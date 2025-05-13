@@ -20,7 +20,7 @@ Creating a new Arbitrum chain involves deploying a set of contracts on your chai
 
 You can explore the code of these contracts in the [nitro-contracts repository](https://github.com/OffchainLabs/nitro-contracts).
 
-Upon deployment, an Arbitrum chain can be configured as a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain, and use ETH or any standard ERC-20 token as its gas token.
+Upon deployment, an Arbitrum chain can be configured as a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain, and use `ETH` or any standard `ERC-20 `token as its gas token.
 
 This page explains how to deploy an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> using the Arbitrum chain (Orbit) SDK. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to the process of creating and configuring an Arbitrum chain.
 
@@ -166,7 +166,7 @@ Now, let's look at the methods to use when creating a new Arbitrum chain with th
 
 The Arbitrum chain (Orbit) SDK includes an example script for creating an Arbitrum chain. We recommend that you first understand the process described in this section and then check the following example scripts:
 
-- [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) for creating an Arbitrum AnyTrust chain with ETH as the gas token.
+- [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) for creating an Arbitrum AnyTrust chain with `ETH` as the gas token.
 - [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-custom-fee-token) for creating an Arbitrum AnyTrust chain with an ERC-20 as the gas token.
 
 :::
@@ -176,7 +176,7 @@ Here are the steps involved in the deployment process:
 1. [Create the chain's configuration object](#1-create-the-chains-configuration-object)
 2. [Deploy the Arbitrum chain](#2-deploy-the-arbitrum-chain)
 3. [Understand the returned data](#3-understand-the-returned-data)
-4. [Set the DAC keyset in the SequencerInbox (for AnyTrust chains)](#4-set-the-dac-keyset-in-the-sequencerinbox-for-anytrust-chains)
+4. [Set the DAC keyset in the `SequencerInbox` (for AnyTrust chains)](#4-set-the-dac-keyset-in-the-sequencerinbox-for-anytrust-chains)
 5. [Next step](#5-next-step)
 
 ### 1. Create the chain's configuration object
@@ -273,13 +273,13 @@ type CreateRollupResults = {
 };
 ```
 
-### 4. Set the DAC keyset in the SequencerInbox (for AnyTrust chains)
+### 4. Set the DAC keyset in the `SequencerInbox` (for AnyTrust chains)
 
-If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the SequencerInbox contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/01-get-started.mdx) to learn more about setting up a DAC.
+If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/01-get-started.mdx) to learn more about setting up a DAC.
 
 :::info
 
-The Arbitrum chain (Orbit) SDK includes an example script for setting up the keyset in the SequencerInbox. We recommend that you first understand the process described in this section and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
+The Arbitrum chain (Orbit) SDK includes an example script for setting up the keyset in the `SequencerInbox`. We recommend that you first understand the process described in this section and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
 
 :::
 

@@ -34,7 +34,7 @@ There are two main types of Arbitrum chains. Review the following table to deter
 | **Rollup**   | Offers Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.                                                                                                                                               | Ideal for applications that require high security guarantees.  |
 | **AnyTrust** | Implements the <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust protocol</a>, relying on an external <a data-quicklook-from='data-availability-committee-dac'>Data Availability Committee (DAC)</a> to store data and provide it on-demand, effectively using it as its Data Availability (DA) layer. | Suitable for applications that require lower transaction fees. |
 
-Additionally, Arbitrum chains can be configured to use ETH or any standard `ERC-20` token as the gas token. To understand the implications of using a custom gas token, see [Configure a custom gas token](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx).
+Additionally, Arbitrum chains can be configured to use `ETH` or any standard `ERC-20` token as the gas token. To understand the implications of using a custom gas token, see [Configure a custom gas token](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx).
 
 ## 2. Deploy your chain
 
