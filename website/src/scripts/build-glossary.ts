@@ -10,7 +10,7 @@
  * containing 'key', 'title', and 'titleforSort' properties.
  */
 
-import matter = require('gray-matter'); // For parsing frontmatter in Markdown files
+import matter from 'gray-matter'; // For parsing frontmatter in Markdown files
 import { marked } from 'marked'; // For converting Markdown to HTML
 import { GrayMatterFile } from 'gray-matter'; // TypeScript type for parsed frontmatter files
 import * as fs from 'fs/promises'; // Async filesystem operations
