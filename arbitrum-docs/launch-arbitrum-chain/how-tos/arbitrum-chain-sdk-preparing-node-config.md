@@ -14,7 +14,7 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is to configure and run an Arbitrum <a data-quicklook-from="arbitrum-nitro">Nitro</a> node for your chain. You configure a Nitro node using a `JSON` file describing all the parameters for the node, including settings for the batch poster, validator, and the chain itself. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to creating and configuring an Arbitrum chain.
 
-Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy a Rollup chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md).
+Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy an Arbitrum chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md).
 
 ## Structure of a Nitro node configuration JSON object
 

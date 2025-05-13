@@ -2189,6 +2189,21 @@
       "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/configuring-arbitrum-chain/?)",
       "destination": "/launch-arbitrum-chain/arbitrum-chain-sdk-introduction",
       "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-anytrust-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-custom-gas-token-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "permanent": false
     }
   ]
 }
