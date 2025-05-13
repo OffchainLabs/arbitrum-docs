@@ -27,7 +27,7 @@ Before reading this guide, we recommend:
 
 Before we describe the process of deploying a token bridge using the Arbitrum chain (Orbit) SDK, let's look at the parameters we need to pass to the token bridge creator contract.
 
-Deploying a new token bridge for an Arbitrum chain is done through a [TokenBridgeCreator](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the appropriate `ParentToChild` messages from the parent chain to the child chain so the counterpart contracts of the token bridge are created in the Arbitrum chain.
+Deploying a new token bridge for an Arbitrum chain is done through a [`TokenBridgeCreator`](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the appropriate `ParentToChild` messages from the parent chain to the child chain so the counterpart contracts of the token bridge are created in the Arbitrum chain.
 
 `TokenBridgeCreator` has a `createTokenBridge` function that creates the parent chain contracts of the token bridge and sends the creation message to the arbitrum chain via retryable tickets. `createTokenBridge` takes four parameters as input:
 
