@@ -70,7 +70,7 @@ You can add any terms to the glossary by following these steps:
 
 Let's assume you need to add the term "State Transition Function" to the glossary. 
 
-1. create an `.mdx` file as follows: 
+1. Create an `.mdx` file as follows: 
 
 `arbitrum-docs/partials/glossary/_state-transition-function.mdx`
 
