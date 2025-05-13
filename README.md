@@ -74,7 +74,7 @@ Let's assume you need to add the term "State Transition Function" to the glossar
 
 `arbitrum-docs/partials/glossary/_state-transition-function.mdx`
 
-2. Ensure the content of your file should follow the following format:
+2. Ensure that the content of your file follows the following format:
 
 ```markdown
 ---
