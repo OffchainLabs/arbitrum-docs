@@ -11,7 +11,7 @@ import { useLocation } from '@docusaurus/router';
 /**
  * A component that generates and renders Schema.org FAQ structured data for SEO
  * and optionally displays the FAQ content on the page
- * 
+ *
  * This component serves two primary purposes:
  * 1. Generates JSON-LD structured data for search engines to recognize FAQ content
  * 2. Optionally renders the FAQ questions and answers as visible HTML content
@@ -28,7 +28,7 @@ import { useLocation } from '@docusaurus/router';
 export default function FAQStructuredData(props) {
   /**
    * Handle direct navigation to FAQ items via URL fragments/anchors
-   * 
+   *
    * This is necessary because this component is rendered asynchronously.
    * When a URL with a fragment is accessed (e.g., /page#faq-item-1), React won't be able to
    * scroll to the target element because it doesn't exist when the page initially loads.
@@ -36,18 +36,18 @@ export default function FAQStructuredData(props) {
    */
   const scrolledRef = React.useRef(false); // Track if we've already scrolled to prevent infinite scrolling
   const { hash } = useLocation(); // Get the URL fragment/hash from React Router
-  
+
   React.useEffect(() => {
     // Only run if we have a hash/fragment and haven't already scrolled
     if (hash && !scrolledRef.current) {
       const id = hash.replace('#', ''); // Remove # prefix from the hash
       const element = document.getElementById(id); // Find the target element
-      
+
       if (element) {
         // Calculate position and scroll, with a small offset to avoid header overlap
-        window.scrollTo({ 
+        window.scrollTo({
           top: element.getBoundingClientRect().top + window.scrollY - 20,
-          behavior: 'smooth'
+          behavior: 'smooth',
         });
         scrolledRef.current = true; // Mark that we've completed the scroll
       }
@@ -97,10 +97,10 @@ export default function FAQStructuredData(props) {
       */}
       {props.renderFaqs &&
         faqs.map((faq) => (
-          <div 
+          <div
             data-search-children // Enable search indexing for child elements
-            className="faq-question" 
-            key={faq.key} 
+            className="faq-question"
+            key={faq.key}
             id={faq.key} // ID used for direct linking to this question
           >
             <h3>
