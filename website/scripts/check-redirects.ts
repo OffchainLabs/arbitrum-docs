@@ -294,8 +294,11 @@ export class RedirectChecker {
 
           // Only add redirects in commit-hook mode
           if (this.mode === 'commit-hook') {
-            this.addRedirect(oldUrl, newUrl, config);
-            redirectsAdded = true;
+            const countBeforeAdd = config.redirects.length;
+            this.addRedirect(oldUrl, newUrl, config); // addRedirect might not add if old/new are same
+            if (config.redirects.length > countBeforeAdd) {
+              redirectsAdded = true;
+            }
           }
         }
       }
@@ -306,9 +309,29 @@ export class RedirectChecker {
         );
       }
 
+      // Determine final hasMissingRedirects status
+      let finalHasMissingRedirects = false;
+      if (this.mode === 'ci') {
+        finalHasMissingRedirects = missingRedirects.length > 0;
+        // In CI, also filter out self-redirects from the reported missingRedirects array
+        // as these aren't actionable and shouldn't fail CI if they are the only thing found.
+        const actionableMissingRedirects = missingRedirects.filter((r) => {
+          return this.normalizeUrl(r.from) !== this.normalizeUrl(r.to);
+        });
+        finalHasMissingRedirects = actionableMissingRedirects.length > 0;
+        // Return the actionable list for CI to report
+        return {
+          hasMissingRedirects: finalHasMissingRedirects,
+          missingRedirects: actionableMissingRedirects,
+        };
+      } else {
+        // commit-hook
+        finalHasMissingRedirects = redirectsAdded;
+      }
+
       return {
-        hasMissingRedirects: missingRedirects.length > 0,
-        missingRedirects,
+        hasMissingRedirects: finalHasMissingRedirects,
+        missingRedirects, // In commit-hook, this list might contain self-redirects, but hasMissingRedirects guides action
       };
     } catch (error) {
       return {

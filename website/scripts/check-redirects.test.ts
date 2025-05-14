@@ -124,7 +124,7 @@ describe('RedirectChecker', () => {
         mode: 'ci',
       });
 
-      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }));
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }, null, 2));
       const result = await checker.check();
 
       expect(result.hasMissingRedirects).toBe(true);
@@ -144,7 +144,7 @@ describe('RedirectChecker', () => {
       });
 
       // Setup vercel.json
-      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }));
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }, null, 2));
 
       // Create and move a file
       writeFileSync(resolve(PAGES_DIR, 'old.md'), 'content');
@@ -213,7 +213,7 @@ describe('RedirectChecker', () => {
       });
 
       // Setup vercel.json
-      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }));
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }, null, 2));
 
       // Create and move multiple files
       writeFileSync(resolve(PAGES_DIR, 'old1.md'), 'content');
@@ -346,81 +346,6 @@ describe('RedirectChecker', () => {
       expect(finalConfig.redirects).toHaveLength(0);
     });
 
-    it('should sort redirects in vercel.json alphabetically by source, then destination', async () => {
-      const initialRedirects = [
-        {
-          source: '/(zebra/?)',
-          destination: '/(zoo/?)',
-          permanent: false,
-        },
-        {
-          source: '/(apple/?)',
-          destination: '/(fruit-basket/?)',
-          permanent: false,
-        },
-        {
-          source: '/(apple/?)',
-          destination: '/(pie/?)',
-          permanent: false,
-        },
-      ];
-      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: initialRedirects }, null, 2));
-      // No git commit needed for vercel.json here as we are testing loading and then adding.
-
-      const checker = new RedirectChecker({
-        vercelJsonPath: VERCEL_JSON_PATH,
-        mode: 'commit-hook',
-      });
-
-      // 1. Test sorting on load
-      // The constructor indirectly calls loadVercelConfig if vercel.json exists.
-      // To explicitly trigger loadVercelConfig and check its output, we might need to access it,
-      // or trust that check() will load and sort it.
-      // For simplicity, we'll check the file after the first operation that involves loading.
-
-      // Create and move a file to add a new redirect that should be sorted into the middle.
-      // This will trigger loadVercelConfig and then addRedirect, both of which sort.
-      writeFileSync(resolve(PAGES_DIR, 'old-banana.md'), 'content');
-      execSync('git add .', { cwd: TEST_DIR });
-      execSync('git commit -m "add banana file"', { cwd: TEST_DIR });
-
-      renameSync(resolve(PAGES_DIR, 'old-banana.md'), resolve(PAGES_DIR, 'new-yellow-fruit.md'));
-      execSync('git add .', { cwd: TEST_DIR });
-
-      try {
-        await checker.check();
-      } catch (error: any) {
-        // We expect this error in commit-hook mode when redirects are added
-        expect(error.message).toBe(
-          'New redirects added to vercel.json. Please review and stage the changes before continuing.',
-        );
-      }
-
-      const finalConfig = JSON.parse(readFileSync(VERCEL_JSON_PATH, 'utf8'));
-      expect(finalConfig.redirects).toEqual([
-        {
-          source: '/(apple/?)',
-          destination: '/(fruit-basket/?)',
-          permanent: false,
-        },
-        {
-          source: '/(apple/?)',
-          destination: '/(pie/?)',
-          permanent: false,
-        },
-        {
-          source: '/(old-banana/?)',
-          destination: '/(new-yellow-fruit/?)',
-          permanent: false,
-        },
-        {
-          source: '/(zebra/?)',
-          destination: '/(zoo/?)',
-          permanent: false,
-        },
-      ]);
-    });
-
     it('should handle sorting and adding redirects in commit-hook mode', async () => {
       const unsortedRedirects = [
         {
@@ -539,6 +464,7 @@ describe('RedirectChecker', () => {
 
     it('should error if vercel.json is malformed', async () => {
       writeFileSync(VERCEL_JSON_PATH, 'this is not json');
+      execSync('git add vercel.json', { cwd: TEST_DIR }); // Stage the malformed file
       const checker = new RedirectChecker({
         vercelJsonPath: VERCEL_JSON_PATH,
         mode: 'commit-hook',
