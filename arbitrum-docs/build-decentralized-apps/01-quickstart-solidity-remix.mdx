@@ -426,6 +426,14 @@ Next, let's deposit some `ETH` into the wallet corresponding to the private key 
 
 Once you've acquired some `ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
+<div className="wrapcode">
+
+ ```shell 
+ cast send --rpc-url https://sepolia-rollup.arbitrum.io/rpc --private-key YOUR_PRIVATE_KEY --create --constructor-args --value 0 --gas-limit 2000000 $(cat VendingMachine.sol-abi)
+```
+
+</div>
+
 This tells Remix to deploy the compiled smart contract through the RPC endpoint corresponding to "Arbitrum Sepolia" in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints).
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's parent chian Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
