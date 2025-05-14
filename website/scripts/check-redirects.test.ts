@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'fs';
 import { dirname, resolve } from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { RedirectChecker } from './check-redirects.js';
+import { RedirectChecker, type RedirectCheckResult } from './check-redirects.js';
 
 describe('RedirectChecker', () => {
   const TEST_DIR = resolve(__dirname, 'test-redirect-checker');
@@ -247,6 +247,305 @@ describe('RedirectChecker', () => {
           permanent: false,
         },
       ]);
+    });
+
+    it('should not create redirects for newly added files', async () => {
+      // Setup vercel.json and commit it
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }, null, 2));
+      execSync('git add vercel.json', { cwd: TEST_DIR });
+      execSync('git commit -m "Add empty vercel.json for new file test"', { cwd: TEST_DIR });
+
+      const checker = new RedirectChecker({
+        vercelJsonPath: VERCEL_JSON_PATH,
+        mode: 'commit-hook',
+      });
+
+      // Create and stage a new file
+      const newFilePath = resolve(PAGES_DIR, 'brand-new-file.md');
+      writeFileSync(newFilePath, 'content');
+      // Ensure the path used in git add is relative to TEST_DIR
+      execSync('git add pages/brand-new-file.md', { cwd: TEST_DIR });
+
+      let result: RedirectCheckResult | undefined;
+      try {
+        result = await checker.check();
+      } catch (e: any) {
+        // Fail if it's the specific error we want to avoid
+        if (
+          e.message ===
+          'New redirects added to vercel.json. Please review and stage the changes before continuing.'
+        ) {
+          throw new Error('Test failed: Redirects were unexpectedly added for a new file.');
+        }
+        // Re-throw other unexpected errors
+        throw e;
+      }
+
+      // If checker.check() did not throw the specific "New redirects added..." error,
+      // result should be defined.
+      expect(result).toBeDefined();
+      // No other errors (like vercel.json not found/malformed, though unlikely here) should occur.
+      expect(result!.error).toBeUndefined();
+      // No missing redirects should be flagged for a new file.
+      expect(result!.hasMissingRedirects).toBe(false);
+
+      // Verify that vercel.json was not modified
+      const finalConfig = JSON.parse(readFileSync(VERCEL_JSON_PATH, 'utf8'));
+      expect(finalConfig.redirects).toHaveLength(0); // Assuming it started empty
+    });
+
+    it('should not create a redirect if source and destination are the same after normalization', async () => {
+      // Setup vercel.json and commit it
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }, null, 2));
+      execSync('git add vercel.json', { cwd: TEST_DIR });
+      execSync('git commit -m "Add empty vercel.json for self-redirect test"', { cwd: TEST_DIR });
+
+      const checker = new RedirectChecker({
+        vercelJsonPath: VERCEL_JSON_PATH,
+        mode: 'commit-hook',
+      });
+
+      // Simulate a move that results in the same normalized URL
+      // e.g. pages/old-path/index.md -> pages/old-path.md
+      // Both getUrlFromPath might resolve to something like /(old-path/?)
+      const oldFileDir = resolve(PAGES_DIR, 'self-redirect-test');
+      mkdirSync(oldFileDir, { recursive: true });
+      const oldFilePath = resolve(oldFileDir, 'index.md');
+      const newFilePath = resolve(PAGES_DIR, 'self-redirect-test.md');
+
+      writeFileSync(oldFilePath, 'content');
+      execSync('git add pages/self-redirect-test/index.md', { cwd: TEST_DIR });
+      execSync('git commit -m "Add file for self-redirect test"', { cwd: TEST_DIR });
+
+      renameSync(oldFilePath, newFilePath);
+      // Add both old (now deleted) and new paths to staging for git to detect as a rename
+      execSync('git add pages/self-redirect-test/index.md pages/self-redirect-test.md', {
+        cwd: TEST_DIR,
+      });
+
+      let result: RedirectCheckResult | undefined;
+      try {
+        result = await checker.check();
+      } catch (e: any) {
+        if (
+          e.message ===
+          'New redirects added to vercel.json. Please review and stage the changes before continuing.'
+        ) {
+          throw new Error(
+            'Test failed: Redirects were unexpectedly added when source and destination were the same.',
+          );
+        }
+        throw e;
+      }
+
+      expect(result).toBeDefined();
+      expect(result!.error).toBeUndefined();
+      expect(result!.hasMissingRedirects).toBe(false);
+
+      const finalConfig = JSON.parse(readFileSync(VERCEL_JSON_PATH, 'utf8'));
+      expect(finalConfig.redirects).toHaveLength(0);
+    });
+
+    it('should sort redirects in vercel.json alphabetically by source, then destination', async () => {
+      const initialRedirects = [
+        {
+          source: '/(zebra/?)',
+          destination: '/(zoo/?)',
+          permanent: false,
+        },
+        {
+          source: '/(apple/?)',
+          destination: '/(fruit-basket/?)',
+          permanent: false,
+        },
+        {
+          source: '/(apple/?)',
+          destination: '/(pie/?)',
+          permanent: false,
+        },
+      ];
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: initialRedirects }, null, 2));
+      // No git commit needed for vercel.json here as we are testing loading and then adding.
+
+      const checker = new RedirectChecker({
+        vercelJsonPath: VERCEL_JSON_PATH,
+        mode: 'commit-hook',
+      });
+
+      // 1. Test sorting on load
+      // The constructor indirectly calls loadVercelConfig if vercel.json exists.
+      // To explicitly trigger loadVercelConfig and check its output, we might need to access it,
+      // or trust that check() will load and sort it.
+      // For simplicity, we'll check the file after the first operation that involves loading.
+
+      // Create and move a file to add a new redirect that should be sorted into the middle.
+      // This will trigger loadVercelConfig and then addRedirect, both of which sort.
+      writeFileSync(resolve(PAGES_DIR, 'old-banana.md'), 'content');
+      execSync('git add .', { cwd: TEST_DIR });
+      execSync('git commit -m "add banana file"', { cwd: TEST_DIR });
+
+      renameSync(resolve(PAGES_DIR, 'old-banana.md'), resolve(PAGES_DIR, 'new-yellow-fruit.md'));
+      execSync('git add .', { cwd: TEST_DIR });
+
+      try {
+        await checker.check();
+      } catch (error: any) {
+        // We expect this error in commit-hook mode when redirects are added
+        expect(error.message).toBe(
+          'New redirects added to vercel.json. Please review and stage the changes before continuing.',
+        );
+      }
+
+      const finalConfig = JSON.parse(readFileSync(VERCEL_JSON_PATH, 'utf8'));
+      expect(finalConfig.redirects).toEqual([
+        {
+          source: '/(apple/?)',
+          destination: '/(fruit-basket/?)',
+          permanent: false,
+        },
+        {
+          source: '/(apple/?)',
+          destination: '/(pie/?)',
+          permanent: false,
+        },
+        {
+          source: '/(old-banana/?)',
+          destination: '/(new-yellow-fruit/?)',
+          permanent: false,
+        },
+        {
+          source: '/(zebra/?)',
+          destination: '/(zoo/?)',
+          permanent: false,
+        },
+      ]);
+    });
+
+    it('should handle sorting and adding redirects in commit-hook mode', async () => {
+      const unsortedRedirects = [
+        {
+          source: '/(zebra/?)',
+          destination: '/(zoo/?)',
+          permanent: false,
+        },
+        {
+          source: '/(apple/?)',
+          destination: '/(fruit-basket/?)',
+          permanent: false,
+        },
+      ];
+      // Create an initially unsorted vercel.json
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: unsortedRedirects }, null, 2));
+      execSync('git add vercel.json', { cwd: TEST_DIR }); // Stage it initially
+      execSync('git commit -m "add unsorted vercel.json"', { cwd: TEST_DIR });
+
+      let checker = new RedirectChecker({
+        vercelJsonPath: VERCEL_JSON_PATH,
+        mode: 'commit-hook',
+      });
+
+      // --- Step 1: Test re-sorting of an existing unsorted file ---
+      try {
+        await checker.check(); // This call should trigger loadVercelConfig
+      } catch (error: any) {
+        expect(error.message).toBe(
+          'vercel.json was re-sorted and/or re-formatted. Please review and stage the changes before continuing.',
+        );
+      }
+      // Verify the file is now sorted on disk
+      let currentConfig = JSON.parse(readFileSync(VERCEL_JSON_PATH, 'utf8'));
+      expect(currentConfig.redirects).toEqual([
+        {
+          source: '/(apple/?)',
+          destination: '/(fruit-basket/?)',
+          permanent: false,
+        },
+        {
+          source: '/(zebra/?)',
+          destination: '/(zoo/?)',
+          permanent: false,
+        },
+      ]);
+
+      // --- Step 2: Simulate staging the re-sorted file and adding a new redirect ---
+      execSync('git add vercel.json', { cwd: TEST_DIR }); // Stage the sorted vercel.json
+      // No commit needed here, just need it staged for the next check()
+
+      // Create and move a file to add a new redirect
+      writeFileSync(resolve(PAGES_DIR, 'old-banana.md'), 'content');
+      execSync('git add pages/old-banana.md', { cwd: TEST_DIR });
+      execSync('git commit -m "add banana file"', { cwd: TEST_DIR });
+
+      renameSync(resolve(PAGES_DIR, 'old-banana.md'), resolve(PAGES_DIR, 'new-yellow-fruit.md'));
+      execSync('git add pages/old-banana.md pages/new-yellow-fruit.md', { cwd: TEST_DIR });
+
+      // Re-initialize checker or ensure its internal state is fresh if necessary,
+      // though for this test, a new instance works fine.
+      checker = new RedirectChecker({
+        vercelJsonPath: VERCEL_JSON_PATH,
+        mode: 'commit-hook',
+      });
+
+      try {
+        await checker.check();
+      } catch (error: any) {
+        expect(error.message).toBe(
+          'New redirects added to vercel.json. Please review and stage the changes before continuing.',
+        );
+      }
+
+      // Verify the file on disk has the new redirect and is still sorted
+      currentConfig = JSON.parse(readFileSync(VERCEL_JSON_PATH, 'utf8'));
+      expect(currentConfig.redirects).toEqual([
+        {
+          source: '/(apple/?)',
+          destination: '/(fruit-basket/?)',
+          permanent: false,
+        },
+        {
+          source: '/(old-banana/?)',
+          destination: '/(new-yellow-fruit/?)',
+          permanent: false,
+        },
+        {
+          source: '/(zebra/?)',
+          destination: '/(zoo/?)',
+          permanent: false,
+        },
+      ]);
+    });
+
+    it('should error in CI mode if vercel.json is unsorted', async () => {
+      const unsortedRedirects = [
+        { source: '/(b/?)', destination: '/(c/?)', permanent: false },
+        { source: '/(a/?)', destination: '/(d/?)', permanent: false },
+      ];
+      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: unsortedRedirects }, null, 2));
+      // In CI, we assume vercel.json is part of the committed state.
+
+      const checker = new RedirectChecker({
+        vercelJsonPath: VERCEL_JSON_PATH,
+        mode: 'ci',
+      });
+
+      const result = await checker.check();
+      expect(result.error).toBe(
+        'vercel.json is not correctly sorted/formatted. Please run the pre-commit hook locally to fix and commit the changes.',
+      );
+      // Ensure the file was not modified in CI mode
+      const fileContent = JSON.parse(readFileSync(VERCEL_JSON_PATH, 'utf8'));
+      expect(fileContent.redirects).toEqual(unsortedRedirects);
+    });
+
+    it('should error if vercel.json is malformed', async () => {
+      writeFileSync(VERCEL_JSON_PATH, 'this is not json');
+      const checker = new RedirectChecker({
+        vercelJsonPath: VERCEL_JSON_PATH,
+        mode: 'commit-hook',
+      });
+      const result = await checker.check();
+      expect(result.error).toContain('Error parsing');
+      expect(result.error).toContain('Please fix the JSON format and try again.');
     });
   });
 

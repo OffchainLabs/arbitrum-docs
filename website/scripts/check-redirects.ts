@@ -17,7 +17,7 @@ interface MovedFile {
   newPath: string;
 }
 
-interface RedirectCheckResult {
+export interface RedirectCheckResult {
   hasMissingRedirects: boolean;
   missingRedirects: Array<{
     from: string;
@@ -66,6 +66,25 @@ export class RedirectChecker {
     this.vercelJsonPath = options.vercelJsonPath || resolve(process.cwd(), '..', 'vercel.json');
     this.mode = options.mode;
     this.gitCommand = options.gitCommand;
+  }
+
+  /**
+   * Sorts the redirects array alphabetically by source, then by destination.
+   */
+  private sortRedirects(redirects: Redirect[]): void {
+    redirects.sort((a, b) => {
+      const sourceA = a.source.toLowerCase();
+      const sourceB = b.source.toLowerCase();
+      if (sourceA < sourceB) return -1;
+      if (sourceA > sourceB) return 1;
+
+      const destA = a.destination.toLowerCase();
+      const destB = b.destination.toLowerCase();
+      if (destA < destB) return -1;
+      if (destA > destB) return 1;
+
+      return 0;
+    });
   }
 
   /**
@@ -126,21 +145,55 @@ export class RedirectChecker {
   private loadVercelConfig(): VercelConfig {
     if (!existsSync(this.vercelJsonPath)) {
       if (this.mode === 'commit-hook') {
-        writeFileSync(this.vercelJsonPath, JSON.stringify({ redirects: [] }, null, 2));
+        const newConfig: VercelConfig = { redirects: [] };
+        this.sortRedirects(newConfig.redirects);
+        writeFileSync(this.vercelJsonPath, JSON.stringify(newConfig, null, 2), 'utf8');
         throw new Error(
           'vercel.json was created. Please review and stage the file before continuing.',
         );
       } else {
+        // ci mode
         throw new Error(`vercel.json not found at ${this.vercelJsonPath}`);
       }
     }
 
-    const content = readFileSync(this.vercelJsonPath, 'utf8');
-    const config = JSON.parse(content) as VercelConfig;
-    if (!config.redirects) {
-      config.redirects = [];
+    const originalFileContent = readFileSync(this.vercelJsonPath, 'utf8');
+    let config: VercelConfig;
+    try {
+      config = JSON.parse(originalFileContent) as VercelConfig;
+    } catch (e) {
+      throw new Error(
+        `Error parsing ${this.vercelJsonPath}: ${
+          (e as Error).message
+        }. Please fix the JSON format and try again.`,
+      );
     }
-    return config;
+
+    if (!config.redirects || !Array.isArray(config.redirects)) {
+      config.redirects = []; // Ensure redirects array exists and is an array for safety
+    }
+
+    // Sort the in-memory representation
+    this.sortRedirects(config.redirects);
+
+    const newFileContent = JSON.stringify(config, null, 2);
+
+    // If in commit-hook mode and the content changed due to sorting or formatting
+    if (this.mode === 'commit-hook' && originalFileContent !== newFileContent) {
+      writeFileSync(this.vercelJsonPath, newFileContent, 'utf8');
+      throw new Error(
+        'vercel.json was re-sorted and/or re-formatted. Please review and stage the changes before continuing.',
+      );
+    }
+
+    // In CI mode, if the file was not sorted/formatted correctly, it's an error.
+    if (this.mode === 'ci' && originalFileContent !== newFileContent) {
+      throw new Error(
+        `vercel.json is not correctly sorted/formatted. Please run the pre-commit hook locally to fix and commit the changes.`,
+      );
+    }
+
+    return config; // Return the (potentially modified in memory, and possibly written to disk) config
   }
 
   /**
@@ -181,12 +234,19 @@ export class RedirectChecker {
    * Add a new redirect to the config
    */
   private addRedirect(oldUrl: string, newUrl: string, config: VercelConfig): void {
-    config.redirects.push({
-      source: oldUrl,
-      destination: newUrl, // Keep the same format as the source URL
-      permanent: false,
-    });
-    writeFileSync(this.vercelJsonPath, JSON.stringify(config, null, 2), 'utf8');
+    const normalizedOldUrl = this.normalizeUrl(oldUrl);
+    const normalizedNewUrl = this.normalizeUrl(newUrl);
+
+    // Only add redirect if the source and destination are different after normalization
+    if (normalizedOldUrl !== normalizedNewUrl) {
+      config.redirects.push({
+        source: oldUrl, // Store the original, pre-normalized URL as vercel expects it
+        destination: newUrl, // Store the original, pre-normalized URL
+        permanent: false,
+      });
+      this.sortRedirects(config.redirects); // Sort after adding a new redirect
+      writeFileSync(this.vercelJsonPath, JSON.stringify(config, null, 2), 'utf8');
+    }
   }
 
   /**
