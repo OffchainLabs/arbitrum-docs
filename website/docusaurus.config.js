@@ -165,6 +165,7 @@ const config = {
           'launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration',
           'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit',
         ],
+        maxHits: 10,
       },
     ],
     require.resolve('docusaurus-plugin-sass'),
