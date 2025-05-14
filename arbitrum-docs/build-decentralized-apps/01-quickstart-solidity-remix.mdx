@@ -6,6 +6,7 @@ user_story: As a web2 developer, I want to onboard into Arbitrum by building and
 content_type: quickstart
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 import ImageZoom from '@site/src/components/ImageZoom';
 
 :::info Want to use Rust instead?
@@ -247,6 +248,17 @@ Let's first add our smart contract to Remix following these steps:
   <ImageZoom src="/img/dapps-remix-compile-contract-2025-01-07.gif" alt="" className="img-600px" />
 </CustomDetails>
 
+<VanillaAdmonition type="note">
+
+Ensure that Remix's compiler version matches the contract's. You can find your contract's compiler version at the top of your contract's file range. It looks like this:
+``` solidity
+pragma solidity ^0.8.2;
+```
+You can easily select the right compiler version in  Remix's the "Solidity compiler" menu.
+
+</VanillaAdmonition>
+
+
 ### Deploy the smart contract to a local Ethereum chain
 
 Once a smart contract gets compiled, it is deployable to a blockchain. The safest way to do this is to deploy it to a locally hosted chain, where you can test and debug your contract before deploying it to a public chain.
@@ -346,7 +358,7 @@ Your Ethereum Mainnet wallet's private key is the password to all of your tokens
 
 :::
 
-Note that in the context of this quickstart, "account" refers to a public wallet address and its associated private key[^5].
+Note that in the context of this quickstart, "account" refers to an EOA (externally owned account) public wallet address and its associated private key[^5].
 
 You should see a balance of 10,000 `ETH`. Keep your private key handy; we'll use it again shortly.
 
@@ -430,7 +442,14 @@ Next, let's deposit some `ETH` into the wallet corresponding to the private key 
 1. Use a parent chain Sepolia `ETH` faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet `ETH` on parent chain Sepolia.
 2. Bridge your parent chain Sepolia `ETH` into Arbitrum child chain using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
+
+
 Once you've acquired some `ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following cast command:
+### Connect Remix to the Arbitrum Sepolia testnet
+
+### Compile your vending machine contract
+
+### Deploy your vending machine contract to the Arbitrum Sepolia testnet
 
 <div className="wrapcode">
 
