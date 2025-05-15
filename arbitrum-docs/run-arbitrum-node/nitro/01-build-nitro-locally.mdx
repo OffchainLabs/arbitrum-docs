@@ -64,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.5.5@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.6.2@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -188,11 +188,11 @@ If you use zsh, replace `bash` with `zsh`.
 
 :::
 
-#### Install foundry
+#### Install foundry version 1.0.0
 
 ```shell
 curl -L https://foundry.paradigm.xyz | bash
-foundryup
+foundryup -i 1.0.0
 ```
 
 ### Step 9. Check dependencies
