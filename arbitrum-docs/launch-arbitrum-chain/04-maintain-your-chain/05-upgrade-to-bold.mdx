@@ -20,7 +20,7 @@ However, enabling BoLD does not require upgrading your ArbOS version.
 
 To enable BoLD in your L2 Arbitrum chain, you'll have to perform these actions:
 
-1. Make sure your nodes are running at least [Nitro v3.5.4](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.4) and enable the required parameters
+1. Make sure your nodes are running at least [Nitro v3.5.4](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.4) and enable the required parameters after the upgrade
 2. Upgrade your Nitro contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
 
 Let's dive into it.
@@ -29,7 +29,7 @@ Let's dive into it.
 
 Before updating the contracts, you want to make sure your nodes are ready for the update. Nitro v3.5.4 introduced compatibility with pre-BoLD and BoLD chains to ensure a smooth upgrade, but Nitro v3.6.2 has many recommended improvements. Nodes will automatically detect whether the chain is running pre-BoLD or BoLD Rollup and Challenge contracts and will perform the appropriate calls depending on that check.
 
-Most of the parameters used in Nitro before v3.5.4 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters:
+Most of the parameters used in Nitro before v3.5.4 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters after the upgrade:
 
 - For validator nodes: add `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
 - For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
@@ -139,11 +139,14 @@ Note that:
 
 ### Step 4: Gather the information of the current state of the chain
 
-The next script will gather information about the chain's current state (the last confirmed assertion), allowing you to initialize the new Rollup contract with that confirmed assertion.
+The next script will gather information about the chain's current state (the last confirmed assertion), allowing you to initialize the new Rollup contract with that confirmed assertion. It's recommended to stop all validators at this point to prevent them from confirming new assertions that might block the upgrade in the next step.
 
-:::info
+:::info Last confirmed assertion
 
-If a new assertion is confirmed between steps 4 and 5, step 5 will revert and step 4 must be repeated.
+As mentioned, this script will try to find the last confirmed assertion of your chain. Please note that:
+
+- If a new assertion is confirmed between steps 4 and 5, step 5 will revert and step 4 must be repeated.
+- The script looks for the `NodeCreated` event of the last confirmed assertion in the last 100,000 blocks. If the `NodeCreated` event was emitted in an older block, it won't be able to find it.
 
 :::
 
@@ -178,8 +181,33 @@ upgrade executor: 0x5FEe78FE9AD96c1d8557C6D6BB22Eb5A61eeD315
 execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca3702c09c78b957d4d820311125753c6d2000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4ebe03a93000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000008a8f0a24d7e58a76fc8f77bb68c7c902b91e182e00000000000000000000000087630025e63a30ecf9ca9d580d9d95922fea6af0000000000000000000000000c32b93e581db6ebc50c08ce381143a259b92f1ed00000000000000000000000000000000000000000000000000000000
 ```
 
-### Step 6: Monitor the validation process
+### Step 6: Update your nodes configuration and restart them
+
+As stated at the beginning, you need to add a few parameters to your node configuration for it to support BoLD:
+
+- For validator nodes: add `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
+- For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
+- For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode) is automatically enabled
+
+Additionally, the `--chain.info-json` object also needs to be modified:
+
+- Update the `rollup.rollup` field to point at the new Rollup contract address
+- Add a new `rollup.stake-token` field with the address of the stake token contract
+
+After updating the configuration, restart your node.
+
+:::info Validator nodes shutdown
+
+When enabling BoLD on a validator, it will default to read only finalized information from its parent chain. If you run your node before the blocks that contain the upgrade transactions are finalized, the node will stop with the following message:
+
+```shell
+error initializing staker: could not create assertion chain: no contract code at given address
+```
+
+In this case, wait until those blocks are finalized and start your node again.
+
+:::
+
+### Step 7: Monitor the validation process
 
 Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is 1 hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is 7 days).
-
-A separate is also available in the `orbit-actions` repository.
