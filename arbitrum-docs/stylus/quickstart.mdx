@@ -134,7 +134,25 @@ Let's create our first Stylus project by running:
 cargo stylus new <YOUR_PROJECT_NAME>
 ```
 
-`cargo stylus new` generates a starter template that implements a Rust version of the [Solidity `Counter` smart contract example](https://github.com/OffchainLabs/counter_contract/blob/master/contracts/Counter.sol).
+`cargo stylus new` generates a starter template that implements a Rust version of the Solidity `Counter` smart contract example:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.22 <0.9.0;
+
+contract Coutner {
+
+   uint count;
+
+  function setCount() public {
+    count = count + 1;
+  }
+
+  function getCount() view public returns(uint) {
+      return count;
+  }
+}
+```
 
 At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference section](./reference/overview) as a starting point; it offers many examples to help you quickly familiarize yourself with Stylus.
 
