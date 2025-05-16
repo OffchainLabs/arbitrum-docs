@@ -289,6 +289,11 @@ export class RedirectChecker {
         const oldUrl = this.getUrlFromPath(oldPath);
         const newUrl = this.getUrlFromPath(newPath);
 
+        if (newUrl.includes('website/archive')) {
+          // Skip archived files
+          continue;
+        }
+
         if (!this.hasRedirect(config, oldUrl, newUrl)) {
           missingRedirects.push({ from: oldUrl, to: newUrl });
 
