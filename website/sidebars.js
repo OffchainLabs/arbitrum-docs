@@ -643,6 +643,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'stylus/how-tos/testing-contracts',
+              label: 'Testing contracts',
+            },
+            {
+              type: 'doc',
               id: 'stylus/how-tos/verifying-contracts',
               label: 'Verify contracts',
             },
