@@ -841,6 +841,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/deploying-token-bridge/?)",
       "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge",
       "permanent": false
