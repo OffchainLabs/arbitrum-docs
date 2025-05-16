@@ -1,154 +1,159 @@
 ---
 title: "How to configure your Arbitrum chain's node using the Arbitrum chain (Orbit) SDK"
-sidebar_label: "Configure your chain's node"
-description: 'How to configure a node using the Arbitrum chain (Orbit) SDK'
-author: GreatSoshiant
-sme: GreatSoshiant
+description: 'Learn how to configure a node using the Arbitrum chain (Orbit) SDK'
+author: GreatSoshiant, jose-franco
+sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
 user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Arbitrum chain (Orbit) SDK.
 content_type: how-to
 ---
 
-This guide will walk you through configuring an Arbitrum chain node supporting a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain.
+import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
-:::caution UNDER CONSTRUCTION
+<RaaSNotice />
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the **Request an update** button at the top of this document.
+Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is to configure and run an Arbitrum <a data-quicklook-from="arbitrum-nitro">Nitro</a> node for your chain. You configure a Nitro node using a `JSON` file describing all the parameters for the node, including settings for the batch poster, validator, and the chain itself. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to creating and configuring an Arbitrum chain.
 
-:::
+Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy an Arbitrum chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md).
 
-:::info
+## Structure of a Nitro node configuration JSON object
 
-See the ["prepare-node-config" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/prepare-node-config) in the Arbitrum chain (Orbit) SDK repository for additional guidance.
+When starting up the node, a Nitro node reads its configuration from a JSON object, usually provided in a file. This object has the following structure:
 
-:::
-
-- Prerequisite: having deployed an Arbitrum chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md) section of the rollup deployment guide.
-
-Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is configuring and running your Arbitrum chain using a Node Config `JSON` file describing all the configurations for the Arbitrum Node, including settings for the Batch-poster, Validator, and the chain itself.
-
-Example for a Rollup Arbitrum Chain:
-
-```js
+```typescript
 {
-  'chain': {
-    'info-json': stringifyInfoJson([...]),
-    'name': chainName,
-    // Additional chain-specific configurations
+  "chain": {
+    "info-json": "[{...}]",
+    "name": "MyArbitrumChain",
   },
-  'parent-chain': {
-    connection: {
-      url: parentChainRpcUrl,
+  "parent-chain": {
+    "connection": {
+      "url": "http://parentChainRpcUrl",
     },
   },
-  'http': {
-    addr: '0.0.0.0',
-    port: 8449,
-    vhosts: '*',
-    corsdomain: '*',
-    api: ['eth', 'net', 'web3', 'arb', 'debug'],
+  "http": {
+    "addr": "0.0.0.0",
+    "port": 8449,
+    "vhosts": "*",
+    "corsdomain": "*",
+    "api": ["eth", "net", "web3", "arb", "debug"],
   },
-  'node': {
-    // Node-specific settings including sequencer, batch-poster, staker configurations
+  "node": {
+    // Node specific settings including sequencer, batch-poster and validator
   },
+  "execution": {
+    // Execution-client specific settings
+  }
 };
 ```
 
-Here are some inputs details from the example above:
+The following table briefly describes the type of parameters that can be configured in each root property:
 
-| Parameters     | Description                                                                   |
-| :------------- | :---------------------------------------------------------------------------- |
-| `chain`        | Details about the hosted chain, including chain ID, name, and core contracts. |
-| `parent-chain` | Information for connecting to the parent chain.                               |
-| `http`         | Configuration parameters for the HTTP server.                                 |
-| `node`         | Specific node settings, including sequencer and batch-poster configurations.  |
+| Property       | Description                                                                          |
+| :------------- | :----------------------------------------------------------------------------------- |
+| `chain`        | Information about the chain, including the chain ID, its name, and the chain config. |
+| `parent-chain` | Information for accessing the parent chain.                                          |
+| `http`         | Configuration parameters for the HTTP server.                                        |
+| `node`         | Node settings, including sequencer, batch-poster and validator if enabled.           |
+| `execution`    | Execution settings, including archive mode and block production parameters.          |
 
-### Additional configuration for AnyTrust Arbitrum chains:
+### Additional configuration for Arbitrum AnyTrust chains:
 
-For AnyTrust Arbitrum chains, the Node Config `JSON` has an additional segment under the `node` field. This addition includes settings specific to the AnyTrust model, such as:
+For <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</a>, the Nitro node configuration object has an additional segment under the `node` field to configure the AnyTrust specific properties:
 
-- Sequencer's inbox address
-- Parent chain node URL
-- RPC aggregators
-
-Example addition for AnyTrust Node Config:
-
-```js
+```typescript
 {
   ...
-  'node': {
+  "node": {
     ...
-    'sequencer-inbox-address': coreContracts.sequencerInbox,
-    'parent-chain-node-url': parentChainRpcUrl,
-    'rest-aggregator': {
-      enable: true,
-      urls: 'http://localhost:9876',
+    "sequencer-inbox-address": "0xSequencerInbox",
+    "parent-chain-node-url": "http://parentChainRpcUrl",
+    "rest-aggregator": {
+      "enable": true,
+      "urls": "http://localhost:9876",
     },
-    'rpc-aggregator': {
-      'enable': true,
-      'assumed-honest': 1,
-      'backends': stringifyBackendsJson([...]),
+    "rpc-aggregator": {
+      "enable": true,
+      "assumed-honest": 3,
+      "backends": "[...]",
     },
   }
   ...
 };
 ```
 
-### Preparing your node config file
+You can find information about what these parameters configure in [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx).
 
-The Node Config file includes three fields types:
+## How to generate a node's configuration file using the Arbitrum chain (Orbit) SDK
 
-1. **Information from the Arbitrum deployment chain**: Such as the addresses of the core contracts.
-2. **Parameters configurable by the chain deployer**: These parameters, like `max-block-speed`, can be adjusted to modify your chain's behavior.
-3. **Fields not typically configured**: Like the HTTP section, which usually remains standard.
+Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Arbitrum chain (Orbit) SDK.
 
-Let's explore the parameters allowing you to set up a stable, and secure Arbitrum chain tailored to your project's requirements:
+:::info Example script
 
-### Node config generation with Arbitrum chain (Orbit) SDK
+The Arbitrum chain (Orbit) SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
-Generating a Node Config `JSON` file to initiate your Arbitrum chain is a step in the deployment process. The Arbitrum chain (Orbit) SDK simplifies this task with an API named `prepareNodeConfig`. This API takes specific parameters for your Arbitrum chain and returns a `JSON` file that can be used as the Node Config to initiate the chain.
+:::
 
-Here’s an example of using the `prepareNodeConfig` API to generate the node config:
+### 1. Gather information from the deployed chain
 
-```js
+To generate the configuration file for your node, you'll need the following information:
+
+- Core contracts: you'll have to configure your node with all the core contracts created on deployment.
+- Chain config: the same configuration used when deploying the chain must be passed to the node.
+- Private keys of the accounts that will operate the chain, like the batch poster and the validator
+- Any extra configuration desired for the sequencer, batch poster and validator, like batch posting frequency or maximum block speed.
+
+### 2. Generate the node configuration object
+
+The `prepareNodeConfig` method generates a JSON object with the configuration for the node. It sets the appropriate defaults for most parameters, allowing you to override any of these defaults.
+
+Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash` (**Note**: _This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node_):
+
+```typescript
+import { createPublicClient, http } from 'viem';
+import {
+  createRollupPrepareTransaction,
+  createRollupPrepareTransactionReceipt,
+  ChainConfig,
+  prepareNodeConfig,
+} from '@arbitrum/orbit-sdk';
+
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(),
+});
+
+// get the transaction
+const tx = createRollupPrepareTransaction(
+  await parentChainPublicClient.getTransaction({ hash: txHash }),
+);
+
+// get the transaction receipt
+const txReceipt = createRollupPrepareTransactionReceipt(
+  await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
+);
+
+// get the chain config and core contracts
+const config = tx.getInputs()[0].config;
+const chainConfig: ChainConfig = JSON.parse(config.chainConfig);
+const coreContracts = txReceipt.getCoreContracts();
+
 const nodeConfig = prepareNodeConfig({
-  chainName: 'My Orbit Chain',
+  chainName: 'MyArbitrumChain',
   chainConfig,
   coreContracts,
-  batchPosterPrivateKey: 'BATCH_POSTER_PRIVATE_KEY_HERE',
-  validatorPrivateKey: 'VALIDATOR_PRIVATE_KEY_HERE',
-  parentChainId: parentChain_chain_id,
-  parentChainRpcUrl: parentChain_RPC_URL,
+  batchPosterPrivateKey,
+  validatorPrivateKey,
+  stakeToken: config.stakeToken,
+  parentChainId: parentChain.id,
+  parentChainRpcUrl: parentChain.rpcUrls.default.http[0],
 });
 ```
 
-Here are some details about the parameters used in the example above:
+Note that `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
 
-| Parameters                | Description                                                                                                                                                                                                                                                                 |
-| :------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainName`               | The name you have chosen for your Arbitrum chain.                                                                                                                                                                                                                           |
-| `chainConfig`             | Configuration used for [chain deployment](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md), returned from the [createRollupPrepareTransactionReceipt](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md) API. |
-| `coreContracts`           | Addresses of your newly deployed Arbitrum chain's, also returned from the `createRollupPrepareTransactionReceipt` API.                                                                                                                                                      |
-| `batchPosterPrivateKey  ` | Private key of the batch-poster account, used for signing batch-posting transactions and related functions.                                                                                                                                                                 |
-| `validatorPrivateKey`     | Private key of the validator(s), used for validating state, posting assertions (`RBlocks`) to the parent chain, and initiating challenges if necessary.                                                                                                                     |
-| `parentChainId`           | Chain ID of the parent chain where your Arbitrum chain is deployed.                                                                                                                                                                                                         |
-| `parentChainRpcUrl`       | Parent chain's RPC URL.                                                                                                                                                                                                                                                     |
+After generating the node configuration object, it can be saved to a file for later use by the Nitro node.
 
-If you don't have the `chainConfig` and `coreContracts` readily available, you can obtain them using the `createRollupPrepareTransaction` and `createRollupPrepareTransactionReceipt` APIs.
+### 3. Next step
 
-Here's an example of how to extract `chainConfig` and `coreContracts` using just the transaction hash from your deployment:
-
-```js
-import {
-  ChainConfig,
-  createRollupPrepareTransaction,
-  createRollupPrepareTransactionReceipt,
-} from '@arbitrum/orbit-sdk';
-
-const tx = createRollupPrepareTransaction({ hash: txHash });
-const txReceipt = createRollupPrepareTransactionReceipt({ hash: txHash });
-const chainConfig: ChainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
-const coreContracts = txReceipt.getCoreContracts();
-```
-
-This process ensures that all necessary configurations and contract details are included in your Node Config.
+You can now run the Nitro node for your Arbitrum chain with the node configuration generated. You can find instructions for running a node in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx).

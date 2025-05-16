@@ -531,6 +531,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/a-gentle-introduction/?)",
       "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
