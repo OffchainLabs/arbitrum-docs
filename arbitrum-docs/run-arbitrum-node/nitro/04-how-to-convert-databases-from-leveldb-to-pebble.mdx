@@ -8,11 +8,19 @@ user_story: As a node runner, I want to learn how to migrate my node database fr
 content_type: How-To
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 Switching from LevelDB to Pebble in Ethereum's Geth client provides several advantages, particularly in terms of resilience to data corruption during unexpected shutdowns, which helps maintain the integrity of your Ethereum node's database.
 
 It's important to understand that transitioning to Pebble may necessitate a complete resynchronization of your Ethereum node. This process can be time-consuming and could lead to downtime. If you are not facing significant issues with LevelDB and do not need Pebble's specific advantages, there may not be a strong reason to make the switch at this time.
 
 While Pebble provides better resilience and potentially improved performance, deciding to switch should consider your specific needs and the possible effects of a full resync on your operations.
+
+<VanillaAdmonition type="note">
+
+Database conversion can take many days/weeks to run.
+
+</VanillaAdmonition>
 
 ## convert-databases.bash script
 
