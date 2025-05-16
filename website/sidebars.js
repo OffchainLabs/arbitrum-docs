@@ -373,18 +373,8 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain',
-                  label: `Deploy a Rollup chain`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-anytrust-chain',
-                  label: `Deploy an AnyTrust chain`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-custom-gas-token-chain',
-                  label: `Deploy a custom gas token chain`,
+                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
+                  label: `Deploy an Arbitrum chain`,
                 },
                 {
                   type: 'doc',
@@ -395,11 +385,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
                   label: `Deploy a token bridge`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/configuring-arbitrum-chain',
-                  label: `Configure your chain`,
                 },
               ],
             },
@@ -890,6 +875,12 @@ const sidebars = {
           id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
           label: 'Database snapshots',
         },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
+          label: 'Convert databases from LevelDB to Pebble',
+        },
+        ,
         {
           type: 'doc',
           id: 'run-arbitrum-node/troubleshooting',
