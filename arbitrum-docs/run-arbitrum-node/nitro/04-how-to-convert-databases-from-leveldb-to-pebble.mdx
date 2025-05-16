@@ -1,0 +1,112 @@
+---
+title: 'How to convert databases from leveldb to pebble'
+sidebar_label: 'Convert node database'
+description: 'Learn how convert your node database from leveldb to pebble'
+author: joshuacolvin0
+sme: joshuacolvin0
+user_story: As a node runner, I want to learn how to migrate my node database from leveldb to pebble.
+content_type: How-To
+---
+
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+Switching from LevelDB to Pebble in Ethereum's Geth client provides several advantages, particularly in terms of resilience to data corruption during unexpected shutdowns, which helps maintain the integrity of your Ethereum node's database.
+
+It's important to understand that transitioning to Pebble may necessitate a complete resynchronization of your Ethereum node. This process can be time-consuming and could lead to downtime. If you are not facing significant issues with LevelDB and do not need Pebble's specific advantages, there may not be a strong reason to make the switch at this time.
+
+While Pebble provides better resilience and potentially improved performance, deciding to switch should consider your specific needs and the possible effects of a full resync on your operations.
+
+<VanillaAdmonition type="note">
+
+Database conversion can take many days/weeks to run.
+
+</VanillaAdmonition>
+
+## convert-databases.bash script
+
+The script can be found in the [Nitro Docker image](https://github.com/OffchainLabs/nitro/blob/7fdc5681c410bf283029e62bde4a1367b32f647d/Dockerfile#L283).
+
+```shell
+Usage: convert-databases.bash [OPTIONS..]
+
+OPTIONS:
+--dbconv          dbconv binary path (default: "/usr/local/bin/dbconv")
+--src             directory containing source databases (default: "/home/user/.arbitrum/arb1/nitro")
+--dst             destination directory
+--force           remove destination directory if it exists
+--skip-existing   skip convertion of databases which directories already exist in the destination directory
+--clean           sets what should be removed in case of error, possible values:
+                      "failed" - remove database which conversion failed (default)
+                      "none"   - remove nothing, leave unfinished and potentially corrupted databases
+                      "all"    - remove whole destination directory
+
+```
+
+Upon successful completion, the script prints out:
+
+```shell
+== Conversion status:
+   l2chaindata database: converted
+   l2chaindata database freezer (ancient): copied
+   arbitrumdata database: converted
+   wasm database: converted
+   classic-msg database: converted
+
+```
+
+### Running the conversion script in Docker
+
+```shell
+docker run \
+       --detach \
+       --rm \
+       --name convert_db \
+       -v /path/to/src/data/arbitrum:/home/user/.arbitrum \
+       -v /path/to/dst/data/arbitrum:/home/user/dst \
+       -it \
+       --entrypoint /bin/bash \
+       nitro-node \
+       -c "convert-databases.bash --dst /home/user/dst/arb1/nitro"
+```
+
+## dbconv tool
+
+`dbconv` tool can be used to:
+
+- Convert single database - copy all entries from a single source database to the destination database that may use a different database engine (`leveldb` or `pebble`)
+- Compact single database - run compaction on the destination database
+- Verify database contents - check if all keys (and optionally values) from the source database are present in the destination database
+
+Selected command arguments:
+
+```shell
+--dst.data string         destination directory of stored chain state
+--dst.db-engine string    backing database implementation to use ('leveldb' or 'pebble') (default "pebble")
+--src.data string         source directory of stored chain state
+--src.db-engine string    backing database implementation to use ('leveldb' or 'pebble') (default "leveldb")
+--convert                 enables conversion step
+--compact                 enables compaction step
+--verify string           enables verification step ("" = disabled, "keys" = only keys, "full" = keys and values)
+```
+
+To see all possible configuration options, run: `dbconv --help`
+
+### example usage
+
+- Converting the `leveldb` database to `pebble` and compacting the resulting database.
+
+```shell
+./target/bin/dbconv --src.data /path/to/source/database/ --src.db-engine leveldb --dst.data /path/to/destination/database/ --dst.db-engine "pebble" --convert --compact
+```
+
+- Verifying that all source DB entries are in the destination DB (checking only if keys exist)
+
+```shell
+./target/bin/dbconv --src.data /path/to/source/database/ --src.db-engine leveldb --dst.data /path/to/destination/database/ --dst.db-engine "pebble" --verify "keys"
+```
+
+- Converting the `leveldb` database to `pebble`, compacting the resulting database, and then verifying that all keys from the source database exist in the destination database
+
+```shell
+./target/bin/dbconv --src.data /path/to/source/database/ --src.db-engine leveldb --dst.data /path/to/destination/database/ --dst.db-engine "pebble" --convert --compact --verify "keys"
+```
