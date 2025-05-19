@@ -1,0 +1,146 @@
+---
+title: 'Canonical factory contracts'
+description: 'Learn how to use the canonical factory contracts for deploying your Arbitrum chain'
+author: jose-franco
+sme: jose-franco
+content_type: how-to
+---
+
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
+
+Deploying new Arbitrum chains is usually done through a `RollupCreator` contract that processes the creation of the needed contracts and sends the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Arbitrum chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
+
+This page describes the benefits of using these canonical factory contracts and lists their addresses in all supported chains.
+
+:::info Use the Arbitrum chain (Orbit) SDK
+
+You can use these contracts to create Arbitrum chains. However, it is strongly recommended to go through the [Arbitrum chain (Orbit) SDK](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) to interact with them. Doing so prevents misconfiguring parameters and using appropriate defaults for most of them.
+
+:::
+
+## Benefits of using the canonical factory contracts
+
+The main benefits of using the canonical factory contracts are:
+
+- **End-to-end deployment and initialization**: The canonical contracts will create all needed contracts, initialize them, and configure them with the parameters passed. Additionally, they will send the appropriate initialization messages to the chain's Inbox contract so the sequencer can process them upon starting. This process is done atomically in a single transaction, guaranteeing a successful chain or token bridge creation.
+- **Gas efficiency**: The canonical contract design is to be gas efficient. Creating and initializing all contracts for a chain or token bridge is a gas-consuming process, so special care has been taken to fit everything into one transaction.
+- **Updated with the latest features**: Whenever a new version is available for the contracts of an Arbitrum chain, the canonical factory contracts get updated, so new rollups and token bridges are created using the updated version.
+
+## Addresses of the canonical factory contracts
+
+This table shows the addresses of the deployed and maintained canonical factory contracts.
+
+| Network          | Chain id | RollupCreator                                                                   | TokenBridgeCreator                                                              |
+| ---------------- | -------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Ethereum         | 1        | <AEL address="0x8c88430658a03497D13cDff7684D37b15aA2F3e1" chainID={1} />        | <AEL address="0x60D9A46F24D5a35b95A78Dd3E793e55D94EE0660" chainID={1} />        |
+| Arbitrum One     | 42161    | <AEL address="0x79607f00e61E6d7C0E6330bd7E9c4AC320D50FC9" chainID={42161} />    | <AEL address="0x2f5624dc8800dfA0A82AC03509Ef8bb8E7Ac000e" chainID={42161} />    |
+| Arbitrum Nova    | 42170    | <AEL address="0x9B523BF5F77e8d90e0E9eb0924aEA6E40B081aE6" chainID={42170} />    | <AEL address="0x8B9D9490a68B1F16ac8A21DdAE5Fd7aB9d708c14" chainID={42170} />    |
+| Base             | 8453     | <AEL address="0x091b8FC0F48613b191f81009797ce55Cf97Af7C8" chainID={8453} />     | <AEL address="0x4C240987d6fE4fa8C7a0004986e3db563150CA55" chainID={8453} />     |
+| Sepolia          | 11155111 | <AEL address="0xfb774eA8A92ae528A596c8D90CBCF1bdBC4Cee79" chainID={11155111} /> | <AEL address="0x7edb2dfBeEf9417e0454A80c51EE0C034e45a570" chainID={11155111} /> |
+| Arbitrum Sepolia | 421614   | <AEL address="0xd2Ec8376B1dF436fAb18120E416d3F2BeC61275b" chainID={421614} />   | <AEL address="0x56C486D3786fA26cc61473C499A36Eb9CC1FbD8E" chainID={421614} />   |
+| Base Sepolia     | 84532    | <AEL address="0x6e244cD02BBB8a6dbd7F626f05B2ef82151Ab502" chainID={84532} />    | <AEL address="0xFC71d21a4FE10Cc0d34745ba9c713836f82f8DE3" chainID={84532} />    |
+
+## How to deploy new factory contracts
+
+This section describes the process of deploying a new `RollupCreator` and a new `TokenBridgeCreator` on a parent chain.
+
+:::warning The use of non-canonical factory contracts is unsupported
+
+This section describes the process of deploying new factory contracts. This can be useful when creating Arbitrum chains on a parent chain that doesn't have canonical factory contracts, or when modifying the core or token bridge contracts. However, keep in mind that using factory contracts different than the ones listed above (canonical) is not supported and might lead to unexpected issues.
+
+:::
+
+### Deploying a `RollupCreator`
+
+To deploy the `RollupCreator` and the core contract templates, we'll use the [nitro-contracts](https://github.com/OffchainLabs/nitro-contracts) repository.
+
+#### Step 1: Clone nitro-contracts repo and checkout the desired release
+
+```shell
+git clone https://github.com/OffchainLabs/nitro-contracts.git
+cd nitro-contracts
+git checkout vX.Y.Z
+```
+
+#### Step 2: Install the dependencies and build the contracts
+
+```shell
+yarn install
+yarn build:all
+```
+
+#### Step 3: Create the .env file and set the desired env parameters
+
+```shell
+cp .env-sample .env
+```
+
+We can use the following parameters:
+
+- `DEVNET_PRIVKEY` or `MAINNET_PRIVKEY`: The private key of the account that will deploy the contracts. Use one or the other depending on the type of network where the contracts will be deployed: testnet or mainnet. Will be used in the `hardhat.config.ts` file.
+- `DISABLE_VERIFICATION`: Whether to disable verification of contracts in the block explorer or not.
+- `ETHERSCAN_API_KEY`: The key to access the API of the block explorer used. Will be used in the `hardhat.config.ts` file.
+
+#### Step 4: Check hardhat configuration
+
+Now we can open the `hardhat.config.ts` file and verify that the network where the contracts are going to be deployed exists in the file. If it exists, we can verify that it's using the environment variables specified above. If it doesn't exist, we can add the network to the configuration file.
+
+#### Step 5: Create a `config.ts` file and specify the right maxDataSize
+
+```shell
+cp scripts/config.ts.example scripts/config.ts
+```
+
+Then we can modify the constant `maxDataSize` to one of the following values:
+
+- `117964` is the parent chain is Ethereum
+- `104857` if the parent chain is a Layer 2 chain
+
+#### Step 6: Run the deployment script
+
+```shell
+yarn deploy-factory --network parentChainNetwork
+```
+
+This last step will create the template contracts and the `RollupCreator` contract, and will show all addresses in the output. It will optionally try to verify the contracts if the configuration is present.
+
+### Deploying a `TokenBridgeCreator`
+
+To deploy the `TokenBridgeCreator` and the token bridge contract templates, we'll use the [token-bridge-contracts](https://github.com/OffchainLabs/token-bridge-contracts) repository.
+
+#### Step 1: Clone token-bridge-contracts repo and checkout the desired release
+
+```shell
+git clone https://github.com/OffchainLabs/token-bridge-contracts.git
+cd token-bridge-contracts
+git checkout vX.Y.Z
+```
+
+#### Step 2: Install the dependencies and build the contracts
+
+```shell
+yarn install
+yarn build
+```
+
+#### Step 3: Create the .env file and set the desired env parameters
+
+```shell
+cp .env-sample .env
+```
+
+We can use the following parameters:
+
+- `BASECHAIN_RPC`: RPC of the parent chain
+- `BASECHAIN_DEPLOYER_KEY`: Private key of the account that will be deploying the contracts
+- `BASECHAIN_WETH`: Address of the WETH contract on the parent chain (should be the zero address for custom gas token chains)
+- `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT`: The gas limit for deploying the child chain factory contracts. It is recommended to leave the default value `6000000`
+- `ARBISCAN_API_KEY`: (Optional) The key to access the API of the block explorer used for verifying the contracts
+
+#### Step 4: Run the deployment script
+
+```shell
+yarn deploy:token-bridge-creator
+```
+
+This step will create the template contracts and the `TokenBridgeCreator` contract, and will show all addresses in the output.

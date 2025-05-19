@@ -1,0 +1,216 @@
+---
+title: Optimistic Rollup
+description: Learn the fundamentals of Arbitrum's Optimistic Rollup.
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about Arbitrum's Optimistic Rollup protocol.
+content_type: get-started
+---
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
+<a data-quicklook-from="arbitrum">Arbitrum</a> is an optimistic rollup. Let’s unpack that term.
+
+_Rollup_
+
+Arbitrum is a Rollup, which means that the inputs to the chain -- the messages that are put into the inbox -- are all recorded on a parent chain (for Arbitrum One, the Ethereum chain) as calldata or blobs (or another format, depending on the configuration of the chain). For the purposes of this article, we also refer to the parent chain as L1, and the Rollup chain as L2.
+
+Because of this, everyone has the information they would need to determine the current correct state of the chain -- they have the full history of the inbox, and the results are uniquely determined by the inbox history, so they can reconstruct the state of the chain based only on public information, if needed.
+
+This also allows anyone to be a full participant in the Arbitrum protocol, to run an Arbitrum node or participate as a <a data-quicklook-from="validator">Validator</a>. Nothing about the history or state of the chain is a secret.
+
+_Optimistic_
+
+Arbitrum chains are Optimistic, which means that Arbitrum chains advances the state of its chain by letting any party (a “proposer”) post on its parent chain an assertion that the party claims is correct (alongside a bond), and then giving everyone else a chance to <a data-quicklook-from="challenge">Challenge</a> that claim (with an accompanying bond). If the <a data-quicklook-from="challenge-period">Challenge Period</a> (6.4 days) passes and nobody has challenged the claimed assertion, the protocol confirms the assertion as correct. Arbitrum chains use an efficient dispute resolution protocol to identify which party is lying if the assertion is challenged during the challenge period. A brief overview of the protocol is included below; for more details, see the [Bold dispute protocol](/how-arbitrum-works/bold/gentle-introduction.mdx) section of the documentation. After the protocol finishes, any liar or liars will forfeit their bonds, and the truth-teller(s) will take part of that deposit as a reward for their efforts (most of the bond is taken away by the chain owner, guaranteeing that the liar is punished even if there's some collusion going on).
+
+Because a party who tries to cheat will lose a deposit, attempts to cheat should be very rare, and the normal case will be a single party posting a correct assertion, and nobody challenging it.
+
+## Resolving disputes using interactive fraud proofs
+
+Among optimistic rollups, the most important design decision is how to resolve disputes. Suppose Alice claims that the chain will produce a certain result, and Bob disagrees. How will the protocol decide which version to accept?
+
+There are basically two choices: interactive proving, or re-executing transactions. Arbitrum uses interactive proving, which we believe is more efficient and more flexible. Much of the design of Arbitrum follows from this fact.
+
+:::note
+
+Zero-knowledge Rollups are able to avoid this situation entirely by using ZK proofs to prove directly to the parent chain that the posted result is correct.
+
+:::
+
+### Interactive proving
+
+The idea of interactive proving is that Alice (along with anyone who agrees with her assertion); Bob (along with anyone who agrees with his assertion); and possibly other parties backing other assertions will engage in an "all-vs-all" challenge game. This is a protocol, refereed by a contract on the parent chain, to resolve their dispute with minimal work required from any contract on the parent chain.
+
+Arbitrum's approach is based on the bisection of the dispute. First, Alice posts a claim covering `N` steps of execution. If Bob disagrees with her claim, he proceeds by posting his own claim about the result of execution, which we say "rivals" Alice's. To defend her claim, Alice (or someone acting in support of her claim) posts two size `N/2` claims, which combine to yield her initial `N-step` claim. If Bob wants to continue the dispute, he (or an ally supporting his claim) must do the same. Bob (or an ally) will then pick one of Alice's `N/2`-step claims to challenge. Now, the size of the dispute has been cut in half. This process continues, cutting the dispute in half at each stage until they disagree about a single execution step. Note that so far, the parent chain referee hasn't had to think about execution "on the merits". Only once the dispute is narrowed down to a single step does the parent chain referee need to resolve it by looking at what the instruction does and whether Alice's claim about it is correct.
+
+:::note
+
+Again, this is a very high-level overview. Please refer to the [Gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) and [Technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx) under the **BoLD dispute protocol** section in the documentation for more details.
+
+The key principle behind interactive proving is that if Alice and Bob are in a dispute, Alice and Bob should do as much off-chain work as possible needed to resolve their dispute, rather than putting that work onto a parent chain contract.
+
+### Re-executing transactions
+
+The alternative to interactive proving would be to have an assertion contain a claimed machine state hash after every individual <a data-quicklook-from="transaction">Transaction</a>. Then in case of a dispute, the parent chain referee would emulate the execution of an entire transaction, to see whether the outcome matches Alice's claim.
+
+### Why interactive proving is better
+
+We believe strongly that interactive proving is the superior approach, for the following reasons.
+
+**More efficient in the optimistic case**: Because interactive proving can resolve disputes larger than one transaction, it can allow an assertion to contain only a single claim about the end state of the chain after all of the execution covered by the block. By contrast, re-execution requires posting a state claim for each transaction within the assertion. With hundreds or thousands of transactions per assertion, there is a substantial difference in computational footprint on the parent chain, and the computational element on the parent chain is usually the main component of the cost of operating a rollup.
+
+**More efficient in the pessimistic case**: In case of a dispute, interactive proving only requires the referee contract on the parent chain to check that Alice and Bob's actions "have the right shape". For example, that Alice has divided her `N`-step claim into two claims half as large. (The referee doesn't need to evaluate the correctness of Alice's claims--Bob does that off-chain.) Only one instruction needs to be re-executed. By contrast, re-execution requires the parent chain referee contract to emulate the execution of an entire transaction.
+
+**Higher per-txn gas limit:** Interactive proving can escape from Ethereum's tight per-transaction gas limit. The gas limit isn't infinite, for obvious reasons, but it can be larger than on Ethereum. As far as Ethereum is concerned, the only downside of a gas-heavy Arbitrum transaction is that it may require an interactive <a data-quicklook-from="fraud-proof">fraud proof</a> with slightly more steps (and only if a fraud proof is actually needed; i.e., in the event of a dispute). By contrast, re-execution must impose a _lower_ gas limit than Ethereum, because it must be possible to emulate execution of the transaction (which is more expensive than executing it directly) within a single Ethereum transaction.
+
+**More implementation flexibility:** Interactive proving allows more flexibility in implementation. All that is necessary is the ability to verify a one-step proof on the parent chain, Ethereum. By contrast, re-execution approaches are tethered to limitations of the Ethereum Virtual Machine (EVM).
+
+### Interactive proving drives the design of Arbitrum
+
+Much of the design of Arbitrum is driven by the opportunities opened up by interactive proving. If you're reading about some feature of Arbitrum, and you're wondering why it exists, two good questions to ask are: "How does this support interactive proving?" and "How does this take advantage of interactive proving?" The answers to most "why" questions about Arbitrum relate to interactive proving.
+
+## Arbitrum Rollup protocol
+
+Before diving into the Rollup protocol, there are two things we need to cover.
+
+First, _if you’re an Arbitrum user or developer, you don’t need to understand the Rollup protocol_. You don’t ever need to think about it unless you want to. Your relationship with it can be like a train passenger’s relationship with the train’s engine: you know it exists, and you rely on it to keep working, but you don’t spend your time monitoring it or studying its internals.
+
+You’re welcome to study, observe, and even participate in the Rollup protocol, but you don’t need to, and most people won’t. So if you’re a typical train passenger who just wants to read or talk to your neighbor, you can skip right to the [next section](#validators) of this document. If not, read on!
+
+The second thing to understand about the Rollup protocol is that _the protocol doesn’t decide the results of transactions, it only confirms the results_. The results are uniquely determined by the sequence of messages in the chain’s inbox. So once your transaction message is in the chain’s inbox, its result is knowable, and Arbitrum nodes will report that your transaction has been completed. The role of the Rollup protocol is to confirm transaction results that, as far as Arbitrum users are concerned, have already occurred. (This is why Arbitrum users can effectively ignore the Rollup protocol.)
+
+You might wonder why we need the Rollup protocol. If everyone knows the results of transactions already, why bother confirming them? The Rollup protocol exists for two reasons. First, somebody might lie about a result, and we need a definitive, <a data-quicklook-from="trustless">Trustless</a> way to tell who is lying. Second, Ethereum doesn’t know the results. The whole point of a child chain scaling system is to run transactions without Ethereum needing to do all of the work--and indeed, Arbitrum can go fast enough that Ethereum couldn’t hope to monitor every Arbitrum transaction. However, once the result is confirmed, Ethereum knows about it and can rely on it, enabling operations on Ethereum, such as processing withdrawals of funds from Nitro back to the parent chain.
+
+With those preliminaries behind us, let’s jump into the details of the Rollup protocol.
+
+The parties who participate in the protocol are called _validators_. Some validators will choose to be proposers--they will place a `WETH` deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will need to play the role of a proposer, since as long as the validator is bonded to the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. Deployment of the BoLD dispute protocol for Arbitrum One makes these roles permissionless to perform. "Watchtower validators," who monitor the chain but don't take any on-chain actions, can also be run permissionlessly (see ["validators"](#validators) below).
+
+The key security property of the Rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that the execution of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> is as trustless as Ethereum. You, and you alone (or someone you hire), can force your transactions to be processed correctly. And that is true, no matter how many malicious people are trying to stop you.
+
+### The rollup Chain
+
+The Rollup protocol tracks a chain of assertions. They're not the same as the parent chain Ethereum blocks, and also not the same as the child chain Nitro blocks. You can think of the assertions as forming a separate chain, which the <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> manages and oversees.
+
+Validators can propose assertions. New assertions will be _unresolved_ at first. Eventually, every assertion will be _resolved_, by being either _confirmed_ or _rejected_. The confirmed assertions make up the confirmed history of the chain.
+
+For more details on how the Rollup Chain works under BoLD, the [Gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) provides an overview that touches on the Rollup Chain.
+
+:::note
+
+Validators and proposers serve different roles. Validators validate transactions by computing the next Chain state using the chain's <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF), whereas proposers can also assert and challenge the chain state on the parent chain.
+
+:::
+
+Each assertion contains:
+
+- the assertion number
+- the predecessor assertion number: assertion number of the last assertion before this one that is (claimed to be) correct
+- the number of child chain blocks that have been created in the chain's history
+- the number of inbox messages that have been consumed in the chain’s history
+- a hash of the outputs produced over the chain’s history.
+
+Except for the assertion number, the contents of the assertion are all just claims by the assertion's proposer. Arbitrum doesn’t know at first whether any of these fields are correct. If all of these fields are correct, the protocol should eventually confirm the assertion. If one or more of these fields are incorrect, the protocol should eventually reject the assertion.
+
+An assertion is implicitly claiming that its predecessor assertion is correct. This implies, transitively, that an assertion implicitly claims the correctness of a complete history of the chain: a sequence of ancestor assertions that reaches all the way back to the birth of the chain.
+
+An assertion is also implicitly claiming that its older siblings (older assertions with the same predecessor), if there are any, are incorrect. If two assertions are siblings, and the older sibling is correct, then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
+
+The assertion is assigned a deadline, which says how long other validators have to respond to it. For an assertion R with no older siblings, this will equal the time the assertion was posted, plus an interval of time known as the Challenge Period; subsequent younger siblings will have the same deadline as their oldest sibling (R). If you’re a validator, and you agree that an assertion is correct, you don’t need to do anything. If you disagree with an assertion, you can post another assertion with a different result, and you’ll probably end up in a challenge against the party who proposed the first assertion (or another party acting in support of that assertion). More on challenges below:
+
+In the normal case, the rollup chain will look like this:
+
+<ImageZoom src="/img/haw-normal-rollup.svg" alt="Normal Rollup" className="img-600px" />
+
+On the left, representing an earlier part of the chain’s history, we have confirmed assertions. These have been fully accepted and recorded by the parent chain contracts that manage the chain. The newest of the confirmed assertions, assertion 94, is called the “latest confirmed assertion.” On the right, we see a set of newer proposed assertions. The protocol can’t yet confirm or reject them, because their deadlines haven’t run out yet. The oldest assertion whose fate has yet to be determined, assertion 95, is called the “first unresolved assertion.”
+
+Notice that a proposed assertion can build on an earlier proposed assertion. This allows validators to continue proposing assertions without needing to wait for the protocol to confirm the previous one. Normally, all of the proposed assertions will be valid, so they will all eventually be accepted.
+
+Here’s another example of what the chain state might look like, if several validators are being malicious. It’s a contrived example, designed to illustrate a variety of cases that can come up in the protocol, all smashed into a single scenario.
+
+<ImageZoom
+  src="/img/haw-rollup-malicious-validator.svg"
+  alt="Rollup with malicious validator"
+  className="img-600px"
+/>
+
+There’s a lot going on here, so let’s unpack it.
+
+- Assertion 100 has been confirmed.
+- Assertion 101 claimed to be a correct successor to assertion 100, but 101 was rejected (hence it is orange).
+- Assertion 102 was eventually confirmed as the correct successor to 100.
+- Assertion 103 was confirmed and is now the latest confirmed assertion.
+- Assertion 104 was proposed as a successor to assertion 103, and 105 was proposed as a successor to 104. 104 was rejected as incorrect, and as a consequence 105 was rejected because its predecessor was rejected.
+- Assertion 106 is unresolved. It claims to be a correct successor to assertion 103 but the protocol hasn’t yet decided whether to confirm or reject it. It is the first unresolved assertion.
+- Assertions 107 and 108 claim to chain from 106. They are also unresolved. If 106 is rejected, they will be automatically rejected too.
+- Assertion 109 disagrees with assertion 106, because they both claim the same predecessor. At least one of them will eventually be rejected, but the protocol hasn’t yet resolved them.
+- Assertion 110 claims to follow 109. It is unresolved. If 109 is rejected, 110 will be automatically rejected too.
+- Assertion 111 claims to follow 104. 111 will inevitably be rejected because its predecessor has already been rejected. But it hasn’t been rejected yet, because the protocol resolves assertions in assertion number order, so the protocol will have to resolve 106 through 110, in order, before it can resolve 111. After 110 has been resolved, 111 can be rejected immediately.
+
+Again, this sort of thing is very unlikely in practice. In this diagram, at least four different bonds must have been placed on wrong assertions, and when the dust settles at least four bonds will be forfeited. The protocol handles these cases correctly, of course, but they’re rare corner cases. This diagram is designed to illustrate the variety of situations that are possible in principle, and how the protocol would deal with them.
+
+### Staking
+
+At any given time, some validators will be bonders, and some will not. Bonders deposit funds that are held by the Arbitrum parent chain contracts and will be confiscated if the bonder loses a challenge. Nitro chains accept bonds in ETH.
+
+A single bond can cover a chain of assertions. Every bonder is bonded on the latest confirmed assertion; and if you’re bonded on an assertion, you can also bond on one successor of that assertion. So you might be bonded on a sequence of assertions that represent a single coherent claim about the correct history of the chain. A single bond suffices to commit you to that sequence of assertions.
+
+In order to create a new assertion, you must be a bonder, and you must already be bonded on the predecessor of the new assertion you’re creating. The bond requirement for assertion creation ensures that anyone who creates a new assertion has something to lose if that assertion is eventually rejected.
+
+The rules for staking are as follows:
+
+- If you’re not bonded, you can bond on the latest confirmed assertion. When doing this, you deposit the current minimum bond amount.
+- If you’re bonded on an assertion, you can also add your bond to any one successor of that assertion. (The protocol tracks the maximum assertion number you’re bonded on, and lets you add your bond to any successor of that assertion, updating your maximum to that successor.) This doesn’t require you to place a new bond.
+  - A special case of adding your bond to a successor assertion is when you create a new assertion as a successor to an assertion you’re already bonded on.
+- If you’re bonded only on the latest confirmed assertion (and possibly earlier assertions), you or anyone else can ask to have your bond refunded. Your bonded funds will be returned to you, and you will no longer be a bonder.
+- If you lose a challenge, your bond is removed from all assertions and you forfeit your bonded funds.
+
+Notice that once you are bonded on an assertion, there is no way to unbond. You are committed to that assertion. Eventually one of two things will happen: that assertion will be confirmed, or you will lose your bond. The only way to get your bond back is to wait until all of the assertions you are bonded on are confirmed.
+
+### Rules for confirming or rejecting assertions
+
+The rules for resolving assertions are fairly simple.
+
+Any unresolved assertion can be confirmed if:
+
+- the assertion's predecessor is the latest confirmed assertion, and
+- the assertion's deadline has passed
+
+Any unresolved assertion can be rejected if:
+
+- the assertion's predecessor has been rejected, or
+- the assertion has a sibling that has been confirmed
+
+A consequence of these rules is that once the first unresolved assertion's deadline has passed (and assuming there is at least one bonder bonded on something other than the latest confirmed assertion), the only way the assertion can be unresolvable is if at least one bonder is bonded on it and at least one bonder is bonded on a different assertion with the same predecessor. If this happens, the two bonders are disagreeing about which assertion is correct. It’s time for a challenge, to resolve the disagreement.
+
+## Delays
+
+Even if the <a data-quicklook-from="assertion">Assertion</a> Tree has multiple conflicting assertions and, say, multiple disputes are in progress, validators can continue making assertions; honest validators will simply build on the one valid assertion (intuitively: an assertion is also an implicit claim of the validity of all of its parent-assertions.) Likewise, users can continue transacting on the child chain, since transactions continue to be posted in the chain's inbox.
+
+The only delay that users experience during a dispute is of their [L2 to L1 messages](/how-arbitrum-works/11-l2-to-l1-messaging.mdx) (i.e., "withdrawals"). A key property of BoLD is that we can guarantee that in the common case, their withdrawals/messages will be delayed by only one challenge period; and in the case of an actual dispute, the withdrawals/messages will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
+
+## Validators
+
+Arbitrum full nodes normally "live at the child chain" which means that they don’t worry about the Rollup protocol but simply treat their Arbitrum chain as a mechanism that feeds inbox messages to the State Transition Function to evolve the child chain chain and produce outputs.
+
+Some Arbitrum nodes will choose to act as _validators_. This means that they watch the progress of the Rollup protocol and participate in that protocol to advance the state of the chain securely.
+
+Not all nodes will choose to do this. Because the Rollup protocol doesn’t decide what the chain will do but merely confirms the correct behavior that is fully determined by the inbox messages, a node can ignore the Rollup protocol and simply compute for itself the correct behavior.
+
+<a data-quicklook-from="offchain-labs">Offchain Labs</a> provides open source validator software, including
+a pre-built Docker image.
+
+Every validator can choose their own approach, but we expect validators to follow three common strategies (For more details on these strategies see [Run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx)):
+
+- The _active validator_ strategy tries to advance the state of the chain by proposing new assertions. An <a data-quicklook-from="active-validator">Active Validator</a> is always bonded, because creating an assertion requires being bonded. A chain really only needs one honest active validator; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
+- The _defensive validator_ strategy watches the Rollup protocol operate. If only correct assertions are proposed, this strategy doesn't bond. But if an incorrect assertion is proposed, this strategy intervenes by posting a correct assertion or staking on a correct assertion that another party has posted. This strategy avoids staking when things are going well, but if someone is dishonest it bonds in order to defend the correct outcome.
+- The _watchtower validator_ strategy never bonds. It simply watches the Rollup protocol, and if an incorrect assertion is proposed, it raises the alarm (by whatever means it chooses) so that others can intervene. This strategy assumes that other parties who are willing to bond will be willing to intervene in order to take some of the dishonest proposer’s bond and that that can happen before the dishonest assertion's deadline expires. (In practice, this will allow several days for a response.)
+
+Under normal conditions, validators using the defensive and watchtower strategies won’t do anything except observe. A malicious actor who is considering whether to try cheating won’t be able to tell how many defensive and watchtower validators are operating incognito. Perhaps some defensive validators will announce themselves, but others probably won’t, so a would-be attacker will always have to worry that defenders are waiting to emerge.
+
+The underlying protocol supports permissionless validation, i.e., anyone can do it. Currently on Arbitrum One, validators that require bond (i.e., active and defensive validators) are whitelisted; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization).
+
+Who will be validators? Anyone will be able to do it, but most people will choose not to. In practice we expect people to validate a chain for several reasons.
+
+- Validators could be paid for their work, by the party that created the chain or someone else. A chain could be configured such that a portion of the funds from user transaction fees are paid directly to validators.
+- Parties who have significant assets at bond on a chain, such as <a data-quicklook-from="dapp">dApp</a> developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
+- Anyone who chooses to validate can do so. Some users will probably choose to validate in order to protect their own interests or just to be good citizens. But ordinary users don’t need to validate, and we expect that the vast majority of users won’t.

@@ -49,7 +49,7 @@ Secure and scalable SSS-based wallets with robust key management custody digital
 
 ### [Digital Assets](https://docs.venly.io/docs/nft-api-overview)
 
-Robust tokenization is based on industry standards and is secured by several code and security audits. The Venly platform facilitates no-code and API solutions to manage, transfer, and gather information on different token asset classes, such as ERC20, ERC721, and ERC1155, which customers use in industries such as Finance, E-commerce, and Gaming.
+Robust tokenization is based on industry standards and is secured by several code and security audits. The Venly platform facilitates no-code and API solutions to manage, transfer, and gather information on different token asset classes, such as `ERC-20`, `ERC-721`, and `ERC-1155`, which customers use in industries such as Finance, E-commerce, and Gaming.
 
 ### [Payments](https://docs.venly.io/docs/pay-api-overview)
 
@@ -186,9 +186,9 @@ POST /api/transactions/execute
 | :------------------------------ | :--------- | :----------------------------------------------------------------- | :-------- | :-------- |
 | `transactionRequest`            | Body       | This object includes the transaction information                   | Object    | ✅        |
 | transactionRequest.`type`       | Body       | This will be **TRANSFER**                                          | String    | ✅        |
-| transactionRequest.`walletId`   | Body       | The `id` of the wallet that will initiate the tx                   | String    | ✅        |
+| transactionRequest.`walletId`   | Body       | The `id` of the wallet that will initiate the transaction          | String    | ✅        |
 | transactionRequest.`to`         | Body       | Destination Address (can be a blockchain address or email address) | String    | ✅        |
-| transactionRequest.`secretType` | Body       | On which blockchain the tx will be executed                        | String    | ✅        |
+| transactionRequest.`secretType` | Body       | On which blockchain the transaction will be executed               | String    | ✅        |
 | transactionRequest.`value`      | Body       | The amount you want to transfer                                    | Integer   | ✅        |
 
 ### Request Body:

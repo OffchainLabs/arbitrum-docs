@@ -12,7 +12,7 @@ sidebar_position: 1
 
 This is possible thanks to [WebAssembly](https://www.infoworld.com/article/3291780/what-is-webassembly-the-next-generation-web-platform-explained.html) technology, which all Stylus contracts compile to. Stylus smart contracts live under the **same Ethereum state trie** in Arbitrum nodes, and can fully interoperate with Solidity or Vyper EVM smart contracts. With Stylus, developers can write smart contracts in Rust that talk to Solidity and vice versa without any limitations.
 
-Today, the Stylus testnet also comes with 2 officially supported [SDKs](../reference/stylus-sdk.md) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages.
+Today, the Stylus testnet also comes with two officially supported [SDKs](/stylus/overview.mdx) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages.
 
 However, _anyone_ can add support for new languages in Stylus. **As long as a programming language can compile to WebAssembly**, Stylus will let you use it to write EVM-compatible smart contracts. Note that in order to be deployed onchain, your compiled program must fit under the 24Kb brotli-compressed limit, and should meet Stylus gas metering requirements.
 
@@ -172,7 +172,7 @@ Caused by:
     missing import memory_grow
 ```
 
-What's wrong? This means that the WasmAllocator from the Zig standard library should actually be using our special `memory_grow` hostio function underneath the hood. We can fix this by copying over the WasmAllocator.zig file from the standard library, and modifying a single line to use `memory_grow`.
+What's wrong? This means that the `WasmAllocator` from the Zig standard library should actually be using our special `memory_grow` hostio function underneath the hood. We can fix this by copying over the WasmAllocator.zig file from the standard library, and modifying a single line to use `memory_grow`.
 
 You can find this file under `WasmAllocator.zig` in the OffchainLabs/zig-on-stylus repository. We can now use it:
 
@@ -237,7 +237,7 @@ fn sieve_of_erathosthenes(comptime limit: usize, nth: u16) bool {
 }
 ```
 
-Checking if a number N is prime would involve just checking if the value at index N in this `prime` boolean slice is true. We can then integrate this function into our `user_entrypoint`:
+Checking if a number `N` is prime would involve just checking if the value at index `N` in this `prime` boolean slice is `true`. We can then integrate this function into our `user_entrypoint`:
 
 ```c
 // The main entrypoint to use for execution of the Stylus WASM program.
