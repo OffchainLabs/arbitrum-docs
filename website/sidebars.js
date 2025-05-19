@@ -877,6 +877,12 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
+          label: 'Convert databases from LevelDB to Pebble',
+        },
+        ,
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/troubleshooting',
           label: 'Troubleshooting',
         },
