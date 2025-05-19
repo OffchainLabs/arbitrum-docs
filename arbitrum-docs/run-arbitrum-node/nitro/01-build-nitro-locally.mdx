@@ -10,8 +10,8 @@ Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to show
 
 This how-to assumes that you're running one of the following operating systems:
 
-- [Debian 11.7 (arm64)](https://cdimage.debian.org/cdimage/archive/11.7.0/arm64/iso-cd/debian-11.7.0-arm64-netinst.iso)
-- [Ubuntu 22.04 (amd64)](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)
+- [Debian 11.7 (arm64)](https://cdimage.debian.org/cdimage/archive/11.7.0/)
+- [Ubuntu 22.04 (amd64)](https://old-releases.ubuntu.com/releases/22.04.2/)
 - [MacOS Sonoma 14.3](https://developer.apple.com/documentation/macos-release-notes/macos-14_3-release-notes).
 
 ## Build a Docker image
@@ -64,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.5.5@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.6.2@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -109,7 +109,7 @@ Replace `~/.zprofile` with `~/.bash_profile` if you use bash instead of zsh).
 Install essentials:
 
 ```shell
-brew install git curl make cmake npm go golangci-lint wabt llvm lld libusb gotestsum
+brew install git curl make cmake npm wabt llvm lld libusb gotestsum
 npm install --global yarn
 sudo mkdir -p /usr/local/bin
 echo "export PATH=/opt/homebrew/opt/llvm/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
@@ -188,11 +188,11 @@ If you use zsh, replace `bash` with `zsh`.
 
 :::
 
-#### Install foundry
+#### Install foundry version 1.0.0
 
 ```shell
 curl -L https://foundry.paradigm.xyz | bash
-foundryup
+foundryup -i 1.0.0
 ```
 
 ### Step 9. Check dependencies
