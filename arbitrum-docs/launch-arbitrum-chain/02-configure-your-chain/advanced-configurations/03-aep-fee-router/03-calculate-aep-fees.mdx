@@ -1,0 +1,111 @@
+---
+title: 'Calculating AEP license fees'
+sidebar_label: 'Calculating AEP license fees'
+description: 'Learn how to calculate your Arbitrum chains revenue and license fees.'
+author: Midroni
+sme: Midroni
+user_story: As a current Arbitrum chain owner, I need to understand how my Arbitrum chain revenue and AEP license fees are calculated.
+content_type: how-to
+---
+
+This document will help you calculate your Arbitrum chain’s _Protocol Net Revenue_ and AEP license fees.
+
+Before we define “Protocol Net Revenue”, let's explain how fees work in a standard Arbitrum chain. From there, we can connect how each fee equates to a revenue or a cost.
+
+### Sequencing revenue
+
+In a vanilla Arbitrum chain (a chain without customizations, transaction ordering policies, or other add-ons), users and dApps will pay a single gas fee to submit their transactions. Under the hood, however, a user’s fee is allocated across four components used by the network in different ways. These four fee components are split as follows:
+
+- `l2BaseFee`: fees paid to execute a transaction on the Arbitrum chain (Orbit).
+- `l2SurplusFee`: surplus fees are charged in addition to the base fee when an Arbitrum chain (Orbit) is congested.
+- `l1BaseFee`: fees paid to cover the cost of an Arbitrum chain (Orbit) posting its settlement transaction to the parent chain.
+- `l1SurplusFee`: an additional surplus fee that can be configured to award extra fees to the batch poster.
+
+Based on the above, we interpret that an Arbitrum chain’s revenue sources include all fee components: `l2BaseFee`, `l2SurplusFee`, `l1BaseFee`, and `l1SurplusFee`. However, one of these fee components is also a cost, `l1BaseFee`, as it is used to pay for parent chain settlement.
+
+### Assertion costs
+
+The above fee system applies to an Arbitrum chain’s Sequencer and Batch Poster, but there is another important actor that is considered essential to the chain. These are the [validators](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx).
+
+Validators are responsible for posting assertions on the parent chain, which are disputable claims about the new state of the Rollup. Posting an assertion is what progressed chain state on the parent chain. Validators are also responsible for securing the chain by creating disputes on false assertions.
+
+As validators are necessary for chain security and chain progression, the gas costs paid by validators are a cost under the AEP license.
+
+The AEP license permits an Arbitrum chain to deduct the gas costs of assertion posting and confirming **only for validators operated by the chain owner**. The AEP Fee Router does not deduct assertion costs from its fees. In a later section, we will explain how chain owners can optionally deduct assertion costs.
+
+### Additional revenue sources
+
+As the Arbitrum chain (Orbit) license allows chain owners to customize their Rollup, the AEP license accounts for revenue sources that could arise out of innovations. As such, it’s worth noting that the total calculation of revenue will also include:
+
+- Revenue from transaction ordering policies.
+- Revenue earned through fees on top of the bridge.
+- Broadly, any revenue earned in connection with your use of Arbitrum Nitro.
+
+You can read the relevant legal terminology in Section 2 of the [AEP Terms](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
+
+## Calculating AEP fees
+
+We are now in a place where we can precisely define AEP fees. An Arbitrum chain’s obligation for AEP license is 10% of a chain’s **Net Protocol Revenue**. Net Protocol Revenue is broadly the difference between (i) gross revenue and (ii) settlement costs.
+
+Based on our understanding above, we can calculate AEP fees as follows.
+
+```jsx
+AEP_FEES = [(gross revenue) - (settlement costs)]*0.1
+AEP_FEES = [(sequencing revenue + additional revenue) - (settlement costs + assertion costs)]*0.1
+AEP_FEES = [(l2BaseFee + l2SurplusFee + l1BaseFee + l1SurplusFee) - (l1BaseFee + assertion costs)]*0.1
+```
+
+## Opting in for assertion cost deduction
+
+The AEP Fee Router **does not deduct** **assertion costs** from the fees it routes. This is because the contract system cannot track the amount of gas validators spend, and it cannot determine the eligibility of a validator.
+
+As such, Arbitrum chains can choose to deduct these costs from their fee stream, but this will require Arbitrum chains to self-report assertion costs and implement an intermediary multisig that sits before the AEP Fee Router system.
+
+Instructions for doing so can be found below.
+
+### Eligible validators
+
+Only validators directly associated with the Arbitrum chain owner are eligible for assertion cost deductions. By directly associated, we mean a validator operated by the team directly or contracted by an external provider (e.g., a Rollup-as-a-Service team) to act as a validator on behalf of the team. In the event of a contracted validator, only one validator can be eligible.
+
+### Eligible costs
+
+The following costs can be deducted for an eligible validator:
+
+1. The cost of posting assertions
+2. The cost of confirming assertions
+3. The cost of participating in fraud proofs
+
+### Deducting assertion costs
+
+If a team elects to deduct their assertion posting costs from eligible validators, they must establish and obey the following process:
+
+- Communicate to the Arbitrum Foundation that they intend to deduct onchain assertion costs
+  - Align on a cadence of disbursal and accounting these costs with the Arbitrum Foundation (e.g., quarterly, annually)
+  - At this cadence, provide onchain accounting to the Arbitrum Foundation to substantiate deducted costs from the AEP Fee Router stream.
+
+To implement the deduction, the team should do the following:
+
+- [Configure all Arbitrum chain fee components](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/07-fee-management.mdx#how-to-configure-the-fee-collector-addresses) to send all fees to a secure multisig address.
+  - For ease of accounting, it’s strongly recommended that this multisig handle no funds other than the rewards earned from the protocol.
+- On the established regular cadence (e.g., quarterly) deduct _all eligible assertion gas costs_ from the multisig’s balance by transferring it to your preferred fee-collecting address. The remainder of the amount must be forwarded to the `RewardDistributor` contract (configured as directed previously)
+- Following this, the `RewardDistributor` will split the post-deduction funds between the **AEP Fee Router** contracts and the configured chain-owner controlled addresses.
+
+## Special cases and exceptions
+
+Certain Arbitrum chain configurations and customizations require special handling of AEP fees. The following is a non-exhaustive list of applicable scenarios and how to ensure AEP compliance. If any of the following cases apply, the recommended approach for fee handling will require manual handling of a portion of or all AEP Fees.
+
+### L2-based custom gas tokens
+
+If you are an L3 or higher chain with a custom gas token, your custom gas token contract might be deployed on L2. If this L2 is not an Arbitrum chain, then the L2 token can't be transferred via the AEP Fee Router, as this would first require bridging down to Ethereum (impossible for L2-based tokens). In this instance, we recommend your chain pay fees in `ETH` by manually sending fees to an `ETH`-configured routing system.
+
+### Non-Ethereum L1
+
+If your Arbitrum chain is deployed on a non-Ethereum L1 (e.g., Solana, BNB Chain), your fees must be manually transferred to a Foundation-controlled address.
+
+### Novel fee-earning customizations
+
+As discussed above in Additional revenue sources, if you have customized your Arbitrum chain to earn revenue through any enshrined component, this revenue must be calculated as part of the AEP fees. In such cases, we recommend engaging with the AF to agree on a revenue model and reporting cadence and then manually send additional fees into the routing system as required.
+
+### Other cases
+
+If you are still determining if your Arbitrum chain configuration applies to the listed or unlisted special cases, we recommend engaging with the Arbitrum Foundation.

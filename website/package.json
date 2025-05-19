@@ -26,7 +26,8 @@
     "typecheck": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check-redirects": "tsx scripts/check-redirects.ts"
+    "check-redirects": "tsx scripts/check-redirects.ts",
+    "check-releases": "ts-node scripts/check-releases.ts"
   },
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
@@ -63,6 +64,8 @@
     "trim": "0.0.3"
   },
   "devDependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
     "@docusaurus/module-type-aliases": "^3.3.2",
     "@offchainlabs/notion-docs-generator": "^0.0.6",
     "@offchainlabs/prettier-config": "0.2.1",
@@ -70,11 +73,13 @@
     "@tsconfig/docusaurus": "^2.0.3",
     "@types/node": "^22.10.10",
     "@types/react": "^19.0.10",
+    "@types/semver": "^7.7.0",
     "docusaurus-plugin-typedoc": "^1.0.1",
     "gray-matter": "^4.0.3",
     "husky": "^9.1.7",
     "markdown-link-extractor": "^3.1.0",
     "prettier": "^2.8.3",
+    "semver": "^7.6.0",
     "styled-components": "^6.1.15",
     "tsx": "^4.19.3",
     "typedoc": "^0.25.13",
