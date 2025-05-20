@@ -14,17 +14,19 @@ The express lane time advantage is currently set to 200ms, while the current blo
 
 Express lane transactions are processed in the order of their `sequenceNumber`, which is a field in every express lane transaction. The `sequenceNumber` field is important because transactions with `sequenceNumber = n` can only be sequenced after all the transactions from `sequenceNumber = 0` to `sequenceNumber = n-1` have been sequenced. The first expected sequence number for a new round is zero and increments for each accepted transaction.
 
+There is a special "dontcare" sequence number (2^64 - 1) that can be used to indicate that you don't care about ordering of this express lane submission relative to others. Transactions with the "dontcare" sequence number will be sequenced right away without waiting for any other transactions. Note that normal nonce ordering within transactions for an account is still respected, so transactions from the same account will still be ordered by their nonce regardless of sequence number. The express lane controller can send ExpressLaneSubmissions with both "dontcare" and normal sequence numbers within the same round.
+
 ## How response times work
 
 The response for a transaction submission to the express lane is returned immediately once received by the sequencer. For example, if an express lane transaction is sent to the sequencer at `t=0ms` and it took 50ms to arrive at the sequencer (defined as `time_to_arrive`), then the expected response time is at `t=50ms`. Note that an accepted transaction is defined as an express lane transaction submission where the sequencer returns an empty result with an HTTP status of `200` and will always have their `sequenceNumber` consumed. You can read more about how to submit express lane transactions in: [How to submit transactions to the express lane](/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
 
 ## Errors relating to the `sequenceNumber`
 
-When it comes to submitting express lane transactions, there are a few scenarios to consider.
+When it comes to submitting express lane transactions, there are a few scenarios to consider. Note that if your use case doesn't require an ordering between ExpressLaneSubmissions beyond the usual per account nonce ordering, then you can use the "dontcare" sequence number described above.
 
 ### Scenario 1: You get an error response immediately
 
-In this scenario, an error response is immediately returned after you send an express lane transaction. The transaction's `sequenceNumber` will not be consumed if the error is Timeboost-related and consumed otherwise, hence you may need to re-submit your transaction after rectifying any errors with the appropriate sequence number. See [Common Timeboost error responses](#common-error-responses) below for a full list of Timeboost-related error responses and how to interpret them.
+In this scenario, an error response is immediately returned after you send an express lane transaction. In most cases the transaction's `sequenceNumber` will not be consumed if the error is Timeboost-related or if the transaction was invalid (eg nonce too low, malformed transaction). If the error contains "Error queuing expressLane transaction" you need to re-submit your transaction with the same sequence number after rectifying any errors, or submit a different transaction with that sequence number. See [Common Timeboost error responses](#common-error-responses) below for a full list of Timeboost-related error responses and how to interpret them.
 
 ### Scenario 2: Your transaction got an empty response with an HTTP status of `200`
 
@@ -54,7 +56,7 @@ The below two tables can also be found on our guide on [How to use Timeboost](/h
 
 #### Table 2: Errors relating to express lane transaction submission
 
-Note that if you get any of the errors below, then the sequence number used in your express lane transaction was _not_ consumed.
+Note that if you get any of the errors below or errors related to invalidity of the transaction (eg nonce too low, malformed transaction), then the sequence number used in your express lane transaction was _not_ consumed.
 | Error | Description |
 | ------------------------------ | --------------------------------------------------------------------- |
 | `MALFORMED_DATA` | wrong input data, failed to deserialize, missing certain fields, etc. |
