@@ -26,7 +26,7 @@ When it comes to submitting express lane transactions, there are a few scenarios
 
 ### Scenario 1: You get an error response immediately
 
-In this scenario, an error response is immediately returned after you send an express lane transaction. In most cases the transaction's `sequenceNumber` will not be consumed if the error is Timeboost-related or if the transaction was invalid (eg nonce too low, malformed transaction). If the error contains "Error queuing expressLane transaction" you need to re-submit your transaction with the same sequence number after rectifying any errors, or submit a different transaction with that sequence number. See [Common Timeboost error responses](#common-error-responses) below for a full list of Timeboost-related error responses and how to interpret them.
+In this scenario, an error response is immediately returned after you send an express lane transaction. In most cases the transaction's `sequenceNumber` will not be consumed if the error is Timeboost-related or if the transaction was invalid (e.g., nonce too low, malformed transaction). If the error contains "Error queuing expressLane transaction" you need to re-submit your transaction with the same sequence number after rectifying any errors, or submit a different transaction with that sequence number. See [Common Timeboost error responses](#common-error-responses) below for a full list of Timeboost-related error responses and how to interpret them.
 
 ### Scenario 2: Your transaction got an empty response with an HTTP status of `200`
 
