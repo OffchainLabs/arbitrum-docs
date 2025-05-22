@@ -49,7 +49,6 @@ This includes:
 
 In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts).
 
-Optionally, an Arbitrum chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/03-aep-fee-router/03-calculate-aep-fees.mdx#assertion-costs) section:
 
 <aside>
 🚨 Layer-3 chains with custom gas tokens with L2-based token contracts cannot send their custom gas tokens to Ethereum. A future version of the AEP Fee Router may allow Arbitrum chains with L2-based tokens to distribute fees using the routing system.
