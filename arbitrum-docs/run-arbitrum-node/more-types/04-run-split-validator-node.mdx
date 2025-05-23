@@ -11,7 +11,6 @@ content_type: how-to
 Split validators separate the validation work to a stateless worker, which provides several key benefits:
 - **Resource management**: Easier to scale and manage compute resources independently
 - **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
-- **Security**: Isolates the staking keys from the validation process
 - **Flexibility**: Allows running multiple validation workers for redundancy or horizontal scalability
 
 This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
@@ -44,8 +43,7 @@ docker run --rm -it \
   --auth.addr 127.0.0.1 \
   --auth.origins 0.0.0.0 \
   --auth.jwtsecret /tmp/nitro-val.jwt \
-  --auth.port 5200 \
-  --validation.wasm.allowed-wasm-module-roots="0x184884e1eb9fefdc158f6c8ac912bb183bf3cf83f0090317e0bc4ac5860baa39,0x260f5fa5c3176a856893642e149cf128b5a8de9f828afec8d11184415dd8dc69,0xb0de9cb89e4d944ae6023a3b62276e54804c242fd8c4c2d8e6cc4450f5fa8b1b,0xdb698a2576298f25448bc092e52cf13b1e24141c997135d70f217d674bbeb69a"
+  --auth.port 5200
 ```
 
 The validation node will listen on port 5200.
@@ -83,7 +81,7 @@ Replace the placeholders with your specific values:
 
 ### Kubernetes deployment with Helm
 
-Arbitrum provides a [community Helm chart](https://github.com/OffchainLabs/community-helm-charts) for easy Kubernetes deployment.
+Arbitrum provides a [community Helm chart](https://github.com/OffchainLabs/community-helm-charts) for Kubernetes deployment.
 
 #### Step 1: Create validation node configuration
 
@@ -118,6 +116,12 @@ validator:
   splitvalidator:
     deployments:
       - name: "current"
+```
+
+#### Step 2: Deploy the validation node
+
+```bash
+helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
 ```
 
 
