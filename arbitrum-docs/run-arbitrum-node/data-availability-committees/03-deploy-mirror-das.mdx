@@ -45,7 +45,7 @@ A mirror DAS will use the same tool and, thus, the same configuration options as
 
 Gather the following information:
 
-- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.2-5b41a2d@@`
+- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.4-28199cd@@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/03-run-full-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
 - URL of the list of REST endpoints of other DA servers to configure the REST aggregator.
@@ -201,7 +201,7 @@ spec:
             mkdir -p /home/user/data/badgerdb
             mkdir -p /home/user/data/syncState
             /usr/local/bin/daserver --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-main-das.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.rest-aggregator.sync-to-storage.eager  --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block "BLOCK NUMBER" --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
-        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.2-5b41a2d@@
+        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.4-28199cd@@
         imagePullPolicy: Always
         resources:
             limits:
