@@ -8,7 +8,13 @@ content_type: how-to
 
 ## Running split validators for Arbitrum chains
 
-Split validators improve security and performance by separating validator responsibilities across multiple nodes. This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
+Split validators separate the validation work to a stateless worker, which provides several key benefits:
+- **Resource management**: Easier to scale and manage compute resources independently
+- **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
+- **Security**: Isolates the staking keys from the validation process
+- **Flexibility**: Allows running multiple validation workers for redundancy or horizontal scalability
+
+This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
 
 Before you read this doc, please ensure you have already walked through [run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx) docs to understand the basics of a validator node.
 
@@ -85,46 +91,6 @@ Create a file named `validation_values.yaml`:
 
 ```yaml
 configmap:
-  enabled: false
-replicaCount: 0
-jwtSecret:
-  enabled: true
-  value: 'Your 32 bytes hex jwt' # Generate with: xxd -l 32 -ps -c 40 /dev/urandom
-validator:
-  enabled: true
-  splitvalidator:
-    global:
-      auth:
-        enable: true
-        port: 5200
-      nodeSelector:
-        kubernetes.io/arch: arm64 # Adjust to your cluster architecture
-      configmap:
-        data:
-          auth:
-            port: 5200
-          validation:
-            wasm:
-              allowed-wasm-module-roots: '0x184884e1eb9fefdc158f6c8ac912bb183bf3cf83f0090317e0bc4ac5860baa39,0x260f5fa5c3176a856893642e149cf128b5a8de9f828afec8d11184415dd8dc69,0xb0de9cb89e4d944ae6023a3b62276e54804c242fd8c4c2d8e6cc4450f5fa8b1b,0xdb698a2576298f25448bc092e52cf13b1e24141c997135d70f217d674bbeb69a'
-    deployments:
-      - name: validator1 # Choose a name for your validator
-persistence:
-  enabled: true
-  size: 10G
-```
-
-#### Step 2: Deploy the validation node
-
-```bash
-helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
-```
-
-#### Step 3: Create staker node configuration
-
-Create a file named `staker_values.yaml`:
-
-```yaml
-configmap:
   data:
     parent-chain:
       id: 1 # Use appropriate parent chain ID
@@ -138,22 +104,22 @@ configmap:
         strategy: 'MakeNodes'
         parent-chain-wallet:
           private-key: 'your-staker-private-key'
-      block-validator:
-        validation-server-configs-list: '[{"jwtsecret":"/secrets/jwtsecret","url":"ws://<release-name>-nitro-val-<validator-name>:5200"}]'
     chain:
       name: 'Your Chain Name'
       id: 42161 # Your chain ID
       info-json: '[Your chain info JSON]'
+
 jwtSecret:
   enabled: true
-  value: 'Your 32 bytes hex jwt' # IMPORTANT: Use the same JWT as validation node
+  value: 'Your 32 bytes hex jwt' 
+
+validator:
+  enabled: true
+  splitvalidator:
+    deployments:
+      - name: "current"
 ```
 
-#### Step 4: Deploy the staker node
-
-```bash
-helm install nitro-staker offchainlabs/nitro --values staker_values.yaml
-```
 
 ### Monitoring and maintenance
 
