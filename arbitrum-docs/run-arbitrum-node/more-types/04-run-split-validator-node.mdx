@@ -11,7 +11,7 @@ content_type: how-to
 Split validators separate the validation work to a stateless worker, which provides several key benefits:
 - **Resource management**: Easier to scale and manage compute resources independently
 - **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
-- **Flexibility**: Allows running multiple validation workers for redundancy or horizontal scalability
+- **Flexibility**: Allows running multiple validation workers for horizontal scalability
 
 This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
 
