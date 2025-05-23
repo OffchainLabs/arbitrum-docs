@@ -40,7 +40,7 @@ Even though there are alpha and beta versions of the Arbitrum Nitro software, on
 
 :::
 
-Latest Docker image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.2-5b41a2d@@</code>
+Latest Docker image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.4-28199cd@@</code>
 
 ## Required parameters
 
@@ -131,7 +131,7 @@ Enable your node to send batches to DAS and get DACerts from them.
 - Example:
 
   ```shell wordWrap=true
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.2-5b41a2d@@ --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.data-availability.enable=true --node.data-availability.sequencer-inbox-address=<Sequencer Inbox Address> --node.data-availability.parent-chain-node-url=<Parent Chain Node URL> --node.data-availability.rest-aggregator.enable=true --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.data-availability.rpc-aggregator.enable=true --node.data-availability.rpc-aggregator.assumed-honest=1 --node.data-availability.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.4-28199cd@@ --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.data-availability.enable=true --node.data-availability.sequencer-inbox-address=<Sequencer Inbox Address> --node.data-availability.parent-chain-node-url=<Parent Chain Node URL> --node.data-availability.rest-aggregator.enable=true --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.data-availability.rpc-aggregator.enable=true --node.data-availability.rpc-aggregator.assumed-honest=1 --node.data-availability.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000
   ```
 
   - Ensure that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
