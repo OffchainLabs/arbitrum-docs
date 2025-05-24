@@ -531,6 +531,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/arbitrum-node-runners/enale-post-4blobs/?)",
+      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4blobs/?)",
+      "permanent": false
+    },
+    {
       "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
       "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
       "permanent": false
