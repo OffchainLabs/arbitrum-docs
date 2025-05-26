@@ -1426,6 +1426,11 @@
       "permanent": false
     },
     {
+      "source": "/(run-arbitrum-node/more-types/split-validator-node/?)",
+      "destination": "/(run-arbitrum-node/more-types/run-split-validator-node/?)",
+      "permanent": false
+    },
+    {
       "source": "/(run-arbitrum-node/run-local-dev-node/?)",
       "destination": "/run-arbitrum-node/run-local-full-chain-simulation",
       "permanent": false

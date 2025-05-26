@@ -828,6 +828,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/more-types/run-split-validator-node',
+              label: 'Run a split validator',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
