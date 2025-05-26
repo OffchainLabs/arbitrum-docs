@@ -277,6 +277,11 @@ const sidebars = {
                   label: `Manage the fee parameters`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs',
+                  label: `Enable blob transactions`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
