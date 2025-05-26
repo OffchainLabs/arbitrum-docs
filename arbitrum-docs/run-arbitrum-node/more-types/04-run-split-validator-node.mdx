@@ -9,6 +9,7 @@ content_type: how-to
 ## Running split validators for Arbitrum chains
 
 Split validators separate the validation work to a stateless worker, which provides several key benefits:
+
 - **Resource management**: Easier to scale and manage compute resources independently
 - **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
 - **Flexibility**: Allows running multiple validation workers for horizontal scalability
@@ -109,13 +110,13 @@ configmap:
 
 jwtSecret:
   enabled: true
-  value: 'Your 32 bytes hex jwt' 
+  value: 'Your 32 bytes hex jwt'
 
 validator:
   enabled: true
   splitvalidator:
     deployments:
-      - name: "current"
+      - name: 'current'
 ```
 
 #### Step 2: Deploy the validation node
@@ -123,7 +124,6 @@ validator:
 ```bash
 helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
 ```
-
 
 ### Monitoring and maintenance
 
