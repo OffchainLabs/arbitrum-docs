@@ -277,6 +277,11 @@ const sidebars = {
                   label: `Manage the fee parameters`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs',
+                  label: `Enable blob transactions`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -820,6 +825,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/more-types/run-validator-node',
               label: 'Run a validator',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/more-types/run-split-validator-node',
+              label: 'Run a split validator',
             },
             {
               type: 'doc',
