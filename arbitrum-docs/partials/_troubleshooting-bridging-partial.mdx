@@ -40,7 +40,7 @@ In any case, the bridge and your wallet will guide you through the process, show
 
 ### How long does it take before I receive my funds when I initiate a withdrawal from Arbitrum chains (One and Nova)?
 <p>
-Using the official Arbitrum Bridge, the process will take <em>roughly</em> one week. However, some users opt to use third-party fast bridges, which often bypass this delay (remember that these bridges are created and maintained by third parties, so please DYOR!).
+Using the official Arbitrum Bridge, the process will take <em>roughly</em> one week. However, some users opt to use third-party fast bridges, which often bypass this delay (remember that these bridges are created and maintained by third parties, so please DYOR!).
 </p>
 
 <p>
@@ -52,13 +52,13 @@ The variability of the dispute window comes from the slight variance of block ti
 </p>
 
 <p>
-The "padding on both ends" involves three events that have to occur between a client receiving their transaction receipt from the sequencer and their L2-to-L1 message being executable. After getting their receipt,
+The "padding on both ends" involves three events that have to occur between a client receiving their transaction receipt from the Sequencer and their child-to-parent chain message being executable. After getting their receipt,
 </p>
 
 <ol>
-<li>The sequencer posts their transaction in a batch (usually within a few minutes, though the sequencer will wait a bit longer if the L1 is congested). Then,</li>
-<li>A validator includes their transaction in an RBlock (usually within the hour). Then, after the ~week long dispute window passes, the RBlock is confirmable, and</li>
-<li>Somebody (anybody) confirms the RBlock on L1 (usually within ~15 minutes).</li>
+<li>The sequencer posts their transaction in a batch (usually within a few minutes, though the sequencer will wait a bit longer if the parent chain is congested). Then,</li>
+<li>A validator includes their transaction in an assertion (usually within the hour). Then, after the ~week long dispute window passes, the assertion is confirmable, and</li>
+<li>Somebody (anybody) confirms the assertion on the parent chain (usually within ~15 minutes).</li>
 </ol>
 <p>
 Additionally, in the rare and unlikely event of a dispute, this delay period will be extended for the dispute to resolve.
@@ -77,7 +77,7 @@ There is no way to cancel a withdrawal that has been already initiated. However,
 
 ### Can I use a smart contract wallet in the bridge?
 <p>
-Support for Smart Contract Wallets is currently limited to token depositing and withdrawal. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the <a href="https://bridge.arbitrum.io/">bridge</a> (unless you also control that address on L1). In that case, you can use the <a href="https://retryable-dashboard.arbitrum.io/tx">cross-chain dashboard</a> to claim your funds on L1.
+Support for Smart Contract Wallets is currently limited to token depositing and withdrawal. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the <a href="https://bridge.arbitrum.io/">bridge</a> (unless you also control that address on L1). In that case, you can use the <a href="https://retryable-dashboard.arbitrum.io/tx">cross-chain dashboard</a> to claim your funds on L1.
 </p>
 
 <p>

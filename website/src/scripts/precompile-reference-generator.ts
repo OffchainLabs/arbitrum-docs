@@ -11,6 +11,7 @@ type PrecompileMethodInfo = {
   implementationLine: number;
   description: string;
   deprecated?: boolean;
+  availableSinceArbOS?: number;
 };
 
 type PrecompileEventInfo = {
@@ -89,11 +90,17 @@ const renderMethodsInTable = (
   });
 
   if (methodOverrides) {
+    // Making all method names lowercase
+    const lowercasedMethodOverrides = Object.keys(methodOverrides).reduce((acc, key) => {
+      acc[key.toLowerCase()] = methodOverrides[key];
+      return acc;
+    }, {});
+
     // Merge potential overrides
-    Object.keys(methodOverrides).map((methodName: string) => {
+    Object.keys(lowercasedMethodOverrides).map((methodName: string) => {
       methodsInformation[methodName] = {
         ...methodsInformation[methodName],
-        ...methodOverrides[methodName],
+        ...lowercasedMethodOverrides[methodName],
       };
     });
   }
@@ -116,6 +123,9 @@ const renderMethodsInTable = (
         .map((methodInfo: PrecompileMethodInfo) => {
           if (methodInfo.deprecated) {
             showDeprecationFlag = true;
+          }
+          if (methodInfo.availableSinceArbOS) {
+            methodInfo.description += ` (Available since ArbOS ${methodInfo.availableSinceArbOS})`;
           }
 
           return `<tr>
@@ -258,7 +268,7 @@ const generatePrecompileReferenceTables = async (
     eventOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/_${precompileName}.md`, methodsTable + eventsTable);
+  fs.writeFileSync(`${partialTablesBasePath}/_${precompileName}.mdx`, methodsTable + eventsTable);
 };
 
 const generateNodeInterfaceReferenceTables = async (
@@ -285,7 +295,7 @@ const generateNodeInterfaceReferenceTables = async (
     methodOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.md`, methodsTable);
+  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.mdx`, methodsTable);
 };
 
 const main = async (precompilesInformation, nodeInterfaceInformation) => {

@@ -13,10 +13,6 @@ Offchain Labs builds products in a way that aligns loosely with the spirit of "b
 
 To do this, some of our product offerings are documented with **public preview** disclaimers that look like this:
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
-
 This banner's purpose is to set expectations while inviting readers like you to express your needs so that we can incorporate them into the way that we iterate on product.
 
 ### What to expect when using public preview offerings
@@ -29,7 +25,7 @@ Public preview offerings are evolving rapidly, so don't expect the degree of rel
 
 Our product team primarily uses three feedback channels while iterating on public preview capabilities:
 
-1.  **Docs**: Click on the `Request an update` button located in the top-right corner of any document to provide feedback on the docs and/or developer experience. This will lead you to a prefilled Github issue that members of our product team periodically review.
+1.  **Docs**: Click on the **Request an update** button located in the top-right corner of any document to provide feedback on the docs and/or developer experience. This will lead you to a prefilled Github issue that members of our product team periodically review.
 2.  **Discord**: [Join the Arbitrum Discord](https://discord.gg/arbitrum) to engage with members of the Arbitrum community and product team.
 3.  **Google form**: Complete [this form](http://bit.ly/3yy6EUK) to ask for support.
 
@@ -37,7 +33,9 @@ Our product team primarily uses three feedback channels while iterating on publi
 
 Our ability to respond to feedback is determined by our ever-evolving capacity and priorities. We can't guarantee responses to all feedback submissions, but our small-but-mighty team is listening, and we'll try our best to acknowledge and respond to your feedback. No guarantees though!
 
-_PS, [our small-but-mighty team is hiring](https://jobs.lever.co/offchainlabs)._
+:::info
+[Our small-but-mighty team is hiring](https://jobs.lever.co/offchainlabs).
+:::
 
 ### Thank you!
 

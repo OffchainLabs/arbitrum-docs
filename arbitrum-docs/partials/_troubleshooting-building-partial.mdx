@@ -1,6 +1,6 @@
 ### How does gas work on Arbitrum?
 <p>
-Fees on Arbitrum chains are collected on L2 in the chains' native currency (ETH on both Arbitrum One and Nova).
+Fees on Arbitrum chains are collected on L2 in the chains' native currency (`ETH` on both Arbitrum One and Nova).
 </p>
 
 <p>
@@ -8,11 +8,11 @@ A transaction fee is comprised of both an L1 and an L2 component:
 </p>
 
 <p>
-The L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See <a href="https://developer.arbitrum.io/arbos/l1-pricing">L1 Pricing</a>.)
+The L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See <a href="https://developer.arbitrum.io/arbos/l1-pricing">L1 Pricing</a>.)
 </p>
 
 <p>
-The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 gwei on Arbitrum One and 0.01 gwei on Nova (See <a href="https://docs.arbitrum.io/arbos/gas">Gas</a>).
+The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 `gwei` on Arbitrum One and 0.01 `gwei` on Nova (See <a href="https://docs.arbitrum.io/arbos/gas">Gas</a>).
 </p>
 
 <p>
@@ -88,7 +88,7 @@ Checking <code>0xfadf238a</code> gives us <code>InsufficientSubmissionCost(uint2
 
 ### How is the L1 portion of an Arbitrum transaction's gas fee computed? 
 <p>
-The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter value can be queried via the <code>getPricesInWei</code>method of the <code>ArbGasInfo</code>precompile. You can find more information about gas calculations in <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">Understanding Arbitrum: 2-Dimensional Fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a>.
+The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter value can be queried via the <code>getPricesInWei</code>method of the <code>ArbGasInfo</code>precompile. You can find more information about gas calculations in <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">Understanding Arbitrum: 2-Dimensional Fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a>.
 </p>
 
 <p>
@@ -98,7 +98,7 @@ The L1 fee that a transaction is required to pay is determined by compressing it
 
 ### What is a retryable ticket's "submission fee"? How can I calculate it? What happens if I the fee I provide is insufficient?
 <p>
-A <a href="https://developer.arbitrum.io/arbos/l1-to-l2-messaging">retryable's</a> submission fee is a special fee a user must pay to create a retryable ticket. The fee is directly proportional to the size of the L1 calldata the retryable ticket uses. The fee can be queried using the <code>Inbox.calculateRetryableSubmissionFee</code>method. If insufficient fee is provided, the transaction will revert on L1, and the ticket won't get created. 
+A <a href="https://developer.arbitrum.io/arbos/l1-to-l2-messaging">retryable's</a> submission fee is a special fee a user must pay to create a retryable ticket. The fee is directly proportional to the size of the L1 calldata the retryable ticket uses. The fee can be queried using the <code>Inbox.calculateRetryableSubmissionFee</code>method. If insufficient fee is provided, the transaction will revert on L1, and the ticket won't get created. 
 </p>
 
 <p>
@@ -108,29 +108,29 @@ A <a href="https://developer.arbitrum.io/arbos/l1-to-l2-messaging">retryable's<
 
 ### Which method in the Inbox contract should I use to submit a retryable ticket (aka L1 to L2 message)?
 <p>
-The method you should (almost certainly) use is <code>Inbox.createRetryableTicket</code>. There is an alternative method, <code>Inbox.unsafeCreateRetryableTicket</code>, which, as the name suggests, should only be used by those who fully understand its implications.
+The method you should (almost certainly) use is <code>Inbox.createRetryableTicket</code>. There is an alternative method, <code>Inbox.unsafeCreateRetryableTicket</code>, which, as the name suggests, should only be used by those who fully understand its implications.
 </p>
 
 <p>
-There are two differences between <code>createRetryableTicket</code> and <code>unsafeCreateRetryableTicket</code>:
+There are two differences between <code>createRetryableTicket</code> and <code>unsafeCreateRetryableTicket</code>:
 </p>
 
 <ol>
-<li>Method <code>createRetryableTicket</code> will check that provided L1 callvalue is sufficient to cover the costs of creating and executing the retryable ticket (at the specified parameters) and otherwise <a href="https://docs.arbitrum.io/for-devs/troubleshooting-building#i-tried-to-create-a-retryable-ticket-but-the-transaction-reverted-on-l1--how-can-i-debug-the-issue">revert directly at L1</a>. <code>unsafeCreateRetryableTicket</code>, in contrast, will allow a retryable ticket to be created that is guaranteed to revert on L2.</li>
-<li>Method <code>createRetryableTicket</code> will check if either the provided <code>excessFeeRefundAddress</code> or the <code>callValueRefundAddress</code> are contracts on L1; if they are, to prevent the situation where refunds are <em>guaranteed</em> to be irrecoverable on L2, it will convert them to their <a href="https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing">address alias</a>, providing a <em>potential</em> path for fund recovery. <code>unsafeCreateRetryableTicket</code> will allow the creation of a retryable ticket with refund addresses that are L1 contracts; since no L1 contract can alias to an address that is also itself an L1 contract, refunds to these addresses on L2 will be irrecoverable.</li>
+<li>Method <code>createRetryableTicket</code> will check that provided L1 callvalue is sufficient to cover the costs of creating and executing the retryable ticket (at the specified parameters) and otherwise <a href="https://docs.arbitrum.io/for-devs/troubleshooting-building#i-tried-to-create-a-retryable-ticket-but-the-transaction-reverted-on-l1--how-can-i-debug-the-issue">revert directly at L1</a>. <code>unsafeCreateRetryableTicket</code>, in contrast, will allow a retryable ticket to be created that is guaranteed to revert on L2.</li>
+<li>Method <code>createRetryableTicket</code> will check if either the provided <code>excessFeeRefundAddress</code> or the <code>callValueRefundAddress</code> are contracts on L1; if they are, to prevent the situation where refunds are <em>guaranteed</em> to be irrecoverable on L2, it will convert them to their <a href="https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing">address alias</a>, providing a <em>potential</em>  for fund recovery. <code>unsafeCreateRetryableTicket</code> will allow the creation of a retryable ticket with refund addresses that are L1 contracts; since no L1 contract can alias to an address that is also itself an L1 contract, refunds to these addresses on L2 will be irrecoverable.</li>
 </ol>
 <p>
-(Astute observers may note a third ticket creation method, <code>createRetryableTicketNoRefundAliasRewrite</code>; this is included only for backwards compatibility, but should be considered deprecated in favor of <code>unsafeCreateRetryableTicket</code>)
+(Astute observers may note a third ticket creation method, <code>createRetryableTicketNoRefundAliasRewrite</code>; this is included only for backwards compatibility, but should be considered deprecated in favor of <code>unsafeCreateRetryableTicket</code>)
 </p>
 
 
 ### Why do I get "custom tx type" errors when I use hardhat?
 <p>
-In Arbitrum, we use a number of non-standard <a href="https://eips.ethereum.org/EIPS/eip-2718">EIP-2718</a> typed transactions. See <a href="https://developer.arbitrum.io/arbos/geth#transaction-types">here</a> for the full list and the rationale.
+In Arbitrum, we use a number of non-standard <a href="https://eips.ethereum.org/EIPS/eip-2718">EIP-2718</a> typed transactions. See <a href="https://developer.arbitrum.io/arbos/geth#transaction-types">here</a> for the full list and the rationale.
 </p>
 
 <p>
-Note that if you're using Hardhat, <a href="https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2">v2.12.2</a> added support for forking networks like Arbitrum with custom transaction types (find more information <a href="https://github.com/NomicFoundation/hardhat/issues/2995">here</a>).
+Note that if you're using Hardhat, <a href="https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2">v2.12.2</a> added support for forking networks like Arbitrum with custom transaction types (find more information <a href="https://github.com/NomicFoundation/hardhat/issues/2995">here</a>).
 </p>
 
 <p>
@@ -144,7 +144,7 @@ Note that if you're using Hardhat, <a href="https://github.com/NomicFoundation/h
 </p>
 
 <p>
-Calling an Arbitrum node's <code>eth_estimateGas</code> RPC returns a value sufficient to cover both the L1 and L2 components of the fee for the current gas price; this is the value that, e.g., will appear in users' wallets in the "gas limit" field.
+Calling an Arbitrum node's <code>eth_estimateGas</code> RPC returns a value sufficient to cover both the L1 and L2 components of the fee for the current gas price; this is the value that, e.g., will appear in users' wallets in the "gas limit" field.
 </p>
 
 <p>
@@ -152,7 +152,7 @@ Thus, if the L1 calldata price changes over time, it will appear (in e.g., a wal
 </p>
 
 <p>
-See <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">2-D fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a> for more.
+See <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">2-D fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a> for more.
 </p>
 
 <p>
@@ -176,7 +176,7 @@ Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing
 
 ### How do block.number and block.timestamp work on Arbitrum?
 <p>
-Solidity calls to <code>block.number</code> on Arbitrum will return the block number/ timestamp of the underlying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.
+Solidity calls to <code>block.number</code> on Arbitrum will return the block number/ timestamp of the underlying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.
 </p>
 
 <p>
@@ -184,7 +184,7 @@ Solidity calls to <code>block.timestamp</code> on Arbitrum are not linked to the
 </p>
 
 <p>
-For more info, see <a href="https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time">block numbers and time</a>.
+For more info, see <a href="https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time">block numbers and time</a>.
 </p>
 
 <p>
@@ -220,7 +220,7 @@ Arbitrum's block intervals fluctuate with throughput, so relying on block number
 </p>
 
 <p>
-You can use <code><a href="https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbynumber">eth_getBlockByNumber()</a></code> with the string <code>"latest"</code>, <code>"safe"</code>, or <code>"finalized"</code>, each offering varying degrees of finality:
+You can use <code><a href="https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbynumber">eth_getBlockByNumber()</a></code> with the string <code>"latest"</code>, <code>"safe"</code>, or <code>"finalized"</code>, each offering varying degrees of finality:
 </p>
 
 <p>
@@ -363,7 +363,7 @@ The replay binary is much too large to post on-chain, so this hash is set in the
 </p>
 
 <p>
-You can find more information in <a href="https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs">How to customize your Orbit chain's behavior</a>.
+You can find more information in [How to customize your Arbitrum chain's behavior](/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx).
 </p>
 
 <p>
@@ -381,17 +381,17 @@ Make sure you have enough funds in your wallet, and the gas fields of the reques
 </p>
 
 
-### How can I verify that an L2 block has been processed as part of a specific RBlock?
+### How can I verify that a child chain block has been processed as part of a specific assertion?
 <p>
-If you want to verify that the latest confirmed (or created) assertion has processed a specific L2 block, you can follow these steps:
+If you want to verify that the latest confirmed (or created) assertion has processed a specific child chain block, you can follow these steps:
 </p>
 
 <ol>
-<li>From the rollup contract, obtain the latest confirmed (or created) Rblock through the function <code>latestConfirmed</code> (or <code>latestNodeCreated</code>). In this context, we refer to RBlocks as "nodes".</li>
+<li>From the rollup contract, obtain the latest confirmed (or created) assertion through the function <code>latestConfirmed</code> (or <code>latestNodeCreated</code>). In this context, we refer to assertions as "nodes".</li>
 <li>Obtain the node information through <code>getNode</code></li>
 <li>Find the <code>NodeCreated</code> event that was emitted when that node was created.</li>
 <li>In that NodeCreated event, there's an <code>assertion</code> property that contains the state of the chain before processing the specified blocks, and after processing them. Get the <code>afterState.globalState</code> property</li>
-<li>That value contains a bytes32Vals array with the latest L2 block hash processed in the first element.</li>
+<li>That value contains a bytes32Vals array with the latest child chain block hash processed in the first element.</li>
 </ol>
 <p>
 You can find an example script in our <a href="https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/l2-block-verification-in-assertion">arbitrum-tutorials</a> repository.

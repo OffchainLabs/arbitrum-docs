@@ -14,13 +14,13 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Stylus',
     Svg: require('@site/static/img/stylus-logo.svg').default,
-    href: '/stylus/stylus-quickstart',
+    href: '/stylus/quickstart',
     description: 'Use Stylus to write an EVM-compatible smart contract in Rust.',
   },
   {
     title: 'Quickstart: Build a dApp (Solidity)',
     Svg: require('@site/static/img/cupcake_icon.svg').default,
-    href: '/build-decentralized-apps/quickstart-solidity-hardhat',
+    href: '/build-decentralized-apps/quickstart-solidity-remix',
     description:
       'Deploy a cupcake vending machine contract locally, then to Arbitrum Sepolia, then to Arbitrum Mainnet.',
   },
@@ -44,11 +44,11 @@ const FeatureList: FeatureItem[] = [
     description: 'Learn about the decentralized organization that governs the One and Nova chains.',
   },
   {
-    title: 'Quickstart: Launch an Orbit chain',
+    title: 'Quickstart: Launch an Arbitrum chain',
     Svg: require('@site/static/img/quickstart.svg').default,
-    href: '/launch-orbit-chain/orbit-quickstart',
+    href: '/launch-arbitrum-chain/arbitrum-chain-quickstart',
     description:
-      'Learn how to launch a local Orbit chain that settles to the public Arbitrum Sepolia testnet.',
+      'Learn how to launch a local Arbitrum chain that settles to the public Arbitrum Sepolia testnet.',
   },
 ];
 

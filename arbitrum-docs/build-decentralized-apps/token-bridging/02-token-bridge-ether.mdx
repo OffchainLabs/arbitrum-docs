@@ -1,0 +1,42 @@
+---
+title: 'ETH bridging'
+description: Describes how bridging ether works on Arbitrum
+author: dzgoldman
+user_story: As a developer, I want to understand how bridging ether works on Arbitrum
+content_type: concept
+sidebar_position: 2
+---
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
+Ether (`ETH`) is the native currency of Ethereum and all Arbitrum chains. It is used to pay the necessary fees to execute a transaction in those chains. Bridging `ETH` from Ethereum (parent chain) to an Arbitrum chain (child chain) follows, thus, a different process than the one followed when bridging other types of asset.
+
+## Depositing ether
+
+To move `ETH` from the parent chain to the child chain, you execute a deposit transaction via `Inbox.depositEth`. This transfers funds to the Bridge contract on the parent chain and credits the same funds to you inside the Arbitrum chain at the specified address.
+
+```sol
+function depositEth(address destAddr) external payable override returns (uint256)
+```
+
+The following diagram depicts the process that funds follow during a deposit operation.
+
+<ImageZoom src="/img/dapps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
+
+As far as the parent chain knows, all deposited funds are held by Arbitrum's Bridge contract.
+
+## Withdrawing ether
+
+Withdrawing ether can be done using the [`ArbSys` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)'s `withdrawEth` method:
+
+```sol
+ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
+```
+
+Upon withdrawing, the Ether balance is burnt on the Arbitrum side, and will later be made available on the Ethereum side.
+
+`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain (see [Child to parent chain messaging](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's `ETH` balance will be credited on the parent chain.
+
+The following diagram depicts the process that funds follow during a withdraw operation.
+
+<ImageZoom src="/img/dapps-withdrawing-ether.svg" alt="Withdrawing Ether" className="img-600px" />

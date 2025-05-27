@@ -1,0 +1,82 @@
+---
+title: 'ArbOS 20 Atlas'
+sidebar_label: 'ArbOS 20 Atlas'
+sidebar_position: 3
+author: dlee
+---
+
+ArbOS 20 Atlas is shipped via Nitro v2.3.1, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.3.1-26fad6f`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
+
+### Requirements:
+
+- [Nitro v2.3.1](https://github.com/OffchainLabs/nitro/releases/tag/v2.3.1) or higher
+- [nitro-contracts v1.2.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v1.2.1) or higher
+- Wasm module root: `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4`
+- Access to the [Ethereum Beacon Chain APIs](https://ethereum.github.io/beacon-APIs/#/), either from your own self-managed parent chain Ethereum node or from a 3rd party provider like [those on this list](/run-arbitrum-node/05-l1-ethereum-beacon-chain-rpc-providers.mdx).
+
+### High-level description of ArbOS 20 changes
+
+ArbOS 20 is an upgrade to enable Arbitrum's support for the parent chain Ethereum's [Dencun upgrade](https://eips.ethereum.org/EIPS/eip-7569) scheduled for March 2024. As a result, all of the ArbOS specific changes revolve around implementing the majority of the [Cancun EIPs](https://github.com/ethereum/execution-specs/blob/master/network-upgrades/mainnet-upgrades/cancun.md) on Arbitrum:
+
+- Enable Arbitrum chains to batch and post transaction data in the form of Blobs to the parent chain Ethereum, to support [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844). This includes updates to the Sequencer Inbox contract to support posting transactions in the form of blobs, updating Nitro's fraud prover to support proving additional hashes (KZG and SHA256 preimages), and updates to the core Nitro node software to handle parsing data from EIP-4844 blobs.
+- Addition of the `TSTORE` and `TLOAD` EVM opcodes introduced in [EIP-1153](https://eips.ethereum.org/EIPS/eip-1153) offering a cheaper option than storage for data that’s discarded at the end of a transaction.
+- Addition of the `MCOPY` EVM opcode introduced in [EIP-5656](https://eips.ethereum.org/EIPS/eip-5656) for cheaper memory copying.
+- Changes to the `SELFDESTRUCT` EVM opcode to reflect the behavior on the parent chain Ethereum, as outlined in [EIP-6780](https://eips.ethereum.org/EIPS/eip-6780).
+- Addition of a batch poster manager role that will have the ability to grant and revoke batch-posting affordances. This role is assigned to the operator of the sequencer to allow the batch poster manager perform key rotations for the batch posters. The DAO will continue to have the ability to revoke the seqauencer role, meaning there is no change to the current system's trust model since the DAO ca update the batch poster manager at any time (along with any batch posters).
+- Increasing the max block height that a batch can be posted, relative to the current block, to 64 bringing this in line with Ethereum's finality guarantees. The current value of 12 was set prior to the Ethereum merge and could mean that a small parent chain reorg can cause an otherwise valid batch to revert.
+- Fix Sequencer Inbox bug: when posting a batch, the Sequencer provides the "newMessageCount” value as a parameter; if the Sequencer is malicious, it can provide the max uint256 value which in turn would make subsequent calls to forceInclusion revert with an overflow error. Atlas’s upgrade to the Sequencer inbox includes a [change](https://github.com/OffchainLabs/nitro-contracts/blob/dcc51066b26b84cb157cbeba2f9f492ab33f9093/src/bridge/SequencerInbox.sol#L327)) in which forceInclusion does not modify the message count, fixing this bug. This bug had been disclosed to Arbitrum RaaS providers and to the Arbitrum DAO Security Council.
+
+### Special notes on ArbOS 20: Atlas support for EIP-4844
+
+- Upgrading to **the Atlas ArbOS release will require access to the parent chain's Ethereum beacon chain endpoints to retrieve blob data. For nodes of a chain that come online 18 days after Atlas gets activated on their chain will need access to historical data to sync up to the latest state.** If you are not operating your own Ethereum consensus client, [please visit this page to view a list of beacon chain RPC providers](/run-arbitrum-node/05-l1-ethereum-beacon-chain-rpc-providers.mdx) where you can access blob data.
+- Applications on Arbitrum will not have to be modified or take any explicit action to get the benefits of using EIP-4844 (i.e., the whole chain opts-in with ArbOS 20 “Atlas”).
+- ArbOS 20 “Atlas” adds support for Arbitrum chains to send data in a blob storage format to data availability layers, like the parent chain Ethereum, that support the blob transaction type. This includes Arbitrum One and Arbitrum Nova. ArbOS 20 “Atlas” does not add support for Arbitrum chains to receive data in a blob storage format. This means that an L3 Arbitrum chain on top of an Arbitrum L2 will use calldata when posting L3 transaction data to the underlying L2. The child chain (L2) Arbitrum chain will then be able to post data to a parent chain data availability layer like Ethereum using blobs.
+- There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e., no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s. To learn more about what EIP-4844 will mean for the child chain users, please checkout this [blog post on Medium by Offchain Lab's Co-foudner and Chief Scientist Ed Felten](https://medium.com/offchainlabs/eip-4844-what-does-it-mean-for-l2-users-5e86ebc4c028).
+
+### Block explorers
+
+Below is a non-comprehensive list of explorers that support querying and viewing blob data on Ethereum that get posted by Arbitrum child chain chains.
+
+- [Blockscout](https://www.blockscout.com/). For self-deployment, blobs are supported as of blockscout v6.2.0 and blockscout-frontend v1.2.6.
+- [Arbiscan](https://arbiscan.io/)
+- [Blobscan](https://blobscan.com/)
+- [Beaconcha.in](https://beaconcha.in/)
+
+### Additional requirement for Arbitrum L2 chain operators: enabling blob batch posting
+
+This section maps to [Step 4 in the guide on _How to upgrade ArbOS on your Arbitrum L2 chain_](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) and contains additional instructions for Arbitrum L2 chain operators for ArbOS 20 Atlas. Specifically, the details below are meant to help Arbitrum L2 chain operators enable blob batch posting to L1 Ethereum following their successful upgrade to the ArbOS 20 Atlas release.
+
+:::caution
+Before proceeding, make sure you have successfully completed Steps 1 through 3 of the guide on [How to upgrade ArbOS on your Arbitrum chain](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx).
+
+To enable the posting of transaction data in Blobs to L1 Ethereum, you must set `node.batch-poster.post-4844-blobs=true` on the batch poster.
+
+#### Full list of ArbOS Atlas specific configuration options for Arbitrum chains
+
+| Flag                                    | Description                                                                                                                                                                                                                                                                                     |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.post-4844-blobs`   | Boolean. Default: `false`. Used to enable or disable the posting of transaction data using Blobs to L1 Ethereum. If using calldata is more expensive and if the parent chain supports EIP4844 blobs, the batch poster will use blobs when this flag is set to `true`. Can be `true` or `false`. |
+| `--node.batch-poster.ignore-blob-price` | Boolean. Default: `false`. If the parent chain supports EIP4844 blobs and `ignore-blob-price` is set to `true`, the batch poster will use EIP4844 blobs even if using calldata is cheaper. Can be `true` or `false`.                                                                            |
+
+The above configurations are also available in the [Nitro command line options reference section](/run-arbitrum-node/03-run-full-node.mdx#optional-parameters) and can be set using the command line or using the JSON node configuration below:
+
+```json
+ "node": {
+    ...
+    "batch-poster": {
+    ...
+      "post-4844-blobs": true,
+      "ignore-blob-price": false,
+    ...
+    },
+  }
+
+```
+
+### Reference links for ArbOS 20 Atlas
+
+- [Nitro v2.3.1 Release details on Github](https://github.com/OffchainLabs/nitro/releases/tag/v2.3.1)
+- Original DAO proposal: [AIP: ArbOS Version 20 "Atlas"](https://forum.arbitrum.foundation/t/aip-arbos-version-20-atlas/20957)
+- [AIP: ArbOS Version 20 "Atlas" Snapshot Vote](https://snapshot.org/#/arbitrumfoundation.eth/proposal/0x813a366e287a872ada13d4f8348e771c7aa2d8c3cb00b2be31539ceab5627513)
+- [Formal Tally (onchain) vote for AIP: ArbOS Version 20](https://www.tally.xyz/gov/arbitrum/proposal/46905320292877192134536823079608810426433248493109520384601548724615383601450)
+- [ArbOS 20 Atlas Audit Report by Trail of Bits](https://github.com/trailofbits/publications/blob/master/reviews/2024-02-offchainlabsarbos-securityreview.pdf)
