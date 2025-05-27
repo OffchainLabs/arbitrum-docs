@@ -18,6 +18,16 @@ There is no protocol level incentive to run an Arbitum full node. If you’re in
 
 :::caution API security disclaimer
 
+When exposing API endpoints to the Internet or any untrusted/hostile network, the following risks may arise:
+
+- Increased risk of crashes due to OOM:
+  Exposing endpoints raises the risk of Out-of-Memory (OOM) crashes.
+- Increased risk of not keeping up with chain progression:
+  Resource starvation (IO or CPU) may occur, leading to an inability to keep up with chain progression.
+
+We strongly advise against exposing API endpoints publicly. Users considering such exposure should exercise caution and implement the right measures to enhance resilience.
+:::
+
 In order to be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
 
 - You can use third party node providers (see the list [here](/build-decentralized-apps/reference/01-node-providers.mdx)) to get RPC access to fully-managed nodes
