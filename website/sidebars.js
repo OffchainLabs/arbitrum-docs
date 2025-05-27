@@ -753,7 +753,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'run-arbitrum-node/node-types',
+          id: 'run-arbitrum-node/overview',
           label: 'Overview',
         },
         {
