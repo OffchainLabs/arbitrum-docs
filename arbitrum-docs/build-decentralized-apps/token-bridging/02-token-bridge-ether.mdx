@@ -21,7 +21,7 @@ function depositEth(address destAddr) external payable override returns (uint256
 
 :::warning
 
-If the transaction is sent by a `7702-enabled account` (e.g., a smart contract wallet using tx.origin-style execution), the destination address on L2 is subject to address aliasing. The `ETH` will be credited to the aliased address of the sender, not the raw `msg.sender`. See [address aliasing](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging#address-aliasing) for details.
+If the transaction is sent by a `7702-enabled account`, the destination address on L2 is subject to address aliasing. The `ETH` will be credited to the aliased address of the sender, not the raw `msg.sender`. See [address aliasing](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging#address-aliasing) for details.
 
 :::
 
