@@ -12,13 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install node_modules
-        # This action does not work very well with subdirectories out of the box,
-        # but we can use this workaround to make it work.
-        # Note that this is highly dependent on the version of the action used
-        uses: OffchainLabs/actions/node-modules/install@35a1f8c3f3ad803e1fd9b81b94d063a4fc90a030
+        uses: OffchainLabs/actions/node-modules/install@main
         with:
           install-command: cd website && yarn install --frozen-lockfile
           cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -29,13 +26,10 @@ jobs:
     needs: install
     steps:
       - name: Checkout files
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Restore node_modules
-        # This action does not work very well with subdirectories out of the box,
-        # but we can use this workaround to make it work.
-        # Note that this is highly dependent on the version of the action used
-        uses: OffchainLabs/actions/node-modules/restore@35a1f8c3f3ad803e1fd9b81b94d063a4fc90a030
+      - name: Install node_modules
+        uses: OffchainLabs/actions/node-modules/install@main
         with:
           cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 

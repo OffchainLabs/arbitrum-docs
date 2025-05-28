@@ -64,8 +64,33 @@ yarn serve
 git submodule update --remote arbitrum-sdk
 ```
 
-### Format content
-Sometimes, your pull request may need to be re-formatted to pass the checks. To be safe, make sure you run the following command (from the `website` directory) before you push your commit:
-```shell
-yarn && yarn format
+### Update glossary
+
+You can add any terms to the glossary by following these steps:
+
+Let's assume you need to add the term "State Transition Function" to the glossary. 
+
+1. Create an `.mdx` file as follows: 
+
+`arbitrum-docs/partials/glossary/_state-transition-function.mdx`
+
+2. Ensure that the content of your file follows the following format:
+
+```markdown
+---
+title: State Transition Function
+key: state-transition-function
+titleforSort: State Transition Function
+---
+
+The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.
 ```
+
+3. While in the `/website` directory, run the following command:
+
+```shell
+npx tsx src/scripts/build-glossary.ts
+```
+ This part will update the glossary.
+
+4. Commit your changes and open a PR.

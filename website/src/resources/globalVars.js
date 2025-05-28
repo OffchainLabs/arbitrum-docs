@@ -21,7 +21,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.4.0-d896e9c',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.6.4-28199cd',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -38,14 +38,14 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.4.0',
+  nitroVersionTag: 'v3.6.4',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: '763bd77906b7677da691eaa31c6e195d455197a4',
+  nitroContractsCommit: '0aec58c99fd7af4502d89335cdbe2c29248f44fa',
   nitroContractsPathToPrecompilesInterface: 'src/precompiles',
 
-  goEthereumCommit: '779b669ac0d0020099a67a1c39fbaf66b901c1a5',
+  goEthereumCommit: '1eb56248c0f729e704c8082d7c874db967df3b2a',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',
@@ -69,7 +69,7 @@ const globalVars = {
   sepoliaDisputeWindowMinutes: blocksToMinutes(sepoliaDisputeWindowBlocks),
 
   // base stake
-  arbOneBaesStakeEth: 1,
+  arbOneBaesStakeEth: 3600,
   novaBaesStakeEth: 1,
   goerliBaesStakeEth: 1,
   sepoliaBaesStakeEth: 1,

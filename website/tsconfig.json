@@ -3,10 +3,15 @@
   "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "moduleResolution": "bundler",
+    "allowJs": true,
     "esModuleInterop": true,
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "downlevelIteration": true,
-    "types": ["node"]
+    "jsx": "react",
+    "lib": ["ESNext", "DOM"],
+    "noEmit": true,
+    "types": ["node", "vitest/globals"],
+    "paths": {
+      "@/*": ["./*"]
+    }
   }
 }

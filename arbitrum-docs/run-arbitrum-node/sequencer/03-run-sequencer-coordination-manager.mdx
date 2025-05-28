@@ -10,10 +10,18 @@ import ImageZoom from '@site/src/components/ImageZoom';
 The Sequencer Coordinator Manager (SQM) is a command-line tool that allows you to manage the priority list of sequencers, update their positions, add new sequencers to the list, and refresh the lists from the Redis server.
 The tool offers keyboard-only support. Any changes you make are stored locally until you choose to save and push them to the Redis server.
 
+- Clone and enter nitro repository:
+
+  ```shell
+  git clone --branch @@nitroVersionTag=v3.6.4@@ https://github.com/OffchainLabs/nitro.git
+  cd nitro
+  ```
+
+- Before starting the Sequencer Coordinator Manager, please read and follow the commands in Step 4 - Step 7 of [Build Nitro's binaries natively](../nitro/01-build-nitro-locally.mdx#build-nitros-binaries-natively) to install the necessary dependencies.
+
 - Here is an example of how to start the Sequencer Coordinator Manager and connect to a local Redis server:
   ```shell
-  git clone --branch @@nitroVersionTag=v3.4.0@@ https://github.com/OffchainLabs/nitro.git
-  cd nitro
+  # In nitro directory
   make target/bin/seq-coordinator-manager
   ./target/bin/seq-coordinator-manager redis://127.0.0.1:6379
   ```

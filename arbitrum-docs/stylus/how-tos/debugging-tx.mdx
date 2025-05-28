@@ -26,7 +26,7 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 - **Crate**: `cargo-stylus`
 - **GNU Debugger (GDB)** (Linux) or **LLDB** (MacOS)
 - **[Cast](https://book.getfoundry.sh/cast/)** (an Ethereum CLI tool)
-- **[Arbitrum RPC Provider](#rpc-endpoint-compatibility)** with tracing endpoints enabled or a [local Stylus dev node](https://docs.arbitrum.io/run-arbitrum-node/run-nitro-dev-node)
+- **[Arbitrum RPC Provider](#rpc-endpoint-compatibility)** with tracing endpoints enabled or a [local Stylus dev node](/run-arbitrum-node/run-nitro-dev-node)
 
 `cargo stylus replay` allows users to debug the execution of a Stylus transaction using [GDB](https://sourceware.org/gdb/) or [LLDB](https://lldb.llvm.org/) against the Rust source code.
 
@@ -121,7 +121,9 @@ Options:
 --use-native-tracer: Uses the native Stylus tracer instead of the default JS tracer. The native tracer has broader support from RPC providers.
 ```
 
-**Note:** The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See more details [below](#rpc-endpoint-compatibility).
+:::note
+The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See more details [below](#rpc-endpoint-compatibility).
+:::
 
 The debugger will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function. While the examples below showcase GDB commands, you can find the LLDB equivalents [here](https://lldb.llvm.org/use/map.html).
 
@@ -166,7 +168,7 @@ Options:
 
 ```sh
   -e, --endpoint <ENDPOINT>  RPC endpoint [default: http://localhost:8547]
-  -t, --tx <TX>              Tx to replay
+  -t, --tx <TX>              Tx (transaction) to replay
   -p, --project <PROJECT>    Project path [default: .]
   -h, --help                 Print help
   -V, --version              Print version
@@ -179,7 +181,7 @@ Run the following command to obtain a trace output:
 cargo stylus trace --tx=$TX_HASH --endpoint=$RPC_URL --use-native-tracer
 ```
 
-This will produce a trace of the functions called and [ink](https://docs.arbitrum.io/stylus/concepts/gas-metering#ink-and-gas) left along each method:
+This will produce a trace of the functions called and [ink](/stylus/concepts/gas-metering#ink-and-gas) left along each method:
 
 ```sh
 [{"args":[0,0,0,4],"endInk":846200000,"name":"user_entrypoint","outs":[],"startInk":846200000},{"args":[],"endInk":846167558,"name":"msg_reentrant","outs":[0,0,0,0],"startInk":846175958},{"args":[],"endInk":846047922,"name":"read_args","outs":[208,157,224,138],"startInk":846061362},{"args":[],"endInk":845914924,"name":"msg_value","outs":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"startInk":845928364},{"args":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"endInk":227196069,"name":"storage_load_bytes32","outs":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"startInk":844944549},{"args":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],"endInk":226716083,"name":"storage_cache_bytes32","outs":[],"startInk":226734563},{"args":[0],"endInk":226418732,"name":"storage_flush_cache","outs":[],"startInk":226486805},{"args":[],"endInk":226362319,"name":"write_result","outs":[],"startInk":226403481},{"args":[],"endInk":846200000,"name":"user_returned","outs":[0,0,0,0],"startInk":846200000}]
@@ -190,4 +192,4 @@ This will produce a trace of the functions called and [ink](https://docs.arbitru
 Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that supports `debug_traceTransaction`.
 By default, the `jsTracer` type is used, which is not supported by most RPC providers. If the `--use-native-tracer` flag is used, the `stylusTracer` type is used, which is supported by many RPC providers.
 Both `jsTracer` and `stylusTracer` are available on local nodes, but `stylusTracer` is more efficient.
-See this [list of RPC providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support.
+See this [list of RPC providers](/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support.
