@@ -12,7 +12,7 @@ import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
 <VanillaAdmonition type="note">
 
-There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+There is no protocol-level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain but don’t want to set up a node locally, see our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) to get RPC access to fully managed nodes hosted by a third-party provider.
 
 </VanillaAdmonition>
 
@@ -20,46 +20,39 @@ There is no protocol level incentive to run an Arbitum full node. If you’re in
 
 When exposing API endpoints to the Internet or any untrusted/hostile network, the following risks may arise:
 
-- Increased risk of crashes due to OOM:
-  Exposing endpoints raises the risk of Out-of-Memory (OOM) crashes.
-- Increased risk of not keeping up with chain progression:
+- **Increased risk of crashes due to Out-of-Memory (OOM)**:
+  Exposing endpoints increases the risk of OOM crashes.
+- **Increased risk of not keeping up with chain progression**:
   Resource starvation (IO or CPU) may occur, leading to an inability to keep up with chain progression.
 
 We strongly advise against exposing API endpoints publicly. Users considering such exposure should exercise caution and implement the right measures to enhance resilience.
+
 :::
 
-In order to be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
+To be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
 
 - You can use [ third party node providers ](/build-decentralized-apps/reference/01-node-providers.mdx) to get RPC access to fully-managed nodes
-- You can run your own Arbitrum node, especially if you want to always know the state of the Arbitrum chain
+- You can run your own Arbitrum node, especially if you want always to know the state of the Arbitrum chain
 
 The rest of this series focuses on the second approach: running your own Arbitrum node.
 
-When exposing API endpoints to the Internet or any untrusted/hostile network, the following risks may arise:
-
-- Increased risk of crashes due to OOM:
-  Exposing endpoints raises the risk of Out-of-Memory (OOM) crashes.
-- Increased risk of not keeping up with chain progression:
-  Resource starvation (IO or CPU) may occur, leading to an inability to keep up with chain progression.
-
-We strongly advise against exposing API endpoints publicly. Users considering such exposure should exercise caution and implement the right measures to enhance resilience.
 :::
 
-In order to be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
+To be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
 
-When it comes to interacting with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quickstart, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each type of node, users can make an informed decision based on their specific requirements and objectives.
+When interacting with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quick start, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each node type, users can make an informed decision based on their specific requirements and objectives.
 
 ### Considerations for running an Arbitrum full node
 
-- Transaction validation and security: Running a full node allows users to independently validate transactions and verify the state of the Arbitrum blockchain. Users can have full confidence in the authenticity and integrity of the transactions they interact with.
-- Reduced trust requirements: By running a full node, users can interact with the Arbitrum network without relying on third-party services or infrastructure. This reduces the need to trust external entities and mitigates the risk of potential centralized failures or vulnerabilities.
-- Lower resource requirements: Compared to archive nodes, full nodes generally require fewer resources such as storage and computational power. This makes them more accessible to users with limited hardware capabilities or those operating on resource-constrained environments.
+- **Transaction validation and security**: Running a full node allows users to independently validate transactions and verify the state of the Arbitrum blockchain. Users can have complete confidence in the authenticity and integrity of the transactions they interact with.
+- **Reduced trust requirements**: By running a full node, users can interact with the Arbitrum network without relying on third-party services or infrastructure. This independence reduces the need to trust external entities and mitigates the risk of potential centralized failures or vulnerabilities.
+- **Lower resource requirements**: Compared to archive nodes, full nodes generally require fewer resources such as storage and computational power. These requirements make it more accessible to users with limited hardware capabilities or those operating in resource-constrained environments.
 
 For detailed instructions, read [how to run an Arbitrum full node](/run-arbitrum-node/02-run-full-node.mdx).
 
 ### Considerations for running an Arbitrum archive node
 
-While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
+While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require access to extensive historical data or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
 
 For detailed instructions, read [how to run an Arbitrum archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx).
 
@@ -71,8 +64,8 @@ For detailed instructions, read [how to run an Arbitrum classic node](/run-arbit
 
 ### Considerations for running a feed relay
 
-If you are running a single node, there is no requirement to set up a feed relay. However, if you have multiple nodes, it is highly recommended to have a single feed relay per datacenter. This setup offers several advantages such as reducing ingress fees and enhancing stability within the network.
+If you are running a single node, there is no requirement to set up a feed relay. However, if you have multiple nodes, it is highly recommended to have a single feed relay per data center. This setup offers several advantages, including reducing ingress fees and enhancing network stability.
 
-In the near future, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
+Soon, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This local feed relay will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
 
 For detailed instructions, read [how to run an Arbitrum feed relay](/run-arbitrum-node/sequencer/01-run-feed-relay.mdx).
