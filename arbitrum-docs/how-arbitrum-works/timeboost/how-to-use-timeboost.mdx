@@ -285,7 +285,7 @@ The express lane is handled by the sequencer, so transactions are sent to the Se
 - chain id
 - current round (following the example above, `currentRound`)
 - address of the auction contract
-- sequence number: a per-round nonce of express lane submissions, which is reset to 0 at the beginning of each round
+- sequence number: a per-round nonce of express lane submissions, which is reset to 0 at the beginning of each round. You can also use the special "dontcare" sequence number (2^64 - 1) to indicate that you don't care about ordering relative to other `ExpressLaneSubmissions` (normal nonce ordering within transactions for an account is still respected)
 - RLP encoded transaction payload
 - conditional options for Arbitrum transactions ([more information](https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71))
 - signature (explained below)
