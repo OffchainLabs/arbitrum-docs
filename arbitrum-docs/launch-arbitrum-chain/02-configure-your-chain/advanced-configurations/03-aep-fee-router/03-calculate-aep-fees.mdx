@@ -25,6 +25,8 @@ Based on the above, we interpret that an Arbitrum chain’s revenue sources incl
 
 ### Assertion costs
 
+_As of June 6th, Assertion Costs will be removed from the AEP formula calculation_
+
 The above fee system applies to an Arbitrum chain’s Sequencer and Batch Poster, but there is another important actor that is considered essential to the chain. These are the [validators](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx).
 
 Validators are responsible for posting assertions on the parent chain, which are disputable claims about the new state of the Rollup. Posting an assertion is what progressed chain state on the parent chain. Validators are also responsible for securing the chain by creating disputes on false assertions.
@@ -54,6 +56,8 @@ AEP_FEES = [(gross revenue) - (settlement costs)]*0.1
 AEP_FEES = [(sequencing revenue + additional revenue) - (settlement costs + assertion costs)]*0.1
 AEP_FEES = [(l2BaseFee + l2SurplusFee + l1BaseFee + l1SurplusFee) - (l1BaseFee + assertion costs)]*0.1
 ```
+
+_As of June 6th, Assertion Costs will be removed from the AEP formula calculation_
 
 ## Opting in for assertion cost deduction
 
