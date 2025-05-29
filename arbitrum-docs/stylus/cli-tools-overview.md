@@ -38,6 +38,6 @@ For more advanced usage and detailed guides, refer to the following resources:
 
 - **[Optimize WASM binaries](/stylus/how-tos/optimizing-binaries.mdx)**
 - **[Troubleshooting](/stylus/troubleshooting-building-stylus.md)**
-- **[Run a Stylus dev node](/run-arbitrum-node/04-run-local-full-chain-simulation.mdx)**
+- **[Run a Stylus dev node](/run-arbitrum-node/03-run-local-full-chain-simulation.mdx)**
 
 This overview page serves as the starting point for mastering the CLI tools available for Stylus development. From optimizing your contracts to debugging and verifying them, the `cargo-stylus` toolset is integral to a smooth development experience.
