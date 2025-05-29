@@ -64,7 +64,7 @@ To the second point, the ArbitrumDAO can, through governance, adjust the amount 
 
 Recall that Arbitrum chains have two types of finality: (1) a trusted or soft confirmation and (2) Ethereum-equivalent finality. A trusted or soft confirmation for a user’s transaction relies on the user trusting the sequencer and the near-instant transaction receipt issued by the sequencer, which takes approximately 250ms. For (2), the user can use the Ethereum-equivalent finality heuristic once their child chain transaction becomes finalized on the parent chain as part of a batch of transactions posted to Ethereum, which can take two epochs, or roughly 13 minutes, in today’s Proof-of-Stake Ethereum. Read more about these two types of finality [here](https://docs.arbitrum.io/how-arbitrum-works/tx-lifecycle).
 
-With Timeboost, both finality timelines for non-express lane transactions (250ms for soft finality and ~13minutes for Ethereum-equivalent finality) will extend by the default 200ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively. 
+With Timeboost, both finality timelines for non-express lane transactions (250ms for soft finality and ~13minutes for Ethereum-equivalent finality) will extend by the default 200ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively.
 
 For express lane transactions, there will be no impact on transaction finality, meaning that finality will remain at 250ms and ~13 minutes for soft finality and Etheruem-equivalent finality, respectively.
 
