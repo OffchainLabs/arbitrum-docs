@@ -156,4 +156,4 @@ After generating the node configuration object, it can be saved to a file for la
 
 ### 3. Next step
 
-You can now run the Nitro node for your Arbitrum chain with the node configuration generated. You can find instructions for running a node in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx).
+You can now run the Nitro node for your Arbitrum chain with the node configuration generated. You can find instructions for running a node in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx).
