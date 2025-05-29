@@ -1102,6 +1102,11 @@ const sidebars = {
               id: 'how-arbitrum-works/timeboost/troubleshoot-timeboost',
             },
             {
+              type: 'doc',
+              label: 'Timeboost FAQ',
+              id: 'how-arbitrum-works/timeboost/timeboost-faq',
+            },
+            {
               type: 'link',
               href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
               label: 'Specification: Timeboost',
