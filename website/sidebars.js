@@ -589,6 +589,11 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
+          type: 'doc',
+          id: 'stylus/stylus-advanced-quickstart',
+          label: 'Advanced-quickstart',
+        },
+        {
           type: 'category',
           label: 'Rust SDK',
           collapsed: true,
