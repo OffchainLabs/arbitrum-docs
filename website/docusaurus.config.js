@@ -139,7 +139,6 @@ const config = {
       'docusaurus-lunr-search',
       {
         excludeRoutes: [
-          'launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/01-layer-leap',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/04-stake-and-validator-configurations',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/05-arbos-configuration',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/06-gas-optimization-tools',
@@ -163,7 +162,7 @@ const config = {
           'launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters',
           'launch-arbitrum-chain/reference/arbitrum-chain-fast-block-times',
           'launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration',
-          'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit',
+          'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit'
         ],
         maxHits: 10,
       },
