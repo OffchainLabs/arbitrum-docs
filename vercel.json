@@ -531,6 +531,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/arbitrum-node-runners/enale-post-4blobs/?)",
+      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4blobs/?)",
+      "permanent": false
+    },
+    {
       "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
       "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
       "permanent": false
@@ -1418,6 +1423,16 @@
     {
       "source": "/(run-arbitrum-node/how-to-use-timeboost/?)",
       "destination": "/(how-arbitrum-works/timeboost/how-to-use-timeboost/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/more-types/split-validator-node/?)",
+      "destination": "/(run-arbitrum-node/more-types/run-split-validator-node/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/node-types/?)",
+      "destination": "/(run-arbitrum-node/overview/?)",
       "permanent": false
     },
     {

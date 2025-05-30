@@ -277,6 +277,11 @@ const sidebars = {
                   label: `Manage the fee parameters`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs',
+                  label: `Enable blob transactions`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -570,7 +575,7 @@ const sidebars = {
       collapsed: true,
       link: {
         type: 'doc',
-        id: 'stylus/stylus-overview',
+        id: 'stylus/stylus-content-map',
       },
       items: [
         {
@@ -741,16 +746,15 @@ const sidebars = {
       type: 'category',
       label: 'Run an Arbitrum node',
       collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'node-running/node-running-content-map',
+      },
       items: [
         {
           type: 'doc',
           id: 'run-arbitrum-node/overview',
           label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/quickstart',
-          label: 'Quickstart',
         },
         {
           type: 'doc',
@@ -828,6 +832,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/more-types/run-split-validator-node',
+              label: 'Run a split validator',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
@@ -837,6 +846,10 @@ const sidebars = {
           type: 'category',
           label: 'Sequencer',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'node-running/sequencer-content-map',
+          },
           items: [
             {
               type: 'doc',
