@@ -5,7 +5,7 @@ sidebar_position: 2
 author: dlee
 ---
 
-The minimum Nitro version that supports ArbOS 40 "Callisto" is [Nitro v3.6.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.0), which is available on Docker hub with the image tag: TODO. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 40 "Callisto" upgrade required a governance vote to activate.
+The minimum Nitro version that supports ArbOS 40 "Callisto" is [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5), which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.6.5-89cef87`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 40 "Callisto" upgrade required a governance vote to activate.
 
 Please note that it is important that you only run the Nitro v3.6.0 against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (it might be inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. This is also mitigated by ensuring you run the Arbitrum Nitro node inside Docker.
 
@@ -15,7 +15,7 @@ As a refresher, ArbOS upgrades can be treated as Arbitrum’s equivalent of a ha
 
 ### Requirements:
 
-- [Nitro v3.6.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.0) or higher
+- [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5) or higher
 - [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
 - WASM module root: `0xdb698a2576298f25448bc092e52cf13b1e24141c997135d70f217d674bbeb69a`
 
@@ -60,7 +60,7 @@ While ArbOS 40 Callisto will be compatible with both `nitro-contracts 3.1.0` and
 
 ### Reference links for ArbOS 40 Callisto
 
-- [Nitro v3.6.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.0)
+- [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5)
 - [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
 - [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) (only relevant for Arbitrum chains that do not have BoLD enabled yet)
 - [README for how to upgrade your rollup contracts to support ArbOS 40 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
