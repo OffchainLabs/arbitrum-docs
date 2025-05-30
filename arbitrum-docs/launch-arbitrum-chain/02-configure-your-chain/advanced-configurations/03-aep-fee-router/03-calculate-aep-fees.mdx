@@ -24,6 +24,21 @@ In a vanilla Arbitrum chain (a chain without customizations, transaction orderin
 Based on the above, we interpret that an Arbitrum chain’s revenue sources include all fee components: `l2BaseFee`, `l2SurplusFee`, `l1BaseFee`, and `l1SurplusFee`. However, one of these fee components is also a cost, `l1BaseFee`, as it is used to pay for parent chain settlement.
 From here on we’ll refer to the three on-chain components (security, execution, protocol) since AEP excludes the L1 Base Fee,
 
+### Assertion costs
+
+:::info
+
+As of June 6th, Assertion Costs will be removed from the AEP formula calculation.
+
+:::
+
+The above fee system applies to an Arbitrum chain’s Sequencer and Batch Poster, but there is another important actor that is considered essential to the chain. These are the [validators](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx).
+
+Validators are responsible for posting assertions on the parent chain, which are disputable claims about the new state of the Rollup. Posting an assertion is what progressed chain state on the parent chain. Validators are also responsible for securing the chain by creating disputes on false assertions.
+
+As validators are necessary for chain security and chain progression, the gas costs paid by validators are a cost under the AEP license.
+
+The AEP license permits an Arbitrum chain to deduct the gas costs of assertion posting and confirming **only for validators operated by the chain owner**. The AEP Fee Router does not deduct assertion costs from its fees. In a later section, we will explain how chain owners can optionally deduct assertion costs.
 
 ### Additional revenue sources
 
@@ -46,6 +61,47 @@ AEP_FEES = [(gross revenue) - (settlement costs)]*0.1
 AEP_FEES = [(sequencing revenue + additional revenue) - (settlement costs)]*0.1
 AEP_FEES = [(l2BaseFee + l2SurplusFee + l1BaseFee + l1SurplusFee) - (l1BaseFee)]*0.1
 ```
+
+:::info
+
+As of June 6th, Assertion Costs will be removed from the AEP formula calculation.
+
+:::
+
+## Opting in for assertion cost deduction
+
+The AEP Fee Router **does not deduct** **assertion costs** from the fees it routes. This is because the contract system cannot track the amount of gas validators spend, and it cannot determine the eligibility of a validator.
+
+As such, Arbitrum chains can choose to deduct these costs from their fee stream, but this will require Arbitrum chains to self-report assertion costs and implement an intermediary multisig that sits before the AEP Fee Router system.
+
+Instructions for doing so can be found below.
+
+### Eligible validators
+
+Only validators directly associated with the Arbitrum chain owner are eligible for assertion cost deductions. By directly associated, we mean a validator operated by the team directly or contracted by an external provider (e.g., a Rollup-as-a-Service team) to act as a validator on behalf of the team. In the event of a contracted validator, only one validator can be eligible.
+
+### Eligible costs
+
+The following costs can be deducted for an eligible validator:
+
+1. The cost of posting assertions
+2. The cost of confirming assertions
+3. The cost of participating in fraud proofs
+
+### Deducting assertion costs
+
+If a team elects to deduct their assertion posting costs from eligible validators, they must establish and obey the following process:
+
+- Communicate to the Arbitrum Foundation that they intend to deduct onchain assertion costs
+  - Align on a cadence of disbursal and accounting these costs with the Arbitrum Foundation (e.g., quarterly, annually)
+  - At this cadence, provide onchain accounting to the Arbitrum Foundation to substantiate deducted costs from the AEP Fee Router stream.
+
+To implement the deduction, the team should do the following:
+
+- [Configure all Arbitrum chain fee components](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/07-fee-management.mdx#how-to-configure-the-fee-collector-addresses) to send all fees to a secure multisig address.
+  - For ease of accounting, it’s strongly recommended that this multisig handle no funds other than the rewards earned from the protocol.
+- On the established regular cadence (e.g., quarterly) deduct _all eligible assertion gas costs_ from the multisig’s balance by transferring it to your preferred fee-collecting address. The remainder of the amount must be forwarded to the `RewardDistributor` contract (configured as directed previously)
+- Following this, the `RewardDistributor` will split the post-deduction funds between the **AEP Fee Router** contracts and the configured chain-owner controlled addresses.
 
 ## Special cases and exceptions
 
