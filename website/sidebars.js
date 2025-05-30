@@ -575,7 +575,7 @@ const sidebars = {
       collapsed: true,
       link: {
         type: 'doc',
-        id: 'stylus/stylus-overview',
+        id: 'stylus/stylus-content-map',
       },
       items: [
         {
@@ -746,16 +746,15 @@ const sidebars = {
       type: 'category',
       label: 'Run an Arbitrum node',
       collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'node-running/node-running-content-map',
+      },
       items: [
         {
           type: 'doc',
           id: 'run-arbitrum-node/overview',
           label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/quickstart',
-          label: 'Quickstart',
         },
         {
           type: 'doc',
@@ -842,6 +841,10 @@ const sidebars = {
           type: 'category',
           label: 'Sequencer',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'node-running/sequencer-content-map',
+          },
           items: [
             {
               type: 'doc',

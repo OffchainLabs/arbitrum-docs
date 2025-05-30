@@ -1431,6 +1431,11 @@
       "permanent": false
     },
     {
+      "source": "/(run-arbitrum-node/node-types/?)",
+      "destination": "/(run-arbitrum-node/overview/?)",
+      "permanent": false
+    },
+    {
       "source": "/(run-arbitrum-node/run-local-dev-node/?)",
       "destination": "/run-arbitrum-node/run-local-full-chain-simulation",
       "permanent": false

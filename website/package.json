@@ -81,7 +81,7 @@
     "prettier": "^2.8.3",
     "semver": "^7.6.0",
     "styled-components": "^6.1.15",
-    "tsx": "^4.19.3",
+    "tsx": "^4.19.4",
     "typedoc": "^0.25.13",
     "typedoc-plugin-frontmatter": "^1.0.0",
     "typedoc-plugin-markdown": "4.0.1",
