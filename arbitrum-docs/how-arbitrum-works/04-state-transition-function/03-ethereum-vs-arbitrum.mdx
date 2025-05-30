@@ -29,7 +29,7 @@ The EVM operates as a stack machine with a maximum depth of 1024 items. Each ite
 
 During execution, the EVM uses transient _memory_ (a word-addresses byte array) that only persists for the duration of a transaction. In contrast, each contract maintains a persistent Merkle Patricia _storage_ trie–a word-addressable word array–that forms part of the global state.
 
-<a data-quicklook-from="smart-contract">smart contract</a> bytecode compiles into a series of EVM opcodes
+<a data-quicklook-from="smart-contract">Smart contract</a> bytecode compiles into a series of EVM opcodes
 that perform standard stack operations (such as `XOR`, `AND`, `ADD`, `SUB`) and blockchain-specific operations
 (such as `ADDRESS`, `BALANCE`, `BLOCKHASH`).
 

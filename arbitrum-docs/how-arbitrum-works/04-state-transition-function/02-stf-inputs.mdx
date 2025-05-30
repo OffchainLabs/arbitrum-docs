@@ -34,19 +34,6 @@ In the system, we refer to these messages as `L1IncomingMessage` [source code re
 
 When submitted to the Sequencer feed, messages are tagged with a unique identifier, ensuring Arbitrum nodes correctly differentiate and process them. Below is the list of message types, their associated constant values, and descriptions:
 
-```solidity
-uint8 constant L2_MSG = 3;
-uint8 constant L1MessageType_L2FundedByL1 = 7;
-uint8 constant L1MessageType_submitRetryableTx = 9;
-uint8 constant L1MessageType_ethDeposit = 12;
-uint8 constant L1MessageType_batchPostingReport = 13;
-uint8 constant L2MessageType_unsignedEOATx = 0;
-uint8 constant L2MessageType_unsignedContractTx = 1;
-
-uint8 constant ROLLUP_PROTOCOL_EVENT_TYPE = 8;
-uint8 constant INITIALIZATION_MSG_TYPE = 11;
-```
-
 - `L2_MSG` (3): Child chain messages submitted directly to the Sequencer.
 
 - `L1MessageType_L2FundedByL1` (7): Child chain messages that go to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>, with funding provided on the parent chain itself.
