@@ -27,7 +27,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Run a node',
     Svg: require('@site/static/img/node.svg').default,
-    href: '/run-arbitrum-node/quickstart',
+    href: '/run-arbitrum-node/overview',
     description: 'Learn how to run a node to interact with any Arbitrum network.',
   },
   {

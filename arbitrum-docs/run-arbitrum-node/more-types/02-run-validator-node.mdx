@@ -12,7 +12,7 @@ This page describes the different strategies a validator may follow and provides
 
 This how-to assumes that you're familiar with the following:
 
-- How to run a full node (see instructions [here](/run-arbitrum-node/03-run-full-node.mdx))
+- How to run a full node (see instructions [here](/run-arbitrum-node/02-run-full-node.mdx))
 - [How the Rollup protocol works](/how-arbitrum-works/05-validation-and-proving/02-rollup-protocol.mdx)
 - [How BoLD works](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
 
@@ -56,7 +56,7 @@ This section explains how to configure your node to act as a validator.
 
 ### Step 0: prerequisites
 
-A validator node is a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions [here](/run-arbitrum-node/03-run-full-node.mdx).
+A validator node is a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions [here](/run-arbitrum-node/02-run-full-node.mdx).
 
 Additionally, you'll need a wallet with enough funds to perform actions onchain and enough tokens to bond. Keep in mind that:
 
@@ -100,7 +100,7 @@ Furthermore, the following logs will indicate that all components are working as
 
 ## Run a validator for an Arbitrum chain
 
-Validation for Arbitrum chains (Orbit) works the same way as for DAO-governed Arbitrum chains. However, as specified in [How to run a node](/run-arbitrum-node/03-run-full-node.mdx#required-parameters), you need to include the information of the chain when configuring your node by using `--chain.info-json`.
+Validation for Arbitrum chains (Orbit) works the same way as for DAO-governed Arbitrum chains. However, as specified in [How to run a node](/run-arbitrum-node/02-run-full-node.mdx#required-parameters), you need to include the information of the chain when configuring your node by using `--chain.info-json`.
 
 ```shell
 --chain.info-json=<Orbit chain's info>
