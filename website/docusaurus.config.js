@@ -139,7 +139,6 @@ const config = {
       'docusaurus-lunr-search',
       {
         excludeRoutes: [
-          'launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/01-layer-leap',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/04-stake-and-validator-configurations',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/05-arbos-configuration',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/06-gas-optimization-tools',
