@@ -7,7 +7,9 @@ user_story: I have questions about Timeboost
 ---
 
 Below are some common and frequently asked questions about Timeboost. This list of questions is in no particular order and will be updated periodically as new questions arise.
+
 ## Using Timeboost
+
 #### As a typical user, will I notice any difference in my experience?
 
 The only difference users should experience is a small delay when submitting their transactions. The default configuration for this delay is 200ms, and a chain's owner can adjust it.
@@ -34,9 +36,8 @@ Arbitrum chains can adopt Timeboost, and Arbitrum chain owners can also choose t
 
 The autonomous auctioneer will consider only an address’s most recent bid, meaning that if you have placed a bid and wish to change it, you may re-submit a bid to “update it.” To cancel a bid, place a new bid that is significantly lower than your original bid or bid below the minimum reserve price. Remember that there is a maximum of five bids per round per address to mitigate DDoS risks.
 
-
-
 ## Security questions
+
 #### Does Timeboost create new types of MEV extraction vectors?
 
 Timeboost does not create new types of Maximum Extractable Value (MEV). Instead, it introduces slight adjustments to when and how existing forms of MEV operate. Timeboost's design strikes a balance between capturing MEV value for the chain without introducing additional externalities.
@@ -57,9 +58,8 @@ Timeboost's design is an auction-based system that encourages open competition. 
 
 Finally, Timeboost is entirely optional, meaning that Arbitrum chains can still function normally without it. Should Timeboost need to be disabled, the network would smoothly revert to FCFS transaction ordering, maintaining its current security and efficiency. Every chain can make its own decision about whether to enable Timeboost–your chain, your rules.
 
-
-
 ## Technical questions
+
 #### Does Timeboost mean an expectation for searchers to bid continuously in advance, expecting opportunities to happen one minute later, rather than “in real time” opportunities (I see something → I submit an arbitrage tx with priority)?
 
 Before answering this question, it is worth clarifying that the participant will likely attempt to predict the amount of MEV generated between 15 seconds and 1 minute 15 seconds in the future, not 1 minute later. This assumption is because the auction is closed and resolved within a maximum of 15 seconds before the start of the next round (as proposed in the current proposal).
