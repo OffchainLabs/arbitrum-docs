@@ -795,13 +795,18 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos40',
+              label: 'Callisto (ArbOS 40)',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos32',
-              label: 'ArbOS 32 Bianca',
+              label: 'Bianca (ArbOS 32)',
             },
             {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos20',
-              label: 'ArbOS 20 Atlas',
+              label: 'Atlas (ArbOS 20)',
             },
             {
               type: 'doc',
