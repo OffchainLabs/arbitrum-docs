@@ -1128,7 +1128,7 @@ const sidebars = {
               // q: why use an anchor html tag here?
               // a: see note at end of file
             },
-                        {
+            {
               type: 'html',
               value:
                 '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost">Deploy Timeboost <span class="other-section-icon">↑</span></a>',
