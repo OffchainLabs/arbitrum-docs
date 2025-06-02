@@ -38,7 +38,7 @@ This section will explore these categories in detail and explain how they work. 
 
 ## Native token bridging
 
-Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use `ETH` as their native token, while some Orbit chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/launch-orbit-chain/concepts/custom-gas-token-sdk.mdx).
+Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use `ETH` as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/launch-arbitrum-chain/concepts/custom-gas-token-sdk.mdx).
 
 Whether a chain uses `ETH` or a custom gas token, users can deposit the token from a parent chain (for Arbitrum One, it is Ethereum) to a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain's Delayed Inbox contract.
 
@@ -62,14 +62,18 @@ While `depositEth` is often the simplest path, you can also use _retryable ticke
 
 #### How deposits work
 
-When you call `Inbox.depositEth`, the `ETH` is sent to the <a data-quicklook-from="bridge">bridge</a> contract on the parent chain. This contract then "credits" the deposited amount to the specified address on the child chain. As far as the parent chain is concerned, the deposited `ETH` remains held by Arbitrum's bridge contract on your behalf.
+When you call `Inbox.depositEth`, the `ETH` is sent to the <a data-quicklook-from="bridge">bridge</a> contract on the parent chain. The bridge then "credits" the deposited amount to the designated address on the child chain. From the L1 perspective, the funds are held in Arbitrum’s bridge contract on your behalf.
 
 A diagram illustrating this deposit process is below:
+
+Note on caller type and aliasing:
 
 - **If the parent chain caller is an Externally Owned Account (EOA)**:
   - The deposited `ETH` will appear in the same EOA address on the child chain.
 - **If the parent chain caller is a contract**:
   - The `ETH` will be deposited to the contract's aliased address on the child chain. In the next section, we will cover [Address aliasing](#address-aliasing).
+- **If the caller is a `7702-enabled account` (EOA with temporary contract code)**:
+  - The `ETH` goes to the aliased address, similar to contracts. This is due to the presence of runtime code during execution, and ensures consistent aliasing behavior post-EIP-7702.
 
 <ImageZoom src="/img/haw-aliasing.svg" alt="Address aliasing" className="img-600px" />
 

@@ -12,7 +12,7 @@ The following are the only exceptions:
 
 - Contributing to the three troubleshooting pages — [nodes](arbitrum-docs/partials/_troubleshooting-nodes-partial.mdx), [builders](arbitrum-docs/partials/_troubleshooting-building-partial.mdx), and [users](arbitrum-docs/partials/_troubleshooting-users-partial.mdx), as well as the [glossary](arbitrum-docs/partials/_glossary-partial.md) page — requires internal Offchain Labs access. If you'd like to make a suggestion about content on any of those pages, open an [issue ticket](https://github.com/OffchainLabs/arbitrum-docs/issues).
 
-- To request to have your project added to the [3rd party node providers page](arbitrum-docs/build-decentralized-apps/reference/01-node-providers.md), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
+- To request to have your project added to the [3rd party node providers page](arbitrum-docs/build-decentralized-apps/reference/01-node-providers.mdx), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
 
 ### Initial set up
 
@@ -63,3 +63,34 @@ yarn serve
 ```shell
 git submodule update --remote arbitrum-sdk
 ```
+
+### Update glossary
+
+You can add any terms to the glossary by following these steps:
+
+Let's assume you need to add the term "State Transition Function" to the glossary. 
+
+1. Create an `.mdx` file as follows: 
+
+`arbitrum-docs/partials/glossary/_state-transition-function.mdx`
+
+2. Ensure that the content of your file follows the following format:
+
+```markdown
+---
+title: State Transition Function
+key: state-transition-function
+titleforSort: State Transition Function
+---
+
+The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.
+```
+
+3. While in the `/website` directory, run the following command:
+
+```shell
+npx tsx src/scripts/build-glossary.ts
+```
+ This part will update the glossary.
+
+4. Commit your changes and open a PR.

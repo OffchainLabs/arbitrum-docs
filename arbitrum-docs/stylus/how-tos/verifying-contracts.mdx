@@ -58,7 +58,7 @@ Upon completion, you will obtain the deployment transaction hash:
 deployment tx hash: 0x1d8ae97e245e1db21dd188e5b64ad9025c1fb4e5f82a8d38bc8ae2b7a387600b
 ```
 
-Save this tx hash, as verifiers will need it.
+Save this transaction hash, as verifiers will need it.
 
 ## Reproducible verification
 
@@ -84,7 +84,7 @@ On deployment, a `keccak256` hash is created from the contents of all Rust sourc
 
 This means the `codehash` onchain of the program will change due to this deployment metadata hash.
 
-The verification routine fetches the deployment transaction by hash via RPC, then attempts to build the local project to reconstruct the deployment init code and WASM using cargo build. It then checks that the deployment tx data matches the created init code.
+The verification routine fetches the deployment transaction by hash via RPC, then attempts to build the local project to reconstruct the deployment init code and WASM using cargo build. It then checks that the deployment transaction data matches the created init code.
 
 ## Important details
 
