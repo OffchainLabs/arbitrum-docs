@@ -57,6 +57,7 @@ If you want your Arbitrum chain (Orbit) to appear on the Arbitrum bridge UI with
 To integrate Layer Leap into your custom bridge UI:
 
 1. **Set up infrastructure**
+
    - Ensure your Arbitrum chain (Orbit) is properly configured
    - Deploy and configure the necessary components
 
@@ -65,8 +66,11 @@ To integrate Layer Leap into your custom bridge UI:
    The simplest implementation uses the Arbitrum SDK:
 
    ```typescript
-   import { TeleportTokenParameters, teleportToken } from '@arbitrum/sdk/dist/lib/teleport/teleport';
-   
+   import {
+     TeleportTokenParameters,
+     teleportToken,
+   } from '@arbitrum/sdk/dist/lib/teleport/teleport';
+
    // Configure the token teleport parameters
    const params: TeleportTokenParameters = {
      l1Signer, // Ethereum signer
@@ -75,9 +79,9 @@ To integrate Layer Leap into your custom bridge UI:
      erc20Address, // Token address (or null for ETH)
      amount, // Amount to bridge
      l3WalletAddress, // Recipient address on the Arbitrum chain (Orbit)
-     teleportType: TeleportType.STANDARD // For ETH-fee chains
+     teleportType: TeleportType.STANDARD, // For ETH-fee chains
    };
-   
+
    // Initiate the teleport
    const result = await teleportToken(params);
    console.log(`Teleport initiated with hash: ${result.hash}`);
@@ -89,40 +93,41 @@ To integrate Layer Leap into your custom bridge UI:
 
    ```typescript
    import { TeleportStatus, getTeleportStatus } from '@arbitrum/sdk/dist/lib/teleport/status';
-   
+
    const status = await getTeleportStatus({
      l1Provider,
      l2Provider,
      l3Provider,
-     l1TxHash
+     l1TxHash,
    });
-   
+
    console.log(`Teleport status: ${TeleportStatus[status.status]}`);
    ```
 
 ## Best practices
 
 1. **Retryable monitoring**
-   
+
    Run the [Retryables Monitoring tool](https://github.com/OffchainLabs/arb-retryables-monitoring) to track and redeem any failed retryables.
 
 2. **Gas estimation**
-   
+
    Layer Leap requires sufficient gas to cover all steps across multiple chains. Conservative gas estimations are recommended.
 
 3. **Error handling**
-   
+
    Implement proper error handling for each step of the teleport process, especially for handling potential failures at the L2 or L3 level.
 
 ## Contract addresses
 
-| Contract | Address |
-| -------- | ------- |
+| Contract                  | Address                                                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | Arb One/Nova L1Teleporter | [0xCBd9c6e310D6AaDeF9F025f716284162F0158992](https://etherscan.io/address/0xCBd9c6e310D6AaDeF9F025f716284162F0158992) |
 
 ## Demo examples
 
 You can see Layer Leap in action on the Arbitrum Bridge by bridging to:
+
 - [Rari](https://bridge.arbitrum.io/?destinationChain=rari-mainnet&sourceChain=ethereum)
 - [Proof of Play](https://bridge.arbitrum.io/?destinationChain=pop-apex&sourceChain=ethereum)
 
