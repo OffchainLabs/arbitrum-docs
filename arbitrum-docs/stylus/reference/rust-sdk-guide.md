@@ -352,6 +352,7 @@ impl Contract {
     }
     
     // Automatically called when transaction has empty calldata
+    #[receive]
     #[payable]
     pub fn receive(&mut self) -> Result<(), Vec<u8>> {
         // Handle ETH receiving logic
