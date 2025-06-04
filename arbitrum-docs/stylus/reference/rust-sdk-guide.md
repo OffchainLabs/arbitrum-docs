@@ -345,6 +345,7 @@ Here's an example implementation:
 #[public]
 impl Contract {
     // Automatically called when transaction has calldata that doesn't match any function
+    #[fallback]
     #[payable]
     pub fn fallback(&mut self, calldata: Vec<u8>) -> Result<Vec<u8>, Vec<u8>> {
         // Handle arbitrary calldata
