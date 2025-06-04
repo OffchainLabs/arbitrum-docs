@@ -68,3 +68,14 @@ Note that if you get any of the errors below or errors related to invalidity of 
 | `SEQUENCE_NUMBER_ALREADY_SEEN` | the sequence number used for the given transaction was already consumed, try resubmitting with a new sequence number |
 | `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
 | `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached |
+
+## Notes on Timeboost's implementation for Arbitrum One & Arbitrum Nova
+
+Although the auctioneer will function autonomously, please note that the ArbitrumDAO (formal owners of Arbitrum One and Arbitrum Nova) has granted the sequencer operator with:
+
+1. The right to pause the acceptance and verification of bids. This is to allow the current sequencer operator to provide reliable, consistent UX and maximize infrastructure stability, and
+2. The right to disable Timeboost entirely in the event of a security risk or otherwise malicious attempt to harm Arbitrum One and Arbitrum Nova node operators, existing deployed applications, and/or end users. The Arbitrum Foundation and Offchain Labs commits to sharing publicly post-mortems and analyses should this scenario arise.
+
+These rights, among a few others as described in the [original AIP](https://forum.arbitrum.foundation/t/constitutional-aip-proposal-to-adopt-timeboost-a-new-transaction-ordering-policy/25167), are expected to only be exercised in circumstances where doing so would enhance Timeboost’s long-term stability, preserve or improve the user experience for those using Timeboost-enabled Arbitrum chains, increase the security posture, resiliency, or stability of the chain, and/or otherwise help increase revenue for the ArbitrumDAO.
+
+It is important to emphasize that for Arbitrum One and Arbitrum Nova, the DAO-elected Arbitrum Security Council can, at any time, perform either Emergency Actions or Non-Emergency Actions to execute software upgrades, perform routine maintenance, and other parameter adjustments to Timeboost, in each case in accordance with its existing powers. These actions can include, but are not limited solely to, exercising the rights proposed above for the current sequencer operator. More information about the Arbitrum Security Council and their scope of powers can be found in the [ArbitrumDAO Constitution](https://docs.arbitrum.foundation/dao-constitution).
