@@ -575,7 +575,7 @@ const sidebars = {
       collapsed: true,
       link: {
         type: 'doc',
-        id: 'stylus/stylus-overview',
+        id: 'stylus/stylus-content-map',
       },
       items: [
         {
@@ -746,16 +746,15 @@ const sidebars = {
       type: 'category',
       label: 'Run an Arbitrum node',
       collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'node-running/node-running-content-map',
+      },
       items: [
         {
           type: 'doc',
           id: 'run-arbitrum-node/overview',
           label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/quickstart',
-          label: 'Quickstart',
         },
         {
           type: 'doc',
@@ -796,13 +795,18 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos40',
+              label: 'Callisto (ArbOS 40)',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos32',
-              label: 'ArbOS 32 Bianca',
+              label: 'Bianca (ArbOS 32)',
             },
             {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos20',
-              label: 'ArbOS 20 Atlas',
+              label: 'Atlas (ArbOS 20)',
             },
             {
               type: 'doc',
@@ -842,6 +846,10 @@ const sidebars = {
           type: 'category',
           label: 'Sequencer',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'node-running/sequencer-content-map',
+          },
           items: [
             {
               type: 'doc',
@@ -1097,6 +1105,11 @@ const sidebars = {
               type: 'doc',
               label: 'Troubleshoot Timeboost',
               id: 'how-arbitrum-works/timeboost/troubleshoot-timeboost',
+            },
+            {
+              type: 'doc',
+              label: 'Timeboost FAQ',
+              id: 'how-arbitrum-works/timeboost/timeboost-faq',
             },
             {
               type: 'link',
