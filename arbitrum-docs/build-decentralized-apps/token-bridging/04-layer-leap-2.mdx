@@ -65,44 +65,44 @@ To integrate Layer Leap into your custom bridge UI:
 
    The simplest implementation uses the Arbitrum SDK:
 
-   ```typescript
-   import {
-     TeleportTokenParameters,
-     teleportToken,
-   } from '@arbitrum/sdk/dist/lib/teleport/teleport';
+```typescript
+import {
+  TeleportTokenParameters,
+  teleportToken,
+} from '@arbitrum/sdk/dist/lib/teleport/teleport';
 
-   // Configure the token teleport parameters
-   const params: TeleportTokenParameters = {
-     l1Signer, // Ethereum signer
-     l2Provider, // Arbitrum L2 provider
-     l3Provider, // Arbitrum chain (Orbit) provider
-     erc20Address, // Token address (or null for ETH)
-     amount, // Amount to bridge
-     l3WalletAddress, // Recipient address on the Arbitrum chain (Orbit)
-     teleportType: TeleportType.STANDARD, // For ETH-fee chains
-   };
+// Configure the token teleport parameters
+const params: TeleportTokenParameters = {
+  l1Signer, // Ethereum signer
+  l2Provider, // Arbitrum L2 provider
+  l3Provider, // Arbitrum chain (Orbit) provider
+  erc20Address, // Token address (or null for ETH)
+  amount, // Amount to bridge
+  l3WalletAddress, // Recipient address on the Arbitrum chain (Orbit)
+  teleportType: TeleportType.STANDARD, // For ETH-fee chains
+};
 
-   // Initiate the teleport
-   const result = await teleportToken(params);
-   console.log(`Teleport initiated with hash: ${result.hash}`);
-   ```
+// Initiate the teleport
+const result = await teleportToken(params);
+console.log(`Teleport initiated with hash: ${result.hash}`);
+```
 
 3. **Monitor and track teleports**
 
    Track the status of a teleport:
 
-   ```typescript
-   import { TeleportStatus, getTeleportStatus } from '@arbitrum/sdk/dist/lib/teleport/status';
+```typescript
+import { TeleportStatus, getTeleportStatus } from '@arbitrum/sdk/dist/lib/teleport/status';
 
-   const status = await getTeleportStatus({
-     l1Provider,
-     l2Provider,
-     l3Provider,
-     l1TxHash,
-   });
+const status = await getTeleportStatus({
+  l1Provider,
+  l2Provider,
+  l3Provider,
+  l1TxHash,
+});
 
-   console.log(`Teleport status: ${TeleportStatus[status.status]}`);
-   ```
+console.log(`Teleport status: ${TeleportStatus[status.status]}`);
+```
 
 ## Best practices
 
