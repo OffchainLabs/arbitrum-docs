@@ -14,7 +14,10 @@ Inheritance allows you to build upon existing smart contract functionality witho
 
 ## Overview
 
-The inheritance model in Stylus aims to replicate the composition pattern found in Solidity. Types that implement the Router trait (provided by the `#[public]` macro) can be connected via inheritance.
+The Stylus SDK offers two approaches to inheritance:
+
+1. **Storage-based inheritance**: The original model using `#[borrow]` and `#[inherit]` annotations
+2. **Trait-based composition**: The newer approach using traits and `#[implements]` annotation
 
 <VanillaAdmonition type="warning">
   Stylus doesn't currently support contract multi-inheritance yet, so you should design your
