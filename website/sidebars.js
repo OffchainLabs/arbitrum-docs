@@ -136,8 +136,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Layer Leap contracts',
+              label: 'Use Layer Leap first version',
               id: 'build-decentralized-apps/token-bridging/layer-leap',
+            },
+            {
+              type: 'doc',
+              label: 'Use Layer Leap second version',
+              id: 'build-decentralized-apps/token-bridging/layer-leap-2',
             },
             {
               type: 'doc',
