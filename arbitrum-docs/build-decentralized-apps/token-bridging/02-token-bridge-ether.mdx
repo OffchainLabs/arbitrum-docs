@@ -19,11 +19,17 @@ To move `ETH` from the parent chain to the child chain, you execute a deposit tr
 function depositEth(address destAddr) external payable override returns (uint256)
 ```
 
+:::warning
+
+If the transaction is sent by a `7702-enabled account`, the destination address on L2 is subject to address aliasing. The `ETH` will be credited to the aliased address of the sender, not the raw `msg.sender`. See [address aliasing](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging#address-aliasing) for details.
+
+:::
+
 The following diagram depicts the process that funds follow during a deposit operation.
 
 <ImageZoom src="/img/dapps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
 
-As far as the parent chain knows, all deposited funds are held by Arbitrum's Bridge contract.
+As far as the parent chain is concerned, all deposited funds are held by the Arbitrum Bridge contract. Once finalized, the `ETH` becomes available on the L2 at the aliased or specified address, depending on the sender type.
 
 ## Withdrawing ether
 
