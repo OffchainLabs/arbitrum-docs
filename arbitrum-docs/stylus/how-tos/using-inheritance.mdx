@@ -299,6 +299,18 @@ impl IOwnable for Contract {
 
 </CustomDetails>
 
+
+
+#### How trait-based composition works
+
+The trait-based composition model follows these principles:
+
+1. Define traits that represent interfaces (similar to Solidity interfaces)
+2. Implement these traits for your contract
+3. Use the `#[implements(...)]` attribute to tell the Stylus SDK which traits your contract implements
+4. The router will connect incoming calls to the appropriate implementation
+
+
 ## Method overriding
 
 If both parent and child implement the same method, the one in the child will override the one in the parent. This allows for customizing inherited functionality.
