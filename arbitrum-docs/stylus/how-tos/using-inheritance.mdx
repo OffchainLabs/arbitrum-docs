@@ -193,11 +193,9 @@ Here's the step-by-step process of how inheritance works in Stylus:
 
 When a method is called on `ChildContract`, it first checks if the requested method exists within `ChildContract`. If a matching function is not found, it will then try the `BaseContract`. Only after trying everything `ChildContract` inherits will the call revert.
 
-
 ### Trait-based composition model
 
 The newer approach to inheritance in Stylus uses traits and the `#[implements]` annotation, which follows a more Rust-native pattern:
-
 
 #### Basic example of trait-based composition
 
@@ -300,8 +298,6 @@ impl IOwnable for Contract {
 ```
 
 </CustomDetails>
-
-
 
 ## Method overriding
 
