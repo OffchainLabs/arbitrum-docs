@@ -181,7 +181,7 @@ impl ChildContract {
 
 </CustomDetails>
 
-### How it works
+#### How it works
 
 In the above code, when someone calls the `ChildContract` on a function defined in `BaseContract`, like `get_value()`, the function from `BaseContract` will be executed.
 
@@ -192,6 +192,116 @@ Here's the step-by-step process of how inheritance works in Stylus:
 3. The `#[inherit(BaseContract)]` annotation on the implementation connects the child to the parent's methods through the Router trait
 
 When a method is called on `ChildContract`, it first checks if the requested method exists within `ChildContract`. If a matching function is not found, it will then try the `BaseContract`. Only after trying everything `ChildContract` inherits will the call revert.
+
+
+### Trait-based composition model
+
+The newer approach to inheritance in Stylus uses traits and the `#[implements]` annotation, which follows a more Rust-native pattern:
+
+
+#### Basic example of trait-based composition
+
+<CustomDetails summary="Trait-Based Inheritance Example">
+
+```rust
+use stylus_sdk::{
+    alloy_primitives::{Address, U256},
+    prelude::*,
+    storage::{StorageAddress, StorageMap, StorageU256},
+};
+
+// Define traits for different functionality
+trait IErc20 {
+    fn name(&self) -> String;
+    fn symbol(&self) -> String;
+    fn decimals(&self) -> U256;
+    fn total_supply(&self) -> U256;
+    fn balance_of(&self, account: Address) -> U256;
+    fn transfer(&mut self, to: Address, value: U256) -> bool;
+}
+
+trait IOwnable {
+    fn owner(&self) -> Address;
+    fn transfer_ownership(&mut self, new_owner: Address) -> bool;
+    fn renounce_ownership(&mut self) -> bool;
+}
+
+// Define storage for each component
+#[storage]
+struct Erc20 {
+    balances: StorageMap<Address, StorageU256>,
+    total_supply: StorageU256,
+}
+
+#[storage]
+struct Ownable {
+    owner: StorageAddress,
+}
+
+// Define the main contract that composes different functionality
+#[storage]
+#[entrypoint]
+struct Contract {
+    erc20: Erc20,
+    ownable: Ownable,
+}
+
+// The #[implements] attribute connects the contract to the traits it implements
+#[public]
+#[implements(IErc20, IOwnable)]
+impl Contract {}
+
+// Implement the ERC20 interface for the contract
+#[public]
+impl IErc20 for Contract {
+    fn name(&self) -> String {
+        "MyToken".to_string()
+    }
+
+    fn symbol(&self) -> String {
+        "MTK".to_string()
+    }
+
+    fn decimals(&self) -> U256 {
+        U256::from(18)
+    }
+
+    fn total_supply(&self) -> U256 {
+        self.erc20.total_supply.get()
+    }
+
+    fn balance_of(&self, account: Address) -> U256 {
+        self.erc20.balances.get(account)
+    }
+
+    fn transfer(&mut self, to: Address, value: U256) -> bool {
+        // Implementation here
+        true
+    }
+}
+
+// Implement the Ownable interface for the contract
+#[public]
+impl IOwnable for Contract {
+    fn owner(&self) -> Address {
+        self.ownable.owner.get()
+    }
+
+    fn transfer_ownership(&mut self, new_owner: Address) -> bool {
+        // Implementation here
+        true
+    }
+
+    fn renounce_ownership(&mut self) -> bool {
+        // Implementation here
+        true
+    }
+}
+```
+
+</CustomDetails>
+
+
 
 ## Method overriding
 
