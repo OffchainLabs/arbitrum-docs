@@ -1,0 +1,45 @@
+---
+id: 'using-constructors'
+title: 'Using constructors with Stylus'
+description: 'A starter guide to using constructors with Stylus.'
+sme: anegg0
+target_audience: 'Developers writing smart contracts using Stylus.'
+sidebar_position: 3
+---
+
+import CustomDetails from '@site/src/components/CustomDetails';
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+## Introduction
+
+
+### Prerequisites
+
+Before implementing inheritance, ensure you have:
+
+<CustomDetails summary="Rust toolchain">
+
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
+</CustomDetails>
+
+<CustomDetails summary="cargo stylus">
+
+In your terminal, run:
+
+```shell
+cargo install --force cargo-stylus
+```
+
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.81 as well as adding the WASM build target:
+
+```shell
+rustup default 1.81
+rustup target add wasm32-unknown-unknown --toolchain 1.81
+```
+
+You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
+
+</CustomDetails>
+
+
