@@ -61,11 +61,16 @@ The storage-based model is similar to Solidity' inheritance, where child contrac
 
 The trait-based approach (#[implements]) offers better alignment with Rust's composition patterns and stronger type safety, making it preferable for new projects. However, both approaches are valid and supported in the SDK.
 
-## Basic inheritance pattern
+### Storage-based inheritance model
 
-Let's walk through a practical example of implementing inheritance in Stylus.
+The original inheritance pattern in Stylus requires two components:
 
-### Step 1: Define the base contract
+1. A storage structure using the `#[borrow]` annotation
+2. An implementation block using the `#[inherit]` annotation
+
+When you use these annotations properly, the child contract will be able to inherit the public methods from the parent contract.
+
+#### Step 1: Define the base contract
 
 First, define your base contract that will be inherited:
 
@@ -117,7 +122,7 @@ impl BaseContract {
 
 In this example, we've created a simple base contract with a single state variable and two methods to get and set its value.
 
-### Step 2: Define the child contract with inheritance
+#### Step 2: Define the child contract with inheritance
 
 Next, create your child contract that inherits from the base contract:
 
