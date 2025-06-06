@@ -224,16 +224,6 @@ impl<T: Erc721Params> Erc721<T> {
 
 </CustomDetails>
 
-### Best practices for ABI correctness
-
-1. **Be explicit with selectors**: When implementing standard interfaces (like ERC-20 or ERC-721), always use the `#[selector]` attribute to match the expected Solidity function names.
-
-2. **Check for name collisions**: Methods with the same name but different parameters need explicit selectors.
-
-3. **Verify generated ABIs**: After compiling your contract, inspect the generated ABI to ensure all methods have the correct selectors.
-
-4. **Test with interface contracts**: Test your contract against a standard interface contract to verify compatibility.
-
 <VanillaAdmonition type="info" title="ABI generation and inheritance">
   The Stylus SDK generates ABIs based on the methods that are available at the entrypoint contract.
   When using trait-based composition, make sure that all methods you want exposed in the ABI are
@@ -254,37 +244,3 @@ In a typical composition chain:
 - If not found there, it looks in the first trait specified in the inheritance list
 - If still not found, it searches in the next trait in the list
 - This continues until the method is found or all possibilities are exhausted
-
-## Current limitations and best practices
-
-### Limitations
-
-1. Stylus doesn't support Solidity-style multiple inheritance yet
-2. There's a risk of undetected selector collisions with functions from implemented traits
-3. No explicit override or virtual keywords for clearly marking overridden functions
-
-### Best practices
-
-1. Be explicit with function selectors using `#[selector(name = "FunctionName")]` when implementing standard interfaces
-2. Use `cargo expand` to examine the expanded code and verify trait-based composition is working as expected
-3. Be cautious with method overriding since there are no explicit override keywords
-4. Design your contracts with composition in mind
-5. Test thoroughly to ensure all implemented methods work correctly
-6. Always use `self.vm()` methods for accessing blockchain context (instead of deprecated functions)
-7. When overriding methods that emit events, make sure to explicitly re-emit the events
-8. Use feature flags to control which contract is the entrypoint when working with multiple contracts
-
-## Debugging issues
-
-If you encounter issues with trait-based composition in your Stylus contracts, try these approaches:
-
-1. Verify the `#[implements]` annotation includes the correct traits
-2. Ensure all function selectors are correctly specified when implementing standard interfaces
-3. Check for method name conflicts between traits and contract implementations
-4. Use the `cargo stylus check` command to verify your contract compiles correctly
-5. Use `cargo clippy` to check for Rust-specific issues and stylus-specific lints
-6. Test individual methods to isolate issues
-7. If you encounter symbol collision errors with `mark_used`, ensure you're only compiling one contract as the entrypoint at a time using feature flags
-8. For VM context errors, verify you're using `self.vm()` methods instead of deprecated global functions
-
-For more information, refer to the [Stylus SDK documentation](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide) and [Stylus by Example](https://docs.arbitrum.io/stylus-by-example/basic_examples/inheritance).
