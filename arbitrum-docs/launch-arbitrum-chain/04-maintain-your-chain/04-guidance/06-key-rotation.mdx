@@ -8,7 +8,7 @@ content_type: how-to
 
 This guide covers how to rotate keys for different roles in your Arbitrum Orbit chain: batch poster, validator/bonder, and Data Availability Servers (DAS).
 
-::: warning Important Prerequisites
+:::warning Important Prerequisites
 
 - **Backup**: Always backup your current configuration and private keys before starting
 - **Testing**: Test key rotation on a testnet environment first if possible
@@ -31,7 +31,7 @@ For sequencer nodes running both the sequencer and batch poster on the same serv
 - Access to call functions on the `SequencerInbox` contract
 - Gracefully stop the current batch poster
 
-### Steps
+### Generate new batch poster keys
 
 1. **Enable the new batch poster**
 
@@ -72,7 +72,7 @@ For sequencer nodes running both the sequencer and batch poster on the same serv
 - The required bond amount available for the new validator
 - Access to call functions on the `Rollup` contract
 
-### Steps
+### Activate new keys
 
 1. **Enable new validator**
 
@@ -115,7 +115,7 @@ For sequencer nodes running both the sequencer and batch poster on the same serv
 - A new DAC keyset generated
 - Access to call functions on the `SequencerInbox` contract
 
-### Steps
+### Generate, deploy, and verify new DAC keys
 
 1. **Generate new keyset**
 
@@ -129,7 +129,7 @@ For sequencer nodes running both the sequencer and batch poster on the same serv
    ```
 
    :::note
-   
+
    `assumedHonest=1` assumes at least one committee member is honest
 
    :::
