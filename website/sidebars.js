@@ -136,16 +136,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Use Layer Leap first version',
-              id: 'build-decentralized-apps/token-bridging/layer-leap',
-            },
-            {
-              type: 'doc',
-              label: 'Use Layer Leap second version',
-              id: 'build-decentralized-apps/token-bridging/layer-leap-2',
-            },
-            {
-              type: 'doc',
               label: 'ERC-20 token bridging',
               id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
@@ -344,6 +334,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
                   label: 'BoLD configuration parameters',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use Layer Leap',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
                 {
                   type: 'category',
