@@ -1,34 +1,46 @@
-# Arbitrum Node Key Rotation Guide
+---
+title: 'Arbitrum Node Key Rotation Guide'
+description: 'Learn how to rotate keys for the different roles in your Arbitrum chain.'
+author: Jason-W123
+sme: Jason-W123
+content_type: how-to
+---
 
-This guide covers how to rotate keys for different roles in your Arbitrum Orbit chain: batch poster, validator/staker, and Data Availability Servers (DAS).
+This guide covers how to rotate keys for different roles in your Arbitrum Orbit chain: batch poster, validator/bonder, and Data Availability Servers (DAS).
 
-## ⚠️ Important Prerequisites
+::: warning Important Prerequisites
 
 - **Backup**: Always backup your current configuration and private keys before starting
 - **Testing**: Test key rotation on a testnet environment first if possible
 - **Downtime**: Plan for potential brief service interruptions during the rotation process
 - **Permissions**: Ensure you have the necessary permissions to call the required smart contract functions
 
-## 1. Batch Poster Key Rotation
+:::
 
-> **Critical Warning**: For sequencer nodes running both sequencer and batch poster on the same server, you **must** split them first and configure Redis for message synchronization. Failure to do so may cause chain reorganizations. Refer to the [High Availability Sequencer documentation](/run-arbitrum-node/sequencer/05-high-availability-sequencer-docs.mdx) for setup instructions.
+## 1. Batch poster key rotation
+
+:::danger Critical warning
+
+For sequencer nodes running both the sequencer and batch poster on the same server, you **must** first split them and then configure Redis for message synchronization. Failure to do so may cause chain reorganizations. Refer to the [High Availability Sequencer documentation](/run-arbitrum-node/sequencer/05-high-availability-sequencer-docs.mdx) for setup instructions.
+
+:::
 
 ### Prerequisites
 
-- New batch poster account funded with sufficient ETH for gas fees
+- A new batch poster account funded with sufficient `ETH` for gas fees
 - Access to call functions on the `SequencerInbox` contract
-- Current batch poster should be stopped gracefully
+- Gracefully stop the current batch poster
 
 ### Steps
 
-1. **Enable new batch poster**
+1. **Enable the new batch poster**
 
-   ```
+   ```sh
    Call setIsBatchPoster(address=<new_address>, enabled=true) on SequencerInbox contract
    Call setBatchPosterManager(address=<new_address>) on SequencerInbox contract if you want to change batch poster manager
    ```
 
-2. **Update node configuration**
+2. **Update the node configuration**
 
    - Update your node configuration to use the new private key
    - Restart the batch poster service with the new configuration
@@ -38,37 +50,37 @@ This guide covers how to rotate keys for different roles in your Arbitrum Orbit 
 
    **Temporary fix**:
 
-   - Add `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag
+   - Add the `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag
    - Restart the batch poster
-   - Remove this flag for next start
+   - **Remove this flag** before the next start
 
 4. **Verify operation**
 
    - Monitor logs to confirm the new batch poster is successfully submitting batches
-   - Check that transactions are being processed normally
+   - Check that transactions are processing normally
 
-5. **Disable old batch poster**
-   ```
+5. **Disable the old batch poster**
+   ```sh
    Call setIsBatchPoster(address=<old_address>, enabled=false) on SequencerInbox contract
    ```
 
-## 2. Validator/Staker Key Rotation
+## 2. Validator/bonder key rotation
 
 ### Prerequisites
 
-- New validator account funded with sufficient ETH
-- Required stake amount available for the new validator
+- A new validator account funded with sufficient `ETH`
+- The required bond amount available for the new validator
 - Access to call functions on the `Rollup` contract
 
 ### Steps
 
 1. **Enable new validator**
 
-   ```
+   ```sh
    Call setValidator(addr=<new_validator_address>, val=true) on Rollup contract
    ```
 
-2. **Update node configuration**
+2. **Update the node configuration**
 
    - Update your validator node configuration to use the new private key
    - Restart the validator service
@@ -78,29 +90,29 @@ This guide covers how to rotate keys for different roles in your Arbitrum Orbit 
 
    - Add `--node.staker.data-poster.dangerous.clear-dbstorage` flag temporarily
    - Restart the validator
-   - Remove this flag for next start
+   - **Remove this flag** before the next start
 
-4. **Verify new validator operation**
+4. **Verify the new validator operation**
 
-   - Monitor that the new validator successfully posts stake transactions
-   - Confirm assertion and confirmation transactions are being submitted
+   - Monitor that the new validator successfully posts bond transactions
+   - Confirm assertion and confirmation transactions are submitted successfully
 
-5. **Disable old validator**
+5. **Disable the old validator**
 
-   ```
+   ```sh
    Call setValidator(addr=<old_validator_address>, val=false) on Rollup contract
    ```
 
-6. **Recover old validator stake** (if applicable)
-   - Wait your old validator's latest stake assertion to be confirmed
-   - Call reduceDeposit() on Rollup Contract
-   - Call withdrawStakerFunds() to get your stake back
+6. **Recover old validator bond** (if applicable)
+   - Wait for your old validator's latest bond assertion to be confirmed
+   - Call `reduceDeposit()` on the `Rollup` Contract
+   - Call `withdrawStakerFunds()` to get your bond back
 
-## 3. AnyTrust Data Availability Committee (DAC) Rotation
+## 3. AnyTrust Data Availability Committee (DAC) rotation
 
 ### Prerequisites
 
-- New DAC keyset generated
+- A new DAC keyset generated
 - Access to call functions on the `SequencerInbox` contract
 
 ### Steps
@@ -108,15 +120,19 @@ This guide covers how to rotate keys for different roles in your Arbitrum Orbit 
 1. **Generate new keyset**
 
    - Follow the [Generate Keyset documentation](/run-arbitrum-node/data-availability-committees/configure-dac#step-1-generate-the-keyset-and-keyset-hash-with-all-the-information-from-the-servers) with your new group of DAS servers
-   - Ensure all new DAS are properly configured and accessible
+   - Ensure that all new DAS's are properly configured and accessible
 
-2. **Update keyset on-chain**
+2. **Update keyset onchain**
 
-   ```
+   ```sh
    Call setValidKeyset(keyset=<new_keyset>, assumedHonest=1) on SequencerInbox contract
    ```
 
-   Note: `assumedHonest=1` assumes at least one committee member is honest
+   :::note
+   
+   `assumedHonest=1` assumes at least one committee member is honest
+
+   :::
 
 3. **Deploy new DAS servers**
 
@@ -127,4 +143,4 @@ This guide covers how to rotate keys for different roles in your Arbitrum Orbit 
 
    - Monitor that the batch poster can successfully write batches to the new DAS servers
    - Check DAS server logs for successful data storage operations
-   - Confirm data availability requests are being handled correctly
+   - Confirm data availability requests are getting handled successfully
