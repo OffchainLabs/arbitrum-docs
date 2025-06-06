@@ -1,5 +1,5 @@
 ---
-title: 'Using inheritance patterns in Stylus contracts'
+title: 'Using inheritance with trait-based composition model'
 description: 'Learn how to implement trait-based composition in your Stylus smart contracts'
 author: anegg0
 sme: mahsamoosavi
@@ -172,7 +172,7 @@ This approach is aligned with Rust's composition patterns and offers better type
 If both parent and child implement the same method, the one in the child will override the one in the parent. This allows for customizing inherited functionality.
 
 <VanillaAdmonition type="caution" title="No explicit override keywords">
-  Stylus does not currently contain explicit override or virtual keywords for explicitly marking
+  Stylus does not currently contain explicit override or virtual keywords for marking
   override functions. It is important to carefully ensure that contracts are only overriding the
   functions you intend to override.
 </VanillaAdmonition>
@@ -184,7 +184,7 @@ When using trait-based composition, you need to be careful about function select
 <VanillaAdmonition type="caution" title="Selector precision">
   When implementing traits with methods that have matching names, you must manually use the
   `#[selector(name = "ActualName")]` attribute to avoid method selector collisions. This is
-  particularly important when implementing standard interfaces like ERC-20 or ERC-721.
+  particularly important when implementing standard interfaces like `ERC-20` or `ERC-721`.
 </VanillaAdmonition>
 
 <CustomDetails summary="Selector issue example">
