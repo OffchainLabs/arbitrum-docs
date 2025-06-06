@@ -664,11 +664,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/using-inheritance',
-              label: 'Using Inheritance',
-            },
-            {
-              type: 'doc',
               id: 'stylus/how-tos/verifying-contracts-arbiscan',
               label: 'Verify on Arbiscan',
             },
@@ -698,6 +693,11 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/concepts/gas-metering',
               label: 'Gas metering',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Using Inheritance',
             },
           ],
         },
