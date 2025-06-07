@@ -56,7 +56,7 @@ The recommended approach to inheritance in Stylus uses traits and the `#[impleme
 
 ### Basic example of trait-based composition
 
-<CustomDetails summary="Trait-Based Inheritance Example">
+<CustomDetails summary="Trait-Based Inheritance Example: ERC-20">
 
 ```rust
 use stylus_sdk::{
@@ -187,8 +187,7 @@ When using trait-based composition, you need to be careful about function select
   particularly important when implementing standard interfaces like `ERC-20` or `ERC-721`.
 </VanillaAdmonition>
 
-<CustomDetails summary="Selector issue example">
-
+<CustomDetails summary="Selector issue example: ERC-721">
 ```rust
 // In Solidity, both these functions would have different selectors:
 // function safeTransferFrom(address from, address to, uint256 tokenId)
@@ -221,7 +220,6 @@ impl<T: Erc721Params> Erc721<T> {
     }
 }
 ```
-
 </CustomDetails>
 
 <VanillaAdmonition type="info" title="ABI generation and inheritance">
