@@ -193,20 +193,18 @@ When using trait-based composition, you need to be careful about function select
 // function safeTransferFrom(address from, address to, uint256 tokenId)
 // function safeTransferFrom(address from, address to, uint256 tokenId, bytes data)
 
-// In Rust, we need to use different method names, but want the same selectors:
-#[public]
+// In Rust, we need to use different method names, but want the same selectors: #[public]
 impl<T: Erc721Params> Erc721<T> {
-    // Use the #[selector] attribute to specify the correct Solidity-compatible name
-    #[selector(name = "safeTransferFrom")]
-    pub fn safe_transfer_from_with_data<S: TopLevelStorage + BorrowMut<Self>>(
-        storage: &mut S,
-        from: Address,
-        to: Address,
-        token_id: U256,
-        data: Bytes,
-    ) -> Result<(), Erc721Error> {
-        // Implementation
-    }
+// Use the #[selector] attribute to specify the correct Solidity-compatible name #[selector(name = "safeTransferFrom")]
+pub fn safe_transfer_from_with_data<S: TopLevelStorage + BorrowMut<Self>>(
+storage: &mut S,
+from: Address,
+to: Address,
+token_id: U256,
+data: Bytes,
+) -> Result<(), Erc721Error> {
+// Implementation
+}
 
     // This method also needs the same selector name
     #[selector(name = "safeTransferFrom")]
@@ -218,7 +216,9 @@ impl<T: Erc721Params> Erc721<T> {
     ) -> Result<(), Erc721Error> {
         // Implementation
     }
+
 }
+
 ```
 </CustomDetails>
 
@@ -242,3 +242,4 @@ In a typical composition chain:
 - If not found there, it looks in the first trait specified in the inheritance list
 - If still not found, it searches in the next trait in the list
 - This continues until the method is found or all possibilities are exhausted
+```
