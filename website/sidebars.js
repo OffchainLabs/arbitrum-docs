@@ -355,11 +355,6 @@ const sidebars = {
                       id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router',
                       label: `Set up AEP fee router`,
                     },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
-                      label: `Calculate AEP license fees`,
-                    },
                   ],
                 },
               ],
