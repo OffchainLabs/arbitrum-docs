@@ -997,6 +997,11 @@ const sidebars = {
               label: 'Stylus execution path',
               id: 'how-arbitrum-works/state-transition-function/stylus-execution-path',
             },
+            {
+              type: 'doc',
+              label: 'Hooks reference',
+              id: 'how-arbitrum-works/state-transition-function/hooks',
+            },
           ],
         },
         {
