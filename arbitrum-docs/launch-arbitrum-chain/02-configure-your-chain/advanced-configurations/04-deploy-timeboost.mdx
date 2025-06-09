@@ -16,7 +16,7 @@ This guide walks you through the process of enabling Timeboost for your Arbitrum
 
 Before starting, ensure you have:
 
-1. An ERC20 token address to use as the bid token
+1. An `ERC-20` token address to use as the bid token
 2. A Redis server for auctioneer coordination
 3. A server to run the auctioneer service
 4. A proxy admin contract address
@@ -48,24 +48,24 @@ Configure the following parameters in your `.env` file:
 
 ```shell
 ## Configuration for DeployExpressLaneAuction.s.sol
-PROXY_ADMIN_ADDRESS=               # Your proxy admin contract address
-AUCTIONEER_ADDRESS=                # Address that will send resolve auction requests
-BIDDING_TOKEN_ADDRESS=             # Your ERC20 bid token address
-BENEFICIARY_ADDRESS=               # Address to receive bid proceeds
-AUCTIONEER_ADMIN_ADDRESS=          # Admin address for the auctioneer
-MIN_RESERVE_PRICE_SETTER_ADDRESS=  # Address allowed to set minimum reserve price
-RESERVE_PRICE_SETTER_ADDRESS=      # Address allowed to set reserve price
-RESERVE_PRICE_SETTER_ADMIN_ADDRESS=# Admin for reserve price setter
-BENEFICIARY_SETTER_ADDRESS=        # Address allowed to change beneficiary
-ROUND_TIMING_SETTER_ADDRESS=       # Address allowed to adjust round timing
-MASTER_ADMIN_ADDRESS=              # Master admin address
+PROXY_ADMIN_ADDRESS=                # Your proxy admin contract address
+AUCTIONEER_ADDRESS=                 # Address that will send resolve auction requests
+BIDDING_TOKEN_ADDRESS=              # Your ERC20 bid token address
+BENEFICIARY_ADDRESS=                # Address to receive bid proceeds
+AUCTIONEER_ADMIN_ADDRESS=           # Admin address for the auctioneer
+MIN_RESERVE_PRICE_SETTER_ADDRESS=   # Address allowed to set minimum reserve price
+RESERVE_PRICE_SETTER_ADDRESS=       # Address allowed to set reserve price
+RESERVE_PRICE_SETTER_ADMIN_ADDRESS= # Admin for reserve price setter
+BENEFICIARY_SETTER_ADDRESS=         # Address allowed to change beneficiary
+ROUND_TIMING_SETTER_ADDRESS=        # Address allowed to adjust round timing
+MASTER_ADMIN_ADDRESS=               # Master admin address
 
-MIN_RESERVE_PRICE=0                # Minimum price for bids (0 recommended for testing)
+MIN_RESERVE_PRICE=0                 # Minimum price for bids (0 recommended for testing)
 
 # Round timing configuration (in seconds)
-ROUND_DURATION_SECONDS=60          # Total duration of each round
-AUCTION_CLOSING_SECONDS=15         # Time before round end when new bids are closed
-RESERVE_SUBMISSION_SECONDS=15      # Time allocated for reserve price submission
+ROUND_DURATION_SECONDS=60           # Total duration of each round
+AUCTION_CLOSING_SECONDS=15          # Time before round end when new bids are closed
+RESERVE_SUBMISSION_SECONDS=15       # Time allocated for reserve price submission
 ```
 
 Deploy the contract:
@@ -78,7 +78,7 @@ forge script --sender $DEPLOYER --rpc-url $CHILD_CHAIN_RPC --slow ./DeployExpres
 Verify successful deployment by checking that the contract returns your configured bid token:
 
 ```shell
-cast call --rpc-url=<Your chain's endpoint> <Your ExpressLaneAuction address> "biddingToken()(address)"
+cast call --rpc-url=<Your-chain's-endpoint> <Your-ExpressLaneAuction-address> "biddingToken()(address)"
 ```
 
 Example output:
@@ -101,7 +101,7 @@ To build only the `autonomous-auctioneer` component during the local build proce
 make target/bin/autonomous-auctioneer
 ```
 
-### Running Bid Validator Service
+### Running bid validator service
 
 Start the bid validator with:
 
@@ -132,7 +132,7 @@ Start the auction server with:
 
 ## Step 3: Configure your sequencer node for Timeboost
 
-Update your sequencer node configuration to enable Timeboost functionality. Add the following new config to your sequencer node's configuration file:
+Update your sequencer node configuration to enable Timeboost functionality. Add the following new config to your sequencer's node configuration file:
 
 ```json
 {
@@ -154,9 +154,9 @@ Update your sequencer node configuration to enable Timeboost functionality. Add 
     "sequencer": {
       "timeboost": {
         "enable": true,
-        "auction-contract-address": "<Your ExpressLaneAuction address>",
-        "auctioneer-address": "<Your auctioneer address>",
-        "redis-url": "<Your Redis URL>"
+        "auction-contract-address": "<Your-ExpressLaneAuction-address>",
+        "auctioneer-address": "<Your-auctioneer-address>",
+        "redis-url": "<Your-Redis-URL>"
       }
     }
   }
@@ -185,7 +185,7 @@ After finishing a bid request, look for messages in your sequencer logs such as:
 AuctionResolved: New express lane controller assigned round
 ```
 
-This message confirms that your sequencer is processing express queue transactions from the express lane controller, and Timeboost is functioning correctly.
+This message confirms that your sequencer is processing express queue transactions from the express lane controller, and that Timeboost is functioning correctly.
 
 ### User interaction verification
 
