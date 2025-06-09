@@ -80,7 +80,8 @@ Verify successful deployment by checking that the contract returns your configur
 ```shell
 cast call --rpc-url=<Your chain's endpoint> <Your ExpressLaneAuction address> "biddingToken()(address)"
 ```
-Example output: 
+
+Example output:
 
 ```shell
 0xYourBidTokenAddress
@@ -188,7 +189,7 @@ This message confirms that your sequencer is processing express queue transactio
 
 ### User interaction verification
 
-Users can interact with Timeboost by submitting bids through the `auctioneer_submitBid` endpoint of your auctioneer service. 
+Users can interact with Timeboost by submitting bids through the `auctioneer_submitBid` endpoint of your auctioneer service.
 For detailed instructions on how users can interact with Timeboost, see [How to Use Timeboost](https://docs.arbitrum.io/how-arbitrum-works/timeboost/how-to-use-timeboost).
 
 A successful bid submission will trigger the auction resolution process and generate the corresponding logs mentioned above.
