@@ -33,20 +33,20 @@ Enabling Timeboost requires completing these three steps:
 
 First, clone the orbit-actions repository:
 
-```bash
+```shell
 git clone https://github.com/OffchainLabs/orbit-actions.git
 cd orbit-actions/scripts/foundry/timeboost
 ```
 
 Create and edit the environment configuration file:
 
-```bash
+```shell
 cp .env.sample .env
 ```
 
 Configure the following parameters in your `.env` file:
 
-```bash
+```shell
 ## Configuration for DeployExpressLaneAuction.s.sol
 PROXY_ADMIN_ADDRESS=               # Your proxy admin contract address
 AUCTIONEER_ADDRESS=                # Address that will send resolve auction requests
@@ -70,14 +70,14 @@ RESERVE_SUBMISSION_SECONDS=15      # Time allocated for reserve price submission
 
 Deploy the contract:
 
-```bash
+```shell
 forge script --sender $DEPLOYER --rpc-url $CHILD_CHAIN_RPC --slow ./DeployExpressLaneAuction.s.sol -vvv --verify --broadcast
 # Use --account XXX / --private-key XXX / --interactive / --ledger to specify the transaction signer
 ```
 
 Verify successful deployment by checking that the contract returns your configured bid token:
 
-```bash
+```shell
 cast call --rpc-url=<Your chain's endpoint> <Your ExpressLaneAuction address> "biddingToken()(address)"
 # Example output: 0xYourBidTokenAddress
 ```
@@ -92,7 +92,7 @@ The services require the `autonomous-auctioneer` binary, which is included in th
 
 To build only the `autonomous-auctioneer` component during the local build process:
 
-```bash
+```shell
 make target/bin/autonomous-auctioneer
 ```
 
@@ -100,7 +100,7 @@ make target/bin/autonomous-auctioneer
 
 Start the bid validator with:
 
-```bash
+```shell
 ./autonomous-auctioneer \
 --bid-validator.auction-contract-address=<Your ExpressLaneAuction address> \
 --bid-validator.rpc-endpoint=<Your chain's rpc URL> \
@@ -114,7 +114,7 @@ Start the bid validator with:
 
 Start the auction server with:
 
-```bash
+```shell
 ./autonomous-auctioneer \
 --auctioneer-server.auction-contract-address=<Your ExpressLaneAuction address> \
 --auctioneer-server.db-directory=<Your_auctioneer_server_db_directory> \
@@ -166,7 +166,7 @@ There are multiple ways to confirm that Timeboost is correctly enabled on your c
 
 When you start your sequencer with Timeboost enabled, you'll see periodic logs indicating the start of new express lane auction rounds:
 
-```
+```shell
 New express lane auction round
 ```
 
@@ -176,7 +176,7 @@ This log indicates that the Timeboost mechanism is active and running normally.
 
 After finishing a bid request, look for messages in your sequencer logs such as:
 
-```
+```shell
 AuctionResolved: New express lane controller assigned round
 ```
 
