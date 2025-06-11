@@ -5,6 +5,8 @@ author: jose-franco
 content_type: how-to
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 Timeboost is a new transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the **Sequencer** faster transaction inclusion.
 
 In this how-to, you'll learn how to bid for the right to use the express lane and submit transactions through the express lane. To learn more about Timeboost and the key terms used on this page, refer to the [gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
@@ -14,23 +16,23 @@ This how-to assumes that you're familiar with the following:
 - [How Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx)
 - [viem](https://viem.sh/), since the snippets of code present in the how-to use this library
 
-::::info Note about transferring express lane rights
+<VanillaAdmonition type="note"  title="Note about transferring express lane rights">
 
 Please note that in the initial release of Timeboost, transferring of express lane control via the either the `setTransferor` or the `transferExpressLaneController` will not be supported by the Arbitrum Nitro node software in the initial launch and may be implemented at a future date via a regular node upgrade. Calls made to these two functions on the auction contract will be successful, but actual transfer of the rights will not be recognized by the node software (including the Sequencer).
 
 A round's express lane controller, at their choice, can still send transactions signed by others on a per-transaction basis, as explained later in this guide.
 
-::::
+</VanillaAdmonition>
 
 ## How to submit bids for the right to be the express lane controller
 
 To use the express lane for faster transaction inclusion, you must win an auction for the right to be the express lane controller for a specific round.
 
-::::info
+<VanillaAdmonition type="note">
 
 Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the round starts. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters.
 
-::::
+</VanillaAdmonition>
 
 Auctions are facilitated by an auction contract, and bids get submitted to an autonomous auctioneer that interact with the contract. Let's look at the process of submitting bids and finding out the winner of an auction.
 
@@ -80,11 +82,11 @@ const biddingTokenContractAddress = await publicClient.readContract({
 console.log(`biddingToken: ${biddingTokenContractAddress}`);
 ```
 
-::::info Bidding token in Arbitrum chains
+<VanillaAdmonition type="note"  title="Bidding token in Arbitrum chains">
 
 On Arbitrum One and Arbitrum Nova, the default bidding token is `WETH`.
 
-::::
+</VanillaAdmonition>
 
 Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract after having it approved as spender of the amount we want to deposit:
 
@@ -152,11 +154,11 @@ Bids are submitted to the autonomous auctioneer endpoint. We need to send a `auc
 - amount in `wei` of the deposit `ERC-20` token to bid
 - signature (explained below)
 
-::::info Minimum reserve price
+<VanillaAdmonition type="info"  title="Minimum reserve price">
 
 The amount to bid must be above the minimum reserve price at the moment you are bidding. This parameter is configurable per chain. You can obtain the minimum reserve price by calling the method `minReservePrice()(uint256)` in the `Auction` contract.
 
-::::
+</VanillaAdmonition>
 
 Let's see an example of a call to this RPC method:
 
@@ -223,11 +225,11 @@ const signature = await account.sign({
 });
 ```
 
-::::info
+<VanillaAdmonition type="note">
 
 You can also call the function `getBidHash` in the auction contract to obtain the `signatureData`, specifying the `round`, `userAddress` and `amountToBid`.
 
-::::
+</VanillaAdmonition>
 
 When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if received correctly. If the result returned contains an error message, it means that something went wrong. Following are some of the error messages that can help us understand what's happening:
 
@@ -514,18 +516,21 @@ In the current implementation, information about the winning bid for a resolved 
 
 #### Table 4: S3 URLs for historical bid data
 
-| Chain            | S3 bucket URL                      |
-| ---------------- | ---------------------------------- |
-| Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/ |
-| Arbitrum One     | s3://timeboost-auctioneer-arb1/    |
-| Arbitrum Nova    | s3://timeboost-auctioneer-nova/    |
+:::info URL updates for historical bid data
+On June 9 2025, at around 17:27 ET (UTC−05:00), the region in which the Amazon S3 bucket for historical bid data on Arbitrum One was _changed_ from `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/` to `s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/`. The below table has been updated for the new, correct URL to access bid data after June 9, 2025 17:27 ET, but if you require data from before June 9, 2025 17:27 ET, then please use `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/`.
+
+| Chain            | S3 bucket URL                                                   |
+| ---------------- | --------------------------------------------------------------- |
+| Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/ue2/validated-timeboost-bids/ |
+| Arbitrum One     | s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/    |
+| Arbitrum Nova    | s3://timeboost-auctioneer-nova/ue2/validated-timeboost-bids/    |
 
 Note: Make sure you use `--no-sign-request` with the [AWS S3 CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/).
 
 Here is an example query on how to look up and download historical bid data:
 
-```bash
-➜  ~ aws s3 ls s3://timeboost-auctioneer-arb1/ --recursive --no-sign-request | grep "2025/06/09/"
+```shell
+➜  ~ aws s3 ls s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/10/  --no-sign-request --recursive
 
 2025-06-09 18:21:47      12553 ue2/validated-timeboost-bids/2025/06/09/0130304-0130343.csv.gzip
 2025-06-09 18:36:46       4725 ue2/validated-timeboost-bids/2025/06/09/0130344-0130358.csv.gzip
