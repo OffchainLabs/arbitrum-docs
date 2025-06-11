@@ -510,37 +510,31 @@ In the sequencer feed, the `BroadcastFeedMessage` struct now contains a `blockMe
 
 ## How to view historical bid data
 
-In the current implementation, information about the winning bid for a resolved auction is emitted via the `AuctionResolved` event ([sample interface](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/express-lane-auction/IExpressLaneAuction.sol#L95-L103)). Historical bid information, including the round number and bid amounts, are published to a public S3 bucket at a regular cadence. Teams can use the URLs below to download the data:
+In the current implementation, information about the winning bid for a resolved auction is emitted via the `AuctionResolved` event ([sample interface](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/express-lane-auction/IExpressLaneAuction.sol#L95-L103)). Historical bid information, including the round number and bid amounts, are published to a public S3 bucket at a regular cadence. The domain for the S3 bucket where historical bids are saved is:
 
 #### Table 4: S3 URLs for historical bid data
 
-:::info URL updates for historical bid data
-On June 9 2025, at around 17:27 ET (UTC−05:00), the region in which the Amazon S3 bucket for historical bid data on Arbitrum One was *changed* from `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/` to `s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/`. The below table has been updated for the new, correct URL to access bid data after June 9, 2025 17:27 ET, but if you require data from before June 9, 2025 17:27 ET, then please use `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/`.
-
-:::
-
-| Chain            | S3 bucket URL                                                   |
-| ---------------- | --------------------------------------------------------------- |
-| Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/ue2/validated-timeboost-bids/ |
-| Arbitrum One     | s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/    |
-| Arbitrum Nova    | s3://timeboost-auctioneer-nova/ue2/validated-timeboost-bids/    |
+| Chain            | S3 bucket URL                        |
+| ---------------- | ------------------------------------ |
+| Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/   |
+| Arbitrum One     | s3://timeboost-auctioneer-arb1/      |
+| Arbitrum Nova    | s3://timeboost-auctioneer-nova/      |
 
 Note: Make sure you use `--no-sign-request` with the [AWS S3 CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/).
 
 Here is an example query on how to look up and download historical bid data:
 
 ```bash
-➜  ~ aws s3 ls s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/10/  --no-sign-request --recursive
+➜  ~ aws s3 ls s3://timeboost-auctioneer-arb1/ --recursive --no-sign-request | grep "2025/06/09/"
 
-2025-06-09 20:06:46       4872 ue2/validated-timeboost-bids/2025/06/10/0130434-0130448.csv.gzip
-2025-06-09 20:21:46       5042 ue2/validated-timeboost-bids/2025/06/10/0130449-0130463.csv.gzip
+2025-06-09 18:21:47      12553 ue2/validated-timeboost-bids/2025/06/09/0130304-0130343.csv.gzip
+2025-06-09 18:36:46       4725 ue2/validated-timeboost-bids/2025/06/09/0130344-0130358.csv.gzip
 ...
-2025-06-10 19:36:46       4382 ue2/validated-timeboost-bids/2025/06/10/0131844-0131858.csv.gzip
-2025-06-10 19:51:46       4395 ue2/validated-timeboost-bids/2025/06/10/0131859-0131873.csv.gzip
+2025-06-09 17:23:28       3407 uw2/validated-timeboost-bids/2025/06/09/0130264-0130284.csv.gzip
+2025-06-09 17:27:32       1228 uw2/validated-timeboost-bids/2025/06/09/0130285-0130288.csv.gzip
 
-
-➜ ~ aws s3 cp s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/10/0131844-0131858.csv.gzip local.csv.gzip --no-sign-request
-download: s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/10/0131844-0131858.csv.gzip to ./local.csv.gzip
+➜ ~ aws s3 cp s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/09/0130304-0130343.csv.gzip local.csv.gzip --no-sign-request
+download: s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/09/0130304-0130343.csv.gzip to ./local.csv.gzip
 ```
 
 ## Troubleshooting and best practices
