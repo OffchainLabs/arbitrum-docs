@@ -43,13 +43,6 @@ const FeatureList: FeatureItem[] = [
     href: 'https://docs.arbitrum.foundation/',
     description: 'Learn about the decentralized organization that governs the One and Nova chains.',
   },
-  {
-    title: 'Quickstart: Launch an Arbitrum chain',
-    Svg: require('@site/static/img/quickstart.svg').default,
-    href: '/launch-arbitrum-chain/arbitrum-chain-quickstart',
-    description:
-      'Learn how to launch a local Arbitrum chain that settles to the public Arbitrum Sepolia testnet.',
-  },
 ];
 
 function Feature({ title, Svg, description, href }: FeatureItem) {
