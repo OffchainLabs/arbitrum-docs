@@ -536,6 +536,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/concepts/custom-gas-token-sdk/?)",
+      "destination": "/(build-decentralized-apps/custom-gas-token-sdk/?)",
+      "permanent": false
+    },
+    {
       "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
       "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
       "permanent": false
