@@ -1126,11 +1126,6 @@
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/orbit-quickstart/?)",
-      "destination": "/launch-arbitrum-chain/arbitrum-chain-quickstart",
-      "permanent": false
-    },
-    {
       "source": "/(launch-orbit-chain/orbit-sdk-introduction/?)",
       "destination": "/launch-arbitrum-chain/arbitrum-chain-sdk-introduction",
       "permanent": false
