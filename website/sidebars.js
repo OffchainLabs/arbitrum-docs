@@ -683,6 +683,11 @@ const sidebars = {
               id: 'stylus/concepts/gas-metering',
               label: 'Gas metering',
             },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Using Inheritance',
+            },
           ],
         },
         {
