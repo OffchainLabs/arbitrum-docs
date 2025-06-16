@@ -55,6 +55,11 @@ const sidebars = {
           id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
+          type: 'doc',
+          id: 'build-decentralized-apps/custom-gas-token-sdk',
+          label: 'Custom gas token SDK',
+        },
+        {
           type: 'category',
           label: 'Arbitrum vs Ethereum',
           items: [
@@ -556,11 +561,6 @@ const sidebars = {
           type: 'doc',
           id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/concepts/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
         },
         {
           type: 'doc',
