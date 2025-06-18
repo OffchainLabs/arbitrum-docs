@@ -53,8 +53,7 @@ Arbitrum chain deployments typically come with an open-source block explorer by 
 Similar to bridges and block explorers, numerous third-party indexing solutions have expressed interest in supporting Arbitrum chains.
 
 ### Can I increase the maximum contract size for my Arbitrum chain?
-
-Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters [`MaxCodeSize` and `MaxInitCodeSize`]() when calling [`prepareNodeConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43).
+Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters [`MaxCodeSize` and `MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) when calling [`prepareNodeConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43).
 
 :::warning
 
@@ -147,15 +146,15 @@ For example, in case plugging in the USDT address on arbitrum one `0xfd086bc7cd5
 
 ### What are the estimated infrastructure costs to run the Sequencer?
 
-The estimated cost is approximately $600 per sequencer replica per month for a low-to-medium activity chain. With networking and storage included, the estimated monthly cost would be $1,500 for the Sequencer.
+The estimated cost is approximately \$600 per sequencer replica per month for a low-to-medium activity chain. With networking and storage included, the estimated monthly cost would be \$1,500 for the Sequencer.
 
 ### What are the costs to run a validator?
 
-The estimated monthly cost for watchtower validators will be approximately $500. All other validators will cost $800 to $900 per month.
+The estimated monthly cost for watchtower validators will be approximately \$500. All other validators will cost \$800 to \$900 per month.
 
 ### What are the different validator modes?
 
-- \*\*Defensive (allowlist required):
+- **Defensive (allowlist required)**:
   - Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.
 - **StakeLatest (allowlist required)**:
   - Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
@@ -185,9 +184,9 @@ We currently don't have any toolkits available for this. The best way to make a 
 
 ### What happens if I don't post an assertion for an extended period?
 
-Over time, without creating assertions, the validator whitelist in the Rollup contract can become disabled. If you look at the [`removeWhitelistAfterValidatorAfk`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62) method, it allows you to disable the whitelist after `confirmPeriodBlocks + VALIDATOR_AFK_BLOCKS' L1 blocks have passed since the last assertion created.
+Over time, without creating assertions, the validator whitelist in the Rollup contract can become disabled. If you look at the [`removeWhitelistAfterValidatorAfk`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62) method, it allows you to disable the whitelist after `confirmPeriodBlocks + VALIDATOR_AFK_BLOCKS` L1 blocks have passed since the last assertion created.
 
-As a default, that's 7200 + 45818 blocks (a bit less than 8 days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using [`setValidatorWhitelistDisabled()`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378) by the chain owner. But it's always better to avoid reaching that point.
+As a default, that's 7200 + 45818 blocks (a bit less than eight days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using [`setValidatorWhitelistDisabled()`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378) by the chain owner. But it's always better to avoid reaching that point.
 
 ### Is there a way to increase the idle timeout on RPC nodes for WebSocket connections?
 
