@@ -53,7 +53,6 @@ Arbitrum chain deployments typically come with an open-source block explorer by 
 Similar to bridges and block explorers, numerous third-party indexing solutions have expressed interest in supporting Arbitrum chains.
 
 ### Can I increase the maximum contract size for my Arbitrum chain?
-
 Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters [`MaxCodeSize` and `MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) when calling [`prepareNodeConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43).
 
 :::warning
@@ -108,7 +107,7 @@ Test this thoroughly on a testnet first.
 :::
 
 1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.
-2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data on-chain
+2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.
 3. Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus respecting L2 transaction size limits.
 
 ### What is the max theoretical TPS for an Orbit chain?
@@ -129,21 +128,19 @@ The actual maximum throughput depends on the configurable execution parameters:
 - A simple transfer (~21,000 gas) could approximately achieve around 6,000 TPS.
 - A more complex transaction (~200,000 gas) would enable approximately 640 TPS.
 
-### Why is the WETH Gateway not necessary for custom gas token chains?
+### Why is the `WETH` Gateway not necessary for custom gas token chains?
 
-The WETH gateway used in the token bridge is a special, custom gateway that unwraps the WETH deposits and sends them to the Orbit chain, then wraps them again on the Orbit chain. Since `ETH` is the gas token in the Arbitrum (Orbit) chain, there's no need to perform this operation, so you can use a standard `ERC-20` for WETH (this is the default case of the token bridge so that you wouldn't need a special WETH gateway).
+The WETH gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Orbit chain, then wraps them again on the Orbit chain. Since `ETH` is the gas token in the Arbitrum (Orbit) chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special WETH gateway).
 
-If you want to enable extra custom operations with WETH, you can create a custom token and a custom gateway to handle this case.
+If you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.
 
 ### How do we verify if an `ERC-20` was bridged using the native bridge?
 
 The following applies to a parent-side bridge deployed on Arbitrum One:
-If the token was bridged using the native token bridge, you can go to [parent_side_bridge_contract]
-
-<!-- need link to parent-side-bridge-contract -->
+If the token was bridged using the native token bridge, you can go to [parent_side_bridge_contract](https://github.com/OffchainLabs/token-bridge-contracts/blob/5bdf33259d2d9ae52ddc69bc5a9cbc558c4c40c7/contracts/tokenbridge/arbitrum/gateway/L2ERC20Gateway.sol#L47)
 
 Call the `calculateL2TokenAddress` address with the address of the token on the parent chain.
-For example, in case plugging in the USDT address on arbitrum one `0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9`, you get `0xB2C565cd7e807e6A1C38bFE32D8FAb9c96ffCeCa`.
+For example, in case plugging in the USDT address on Arbitrum One `0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9`, you get `0xB2C565cd7e807e6A1C38bFE32D8FAb9c96ffCeCa`.
 
 ### What are the estimated infrastructure costs to run the Sequencer?
 
@@ -151,7 +148,7 @@ The estimated cost is approximately \$600 per sequencer replica per month for a 
 
 ### What are the costs to run a validator?
 
-The estimated monthly cost for watchtower validators will be approximately \$500. All other validators will cost \$800 to \$900 per month.
+The estimated monthly cost for Watchtower validators will be approximately \$500. All other validators will cost \$800 to \$900 per month.
 
 ### What are the different validator modes?
 
@@ -165,7 +162,7 @@ The estimated monthly cost for watchtower validators will be approximately \$500
   - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
   - Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.
 - **Watchtower**:
-  - A node in Watchtower mode will immediately log an error if an on-chain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
+  - A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
 
 ### What is the amount of funds that a validator needs in its wallet to participate in fraud proofs?
 
