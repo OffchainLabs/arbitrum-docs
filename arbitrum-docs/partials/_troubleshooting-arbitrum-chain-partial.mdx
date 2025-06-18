@@ -129,7 +129,7 @@ The actual maximum throughput depends on the configurable execution parameters:
 - A simple transfer (~21,000 gas) could approximately achieve around 6,000 TPS.
 - A more complex transaction (~200,000 gas) would enable approximately 640 TPS.
 
-### Why is the `WETH` Gateway not necessary for custom gas token chains?
+### Why is the WETH Gateway not necessary for custom gas token chains?
 
 The WETH gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Orbit chain, then wraps them again on the Orbit chain. Since `ETH` is the gas token in the Arbitrum (Orbit) chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special WETH gateway).
 
