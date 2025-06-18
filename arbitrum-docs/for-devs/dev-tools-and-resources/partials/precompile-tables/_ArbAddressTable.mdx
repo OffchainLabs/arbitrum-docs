@@ -1,168 +1,48 @@
 <table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Solidity interface</th>
-      <th>Go implementation</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <code>addressExists()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L17"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L17"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>AddressExists checks if an address exists in the table</td>
-    </tr>
-    <tr>
-      <td>
-        <code>compress()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L26"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L22"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Compress and returns the bytes that represent the address</td>
-    </tr>
-    <tr>
-      <td>
-        <code>decompress()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L36"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L27"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>
-        Decompress the compressed bytes at the given offset with those of the corresponding account
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <code>lookup()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L45"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L40"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Lookup the index of an address in the table</td>
-    </tr>
-    <tr>
-      <td>
-        <code>lookupIndex()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L53"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L52"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>LookupIndex for an address in the table by index</td>
-    </tr>
-    <tr>
-      <td>
-        <code>register()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L62"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L67"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Register adds an account to the table, shrinking its compressed representation</td>
-    </tr>
-    <tr>
-      <td>
-        <code>size()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L69"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L73"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Size gets the number of addresses in the table</td>
-    </tr>
-  </tbody>
-</table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Solidity interface</th>
+        <th>Go implementation</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+            <td><code>addressExists()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L17" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L17" target="_blank">Implementation</a></td>
+            <td>AddressExists checks if an address exists in the table</td>
+          </tr><tr>
+            <td><code>compress()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L26" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L22" target="_blank">Implementation</a></td>
+            <td>Compress and returns the bytes that represent the address</td>
+          </tr><tr>
+            <td><code>decompress()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L36" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L27" target="_blank">Implementation</a></td>
+            <td>Decompress the compressed bytes at the given offset with those of the corresponding account</td>
+          </tr><tr>
+            <td><code>lookup()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L45" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L40" target="_blank">Implementation</a></td>
+            <td>Lookup the index of an address in the table</td>
+          </tr><tr>
+            <td><code>lookupIndex()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L53" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L52" target="_blank">Implementation</a></td>
+            <td>LookupIndex for  an address in the table by index</td>
+          </tr><tr>
+            <td><code>register()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L62" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L67" target="_blank">Implementation</a></td>
+            <td>Register adds an account to the table, shrinking its compressed representation</td>
+          </tr><tr>
+            <td><code>size()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbAddressTable.sol#L69" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbAddressTable.go#L73" target="_blank">Implementation</a></td>
+            <td>Size gets the number of addresses in the table</td>
+          </tr>
+    </tbody>
+  </table>
