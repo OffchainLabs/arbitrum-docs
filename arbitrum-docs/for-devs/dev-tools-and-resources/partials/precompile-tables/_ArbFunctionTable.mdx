@@ -1,28 +1,78 @@
 <table>
-    <thead>
-      <tr>
-        <th>Method</th>
-        <th>Solidity interface</th>
-        <th>Go implementation</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-            <td><code>upload()</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbFunctionTable.sol#L15" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbFunctionTable.go#L19" target="_blank">Implementation</a></td>
-            <td>Upload does nothing</td>
-          </tr><tr>
-            <td><code>size()</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbFunctionTable.sol#L20" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbFunctionTable.go#L24" target="_blank">Implementation</a></td>
-            <td>Size returns the empty table's size, which is 0</td>
-          </tr><tr>
-            <td><code>get(address addr, uint256 index)</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbFunctionTable.sol#L25" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbFunctionTable.go#L29" target="_blank">Implementation</a></td>
-            <td>Get reverts since the table is empty</td>
-          </tr>
-    </tbody>
-  </table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Solidity interface</th>
+      <th>Go implementation</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>upload()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbFunctionTable.sol#L15"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbFunctionTable.go#L19"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Upload does nothing</td>
+    </tr>
+    <tr>
+      <td>
+        <code>size()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbFunctionTable.sol#L20"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbFunctionTable.go#L24"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Size returns the empty table's size, which is 0</td>
+    </tr>
+    <tr>
+      <td>
+        <code>get(address addr, uint256 index)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/precompiles/ArbFunctionTable.sol#L25"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.6/precompiles/ArbFunctionTable.go#L29"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Get reverts since the table is empty</td>
+    </tr>
+  </tbody>
+</table>
