@@ -95,7 +95,7 @@ The implications of reducing the block speed below 100ms are that an increased b
 
 Yes, we have documented fast deposits in [how to configure delayed inbox finality](/launch-arbitrum-chain/how-tos/arbitrum-chain-finality.mdx).
 
-There is a flag that can be changed, which allows an Orbit chain to wait for finality on the parent chain before depositing a transaction.
+There is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.
 For an L3 on Arb One, for example, we consider this a feature because they can instantly register a deposit on the child chain, as Arb One has an ultra-low re-org risk (having never re-organized).
 For an L2, however, we recommend waiting ~12 minutes for L1 finality, as there is a greater risk of reorganization, for example, the deposit transaction not being included immediately in the fork-choice.
 
