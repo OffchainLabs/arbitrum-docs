@@ -158,7 +158,7 @@ The estimated monthly cost for Watchtower validators will be approximately \$500
 - **StakeLatest (allowlist required)**:
   - Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
 - **ResolveNodes (allowlist required)**:
-  - Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time unconfirmed assertion resolved or new assertion created)
+  - Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
 - **MakeNodes (allowlist required)**:
   - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
   - Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.
