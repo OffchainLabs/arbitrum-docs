@@ -6,3 +6,38 @@ sme:
 content_type: how-to
 tags: ['hide-from-search']
 ---
+
+<!-- Basic smart contract info (default), but it is customizable -->
+Arbitrum chains do support an increased smart contract size limit of 96kB. 
+
+<!-- ## Smart contract size limitations
+	 - Explain the limitations of the smart contract size
+	 - Explain why these limitations exist
+-->
+
+
+<!-- ## Smart contract size impact on deployment 
+	 - Explain how the contract size impacts the deployment
+-->
+
+
+<!-- ## Guidance/Recommendations on contract size limit -->
+
+
+<!-- How to increase the maximum smart contract size -->
+You can use our Arbitrum chain (Orbit) SDK and configure the parameters [`MaxCodeSize` and `MaxInitCodeSize`](https://docs.arbitrum.io/launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain#can-i-increase-the-maximum-contract-size-for-my-arbitrum-chain:~:text=MaxCodeSize%20and%20MaxInitCodeSize) when calling [`prepareNodeConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43).
+
+<!-- ## Best practices for optimization -->
+
+
+<!-- ## Impacts of increasing the size 
+	 - What implications/downsides of increasing the size limit
+	 - i.e., higher gas fees, performance impacts
+-->
+
+<!-- Stylus - this blurb is from [here](https://docs.arbitrum.io/stylus/how-tos/optimizing-binaries)-->
+To be deployed onchain, the size of your uncompressed WebAssembly (WASM) file must not exceed 128Kb, while the compressed binary must not exceed 24KB. Stylus conforms with the same contract size limit as the EVM to remain fully interoperable with all smart contracts on Arbitrum chains.
+
+cargo-stylus, the Stylus CLI tool, automatically compresses your WASM programs, but there are additional steps that you can take to further reduce the size of your binaries.
+
+Your options fall into two categories: Rust compiler flags, and third-party optimization tools.
