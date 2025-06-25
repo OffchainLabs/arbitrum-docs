@@ -1,8 +1,14 @@
 ---
 title: 'Gas Optimization Tools'
 description: 'Learn how to configure gas optimization tools for your Arbitrum chain'
-author:
+author: petevielhaber
 sme:
 content_type: how-to
-tags: ['hide-from-search']
 ---
+
+| Parameter | Description | How to set |
+| --------- | ----------- | ---------- |
+| Gas speed limit | Target gas usage per second, over which the congestion mechanism activates. This parameter is set to seven million on Arbitrum One and Nova, and alterations to this should be considered carefully, as setting it too high may result in state bloat that impacts the performance of the chain. | Call `ArbOwner.setSpeedLimit()` passing in the maximum number of gas units to be executed per second. |
+| Block gas limit | Maximum amount of gas that can be consumed by all of the transactions within a block. On Arbitrum One this is set to 30 million. It can comfortably be set higher, but may harm UX as the processing time of a block will increase correspondingly. | Call `ArbOwner.setMaxTxGasLimit()` passing in the maximum number of gas units to be executed per block and transaction. |
+| Gas price floor | Minimum gas price and is defaulted to 0.1 `gwei`. This can be set lower or higher as needed, and will impact the willingness of users to transact on the network. | Either in the minL2BaseFee field in the Arbitrum chain (Orbit) setup script config or by calling `ArbOwner.setMinimumL2BaseFee()` passing in the minimum base fee in `wei`. |
+| Per batch gas cost | Internal measure of parent chain gas overhead for posting a batch. | <!-- how? --> |

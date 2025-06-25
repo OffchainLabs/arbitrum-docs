@@ -287,6 +287,11 @@ const sidebars = {
                   label: `Enable blob transactions`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools',
+                  label: `Gas optimization tools`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
