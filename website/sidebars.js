@@ -564,7 +564,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-<<<<<<< timeboost-for-orbit
           id: 'launch-arbitrum-chain/concepts/custom-gas-token-sdk',
           label: 'Custom gas token SDK',
         },
@@ -575,8 +574,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-=======
->>>>>>> master
           id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
           label: 'BoLD for Arbitrum chains',
         },
