@@ -337,11 +337,6 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
-                  label: `Deploy and configure Timeboost`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
                   label: 'BoLD configuration parameters',
                 },
@@ -564,18 +559,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/concepts/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
+          id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
+          label: 'BoLD for Arbitrum chains',
         },
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
           label: 'Timeboost for Arbitrum chains',
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
-          label: 'BoLD for Arbitrum chains',
         },
         {
           type: 'doc',
@@ -1132,20 +1122,6 @@ const sidebars = {
               id: 'how-arbitrum-works/timeboost/timeboost-faq',
             },
             {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/timeboost-for-arbitrum-chains">Timeboost for Arbitrum chains<span class="other-section-icon">↑</span></a>',
-              // q: why use an anchor html tag here?
-              // a: see note at end of file
-            },
-            {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost">Deploy Timeboost <span class="other-section-icon">↑</span></a>',
-              // q: why use an anchor html tag here?
-              // a: see note at end of file
-            },
-            {
               type: 'link',
               href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
               label: 'Specification: Timeboost',
@@ -1159,11 +1135,6 @@ const sidebars = {
               type: 'link',
               href: 'https://arxiv.org/abs/2306.02179',
               label: 'White paper: Timeboost',
-            },
-            {
-              type: 'link',
-              href: 'https://arxiv.org/abs/2410.10797',
-              label: 'MEV Capture Through Time-Advantaged Arbitrage',
             },
           ],
         },
