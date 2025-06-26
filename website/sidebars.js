@@ -1221,7 +1221,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'Prysm docs',
-      href: 'https://docs.prylabs.network/docs/install/install-with-script',
+      href: 'https://www.offchainlabs.com/prysm/docs',
     },
   ],
 };
