@@ -18,11 +18,11 @@ In a vanilla Arbitrum chain (a chain without customizations, transaction orderin
 
 - `l2BaseFee`: fees paid to execute a transaction on the Arbitrum chain (Orbit).
 - `l2SurplusFee`: surplus fees are charged in addition to the base fee when an Arbitrum chain (Orbit) is congested.
-- `l1BaseFee`: fees paid to cover the cost of an Arbitrum chain (Orbit) posting its settlement transaction to the parent chain.
 - `l1SurplusFee`: an additional surplus fee that can be configured to award extra fees to the batch poster.
 
-Based on the above, we interpret that an Arbitrum chain’s revenue sources include all fee components: `l2BaseFee`, `l2SurplusFee`, `l1BaseFee`, and `l1SurplusFee`. However, one of these fee components is also a cost, `l1BaseFee`, as it is used to pay for parent chain settlement.
-From here on, we will refer to the three onchain components (security, execution, protocol) since AEP excludes the L1 Base Fee.
+Based on the above, we interpret that an Arbitrum chain’s revenue sources include all fee components: `l2BaseFee`, `l2SurplusFee`, and `l1SurplusFee`.
+
+From here on, we will refer to the three onchain components (security, execution, protocol).
 
 ### Additional revenue sources
 
@@ -43,7 +43,7 @@ Based on our understanding above, we can calculate AEP fees as follows.
 ```jsx
 AEP_FEES = [(gross revenue) - (settlement costs)]*0.1
 AEP_FEES = [(sequencing revenue + additional revenue) - (settlement costs)]*0.1
-AEP_FEES = [(l2BaseFee + l2SurplusFee + l1BaseFee + l1SurplusFee) - (l1BaseFee)]*0.1
+AEP_FEES = [(l2BaseFee + l2SurplusFee + l1SurplusFee) - settlement costs]*0.1
 ```
 
 :::info

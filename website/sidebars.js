@@ -55,6 +55,11 @@ const sidebars = {
           id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
+          type: 'doc',
+          id: 'build-decentralized-apps/custom-gas-token-sdk',
+          label: 'Custom gas token SDK',
+        },
+        {
           type: 'category',
           label: 'Arbitrum vs Ethereum',
           items: [
@@ -559,6 +564,7 @@ const sidebars = {
         },
         {
           type: 'doc',
+<<<<<<< timeboost-for-orbit
           id: 'launch-arbitrum-chain/concepts/custom-gas-token-sdk',
           label: 'Custom gas token SDK',
         },
@@ -569,6 +575,8 @@ const sidebars = {
         },
         {
           type: 'doc',
+=======
+>>>>>>> master
           id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
           label: 'BoLD for Arbitrum chains',
         },
