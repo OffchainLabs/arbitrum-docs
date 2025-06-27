@@ -41,9 +41,9 @@ const globalVars = {
   nitroVersionTag: 'v3.6.5',
   nitroPathToPrecompiles: 'precompiles',
 
-  nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: 'bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd',
-  nitroContractsPathToPrecompilesInterface: 'src/precompiles',
+  nitroContractsRepositorySlug: 'nitro-precompile-interfaces',
+  nitroContractsCommit: 'fe4121240ca1ee2cbf07d67d0e6c38015d94e704',
+  nitroContractsPathToPrecompilesInterface: '/',
 
   goEthereumCommit: 'd98903bdea0cf6092b023afa309be540f448e0fb',
 
