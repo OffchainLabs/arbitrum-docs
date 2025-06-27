@@ -342,6 +342,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
+                  label: 'Timeboost for Arbitrum chains',
+                },
+                {
+                  type: 'doc',
                   label: 'Use Layer Leap',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
