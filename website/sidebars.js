@@ -27,6 +27,11 @@ const sidebars = {
           id: 'for-devs/dev-tools-and-resources/chain-info',
           label: 'Chain info',
         },
+        {
+          type: 'doc',
+          label: 'Lidia Interactive Diagrams',
+          id: 'for-devs/lidia-interactive-diagrams',
+        },
       ],
     },
     {
@@ -1207,18 +1212,6 @@ const sidebars = {
       type: 'doc',
       label: 'Audit reports',
       id: 'audit-reports',
-    },
-    {
-      type: 'category',
-      label: 'Development Tools',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'test-lidia',
-          label: 'Lidia Interactive Diagrams',
-        },
-      ],
     },
     {
       type: 'link',
