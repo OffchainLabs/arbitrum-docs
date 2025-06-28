@@ -17,18 +17,18 @@ export default function LidiaDiagram({ config }: LidiaDiagramProps) {
       try {
         const response = await fetch(currentState.svgPath);
         const svgText = await response.text();
-        
+
         svgContainerRef.current!.innerHTML = svgText;
-        
+
         const svg = svgContainerRef.current!.querySelector('svg');
         if (!svg) return;
 
-        currentState.clickableAreas.forEach(area => {
+        currentState.clickableAreas.forEach((area) => {
           const element = svg.querySelector(area.selector);
           if (!element) return;
 
           element.classList.add('lidia-clickable');
-          
+
           if (area.tooltip) {
             element.setAttribute('title', area.tooltip);
           }
@@ -54,8 +54,8 @@ export default function LidiaDiagram({ config }: LidiaDiagramProps) {
       <div className="lidia-header">
         <h3 className="lidia-title">{config.title}</h3>
         {canGoBack && (
-          <button 
-            className="lidia-back-button" 
+          <button
+            className="lidia-back-button"
             onClick={goBack}
             aria-label="Go back to previous state"
           >
@@ -63,10 +63,7 @@ export default function LidiaDiagram({ config }: LidiaDiagramProps) {
           </button>
         )}
       </div>
-      <div 
-        ref={svgContainerRef} 
-        className="lidia-svg-container"
-      />
+      <div ref={svgContainerRef} className="lidia-svg-container" />
     </div>
   );
 }

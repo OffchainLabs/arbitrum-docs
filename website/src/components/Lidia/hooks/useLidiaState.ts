@@ -8,16 +8,16 @@ export function useLidiaState(config: LidiaDiagramConfig) {
   });
 
   const navigateToState = useCallback((stateId: string) => {
-    setState(prev => ({
+    setState((prev) => ({
       currentStateId: stateId,
       history: [...prev.history, stateId],
     }));
   }, []);
 
   const goBack = useCallback(() => {
-    setState(prev => {
+    setState((prev) => {
       if (prev.history.length <= 1) return prev;
-      
+
       const newHistory = prev.history.slice(0, -1);
       return {
         currentStateId: newHistory[newHistory.length - 1],
@@ -28,7 +28,7 @@ export function useLidiaState(config: LidiaDiagramConfig) {
 
   const canGoBack = state.history.length > 1;
 
-  const currentState = config.states.find(s => s.id === state.currentStateId);
+  const currentState = config.states.find((s) => s.id === state.currentStateId);
 
   return {
     currentState,
