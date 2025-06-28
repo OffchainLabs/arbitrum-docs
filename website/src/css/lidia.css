@@ -1,0 +1,64 @@
+.lidia-container {
+  margin: 2rem 0;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-border-radius);
+  padding: 1.5rem;
+  background: var(--ifm-background-surface-color);
+}
+
+.lidia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lidia-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.lidia-back-button {
+  padding: 0.5rem 1rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ifm-border-radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: opacity 0.2s;
+}
+
+.lidia-back-button:hover {
+  opacity: 0.8;
+}
+
+.lidia-svg-container {
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.lidia-svg-container svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.lidia-clickable {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.lidia-clickable:hover {
+  opacity: 0.7;
+}
+
+.lidia-error {
+  padding: 1rem;
+  background: var(--ifm-color-danger-lightest);
+  color: var(--ifm-color-danger-dark);
+  border-radius: var(--ifm-border-radius);
+  margin: 1rem 0;
+}

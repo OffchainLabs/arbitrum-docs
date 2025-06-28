@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  
+  <text x="400" y="50" text-anchor="middle" fill="#0056b3" font-size="24" font-weight="bold">Sub-component 1 Deep Dive</text>
+  
+  <!-- Process flow -->
+  <rect x="100" y="150" width="120" height="80" fill="#004085" rx="5"/>
+  <text x="160" y="200" text-anchor="middle" fill="white" font-size="14">Input</text>
+  
+  <rect x="300" y="150" width="120" height="80" fill="#004085" rx="5"/>
+  <text x="360" y="200" text-anchor="middle" fill="white" font-size="14">Process</text>
+  
+  <rect x="500" y="150" width="120" height="80" fill="#004085" rx="5"/>
+  <text x="560" y="200" text-anchor="middle" fill="white" font-size="14">Output</text>
+  
+  <!-- Arrows -->
+  <path d="M 220 190 L 280 190 L 270 180 M 280 190 L 270 200" stroke="white" stroke-width="2" fill="none"/>
+  <path d="M 420 190 L 480 190 L 470 180 M 480 190 L 470 200" stroke="white" stroke-width="2" fill="none"/>
+  
+  <!-- Details -->
+  <rect x="200" y="300" width="400" height="200" fill="#e3f2fd" rx="10"/>
+  <text x="400" y="340" text-anchor="middle" fill="#004085" font-size="16" font-weight="bold">Implementation Details</text>
+  
+  <text x="220" y="380" fill="#004085" font-size="14">• Uses advanced algorithms</text>
+  <text x="220" y="410" fill="#004085" font-size="14">• Optimized for performance</text>
+  <text x="220" y="440" fill="#004085" font-size="14">• Handles edge cases gracefully</text>
+  <text x="220" y="470" fill="#004085" font-size="14">• Fully tested and documented</text>
+  
+  <text x="400" y="550" text-anchor="middle" fill="#6c757d" font-size="14">This is the deepest level of detail</text>
+</svg>

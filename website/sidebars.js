@@ -1209,6 +1209,18 @@ const sidebars = {
       id: 'audit-reports',
     },
     {
+      type: 'category',
+      label: 'Development Tools',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'test-lidia',
+          label: 'Lidia Interactive Diagrams',
+        },
+      ],
+    },
+    {
       type: 'link',
       label: 'DAO docs',
       href: 'https://docs.arbitrum.foundation/gentle-intro-dao-governance',

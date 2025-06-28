@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  
+  <!-- Component A -->
+  <g id="component-a">
+    <rect x="100" y="200" width="200" height="150" fill="#007bff" rx="10"/>
+    <text x="200" y="285" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Component A</text>
+  </g>
+  
+  <!-- Component B -->
+  <g id="component-b">
+    <rect x="500" y="200" width="200" height="150" fill="#28a745" rx="10"/>
+    <text x="600" y="285" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Component B</text>
+  </g>
+  
+  <!-- Connection -->
+  <line x1="300" y1="275" x2="500" y2="275" stroke="#6c757d" stroke-width="3" stroke-dasharray="5,5"/>
+  
+  <text x="400" y="500" text-anchor="middle" fill="#6c757d" font-size="16">Click on components to explore details</text>
+</svg>
