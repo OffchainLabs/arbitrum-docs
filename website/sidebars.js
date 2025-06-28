@@ -27,6 +27,11 @@ const sidebars = {
           id: 'for-devs/dev-tools-and-resources/chain-info',
           label: 'Chain info',
         },
+        {
+          type: 'doc',
+          label: 'Lidia Interactive Diagrams',
+          id: 'for-devs/lidia-interactive-diagrams',
+        },
       ],
     },
     {
