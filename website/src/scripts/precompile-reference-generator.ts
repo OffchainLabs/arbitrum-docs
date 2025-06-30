@@ -31,10 +31,16 @@ type PrecompileEventOverrides = {
 
 const partialTablesBasePath =
   '../arbitrum-docs/for-devs/dev-tools-and-resources/partials/precompile-tables';
-const interfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/`;
+// Precompile interfaces are in the nitro-precompile-interfaces repository
+const interfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroPrecompilesRepositorySlug}/blob/${globalVars.nitroPrecompilesCommit}${
+  globalVars.nitroPrecompilesPathToInterfaces
+    ? '/' + globalVars.nitroPrecompilesPathToInterfaces
+    : ''
+}/`;
 const implementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/${globalVars.nitroPathToPrecompiles}/`;
-const nodeInterfaceInterfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/src/node-interface/`;
-const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/nodeInterface/`;
+// NodeInterface is in the nitro-contracts repository
+const nodeInterfaceInterfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/${globalVars.nitroContractsPathToPrecompilesInterface}/`;
+const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/execution/nodeInterface/`;
 const defaultDeprecationNotice = `<p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>`;
 
 const renderMethodsInTable = (
