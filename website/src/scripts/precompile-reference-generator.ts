@@ -31,10 +31,10 @@ type PrecompileEventOverrides = {
 
 const partialTablesBasePath =
   '../arbitrum-docs/for-devs/dev-tools-and-resources/partials/precompile-tables';
-const interfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/${globalVars.nitroContractsPathToPrecompilesInterface}/`;
+const interfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroPrecompilesRepositorySlug}/blob/main`;
 const implementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/${globalVars.nitroPathToPrecompiles}/`;
 const nodeInterfaceInterfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/src/node-interface/`;
-const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/nodeInterface/`;
+const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/execution/nodeInterface/`;
 const defaultDeprecationNotice = `<p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>`;
 
 const renderMethodsInTable = (

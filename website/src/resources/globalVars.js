@@ -45,6 +45,9 @@ const globalVars = {
   nitroContractsCommit: 'bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd',
   nitroContractsPathToPrecompilesInterface: 'src/precompiles',
 
+  nitroPrecompilesRepositorySlug: 'nitro-precompile-interfaces',
+  nitroPrecompilesPathToPrecompilesInterface: 'blob/main',
+
   goEthereumCommit: 'd98903bdea0cf6092b023afa309be540f448e0fb',
 
   nitroPathToArbos: 'arbos',
