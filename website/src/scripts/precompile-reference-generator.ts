@@ -32,7 +32,9 @@ type PrecompileEventOverrides = {
 const partialTablesBasePath =
   '../arbitrum-docs/for-devs/dev-tools-and-resources/partials/precompile-tables';
 // Precompile interfaces are in the nitro-precompile-interfaces repository
-const interfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroPrecompilesRepositorySlug}/blob/${globalVars.nitroPrecompilesCommit}${
+const interfaceBaseUrl = `https://github.com/OffchainLabs/${
+  globalVars.nitroPrecompilesRepositorySlug
+}/blob/${globalVars.nitroPrecompilesCommit}${
   globalVars.nitroPrecompilesPathToInterfaces
     ? '/' + globalVars.nitroPrecompilesPathToInterfaces
     : ''
