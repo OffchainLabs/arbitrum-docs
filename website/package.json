@@ -42,6 +42,7 @@
     "@types/mdx": "^2.0.11",
     "@types/prismjs": "^1.26.5",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@xyflow/react": "^12.8.1",
     "classnames": "^2.5.1",
     "clsx": "^1.2.1",
     "docusaurus-lunr-search": "^3.3.2",
