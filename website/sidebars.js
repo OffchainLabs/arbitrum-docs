@@ -32,6 +32,11 @@ const sidebars = {
           label: 'Lidia Interactive Diagrams',
           id: 'for-devs/lidia-interactive-diagrams',
         },
+        {
+          type: 'doc',
+          label: 'LidiaFlow Interactive Diagrams',
+          id: 'for-devs/lidia-flow-interactive-diagrams',
+        },
       ],
     },
     {
