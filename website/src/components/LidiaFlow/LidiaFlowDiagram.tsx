@@ -1,14 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import ReactFlow, {
+import {
+  ReactFlow,
   Background,
   Controls,
   MiniMap,
   useNodesState,
   useEdgesState,
-  Node,
-  NodeMouseHandler,
   ReactFlowProvider,
 } from '@xyflow/react';
+import type { Node, NodeMouseHandler } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import '../../css/lidia-flow.css';
 
