@@ -342,11 +342,6 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
-                  label: 'Timeboost for Arbitrum chains',
-                },
-                {
-                  type: 'doc',
                   label: 'Use Layer Leap',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
@@ -567,6 +562,12 @@ const sidebars = {
           id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
           label: 'BoLD for Arbitrum chains',
         },
+        {
+          type: 'doc',
+          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
+          label: 'Timeboost for Arbitrum chains',
+        },
+
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
