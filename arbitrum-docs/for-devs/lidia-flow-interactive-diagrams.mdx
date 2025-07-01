@@ -1,0 +1,133 @@
+---
+title: LidiaFlow Interactive Diagrams
+description: Learn how to use LidiaFlow, a ReactFlow-based component for creating interactive, click-to-explore diagrams in your Arbitrum documentation
+---
+
+import LidiaFlowDiagram from '@site/src/components/LidiaFlow';
+import exampleConfig from '@site/static/diagrams/lidia-flow-example/config.json';
+
+# LidiaFlow Interactive Diagrams
+
+LidiaFlow is a ReactFlow-based component that enables interactive, click-to-morph diagrams for exploring complex technical concepts. Built on top of ReactFlow, it provides a more powerful and flexible alternative to traditional SVG-based diagrams while maintaining the simplicity of click-to-explore navigation.
+
+## Example
+
+<LidiaFlowDiagram config={exampleConfig} />
+
+## How it works
+
+- **Click** on nodes with blue highlights to explore deeper levels of detail
+- **Navigate back** using the back button to return to previous states
+- **Tooltips** appear on hover to guide your exploration
+- **Mini-map** in the corner helps you navigate complex diagrams
+- **Zoom and pan** to explore large diagrams with ease
+
+## Using LidiaFlow in your documentation
+
+To add interactive diagrams to your documentation:
+
+1. Define a configuration file with nodes, edges, and navigation flow
+2. Import and use the `LidiaFlowDiagram` component in your MDX files
+
+### Example usage
+
+```mdx
+import LidiaFlowDiagram from '@site/src/components/LidiaFlow';
+import myDiagramConfig from '@site/static/diagrams/my-diagram/config.json';
+
+<LidiaFlowDiagram config={myDiagramConfig} />
+```
+
+### Configuration structure
+
+```json
+{
+  "id": "diagram-id",
+  "title": "Diagram Title",
+  "initialStateId": "overview",
+  "states": [
+    {
+      "id": "overview",
+      "nodes": [
+        {
+          "id": "1",
+          "type": "clickable",
+          "position": { "x": 250, "y": 0 },
+          "data": {
+            "label": "Component Name",
+            "isClickable": true,
+            "tooltip": "Click to explore this component"
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1-2",
+          "source": "1",
+          "target": "2",
+          "animated": true
+        }
+      ],
+      "clickableAreas": [
+        {
+          "nodeId": "1",
+          "nextStateId": "detail-view"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Configuration Reference
+
+### Top-level configuration
+
+- `id`: Unique identifier for the diagram
+- `title`: Title displayed in the diagram header
+- `initialStateId`: ID of the state to show first
+- `states`: Array of diagram states
+
+### State configuration
+
+- `id`: Unique identifier for the state
+- `nodes`: Array of ReactFlow nodes
+- `edges`: Array of ReactFlow edges
+- `clickableAreas`: Array defining which nodes navigate to which states
+
+### Node configuration
+
+- `id`: Unique node identifier
+- `type`: Node type (use `"clickable"` for interactive nodes)
+- `position`: `{ x, y }` coordinates
+- `data`: Node data including:
+  - `label`: Text displayed in the node
+  - `isClickable`: Whether the node can be clicked
+  - `tooltip`: Hover text for guidance
+
+### Edge configuration
+
+- `id`: Unique edge identifier
+- `source`: Source node ID
+- `target`: Target node ID
+- `animated`: Optional boolean for animated edges
+
+## Best practices
+
+- Keep diagrams simple and focused on one concept per state
+- Use clear, descriptive labels for nodes
+- Provide helpful tooltips to guide users
+- Limit navigation depth to 3-5 levels for optimal user experience
+- Use the mini-map for complex diagrams with many nodes
+- Consider using animated edges to show data flow
+
+## Advanced features
+
+LidiaFlow leverages ReactFlow's powerful features:
+
+- **Mini-map navigation** for large diagrams
+- **Zoom controls** for detailed exploration
+- **Smooth transitions** between states
+- **Custom node types** (extend with your own components)
+- **Keyboard navigation** support
+- **Touch device** compatibility
