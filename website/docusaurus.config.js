@@ -88,7 +88,11 @@ const config = {
             },
           },
           modalSettings: {
-            // optional settings
+            placeholder: 'Search documentation...',
+            defaultQuery: '',
+            maxResults: 40,
+            debounceTimeMs: 300,
+            shouldOpenLinksInNewTab: true,
           },
           searchSettings: {
             // optional settings
