@@ -6,6 +6,7 @@ const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -74,7 +75,7 @@ const config = {
       {
         SearchBar: {
           baseSettings: {
-            apiKey: `Bearer ${process.env.INKEEP_API_KEY}`, // Using environment variable for API key with Bearer prefix
+            apiKey: process.env.INKEEP_API_KEY, // Using environment variable for API key
             primaryBrandColor: '#213147', // Arbitrum's primary brand color
             organizationDisplayName: 'Arbitrum',
             theme: {
