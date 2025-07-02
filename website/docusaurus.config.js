@@ -6,7 +6,6 @@ const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -70,6 +69,44 @@ const config = {
     ],
   ],
   plugins: [
+    [
+      '@inkeep/cxkit-docusaurus',
+      {
+        SearchBar: {
+          baseSettings: {
+            apiKey: `Bearer ${process.env.INKEEP_API_KEY}`, // Using environment variable for API key with Bearer prefix
+            primaryBrandColor: '#213147', // Arbitrum's primary brand color
+            organizationDisplayName: 'Arbitrum',
+            theme: {
+              syntaxHighlighter: {
+                lightTheme: require('prism-react-renderer/themes/github'),
+                darkTheme: require('prism-react-renderer/themes/palenight'),
+              },
+            },
+          },
+          modalSettings: {
+            // optional settings
+          },
+          searchSettings: {
+            // optional settings
+          },
+          aiChatSettings: {
+            aiAssistantAvatar: '/img/logo.svg', // Using Arbitrum logo as AI assistant avatar
+            exampleQuestions: [
+              'How to estimate gas in Arbitrum?',
+              'What is the difference between Arbitrum One and Nova?',
+              'How to deploy a smart contract on Arbitrum?',
+              'What are Arbitrum Orbit chains?',
+              'How does Arbitrum handle L1 to L2 messaging?',
+              'What is Arbitrum Stylus?',
+            ],
+            botName: 'Arbitrum Assistant',
+            getStartedMessage:
+              "Hi! I'm here to help you navigate Arbitrum documentation. Ask me anything about building on Arbitrum, deploying contracts, or understanding our technology.",
+          },
+        },
+      },
+    ],
     [
       'docusaurus-plugin-typedoc',
       {
@@ -135,38 +172,38 @@ const config = {
       },
     ],
     require.resolve('docusaurus-plugin-fathom'),
-    [
-      'docusaurus-lunr-search',
-      {
-        excludeRoutes: [
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/04-stake-and-validator-configurations',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/05-arbos-configuration',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/06-gas-optimization-tools',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/08-batch-posting-assertion-control',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/09-sequencer-timing-adjustments',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/10-per-batch-gas-cost',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/11-smart-contract-size-limit',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/12-customizing-anytrust',
-          'launch-arbitrum-chain/02-start-your-journey',
-          'launch-arbitrum-chain/03-arbitrum-license',
-          'launch-arbitrum-chain/04-maintain-your-chain/01-bridging',
-          'launch-arbitrum-chain/04-maintain-your-chain/02-monitoring',
-          'launch-arbitrum-chain/04-maintain-your-chain/04-guidance/01-decentralization-security',
-          'launch-arbitrum-chain/04-maintain-your-chain/04-guidance/02-guidance-on-altda',
-          'launch-arbitrum-chain/06-third-party-integrations/03-integrations',
-          'launch-arbitrum-chain/07-arbitrum-node-runners/arbitrum-chain-node-providers',
-          'launch-arbitrum-chain/08-ecosystem-support/01-arbitrum-chain-portal',
-          'launch-arbitrum-chain/08-ecosystem-support/03-get-listed-arbitrum-chain-platforms',
-          'launch-arbitrum-chain/how-tos/how-to-configure-your-chain',
-          'launch-arbitrum-chain/reference/arbitrum-chain-batch-poster-configuration',
-          'launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters',
-          'launch-arbitrum-chain/reference/arbitrum-chain-fast-block-times',
-          'launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration',
-          'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit',
-        ],
-        maxHits: 10,
-      },
-    ],
+    //   [
+    //     'docusaurus-lunr-search',
+    //     {
+    //       excludeRoutes: [
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/04-stake-and-validator-configurations',
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/05-arbos-configuration',
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/06-gas-optimization-tools',
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/08-batch-posting-assertion-control',
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/09-sequencer-timing-adjustments',
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/10-per-batch-gas-cost',
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/11-smart-contract-size-limit',
+    //         'launch-arbitrum-chain/02-configure-your-chain/common-configurations/12-customizing-anytrust',
+    //         'launch-arbitrum-chain/02-start-your-journey',
+    //         'launch-arbitrum-chain/03-arbitrum-license',
+    //         'launch-arbitrum-chain/04-maintain-your-chain/01-bridging',
+    //         'launch-arbitrum-chain/04-maintain-your-chain/02-monitoring',
+    //         'launch-arbitrum-chain/04-maintain-your-chain/04-guidance/01-decentralization-security',
+    //         'launch-arbitrum-chain/04-maintain-your-chain/04-guidance/02-guidance-on-altda',
+    //         'launch-arbitrum-chain/06-third-party-integrations/03-integrations',
+    //         'launch-arbitrum-chain/07-arbitrum-node-runners/arbitrum-chain-node-providers',
+    //         'launch-arbitrum-chain/08-ecosystem-support/01-arbitrum-chain-portal',
+    //         'launch-arbitrum-chain/08-ecosystem-support/03-get-listed-arbitrum-chain-platforms',
+    //         'launch-arbitrum-chain/how-tos/how-to-configure-your-chain',
+    //         'launch-arbitrum-chain/reference/arbitrum-chain-batch-poster-configuration',
+    //         'launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters',
+    //         'launch-arbitrum-chain/reference/arbitrum-chain-fast-block-times',
+    //         'launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration',
+    //         'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit',
+    //       ],
+    //       maxHits: 10,
+    //     },
+    //   ],
     require.resolve('docusaurus-plugin-sass'),
   ],
   themeConfig:
