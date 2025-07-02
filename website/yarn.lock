@@ -8021,6 +8021,11 @@ dotenv@^16.0.3:
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.5.0.tgz"
   integrity sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==
 
+dotenv@^17.0.1:
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-17.0.1.tgz#79bc4d232fadb42a4092685ff1206d31b2a43f95"
+  integrity sha512-GLjkduuAL7IMJg/ZnOPm9AnWKJ82mSE2tzXLaJ/6hD6DhwGfZaXG77oB8qbReyiczNxnbxQKyh0OE5mXq0bAHA==
+
 dunder-proto@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz"

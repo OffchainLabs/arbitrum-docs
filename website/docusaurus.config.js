@@ -1,6 +1,8 @@
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 
+require('dotenv').config();
+
 const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
@@ -75,7 +77,8 @@ const config = {
       {
         SearchBar: {
           baseSettings: {
-            apiKey: process.env.INKEEP_API_KEY, // Using environment variable for API key
+            apiKey: process.env.INKEEP_API_KEY,
+            // apiKey: '0b78e3a3055ff8a31e7ea2d783f7c130de11bfcb5433b530',
             primaryBrandColor: '#213147', // Arbitrum's primary brand color
             organizationDisplayName: 'Arbitrum',
             theme: {
