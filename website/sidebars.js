@@ -55,6 +55,11 @@ const sidebars = {
           id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
+          type: 'doc',
+          id: 'build-decentralized-apps/custom-gas-token-sdk',
+          label: 'Custom gas token SDK',
+        },
+        {
           type: 'category',
           label: 'Arbitrum vs Ethereum',
           items: [
@@ -337,6 +342,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
+                  label: 'Deploy and configure Timeboost',
+                },
+                {
+                  type: 'doc',
                   label: 'Use Layer Leap',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
@@ -554,14 +564,15 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/concepts/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
-        },
-        {
-          type: 'doc',
           id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
           label: 'BoLD for Arbitrum chains',
         },
+        {
+          type: 'doc',
+          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
+          label: 'Timeboost for Arbitrum chains',
+        },
+
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
@@ -1221,7 +1232,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'Prysm docs',
-      href: 'https://docs.prylabs.network/docs/install/install-with-script',
+      href: 'https://www.offchainlabs.com/prysm/docs',
     },
   ],
 };

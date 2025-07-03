@@ -536,6 +536,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/concepts/custom-gas-token-sdk/?)",
+      "destination": "/(build-decentralized-apps/custom-gas-token-sdk/?)",
+      "permanent": false
+    },
+    {
       "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
       "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
       "permanent": false
@@ -1126,11 +1131,6 @@
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/orbit-quickstart/?)",
-      "destination": "/launch-arbitrum-chain/arbitrum-chain-quickstart",
-      "permanent": false
-    },
-    {
       "source": "/(launch-orbit-chain/orbit-sdk-introduction/?)",
       "destination": "/launch-arbitrum-chain/arbitrum-chain-sdk-introduction",
       "permanent": false
@@ -1373,6 +1373,11 @@
     {
       "source": "/(partials/_troubleshooting-orbit-partial/?)",
       "destination": "/partials/_troubleshooting-arbitrum-chain-partial",
+      "permanent": false
+    },
+    {
+      "source": "/(partials/glossary/_externally_owned_accounts/?)",
+      "destination": "/(partials/glossary/_externally-owned-accounts/?)",
       "permanent": false
     },
     {
