@@ -80,7 +80,7 @@ We show here a list of the parameters that are most commonly used when running a
 
 - Arbitrum classic does not communicate with Nitro sequencer, so the classic relay is no longer used.
 
-### Why classic nodes serve rpc methods so slow?
+### Why classic nodes serve rpc methods so slowly?
 
 When you call rpc methods on Arbitrum Classic nodes, the request time may take long, this is because classic nodes must perform many sequential reads from the database to reconstruct blockchain state for state accessing operation. The node needs to load execution cursors from disk, rebuild machine state from checkpoints, and execute transactions to reach the target state - all of which involve expensive disk I/O operations.
 
