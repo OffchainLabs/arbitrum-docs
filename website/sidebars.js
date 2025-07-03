@@ -622,6 +622,11 @@ const sidebars = {
             ...stylusByExampleDocsSidebarSDK,
             {
               type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Composition and trait-based routing model',
+            },
+            {
+              type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Advanced features',
             },
@@ -693,11 +698,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/concepts/gas-metering',
               label: 'Gas metering',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/using-inheritance',
-              label: 'Using Inheritance',
             },
           ],
         },
