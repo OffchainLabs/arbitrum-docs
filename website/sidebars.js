@@ -638,6 +638,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'stylus/how-tos/using-constructors',
+              label: 'Using constructors',
+            },
+            {
+              type: 'doc',
               id: 'stylus/how-tos/verifying-contracts',
               label: 'Verify contracts',
             },
