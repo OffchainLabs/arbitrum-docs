@@ -196,7 +196,8 @@ When using trait-based composition, you need to be careful about function select
 // In Rust, we need to use different method names, but want the same selectors:
 #[public]
 impl<T: Erc721Params> Erc721<T> {
-// Use the #[selector] attribute to specify the correct Solidity-compatible name #[selector(name = "safeTransferFrom")]
+// Use the #[selector] attribute to specify the correct Solidity-compatible name
+#[selector(name = "safeTransferFrom")]
 pub fn safe_transfer_from_with_data<S: TopLevelStorage + BorrowMut<Self>>(
 storage: &mut S,
 from: Address,
