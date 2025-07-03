@@ -19,7 +19,7 @@ Constructors allow you to initialize your Stylus smart contracts with specific p
 By the end of this guide, you'll be able to:
 
 - Implement constructor functions in Stylus contracts
-- Understand constructor rules and limitations 
+- Understand constructor rules and limitations
 - Deploy contracts with constructor parameters
 - Test constructor functionality
 - Handle constructor errors and validation
@@ -67,17 +67,19 @@ Stylus constructors provide an atomic way to deploy, activate, and initialize a 
 
 Stylus constructors follow these important rules:
 
-| Rule | Why it exists |
-|------|---------------|
-| **Exactly 0 or 1 constructor** per contract | Mimics Solidity behavior and avoids ambiguity |
-| **Must be annotated with `#[constructor]`** | Guarantees the deployer calls the correct initialization method |
-| **Must take `&mut self`** | Allows writing to contract storage during deployment |
-| **Returns `()` or `Result<(), Error>`** | Enables error handling; reverting aborts deployment |
-| **Use `tx_origin()` for deployer address** | Factory contracts are used in deployment, so `msg_sender()` returns the factory address |
-| **Constructor runs exactly once** | The SDK uses a sentinel system to prevent re-execution |
+| Rule                                        | Why it exists                                                                           |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| **Exactly 0 or 1 constructor** per contract | Mimics Solidity behavior and avoids ambiguity                                           |
+| **Must be annotated with `#[constructor]`** | Guarantees the deployer calls the correct initialization method                         |
+| **Must take `&mut self`**                   | Allows writing to contract storage during deployment                                    |
+| **Returns `()` or `Result<(), Error>`**     | Enables error handling; reverting aborts deployment                                     |
+| **Use `tx_origin()` for deployer address**  | Factory contracts are used in deployment, so `msg_sender()` returns the factory address |
+| **Constructor runs exactly once**           | The SDK uses a sentinel system to prevent re-execution                                  |
 
 <VanillaAdmonition type="info" title="Factory pattern in deployment">
-Stylus uses a factory pattern for deployment, which means `msg_sender()` in a constructor returns the factory contract address, not the deployer. Always use `tx_origin()` to get the actual deployer address.
+  Stylus uses a factory pattern for deployment, which means `msg_sender()` in a constructor returns
+  the factory contract address, not the deployer. Always use `tx_origin()` to get the actual
+  deployer address.
 </VanillaAdmonition>
 
 ## Basic constructor implementation
@@ -132,24 +134,24 @@ impl SimpleToken {
 
         // Get the deployer address using tx_origin()
         let deployer = self.vm().tx_origin();
-        
+
         // Initialize contract state
         self.owner.set(deployer);
         self.name.set_str(&name);
         self.symbol.set_str(&symbol);
         self.total_supply.set(initial_supply);
-        
+
         // Mint initial supply to deployer
         self.balances.setter(deployer).set(initial_supply);
-        
+
         Ok(())
     }
-    
+
     // Additional contract methods...
     pub fn balance_of(&self, account: Address) -> U256 {
         self.balances.get(account)
     }
-    
+
     pub fn total_supply(&self) -> U256 {
         self.total_supply.get()
     }
@@ -169,7 +171,7 @@ impl SimpleToken {
 
 ```rust
 #[constructor]
-#[payable] 
+#[payable]
 pub fn constructor(
     &mut self,
     name: String,
@@ -181,17 +183,17 @@ pub fn constructor(
     if initial_supply == U256::ZERO {
         return Err(TokenContractError::InvalidAmount(InvalidAmount {}));
     }
-    
+
     if initial_supply > max_supply {
         return Err(TokenContractError::TooManyTokens(TooManyTokens {}));
     }
-    
+
     if name.is_empty() || symbol.is_empty() {
         return Err(TokenContractError::InvalidAmount(InvalidAmount {}));
     }
 
     let deployer = self.vm().tx_origin();
-    
+
     // Initialize with timestamp tracking
     self.owner.set(deployer);
     self.name.set_str(&name);
@@ -199,10 +201,10 @@ pub fn constructor(
     self.total_supply.set(initial_supply);
     self.max_supply.set(max_supply);
     self.created_at.set(U256::from(self.vm().block_timestamp()));
-    
+
     // Mint tokens to deployer
     self.balances.setter(deployer).set(initial_supply);
-    
+
     // Emit initialization event
     log(self.vm(), TokenCreated {
         creator: deployer,
@@ -210,7 +212,7 @@ pub fn constructor(
         symbol: symbol.clone(),
         initial_supply,
     });
-    
+
     Ok(())
 }
 ```
@@ -226,13 +228,13 @@ impl ChildContract {
     pub fn constructor(&mut self, child_param: U256) -> Result<(), Error> {
         // Call parent constructor first
         self.parent_constructor()?;
-        
+
         // Initialize child-specific state
         self.child_value.set(child_param);
-        
+
         Ok(())
     }
-    
+
     fn parent_constructor(&mut self) -> Result<(), Error> {
         // Parent initialization logic
         Ok(())
@@ -249,46 +251,46 @@ The Stylus SDK provides comprehensive testing tools for constructor functionalit
 mod tests {
     use super::*;
     use stylus_sdk::testing::*;
-    
+
     #[test]
     fn test_constructor_success() {
         let vm = TestVMBuilder::new()
             .sender(Address::from([0x01; 20]))
             .build();
-        
+
         let mut contract = SimpleToken::from(&vm);
-        
+
         let result = contract.constructor(
             "Test Token".to_string(),
             "TEST".to_string(),
             U256::from(1000000),
         );
-        
+
         assert!(result.is_ok());
         assert_eq!(contract.name.get_string(), "Test Token");
         assert_eq!(contract.symbol.get_string(), "TEST");
         assert_eq!(contract.total_supply.get(), U256::from(1000000));
         assert_eq!(
-            contract.balance_of(Address::from([0x01; 20])), 
+            contract.balance_of(Address::from([0x01; 20])),
             U256::from(1000000)
         );
     }
-    
+
     #[test]
     fn test_constructor_validation() {
         let vm = TestVMBuilder::new()
             .sender(Address::from([0x01; 20]))
             .build();
-        
+
         let mut contract = SimpleToken::from(&vm);
-        
+
         // Test zero supply rejection
         let result = contract.constructor(
             "Test Token".to_string(),
             "TEST".to_string(),
             U256::ZERO,
         );
-        
+
         assert!(result.is_err());
         assert!(matches!(
             result.unwrap_err(),
@@ -317,6 +319,7 @@ cargo stylus deploy \
 Constructor arguments are automatically encoded by `cargo stylus`. The arguments should be provided in the same order as defined in your constructor function.
 
 For complex types:
+
 - **Strings**: Provide as quoted strings
 - **Numbers**: Provide as decimal or hex (0x prefix)
 - **Addresses**: Provide as hex strings with 0x prefix
@@ -339,10 +342,10 @@ Always validate constructor parameters to prevent deployment of misconfigured co
 pub fn constructor(&mut self, params: ConstructorParams) -> Result<(), Error> {
     // Validate all parameters before any state changes
     self.validate_parameters(&params)?;
-    
+
     // Initialize state only after validation passes
     self.initialize_state(params)?;
-    
+
     Ok(())
 }
 
@@ -363,7 +366,7 @@ Use descriptive error types and provide meaningful error messages:
 sol! {
     #[derive(Debug)]
     error InvalidName(string reason);
-    #[derive(Debug)] 
+    #[derive(Debug)]
     error InvalidSupply(uint256 provided, uint256 max_allowed);
     #[derive(Debug)]
     error Unauthorized(address caller);
@@ -386,25 +389,25 @@ Initialize contract state in a logical order to avoid dependency issues:
 pub fn constructor(&mut self, params: ConstructorParams) -> Result<(), Error> {
     // 1. Validate parameters first
     self.validate_parameters(&params)?;
-    
+
     // 2. Set basic contract metadata
     self.name.set_str(&params.name);
     self.symbol.set_str(&params.symbol);
-    
+
     // 3. Set ownership and permissions
     let deployer = self.vm().tx_origin();
     self.owner.set(deployer);
-    
+
     // 4. Initialize token economics
     self.total_supply.set(params.initial_supply);
     self.max_supply.set(params.max_supply);
-    
+
     // 5. Set up initial balances
     self.balances.setter(deployer).set(params.initial_supply);
-    
+
     // 6. Emit events last
     log(self.vm(), ContractInitialized { /* ... */ });
-    
+
     Ok(())
 }
 ```
