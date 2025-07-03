@@ -16,11 +16,6 @@ Inheritance allows you to build upon existing smart contract functionality witho
 
 The Stylus SDK offers trait-based composition using traits and the `#[implements]` annotation. This approach follows Rust's composition patterns and provides stronger type safety.
 
-<VanillaAdmonition type="warning">
-  Stylus doesn't currently support contract multi-inheritance yet, so you should design your
-  contracts accordingly.
-</VanillaAdmonition>
-
 ## Getting started
 
 Before implementing trait-based composition, ensure you have:
@@ -42,7 +37,7 @@ cargo install --force cargo-stylus
 Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.81 as well as adding the WASM build target:
 
 ```shell
-rustup default 1.81
+rustup default 1.88
 rustup target add wasm32-unknown-unknown --toolchain 1.81
 ```
 
