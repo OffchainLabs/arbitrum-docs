@@ -130,7 +130,7 @@ KeysetHash: 0xfdca3e4e2de25f0a56d0ced68fd1cc64f91b20cde67c964c55105477c02f49be
 
 Once we have the keyset and its hash, we can configure the `SequencerInbox` contract so it accepts DACerts signed by the DAC members.
 
-The `SequencerInbox` can be configured with the new keyset by invoking the [setValidKeyset](https://github.com/OffchainLabs/nitro-contracts/blob/@@nitroContractsCommit=bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd@@/src/bridge/SequencerInbox.sol#L751) method. Note that only the chain owner can call this method.
+The `SequencerInbox` can be configured with the new keyset by invoking the [setValidKeyset](https://github.com/OffchainLabs/nitro-contracts/blob/dcc51066b26b84cb157cbeba2f9f492ab33f9093/src/bridge/SequencerInbox.sol#L743) method. Note that only the chain owner can call this method.
 
 Here's an example of how to use Foundry to configure the `SequencerInbox` with the keyset generated in the previous step:
 
