@@ -63,6 +63,12 @@ Instructions on how to set up a local Arbitrum test node can be found [here](htt
 
 Stylus constructors provide an atomic way to deploy, activate, and initialize a contract in a single transaction. Without a constructor, your contract's storage might be accessed before your initialization logic runs, which can lead to unexpected behavior.
 
+<VanillaAdmonition type="info" title="Constructors and composition">
+  Stylus uses trait-based composition instead of traditional inheritance. When building contracts that 
+  compose multiple traits, constructors help initialize all components properly. See the 
+  [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for examples.
+</VanillaAdmonition>
+
 ### Constructor rules and guarantees
 
 Stylus constructors follow these important rules:
@@ -217,30 +223,89 @@ pub fn constructor(
 }
 ```
 
-### Constructor with inheritance
+### Constructor with trait-based composition
 
-When your contract inherits from another contract with a constructor, you must manually call the parent constructor:
+Stylus uses trait-based composition instead of traditional inheritance. When implementing constructors with traits, each component typically has its own initialization logic:
 
 ```rust
-#[public]
-impl ChildContract {
-    #[constructor]
-    pub fn constructor(&mut self, child_param: U256) -> Result<(), Error> {
-        // Call parent constructor first
-        self.parent_constructor()?;
+// Define traits for different functionality
+trait IErc20 {
+    fn balance_of(&self, account: Address) -> U256;
+    fn transfer(&mut self, to: Address, value: U256) -> bool;
+}
 
-        // Initialize child-specific state
-        self.child_value.set(child_param);
+trait IOwnable {
+    fn owner(&self) -> Address;
+    fn transfer_ownership(&mut self, new_owner: Address) -> bool;
+}
+
+// Define storage for each component
+#[storage]
+struct Erc20Component {
+    balances: StorageMap<Address, StorageU256>,
+    total_supply: StorageU256,
+}
+
+#[storage]
+struct OwnableComponent {
+    owner: StorageAddress,
+}
+
+// Main contract that composes functionality
+#[storage]
+#[entrypoint]
+struct MyToken {
+    erc20: Erc20Component,
+    ownable: OwnableComponent,
+    name: StorageString,
+    symbol: StorageString,
+}
+
+#[public]
+#[implements(IErc20, IOwnable)]
+impl MyToken {
+    #[constructor]
+    pub fn constructor(
+        &mut self,
+        name: String,
+        symbol: String,
+        initial_supply: U256,
+    ) -> Result<(), TokenError> {
+        // Initialize each component
+        self.initialize_ownable()?;
+        self.initialize_erc20(initial_supply)?;
+        
+        // Initialize contract-specific state
+        self.name.set_str(&name);
+        self.symbol.set_str(&symbol);
 
         Ok(())
     }
 
-    fn parent_constructor(&mut self) -> Result<(), Error> {
-        // Parent initialization logic
+    fn initialize_ownable(&mut self) -> Result<(), TokenError> {
+        let deployer = self.vm().tx_origin();
+        self.ownable.owner.set(deployer);
+        Ok(())
+    }
+
+    fn initialize_erc20(&mut self, initial_supply: U256) -> Result<(), TokenError> {
+        if initial_supply == U256::ZERO {
+            return Err(TokenError::InvalidSupply);
+        }
+        
+        let deployer = self.vm().tx_origin();
+        self.erc20.total_supply.set(initial_supply);
+        self.erc20.balances.setter(deployer).set(initial_supply);
         Ok(())
     }
 }
 ```
+
+<VanillaAdmonition type="info" title="Trait-based composition in Stylus">
+  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is 
+  initialized explicitly in the constructor. For more details on trait-based composition, see the 
+  [Composition and trait-based routing model](/stylus/how-tos/using-inheritance) guide.
+</VanillaAdmonition>
 
 ## Testing constructors
 
