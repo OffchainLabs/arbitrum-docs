@@ -624,6 +624,11 @@ const sidebars = {
               id: 'stylus/how-tos/using-constructors',
               label: 'Using constructors',
             },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-constructors',
+              label: 'Using constructors',
+            },
             ...stylusByExampleDocsSidebarSDK,
             {
               type: 'doc',
