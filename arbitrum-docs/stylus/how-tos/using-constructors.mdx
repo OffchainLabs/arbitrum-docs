@@ -64,9 +64,10 @@ Instructions on how to set up a local Arbitrum test node can be found [here](htt
 Stylus constructors provide an atomic way to deploy, activate, and initialize a contract in a single transaction. Without a constructor, your contract's storage might be accessed before your initialization logic runs, which can lead to unexpected behavior.
 
 <VanillaAdmonition type="info" title="Constructors and composition">
-  Stylus uses trait-based composition instead of traditional inheritance. When building contracts that 
-  compose multiple traits, constructors help initialize all components properly. See the 
-  [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for examples.
+  Stylus uses trait-based composition instead of traditional inheritance. When building contracts
+  that compose multiple traits, constructors help initialize all components properly. See the
+  [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for
+  examples.
 </VanillaAdmonition>
 
 ### Constructor rules and guarantees
@@ -274,7 +275,7 @@ impl MyToken {
         // Initialize each component
         self.initialize_ownable()?;
         self.initialize_erc20(initial_supply)?;
-        
+
         // Initialize contract-specific state
         self.name.set_str(&name);
         self.symbol.set_str(&symbol);
@@ -292,7 +293,7 @@ impl MyToken {
         if initial_supply == U256::ZERO {
             return Err(TokenError::InvalidSupply);
         }
-        
+
         let deployer = self.vm().tx_origin();
         self.erc20.total_supply.set(initial_supply);
         self.erc20.balances.setter(deployer).set(initial_supply);
@@ -302,8 +303,8 @@ impl MyToken {
 ```
 
 <VanillaAdmonition type="info" title="Trait-based composition in Stylus">
-  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is 
-  initialized explicitly in the constructor. For more details on trait-based composition, see the 
+  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is
+  initialized explicitly in the constructor. For more details on trait-based composition, see the
   [Composition and trait-based routing model](/stylus/how-tos/using-inheritance) guide.
 </VanillaAdmonition>
 
