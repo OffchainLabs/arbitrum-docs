@@ -82,8 +82,8 @@
 ### What token is used to pay gas fees on Orbit chains?
 
 <p>
-  By default, Orbit chains pay gas in ETH. However, Orbit chains using AnyTrust can be configured to
-  use any ERC-20 token as the gas fee token of the chain.
+  By default, Orbit chains pay gas in <code>ETH</code>. However, Orbit chains using AnyTrust can be configured to
+  use any <code>ERC-20</code> token as the gas fee token of the chain.
 </p>
 
 <p>
@@ -248,7 +248,7 @@ You can find more detailed information about fees in these pages:-
 <br />
 L1 fees: <a href="https://docs.arbitrum.io/arbos/l1-pricing">
   https://docs.arbitrum.io/arbos/l1-pricing
-</a>- L2 fees: <a href="https://docs.arbitrum.io/arbos/gas">https://docs.arbitrum.io/arbos/gas</a>
+</a>L2 fees: <a href="https://docs.arbitrum.io/arbos/gas">https://docs.arbitrum.io/arbos/gas</a>
 <br />
 
 <br />
@@ -295,11 +295,8 @@ And information about the precompiles methods in: <a href="https://docs.arbitru
 
 ### How do I increase the max transaction data size?
 
-<p>:::warning Always test first</p>
+<p><b>Warning: Always test first!</b></p>
 
-<p>Test this thoroughly on a testnet first.</p>
-
-<p>:::</p>
 
 <ol>
   <li>
@@ -399,41 +396,40 @@ And information about the precompiles methods in: <a href="https://docs.arbitru
 ### What are the estimated infrastructure costs to run the Sequencer?
 
 <p>
-  The estimated cost is approximately $600 per sequencer replica per month for a low-to-medium
-  activity chain. With networking and storage included, the estimated monthly cost would be $1,500
+  The estimated cost is approximately \$600 per sequencer replica per month for a low-to-medium
+  activity chain. With networking and storage included, the estimated monthly cost would be \$1,500
   for the Sequencer.
 </p>
 
 ### What are the different validator modes?
 
 <ul>
-<li><strong>Defensive (allowlist required)</strong>:<ul>
-<li>Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.</li></ul>
+<li><strong>Defensive (allowlist required)</strong>:</li>
+<li>Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.</li>
 
-</li>
-<li><strong>StakeLatest (allowlist required)</strong>:<ul>
-<li>Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)</li></ul>
+<li><strong>StakeLatest (allowlist required)</strong>:</li>
+<li>Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)</li>
 
-</li>
-<li><strong>ResolveNodes (allowlist required)</strong>:<ul>
-<li>Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)</li></ul>
 
-</li>
-<li><strong>MakeNodes (allowlist required)</strong>:<ul>
+<li><strong>ResolveNodes (allowlist required)</strong>:</li>
+<li>Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)</li>
+
+
+<li><strong>MakeNodes (allowlist required)</strong>:</li>
 <li>Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)</li>
-<li>Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.</li></ul>
+<li>Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.</li>
 
-</li>
-<li><strong>Watchtower</strong>:<ul>
-<li>A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).</li></ul>
 
-</li></ul>
+<li><strong>Watchtower</strong>:</li>
+<li>A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).</li>
+
+</ul>
 
 ### What are the costs to run a validator?
 
 <p>
-  The estimated monthly cost for Watchtower validators will be approximately $500. All other
-  validators will cost $800 to $900 per month.
+  The estimated monthly cost for Watchtower validators will be approximately \$500. All other
+  validators will cost \$800 to \$900 per month.
 </p>
 
 ### What is the amount of funds that a validator needs in its wallet to participate in fraud proofs?
@@ -480,8 +476,7 @@ And information about the precompiles methods in: <a href="https://docs.arbitru
 <p>
   Over time, without creating assertions, the validator whitelist in the Rollup contract can become
   disabled. If you look at the{' '}
-  <code>
-    <a href="https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62">
+  <code><a href="https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62">
       removeWhitelistAfterValidatorAfk
     </a>
   </code>{' '}
