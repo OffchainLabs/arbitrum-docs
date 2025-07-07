@@ -82,8 +82,8 @@
 ### What token is used to pay gas fees on Orbit chains?
 
 <p>
-  By default, Orbit chains pay gas in <code>ETH</code>. However, Orbit chains using AnyTrust can be configured to
-  use any <code>ERC-20</code> token as the gas fee token of the chain.
+  By default, Orbit chains pay gas in <code>ETH</code>. However, Orbit chains using AnyTrust can be
+  configured to use any <code>ERC-20</code> token as the gas fee token of the chain.
 </p>
 
 <p>
@@ -295,8 +295,9 @@ And information about the precompiles methods in: <a href="https://docs.arbitru
 
 ### How do I increase the max transaction data size?
 
-<p><b>Warning: Always test first!</b></p>
-
+<p>
+  <b>Warning: Always test first!</b>
+</p>
 
 <ol>
   <li>
@@ -407,21 +408,44 @@ And information about the precompiles methods in: <a href="https://docs.arbitru
 <li><strong>Defensive (allowlist required)</strong>:</li>
 <li>Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.</li>
 
-<li><strong>StakeLatest (allowlist required)</strong>:</li>
-<li>Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)</li>
+<li>
+  <strong>StakeLatest (allowlist required)</strong>:
+</li>
+<li>
+  Stay staked on the latest assertion and challenge any bad assertions found (wallet required,
+  always staked, uses some gas every time new assertion created)
+</li>
 
+<li>
+  <strong>ResolveNodes (allowlist required)</strong>:
+</li>
+<li>
+  Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad
+  assertions found (wallet required, always staked, uses some gas every time an unconfirmed
+  assertion is resolved or a new assertion is created)
+</li>
 
-<li><strong>ResolveNodes (allowlist required)</strong>:</li>
-<li>Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)</li>
+<li>
+  <strong>MakeNodes (allowlist required)</strong>:
+</li>
+<li>
+  Continuously create new assertions, challenging any bad assertions found (wallet required, always
+  staked, most expensive node to run)
+</li>
+<li>
+  Note that if there is more than one MakeNodes validator running, they might all try to create a
+  new assertion at the same time. In that case, only one will be successful, and the others will
+  have still spent gas on reverted calls that did nothing.
+</li>
 
-
-<li><strong>MakeNodes (allowlist required)</strong>:</li>
-<li>Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)</li>
-<li>Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.</li>
-
-
-<li><strong>Watchtower</strong>:</li>
-<li>A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).</li>
+<li>
+  <strong>Watchtower</strong>:
+</li>
+<li>
+  A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the
+  locally computed chain state. It doesn't require a wallet, as it never takes any action onchain.
+  This mode is the default-enabled strategy for all nodes (full and archive).
+</li>
 
 </ul>
 
@@ -476,7 +500,8 @@ And information about the precompiles methods in: <a href="https://docs.arbitru
 <p>
   Over time, without creating assertions, the validator whitelist in the Rollup contract can become
   disabled. If you look at the{' '}
-  <code><a href="https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62">
+  <code>
+    <a href="https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62">
       removeWhitelistAfterValidatorAfk
     </a>
   </code>{' '}
