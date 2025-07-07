@@ -30,7 +30,7 @@ Before implementing constructors, ensure you have:
 
 <CustomDetails summary="Rust toolchain">
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </CustomDetails>
 
@@ -42,11 +42,11 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.81 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.88 as well as adding the WASM build target:
 
 ```shell
-rustup default 1.81
-rustup target add wasm32-unknown-unknown --toolchain 1.81
+rustup default 1.88
+rustup target add wasm32-unknown-unknown --toolchain 1.88
 ```
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
@@ -303,9 +303,7 @@ impl MyToken {
 ```
 
 <VanillaAdmonition type="info" title="Trait-based composition in Stylus">
-  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is
-  initialized explicitly in the constructor. For more details on trait-based composition, see the
-  [Composition and trait-based routing model](/stylus/how-tos/using-inheritance) guide.
+  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is initialized explicitly in the constructor. 
 </VanillaAdmonition>
 
 ## Testing constructors
