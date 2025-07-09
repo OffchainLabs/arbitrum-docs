@@ -59,6 +59,7 @@ Understanding this trust model is essential. While we expect the sequencer to be
 ### Role of the sequencer feed in the network
 
 The sequencer Feed serves several vital functions within the Arbitrum ecosystem:
+
 - **State synchronization**: Nodes use the feed to stay synchronized with the latest state of the network, ensuring consistency across the decentralized platform.
 - **Application development**: Developers can build applications that respond instantly to network events, enabling features like live updates, instant notifications, and real-time analytics.
 - **Ecosystem transparency**: The feed promotes transparency and trust within the community by providing visibility into transaction sequencing and network activity.
@@ -66,6 +67,7 @@ The sequencer Feed serves several vital functions within the Arbitrum ecosystem:
 ### Considerations and limitations
 
 While the Sequencer Feed offers significant advantages, consider the following:
+
 - **Reliance on sequencer availability**: The effectiveness of the real-time feed depends on the sequencer's uptime and responsiveness. Network issues or sequencer downtime can delay transaction visibility.
 - **Provisional nature of soft finality**: Until transactions reach finality on the parent chain, there is a small risk that the provisional ordering provided by the feed could change in exceptional circumstances.
 - **Security implications**: For high-stakes transactions where security is paramount (e.g., centralized exchange deposits and withdrawals), users may prefer to wait for the parent chain confirmation despite the longer latency.
@@ -105,13 +107,15 @@ The sequencer in Arbitrum is critical in collecting and organizing child chain t
 - **Buffering**: Received transactions are temporarily stored in a buffer awaiting batch formation.
 
 ### Batch formation criteria:
+
 - **Size thresholds**: Batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transaction, improving cost efficiency.
 - **Time constraints**: The sequencer also monitors the time elapsed since the last posted batch to prevent undue delays. Upon reaching the maximum time threshold, the sequencer will create a batch with the transactions collected so far, even if the batch doesn't meet the size threshold.
 
 ### Batch creation process:
+
 - **Aggregation**: Once the batch formation criteria (the size or time threshold) are satisfied, the sequencer aggregates the buffered transactions into a single batch.
 - **Metadata inclusion**: The batch includes the necessary metadata of all transactions.
-- **Preparation for compression**:  Batch preparation for the compression stage begins, where techniques will minimize the data size before posting to parent chain.
+- **Preparation for compression**: Batch preparation for the compression stage begins, where techniques will minimize the data size before posting to parent chain.
 
 This batching mechanism allows the sequencer to efficiently manage transactions by balancing the need for cost-effective parent chain posting with the requirement for prompt transaction processing. By strategically grouping transactions into batches based on size and time criteria, the sequencer reduces per-transaction costs and enhances the overall scalability of the Arbitrum network.
 
