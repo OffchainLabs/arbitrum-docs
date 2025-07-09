@@ -9,7 +9,7 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-The <a data-quicklook-from="sequencer">Sequencer</a> is a pivotal component of the <a data-quicklook-from="arbitrum">Arbitrum</a> network and is responsible for efficiently ordering and processing transactions. It plays a crucial role in providing users with fast <a data-quicklook-from="transaction">transaction</a> confirmations while maintaining the security and integrity of the <a data-quicklook-from="blockchain">Blockchain</a>. In Arbitrum, the Sequencer orders incoming transactions and manages the batching, compression, and posting of transaction data to <a data-quicklook-from="parent-chain">parent chain</a>, optimizing costs and performance.
+The <a data-quicklook-from="sequencer">Sequencer</a> is a pivotal component of <a data-quicklook-from="arbitrum">Arbitrum</a>, responsible for efficiently ordering and processing transactions. It plays a crucial role in providing users with fast <a data-quicklook-from="transaction">transaction</a> confirmations while maintaining the security and integrity of the <a data-quicklook-from="blockchain">blockchain</a>. In Arbitrum, the sequencer orders incoming transactions and manages the batching, compression, and posting of transaction data to the <a data-quicklook-from="parent-chain">parent chain</a>.
 
 <ImageZoom
   src="/img/haw-sequencer-operations.svg"
@@ -17,117 +17,157 @@ The <a data-quicklook-from="sequencer">Sequencer</a> is a pivotal component of t
   className="img-600px"
 />
 
-In this section, we will explore the operation of the Sequencer in detail. The topics covered include:
+## Sequencing and broadcasting
 
-- [Sequencing and Broadcasting (Sequencer Feed)](#sequencing-and-broadcasting): An overview of the real-time transaction feed provided by the Sequencer, which allows nodes to receive instant updates on the transaction sequence.
-- [Batch-Posting](#batch-posting): How the Sequencer groups transactions into batches, compresses them to reduce data size and sends them to the Sequencer Inbox Contract on the parent chain. This section also delves into the parent chain pricing model and how it affects transaction costs.
-  - [Batching](#batching-and-compression)
-  - [Compression](#compression)
-  - [Submitting to the Sequencer Inbox Contract](#submitting-to-the-sequencer-inbox-contract)
-- [Finality](#finality): Understanding how transaction finality is achieved in Arbitrum through both soft and hard finality mechanisms, ensuring that transactions are confirmed securely and reliably. (not as a sequencer task)
-- [Censorship Timeout](#censorship-timeout): A brief introduction to a special feature that aims to limit the negative effects of prolonged sequencer censorship and/or unexpected sequencer outages.
+The <a data-quicklook-from="sequencer-feed">Sequencer Feed</a> is a critical component of the Arbitrum Nitro architecture. It enables the real-time dissemination of transaction data as it is received and ordered by the sequencer. It allows users and nodes to receive immediate updates on transaction sequencing, facilitating rapid transaction confirmations and enhancing the network's overall responsiveness.
 
-By examining these aspects, you will understand the Sequencer's role within the Arbitrum ecosystem, including how it enhances transaction throughput, reduces latency, and maintains a fair and decentralized network.
-
-## Sequencing and Broadcasting
-
-The **<a data-quicklook-from="sequencer-feed">Sequencer Feed</a>** is a critical component of the Arbitrum network's Nitro architecture. It enables real-time dissemination of transaction data as they are accepted and ordered by the Sequencer. It allows users and nodes to receive immediate updates on transaction sequencing, facilitating rapid transaction confirmations and enhancing the network's overall responsiveness.
-
-### How the Sequencer Publishes the Sequence
+### How the sequencer publishes the sequence
 
 The Sequencer communicates the transaction sequence through two primary channels:
 
-1. **Real-Time Sequencer Feed**: A live broadcast that publishes transactions instantly as they are sequenced. Nodes and clients subscribed to this feed receive immediate notifications, allowing them to process transactions without delay.
-2. **Batches Posted on the Parent Chain**: At regular intervals, the Sequencer aggregates transactions and posts them to the parent chain for finality. (Refer to the <a data-quicklook-from="batch">Batch</a>-Posting section for detailed information on this process.)
+#### 1. Real-time sequencer feed:
+
+A live broadcast that publishes transactions instantly as they are sequenced. Nodes and clients subscribed to this feed receive immediate notifications, enabling them to process transactions promptly.
+
+#### 2. Batches posted on the parent chain
+
+At regular intervals, the sequencer aggregates transactions and posts them to the parent chain for finality. (Refer to the [Batch-Posting](#batch-posting) section for detailed information on this process.)
 
 <ImageZoom src="/img/haw-sequencer-feed.svg" alt="Sequencer feed" className="img-600px" />
 
-### Real-Time Sequencer Feed
+### Real-time sequencer feed
 
 The real-time feed represents the Sequencer's commitment to process transactions in a specific order. By subscribing to this feed, nodes and clients can:
 
-- **Receive Immediate Notifications**: Obtain instant information about newly sequenced transactions and their ordering.
-- **Process Transactions Promptly**: Utilize the sequenced transactions to update the state locally, enabling rapid application responses and user interactions.
-- **Benefit from Soft Finality**: Gain provisional assurance about transaction acceptance and ordering before the parent chain reaches finality.
+#### Receive immediate notifications
+
+Obtain instant information about newly sequenced transactions and their ordering.
+
+#### Process transactions promptly
+
+Utilize the sequenced transactions to update the state locally, enabling rapid application responses and user interactions.
+
+#### Benefit from soft finality
+
+Gain provisional assurance about transaction acceptance and ordering before the parent chain reaches finality.
 
 This mechanism is particularly valuable for applications requiring low latency and high throughput, such as decentralized exchanges or real-time gaming platforms.
 
-### Soft Finality and Trust Model
+### Soft finality and trust model
 
 "Soft finality" refers to the preliminary <a data-quicklook-from="confirmation">confirmation</a> of transactions based on the Sequencer's real-time feed. Key aspects include:
 
-- **Dependence on Sequencer Integrity**: The feed's accuracy and reliability depend on the Sequencer operating honestly and without significant downtime.
-- **Immediate User Feedback**: Users can act on transaction confirmations swiftly, improving the user experience.
-- **Eventual Consistency with the parent chain**: While the real-time feed provides quick updates, ultimate security, and finality are established once transactions are posted to and finalized on the parent chain. (See the **Finality** section for an in-depth discussion.)
+#### Dependence on sequencer integrity
+
+The feed's accuracy and reliability depend on the Sequencer operating honestly and without significant downtime.
+
+#### Immediate user feedback
+
+Users can act on transaction confirmations swiftly, improving the user experience.
+
+#### Eventual consistency with the parent chain
+
+While the real-time feed provides quick updates, ultimate security, and finality are established once transactions are posted to and finalized on the parent chain. (See the [Finality section](#finality) for an in-depth discussion.)
 
 Understanding this trust model is essential. While we expect the Sequencer to behave correctly, users and developers should know that soft finality depends on this assumption. In scenarios where absolute certainty is required, parties may wait for transactions to achieve finality on the parent chain.
 
-### Role of the Sequencer Feed in the Network
+### Role of the sequencer feed in the network
 
 The Sequencer Feed serves several vital functions within the Arbitrum ecosystem:
 
-- **State Synchronization**: Nodes use the feed to stay synchronized with the latest state of the network, ensuring consistency across the decentralized platform.
-- **Application Development**: Developers can build applications that respond instantly to network events, enabling features like live updates, instant notifications, and real-time analytics.
-- **Ecosystem Transparency**: The feed promotes transparency and trust within the community by providing visibility into transaction sequencing and network activity.
+#### State synchronization
+Nodes use the feed to stay synchronized with the latest state of the network, ensuring consistency across the decentralized platform.
 
-### Considerations and Limitations
+#### Application development
+Developers can build applications that respond instantly to network events, enabling features like live updates, instant notifications, and real-time analytics.
+
+#### Ecosystem transparency
+The feed promotes transparency and trust within the community by providing visibility into transaction sequencing and network activity.
+
+
+
+### Considerations and limitations
 
 While the Sequencer Feed offers significant advantages, consider the following:
 
-- **Reliance on Sequencer Availability**: The effectiveness of the real-time feed depends on the Sequencer's uptime and responsiveness. Network issues or Sequencer downtime can delay transaction visibility.
-- **Provisional Nature of Soft Finality**: Until transactions reach finality on the parent chain, there is a small risk that the provisional ordering provided by the feed could change in exceptional circumstances.
-- **Security Implications**: For high-stakes transactions where security is paramount (e.g., centralized exchange deposits and withdrawals), users may prefer to wait for the parent chain confirmation despite the longer latency.
+#### Reliance on sequencer availability
+The effectiveness of the real-time feed depends on the sequencer's uptime and responsiveness. Network issues or sequencer downtime can delay transaction visibility.
+
+#### Provisional nature of soft finality
+Until transactions reach finality on the parent chain, there is a small risk that the provisional ordering provided by the feed could change in exceptional circumstances.
+
+#### Security implications
+For high-stakes transactions where security is paramount (e.g., centralized exchange deposits and withdrawals), users may prefer to wait for the parent chain confirmation despite the longer latency.
 
 Developers and users should design their applications and interactions with these factors in mind, choosing the appropriate balance between speed and certainty based on their requirements.
 
-### **Delayed messages on the Sequencer feed**
+### Delayed messages on the sequencer feed
 
-As illustrated in the diagram, the Sequencer feed not only sends <a data-quicklook-from="child-chain">child chain</a> transactions posted directly to the Sequencer but also incorporates parent chain-–submitted child chain transactions. These include child chain messages submitted on the parent chain and retryable transactions. The Sequencer agent monitors the finalized messages submitted to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> Contract. Once finalized, it processes them as incoming messages to the feed, ensuring they are added as ordered transactions.
+As illustrated in the diagram, the sequencer feed not only sends <a data-quicklook-from="child-chain">child chain</a> transactions posted directly to the sequencer but also incorporates parent chain-–submitted child chain transactions. These include child chain messages submitted on the parent chain and retryable transactions. The Sequencer agent monitors the finalized messages submitted to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> Contract. Once finalized, it processes them as incoming messages to the feed, ensuring they are added as ordered transactions.
 
 It is important to note that the Nitro node can be configured to add Delayed Inbox transactions immediately after their submission to the parent chain, even before finalization. However, this approach introduces a risk of the child chain reorganization if the transaction fails to finalize on the parent chain. To mitigate this risk, on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova, the Sequencer only includes these transactions in the feed once they are finalized on the Ethereum chain.
 
 You can also explore how the feed sends incoming messages via WebSocket and learn how to extract message data from the feed on this page: [Read Sequencer Feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
 
-## Batch-Posting
+## Batch-posting
 
-Batch-Posting is a fundamental process in the operation of the Sequencer within the Arbitrum network. It involves collecting multiple child chain transactions, organizing them into batches, compressing the data to reduce size, and sending these batches to the Sequencer Inbox Contract on parent chain. This mechanism is crucial for ensuring that transactions are securely recorded on the parent chain blockchain while optimizing for cost and performance.
+Batch-posting is a fundamental process in the operation of the sequencer within the Arbitrum network. It involves collecting multiple child chain transactions, organizing them into batches, compressing the data to reduce size, and sending these batches to the Sequencer Inbox Contract on parent chain. This mechanism is crucial for ensuring that transactions are securely recorded on the parent chain blockchain while optimizing for cost and performance.
 
-In this section, we will explore the Batch-Posting process in detail, covering the following topics:
+In this section, we will explore the Batch-posting process in detail, covering the following topics:
 
-- **Batching**: How the Sequencer groups incoming transactions into batches for efficient processing and posting.
-- **Compression**: The methods used to compress transaction data, minimizing the amount of data that needs to be posted on parent chain and thereby reducing costs.
-- **Sending to Sequencer Inbox contract**: The procedure for submitting compressed batches to the Sequencer Inbox contract on parent chain, ensuring secure and reliable recording of transactions.
+#### Batching
+How the sequencer groups incoming transactions into batches for efficient processing and posting.
+
+#### Compression
+The methods used to compress transaction data, minimizing the amount of data that needs to be posted on parent chain and thereby reducing costs.
+
+#### Sending to Sequencer Inbox contract
+The procedure for submitting compressed batches to the Sequencer Inbox contract on parent chain, ensuring secure and reliable recording of transactions.
+
 
 Understanding Batch-Posting is essential for grasping how Arbitrum achieves scalability and cost-efficiency without compromising security. By delving into these subtopics, you'll gain insight into the Sequencer's role in optimizing transaction throughput and minimizing fees, as well as the innovative solutions implemented to address the challenges of parent chain data pricing.
 
 ## Batching and compression
 
-The Sequencer in Arbitrum is critical in collecting and organizing child chain transactions before posting them to the parent chain. The batching process is designed to optimize for both cost efficiency and timely transaction inclusion.
+The sequencer in Arbitrum is critical in collecting and organizing child chain transactions before posting them to the parent chain. The batching process is designed to optimize for both cost efficiency and timely transaction inclusion.
 
 <ImageZoom src="/img/haw-batching.svg" alt="Batching" className="img-600px" />
 
-**Transaction Collection and Ordering:**
+### Transaction collection and ordering:
 
-- **Continuous Reception:** The Sequencer continuously receives transactions submitted by users.
-- **Ordering:** Transactions are ordered based on the sequence in which they are received, maintaining a deterministic transaction order.
-- **Buffering:** Received transactions are temporarily stored in a buffer awaiting batch formation.
+#### Continuous reception
+The sequencer continuously receives transactions submitted by users.
 
-**Batch Formation Criteria:**
+#### Ordering
+Transactions are ordered based on the sequence in which they are received, maintaining a deterministic transaction order.
 
-- **Size Thresholds:** Batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transaction, improving cost efficiency.
-- **Time Constraints:** The Sequencer also monitors the time elapsed since the last posted batch to prevent undue delays. Upon reaching the maximum time threshold, the Sequencer will create a batch with the transactions collected so far, even if the batch doesn't meet the size threshold.
+#### Buffering
+ Received transactions are temporarily stored in a buffer awaiting batch formation.
 
-**Batch Creation Process:**
+### Batch formation criteria:
 
-- **Aggregation:** Once the batch formation criteria (the size or time threshold) are satisfied, the Sequencer aggregates the buffered transactions into a single batch.
-- **Metadata Inclusion:** The batch includes the necessary metadata of all transactions.
-- **Preparation for Compression:** Batch preparation for the compression stage begins, where techniques will minimize the data size before posting to parent chain.
+#### Size Thresholds
+Batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transaction, improving cost efficiency.
 
-This batching mechanism allows the Sequencer to efficiently manage transactions by balancing the need for cost-effective parent chain posting with the requirement for prompt transaction processing. By strategically grouping transactions into batches based on size and time criteria, the Sequencer reduces per-transaction costs and enhances the overall scalability of the Arbitrum network.
+#### Time Constraints
+The sequencer also monitors the time elapsed since the last posted batch to prevent undue delays. Upon reaching the maximum time threshold, the sequencer will create a batch with the transactions collected so far, even if the batch doesn't meet the size threshold.
+
+### Batch creation process:
+
+#### Aggregation
+Once the batch formation criteria (the size or time threshold) are satisfied, the Sequencer aggregates the buffered transactions into a single batch.
+
+#### Metadata inclusion 
+The batch includes the necessary metadata of all transactions.
+
+#### Preparation for compression
+Batch preparation for the compression stage begins, where techniques will minimize the data size before posting to parent chain.
+
+This batching mechanism allows the sequencer to efficiently manage transactions by balancing the need for cost-effective parent chain posting with the requirement for prompt transaction processing. By strategically grouping transactions into batches based on size and time criteria, the sequencer reduces per-transaction costs and enhances the overall scalability of the Arbitrum network.
 
 ### Compression
 
-The Sequencer employs compression when forming transaction batches to optimize the data and cost of batches posted to the parent chain. Arbitrum uses the Brotli compression algorithm due to its high compression ratio and efficiency, crucial for reducing parent chain posting costs.
+The sequencer employs compression when forming transaction batches to optimize the data and cost of batches posted to the parent chain. Arbitrum uses the Brotli compression algorithm due to its high compression ratio and efficiency, crucial for reducing parent chain posting costs.
 
 <ImageZoom src="/img/haw-compression.svg" alt="Compression" className="img-600px" />
 
@@ -135,8 +175,11 @@ The Sequencer employs compression when forming transaction batches to optimize t
 
 Brotli’s compression algorithm includes a parameter: **compression level**, which ranges from **0 to 11**. This parameter allows you to balance two key factors:
 
-- **Compression Efficiency**: Higher levels result in greater size reduction.
-- **Computational Cost**: Higher levels require more processing power and time.
+#### Compression efficiency
+Higher levels result in greater size reduction.
+
+#### Computational cost
+Higher levels require more processing power and time.
 
 As the compression level increases, you achieve better compression ratios at the expense of longer compression times.
 
@@ -148,11 +191,11 @@ This tradeoff prioritizes speed over compression efficiency, enabling faster pro
 
 Now that transactions are batched and compressed, they can be passed to batch-poster to be sent to the parent chain.
 
-## Submitting to the Sequencer Inbox Contract
+## Submitting to the Sequencer Inbox contract
 
-After batching and compressing transactions, the Sequencer posts these batches to the parent chain to ensure security and finality. This process involves the **Batch Poster**, an Externally Owned Account (EOA) controlled by the Sequencer. The Batch Poster is responsible for submitting the compressed transaction batches to the **Sequencer Inbox Contract** on parent chain.
+After batching and compressing transactions, the sequencer posts these batches to the parent chain to ensure security and finality. This process involves the **Batch Poster**, an Externally Owned Account (EOA) controlled by the sequencer. The Batch Poster is responsible for submitting the compressed transaction batches to the **Sequencer Inbox Contract** on parent chain.
 
-There are two primary methods the Sequencer uses to send batches to the parent chain, depending on whether the chain supports EIP-4844 (Proto-Danksharding) and the current network conditions:
+There are two primary methods the sequencer uses to send batches to the parent chain, depending on whether the chain supports EIP-4844 (Proto-Danksharding) and the current network conditions:
 
 <ImageZoom
   src="/img/haw-submit-to-sequencer-inbox.svg"
@@ -182,16 +225,24 @@ There are two primary methods the Sequencer uses to send batches to the parent c
   - **Compatibility**: If the parent chain does not support EIP-4844, this method is the default and only option for batch posting.
 
 :::note
-The Sequencer continuously monitors network conditions to choose the most economical method for batch posting, ensuring optimal operation under varying circumstances.
+
+The sequencer continuously monitors network conditions to choose the most economical method for batch posting, ensuring optimal operation under varying circumstances.
+
 :::
 
-### Authority and Finality
+### Authority and finality
 
-- **Exclusive Access**: Only the Sequencer can call these methods on the Sequencer Inbox Contract. This exclusivity ensures that no other party can directly include messages.
-- **Soft-Confirmation Receipts**: The Sequencer's unique ability to immediately process and include transactions allows it to provide users with instant, "soft-confirmation" receipts,
-- **Parent chain Finality**: Once batches post, the transactions achieve parent-chain-level finality, secured by Parent chain’s consensus mechanism.
+#### Exclusive access
+Only the sequencer can call these methods on the Sequencer Inbox Contract. This exclusivity ensures that no other party can directly include messages.
 
-By efficiently sending compressed transaction batches to the Sequencer Inbox contract using the most cost-effective method available, the Sequencer ensures transactions are securely recorded on parent chain. This process maintains the integrity and reliability of the network, providing users with fast and secure transaction processing.
+#### Soft-confirmation receipts
+The sequencer's unique ability to immediately process and include transactions allows it to provide users with instant, "soft-confirmation" receipts,
+
+#### Parent chain finality
+Once batches post, the transactions achieve parent-chain-level finality, secured by Parent chain’s consensus mechanism.
+
+By efficiently sending compressed transaction batches to the Sequencer Inbox contract using the most cost-effective method available, the sequencer ensures transactions are securely recorded on parent chain. This process maintains the integrity and reliability of the network, providing users with fast and secure transaction processing.
+
 
 ## Finality
 
@@ -199,32 +250,32 @@ Finality in blockchain systems refers to the point at which a transaction become
 
 Arbitrum offers two levels of finality:
 
-1. **Soft Finality**: Provided by the Sequencer's real-time feed, offering immediate but provisional transaction confirmations.
+1. **Soft Finality**: Provided by the sequencer's real-time feed, offering immediate but provisional transaction confirmations.
 2. **Hard Finality**: Occurs when transactions are included in batches posted to and finalized on the parent chain, providing strong security assurances.
 
 This section explores the concepts of soft and hard finality, their implications, trust considerations, and guidance for utilizing them effectively within the Arbitrum network.
 
 ### Soft Finality
 
-Soft finality refers to the preliminary confirmation of transactions based on the Sequencer's real-time feed. Key characteristics include:
+Soft finality refers to the preliminary confirmation of transactions based on the sequencer's real-time feed. Key characteristics include:
 
-- **Immediate Confirmation**: Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer.
-- **Provisional Assurance**: The confirmations are provisional and rely on the Sequencer's integrity and availability.
-- **High Performance**: Enables applications to offer rapid responses and real-time interactions, enhancing user experience.
+- **Immediate confirmation**: Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer.
+- **Provisional assurance**: The confirmations are provisional and rely on the sequencer's integrity and availability.
+- **High performance**: Enables applications to offer rapid responses and real-time interactions, enhancing user experience.
 
-**Advantages of Soft Finality**:
+### Advantages of soft finality:
 
-- **Low Latency**: Users receive immediate feedback on transaction status.
-- **Optimized for Speed**: Ideal for applications where responsiveness is critical.
-- **Improved User Experience**: Reduces waiting times and uncertainty.
+- **Low latency**: Users receive immediate feedback on transaction status.
+- **Optimized for speed**: Ideal for applications where responsiveness is critical.
+- **Improved user experience**: Reduces waiting times and uncertainty.
 
-**Limitations of Soft Finality**:
+### Limitations of soft finality:
 
-- **Trust Dependency**: Relies on the Sequencer's honesty and ability to maintain uptime..
-- **Potential for Reordering**: In rare cases, if the Sequencer acts maliciously or encounters issues, the provisional ordering could change.
-- **Not Suitable for High-Value Transactions**: For transactions requiring strong security guarantees, soft finality may not suffice.
+- **Trust dependency**: Relies on the sequencer's honesty and ability to maintain uptime..
+- **Potential for reordering**: In rare cases, if the Sequencer acts maliciously or encounters issues, the provisional ordering could change.
+- **Not suitable for high-value transactions**: For transactions requiring strong security guarantees, soft finality may not suffice.
 
-### Hard Finality
+### Hard finality
 
 Hard finality occurs when batched transactions get posted to the parent chain. Key characteristics include:
 
@@ -235,7 +286,7 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 **Advantages of Hard Finality**:
 
 - **Maximum Security**: Protected by the robustness of the parent chain's consensus mechanism.
-- **Trust Minimization**: This does not require trust in the Sequencer; security comes from the underlying blockchain.
+- **Trust Minimization**: This does not require trust in the sequencer; security comes from the underlying blockchain.
 - **Suitable for High-Value Transactions**: Ideal for scenarios where security and immutability are paramount.
 
 **Limitations of Hard Finality**:
@@ -248,11 +299,11 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 Understanding the trust assumptions associated with each level of finality is essential:
 
 - **Soft Finality Trust Model**:
-  - **Reliance on the Sequencer**: Users must trust that the Sequencer operates honestly, sequences transactions correctly, and remains available.
+  - **Reliance on the sequencer**: Users must trust that the Sequencer operates honestly, sequences transactions correctly, and remains available.
   - **Risk of Misbehavior**: If the Sequencer acts maliciously, it could reorder or censor certain transactions before they achieve hard finality.
 - **Hard Finality Trust Model**:
   - **Reliance on the Parent Chain**: Security is based on the consensus and integrity of the parent chain.
-  - **Reduced Trust in Sequencer**: Even if the Sequencer misbehaves, transactions included in posted batches are secured once finalized on the parent chain.
+  - **Reduced Trust in Sequencer**: Even if the sequencer misbehaves, transactions included in posted batches are secured once finalized on the parent chain.
 
 ### Application Implications
 
