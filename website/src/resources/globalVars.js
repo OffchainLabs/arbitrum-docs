@@ -43,7 +43,7 @@ const globalVars = {
 
   nitroContractsRepositorySlug: 'nitro-contracts',
   nitroContractsCommit: 'bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd',
-  nitroContractsPathToPrecompilesInterface: 'src/node-interface',
+  nitroContractsPathToPrecompilesInterface: 'nitro-contracts',
 
   // Precompile interfaces repository
   nitroPrecompilesRepositorySlug: 'nitro-precompile-interfaces',
