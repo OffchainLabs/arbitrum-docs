@@ -20,6 +20,7 @@ This diagram illustrates the various pathways for submitting transactions to the
 This section outlines the different methods for users to submit transactions to the sequencer on the Arbitrum chain. There are four primary ways to do this: Public RPC, Third-Party RPCs, Arbitrum Nodes, and the Sequencer Endpoint. We will explore these methods in detail, explaining when to choose one over the other and how to use each to effectively submit transactions to the Arbitrum sequencer.
 
 ### 1. Public RPC
+
 Arbitrum provides public RPCs for its primary chains: <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia. Due to their rate-limited nature, these RPC endpoints are suitable for less resource-intensive operations. Public RPCs can be a viable option for general use cases and lightweight interactions with the network.
 
 For more details on the specific RPC endpoints for each chain, refer to the [Arbitrum Public RPC Endpoints page](https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers#arbitrum-public-rpc-endpoints).
@@ -53,7 +54,6 @@ The diagram below shows different ways to submit transactions to the Sequencer:
 This section explores an alternative method for submitting transactions to the Arbitrum chain, which bypasses the sequencer. This page focuses on how users can send their transactions directly to the Delayed Inbox contract on the parent chain rather than through the sequencer. This method offers two distinct paths a transaction can take, with each route interacting with the network differently to achieve transaction inclusion. This approach provides users with greater flexibility, ensuring that transactions can still be processed even if the sequencer is unavailable or users choose not to rely on it. This section highlights these alternative submission mechanisms and underscores the robustness and decentralization features inherent in the Arbitrum network.
 
 In **Diagram 3**, we demonstrate how users can submit their transactions using the Delayed Inbox contract to bypass the sequencer. As illustrated in the diagram, there are two possible paths for transaction handling. When a transaction gets submitted to the Delayed Inbox, the sequencer may automatically pick it up, include it as an ordered transaction, and send it to the Sequencer feed. However, if the sequencer does not process the transaction within 24 hours, users have the reliable option to call the `forceInclude` function on the `SequencerInbox` contract. This action ensures that the sequencer picks up the transaction and includes it in the ordered transaction list, providing users with confidence in their transactions.
-
 
 <!--<ImageZoom
   src="/img/haw-bypassing-the-sequencer.svg"
