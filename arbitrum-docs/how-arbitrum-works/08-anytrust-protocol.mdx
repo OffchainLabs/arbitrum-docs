@@ -14,6 +14,7 @@ The Arbitrum protocol requires that all Arbitrum nodes, including validators, ha
 AnyTrust relies instead on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has `N` members, of which AnyTrust assumes at least two are honest. This assumption means that if `N - 1` DAC members promise to provide access to some data, at least one of the promising parties must be honest. Since there are two honest members and only one failed to make the promise, it follows that at least one of the promisers must be honest, and that member will provide data when needed to ensure the chain can properly function.
 
 ## Keysets
+
 A Keyset specifies the BLS public keys of DAC members and the number of signatures required for a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> to be valid. Keysets enable DAC membership changes and provide DAC members with the ability to update their keys.
 
 A Keyset contains:

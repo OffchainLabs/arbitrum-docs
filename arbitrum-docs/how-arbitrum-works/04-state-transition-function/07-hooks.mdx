@@ -20,34 +20,37 @@ Any links on this page may reference old releases of Nitro or our fork of Geth. 
 :::
 
 ## Hooks
+
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
 
 Below is ApplyTransaction's callgraph, with additional info on where the various Arbitrum-specific hooks are. Click on any to go to their section. By default, these hooks do nothing to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#enablearbos) set to true, [`ReadyEVMForL2`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#readyevmforl2) installs the alternative child chain hooks.
 
 - `core.ApplyTransaction` -> `core.applyTransaction` -> `core.ApplyMessage`
-	- `core.NewStateTransition`
-		- `ReadyEVMForL2`
-	- `core.TransitionDb`
-		- [`StartTxHook`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#starttxhook)
-		- `core.transitionDbImpl`
-			- if `IsArbitrum()` remove tip
-			- [`GasChargingHook`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#gascharginghook)
-			- `evm.Call`
-				- `core.vm.EVMInterpreter.Run`
-					- [`PushCaller`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#pushcaller)
-					- `PopCaller`
-				- `core.StateTransition.refundGas`
-					- [`ForceRefundGas`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#forcerefundgas)
-					- [`NonrefundableGas`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#nonrefundablegas)
-				- [EndTxHook](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#endtxhook)
-	- added return parameter: `transactionResult`
+  - `core.NewStateTransition`
+    - `ReadyEVMForL2`
+  - `core.TransitionDb`
+    - [`StartTxHook`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#starttxhook)
+    - `core.transitionDbImpl`
+      - if `IsArbitrum()` remove tip
+      - [`GasChargingHook`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#gascharginghook)
+      - `evm.Call`
+        - `core.vm.EVMInterpreter.Run`
+          - [`PushCaller`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#pushcaller)
+          - `PopCaller`
+        - `core.StateTransition.refundGas`
+          - [`ForceRefundGas`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#forcerefundgas)
+          - [`NonrefundableGas`](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#nonrefundablegas)
+        - [EndTxHook](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum#endtxhook)
+  - added return parameter: `transactionResult`
 
 What follows is an overview of each hook in chronological order.
 
 ### [`ReadyEVMForL2`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbstate/geth-hook.go#L47)
+
 A call to `ReadyEVMForL2` installs the other transaction-specific hooks into each Geth EVM right before it performs a state transition. Without this call, the state transition will instead use the default `DefaultTxProcessor` and get the same results as vanilla Geth. A `TxProcessor` object carries these hooks and the associated Arbitrum-specific state during the transaction's lifetime.
 
 ### [`StartTxHook`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L100)
+
 Geth calls the `StartTxHook` before a transaction executes, which allows ArbOS to handle two Arbitrum-specific transaction types.
 
 If the transaction is `ArbitrumDepositTx`, ArbOS adds balance to the destination account. This approach is safe because the parent chain bridge submits such a transaction only after collecting the same amount of funds on the parent chain.
@@ -57,20 +60,25 @@ If the transaction is an `ArbitrumSubmitRetryableTx`, ArbOS creates a retryable 
 The hook returns true for both transaction types, signifying that the state transition is complete.
 
 ### [`GasChargingHook`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L354)
+
 This fallible hook ensures the user has enough funds to pay their poster's parent chain calldata costs. If not, the transaction is reverted, and the EVM does not start. In the common case, that the user can pay, the amount paid for calldata is set aside for later reimbursement of the poster. All other fees go to the network account, as they represent the transaction's burden on validators and nodes more generally.
 
 Suppose the user attempts to purchase compute gas over ArbOS's per-block gas limit. In that case, the difference is [set aside](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L407) and [refunded later](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_transition.go#L419) via ForceRefundGas so only the gas limit is used. Note that the limit observed may not be the same as that seen [at the start of the block](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/block_processor.go#L176) if ArbOS's larger gas pool falls below the [`MaxPerBlockGasLimit`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/l2pricing/l2pricing.go#L86) while processing the block's previous transactions.
- 
+
 ### [`PushCaller`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L76)
+
 These hooks track the callers within the EVM callstack, pushing and popping as calls are made and completed. This hook provides [`ArbSys`](https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference#arbsys) with info about the callstack, which is used to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
 
 ### [`L1BlockHash`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L617)
+
 In Arbitrum, the `BlockHash` and `Number` operations return data that relies on the underlying parent chain blocks instead of child chain blocks to accommodate the normal use-case of these opcodes, which often assumes Ethereum-like time passes between different blocks. The `L1BlockHash` and `L1BlockNumber` hooks have the required data for these operations.
 
 ### [`ForceRefundGas`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L425)
+
 This hook allows ArbOS to add additional refunds to the user's transaction. The only usage of this hook is to refund any compute gas purchased in excess of ArbOS's per-block gas limit during the `GasChargingHook`.
 
 ### [`NonRefundableGas`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L418)
+
 Because poster costs come at the expense of the parent chain aggregators and not the network–the amounts paid for the parent chain calldata should not be refunded. This hook provides Geth access to the equivalent amount of child chain gas the poster's cost equals, ensuring reimbursement for this amount doesn't occur for network-incentivized behaviors like freeing storage slots.
 
 ### [`EndTxHook`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L429)
