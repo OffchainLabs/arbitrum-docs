@@ -9,7 +9,7 @@ content_type: get-started
 
 AnyTrust is a variant of <a data-quicklook-from="arbitrum">Arbitrum</a> Nitro technology that lowers costs by accepting a mild trust assumption.
 
-The Arbitrum protocol requires that all Arbitrum nodes, including validators, have access to the data of every child chain <a data-quicklook-from="transaction">transaction</a> in the Arbitrum inbox. An Arbitrum Rollup provides data access by posting data in batches on the parent chain, Ethereum, as calldata. 
+The Arbitrum protocol requires that all Arbitrum nodes, including validators, have access to the data of every child chain <a data-quicklook-from="transaction">transaction</a> in the Arbitrum inbox. An Arbitrum Rollup provides data access by posting data in batches on the parent chain, Ethereum, as calldata.
 
 AnyTrust relies instead on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has `N` members, of which AnyTrust assumes at least two are honest. This assumption means that if `N - 1` DAC members promise to provide access to some data, at least one of the promising parties must be honest. Since there are two honest members and only one failed to make the promise, it follows that at least one of the promisers must be honest, and that member will provide data when needed to ensure the chain can properly function.
 
@@ -17,6 +17,7 @@ Keysets
 A Keyset specifies the BLS public keys of DAC members and the number of signatures required for a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> to be valid. Keysets enable DAC membership changes and provide DAC members with the ability to update their keys.
 
 A Keyset contains:
+
 - The number of DAC members, and
 - For each DAC member, a BLS public key, and
 - The number of DAC signatures required.
@@ -28,11 +29,13 @@ A parent chain has a `KeysetManager` contract that maintains a list of the curre
 Although the API does not limit the number of Keysets that can be valid at the same time, usually, only one Keyset will be valid.
 
 ## Data Availability Certificates
+
 A central concept in AnyTrust is the Data Availability Certificate (hereafter referred to as a "DACert"). A DACert contains:
+
 - the hash of a data block, and
 - an expiration time, and
 - proof that `N-1` DAC members have signed the (hash, expiration time) pair, consisting of
-the hash of the Keyset used in signing, and
+  the hash of the Keyset used in signing, and
 - a bitmap saying which DAC members signed, and
 - a BLS aggregated signature (over the BLS12-381 curve) proving that those parties signed.
 
@@ -43,6 +46,7 @@ In ordinary (non-AnyTrust) Nitro, the Arbitrum <a data-quicklook-from="sequencer
 AnyTrust provides the sequencer with two options for posting a data block on the parent chain: it can post the full data as described above, or it can post a DACert proving the availability of the data. The parent chain inbox contract will reject any DACert that uses an invalid Keyset; the child chain code checks the other aspects of DACert validity.
 
 The child chain code that reads data from the inbox reads a full data block, just like vanilla Nitro. If it sees a DACert instead, it checks the validity of the DACert regarding the Keyset specified by the DACert (which is known to be valid because the parent chain inbox has verified it). The child chain code verifies that:
+
 - The number of signers is at least the number required by the Keyset, and
 - The aggregated signature is valid for the claimed signers, and
 - The expiration time is at least two weeks after the current child chain timestamp.
@@ -50,7 +54,9 @@ The child chain code that reads data from the inbox reads a full data block, jus
 If the DACert is invalid, the child chain code discards the DACert and moves on to the next data block. If the DACert is valid, the child chain code reads the data block, which is guaranteed to be available because the DACert is valid.
 
 ## Data Availability Servers
+
 DAC members run Data Availability Server (DAS) software. The DAS exposes two APIs:
+
 - The Sequencer API, intended for use only by the Arbitrum chain's Sequencer, provides a JSON-RPC interface that enables the sequencer to submit data blocks to the DAS for storage. Deployments will typically block access to this API from callers other than the sequencer.
 - The REST API, designed to be accessible to the world, is a RESTful HTTP(S) protocol that enables data blocks to be fetched by hash. This API is fully cacheable, and deployments can utilize a caching proxy or CDN to increase scalability and protect against DoS attacks.
 
@@ -59,6 +65,7 @@ Only DAC members have reason to support the Sequencer API. We expect others to r
 The DAS software, based on configuration options, can store its data in local files, a Badger database, Amazon S3, or redundantly across multiple backing stores. The software also supports optional caching in memory (using Bigcache) or in a Redis instance.
 
 ## Sequencer-DAC interaction
+
 When the Arbitrum sequencer produces a data <a data-quicklook-from="batch">batch</a> that it wants to post using the DAC, it sends the batch's data, along with an expiration time (normally three weeks in the future) via RPC to all DAC members in parallel. Each DAC member stores the data in its backing store, indexed by the data's hash. Then, the member signs the (hash, expiration time) pair using its BLS key and returns the signature along with a success indicator to the sequencer.
 
 Once the sequencer has collected enough signatures, it can aggregate the signatures and create a valid DACert for the (hash, expiration time) pair. The sequencer then posts that DACert to the parent chain inbox contract, making it available to the AnyTrust chain software at the child chain.
