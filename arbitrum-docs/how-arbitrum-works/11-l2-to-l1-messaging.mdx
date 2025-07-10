@@ -36,7 +36,7 @@ Messages from child to parent are included in Arbitrum's Rollup state and finali
 
 ## Client flow (How to send and execute messages)
 
-### Sending a message from a child to parent chain
+### Sending a message from a child chain to the parent chain
 
 A contract or user sends a message from the child chain by calling:
 
@@ -53,7 +53,7 @@ After the seven-day <a data-quicklook-from="challenge">Challenge</a> period, if 
 
 :::note
 
-We refer to `NodeInterface` as a "virtual" contract; its methods are accessible via calls `0x00000000000000000000000000000000000000C8`, but it doesn't live onchain. It isn't a precompile but behaves like a precompile that can't receive calls from other contracts. This approach is a cute trick that lets us provide Arbitrum-specific data without implementing a custom RPC.
+We refer to `NodeInterface` as a "virtual" contract; its methods are accessible via calls `0x00000000000000000000000000000000000000C8`, but it doesn't live onchain. It isn't a precompile, but it behaves like one that can't receive calls from other contracts. This approach is a clever trick that allows us to provide Arbitrum-specific data without implementing a custom RPC.
 
 :::
 
@@ -67,9 +67,9 @@ We refer to `NodeInterface` as a "virtual" contract; its methods are accessible 
 - Calling `confirmNode` on the Rollup contract has constant gas overhead, regardless of the number of messages in the assertion.
 - This confirmation ensures malicious actors cannot grief the network by submitting assertions with many outgoing messages.
 
-### Why child to parent chain messages require manual execution
+### Why do the parent chain messages require manual execution
 
-Unlike [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx), which can execute automatically with pre-funded gas, child-to-parent chain message must undergo manual execution because Ethereum (parent chain) does not support scheduled execution.
+Unlike [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx), which can execute automatically with pre-funded gas, child-to-parent chain messages must undergo manual execution because Ethereum (parent chain) does not support scheduled execution.
 
 However, applications can implement execution markets that allow third parties to execute messages for a fee.
 
@@ -96,7 +96,7 @@ ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
 
 Upon withdrawing, the Ether balance is burnt on the child chain side and will later be made available on the parent chain side.
 
-`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain. Once the withdraw executes (removed from the outbox), the user's Ether balance will receive credit on the parent chain.
+`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain. Once the withdrawal executes (removed from the outbox), the user's Ether balance will receive credit on the parent chain.
 
 The following diagram depicts the process that funds follow during a withdrawal operation.
 
@@ -108,7 +108,7 @@ The following diagram depicts the process that funds follow during a withdrawal 
 
 ## `ERC-20` token withdrawal
 
-Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#token-bridging) section of Bridging from a parent chain to a child chain article. This section will explain how the Arbitrum canonical bridge works on the child-to-parent chain token bridging.
+Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#token-bridging) section of the Bridging from a parent chain to a child chain article. This section explains how the Arbitrum canonical bridge works for child-to-parent chain token bridging.
 
 1. Initiation of a child-to-parent chain transfer occurs via the `L2GatewayRouter` contract on the child chain.
 2. The token's gateway contract (`L2ArbitrumGateway`) on the child chain gets called.
@@ -120,9 +120,9 @@ Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and a
   className="img-800px"
 />
 
-For any given gateway pairing, calls have to be initiated through the corresponding router (`L2GatewayRouter`), and the gateways must conform to the `TokenGateway` interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
+For any given gateway pairing, calls must initiate through the corresponding router (`L2GatewayRouter`), and the gateways must conform to the `TokenGateway` interfaces. The `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
-Token withdrawals are the most common usage of child-to-parent chain messaging. The standard withdrawal happens as follows (for standard gateway):
+Token withdrawals are the most common usage of child-to-parent chain messaging. The standard withdrawal happens as follows (for the standard gateway):
 
 1. On the child chain, a user calls `L2GatewayRouter.outBoundTransfer`, which calls `outBoundTransfer` on `arbSomeERC20Token`'s gateway (i.e., `L2ERC20Gateway`).
 2. This call burns `arbSomeERC20Token` tokens and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will eventually execute on the parent chain.
