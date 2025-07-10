@@ -8,27 +8,28 @@ content_type: get-started
 ---
 
 <a data-quicklook-from="arbos">ArbOS</a> is the <a data-quicklook-from="child-chain">child chain</a> hypervisor
-that facilitates the execution environment of the child chain Arbitrum. ArbOS is a trusted "system glue"
-component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">
+that facilitates the execution environment of the child chain Arbitrum. ArbOS is a trusted "system glue" component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">
   State Transition Function
 </a> (STF). It accounts for and manages network resources, produces blocks from incoming messages and
 cross-chain messaging, and operates its instrumented instance of <a data-quicklook-from="geth">
   Geth
 </a> for <a data-quicklook-from="smart-contract">smart contract</a> execution.
 
-In Arbitrum, much of the work that would otherwise have to be done expensively on the <a data-quicklook-from="parent-chain">parent chain</a> gets completed by ArbOS, who will trustlessly perform these functions at the speed and low cost of the child chain.
+In Arbitrum, much of the work that would otherwise have to be done expensively on the <a data-quicklook-from="parent-chain">parent chain</a> gets completed by ArbOS, which will trustlessly perform these functions at the speed and low cost of the child chain.
 
-Supporting these functions in the child chain trusted software, rather than building them into the parent chain-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at the child chain, instead of having to manage those resources as part of a parent chain contract. Having a trusted operating system at the child chain also has significant advantages in flexibility because the child chain code is easier to evolve or to customize for a particular chain than a parent chain enforced architecture would be.
+Supporting these functions in the child chain trusted software, rather than building them into the parent chain-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at the child chain, instead of having to manage those resources as part of a parent chain contract. Having a trusted operating system at the child chain also has significant advantages in flexibility, as the child chain code is easier to evolve or customize for a particular chain than a parent chain's enforced architecture would be.
 
 ## Precompiles
 
-ArbOS provides child chain-specific precompiles with methods smart contracts can call the same way they can Solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a full reference of the precompiles available in Arbitrum chains.
+ArbOS provides child chain-specific precompiles with methods that smart contracts can call the same way they call Solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a complete reference of the precompiles available in Arbitrum chains.
 
 A precompile consists of a Solidity interface in `contracts/src/precompiles/` and a corresponding Golang implementation in `precompiles/`. Using Geth's ABI generator, `solgen/gen.go` generates `solgen/go/precompilesgen/precompilesgen.go`, which collects the ABI data of the precompiles. The [runtime installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses this generated file to check the type safety of each precompile's implementer.
 
-[The installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses runtime reflection to ensure each implementer has all the right methods and signatures. This reflection includes restricting access to stateful objects like the EVM and `statedb` based on the declared purity. Additionally, the installer verifies and populates event function pointers to provide each precompile the ability to emit logs and know their gas costs. Additional configuration, like restricting a precompile's methods to only be callable by chain owners is possible by adding precompile wrappers like `ownerOnly` and `debugOnly` to their [installation entry](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L403).
+[The installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses runtime reflection to ensure each implementer has all the right methods and signatures. This reflection involves restricting access to stateful objects, such as the EVM and `statedb`, based on the declared purity. Additionally, the installer verifies and populates event function pointers, providing each precompile with the ability to emit logs and determine their gas costs. 
 
-Completion of calling, dispatching, and recording of precompile methods occurs via runtime reflection, which avoids any human error manually parsing and writing bytes could introduce, and uses Geth's stable APIs for [packing and unpacking](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L438) values.
+Restricting a precompile's methods to only be callable by chain owners is possible by adding precompile wrappers like `ownerOnly` and `debugOnly` to their [installation entry](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L403).
+
+Completion of calling, dispatching, and recording of precompile methods occurs via runtime reflection, which avoids any human error that manually parsing and writing bytes could introduce, and uses Geth's stable APIs for [packing and unpacking](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L438) values.
 
 Each time a <a data-quicklook-from="transaction">transaction</a> calls a method of a child chain-specific precompile, a [`call context`](https://github.com/OffchainLabs/nitro/blob/f11ba39cf91ee1fe1b5f6b67e8386e5efd147667/precompiles/context.go#L26) gets created to track and record the gas burnt. For convenience, it also provides access to the public fields of the underlying [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38). Because sub-transactions could revert without updates to this struct, the `TxProcessor` only makes public what is safe, such as the amount of parent chain calldata paid by the top-level transaction.
 
@@ -38,22 +39,22 @@ Refer to the [precompiles reference](/build-decentralized-apps/precompiles/02-re
 
 ## Messages
 
-An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming sequencer message. A message includes one or more user transactions depending on load and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, ultimately, the relationship is still bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that made it. A sequencer batch may contain more than one `L1IncomingMessage`.
+An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming sequencer message. A message includes one or more user transactions, depending on load, and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, ultimately, the relationship remains bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that contributed to its creation. A sequencer batch may contain more than one `L1IncomingMessage`.
 
 ## Retryables
 
-A retryable is a special message type for creating atomic parent chain to child chain messages; for details, see [parent-to-child chain messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+A retryable is a special message type for creating atomic parent-to-child chain messages; for details, see [parent-to-child chain messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
 ## ArbOS state
 
 ArbOS's state is viewed and modified via [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36) objects, which provide convenient abstractions for working with the underlying data of its [`backingStorage`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L51). The backing storage's [keyed subspace strategy](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L21) makes [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36)'s convenient getters and setters possible, minimizing the need to work directly with the specific keys and values of the underlying storage's [`stateDB`](https://github.com/OffchainLabs/go-ethereum/blob/0ba62aab54fd7d6f1570a235f4e3a877db9b2bd0/core/state/statedb.go#L66).
 
-Because two [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36) objects with the same [`backingStorage`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L51) contain and mutate the same underlying state, different `ArbosState` objects can provide different views of ArbOS's contents. [`Burner`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/burn/burn.go#L11) objects, which track gas usage while working with the `ArbosState`, provide the internal mechanism. Some are read-only, causing transactions to revert with `vm.ErrWriteProtection` upon a mutating request. Others demand the caller have elevated privileges. Meanwhile, others dynamically charge users when doing stateful work. This view is chosen for safety when [`OpenArbosState()`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L57) creates the object and may never change.
+Because two [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36) objects with the same [`backingStorage`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L51) contain and mutate the same underlying state, different `ArbosState` objects can provide different views of ArbOS's contents. [`Burner`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/burn/burn.go#L11) objects, which track gas usage while working with the `ArbosState`, provide the internal mechanism. Some are read-only, causing transactions to revert with `vm.ErrWriteProtection` when a mutating request gets made. Others demand that the caller have elevated privileges. Meanwhile, others dynamically charge users when doing stateful work. This view is chosen for safety when [`OpenArbosState()`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L57) creates the object and may never change.
 
-Must of ArbOS's state exists to facilitate its [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). The parts that aren't are detailed below.
+Most of ArbOS's state exists to facilitate its [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). The parts that aren't are detailed below.
 
 [`arbosVersion`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L37), [`updgradeVersion`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L38) and [`upgradeTimestamp`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L39)
-ArbOS upgrades are scheduled to happen [when finalizing the first block](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L350) after the `upgradeTimestamp`.
+ArbOS schedules upgrades [when finalizing the first block](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L350) after the `upgradeTimestamp`.
 
 ### [`blockhashes`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/blockhash/blockhash.go#L15)
 
@@ -63,11 +64,11 @@ This component maintains the last 256 parent chain block hashes in a circular bu
 
 In addition to supporting the [`ArbAggregator precompile`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator), the parent chain pricing state provides tools for determining the parent chain component of a transaction's gas costs. This part of the state tracks the total amount of funds collected from transactions in parent chain gas fees and the funds spent by batch posters to post data breaches on the parent chain.
 
-Based on this information, ArbOS maintains a parent chain data fee, which is also tracked as part of this state, determining how much transaction fees will cost for parent chain fees. ArbOS dynamically adjusts this value so that fees collected are approximately equal to batch posting costs.
+Based on this information, ArbOS maintains a parent chain data fee, which is also tracked as part of this state, determining the cost of parent chain fees for transactions. ArbOS dynamically adjusts this value to ensure that the fees collected are approximately equal to the batch posting costs.
 
 ## Parent chain pricing model
 
-Efficient handling of parent chain gas costs is crucial for the Arbitrum network's scalability and economic sustainability. The Sequencer implements a dynamic parent chain pricing model to ensure that fees collected from transactions closely match the actual costs incurred when posting data to the parent chain. This section details the challenges in pricing parent chain resources, how fees are collected and allocated, and how the system adjusts to maintain equilibrium over time.
+Efficient handling of parent chain gas costs is crucial for the Arbitrum network's scalability and economic sustainability. The Sequencer implements a dynamic parent chain pricing model to ensure that fees collected from transactions closely match the actual costs incurred when posting data to the parent chain. This section outlines the challenges in pricing parent chain resources, the process of collecting and allocating fees, and how the system adjusts to maintain equilibrium over time.
 
 ## Challenges in pricing parent chain resources
 
@@ -107,19 +108,19 @@ To overcome these challenges, Arbitrum's Nitro implements a two-fold strategy:
 
 :::info
 
-For a complete breakdown of adaptive fees and costs refer to the [Gas-fees document](/how-arbitrum-works/09-gas-fees.mdx).
+For a complete breakdown of adaptive fees and costs, refer to the [Gas-fees document](/how-arbitrum-works/09-gas-fees.mdx).
 
 :::
 
 ## Child chain tips
 
-The Sequencer prioritizes transactions on a first-come, first-served basis. Because tips do not make sense in this model, they are ignored. Arbitrum users always pay the basefee regardless of the tip they choose.
+The Sequencer prioritizes transactions on a first-come, first-served basis. Because tips do not make sense in this model, they get ignored. Arbitrum users always pay the basefee regardless of the tip they choose.
 
 ## Gas estimating retryables
 
-When a transaction schedules another, the subsequent transaction's execution [will be included](https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999) when estimating gas via the node's RPC. Finding a gas estimate for a transaction is only possible if all the transactions succeed at a given gas limit. This estimation is especially important when working with retryables and scheduling `redeem` attempts.
+When a transaction schedules another, the subsequent transaction's execution [will be included](https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999) when estimating gas via the node's RPC. Finding a gas estimate for a transaction is only possible if all the transactions succeed at a given gas limit. This estimation is fundamental when working with retryables and scheduling `redeem` attempts.
 
-Because a call to `redeem` donates all of the call's gas, doing multiple requires limiting the amount of gas provided to each sub-call. Otherwise, the first will take all of the gas and force the second to fail, irrespective of the estimation's gas limit.
+Because a call to `redeem` donates all of the call's gas, doing multiple calls requires limiting the amount of gas provided to each sub-call. Otherwise, the first will take all of the gas and force the second to fail, irrespective of the estimation's gas limit.
 
 Gas estimation for retryable submissions is possible via the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) and similarly requires the auto-redeem attempt to succeed.
 
@@ -127,6 +128,6 @@ Gas estimation for retryable submissions is possible via the [`NodeInterface`](/
 
 The security of Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">validator</a> creates an <a data-quicklook-from="assertion">assertion</a>, other validators will check it and respond with a correct assertion and a <a data-quicklook-from="challenge">challenge</a> if it is wrong. This assumption requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for assertions.
 
-This approach sets an effective speed limit on execution of a Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit enforced by the Rollup protocol contracts on how far a deadline can be in the future, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
+This approach sets a practical speed limit on the execution of a Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will become increasingly distant in the future. Due to the limit enforced by the Rollup protocol contracts on how far a deadline can be in the future, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
 
-Being able to set the speed limit accurately depends on being able to estimate the time required to validate an assertion, with some accuracy. Any uncertainty in estimating validation time will force us to lower the speed limit to be safe. We do not want to lower the speed limit, so we try to enable accurate estimation.
+Being able to set the speed limit accurately depends on accurately estimating the time required to validate an assertion. Any uncertainty in estimating the validation time will force us to lower the speed limit to ensure safety. We do not want to reduce the speed limit, so we try to enable accurate estimation.
