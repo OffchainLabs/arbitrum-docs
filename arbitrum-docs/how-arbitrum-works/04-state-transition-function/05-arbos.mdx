@@ -8,7 +8,8 @@ content_type: get-started
 ---
 
 <a data-quicklook-from="arbos">ArbOS</a> is the <a data-quicklook-from="child-chain">child chain</a> hypervisor
-that facilitates the execution environment of the child chain Arbitrum. ArbOS is a trusted "system glue" component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">
+that facilitates the execution environment of the child chain Arbitrum. ArbOS is a trusted "system glue"
+component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">
   State Transition Function
 </a> (STF). It accounts for and manages network resources, produces blocks from incoming messages and
 cross-chain messaging, and operates its instrumented instance of <a data-quicklook-from="geth">
@@ -25,7 +26,7 @@ ArbOS provides child chain-specific precompiles with methods that smart contract
 
 A precompile consists of a Solidity interface in `contracts/src/precompiles/` and a corresponding Golang implementation in `precompiles/`. Using Geth's ABI generator, `solgen/gen.go` generates `solgen/go/precompilesgen/precompilesgen.go`, which collects the ABI data of the precompiles. The [runtime installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses this generated file to check the type safety of each precompile's implementer.
 
-[The installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses runtime reflection to ensure each implementer has all the right methods and signatures. This reflection involves restricting access to stateful objects, such as the EVM and `statedb`, based on the declared purity. Additionally, the installer verifies and populates event function pointers, providing each precompile with the ability to emit logs and determine their gas costs. 
+[The installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses runtime reflection to ensure each implementer has all the right methods and signatures. This reflection involves restricting access to stateful objects, such as the EVM and `statedb`, based on the declared purity. Additionally, the installer verifies and populates event function pointers, providing each precompile with the ability to emit logs and determine their gas costs.
 
 Restricting a precompile's methods to only be callable by chain owners is possible by adding precompile wrappers like `ownerOnly` and `debugOnly` to their [installation entry](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L403).
 
