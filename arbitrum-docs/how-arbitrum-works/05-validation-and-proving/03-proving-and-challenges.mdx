@@ -9,7 +9,7 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-This document details the mechanisms for proving correct execution and resolving disputes in the Rollup Protocol. It explains how the system separates ordinary execution from proving, transforms <a data-quicklook-from="wasm">WASM</a> into a specialized proving format (WAVM), and employs interactive fraud proofs to resolve disputes efficiently.
+This document outlines the mechanisms for proving correct execution and resolving disputes within the Rollup Protocol. It explains how the system separates ordinary execution from proving, transforms <a data-quicklook-from="wasm">WASM</a> into a specialized proving format (WAVM), and employs interactive fraud proofs to resolve disputes efficiently.
 
 ## 1. Separating execution from proving
 
@@ -36,7 +36,7 @@ WAVM is a modified version of WASM designed to meet the needs of fraud proofs. T
     - WAVM removes some WASM features that the Go compiler never generates. The transformation phase ensures these features are absent.
   - **Restrictions on certain features**:
     - Floating-point instructions: WAVM does not contain floating-point instructions. Instead, any floating-point operations get replaced by calls to the Berkeley SoftFloat library.
-      - Rationale: Using software floating-point libraries reduces the risk of incompatibilities between different architecture.
+      - Rationale: Using software floating-point libraries reduces the risk of incompatibilities between different architectures.
   - **Nested control flow**:
     - WAVM flattens control flow constructs by converting them into jump instructions.
   - **Variable-time instructions**:
@@ -47,7 +47,7 @@ WAVM is a modified version of WASM designed to meet the needs of fraud proofs. T
 
 ## 3. `ReadPreImage` and the hash oracle trick
 
-An interesting instruction in WAVM is `ReadPreImage`, which the "hash oracle trick" uses. This mechanism works as follows:
+An interesting instruction in WAVM is `ReadPreImage`, utilized by the "hash oracle trick". This mechanism works as follows:
 
 - **Functionality of `ReadPreImage`**:
   - **Input**: A hash `H` and an offset `I`.
@@ -71,7 +71,7 @@ This "hash oracle trick" originates from the original <a data-quicklook-from="ar
 
 ## 4. Resolving disputes using interactive fraud proofs
 
-Disputes resolution in Optimistic Rollups is a critical design decision. The protocol must decide which execution version is correct when two parties disagree.
+Dispute resolution in Optimistic Rollups is a critical design decision. The protocol must decide which execution version is correct when two parties disagree.
 
 ### 4.1 Overview of dispute resolution
 
@@ -79,7 +79,7 @@ Disputes resolution in Optimistic Rollups is a critical design decision. The pro
   - Assume that assertions about execution are correct unless challenged.
 - **Dispute Resolution Options**:
   - **Interactive proving**:
-    - Parties engage in a challenge game to narrow down the dispute executed steps.
+    - Parties engage in a challenge game to narrow down the disputed execution steps.
   - **Re-executing transactions**:
     - The <a data-quicklook-from="parent-chain">parent chain</a> re-executes transactions, checking each state transition.
 
@@ -109,7 +109,7 @@ Arbitrum favors interactive proving due to its efficiency and flexibility.
      - Bob challenges the assertion.
      - Alice then provides two sub-assertions, each covering `N/2` steps.
    - **Subsequent rounds**:
-     - Bob chooses one half to challenge, and the process repeats––halving the disputed steps until only a single instruction remains.
+     - Bob chooses one half to challenge, and the process repeats, halving the disputed steps until only a single instruction remains.
 3. **Final one-step proof**:
    - Once the dispute narrows to a single execution step, the parent chain referee verifies that one-step claim.
 
@@ -121,7 +121,7 @@ Arbitrum favors interactive proving due to its efficiency and flexibility.
   - Bob selects the half he disputes.
   - This iteration of the bisection continues until the dispute reaches a single instruction.
 
-#### Why bisection correctly identifies a cheater
+#### Why does bisection correctly identify a cheater
 
 1. **If Alice's claim is correct**:
    - Every bisection provides truthful intermediate states.
@@ -148,13 +148,13 @@ Interactive proving is more efficient in optimistic and pessimistic cases, as it
 
 ## 5. Interactive fraud proofs and the challenge protocol
 
-Interactive fraud proofs form the basis for resolving proposer disputes when conflicting assertions are made.
+Interactive fraud proofs are fundamental for resolving disputes among proposers when conflicting claims arise.
 
 ### 5.1 Dispute scenario
 
 - **Example setup**:
   - Suppose the Rollup chain includes assertions 93 and 95, which are siblings (both following assertion 92).
-  - Alice is bonded on assertion 93, while Bob is bonded on assertion 95.
+  - Alice is bonded on assertion 93, while Bob's bond is on assertion 95.
   - Bob's bonding on 95 implies that assertion 93 must be incorrect.
 - **Initiation of the challenge**:
   - An interactive challenge is initiated automatically when two proposers place bonds on sibling assertions.
@@ -166,11 +166,11 @@ Interactive fraud proofs form the basis for resolving proposer disputes when con
 1. **Bisection phase**:
    - The goal is to narrow the dispute to a single execution step.
    - At each stage, claims are bisected into smaller segments (first over child chain blocks, then over "big steps" of 2²⁶ instructions, and finally to a single instruction).
-   - The parent chain referee only checks that the moves have "the right shape" (e.g., that the bisection was performed correctly) without evaluating the correctness of execution.
+   - The parent chain referee only checks that the moves have "the right shape" (e.g., that the bisection occurred correctly) without evaluating the correctness of execution.
 2. **One-step proof phase**:
    - Once the dispute reduces to one instruction, any player can initiate the one-step proof.
    - The parent chain executes the disputed instruction using the proof data provided.
-   - If the one-step proof is correct, the disputed edge is confirmed, and the challenges resolves.
+   - If the one-step proof is correct, the disputed edge is confirmed, and the challenges resolve.
 
 ### 5.3 Efficiency considerations
 
@@ -179,9 +179,9 @@ Interactive fraud proofs form the basis for resolving proposer disputes when con
 - **Pessimistic case**:
   - Only one instruction is re-executed onchain during a dispute.
 - **Gas limits**:
-  - The interactive proving model can work with higher per-transaction gas limits since most work is done offchain.
+  - The interactive proving model can work with higher per-transaction gas limits since most work gets completed offchain.
 - **Implementation flexibility**:
-  - The system only requires verification a one-step proof onchain, rather than full transaction re-execution.
+  - The system only requires verification of a one-step proof onchain, rather than full transaction re-execution.
 
 ### 5.4 `ChallengeManager`: The arbiter
 
@@ -192,7 +192,7 @@ Interactive fraud proofs form the basis for resolving proposer disputes when con
 />
 
 - **Role**:
-  - The `ChallengeManager` contract arbitrates the challenge game.
+  - The `ChallengeManager` Contract arbitrates the challenge game.
   - It tracks assertion histories, timers, and state commitments.
 - **State machine**:
   - A state machine represents the challenge with several distinct phases:
@@ -208,7 +208,7 @@ Interactive fraud proofs form the basis for resolving proposer disputes when con
   - Winning is not instantaneous; a built-in time delay safeguards against erroneous challenge resolutions.
   - This delay allows time for diagnosing and correcting errors via contract upgrades if necessary.
 
-## 6. One-step proof assumptions
+## 6. One-step proof of assumptions
 
 The one-step proof (OSP) is the final arbiter of a single disputed instruction. Its design accounts for several key assumptions:
 
@@ -226,12 +226,12 @@ The one-step proof (OSP) is the final arbiter of a single disputed instruction. 
   - In challenges between malicious assertions, unreachable cases may occur and can be handled arbitrarily by the one-step proof.
 - **Safety in honest challenges**:
   - An honest party never needs to prove an unreachable case.
-  - If a dishonest party attempts to force an unreachable case, it will be preceded by an invalid reachable case, ensuring that the dishonest party eventually loses the challenge.
+  - If a dishonest party attempts to force an unreachable case, it will be preceded by an invalid reachable case, ensuring that the fraudulent party eventually loses the challenge.
 
 ### 6.3 Additional safety assumptions
 
 - **WAVM code validity**:
-  - The WAVM code produced by the arbitrator comes from valid WASM compile. It is checked using `wasm-validate` from the WebAssembly Binary Toolkit (WABT).
+  - The WAVM code produced by the arbitrator comes from a valid WASM compile. It gets checked using `wasm-validate` from the WebAssembly Binary Toolkit (WABT).
 - **Inbox message size**:
   - Inbox messages must be small enough (no larger than 117,964 bytes) to be fully available for proving.
 - **Preimage requests**:
@@ -260,7 +260,7 @@ Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transform
   - The nested control flow flattens into jumps.
   - Variable-time instructions transform into fixed-cost instructions.
 - **Added opcodes**:
-  - New opcodes additions for interacting with the blockchain (e.g., reading global state, fetching inbox messages, signaling completion).
+  - New opcode additions for interacting with the blockchain (e.g., reading global state, fetching inbox messages, signaling completion).
 
 ### 7.3 Translation of specific WASM constructs
 
@@ -268,7 +268,7 @@ Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transform
   - In WASM, blocks contain instructions and branch instructions for exiting blocks.
   - In WAVM, since instructions are flat, branch instructions are replaced with jumps to predetermined destinations.
 - **If and Else**:
-  - Translated into a block with an `ArbitraryJumpIf` instructions.
+  - Translated into a block with an `ArbitraryJumpIf` instruction.
     - **Structure example**:
       - Begin block with endpoint `end`
       - Conditional jump to `else` block
@@ -279,7 +279,7 @@ Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transform
 - **Branch instructions (`br` and `br_if`)**:
   - Translated into `ArbitraryJump` and `ArbitraryJumpIf` with jump destinations known at compile time.
 - **Branch table (`br_table`)**:
-  - Translated to a series of conditional checks for each possible branch, with a default branch if no conditions are met.
+  - Translated to a series of conditional checks for each possible branch, with a default branch when no conditional matches occur.
 - **`Local.tee`**:
   - Implemented by duplicating the local value (using a `Dup` opcode) followed by a `LocalSet`.
 - **Return**:
@@ -294,7 +294,7 @@ Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transform
 
 ### 7.4 WAVM custom opcodes not in WASM
 
-WAVM includes several unique opcodes that simplifying proving. They breakdown into several categories:
+WAVM includes several unique opcodes that simplify proving. They break down into several categories:
 
 #### Invariants and Codegen internal opcodes
 
@@ -344,11 +344,11 @@ WAVM includes several unique opcodes that simplifying proving. They breakdown in
 
 ## 8. WAVM floating-point implementation
 
-Floating-point operations in WAVM are handled differently to ensure determinism and consistency:
+Floating-point operations in WAVM get handled differently to ensure determinism and consistency:
 
 - **Implementation using Berkeley SoftFloat**:
-  - Instead of implementation IEEE 754-2019 directly in WAVM, floating-point instructions are replaced with calls to the Berkeley SoftFloat-3e library.
-  - The soft float library is linked, and floating-point operations are implemented via cross-module calls.
+  - Instead of implementing IEEE 754-2019 directly in WAVM, floating-point instructions are replaced with calls to the Berkeley SoftFloat-3e library.
+  - The soft float library is linked, and floating-point operations get implemented via cross-module calls.
 - **Known divergences**:
   - For example, floating-point to integer truncation will saturate on overflow (instead of erroring), which is safer and more consistent with x86 behavior.
   - These divergences follow proposals (e.g., saturating opcodes) that are not yet widely adopted.
@@ -367,7 +367,7 @@ WASM's notion of modules is extended in WAVM to support multi-module programs. T
     - **For Go**:
       - Sets `argv` to `["js"]` (to mimic the JS environment) and calls `run`.
     - **For Rust**:
-      - Simply calls `main` with no arguments.
+      - Calls `main` with no arguments.
 
 ### 9.2 Library exports
 
@@ -387,32 +387,32 @@ WASM's notion of modules is extended in WAVM to support multi-module programs. T
 ### 9.4 Caller module internals call
 
 - **Purpose**:
-  - Each stack frame retains information about the caller module and its internals offset.
+  - Each stack frame retains information about the caller module and its internal offset.
 - **Implementation**:
   - WAVM appends four "internal" functions to each module that perform small memory load or store operations.
   - Libraries use opcodes such as `wavm_caller_{load,store}{8,32}` to access their caller's memory.
-  - Only libraries can access their caller's memory; restrictions prevent the main module from doing so.
+  - Only libraries can access their callers' memory; restrictions prevent the main module from doing so.
 
 ## 10. Stylus proving and fraud detection
 
 <a data-quicklook-from="stylus">Stylus</a> introduces an execution path alongside the EVM, enabling <a data-quicklook-from="smart-contract">
   smart Contract
-</a> execution in WebAssembly (WASM). Given that Stylus program are fraud-proven directly rather than
-interpreted via Geth's EVM implementation––the proving mechanism required modifications to the standard
+</a> execution in WebAssembly (WASM). Given that Stylus programs are fraud-proven directly rather than
+interpreted via Geth's EVM implementation–the proving mechanism required modifications to the standard
 Arbitrum proving architecture.
 
 ### 10.1 Proving Stylus programs
 
-Unlike EVM-based contracts, Stylus programs are dynamically linked into the replay machine when proving fraud. This is achieved through two key opcodes:
+Unlike EVM-based contracts, Stylus programs are dynamically linked into the replay machine when proving fraud. This linking is possible with two key opcodes:
 
 - **`LinkModule`**: Loads the Stylus contract's WASM module into the replay machine.
 - **`UnlinkModule`**: Removes the module once execution completes.
 
-These opcodes ensure that Stylus contracts are treated as part as part of the replay machine, allowing for precise fraud-proof bisection at the WASM level.
+These opcodes ensure that Stylus contracts are treated as part of the replay machine, allowing for precise, fraud-proof bisection at the WASM level.
 
 ### 10.2 Execution-proving separation
 
-Stylus leverages Arbitrum's execution-proving separation, where the replay machine runs in WAVM, and disputes over Stylus transactions follow the standard interactive fraud-proof protocol (<a data-quicklook-from="bold">BoLD</a>), which means:
+Stylus leverages Arbitrum's separation of execution and proving, where the replay machine runs in WAVM. Disputes over Stylus transactions follow the standard interactive fraud-proof protocol (<a data-quicklook-from="bold">BoLD</a>), which means:
 
 1. A challenge initiates if a <a data-quicklook-from="validator">validator</a> disputes the execution of a Stylus transaction.
 2. The dispute narrows to a single WAVM opcode via the bisection protocol.
