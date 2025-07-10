@@ -7,7 +7,7 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-The validation and proving mechanism in <a data-quicklook-from="arbitrum">Arbitrum</a> ensures the integrity of offchain execution while maintaining Ethereum's security guarantees. As an Optimistic Rollup, Arbitrum assumes that transactions execute correctly unless challenged. Arbitrum employs interactive fraud proofs to resolve conflicts efficiently, if a dispute arises.
+The validation and proving mechanism in <a data-quicklook-from="arbitrum">Arbitrum</a> ensures the integrity of offchain execution while maintaining Ethereum's security guarantees. As an Optimistic Rollup, Arbitrum assumes that transactions execute correctly unless challenged. Arbitrum utilizes interactive fraud proofs to resolve conflicts efficiently in the event of a dispute.
 
 At the core of Arbitrum's validation model is the separation of execution and proving: transactions execute optimistically, while state transitions can be verified onchain if necessary. Arbitrum achieves this through WAVM (WebAssembly for Arbitrum Virtual Machine), a modified <a data-quicklook-from="wasm">WASM</a> format optimized for proving, and the <a data-quicklook-from="bold">BoLD</a> dispute protocol, which resolves disagreements using an interactive, multi-round <a data-quicklook-from="challenge">challenge</a> system.
 
