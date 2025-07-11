@@ -7,6 +7,7 @@ sme: Midroni, TucksonDev
 user_story: As a current Arbitrum chain owner, I need to learn how to set up an AEP fee router.
 content_type: how-to
 ---
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
@@ -24,7 +25,7 @@ You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](ht
 
 ## The AEP fee router contract system
 
-This section describes the different fee distribution and router contracts that are available. You can find their source code [here](https://github.com/OffchainLabs/fund-distribution-contracts/tree/main/src/FeeRouter).
+This section describes the different fee distribution and router contracts that are available. You can find their source code in the [fund distribution contracts repository](https://github.com/OffchainLabs/fund-distribution-contracts/tree/main/src/FeeRouter).
 
 ### RewardDistributor
 
@@ -49,14 +50,14 @@ This includes:
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
 - Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
 
-In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts).
+In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can [see which networks have a router deployed](#canonical-contracts).
 
-<aside>
+<VanillaAdmonition type="note"  title="Note about custom gas tokens">
 🚨 Layer-3 chains with custom gas tokens with L2-based token contracts cannot send their custom gas tokens to Ethereum. A future version of the AEP Fee Router may allow Arbitrum chains with L2-based tokens to distribute fees using the routing system.
 
 In the absence of these, please send `ETH` through the AEP Fee Router to fulfill your AEP license obligations.
 
-</aside>
+</VanillaAdmonition>
 
 Here are a few flows to help visualize the deployment:
 
