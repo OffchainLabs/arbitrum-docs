@@ -1,0 +1,127 @@
+---
+title: 'Reporting on Fees'
+sidebar_label: 'Report on Fees'
+description: 'Learn how to setup an AEP fee router.'
+author: gmehta2
+sme: Jason-W123 
+user_story: As a current Arbitrum chain owner, I need to learn how to report on fees.
+content_type: how-to
+---
+
+As a RaaS or Chain Owner, if you require internal daily reporting on fees, we have an [RPC script you can leverage for reporting purposes](https://github.com/yahgwai/aep-fee-tracker/).
+
+## Fee Collection System Overview 
+
+### 1. Fee Collector Address Types (L1 Focus)
+
+There are two main L1 fee collector addresses:
+
+1. **L1 Base Fee** - Refunds batch poster for parent chain posting costs
+2. **L1 Surplus** - Collects profit on batch posting fees
+
+#### Important Distinction:
+
+- L1 Base Fee = Cost recovery only (NOT for profit)
+- L1 Surplus = Profit collection
+- Using L1 Base Fee for profit indicates misconfiguration
+
+### 2. How the System Works (Same Gas Token Scenario)
+
+#### Transaction Flow:
+
+1. Users send transactions on the child chain
+2. Transactions are packaged into batches
+3. Batch poster sends batches to parent chain (paying parent chain gas)
+4. Batch posting reports are generated containing:
+    - Batch size
+    - Gas price used
+
+#### Fee Recovery Mechanism:
+
+1. ArboS consumes batch posting reports
+2. Creates gas price view of parent chain on child chain
+3. Uses this view for pricing future transactions
+4. Implements balancing mechanism to ensure:
+    - Amount collected in L1 base fee ≈ Amount spent on batch posting
+    - Uses estimates that average out over time
+
+### 3. Custom Gas Token Scenario (Different tokens on parent/child chains)
+
+#### Transaction Flow:
+
+1. Users send transactions on the child chain
+2. Transactions are packaged into batches
+3. Batch poster sends batches to parent chain (paying parent chain gas)
+4. **Fee token price setter mechanism scales the gas price by the exchange rate**
+5. Batch posting reports are generated containing:
+    - Batch size
+    - Gas price used **(scaled by the exchange rate)**
+
+#### Fee Recovery Mechanism:
+
+Same as the same gas token scenario, but uses the gas price from the batch posting report that was already scaled by the exchange rate.
+
+#### The Exchange Rate Problem:
+
+- Batch poster spends in parent chain gas units
+- Gets refunded in child chain gas units
+- Creates exchange rate risk
+- Should NOT set artificially high exchange rate for profit
+
+### 4. Monitoring Tool Requirements
+
+#### Purpose:
+
+Detect if operators have misconfigured the L1 base fee mechanism (using it for profit by manipulating exchange rates)
+
+#### Cost Calculation (Same for All Revenue Methods):
+
+- Parent chain tokens spent = gas used × gas price (from batch posting report)
+- Plus percentage for exchange transaction costs
+
+#### Revenue Calculation Methods:
+
+#### Method 1 - Exchange Rate Analysis (Parent Chain Only):
+
+- **Revenue Calculation**:
+    - Simulated revenue = gas used × gas price (from batch posting report)
+    - Note: This gas price has already been adjusted by the fee token pricer mechanism
+    - This represents the child chain tokens that will be collected from users
+- **Data Source**: Batch posting reports only
+- **Process**:
+    1. Extract gas used and scaled gas price from batch posting report
+    2. Calculate simulated revenue in child chain tokens
+    3. Compare against actual costs in parent chain tokens (using ideal exchange rate)
+- **Advantage**: Lightweight - only needs parent chain data
+
+#### Method 2 - Direct Balance Tracking (Child Chain):
+
+- **Revenue**: Actual amount collected in L1 base fee collector address
+- **Data Source**: Child chain L1 base fee address balance
+- **Process**: Track actual collected amounts
+- **Advantage**: More accurate - uses real collection data
+
+**Note**: Method 1 and Method 2 should be roughly equivalent over the long term.
+
+#### Analysis Criteria (Both Must Be Met):
+
+1. **Volume Threshold**
+    - Check the total value in batch posting reports
+    - Must be above threshold (filters out small chains with low volume)
+2. **Cost vs Revenue Deviation**
+    - Calculate the deviation between revenue and estimated costs
+    - Use either Method 1 or Method 2 for revenue
+    - Must exceed the deviation threshold
+
+**If both criteria are met → indicates misconfiguration**
+
+### Implementation Details:
+
+#### Exchange Rate Sources:
+
+- Use third-party sources for "ideal" exchange rates (e.g., CoinGecko, CoinMarketCap, etc.)
+
+#### Output:
+
+- The tool generates a simple report showing exchange rate deviations.
+- If both criteria are met, contact the chain owner to inform them that they need to use a better pricing mechanism
