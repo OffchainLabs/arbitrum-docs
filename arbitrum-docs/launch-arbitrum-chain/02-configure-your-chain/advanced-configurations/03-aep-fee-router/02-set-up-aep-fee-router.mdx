@@ -8,6 +8,8 @@ user_story: As a current Arbitrum chain owner, I need to learn how to set up an 
 content_type: how-to
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 ## Quick start
 
 You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
@@ -58,11 +60,9 @@ In the absence of these, please send `ETH` through the AEP Fee Router to fulfill
 
 Here are a few flows to help visualize the deployment:
 
-Scenario 1: You are an L2 Arbitrum Chain that settles on Ethereum.
+<ImageZoom src="/img/arb-chain-aep-scenario-1.svg" alt="AEP scenario 1" className="img-800px" />
 
-Scenario 2: You are an L3 Arbitrum Chain that settles to another L2. The custom gas token you are using exists on L1.
-
-Scenario 3: You are an L3 Arbitrum Chain that settles to another L2. The custom gas token doesn't exist on L1.
+<ImageZoom src="/img/arb-chain-aep-scenario-2.svg" alt="AEP scenario 2" className="img-800px" />
 
 ## Deployment scripts
 
