@@ -97,7 +97,7 @@ async function updateLunrExcludeRoutes(newRoutes: string[]): Promise<void> {
   const indentMatch = currentRoutesString.match(/^\s+/m);
   const indent = indentMatch ? indentMatch[0] : '          ';
 
-  const allRoutes = [...new Set(newRoutes)].sort();
+  const allRoutes = Array.from(new Set(newRoutes)).sort();
 
   let formattedRoutesString;
   if (allRoutes.length === 0) {
@@ -148,29 +148,30 @@ async function updateLunrExcludeRoutes(newRoutes: string[]): Promise<void> {
 // Helper to get the route for a markdown file
 function getRouteFromFile(file: string): string | null {
   let rel = path.relative(DOCS_ROOT, file).replace(/\\/g, '/');
-  rel = rel.replace(/\.(md|mdx)$/, '');
 
-  // Your existing logic:
   // Remove leading partials/_ or _category_ files
   if (rel.startsWith('partials/') || rel.endsWith('_category_')) return null;
 
-  // Add more Docusaurus-like conventions:
+  // Remove the file extension
+  rel = rel.replace(/\.(md|mdx)$/, '');
+
+  // Remove leading numbers like '01-', '02-', '04-', etc. from each path segment
+  // This matches how Docusaurus processes numbered prefixes
+  rel = rel.replace(/\d{2,3}-/g, '');
+
+  // Handle index files
   if (rel.endsWith('/index')) {
-    rel = rel.substring(0, rel.length - 'index'.length); // 'foo/index' -> 'foo/'
+    rel = rel.substring(0, rel.length - '/index'.length);
   }
   if (rel === 'index') {
-    rel = '/'; // Root index file
+    rel = '/';
   }
-  // Ensure consistent trailing slash for "directory" routes, and no trailing slash for specific files.
-  // This needs to match how routes are stored in docusaurus.config.js.
-  // For now, this will produce: 'path/to/doc', 'path/to/dir/', '/'
-  // If your config uses 'path/to/dir' (no trailing slash), adjust accordingly.
-  // The current version of your code (before this edit) produced 'path/to/doc' and 'path/to/dir/index'.
-  // Let's stick to your original simpler output, as it was provided:
-  // return rel; // This was your original return.
-  // Reverting to your simpler logic to minimize unexpected changes for your setup:
-  // The key is that this output must match the format of routes in `excludeRoutes`.
-  // If `arbitrum-docs/foo/index.md` should be `foo/index` in `excludeRoutes`, this is fine.
+
+  // Add leading slash to match the format used in docusaurus.config.js
+  if (!rel.startsWith('/')) {
+    rel = '/' + rel;
+  }
+
   return rel;
 }
 
@@ -202,7 +203,7 @@ async function main() {
     }
   }
 
-  const finalTargetExcludedRoutes = [...new Set(targetActuallyTaggedRoutes)].sort();
+  const finalTargetExcludedRoutes = Array.from(new Set(targetActuallyTaggedRoutes)).sort();
 
   const routesToAdd = finalTargetExcludedRoutes.filter(
     (r) => !currentConfigExcludedRoutes.includes(r),
