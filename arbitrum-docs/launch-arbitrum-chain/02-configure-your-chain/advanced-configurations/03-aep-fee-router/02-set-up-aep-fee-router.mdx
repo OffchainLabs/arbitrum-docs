@@ -32,7 +32,9 @@ This section describes the different fee distribution and router contracts that 
 
 The **AEP fee router** system relies on configuring an escrow contract as the intended reward address for protocol fee components. This intermediary contract is known as the `RewardDistributor.`
 
-The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. The `RewardDistributor` can be permissionlessly called to perform a withdrawal which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
+The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. A `rewardDistributor` will be deployed in 3 instances to collect from `L2Surplus`, `L2BaseFee`, `L1surplus` addresses.
+
+The `RewardDistributor` can be *permissionlessly* called to perform a withdrawal, which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
 
 ### ChildToParentRouter
 
