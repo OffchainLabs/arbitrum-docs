@@ -341,7 +341,7 @@ async function generateFiles() {
     renderJSONFAQStructuredData(cmsContents.orbitFAQs)
   )
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-orbit-partial.mdx',
+    '../arbitrum-docs/partials/_troubleshooting-arbitrum-chain-partial.mdx',
     renderFAQs(cmsContents.orbitFAQs)
   )
 
