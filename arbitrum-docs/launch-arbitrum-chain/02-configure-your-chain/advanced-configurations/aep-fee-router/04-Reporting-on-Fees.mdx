@@ -8,6 +8,8 @@ user_story: As a current Arbitrum chain owner, I need to learn how to report on 
 content_type: how-to
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 As a RaaS or Chain Owner, if you require internal daily reporting on fees, we have an [RPC script you can leverage for reporting purposes](https://github.com/yahgwai/aep-fee-tracker/).
 
 ## Fee Collection System Overview
@@ -125,3 +127,9 @@ Detect if operators have misconfigured the L1 base fee mechanism (using it for p
 
 - The tool generates a simple report showing exchange rate deviations.
 - If both criteria are met, contact the chain owner to inform them that they need to use a better pricing mechanism
+
+<VanillaAdmonition type="info">
+
+As a RaaS, if you want to dispute the fees, you can contact the Arbitrum Foundation to review your fees.
+
+</VanillaAdmonition>
