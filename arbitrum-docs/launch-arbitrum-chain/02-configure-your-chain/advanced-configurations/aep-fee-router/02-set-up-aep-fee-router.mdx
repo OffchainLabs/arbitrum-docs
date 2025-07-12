@@ -8,6 +8,10 @@ user_story: As a current Arbitrum chain owner, I need to learn how to set up an 
 content_type: how-to
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
 ## Quick start
 
 You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
@@ -22,13 +26,15 @@ You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](ht
 
 ## The AEP fee router contract system
 
-This section describes the different fee distribution and router contracts that are available. You can find their source code [here](https://github.com/OffchainLabs/fund-distribution-contracts/tree/main/src/FeeRouter).
+This section describes the different fee distribution and router contracts that are available. You can find their source code in the [fund distribution contracts repository](https://github.com/OffchainLabs/fund-distribution-contracts/tree/main/src/FeeRouter).
 
 ### RewardDistributor
 
 The **AEP fee router** system relies on configuring an escrow contract as the intended reward address for protocol fee components. This intermediary contract is known as the `RewardDistributor.`
 
-The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. The `RewardDistributor` can be permissionlessly called to perform a withdrawal which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
+The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. A `rewardDistributor` will be deployed in 3 instances to collect from `L2Surplus`, `L2BaseFee`, `L1surplus` addresses.
+
+The `RewardDistributor` can be _permissionlessly_ called to perform a withdrawal, which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
 
 ### ChildToParentRouter
 
@@ -47,34 +53,37 @@ This includes:
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
 - Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
 
-In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts).
+In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can [see which networks have a router deployed](#canonical-contracts).
 
-<aside>
-🚨 Layer-3 chains with custom gas tokens with L2-based token contracts cannot send their custom gas tokens to Ethereum. A future version of the AEP Fee Router may allow Arbitrum chains with L2-based tokens to distribute fees using the routing system.
+<VanillaAdmonition type="note"  title="Note about custom gas tokens">
+Layer-3 chains with custom gas tokens with L2-based token contracts cannot send their custom gas tokens to Ethereum. A future version of the AEP Fee Router may allow Arbitrum chains with L2-based tokens to distribute fees using the routing system.
 
 In the absence of these, please send `ETH` through the AEP Fee Router to fulfill your AEP license obligations.
 
-</aside>
+</VanillaAdmonition>
 
 Here are a few flows to help visualize the deployment:
 
-Scenario 1: You are an L2 Arbitrum Chain that settles on Ethereum.
+<ImageZoom src="/img/arb-chain-aep-scenario-1.svg" alt="AEP scenario 1" className="img-800px" />
 
-Scenario 2: You are an L3 Arbitrum Chain that settles to another L2. The custom gas token you are using exists on L1.
+<ImageZoom src="/img/arb-chain-aep-scenario-2.svg" alt="AEP scenario 2" className="img-800px" />
 
-Scenario 3: You are an L3 Arbitrum Chain that settles to another L2. The custom gas token doesn't exist on L1.
+<VanillaAdmonition type="info"  title="Please reach out if:">
+    1. Your chain is on another L2 for which we do not have a `ChildToParent` router deployed
+    2. Your custom gas token is only available on the L2 and non-EVM L1
+
+</VanillaAdmonition>
 
 ## Deployment scripts
 
 The Arbitrum chain (Orbit) SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
 
-::::info Note for L3 chains with custom gas tokens
-
+<VanillaAdmonition type="info"  title="Note for L3 chains with custom gas tokens">
 The standard script deploys and sets up the AEP fee router contracts to route funds to the parent chain.
 L2 chains are expected to route funds to the [multisig wallet owned by the Arbitrum Foundation](#canonical-contracts) living on Ethereum.
 L3 chains (or further layers) might need to specify a different target address on the parent chain depending on the gas token of the chain. If the chain uses `ETH` as the gas token, and a [ChildToParentRouter](#canonical-contracts) contract is deployed in the parent chain, they can route their funds to that contract. If the chain uses a different gas token, please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
 
-::::
+</VanillaAdmonition>
 
 The script performs the following operations:
 
