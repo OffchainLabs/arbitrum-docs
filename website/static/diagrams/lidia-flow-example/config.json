@@ -1,0 +1,189 @@
+{
+  "id": "arbitrum-architecture",
+  "title": "Arbitrum Architecture Overview",
+  "initialStateId": "overview",
+  "states": [
+    {
+      "id": "overview",
+      "nodes": [
+        {
+          "id": "1",
+          "type": "clickable",
+          "position": { "x": 250, "y": 0 },
+          "data": {
+            "label": "Sequencer",
+            "isClickable": true,
+            "tooltip": "Click to explore the Sequencer components"
+          }
+        },
+        {
+          "id": "2",
+          "type": "clickable",
+          "position": { "x": 100, "y": 150 },
+          "data": {
+            "label": "L1 Contracts",
+            "isClickable": true,
+            "tooltip": "Click to explore L1 Contracts"
+          }
+        },
+        {
+          "id": "3",
+          "type": "clickable",
+          "position": { "x": 400, "y": 150 },
+          "data": {
+            "label": "Validators",
+            "isClickable": true,
+            "tooltip": "Click to explore Validator network"
+          }
+        },
+        {
+          "id": "4",
+          "position": { "x": 250, "y": 300 },
+          "data": {
+            "label": "User Transactions",
+            "isClickable": false
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e1-2", "source": "1", "target": "2", "animated": true },
+        { "id": "e1-3", "source": "1", "target": "3", "animated": true },
+        { "id": "e4-1", "source": "4", "target": "1" }
+      ],
+      "clickableAreas": [
+        { "nodeId": "1", "nextStateId": "sequencer-detail" },
+        { "nodeId": "2", "nextStateId": "l1-contracts-detail" },
+        { "nodeId": "3", "nextStateId": "validators-detail" }
+      ]
+    },
+    {
+      "id": "sequencer-detail",
+      "nodes": [
+        {
+          "id": "s1",
+          "position": { "x": 250, "y": 0 },
+          "data": {
+            "label": "Transaction Pool",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "s2",
+          "position": { "x": 250, "y": 100 },
+          "data": {
+            "label": "Batch Creator",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "s3",
+          "position": { "x": 250, "y": 200 },
+          "data": {
+            "label": "State Manager",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "s4",
+          "position": { "x": 250, "y": 300 },
+          "data": {
+            "label": "L1 Publisher",
+            "isClickable": false
+          }
+        }
+      ],
+      "edges": [
+        { "id": "es1-2", "source": "s1", "target": "s2" },
+        { "id": "es2-3", "source": "s2", "target": "s3" },
+        { "id": "es3-4", "source": "s3", "target": "s4" }
+      ],
+      "clickableAreas": []
+    },
+    {
+      "id": "l1-contracts-detail",
+      "nodes": [
+        {
+          "id": "l1",
+          "position": { "x": 250, "y": 0 },
+          "data": {
+            "label": "Rollup Contract",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "l2",
+          "position": { "x": 100, "y": 150 },
+          "data": {
+            "label": "Inbox",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "l3",
+          "position": { "x": 400, "y": 150 },
+          "data": {
+            "label": "Outbox",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "l4",
+          "position": { "x": 250, "y": 300 },
+          "data": {
+            "label": "Challenge Manager",
+            "isClickable": false
+          }
+        }
+      ],
+      "edges": [
+        { "id": "el1-2", "source": "l1", "target": "l2" },
+        { "id": "el1-3", "source": "l1", "target": "l3" },
+        { "id": "el1-4", "source": "l1", "target": "l4" }
+      ],
+      "clickableAreas": []
+    },
+    {
+      "id": "validators-detail",
+      "nodes": [
+        {
+          "id": "v1",
+          "position": { "x": 250, "y": 0 },
+          "data": {
+            "label": "Validator Node",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "v2",
+          "position": { "x": 100, "y": 150 },
+          "data": {
+            "label": "State Sync",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "v3",
+          "position": { "x": 400, "y": 150 },
+          "data": {
+            "label": "Fraud Proofs",
+            "isClickable": false
+          }
+        },
+        {
+          "id": "v4",
+          "position": { "x": 250, "y": 300 },
+          "data": {
+            "label": "Staking Module",
+            "isClickable": false
+          }
+        }
+      ],
+      "edges": [
+        { "id": "ev1-2", "source": "v1", "target": "v2" },
+        { "id": "ev1-3", "source": "v1", "target": "v3" },
+        { "id": "ev1-4", "source": "v1", "target": "v4" }
+      ],
+      "clickableAreas": []
+    }
+  ]
+}

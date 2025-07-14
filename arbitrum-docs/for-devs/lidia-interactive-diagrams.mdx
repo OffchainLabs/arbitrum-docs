@@ -1,0 +1,69 @@
+---
+title: Lidia Interactive Diagrams
+description: Learn how to use Lidia, a React component for creating interactive, click-to-morph diagrams in your Arbitrum documentation
+---
+
+import LidiaDiagram from '@site/src/components/Lidia';
+import exampleConfig from '@site/static/diagrams/example/config.json';
+
+# Lidia Interactive Diagrams
+
+Lidia is a React component that enables interactive, click-to-morph diagrams for exploring complex technical concepts. It's particularly useful for visualizing multi-layered architectures, workflows, and system components.
+
+## Example
+
+<LidiaDiagram config={exampleConfig} />
+
+## How it works
+
+- **Click** on highlighted areas to explore deeper levels of detail
+- **Navigate back** using the back button to return to previous states
+- **Tooltips** appear on hover to guide your exploration
+
+## Using Lidia in your documentation
+
+To add interactive diagrams to your documentation:
+
+1. Create SVG diagrams with clickable areas (elements with unique IDs)
+2. Define a configuration file mapping the navigation flow
+3. Import and use the `LidiaDiagram` component in your MDX files
+
+### Example usage
+
+```mdx
+import LidiaDiagram from '@site/src/components/Lidia';
+import myDiagramConfig from '@site/static/diagrams/my-diagram/config.json';
+
+<LidiaDiagram config={myDiagramConfig} />
+```
+
+### Configuration structure
+
+```json
+{
+  "id": "diagram-id",
+  "title": "Diagram Title",
+  "initialStateId": "overview",
+  "states": [
+    {
+      "id": "overview",
+      "svgPath": "/diagrams/my-diagram/overview.svg",
+      "clickableAreas": [
+        {
+          "id": "area-1",
+          "selector": "#svg-element-id",
+          "nextStateId": "detail-view",
+          "tooltip": "Click to explore"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Best practices
+
+- Keep diagrams simple and focused on one concept per state
+- Use clear, descriptive IDs for clickable areas
+- Provide helpful tooltips to guide users
+- Limit navigation depth to 3-5 levels for optimal user experience
