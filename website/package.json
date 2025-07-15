@@ -45,7 +45,6 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "classnames": "^2.5.1",
     "clsx": "^1.2.1",
-    "docusaurus-lunr-search": "^3.3.2",
     "docusaurus-plugin-fathom": "^1.2.0",
     "docusaurus-plugin-sass": "^0.2.5",
     "dotenv": "^17.0.1",
@@ -94,16 +93,8 @@
     "image-size": "~1.0.2"
   },
   "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "production": [">0.5%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   },
   "engines": {
     "node": ">=16.14"
