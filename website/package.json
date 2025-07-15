@@ -9,7 +9,7 @@
     "update_variable_refs": "tsx src/scripts/update-variable-references.ts",
     "prepare": "husky",
     "postinstall": "git config core.hooksPath .husky",
-    "start": "yarn clear && yarn install_sdk_dependencies && docusaurus start",
+    "start": "yarn clear && yarn format && yarn install_sdk_dependencies && docusaurus start",
     "build_translation": "yarn tsx ./src/scripts/move-untranslated-files.ts",
     "build": "yarn install_sdk_dependencies && docusaurus build",
     "swizzle": "docusaurus swizzle",
@@ -94,8 +94,16 @@
     "image-size": "~1.0.2"
   },
   "browserslist": {
-    "production": [">0.5%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "engines": {
     "node": ">=16.14"
