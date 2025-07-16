@@ -14,7 +14,7 @@ Below is a breakdown of each specified parameter, including its role, typical de
 
 - **Description**: This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
 - **Default (Arbitrum One)**: 7,000,000 gas/second.
-- **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the ArbOwner precompile, where `newSpeedLimit` is the desired gas per second.
+- **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newSpeedLimit` is the desired gas per second.
 
 Example using `cast`:
 
@@ -30,7 +30,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 
 - **Description**: This limits the maximum amount consumable by all transactions in a single L2 block. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the speed limit and gas pools, but this sets a hard cap (often aligned with the maximum gas per transaction in the documentation, as blocks can contain multiple transactions).
 - **Default (Arbitrum One)**: 32,000,000 gas per block.
-- **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbOwner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbOwner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
+- **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 
 Example using `cast`:
 
@@ -48,7 +48,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 - **Default (Arbitrum One)**: 0.01 `gwei` (10,000,000 `wei`).
 - **Configuration**:
   - **During deployment**: Set the `minL2BaseFee` field in the Orbit setup script's config JSON.
-  - **Post-deployment**: Call the `setMinimumL2BaseFee(uint256 newMinBaseFee)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbOwner), where `newMinBaseFee` is the value in `wei`.
+  - **Post-deployment**: Call the `setMinimumL2BaseFee(uint256 newMinBaseFee)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newMinBaseFee` is the value in `wei`.
 
 Example using `cast`:
 
@@ -64,7 +64,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 
 - **Description**: This refers to the fixed L2 gas charge applied for the overhead of posting each batch to the parent chain (e.g., Arbitrum One or Nova). It is used in transaction pricing to amortize the parent chain's fixed costs (like calldata posting) over the batch's transactions. It can be adjusted to reflect actual posting costs or incentivize batching. The surplus (if any) gets rewarded to the batch poster.
 - **Default (Arbitrum One)**: Varies based on parent chain fees, but typically around 100,000 gas (adjustable to match).
-- **Configuration**: Call the `setPerBatchGasCharge(int64 newCharge)` on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbOwner), where `newCharge` is the fixed gas units per batch. This configuration adjusts the allocation of L2 gas for batch overhead in pricing. Additionally, you can configure related surplus fees (extra reward to batch poster) via `setL1PricingRewardRate(uint64 rate)`. The actual cost is influenced by the parent chain base fee estimates, which are dynamic; therefore, monitor them via `ArbGasInfo`'s `getPricesInWei()` method.
+- **Configuration**: Call the `setPerBatchGasCharge(int64 newCharge)` on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newCharge` is the fixed gas units per batch. This configuration adjusts the allocation of L2 gas for batch overhead in pricing. Additionally, you can configure related surplus fees (extra reward to batch poster) via `setL1PricingRewardRate(uint64 rate)`. The actual cost is influenced by the parent chain base fee estimates, which are dynamic; therefore, monitor them via `ArbGasInfo`'s `getPricesInWei()` method.
 
 Example using `cast` (for per batch charge):
 
@@ -78,6 +78,6 @@ Refer to the [How to manage the fee parameters](/launch-arbitrum-chain/02-config
 
 :::warning Caution
 
-Always test changes on a devnet or testnet Orbit chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbOwner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible. For deployment-specific initial configurations, refer to the Arbitrum chain quickstart script in the official documentation or SDK.
+Always test changes on a devnet or testnet Orbit chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible. For deployment-specific initial configurations, refer to the Arbitrum chain quickstart script in the official documentation or SDK.
 
 :::
