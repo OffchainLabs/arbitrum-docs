@@ -3,8 +3,8 @@ title: 'Configure Batch Poster and Assertion Control'
 sidebar_label: 'Batch Poster and Assertion Control'
 description: 'Learn how to configure the Batch Poster and Assertion Control.'
 author: pete-vielhaber
-sme: 
-user_story: 
+sme:
+user_story:
 content_type: get-started
 ---
 
@@ -15,6 +15,7 @@ Batch posting configurations allow the sequencer to group, compress, and post tr
 Assertion posting configurations enable validators to periodically create and post assertions (state roots) of the Arbitrum chain's execution to the parent chain. Parameters control the interval between assertions and staking requirements. These prevent reordering and reorgs by allowing any honest validator to challenge incorrect assertions during a dispute window (typically seven days on Arbitrum chains). Regular assertions ensure state commitments are frequent enough to detect discrepancies early, triggering onchain resolution via bisection games, which enforce the correct chain state and deter reorganizations.
 
 ## Batch Posting Minimum Frequency: Maximum Wait Time to Post a Batch
+
 The batch posting minimum frequency is primarily controlled by the `--node.batch-poster.max-delay` parameter in the [Nitro node's configuration](https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go) (set via the JSON config file or command-line flags when deploying an Orbit chain). This parameter defines the maximum time the batch poster will wait after receiving a transaction before posting a batch that includes it. The default value is one hour (3600 seconds).
 
 - **Configuration Options**: Set this in the `node.batch-poster` section of the config, e.g., `"max-delay": "30m"` for a 30-minute maximum wait. Lower values increase posting frequency but may result in smaller, less efficient batches during periods of low activity, thereby increasing gas costs on the parent chain. If no transactions are received, no batches will post regardless of this setting.
@@ -22,6 +23,7 @@ The batch posting minimum frequency is primarily controlled by the `--node.batch
 - **Recommended Settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, stick to the default one hour to avoid unnecessary postings.
 
 ## Validator Node Creation Frequency: Interval Between Validator Assertions
+
 The validator assertion posting frequency is controlled by the `--node.staker.make-assertion-interval` parameter in the Nitro node's configuration. This parameter sets the minimum time to wait since the last assertion before posting a new one (if the validator configuration is to make new assertions via the `MakeNodes` strategy). The default value is one hour (3600 seconds). This interval must always exceed the rollup contract's `minimumAssertionPeriod`, which defaults to 75 L1 blocks (approximately 15 minutes at 12-second block times).
 
 - **Configuration Options**: Configure this in the `node.staker` section, e.g., `"make-assertion-interval": "45m"` for a 45-minute interval. Validators also require staking (bonding `ETH` or tokens on the parent chain) to post assertions, with the minimum stake set via the rollup contract during chain deployment. If an incorrect assertion is detected, the interval is bypassed, and a new challenge begins. No new assertions get posted if no new batches arrive or force inclusions occur.
@@ -29,6 +31,7 @@ The validator assertion posting frequency is controlled by the `--node.staker.ma
 - **Recommended Settings**: Set to 20-30 minutes for chains needing low-latency finality, but ensure it's >15 minutes to comply with the minimum period. Higher values (e.g., two hours) are suitable for low-stakes chains to reduce validator operational costs.
 
 ## Reorg Resistance Margin
+
 The reorganization resistance margin is configurable via the `--node.batch-poster.reorg-resistance-margin` parameter, which specifies a time duration (e.g., in minutes) during which the batch poster will avoid posting batches if their minimum L1 block number or timestamp is too close to the current L1 head. This margin serves as a safety buffer to prevent posting batches that reference recent L1 states, which are prone to reorganization. The default value is ten minutes (600 seconds), based on observed usage in deployments and error logs.
 
 - **Detailed Explanation of the Message**: The message "Disabling batch posting due to batch being within reorg resistance margin from layer 1 minimum block or timestamp bounds" signifies that the batch poster's logic has detected the proposed batch's minimum required L1 block or timestamp falls within the configured margin of the current L1 chain head. For example, if the margin is ten minutes and the L1 head timestamp is `T`, the poster disables itself if the batch requires a minimum timestamp greater than (`T - 10m`) or a minimum block that is too close to the head. This message serves as a protective mechanism: L1 chains, such as Ethereum, can undergo short reorganizations (e.g., uncle blocks or brief forks), which could invalidate a posted batch if it references a block/timestamp that gets reorganized. By temporarily disabling posting, the system waits for L1 to stabilize, ensuring the batch remains valid once posted. The disablement is transient; posting resumes once the margin clears (e.g., as L1 advances). This message often appears in logs during periods of high L1 volatility or when the sequencer's clock/L1 sync is slightly off. It's normal in such cases, but it may indicate setup issues if it persists.
