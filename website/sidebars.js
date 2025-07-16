@@ -351,6 +351,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
                 {
+                  type: 'doc',
+                  label: 'Use Configure Batch Poster and Assertion Control',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-batch-poster-assertion-control',
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
