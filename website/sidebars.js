@@ -469,6 +469,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
                   label: `Post-launch deployments`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
+                  label: `Key rotation`,
+                },
               ],
             },
             {
