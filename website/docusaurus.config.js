@@ -145,7 +145,6 @@ const config = {
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/08-batch-posting-assertion-control',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/09-sequencer-timing-adjustments',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/10-per-batch-gas-cost',
-          'launch-arbitrum-chain/02-configure-your-chain/common-configurations/11-smart-contract-size-limit',
           'launch-arbitrum-chain/02-configure-your-chain/common-configurations/12-customizing-anytrust',
           'launch-arbitrum-chain/02-start-your-journey',
           'launch-arbitrum-chain/03-arbitrum-license',
@@ -162,7 +161,7 @@ const config = {
           'launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters',
           'launch-arbitrum-chain/reference/arbitrum-chain-fast-block-times',
           'launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration',
-          'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit',
+          'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit'
         ],
         maxHits: 10,
       },

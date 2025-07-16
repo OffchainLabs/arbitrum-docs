@@ -4,7 +4,6 @@ description: 'Learn how to configure smart contract size limits on your Arbitrum
 author:
 sme:
 content_type: how-to
-tags: ['hide-from-search']
 ---
 
 For standard public Arbitrum chains (such as Arbitrum One or Nova), the smart contract code size limit is fixed at 24 kB, as enforced by [EIP-170](https://eips.ethereum.org/EIPS/eip-170). This limit is not configurable for end-users or developers deploying contracts on these chains.
@@ -39,8 +38,8 @@ While beneficial for complexity, raising the limit introduces trade-offs, partic
 
 1. Use the [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) to prepare your chain's configuration.
 2. When calling the `prepareNodeConfig` function, modify the relevant parameters: [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L29) (for deployed contract code size) and [`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L30) (for initialization code size during deployment).
-3. These parameters are defined in the SDK's `prepareChainConfig.ts` file. An example implementation is available in the SDK's [`examples/prepare-node-config/index.ts`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29).
+3. These parameters are defined in the SDK's [`prepareChainConfig.ts`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) file. An example implementation is available in the SDK's [`examples/prepare-node-config/index.ts`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts).
 <!-- I'm not sure this example above in #3 is correct -->
 4. Note that once the chain deploys, the smart contract limits are unchangeable via upgrades—you must set them during initial configuration.
 
-This customization applies to both EVM-compatible contracts and Stylus (WebAssembly-based) contracts on Arbitrum chains. However, Stylus contracts must also adhere to compression limits (e.g., 24 kB Brotli-compressed in some cases, with potentially higher uncompressed equivalents of ~128 kB, depending on the setup). You can learn more about Stylus in this section.
+This customization applies to both EVM-compatible contracts and Stylus (WebAssembly-based) contracts on Arbitrum chains. However, Stylus contracts must also adhere to compression limits (e.g., 24 kB Brotli-compressed in some cases, with potentially higher uncompressed equivalents of ~128 kB, depending on the setup). You can learn more about [Stylus in this section](/stylus/gentle-introduction.mdx).
