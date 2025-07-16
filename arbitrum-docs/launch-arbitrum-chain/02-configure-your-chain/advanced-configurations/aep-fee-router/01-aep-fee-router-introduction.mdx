@@ -1,0 +1,46 @@
+---
+title: 'The AEP fee router: introduction'
+sidebar_label: 'AEP fee router: overview'
+description: 'Learn what is the AEP fee router.'
+author: Midroni
+sme: Midroni
+user_story: As a current Arbitrum chain owner, I need to understand what the AEP fee router is.
+content_type: get-started
+---
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
+## What is the Arbitrum expansion program?
+
+The [Arbitrum Expansion Program](https://forum.arbitrum.foundation/t/the-arbitrum-expansion-program-and-developer-guild/20722) (AEP) allows Arbitrum chains to deploy on _any chain_ permissionlessly. As part of the [AEP license](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf), Arbitrum chains deployed outside of Arbitrum One and Arbitrum Nova must pay 10% of their **Protocol Net Revenue** to the Arbitrum Foundation.
+
+The Arbitrum Expansion Program and Developer Guild are initiatives launched in collaboration with Offchain Labs to promote the development of customized Arbitrum chains using the Arbitrum chain framework. The Expansion Program simplifies the process for teams to create Layer 2 (L2) and Layer 3 (L3) chains, offering self-service tools and customization options.
+Projects benefit from features like:
+
+- Dedicated block space
+- Custom gas tokens
+- Flexible governance.
+
+These chains can settle to any chain relying on the Ethereum security model.
+
+The Developer Guild incentivizes developers contributing to the Arbitrum codebase, with 2% of revenue from new chains going to a fund dedicated to this purpose. The Expansion Program is designed to align with Ethereum, encourage innovation, and enable projects to tailor the Arbitrum stack to their specific needs. The program also aims to streamline chain deployment, making it easier for developers to adopt Arbitrum's technology while contributing back to the community.
+
+As an Arbitrum chain owner, you may have the following questions:
+
+## How do I send my AEP fees from my Arbitrum chain to the Arbitrum DAO?
+
+Arbitrum provides Arbitrum chains with easily deployable smart contracts that can streamline the transfer of AEP Fees to the Arbitrum Foundation that routes them to the Arbitrum DAO treasury. These contracts are known as **AEP Fee Routers**.
+
+## What is protocol net revenue?
+
+Protocol Net Revenue is equivalent to an Arbitrum chain's profit (revenue minus costs).
+
+## How can I ensure I'm complying with the AEP license?
+
+The Arbitrum Foundation will track compliance based on fees received through the **AEP Fee Router**.
+
+## How can I set up an AEP fee router on my Arbitrum chain?
+
+You can learn how to set up your AEP fee router in [implementation guide](/launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/aep-fee-router/02-set-up-aep-fee-router.mdx).
+
+<ImageZoom src="/img/orbit-aep-scenarios.png" alt="AEP scenario 1" className="img-400px" />
