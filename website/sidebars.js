@@ -238,7 +238,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run an Arbitrum chain',
+      label: 'Run an Arbitrum (Orbit) chain',
       collapsed: true,
       items: [
         {
