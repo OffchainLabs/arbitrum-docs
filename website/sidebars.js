@@ -342,6 +342,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
+                  label: 'Deploy and configure Timeboost',
+                },
+                {
+                  type: 'doc',
                   label: 'Use Layer Leap',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
@@ -364,6 +369,11 @@ const sidebars = {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
                       label: `Calculate AEP license fees`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/reporting-on-fees',
+                      label: `Report your fees`,
                     },
                   ],
                 },
@@ -569,6 +579,12 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
+          label: 'Timeboost for Arbitrum chains',
+        },
+
+        {
+          type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
@@ -614,6 +630,11 @@ const sidebars = {
               label: 'Structure of a Contract',
             },
             ...stylusByExampleDocsSidebarSDK,
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Composition and trait-based routing model',
+            },
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
@@ -1221,7 +1242,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'Prysm docs',
-      href: 'https://docs.prylabs.network/docs/install/install-with-script',
+      href: 'https://www.offchainlabs.com/prysm/docs',
     },
   ],
 };
