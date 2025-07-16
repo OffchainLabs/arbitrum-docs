@@ -35,7 +35,7 @@ While beneficial for complexity, raising the limit introduces trade-offs, partic
 - **Irreversibility**: The limit must be set during initial chain configuration and cannot be changed post-deployment, so poor choices could lead to long-term inefficiencies.
   Overall, increasing the limit is ideal for specialized Arbitrum chains where complexity outweighs costs. However, we recommend sticking to defaults unless necessary.
 
-How to Configure
+## How to Configure
 
 1. Use the [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) to prepare your chain's configuration.
 2. When calling the `prepareNodeConfig` function, modify the relevant parameters: [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L29) (for deployed contract code size) and [`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L30) (for initialization code size during deployment).
