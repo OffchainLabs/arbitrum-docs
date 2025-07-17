@@ -49,7 +49,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          path: '../arbitrum-docs',
+          // path: './docs',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
