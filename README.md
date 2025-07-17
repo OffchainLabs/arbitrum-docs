@@ -22,8 +22,6 @@ git clone git@github.com:OffchainLabs/arbitrum-docs.git
 cd arbitrum-docs/
 
 git submodule update --init --recursive
-
-cd website/
 ```
 
 Install node dependencies
@@ -34,7 +32,7 @@ yarn
 
 ### Dev Build
 
-To start a build server to serve the docs site locally, run this command from the `/website` directory:
+To start a build server to serve the docs site locally, run this command from the root directory:
 
 ```shell
 yarn start
@@ -44,7 +42,7 @@ This command will both generate the `arbitrum-sdk` docs from the submodule and s
 
 ### Build
 
-While in the `/website` directory, this command will build the site:
+While in the root directory, this command will build the site:
 
 ```shell
 yarn build
@@ -68,9 +66,9 @@ git submodule update --remote arbitrum-sdk
 
 You can add any terms to the glossary by following these steps:
 
-Let's assume you need to add the term "State Transition Function" to the glossary. 
+Let's assume you need to add the term "State Transition Function" to the glossary.
 
-1. Create an `.mdx` file as follows: 
+1. Create an `.mdx` file as follows:
 
 `arbitrum-docs/partials/glossary/_state-transition-function.mdx`
 
@@ -86,11 +84,12 @@ titleforSort: State Transition Function
 The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.
 ```
 
-3. While in the `/website` directory, run the following command:
+3. While in the root directory, run the following command:
 
 ```shell
 npx tsx src/scripts/build-glossary.ts
 ```
- This part will update the glossary.
+
+This part will update the glossary.
 
 4. Commit your changes and open a PR.

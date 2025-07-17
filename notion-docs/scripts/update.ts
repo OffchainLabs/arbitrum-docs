@@ -283,7 +283,7 @@ async function generateFiles() {
   const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
   addItems(validGlossaryTerms, '/intro/glossary')
   const glossaryJSON = renderGlossaryJSON(validGlossaryTerms, linkableTerms)
-  fs.writeFileSync('../website/static/glossary.json', glossaryJSON)
+  fs.writeFileSync('static/glossary.json', glossaryJSON)
   const definitionsHTML = `\n\n${renderGlossary(
     validGlossaryTerms,
     linkableTerms
@@ -297,7 +297,7 @@ async function generateFiles() {
   // ----
   // Get started
   fs.writeFileSync(
-    '../website/static/get-started-faqs.json',
+    'static/get-started-faqs.json',
     renderJSONFAQStructuredData(cmsContents.getStartedFAQs)
   )
   fs.writeFileSync(
@@ -307,7 +307,7 @@ async function generateFiles() {
 
   // Node running
   fs.writeFileSync(
-    '../website/static/node-running-faqs.json',
+    'static/node-running-faqs.json',
     renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
   )
   fs.writeFileSync(
@@ -317,7 +317,7 @@ async function generateFiles() {
 
   // Building
   fs.writeFileSync(
-    '../website/static/building-faqs.json',
+    'static/building-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingFAQs)
   )
   fs.writeFileSync(
@@ -327,7 +327,7 @@ async function generateFiles() {
 
   // Stylus
   fs.writeFileSync(
-    '../website/static/building-stylus-faqs.json',
+    'static/building-stylus-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingStylusFAQs)
   )
   fs.writeFileSync(
@@ -337,7 +337,7 @@ async function generateFiles() {
 
   // Orbit
   fs.writeFileSync(
-    '../website/static/building-orbit-faqs.json',
+    'static/building-orbit-faqs.json',
     renderJSONFAQStructuredData(cmsContents.orbitFAQs)
   )
   fs.writeFileSync(
@@ -347,7 +347,7 @@ async function generateFiles() {
 
   // Bridging
   fs.writeFileSync(
-    '../website/static/bridging-faqs.json',
+    'static/bridging-faqs.json',
     renderJSONFAQStructuredData(cmsContents.bridgingFAQs)
   )
   fs.writeFileSync(
