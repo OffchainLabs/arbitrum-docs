@@ -1,4 +1,8 @@
 {
+  "buildCommand": "yarn build",
+  "outputDirectory": "build",
+  "installCommand": "bash scripts/init-submodules.sh && yarn install",
+  "framework": "docusaurus-2",
   "redirects": [
     {
       "source": "/",
