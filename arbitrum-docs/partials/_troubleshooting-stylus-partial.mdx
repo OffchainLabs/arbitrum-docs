@@ -18,20 +18,6 @@ Currently there isn't any analogue. However, you can use a minimal entrypoint an
 </p>
 
 
-### Why are constructors not yet supported for Stylus contracts?
-<p>
-Constructors use EVM bytecode to initialize state. While one could add EVM bytecode manually to their Stylus deployment, we don't allow WASM execution in the constructor so there's no way to express this in the SDK.
-</p>
-
-<p>
-We're working on models that will make init easier, so there might be better solutions available in the future. For now, we suggest calling an init method after deploying.
-</p>
-
-<p>
-
-</p>
-
-
 ### Is it possible to verify Stylus contracts on the block explorer?
 <p>
 Currently it is not possible to verify contracts compiled to WASM on the block explorer, but we are actively working with providers to have the verification process ready for when Stylus reaches mainnet-ready status.

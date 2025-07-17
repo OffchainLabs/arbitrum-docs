@@ -38,7 +38,7 @@ This section will explore these categories in detail and explain how they work. 
 
 ## Native token bridging
 
-Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use `ETH` as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/launch-arbitrum-chain/concepts/custom-gas-token-sdk.mdx).
+Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use `ETH` as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/build-decentralized-apps/custom-gas-token-sdk.mdx).
 
 Whether a chain uses `ETH` or a custom gas token, users can deposit the token from a parent chain (for Arbitrum One, it is Ethereum) to a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain's Delayed Inbox contract.
 
@@ -319,7 +319,7 @@ If a `redeem` is not done at submission or the submission's initial `redeem` fai
 
 1. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is **not** limited by the original `gasLimit` set during the ticket creation. <a data-quicklook-from="arbos">ArbOS</a> will [enqueue the `redeem`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245) before moving on to the next non-`redeem` transaction in the block it's forming. In this manner, `redeem`'s are scheduled to happen as soon as possible and will always be in the same block as the transaction that scheduled it. Note that the `redeem` attempt's gas comes from the call to `redeem`, so there's no chance to reach the block's gas limit before execution.
 
-2. If the fixed period (one week) elapses without a successful `redeem`, the ticket **expires** and will be [automatically discarded](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262), unless some party has paid a fee to [keep the ticket alive](https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41) for another full period. A ticket can live indefinitely as long as it continues to renew each time before it expires.
+2. If the fixed period (one week) elapses without a successful `redeem`, the ticket **expires** and will be [automatically discarded](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262), unless some party has paid a fee to [keep the ticket alive](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbRetryableTx.sol#L45) for another full period. A ticket can live indefinitely as long as it continues to renew each time before it expires.
 
 **Process flow**
 
