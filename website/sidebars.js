@@ -287,6 +287,21 @@ const sidebars = {
                   label: `Enable blob transactions`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools',
+                  label: `Gas optimization tools`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/how-tos/customize-deployment-configuration',
+                  label: `Customize your chain's deployment`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/reference/additional-configuration-parameters',
+                  label: `Additional configuration parameters`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -312,16 +327,6 @@ const sidebars = {
                       label: 'Configure a Data Availability Committee (DAC)',
                     },
                   ],
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/how-tos/customize-deployment-configuration',
-                  label: `Customize your chain's deployment`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/reference/additional-configuration-parameters',
-                  label: `Additional configuration parameters`,
                 },
               ],
             },
