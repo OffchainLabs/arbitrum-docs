@@ -150,17 +150,6 @@ const config = {
       },
     ],
     [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'sdk',
-        path: 'sdk-docs',
-        routeBasePath: 'sdk',
-        sidebarPath: require.resolve('./sdk-docs/sidebar.js'),
-        // use the sdk-sidebar-generator if you want dynamic generation
-        // sidebarItemsGenerator: sdkSidebarGenerator,
-      },
-    ],
-    [
       'docusaurus-plugin-typedoc',
       {
         id: 'arbitrum-sdk',
@@ -174,7 +163,7 @@ const config = {
         readme: 'none',
 
         // Output options
-        out: '../arbitrum-docs/sdk-docs/reference',
+        out: '../arbitrum-docs/docs/sdk',
         hideGenerator: true,
         validation: {
           notExported: false,

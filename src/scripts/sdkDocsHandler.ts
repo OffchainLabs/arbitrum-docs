@@ -15,20 +15,19 @@ const { parseMarkdownContentTitle } = require('@docusaurus/utils');
  * files by leading numbers first then alphabetically.
  */
 function load(app) {
-  const outputDir = path.join(app.options.getValue('out'), '../');
-  const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
+  const sdkOutputDir = app.options.getValue('out'); // This is the SDK directory
+  const sourceDir = path.join(sdkOutputDir, '../../arbitrum-sdk/docs');
 
   app.renderer.on(RendererEvent.START, async () => {
-    cleanDirectory(outputDir);
+    cleanDirectory(sdkOutputDir);
   });
 
   app.renderer.on(RendererEvent.END, async () => {
-    copyFiles(sourceDir, outputDir);
-
-    const sidebarItems = generateSidebar(outputDir);
+    // Generate sidebar only from the actual TypeDoc generated content
+    const sidebarItems = generateSidebarFromSDKContent(sdkOutputDir);
     const sidebarConfig = { items: sidebarItems };
-    const sidebarPath = path.join(outputDir, 'sidebar.js');
-
+    const sidebarPath = path.join(sdkOutputDir, '../../sdk-sidebar.js');
+    
     fs.writeFileSync(
       sidebarPath,
       `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst typedocSidebar = ${JSON.stringify(
@@ -115,7 +114,7 @@ function generateSidebar(dir, basePath = '') {
       if (entry.isDirectory()) {
         const subItems = generateSidebar(
           fullPath,
-          `${basePath}/${entry.name.replace(/^\d+-/, '')}`,
+          basePath ? `${basePath}/${entry.name.replace(/^\d+-/, '')}` : entry.name.replace(/^\d+-/, ''),
         );
         const label = capitalizeFirstLetter(getLabelFromFilesystem(entry.name));
         return {
@@ -145,7 +144,7 @@ function generateId(name, basePath) {
   // For consistency with Docusaurus ID generation, use the same logic as getLabelFromFilesystem
   const idLabel = getLabelFromFilesystem(name);
   if (basePath) {
-    return path.join(basePath, idLabel).replace(/^\//, '');
+    return path.join(basePath, idLabel).replace(/\\/g, '/');
   }
   return idLabel;
 }
@@ -173,6 +172,46 @@ function getTitleFromFileContent(filePath) {
   const { contentTitle } = parseMarkdownContentTitle(fileContent);
 
   return contentTitle || '';
+}
+
+// Generate sidebar only from the actual SDK TypeDoc content
+function generateSidebarFromSDKContent(sdkDir) {
+  const entries = fs.readdirSync(sdkDir, { withFileTypes: true });
+  const items = [];
+
+  // Process each entry in the SDK directory
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      // This is a category (like assetBridger, dataEntities, etc.)
+      const categoryPath = path.join(sdkDir, entry.name);
+      const categoryFiles = fs.readdirSync(categoryPath, { withFileTypes: true });
+      
+      const categoryItems = categoryFiles
+        .filter(file => file.isFile() && file.name.endsWith('.md'))
+        .map(file => ({
+          type: 'doc',
+          id: `sdk/${entry.name}/${file.name.replace('.md', '')}`,
+          label: capitalizeFirstLetter(file.name.replace('.md', '').replace(/([A-Z])/g, ' $1').trim())
+        }));
+
+      if (categoryItems.length > 0) {
+        items.push({
+          type: 'category',
+          label: capitalizeFirstLetter(entry.name),
+          items: categoryItems
+        });
+      }
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      // This is a top-level document
+      items.push({
+        type: 'doc',
+        id: `sdk/${entry.name.replace('.md', '')}`,
+        label: capitalizeFirstLetter(entry.name.replace('.md', '').replace(/([A-Z])/g, ' $1').trim())
+      });
+    }
+  }
+
+  return items;
 }
 
 exports.load = load;

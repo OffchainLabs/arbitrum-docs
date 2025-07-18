@@ -1,8 +1,21 @@
 // @ts-check
 
-const sdkSidebar = require('./sdk-docs/sidebar.js');
+// Use the generated SDK sidebar for API reference
+const sdkApiSidebar = require('./sdk-sidebar.js');
 const stylusByExampleDocsSidebarSDK = require('./stylus-by-example/basic_examples/sidebar.js');
 const stylusByExampleDocsSidebarExamples = require('./stylus-by-example/applications/sidebar.js');
+
+// Create a custom SDK sidebar that combines manual intro pages with generated API docs
+const sdkSidebar = {
+  sdkSidebar: [
+    {
+      type: 'doc',
+      id: 'sdk/index',
+      label: 'Overview',
+    },
+    ...sdkApiSidebar.sdkSidebar,
+  ],
+};
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -225,9 +238,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'link',
+          type: 'category',
           label: 'Arbitrum SDK',
-          items: sdkSidebar,
+          items: sdkSidebar.sdkSidebar,
         },
         {
           type: 'link',
