@@ -29,9 +29,6 @@ run_yarn_command() {
   fi
 }
 
-# Change to website directory
-cd website || handle_error "Failed to change to website directory"
-
 # Check if globalVars.js has staged changes
 if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
   log_info "Detected changes in globalVars.js"
