@@ -11,7 +11,12 @@ const sdkSidebar = {
     {
       type: 'doc',
       id: 'sdk/index',
-      label: 'Overview',
+      label: 'Introduction',
+    },
+    {
+      type: 'doc',
+      id: 'sdk/migrate',
+      label: 'Migrate from v3 to v4',
     },
     ...sdkApiSidebar.sdkSidebar,
   ],
