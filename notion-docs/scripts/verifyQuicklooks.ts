@@ -14,7 +14,7 @@ function findQuotedTextAfter(string: string, input: string) {
   return matches
 }
 
-glob('../../arbitrum-docs/**/*', function (err: any, res: any) {
+glob('../../docs/**/*', function (err: any, res: any) {
   if (err) {
     throw new Error(err)
   } else {
