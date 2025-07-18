@@ -1,6 +1,6 @@
 // @ts-check
 
-const sdkDocsSidebar = require('sdk/sidebar.js');
+// const { sdkSidebar: sdkDocsSidebar } = require('./sdk-docs/sidebar.js');
 const stylusByExampleDocsSidebarSDK = require('./stylus-by-example/basic_examples/sidebar.js');
 const stylusByExampleDocsSidebarExamples = require('./stylus-by-example/applications/sidebar.js');
 
@@ -225,9 +225,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkDocsSidebar,
+          href: '/sdk',
         },
         {
           type: 'link',

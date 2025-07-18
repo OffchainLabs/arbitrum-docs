@@ -35,7 +35,7 @@ function load(app) {
         sidebarConfig,
         null,
         2,
-      )};\nmodule.exports = typedocSidebar.items;`,
+      )};\nmodule.exports = { sdkSidebar: typedocSidebar.items };`,
       'utf8',
     );
   });
@@ -142,9 +142,12 @@ function capitalizeFirstLetter(string) {
 }
 
 function generateId(name, basePath) {
-  const label = getLabelFromFilesystem(name);
-  const slashIfNeeded = basePath.startsWith('/') ? '' : '/';
-  return 'sdk' + slashIfNeeded + path.join(basePath, label);
+  // For consistency with Docusaurus ID generation, use the same logic as getLabelFromFilesystem
+  const idLabel = getLabelFromFilesystem(name);
+  if (basePath) {
+    return path.join(basePath, idLabel).replace(/^\//, '');
+  }
+  return idLabel;
 }
 
 function generateLabel(entry) {

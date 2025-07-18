@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
-const sdkCodebasePath = '../arbitrum-sdk';
+const sdkCodebasePath = './arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
@@ -59,9 +59,7 @@ const config = {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
               return undefined;
-            return (
-              'https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/' + s.docPath
-            );
+            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/' + s.docPath;
           },
           showLastUpdateTime: true,
         },
@@ -155,9 +153,9 @@ const config = {
       '@docusaurus/plugin-content-docs',
       {
         id: 'sdk',
-        path: 'sdk',
+        path: 'sdk-docs',
         routeBasePath: 'sdk',
-        sidebarPath: require.resolve('./sdk/sidebar.js'),
+        sidebarPath: require.resolve('./sdk-docs/sidebar.js'),
         // use the sdk-sidebar-generator if you want dynamic generation
         // sidebarItemsGenerator: sdkSidebarGenerator,
       },
@@ -176,7 +174,7 @@ const config = {
         readme: 'none',
 
         // Output options
-        out: '../arbitrum-docs/sdk/reference',
+        out: '../arbitrum-docs/sdk-docs/reference',
         hideGenerator: true,
         validation: {
           notExported: false,
