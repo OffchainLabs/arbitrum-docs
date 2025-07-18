@@ -44,38 +44,42 @@ function load(app) {
     // Copy basic examples into their directory
     copyFiles(sourceDirBasicExamples, basicExamplesOutputDir, allowList);
 
-    // Generate sidebar for basic examples
-    const basicExamplesSidebarItems = generateSidebar(basicExamplesOutputDir, '/basic_examples');
-    const basicExamplesSidebarConfig = { items: basicExamplesSidebarItems };
-    const basicExamplesSidebarPath = path.join(basicExamplesOutputDir, 'sidebar.js');
+    // Generate sidebar for basic examples only if the directory exists and has content
+    if (fs.existsSync(basicExamplesOutputDir)) {
+      const basicExamplesSidebarItems = generateSidebar(basicExamplesOutputDir, '/basic_examples');
+      const basicExamplesSidebarConfig = { items: basicExamplesSidebarItems };
+      const basicExamplesSidebarPath = path.join(basicExamplesOutputDir, 'sidebar.js');
 
-    fs.writeFileSync(
-      basicExamplesSidebarPath,
-      `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
-        basicExamplesSidebarConfig,
-        null,
-        2,
-      )};\nmodule.exports = sidebar.items;`,
-      'utf8',
-    );
+      fs.writeFileSync(
+        basicExamplesSidebarPath,
+        `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
+          basicExamplesSidebarConfig,
+          null,
+          2,
+        )};\nmodule.exports = sidebar.items;`,
+        'utf8',
+      );
+    }
 
     // Copy applications into their directory
     copyFiles(sourceDirApplications, applicationsOutputDir, appsAllowList);
 
-    // Generate sidebar for applications
-    const applicationsSidebarItems = generateSidebar(applicationsOutputDir, '/applications');
-    const applicationsSidebarConfig = { items: applicationsSidebarItems };
-    const applicationsSidebarPath = path.join(applicationsOutputDir, 'sidebar.js');
+    // Generate sidebar for applications only if the directory exists and has content
+    if (fs.existsSync(applicationsOutputDir)) {
+      const applicationsSidebarItems = generateSidebar(applicationsOutputDir, '/applications');
+      const applicationsSidebarConfig = { items: applicationsSidebarItems };
+      const applicationsSidebarPath = path.join(applicationsOutputDir, 'sidebar.js');
 
-    fs.writeFileSync(
-      applicationsSidebarPath,
-      `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
-        applicationsSidebarConfig,
-        null,
-        2,
-      )};\nmodule.exports = sidebar.items;`,
-      'utf8',
-    );
+      fs.writeFileSync(
+        applicationsSidebarPath,
+        `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
+          applicationsSidebarConfig,
+          null,
+          2,
+        )};\nmodule.exports = sidebar.items;`,
+        'utf8',
+      );
+    }
   });
 }
 
@@ -95,12 +99,12 @@ function cleanDirectory(directory) {
 
 function copyFiles(source, target, allowList) {
   if (!fs.existsSync(source)) {
-    console.error(`Source path does not exist: ${source}`);
+    console.warn(`Source path does not exist: ${source} - skipping stylus-by-example generation`);
     return;
   }
 
   if (!fs.lstatSync(source).isDirectory()) {
-    console.error(`Source path is not a directory: ${source}`);
+    console.warn(`Source path is not a directory: ${source} - skipping stylus-by-example generation`);
     return;
   }
 
