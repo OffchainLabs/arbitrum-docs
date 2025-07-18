@@ -10,20 +10,16 @@ For most of the docs content, you can contribute by simply reviewing our [docs c
 
 The following are the only exceptions:
 
-- Contributing to the three troubleshooting pages — [nodes](arbitrum-docs/partials/_troubleshooting-nodes-partial.mdx), [builders](arbitrum-docs/partials/_troubleshooting-building-partial.mdx), and [users](arbitrum-docs/partials/_troubleshooting-users-partial.mdx), as well as the [glossary](arbitrum-docs/partials/_glossary-partial.md) page — requires internal Offchain Labs access. If you'd like to make a suggestion about content on any of those pages, open an [issue ticket](https://github.com/OffchainLabs/arbitrum-docs/issues).
+- Contributing to the three troubleshooting pages — [nodes](docs/partials/_troubleshooting-nodes-partial.mdx), [builders](docs/partials/_troubleshooting-building-partial.mdx), and [users](docs/partials/_troubleshooting-users-partial.mdx), as well as the [glossary](docs/partials/_glossary-partial.md) page — requires internal Offchain Labs access. If you'd like to make a suggestion about content on any of those pages, open an [issue ticket](https://github.com/OffchainLabs/arbitrum-docs/issues).
 
-- To request to have your project added to the [3rd party node providers page](arbitrum-docs/build-decentralized-apps/reference/01-node-providers.mdx), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
+- To request to have your project added to the [3rd party node providers page](docs/build-decentralized-apps/reference/01-node-providers.mdx), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
 
 ### Initial set up
 
 ```shell
 git clone git@github.com:OffchainLabs/arbitrum-docs.git
 
-cd arbitrum-docs/
-
 git submodule update --init --recursive
-
-cd website/
 ```
 
 Install node dependencies
@@ -34,7 +30,7 @@ yarn
 
 ### Dev Build
 
-To start a build server to serve the docs site locally, run this command from the `/website` directory:
+To start a build server to serve the docs site locally, run this command from the root directory:
 
 ```shell
 yarn start
@@ -44,7 +40,7 @@ This command will both generate the `arbitrum-sdk` docs from the submodule and s
 
 ### Build
 
-While in the `/website` directory, this command will build the site:
+While in the root directory, this command will build the site:
 
 ```shell
 yarn build
@@ -72,7 +68,7 @@ Let's assume you need to add the term "State Transition Function" to the glossar
 
 1. Create an `.mdx` file as follows: 
 
-`arbitrum-docs/partials/glossary/_state-transition-function.mdx`
+`docs/partials/glossary/_state-transition-function.mdx`
 
 2. Ensure that the content of your file follows the following format:
 
@@ -86,7 +82,7 @@ titleforSort: State Transition Function
 The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.
 ```
 
-3. While in the `/website` directory, run the following command:
+3. While in the root directory, run the following command:
 
 ```shell
 npx tsx src/scripts/build-glossary.ts

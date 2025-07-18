@@ -29,9 +29,6 @@ run_yarn_command() {
   fi
 }
 
-# Change to website directory
-cd website || handle_error "Failed to change to website directory"
-
 # Check if globalVars.js has staged changes
 if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
   log_info "Detected changes in globalVars.js"
@@ -57,9 +54,6 @@ run_yarn_command "check-redirects" "The redirect checker found issues that need 
 # Final formatting pass
 log_info "Running final formatting pass..."
 run_yarn_command "format" "Final formatting failed"
-
-# Return to original directory
-cd .. || handle_error "Failed to return to original directory"
 
 log_success "Pre-commit tasks completed"
 log_info "Note: To bypass hooks, use git commit --no-verify"

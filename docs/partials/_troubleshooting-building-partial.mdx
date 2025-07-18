@@ -1,0 +1,225 @@
+### How does gas work on Arbitrum?
+
+Fees on Arbitrum chains are collected on L2 in the chains' native currency (ETH on both Arbitrum One and Nova).
+
+A transaction fee is comprised of both an L1 and an L2 component:
+
+The L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See [L1 Pricing](https://developer.arbitrum.io/arbos/l1-pricing).)
+
+The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 gwei on Arbitrum One and 0.01 gwei on Nova (See [Gas](https://docs.arbitrum.io/arbos/gas)).
+
+L2 Gas price adjusts responsively to chain congestion, ala EIP 1559.
+
+### I tried to create a retryable ticket but the transaction reverted on L1. How can I debug the issue?
+
+Creation of retryable tickets can revert with one of these custom errors:
+
+1. **InsufficientValue**: not enough gas included in your L1 transaction's callvalue to cover the total cost of your retryable ticket; i.e., `msg.value < (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)`. Note that your L1 transaction's callvalue must cover this full cost. See [Retryable Tickets Lifecycle](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#submission) for more information.
+2. **InsufficientSubmissionCost**: provided submission cost isn't high enough to create your retryable ticket.
+3. **GasLimitTooLarge**: provided gas limit is greater than 2^64
+4. **DataTooLarge**: provided data is greater than 117.964 KB (90% of Geth's 128 KB transaction size limit).
+
+To figure out which error caused your transaction to revert, we recommend using etherscan's Parity VM trace support (Tenderly is generally a very useful debugging tool; however, it can be buggy when it comes to custom Geth errors).
+
+Use the following link to view the Parity VM trace of your failed transaction (replacing the tx-hash with your own, and using the appropriate etherscan root url):
+
+[https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw](https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw)
+
+To find out the reversion error signature, go to the "Raw Traces" tab, and scroll down to find the last "subtrace" in which your transaction is reverted. Then find "output" field of that subtrace.
+
+(In the above example the desirable "output" is:  
+`{'0xfadf238a0000000000000000000000000000000000000000000000000000c4df7e2903b00000000000000000000000000000000000000000000000000000a39a1d002808'}`)
+
+The first four bytes of the output is the custom error signature; in our example it's `0xfadf238a`.
+
+To let's find out which is custom error this signature represents, we can use this handy tool by Samzcsun: [https://sig.eth.samczsun.com/](https://sig.eth.samczsun.com/)
+
+Checking `0xfadf238a` gives us `InsufficientSubmissionCost(uint256,uint256)`.
+
+### How is the L1 portion of an Arbitrum transaction's gas fee computed?
+
+The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter value can be queried via the `getPricesInWei` method of the `ArbGasInfo` precompile. You can find more information about gas calculations in [Understanding Arbitrum: 2-Dimensional Fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas).
+
+### What is a retryable ticket's "submission fee"? How can I calculate it? What happens if I the fee I provide is insufficient?
+
+A [retryable's](https://developer.arbitrum.io/arbos/l1-to-l2-messaging) submission fee is a special fee a user must pay to create a retryable ticket. The fee is directly proportional to the size of the L1 calldata the retryable ticket uses. The fee can be queried using the `Inbox.calculateRetryableSubmissionFee` method. If insufficient fee is provided, the transaction will revert on L1, and the ticket won't get created.
+
+### Which method in the Inbox contract should I use to submit a retryable ticket (aka L1 to L2 message)?
+
+The method you should (almost certainly) use is `Inbox.createRetryableTicket`. There is an alternative method, `Inbox.unsafeCreateRetryableTicket`, which, as the name suggests, should only be used by those who fully understand its implications.
+
+There are two differences between `createRetryableTicket` and `unsafeCreateRetryableTicket`:
+
+1. Method `createRetryableTicket` will check that provided L1 callvalue is sufficient to cover the costs of creating and executing the retryable ticket (at the specified parameters) and otherwise [revert directly at L1](https://docs.arbitrum.io/for-devs/troubleshooting-building#i-tried-to-create-a-retryable-ticket-but-the-transaction-reverted-on-l1--how-can-i-debug-the-issue). `unsafeCreateRetryableTicket`, in contrast, will allow a retryable ticket to be created that is guaranteed to revert on L2.
+2. Method `createRetryableTicket` will check if either the provided `excessFeeRefundAddress` or the `callValueRefundAddress` are contracts on L1; if they are, to prevent the situation where refunds are _guaranteed_ to be irrecoverable on L2, it will convert them to their [address alias](https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing), providing a _potential_ path for fund recovery. `unsafeCreateRetryableTicket` will allow the creation of a retryable ticket with refund addresses that are L1 contracts; since no L1 contract can alias to an address that is also itself an L1 contract, refunds to these addresses on L2 will be irrecoverable.
+
+(Astute observers may note a third ticket creation method, `createRetryableTicketNoRefundAliasRewrite`; this is included only for backwards compatibility, but should be considered deprecated in favor of `unsafeCreateRetryableTicket`)
+
+### Why do I get "custom tx type" errors when I use hardhat?
+
+In Arbitrum, we use a number of non-standard [EIP-2718](https://eips.ethereum.org/EIPS/eip-2718) typed transactions. See [here](https://developer.arbitrum.io/arbos/geth#transaction-types) for the full list and the rationale.
+
+Note that if you're using Hardhat, [v2.12.2](https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2) added support for forking networks like Arbitrum with custom transaction types (find more information [here](https://github.com/NomicFoundation/hardhat/issues/2995)).
+
+### Why does it look like two identical transactions consume a different amount of gas?
+
+Calling an Arbitrum node's `eth_estimateGas` RPC returns a value sufficient to cover both the L1 and L2 components of the fee for the current gas price; this is the value that, e.g., will appear in users' wallets in the "gas limit" field.
+
+Thus, if the L1 calldata price changes over time, it will appear (in e.g., a wallet) that a transaction's gas limit is changing. In fact, the L2 gas limit isn't changing, merely the total gas required to cover the transaction's L1 + L2 fees.
+
+See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas) for more.
+
+### Why am I getting error "429 Too Many Requests" when using one of Offchain Labs' Public RPCs?
+
+Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing. Hitting the rate limit could come from your request frequency and/or the resources required to process the requests. If you are hitting our rate limit, we recommend [running your own node](https://developer.arbitrum.io/node-running/how-tos/running-a-full-node) or [using a third party node provider](https://developer.arbitrum.io/node-running/node-providers).
+
+### How do block.number and block.timestamp work on Arbitrum?
+
+Solidity calls to `block.number` on Arbitrum will return the block number/ timestamp of the underlying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.
+
+Solidity calls to `block.timestamp` on Arbitrum are not linked to the timestamp of the L1 block. It is updated every L2 block based on the sequencer's clock. Furthermore, for transactions that are force-included from L1 (bypassing the Sequencer) `block.timestamp` will be equal to the L1 timestamp when the transaction was put in the delayed inbox on L1 (not force-included), or the L2 timestamp of the previous L2 block (whichever is greater of the two timestamps).
+
+For more info, see [block numbers and time](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time).
+
+### Do I need to download any special npm libraries in order to use web3.js, ethers.js or viem on Arbitrum?
+
+Nope, web3.js, ethers.js and viem will work out of the box just like they do on L1 Ethereum.
+
+Once upon a time, Arbitrum developers were required to download supplemental packages with names like "arb-provider-ethers" and "arb-ethers-web3-bridge", but these packages are deprecated and no longer required! Any guide that directs devs to use them should be considered outdated.
+
+### How many block numbers must we wait for in Arbitrum before we can confidently state that the transaction has reached finality?
+
+Arbitrum's block intervals fluctuate with throughput, so relying on block numbers for finality isn't recommended. However, Arbitrum nodes support Ethereum's JSON RPC, enabling the use of [`eth_getBlockByNumber()`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbynumber) to determine block finality. Here, we provide additional details on how to achieve this.
+
+You can use [`eth_getBlockByNumber()`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbynumber) with the string `"latest"`, `"safe"`, or `"finalized"`, each offering varying degrees of finality:
+
+- `latest`: Provides you with the most recent Arbitrum block number, also known as the tip of the chain. This block is typically the last sequenced block and may not yet be posted on L1. As long as you trust the Sequencer to eventually post this information on L1, relying on the `latest` block should be fine.
+- `safe`: Provides you with the most recent Arbitrum block number that has achieved attestations from a two-thirds majority of Ethereum's validator set. This occurs when the Sequencer's batch is posted as an L1 block on Ethereum and then the batch transactions achieve `safe` finality there. While safe blocks are typically resistant to re-orgs, they can still be re-orged in the event of a significant L1 re-org.
+- `finalized`: Provides you with the most recent Arbitrum block number that is finalized on Ethereum. This means that the Sequencer's batch has been published as an L1 block on the Ethereum network and has reached a substantial depth, making it eligible for hard finality. Unlike `safe` blocks, `finalized` blocks are highly improbable to undergo re-orgs.
+
+To learn more about the different phases of an Arbitrum transaction, from client initiation to Layer 1 confirmation, check out [The Lifecycle of an Arbitrum Transaction](https://docs.arbitrum.io/tx-lifecycle).
+
+### How can I list my token on the Arbitrum Bridge?
+
+The L2 token list used in the Arbitrum bridge is generated from the L1 tokens that are part of the token list of [Uniswap](https://tokenlists.org/token-list?url=https%3A%2F%2Ftokens.uniswap.org), [Gemini](https://tokenlists.org/token-list?url=https%3A%2F%2Fwww.gemini.com%2Funiswap%2Fmanifest.json), [Coinmarketcap](https://api.coinmarketcap.com/data-api/v3/uniswap/all.json) or [Coingecko](https://tokens.coingecko.com/uniswap/all.json). This is valid for L1-native tokens that have been bridged over to L2, and for L2-native tokens that have been bridged over to L1 as long as they are part of any of those lists.
+
+Currently, there isn't any L2-only token list.
+
+### What is a testnet or a devnet?
+
+Testnets (or devnets) primarily serve developers who want to test out the applications they're building without having to use any real mainnet funds.
+
+Arbitrum Sepolia is a testnet that has the same full feature-set as the mainnet network. It is also a "true" L2 that runs on top of the Sepolia testnet (L1), using it for security and settlement.
+
+Users can bridge any asset from the Sepolia testnet (L1) into the Arbitrum Sepolia testnet (and back!), using the official [bridge](https://bridge.arbitrum.io/).
+
+### Is there any testnet available on Arbitrum?
+
+Yes, there's an Arbitrum Sepolia testnet (421614) that uses the Nitro tech stack and runs on top of Ethereum Sepolia. You can find more information [here](https://developer.arbitrum.io/public-chains).
+
+### When was Arbitrum One upgraded from Classic to Nitro?
+
+Arbitrum One [was upgraded](https://medium.com/offchainlabs/its-nitro-time-86944693bf29) on August 31st, 2022 (block [22207818](https://arbiscan.io/block/22207818)), from the Classic stack to the improved [Nitro](https://developer.arbitrum.io/inside-arbitrum-nitro/) tech stack, maintaining the same state.
+
+### Do Arbitrum chains support precompiles that are present on Ethereum?
+
+Yes, all Arbitrum chains support all precompiles that Ethereum supports, as well as others that are not present on Ethereum. Check the [precompiles reference page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/precompiles) for more information about Arbitrum specific precompiles.
+
+### What's the contract code size limit in Arbitrum chains?
+
+As specified in [EIP-170](https://eips.ethereum.org/EIPS/eip-170), contracts of up to 24KB are deployable on Arbitrum chains.
+
+### How can I find the L2 block(s) that corresponds to a given L1 block?
+
+First of all, you should be familiar with how block numbers behave on Arbitrum. You can find information about it in [Block numbers and time](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time).
+
+When you query an RPC node for a transaction receipt or a block information, you obtain as part of the result the property `l1BlockNumber`, which is the L1 block number that the sequencer viewed when it processed the transaction.
+
+With that, although it might be computationally complex, you can binary search the L1 block number you are looking for, and get all L2 blocks that have that `l1BlockNumber`.
+
+If you want a more specific result, you can perform the same operation with the timestamp from the L1 block, instead of the actual block number.
+
+### Why do some old transactions have extremely high gas prices when querying them?
+
+When Arbitrum One was running under the Arbitrum Classic stack (before Nitro), the gas price was an unbounded bid, so when requesting those transactions via RPC, you may obtain a very high amount in the `gasPrice` property.
+
+Instead of that, it is recommended to look at the `effectiveGasPrice` property from the transaction receipt.
+
+### What is the WASM module root?
+
+The WASM module root is a 32 byte hash, which is a merkelization of the Go replay binary and its dependencies.
+
+The replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.
+
+You can find more information in [How to customize your Orbit chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).
+
+### Why do I get a "gas required exceeds allowance" when trying to estimate the gas costs of a request?
+
+During an `eth_estimateGas` call the actual request will be simulated on the node, so if the transaction reverts or if there aren't enough funds in the wallet that's making the call (usually the `from` parameter), the eth_estimateGas request will return the error `gas required exceeds allowance`.
+
+Make sure you have enough funds in your wallet, and the gas fields of the request (if you're using them) are correctly set.
+
+### How can I verify that a child chain block has been processed as part of a specific assertion?
+
+If you want to verify that the latest confirmed (or created) assertion has processed a specific child chain block, you can follow these steps:
+
+1. From the rollup contract, obtain the latest confirmed (or created) assertion through the function `latestConfirmed` (or `latestNodeCreated`). In this context, we refer to assertions as "nodes".
+2. Obtain the node information through `getNode`
+3. Find the `NodeCreated` event that was emitted when that node was created.
+4. In that NodeCreated event, there's an `assertion` property that contains the state of the chain before processing the specified blocks, and after processing them. Get the `afterState.globalState` property
+5. That value contains a bytes32Vals array with the latest child chain block hash processed in the first element.
+
+You can find an example script in our [arbitrum-tutorials](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/l2-block-verification-in-assertion) repository.
+
+### Why is the fee of some Classic transactions slightly different than the multiplication of gasLimit and effectiveGasPrice?
+
+Gas prices in Classic transactions worked a bit differently than in Nitro transactions. Classic transactions handled four different prices: L1 fixed, L1 calldata, L2 computation and L2 storage. You can see all those prices in the Advanced TxInfo of Arbiscan (here's an [example](https://arbiscan.io/tx/0xecfe992adc408d1458d97b6e066ea7f4169bf048e84cb7a4beaea6e9c54f07da#txninfo)).
+
+When querying the receipt of a Classic transaction on a Nitro node, there's some calculation done to get an effectiveGasPrice that is close to (but not exactly) what those four prices represent. That's why if you multiply the gasLimit by the effectiveGasPrice you might end up with a transaction fee that is slightly different than the actual fee paid.
+
+To get the exact fees paid, you can query a Classic node, which will return all the accurate information in an object called `feeStats`. That object will contain all the information split into the four different gas fields: `prices`, `unitsUsed` and `paid` (which is price \* unitsUsed).
+
+### How can I update the information of my bridged token on Arbiscan?
+
+If you have a native-L1 token that was bridged to L2 via the standard gateway, you might find that you can't claim ownership of the L2 contract of your token as it was generated by another contract.
+
+To update its information on Arbiscan (logo, socials, etc.), you can open a ticket through [Arbiscan support system](https://arbiscan.io/contactus) and request them to replicate the information of your token on L1 to L2.
+
+### Why does my transaction revert with InvalidFEOpcode when using Foundry?
+
+Foundry and other similar development tools that enable chain forking, do not support Arbitrum precompiles. If your transaction is calling a precompile, it is likely that it will revert with `InvalidFEOpcode`.
+
+To rule out that possibility, it is recommended to send the transaction with a different tool.
+
+### Why do I receive an "intrinsic gas too low" error when sending a transaction even with a high gas price?
+
+The error `intrinsic gas too low` usually refers to not providing enough gas to pay for the L1 component of the transaction fees. This is usually a problem related to not setting a high enough gas limit (instead of gas price), due to how Arbitrum handles gas. You can find more information in the article [Understanding Arbitrum: 2-dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the page [How to estimate gas](https://docs.arbitrum.io/devs-how-tos/how-to-estimate-gas).
+
+### How can I interpret Arbitrum transaction traces?
+
+In Arbitrum, every block contains a system transaction of type [`ArbitrumInternalTxType`](https://docs.arbitrum.io/arbos/geth#ArbitrumInternalTx), which is created by the ArbOS itself for specific state updates, such as the L1 base fee and the block number. These transactions are distinct from typical Ethereum transactions and are exclusively generated by the ArbOS state transition function, not by external entities like externally owned accounts (EOAs) or smart contracts. Despite having an `INVALID` opcode, these transactions are represented in the trace API to signify their presence in the block, even though they're not triggered by an opcode within EVM execution.
+
+One of the key functionalities of `ArbitrumInternalTxType` involves managing value transfers related to acknowledging batch postings. When batches of transactions are submitted to Layer 1, a special cross-chain message is produced as a receipt, confirming the successful posting of the batch. The function `ApplyInternalTxUpdate` is responsible for processing and updating the system's state based on these cross-chain messages, ensuring consistency and integrity across the Arbitrum network.
+
+Another functionality of `ArbitrumInternalTxType` transactions is handling the value held in retryables when they are discarded. Retryable transactions are essentially transactions that can be retried if they fail to execute on the destination chain. However, in certain scenarios, these retryable transactions might get discarded, for instance, due to expiration or other conditions.
+
+In such cases, the escrowed call value, which is the value associated with the retryable transaction, will be paid out to a specified `callValueRefundAddress` account. This address is designated during the initial submission of the transaction on the parent chain. The purpose of this mechanism is to ensure that funds associated with retryable transactions are not lost in case they cannot be successfully executed, thereby maintaining the integrity and reliability of the Arbitrum network.
+
+To accurately reflect value transfers associated with these transactions, we employ a unique `callType` parameter: `invalid`. Unlike conventional EVM calls (such as `delegatecall`, `call`, etc.), this designation signifies a different system transaction. Essentially, it denotes a straightforward value transfer from one account to another, with no inherent invocation of smart contract logic. While technically feasible to conduct this transfer within a conventional call type, our deliberate choice of `invalid` aims to enhance the clarity and distinctiveness of this transaction type within the EVM ecosystem.
+
+Notably, the sender account remains consistent across all instances of this transaction type for the batch posting receipt version. However, it's important to note that for retryable transactions, the sender account differs as each retryable transaction escrows its value in a unique vault specific to that transaction. This ensures that funds associated with each retryable transaction are securely held until either successful execution or eventual refund.
+
+:::note
+
+- All pre-Nitro transactions are labeled as`ArbitrumLegacyTxType` by Nitro.
+- Traces are not available for pre-Nitro (Classic) transactions.
+
+:::
+
+### Why do some blocks have a total gas limit that's over the standard block gas limit?
+
+The execution gas block limit of Arbitrum chains is 32 million. However, when querying a block, we might find a `gasLimit` value that exceeds that number.
+
+This happens because this gasLimit field accounts for both execution gas and the correspondent gas limit of the L1 costs (you can find more information about the role of the L1 costs in a transaction's gas limit on [this article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9)). The gas limit corresponding to L1 costs is practically unlimited, so we might find very high values on the gasLimit field of a block.
+
+The effective block gas limit (32 million) only accounts for execution gas limit. We can check the actual gas used for execution on a specific block, by checking the `gasUsed` field.
