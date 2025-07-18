@@ -19,14 +19,11 @@ As a RaaS or Chain Owner, if you require internal daily reporting on fees, we ha
 ## Fee Collection System Overview
 
 ### 1. Fee Collector Address Types (L1 Focus)
-
 There are two main L1 fee collector addresses:
-
 1. **L1 Base Fee** - Refunds batch poster for parent chain posting costs
 2. **L1 Surplus** - Collects profit on batch posting fees
 
 #### Important Distinction:
-
 - L1 Base Fee = Cost recovery only (NOT for profit)
 - L1 Surplus = Profit collection
 - Using L1 Base Fee for profit indicates misconfiguration
@@ -44,7 +41,7 @@ There are two main L1 fee collector addresses:
 
 #### Fee Recovery Mechanism:
 
-1. ArboS consumes batch posting reports
+1. ArbOS consumes batch posting reports
 2. Creates gas price view of parent chain on child chain
 3. Uses this view for pricing future transactions
 4. Implements balancing mechanism to ensure:
