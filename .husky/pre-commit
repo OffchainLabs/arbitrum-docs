@@ -55,8 +55,5 @@ run_yarn_command "check-redirects" "The redirect checker found issues that need 
 log_info "Running final formatting pass..."
 run_yarn_command "format" "Final formatting failed"
 
-# Return to original directory
-cd .. || handle_error "Failed to return to original directory"
-
 log_success "Pre-commit tasks completed"
 log_info "Note: To bypass hooks, use git commit --no-verify"

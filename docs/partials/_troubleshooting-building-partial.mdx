@@ -17,7 +17,7 @@ Creation of retryable tickets can revert with one of these custom errors:
 1. **InsufficientValue**: not enough gas included in your L1 transaction's callvalue to cover the total cost of your retryable ticket; i.e., `msg.value < (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)`. Note that your L1 transaction's callvalue must cover this full cost. See [Retryable Tickets Lifecycle](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#submission) for more information.
 2. **InsufficientSubmissionCost**: provided submission cost isn't high enough to create your retryable ticket.
 3. **GasLimitTooLarge**: provided gas limit is greater than 2^64
-4. **DataTooLarge**: provided data is greater than 117.964 KB  (90% of Geth's 128 KB transaction size limit).
+4. **DataTooLarge**: provided data is greater than 117.964 KB (90% of Geth's 128 KB transaction size limit).
 
 To figure out which error caused your transaction to revert, we recommend using etherscan's Parity VM trace support (Tenderly is generally a very useful debugging tool; however, it can be buggy when it comes to custom Geth errors).
 
@@ -51,7 +51,7 @@ The method you should (almost certainly) use is `Inbox.createRetryableTicket`. T
 There are two differences between `createRetryableTicket` and `unsafeCreateRetryableTicket`:
 
 1. Method `createRetryableTicket` will check that provided L1 callvalue is sufficient to cover the costs of creating and executing the retryable ticket (at the specified parameters) and otherwise [revert directly at L1](https://docs.arbitrum.io/for-devs/troubleshooting-building#i-tried-to-create-a-retryable-ticket-but-the-transaction-reverted-on-l1--how-can-i-debug-the-issue). `unsafeCreateRetryableTicket`, in contrast, will allow a retryable ticket to be created that is guaranteed to revert on L2.
-2. Method `createRetryableTicket` will check if either the provided `excessFeeRefundAddress` or the `callValueRefundAddress` are contracts on L1; if they are, to prevent the situation where refunds are *guaranteed* to be irrecoverable on L2, it will convert them to their [address alias](https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing), providing a *potential* path for fund recovery. `unsafeCreateRetryableTicket` will allow the creation of a retryable ticket with refund addresses that are L1 contracts; since no L1 contract can alias to an address that is also itself an L1 contract, refunds to these addresses on L2 will be irrecoverable.
+2. Method `createRetryableTicket` will check if either the provided `excessFeeRefundAddress` or the `callValueRefundAddress` are contracts on L1; if they are, to prevent the situation where refunds are _guaranteed_ to be irrecoverable on L2, it will convert them to their [address alias](https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing), providing a _potential_ path for fund recovery. `unsafeCreateRetryableTicket` will allow the creation of a retryable ticket with refund addresses that are L1 contracts; since no L1 contract can alias to an address that is also itself an L1 contract, refunds to these addresses on L2 will be irrecoverable.
 
 (Astute observers may note a third ticket creation method, `createRetryableTicketNoRefundAliasRewrite`; this is included only for backwards compatibility, but should be considered deprecated in favor of `unsafeCreateRetryableTicket`)
 
@@ -177,7 +177,7 @@ Gas prices in Classic transactions worked a bit differently than in Nitro transa
 
 When querying the receipt of a Classic transaction on a Nitro node, there's some calculation done to get an effectiveGasPrice that is close to (but not exactly) what those four prices represent. That's why if you multiply the gasLimit by the effectiveGasPrice you might end up with a transaction fee that is slightly different than the actual fee paid.
 
-To get the exact fees paid, you can query a Classic node, which will return all the accurate information in an object called `feeStats`. That object will contain all the information split into the four different gas fields: `prices`, `unitsUsed` and `paid` (which is price * unitsUsed).
+To get the exact fees paid, you can query a Classic node, which will return all the accurate information in an object called `feeStats`. That object will contain all the information split into the four different gas fields: `prices`, `unitsUsed` and `paid` (which is price \* unitsUsed).
 
 ### How can I update the information of my bridged token on Arbiscan?
 
