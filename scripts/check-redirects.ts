@@ -63,7 +63,7 @@ export class RedirectChecker {
   private gitCommand?: string;
 
   constructor(options: RedirectCheckerOptions) {
-    this.vercelJsonPath = options.vercelJsonPath || resolve(process.cwd(), '..', 'vercel.json');
+    this.vercelJsonPath = options.vercelJsonPath || resolve(process.cwd(), 'vercel.json');
     this.mode = options.mode;
     this.gitCommand = options.gitCommand;
   }

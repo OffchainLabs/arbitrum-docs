@@ -25,12 +25,12 @@ function load(app) {
   app.renderer.on(RendererEvent.END, async () => {
     // Create the manual introduction and migration files
     createManualFiles(sdkOutputDir);
-    
+
     // Generate sidebar only from the actual TypeDoc generated content
     const sidebarItems = generateSidebarFromSDKContent(sdkOutputDir);
     const sidebarConfig = { items: sidebarItems };
     const sidebarPath = path.join(sdkOutputDir, '../../sdk-sidebar.js');
-    
+
     fs.writeFileSync(
       sidebarPath,
       `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst typedocSidebar = ${JSON.stringify(
@@ -51,7 +51,7 @@ function cleanDirectory(directory, preserveFiles = []) {
       if (preserveFiles.includes(file)) {
         return;
       }
-      
+
       const curPath = path.join(directory, file);
       if (fs.lstatSync(curPath).isDirectory()) {
         cleanDirectory(curPath);
@@ -122,7 +122,9 @@ function generateSidebar(dir, basePath = '') {
       if (entry.isDirectory()) {
         const subItems = generateSidebar(
           fullPath,
-          basePath ? `${basePath}/${entry.name.replace(/^\d+-/, '')}` : entry.name.replace(/^\d+-/, ''),
+          basePath
+            ? `${basePath}/${entry.name.replace(/^\d+-/, '')}`
+            : entry.name.replace(/^\d+-/, ''),
         );
         const label = capitalizeFirstLetter(getLabelFromFilesystem(entry.name));
         return {
@@ -193,20 +195,25 @@ function generateSidebarFromSDKContent(sdkDir) {
       // This is a category (like assetBridger, dataEntities, etc.)
       const categoryPath = path.join(sdkDir, entry.name);
       const categoryFiles = fs.readdirSync(categoryPath, { withFileTypes: true });
-      
+
       const categoryItems = categoryFiles
-        .filter(file => file.isFile() && file.name.endsWith('.md'))
-        .map(file => ({
+        .filter((file) => file.isFile() && file.name.endsWith('.md'))
+        .map((file) => ({
           type: 'doc',
           id: `sdk/${entry.name}/${file.name.replace('.md', '')}`,
-          label: capitalizeFirstLetter(file.name.replace('.md', '').replace(/([A-Z])/g, ' $1').trim())
+          label: capitalizeFirstLetter(
+            file.name
+              .replace('.md', '')
+              .replace(/([A-Z])/g, ' $1')
+              .trim(),
+          ),
         }));
 
       if (categoryItems.length > 0) {
         items.push({
           type: 'category',
           label: capitalizeFirstLetter(entry.name),
-          items: categoryItems
+          items: categoryItems,
         });
       }
     } else if (entry.isFile() && entry.name.endsWith('.md')) {
@@ -214,7 +221,12 @@ function generateSidebarFromSDKContent(sdkDir) {
       items.push({
         type: 'doc',
         id: `sdk/${entry.name.replace('.md', '')}`,
-        label: capitalizeFirstLetter(entry.name.replace('.md', '').replace(/([A-Z])/g, ' $1').trim())
+        label: capitalizeFirstLetter(
+          entry.name
+            .replace('.md', '')
+            .replace(/([A-Z])/g, ' $1')
+            .trim(),
+        ),
       });
     }
   }
@@ -627,7 +639,7 @@ Message classes have been renamed and their methods updated:
   // Write the files
   fs.writeFileSync(path.join(sdkOutputDir, 'index.mdx'), introductionContent, 'utf8');
   fs.writeFileSync(path.join(sdkOutputDir, 'migrate.mdx'), migrationContent, 'utf8');
-  
+
   // Remove the TypeDoc-generated index.md file if it exists
   const indexMdPath = path.join(sdkOutputDir, 'index.md');
   if (fs.existsSync(indexMdPath)) {
