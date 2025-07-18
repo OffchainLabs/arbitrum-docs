@@ -1,0 +1,293 @@
+|-- buildDecentralizedAppsSidebar
+|  -- Welcome
+|    -- A gentle introduction
+|    -- Get started
+|    -- Chain info
+|  -- Build decentralized apps
+|    -- Quickstart (Solidity)
+|    -- Estimate gas
+|    -- Chains and testnets
+|    -- Cross-chain messaging
+|    -- Custom gas token SDK
+|    -- Arbitrum vs Ethereum
+|      -- Comparison overview
+|      -- Block gas limit, numbers and time
+|      -- RPC methods
+|      -- Solidity support
+|    -- Oracles
+|    -- Precompiles
+|      -- Overview
+|      -- Reference
+|    -- NodeInterface
+|      -- Overview
+|      -- Reference
+|    -- Token bridging
+|      -- Overview
+|      -- ETH bridging
+|      -- ERC-20 token bridging
+|      -- Bridge tokens programmatically
+|        -- Get started
+|        -- Use the standard gateway
+|        -- Use the generic-custom gateway
+|        -- Use the custom gateway
+|    -- Reference
+|      -- RPC endpoints and providers
+|      -- Smart contract addresses
+|      -- Chain parameters
+|      -- Development frameworks
+|      -- Web3 libraries and tools
+|      -- Monitoring tools and block explorers
+|      -- Debugging tools
+|      -- Mainnet risks
+|    -- Troubleshooting
+|    -- Arbitrum SDK
+|      -- Introduction
+|      -- Migrating from v3 to v4
+|      -- Intro2
+|      -- Reference
+|        -- Index
+|        -- AssetBridger
+|          -- AssetBridger
+|          -- Erc20Bridger
+|          -- EthBridger
+|          -- L1l3Bridger
+|        -- DataEntities
+|          -- Address
+|          -- Constants
+|          -- Errors
+|          -- Event
+|          -- Message
+|          -- Networks
+|          -- RetryableData
+|          -- Rpc
+|          -- SignerOrProvider
+|          -- TransactionRequest
+|        -- Inbox
+|          -- Inbox
+|        -- Message
+|          -- ChildToParentMessage
+|          -- ChildToParentMessageClassic
+|          -- ChildToParentMessageNitro
+|          -- ChildTransaction
+|          -- ParentToChildMessage
+|          -- ParentToChildMessageCreator
+|          -- ParentToChildMessageGasEstimator
+|          -- ParentTransaction
+|        -- Utils
+|          -- ArbProvider
+|          -- Byte_serialize_params
+|          -- EventFetcher
+|          -- Lib
+|          -- Multicall
+|          -- Types
+|    -- Tutorials
+|    -- Tutorials (https://github.com/OffchainLabs/arbitrum-tutorials)
+|  -- Run an Arbitrum (Orbit) chain
+|    -- A gentle introduction
+|    -- Arbitrum chain licensing
+|    -- Configure your chain
+|      -- Common features
+|        -- Configure a custom AnyTrust gas token
+|        -- Configure a custom Rollup gas token
+|        -- Customize the challenge period
+|        -- Manage the fee parameters
+|        -- Enable blob transactions
+|        -- Data Availability Committees
+|          -- Get started
+|          -- Deploy a Data Availability Server (DAS)
+|          -- Deploy a mirror Data Availability Server
+|          -- Configure a Data Availability Committee (DAC)
+|        -- Customize your chain's deployment
+|        -- Additional configuration parameters
+|      -- Advanced features
+|        -- Enable fast withdrawals
+|        -- BoLD configuration parameters
+|        -- Deploy and configure Timeboost
+|        -- Use Layer Leap
+|        -- Configure AEP fee routing
+|          -- AEP fee router overview
+|          -- Set up AEP fee router
+|          -- Calculate AEP license fees
+|          -- Report your fees
+|    -- Deploy an Arbitrum chain
+|      -- Deploy a production chain
+|        -- Overview
+|        -- Deploy an Arbitrum chain
+|        -- Generate the node config file
+|        -- Deploy a token bridge
+|      -- Canonical factory contracts
+|    -- Maintain your chain
+|      -- Ownership structure and access control
+|      -- ArbOS
+|        -- ArbOS software releases
+|        -- Upgrade ArbOS
+|      -- Guidance
+|        -- Manage gas state growth
+|        -- Manage gas speed limit
+|        -- Post-launch deployments
+|      -- Upgrade to BoLD
+|      -- Monitoring tools and considerations
+|    -- Customize your chain
+|      -- Customize your chain's precompiles
+|      -- Customize your chain's behavior
+|      -- Customize ArbOS version
+|      -- Configure delayed inbox finality
+|    -- Third-party integrations and features
+|      -- Implement Circle bridged USDC
+|      -- Third-party infrastructure providers
+|    -- Run a node for an Arbitrum chain
+|      -- Run a full node
+|      -- Run a validator
+|      -- Run a sequencer node
+|      -- Run high-availability sequencer nodes
+|    -- Add your chain to the bridge
+|    -- BoLD for Arbitrum chains
+|    -- Timeboost for Arbitrum chains
+|    -- Public preview
+|    -- FAQ
+|  -- Write Stylus Contracts
+|    -- A gentle introduction
+|    -- Quickstart
+|    -- Rust SDK
+|      -- Overview
+|      -- Structure of a Contract
+|      -- Hello World
+|      -- Primitive Data Types
+|      -- Variables
+|      -- Constants
+|      -- Function
+|      -- Errors
+|      -- Events
+|      -- Inheritance
+|      -- Vm Affordances
+|      -- Sending Ether
+|      -- Function Selector
+|      -- Abi Encode
+|      -- Abi Decode
+|      -- Hashing
+|      -- Bytes In Bytes Out
+|      -- Composition and trait-based routing model
+|      -- Advanced features
+|      -- Recommended Rust Crates
+|    -- Rust CLI
+|      -- Overview
+|      -- Debug transactions
+|      -- Testing contracts
+|      -- Verify contracts
+|      -- Cache contracts
+|      -- Verify on Arbiscan
+|      -- Optimize WASM binaries
+|    -- Run a local dev node
+|    -- Concepts
+|      -- Architecture overview
+|      -- Gas metering
+|    -- Examples
+|      -- Erc20
+|      -- Erc721
+|      -- Multi Call
+|      -- Vending Machine
+|      -- Awesome Stylus
+|      -- Awesome Stylus (https://github.com/OffchainLabs/awesome-stylus)
+|    -- Reference
+|      -- Chain Info
+|      -- Gas & Ink Pricing
+|      -- Stylus by Example
+|      -- Stylus by Example (https://stylus-by-example.org/)
+|      -- Cargo Stylus CLI GitHub
+|      -- Cargo Stylus CLI GitHub (https://github.com/OffchainLabs/cargo-stylus)
+|      -- Rust SDK Crate
+|      -- Rust SDK Crate (https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html)
+|      -- Source Code Repository
+|      -- Source Code Repository (https://github.com/OffchainLabs/stylus)
+|    -- Using other languages
+|    -- Troubleshooting
+|  -- Run an Arbitrum node
+|    -- Overview
+|    -- Run a full node
+|    -- Run a local full chain simulation
+|    -- Run a local dev node
+|    -- L1 Ethereum RPC providers
+|    -- Data Availability Committees
+|    -- ArbOS software releases
+|      -- Overview
+|      -- Callisto (ArbOS 40)
+|      -- Bianca (ArbOS 32)
+|      -- Atlas (ArbOS 20)
+|      -- ArbOS 11
+|    -- More node types
+|      -- Run an archive node
+|      -- Run a validator
+|      -- Run a split validator
+|      -- Run a Classic node
+|    -- Sequencer
+|      -- Run a sequencer node
+|      -- Run a feed relay
+|      -- Read the sequencer feed
+|      -- Run a Sequencer Coordination Manager (SQM)
+|      -- Run high availability sequencer nodes
+|    -- Build Nitro locally
+|    -- Migrate to Nitro from Classic
+|    -- Database snapshots
+|    -- Convert databases from LevelDB to Pebble
+|    -- Troubleshooting
+|    -- FAQ
+|  -- Arbitrum bridge
+|    -- Quickstart
+|    -- USDC on Arbitrum One
+|    -- Troubleshooting
+|  -- How Arbitrum works
+|    -- A gentle introduction
+|    -- Sequencing, Followed by Deterministic Execution
+|    -- The Sequencer and Censorship Resistance
+|    -- Parent to Child chain messaging
+|    -- State Transition Function
+|      -- STF Overview
+|      -- STF inputs
+|      -- Ethereum vs Arbitrum
+|      -- Modified Geth on Arbitrum
+|      -- ArbOS
+|      -- Stylus execution path
+|    -- Validation and Proving
+|      -- Validation and proving overview
+|      -- Rollup protocol
+|      -- Proving and challenges
+|    -- AnyTrust protocol
+|    -- Child to parent chain messaging
+|    -- Gas and fees
+|    -- Data Availability
+|    -- Nitro whitepaper
+|    -- Nitro whitepaper (https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)
+|    -- The BoLD dispute protocol
+|      -- A gentle introduction
+|      -- Deploy a validator on testnet
+|      -- Deploy a validator on testnet (https://github.com/offchainlabs/bold-validator-starter-kit)
+|      -- BoLD Whitepaper
+|      -- BoLD Whitepaper (https://arxiv.org/abs/2404.10491)
+|      -- Technical deep dive
+|      -- Economics of disputes
+|      -- Specification on Github
+|      -- Specification on Github (https://github.com/OffchainLabs/bold)
+|      -- Audit Report by Trail of Bits
+|      -- Audit Report by Trail of Bits (https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf)
+|      -- Audit Report by Code4rena
+|      -- Audit Report by Code4rena (https://code4rena.com/reports/2024-05-arbitrum-foundation)
+|    -- Timeboost
+|      -- Public preview
+|      -- Use Timeboost
+|      -- Troubleshoot Timeboost
+|      -- Timeboost FAQ
+|      -- Specification: Timeboost
+|      -- Specification: Timeboost (https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md)
+|      -- Specification: Timeboost with decentralized sequencing
+|      -- Specification: Timeboost with decentralized sequencing (https://github.com/OffchainLabs/decentralized-timeboost-spec)
+|      -- White paper: Timeboost
+|      -- White paper: Timeboost (https://arxiv.org/abs/2306.02179)
+|  -- FAQ
+|  -- Glossary
+|  -- Third-party docs
+|    -- Oracles
+|  -- Audit reports
+|  -- DAO docs
+|  -- DAO docs (https://docs.arbitrum.foundation/gentle-intro-dao-governance)
+|  -- Prysm docs
+|  -- Prysm docs (https://www.offchainlabs.com/prysm/docs)
