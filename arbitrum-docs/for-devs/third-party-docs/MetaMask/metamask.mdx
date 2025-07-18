@@ -1,0 +1,29 @@
+---
+title: 'MetaMask Smart Accounts'
+description: 'Learn about MetaMask Smart Accounts and how to use them with Arbitrum'
+sidebar_label: 'MetaMask'
+third_party_content_owner: 'alexandratran'
+---
+
+The [MetaMask Delegation Toolkit](https://docs.metamask.io/delegation-toolkit/) is a collection of tools for embedding
+MetaMask Smart Accounts into dapps.
+[Smart accounts](https://docs.metamask.io/delegation-toolkit/concepts/smart-accounts/) support programmable account
+behavior and advanced features like delegated permissions, multi-signature approvals, and gas abstraction.
+Unlike traditional wallets, which rely on private keys for every transaction, MetaMask Smart Accounts use smart contracts to
+govern account logic.
+
+[Delegations](https://docs.metamask.io/delegation-toolkit/concepts/delegation/) are a core feature of MetaMask Smart
+Accounts, enabling secure, rule-based permission sharing.
+These delegations are powered by the toolkit's Delegation Framework, which defines how permissions are created, shared,
+and enforced.
+
+## Using MetaMask Smart Accounts with Arbitrum
+
+The latest version of the MetaMask Delegation Toolkit
+[supports multiple networks](https://docs.metamask.io/delegation-toolkit/get-started/supported-networks/), including
+Arbitrum and Arbitrum Sepolia.
+
+You can follow the the
+[MetaMask Smart Accounts quickstart](https://docs.metamask.io/delegation-toolkit/development/get-started/quickstart/) to
+set up the toolkit, create a smart account, and send a user operation.
+Make sure you import `arbitrum` or `arbitrumSepolia` from `viem/chains` when setting up the Public Client.
