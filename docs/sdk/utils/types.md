@@ -18,16 +18,16 @@ being refactored, and not being updated in the usage of OmitTyped
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` |
-| `K` *extends* keyof `T` |
+| Type parameter          |
+| :---------------------- |
+| `T`                     |
+| `K` _extends_ keyof `T` |
 
 #### Source
 
 [utils/types.ts:6](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/types.ts#L6)
 
-***
+---
 
 ### PartialPick\<T, K\>
 
@@ -39,16 +39,16 @@ Make the specified properties optional
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` |
-| `K` *extends* keyof `T` |
+| Type parameter          |
+| :---------------------- |
+| `T`                     |
+| `K` _extends_ keyof `T` |
 
 #### Source
 
 [utils/types.ts:11](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/types.ts#L11)
 
-***
+---
 
 ### RequiredPick\<T, K\>
 
@@ -60,10 +60,10 @@ Make the specified properties required
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` |
-| `K` *extends* keyof `T` |
+| Type parameter          |
+| :---------------------- |
+| `T`                     |
+| `K` _extends_ keyof `T` |
 
 #### Source
 
