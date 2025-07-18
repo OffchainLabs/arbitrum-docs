@@ -16,8 +16,8 @@ Bridger for moving either ETH or custom gas tokens back and forth between parent
 
 #### Properties
 
-| Property | Modifier | Type | Description | Inherited from |
-| :------ | :------ | :------ | :------ | :------ |
+| Property       | Modifier   | Type     | Description                                                                                                                                                                                                                                                               | Inherited from                                                                          |
+| :------------- | :--------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------- |
 | `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address<br /><br />In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`AssetBridger`](assetBridger.md#assetbridgerdepositparamswithdrawparams).`nativeToken` |
 
 #### Accessors
@@ -50,9 +50,9 @@ Approves the custom gas token to be spent by the Inbox on the parent network.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `WithParentSigner`\<`ApproveGasTokenParamsOrTxRequest`\> |  |
+| Parameter | Type                                                     | Description |
+| :-------- | :------------------------------------------------------- | :---------- |
+| `params`  | `WithParentSigner`\<`ApproveGasTokenParamsOrTxRequest`\> |             |
 
 ###### Returns
 
@@ -72,9 +72,9 @@ Check the signer/provider matches the child network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -98,9 +98,9 @@ Check the signer/provider matches the parent network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -124,9 +124,9 @@ Deposit ETH from Parent onto Child network
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `EthDepositParams` \| `ParentToChildTxReqAndSigner` |  |
+| Parameter | Type                                                | Description |
+| :-------- | :-------------------------------------------------- | :---------- |
+| `params`  | `EthDepositParams` \| `ParentToChildTxReqAndSigner` |             |
 
 ###### Returns
 
@@ -150,9 +150,9 @@ Deposit ETH from parent network onto a different child network address
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `EthDepositToParams` \| [`ParentToChildTransactionRequest`](../dataEntities/transactionRequest.md#parenttochildtransactionrequest) & `object` & `object` |  |
+| Parameter | Type                                                                                                                                                     | Description |
+| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| `params`  | `EthDepositToParams` \| [`ParentToChildTransactionRequest`](../dataEntities/transactionRequest.md#parenttochildtransactionrequest) & `object` & `object` |             |
 
 ###### Returns
 
@@ -172,9 +172,9 @@ Creates a transaction request for approving the custom gas token to be spent by 
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params`? | `ApproveGasTokenParams` |  |
+| Parameter | Type                    | Description |
+| :-------- | :---------------------- | :---------- |
+| `params`? | `ApproveGasTokenParams` |             |
 
 ###### Returns
 
@@ -194,9 +194,9 @@ Gets tx request for depositing ETH or custom gas token
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `EthDepositRequestParams` |  |
+| Parameter | Type                      | Description |
+| :-------- | :------------------------ | :---------- |
+| `params`  | `EthDepositRequestParams` |             |
 
 ###### Returns
 
@@ -216,9 +216,9 @@ Gets transaction calldata for a tx request for depositing ETH or custom gas toke
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `EthDepositRequestParams` |  |
+| Parameter | Type                      | Description |
+| :-------- | :------------------------ | :---------- |
+| `params`  | `EthDepositRequestParams` |             |
 
 ###### Returns
 
@@ -238,9 +238,9 @@ Get a transaction request for an ETH deposit to a different child network addres
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `EthDepositToRequestParams` |  |
+| Parameter | Type                        | Description |
+| :-------- | :-------------------------- | :---------- |
+| `params`  | `EthDepositToRequestParams` |             |
 
 ###### Returns
 
@@ -260,9 +260,9 @@ Get a transaction request for an eth withdrawal
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `EthWithdrawParams` |  |
+| Parameter | Type                | Description |
+| :-------- | :------------------ | :---------- |
+| `params`  | `EthWithdrawParams` |             |
 
 ###### Returns
 
@@ -282,9 +282,9 @@ Asserts that the provided argument is of type `ApproveGasTokenParams` and not `A
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ApproveGasTokenParamsOrTxRequest` |  |
+| Parameter | Type                               | Description |
+| :-------- | :--------------------------------- | :---------- |
+| `params`  | `ApproveGasTokenParamsOrTxRequest` |             |
 
 ###### Returns
 
@@ -304,9 +304,9 @@ Withdraw ETH from child network onto parent network
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ChildToParentTxReqAndSigner` \| `EthWithdrawParams` & `object` |  |
+| Parameter | Type                                                            | Description |
+| :-------- | :-------------------------------------------------------------- | :---------- |
+| `params`  | `ChildToParentTxReqAndSigner` \| `EthWithdrawParams` & `object` |             |
 
 ###### Returns
 
@@ -330,9 +330,9 @@ Instantiates a new EthBridger from a child network Provider
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 

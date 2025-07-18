@@ -12,8 +12,8 @@ Tools for interacting with the inbox and bridge contracts
 
 #### Properties
 
-| Property | Modifier | Type | Description |
-| :------ | :------ | :------ | :------ |
+| Property         | Modifier  | Type       | Description           |
+| :--------------- | :-------- | :--------- | :-------------------- |
 | `parentProvider` | `private` | `Provider` | Parent chain provider |
 
 #### Methods
@@ -30,10 +30,10 @@ gas fee part.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter                 | Type                             |
+| :------------------------ | :------------------------------- |
 | `childTransactionRequest` | `RequiredTransactionRequestType` |
-| `childProvider` | `Provider` |
+| `childProvider`           | `Provider`                       |
 
 ###### Returns
 
@@ -55,10 +55,10 @@ the provided timestamp
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `blockNumber` | `number` |  |
-| `blockTimestamp` | `number` |  |
+| Parameter        | Type     | Description |
+| :--------------- | :------- | :---------- |
+| `blockNumber`    | `number` |             |
+| `blockTimestamp` | `number` |             |
 
 ###### Returns
 
@@ -80,20 +80,20 @@ until after a delay period has been completed.
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `undefined` \| `ForceInclusionParams` |
+| Type parameter                                      |
+| :-------------------------------------------------- |
+| `T` _extends_ `undefined` \| `ForceInclusionParams` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `messageDeliveredEvent`? | `T` | Provide this to include all messages up to this one. Responsibility is on the caller to check the eligibility of this event. |
-| `overrides`? | `Overrides` | - |
+| Parameter                | Type        | Description                                                                                                                  |
+| :----------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| `messageDeliveredEvent`? | `T`         | Provide this to include all messages up to this one. Responsibility is on the caller to check the eligibility of this event. |
+| `overrides`?             | `Overrides` | -                                                                                                                            |
 
 ###### Returns
 
-`Promise`\<`T` *extends* `ForceInclusionParams` ? `ContractTransaction` : `null` \| `ContractTransaction`\>
+`Promise`\<`T` _extends_ `ForceInclusionParams` ? `ContractTransaction` : `null` \| `ContractTransaction`\>
 
 The force include transaction, or null if no eligible message were found for inclusion
 
@@ -105,9 +105,9 @@ The force include transaction, or null if no eligible message were found for inc
 
 ```ts
 private getEventsAndIncreaseRange(
-   bridge: Bridge, 
-   searchRangeBlocks: number, 
-   maxSearchRangeBlocks: number, 
+   bridge: Bridge,
+   searchRangeBlocks: number,
+   maxSearchRangeBlocks: number,
 rangeMultiplier: number): Promise<FetchedEvent<MessageDeliveredEvent>[]>
 ```
 
@@ -116,12 +116,12 @@ increased incrementally up to the max search range blocks.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `bridge` | `Bridge` |  |
-| `searchRangeBlocks` | `number` |  |
-| `maxSearchRangeBlocks` | `number` |  |
-| `rangeMultiplier` | `number` | - |
+| Parameter              | Type     | Description |
+| :--------------------- | :------- | :---------- |
+| `bridge`               | `Bridge` |             |
+| `searchRangeBlocks`    | `number` |             |
+| `maxSearchRangeBlocks` | `number` |             |
+| `rangeMultiplier`      | `number` | -           |
 
 ###### Returns
 
@@ -141,18 +141,18 @@ Get a range of blocks within messages eligible for force inclusion emitted event
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `blockNumberRangeSize` | `number` |  |
+| Parameter              | Type     | Description |
+| :--------------------- | :------- | :---------- |
+| `blockNumberRangeSize` | `number` |             |
 
 ###### Returns
 
 `Promise`\<`object`\>
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `endBlock` | `number` | firstEligibleBlock.number |
-| `startBlock` | `number` | ... |
+| Member       | Type     | Value                     |
+| :----------- | :------- | :------------------------ |
+| `endBlock`   | `number` | firstEligibleBlock.number |
+| `startBlock` | `number` | ...                       |
 
 ###### Source
 
@@ -162,8 +162,8 @@ Get a range of blocks within messages eligible for force inclusion emitted event
 
 ```ts
 getForceIncludableEvent(
-   maxSearchRangeBlocks: number, 
-   startSearchRangeBlocks: number, 
+   maxSearchRangeBlocks: number,
+   startSearchRangeBlocks: number,
 rangeMultiplier: number): Promise<null | ForceInclusionParams>
 ```
 
@@ -171,11 +171,11 @@ Find the event of the latest message that can be force include
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `maxSearchRangeBlocks` | `number` | `undefined` | The max range of blocks to search in.<br />Defaults to 3 * 6545 ( = ~3 days) prior to the first eligible block |
-| `startSearchRangeBlocks` | `number` | `100` | The start range of block to search in.<br />Moves incrementally up to the maxSearchRangeBlocks. Defaults to 100; |
-| `rangeMultiplier` | `number` | `2` | The multiplier to use when increasing the block range<br />Defaults to 2. |
+| Parameter                | Type     | Default value | Description                                                                                                      |
+| :----------------------- | :------- | :------------ | :--------------------------------------------------------------------------------------------------------------- |
+| `maxSearchRangeBlocks`   | `number` | `undefined`   | The max range of blocks to search in.<br />Defaults to 3 \* 6545 ( = ~3 days) prior to the first eligible block  |
+| `startSearchRangeBlocks` | `number` | `100`         | The start range of block to search in.<br />Moves incrementally up to the maxSearchRangeBlocks. Defaults to 100; |
+| `rangeMultiplier`        | `number` | `2`           | The multiplier to use when increasing the block range<br />Defaults to 2.                                        |
 
 ###### Returns
 
@@ -199,8 +199,8 @@ within 24 hours, you can force include it
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter  | Type     | Description                                                                                                     |
+| :--------- | :------- | :-------------------------------------------------------------------------------------------------------------- |
 | `signedTx` | `string` | A signed transaction which can be sent directly to chain,<br />you can call inboxTools.signChainMessage to get. |
 
 ###### Returns
@@ -225,10 +225,10 @@ above.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `txRequest` | `RequiredTransactionRequestType` | A signed transaction which can be sent directly to chain,<br />tx.to, tx.data, tx.value must be provided when not contract creation, if<br />contractCreation is true, no need provide tx.to. tx.gasPrice and tx.nonce<br />can be overrided. (You can also send contract creation transaction by set tx.to<br />to zero address or null) |
-| `childSigner` | `Signer` | ethers Signer type, used to sign Chain transaction |
+| Parameter     | Type                             | Description                                                                                                                                                                                                                                                                                                                               |
+| :------------ | :------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `txRequest`   | `RequiredTransactionRequestType` | A signed transaction which can be sent directly to chain,<br />tx.to, tx.data, tx.value must be provided when not contract creation, if<br />contractCreation is true, no need provide tx.to. tx.gasPrice and tx.nonce<br />can be overrided. (You can also send contract creation transaction by set tx.to<br />to zero address or null) |
+| `childSigner` | `Signer`                         | ethers Signer type, used to sign Chain transaction                                                                                                                                                                                                                                                                                        |
 
 ###### Returns
 

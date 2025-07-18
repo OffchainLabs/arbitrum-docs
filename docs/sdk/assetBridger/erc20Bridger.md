@@ -26,8 +26,8 @@ Bridger for moving ERC20 tokens back and forth between parent-to-child
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter      | Type                                                             |
+| :------------- | :--------------------------------------------------------------- |
 | `childNetwork` | [`ArbitrumNetwork`](../dataEntities/networks.md#arbitrumnetwork) |
 
 ###### Returns
@@ -44,8 +44,8 @@ Bridger for moving ERC20 tokens back and forth between parent-to-child
 
 #### Properties
 
-| Property | Modifier | Type | Description | Inherited from |
-| :------ | :------ | :------ | :------ | :------ |
+| Property       | Modifier   | Type     | Description                                                                                                                                                                                                                                                               | Inherited from                                               |
+| :------------- | :--------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------- |
 | `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address<br /><br />In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`Erc20Bridger`](erc20Bridger.md#erc20bridger).`nativeToken` |
 
 #### Accessors
@@ -78,9 +78,9 @@ Approves the custom gas token to be spent by the relevant gateway on the parent 
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ApproveParamsOrTxRequest` |  |
+| Parameter | Type                       | Description |
+| :-------- | :------------------------- | :---------- |
+| `params`  | `ApproveParamsOrTxRequest` |             |
 
 ###### Returns
 
@@ -104,9 +104,9 @@ Approve tokens for deposit to the bridge. The tokens will be approved for the re
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ApproveParamsOrTxRequest` |  |
+| Parameter | Type                       | Description |
+| :-------- | :------------------------- | :---------- |
+| `params`  | `ApproveParamsOrTxRequest` |             |
 
 ###### Returns
 
@@ -130,9 +130,9 @@ Check the signer/provider matches the child network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -156,9 +156,9 @@ Check the signer/provider matches the parent network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -182,9 +182,9 @@ Execute a token deposit from parent to child network
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Erc20DepositParams` \| `ParentToChildTxReqAndSignerProvider` |  |
+| Parameter | Type                                                          | Description |
+| :-------- | :------------------------------------------------------------ | :---------- |
+| `params`  | `Erc20DepositParams` \| `ParentToChildTxReqAndSignerProvider` |             |
 
 ###### Returns
 
@@ -208,9 +208,9 @@ Creates a transaction request for approving the custom gas token to be spent by 
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ProviderTokenApproveParams` |  |
+| Parameter | Type                         | Description |
+| :-------- | :--------------------------- | :---------- |
+| `params`  | `ProviderTokenApproveParams` |             |
 
 ###### Returns
 
@@ -235,9 +235,9 @@ The tokens will be approved for the relevant gateway.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ProviderTokenApproveParams` |  |
+| Parameter | Type                         | Description |
+| :-------- | :--------------------------- | :---------- |
+| `params`  | `ProviderTokenApproveParams` |             |
 
 ###### Returns
 
@@ -261,10 +261,10 @@ Get the corresponding child network token address for the provided parent networ
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ParentAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `erc20ParentAddress` | `string`   |             |
+| `parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -288,10 +288,10 @@ Get the address of the child gateway for this token
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ParentAddress` | `string` |  |
-| `childProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `erc20ParentAddress` | `string`   |             |
+| `childProvider`      | `Provider` |             |
 
 ###### Returns
 
@@ -309,8 +309,8 @@ Get the address of the child gateway for this token
 
 ```ts
 getChildGatewaySetEvents(
-   childProvider: Provider, 
-   filter: object, 
+   childProvider: Provider,
+   filter: object,
 customNetworkChildGatewayRouter?: string): Promise<object[]>
 ```
 
@@ -318,13 +318,13 @@ Get all the gateway set events on the child gateway router
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` | The provider for the child network |
-| `filter` | `object` | An object containing fromBlock and toBlock to filter events |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock`? | `BlockTag` | - |
-| `customNetworkChildGatewayRouter`? | `string` | Optional address of the custom network child gateway router |
+| Parameter                          | Type       | Description                                                 |
+| :--------------------------------- | :--------- | :---------------------------------------------------------- |
+| `childProvider`                    | `Provider` | The provider for the child network                          |
+| `filter`                           | `object`   | An object containing fromBlock and toBlock to filter events |
+| `filter.fromBlock`                 | `BlockTag` | -                                                           |
+| `filter.toBlock`?                  | `BlockTag` | -                                                           |
+| `customNetworkChildGatewayRouter`? | `string`   | Optional address of the custom network child gateway router |
 
 ###### Returns
 
@@ -353,10 +353,10 @@ of any of the underlying functions on that contract.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `childTokenAddr` | `string` |  |
+| Parameter        | Type       | Description |
+| :--------------- | :--------- | :---------- |
+| `childProvider`  | `Provider` |             |
+| `childTokenAddr` | `string`   |             |
 
 ###### Returns
 
@@ -380,9 +380,9 @@ Get the arguments for calling the deposit function
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `DepositRequest` |  |
+| Parameter | Type             | Description |
+| :-------- | :--------------- | :---------- |
+| `params`  | `DepositRequest` |             |
 
 ###### Returns
 
@@ -407,10 +407,10 @@ Validates the returned address against the child network router to ensure it is 
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ChildChainAddress` | `string` |  |
-| `childProvider` | `Provider` |  |
+| Parameter                | Type       | Description |
+| :----------------------- | :--------- | :---------- |
+| `erc20ChildChainAddress` | `string`   |             |
+| `childProvider`          | `Provider` |             |
 
 ###### Returns
 
@@ -434,10 +434,10 @@ Get the address of the parent gateway for this token
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ParentAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `erc20ParentAddress` | `string`   |             |
+| `parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -461,12 +461,12 @@ Get all the gateway set events on the Parent gateway router
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentProvider` | `Provider` | The provider for the parent network |
-| `filter` | `object` | An object containing fromBlock and toBlock to filter events |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock` | `BlockTag` | - |
+| Parameter          | Type       | Description                                                 |
+| :----------------- | :--------- | :---------------------------------------------------------- |
+| `parentProvider`   | `Provider` | The provider for the parent network                         |
+| `filter`           | `object`   | An object containing fromBlock and toBlock to filter events |
+| `filter.fromBlock` | `BlockTag` | -                                                           |
+| `filter.toBlock`   | `BlockTag` | -                                                           |
 
 ###### Returns
 
@@ -491,10 +491,10 @@ of any of the underlying functions on that contract.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentProvider` | `Provider` |  |
-| `parentTokenAddr` | `string` |  |
+| Parameter         | Type       | Description |
+| :---------------- | :--------- | :---------- |
+| `parentProvider`  | `Provider` |             |
+| `parentTokenAddr` | `string`   |             |
 
 ###### Returns
 
@@ -512,11 +512,11 @@ of any of the underlying functions on that contract.
 
 ```ts
 getWithdrawalEvents(
-   childProvider: Provider, 
-   gatewayAddress: string, 
-   filter: object, 
-   parentTokenAddress?: string, 
-   fromAddress?: string, 
+   childProvider: Provider,
+   gatewayAddress: string,
+   filter: object,
+   parentTokenAddress?: string,
+   fromAddress?: string,
 toAddress?: string): Promise<object & object[]>
 ```
 
@@ -524,16 +524,16 @@ Get the child network events created by a withdrawal
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `gatewayAddress` | `string` |  |
-| `filter` | `object` |  |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock`? | `BlockTag` | - |
-| `parentTokenAddress`? | `string` |  |
-| `fromAddress`? | `string` |  |
-| `toAddress`? | `string` | - |
+| Parameter             | Type       | Description |
+| :-------------------- | :--------- | :---------- |
+| `childProvider`       | `Provider` |             |
+| `gatewayAddress`      | `string`   |             |
+| `filter`              | `object`   |             |
+| `filter.fromBlock`    | `BlockTag` | -           |
+| `filter.toBlock`?     | `BlockTag` | -           |
+| `parentTokenAddress`? | `string`   |             |
+| `fromAddress`?        | `string`   |             |
+| `toAddress`?          | `string`   | -           |
 
 ###### Returns
 
@@ -557,9 +557,9 @@ Get the arguments for calling the token withdrawal function
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Erc20WithdrawParams` |  |
+| Parameter | Type                  | Description |
+| :-------- | :-------------------- | :---------- |
+| `params`  | `Erc20WithdrawParams` |             |
 
 ###### Returns
 
@@ -583,10 +583,10 @@ Whether the token has been disabled on the router
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentTokenAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `parentTokenAddress` | `string`   |             |
+| `parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -610,12 +610,12 @@ Checks if the token has been properly registered on both gateways. Mostly useful
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `object` |  |
-| `params.childProvider` | `Provider` |  |
-| `params.erc20ParentAddress` | `string` |  |
-| `params.parentProvider` | `Provider` |  |
+| Parameter                   | Type       | Description |
+| :-------------------------- | :--------- | :---------- |
+| `params`                    | `object`   |             |
+| `params.childProvider`      | `Provider` |             |
+| `params.erc20ParentAddress` | `string`   |             |
+| `params.parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -633,9 +633,9 @@ Checks if the token has been properly registered on both gateways. Mostly useful
 
 ```ts
 registerCustomToken(
-   parentTokenAddress: string, 
-   childTokenAddress: string, 
-   parentSigner: Signer, 
+   parentTokenAddress: string,
+   childTokenAddress: string,
+   parentSigner: Signer,
 childProvider: Provider): Promise<ParentContractTransaction<ParentTransactionReceipt>>
 ```
 
@@ -644,12 +644,12 @@ See https://developer.offchainlabs.com/docs/bridging_assets#the-arbitrum-generic
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentTokenAddress` | `string` | Address of the already deployed parent token. Must inherit from https://developer.offchainlabs.com/docs/sol_contract_docs/md_docs/arb-bridge-peripherals/tokenbridge/ethereum/icustomtoken. |
-| `childTokenAddress` | `string` | Address of the already deployed child token. Must inherit from https://developer.offchainlabs.com/docs/sol_contract_docs/md_docs/arb-bridge-peripherals/tokenbridge/arbitrum/iarbtoken. |
-| `parentSigner` | `Signer` | The signer with the rights to call `registerTokenOnL2` on the parent token |
-| `childProvider` | `Provider` | Arbitrum rpc provider |
+| Parameter            | Type       | Description                                                                                                                                                                                 |
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `parentTokenAddress` | `string`   | Address of the already deployed parent token. Must inherit from https://developer.offchainlabs.com/docs/sol_contract_docs/md_docs/arb-bridge-peripherals/tokenbridge/ethereum/icustomtoken. |
+| `childTokenAddress`  | `string`   | Address of the already deployed child token. Must inherit from https://developer.offchainlabs.com/docs/sol_contract_docs/md_docs/arb-bridge-peripherals/tokenbridge/arbitrum/iarbtoken.     |
+| `parentSigner`       | `Signer`   | The signer with the rights to call `registerTokenOnL2` on the parent token                                                                                                                  |
+| `childProvider`      | `Provider` | Arbitrum rpc provider                                                                                                                                                                       |
 
 ###### Returns
 
@@ -663,9 +663,9 @@ See https://developer.offchainlabs.com/docs/bridging_assets#the-arbitrum-generic
 
 ```ts
 setGateways(
-   parentSigner: Signer, 
-   childProvider: Provider, 
-   tokenGateways: TokenAndGateway[], 
+   parentSigner: Signer,
+   childProvider: Provider,
+   tokenGateways: TokenAndGateway[],
 options?: GasOverrides): Promise<ParentContractCallTransaction>
 ```
 
@@ -673,12 +673,12 @@ Register the provided token addresses against the provided gateways
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSigner` | `Signer` |  |
-| `childProvider` | `Provider` |  |
-| `tokenGateways` | `TokenAndGateway`[] |  |
-| `options`? | `GasOverrides` | - |
+| Parameter       | Type                | Description |
+| :-------------- | :------------------ | :---------- |
+| `parentSigner`  | `Signer`            |             |
+| `childProvider` | `Provider`          |             |
+| `tokenGateways` | `TokenAndGateway`[] |             |
+| `options`?      | `GasOverrides`      | -           |
 
 ###### Returns
 
@@ -698,9 +698,9 @@ Withdraw tokens from child to parent network
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ChildToParentTxReqAndSigner` \| [`OmitTyped`](../utils/types.md#omittypedtk)\<`Erc20WithdrawParams`, `"from"`\> & `object` |  |
+| Parameter | Type                                                                                                                        | Description |
+| :-------- | :-------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| `params`  | `ChildToParentTxReqAndSigner` \| [`OmitTyped`](../utils/types.md#omittypedtk)\<`Erc20WithdrawParams`, `"from"`\> & `object` |             |
 
 ###### Returns
 
@@ -724,9 +724,9 @@ Instantiates a new Erc20Bridger from a child provider
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -740,7 +740,7 @@ Instantiates a new Erc20Bridger from a child provider
 
 [assetBridger/erc20Bridger.ts:216](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L216)
 
-***
+---
 
 ### Erc20Bridger
 
@@ -766,8 +766,8 @@ Bridger for moving ERC20 tokens back and forth between parent-to-child
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter      | Type                                                             |
+| :------------- | :--------------------------------------------------------------- |
 | `childNetwork` | [`ArbitrumNetwork`](../dataEntities/networks.md#arbitrumnetwork) |
 
 ###### Returns
@@ -777,8 +777,8 @@ Bridger for moving ERC20 tokens back and forth between parent-to-child
 ###### Overrides
 
 AssetBridger\<
-  Erc20DepositParams \| ParentToChildTxReqAndSignerProvider,
-  OmitTyped\<Erc20WithdrawParams, 'from'\> \| ChildToParentTransactionRequest
+Erc20DepositParams \| ParentToChildTxReqAndSignerProvider,
+OmitTyped\<Erc20WithdrawParams, 'from'\> \| ChildToParentTransactionRequest
 \>.constructor
 
 ###### Source
@@ -787,8 +787,8 @@ AssetBridger\<
 
 #### Properties
 
-| Property | Modifier | Type | Description | Inherited from |
-| :------ | :------ | :------ | :------ | :------ |
+| Property       | Modifier   | Type     | Description                                                                                                                                                                                                                                                               | Inherited from                                                                          |
+| :------------- | :--------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------- |
 | `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address<br /><br />In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`AssetBridger`](assetBridger.md#assetbridgerdepositparamswithdrawparams).`nativeToken` |
 
 #### Accessors
@@ -821,9 +821,9 @@ Approves the custom gas token to be spent by the relevant gateway on the parent 
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ApproveParamsOrTxRequest` |  |
+| Parameter | Type                       | Description |
+| :-------- | :------------------------- | :---------- |
+| `params`  | `ApproveParamsOrTxRequest` |             |
 
 ###### Returns
 
@@ -843,9 +843,9 @@ Approve tokens for deposit to the bridge. The tokens will be approved for the re
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ApproveParamsOrTxRequest` |  |
+| Parameter | Type                       | Description |
+| :-------- | :------------------------- | :---------- |
+| `params`  | `ApproveParamsOrTxRequest` |             |
 
 ###### Returns
 
@@ -865,9 +865,9 @@ Check the signer/provider matches the child network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -891,9 +891,9 @@ Check the signer/provider matches the parent network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -917,9 +917,9 @@ Execute a token deposit from parent to child network
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Erc20DepositParams` \| `ParentToChildTxReqAndSignerProvider` |  |
+| Parameter | Type                                                          | Description |
+| :-------- | :------------------------------------------------------------ | :---------- |
+| `params`  | `Erc20DepositParams` \| `ParentToChildTxReqAndSignerProvider` |             |
 
 ###### Returns
 
@@ -943,9 +943,9 @@ Creates a transaction request for approving the custom gas token to be spent by 
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ProviderTokenApproveParams` |  |
+| Parameter | Type                         | Description |
+| :-------- | :--------------------------- | :---------- |
+| `params`  | `ProviderTokenApproveParams` |             |
 
 ###### Returns
 
@@ -966,9 +966,9 @@ The tokens will be approved for the relevant gateway.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ProviderTokenApproveParams` |  |
+| Parameter | Type                         | Description |
+| :-------- | :--------------------------- | :---------- |
+| `params`  | `ProviderTokenApproveParams` |             |
 
 ###### Returns
 
@@ -988,10 +988,10 @@ Get the corresponding child network token address for the provided parent networ
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ParentAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `erc20ParentAddress` | `string`   |             |
+| `parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -1011,10 +1011,10 @@ Get the address of the child gateway for this token
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ParentAddress` | `string` |  |
-| `childProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `erc20ParentAddress` | `string`   |             |
+| `childProvider`      | `Provider` |             |
 
 ###### Returns
 
@@ -1037,10 +1037,10 @@ of any of the underlying functions on that contract.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `childTokenAddr` | `string` |  |
+| Parameter        | Type       | Description |
+| :--------------- | :--------- | :---------- |
+| `childProvider`  | `Provider` |             |
+| `childTokenAddr` | `string`   |             |
 
 ###### Returns
 
@@ -1060,9 +1060,9 @@ Get the arguments for calling the deposit function
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `DepositRequest` |  |
+| Parameter | Type             | Description |
+| :-------- | :--------------- | :---------- |
+| `params`  | `DepositRequest` |             |
 
 ###### Returns
 
@@ -1082,9 +1082,9 @@ Get the call value for the deposit transaction request
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `depositParams` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`ParentToChildMessageGasParams`, `"deposit"`\> |  |
+| Parameter       | Type                                                                                         | Description |
+| :-------------- | :------------------------------------------------------------------------------------------- | :---------- |
+| `depositParams` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`ParentToChildMessageGasParams`, `"deposit"`\> |             |
 
 ###### Returns
 
@@ -1104,10 +1104,10 @@ Get the `data` param for call to `outboundTransfer`
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `depositParams` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`ParentToChildMessageGasParams`, `"deposit"`\> |  |
-| `decimals` | `number` | - |
+| Parameter       | Type                                                                                         | Description |
+| :-------------- | :------------------------------------------------------------------------------------------- | :---------- |
+| `depositParams` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`ParentToChildMessageGasParams`, `"deposit"`\> |             |
+| `decimals`      | `number`                                                                                     | -           |
 
 ###### Returns
 
@@ -1128,10 +1128,10 @@ Validates the returned address against the child network router to ensure it is 
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ChildChainAddress` | `string` |  |
-| `childProvider` | `Provider` |  |
+| Parameter                | Type       | Description |
+| :----------------------- | :--------- | :---------- |
+| `erc20ChildChainAddress` | `string`   |             |
+| `childProvider`          | `Provider` |             |
 
 ###### Returns
 
@@ -1151,10 +1151,10 @@ Get the address of the parent gateway for this token
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20ParentAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `erc20ParentAddress` | `string`   |             |
+| `parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -1177,10 +1177,10 @@ of any of the underlying functions on that contract.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentProvider` | `Provider` |  |
-| `parentTokenAddr` | `string` |  |
+| Parameter         | Type       | Description |
+| :---------------- | :--------- | :---------- |
+| `parentProvider`  | `Provider` |             |
+| `parentTokenAddr` | `string`   |             |
 
 ###### Returns
 
@@ -1194,11 +1194,11 @@ of any of the underlying functions on that contract.
 
 ```ts
 getWithdrawalEvents(
-   childProvider: Provider, 
-   gatewayAddress: string, 
-   filter: object, 
-   parentTokenAddress?: string, 
-   fromAddress?: string, 
+   childProvider: Provider,
+   gatewayAddress: string,
+   filter: object,
+   parentTokenAddress?: string,
+   fromAddress?: string,
 toAddress?: string): Promise<object & object[]>
 ```
 
@@ -1206,16 +1206,16 @@ Get the child network events created by a withdrawal
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `gatewayAddress` | `string` |  |
-| `filter` | `object` |  |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock`? | `BlockTag` | - |
-| `parentTokenAddress`? | `string` |  |
-| `fromAddress`? | `string` |  |
-| `toAddress`? | `string` | - |
+| Parameter             | Type       | Description |
+| :-------------------- | :--------- | :---------- |
+| `childProvider`       | `Provider` |             |
+| `gatewayAddress`      | `string`   |             |
+| `filter`              | `object`   |             |
+| `filter.fromBlock`    | `BlockTag` | -           |
+| `filter.toBlock`?     | `BlockTag` | -           |
+| `parentTokenAddress`? | `string`   |             |
+| `fromAddress`?        | `string`   |             |
+| `toAddress`?          | `string`   | -           |
 
 ###### Returns
 
@@ -1235,9 +1235,9 @@ Get the arguments for calling the token withdrawal function
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Erc20WithdrawParams` |  |
+| Parameter | Type                  | Description |
+| :-------- | :-------------------- | :---------- |
+| `params`  | `Erc20WithdrawParams` |             |
 
 ###### Returns
 
@@ -1257,10 +1257,10 @@ Whether the token has been disabled on the router
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentTokenAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter            | Type       | Description |
+| :------------------- | :--------- | :---------- |
+| `parentTokenAddress` | `string`   |             |
+| `parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -1280,12 +1280,12 @@ Checks if the token has been properly registered on both gateways. Mostly useful
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `object` |  |
-| `params.childProvider` | `Provider` |  |
-| `params.erc20ParentAddress` | `string` |  |
-| `params.parentProvider` | `Provider` |  |
+| Parameter                   | Type       | Description |
+| :-------------------------- | :--------- | :---------- |
+| `params`                    | `object`   |             |
+| `params.childProvider`      | `Provider` |             |
+| `params.erc20ParentAddress` | `string`   |             |
+| `params.parentProvider`     | `Provider` |             |
 
 ###### Returns
 
@@ -1305,10 +1305,10 @@ Is this a known or unknown WETH gateway
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `gatewayAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter        | Type       | Description |
+| :--------------- | :--------- | :---------- |
+| `gatewayAddress` | `string`   |             |
+| `parentProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -1328,10 +1328,10 @@ Does the provided address look like a weth gateway
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `potentialWethGatewayAddress` | `string` |  |
-| `parentProvider` | `Provider` |  |
+| Parameter                     | Type       | Description |
+| :---------------------------- | :--------- | :---------- |
+| `potentialWethGatewayAddress` | `string`   |             |
+| `parentProvider`              | `Provider` |             |
 
 ###### Returns
 
@@ -1351,9 +1351,9 @@ Withdraw tokens from child to parent network
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ChildToParentTxReqAndSigner` \| [`OmitTyped`](../utils/types.md#omittypedtk)\<`Erc20WithdrawParams`, `"from"`\> & `object` |  |
+| Parameter | Type                                                                                                                        | Description |
+| :-------- | :-------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| `params`  | `ChildToParentTxReqAndSigner` \| [`OmitTyped`](../utils/types.md#omittypedtk)\<`Erc20WithdrawParams`, `"from"`\> & `object` |             |
 
 ###### Returns
 
@@ -1377,9 +1377,9 @@ Instantiates a new Erc20Bridger from a child provider
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 

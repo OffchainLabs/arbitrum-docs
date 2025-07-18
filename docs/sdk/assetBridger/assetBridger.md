@@ -17,15 +17,15 @@ Base for bridging assets from parent-to-child and back
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `DepositParams` |
+| Type parameter   |
+| :--------------- |
+| `DepositParams`  |
 | `WithdrawParams` |
 
 #### Properties
 
-| Property | Modifier | Type | Description |
-| :------ | :------ | :------ | :------ |
+| Property       | Modifier   | Type     | Description                                                                                                                                                                                                                                                               |
+| :------------- | :--------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address<br /><br />In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network |
 
 #### Accessors
@@ -58,9 +58,9 @@ Check the signer/provider matches the child network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -80,9 +80,9 @@ Check the signer/provider matches the parent network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -102,9 +102,9 @@ Transfer assets from parent-to-child
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `DepositParams` |  |
+| Parameter | Type            | Description |
+| :-------- | :-------------- | :---------- |
+| `params`  | `DepositParams` |             |
 
 ###### Returns
 
@@ -124,9 +124,9 @@ Transfer assets from child-to-parent
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `WithdrawParams` |  |
+| Parameter | Type             | Description |
+| :-------- | :--------------- | :---------- |
+| `params`  | `WithdrawParams` |             |
 
 ###### Returns
 

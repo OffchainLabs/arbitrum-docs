@@ -16,24 +16,24 @@ A message for Eth deposits from Parent to Child
 
 ```ts
 new EthDepositMessage(
-   childProvider: Provider, 
-   childChainId: number, 
-   messageNumber: BigNumber, 
-   from: string, 
-   to: string, 
+   childProvider: Provider,
+   childChainId: number,
+   messageNumber: BigNumber,
+   from: string,
+   to: string,
    value: BigNumber): EthDepositMessage
 ```
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `childChainId` | `number` |  |
-| `messageNumber` | `BigNumber` |  |
-| `from` | `string` | - |
-| `to` | `string` | Recipient address of the ETH on Chain |
-| `value` | `BigNumber` |  |
+| Parameter       | Type        | Description                           |
+| :-------------- | :---------- | :------------------------------------ |
+| `childProvider` | `Provider`  |                                       |
+| `childChainId`  | `number`    |                                       |
+| `messageNumber` | `BigNumber` |                                       |
+| `from`          | `string`    | -                                     |
+| `to`            | `string`    | Recipient address of the ETH on Chain |
+| `value`         | `BigNumber` |                                       |
 
 ###### Returns
 
@@ -45,13 +45,13 @@ new EthDepositMessage(
 
 #### Properties
 
-| Property | Modifier | Type | Description |
-| :------ | :------ | :------ | :------ |
-| `childChainId` | `readonly` | `number` | - |
-| `childProvider` | `private` | `Provider` | - |
-| `messageNumber` | `readonly` | `BigNumber` | - |
-| `to` | `readonly` | `string` | Recipient address of the ETH on Chain |
-| `value` | `readonly` | `BigNumber` | - |
+| Property        | Modifier   | Type        | Description                           |
+| :-------------- | :--------- | :---------- | :------------------------------------ |
+| `childChainId`  | `readonly` | `number`    | -                                     |
+| `childProvider` | `private`  | `Provider`  | -                                     |
+| `messageNumber` | `readonly` | `BigNumber` | -                                     |
+| `to`            | `readonly` | `string`    | Recipient address of the ETH on Chain |
+| `value`         | `readonly` | `BigNumber` | -                                     |
 
 #### Methods
 
@@ -59,9 +59,9 @@ new EthDepositMessage(
 
 ```ts
 static fromEventComponents(
-   childProvider: Provider, 
-   messageNumber: BigNumber, 
-   senderAddr: string, 
+   childProvider: Provider,
+   messageNumber: BigNumber,
+   senderAddr: string,
 inboxMessageEventData: string): Promise<EthDepositMessage>
 ```
 
@@ -69,12 +69,12 @@ Create an EthDepositMessage from data emitted in event when calling ethDeposit o
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `messageNumber` | `BigNumber` | The message number in the Inbox.InboxMessageDelivered event |
-| `senderAddr` | `string` | The sender address from Bridge.MessageDelivered event |
-| `inboxMessageEventData` | `string` | The data field from the Inbox.InboxMessageDelivered event |
+| Parameter               | Type        | Description                                                 |
+| :---------------------- | :---------- | :---------------------------------------------------------- |
+| `childProvider`         | `Provider`  |                                                             |
+| `messageNumber`         | `BigNumber` | The message number in the Inbox.InboxMessageDelivered event |
+| `senderAddr`            | `string`    | The sender address from Bridge.MessageDelivered event       |
+| `inboxMessageEventData` | `string`    | The data field from the Inbox.InboxMessageDelivered event   |
 
 ###### Returns
 
@@ -95,9 +95,9 @@ event InboxMessageDelivered(uint256 indexed messageNum, bytes data);
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `eventData` | `string` |  |
+| Parameter   | Type     | Description |
+| :---------- | :------- | :---------- |
+| `eventData` | `string` |             |
 
 ###### Returns
 
@@ -105,9 +105,9 @@ event InboxMessageDelivered(uint256 indexed messageNum, bytes data);
 
 destination and amount
 
-| Member | Type |
-| :------ | :------ |
-| `to` | `string` |
+| Member  | Type        |
+| :------ | :---------- |
+| `to`    | `string`    |
 | `value` | `BigNumber` |
 
 ###### Source
@@ -129,15 +129,15 @@ type ParentToChildMessageWriter.
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 #### Source
 
 [message/ParentToChildMessage.ts:98](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentToChildMessage.ts#L98)
 
-***
+---
 
 ### ParentToChildMessageWaitForStatusResult
 

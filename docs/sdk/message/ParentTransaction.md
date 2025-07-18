@@ -28,9 +28,9 @@ Get any eth deposit messages created by this transaction
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -115,15 +115,15 @@ Get any parent-to-child messages created by this transaction
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childSignerOrProvider` | `T` |  |
+| Parameter               | Type | Description |
+| :---------------------- | :--- | :---------- |
+| `childSignerOrProvider` | `T`  |             |
 
 ###### Returns
 
@@ -147,9 +147,9 @@ Get classic parent-to-child messages created by this transaction
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -193,15 +193,15 @@ Check if is a classic transaction
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childSignerOrProvider` | `T` |  |
+| Parameter               | Type | Description |
+| :---------------------- | :--- | :---------- |
+| `childSignerOrProvider` | `T`  |             |
 
 ###### Returns
 
@@ -219,8 +219,8 @@ Check if is a classic transaction
 
 ```ts
 waitForChildTransactionReceipt<T>(
-   childSignerOrProvider: T, 
-   confirmations?: number, 
+   childSignerOrProvider: T,
+   confirmations?: number,
 timeout?: number): Promise<object & ParentToChildMessageWaitForStatusResult>
 ```
 
@@ -228,17 +228,17 @@ Wait for the transaction to arrive and be executed on the child chain
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childSignerOrProvider` | `T` | - |
-| `confirmations`? | `number` | Amount of confirmations the retryable ticket and the auto redeem receipt should have |
-| `timeout`? | `number` | Amount of time to wait for the retryable ticket to be created<br />Defaults to 15 minutes, as by this time all transactions are expected to be included on the child chain. Throws on timeout. |
+| Parameter               | Type     | Description                                                                                                                                                                                    |
+| :---------------------- | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `childSignerOrProvider` | `T`      | -                                                                                                                                                                                              |
+| `confirmations`?        | `number` | Amount of confirmations the retryable ticket and the auto redeem receipt should have                                                                                                           |
+| `timeout`?              | `number` | Amount of time to wait for the retryable ticket to be created<br />Defaults to 15 minutes, as by this time all transactions are expected to be included on the child chain. Throws on timeout. |
 
 ###### Returns
 
@@ -262,9 +262,9 @@ Replaces the wait function with one that returns a [ParentContractCallTransactio
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractTransaction` | `ContractTransaction` |  |
+| Parameter             | Type                  | Description |
+| :-------------------- | :-------------------- | :---------- |
+| `contractTransaction` | `ContractTransaction` |             |
 
 ###### Returns
 
@@ -288,9 +288,9 @@ Replaces the wait function with one that returns a [ParentEthDepositTransactionR
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractTransaction` | `ContractTransaction` |  |
+| Parameter             | Type                  | Description |
+| :-------------------- | :-------------------- | :---------- |
+| `contractTransaction` | `ContractTransaction` |             |
 
 ###### Returns
 
@@ -314,9 +314,9 @@ Replaces the wait function with one that returns a ParentTransactionReceipt
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractTransaction` | `ContractTransaction` |  |
+| Parameter             | Type                  | Description |
+| :-------------------- | :-------------------- | :---------- |
+| `contractTransaction` | `ContractTransaction` |             |
 
 ###### Returns
 
@@ -330,7 +330,7 @@ Replaces the wait function with one that returns a ParentTransactionReceipt
 
 [message/ParentTransaction.ts:311](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L311)
 
-***
+---
 
 ### ParentEthDepositTransactionReceipt
 
@@ -353,9 +353,9 @@ Get any eth deposit messages created by this transaction
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -440,15 +440,15 @@ Get any parent-to-child messages created by this transaction
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childSignerOrProvider` | `T` |  |
+| Parameter               | Type | Description |
+| :---------------------- | :--- | :---------- |
+| `childSignerOrProvider` | `T`  |             |
 
 ###### Returns
 
@@ -472,9 +472,9 @@ Get classic parent-to-child messages created by this transaction
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -518,15 +518,15 @@ Check if is a classic transaction
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childSignerOrProvider` | `T` |  |
+| Parameter               | Type | Description |
+| :---------------------- | :--- | :---------- |
+| `childSignerOrProvider` | `T`  |             |
 
 ###### Returns
 
@@ -544,8 +544,8 @@ Check if is a classic transaction
 
 ```ts
 waitForChildTransactionReceipt(
-   childProvider: Provider, 
-   confirmations?: number, 
+   childProvider: Provider,
+   confirmations?: number,
 timeout?: number): Promise<object & EthDepositMessageWaitForStatusResult>
 ```
 
@@ -553,11 +553,11 @@ Wait for the funds to arrive on the child chain
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` | - |
-| `confirmations`? | `number` | Amount of confirmations the retryable ticket and the auto redeem receipt should have |
-| `timeout`? | `number` | Amount of time to wait for the retryable ticket to be created<br />Defaults to 15 minutes, as by this time all transactions are expected to be included on the child chain. Throws on timeout. |
+| Parameter        | Type       | Description                                                                                                                                                                                    |
+| :--------------- | :--------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `childProvider`  | `Provider` | -                                                                                                                                                                                              |
+| `confirmations`? | `number`   | Amount of confirmations the retryable ticket and the auto redeem receipt should have                                                                                                           |
+| `timeout`?       | `number`   | Amount of time to wait for the retryable ticket to be created<br />Defaults to 15 minutes, as by this time all transactions are expected to be included on the child chain. Throws on timeout. |
 
 ###### Returns
 
@@ -581,9 +581,9 @@ Replaces the wait function with one that returns a [ParentContractCallTransactio
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractTransaction` | `ContractTransaction` |  |
+| Parameter             | Type                  | Description |
+| :-------------------- | :-------------------- | :---------- |
+| `contractTransaction` | `ContractTransaction` |             |
 
 ###### Returns
 
@@ -607,9 +607,9 @@ Replaces the wait function with one that returns a [ParentEthDepositTransactionR
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractTransaction` | `ContractTransaction` |  |
+| Parameter             | Type                  | Description |
+| :-------------------- | :-------------------- | :---------- |
+| `contractTransaction` | `ContractTransaction` |             |
 
 ###### Returns
 
@@ -633,9 +633,9 @@ Replaces the wait function with one that returns a ParentTransactionReceipt
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractTransaction` | `ContractTransaction` |  |
+| Parameter             | Type                  | Description |
+| :-------------------- | :-------------------- | :---------- |
+| `contractTransaction` | `ContractTransaction` |             |
 
 ###### Returns
 

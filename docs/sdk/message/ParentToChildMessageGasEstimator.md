@@ -16,9 +16,9 @@ An optional big number percentage increase
 
 #### Type declaration
 
-| Member | Type | Description |
-| :------ | :------ | :------ |
-| `base` | `BigNumber` | If provided, will override the estimated base |
+| Member            | Type        | Description                                                                    |
+| :---------------- | :---------- | :----------------------------------------------------------------------------- |
+| `base`            | `BigNumber` | If provided, will override the estimated base                                  |
 | `percentIncrease` | `BigNumber` | How much to increase the base by. If not provided system defaults may be used. |
 
 #### Source

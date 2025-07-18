@@ -12,8 +12,8 @@ Util for executing multi calls against the MultiCallV2 contract
 
 #### Properties
 
-| Property | Modifier | Type | Description |
-| :------ | :------ | :------ | :------ |
+| Property  | Modifier   | Type     | Description                   |
+| :-------- | :--------- | :------- | :---------------------------- |
 | `address` | `readonly` | `string` | Address of multicall contract |
 
 #### Methods
@@ -61,16 +61,16 @@ supplied token addresses.
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `undefined` \| `TokenMultiInput` |
+| Type parameter                                 |
+| :--------------------------------------------- |
+| `T` _extends_ `undefined` \| `TokenMultiInput` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `erc20Addresses` | `string`[] |  |
-| `options`? | `T` | Defaults to just 'name' |
+| Parameter        | Type       | Description             |
+| :--------------- | :--------- | :---------------------- |
+| `erc20Addresses` | `string`[] |                         |
+| `options`?       | `T`        | Defaults to just 'name' |
 
 ###### Returns
 
@@ -95,39 +95,38 @@ create your inputs as a tuple and pass the tuple in. The return type will be
 a tuple of the decoded return types. eg.
 
 ```typescript
-  const inputs: [
-    CallInput<Awaited<ReturnType<ERC20['functions']['balanceOf']>>[0]>,
-    CallInput<Awaited<ReturnType<ERC20['functions']['name']>>[0]>
-  ] = [
-    {
-      targetAddr: token.address,
-      encoder: () => token.interface.encodeFunctionData('balanceOf', ['']),
-      decoder: (returnData: string) =>
-        token.interface.decodeFunctionResult('balanceOf', returnData)[0],
-    },
-    {
-      targetAddr: token.address,
-      encoder: () => token.interface.encodeFunctionData('name'),
-      decoder: (returnData: string) =>
-        token.interface.decodeFunctionResult('name', returnData)[0],
-    },
-  ]
+const inputs: [
+  CallInput<Awaited<ReturnType<ERC20['functions']['balanceOf']>>[0]>,
+  CallInput<Awaited<ReturnType<ERC20['functions']['name']>>[0]>,
+] = [
+  {
+    targetAddr: token.address,
+    encoder: () => token.interface.encodeFunctionData('balanceOf', ['']),
+    decoder: (returnData: string) =>
+      token.interface.decodeFunctionResult('balanceOf', returnData)[0],
+  },
+  {
+    targetAddr: token.address,
+    encoder: () => token.interface.encodeFunctionData('name'),
+    decoder: (returnData: string) => token.interface.decodeFunctionResult('name', returnData)[0],
+  },
+];
 
-  const res = await multiCaller.call(inputs)
+const res = await multiCaller.call(inputs);
 ```
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* [`CallInput`](multicall.md#callinputt)\<`unknown`\>[] |
-| `TRequireSuccess` *extends* `boolean` |
+| Type parameter                                                      |
+| :------------------------------------------------------------------ |
+| `T` _extends_ [`CallInput`](multicall.md#callinputt)\<`unknown`\>[] |
+| `TRequireSuccess` _extends_ `boolean`                               |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `T` |  |
+| Parameter         | Type              | Description                                    |
+| :---------------- | :---------------- | :--------------------------------------------- |
+| `params`          | `T`               |                                                |
 | `requireSuccess`? | `TRequireSuccess` | Fail the whole call if any internal call fails |
 
 ###### Returns
@@ -148,9 +147,9 @@ Finds the correct multicall address for the given provider and instantiates a mu
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `provider` | `Provider` |  |
+| Parameter  | Type       | Description |
+| :--------- | :--------- | :---------- |
+| `provider` | `Provider` |             |
 
 ###### Returns
 
@@ -173,16 +172,16 @@ Input to multicall aggregator
 #### Type parameters
 
 | Type parameter |
-| :------ |
-| `T` |
+| :------------- |
+| `T`            |
 
 #### Type declaration
 
-| Member | Type | Description |
-| :------ | :------ | :------ |
-| `decoder` | (`returnData`: `string`) => `T` | Function to decode the result of the call |
-| `encoder` | () => `string` | Function to produce encoded call data |
-| `targetAddr` | `string` | Address of the target contract to be called |
+| Member       | Type                            | Description                                 |
+| :----------- | :------------------------------ | :------------------------------------------ |
+| `decoder`    | (`returnData`: `string`) => `T` | Function to decode the result of the call   |
+| `encoder`    | () => `string`                  | Function to produce encoded call data       |
+| `targetAddr` | `string`                        | Address of the target contract to be called |
 
 #### Source
 

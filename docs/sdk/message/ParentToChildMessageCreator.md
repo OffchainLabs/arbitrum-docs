@@ -16,8 +16,8 @@ Creates retryable tickets by directly calling the Inbox contract on Parent chain
 
 ```ts
 createRetryableTicket(
-   params: OmitTyped<ParentToChildMessageNoGasParams, "excessFeeRefundAddress" | "callValueRefundAddress"> & Partial<ParentToChildMessageNoGasParams> & object | ParentToChildTransactionRequest & object, 
-   childProvider: Provider, 
+   params: OmitTyped<ParentToChildMessageNoGasParams, "excessFeeRefundAddress" | "callValueRefundAddress"> & Partial<ParentToChildMessageNoGasParams> & object | ParentToChildTransactionRequest & object,
+   childProvider: Provider,
 options?: GasOverrides): Promise<ParentContractTransaction<ParentTransactionReceipt>>
 ```
 
@@ -25,11 +25,11 @@ Creates a retryable ticket by directly calling the Inbox contract on Parent chai
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`ParentToChildMessageNoGasParams`, `"excessFeeRefundAddress"` \| `"callValueRefundAddress"`\> & `Partial`\<`ParentToChildMessageNoGasParams`\> & `object` \| [`ParentToChildTransactionRequest`](../dataEntities/transactionRequest.md#parenttochildtransactionrequest) & `object` |
-| `childProvider` | `Provider` |
-| `options`? | `GasOverrides` |
+| Parameter       | Type                                                                                                                                                                                                                                                                                                                             |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `params`        | [`OmitTyped`](../utils/types.md#omittypedtk)\<`ParentToChildMessageNoGasParams`, `"excessFeeRefundAddress"` \| `"callValueRefundAddress"`\> & `Partial`\<`ParentToChildMessageNoGasParams`\> & `object` \| [`ParentToChildTransactionRequest`](../dataEntities/transactionRequest.md#parenttochildtransactionrequest) & `object` |
+| `childProvider` | `Provider`                                                                                                                                                                                                                                                                                                                       |
+| `options`?      | `GasOverrides`                                                                                                                                                                                                                                                                                                                   |
 
 ###### Returns
 
@@ -43,9 +43,9 @@ Creates a retryable ticket by directly calling the Inbox contract on Parent chai
 
 ```ts
 static getTicketCreationRequest(
-   params: ParentToChildMessageParams, 
-   parentProvider: Provider, 
-   childProvider: Provider, 
+   params: ParentToChildMessageParams,
+   parentProvider: Provider,
+   childProvider: Provider,
 options?: GasOverrides): Promise<ParentToChildTransactionRequest>
 ```
 
@@ -53,12 +53,12 @@ Generate a transaction request for creating a retryable ticket
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ParentToChildMessageParams` |  |
-| `parentProvider` | `Provider` |  |
-| `childProvider` | `Provider` |  |
-| `options`? | `GasOverrides` |  |
+| Parameter        | Type                         | Description |
+| :--------------- | :--------------------------- | :---------- |
+| `params`         | `ParentToChildMessageParams` |             |
+| `parentProvider` | `Provider`                   |             |
+| `childProvider`  | `Provider`                   |             |
+| `options`?       | `GasOverrides`               |             |
 
 ###### Returns
 
@@ -72,10 +72,10 @@ Generate a transaction request for creating a retryable ticket
 
 ```ts
 static protected getTicketCreationRequestCallData(
-   params: ParentToChildMessageParams, 
-   estimates: Pick<RetryableData, ParentToChildGasKeys>, 
-   excessFeeRefundAddress: string, 
-   callValueRefundAddress: string, 
+   params: ParentToChildMessageParams,
+   estimates: Pick<RetryableData, ParentToChildGasKeys>,
+   excessFeeRefundAddress: string,
+   callValueRefundAddress: string,
    nativeTokenIsEth: boolean): string
 ```
 
@@ -83,13 +83,13 @@ Prepare calldata for a call to create a retryable ticket
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ParentToChildMessageParams` |  |
-| `estimates` | `Pick`\<`RetryableData`, `ParentToChildGasKeys`\> |  |
-| `excessFeeRefundAddress` | `string` |  |
-| `callValueRefundAddress` | `string` |  |
-| `nativeTokenIsEth` | `boolean` |  |
+| Parameter                | Type                                              | Description |
+| :----------------------- | :------------------------------------------------ | :---------- |
+| `params`                 | `ParentToChildMessageParams`                      |             |
+| `estimates`              | `Pick`\<`RetryableData`, `ParentToChildGasKeys`\> |             |
+| `excessFeeRefundAddress` | `string`                                          |             |
+| `callValueRefundAddress` | `string`                                          |             |
+| `nativeTokenIsEth`       | `boolean`                                         |             |
 
 ###### Returns
 
@@ -103,9 +103,9 @@ Prepare calldata for a call to create a retryable ticket
 
 ```ts
 static protected getTicketEstimate(
-   params: ParentToChildMessageNoGasParams, 
-   parentProvider: Provider, 
-   childProvider: Provider, 
+   params: ParentToChildMessageNoGasParams,
+   parentProvider: Provider,
+   childProvider: Provider,
 retryableGasOverrides?: GasOverrides): Promise<Pick<RetryableData, ParentToChildGasKeys>>
 ```
 
@@ -113,12 +113,12 @@ Gets a current estimate for the supplied params
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `ParentToChildMessageNoGasParams` |  |
-| `parentProvider` | `Provider` |  |
-| `childProvider` | `Provider` |  |
-| `retryableGasOverrides`? | `GasOverrides` |  |
+| Parameter                | Type                              | Description |
+| :----------------------- | :-------------------------------- | :---------- |
+| `params`                 | `ParentToChildMessageNoGasParams` |             |
+| `parentProvider`         | `Provider`                        |             |
+| `childProvider`          | `Provider`                        |             |
+| `retryableGasOverrides`? | `GasOverrides`                    |             |
 
 ###### Returns
 

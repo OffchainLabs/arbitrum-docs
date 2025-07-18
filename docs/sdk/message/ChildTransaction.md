@@ -26,9 +26,9 @@ Get number of parent chain confirmations that the batch including this tx has
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `JsonRpcProvider` |  |
+| Parameter       | Type              | Description |
+| :-------------- | :---------------- | :---------- |
+| `childProvider` | `JsonRpcProvider` |             |
 
 ###### Returns
 
@@ -50,9 +50,9 @@ Get the number of the batch that included this tx (will throw if no such batch e
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `JsonRpcProvider` |  |
+| Parameter       | Type              | Description |
+| :-------------- | :---------------- | :---------- |
+| `childProvider` | `JsonRpcProvider` |             |
 
 ###### Returns
 
@@ -90,15 +90,15 @@ Get any child-to-parent-messages created by this transaction
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` |  |
+| Parameter                | Type | Description |
+| :----------------------- | :--- | :---------- |
+| `parentSignerOrProvider` | `T`  |             |
 
 ###### Returns
 
@@ -135,10 +135,10 @@ made available on parent chain
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `childProvider` | `JsonRpcProvider` | `undefined` |  |
-| `confirmations` | `number` | `10` | The number of confirmations on the batch before data is to be considered available |
+| Parameter       | Type              | Default value | Description                                                                        |
+| :-------------- | :---------------- | :------------ | :--------------------------------------------------------------------------------- |
+| `childProvider` | `JsonRpcProvider` | `undefined`   |                                                                                    |
+| `confirmations` | `number`          | `10`          | The number of confirmations on the batch before data is to be considered available |
 
 ###### Returns
 
@@ -158,9 +158,9 @@ Replaces the wait function with one that returns an L2TransactionReceipt
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractTransaction` | `ContractTransaction` |  |
+| Parameter             | Type                  | Description |
+| :-------------------- | :-------------------- | :---------- |
+| `contractTransaction` | `ContractTransaction` |             |
 
 ###### Returns
 
@@ -180,10 +180,10 @@ Adds a waitForRedeem function to a redeem transaction
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `redeemTx` | `ChildContractTransaction` |  |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type                       | Description |
+| :-------------- | :------------------------- | :---------- |
+| `redeemTx`      | `ChildContractTransaction` |             |
+| `childProvider` | `Provider`                 |             |
 
 ###### Returns
 

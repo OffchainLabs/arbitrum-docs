@@ -16,12 +16,12 @@ Bridger for moving ERC20 tokens from L1 to L3
 
 #### Properties
 
-| Property | Modifier | Type | Default value | Description |
-| :------ | :------ | :------ | :------ | :------ |
-| `_l1FeeTokenAddress` | `protected` | `undefined` \| `string` | `undefined` | If the L3 network uses a custom fee token, this is the address of that token on L1 |
-| `l2ForwarderFactoryDefaultGasLimit` | `readonly` | `BigNumber` | `...` | Default gas limit for L2ForwarderFactory.callForwarder of 1,000,000<br /><br />Measured Standard: 361746<br /><br />Measured OnlyGasToken: 220416<br /><br />Measured NonGasTokenToCustomGas: 373449 |
-| `l2GasTokenAddress` | `readonly` | `undefined` \| `string` | `undefined` | If the L3 network uses a custom (non-eth) fee token, this is the address of that token on L2 |
-| `teleporter` | `readonly` | `Teleporter` | `undefined` | Addresses of teleporter contracts on L2 |
+| Property                            | Modifier    | Type                    | Default value | Description                                                                                                                                                                                          |
+| :---------------------------------- | :---------- | :---------------------- | :------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_l1FeeTokenAddress`                | `protected` | `undefined` \| `string` | `undefined`   | If the L3 network uses a custom fee token, this is the address of that token on L1                                                                                                                   |
+| `l2ForwarderFactoryDefaultGasLimit` | `readonly`  | `BigNumber`             | `...`         | Default gas limit for L2ForwarderFactory.callForwarder of 1,000,000<br /><br />Measured Standard: 361746<br /><br />Measured OnlyGasToken: 220416<br /><br />Measured NonGasTokenToCustomGas: 373449 |
+| `l2GasTokenAddress`                 | `readonly`  | `undefined` \| `string` | `undefined`   | If the L3 network uses a custom (non-eth) fee token, this is the address of that token on L2                                                                                                         |
+| `teleporter`                        | `readonly`  | `Teleporter`            | `undefined`   | Addresses of teleporter contracts on L2                                                                                                                                                              |
 
 #### Methods
 
@@ -35,9 +35,9 @@ Check the signer/provider matches the l1Network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -61,9 +61,9 @@ Check the signer/provider matches the l2Network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -87,9 +87,9 @@ Check the signer/provider matches the l3Network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -113,9 +113,9 @@ Given raw calldata for a callForwarder call, decode the parameters
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `data` | `string` |
+| Parameter | Type     |
+| :-------- | :------- |
+| `data`    | `string` |
 
 ###### Returns
 
@@ -135,9 +135,9 @@ Given raw calldata for a teleport tx, decode the teleport parameters
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `data` | `string` |
+| Parameter | Type     |
+| :-------- | :------- |
+| `data`    | `string` |
 
 ###### Returns
 
@@ -151,10 +151,10 @@ Given raw calldata for a teleport tx, decode the teleport parameters
 
 ```ts
 protected _fillPartialTeleportParams(
-   partialTeleportParams: OmitTyped<TeleportParamsStruct, "gasParams">, 
-   retryableOverrides: Erc20L1L3DepositRequestRetryableOverrides, 
-   l1Provider: Provider, 
-   l2Provider: Provider, 
+   partialTeleportParams: OmitTyped<TeleportParamsStruct, "gasParams">,
+   retryableOverrides: Erc20L1L3DepositRequestRetryableOverrides,
+   l1Provider: Provider,
+   l2Provider: Provider,
 l3Provider: Provider): Promise<object>
 ```
 
@@ -163,29 +163,29 @@ Does not modify the input parameters.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter               | Type                                                                                  |
+| :---------------------- | :------------------------------------------------------------------------------------ |
 | `partialTeleportParams` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`TeleportParamsStruct`, `"gasParams"`\> |
-| `retryableOverrides` | `Erc20L1L3DepositRequestRetryableOverrides` |
-| `l1Provider` | `Provider` |
-| `l2Provider` | `Provider` |
-| `l3Provider` | `Provider` |
+| `retryableOverrides`    | `Erc20L1L3DepositRequestRetryableOverrides`                                           |
+| `l1Provider`            | `Provider`                                                                            |
+| `l2Provider`            | `Provider`                                                                            |
+| `l3Provider`            | `Provider`                                                                            |
 
 ###### Returns
 
 `Promise`\<`object`\>
 
-| Member | Type |
-| :------ | :------ |
-| `costs` | [`BigNumber`, `BigNumber`, `number`, `RetryableGasCostsStructOutput`] & `object` |
-| `teleportParams` | `object` |
-| `teleportParams.amount` | `BigNumberish` |
-| `teleportParams.gasParams` | `RetryableGasParamsStruct` |
-| `teleportParams.l1Token` | `string` |
-| `teleportParams.l1l2Router` | `string` |
-| `teleportParams.l2l3RouterOrInbox` | `string` |
-| `teleportParams.l3FeeTokenL1Addr` | `string` |
-| `teleportParams.to` | `string` |
+| Member                             | Type                                                                             |
+| :--------------------------------- | :------------------------------------------------------------------------------- |
+| `costs`                            | [`BigNumber`, `BigNumber`, `number`, `RetryableGasCostsStructOutput`] & `object` |
+| `teleportParams`                   | `object`                                                                         |
+| `teleportParams.amount`            | `BigNumberish`                                                                   |
+| `teleportParams.gasParams`         | `RetryableGasParamsStruct`                                                       |
+| `teleportParams.l1Token`           | `string`                                                                         |
+| `teleportParams.l1l2Router`        | `string`                                                                         |
+| `teleportParams.l2l3RouterOrInbox` | `string`                                                                         |
+| `teleportParams.l3FeeTokenL1Addr`  | `string`                                                                         |
+| `teleportParams.to`                | `string`                                                                         |
 
 ###### Source
 
@@ -201,15 +201,15 @@ Estimate the gasLimit and maxSubmissionFee for the L1 to L2 fee token bridge leg
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `object` |
-| `params.feeTokenAmount` | `BigNumber` |
-| `params.l1GasPrice` | `BigNumber` |
-| `params.l1Provider` | `Provider` |
-| `params.l2ForwarderAddress` | `string` |
-| `params.l2Provider` | `Provider` |
-| `params.l3FeeTokenL1Addr` | `string` |
+| Parameter                   | Type        |
+| :-------------------------- | :---------- |
+| `params`                    | `object`    |
+| `params.feeTokenAmount`     | `BigNumber` |
+| `params.l1GasPrice`         | `BigNumber` |
+| `params.l1Provider`         | `Provider`  |
+| `params.l2ForwarderAddress` | `string`    |
+| `params.l2Provider`         | `Provider`  |
+| `params.l3FeeTokenL1Addr`   | `string`    |
 
 ###### Returns
 
@@ -229,15 +229,15 @@ Estimate the gasLimit and maxSubmissionFee for the L1 to L2 token bridge leg of 
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `object` |
-| `params.amount` | `BigNumberish` |
-| `params.l1GasPrice` | `BigNumber` |
-| `params.l1Provider` | `Provider` |
-| `params.l1Token` | `string` |
-| `params.l2ForwarderAddress` | `string` |
-| `params.l2Provider` | `Provider` |
+| Parameter                   | Type           |
+| :-------------------------- | :------------- |
+| `params`                    | `object`       |
+| `params.amount`             | `BigNumberish` |
+| `params.l1GasPrice`         | `BigNumber`    |
+| `params.l1Provider`         | `Provider`     |
+| `params.l1Token`            | `string`       |
+| `params.l2ForwarderAddress` | `string`       |
+| `params.l2Provider`         | `Provider`     |
 
 ###### Returns
 
@@ -258,10 +258,10 @@ Gas limit is hardcoded to 1,000,000
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter    | Type        |
+| :----------- | :---------- |
 | `l1GasPrice` | `BigNumber` |
-| `l1Provider` | `Provider` |
+| `l1Provider` | `Provider`  |
 
 ###### Returns
 
@@ -281,14 +281,14 @@ Estimate the gasLimit and maxSubmissionFee for the L2 -> L3 leg of a teleportati
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `object` |
-| `params.l1Provider` | `Provider` |
-| `params.l2ForwarderAddress` | `string` |
-| `params.l2GasPrice` | `BigNumber` |
-| `params.l2Provider` | `Provider` |
-| `params.l3Provider` | `Provider` |
+| Parameter                      | Type                                                                                  |
+| :----------------------------- | :------------------------------------------------------------------------------------ |
+| `params`                       | `object`                                                                              |
+| `params.l1Provider`            | `Provider`                                                                            |
+| `params.l2ForwarderAddress`    | `string`                                                                              |
+| `params.l2GasPrice`            | `BigNumber`                                                                           |
+| `params.l2Provider`            | `Provider`                                                                            |
+| `params.l3Provider`            | `Provider`                                                                            |
 | `params.partialTeleportParams` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`TeleportParamsStruct`, `"gasParams"`\> |
 
 ###### Returns
@@ -309,18 +309,18 @@ Estimate the gasLimit and maxSubmissionFee for a token bridge retryable
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `object` |
-| `params.amount` | `BigNumber` |
-| `params.childProvider` | `Provider` |
-| `params.from` | `string` |
-| `params.isWeth` | `boolean` |
-| `params.parentErc20Address` | `string` |
-| `params.parentGasPrice` | `BigNumber` |
-| `params.parentGatewayAddress` | `string` |
-| `params.parentProvider` | `Provider` |
-| `params.to` | `string` |
+| Parameter                     | Type        |
+| :---------------------------- | :---------- |
+| `params`                      | `object`    |
+| `params.amount`               | `BigNumber` |
+| `params.childProvider`        | `Provider`  |
+| `params.from`                 | `string`    |
+| `params.isWeth`               | `boolean`   |
+| `params.parentErc20Address`   | `string`    |
+| `params.parentGasPrice`       | `BigNumber` |
+| `params.parentGatewayAddress` | `string`    |
+| `params.parentProvider`       | `Provider`  |
+| `params.to`                   | `string`    |
 
 ###### Returns
 
@@ -358,9 +358,9 @@ Will throw if the L3 network uses ETH for fees or the fee token doesn't exist on
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `TxRequestParams` \| `object` |
+| Parameter | Type                          |
+| :-------- | :---------------------------- |
+| `params`  | `TxRequestParams` \| `object` |
 
 ###### Returns
 
@@ -381,9 +381,9 @@ The tokens will be approved for L1Teleporter.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `TxRequestParams` \| `TokenApproveParams` & `object` |
+| Parameter | Type                                                 |
+| :-------- | :--------------------------------------------------- |
+| `params`  | `TxRequestParams` \| `TokenApproveParams` & `object` |
 
 ###### Returns
 
@@ -403,9 +403,9 @@ Execute a teleportation of some tokens from L1 to L3.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `TxRequestParams` \| `Erc20L1L3DepositRequestParams` & `object` |
+| Parameter | Type                                                            |
+| :-------- | :-------------------------------------------------------------- |
+| `params`  | `TxRequestParams` \| `Erc20L1L3DepositRequestParams` & `object` |
 
 ###### Returns
 
@@ -427,12 +427,12 @@ Will throw if the L3 network uses ETH for fees or the fee token doesn't exist on
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `object` |
-| `params.amount`? | `BigNumber` |
-| `params.l1Provider` | `Provider` |
-| `params.l2Provider` | `Provider` |
+| Parameter           | Type        |
+| :------------------ | :---------- |
+| `params`            | `object`    |
+| `params.amount`?    | `BigNumber` |
+| `params.l1Provider` | `Provider`  |
+| `params.l2Provider` | `Provider`  |
 
 ###### Returns
 
@@ -453,9 +453,9 @@ The tokens will be approved for L1Teleporter.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `TokenApproveParams` |
+| Parameter | Type                 |
+| :-------- | :------------------- |
+| `params`  | `TokenApproveParams` |
 
 ###### Returns
 
@@ -475,19 +475,19 @@ Given a teleportation tx, get the L1Teleporter parameters, L2Forwarder parameter
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `object` & `TxReference` |
+| Parameter | Type                     |
+| :-------- | :----------------------- |
+| `params`  | `object` & `TxReference` |
 
 ###### Returns
 
 `Promise`\<`object`\>
 
-| Member | Type |
-| :------ | :------ |
-| `l2ForwarderAddress` | `Promise`\<`string`\> |
-| `l2ForwarderParams` | `L2ForwarderParamsStruct` |
-| `teleportParams` | `TeleportParamsStruct` |
+| Member               | Type                      |
+| :------------------- | :------------------------ |
+| `l2ForwarderAddress` | `Promise`\<`string`\>     |
+| `l2ForwarderParams`  | `L2ForwarderParamsStruct` |
+| `teleportParams`     | `TeleportParamsStruct`    |
 
 ###### Source
 
@@ -504,9 +504,9 @@ Also returns the amount of fee tokens required for teleportation.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `Erc20L1L3DepositRequestParams` & `object` \| `object` |
+| Parameter | Type                                                   |
+| :-------- | :----------------------------------------------------- |
+| `params`  | `Erc20L1L3DepositRequestParams` & `object` \| `object` |
 
 ###### Returns
 
@@ -528,9 +528,9 @@ Can provide either the txHash, the tx, or the txReceipt
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `GetL1L3DepositStatusParams` |
+| Parameter | Type                         |
+| :-------- | :--------------------------- |
+| `params`  | `GetL1L3DepositStatusParams` |
 
 ###### Returns
 
@@ -551,8 +551,8 @@ If the fee token is not available on L1, does not use 18 decimals on L1 and L2, 
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter    | Type       |
+| :----------- | :--------- |
 | `l1Provider` | `Provider` |
 | `l2Provider` | `Provider` |
 
@@ -574,10 +574,10 @@ Given an L1 token's address, get the address of the token's L1 \<-\> L2 gateway 
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `erc20L1Address` | `string` |
-| `l1Provider` | `Provider` |
+| Parameter        | Type       |
+| :--------------- | :--------- |
+| `erc20L1Address` | `string`   |
+| `l1Provider`     | `Provider` |
 
 ###### Returns
 
@@ -600,10 +600,10 @@ of any of the underlying functions on that contract.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `l1TokenAddr` | `string` |
-| `l1Provider` | `Provider` |
+| Parameter     | Type       |
+| :------------ | :--------- |
+| `l1TokenAddr` | `string`   |
+| `l1Provider`  | `Provider` |
 
 ###### Returns
 
@@ -623,10 +623,10 @@ Get the corresponding L2 token address for the provided L1 token
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `erc20L1Address` | `string` |
-| `l1Provider` | `Provider` |
+| Parameter        | Type       |
+| :--------------- | :--------- |
+| `erc20L1Address` | `string`   |
+| `l1Provider`     | `Provider` |
 
 ###### Returns
 
@@ -640,8 +640,8 @@ Get the corresponding L2 token address for the provided L1 token
 
 ```ts
 getL2L3GatewayAddress(
-   erc20L1Address: string, 
-   l1Provider: Provider, 
+   erc20L1Address: string,
+   l1Provider: Provider,
 l2Provider: Provider): Promise<string>
 ```
 
@@ -649,11 +649,11 @@ Get the address of the L2 \<-\> L3 gateway on L2 given an L1 token address
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `erc20L1Address` | `string` |
-| `l1Provider` | `Provider` |
-| `l2Provider` | `Provider` |
+| Parameter        | Type       |
+| :--------------- | :--------- |
+| `erc20L1Address` | `string`   |
+| `l1Provider`     | `Provider` |
+| `l2Provider`     | `Provider` |
 
 ###### Returns
 
@@ -676,10 +676,10 @@ of any of the underlying functions on that contract.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `l2TokenAddr` | `string` |
-| `l2Provider` | `Provider` |
+| Parameter     | Type       |
+| :------------ | :--------- |
+| `l2TokenAddr` | `string`   |
+| `l2Provider`  | `Provider` |
 
 ###### Returns
 
@@ -693,8 +693,8 @@ of any of the underlying functions on that contract.
 
 ```ts
 getL3Erc20Address(
-   erc20L1Address: string, 
-   l1Provider: Provider, 
+   erc20L1Address: string,
+   l1Provider: Provider,
 l2Provider: Provider): Promise<string>
 ```
 
@@ -702,11 +702,11 @@ Get the corresponding L3 token address for the provided L1 token
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `erc20L1Address` | `string` |
-| `l1Provider` | `Provider` |
-| `l2Provider` | `Provider` |
+| Parameter        | Type       |
+| :--------------- | :--------- |
+| `erc20L1Address` | `string`   |
+| `l1Provider`     | `Provider` |
+| `l2Provider`     | `Provider` |
 
 ###### Returns
 
@@ -729,10 +729,10 @@ of any of the underlying functions on that contract.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `l3TokenAddr` | `string` |
-| `l3Provider` | `Provider` |
+| Parameter     | Type       |
+| :------------ | :--------- |
+| `l3TokenAddr` | `string`   |
+| `l3Provider`  | `Provider` |
 
 ###### Returns
 
@@ -752,10 +752,10 @@ Whether the L1 token has been disabled on the L1 \<-\> L2 router given an L1 tok
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `l1TokenAddress` | `string` |
-| `l1Provider` | `Provider` |
+| Parameter        | Type       |
+| :--------------- | :--------- |
+| `l1TokenAddress` | `string`   |
+| `l1Provider`     | `Provider` |
 
 ###### Returns
 
@@ -769,9 +769,9 @@ Whether the L1 token has been disabled on the L1 \<-\> L2 router given an L1 tok
 
 ```ts
 l2ForwarderAddress(
-   owner: string, 
-   routerOrInbox: string, 
-   destinationAddress: string, 
+   owner: string,
+   routerOrInbox: string,
+   destinationAddress: string,
 l1OrL2Provider: Provider): Promise<string>
 ```
 
@@ -779,12 +779,12 @@ Given some L2Forwarder parameters, get the address of the L2Forwarder contract
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `owner` | `string` |
-| `routerOrInbox` | `string` |
-| `destinationAddress` | `string` |
-| `l1OrL2Provider` | `Provider` |
+| Parameter            | Type       |
+| :------------------- | :--------- |
+| `owner`              | `string`   |
+| `routerOrInbox`      | `string`   |
+| `destinationAddress` | `string`   |
+| `l1OrL2Provider`     | `Provider` |
 
 ###### Returns
 
@@ -804,10 +804,10 @@ Whether the L2 token has been disabled on the L2 \<-\> L3 router given an L2 tok
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `l2TokenAddress` | `string` |
-| `l2Provider` | `Provider` |
+| Parameter        | Type       |
+| :--------------- | :--------- |
+| `l2TokenAddress` | `string`   |
+| `l2Provider`     | `Provider` |
 
 ###### Returns
 
@@ -827,8 +827,8 @@ Get the type of teleportation from the l1Token and l3FeeTokenL1Addr teleport par
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter               | Type                                                                  |
+| :---------------------- | :-------------------------------------------------------------------- |
 | `partialTeleportParams` | `Pick`\<`TeleportParamsStruct`, `"l1Token"` \| `"l3FeeTokenL1Addr"`\> |
 
 ###### Returns
@@ -839,7 +839,7 @@ Get the type of teleportation from the l1Token and l3FeeTokenL1Addr teleport par
 
 [assetBridger/l1l3Bridger.ts:953](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L953)
 
-***
+---
 
 ### EthL1L3Bridger
 
@@ -861,9 +861,9 @@ Check the signer/provider matches the l1Network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -887,9 +887,9 @@ Check the signer/provider matches the l2Network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -913,9 +913,9 @@ Check the signer/provider matches the l3Network, throws if not
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sop` | `SignerOrProvider` |  |
+| Parameter | Type               | Description |
+| :-------- | :----------------- | :---------- |
+| `sop`     | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -939,9 +939,9 @@ Deposit ETH to L3 via a double retryable ticket
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `TxRequestParams` \| `EthL1L3DepositRequestParams` & `object` |
+| Parameter | Type                                                          |
+| :-------- | :------------------------------------------------------------ |
+| `params`  | `TxRequestParams` \| `EthL1L3DepositRequestParams` & `object` |
 
 ###### Returns
 
@@ -961,16 +961,16 @@ Given an L1 transaction, get the retryable parameters for both l2 and l3 tickets
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `object` & `TxReference` |
+| Parameter | Type                     |
+| :-------- | :----------------------- |
+| `params`  | `object` & `TxReference` |
 
 ###### Returns
 
 `Promise`\<`object`\>
 
-| Member | Type |
-| :------ | :------ |
+| Member           | Type                                                                          |
+| :--------------- | :---------------------------------------------------------------------------- |
 | `l1l2TicketData` | [`RetryableMessageParams`](../dataEntities/message.md#retryablemessageparams) |
 | `l2l3TicketData` | [`RetryableMessageParams`](../dataEntities/message.md#retryablemessageparams) |
 
@@ -988,9 +988,9 @@ Get a tx request to deposit ETH to L3 via a double retryable ticket
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `EthL1L3DepositRequestParams` & `object` \| `object` |
+| Parameter | Type                                                 |
+| :-------- | :--------------------------------------------------- |
+| `params`  | `EthL1L3DepositRequestParams` & `object` \| `object` |
 
 ###### Returns
 
@@ -1010,9 +1010,9 @@ Get the status of a deposit given an L1 tx receipt. Does not check if the tx is 
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `GetL1L3DepositStatusParams` |
+| Parameter | Type                         |
+| :-------- | :--------------------------- |
+| `params`  | `GetL1L3DepositStatusParams` |
 
 ###### Returns
 

@@ -20,8 +20,8 @@ Base functionality for Child-to-Parent messages
 
 ```ts
 static fromEvent<T>(
-   parentSignerOrProvider: T, 
-   event: ChildToParentTransactionEvent, 
+   parentSignerOrProvider: T,
+   event: ChildToParentTransactionEvent,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriter<T>
 ```
 
@@ -29,17 +29,17 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `event` | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message. |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type                            | Description                                                                                                                                                                              |
+| :----------------------- | :------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`                             | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider`?        | `Provider`                      | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -53,11 +53,11 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ```ts
 static getChildToParentEvents(
-   childProvider: Provider, 
-   filter: object, 
-   position?: BigNumber, 
-   destination?: string, 
-   hash?: BigNumber, 
+   childProvider: Provider,
+   filter: object,
+   position?: BigNumber,
+   destination?: string,
+   hash?: BigNumber,
 indexInBatch?: BigNumber): Promise<ChildToParentTransactionEvent & object[]>
 ```
 
@@ -65,16 +65,16 @@ Get event logs for ChildToParent transactions.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `filter` | `object` | Block range filter |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock`? | `BlockTag` | - |
-| `position`? | `BigNumber` | The batchnumber indexed field was removed in nitro and a position indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same batchnumber.<br />For post nitro events it will be used to find events with the same position. |
-| `destination`? | `string` | The parent destination of the ChildToParent message |
-| `hash`? | `BigNumber` | The uniqueId indexed field was removed in nitro and a hash indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same uniqueId.<br />For post nitro events it will be used to find events with the same hash. |
-| `indexInBatch`? | `BigNumber` | The index in the batch, only valid for pre-nitro events. This parameter is ignored post-nitro |
+| Parameter          | Type        | Description                                                                                                                                                                                                                                                                            |
+| :----------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `childProvider`    | `Provider`  |                                                                                                                                                                                                                                                                                        |
+| `filter`           | `object`    | Block range filter                                                                                                                                                                                                                                                                     |
+| `filter.fromBlock` | `BlockTag`  | -                                                                                                                                                                                                                                                                                      |
+| `filter.toBlock`?  | `BlockTag`  | -                                                                                                                                                                                                                                                                                      |
+| `position`?        | `BigNumber` | The batchnumber indexed field was removed in nitro and a position indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same batchnumber.<br />For post nitro events it will be used to find events with the same position. |
+| `destination`?     | `string`    | The parent destination of the ChildToParent message                                                                                                                                                                                                                                    |
+| `hash`?            | `BigNumber` | The uniqueId indexed field was removed in nitro and a hash indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same uniqueId.<br />For post nitro events it will be used to find events with the same hash.               |
+| `indexInBatch`?    | `BigNumber` | The index in the batch, only valid for pre-nitro events. This parameter is ignored post-nitro                                                                                                                                                                                          |
 
 ###### Returns
 
@@ -86,7 +86,7 @@ Any classic and nitro events that match the provided filters.
 
 [message/ChildToParentMessage.ts:109](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L109)
 
-***
+---
 
 ### ChildToParentMessageReader
 
@@ -113,9 +113,9 @@ If the message can or already has been executed, this returns null
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -138,8 +138,8 @@ In order to check if the message has been executed proof info must be provided.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -162,10 +162,10 @@ can take 1 week+, so waiting here could be a very long operation.
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `childProvider` | `Provider` | `undefined` | - |
-| `retryDelay` | `number` | `500` |  |
+| Parameter       | Type       | Default value | Description |
+| :-------------- | :--------- | :------------ | :---------- |
+| `childProvider` | `Provider` | `undefined`   | -           |
+| `retryDelay`    | `number`   | `500`         |             |
 
 ###### Returns
 
@@ -181,8 +181,8 @@ outbox entry status (either executed or confirmed but not pending)
 
 ```ts
 static fromEvent<T>(
-   parentSignerOrProvider: T, 
-   event: ChildToParentTransactionEvent, 
+   parentSignerOrProvider: T,
+   event: ChildToParentTransactionEvent,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriter<T>
 ```
 
@@ -190,17 +190,17 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `event` | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message. |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type                            | Description                                                                                                                                                                              |
+| :----------------------- | :------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`                             | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider`?        | `Provider`                      | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -218,11 +218,11 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ```ts
 static getChildToParentEvents(
-   childProvider: Provider, 
-   filter: object, 
-   position?: BigNumber, 
-   destination?: string, 
-   hash?: BigNumber, 
+   childProvider: Provider,
+   filter: object,
+   position?: BigNumber,
+   destination?: string,
+   hash?: BigNumber,
 indexInBatch?: BigNumber): Promise<ChildToParentTransactionEvent & object[]>
 ```
 
@@ -230,16 +230,16 @@ Get event logs for ChildToParent transactions.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `filter` | `object` | Block range filter |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock`? | `BlockTag` | - |
-| `position`? | `BigNumber` | The batchnumber indexed field was removed in nitro and a position indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same batchnumber.<br />For post nitro events it will be used to find events with the same position. |
-| `destination`? | `string` | The parent destination of the ChildToParent message |
-| `hash`? | `BigNumber` | The uniqueId indexed field was removed in nitro and a hash indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same uniqueId.<br />For post nitro events it will be used to find events with the same hash. |
-| `indexInBatch`? | `BigNumber` | The index in the batch, only valid for pre-nitro events. This parameter is ignored post-nitro |
+| Parameter          | Type        | Description                                                                                                                                                                                                                                                                            |
+| :----------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `childProvider`    | `Provider`  |                                                                                                                                                                                                                                                                                        |
+| `filter`           | `object`    | Block range filter                                                                                                                                                                                                                                                                     |
+| `filter.fromBlock` | `BlockTag`  | -                                                                                                                                                                                                                                                                                      |
+| `filter.toBlock`?  | `BlockTag`  | -                                                                                                                                                                                                                                                                                      |
+| `position`?        | `BigNumber` | The batchnumber indexed field was removed in nitro and a position indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same batchnumber.<br />For post nitro events it will be used to find events with the same position. |
+| `destination`?     | `string`    | The parent destination of the ChildToParent message                                                                                                                                                                                                                                    |
+| `hash`?            | `BigNumber` | The uniqueId indexed field was removed in nitro and a hash indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same uniqueId.<br />For post nitro events it will be used to find events with the same hash.               |
+| `indexInBatch`?    | `BigNumber` | The index in the batch, only valid for pre-nitro events. This parameter is ignored post-nitro                                                                                                                                                                                          |
 
 ###### Returns
 
@@ -255,7 +255,7 @@ Any classic and nitro events that match the provided filters.
 
 [message/ChildToParentMessage.ts:109](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L109)
 
-***
+---
 
 ### ChildToParentMessageWriter
 
@@ -271,8 +271,8 @@ Provides read and write access for Child-to-Parent messages
 
 ```ts
 new ChildToParentMessageWriter(
-   parentSigner: Signer, 
-   event: ChildToParentTransactionEvent, 
+   parentSigner: Signer,
+   event: ChildToParentTransactionEvent,
    parentProvider?: Provider): ChildToParentMessageWriter
 ```
 
@@ -280,11 +280,11 @@ Instantiates a new `ChildToParentMessageWriter` object.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSigner` | `Signer` | The signer to be used for executing the Child-to-Parent message. |
-| `event` | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message. |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter         | Type                            | Description                                                                                                                                                                    |
+| :---------------- | :------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSigner`    | `Signer`                        | The signer to be used for executing the Child-to-Parent message.                                                                                                               |
+| `event`           | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                  |
+| `parentProvider`? | `Provider`                      | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -312,10 +312,10 @@ corresponding assertion is confirmed.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `childProvider` | `Provider` |
-| `overrides`? | `Overrides` |
+| Parameter       | Type        |
+| :-------------- | :---------- |
+| `childProvider` | `Provider`  |
+| `overrides`?    | `Overrides` |
 
 ###### Returns
 
@@ -336,9 +336,9 @@ If the message can or already has been executed, this returns null
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -365,8 +365,8 @@ In order to check if the message has been executed proof info must be provided.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -393,10 +393,10 @@ can take 1 week+, so waiting here could be a very long operation.
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `childProvider` | `Provider` | `undefined` | - |
-| `retryDelay` | `number` | `500` |  |
+| Parameter       | Type       | Default value | Description |
+| :-------------- | :--------- | :------------ | :---------- |
+| `childProvider` | `Provider` | `undefined`   | -           |
+| `retryDelay`    | `number`   | `500`         |             |
 
 ###### Returns
 
@@ -416,8 +416,8 @@ outbox entry status (either executed or confirmed but not pending)
 
 ```ts
 static fromEvent<T>(
-   parentSignerOrProvider: T, 
-   event: ChildToParentTransactionEvent, 
+   parentSignerOrProvider: T,
+   event: ChildToParentTransactionEvent,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriter<T>
 ```
 
@@ -425,17 +425,17 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `event` | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message. |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type                            | Description                                                                                                                                                                              |
+| :----------------------- | :------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`                             | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider`?        | `Provider`                      | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -453,11 +453,11 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ```ts
 static getChildToParentEvents(
-   childProvider: Provider, 
-   filter: object, 
-   position?: BigNumber, 
-   destination?: string, 
-   hash?: BigNumber, 
+   childProvider: Provider,
+   filter: object,
+   position?: BigNumber,
+   destination?: string,
+   hash?: BigNumber,
 indexInBatch?: BigNumber): Promise<ChildToParentTransactionEvent & object[]>
 ```
 
@@ -465,16 +465,16 @@ Get event logs for ChildToParent transactions.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `filter` | `object` | Block range filter |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock`? | `BlockTag` | - |
-| `position`? | `BigNumber` | The batchnumber indexed field was removed in nitro and a position indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same batchnumber.<br />For post nitro events it will be used to find events with the same position. |
-| `destination`? | `string` | The parent destination of the ChildToParent message |
-| `hash`? | `BigNumber` | The uniqueId indexed field was removed in nitro and a hash indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same uniqueId.<br />For post nitro events it will be used to find events with the same hash. |
-| `indexInBatch`? | `BigNumber` | The index in the batch, only valid for pre-nitro events. This parameter is ignored post-nitro |
+| Parameter          | Type        | Description                                                                                                                                                                                                                                                                            |
+| :----------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `childProvider`    | `Provider`  |                                                                                                                                                                                                                                                                                        |
+| `filter`           | `object`    | Block range filter                                                                                                                                                                                                                                                                     |
+| `filter.fromBlock` | `BlockTag`  | -                                                                                                                                                                                                                                                                                      |
+| `filter.toBlock`?  | `BlockTag`  | -                                                                                                                                                                                                                                                                                      |
+| `position`?        | `BigNumber` | The batchnumber indexed field was removed in nitro and a position indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same batchnumber.<br />For post nitro events it will be used to find events with the same position. |
+| `destination`?     | `string`    | The parent destination of the ChildToParent message                                                                                                                                                                                                                                    |
+| `hash`?            | `BigNumber` | The uniqueId indexed field was removed in nitro and a hash indexed field was added.<br />For pre-nitro events the value passed in here will be used to find events with the same uniqueId.<br />For post nitro events it will be used to find events with the same hash.               |
+| `indexInBatch`?    | `BigNumber` | The index in the batch, only valid for pre-nitro events. This parameter is ignored post-nitro                                                                                                                                                                                          |
 
 ###### Returns
 
@@ -505,9 +505,9 @@ type ChildToParentMessageWriter.
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 #### Source
 

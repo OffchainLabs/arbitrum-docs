@@ -22,9 +22,9 @@ Ethereum/Arbitrum address class
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `value` | `string` | A valid Ethereum address. Doesn't need to be checksum cased. |
+| Parameter | Type     | Description                                                  |
+| :-------- | :------- | :----------------------------------------------------------- |
+| `value`   | `string` | A valid Ethereum address. Doesn't need to be checksum cased. |
 
 ###### Returns
 
@@ -36,9 +36,9 @@ Ethereum/Arbitrum address class
 
 #### Properties
 
-| Property | Modifier | Type | Description |
-| :------ | :------ | :------ | :------ |
-| `value` | `readonly` | `string` | A valid Ethereum address. Doesn't need to be checksum cased. |
+| Property | Modifier   | Type     | Description                                                  |
+| :------- | :--------- | :------- | :----------------------------------------------------------- |
+| `value`  | `readonly` | `string` | A valid Ethereum address. Doesn't need to be checksum cased. |
 
 #### Methods
 

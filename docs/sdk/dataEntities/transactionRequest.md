@@ -12,11 +12,11 @@ A transaction request for a transaction that will trigger a child to parent mess
 
 #### Properties
 
-| Property | Type | Description |
-| :------ | :------ | :------ |
+| Property                 | Type                                                   | Description                                                                                                                                                                                                                                                                                     |
+| :----------------------- | :----------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `estimateParentGasLimit` | (`l1Provider`: `Provider`) => `Promise`\<`BigNumber`\> | Estimate the gas limit required to execute the withdrawal on the parent chain.<br />Note that this is only a rough estimate as it may not be possible to know<br />the exact size of the proof straight away, however the real value should be<br />within a few thousand gas of this estimate. |
 
-***
+---
 
 ### ParentToChildTransactionRequest
 
@@ -25,10 +25,10 @@ execution on the child chain
 
 #### Properties
 
-| Property | Type | Description |
-| :------ | :------ | :------ |
+| Property        | Type                                                                                                                                                                                                                           | Description                                                                                                    |
+| :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
 | `retryableData` | [`OmitTyped`](../utils/types.md#omittypedtk)\<`ParentToChildMessageNoGasParams`, `"excessFeeRefundAddress"` \| `"callValueRefundAddress"`\> & `Partial`\<`ParentToChildMessageNoGasParams`\> & `ParentToChildMessageGasParams` | Information about the retryable ticket, and it's subsequent execution, that<br />will occur on the child chain |
-| `txRequest` | `Required`\<`Pick`\<`TransactionRequest`, `"data"` \| `"value"` \| `"from"` \| `"to"`\>\> | Core fields needed to form the parent component of the transaction request |
+| `txRequest`     | `Required`\<`Pick`\<`TransactionRequest`, `"data"` \| `"value"` \| `"from"` \| `"to"`\>\>                                                                                                                                      | Core fields needed to form the parent component of the transaction request                                     |
 
 #### Methods
 
@@ -53,7 +53,9 @@ If this request were sent now, would it have enough margin to reliably succeed
 ### isChildToParentTransactionRequest()
 
 ```ts
-function isChildToParentTransactionRequest<T>(possibleRequest: ChildToParentTransactionRequest | IsNotTransactionRequest<T>): possibleRequest is ChildToParentTransactionRequest
+function isChildToParentTransactionRequest<T>(
+  possibleRequest: ChildToParentTransactionRequest | IsNotTransactionRequest<T>,
+): possibleRequest is ChildToParentTransactionRequest;
 ```
 
 Check if an object is of ChildToParentTransactionRequest type
@@ -61,14 +63,14 @@ Check if an object is of ChildToParentTransactionRequest type
 #### Type parameters
 
 | Type parameter |
-| :------ |
-| `T` |
+| :------------- |
+| `T`            |
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `possibleRequest` | [`ChildToParentTransactionRequest`](transactionRequest.md#childtoparenttransactionrequest) \| `IsNotTransactionRequest`\<`T`\> |  |
+| Parameter         | Type                                                                                                                           | Description |
+| :---------------- | :----------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| `possibleRequest` | [`ChildToParentTransactionRequest`](transactionRequest.md#childtoparenttransactionrequest) \| `IsNotTransactionRequest`\<`T`\> |             |
 
 #### Returns
 
@@ -78,12 +80,14 @@ Check if an object is of ChildToParentTransactionRequest type
 
 [dataEntities/transactionRequest.ts:70](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/transactionRequest.ts#L70)
 
-***
+---
 
 ### isParentToChildTransactionRequest()
 
 ```ts
-function isParentToChildTransactionRequest<T>(possibleRequest: ParentToChildTransactionRequest | IsNotTransactionRequest<T>): possibleRequest is ParentToChildTransactionRequest
+function isParentToChildTransactionRequest<T>(
+  possibleRequest: ParentToChildTransactionRequest | IsNotTransactionRequest<T>,
+): possibleRequest is ParentToChildTransactionRequest;
 ```
 
 Check if an object is of ParentToChildTransactionRequest type
@@ -91,14 +95,14 @@ Check if an object is of ParentToChildTransactionRequest type
 #### Type parameters
 
 | Type parameter |
-| :------ |
-| `T` |
+| :------------- |
+| `T`            |
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `possibleRequest` | [`ParentToChildTransactionRequest`](transactionRequest.md#parenttochildtransactionrequest) \| `IsNotTransactionRequest`\<`T`\> |  |
+| Parameter         | Type                                                                                                                           | Description |
+| :---------------- | :----------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| `possibleRequest` | [`ParentToChildTransactionRequest`](transactionRequest.md#parenttochildtransactionrequest) \| `IsNotTransactionRequest`\<`T`\> |             |
 
 #### Returns
 

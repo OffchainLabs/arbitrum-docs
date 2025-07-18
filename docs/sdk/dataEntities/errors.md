@@ -18,7 +18,7 @@ Errors originating in Arbitrum SDK
 
 - [`MissingProviderArbSdkError`](errors.md#missingproviderarbsdkerror)
 
-***
+---
 
 ### MissingProviderArbSdkError
 

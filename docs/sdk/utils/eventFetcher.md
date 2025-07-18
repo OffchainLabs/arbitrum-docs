@@ -16,8 +16,8 @@ Fetches and parses blockchain logs
 
 ```ts
 getEvents<TContract, TEventFilter>(
-   contractFactory: TypeChainContractFactory<TContract>, 
-   topicGenerator: (t: TContract) => TEventFilter, 
+   contractFactory: TypeChainContractFactory<TContract>,
+   topicGenerator: (t: TContract) => TEventFilter,
 filter: object): Promise<FetchedEvent<TEventOf<TEventFilter>>[]>
 ```
 
@@ -25,21 +25,21 @@ Fetch logs and parse logs
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `TContract` *extends* `Contract` |
-| `TEventFilter` *extends* `TypedEventFilter`\<`TypedEvent`\<`any`, `any`\>\> |
+| Type parameter                                                              |
+| :-------------------------------------------------------------------------- |
+| `TContract` _extends_ `Contract`                                            |
+| `TEventFilter` _extends_ `TypedEventFilter`\<`TypedEvent`\<`any`, `any`\>\> |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `contractFactory` | [`TypeChainContractFactory`](../dataEntities/event.md#typechaincontractfactorytcontract)\<`TContract`\> | A contract factory for generating a contract of type TContract at the addr |
-| `topicGenerator` | (`t`: `TContract`) => `TEventFilter` | Generator function for creating |
-| `filter` | `object` | Block and address filter parameters |
-| `filter.address`? | `string` | - |
-| `filter.fromBlock` | `BlockTag` | - |
-| `filter.toBlock` | `BlockTag` | - |
+| Parameter          | Type                                                                                                    | Description                                                                |
+| :----------------- | :------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------- |
+| `contractFactory`  | [`TypeChainContractFactory`](../dataEntities/event.md#typechaincontractfactorytcontract)\<`TContract`\> | A contract factory for generating a contract of type TContract at the addr |
+| `topicGenerator`   | (`t`: `TContract`) => `TEventFilter`                                                                    | Generator function for creating                                            |
+| `filter`           | `object`                                                                                                | Block and address filter parameters                                        |
+| `filter.address`?  | `string`                                                                                                | -                                                                          |
+| `filter.fromBlock` | `BlockTag`                                                                                              | -                                                                          |
+| `filter.toBlock`   | `BlockTag`                                                                                              | -                                                                          |
 
 ###### Returns
 

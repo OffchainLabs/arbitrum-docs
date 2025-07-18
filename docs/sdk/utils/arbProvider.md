@@ -26,10 +26,10 @@ Arbitrum specific formats
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter  | Type              | Description                              |
+| :--------- | :---------------- | :--------------------------------------- |
 | `provider` | `JsonRpcProvider` | Must be connected to an Arbitrum network |
-| `network`? | `Networkish` | Must be an Arbitrum network |
+| `network`? | `Networkish`      | Must be an Arbitrum network              |
 
 ###### Returns
 

@@ -20,11 +20,11 @@ Provides read-only access for classic Child-to-Parent-messages
 
 #### Properties
 
-| Property | Modifier | Type | Default value | Description | Inherited from |
-| :------ | :------ | :------ | :------ | :------ | :------ |
-| `batchNumber` | `readonly` | `BigNumber` | `undefined` | The number of the batch this message is part of | `ChildToParentMessageClassic.batchNumber` |
-| `indexInBatch` | `readonly` | `BigNumber` | `undefined` | The index of this message in the batch | `ChildToParentMessageClassic.indexInBatch` |
-| `outboxAddress` | `protected` | `null` \| `string` | `null` | Contains the classic outbox address, or set to zero address if this network<br />did not have a classic outbox deployed | - |
+| Property        | Modifier    | Type               | Default value | Description                                                                                                             | Inherited from                             |
+| :-------------- | :---------- | :----------------- | :------------ | :---------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
+| `batchNumber`   | `readonly`  | `BigNumber`        | `undefined`   | The number of the batch this message is part of                                                                         | `ChildToParentMessageClassic.batchNumber`  |
+| `indexInBatch`  | `readonly`  | `BigNumber`        | `undefined`   | The index of this message in the batch                                                                                  | `ChildToParentMessageClassic.indexInBatch` |
+| `outboxAddress` | `protected` | `null` \| `string` | `null`        | Contains the classic outbox address, or set to zero address if this network<br />did not have a classic outbox deployed | -                                          |
 
 #### Methods
 
@@ -38,9 +38,9 @@ Estimates the Parent Chain block number in which this Child-to-Parent tx will be
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -62,10 +62,10 @@ Classic had 2 outboxes, we need to find the correct one for the provided batch n
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `batchNumber` | `number` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
+| `batchNumber`   | `number`   |             |
 
 ###### Returns
 
@@ -85,8 +85,8 @@ Check if given outbox message has already been executed
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -108,9 +108,9 @@ In order to check if the message has been executed proof info must be provided.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -130,9 +130,9 @@ Get the execution proof for this message. Returns null if the batch does not exi
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -154,10 +154,10 @@ can take 1 week+, so waiting here could be a very long operation.
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `childProvider` | `Provider` | `undefined` | - |
-| `retryDelay` | `number` | `500` |  |
+| Parameter       | Type       | Default value | Description |
+| :-------------- | :--------- | :------------ | :---------- |
+| `childProvider` | `Provider` | `undefined`   | -           |
+| `retryDelay`    | `number`   | `500`         |             |
 
 ###### Returns
 
@@ -173,9 +173,9 @@ outbox entry status (either executed or confirmed but not pending)
 
 ```ts
 static fromBatchNumber<T>(
-   parentSignerOrProvider: T, 
-   batchNumber: BigNumber, 
-   indexInBatch: BigNumber, 
+   parentSignerOrProvider: T,
+   batchNumber: BigNumber,
+   indexInBatch: BigNumber,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterClassic<T>
 ```
 
@@ -183,18 +183,18 @@ Instantiates a new `ChildToParentMessageWriterClassic` or `ChildToParentMessageR
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `batchNumber` | `BigNumber` | The number of the batch containing the Child-to-Parent message. |
-| `indexInBatch` | `BigNumber` | The index of the Child-to-Parent message within the batch. |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type        | Description                                                                                                                                                                              |
+| :----------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`         | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `batchNumber`            | `BigNumber` | The number of the batch containing the Child-to-Parent message.                                                                                                                          |
+| `indexInBatch`           | `BigNumber` | The index of the Child-to-Parent message within the batch.                                                                                                                               |
+| `parentProvider`?        | `Provider`  | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -208,7 +208,7 @@ Instantiates a new `ChildToParentMessageWriterClassic` or `ChildToParentMessageR
 
 [message/ChildToParentMessageClassic.ts:128](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L128)
 
-***
+---
 
 ### ChildToParentMessageWriterClassic
 
@@ -224,9 +224,9 @@ Provides read and write access for classic Child-to-Parent-messages
 
 ```ts
 new ChildToParentMessageWriterClassic(
-   parentSigner: Signer, 
-   batchNumber: BigNumber, 
-   indexInBatch: BigNumber, 
+   parentSigner: Signer,
+   batchNumber: BigNumber,
+   indexInBatch: BigNumber,
    parentProvider?: Provider): ChildToParentMessageWriterClassic
 ```
 
@@ -234,12 +234,12 @@ Instantiates a new `ChildToParentMessageWriterClassic` object.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSigner` | `Signer` | The signer to be used for executing the Child-to-Parent message. |
-| `batchNumber` | `BigNumber` | The number of the batch containing the Child-to-Parent message. |
-| `indexInBatch` | `BigNumber` | The index of the Child-to-Parent message within the batch. |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter         | Type        | Description                                                                                                                                                                    |
+| :---------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSigner`    | `Signer`    | The signer to be used for executing the Child-to-Parent message.                                                                                                               |
+| `batchNumber`     | `BigNumber` | The number of the batch containing the Child-to-Parent message.                                                                                                                |
+| `indexInBatch`    | `BigNumber` | The index of the Child-to-Parent message within the batch.                                                                                                                     |
+| `parentProvider`? | `Provider`  | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -255,12 +255,12 @@ Instantiates a new `ChildToParentMessageWriterClassic` object.
 
 #### Properties
 
-| Property | Modifier | Type | Default value | Description | Inherited from |
-| :------ | :------ | :------ | :------ | :------ | :------ |
-| `batchNumber` | `readonly` | `BigNumber` | `undefined` | The number of the batch this message is part of | [`ChildToParentMessageReaderClassic`](ChildToParentMessageClassic.md#childtoparentmessagereaderclassic).`batchNumber` |
-| `indexInBatch` | `readonly` | `BigNumber` | `undefined` | The index of this message in the batch | [`ChildToParentMessageReaderClassic`](ChildToParentMessageClassic.md#childtoparentmessagereaderclassic).`indexInBatch` |
-| `outboxAddress` | `protected` | `null` \| `string` | `null` | Contains the classic outbox address, or set to zero address if this network<br />did not have a classic outbox deployed | [`ChildToParentMessageReaderClassic`](ChildToParentMessageClassic.md#childtoparentmessagereaderclassic).`outboxAddress` |
-| `parentSigner` | `private` | `Signer` | `undefined` | The signer to be used for executing the Child-to-Parent message. | - |
+| Property        | Modifier    | Type               | Default value | Description                                                                                                             | Inherited from                                                                                                          |
+| :-------------- | :---------- | :----------------- | :------------ | :---------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| `batchNumber`   | `readonly`  | `BigNumber`        | `undefined`   | The number of the batch this message is part of                                                                         | [`ChildToParentMessageReaderClassic`](ChildToParentMessageClassic.md#childtoparentmessagereaderclassic).`batchNumber`   |
+| `indexInBatch`  | `readonly`  | `BigNumber`        | `undefined`   | The index of this message in the batch                                                                                  | [`ChildToParentMessageReaderClassic`](ChildToParentMessageClassic.md#childtoparentmessagereaderclassic).`indexInBatch`  |
+| `outboxAddress` | `protected` | `null` \| `string` | `null`        | Contains the classic outbox address, or set to zero address if this network<br />did not have a classic outbox deployed | [`ChildToParentMessageReaderClassic`](ChildToParentMessageClassic.md#childtoparentmessagereaderclassic).`outboxAddress` |
+| `parentSigner`  | `private`   | `Signer`           | `undefined`   | The signer to be used for executing the Child-to-Parent message.                                                        | -                                                                                                                       |
 
 #### Methods
 
@@ -276,10 +276,10 @@ corresponding assertion is confirmed.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `childProvider` | `Provider` |
-| `overrides`? | `Overrides` |
+| Parameter       | Type        |
+| :-------------- | :---------- |
+| `childProvider` | `Provider`  |
+| `overrides`?    | `Overrides` |
 
 ###### Returns
 
@@ -299,9 +299,9 @@ Estimates the Parent Chain block number in which this Child-to-Parent tx will be
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -327,10 +327,10 @@ Classic had 2 outboxes, we need to find the correct one for the provided batch n
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
-| `batchNumber` | `number` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
+| `batchNumber`   | `number`   |             |
 
 ###### Returns
 
@@ -354,8 +354,8 @@ Check if given outbox message has already been executed
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -381,9 +381,9 @@ In order to check if the message has been executed proof info must be provided.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -407,9 +407,9 @@ Get the execution proof for this message. Returns null if the batch does not exi
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -435,10 +435,10 @@ can take 1 week+, so waiting here could be a very long operation.
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `childProvider` | `Provider` | `undefined` | - |
-| `retryDelay` | `number` | `500` |  |
+| Parameter       | Type       | Default value | Description |
+| :-------------- | :--------- | :------------ | :---------- |
+| `childProvider` | `Provider` | `undefined`   | -           |
+| `retryDelay`    | `number`   | `500`         |             |
 
 ###### Returns
 
@@ -458,9 +458,9 @@ outbox entry status (either executed or confirmed but not pending)
 
 ```ts
 static fromBatchNumber<T>(
-   parentSignerOrProvider: T, 
-   batchNumber: BigNumber, 
-   indexInBatch: BigNumber, 
+   parentSignerOrProvider: T,
+   batchNumber: BigNumber,
+   indexInBatch: BigNumber,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterClassic<T>
 ```
 
@@ -468,18 +468,18 @@ Instantiates a new `ChildToParentMessageWriterClassic` or `ChildToParentMessageR
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `batchNumber` | `BigNumber` | The number of the batch containing the Child-to-Parent message. |
-| `indexInBatch` | `BigNumber` | The index of the Child-to-Parent message within the batch. |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type        | Description                                                                                                                                                                              |
+| :----------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`         | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `batchNumber`            | `BigNumber` | The number of the batch containing the Child-to-Parent message.                                                                                                                          |
+| `indexInBatch`           | `BigNumber` | The index of the Child-to-Parent message within the batch.                                                                                                                               |
+| `parentProvider`?        | `Provider`  | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -508,9 +508,9 @@ type ChildToParentMessageWriter.
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 #### Source
 

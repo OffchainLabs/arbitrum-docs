@@ -16,11 +16,11 @@ L1ToL2GasPriceEstimator.
 
 #### Properties
 
-| Property | Modifier | Type | Default value | Description |
-| :------ | :------ | :------ | :------ | :------ |
-| `ErrorTriggeringParams` | `static` | `object` | `...` | The parameters that should be passed to createRetryableTicket in order to induce<br />a revert with retryable data |
-| `ErrorTriggeringParams.gasLimit` | `public` | `BigNumber` | `...` | - |
-| `ErrorTriggeringParams.maxFeePerGas` | `public` | `BigNumber` | `...` | - |
+| Property                             | Modifier | Type        | Default value | Description                                                                                                        |
+| :----------------------------------- | :------- | :---------- | :------------ | :----------------------------------------------------------------------------------------------------------------- |
+| `ErrorTriggeringParams`              | `static` | `object`    | `...`         | The parameters that should be passed to createRetryableTicket in order to induce<br />a revert with retryable data |
+| `ErrorTriggeringParams.gasLimit`     | `public` | `BigNumber` | `...`         | -                                                                                                                  |
+| `ErrorTriggeringParams.maxFeePerGas` | `public` | `BigNumber` | `...`         | -                                                                                                                  |
 
 #### Methods
 
@@ -34,9 +34,9 @@ Try to parse a retryable data struct from the supplied ethersjs error, or any ex
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `ethersJsErrorOrData` | `string` \| `Error` \| `object` |  |
+| Parameter             | Type                            | Description |
+| :-------------------- | :------------------------------ | :---------- |
+| `ethersJsErrorOrData` | `string` \| `Error` \| `object` |             |
 
 ###### Returns
 

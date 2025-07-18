@@ -20,8 +20,8 @@ Base functionality for nitro Child->Parent messages
 
 ```ts
 static fromEvent<T>(
-   parentSignerOrProvider: T, 
-   event: object, 
+   parentSignerOrProvider: T,
+   event: object,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterNitro<T>
 ```
 
@@ -29,26 +29,26 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `event` | `object` | The event containing the data of the Child-to-Parent message. |
-| `event.arbBlockNum` | `BigNumber` | - |
-| `event.caller`? | `string` | - |
-| `event.callvalue`? | `BigNumber` | - |
-| `event.data`? | `string` | - |
-| `event.destination`? | `string` | - |
-| `event.ethBlockNum`? | `BigNumber` | - |
-| `event.hash`? | `BigNumber` | - |
-| `event.position`? | `BigNumber` | - |
-| `event.timestamp`? | `BigNumber` | - |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type        | Description                                                                                                                                                                              |
+| :----------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`         | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `object`    | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `event.arbBlockNum`      | `BigNumber` | -                                                                                                                                                                                        |
+| `event.caller`?          | `string`    | -                                                                                                                                                                                        |
+| `event.callvalue`?       | `BigNumber` | -                                                                                                                                                                                        |
+| `event.data`?            | `string`    | -                                                                                                                                                                                        |
+| `event.destination`?     | `string`    | -                                                                                                                                                                                        |
+| `event.ethBlockNum`?     | `BigNumber` | -                                                                                                                                                                                        |
+| `event.hash`?            | `BigNumber` | -                                                                                                                                                                                        |
+| `event.position`?        | `BigNumber` | -                                                                                                                                                                                        |
+| `event.timestamp`?       | `BigNumber` | -                                                                                                                                                                                        |
+| `parentProvider`?        | `Provider`  | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -58,7 +58,7 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 [message/ChildToParentMessageNitro.ts:148](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L148)
 
-***
+---
 
 ### ChildToParentMessageReaderNitro
 
@@ -85,9 +85,9 @@ If the message can or already has been executed, this returns null
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -110,9 +110,9 @@ and if so updates the local network with a new rollup address
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `arbitrumNetwork` | [`ArbitrumNetwork`](../dataEntities/networks.md#arbitrumnetwork) |  |
+| Parameter         | Type                                                             | Description |
+| :---------------- | :--------------------------------------------------------------- | :---------- |
+| `arbitrumNetwork` | [`ArbitrumNetwork`](../dataEntities/networks.md#arbitrumnetwork) |             |
 
 ###### Returns
 
@@ -134,8 +134,8 @@ Check if this message has already been executed in the Outbox
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -156,10 +156,10 @@ Check whether the provided network has a BoLD rollup
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `arbitrumNetwork` | [`ArbitrumNetwork`](../dataEntities/networks.md#arbitrumnetwork) |  |
-| `parentProvider` | `Provider` |  |
+| Parameter         | Type                                                             | Description |
+| :---------------- | :--------------------------------------------------------------- | :---------- |
+| `arbitrumNetwork` | [`ArbitrumNetwork`](../dataEntities/networks.md#arbitrumnetwork) |             |
+| `parentProvider`  | `Provider`                                                       |             |
 
 ###### Returns
 
@@ -180,8 +180,8 @@ In order to check if the message has been executed proof info must be provided.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -204,10 +204,10 @@ can take 1 week+, so waiting here could be a very long operation.
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `childProvider` | `Provider` | `undefined` | - |
-| `retryDelay` | `number` | `500` |  |
+| Parameter       | Type       | Default value | Description |
+| :-------------- | :--------- | :------------ | :---------- |
+| `childProvider` | `Provider` | `undefined`   | -           |
+| `retryDelay`    | `number`   | `500`         |             |
 
 ###### Returns
 
@@ -223,8 +223,8 @@ outbox entry status (either executed or confirmed but not pending)
 
 ```ts
 static fromEvent<T>(
-   parentSignerOrProvider: T, 
-   event: object, 
+   parentSignerOrProvider: T,
+   event: object,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterNitro<T>
 ```
 
@@ -232,26 +232,26 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `event` | `object` | The event containing the data of the Child-to-Parent message. |
-| `event.arbBlockNum` | `BigNumber` | - |
-| `event.caller`? | `string` | - |
-| `event.callvalue`? | `BigNumber` | - |
-| `event.data`? | `string` | - |
-| `event.destination`? | `string` | - |
-| `event.ethBlockNum`? | `BigNumber` | - |
-| `event.hash`? | `BigNumber` | - |
-| `event.position`? | `BigNumber` | - |
-| `event.timestamp`? | `BigNumber` | - |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type        | Description                                                                                                                                                                              |
+| :----------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`         | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `object`    | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `event.arbBlockNum`      | `BigNumber` | -                                                                                                                                                                                        |
+| `event.caller`?          | `string`    | -                                                                                                                                                                                        |
+| `event.callvalue`?       | `BigNumber` | -                                                                                                                                                                                        |
+| `event.data`?            | `string`    | -                                                                                                                                                                                        |
+| `event.destination`?     | `string`    | -                                                                                                                                                                                        |
+| `event.ethBlockNum`?     | `BigNumber` | -                                                                                                                                                                                        |
+| `event.hash`?            | `BigNumber` | -                                                                                                                                                                                        |
+| `event.position`?        | `BigNumber` | -                                                                                                                                                                                        |
+| `event.timestamp`?       | `BigNumber` | -                                                                                                                                                                                        |
+| `parentProvider`?        | `Provider`  | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -265,7 +265,7 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 [message/ChildToParentMessageNitro.ts:148](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L148)
 
-***
+---
 
 ### ChildToParentMessageWriterNitro
 
@@ -281,8 +281,8 @@ Provides read and write access for nitro child-to-Parent-messages
 
 ```ts
 new ChildToParentMessageWriterNitro(
-   parentSigner: Signer, 
-   event: object, 
+   parentSigner: Signer,
+   event: object,
    parentProvider?: Provider): ChildToParentMessageWriterNitro
 ```
 
@@ -290,20 +290,20 @@ Instantiates a new `ChildToParentMessageWriterNitro` object.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSigner` | `Signer` | The signer to be used for executing the Child-to-Parent message. |
-| `event` | `object` | The event containing the data of the Child-to-Parent message. |
-| `event.arbBlockNum` | `BigNumber` | - |
-| `event.caller`? | `string` | - |
-| `event.callvalue`? | `BigNumber` | - |
-| `event.data`? | `string` | - |
-| `event.destination`? | `string` | - |
-| `event.ethBlockNum`? | `BigNumber` | - |
-| `event.hash`? | `BigNumber` | - |
-| `event.position`? | `BigNumber` | - |
-| `event.timestamp`? | `BigNumber` | - |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter            | Type        | Description                                                                                                                                                                    |
+| :------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSigner`       | `Signer`    | The signer to be used for executing the Child-to-Parent message.                                                                                                               |
+| `event`              | `object`    | The event containing the data of the Child-to-Parent message.                                                                                                                  |
+| `event.arbBlockNum`  | `BigNumber` | -                                                                                                                                                                              |
+| `event.caller`?      | `string`    | -                                                                                                                                                                              |
+| `event.callvalue`?   | `BigNumber` | -                                                                                                                                                                              |
+| `event.data`?        | `string`    | -                                                                                                                                                                              |
+| `event.destination`? | `string`    | -                                                                                                                                                                              |
+| `event.ethBlockNum`? | `BigNumber` | -                                                                                                                                                                              |
+| `event.hash`?        | `BigNumber` | -                                                                                                                                                                              |
+| `event.position`?    | `BigNumber` | -                                                                                                                                                                              |
+| `event.timestamp`?   | `BigNumber` | -                                                                                                                                                                              |
+| `parentProvider`?    | `Provider`  | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -319,8 +319,8 @@ Instantiates a new `ChildToParentMessageWriterNitro` object.
 
 #### Properties
 
-| Property | Modifier | Type | Description |
-| :------ | :------ | :------ | :------ |
+| Property       | Modifier  | Type     | Description                                                      |
+| :------------- | :-------- | :------- | :--------------------------------------------------------------- |
 | `parentSigner` | `private` | `Signer` | The signer to be used for executing the Child-to-Parent message. |
 
 #### Methods
@@ -337,10 +337,10 @@ corresponding assertion is confirmed.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `childProvider` | `Provider` |
-| `overrides`? | `Overrides` |
+| Parameter       | Type        |
+| :-------------- | :---------- |
+| `childProvider` | `Provider`  |
+| `overrides`?    | `Overrides` |
 
 ###### Returns
 
@@ -361,9 +361,9 @@ If the message can or already has been executed, this returns null
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `childProvider` | `Provider` |  |
+| Parameter       | Type       | Description |
+| :-------------- | :--------- | :---------- |
+| `childProvider` | `Provider` |             |
 
 ###### Returns
 
@@ -389,8 +389,8 @@ Check if this message has already been executed in the Outbox
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -416,8 +416,8 @@ In order to check if the message has been executed proof info must be provided.
 
 ###### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type       |
+| :-------------- | :--------- |
 | `childProvider` | `Provider` |
 
 ###### Returns
@@ -444,10 +444,10 @@ can take 1 week+, so waiting here could be a very long operation.
 
 ###### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `childProvider` | `Provider` | `undefined` | - |
-| `retryDelay` | `number` | `500` |  |
+| Parameter       | Type       | Default value | Description |
+| :-------------- | :--------- | :------------ | :---------- |
+| `childProvider` | `Provider` | `undefined`   | -           |
+| `retryDelay`    | `number`   | `500`         |             |
 
 ###### Returns
 
@@ -467,8 +467,8 @@ outbox entry status (either executed or confirmed but not pending)
 
 ```ts
 static fromEvent<T>(
-   parentSignerOrProvider: T, 
-   event: object, 
+   parentSignerOrProvider: T,
+   event: object,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterNitro<T>
 ```
 
@@ -476,26 +476,26 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ###### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `parentSignerOrProvider` | `T` | Signer or provider to be used for executing or reading the Child-to-Parent message. |
-| `event` | `object` | The event containing the data of the Child-to-Parent message. |
-| `event.arbBlockNum` | `BigNumber` | - |
-| `event.caller`? | `string` | - |
-| `event.callvalue`? | `BigNumber` | - |
-| `event.data`? | `string` | - |
-| `event.destination`? | `string` | - |
-| `event.ethBlockNum`? | `BigNumber` | - |
-| `event.hash`? | `BigNumber` | - |
-| `event.position`? | `BigNumber` | - |
-| `event.timestamp`? | `BigNumber` | - |
-| `parentProvider`? | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type        | Description                                                                                                                                                                              |
+| :----------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`         | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `object`    | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `event.arbBlockNum`      | `BigNumber` | -                                                                                                                                                                                        |
+| `event.caller`?          | `string`    | -                                                                                                                                                                                        |
+| `event.callvalue`?       | `BigNumber` | -                                                                                                                                                                                        |
+| `event.data`?            | `string`    | -                                                                                                                                                                                        |
+| `event.destination`?     | `string`    | -                                                                                                                                                                                        |
+| `event.ethBlockNum`?     | `BigNumber` | -                                                                                                                                                                                        |
+| `event.hash`?            | `BigNumber` | -                                                                                                                                                                                        |
+| `event.position`?        | `BigNumber` | -                                                                                                                                                                                        |
+| `event.timestamp`?       | `BigNumber` | -                                                                                                                                                                                        |
+| `parentProvider`?        | `Provider`  | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -524,9 +524,9 @@ type ChildToParentMessageWriter.
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `T` *extends* `SignerOrProvider` |
+| Type parameter                   |
+| :------------------------------- |
+| `T` _extends_ `SignerOrProvider` |
 
 #### Source
 

@@ -23,10 +23,10 @@ Throws if not.
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `signerOrProvider` | `SignerOrProvider` |  |
-| `chainId` | `number` |  |
+| Parameter          | Type               | Description |
+| :----------------- | :----------------- | :---------- |
+| `signerOrProvider` | `SignerOrProvider` |             |
+| `chainId`          | `number`           |             |
 
 ###### Returns
 
@@ -47,9 +47,9 @@ If signerOrProvider is a signer then return signer.provider
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `signerOrProvider` | `SignerOrProvider` |  |
+| Parameter          | Type               | Description |
+| :----------------- | :----------------- | :---------- |
+| `signerOrProvider` | `SignerOrProvider` |             |
 
 ###### Returns
 
@@ -69,9 +69,9 @@ Check if the signer has a connected provider
 
 ###### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `signer` | `Signer` |  |
+| Parameter | Type     | Description |
+| :-------- | :------- | :---------- |
+| `signer`  | `Signer` |             |
 
 ###### Returns
 
