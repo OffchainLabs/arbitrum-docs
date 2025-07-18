@@ -16,7 +16,7 @@ node_modules/
 .cache-loader
 
 # Generated docs
-sdk
+/sdk-docs
 
 # Misc
 .DS_Store
