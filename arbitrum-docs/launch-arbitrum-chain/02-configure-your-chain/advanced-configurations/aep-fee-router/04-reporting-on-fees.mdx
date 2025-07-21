@@ -74,16 +74,6 @@ Same as the same gas token scenario, but uses the gas price from the batch posti
 - Creates exchange rate risk
 - Should NOT set artificially high exchange rate for profit
 
-### 4. Monitoring Tool Requirements
-
-#### Purpose:
-
-Detect if operators have misconfigured the L1 base fee mechanism (using it for profit by manipulating exchange rates)
-
-#### Cost Calculation (Same for All Revenue Methods):
-
-- Parent chain tokens spent = gas used × gas price (from batch posting report)
-- Plus percentage for exchange transaction costs
 
 #### Revenue Calculation Methods:
 
@@ -120,8 +110,6 @@ Detect if operators have misconfigured the L1 base fee mechanism (using it for p
    - Must exceed the deviation threshold
 
 **If both criteria are met → indicates misconfiguration**
-
-### Implementation Details:
 
 #### Exchange Rate Sources:
 
