@@ -1,4 +1,8 @@
 {
+  "buildCommand": "cd website && yarn build",
+  "outputDirectory": "website/build",
+  "installCommand": "cd website && yarn install",
+  "framework": "docusaurus-2",
   "redirects": [
     {
       "source": "/",
