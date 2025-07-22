@@ -238,7 +238,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run an Arbitrum chain',
+      label: 'Run an Arbitrum (Orbit) chain',
       collapsed: true,
       items: [
         {
@@ -369,6 +369,11 @@ const sidebars = {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
                       label: `Calculate AEP license fees`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/reporting-on-fees',
+                      label: `Report your fees`,
                     },
                   ],
                 },
@@ -620,6 +625,11 @@ const sidebars = {
               label: 'Structure of a Contract',
             },
             ...stylusByExampleDocsSidebarSDK,
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Composition and trait-based routing model',
+            },
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
