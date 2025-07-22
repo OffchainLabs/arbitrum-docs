@@ -1,0 +1,70 @@
+---
+title: 'ArbOS 40 Callisto'
+sidebar_label: 'ArbOS 40 Callisto'
+sidebar_position: 2
+author: dlee
+---
+
+The minimum Nitro version that supports ArbOS 40 "Callisto" is [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.6.5-89cef87`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 40 "Callisto" upgrade required a governance vote to activate.
+
+Please note that it is important to run Nitro v3.6.5 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the Arbitrum Nitro node inside Docker.
+
+The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.mdx).
+
+As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Please note that ArbOS 40 Callisto is an upgrade that builds upon [ArbOS 32 Bianca](./arbos32.mdx).
+
+### Requirements:
+
+- [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5) or higher
+- [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
+- WASM module root: `0xdb698a2576298f25448bc092e52cf13b1e24141c997135d70f217d674bbeb69a`
+
+:::caution
+
+If your chain is not ready to activate BoLD, please use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher cannot be used without activating BoLD.
+
+:::
+
+### High-level description of ArbOS 40 changes
+
+ArbOS 40 Callisto is an upgrade to enable Arbitrum's support for the parent chain Ethereum's [Pectra upgrade](https://ethereum.org/en/roadmap/pectra/) scheduled for [May 7, 2025 at epoch `364032`](https://blog.ethereum.org/en/2025/04/23/pectra-mainnet). As a result, the majority of the ArbOS-specific changes revolve around implementing the relevant [Prague EIPs](https://eips.ethereum.org/EIPS/eip-7600) on Arbitrum chains.
+
+Please see below for the list of all changes included in ArbOS 40 Callisto:
+
+#### [EIP-7702: Set EOA Account code](https://eips.ethereum.org/EIPS/eip-7702)
+
+EIP-7702 introduces a new transaction type that allows Externally Owned Accounts (EOAs) to set executable code, adding account-abstraction functionality to EOAs such as delegation, batching, sponsorship, and privilege de-escalation. In terms of batching, multiple operations can be combined (i.e., token approval and token spend) in an atomic transaction. Transaction sponsorship or paymaster support is extendable to EOAs. Discrete permissioning is configurable using sub-keys.
+
+#### [EIP-2537: Precompile for BLS12-381 curve operations](https://eips.ethereum.org/EIPS/eip-2537)
+
+This EIP introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. BLS signature verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
+
+#### [EIP-2935: Serve historical block hashes from state](https://eips.ethereum.org/EIPS/eip-2935)
+
+This EIP proposes storing a wider window of block hashes in the storage of a dedicated system contract. Bundling historical block hashes within the state enables efficient data retrieval for applications that require extended access to historical block hashes, like stateless clients. If approved, ArbOS 40 will adapt this EIP to the L2 and store the same number of L2 block hashes that are generated in the time it takes for 8192 L1 blocks to build - this is approximately 27 hours' worth of L2 block hashes.
+
+#### Minor Stylus fix to correct caching behavior for contracts that do not exist ([#2998](https://github.com/OffchainLabs/nitro/pull/2998))
+
+Currently, Stylus will cache results from calling account_code and account_code_size for a contract that does not exist. We would like to propose a fix to address this so that the call returns the correct information that properly reflects the latest state of the contract’s code or code size. This change will not increment the Stylus version, so re-activation of already deployed Stylus contracts is not required.
+
+### Pectra changes that are not included in the proposed ArbOS 40 Callisto Upgrade
+
+Support and implementation for the following EIPs are not planned to be part of ArbOS 40 Callisto:
+
+- All Ethereum Consensus Layer (CL) Pectra changes (EIP-6610, EIP-7002, EIP-7251, EIP-7549, EIP-7691) because Arbitrum chains do not have a beacon chain and therefore do not have a peer-to-peer layer like Ethereum does.
+- [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623): Increase calldata cost: because block size variance is less of a concern on Arbitrum chains. This lack of support is due to two reasons: first, Arbitrum chains do not require nodes to send blocks over the network through their peer-to-peer layer; instead, they rely on the parent chain’s RPC to retrieve block data. Secondly, because Arbitrum block sizes are already limited to ~100KB, so increasing calldata cost is not expected to reduce Arbitrum block sizes.- [EIP-7685](https://eips.ethereum.org/EIPS/eip-7685): General purpose execution layer requests: because Arbitrum chains do not have a beacon chain and, therefore, there is nothing to request from the EL on Arbitrum chains.
+- [EIP-7840](https://eips.ethereum.org/EIPS/eip-7840): Add blob schedule to EL configuration files: because Arbitrum chains do not support posting blobs on the rollup (but otherwise still does support posting blobs to Ethereum L1).
+
+### Special note about ArbOS 40 Callisto for chains who have not yet upgraded to use Arbitrum BoLD
+
+While ArbOS 40 Callisto will be compatible with both `nitro-contracts 3.1.0` and `nitro-contracts 2.1.3`, only chains that have Arbitrum BoLD enabled can use `nitro-contracts 3.x`. This requirement means that if your chain has not yet upgraded to use BoLD, please only use `nitro-contracts 2.1.3` for your ArbOS 40 Callisto upgrade.
+
+### Reference links for ArbOS 40 Callisto
+
+- [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5)
+- [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
+- [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) (only relevant for Arbitrum chains that do not have BoLD enabled yet)
+- [README for how to upgrade your rollup contracts to support ArbOS 40 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
+- [AIP: ArbOS Version 40 Callisto Forum Post](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-version-40-callisto/28436)
+- [Temperature check vote on Snapshot for ArbOS 40 Callisto](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x7cc26491a070c74c1a4ec5a9892571d31eb690015936a35b52c0d3a97bd5497f)
+- [ArbOS 40 Audit Report, from Trail of Bits](https://github.com/trailofbits/publications/blob/master/reviews/2025-05-offchainlabs-arbos40nitro-securityreview.pdf)

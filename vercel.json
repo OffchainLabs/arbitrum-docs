@@ -1,4 +1,8 @@
 {
+  "buildCommand": "cd website && yarn build",
+  "outputDirectory": "website/build",
+  "installCommand": "cd website && yarn install",
+  "framework": "docusaurus-2",
   "redirects": [
     {
       "source": "/",
@@ -528,6 +532,16 @@
     {
       "source": "/(intro/?)",
       "destination": "/welcome/arbitrum-gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/arbitrum-node-runners/enale-post-4blobs/?)",
+      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4blobs/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/concepts/custom-gas-token-sdk/?)",
+      "destination": "/(build-decentralized-apps/custom-gas-token-sdk/?)",
       "permanent": false
     },
     {
@@ -1121,11 +1135,6 @@
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/orbit-quickstart/?)",
-      "destination": "/launch-arbitrum-chain/arbitrum-chain-quickstart",
-      "permanent": false
-    },
-    {
       "source": "/(launch-orbit-chain/orbit-sdk-introduction/?)",
       "destination": "/launch-arbitrum-chain/arbitrum-chain-sdk-introduction",
       "permanent": false
@@ -1371,6 +1380,11 @@
       "permanent": false
     },
     {
+      "source": "/(partials/glossary/_externally_owned_accounts/?)",
+      "destination": "/(partials/glossary/_externally-owned-accounts/?)",
+      "permanent": false
+    },
+    {
       "source": "/(proving/challenge-manager/?)",
       "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
       "permanent": false
@@ -1418,6 +1432,16 @@
     {
       "source": "/(run-arbitrum-node/how-to-use-timeboost/?)",
       "destination": "/(how-arbitrum-works/timeboost/how-to-use-timeboost/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/more-types/split-validator-node/?)",
+      "destination": "/(run-arbitrum-node/more-types/run-split-validator-node/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/node-types/?)",
+      "destination": "/(run-arbitrum-node/overview/?)",
       "permanent": false
     },
     {

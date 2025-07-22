@@ -55,6 +55,11 @@ const sidebars = {
           id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
+          type: 'doc',
+          id: 'build-decentralized-apps/custom-gas-token-sdk',
+          label: 'Custom gas token SDK',
+        },
+        {
           type: 'category',
           label: 'Arbitrum vs Ethereum',
           items: [
@@ -233,7 +238,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run an Arbitrum chain',
+      label: 'Run an Arbitrum (Orbit) chain',
       collapsed: true,
       items: [
         {
@@ -275,6 +280,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management',
                   label: `Manage the fee parameters`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs',
+                  label: `Enable blob transactions`,
                 },
                 {
                   type: 'category',
@@ -331,6 +341,16 @@ const sidebars = {
                   label: 'BoLD configuration parameters',
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
+                  label: 'Deploy and configure Timeboost',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use Layer Leap',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
@@ -349,6 +369,11 @@ const sidebars = {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
                       label: `Calculate AEP license fees`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/reporting-on-fees',
+                      label: `Report your fees`,
                     },
                   ],
                 },
@@ -544,14 +569,15 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/concepts/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
-        },
-        {
-          type: 'doc',
           id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
           label: 'BoLD for Arbitrum chains',
         },
+        {
+          type: 'doc',
+          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
+          label: 'Timeboost for Arbitrum chains',
+        },
+
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
@@ -570,7 +596,7 @@ const sidebars = {
       collapsed: true,
       link: {
         type: 'doc',
-        id: 'stylus/stylus-overview',
+        id: 'stylus/stylus-content-map',
       },
       items: [
         {
@@ -599,6 +625,11 @@ const sidebars = {
               label: 'Structure of a Contract',
             },
             ...stylusByExampleDocsSidebarSDK,
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Composition and trait-based routing model',
+            },
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
@@ -741,16 +772,15 @@ const sidebars = {
       type: 'category',
       label: 'Run an Arbitrum node',
       collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'node-running/node-running-content-map',
+      },
       items: [
         {
           type: 'doc',
           id: 'run-arbitrum-node/overview',
           label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/quickstart',
-          label: 'Quickstart',
         },
         {
           type: 'doc',
@@ -791,13 +821,18 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos40',
+              label: 'Callisto (ArbOS 40)',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos32',
-              label: 'ArbOS 32 Bianca',
+              label: 'Bianca (ArbOS 32)',
             },
             {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos20',
-              label: 'ArbOS 20 Atlas',
+              label: 'Atlas (ArbOS 20)',
             },
             {
               type: 'doc',
@@ -823,6 +858,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/more-types/run-split-validator-node',
+              label: 'Run a split validator',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
@@ -832,6 +872,10 @@ const sidebars = {
           type: 'category',
           label: 'Sequencer',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'node-running/sequencer-content-map',
+          },
           items: [
             {
               type: 'doc',
@@ -1089,6 +1133,11 @@ const sidebars = {
               id: 'how-arbitrum-works/timeboost/troubleshoot-timeboost',
             },
             {
+              type: 'doc',
+              label: 'Timeboost FAQ',
+              id: 'how-arbitrum-works/timeboost/timeboost-faq',
+            },
+            {
               type: 'link',
               href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
               label: 'Specification: Timeboost',
@@ -1188,7 +1237,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'Prysm docs',
-      href: 'https://docs.prylabs.network/docs/install/install-with-script',
+      href: 'https://www.offchainlabs.com/prysm/docs',
     },
   ],
 };

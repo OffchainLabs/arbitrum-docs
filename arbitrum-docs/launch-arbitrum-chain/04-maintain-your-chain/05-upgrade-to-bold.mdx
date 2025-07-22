@@ -32,8 +32,8 @@ Before updating the contracts, you want to make sure your nodes are ready for th
 Most of the parameters used in Nitro before v3.5.4 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters after the upgrade:
 
 - For validator nodes: add `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
-- For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
-- For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode) is automatically enabled
+- For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode)
+- For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode) is automatically enabled
 
 Additionally, after performing the upgrade, the `--chain.info-json` object also needs to be modified:
 
@@ -77,7 +77,7 @@ First clone the `nitro-contracts` repository and checkout the appropriate versio
 ```shell
 $ git clone https://github.com/OffchainLabs/nitro-contracts.git
 $ cd nitro-contracts
-$ git checkout v3.1.0-qol
+$ git checkout v3.1.0-scripts
 ```
 
 Once you have the correct version, install the dependencies and build the contracts:
@@ -91,7 +91,7 @@ $ yarn build:all
 
 The BoLD upgrade action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, copy the [`scripts/files/configs/custom.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/scripts/files/configs/custom.ts) file and adjust the configuration to match that of your chain.
 
-**Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLD's configuration parameters](../../launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
+**Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLD's configuration parameters](../../launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/02-bold.mdx).
 
 ### Step 3: Prepare and deploy the upgrade contract
 
@@ -186,8 +186,8 @@ execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca
 As stated at the beginning, you need to add a few parameters to your node configuration for it to support BoLD:
 
 - For validator nodes: add `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
-- For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
-- For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode) is automatically enabled
+- For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode)
+- For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode) is automatically enabled
 
 Additionally, the `--chain.info-json` object also needs to be modified:
 

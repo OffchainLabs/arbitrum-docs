@@ -10,9 +10,9 @@ The `--parent-chain.connection.url` parameter needs to provide a standard RPC en
 --parent-chain.connection.url=<Parent chain RPC URL>
 ```
 
-:::info Public Arbitrum RPC endpoints
+:::info Try it out
 
-[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.mdx#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
+If you choose to self-host an EVM node, the [Prysm client software](https://www.offchainlabs.com/prysm/docs) is a great choice. It's straightforward, efficient, and effective—ensuring your setup runs smoothly!
 
 :::
 
@@ -22,7 +22,13 @@ Additionally, if the chain is a Layer-2 (L2) chain on top of Ethereum and uses b
 --parent-chain.blob-client.beacon-url=<Parent chain beacon chain RPC URL>
 ```
 
-You can find a list of Ethereum beacon chain RPC providers [here](/run-arbitrum-node/05-l1-ethereum-beacon-chain-rpc-providers.mdx). Note that historical blob data is required for these chains to properly sync up if they are new or have been offline for more than 18 days. This means that the beacon chain RPC endpoint you use may also need to provide historical blob data. Please see [Special notes on ArbOS 20: Atlas support for EIP-4844](/run-arbitrum-node/arbos-releases/arbos20.mdx#special-notes-on-arbos-20-atlas-support-for-eip-4844) for more details.
+:::info Public Arbitrum RPC endpoints
+
+[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.mdx#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
+
+:::
+
+You can find beacon providers in our [list of Ethereum beacon chain RPC providers](/run-arbitrum-node/04-l1-ethereum-beacon-chain-rpc-providers.mdx). Note that historical blob data is required for these chains to properly sync up if they are new or have been offline for more than 18 days. This means that the beacon chain RPC endpoint you use may also need to provide historical blob data. Please see [Special notes on ArbOS 20: Atlas support for EIP-4844](/run-arbitrum-node/arbos-releases/arbos20.mdx#special-notes-on-arbos-20-atlas-support-for-eip-4844) for more details.
 
 #### 2. Child chain parameters
 
