@@ -624,6 +624,11 @@ const sidebars = {
               id: 'stylus/reference/project-structure',
               label: 'Structure of a Contract',
             },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-constructors',
+              label: 'Using constructors',
+            },
             ...stylusByExampleDocsSidebarSDK,
             {
               type: 'doc',
