@@ -7,6 +7,7 @@ This process is advanced and affects the State Transition Function (STF), so it'
 #### Steps to Customize Precompiles
 
 1. **Prepare the Nitro Source Code**:
+
    - Clone the Nitro repository (use the latest stable branch, e.g., v3.6.5 or higher):
      ```
      git clone --branch v3.6.5 https://github.com/OffchainLabs/nitro.git
@@ -16,6 +17,7 @@ This process is advanced and affects the State Transition Function (STF), so it'
    - Install Docker for building images.
 
 2. **Modify ArbOS for Custom Precompiles**:
+
    - Choose an customization option based on your needs (see Decisions section below). Modifications are made in Go files like `ArbSys.go`, `precompile.go`, or `arbosstate.go`.
    - **Option 1: Add a New Method to an Existing Precompile** (e.g., add `sayHi()` to ArbSys):
      - Edit the relevant precompile file (e.g., `ArbSys.go`).
@@ -62,6 +64,7 @@ This process is advanced and affects the State Transition Function (STF), so it'
    - These changes ensure activation only after upgrading to the specified ArbOS version.
 
 3. **Build and Run the Custom Node (Without Fraud Proofs Initially)**:
+
    - Build the Docker image:
      ```
      docker build . --tag custom-nitro-node
@@ -77,6 +80,7 @@ This process is advanced and affects the State Transition Function (STF), so it'
    - Run using Docker Compose (for Orbit chains) or `docker run`. Test the custom precompile functionality.
 
 4. **Enable Fraud Proofs and Deploy**:
+
    - Build a dev image with the replay binary:
      ```
      docker build . --target nitro-node-dev --tag custom-nitro-node-dev
@@ -95,13 +99,13 @@ This process is advanced and affects the State Transition Function (STF), so it'
 
 Customizations are often immutable post-deployment without upgrades, so plan carefully. Use the table below for key decisions:
 
-| Decision Area | Key Considerations | Trade-offs |
-|---------------|--------------------|------------|
-| **Customization Option** | Choose based on needs: Add methods to existing (simpler, e.g., extend ArbSys); create new precompile (for unique addresses/functionality); modify state (for persistent data). | Adding to existing is easier/less disruptive but limited by address; new ones offer flexibility but require free addresses (e.g., avoid 0x01-0x09). State mods add persistence but increase STF complexity. |
-| **ArbOS Version for Activation** | Select a future version (e.g., 30+) to activate changes; ensure compatibility with current chain state. | Higher versions allow phased rollouts but delay deployment; must align with chain upgrades to avoid breaking existing contracts. |
-| **Chain Type (Rollup vs. AnyTrust)** | Custom precompiles work in both, but AnyTrust may need DAC configs for DA. | Rollup ensures max security for custom ops; AnyTrust lowers costs but adds trust assumptions—test fraud proofs rigorously. |
-| **Backward Compatibility** | Design changes to be forward-compatible; use version controls to prevent activation issues. | Ensures smooth upgrades but limits radical changes; incompatible mods risk chain halts or forks. |
-| **Resource Allocation** | Budget for audits, maintenance, and partners; self-implement if experienced. | Partnering speeds up but adds costs; in-house offers control but requires Go/Nitro expertise. |
-| **When to Customize** | Use for app-specific needs (e.g., custom crypto ops in gaming); skip if standard precompiles suffice. | Enhances efficiency/utility but increases attack surface—audit thoroughly for production. |
+| Decision Area                        | Key Considerations                                                                                                                                                             | Trade-offs                                                                                                                                                                                                  |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Customization Option**             | Choose based on needs: Add methods to existing (simpler, e.g., extend ArbSys); create new precompile (for unique addresses/functionality); modify state (for persistent data). | Adding to existing is easier/less disruptive but limited by address; new ones offer flexibility but require free addresses (e.g., avoid 0x01-0x09). State mods add persistence but increase STF complexity. |
+| **ArbOS Version for Activation**     | Select a future version (e.g., 30+) to activate changes; ensure compatibility with current chain state.                                                                        | Higher versions allow phased rollouts but delay deployment; must align with chain upgrades to avoid breaking existing contracts.                                                                            |
+| **Chain Type (Rollup vs. AnyTrust)** | Custom precompiles work in both, but AnyTrust may need DAC configs for DA.                                                                                                     | Rollup ensures max security for custom ops; AnyTrust lowers costs but adds trust assumptions—test fraud proofs rigorously.                                                                                  |
+| **Backward Compatibility**           | Design changes to be forward-compatible; use version controls to prevent activation issues.                                                                                    | Ensures smooth upgrades but limits radical changes; incompatible mods risk chain halts or forks.                                                                                                            |
+| **Resource Allocation**              | Budget for audits, maintenance, and partners; self-implement if experienced.                                                                                                   | Partnering speeds up but adds costs; in-house offers control but requires Go/Nitro expertise.                                                                                                               |
+| **When to Customize**                | Use for app-specific needs (e.g., custom crypto ops in gaming); skip if standard precompiles suffice.                                                                          | Enhances efficiency/utility but increases attack surface—audit thoroughly for production.                                                                                                                   |
 
 In summary, this process forks Nitro to modify ArbOS, builds custom nodes, and upgrades on-chain. For Orbit-specific deployments, integrate with the SDK and test extensively to ensure fraud proofs remain valid.

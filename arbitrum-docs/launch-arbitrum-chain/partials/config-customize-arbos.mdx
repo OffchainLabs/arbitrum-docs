@@ -9,6 +9,7 @@ Customizations must be deterministic, pure (no external resources), replayable, 
 #### Steps to Customize ArbOS
 
 1. **Download the Nitro Source Code**:
+
    - Clone the repository (use the latest stable branch, e.g., v3.6.5):
      ```
      git clone --branch v3.6.5 https://github.com/OffchainLabs/nitro.git
@@ -18,8 +19,10 @@ Customizations must be deterministic, pure (no external resources), replayable, 
    - Install Docker for building images.
 
 2. **Apply Modifications to ArbOS**:
+
    - Identify changes (e.g., precompiles affect STF outcomes like block hashes; non-STF like RPC methods do not require this).
    - Edit Go files (e.g., `precompile.go`, `arbosstate.go`) with version controls for activation.
+
      - **Add New Method to Existing Precompile** (e.g., `sayHi()` to ArbSys at 0x64):
        Edit `ArbSys.go` (in `precompiles/`):
        ```
@@ -37,6 +40,7 @@ Customizations must be deterministic, pure (no external resources), replayable, 
        ```
      - **Create New Precompile** (e.g., ArbHi at 0x11a):
        Create `ArbHi.go` in `precompiles/`:
+
        ```
        package precompiles
 
@@ -48,7 +52,9 @@ Customizations must be deterministic, pure (no external resources), replayable, 
            return "hi", nil
        }
        ```
+
        Update `precompile.go`:
+
        ```
        ArbHi := insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress}))
        ArbHi.arbosVersion = 30
@@ -56,6 +62,7 @@ Customizations must be deterministic, pure (no external resources), replayable, 
            method.arbosVersion = 30
        }
        ```
+
      - **Add New ArbOS State** (e.g., `myNumber`):
        Edit `arbosstate.go` in `UpgradeArbosVersion`:
        ```
@@ -76,6 +83,7 @@ Customizations must be deterministic, pure (no external resources), replayable, 
      - Other options: Define new events, customize gas usage, or modify state—see full docs for details.
 
 3. **Build and Run Custom Node Without Fraud Proofs**:
+
    - Build the image:
      ```
      docker build . --tag custom-nitro-node
@@ -92,6 +100,7 @@ Customizations must be deterministic, pure (no external resources), replayable, 
    - Test changes (e.g., via `eth_call` or `cast call`).
 
 4. **Enable Fraud Proofs**:
+
    - Build dev image:
      ```
      docker build . --target nitro-node-dev --tag custom-nitro-node-dev
@@ -111,11 +120,11 @@ Customizations must be deterministic, pure (no external resources), replayable, 
 
 Customizations are often immutable without upgrades; test thoroughly to avoid re-orgs or vulnerabilities.
 
-| Decision Area | Key Considerations | Trade-offs |
-|---------------|--------------------|------------|
-| **Type of Modification** | Choose: Precompiles (efficiency for ops), state (persistent data), STF logic (execution changes). | Precompiles are simpler but limited to view/pure (no state mods without upgrades); state/STF enable advanced features but risk DoS or complexity. |
-| **Activation Version** | Select future ArbOS (e.g., 30+); align with canonical to inherit features. | Higher versions phase activations but trigger intermediates; low risks early errors. |
-| **Backward Compatibility** | Use conditionals/initialize to null; ensure no historical alterations. | Prevents re-orgs but restricts changes; incompatible risks halts/forks. |
-| **Chain Mode** | Apply to Rollup/AnyTrust; test proofs in both. | Rollup ensures security; AnyTrust lowers costs but adds DAC trust. |
-| **Resource Allocation** | Partner for audits/maintenance; self-implement if expert. | Collaboration reduces risks but costs; in-house offers control but demands skills. |
-| **When to Customize** | For unique needs (e.g., custom ops); skip if standard ArbOS suffices. | Enhances sovereignty but increases attack surface—audit rigorously.
+| Decision Area              | Key Considerations                                                                                | Trade-offs                                                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Type of Modification**   | Choose: Precompiles (efficiency for ops), state (persistent data), STF logic (execution changes). | Precompiles are simpler but limited to view/pure (no state mods without upgrades); state/STF enable advanced features but risk DoS or complexity. |
+| **Activation Version**     | Select future ArbOS (e.g., 30+); align with canonical to inherit features.                        | Higher versions phase activations but trigger intermediates; low risks early errors.                                                              |
+| **Backward Compatibility** | Use conditionals/initialize to null; ensure no historical alterations.                            | Prevents re-orgs but restricts changes; incompatible risks halts/forks.                                                                           |
+| **Chain Mode**             | Apply to Rollup/AnyTrust; test proofs in both.                                                    | Rollup ensures security; AnyTrust lowers costs but adds DAC trust.                                                                                |
+| **Resource Allocation**    | Partner for audits/maintenance; self-implement if expert.                                         | Collaboration reduces risks but costs; in-house offers control but demands skills.                                                                |
+| **When to Customize**      | For unique needs (e.g., custom ops); skip if standard ArbOS suffices.                             | Enhances sovereignty but increases attack surface—audit rigorously.                                                                               |

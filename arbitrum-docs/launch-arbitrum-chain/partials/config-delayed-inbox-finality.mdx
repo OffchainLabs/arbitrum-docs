@@ -7,11 +7,13 @@ Configurations are set at deployment (via RollupCreator) or post-launch (via con
 #### Steps to Configure Delayed Inbox Finality
 
 1. **Understand Key Components**:
+
    - **Sequencer Inbox Max Time Variation**: Defines boundaries for sequencer manipulation of blocks/timestamps and force-inclusion periods.
    - **Sequencer Node Flags**: Adjust how the sequencer waits for parent chain finality (L1 vs. L2) and block confirmations.
    - For L3s settling to Arbitrum One/Nova, finality can depend on L1 batches or L2 DACerts, typically ~tens of minutes by default.
 
 2. **Set Max Time Variation Parameters (Core for Force-Inclusion Period)**:
+
    - Deploy or update via the `SequencerInbox` contract on the parent chain.
    - **Via RollupCreator (at Deployment)**: Include in the `sequencerInboxMaxTimeVariation` field of the config JSON.
      Example config snippet:
@@ -34,6 +36,7 @@ Configurations are set at deployment (via RollupCreator) or post-launch (via con
        ```
 
 3. **Configure Sequencer Node for Finality Behavior**:
+
    - Edit the sequencer node's config (e.g., in docker-compose.yml or nodeConfig.json).
    - Enable delayed sequencer: `--node.delayed-sequencer.enable=true` (required for reading delayed inbox).
    - Switch to L2 finality (for L3s): `--node.delayed-sequencer.use-merge-finality=false` (relies on L2 instead of L1).
@@ -58,12 +61,12 @@ Configurations are set at deployment (via RollupCreator) or post-launch (via con
 
 Use the table below for key decisions, focusing on trade-offs between speed, security, and complexity.
 
-| Decision Area | Key Considerations | Trade-offs |
-|---------------|--------------------|------------|
-| **Finality Layer (L1 vs. L2)** | Set `--node.delayed-sequencer.use-merge-finality=false` for L2 reliance in L3s settling to Arbitrum One/Nova. Use for faster deposits via L2 DACerts. | L2 finality speeds up (~tens of minutes) but risks if L2 re-orgs; L1 (default) is more secure but slower (waits for Ethereum finality). |
-| **Force-Inclusion Period (delayBlocks/delaySeconds)** | Shorten for quicker user-forced inclusions; set via contract call or config. Ideal for high-UX apps. | Shorter periods reduce censorship resistance wait times but increase spam/DoS risks; longer (default 24h) enhances security but frustrates users during sequencer issues. |
-| **Confirmation Distance (finalize-distance)** | Set to 1 for ~1-minute finality; configure in sequencer flags. | Faster finality improves deposits/bridges but heightens re-org risks on un-finalized blocks; higher values prioritize safety over speed. |
-| **Timestamp Manipulation (futureBlocks/futureSeconds)** | Adjust for sequencer flexibility in posting; defaults allow minor adjustments. | Higher values aid in handling network variability but risk sequencer abuse (e.g., MEV); lower limits enhance predictability. |
-| **Deployment vs. Upgrade** | Set at genesis for new Orbit chains; update post-launch for live ones. | Genesis is simpler/no disruption; upgrades require governance and may cause temporary delays but allow iteration. |
-| **Chain Mode (Rollup vs. AnyTrust)** | Applies to both; AnyTrust may layer with DAC for DA. | Rollup ties directly to L1 finality (more secure); AnyTrust enables faster configs but adds committee trust. |
-| **When to Customize** | For UX-critical apps (e.g., gaming needing fast deposits); use defaults for standard security. | Customization boosts speed/utility but demands testing/audits; defaults minimize risks for general-purpose chains.
+| Decision Area                                           | Key Considerations                                                                                                                                    | Trade-offs                                                                                                                                                                |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Finality Layer (L1 vs. L2)**                          | Set `--node.delayed-sequencer.use-merge-finality=false` for L2 reliance in L3s settling to Arbitrum One/Nova. Use for faster deposits via L2 DACerts. | L2 finality speeds up (~tens of minutes) but risks if L2 re-orgs; L1 (default) is more secure but slower (waits for Ethereum finality).                                   |
+| **Force-Inclusion Period (delayBlocks/delaySeconds)**   | Shorten for quicker user-forced inclusions; set via contract call or config. Ideal for high-UX apps.                                                  | Shorter periods reduce censorship resistance wait times but increase spam/DoS risks; longer (default 24h) enhances security but frustrates users during sequencer issues. |
+| **Confirmation Distance (finalize-distance)**           | Set to 1 for ~1-minute finality; configure in sequencer flags.                                                                                        | Faster finality improves deposits/bridges but heightens re-org risks on un-finalized blocks; higher values prioritize safety over speed.                                  |
+| **Timestamp Manipulation (futureBlocks/futureSeconds)** | Adjust for sequencer flexibility in posting; defaults allow minor adjustments.                                                                        | Higher values aid in handling network variability but risk sequencer abuse (e.g., MEV); lower limits enhance predictability.                                              |
+| **Deployment vs. Upgrade**                              | Set at genesis for new Orbit chains; update post-launch for live ones.                                                                                | Genesis is simpler/no disruption; upgrades require governance and may cause temporary delays but allow iteration.                                                         |
+| **Chain Mode (Rollup vs. AnyTrust)**                    | Applies to both; AnyTrust may layer with DAC for DA.                                                                                                  | Rollup ties directly to L1 finality (more secure); AnyTrust enables faster configs but adds committee trust.                                                              |
+| **When to Customize**                                   | For UX-critical apps (e.g., gaming needing fast deposits); use defaults for standard security.                                                        | Customization boosts speed/utility but demands testing/audits; defaults minimize risks for general-purpose chains.                                                        |
