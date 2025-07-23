@@ -1,0 +1,24 @@
+### Benefits of Enabling TimeBoost in Arbitrum Chains
+
+TimeBoost is an optional transaction ordering policy for Arbitrum chains (including Orbit L2s/L3s, Arbitrum One, and Nova), introduced in mid-2025 as an upgrade to the Nitro stack. It enhances the default First-Come, First-Served (FCFS) model by adding an "express lane" auction, where bidders gain a 200ms time advantage for transaction inclusion, while non-winning transactions face a minor delay. This preserves fast block times (250ms) and private mempools to protect against harmful MEV like front-running. As of July 2025, it's live on testnets like Sepolia and adoptable via DAO votes or chain owner decisions. Key benefits include:
+
+- **MEV Revenue Capture for Chain Owners**: Allows chains to collect bids from auctions, potentially equaling available MEV (e.g., from arbitrage or liquidations), which can be redistributed to users, apps, or the DAO. This creates a sustainable revenue stream, especially using the chain's native token for bids to boost utility.
+- **Reduction in Latency Racing and Network Spam**: Shifts searchers from wasteful hardware investments and spamming to on-chain bidding, decreasing congestion and improving overall network efficiency without altering block times.
+- **Preserved User Experience and MEV Protections**: Regular users see minimal impact (transactions delayed ~200ms to ~450ms total), with continued safeguards against sandwich attacks via private mempools. Express lane winners can't reorder blocks, maintaining fairness.
+- **Increased Profitability for Searchers and Sophisticated Actors**: Bidding for time advantages is more efficient than FCFS races, enabling better MEV extraction (e.g., backrunning) while allowing resale or transfer of express lane rights.
+- **Flexibility and Compatibility**: Works with centralized or decentralized sequencers, custom gas tokens, and features like BoLD. It's fully optional and reversible, reverting to FCFS if disabled, with no impact on core security.
+
+
+### Decisions Regarding TimeBoost
+
+Enabling TimeBoost requires deployment of new contracts and sequencer configs, often via governance (e.g., DAO for public chains) or owner actions for Orbit chains. It's not recommended for most chains unless MEV activity justifies setup costs and minor UX trade-offs; test on Sepolia first. Decisions are customizable but involve trade-offs in revenue vs. complexity. The table below outlines key areas:
+
+| Decision Area | Key Considerations | Trade-offs |
+|---------------|--------------------|------------|
+| **Whether to Enable TimeBoost** | Assess if your chain has high DeFi/MEV (e.g., arbitrage, liquidations) to offset infrastructure costs; enable via Nitro upgrade and auction contract deployment. For Orbit chains, adopt at genesis or post-launch. | Enables revenue but adds slight delays for users; skip if low MEV, as costs (e.g., auctioneer maintenance) may exceed benefits. Recommended only for significant activity. |
+| **Auction Parameters** | Set round duration (default: 1 min), express lane advantage (default: 200ms delay for non-winners), bid closing time (e.g., 15s before round), and minimum bid. Configure via on-chain contract. | Longer rounds stabilize revenue but reduce frequency; shorter advantages minimize UX impact but lower bid appeal. Adjustable post-launch but requires governance. |
+| **Bid Token and Revenue Handling** | Choose any ERC-20 (e.g., native token for utility or ARB/ETH for liquidity); decide on proceeds distribution (e.g., burn, redistribute to users/DAO). | Native token boosts demand but volatility risks; stable tokens ensure predictability but less ecosystem alignment. |
+| **Sequencer Setup (Centralized vs. Decentralized)** | Integrate with current centralized sequencer for quicker rollout; plan for decentralized (e.g., via Espresso) for future-proofing. | Centralized enables faster adoption but centralization risks; decentralized enhances security but delays implementation. |
+| **Infrastructure Components** | Deploy off-chain auctioneer (for bid validation), on-chain contract (for resolution), and sequencer configs (e.g., express lane handling). Use RaaS for managed setup. | Adds operational costs (e.g., S3 for bid data) but enables features like transfers; self-hosting offers control but demands expertise. |
+| **User Impact Mitigation** | Adjust non-express delays or provide sequencer feed/docs for transparency; monitor for UX feedback. | Lower delays preserve UX but reduce express value/bids; higher delays boost revenue but may deter users. |
+| **When to Enable or Skip** | Enable for DeFi/gaming chains with MEV; skip for low-activity or cost-sensitive ones. Revert to FCFS if needed; audit via Trail of Bits. | Revenue potential vs. setup/UX costs; 2025 trends favor high-MEV chains like One.

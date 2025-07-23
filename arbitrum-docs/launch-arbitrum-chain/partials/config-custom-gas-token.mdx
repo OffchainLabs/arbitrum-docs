@@ -1,0 +1,27 @@
+## Benefits of Using a Custom Gas Token in Arbitrum Orbit Chains
+
+Arbitrum Orbit allows developers to create customizable Layer 2 or Layer 3 chains, and one key feature is the ability to use an ERC-20 token (other than ETH) as the native gas token for transaction fees. This is particularly supported in AnyTrust chains, with recent expansions making it available for chains posting data to Ethereum. Here are the primary benefits:
+
+- **Enhanced Token Utility and Demand**: By designating a project's native token as the gas token, it creates ongoing demand through transaction fees, transforming the token into essential infrastructure rather than relying solely on speculation. This can drive value accrual and ecosystem growth.
+- **Internalized Economic Value**: Transaction fees are captured within the ecosystem, preventing value leakage to external tokens like ETH and fostering a sustainable model where the community benefits directly from network activity.
+- **Improved User Experience and Onboarding**: Users can interact with the chain using a single token for all needs, eliminating the hassle of managing multiple assets (e.g., ETH for gas plus a native token for app interactions). This reduces friction, especially in closed ecosystems like gaming or social platforms, and enables features like fee subsidization.
+- **Unified Brand and Ecosystem Alignment**: Reinforces the project's identity by having users engage exclusively with the native token, which is ideal for tailored use cases such as in-game economies or specialized DeFi.
+- **Greater Predictability and Control**: On isolated chains, custom gas tokens lead to more reliable gas prices, less affected by external activity. Developers gain full sovereignty over gas costs, governance, and scaling, optimizing for performance.
+- **Innovation in Economic Models**: Enables creative setups, like incentivizing network security (e.g., rewarding nodes) or abstracting fees to make decentralized apps more accessible to non-technical users.
+
+Overall, this feature is particularly valuable for projects aiming to build self-contained ecosystems, as seen in examples like Xai Gaming or Degen Chain, where it has driven high transaction volumes and user adoption.
+
+## Decisions and Considerations Regarding Custom Gas Tokens
+
+Implementing a custom gas token requires careful planning, as choices are often immutable post-deployment. Here's a breakdown of key decisions, using a table for clarity:
+
+| Decision Area | Key Considerations | Trade-offs |
+|---------------|--------------------|------------|
+| **Chain Model (Rollup vs. AnyTrust)** | Custom gas tokens are supported in AnyTrust chains (using a Data Availability Committee for lower costs) and now extended to chains posting data to Ethereum. Rollup chains (posting all data to Ethereum L1) do not support this yet. Choose AnyTrust if cost efficiency and custom tokens are priorities. | AnyTrust offers lower costs but reduces decentralization and introduces trust assumptions in the DAC vs. Rollup's stronger security. If security is paramount, stick with ETH and Rollup. |
+| **Implementation Approach (Native vs. Account Abstraction)** | - **Native**: Integrates at the protocol level with dynamic price oracles; requires 100% use of the ERC-20 token; simpler and predictable.<br />- **Account Abstraction (via ERC-4337)**: Uses paymasters for flexibility; supports multiple tokens or post-launch changes; more future-proof. | Native is easier to integrate but lacks flexibility and can't be changed easily. Account Abstraction adds complexity (e.g., needing bundlers and custom tooling) but avoids sell pressure and enables granular control. Native is recommended for simplicity; AA for adaptability. |
+| **Token Selection and Compliance** | The ERC-20 token must have 18 decimals, non-rebasing supply, no transfer fees/taxes, no callback hooks, and specific name/symbol constraints. It should align with your ecosystem (e.g., your native token for utility). | Incompatible tokens require modifications, potentially delaying launch. Volatile or illiquid tokens can complicate user adoption and operations. |
+| **Economic Management** | Handle ETH needs for data availability (DA) costs via swaps (CustomToken → ETH), forecast collections, manage liquidity, and build reserves. Consider volatility impacts on fee coverage. | Risk of operational deficits if token price drops (e.g., 50% decline making fees insufficient). Requires resources for ongoing management; skip if your token lacks strong liquidity or utility. |
+| **Settlement and Licensing** | If settling to chains other than Arbitrum One or Nova, follow Arbitrum Expansion Program (AEP) guidelines. Ensure integration with bridges and tooling. | Additional licensing may apply, affecting deployment. Poor choices can limit interoperability with Ethereum. |
+| **When to Use or Skip** | Use if: Building closed ecosystems (e.g., gaming), token has high utility/liquidity, seeking economic control.<br />Skip if: Need max interoperability, token is volatile, lack resources for complexity, or prefer ETH alignment. | Adds operational overhead; migration post-launch is risky (involves pauses, upgrades, potential fund loss). Plan at genesis for minimal disruption. |
+
+In summary, evaluate your project's goals—such as cost vs. security, simplicity vs. flexibility—and test thoroughly using the Orbit SDK. Consult official docs for deployment configs, as features evolve.

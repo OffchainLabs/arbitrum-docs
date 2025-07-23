@@ -1,0 +1,24 @@
+### Benefits of Using a Native Gas Token in Arbitrum Orbit Chains
+
+A native gas token (also known as a custom gas token) in Arbitrum Orbit chains refers to using an ERC-20 token other than ETH to pay for transaction fees. This feature is supported in Orbit's customizable Layer 2 or Layer 3 setups, particularly AnyTrust chains, and has seen expanded use cases by 2025. Key benefits include:
+
+- **Enhanced Token Utility and Demand**: Designating a project's native token as the gas token creates built-in utility, driving constant demand through transaction fees. This shifts the token from speculative to essential infrastructure, potentially increasing its value via mechanisms like accumulation in the sequencer and airdrops for onboarding.
+- **Internalized Economic Value**: Fees stay within the ecosystem, capturing network activity directly for the community and preventing leakage to external assets like ETH. This supports sustainable models, especially with low data availability (DA) costs allowing token accrual.
+- **Improved User Experience and Onboarding**: Users interact with a single token, eliminating the need to manage ETH alongside native assets. This reduces friction in closed ecosystems (e.g., gaming or social apps), enables fee subsidization via airdrops or sponsorships, and simplifies accounting with stablecoins.
+- **Unified Brand and Ecosystem Alignment**: Reinforces project identity by having all interactions use the native token, ideal for specialized use cases like in-game economies or regulated apps with permissioning (e.g., via ERC-3643 for compliance).
+- **Predictability and Innovation**: Stablecoins as gas tokens eliminate fee volatility, avoid taxable events, and enable features like native yield on bridged assets. This fosters innovation in economic models, such as rewarding users or integrating with alt-DA for cost efficiency.
+- **Accessibility and Liquidity**: Enhances stability, easier payments, and greater liquidity, making the chain more user-friendly and attractive for high-volume apps like gaming.
+
+Examples from 2025 include chains like SlingshotDAO on Orbit L3 using $SLING for seamless UX and gas fee sponsorship, and PlayBlock leveraging custom tokens for high-performance gaming.
+
+### Decisions Regarding Native Gas Tokens
+
+Implementing a native gas token is often immutable after deployment, so decisions must be made early. By 2025, trends favor account abstraction for flexibility, with Orbit maintaining strong support amid deprecations in frameworks like OP Stack. Use the table below for key areas:
+
+| Decision Area | Key Considerations | Trade-offs |
+|---------------|--------------------|------------|
+| **Chain Type and Framework** | Choose Arbitrum Orbit AnyTrust for native support with dynamic price oracles and alt-DA (e.g., Celestia, EigenDA) to minimize costs. Evaluate if your appchain (e.g., gaming) needs ETH; if not, custom tokens shine. Note OP Stack deprecated direct support in June 2025, pushing toward AA. | AnyTrust offers cost efficiency but adds trust assumptions vs. full Rollups. Limited framework options (e.g., no OP Stack direct) restrict architecture; Orbit provides flexibility but requires specific DA setups. |
+| **Implementation Approach** | - **Native/Direct**: Set at genesis (e.g., via Conduit deployment) for deterministic gas accounting; immutable post-launch.<br />- **Account Abstraction (ERC-4337)**: Use paymasters for multi-token support and post-deployment changes; aligns with 2025 trends like zkSync roadmaps. | Native is simpler and predictable but inflexible (no changes). AA adds complexity (needs bundlers, infrastructure) and swap costs but offers future-proofing and avoids sell pressure. |
+| **Token Selection and Requirements** | Select an ERC-20 with 18 decimals, non-rebasing supply, no fees/taxes/hooks, and compliant interfaces (e.g., gasPayingToken()). Options: project native for utility, yield-bearing for earnings, or stablecoin (e.g., USDC) for predictability. Ensure alignment with ecosystem needs. | Incompatible tokens delay launch; volatile ones risk UX. Stablecoins simplify but may lack utility; yield-bearing adds value but complexity. |
+| **Economic Management** | Forecast fee collections, hedge volatility (e.g., token-to-ETH swaps for DA), maintain liquidity/reserves. Use alt-DA to reduce risks; consider permissioning for regulated use. | Volatility can cause deficits (e.g., 50% price drop halves fee value); requires ongoing hedging/resources. Profitable chains can use revenue for airdrops/growth. |
+| **When to Use or Skip** | Use for closed ecosystems needing UX boosts (e.g., games like DeFi Kingdoms) or compliance. Skip if ETH interoperability is key, token lacks liquidity, or resources for complexity are limited. Test via Orbit SDK. | Adds overhead/risks like migration issues; benefits outweigh for utility-focused projects but not general-purpose chains.

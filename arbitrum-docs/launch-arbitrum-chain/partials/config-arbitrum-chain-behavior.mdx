@@ -1,0 +1,104 @@
+Customizing the behavior of an Arbitrum chain, particularly in Orbit L2 or L3 setups, primarily involves modifying the State Transition Function (STF)—the logic that processes transactions and produces new blocks. This is achieved by altering ArbOS (the L2 operating system within the Nitro stack), which implements the STF. Changes can include adding new precompiles, modifying state, or adjusting execution logic, enabling tailored features like custom gas rewards or EVM extensions. As of July 2025, this requires forking the Nitro codebase, applying version-controlled modifications for compatibility, building custom nodes, and updating the on-chain WASM module root to ensure fraud proofs recognize the new behavior.
+
+Key benefits include:
+- **Tailored Functionality**: Adapt the chain for specific use cases, such as gaming (e.g., custom opcodes for performance) or DeFi (e.g., rewarding deployers with gas portions), enhancing efficiency and utility.
+- **Backward Compatibility**: Version controls allow phased activations without disrupting existing blocks or contracts, supporting smooth upgrades.
+- **Fraud Proof Integrity**: Updated WASM roots ensure validators and challengers (e.g., under BoLD) can verify the custom STF, maintaining Ethereum-inherited security.
+- **Ecosystem Flexibility**: Supports innovations like custom precompiles or state variables, but requires expertise to balance performance, security, and costs.
+
+This process is advanced; collaborate with RaaS providers (e.g., Caldera, Zeeve) for implementation, audits, and maintenance. Offchain Labs does not review individual changes but offers ecosystem support.
+
+#### Steps to Customize Chain Behavior
+
+1. **Assess Prerequisites and Plan Changes**:
+   - Ensure modifications are deterministic, pure (no external resources), replayable, and complete in under 1 second with a ~32M gas limit. They must not alter old blocks or fail on malformed inputs.
+   - Identify STF-impacting changes (e.g., new precompiles affect block hashes) vs. non-STF (e.g., RPC methods, which don't require this process).
+   - Allocate resources for audits and ongoing security.
+
+2. **Download and Modify Nitro Source Code**:
+   - Clone the repository (use latest stable, e.g., v3.6.5):
+     ```
+     git clone --branch v3.6.5 https://github.com/OffchainLabs/nitro.git
+     cd nitro
+     git submodule update --init --recursive --force
+     ```
+   - Apply changes in Go files (e.g., `precompile.go`, `arbosstate.go`):
+     - **Add Method to Existing Precompile** (e.g., `sayHi()` to ArbSys at 0x6b):
+       Edit `ArbSys.go` and add version control in `precompile.go`:
+       ```
+       ArbSys := insert(MakePrecompile(pgen.ArbSysMetaData, &ArbSys{Address: types.ArbSysAddress}))
+       ArbSys.methodsByName["SayHi"].arbosVersion = 30  // Activation version
+       ```
+     - **Create New Precompile** (e.g., ArbHi at 0x6f):
+       Add in new file, then in `precompile.go`:
+       ```
+       ArbHi := insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress}))
+       ArbHi.arbosVersion = 30
+       for _, method := range ArbHi.methods {
+           method.arbosVersion = 30
+       }
+       ```
+     - **Add New ArbOS State** (e.g., `myNumber`):
+       Edit `arbosstate.go` in `UpgradeArbosVersion`:
+       ```
+       case 21:  // Target version
+           state.myNumber = 42  // Initialize
+       ```
+     - **Modify STF Logic** (e.g., conditional execution):
+       Use if-else based on version in relevant files (e.g., `block_process.go`):
+       ```
+       if state.arbosVersion >= 21 {
+           // New logic
+       } else {
+           // Old logic
+       }
+       ```
+
+3. **Build and Run Custom Node Without Fraud Proofs**:
+   - Install Docker and build:
+     ```
+     docker build . --tag custom-nitro-node
+     ```
+   - Edit `nodeConfig.json` to disable validator:
+     ```
+     "staker": {
+         "dangerous": {
+             "without-block-validator": true
+         }
+     }
+     ```
+   - Run via docker-compose (update `docker-compose.yml` to use new image) or:
+     ```
+     docker run --rm -it -v /path/to/node/dir:/home/user/.arbitrum -p 8449:8449 custom-nitro-node --conf.file /home/user/.arbitrum/nodeConfig.json
+     ```
+   - Test changes.
+
+4. **Enable Fraud Proofs and Update WASM Root**:
+   - Build dev image:
+     ```
+     docker build . --target nitro-node-dev --tag custom-nitro-node-dev
+     docker run --rm --entrypoint cat custom-nitro-node-dev target/machines/latest/module-root.txt
+     ```
+   - Extract new WASM root (32-byte hash).
+   - Update on-chain via `upgradeExecutor.executeCall()` (calldata: `0x89384960` + root).
+   - Remove dangerous config, run with dev image.
+   - Preserve replay binary for future builds (extract and modify Dockerfile).
+
+5. **Schedule and Execute Upgrade**:
+   - Propose via DAO (for public chains) or owner actions.
+   - Activate at chosen ArbOS version (e.g., 32+ to build on canonical).
+   - Test on devnet with Orbit SDK before mainnet.
+
+
+#### Decisions Regarding Customization
+
+Modifications are often immutable without further upgrades, so evaluate trade-offs early. Use the Orbit SDK for testing.
+
+| Decision Area | Key Considerations | Trade-offs |
+|---------------|--------------------|------------|
+| **Type of Change** | Select: Add methods/precompiles (simpler), new state (persistent data), STF logic (core execution). | Precompiles enhance efficiency but risk vulnerabilities; state adds utility but STF complexity; logic changes enable innovations but must preserve determinism. |
+| **Activation Version** | Choose future ArbOS version (e.g., 30+); align with canonical releases. | Higher versions enable phasing but activate intermediate features; low risks premature rollout. |
+| **Compatibility Mode** | Use conditionals for backward logic; initialize states to 0/null. | Ensures no re-orgs but limits radical changes; incompatible risks chain halts. |
+| **Chain Mode (Rollup/AnyTrust)** | Apply to both; AnyTrust needs DAC for DA. | Rollup maximizes security for custom STF; AnyTrust lowers costs but adds trust—test proofs. |
+| **Resource Allocation** | Partner with RaaS/experts; budget audits/maintenance. | Collaboration speeds up but costs; in-house offers control but requires Go/Nitro skills. |
+| **When to Customize** | For app-specific needs (e.g., custom rewards); skip if standard suffices. | Boosts sovereignty but increases attack surface—audit for production; non-STF changes are simpler.

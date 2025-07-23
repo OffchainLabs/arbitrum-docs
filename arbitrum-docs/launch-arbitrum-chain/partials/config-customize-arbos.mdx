@@ -1,0 +1,121 @@
+### Customizing ArbOS in Arbitrum Chains
+
+ArbOS is the Layer 2 operating system within the Nitro stack that implements the State Transition Function (STF) for Arbitrum chains, including Orbit L2s and L3s. Customizing ArbOS allows you to modify chain behavior, such as adding precompiles, defining new events, altering gas usage, or introducing custom state and logic. This enables tailored features like rewarding contract deployers with gas portions or optimizing for specific use cases (e.g., gaming or DeFi). However, it affects the STF, requiring updates to fraud proofs for compatibility.
+
+Customization involves forking the Nitro codebase, applying version-controlled changes to ensure backward compatibility, building custom nodes, and upgrading the on-chain WASM module root. This process is complex and requires expertise in Go, Nitro, and ArbOS—collaborate with Rollup-as-a-Service (RaaS) providers like Caldera or Zeeve for implementation, audits, and maintenance. Offchain Labs does not review individual changes. Allocate resources for security audits to mitigate risks like Denial-of-Service (DoS) attacks or chain re-orgs.
+
+Customizations must be deterministic, pure (no external resources), replayable, and complete in under 1 second with a ~32M gas limit. They cannot alter historical blocks or fail on malformed inputs. If customizing pre-launch, integrate at genesis; for live chains, use upgrades to avoid disruptions.
+
+#### Steps to Customize ArbOS
+
+1. **Download the Nitro Source Code**:
+   - Clone the repository (use the latest stable branch, e.g., v3.6.5):
+     ```
+     git clone --branch v3.6.5 https://github.com/OffchainLabs/nitro.git
+     cd nitro
+     git submodule update --init --recursive --force
+     ```
+   - Install Docker for building images.
+
+2. **Apply Modifications to ArbOS**:
+   - Identify changes (e.g., precompiles affect STF outcomes like block hashes; non-STF like RPC methods do not require this).
+   - Edit Go files (e.g., `precompile.go`, `arbosstate.go`) with version controls for activation.
+     - **Add New Method to Existing Precompile** (e.g., `sayHi()` to ArbSys at 0x64):
+       Edit `ArbSys.go` (in `precompiles/`):
+       ```
+       func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
+           return "hi", nil
+       }
+       ```
+       Update Solidity interface `ArbSys.sol` (in `nitro-contracts/src/precompiles/`):
+       ```
+       function sayHi() external view returns(string memory);
+       ```
+       Append version control in `precompile.go`:
+       ```
+       ArbSys.methodsByName["SayHi"].arbosVersion = 30  // Activation version
+       ```
+     - **Create New Precompile** (e.g., ArbHi at 0x11a):
+       Create `ArbHi.go` in `precompiles/`:
+       ```
+       package precompiles
+
+       type ArbHi struct {
+           Address addr // 0x11a
+       }
+
+       func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
+           return "hi", nil
+       }
+       ```
+       Update `precompile.go`:
+       ```
+       ArbHi := insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress}))
+       ArbHi.arbosVersion = 30
+       for _, method := range ArbHi.methods {
+           method.arbosVersion = 30
+       }
+       ```
+     - **Add New ArbOS State** (e.g., `myNumber`):
+       Edit `arbosstate.go` in `UpgradeArbosVersion`:
+       ```
+       case 21:  // Target version
+           ensure(state.SetNewMyNumber(42))  // Initialize
+       ```
+       Initialize to 0/null initially to avoid re-orgs.
+     - **Modify STF Logic** (e.g., conditional return in `SayHi`):
+       ```
+       func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
+           if state.ArbOSVersion() >= 21 {
+               return "hi, new ArbOS version", nil
+           } else {
+               return "hi", nil
+           }
+       }
+       ```
+     - Other options: Define new events, customize gas usage, or modify state—see full docs for details.
+
+3. **Build and Run Custom Node Without Fraud Proofs**:
+   - Build the image:
+     ```
+     docker build . --tag custom-nitro-node
+     ```
+   - Disable validator in `nodeConfig.json`:
+     ```
+     "staker": {
+         "dangerous": {
+             "without-block-validator": true
+         }
+     }
+     ```
+   - Run (e.g., via docker-compose for Orbit or direct `docker run`).
+   - Test changes (e.g., via `eth_call` or `cast call`).
+
+4. **Enable Fraud Proofs**:
+   - Build dev image:
+     ```
+     docker build . --target nitro-node-dev --tag custom-nitro-node-dev
+     docker run --rm --entrypoint cat custom-nitro-node-dev target/machines/latest/module-root.txt
+     ```
+   - Extract new WASM root (32-byte hash).
+   - Update on-chain via `upgradeExecutor.executeCall()` (calldata: `0x89384960` + root).
+   - Remove dangerous config and run with dev image.
+   - Preserve replay binary (extract and update Dockerfile for future builds).
+
+5. **Upgrade the Chain**:
+   - Propose via DAO (public chains) or owner actions.
+   - Activate at target ArbOS version (e.g., 30+ to build on canonical).
+   - Test on devnet with Orbit SDK before mainnet.
+
+#### Decisions Regarding ArbOS Customization
+
+Customizations are often immutable without upgrades; test thoroughly to avoid re-orgs or vulnerabilities.
+
+| Decision Area | Key Considerations | Trade-offs |
+|---------------|--------------------|------------|
+| **Type of Modification** | Choose: Precompiles (efficiency for ops), state (persistent data), STF logic (execution changes). | Precompiles are simpler but limited to view/pure (no state mods without upgrades); state/STF enable advanced features but risk DoS or complexity. |
+| **Activation Version** | Select future ArbOS (e.g., 30+); align with canonical to inherit features. | Higher versions phase activations but trigger intermediates; low risks early errors. |
+| **Backward Compatibility** | Use conditionals/initialize to null; ensure no historical alterations. | Prevents re-orgs but restricts changes; incompatible risks halts/forks. |
+| **Chain Mode** | Apply to Rollup/AnyTrust; test proofs in both. | Rollup ensures security; AnyTrust lowers costs but adds DAC trust. |
+| **Resource Allocation** | Partner for audits/maintenance; self-implement if expert. | Collaboration reduces risks but costs; in-house offers control but demands skills. |
+| **When to Customize** | For unique needs (e.g., custom ops); skip if standard ArbOS suffices. | Enhances sovereignty but increases attack surface—audit rigorously.

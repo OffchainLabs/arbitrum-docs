@@ -1,0 +1,26 @@
+### Benefits of Using AnyTrust in Arbitrum Orbit Chains
+
+Arbitrum Orbit allows developers to deploy customizable Layer 2 (L2) or Layer 3 (L3) chains using the Nitro stack, with AnyTrust mode relying on a Data Availability Committee (DAC) for offchain data storage instead of posting everything to Ethereum or a parent chain. This contrasts with rollup mode, which uses Ethereum for full data availability (DA). As of July 2025, AnyTrust remains popular for cost-sensitive applications like gaming, with key benefits including:
+
+- **Significant Cost Reduction**: By using a DAC to handle DA offchain in the common case (assuming most committee members are honest), transaction fees are drastically lower than in rollups—often 10x or more—since data isn't posted to Ethereum L1 unless a challenge occurs. This makes it ideal for high-volume, low-value transactions in apps like games or social platforms.
+- **Higher Throughput and Performance**: Dedicated resources reduce competition with other chains, enabling up to 1 gigagas/sec and sub-second finality, with more reliable gas prices isolated from Ethereum or Arbitrum L2 traffic fluctuations.
+- **Support for Custom Gas Tokens**: Unlike rollups, AnyTrust allows ERC-20 tokens (e.g., a project's native token) for gas fees, enhancing ecosystem utility and enabling features like fee subsidization or stablecoin integration for predictable costs.
+- **Flexibility for Specific Use Cases**: Optimized for scenarios needing speed over maximal decentralization, such as gaming (e.g., Xai chain), with fallback to "rollup mode" for security during disputes, ensuring data availability if enough DAC members are honest.
+- **Ease of Prototyping and Upgrades**: Low setup costs via the Orbit SDK, with access to Nitro's ongoing improvements for extensibility, making it straightforward to launch and iterate on custom chains.
+- **Balanced Security for Cost Trade-off**: While introducing a trust assumption (e.g., at least 2 honest DAC members out of 20), it inherits Ethereum's security via settlement and provides fraud proofs, suitable for apps where ultra-low costs outweigh full trustlessness.
+
+Examples include transitions like dKargo's testnet shift to AnyTrust for better efficiency and Xai's use for gasless gaming, highlighting real-world scalability gains.
+
+### Decisions Regarding AnyTrust in Arbitrum Orbit Chains
+
+AnyTrust deployments are permanent after launch, so evaluate trade-offs early using the Orbit SDK for testing. Key decisions center on balancing cost savings with security needs, often via RaaS providers like Caldera or Conduit. The table below details main areas:
+
+| Decision Area | Key Considerations | Trade-offs |
+|---------------|--------------------|------------|
+| **Chain Model (AnyTrust vs. Rollup)** | Choose AnyTrust for cost/performance priority; requires setting a DAC with a threshold (e.g., K=2 honest members out of 20). Rollup for full Ethereum DA if trustlessness is critical. | AnyTrust lowers fees and boosts speed but adds DAC trust (safety breaks if too many collude); rollups are more secure/decentralized but costlier. |
+| **DAC Configuration** | Define committee size, members (permissioned nodes), and honesty threshold K; ensure members are reputable to minimize risks. Fallback to rollup mode must be configured for disputes. | Larger committees enhance security but increase coordination complexity/costs; low K reduces trust but risks data withholding if malicious. |
+| **Settlement Layer** | Select parent (e.g., Ethereum for L2, Arbitrum One for L3) for finality/disputes; comply with AEP if non-standard. | Direct Ethereum maximizes security but fees; L3 on Arbitrum reduces costs but adds layer dependency. |
+| **Custom Gas Token** | Opt for ERC-20 (non-ETH) if needed for utility; ensure compatibility (18 decimals, no fees). | AnyTrust supports it for UX, but not rollups; adds ecosystem value but requires liquidity management to cover DA swaps. |
+| **Governance and Permissions** | Define custom rules (e.g., DAO-led like Arbitrum) or project-specific; choose permissioned (open like Ethereum) vs. restricted access for privacy/compliance. | Full sovereignty enables tailoring but demands robust setup to prevent centralization; permissioned limits decentralization but suits enterprises. |
+| **Infrastructure Provider** | Pick RaaS (e.g., Caldera for managed DAC) or self-host for control; integrate with SDK for DA fallback. | Managed eases launch but adds fees/vendor lock; self-hosting offers control but needs expertise for DAC upkeep. |
+| **When to Use or Skip** | Use for cost-driven apps (e.g., gaming like Xai) with acceptable trust; skip for DeFi needing max security (use rollup). Test DAC reliability. | Benefits speed/cost but risks DA issues; evolving hybrids (e.g., alt-DA) may reduce trade-offs.

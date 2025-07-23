@@ -1,0 +1,25 @@
+### Benefits of Including Force-Inclusion in Arbitrum Orbit Chains
+
+Force-inclusion (also referred to as forced transactions or forced batches) in Arbitrum Orbit chains is a mechanism that allows users to submit transactions directly to the parent chain (e.g., Ethereum L1 or Arbitrum L2) if the sequencer is censoring, delayed, or offline. This approach ensures the transaction gets included in the Orbit chain's state after a waiting period (typically 24 hours). It's a core feature of the Nitro stack, applicable to both Rollup and AnyTrust modes, with enhancements like BoLD's censorship timeout as of 2025. Key benefits include:
+
+- **Censorship Resistance**: Prevents a malicious or faulty sequencer from ignoring user transactions indefinitely. Users can force inclusion via the parent chain, ensuring fair access and reducing centralization risks associated with the sequencer.
+- **Liveness Guarantee**: Maintains chain progress and availability even during sequencer downtime. Transactions are guaranteed inclusion after the delay, allowing users to exit assets or continue interactions without relying solely on the sequencer.
+- **Enhanced Security and User Protection**: Inherits Ethereum's security for dispute resolution, enabling safe withdrawals and state updates. In AnyTrust mode, it includes a fallback to full data posting if the DAC fails, ensuring data availability without halting the chain.
+- **Flexibility for L3 Chains**: For Orbit L3s settling to L2 parents, force-inclusion propagates up the stack (L3 to L2, then L2 to L1 if needed), with BoLD's optional censorship timeout reducing the window during sustained issues, improving responsiveness.
+- **Cost Efficiency in Rare Cases**: Only used in exceptional scenarios (e.g., sequencer failure), minimizing L1 gas costs while providing a backstop, which supports high-throughput applications, such as gaming, without constant L1 overhead.
+
+This feature is particularly valuable for Orbit chains in high-stakes or regulated environments.
+
+### Decisions Regarding Force-Inclusion
+
+Force-inclusion is enabled by default in Orbit chains but requires configuration at deployment or via upgrades. Decisions are often immutable or governance-controlled, so test with the Orbit SDK. Focus on balancing security, delays, and chain mode, with RaaS providers like Caldera assisting. The table below outlines key areas:
+
+| Decision Area | Key Considerations | Trade-offs |
+|---------------|--------------------|------------|
+| **Enable Force-Inclusion** | Decide to include it at genesis (standard in Nitro); for custom chains, confirm via Rollup contracts. In BoLD-upgraded chains, enable optional censorship timeout for L3s. Essential for liveness, but it adds minor complexity; skipping reduces censorship resistance, making it unsuitable for production chains. |
+| **Waiting Period/Delay** | Set the delay before force-inclusion (default: 24 hours, or 86,400 seconds). Adjustable via sequencer configs; BoLD's timeout can dynamically lower it during censorship. | Shorter delays improve UX but risk spam/DDoS; longer delays enhance security but frustrate users during outages. |
+| **Chain Mode (Rollup vs. AnyTrust)** | Use Rollup for direct L1 force-inclusion; AnyTrust for DAC-integrated forced batches with fallback to full data posting. | Rollup offers stronger trustlessness but higher costs; AnyTrust reduces fees but relies on DAC honesty for efficiency. |
+| **DAC/Keyset Configuration (AnyTrust)** | Define DAC members, BLS keys, signature threshold (e.g., N-1), and expiration (min 2 weeks). Set backing stores (e.g., S3) and caching. More members boost resilience but increase coordination; a poor setup risks fallback overuse, which raises costs. |
+| **Parent Chain Selection** | Settle to Ethereum L1 for max security or Arbitrum L2 (e.g., One) for layered inclusion. Comply with AEP for non-standard. | L1 maximizes guarantees but fees; L2 lowers costs but adds propagation steps for L3s. |
+| **BoLD and Timeout Features** | Enable BoLD for permissionless challenges; activate censorship timeout (disabled by default) with delay buffer for repeated issues. | Improves resistance but requires high bonds; skip for simple chains to avoid complexity. |
+| **When to Use or Customize** | Include for all production chains; customize delays for gaming (shorter) vs. DeFi (longer). Monitor sequencer health to minimize usage. Adds overhead in monitoring; benefits outweigh the costs for trust-minimized ecosystems, but are rare in low-risk testnets.
