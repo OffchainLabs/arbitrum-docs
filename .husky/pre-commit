@@ -29,22 +29,19 @@ run_yarn_command() {
   fi
 }
 
-# Change to website directory
-cd website || handle_error "Failed to change to website directory"
-
 # Check if globalVars.js has staged changes
 if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
   log_info "Detected changes in globalVars.js"
 
   # Run variable references update
   log_info "Updating variable references..."
-  run_yarn_command "update_variable_refs" "Failed to update variable references"
+  run_yarn_command "update-variable-refs" "Failed to update variable references"
 
   # Run the globalVars update checker script
   run_yarn_command "tsx scripts/check-globalvars-updates.ts" "globalVars update check failed"
 
   log_info "Running precompiles reference table generator..."
-  run_yarn_command "generate_precompiles_ref_tables" "Failed to generate precompiles reference tables"
+  run_yarn_command "generate-precompiles-ref-tables" "Failed to generate precompiles reference tables"
 
   log_info "Running formatter..."
   run_yarn_command "format" "Formatting failed"
@@ -58,8 +55,12 @@ run_yarn_command "check-redirects" "The redirect checker found issues that need 
 log_info "Running final formatting pass..."
 run_yarn_command "format" "Final formatting failed"
 
-# Return to original directory
-cd .. || handle_error "Failed to return to original directory"
+# Auto-stage any files that were reformatted during the pre-commit process
+if [ -n "$(git diff --name-only)" ]; then
+  log_info "Auto-staging files modified by formatters..."
+  git add $(git diff --name-only)
+  log_success "Auto-staged formatted files"
+fi
 
 log_success "Pre-commit tasks completed"
 log_info "Note: To bypass hooks, use git commit --no-verify"
