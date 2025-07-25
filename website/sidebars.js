@@ -287,6 +287,11 @@ const sidebars = {
                   label: `Enable blob transactions`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/smart-contract-size-limit',
+                  label: `Configure the smart contract size limit`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
