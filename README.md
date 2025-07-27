@@ -64,9 +64,9 @@ git submodule update --remote arbitrum-sdk
 
 You can add any terms to the glossary by following these steps:
 
-Let's assume you need to add the term "State Transition Function" to the glossary. 
+Let's assume you need to add the term "State Transition Function" to the glossary.
 
-1. Create an `.mdx` file as follows: 
+1. Create an `.mdx` file as follows:
 
 `docs/partials/glossary/_state-transition-function.mdx`
 
@@ -87,6 +87,7 @@ The STF (State Transition Function) defines how new blocks are produced from inp
 ```shell
 npx tsx src/scripts/build-glossary.ts
 ```
- This part will update the glossary.
+
+This part will update the glossary.
 
 4. Commit your changes and open a PR.

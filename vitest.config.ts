@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config'
-import { resolve } from 'path'
+import { defineConfig } from 'vitest/config';
+import { resolve } from 'path';
 
 export default defineConfig({
   test: {
@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'node',
     include: ['scripts/**/*.test.ts'],
     alias: {
-      '@': resolve(__dirname, './')
-    }
-  }
-}) 
+      '@': resolve(__dirname, './'),
+    },
+  },
+});

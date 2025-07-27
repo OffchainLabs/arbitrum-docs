@@ -42,7 +42,7 @@ EIP-7702 introduces a new transaction type that allows Externally Owned Accounts
 #### [EIP-2537: Precompile for BLS12-381 curve operations](https://eips.ethereum.org/EIPS/eip-2537)
 
 :::caution
-This EIP and its specified precompiles are part of ArbOS 40 Callisto but are *not* enabled. The enabling of these precompiles will be proposed in a future ArbOS release.
+This EIP and its specified precompiles are part of ArbOS 40 Callisto but are _not_ enabled. The enabling of these precompiles will be proposed in a future ArbOS release.
 :::
 
 This EIP introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. BLS signature verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
