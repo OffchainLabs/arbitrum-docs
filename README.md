@@ -52,12 +52,10 @@ The following are the only exceptions:
 - To request to have your project added to the [3rd party node providers page](docs/build-decentralized-apps/reference/01-node-providers.mdx), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
 
 ### Initial set up
+1. `git clone git@github.com:OffchainLabs/arbitrum-docs.git`
+2. `cd arbitrum-docs`
+3. `git submodule update --init --recursive`
 
-```shell
-git clone git@github.com:OffchainLabs/arbitrum-docs.git
-
-git submodule update --init --recursive
-```
 
 Install node dependencies
 
@@ -127,3 +125,11 @@ npx tsx src/scripts/build-glossary.ts
  This part will update the glossary.
 
 4. Commit your changes and open a PR.
+
+### Formatting
+
+1. Run `yarn format` from the root directory (`arbitrum-docs`).
+
+### Redirects
+
+1. From the root directory, run `yarn check-redirects`.

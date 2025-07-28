@@ -1,190 +1,65 @@
 ### How does Stylus manage security issues in smart contracts when interacting with so many different languages?
 
-<p>
-  All languages are compiled to WASM for them to be able to work with Stylus. So it just needs to
-  verify that the produced WASM programs behave as they should inside the new virtual machine.
-</p>
-
-<p>
-
-</p>
+All languages are compiled to WASM for them to be able to work with Stylus. So it just needs to verify that the produced WASM programs behave as they should inside the new virtual machine.
 
 ### Is there any analogue of the fallback function from Solidity in the Rust Stylus SDK?
 
-<p>
-  Currently there isn't any analogue. However, you can use a minimal entrypoint and perform raw
-  delegate calls, forwarding your calldata. You can find more information in{' '}
-  <a href="https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming">
-    Bytes-in, bytes-out programming
-  </a>{' '}
-  and{' '}
-  <a href="https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call">
-    call, static_call and delegate_call
-  </a>
-  .
-</p>
-
-<p>
-
-</p>
+Currently there isn't any analogue. However, you can use a minimal entrypoint and perform raw delegate calls, forwarding your calldata. You can find more information in [Bytes-in, bytes-out programming](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) and [call, `static_call` and `delegate_call`](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call).
 
 ### Is it possible to verify Stylus contracts on the block explorer?
 
-<p>
-  Currently it is not possible to verify contracts compiled to WASM on the block explorer, but we
-  are actively working with providers to have the verification process ready for when Stylus reaches
-  mainnet-ready status.
-</p>
-
-<p>
-
-</p>
+Currently it is not possible to verify contracts compiled to WASM on the block explorer, but we are actively working with providers to have the verification process ready for when Stylus reaches mainnet-ready status.
 
 ### Do Stylus contracts compile down to EVM bytecode like prior other attempts?
 
-<p>
-  No. Stylus contracts are compiled down to WASM. The user writes a program in Rust / C / C++ which
-  is then compiled down to WebAssembly.
-</p>
-
-<p>
-
-</p>
+No. Stylus contracts are compiled down to WASM. The user writes a program in Rust/C/C++ which is then compiled down to WebAssembly.
 
 ### How is a Stylus contract deployed?
 
-<p>
-  Stylus contracts are deployed on chain as a blob of bytes, just like EVM ones. The only difference
-  is that when the contract is executed, instead of invoking the EVM, we invoke a separate WASM
-  runtime. Note that a special EOF-inspired prefix distinguishes Stylus contracts from traditional
-  EVM contracts: when a contract's bytecode starts with the magic <code>0xEFF00000</code> prefix,
-  it's a Stylus WASM contract.
-</p>
-
-<p>
-
-</p>
+Stylus contracts are deployed on chain as a blob of bytes, just like EVM ones. The only difference is that when the contract is executed, instead of invoking the EVM, we invoke a separate WASM runtime. Note that a special EOF-inspired prefix distinguishes Stylus contracts from traditional EVM contracts: when a contract's bytecode starts with the magic `0xEFF00000` prefix, it's a Stylus WASM contract.
 
 ### Is there a new transaction type to deploy Stylus contracts?
 
-<p>
-  You deploy a Stylus contract the same way that Solidity contracts are deployed. There are no
-  special transaction types. As a UX note: a WASM will revert until a special instrumentation
-  operation is performed by a call to the new  <code>ArbWasm</code> precompile, which readies the
-  program for calls on-chain.
-</p>
+You deploy a Stylus contract the same way that Solidity contracts are deployed. There are no special transaction types. As a UX note: a WASM will revert until a special instrumentation operation is performed by a call to the new `ArbWasm` precompile, which readies the program for calls on-chain.
 
-<p>
-  You can find instructions for deploying a Stylus contract in our{' '}
-  <a href="https://docs.arbitrum.io/stylus/stylus-quickstart#checking-your-stylus-project-is-valid">
-    Quickstart
-  </a>
-  .
-</p>
+You can find instructions for deploying a Stylus contract in our [Quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart#checking-your-stylus-project-is-valid).
 
 ### Do Stylus contracts use a different type of ABI?
 
-<p>
-  Stylus contracts use solidity ABIs. Methods, signatures, logs, calls, etc. work exactly as in the
-  EVM. From a user's / explorer's perspective, it all just looks and behaves like solidity.
-</p>
-
-<p>
-
-</p>
+Stylus contracts use solidity ABIs. Methods, signatures, logs, calls, etc. work exactly as in the EVM. From a user's / explorer's perspective, it all just looks and behaves like solidity.
 
 ### Does the Stylus SDK for Rust support custom data structures?
 
-<p>
-  For in-memory usage, you should be able to use any implementation of custom data structures
-  without problems.
-</p>
+For in-memory usage, you should be able to use any implementation of custom data structures without problems.
 
-<p>
-  For storage usage, it might be a bit more complicated. Stylus uses the EVM storage system, so
-  you'll need to define the data structure on top of it. However, in the SDK there's a storage trait
-  that custom types can implement to back their collections with the EVM state trie. The SDK macros
-  are compatible with them too, although fundamentally it's still a global key-value system.
-</p>
+For storage usage, it might be a bit more complicated. Stylus uses the EVM storage system, so you'll need to define the data structure on top of it. However, in the SDK there's a storage trait that custom types can implement to back their collections with the EVM state trie. The SDK macros are compatible with them too, although fundamentally it's still a global key-value system.
 
-<p>
-  You can read more about it in the{' '}
-  <a href="https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#storage">
-    Stylus Rust SDK page
-  </a>
-  .
-</p>
+You can read more about it in the [Stylus Rust SDK page](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#storage).
 
-<p>
-  As an alternative solution, you can use{' '}
-  <a href="https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming">
-    entrypoint-style contracts
-  </a>{' '}
-  for your custom data structures.
-</p>
-
-<p>
-
-</p>
-
-<p>
-
-</p>
+As an alternative solution, you can use [entrypoint-style contracts](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) for your custom data structures.
 
 ### Why do I get an error "no library targets found in package" when trying to compile and old example?
 
-<p>
-  Some of the first Stylus examples were built and deployed using a previous version of{' '}
-  <a href="https://github.com/OffchainLabs/cargo-stylus">cargo-stylus</a> (<code>0.1.x</code>). In
-  that version, Stylus projects were structured as regular Rust binaries.
-</p>
+Some of the first Stylus examples were built and deployed using a previous version of [cargo-stylus](https://github.com/OffchainLabs/cargo-stylus) (`0.1.x`). In that version, Stylus projects were structured as regular Rust binaries.
 
-<p>
-  Since{' '}
-  <a href="https://github.com/OffchainLabs/cargo-stylus/releases/tag/v0.2.1">cargo-stylus v0.2.1</a>,
-  Stylus projects are structured as libraries, so when trying to compile old projects you might get an
-  error <code>no library targets found in package</code>.
-</p>
+Since [cargo-stylus v0.2.1](https://github.com/OffchainLabs/cargo-stylus/releases/tag/v0.2.1), Stylus projects are structured as libraries, so when trying to compile old projects you might get an error `no library targets found in package`.
 
-<p>
-  To solve this, it's usually enough to rename the <code>main.rs</code> file to a{' '}
-  <code>lib.rs</code> file.
-</p>
-
-<p>
-
-</p>
+To solve this, it's usually enough to rename the `main.rs` file to a `lib.rs` file.
 
 ### How can I generate the ABI of my Stylus contract?
 
-<p>
-  The{' '}
-  <a href="https://github.com/OffchainLabs/cargo-stylus/tree/main#exporting-solidity-abis">
-    cargo-stylus tool
-  </a>{' '}
-  has a command that allows you to export the ABI of your Stylus contract:{' '}
-  <code>cargo stylus export-abi</code>.
-</p>
+The [cargo-stylus tool](https://github.com/OffchainLabs/cargo-stylus/tree/main#exporting-solidity-abis) has a command that allows you to export the ABI of your Stylus contract: `cargo stylus export-abi`.
 
-<p>
-  If you're using the Stylus Rust SDK, you'll need to enable the export-abi feature in your
-  Cargo.toml file like so:
-</p>
+If you're using the Stylus Rust SDK, you'll need to enable the export-abi feature in your Cargo.toml file like so:
 
 ```rust
 [features]
 export-abi = ["stylus-sdk/export-abi"]
 ```
 
-<p>
-  You'll also need to have a <code>main.rs</code> file that selects that feature.
-</p>
+You'll also need to have a `main.rs` file that selects that feature.
 
-<p>
-  This is an example of a main.rs file that allows you to export the abi of the{' '}
-  <a href="https://github.com/OffchainLabs/stylus-hello-world">stylus-hello-world</a> example
-  project:
-</p>
+This is an example of a main.rs file that allows you to export the abi of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) example project:
 
 ```rust
 #![cfg_attr(not(feature = "export-abi"), no_main)]
@@ -194,7 +69,3 @@ fn main() {
     stylus_hello_world::main();
 }
 ```
-
-<p>
-
-</p>
