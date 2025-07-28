@@ -154,14 +154,46 @@ export class RedirectChecker {
   }
 
   /**
+   * Format JSON content using prettier with project configuration
+   */
+  private async formatJsonContent(content: string): Promise<string> {
+    try {
+      const prettier = require('prettier');
+      const options = await prettier.resolveConfig(process.cwd()) || {};
+      
+      return prettier.format(content, {
+        ...options,
+        parser: 'json',
+        filepath: this.vercelJsonPath,
+      });
+    } catch (error) {
+      // Fallback to basic JSON formatting if prettier fails
+      console.warn('⚠️ Prettier formatting failed, using basic JSON formatting:', error);
+      return JSON.stringify(JSON.parse(content), null, 2) + '\n';
+    }
+  }
+
+  /**
+   * Normalize file content by handling cross-platform line endings and trailing whitespace
+   */
+  private normalizeFileContent(content: string): string {
+    return content
+      .replace(/\r\n/g, '\n') // Convert CRLF to LF
+      .replace(/\r/g, '\n')   // Convert CR to LF  
+      .trim();                // Remove leading/trailing whitespace
+  }
+
+  /**
    * Load and parse the vercel.json configuration file
    */
-  private loadVercelConfig(): VercelConfig {
+  private async loadVercelConfig(): Promise<VercelConfig> {
     if (!existsSync(this.vercelJsonPath)) {
       if (this.mode === 'commit-hook') {
         const newConfig: VercelConfig = { redirects: [] };
         this.sortRedirects(newConfig.redirects);
-        writeFileSync(this.vercelJsonPath, JSON.stringify(newConfig, null, 2), 'utf8');
+        const rawContent = JSON.stringify(newConfig);
+        const formattedContent = await this.formatJsonContent(rawContent);
+        writeFileSync(this.vercelJsonPath, formattedContent, 'utf8');
         throw new Error(
           'vercel.json was created. Please review and stage the file before continuing.',
         );
@@ -190,10 +222,15 @@ export class RedirectChecker {
     // Sort the in-memory representation
     this.sortRedirects(config.redirects);
 
-    const newFileContent = JSON.stringify(config, null, 2);
+    const rawContent = JSON.stringify(config);
+    const newFileContent = await this.formatJsonContent(rawContent);
+
+    // Normalize both contents for comparison to handle cross-platform differences
+    const normalizedOriginal = this.normalizeFileContent(originalFileContent);
+    const normalizedNew = this.normalizeFileContent(newFileContent);
 
     // If in commit-hook mode and the content changed due to sorting or formatting
-    if (this.mode === 'commit-hook' && originalFileContent !== newFileContent) {
+    if (this.mode === 'commit-hook' && normalizedOriginal !== normalizedNew) {
       writeFileSync(this.vercelJsonPath, newFileContent, 'utf8');
       // Auto-stage the reformatted vercel.json to prevent commit loop
       try {
@@ -212,7 +249,7 @@ export class RedirectChecker {
     }
 
     // In CI mode, if the file was not sorted/formatted correctly, it's an error.
-    if (this.mode === 'ci' && originalFileContent !== newFileContent) {
+    if (this.mode === 'ci' && normalizedOriginal !== normalizedNew) {
       throw new Error(
         `vercel.json is not correctly sorted/formatted. Please run the pre-commit hook locally to fix and commit the changes.`,
       );
@@ -258,7 +295,7 @@ export class RedirectChecker {
   /**
    * Add a new redirect to the config
    */
-  private addRedirect(oldUrl: string, newUrl: string, config: VercelConfig): void {
+  private async addRedirect(oldUrl: string, newUrl: string, config: VercelConfig): Promise<void> {
     const normalizedOldUrl = this.normalizeUrl(oldUrl);
     const normalizedNewUrl = this.normalizeUrl(newUrl);
 
@@ -270,7 +307,9 @@ export class RedirectChecker {
         permanent: false,
       });
       this.sortRedirects(config.redirects); // Sort after adding a new redirect
-      writeFileSync(this.vercelJsonPath, JSON.stringify(config, null, 2), 'utf8');
+      const rawContent = JSON.stringify(config);
+      const formattedContent = await this.formatJsonContent(rawContent);
+      writeFileSync(this.vercelJsonPath, formattedContent, 'utf8');
     }
   }
 
@@ -297,7 +336,7 @@ export class RedirectChecker {
         }
       }
 
-      const config = this.loadVercelConfig();
+      const config = await this.loadVercelConfig();
       const movedFiles = this.getMovedFiles();
 
       if (movedFiles.length === 0) {
@@ -325,7 +364,7 @@ export class RedirectChecker {
           // Only add redirects in commit-hook mode
           if (this.mode === 'commit-hook') {
             const countBeforeAdd = config.redirects.length;
-            this.addRedirect(oldUrl, newUrl, config); // addRedirect might not add if old/new are same
+            await this.addRedirect(oldUrl, newUrl, config); // addRedirect might not add if old/new are same
             if (config.redirects.length > countBeforeAdd) {
               redirectsAdded = true;
             }
