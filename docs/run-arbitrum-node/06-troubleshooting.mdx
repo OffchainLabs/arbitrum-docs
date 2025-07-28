@@ -1,0 +1,450 @@
+---
+title: 'Troubleshooting: Run a node'
+author: symbolpunk
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Troubleshooting: Run a node
+
+The guidance displayed on this page will change based on your selected configuration:
+
+import MultidimensionalContentControlsPartial from '../partials/_multidimensional-content-controls-partial.mdx';
+
+<MultidimensionalContentControlsPartial />
+
+:::tip Thank you!
+
+At the end of this troubleshooting guide, you'll find a **Generate troubleshooting report** button. Clicking this button will generate a report that includes your selected configuration. You can include this report when asking for help.
+
+**Using this page to generate a troubleshooting report is helpful** because it gathers the information that we need in order to resolve your issue.
+
+:::
+
+### Step 1: Try the troubleshooting checklist
+
+If you're running into unexpected outputs or errors, the following checklist may help you independently resolve your issue.
+
+<div className="hide-tabs">
+  <div className="checklist">
+    <div className="task">
+      <div className="input-container">
+        <input id="tc-1" type="checkbox" />
+        <span className="done"></span>
+      </div>
+      <div className="guidance-container">
+        <label htmlFor="tc-1">1. Select an Operating system, Network, and Node type above</label>
+        <p>The guidance displayed on this page will change based on your selected configuration.</p>
+      </div>
+    </div>
+    <div className="task">
+      <div className="input-container">
+        <input id="tc-2" type="checkbox" />
+        <span className="done"></span>
+      </div>
+      <div className="guidance-container">
+        <label htmlFor="tc-2">2. Review the docs</label>
+        <Tabs
+          className="tabgroup-with-label node-type-tabgroup"
+          groupId="node-type"
+          defaultValue="full-node"
+          values={[
+            { label: 'Node type:', value: 'label' },
+            { label: 'Full node', value: 'full-node' },
+            { label: 'Archive node', value: 'archive-node' },
+            { label: 'Validator node', value: 'validator-node' },
+          ]}
+        >
+          <TabItem className="unclickable-element" value="label"></TabItem>
+          <TabItem value="full-node">
+            <Tabs
+              className="tabgroup-with-label network-tabgroup"
+              groupId="network"
+              defaultValue="arb-one-nitro"
+              values={[
+                { label: 'Network:', value: 'label' },
+                { label: 'Arbitrum One (Nitro)', value: 'arb-one-nitro' },
+                { label: 'Arbitrum One (Classic)', value: 'arb-one-classic' },
+                { label: 'Arbitrum Nova', value: 'arb-nova' },
+                { label: 'Arbitrum Sepolia', value: 'arb-sepolia' },
+                { label: 'Localhost', value: 'localhost' },
+              ]}
+            >
+              <TabItem className="unclickable-element" value="label"></TabItem>
+              <TabItem value="arb-one-nitro">
+                <p>
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
+                  may address your issue.
+                </p>
+              </TabItem>
+              <TabItem value="arb-one-classic">
+                <p>
+                  <a href="/run-arbitrum-node/more-types/run-classic-node">
+                    How to run a full node (Classic, pre-Nitro)
+                  </a>{' '}
+                  may address your issue.
+                </p>
+              </TabItem>
+              <TabItem value="arb-nova">
+                <p>
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
+                  may address your issue.
+                </p>
+              </TabItem>
+              <TabItem value="arb-sepolia">
+                <p>
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
+                  may address your issue.
+                </p>
+              </TabItem>
+              <TabItem value="localhost">
+                <p>
+                  The{' '}
+                  <a href="/run-arbitrum-node/run-local-dev-node">How to run a local dev node</a>{' '}
+                  may address your issue.
+                </p>
+              </TabItem>
+            </Tabs>
+          </TabItem>
+          <TabItem value="archive-node">
+            <p>
+              <a href="/run-arbitrum-node/more-types/run-archive-node">
+                How to run an archive node
+              </a>{' '}
+              may address your issue.
+            </p>
+          </TabItem>
+          <TabItem value="validator-node">
+            <p>
+              <a href="/run-arbitrum-node/more-types/run-validator-node">How to run a validator</a>{' '}
+              may address your issue.
+            </p>
+          </TabItem>
+        </Tabs>
+      </div>
+    </div>
+    <div className="task">
+      <div className="input-container">
+        <input id="tc-3" type="checkbox" />
+        <span className="done"></span>
+      </div>
+      <div className="guidance-container">
+        <label htmlFor="tc-3">3. Review the FAQ</label>
+        <p>
+          Answers to frequently asked questions can be found in{' '}
+          <a href="/node-running/faq">Frequently asked questions: Run a node</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+### Step 2: Look for your scenario
+
+Common troubleshooting scenarios and solutions are detailed below.
+
+You can check logs by different log types: info, warn, and error.
+
+<Tabs
+  className="tabgroup-with-label log-taggroup"
+  groupId="logs"
+  defaultValue="info"
+  values={[
+    { label: 'Logs type:', value: 'label' },
+    { label: 'Info', value: 'info' },
+    { label: 'Warn', value: 'warn' },
+    { label: 'Error', value: 'error' },
+  ]}
+>
+  <TabItem className="unclickable-element" value="label"></TabItem>
+  <TabItem value="info">
+    <table className="small-table" id="troubleshooting-table-info">
+      <tbody>
+        <tr>
+          <th style={{ minWidth: 180 + 'px' }}>Scenario</th>
+          <th>Solution</th>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>Unindex transactions</code>.
+          </td>
+          <td>
+            This is expected behavior. You'll see this when your node removes old{' '}
+            <code>txlookup</code> indices. This is emitted from the base Geth node, so you'd see the
+            same output from a mainnet Geth node.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>Head state missing, repairing</code>.
+          </td>
+          <td>
+            This is usually because your node shuts down ungracefully. In most cases, it will
+            recover in a few minutes, but if it not, you may have to re-sync your node. Remember to
+            shut down your node gracefully with the following command:{' '}
+            <code>docker stop —time=1800 $(docker ps -aq)</code>.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>Your local machine is running out of memory</td>
+          <td>
+            Nitro (and Geth) can consume a lot of memory depending on the request load. It's
+            possible that your machine may run out of memory when receiving tons of requests.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            Your Arbitrum node can’t connect to your parent chain node on{' '}
+            <code>localhost:8545</code>
+          </td>
+          <td>
+            This is often because of a Docker port configuration issue. See
+            https://stackoverflow.com/questions/43884981/unable-to-connect-localhost-in-docker.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You specified your snapshot file path via the <code>--init.url</code> parameter, but the
+            snapshot file isn't found.
+          </td>
+          <td>
+            This is usually because the snapshot file isn't mounted to your Docker container. Mount
+            it and change the file path to your Docker container’s mount point.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You get <code>403</code> errors from the feed URL.
+          </td>
+          <td>
+            This often happens when Cloudflare attempts to block botnets and other malicious actors
+            but accidentally blocks node runners.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>latest assertion not yet in our node</code>
+          </td>
+          <td>
+            This usually because your node hasn’t synced to the latest state, it’s a normal
+            behavior.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>"Post "xxx_url": context deadline exceeded"</code>
+          </td>
+          <td>
+            Please check your parent chain endpoint because there is something going wrong on that
+            endpoint; you can check it.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>Resuming state snapshot generation</code>
+          </td>
+          <td>
+            This is a normal behavior while the node is catching up to the tip of the chain; once a
+            node has been fully synced, "Resuming state snapshot generation" shouldn't be logged
+            unless it falls behind again.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </TabItem>
+  <TabItem value="warn">
+    <table className="small-table" id="troubleshooting-table-warn">
+      <tbody>
+        <tr>
+          <th style={{ minWidth: 180 + 'px' }}>Scenario</th>
+          <th>Solution</th>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see{' '}
+            <code>
+              `error reading inbox` err="sequencer batches out of order; after batch A got batch B”
+            </code>
+          </td>
+          <td>
+            This is because you get two discontinuous batches; this might be because of your parent
+            chain endpoint issues. You can change to another endpoint and set nitro `
+            --init.reorg-to-batch A`
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see{' '}
+            <code>
+              `error reading inbox` err="failed to get previous message for pos `x`: leveldb: not
+              found”
+            </code>
+          </td>
+          <td>
+            This is because your node db crashed and lost some messages. You can try to set
+            `--init.reorg-to-message-batch x-1`
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see{' '}
+            <code>`Failed to load snapshot` err="head doesn't match snapshot: have a, want b”</code>
+          </td>
+          <td>
+            This is usually because an ungraceful shutdown caused a corrupted database; try
+            restarting the node without a prune flag, and after your node goes back to normal, then
+            graceful shut it down and restart to prune it.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see{' '}
+            <code>
+              failed to get blobs: expected at least six blobs for slot `[slot_number]` but only got
+              0
+            </code>
+          </td>
+          <td>
+            This often happens when you connect to a beacon chain endpoint while the blob you are
+            querying is expired. To resolve this error, connect to a beacon endpoint that supports
+            historical blob data (see{' '}
+            <a href="/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers">
+              List of Ethereum beacon chain RPC providers
+            </a>
+            ).
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>P2P server will be useless, neither dialing nor listening</code>
+          </td>
+          <td>Arbitrum Nitro doesn’t need P2P mode, so you can ignore this log.</td>
+        </tr>
+      </tbody>
+    </table>
+  </TabItem>
+  <TabItem value="error">
+    <table className="small-table" id="troubleshooting-table-warn">
+      <tbody>
+        <tr>
+          <th style={{ minWidth: 180 + 'px' }}>Scenario</th>
+          <th>Solution</th>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>no contract code at given address</code>
+          </td>
+          <td>
+            Your parent chain node might not sync to the latest state, please wait after it finishes
+            syncing.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see{' '}
+            <code>
+              `staker: error checking latest staked` err="latest assertion of x: globalstate not in
+              chain: count a hash b expected c, sendroot d expected f"
+            </code>
+          </td>
+          <td>
+            Once it catches up, the node will check the state against the latest confirmed assertion
+            bonded onchain; if it doesn’t match, it will log this error. Usually, this is because of
+            db corruption, so you might need to re-sync the blockchain; using a snapshot might help:
+            https://snapshot-explorer.arbitrum.io/
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see{' '}
+            <code>
+              disabling L1 bound as batch posting message is close to the maximum delay
+              `blockNumber`
+            </code>
+            or <code>batch is within reorg resistance margin from layer 1 minimum block or timestamp bounds</code>
+          </td>
+          <td>
+            It indicates that there has been an issue with batch posting on the network. This could
+            occur if your batch poster didn't post a batch for an extended period. Common reasons
+            include the node being shut down inadvertently or the batch poster running out of funds,
+            leading to no new blocks being produced or posted by the batch poster. <br />
+            To resolve this, If re-org doesn’t matter, you can just start the batch poster with `--node.batch-poster.reorg-resistance-margin=0`
+            and `node.batch-poster.l1-block-bound` to ignore, If it does, you'd want to modify the time
+            bounds on the sequencer inbox to allow the sequencer to post a batch containing the transactions
+            with the old timestamp
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see{' '}
+            <code>
+              on-chain WASM module root did not match with any of the allowed WASM module roots
+            </code>
+          </td>
+          <td>
+            Usually, because you are running on an old node version, try to upgrade your node. Also,
+            you modify your node’s code; please refer to the continue set.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>error acting as staker</code>
+          </td>
+          <td>
+            In most cases, this error is caused by your parent chain endpoint's rate limit or other
+            issues, you can check your parent chain endpoint. If the error still persists, please
+            ask in our discord node-running [channel](https://discord.gg/arbitrum).
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </TabItem>
+</Tabs>
+
+<!--
+#### Troubleshooting your feed relay
+
+import FeedRelayTroubleshootingPartial from '@site/../arbitrum-docs/node-running/partials/_feed-relay-troubleshooting.md';
+
+<FeedRelayTroubleshootingPartial />
+-->
+
+### Step 3: Generate a troubleshooting report
+
+1.  Complete the above troubleshooting checklist.
+2.  Fill in the below form.
+3.  Click **Generate troubleshooting report**.
+4.  Copy and paste the **generated report text** when asking for support on [Discord](https://discord.gg/ZpZuw7p) or any other support channel.
+
+<br />
+
+import { GenerateTroubleshootingReportWidget } from '@site/src/components/GenerateTroubleshootingReportWidget.js';
+
+<GenerateTroubleshootingReportWidget />
+
+<div className="troubleshooting-report-area">
+  <p>
+    Node startup command (make sure to remove any sensitive information like, i.e., private keys)
+  </p>
+  <textarea
+    id="vn-cmd"
+    rows="3"
+    placeholder='Paste here the command you use to run your node: "docker run ..."'
+  ></textarea>
+  <p>Unexpected output</p>
+  <span>
+    <strong>Tip:</strong> Paste the ~100 lines of output <strong>before and including</strong> the
+    unexpected output you're asking about. You can use the following command to get the logs:{' '}
+  </span>
+  <code>docker logs --tail 100 YOUR_CONTAINER_ID</code>
+  <textarea id="output" rows="3" placeholder="Paste your unexpected output here..."></textarea>
+  <a id="generate-report" className="generate-report">
+    Generate troubleshooting report
+  </a>
+  <div id="generated-report" className="generated-report">
+    Complete the checklist above before generating...
+  </div>
+</div>
+
+<!-- todo: gpt-n + langchain + pinecone -->
