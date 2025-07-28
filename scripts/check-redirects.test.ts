@@ -124,7 +124,16 @@ describe('RedirectChecker', () => {
         mode: 'ci',
       });
 
-      writeFileSync(VERCEL_JSON_PATH, JSON.stringify({ redirects: [] }, null, 2));
+      // Create properly formatted vercel.json using prettier
+      const prettier = require('prettier');
+      const options = await prettier.resolveConfig(process.cwd()) || {};
+      const formattedContent = prettier.format(JSON.stringify({ redirects: [] }), {
+        ...options,
+        parser: 'json',
+        filepath: VERCEL_JSON_PATH,
+      });
+      writeFileSync(VERCEL_JSON_PATH, formattedContent);
+      
       const result = await checker.check();
 
       expect(result.hasMissingRedirects).toBe(true);
@@ -472,6 +481,66 @@ describe('RedirectChecker', () => {
       const result = await checker.check();
       expect(result.error).toContain('Error parsing');
       expect(result.error).toContain('Please fix the JSON format and try again.');
+    });
+
+    it('should handle cross-platform line endings and trailing whitespace', async () => {
+      const redirects = [
+        {
+          source: '/(zebra/?)',
+          destination: '/(zoo/?)',
+          permanent: false,
+        },
+        {
+          source: '/(apple/?)',
+          destination: '/(fruit/?)',
+          permanent: false,
+        },
+      ];
+
+      // Create vercel.json files with different line ending styles but in wrong order (to trigger formatting)
+      const testCases = [
+        {
+          name: 'CRLF line endings with trailing spaces',
+          content: JSON.stringify({ redirects }, null, 2).replace(/\n/g, '\r\n') + '   \r\n',
+        },
+        {
+          name: 'LF line endings with trailing spaces',
+          content: JSON.stringify({ redirects }, null, 2) + '   \n',
+        },
+        {
+          name: 'CR line endings with trailing spaces',
+          content: JSON.stringify({ redirects }, null, 2).replace(/\n/g, '\r') + '   \r',
+        },
+        {
+          name: 'mixed line endings with various trailing whitespace',
+          content: JSON.stringify({ redirects }, null, 2).replace(/\n/g, '\r\n') + '\t  \n   ',
+        },
+      ];
+
+      for (const testCase of testCases) {
+        // Write file with problematic formatting (unsorted to trigger reformatting)
+        writeFileSync(VERCEL_JSON_PATH, testCase.content);
+        execSync('git add vercel.json', { cwd: TEST_DIR });
+        execSync(`git commit -m "Add vercel.json with ${testCase.name}"`, { cwd: TEST_DIR });
+
+        const checker = new RedirectChecker({
+          vercelJsonPath: VERCEL_JSON_PATH,
+          mode: 'commit-hook',
+        });
+
+        const result = await checker.check();
+        expect(result.hasMissingRedirects).toBe(false);
+        expect(result.error).toBeUndefined();
+
+        // Verify the file content was normalized properly after auto-formatting 
+        const normalizedContent = readFileSync(VERCEL_JSON_PATH, 'utf8');
+        // Prettier formats the JSON, so we just need to verify it's properly formatted and sorted
+        const parsedContent = JSON.parse(normalizedContent);
+        expect(parsedContent.redirects).toEqual([redirects[1], redirects[0]]); // Should be sorted
+        expect(normalizedContent.endsWith('\n')).toBe(true);
+        expect(normalizedContent.includes('\r')).toBe(false);
+        expect(/\s+$/.test(normalizedContent.replace(/\n$/, ''))).toBe(false); // No trailing spaces except final newline
+      }
     });
   });
 
