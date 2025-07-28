@@ -19,6 +19,8 @@ The following are the only exceptions:
 ```shell
 git clone git@github.com:OffchainLabs/arbitrum-docs.git
 
+cd arbitrum-docs
+
 git submodule update --init --recursive
 ```
 
