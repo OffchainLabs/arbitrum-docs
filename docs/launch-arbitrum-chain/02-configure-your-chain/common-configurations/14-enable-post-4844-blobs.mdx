@@ -1,0 +1,111 @@
+---
+title: 'Enabling blob transactions for Arbitrum batch poster'
+description: 'How to configure your Arbitrum node to post EIP-4844 blob transactions to the parent chain'
+author: Jason Wan
+sme: Jason Wan
+content_type: how-to
+user_story: 'As an Arbitrum chain operator, I want to enable EIP-4844 blob transactions for my batch poster so I can reduce data availability costs.'
+---
+
+# Enabling blob transactions for Arbitrum batch poster
+
+This guide explains how to configure your Arbitrum node to post EIP-4844 blob transactions to the parent chain, which can significantly reduce data availability costs.
+
+## Prerequisites
+
+Before enabling blob transactions, verify that your setup meets these requirements:
+
+### 1. Chain configuration
+
+- Your Arbitrum chain must be running in **Rollup mode**
+
+### 2. Parent chain compatibility
+
+Your parent chain (typically Ethereum mainnet or a testnet) must support **EIP-4844**. You can verify this by checking that recent block headers contain:
+
+- `ExcessBlobGas` field
+- `BlobGasUsed` field
+
+### 3. ArbOS version
+
+Your ArbOS version must be **20 or higher**. To check your current version:
+
+**Method 1: Smart contract call**
+Call the `arbOSVersion()` function on the ArbSys precompile contract:
+
+- Contract address: `0x0000000000000000000000000000000000000064`
+- Function: `arbOSVersion()` returns `uint256`
+- You can call this using any Ethereum client or block explorer on your Arbitrum chain
+
+**Method 2: Using `cast` (if you have Foundry installed)**
+
+```shell
+cast call 0x0000000000000000000000000000000000000064 "arbOSVersion()" --rpc-url YOUR_ARBITRUM_RPC_URL
+```
+
+If your version is below 20, upgrade by following the [ArbOS upgrade guide](13-arbos-upgrade.mdx).
+
+## Configuration
+
+To enable blob transaction posting, add the following configuration to your node:
+
+```json
+{
+  "node": {
+    "batch-poster": {
+      "data-poster": {
+        "post-4844-blobs": true
+      },
+      "post-4844-blobs": true
+    }
+  }
+}
+```
+
+After updating your configuration:
+
+1. Save the configuration file
+2. Restart your Arbitrum node
+3. Monitor the logs to confirm blob posting is active
+
+## Verification
+
+Once restarted, you can verify that blob transactions are being posted successfully by monitoring your node logs.
+
+### Log messages to look for
+
+When a blob transaction is successfully posted, you'll see a log entry similar to:
+
+```shell
+INFO [05-23|00:49:16.160] BatchPoster: batch sent  sequenceNumber=6 from=24 to=28 prevDelayed=13 currentDelayed=14 totalSegments=9
+numBlobs=1
+```
+
+**Key indicator**: The `numBlobs` field shows the number of blobs included in the transaction:
+
+- `numBlobs=0`: Traditional calldata transaction was posted
+- `numBlobs>0`: Blob transaction was successfully posted (in the example above, 1 blob was sent)
+
+## Troubleshooting
+
+### Why is my node still posting calldata instead of blobs?
+
+Your node may continue using calldata in these scenarios:
+
+1. **Cost optimization**: When blob gas prices are high, calldata posting may be more economical, but you can set the `--node.batch-poster.ignore-blob-price` flag to `true` to force the batch poster to use blobs.
+2. **Batch Type Switching Protection**: After a non-blob transaction is posted, the next 16 transactions will also use calldata to prevent frequent switching
+
+Check your node logs for blob-related error messages and verify that your parent chain is accessible and fully synced.
+
+## Optional parameters
+
+You can also set the following optional parameters to control blob posting behavior:
+
+| Flag                                                        | Description                                                                                                                                                                                                                |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.ignore-blob-price`                     | Boolean. Default: `false`. If the parent chain supports `EIP-4844` blobs and `ignore-blob-price` is set to `true`, the batch poster will use `EIP-4844` blobs even if using calldata is cheaper. Can be `true` or `false`. |
+| `--parent-chain.blob-client.authorization`                  | String. Default: `""`. Value to send with the HTTP Authorization: header for Beacon REST requests, must include both scheme and scheme parameters                                                                          |
+| `--parent-chain.blob-client.secondary-beacon-url`           | String. Default: `""`. Value to send with the HTTP Authorization: header for Beacon REST requests, must include both scheme and scheme parameters                                                                          |
+| `--node.batch-poster.data-poster.blob-tx-replacement-times` | durationSlice. Default: `[5m0s,10m0s,30m0s,1h0m0s,4h0m0s,8h0m0s,16h0m0s,22h0m0s]`. comma-separated list of durations since first posting a blob transaction to attempt a replace-by-fee                                    |
+| `--node.batch-poster.data-poster.max-blob-tx-tip-cap-gwei`  | float. Default: `1`. the maximum tip cap to post `EIP-4844` blob-carrying transactions at                                                                                                                                  |
+| `--node.batch-poster.data-poster.min-blob-tx-tip-cap-gwei`  | float. Default: `1`. the minimum tip cap to post `EIP-4844` blob-carrying transactions at                                                                                                                                  |
