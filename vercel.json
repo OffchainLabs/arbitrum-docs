@@ -1442,8 +1442,6 @@
       "destination": "/(how-arbitrum-works/timeboost/troubleshoot-timeboost/?)",
       "permanent": false
     },
-    { "source": "/(sdk-docs/?)", "destination": "/sdk/introduction", "permanent": false },
-    { "source": "/(sdk-docs/?)", "destination": "/sdk/introduction", "permanent": false },
     {
       "source": "/(sdk-docs/assetBridger/?)",
       "destination": "/sdk/reference/assetBridger/assetBridger",
@@ -1569,7 +1567,6 @@
       "destination": "/sdk/reference/utils/types",
       "permanent": false
     },
-    { "source": "/(sdk/?)", "destination": "/sdk/introduction", "permanent": false },
     {
       "source": "/(sdk/assetBridger_erc20Bridger/?)",
       "destination": "/sdk/reference/assetBridger/erc20Bridger",
@@ -1631,6 +1628,7 @@
       "destination": "/sdk/reference/inbox/inbox",
       "permanent": false
     },
+    { "source": "/(sdk/introduction?)", "destination": "/sdk/", "permanent": false },
     {
       "source": "/(sdk/message_L1ToL2Message/?)",
       "destination": "/sdk/reference/message/ParentToChildMessage",
