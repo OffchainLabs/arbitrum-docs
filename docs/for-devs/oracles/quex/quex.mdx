@@ -1,0 +1,97 @@
+---
+id: 'quex'
+title: 'Quex'
+sidebar_label: 'Quex'
+description: 'Learn how to make verifiable HTTP requests from your Arbitrum dApp'
+author: catena2w
+sme: catena2w
+user_story: As an Arbitrum developer, I want to learn how to use oracles in my dApp.
+content_type: get-started
+---
+
+:::warning
+
+Quex contracts are currently undergoing security audits and infrastructure security improvements. Before using Quex oracles in production dApps, please reach out via [on Discord](https://discord.com/invite/NsuE32xHvj). Quex will be happy to assist you with the integration and, if needed, set up a dedicated data oracle pools if there is a need.
+
+:::
+
+[Quex](https://quex.tech/) is an oracle protocol designed to securely deliver verifiable offchain data to onchain smart contracts using confidential computing proofs. Quex oracles enable dApps on Arbitrum to reliably and securely access real-world data, empowering developers to build advanced financial applications, parametric tokens, prediction markets, and more.
+
+Unlike traditional oracles, Quex allows developers to securely make verifiable API calls to virtually any offchain data source —– including private APIs protected by credentials. This means you're not limited to predefined data feeds and can securely access the entire internet.
+
+### Querying the API endpoint through Quex
+
+Here's an example of how to use Quex to securely fetch the TVL data for the AAVE protocol from DefiLlama's [API endpoint](https://api.llama.fi/tvl/aave). This example will also include basic post-processing to showcase Quex's capabilities for verifiable offchain computations. We'll build our example using [Foundry](https://book.getfoundry.sh) (Forge), but feel free to use your preferred tools.
+
+Quex provides a package with convenient libraries that simplify making requests and verifying responses. First, install this package in your project:
+
+```bash
+forge install quex-tech/quex-v1-interfaces
+```
+
+Here's a complete Solidity example demonstrating how to use Quex for verifiable API calls within an Arbitrum smart contract:
+
+```solidity
+import "quex-v1-interfaces/src/libraries/QuexRequestManager.sol";
+
+contract ApiCallConsumer is QuexRequestManager {
+    /**
+     * Network: Arbitrum One
+     * Quex Core: 0xD8a37e96117816D43949e72B90F73061A868b387
+     * Request Oracle Pool: 0x957E16D5bfa78799d79b86bBb84b3Ca34D986439
+     */
+    constructor(address _coreAddress, address _poolAddress) QuexRequestManager(_coreAddress){
+        setUpFlow(quexCore, oraclePool);
+    }
+
+    /**
+     * @notice Creates a new flow to fetch TVL data from the DeFi Llama API for Aave, multiplies it by 1e18,
+     * and rounds to the nearest integer.
+     */
+    function setUpFlow(address quexCore, address oraclePool) private onlyOwner {
+        FlowBuilder.FlowConfig memory config = FlowBuilder.create(quexCore, oraclePool, "api.llama.fi", "/tvl/aave");
+        config = config.withFilter(". * 1000000000000000000 | round");
+        config = config.withSchema("uint256");
+        config = config.withCallback(address(this), this.processResponse.selector);
+        registerFlow(config);
+    }
+
+    /**
+     * Verify proofs and processes a response from Request Oracle Pool
+     */
+    function processResponse(uint256 receivedRequestId, DataItem memory response, IdType idType)
+    external verifyResponse(receivedRequestId, idType)
+    {
+        uint256 lastTVL = abi.decode(response.value, (uint256));
+    }
+}
+```
+
+The most interesting part here is the `setUpFlow` function. It relies on two contracts, Core and the HTTP oracle pool, that are already [deployed on Arbitrum](https://docs.quex.tech/general-information/addresses). This function specifies the host (`api.llama.fi`) and path (`/tvl/aave`) for future requests that the oracle will perform upon request.
+
+Most APIs return JSON responses, which aren't very convenient to process directly in Solidity. To extract necessary data, Quex oracles support response post-processing: a script written in the [JQ language](https://docs.quex.tech/developers/https_pool/jq_subset) which is applied before passing the data onchain. Our example script defined in `config.withFilter(". * 1000000000000000000 | round");` multiplies the response by `1e18` and rounds it to the nearest integer. Since Quex supports operations with complex response structures, we must define a schema for the returned result. In our example, `config.withSchema("uint256");` specifies the return type as a simple numeric value.
+
+As we've mentioned, Quex is a pull oracle operating in a request-response model. Thanks to the efficient confidential computing security model, proof generation is extremely fast, and you can expect responses with proofs delivered in the next block. However, because this is still an asynchronous operation, we must define a callback, a function called once the response is delivered. This is done in the line `config.withCallback(address(this), this.processResponse.selector);`, specifying that the contract's own `processResponse` function will be invoked.
+
+### Making requests
+
+Quex supports both offchain and onchain initiated data [delivery modes](https://docs.quex.tech/general-information/data_delivery). This example relies on the on-chain mechanism, meaning that data requests must be initiated directly from your smart contract. To request data, simply call the built-in `request()` method, which triggers the entire process. Note that this method is payable, as you need to attach enough funds to cover the callback gas fees.
+
+Once the response is generated, it is passed to the `processResponse` method we've specified as a callback. The response arrives with confidential computing proofs, preventing any data manipulation. However, by the time the data reaches your contract, these proofs are already verified within the Quex core. Still, calling `verifyResponse(receivedRequestId, idType)` remains essential to ensure that the response originates from the correct Quex core address and corresponds exactly to the original request. After that, you only need to unpack the data according to the schema you've defined:
+
+```solidity
+uint256 lastTVL = abi.decode(response.value, (uint256));
+```
+
+Tada! You now have your response to the defined API call –– with complete certainty about its authenticity and security!
+
+## Connect with us!
+
+Still looking for answers? We got them! Check out all the ways you can reach us:
+
+- Visit us at [quex.tech](https://quex.tech)
+- Read our [Docs](https://docs.quex.tech)
+- Explore our [examples repository](https://github.com/quex-tech/quex-v1-examples)
+- Chat with us on [Telegram](https://t.me/quex_tech)
+- Follow us on [X](https://x.com/quex_tech)
+- Join our [Discord](https://discord.com/invite/NsuE32xHvj)
