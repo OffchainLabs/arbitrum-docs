@@ -61,7 +61,7 @@ Instructions on how to set up a local Arbitrum test node can be found [in the Ni
 
 ## Understanding Stylus constructors
 
-Stylus constructors provide an atomic way to deploy, activate, and initialize a contract in a single transaction. Without a constructor, your contract's storage might be accessed before your initialization logic runs, which can lead to unexpected behavior.
+Stylus constructors provide an atomic way to deploy, activate, and initialize a contract in a single transaction. If your contract lacks a constructor, it may allow access to the contract's storage before the initialization logic runs, leading to unexpected behavior.
 
 <VanillaAdmonition type="info" title="Constructors and composition">
   Stylus uses trait-based composition instead of traditional inheritance. When building contracts
