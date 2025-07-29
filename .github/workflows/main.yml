@@ -8,37 +8,40 @@ on:
 
 jobs:
   install:
-    name: "Install"
+    name: 'Install'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
 
       - name: Install node_modules
-        # This action does not work very well with subdirectories out of the box,
-        # but we can use this workaround to make it work.
-        # Note that this is highly dependent on the version of the action used
-        uses: OffchainLabs/actions/node-modules/install@35a1f8c3f3ad803e1fd9b81b94d063a4fc90a030
+        uses: OffchainLabs/actions/node-modules/install@main
         with:
-          install-command: cd website && yarn install --frozen-lockfile
-          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          install-command: yarn install --frozen-lockfile
+          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
   check-formatting:
-    name: "Check Formatting"
+    name: 'Check Formatting'
     runs-on: ubuntu-latest
     needs: install
     steps:
       - name: Checkout files
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Restore node_modules
-        # This action does not work very well with subdirectories out of the box,
-        # but we can use this workaround to make it work.
-        # Note that this is highly dependent on the version of the action used
-        uses: OffchainLabs/actions/node-modules/restore@35a1f8c3f3ad803e1fd9b81b94d063a4fc90a030
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          node-version: '22.x'
+
+      - name: Install node_modules
+        uses: OffchainLabs/actions/node-modules/install@main
+        with:
+          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Check formatting with Prettier
-        working-directory: ./website
         run: yarn format:check
