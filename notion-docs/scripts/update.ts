@@ -242,13 +242,22 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
 // Renderer for FAQs structured data in JSON
 const renderJSONFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
   const printItem = (faq: RenderedKnowledgeItem) => {
-    const faqQuestion = escapeForJSON(faq.title)
+    const faqQuestion = escapeForJSON(faq.titleforSort)
     const faqAnswer = escapeForJSON(faq.text)
     const faqKey = escapeForJSON(faq.key)
     return `{"question": "${faqQuestion}","answer": "${faqAnswer}","key": "${faqKey}"}`
   }
 
   return '[\n' + faqs.map(printItem).join(',\n') + '\n]'
+}
+
+// Renderer for FAQ questions and answers
+const renderFAQs = (faqs: RenderedKnowledgeItem[]) => {
+  const printItem = (faq: RenderedKnowledgeItem) => {
+    return `### ${faq.title}` + '\n' + `${faq.text}`
+  }
+
+  return faqs.map(printItem).join('\n')
 }
 
 async function generateFiles() {
@@ -274,46 +283,73 @@ async function generateFiles() {
   const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
   addItems(validGlossaryTerms, '/intro/glossary')
   const glossaryJSON = renderGlossaryJSON(validGlossaryTerms, linkableTerms)
-  fs.writeFileSync('../website/static/glossary.json', glossaryJSON)
+  fs.writeFileSync('static/glossary.json', glossaryJSON)
   const definitionsHTML = `\n\n${renderGlossary(
     validGlossaryTerms,
     linkableTerms
   )}\n`
-  fs.writeFileSync(
-    '../arbitrum-docs/partials/_glossary-partial.md',
-    definitionsHTML
-  )
+  fs.writeFileSync('../docs/partials/_glossary-partial.mdx', definitionsHTML)
 
   // FAQs
   // ----
+  // Get started
   fs.writeFileSync(
-    '../website/static/get-started-faqs.json',
+    'static/get-started-faqs.json',
     renderJSONFAQStructuredData(cmsContents.getStartedFAQs)
   )
-
   fs.writeFileSync(
-    '../website/static/node-running-faqs.json',
+    '../docs/partials/_troubleshooting-users-partial.mdx',
+    renderFAQs(cmsContents.getStartedFAQs)
+  )
+
+  // Node running
+  fs.writeFileSync(
+    'static/node-running-faqs.json',
     renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
   )
-
   fs.writeFileSync(
-    '../website/static/building-faqs.json',
+    '../docs/partials/_troubleshooting-nodes-partial.mdx',
+    renderFAQs(cmsContents.nodeRunningFAQs)
+  )
+
+  // Building
+  fs.writeFileSync(
+    'static/building-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingFAQs)
   )
-
   fs.writeFileSync(
-    '../website/static/building-stylus-faqs.json',
+    '../docs/partials/_troubleshooting-building-partial.mdx',
+    renderFAQs(cmsContents.buildingFAQs)
+  )
+
+  // Stylus
+  fs.writeFileSync(
+    'static/building-stylus-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingStylusFAQs)
   )
-
   fs.writeFileSync(
-    '../website/static/building-orbit-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.orbitFAQs)
+    '../docs/partials/_troubleshooting-stylus-partial.mdx',
+    renderFAQs(cmsContents.buildingStylusFAQs)
   )
 
+  // Orbit
   fs.writeFileSync(
-    '../website/static/bridging-faqs.json',
+    'static/building-orbit-faqs.json',
+    renderJSONFAQStructuredData(cmsContents.orbitFAQs)
+  )
+  fs.writeFileSync(
+    '../docs/partials/_troubleshooting-arbitrum-chain-partial.mdx',
+    renderFAQs(cmsContents.orbitFAQs)
+  )
+
+  // Bridging
+  fs.writeFileSync(
+    'static/bridging-faqs.json',
     renderJSONFAQStructuredData(cmsContents.bridgingFAQs)
+  )
+  fs.writeFileSync(
+    '../docs/partials/_troubleshooting-bridging-partial.mdx',
+    renderFAQs(cmsContents.bridgingFAQs)
   )
 }
 

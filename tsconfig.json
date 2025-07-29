@@ -1,0 +1,17 @@
+{
+  // This file is not used in compilation. It is here just for a nice editor experience.
+  "extends": "@tsconfig/docusaurus/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": ["ESNext", "DOM"],
+    "noEmit": true,
+    "types": ["node", "vitest/globals"],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}

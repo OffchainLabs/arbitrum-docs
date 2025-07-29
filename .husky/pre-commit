@@ -1,0 +1,66 @@
+#!/bin/sh
+
+# Function to handle errors
+handle_error() {
+  echo "❌ Error: $1"
+  exit 1
+}
+
+# Function to log success messages
+log_success() {
+  echo "✅ $1"
+}
+
+# Function to log info messages
+log_info() {
+  echo "💡 $1"
+}
+
+# Function to run yarn command and check exit code
+run_yarn_command() {
+  local command=$1
+  local error_message=$2
+
+  yarn $command
+  local exit_code=$?
+
+  if [ $exit_code -ne 0 ]; then
+    handle_error "$error_message"
+  fi
+}
+
+# Check if globalVars.js has staged changes
+if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
+  log_info "Detected changes in globalVars.js"
+
+  # Run variable references update
+  log_info "Updating variable references..."
+  run_yarn_command "update-variable-refs" "Failed to update variable references"
+
+  # Run the globalVars update checker script
+  run_yarn_command "tsx scripts/check-globalvars-updates.ts" "globalVars update check failed"
+
+  log_info "Running precompiles reference table generator..."
+  run_yarn_command "generate-precompiles-ref-tables" "Failed to generate precompiles reference tables"
+
+  log_info "Running formatter..."
+  run_yarn_command "format" "Formatting failed"
+fi
+
+# Check redirects
+log_info "Checking redirects..."
+run_yarn_command "check-redirects" "The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
+
+# Final formatting pass
+log_info "Running final formatting pass..."
+run_yarn_command "format" "Final formatting failed"
+
+# Auto-stage any files that were reformatted during the pre-commit process
+if [ -n "$(git diff --name-only)" ]; then
+  log_info "Auto-staging files modified by formatters..."
+  git add $(git diff --name-only)
+  log_success "Auto-staged formatted files"
+fi
+
+log_success "Pre-commit tasks completed"
+log_info "Note: To bypass hooks, use git commit --no-verify"
