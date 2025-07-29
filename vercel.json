@@ -1567,7 +1567,6 @@
       "destination": "/sdk/reference/utils/types",
       "permanent": false
     },
-    { "source": "/(sdk/?)", "destination": "/sdk/", "permanent": false },
     {
       "source": "/(sdk/assetBridger_erc20Bridger/?)",
       "destination": "/sdk/reference/assetBridger/erc20Bridger",
