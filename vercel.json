@@ -1,14 +1,10 @@
 {
-  "buildCommand": "cd website && yarn build",
-  "outputDirectory": "website/build",
-  "installCommand": "cd website && yarn install",
+  "buildCommand": "yarn build",
+  "outputDirectory": "build",
+  "installCommand": "bash scripts/init-submodules.sh && yarn install",
   "framework": "docusaurus-2",
   "redirects": [
-    {
-      "source": "/",
-      "destination": "/welcome/get-started",
-      "permanent": false
-    },
+    { "source": "/", "destination": "/welcome/get-started", "permanent": false },
     {
       "source": "/(/build-decentralized-apps/oracles/how-to-use-oracles/?)",
       "destination": "/build-decentralized-apps/oracles/overview-oracles",
@@ -1234,16 +1230,8 @@
       "destination": "/launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain",
       "permanent": false
     },
-    {
-      "source": "/(learn-more/?)",
-      "destination": "/learn-more/faq",
-      "permanent": false
-    },
-    {
-      "source": "/(learnmore/faq/?)",
-      "destination": "/learn-more/faq",
-      "permanent": false
-    },
+    { "source": "/(learn-more/?)", "destination": "/learn-more/faq", "permanent": false },
+    { "source": "/(learnmore/faq/?)", "destination": "/learn-more/faq", "permanent": false },
     {
       "source": "/(mainnet-beta/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
@@ -1454,16 +1442,8 @@
       "destination": "/(how-arbitrum-works/timeboost/troubleshoot-timeboost/?)",
       "permanent": false
     },
-    {
-      "source": "/(sdk-docs/?)",
-      "destination": "/sdk/introduction",
-      "permanent": false
-    },
-    {
-      "source": "/(sdk-docs/?)",
-      "destination": "/sdk/introduction",
-      "permanent": false
-    },
+    { "source": "/(sdk-docs/?)", "destination": "/sdk/introduction", "permanent": false },
+    { "source": "/(sdk-docs/?)", "destination": "/sdk/introduction", "permanent": false },
     {
       "source": "/(sdk-docs/assetBridger/?)",
       "destination": "/sdk/reference/assetBridger/assetBridger",
@@ -1589,11 +1569,7 @@
       "destination": "/sdk/reference/utils/types",
       "permanent": false
     },
-    {
-      "source": "/(sdk/?)",
-      "destination": "/sdk/introduction",
-      "permanent": false
-    },
+    { "source": "/(sdk/?)", "destination": "/sdk/introduction", "permanent": false },
     {
       "source": "/(sdk/assetBridger_erc20Bridger/?)",
       "destination": "/sdk/reference/assetBridger/erc20Bridger",
@@ -1649,11 +1625,7 @@
       "destination": "/sdk/reference/dataEntities/transactionRequest",
       "permanent": false
     },
-    {
-      "source": "/(sdk/inbox/?)",
-      "destination": "/sdk/inbox/inbox",
-      "permanent": false
-    },
+    { "source": "/(sdk/inbox/?)", "destination": "/sdk/inbox/inbox", "permanent": false },
     {
       "source": "/(sdk/inbox_inbox/?)",
       "destination": "/sdk/reference/inbox/inbox",
@@ -1799,11 +1771,7 @@
       "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/variables",
       "permanent": false
     },
-    {
-      "source": "/(stylus/?)",
-      "destination": "/stylus/gentle-introduction",
-      "permanent": false
-    },
+    { "source": "/(stylus/?)", "destination": "/stylus/gentle-introduction", "permanent": false },
     {
       "source": "/(stylus/concepts/stylus-cache-manager/?)",
       "destination": "/stylus/concepts/how-it-works",
@@ -1919,11 +1887,7 @@
       "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
-    {
-      "source": "/docs/glossary",
-      "destination": "/intro/glossary",
-      "permanent": false
-    },
+    { "source": "/docs/glossary", "destination": "/intro/glossary", "permanent": false },
     {
       "source": "/docs/installation",
       "destination": "/run-arbitrum-node/run-full-node",
@@ -1954,11 +1918,7 @@
       "destination": "/for-devs/concepts/public-chains",
       "permanent": false
     },
-    {
-      "source": "/docs/rollup_basics",
-      "destination": "/intro",
-      "permanent": false
-    },
+    { "source": "/docs/rollup_basics", "destination": "/intro", "permanent": false },
     {
       "source": "/docs/running_goerli_nitro_node",
       "destination": "/run-arbitrum-node/run-full-node",
@@ -2019,46 +1979,18 @@
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
     },
-    {
-      "source": "/faqs/faqs-index",
-      "destination": "/learn-more/faq",
-      "permanent": false
-    },
-    {
-      "source": "/faqs/gas-faqs",
-      "destination": "/learn-more/faq",
-      "permanent": false
-    },
-    {
-      "source": "/faqs/how-fees",
-      "destination": "/faqs/gas-faqs",
-      "permanent": false
-    },
-    {
-      "source": "/faqs/misc-faqs",
-      "destination": "/learn-more/faq",
-      "permanent": false
-    },
-    {
-      "source": "/faqs/nodes-faqs",
-      "destination": "/node-running/faq",
-      "permanent": false
-    },
-    {
-      "source": "/faqs/protocol-faqs",
-      "destination": "/learn-more/faq",
-      "permanent": false
-    },
+    { "source": "/faqs/faqs-index", "destination": "/learn-more/faq", "permanent": false },
+    { "source": "/faqs/gas-faqs", "destination": "/learn-more/faq", "permanent": false },
+    { "source": "/faqs/how-fees", "destination": "/faqs/gas-faqs", "permanent": false },
+    { "source": "/faqs/misc-faqs", "destination": "/learn-more/faq", "permanent": false },
+    { "source": "/faqs/nodes-faqs", "destination": "/node-running/faq", "permanent": false },
+    { "source": "/faqs/protocol-faqs", "destination": "/learn-more/faq", "permanent": false },
     {
       "source": "/faqs/seq-or-val",
       "destination": "/faqs/protocol-faqs#q-seq-vs-val",
       "permanent": false
     },
-    {
-      "source": "/faqs/the-merge",
-      "destination": "/welcome/get-started",
-      "permanent": false
-    },
+    { "source": "/faqs/the-merge", "destination": "/welcome/get-started", "permanent": false },
     {
       "source": "/faqs/tooling-faqs",
       "destination": "/for-devs/troubleshooting-building",
@@ -2069,11 +2001,7 @@
       "destination": "/faqs/protocol-faqs#q-dispute-reorg",
       "permanent": false
     },
-    {
-      "source": "/faqs/x-chain-faqs",
-      "destination": "/learn-more/faq",
-      "permanent": false
-    },
+    { "source": "/faqs/x-chain-faqs", "destination": "/learn-more/faq", "permanent": false },
     {
       "source": "/for-devs/dev-tools-and-resources/overview",
       "destination": "/build-decentralized-apps/reference/node-providers",
