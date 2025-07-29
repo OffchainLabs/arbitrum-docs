@@ -1,5 +1,38 @@
 .vscode
-arbitrum-docs/sdk
-arbitrum-docs/stylus-by-example
+
 .vercel
 .DS_Store
+node_modules/
+
+# Dependencies
+node_modules
+
+# Production
+build
+
+# Generated files
+.docusaurus
+.cache-loader
+
+# Generated docs
+docs/sdk/
+!docs/sdk/index.mdx
+!docs/sdk/migrate.mdx
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# yarn cache
+.yarn
+
+/i18n/*/docusaurus-plugin-content-docs/current/*
+
+sdk-sidebar.js
