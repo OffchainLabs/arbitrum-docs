@@ -1,4 +1,3 @@
-
 Thank you for considering contributing to the Arbitrum documentation! We're excited to have you on board.
 
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
@@ -36,16 +35,15 @@ If you'd like to request an update or share a suggestion related to an **existin
 
 If you would like to participate in translating the Arbitrum docs, you can:
 
-1. Check if `/website/i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
+1. Check if `i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
 
 ```
-cd ./website
 npm run write-translations -- --locale fr
 ```
 
-It will help generate folder `website/i18n/fr`.
+It will help generate folder `i18n/fr`.
 
-2. Create the folders `current` and `translated` under the newly generated folder `website/i18n/fr/docusaurus-plugin-content-docs`:
+2. Create the folders `current` and `translated` under the newly generated folder `i18n/fr/docusaurus-plugin-content-docs`:
 
 ```
 mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/translated
@@ -57,7 +55,7 @@ mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/
 
 Test run:
 
-1. Check that the `i18n` settings in `website/docusaurus.config.js` have included your new language:
+1. Check that the `i18n` settings in `docusaurus.config.js` have included your new language:
 
 ```
 i18n: {
@@ -92,7 +90,7 @@ navbar: {
 2. Build translation and docs:
 
 ```
-yarn build_translation && yarn build
+yarn build-translation && yarn build
 ```
 
 6. Start docs:
@@ -109,15 +107,15 @@ npm run serve
 
 Every document should be a specific _type_ of document. Each type of document has its own purpose:
 
-| Document type | Purpose |
-| ------------- | ------- |
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers |
-| Quickstart | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
-| How-to | Provide task-oriented procedural guidance |
-| Concept | Explain what things are and how they work |
-| FAQ | Address frequently asked questions |
-| Troubleshooting | List common troubleshooting scenarios and solutions |
-| Reference | Lists and tables of things, such as API endpoints and developer resources |
+| Document type       | Purpose                                                                            |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             |
+| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
+| How-to              | Provide task-oriented procedural guidance                                          |
+| Concept             | Explain what things are and how they work                                          |
+| FAQ                 | Address frequently asked questions                                                 |
+| Troubleshooting     | List common troubleshooting scenarios and solutions                                |
+| Reference           | Lists and tables of things, such as API endpoints and developer resources          |
 
 This isn't an exhaustive list, but it includes most of the document types that we use.
 
@@ -151,7 +149,7 @@ The following style guidelines provide recommendations that help us deliver **a 
     - We want to maintain both **high discoverability** and **high relevance**. Generally, links to other docs should be "very likely useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
 10. **Things to avoid**
     - **Symbols where words will do**: Minimize usage of `&` and `/` - spell out words like "_and_" and "_or_".
-    - **Jargon**:  precise technical terminology is ok if your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
+    - **Jargon**: precise technical terminology is ok if your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
 
 Don't stress too much about checking off all these boxes; we periodically review and edit our most heavily trafficked docs, bringing them up to spec with the latest style guidelines.
 
