@@ -8,9 +8,6 @@ on:
 jobs:
   check_releases:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./website
     permissions:
       contents: write
       pull-requests: write
@@ -21,9 +18,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 22
           cache: 'yarn'
-          cache-dependency-path: ./website/yarn.lock
+          cache-dependency-path: yarn.lock
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -37,4 +34,4 @@ jobs:
       - name: Check for PR creation
         if: ${{ steps.check-releases.outputs.pr_url }}
         run: |
-          echo "Pull request created: ${{ steps.check-releases.outputs.pr_url }}" 
+          echo "Pull request created: ${{ steps.check-releases.outputs.pr_url }}"

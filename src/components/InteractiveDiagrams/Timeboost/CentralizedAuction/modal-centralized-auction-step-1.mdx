@@ -1,0 +1,11 @@
+# Step 1: Deposit funds into the auction contract
+
+Users must first deposit ERC-20 tokens into the auction contract to participate in bidding.
+
+1. Call `submitDeposit()` on the IExpressLaneAuction contract
+2. The contract emits a DepositSubmitted event with the bidder's address and amount
+3. Funds are now available for bidding in future auction rounds
+
+```solidity
+function submitDeposit(uint256 amount) external;
+```
