@@ -45,3 +45,20 @@ jobs:
 
       - name: Check formatting with Prettier
         run: yarn format:check
+
+  label-merge-conflicts:
+    name: 'Label Merge Conflicts'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      
+      - name: Label conflicting PRs
+        uses: prince-chrismc/label-merge-conflicts-action@v3
+        with:
+          conflict_label_name: 'merge conflict(s)'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          conflict_comment: 'This pull request has merge conflicts that need to be resolved before it can be merged.'
