@@ -8,7 +8,7 @@ on:
 
 jobs:
   install:
-    name: "Install"
+    name: 'Install'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
@@ -22,11 +22,11 @@ jobs:
       - name: Install node_modules
         uses: OffchainLabs/actions/node-modules/install@main
         with:
-          install-command: cd website && yarn install --frozen-lockfile
-          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          install-command: yarn install --frozen-lockfile
+          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
   check-formatting:
-    name: "Check Formatting"
+    name: 'Check Formatting'
     runs-on: ubuntu-latest
     needs: install
     steps:
@@ -41,8 +41,7 @@ jobs:
       - name: Install node_modules
         uses: OffchainLabs/actions/node-modules/install@main
         with:
-          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Check formatting with Prettier
-        working-directory: ./website
         run: yarn format:check
