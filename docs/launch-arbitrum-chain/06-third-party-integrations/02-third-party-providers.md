@@ -92,11 +92,12 @@ The following Oracle providers can be used to integrate offchain data with your 
 
 ## RPC endpoints
 
-RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Arbitrum chains (Orbit:
+RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Arbitrum chains:
 
 - [Alchemy](https://www.alchemy.com/)
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
+- [Grove](https://grove.city/)
 - [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
 - [Sequence](https://sequence.xyz/node-gateway)
 
