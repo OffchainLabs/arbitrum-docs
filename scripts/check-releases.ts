@@ -204,7 +204,9 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
           });
           console.log(`Updated branch ${branchName} to match master.`);
         } else {
-          console.error(`Unexpected comparison status: ${comparison.status}. Manual intervention required.`);
+          const errorMessage = `Unexpected comparison status: ${comparison.status}. Manual intervention required.`;
+          console.error(errorMessage);
+          throw new Error(errorMessage);
         }
       }
     }
