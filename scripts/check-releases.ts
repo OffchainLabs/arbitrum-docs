@@ -25,7 +25,7 @@ async function createBackupBranch(
   octokit: ReturnType<typeof github.getOctokit>,
   context: typeof github.context,
   baseBranchName: string,
-  sha: string
+  sha: string,
 ): Promise<string> {
   const backupBranchName = `${baseBranchName}-backup-${Date.now()}`;
   await octokit.rest.git.createRef({
@@ -121,10 +121,8 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
     const { data: existingPrs } = await octokit.rest.pulls.list({
       ...context.repo,
       state: 'open',
-      head: `${context.repo.owner}:${branchName}`,
     });
-
-    let existingPr = existingPrs.find(pr => pr.title === prTitle); // Find PR matching the title
+    let existingPr = existingPrs.find((pr) => pr.title === prTitle); // Find PR matching the title across all branches
     if (!existingPr) {
       console.log(`No existing pull request found with title "${prTitle}".`);
     }
@@ -149,14 +147,14 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
       }
     }
 
-function isUnexpectedError(error: unknown): boolean {
-  return (
-    error &&
-    typeof error === 'object' &&
-    'status' in error &&
-    (error as { status?: number }).status !== 404
-  );
-}
+    function isUnexpectedError(error: unknown): boolean {
+      return (
+        error &&
+        typeof error === 'object' &&
+        'status' in error &&
+        (error as { status?: number }).status !== 404
+      );
+    }
     if (!branchExists) {
       // Create a new branch
       await octokit.rest.git.createRef({
@@ -189,7 +187,7 @@ function isUnexpectedError(error: unknown): boolean {
             octokit,
             context,
             branchName,
-            branchRef.object.sha
+            branchRef.object.sha,
           );
           console.log(`Created backup branch: ${backupBranchName} to preserve commits.`);
 
@@ -207,7 +205,7 @@ function isUnexpectedError(error: unknown): boolean {
             octokit,
             context,
             branchName,
-            branchRef.object.sha
+            branchRef.object.sha,
           );
           console.log(`Created backup branch: ${backupBranchName} to preserve diverged commits.`);
 
@@ -217,7 +215,9 @@ function isUnexpectedError(error: unknown): boolean {
             sha: masterRef.object.sha,
             force: true,
           });
-          console.warn(`Forcefully updated branch ${branchName} to match master. Previous commits preserved in ${backupBranchName}.`);
+          console.warn(
+            `Forcefully updated branch ${branchName} to match master. Previous commits preserved in ${backupBranchName}.`,
+          );
         } else if (comparison.status === 'behind') {
           await octokit.rest.git.updateRef({
             ...context.repo,
@@ -279,7 +279,7 @@ function isUnexpectedError(error: unknown): boolean {
       });
 
       console.log(`Updated existing PR #${updatedPr.number}: ${updatedPr.html_url}`);
-      
+
       // Set output for GitHub Actions
       core.setOutput('pr_number', updatedPr.number);
       core.setOutput('pr_url', updatedPr.html_url);
