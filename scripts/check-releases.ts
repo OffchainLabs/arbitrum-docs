@@ -179,13 +179,22 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
           });
           console.log(`Updated branch ${branchName} to match master.`);
         } else if (comparison.status === 'diverged') {
+          // Create a backup branch to preserve commits before force updating
+          const backupBranchName = `${branchName}-backup-${Date.now()}`;
+          await octokit.rest.git.createRef({
+            ...context.repo,
+            ref: `refs/heads/${backupBranchName}`,
+            sha: branchRef.object.sha,
+          });
+          console.log(`Created backup branch: ${backupBranchName} to preserve diverged commits.`);
+
           await octokit.rest.git.updateRef({
             ...context.repo,
             ref: `heads/${branchName}`,
             sha: masterRef.object.sha,
             force: true,
           });
-          console.warn(`Forcefully updated branch ${branchName} to match master.`);
+          console.warn(`Forcefully updated branch ${branchName} to match master. Previous commits preserved in ${backupBranchName}.`);
         } else if (comparison.status === 'behind') {
           await octokit.rest.git.updateRef({
             ...context.repo,
