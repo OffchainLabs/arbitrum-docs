@@ -128,8 +128,8 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
         ref: `heads/${branchName}`,
       });
       branchExists = true;
-    } catch (error: any) {
-      if (error.status !== 404) {
+    } catch (error: unknown) {
+      if (isErrorWithStatus(error) && error.status !== 404) {
         throw error;
       }
     }
