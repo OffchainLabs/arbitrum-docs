@@ -17,7 +17,7 @@ The limit exists because larger contracts require more resources to process and 
 ## Benefits of increasing the smart contract size limit
 
 Increasing the smart contract code size limit (from the default 24 kB up to 96 kB) enables greater flexibility in development, particularly for complex applications. Key benefits include:
-Support for More Complex and Feature-Rich Contracts: Larger contracts can incorporate extensive logic, libraries, and functionalities without requiring the need to split code across multiple contracts. This consolidation is beneficial for applications such as DeFi protocols, games, or enterprise solutions that require intricate computations or integrations, thereby reducing the need for workarounds like proxy patterns.
+- **Support for more complex and feature-rich contracts**: Larger contracts can incorporate extensive logic, libraries, and functionalities without the need to split code across multiple contracts. This consolidation is helpful for applications such as DeFi protocols, games, or enterprise solutions that require intricate computations or integrations, thereby reducing the need for workarounds like proxy patterns.
 
 - **Reduced gas costs for execution**: By consolidating code into a single contract, you avoid expensive inter-contract calls (e.g., via proxies or delegates), which can lower overall runtime gas consumption. Proxy patterns, often used to bypass size limits, add overhead and increase the cost of calls.
 - **Simplified development and maintenance**: Developers can write cleaner, more modular code without artificial splitting, making it easier to audit, debug, and upgrade contracts. Cleaner code streamlines the development process and reduces complexity in reasoning about the codebase.
