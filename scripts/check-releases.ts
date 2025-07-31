@@ -158,14 +158,10 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
           head: masterRef.object.sha,
         });
 
-        if (comparison.status === 'ahead' || comparison.status === 'identical') {
-          await octokit.rest.git.updateRef({
-            ...context.repo,
-            ref: `heads/${branchName}`,
-            sha: masterRef.object.sha,
-            force: true,
-          });
-          console.log(`Updated existing branch: ${branchName}`);
+        if (comparison.status === 'identical') {
+          console.log(`Branch ${branchName} is already up-to-date.`);
+        } else if (comparison.status === 'ahead') {
+          console.warn(`Branch ${branchName} is ahead of master. Manual review required to preserve commits.`);
         } else if (comparison.status === 'diverged') {
           await octokit.rest.git.updateRef({
             ...context.repo,
