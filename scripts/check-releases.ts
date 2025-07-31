@@ -155,7 +155,7 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
           head: masterRef.object.sha,
         });
 
-        if (comparison.status === 'ahead' || comparison.status === 'identical') {
+        if (comparison.status === 'ahead' || comparison.status === 'identical' || comparison.status === 'behind') {
           await octokit.rest.git.updateRef({
             ...context.repo,
             ref: `heads/${branchName}`,
