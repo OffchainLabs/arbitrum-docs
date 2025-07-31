@@ -89,7 +89,7 @@ function isNewerVersion(newVersion: string, currentVersion: string): boolean {
   return semver.gt(cleanNew, cleanCurrent);
 }
 
-async function createPullRequest(updatedProjects: Project[]) {
+async function createOrUpdatePullRequest(updatedProjects: Project[]) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
     throw new Error('GITHUB_TOKEN not found in environment');
@@ -98,27 +98,63 @@ async function createPullRequest(updatedProjects: Project[]) {
   const octokit = github.getOctokit(token);
   const context = github.context;
 
-  // Create a new branch
-  const branchName = `docs/update-dependencies-${new Date().toISOString().split('T')[0]}`;
+  const prTitle = 'chore: update dependencies to latest versions';
+  const branchName = 'docs/update-dependencies';
 
   try {
-    // Get the current commit SHA
-    const { data: ref } = await octokit.rest.git.getRef({
+    // Check for existing open PRs with the same title
+    const { data: existingPrs } = await octokit.rest.pulls.list({
+      ...context.repo,
+      state: 'open',
+      head: `${context.repo.owner}:${branchName}`,
+    });
+
+    let existingPr = existingPrs.find(pr => pr.title === prTitle);
+
+    // Get the current commit SHA from master
+    const { data: masterRef } = await octokit.rest.git.getRef({
       ...context.repo,
       ref: 'heads/master',
     });
 
-    // Create a new branch
-    await octokit.rest.git.createRef({
-      ...context.repo,
-      ref: `refs/heads/${branchName}`,
-      sha: ref.object.sha,
-    });
+    let branchExists = false;
+    try {
+      // Check if branch already exists
+      await octokit.rest.git.getRef({
+        ...context.repo,
+        ref: `heads/${branchName}`,
+      });
+      branchExists = true;
+    } catch (error: any) {
+      if (error.status !== 404) {
+        throw error;
+      }
+    }
 
-    // Update dependencies.json in the new branch
+    if (!branchExists) {
+      // Create a new branch
+      await octokit.rest.git.createRef({
+        ...context.repo,
+        ref: `refs/heads/${branchName}`,
+        sha: masterRef.object.sha,
+      });
+      console.log(`Created new branch: ${branchName}`);
+    } else {
+      // Update existing branch to latest master
+      await octokit.rest.git.updateRef({
+        ...context.repo,
+        ref: `heads/${branchName}`,
+        sha: masterRef.object.sha,
+        force: true,
+      });
+      console.log(`Updated existing branch: ${branchName}`);
+    }
+
+    // Update dependencies.json in the branch
     const { data: content } = await octokit.rest.repos.getContent({
       ...context.repo,
       path: DEPENDENCIES_FILE,
+      ref: branchName,
     });
 
     if (!('content' in content)) {
@@ -146,26 +182,41 @@ async function createPullRequest(updatedProjects: Project[]) {
       sha: content.sha,
     });
 
-    // Create pull request
     const prBody = `This PR updates the following dependencies to their latest versions:\n\n${updatedProjects
       .map((p) => `- ${p.name}: ${p.latestRelease} (released on ${p.latestReleaseDate})`)
       .join('\n')}\n\nPlease review the changes and update the documentation accordingly.`;
 
-    const { data: pr } = await octokit.rest.pulls.create({
-      ...context.repo,
-      title: 'chore: update dependencies to latest versions',
-      head: branchName,
-      base: 'master',
-      body: prBody,
-    });
+    if (existingPr) {
+      // Update existing PR
+      const { data: updatedPr } = await octokit.rest.pulls.update({
+        ...context.repo,
+        pull_number: existingPr.number,
+        body: prBody,
+      });
 
-    console.log(`Created PR #${pr.number}: ${pr.html_url}`);
+      console.log(`Updated existing PR #${updatedPr.number}: ${updatedPr.html_url}`);
+      
+      // Set output for GitHub Actions
+      core.setOutput('pr_number', updatedPr.number);
+      core.setOutput('pr_url', updatedPr.html_url);
+    } else {
+      // Create new pull request
+      const { data: pr } = await octokit.rest.pulls.create({
+        ...context.repo,
+        title: prTitle,
+        head: branchName,
+        base: 'master',
+        body: prBody,
+      });
 
-    // Set output for GitHub Actions
-    core.setOutput('pr_number', pr.number);
-    core.setOutput('pr_url', pr.html_url);
+      console.log(`Created new PR #${pr.number}: ${pr.html_url}`);
+
+      // Set output for GitHub Actions
+      core.setOutput('pr_number', pr.number);
+      core.setOutput('pr_url', pr.html_url);
+    }
   } catch (error) {
-    console.error('Error creating pull request:', error);
+    console.error('Error creating/updating pull request:', error);
     throw error;
   }
 }
@@ -206,8 +257,8 @@ async function main() {
     }
 
     if (updatedProjects.length > 0) {
-      console.log('Creating pull request with updates...');
-      await createPullRequest(updatedProjects);
+      console.log('Creating or updating pull request with updates...');
+      await createOrUpdatePullRequest(updatedProjects);
     } else {
       console.log('All dependencies are up to date.');
     }
