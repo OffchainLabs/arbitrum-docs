@@ -109,7 +109,7 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
       head: `${context.repo.owner}:${branchName}`,
     });
 
-    let existingPr = existingPrs.find(pr => pr.title === prTitle);
+    let existingPr = existingPrs[0]; // Use the first PR matching the head branch filter
 
     // Get the current commit SHA from master
     const { data: masterRef } = await octokit.rest.git.getRef({
