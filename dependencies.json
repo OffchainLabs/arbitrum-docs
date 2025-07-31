@@ -5,8 +5,8 @@
       "name": "Arbitrum Nitro",
       "repo": "https://github.com/OffchainLabs/nitro",
       "currentDocsVersion": "v3.6.0",
-      "latestRelease": "v3.6.0",
-      "latestReleaseDate": "2025-04-29",
+      "latestRelease": "v3.6.8",
+      "latestReleaseDate": "2025-07-08",
       "docsPath": "docs/arbitrum-docs/how-arbitrum-works",
       "description": "Core Arbitrum protocol implementation"
     },
@@ -25,8 +25,8 @@
       "name": "Arbitrum Stylus SDK",
       "repo": "https://github.com/OffchainLabs/stylus-sdk-rs",
       "currentDocsVersion": "v0.8.4",
-      "latestRelease": "v0.8.4",
-      "latestReleaseDate": "2025-04-09",
+      "latestRelease": "v0.9.0",
+      "latestReleaseDate": "2025-05-20",
       "docsPath": "docs/arbitrum-docs/stylus",
       "description": "Rust smart contracts on Arbitrum"
     },
@@ -35,8 +35,8 @@
       "name": "Arbitrum Orbit SDK",
       "repo": "https://github.com/OffchainLabs/arbitrum-orbit-sdk",
       "currentDocsVersion": "0.23.1",
-      "latestRelease": "0.23.1",
-      "latestReleaseDate": "2024-03-19",
+      "latestRelease": "v0.23.4",
+      "latestReleaseDate": "2025-07-22",
       "docsPath": "docs/arbitrum-docs/launch-arbitrum-chain",
       "description": "SDK for building Arbitrum Orbit chains"
     },
@@ -45,8 +45,8 @@
       "name": "Arbitrum Nitro Contracts",
       "repo": "https://github.com/OffchainLabs/nitro-contracts",
       "currentDocsVersion": "v3.1.0",
-      "latestRelease": "v3.1.0",
-      "latestReleaseDate": "2025-04-11",
+      "latestRelease": "v3.1.1",
+      "latestReleaseDate": "2025-06-17",
       "docsPath": "docs/arbitrum-docs/build-decentralized-apps",
       "description": "Smart contracts for the Arbitrum Nitro protocol"
     },
