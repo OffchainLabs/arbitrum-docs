@@ -122,9 +122,9 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
       ...context.repo,
       state: 'open',
     });
-    let existingPr = existingPrs.find((pr) => pr.title === prTitle); // Find PR matching the title across all branches
+    let existingPr = existingPrs.find((pr) => pr.title === prTitle && pr.head.ref === branchName); // Ensure both title and branch match
     if (!existingPr) {
-      console.log(`No existing pull request found with title "${prTitle}".`);
+      console.log(`No existing pull request found with title "${prTitle}" on branch "${branchName}".`);
     }
 
     // Get the current commit SHA from master
