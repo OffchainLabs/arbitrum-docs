@@ -32,7 +32,7 @@ While beneficial for complexity, raising the limit introduces trade-offs, partic
 - **Performance and network efficiency concerns**: Although EVM execution charges gas per opcode (not code size), large contracts could lead to slower node processing or higher resource demands on validators/sequencers. This slower processing might exacerbate DoS risks on your chain, as the purpose of the EIP-170 limit was to mitigate such issues.
 - **Compatibility and portability issues**: Contracts exceeding the standard 24 kB limit (enforced on public chains like Arbitrum One or Ethereum) cannot be deployed elsewhere without modifications. This restriction limits interoperability and could lock you into your  Arbitrum (Orbit) chain, reducing flexibility if you need to migrate in the future.
 - **Irreversibility**: The limit must be set during initial chain configuration and cannot be changed post-deployment, so poor choices could lead to long-term inefficiencies.
-  Overall, increasing the limit is ideal for specialized Arbitrum chains where complexity outweighs costs. However, we recommend sticking to defaults unless necessary.
+Overall, increasing the limit is ideal for specialized Arbitrum chains where complexity outweighs costs, but we recommend sticking to defaults unless necessary.
 
 ## How to Configure
 
