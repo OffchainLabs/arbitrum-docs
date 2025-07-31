@@ -21,6 +21,21 @@ interface DependenciesConfig {
   projects: Project[];
 }
 
+async function createBackupBranch(
+  octokit: ReturnType<typeof github.getOctokit>,
+  context: typeof github.context,
+  baseBranchName: string,
+  sha: string
+): Promise<string> {
+  const backupBranchName = `${baseBranchName}-backup-${Date.now()}`;
+  await octokit.rest.git.createRef({
+    ...context.repo,
+    ref: `refs/heads/${backupBranchName}`,
+    sha: sha,
+  });
+  return backupBranchName;
+}
+
 function extractRepoInfo(repoUrl: string): { owner: string; repo: string } | null {
   try {
     const url = new URL(repoUrl);
@@ -129,7 +144,7 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
       });
       branchExists = true;
     } catch (error: unknown) {
-      if (isErrorWithStatus(error) && error.status !== 404) {
+      if (error && typeof error === 'object' && 'status' in error && error.status !== 404) {
         throw error;
       }
     }
@@ -162,12 +177,12 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
           console.log(`Branch ${branchName} is already up-to-date.`);
         } else if (comparison.status === 'ahead') {
           // Create a backup branch to preserve commits
-          const backupBranchName = `${branchName}-backup-${Date.now()}`;
-          await octokit.rest.git.createRef({
-            ...context.repo,
-            ref: `refs/heads/${backupBranchName}`,
-            sha: branchRef.object.sha,
-          });
+          const backupBranchName = await createBackupBranch(
+            octokit,
+            context,
+            branchName,
+            branchRef.object.sha
+          );
           console.log(`Created backup branch: ${backupBranchName} to preserve commits.`);
 
           // Update the branch to match master
@@ -180,12 +195,12 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
           console.log(`Updated branch ${branchName} to match master.`);
         } else if (comparison.status === 'diverged') {
           // Create a backup branch to preserve commits before force updating
-          const backupBranchName = `${branchName}-backup-${Date.now()}`;
-          await octokit.rest.git.createRef({
-            ...context.repo,
-            ref: `refs/heads/${backupBranchName}`,
-            sha: branchRef.object.sha,
-          });
+          const backupBranchName = await createBackupBranch(
+            octokit,
+            context,
+            branchName,
+            branchRef.object.sha
+          );
           console.log(`Created backup branch: ${backupBranchName} to preserve diverged commits.`);
 
           await octokit.rest.git.updateRef({
