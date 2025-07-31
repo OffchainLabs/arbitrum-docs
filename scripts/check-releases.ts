@@ -163,7 +163,7 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
             force: false,
           });
           console.log(`Updated existing branch: ${branchName}`);
-        } else if (comparison.status === 'behind' || comparison.status === 'diverged') {
+        } else if (comparison.status === 'diverged') {
           await octokit.rest.git.updateRef({
             ...context.repo,
             ref: `heads/${branchName}`,
