@@ -37,7 +37,7 @@ Overall, increasing the limit is ideal for specialized Arbitrum chains where com
 ## How to configure
 
 1. Use the [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) to prepare your chain's configuration.
-2. When calling the `prepareNodeConfig` function, modify the relevant parameters: [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L29) (for deployed contract code size) and [`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L30) (for initialization code size during deployment).
+2. When calling the `prepareNodeConfig` function, modify the relevant parameters: [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L29) for deployed contract code size, and [`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L30) for initialization code size during deployment.
 3. These parameters are defined in the SDK's [`prepareChainConfig.ts`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) file. An example implementation is available in the SDK's [`examples/prepare-node-config/index.ts`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts).
 <!-- I'm not sure this example above in #3 is correct -->
 4. Note that once the chain deploys, the smart contract limits are unchangeable via upgrades—you must set them during initial configuration.
