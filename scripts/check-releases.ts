@@ -154,7 +154,7 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
     const { data: content } = await octokit.rest.repos.getContent({
       ...context.repo,
       path: DEPENDENCIES_FILE,
-      ref: branchName,
+      ref: 'master',
     });
 
     if (!('content' in content)) {
