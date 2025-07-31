@@ -160,7 +160,7 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
             ...context.repo,
             ref: `heads/${branchName}`,
             sha: masterRef.object.sha,
-            force: false,
+            force: true,
           });
           console.log(`Updated existing branch: ${branchName}`);
         } else if (comparison.status === 'diverged') {
