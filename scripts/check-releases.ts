@@ -144,11 +144,19 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
       });
       branchExists = true;
     } catch (error: unknown) {
-      if (error && typeof error === 'object' && 'status' in error && error.status !== 404) {
+      if (isUnexpectedError(error)) {
         throw error;
       }
     }
 
+function isUnexpectedError(error: unknown): boolean {
+  return (
+    error &&
+    typeof error === 'object' &&
+    'status' in error &&
+    (error as { status?: number }).status !== 404
+  );
+}
     if (!branchExists) {
       // Create a new branch
       await octokit.rest.git.createRef({
