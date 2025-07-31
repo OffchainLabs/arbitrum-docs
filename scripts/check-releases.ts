@@ -170,6 +170,14 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
             force: true,
           });
           console.warn(`Forcefully updated branch ${branchName} to match master.`);
+        } else if (comparison.status === 'behind') {
+          await octokit.rest.git.updateRef({
+            ...context.repo,
+            ref: `heads/${branchName}`,
+            sha: masterRef.object.sha,
+            force: false,
+          });
+          console.log(`Updated branch ${branchName} to match master.`);
         } else {
           console.error(`Unexpected comparison status: ${comparison.status}. Manual intervention required.`);
         }
