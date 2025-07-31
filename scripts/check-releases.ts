@@ -163,8 +163,16 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
             force: false,
           });
           console.log(`Updated existing branch: ${branchName}`);
+        } else if (comparison.status === 'behind' || comparison.status === 'diverged') {
+          await octokit.rest.git.updateRef({
+            ...context.repo,
+            ref: `heads/${branchName}`,
+            sha: masterRef.object.sha,
+            force: true,
+          });
+          console.warn(`Forcefully updated branch ${branchName} to match master.`);
         } else {
-          console.error(`Cannot fast-forward branch ${branchName}. Manual intervention required.`);
+          console.error(`Unexpected comparison status: ${comparison.status}. Manual intervention required.`);
         }
       }
     }
