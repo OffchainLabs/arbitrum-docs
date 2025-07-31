@@ -141,13 +141,32 @@ async function createOrUpdatePullRequest(updatedProjects: Project[]) {
       console.log(`Created new branch: ${branchName}`);
     } else {
       // Update existing branch to latest master
-      await octokit.rest.git.updateRef({
+      const { data: branchRef } = await octokit.rest.git.getRef({
         ...context.repo,
         ref: `heads/${branchName}`,
-        sha: masterRef.object.sha,
-        force: true,
       });
-      console.log(`Updated existing branch: ${branchName}`);
+
+      if (branchRef.object.sha === masterRef.object.sha) {
+        console.log(`Branch ${branchName} is already up-to-date.`);
+      } else {
+        const { data: comparison } = await octokit.rest.repos.compareCommits({
+          ...context.repo,
+          base: branchRef.object.sha,
+          head: masterRef.object.sha,
+        });
+
+        if (comparison.status === 'ahead' || comparison.status === 'identical') {
+          await octokit.rest.git.updateRef({
+            ...context.repo,
+            ref: `heads/${branchName}`,
+            sha: masterRef.object.sha,
+            force: false,
+          });
+          console.log(`Updated existing branch: ${branchName}`);
+        } else {
+          console.error(`Cannot fast-forward branch ${branchName}. Manual intervention required.`);
+        }
+      }
     }
 
     // Update dependencies.json in the branch
