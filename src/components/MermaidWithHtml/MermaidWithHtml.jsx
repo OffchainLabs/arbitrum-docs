@@ -16,10 +16,8 @@ const MermaidWithHtml = ({ children }) => {
   );
 };
 
-
 // This is used to generate the mermaid code from the <Node> and <Connection> blocks
 const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections, title) => {
-
   // todo: magic string, could make this configurable. TB = top to bottom, LR = left to right, etc.
   const graphType = 'TB';
   const usedNodeIds = new Set();
@@ -45,7 +43,6 @@ const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections, 
 
       usedNodeIds.add(fromHtmlNodeId);
       usedNodeIds.add(toHtmlNodeId);
-
 
       let mermaidLine;
 
@@ -79,11 +76,11 @@ const Nodes = ({ children, title }) => {
   const childArray = React.Children.toArray(children);
 
   const htmlNodes = childArray.filter(
-    (child) => React.isValidElement(child) && child.type === Node
+    (child) => React.isValidElement(child) && child.type === Node,
   );
 
   const connections = childArray.filter(
-    (child) => React.isValidElement(child) && child.type === Connection
+    (child) => React.isValidElement(child) && child.type === Connection,
   );
 
   const code = generateMermaidCodeFromHtmlNodesAndConnections(htmlNodes, connections, title);
@@ -113,9 +110,12 @@ const Nodes = ({ children, title }) => {
     };
   }, [code]);
 
-  return <div className="mermaid" ref={containerRef}>{code}</div>;
+  return (
+    <div className="mermaid" ref={containerRef}>
+      {code}
+    </div>
+  );
 };
-
 
 const NodeDescriptions = ({ children }) => {
   const listRef = useRef(null);
@@ -124,7 +124,7 @@ const NodeDescriptions = ({ children }) => {
     if (listRef.current) {
       listRef.current.childNodes.forEach((nodeInfo) => {
         // todo: wire up highlighting here
-        nodeInfo.classList.add("node-description");
+        nodeInfo.classList.add('node-description');
       });
     }
   }, []);
@@ -138,14 +138,16 @@ const NodeDescriptions = ({ children }) => {
 
 const NodeDescription = ({ children }) => {
   const nodeRef = useRef(null);
-  return <div className="node-info" ref={nodeRef}>{children}</div>;
+  return (
+    <div className="node-info" ref={nodeRef}>
+      {children}
+    </div>
+  );
 };
 
-
-
-
 const Node = ({ id, children }) => <div data-node-id={id}>{children}</div>;
-const Connection = ({ from, to }) => (<div data-connection-from={from} data-connection-to={to}></div>);
-
+const Connection = ({ from, to }) => (
+  <div data-connection-from={from} data-connection-to={to}></div>
+);
 
 export { MermaidWithHtml, NodeDescription, NodeDescriptions, Nodes, Node, Connection };
