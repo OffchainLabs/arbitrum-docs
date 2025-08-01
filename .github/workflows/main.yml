@@ -57,7 +57,7 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Label conflicting PRs
-        uses: prince-chrismc/label-merge-conflicts-action@v3
+        uses: prince-chrismc/label-merge-conflicts-action@c1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0
         with:
           conflict_label_name: 'merge conflict(s)'
           github_token: ${{ secrets.GITHUB_TOKEN }}
