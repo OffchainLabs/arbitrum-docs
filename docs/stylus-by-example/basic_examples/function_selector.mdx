@@ -1,0 +1,40 @@
+---
+title: 'Function selector • Stylus by Example'
+description: "How to compute the encoded function selector of a contract's function using the Arbitrum Stylus Rust SDK."
+---
+
+{/* Begin Content */}
+
+# Function selector
+
+When a smart contract is called, the first 4 bytes of the calldata sent as part of the request are called the "function selector", and identify which function of the smart contract to call.
+
+You can compute a specific function selector by using the `function_selector!` macro.
+
+Here's an example that computes the selector of a function named `foo`:
+
+import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
+
+<NotForProductionBannerPartial />
+
+```rust
+function_selector!("foo") // returns 0xc2985578
+```
+
+Functions usually take a number of arguments that you need to pass in order for the call to be successful. For example, here's the signature of a function that takes 2 arguments, an address and a uint256:
+
+```solidity
+function transfer(address recipient, uint256 amount) external returns (bool);
+```
+
+To compute the selector for this function, pass the types of the arguments to the `function_selector` macro:
+
+```rust
+function_selector!("transfer", Address, U256) // returns 0xa9059cbb
+```
+
+`function_selector` will return a byte array containing the encoded function selector.
+
+## Learn More
+
+- [`stylus_sdk::function_selector`](https://docs.rs/stylus-sdk/latest/stylus_sdk/macro.function_selector.html)

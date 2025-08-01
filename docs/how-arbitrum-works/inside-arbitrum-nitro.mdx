@@ -7,6 +7,8 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
+import ImageWithCaption from '@site/src/components/ImageCaptions/';
+
 This document is a deep-dive explanation of Arbitrum Nitro's design and the rationale for it. This isn't API documentation, nor is it a guided tour of the code - look elsewhere for those. "Inside Arbitrum Nitro" is for people who want to understand Nitro's design.
 
 The body of this document will describe Arbitrum Rollup, this primary use case of the Nitro technology and the one used on the Arbitrum One chain. This is a variant use case, called AnyTrust, which is used by the Arbitrum Nova chain. AnyTrust is covered by a section at the end of this document.
@@ -36,7 +38,10 @@ Nitro is a major upgrade to Arbitrum, improving over "classic" Arbitrum in sever
 
 At the most basic level, an Arbitrum chain works like this:
 
-![Ed's Original Napkin Drawing](eds-napkin-drawing.png)
+<ImageWithCaption
+  caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten"
+  src="/img/haw-eds-napkin-drawing.png"
+/>
 
 People and contracts put messages into the inbox. The chain reads the messages one at a time, and processes each one. This updates the state of the chain and produces some outputs.
 
@@ -66,7 +71,7 @@ The essence of Nitro, and its key innovations, lie in four big ideas. We'll list
 
 This diagram summarizes how transactions are processed in Nitro.
 
-![Transaction Lifecycle](og-transaction-lifecycle.png)
+<ImageWithCaption caption="Transaction lifecycle" src="/img/haw-transaction-lifecycle.svg" />
 
 Let's follow a user's transaction through this process.
 
@@ -94,7 +99,7 @@ The Sequencer's batches are compressed using a general-purpose data compression 
 
 The second key design idea in Nitro is "Geth at the Core." Here "Geth" refers to go-ethereum, the most common node software for Ethereum. As its name would suggest, go-ethereum is written in the Go programming language, as is almost all of Nitro.
 
-![Geth Sandwich](geth-sandwich.png)
+<ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
 The software that makes up a Nitro node can be thought of as built in three main layers, which are shown above:
 
@@ -223,7 +228,7 @@ The RBlock is assigned a deadline, which says how long other validators have to 
 
 In the normal case, the rollup chain will look like this:
 
-![Normal Rollup Chain](og-normal-rollup-chain.png)
+<ImageWithCaption caption="Normal Rollup chain" src="/img/haw-normal-rollup-chain.svg" />
 
 On the left, representing an earlier part of the chain's history, we have confirmed RBlocks. These have been fully accepted and recorded by the Layer 1 contracts that manage the chain. The newest of the confirmed RBlocks, RBlock 94, is called the "latest confirmed RBlock." On the right, we see a set of newer proposed RBlocks. The protocol can't yet confirm or reject them, because their deadlines haven't run out yet. The oldest RBlock whose fate has yet to be determined RBlock 95, is called the "first unresolved RBlock."
 
@@ -231,7 +236,7 @@ Notice that a proposed RBlock can build on an earlier proposed RBlock. This allo
 
 Here's another example of what the chain state might look like, if several validators are being malicious. It's a contrived example, designed to illustrate a variety of cases that can come up in the protocol, all smashed into a single scenario.
 
-![Malicious Rollup Chain](og-malicious-rollup-chain.png)
+<ImageWithCaption caption="Malicious Rollup chain" src="/img/haw-malicious-rollup-chain.svg" />
 
 There's a lot going on here, so let's unpack it.
 
@@ -296,7 +301,7 @@ A consequence of these rules is that once the first unresolved RBlock's deadline
 
 Suppose the rollup chain looks like this:
 
-![Rollup Challenges](rollup-challenges.png)
+<ImageWithCaption caption="Rollup challenges" src="/img/haw-rollup-challenges.svg" />
 
 RBlocks 93 and 95 are siblings (they both have 92 as predecessor). Alice is staked on 93 and Bob is staked on 95.
 
