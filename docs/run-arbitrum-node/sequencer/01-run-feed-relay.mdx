@@ -21,11 +21,11 @@ The feed relay is in the same docker image as the Nitro node.
 
 - Here is an example of how to run the feed relay for Arbitrum One:
   ```shell
-  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.5-89cef87@@ --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1-feed.arbitrum.io/feed --chain.id=42161
+  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@ --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1-feed.arbitrum.io/feed --chain.id=42161
   ```
 - Here is an example of how to run nitro-node for Arbitrum One with custom relay:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.5-89cef87@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.feed.input.url=ws://local-relay-address:9642
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.feed.input.url=ws://local-relay-address:9642
   ```
 
 Note that Arbitrum classic does not communicate with Nitro sequencer, so classic relay is no longer used.
