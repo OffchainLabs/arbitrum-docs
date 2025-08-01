@@ -67,12 +67,12 @@
 }
 /* Light theme overrides */
 [data-theme='dark'] .admonitionTitle {
-    color: #b5c2d3;
-  }
-  
-  [data-theme='dark'] .admonitionContent {
-    color: rgba(184, 194, 205, 0.8);
-  }
+  color: #b5c2d3;
+}
+
+[data-theme='dark'] .admonitionContent {
+  color: rgba(184, 194, 205, 0.8);
+}
 
 /* Add these styles */
 .icon {
