@@ -7,6 +7,12 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
+<!--
+
+This entire page could be moved to /build-decentralized-apps/reference/*******
+
+-->
+
 Nitro makes minimal modifications to <a data-quicklook-from="geth">Geth</a> in hopes of not violating its assumptions. This section will explore the relationship between Geth and <a data-quicklook-from="arbos">ArbOS</a>, which consists of a series of hooks, interface implementations, and strategic re-appropriations of Geth's basic types.
 
 We store ArbOS's state at an address inside a Geth `statedb`. In doing so, ArbOS inherits the `statedb`'s statefulness and lifetime properties. For example, a <a data-quicklook-from="transaction">Transaction</a>'s direct state changes to ArbOS would get discarded upon a revert.

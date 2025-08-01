@@ -81,6 +81,15 @@ Once the transactions are sequenced, they are run through the _state transition 
 
 Because the protocol doesn't trust the Sequencer not to put garbage into its sequence, the state transition function will detect and discard any invalid (e.g., improperly formed) transactions in the sequence. A well-behaved Sequencer will filter out invalid transactions so the state transition function never sees them - and this reduces cost and therefore keeps transactions fees low - but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the fees are signed by their senders, so the Sequencer can't create forged transactions.)
 
+<!--
+
+:::info More information
+
+To learn more about the Sequencer Feed take a look at the [Sequencer Feed Deep Dive](/how-arbitrum-works/04-state-transition-function/02-stf-inputs.mdx)
+
+:::
+-->
+
 The state transition function is deterministic, which means that its behavior depends only on the current state and the contents of the next transaction - and nothing else. Because of this determinism, the result of a transaction `T` will depend only on the genesis state of the chain, the transactions before `T` in the sequence, and `T` itself.
 
 It follows that anyone who knows the transaction sequence can computate the state transition function for themselves - and all honest parties who do this are guaranteed to get identical results. This is the normal way that Nitro nodes operate: get the transaction sequence, and run the state transition function locally. No consensus mechanism is needed for this.
@@ -94,6 +103,14 @@ The real-time feed is published by the Sequencer so that anyone who subscribes t
 The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically - perhaps every few minutes in production - the Sequencer concatenates the next group of transactions is the feed, compresses them for efficiency, and posts the result as calldata on Ethereum. This is the final and official record of the transaction sequence. As soon as this Ethereum transaction has finality on Ethereum, the Layer 2 Nitro transactions it records will have finality. These transactions are final because their position in the sequence has finality, and the outcome of the transactions is deterministic and knowable to any party. This is "hard finality."
 
 The Sequencer's batches are compressed using a general-purpose data compression algorithm called "Brotli", on its highest-compression setting.
+
+<!-- 
+:::info More information
+
+For a deep dive into the Sequencer, batching, compression and all things Sequencer, refer to the [Sequencer Deep Dive](/how-arbitrum-works/03-sequencer.mdx).
+
+:::
+-->
 
 ## Geth at the Core
 
@@ -111,6 +128,13 @@ Because the top and bottom layers rely heavily on code from Geth, this structure
 
 The State Transition Function consists of the bottom Geth layer, and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code, and implicitly includes all of the code called by that function. The STF takes as input the bytes of a transaction received in the inbox, and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state, and at the end will emit the header of a new block (in Ethereum's block header format) which will be appended to the Nitro chain.
 
+<!--
+
+:::info More information
+For a deep dive into the Geth Sandwich, refer to the [Geth Sandwich Deep Dive](/how-arbitrum-works/04-state-transition-function/03-ethereum-vs-arbitrum.mdx)
+
+-->
+
 ## Separating Execution from Proving
 
 One of the challenges in designing a practical rollup system is the tension between wanting the system to perform well in ordinary exectuion, versus being able to reliably prove the results of execution. Nitro resolves this tension by using the same source code for both execution and proving, abut compiling it to different targets for the two cases.
@@ -118,6 +142,12 @@ One of the challenges in designing a practical rollup system is the tension betw
 When compiling the Nitro node software for _execution_, the ordinary Go compiler is used, producing native code for the target architecture, which of course will be different for different node deployments. (The node software is distributed in source code form, and as a Docker image containing a compiled binary.)
 
 Separately, for _proving_, the portion of the code that is the State Transition Function is compiled by the Go compiled to WebAssembly (WASM), which is a typed, portable machine code format. The WASM code then goes through a simple transaction into a format we call WAVM, which is detailed below. If there is a dispute about the correct result of computing the STF, it is resolved with a reference to the WAVM code.
+
+<!--
+
+There is content on 05-validation-and-proving/03-proving-and-challenges.mdx that speaks to this section and a few of the following
+
+-->
 
 ### WAVM
 
@@ -185,6 +215,14 @@ We belive strongly that interactive proving is the superior approach, for the fo
 ### Interactive proving drives the design of Arbitrum
 
 Much of the design of Arbitrum is driven by the opportunities opened up by interactive proving. If you're reading about some feature of Arbitrum, and you're wondering why it exists, two good questions to ask are: "How does this support interactive proving?" and "How does this take advantage of interactive proving?" The answers to most "why questions" about Arbitrum relate to interactive proving.
+
+<!-- 
+:::info More information
+
+For a deep dive into the Geth and the State Transition Function, refer to the [State Transition Function Deep Dive](/how-arbitrum-works/04-state-transition-function/***********).
+
+:::
+-->
 
 ## Arbitrum Rollup Protocol
 
@@ -297,6 +335,18 @@ The first unresolved RBlock can be rejected if:
 
 A consequence of these rules is that once the first unresolved RBlock's deadline has passed (and assuming there is at least one staker staked on something other than the latest confirmed RBlock), the only way the RBlock can be unresolvable is if at least one staker is staked on it and at least one staker is staked on a different RBlock with the same predecessor. If this happens, the two stakers are disagreeing about which RBlock is correct. It's time for a challenge, to resolve the disagreement.
 
+<!-- 
+:::info More information
+
+For a deep dive into the Rollup Protocol, validation and proving, refer to the [Rollup Protocol Deep Dive](/how-arbitrum-works/05-validation-and-proving/*********).
+
+
+
+>>>>>> A lot of content is very similar may have to strip or combine the 02-rollup-protocol.mdx page
+
+:::
+-->
+
 ### Challenges
 
 Suppose the rollup chain looks like this:
@@ -352,6 +402,14 @@ It should be clear that these changes don't affect the basic correctness of the 
 The challenge protocol is designed so that the dispute can be resolved with a minimum of work required by the protocol (via its Layer 1 Ethereum contracts) in its role as referee. When it is Alice's move, the protocol only needs to keep track of the time Alice uses, and ensure that her move does include `K-1` intermediate points as required. The protocol doesn't need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice's move "has the right shape."
 
 The only point where the protocol needs to evaluate a move "on the merits" is at the one-step proof, where it needs to look at Alice's proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
+
+<!-- 
+:::info More information
+
+For a deep dive into the Challenges, refer to the [Challenges Deep Dive](/how-arbitrum-works/04-validation-and-proving/03-proving-and-challenges.mdx).
+
+:::
+-->
 
 ## Validators
 
@@ -592,3 +650,11 @@ When the Arbitrum sequencer produces a data batch that it wants to post using th
 Once the Sequencer has collected enough signatures, it can aggregate the signatures and create a valid DACert for the (hash, expiration time) pair. The Sequencer then posts that DACert to the L1 inbox contract, making it available to the AnyTrust chain software at L2.
 
 If the Sequencer fails to collect enough signatures within a few minutes, it will abandon the attempt to use the Committee, and will "fall back to rollup" by posting the full data directly to the L1 chain, as it would do in a non-AnyTrust chain. The L2 software can understand both data posting formats (via DACert or via full data) and will handle each one correctly.
+
+<!--
+:::info More information
+
+For a deep dive into AnyTrust, refer to the [AnyTrust Deep Dive](/how-arbitrum-works/08-anytrust-protocol.mdx).
+
+:::
+-->
