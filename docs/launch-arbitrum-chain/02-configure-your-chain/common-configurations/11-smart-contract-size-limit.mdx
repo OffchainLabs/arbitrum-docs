@@ -1,9 +1,11 @@
 ---
-title: 'Smart contract size limit'
-description: 'Learn how to configure smart contract size limits on your Arbitrum chain'
-author:
-sme:
-content_type: how-to
+title: 'Configure the smart contract size limit'
+sidebar_label: 'Smart Contract Size Limit'
+description: 'Learn more about benefits, drawbacks, and how to configure the smart contract size limit.'
+user_story: 'I want to increase the smart contract size limit on my Arbitrum chain.'
+content_type: 'how-to'
+author: pete-vielhaber
+sme: pete-vielhaber
 ---
 
 For standard public Arbitrum chains (such as Arbitrum One or Nova), the smart contract code size limit is fixed at 24 kB, as enforced by [EIP-170](https://eips.ethereum.org/EIPS/eip-170). This limit is not configurable for end-users or developers deploying contracts on these chains.
@@ -17,6 +19,7 @@ The limit exists because larger contracts require more resources to process and 
 ## Benefits of increasing the smart contract size limit
 
 Increasing the smart contract code size limit (from the default 24 kB up to 96 kB) enables greater flexibility in development, particularly for complex applications. Key benefits include:
+
 - **Support for more complex and feature-rich contracts**: Larger contracts can incorporate extensive logic, libraries, and functionalities without the need to split code across multiple contracts. This consolidation is helpful for applications such as DeFi protocols, games, or enterprise solutions that require intricate computations or integrations, thereby reducing the need for workarounds like proxy patterns.
 
 - **Reduced gas costs for execution**: By consolidating code into a single contract, you avoid expensive inter-contract calls (e.g., via proxies or delegates), which can lower overall runtime gas consumption. Proxy patterns, often used to bypass size limits, add overhead and increase the cost of calls.
@@ -27,12 +30,11 @@ Increasing the smart contract code size limit (from the default 24 kB up to 96 k
 
 While beneficial for complexity, raising the limit introduces trade-offs, particularly in costs, security, and performance. These are more pronounced in Rollup environments, such as Arbitrum, where transactions get posted to the Ethereum Layer 1.
 
-- **Higher deployment costs**: Larger contracts require more bytecode in the initialization code, which increases the transaction size and, consequently, the calldata costs posted to Ethereum L1. In Rollups, this can significantly raise deployment fees, as costs scale with data size.
-- **Potential security risks**: Increasing code complexity increases the surface area for vulnerabilities, making audits more challenging and raising the risk of exploits. Larger contracts may also complicate fraud-proof mechanisms in optimistic rollups, such as Arbitrum, potentially making disputes more resource-intensive and time-consuming.
 - **Performance and network efficiency concerns**: Although EVM execution charges gas per opcode (not code size), large contracts could lead to slower node processing or higher resource demands on validators/sequencers. This slower processing might exacerbate DoS risks on your chain, as the purpose of the EIP-170 limit was to mitigate such issues.
-- **Compatibility and portability issues**: Contracts exceeding the standard 24 kB limit (enforced on public chains like Arbitrum One or Ethereum) cannot be deployed elsewhere without modifications. This restriction limits interoperability and could lock you into your  Arbitrum (Orbit) chain, reducing flexibility if you need to migrate in the future.
+- **Compatibility and portability issues**: Contracts exceeding the standard 24 kB limit (enforced on public chains like Arbitrum One or Ethereum) cannot be deployed elsewhere without modifications. This restriction limits interoperability and could lock you into your Arbitrum (Orbit) chain, reducing flexibility if you need to migrate in the future.
 - **Irreversibility**: The limit must be set during initial chain configuration and cannot be changed post-deployment, so poor choices could lead to long-term inefficiencies.
-Overall, increasing the limit is ideal for specialized Arbitrum chains where complexity outweighs costs, but we recommend sticking to defaults unless necessary.
+  Overall, increasing the limit is ideal for specialized Arbitrum chains where complexity outweighs costs, but we recommend sticking to defaults unless necessary.
+- **Higher contract deployment costs (users)**: Larger contracts require more bytecode in the initialization code, which increases the transaction size and, consequently, the calldata costs posted to Ethereum L1. In Rollups, this can significantly raise deployment fees, as costs scale with data size for users.
 
 ## How to configure
 
