@@ -17,10 +17,10 @@ The body of this document will describe Arbitrum Rollup, this primary use case o
 
 Arbitrum is an L2 scaling solution for Ethereum, offering a unique combination of benefits:
 
-- Trustless security: security rooted in Ethereum, with any one party able to ensure correct Layer 2 results
-- Compatability with Ethereum: able to run unmodified EVM contracts and unmodified Ethereum transactions
-- Scalability: moving contracts' computation and storage off of the main Ethereum chain, allowing much higher throughput
-- Minimum cost: designed and engineered to minimize the L1 gas footprint of the system, minimizing per-transaction cost
+- **Trustless security**: security rooted in Ethereum, with any one party able to ensure correct Layer 2 results
+- **Compatability with Ethereum**: able to run unmodified EVM contracts and unmodified Ethereum transactions
+- **Scalability**: moving contracts' computation and storage off of the main Ethereum chain, allowing much higher throughput
+- **Minimum cost**: designed and engineered to minimize the L1 gas footprint of the system, minimizing per-transaction cost
 
 Some other Layer 2 systems provide some of these features, but to our knowledge no other system offers the same combination of features at the same cost.
 
@@ -104,7 +104,7 @@ The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically
 
 The Sequencer's batches are compressed using a general-purpose data compression algorithm called "Brotli", on its highest-compression setting.
 
-<!-- 
+<!--
 :::info More information
 
 For a deep dive into the Sequencer, batching, compression and all things Sequencer, refer to the [Sequencer Deep Dive](/how-arbitrum-works/03-sequencer.mdx).
@@ -216,7 +216,7 @@ We belive strongly that interactive proving is the superior approach, for the fo
 
 Much of the design of Arbitrum is driven by the opportunities opened up by interactive proving. If you're reading about some feature of Arbitrum, and you're wondering why it exists, two good questions to ask are: "How does this support interactive proving?" and "How does this take advantage of interactive proving?" The answers to most "why questions" about Arbitrum relate to interactive proving.
 
-<!-- 
+<!--
 :::info More information
 
 For a deep dive into the Geth and the State Transition Function, refer to the [State Transition Function Deep Dive](/how-arbitrum-works/04-state-transition-function/***********).
@@ -293,7 +293,7 @@ Again: this sort of thing is very unlikely in practice. In this diagram, at leas
 
 ### Staking
 
-At any given time, some validators will be stakers, and some will not. Stakers deposit funds that are held by the Arbitrum Layer 1 contracts and will be confiscated if the staker loses a challenge. Nitro chains accept stakes in ETH.
+At any given time, some validators will be stakers, and some will not. Stakers deposit funds that are held by the Arbitrum Layer 1 contracts and will be confiscated if the staker loses a challenge. Nitro chains accept stakes in `ETH`.
 
 A single stake can cover a chain of RBlocks. Every staker is staked on the lastest confirmed RBlock; and if you're staked on an RBlock, you can also stake on one successor of that RBlock. So you might be staked on a sequence of RBlocks that represent a single coherent claim about the correct history of the chain. A single stake suffices to commit you to that sequence of RBlocks.
 
@@ -335,7 +335,7 @@ The first unresolved RBlock can be rejected if:
 
 A consequence of these rules is that once the first unresolved RBlock's deadline has passed (and assuming there is at least one staker staked on something other than the latest confirmed RBlock), the only way the RBlock can be unresolvable is if at least one staker is staked on it and at least one staker is staked on a different RBlock with the same predecessor. If this happens, the two stakers are disagreeing about which RBlock is correct. It's time for a challenge, to resolve the disagreement.
 
-<!-- 
+<!--
 :::info More information
 
 For a deep dive into the Rollup Protocol, validation and proving, refer to the [Rollup Protocol Deep Dive](/how-arbitrum-works/05-validation-and-proving/*********).
@@ -403,7 +403,7 @@ The challenge protocol is designed so that the dispute can be resolved with a mi
 
 The only point where the protocol needs to evaluate a move "on the merits" is at the one-step proof, where it needs to look at Alice's proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
 
-<!-- 
+<!--
 :::info More information
 
 For a deep dive into the Challenges, refer to the [Challenges Deep Dive](/how-arbitrum-works/04-validation-and-proving/03-proving-and-challenges.mdx).
@@ -530,11 +530,29 @@ When the ticket is redeemed, the pre-packaged transaction runs with sender and o
 
 This mechanism is a bit more cumbersome than ordinary L1 to L2 transactions, but it has the advantage that the submission cost is predictable and the ticket will always be available for redemption if the submission cost is paid. As long as there is some user who is willing to redeem the ticket, the L2 transaction will eventually be able to execute and will not be silently dropped.
 
+<!--
+
+:::info More information
+
+For a deeper look into L1-to-L2 Messaging read more in the [deep dive](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+
+:::
+
+-->
+
 ### L2 to L1 ticket-based calls
 
 Calls from L2 and L1 operate in a similar way, with a ticket-based system. An L2 contract can call a method of the precompiled ArbSys contract, to send a transaction to L1. When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a ticket is created in the L1 outbox contract. The ticket can be triggered by anyone who calls a certain L1 outbox method and submits the `ticketID`. The ticket is only marked as redeemed if the L1 transaction does not revert.
 
 These L2-to-L1 tickets have unlimited lifetime, until they're successfully redeemed. No rent is required, as the tickets (actually a Merkle hash of the tickets) are recorded in Ethereum storage, which does not require rent. (The cost of allocating storage for the ticket Merkle roots is covered by L2 transaction fees.)
+
+<!--
+
+:::info More information
+
+For further reading take a look at the [L2-to-L1-messaging](/how-arbitrum-works/11-l2-to-l1-messaging.mdx) deep dive.
+
+-->
 
 ## Gas and Fees
 
@@ -554,8 +572,8 @@ User transactions pay fees, to cover the cost of operating the chain. These fees
 
 Fees are charged for two resources that a transaction can use:
 
-- L2 gas: an Ethereum-equivalent amount of gas, as required to execute the transaction on the Nitro chain
-- L1 calldata: a fee per unit of L1 calldata attributable to the transaction, which is charged only if the transaction came in via the Sequencer, and is paid to the Sequencer to cover its costs
+- **L2 gas**: an Ethereum-equivalent amount of gas, as required to execute the transaction on the Nitro chain
+- **L1 calldata**: a fee per unit of L1 calldata attributable to the transaction, which is charged only if the transaction came in via the Sequencer, and is paid to the Sequencer to cover its costs
 
 ## L2 gas fees
 
