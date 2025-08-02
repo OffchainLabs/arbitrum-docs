@@ -40,8 +40,6 @@ As an alternative solution, you can use [entrypoint-style contracts](https://doc
 
 ### Why do I get an error "no library targets found in package" when trying to compile and old example?
 
-Some of the first Stylus examples were built and deployed using a previous version of [cargo-stylus](https://github.com/OffchainLabs/cargo-stylus) (`0.1.x`). In that version, Stylus projects were structured as regular Rust binaries.
-
 Since [cargo-stylus v0.2.1](https://github.com/OffchainLabs/cargo-stylus/releases/tag/v0.2.1), Stylus projects are structured as libraries, so when trying to compile old projects you might get an error `no library targets found in package`.
 
 To solve this, it's usually enough to rename the `main.rs` file to a `lib.rs` file.

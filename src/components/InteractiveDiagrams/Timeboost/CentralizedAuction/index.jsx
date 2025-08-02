@@ -2311,22 +2311,12 @@ export const FlowChart = (props) => (
           d="M256.03 618.93v-63.6c0-6.61 5.36-11.97 11.97-11.97h138.61c6.61 0 11.97-5.36 11.97-11.97V294.43c0-6.61 5.36-11.97 11.97-11.97h54.36"
           className="cls-4"
         />
-        <NumberComponent
-          number={1}
-        />
-        <Modal
-          number={2}
-        />
-        <Modal
-          number={3}
-        />
-        <Modal
-          number={4}
-        />
-        <NumberComponent
-          number={5}
-        />
-        </g>
+        <NumberComponent number={1} />
+        <Modal number={2} />
+        <Modal number={3} />
+        <Modal number={4} />
+        <NumberComponent number={5} />
+      </g>
     </g>
   </svg>
 );
