@@ -14,7 +14,7 @@ import {
   useMergeRefs,
 } from '@floating-ui/react';
 import { MDXProvider } from '@mdx-js/react';
-import Link from '@docusaurus/Link';
+// Remove Link import - we'll use a span instead to avoid broken link detection
 import './styles.css';
 
 // Import all config partials statically to avoid CSP issues
@@ -111,14 +111,9 @@ export function FloatingHoverModal({ href, children }) {
 
   return (
     <>
-      <Link
-        ref={ref}
-        href={href}
-        className="floating-hover-modal__trigger"
-        {...getReferenceProps()}
-      >
+      <span ref={ref} className="floating-hover-modal__trigger" {...getReferenceProps()}>
         {children}
-      </Link>
+      </span>
 
       {isOpen && ContentComponent && (
         <FloatingPortal>
