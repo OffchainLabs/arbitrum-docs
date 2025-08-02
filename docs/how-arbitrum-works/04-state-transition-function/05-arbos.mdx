@@ -7,6 +7,16 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
+<!--
+******************************************************
+******************************************************
+******************************************************
+Not sure this is more relevant or expansive than the existing information from "Inside Arbitrum Nitro" it's more a deep explanation of how the precompiles themselves work. If we were to keep this content, I firmly believe it would make more sense to move this to the [Precompiles](/build-decentralized-apps/precompiles/01-overview.mdx)
+******************************************************
+******************************************************
+******************************************************
+
+
 <a data-quicklook-from="arbos">ArbOS</a> is the <a data-quicklook-from="child-chain">child chain</a> hypervisor
 that facilitates the execution environment of the child chain Arbitrum. ArbOS is a trusted "system glue"
 component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">
@@ -32,37 +42,6 @@ Completion of calling, dispatching, and recording of precompile methods occurs v
 
 Each time a <a data-quicklook-from="transaction">transaction</a> calls a method of a child chain-specific precompile, a [`call context`](https://github.com/OffchainLabs/nitro/blob/f11ba39cf91ee1fe1b5f6b67e8386e5efd147667/precompiles/context.go#L26) gets created to track and record the gas burnt. For convenience, it also provides access to the public fields of the underlying [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38). Because sub-transactions could revert without updates to this struct, the `TxProcessor` only makes public what is safe, such as the amount of parent chain calldata paid by the top-level transaction.
 
-## Precompile descriptions
-
-- `ArbAggregator`: Provides methods for configuring transaction aggregation. The <a data-quicklook-from="arbitrum-one">Arbitrum One</a> <a data-quicklook-from="sequencer">Sequencer</a> is the default aggregator unless changed by users. The precompile manages fee collection and <a data-quicklook-from="batch">batch</a> posters for chain aggregation.
-
-- `ArbGasInfo`: Retrieves various gas-related statistics, including gas prices in both `wei` and `Ink`, parent chain gas price estimates, transaction fees, and congestion metrics. It is crucial in estimating transaction costs and adjusting gas pricing dynamically.
-
-- `ArbRetryableTx`: Handles retryable transactions, enabling parent-to-child messaging with delayed execution. The precompile manages retryables, checks expiration times, extends their lifetime, and cancels pending retryables.
-
-- `ArbSys`: Provides system-level utilities for interacting with the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>. It exposes methods to retrieve chain-specific information such as block numbers, chain IDs, and gas availability. It also supports child-to-parent messaging and contract aliasing.
-
-- `ArbWasm`: Facilitates the deployment and management of <a data-quicklook-from="stylus">Stylus</a> contracts on <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>. It provides lifecycle management for <a data-quicklook-from="wasm">WASM</a>-based programs, including activation, expiration handling, memory footprint calculation, and version tracking.
-
-- `ArbWasmCache`: Manages Stylus caching mechanisms. It allows chain owners or designated managers to cache WASM programs for efficient execution, reduce computation costs, and improve call performance.
-
-- `ArbAddressTable`: Implements a compression scheme for frequently used addresses, allowing smart contracts to reference addresses using shorter representations, thus reducing calldata costs.
-
-- `ArbBLS` (disabled): Previously used for registering BLS public keys but is deprecated in Nitro.
-
-- `ArbDebug`: A debugging tool enabled by the `AllowDebugPrecompiles` flag. It provides mechanisms to emit test events, trigger reverts, and panic the chain for testing purposes.
-
-- `ArbFunctionTable` (no longer used): Originally designed to assist with function table compression, but is now deprecated in Nitro.
-
-- `ArbInfo`: Retrieves account information, including balances and deployed contract code, providing a lightweight alternative to calling `eth_getCode` or `eth_getBalance`.
-
-- `ArbOwner`: Allows chain owners to manage key network parameters, including gas pricing, scheduling upgrades, and setting various chain limits. The precompile is only accessible to chain owners.
-
-- `ArbOwnerPublic`: A read-only version of `ArbOwner` that allows users to query information about current chain owners and governance settings.
-
-- `ArbosTest` (legacy): A historical precompile used for burning arbitrary amounts of gas. It has limited utility in Nitro.
-
-- `ArbStatistics`: Provides historical data about the chain's state before the Nitro upgrade. Most functions that required this precompile in <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> now have better alternatives.
 
 ## Messages
 
@@ -92,6 +71,18 @@ This component maintains the last 256 parent chain block hashes in a circular bu
 In addition to supporting the [`ArbAggregator precompile`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator), the parent chain pricing state provides tools for determining the parent chain component of a transaction's gas costs. This part of the state tracks the total amount of funds collected from transactions in parent chain gas fees and the funds spent by batch posters to post data breaches on the parent chain.
 
 Based on this information, ArbOS maintains a parent chain data fee, which is also tracked as part of this state, determining how much transaction fees will cost for parent chain fees. ArbOS dynamically adjusts this value so that fees collected are approximately equal to batch posting costs.
+
+
+-->
+
+<!--
+******************************************************
+******************************************************
+******************************************************
+Based on current feedback from the AI Assistant it seems there are a ton of questions about gas - and the content around gas is scattered in multiple places. I am of the belief that we need a page that contains all the gassy information we can combine in a logical way without stripping it out of logical places - maybe partialize them.
+******************************************************
+******************************************************
+******************************************************
 
 ## Parent chain pricing model
 
@@ -366,6 +357,19 @@ Users and developers can access parent chain fee-related data through the follow
   - **Field**: `gasUsedForL1`
 
   - **Description**: Indicates the child chain gas used to cover parent chain costs.
+-->
+
+<!--
+******************************************************
+******************************************************
+******************************************************
+more precompile to move
+******************************************************
+******************************************************
+******************************************************
+
+
+
 
 ### [`l2PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l2pricing/l2pricing.go#L14)
 
@@ -378,6 +382,20 @@ ArbOS's larger gas pool [determines](https://github.com/OffchainLabs/nitro/blob/
 We need a per-block gas limit because arbitrator WAVM execution is much slower than native transaction execution. This limit means there can only be so much gas, roughly translating to wall-block time–in a child chain block. It also allows ArbOS to limit the size of blocks should demand continue to surge even as the price rises.
 
 ArbOS's per-block gas limit is distinct from Geth's block limit, which ArbOS [sets sufficiently high](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L166) to never run out. This approach is safe since Geth's block limit exists to constrain the work done per block, which ArbOS already does via its own per-block gas limit. Though it'll never run out, a block's transactions use the [same Geth gas pool](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L199) to maintain the invariant that the pool decreases monotonically after each transaction. Block headers [use the Geth block limit](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L67) for internal consistency and to ensure gas estimation works. There are distinct from the [`gasLeft`](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L146) variable, which ephemerally exists outside of the global state to keep child chain blocks from exceeding ArbOS's per-block gas limit and to deduct space where the state transition failed or [used negligible amounts](https://github.com/OffchainLabs/nitro/blob/faf55a1da8afcabb1f3c406b291e721bfde71a05/arbos/block_processor.go#L328) of compute gas. ArbOS does not need to persist `gasLeft` because its pool induces a revert, and transactions use the Geth block limit during EVM execution.
+
+-->
+
+<!--
+******************************************************
+******************************************************
+******************************************************
+more gassy stuff
+******************************************************
+******************************************************
+******************************************************
+
+
+
 
 ## Child chain gas pricing
 
@@ -418,3 +436,4 @@ The security of Nitro chains depends on the assumption that when one <a data-qui
 This approach sets an effective speed limit on execution of a Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit enforced by the Rollup protocol contracts on how far a deadline can be in the future, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
 
 Being able to set the speed limit accurately depends on being able to estimate the time required to validate an assertion, with some accuracy. Any uncertainty in estimating validation time will force us to lower the speed limit to be safe. We do not want to lower the speed limit, so we try to enable accurate estimation.
+-->
