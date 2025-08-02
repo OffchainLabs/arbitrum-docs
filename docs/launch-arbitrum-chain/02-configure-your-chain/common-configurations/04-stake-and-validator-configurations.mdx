@@ -1,12 +1,137 @@
 ---
 title: 'Stake and validator configurations'
 description: 'Learn how to configure your Arbitrum chain with a custom stake and validator configurations'
-author:
+author: pete-vielhaber
 sme:
 content_type: how-to
 tags: ['hide-from-search']
 ---
 
-- **Base Stake**: Minimum bond required for validators.
-- **Stake Token**: Token used for staking.
-- **Loser Stake Escrow**: Address for escrowed funds from losing validators.
+Arbitrum Orbit chains are customizable Layer 3 (L3) chains that settle to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support validator configurations to ensure chain security through bonding (staking) and assertion challenges. Validators post assertions about the chain's state on the parent L2 chain and can challenge incorrect assertions. Orbit chains can be permissioned, meaning validators must be whitelisted.
+
+Staking is required for active validation, where validators bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bonded stake is escrowed or burned. Configurations such as stake token, base stake, and loser stake escrow are configurable during chain deployment or post-deployment via contract calls.
+
+Orbit chains may utilize the BoLD (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects staking tokens (e.g., `WETH` for BoLD-enabled chains like Arbitrum One/Nova, or `ETH`/native for other chains).
+
+## Key concepts
+
+- **Validators**: Nodes that monitor and assert the chain's state. They can follow strategies from passive monitoring to active assertion creation. Validation adds overhead but enhances security.
+- **Staking/Bonding**: Validators deposit a bond (stake) to post assertions. The bond disincentivizes malicious behavior, as forfeiting the stake results in lost challenges.
+- **Permissioned Validation**: Validators must get added to an allowlist in the chain's Rollup contract.
+- **Tradeoffs**: A lower base stake reduces entry barriers but increases attack risks (e.g., spam challenges halting the chain). Higher stakes promote honesty but limit participation.
+
+## Stake token configuration
+
+The stake token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges.
+
+### Details
+
+- Can be `ETH` (native gas token) or an `ERC-20` token.
+- **For BoLD-enabled chains** (e.g., settling to Arbitrum One or Nova), it defaults to `WETH`.
+- **For non-BoLD chains**, it defaults to the parent chain's native token (usually `ETH`).
+- Currently, it's often hardcoded to `ETH` in basic deployments, but customizable to an `ERC-20` contract address in advanced setups. Future updates will expand `ERC-20` support.
+
+### How to Configure
+
+- During deployment in the [Arbitrum Orbit deployment portal](https://orbit.arbitrum.io/):
+  1.  Connect your wallet (may require switching to Arbitrum Sepolia for testnets).
+  2.  In the configuration form, enter the stake token's contract address on the parent L2 chain.
+  3.  Use `0x0000000000000000000000000000000000000000` for `ETH`.
+- **Post-deployment**: Not directly modifiable; set during initial Rollup contract creation.
+
+### Default
+
+`ETH` (or parent chain native token).
+
+## Base stake configuration
+
+The base stake is the minimum amount of the stake token that validators must deposit to bond and post assertions.
+
+### Details
+
+- Specified as a float value (e.g., in `wei` for `ETH`).
+- Must be greater than 0.
+- **Balances security**: Low values ease entry but risk malicious challenges; high values deter attacks but exclude smaller validators.
+
+### How to Configure
+
+- During deployment in the Orbit portal:
+  1.  In the configuration form, enter the base stake amount as a float.
+  2.  Review and deploy the chain (submits transactions to the parent chain).
+- **Post-deployment**: Adjustable via the Rollup contract if permissions allow (e.g., as chain owner).
+
+### Default
+
+No specific default; must be set >0 during deployment.
+
+## Loser stake escrow configuration
+
+The loser stake escrow is the address where a validator's bonded funds are sent if they lose a challenge (e.g., due to an incorrect assertion). This mechanism acts as a penalty.
+
+### Details
+
+- Funds are escrowed (held) rather than immediately burned, allowing potential recovery or governance decisions.
+- Recommended: Set to an address controlled by chain owners for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
+
+### How to configure
+
+- **During deployment**: Set in the `loserStakeEscrow` field of the `RollupCreator` configuration.
+- **Post-deployment**:
+  1. As the chain owner or upgrade executor, call the `Rollup.setLoserStakeEscrow(address newEscrow)` function on the Rollup contract.
+  2. Use tools like Etherscan or a wallet (e.g., MetaMask) to interact with the contract on the parent chain.
+
+### Default
+
+No default specified; must be configured.
+
+## Validator configurations and how to setup them up
+
+Validators are configured during chain deployment and can be run post-launch. Orbit chains support permissioned validators, added to an allowlist.
+
+### During Deployment (Initial Setup)
+
+1. In the Orbit deployment portal:
+   - Specify the number of initial validators (e.g., 1 for devnets, more for production).
+   - The first validator address is auto-generated with a private key (stored in downloaded JSON configs).
+   - Add additional validator addresses (e.g., your wallet addresses); they get whitelisted in the Rollup contract.
+2. Download `nodeConfig.json` and `orbitSetupScriptConfig.json` (these files contain validator private keys—back them up securely).
+3. Clone the [orbit-setup-script repo](https://github.com/OffchainLabs/orbit-setup-script).
+4. Move configs to the `config` directory.
+5. Run the setup script (e.g., via Docker or locally) to fund and initialize validators:
+
+- Example command to fund: `yarn run fund-bonder --privateKey 0xYourPrivateKey --l2rpc https://sepolia.arbitrum.io/rpc --l3rpc http://localhost:8449`.
+
+6. Deploy the chain; validators are now bonded with the base stake.
+
+### Adding Validators Post-Deployment (Permissioned Chains)
+
+1. As the upgrade executor (chain admin), call `setValidator(address[] calldata validators, bool[] calldata isValidator)` on the Rollup contract to update the allowlist.
+2. Ensure the new validator has a wallet funded with the base stake amount in the stake token.
+
+### Running a Validator Node
+
+Validators run as enhanced full nodes. Prerequisites: A funded wallet for bonding (base stake in stake token) and gas (parent chain native token).
+
+1. Set up a full node (see Arbitrum docs for base config).
+2. **Add Orbit chain info**: `--chain.info-json=<Orbit chain's info JSON>`.
+3. **Enable validation**: `--node.staker.enable=true`.
+4. **Choose a strategy** (via `--node.staker.strategy` or `--node.bold.strategy` for BoLD):
+
+| Strategy     | Description                                                                 | Gas Usage                     | Bonding Required? | Recommended For                                                                           |
+| ------------ | --------------------------------------------------------------------------- | ----------------------------- | ----------------- | ----------------------------------------------------------------------------------------- |
+| Watchtower   | Monitors and logs errors; no onchain actions.                               | None                          | No                | Low-risk monitoring (default).                                                            |
+| Defensive    | Bonds and challenges bad assertions if detected.                            | Only on disputes              | Yes               | Balanced security.                                                                        |
+| StakeLatest  | Bonds on latest correct assertion; moves bond for new ones (pre-BoLD only). | Per new assertion             | Yes               | Active but gas-intensive.                                                                 |
+| ResolveNodes | Bonds on latest; resolves unconfirmed assertions.                           | Per new/resolution            | Yes               | Efficient for confirmations.                                                              |
+| MakeNodes    | Creates new assertions periodically; competes with others.                  | High (creations, resolutions) | Yes               | Full active validation; set interval >1 hour via `--node.staker.make-assertion-interval`. |
+
+5. **Configure wallet**: `--node.staker.parent-chain-wallet.private-key=0xPrivateKey`.
+6. **For BoLD**: Enable with `--node.bold.enable=true` (if on older Nitro versions).
+7. **Verify**: Check logs for "running as validator" and "validation succeeded".
+8. **Bond**: The node will automatically bond the base stake when active; ensure the wallet has funds.
+
+### Assertion Interval
+
+Default one hour for new assertions (via `--node.staker.make-assertion-interval`); must exceed the Rollup's `minimumAssertionPeriod` (~15 minutes).
+
+For production, run multiple validators in a network. Test on devnets first. Always back up keys, as they're needed to withdraw bonds. If issues arise, refer to the official Arbitrum docs for updates, as configurations evolve.
