@@ -27,7 +27,7 @@ Timeboost is the culmination of over a year of [research and development](https:
 
 Today, Arbitrum chains order incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. This ordering policy was chosen as the default for Arbitrum chains because it is simple to understand and implement, enables fast block times (starting at 250ms and down to 100ms if desired), and protects users from harmful types of MEV like front-running & sandwich attacks.
 
-However, there are a few downsides to an FCFS ordering policy. Under FCFS, searchers are incentivized to participate in and try to win latency races through investments in off-chain hardware. This means that for searchers on Arbitrum chains, generating a profit from arbitrage and liquidation opportunities involves a lot of spam, placing stress on chain infrastructure and contributing to congestion. Additionally, all of the captured MEV on an Arbitrum chain under FCFS goes to searchers - returning none of the available MEV to the chain owner or the applications on the chain.
+However, there are a few downsides to an FCFS ordering policy. Under FCFS, searchers are incentivized to participate in and try to win latency races through investments in offchain hardware. This means that for searchers on Arbitrum chains, generating a profit from arbitrage and liquidation opportunities involves a lot of spam, placing stress on chain infrastructure and contributing to congestion. Additionally, all of the captured MEV on an Arbitrum chain under FCFS goes to searchers - returning none of the available MEV to the chain owner or the applications on the chain.
 
 Timeboost retains most FCFS benefits while addressing FCFS limitations.
 
