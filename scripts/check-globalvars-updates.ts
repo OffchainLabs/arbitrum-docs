@@ -11,7 +11,7 @@ function getGitStatus(filePath: string): string {
   try {
     const absPath = path.resolve(filePath);
     const relPath = path.relative(REPO_ROOT, absPath);
-    
+
     // Handle the case where relPath is empty (same as REPO_ROOT)
     const pathToCheck = relPath || '.';
 

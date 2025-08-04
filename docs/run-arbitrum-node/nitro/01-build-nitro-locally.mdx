@@ -170,15 +170,15 @@ sudo apt-get install bison
 brew install bison
 ```
 
-### Step 8. Configure Go [1.23](https://github.com/moovweb/gvm)
+### Step 8. Configure Go [1.24](https://github.com/moovweb/gvm)
 
 #### Install and configure Go
 
 ```shell
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
-gvm install go1.23
-gvm use go1.23 --default
+gvm install go1.24
+gvm use go1.24 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
