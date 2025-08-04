@@ -342,6 +342,64 @@ l1BlockNumber             "0x1223"
 
 Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this by calling your contract's `number()(uint256)` function again).
 
+## Testing your contract
+
+The Stylus testing framework includes `TestVM`, a simulation of the Stylus execution environment that enables you to test your contracts without deploying them. Here's a simple example of how
+to test the counter contract:
+
+```rust
+#[cfg(test)]
+mod test {
+    use super::*;
+    use alloy_primitives::address;
+    use stylus_sdk::testing::*;
+
+    #[test]
+    fn test_counter_operations() {
+        // Set up test environment
+        let vm = TestVM::default();
+        // Initialize your contract
+        let mut contract = Counter::from(&vm);
+
+        // Test initial state
+        assert_eq!(contract.number().unwrap(), U256::ZERO);
+
+        // Test increment
+        contract.increment().unwrap();
+        assert_eq!(contract.number().unwrap(), U256::from(1));
+
+        // Test set number
+        contract.set_number(U256::from(5)).unwrap();
+        assert_eq!(contract.number().unwrap(), U256::from(5));
+    }
+}
+```
+
+To enable testing, you'll need to add the following to your `Cargo.toml`:
+
+```toml
+[dev-dependencies]
+stylus-sdk = { version = "0.8.4", features = ["stylus-test"] }
+```
+
+### Running your tests
+
+You can run your tests using the standard Rust test command:
+
+```shell
+cargo test
+```
+
+The testing framework allows you to:
+
+- Simulate transaction context and block information
+- Test contract storage operations
+- Verify state transitions
+- Mock contract-to-contract interactions
+- Test various scenarios without deployment costs
+
+For more advanced testing techniques and best practices, see the [Testing contracts with Stylus guide](./how-tos/testing-contracts).
+
 ## Conclusion
 
 Congratulations! You've successfully initialized, deployed, and interacted with your first contract using Stylus and Rust.
