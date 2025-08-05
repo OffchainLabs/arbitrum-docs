@@ -49,7 +49,7 @@ It will help generate folder `i18n/fr`.
 mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/translated
 ```
 
-3. Translate one of more docs files located in `/arbitrum-docs`.
+3. Translate one of more docs files located in `docs/`.
 
 4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in `i18n` should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
 
