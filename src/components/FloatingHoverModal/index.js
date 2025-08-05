@@ -111,9 +111,14 @@ export function FloatingHoverModal({ href, children }) {
 
   return (
     <>
-      <span ref={ref} className="floating-hover-modal__trigger" {...getReferenceProps()}>
+      <button
+        ref={ref}
+        className="floating-hover-modal__trigger"
+        type="button"
+        {...getReferenceProps()}
+      >
         {children}
-      </span>
+      </button>
 
       {isOpen && ContentComponent && (
         <FloatingPortal>
