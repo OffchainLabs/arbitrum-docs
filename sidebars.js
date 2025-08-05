@@ -262,6 +262,11 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'launch-arbitrum-chain/introduction',
+          label: 'Where do I start?',
+        },
+        {
+          type: 'doc',
           id: 'launch-arbitrum-chain/a-gentle-introduction',
           label: 'A gentle introduction',
         },

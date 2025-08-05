@@ -1,0 +1,62 @@
+---
+title: 'Where do I start?'
+description: 'Launch your own Arbitrum chain using the Arbitrum Nitro codebase. Build an L2 or an L3 with the ability to customize every aspect of the chain specifically for your needs.'
+author: pete-vielhaber
+sme:
+target_audience: technical decision-makers, people familiar with web3 who will decide to use Arbitrum chain on behalf of their organizations
+sidebar_position: 1
+---
+
+An Arbitrum chain is a customizable blockchain built using Arbitrum's Nitro technology stack, allowing you to deploy your Layer 2 (L2) or Layer 3 (L3) chain. These chains are configurable as either Rollups (which post data directly to Ethereum for maximum security and decentralization) or AnyTrust chains (which use a Data Availability Committee for lower costs and faster performance).
+
+This flexibility enables you to create a dedicated chain tailored to specific applications, ecosystems, or business needs, with the flexibility to host smart contracts for one or multiple apps, or none at all. Arbitrum chains are designed for progressive decentralization, leveraging Ethereum's security while giving you control over governance and operations.
+
+## Key features
+
+Arbitrum (Orbit) chains offer a range of customizable and high-performance features, making them ideal for developers and projects seeking scalability beyond general-purpose L2s. Here's a breakdown:
+
+### Security
+
+Security is a cornerstone for any blockchain, as it directly impacts user trust, asset protection, and long-term adoption. Arbitrum chains inherit Ethereum's battle-tested security model through Arbitrum's Nitro stack, which includes interactive fraud proofs and permissionless validation. This security model means your chain benefits from Ethereum-level decentralization without requiring you to manage it from scratch.
+
+### Protocol customization
+
+Customizing the protocol enables you to tailor the chain's architecture to your specific needs, which is crucial for optimizing performance, enhancing the user experience, and achieving competitive differentiation. You can modify elements like throughput, privacy settings, settlement logic, precompiles, and even permission access. Customizing the protocol allows you to create a chain optimized for niche use cases, such as gaming (high transactions per second, TPS), enterprise (private transactions), or AI (specialized computations). The modular design reduces development time and costs, as you build on Arbitrum's stack while experimenting with custom features ahead of Ethereum's timeline. Ultimately, this fosters innovation, improves efficiency, and gives you a strategic edge in attracting dApps or ecosystems tailored to your vision.
+
+### Profit share
+
+Profit sharing in Arbitrum chains refers to a revenue model where operations are monetizable through sequencer fees, MEV (Maximal Extractable Value), and transaction profits, while typically sharing a portion (e.g., 10% under the Arbitrum Expansion Program (AEP)) with the Arbitrum DAO as a licensing fee.
+
+For you, it converts your chain into a revenue-generating asset, especially for high-volume apps, without incurring massive upfront costs. The shared portion supports the broader ecosystem (e.g., Arbitrum upgrades), ensuring long-term viability.
+
+### Block times
+
+Arbitrum chains are fast, with response times ranging from 100ms to 250ms, and feature an elastic design that only produces blocks on demand. This feature is crucial for real-time applications, as shorter block times enable near-instant confirmations, reducing latency and improving the user experience compared to Ethereum's 12-second average block time. It benefits you by supporting high-throughput use cases, such as gaming, trading, or social apps, where delays can lead to user churn. The elastic mechanism also minimizes unnecessary L1/L2 settlement costs, lowering operational expenses and making your chain more efficient and cost-effective.
+
+### Custom gas token
+
+The ability to use a custom `ERC-20` token as the native gas token (especially in AnyTrust chains) is a game-changer for ecosystem integration and user friction reduction. This ability is important because it allows you to align fees with your project's tokenomics. You could benefit from seamless onboarding, potential revenue from staking, and enhanced liquidity for your token. It's also cost-efficient, as it avoids `ETH` price swings, making your chain more accessible and profitable long-term.
+
+### Data availability solutions
+
+Arbitrum chains' execution environment utilizes EVM+ via Stylus, supporting Solidity alongside Rust, C, and C++ through WASM for advanced computations. This multi-language support is paramount for expanding beyond EVM limitations, enabling the execution of complex logic, such as AI models or high-performance applications. This flexibility offers broader developer appeal, faster execution (WASM is more efficient), and compatibility with existing tools. You can customize restrictions, e.g., for security or optimization.
+
+### Governance
+
+Governance on Arbitrum chains is sovereign and customizable, decoupling from the Arbitrum DAO while allowing you to define rules like upgrades, validators, or account abstraction. Governance is vital for maintaining control and adapting to your project's needs without external interference. You'll benefit from faster decision-making (e.g., implementing features ahead of public chains), progressive decentralization (starting centralized and adding validators), and tailored models (e.g., DAO-voted or owner-led). You'll get ensured autonomy, reduced risks associated with shared governance conflicts, and aligned incentives with your vision, fostering a dedicated community and promoting long-term sustainability.
+
+You can launch a chain quickly via tools like the [Arbitrum Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk)'s Rollup creation [example on GitHub](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth), and you may qualify for [grants from the Arbitrum Foundation](https://arbitrum.foundation/grants) to support development.
+
+## How do you fit into the Arbitrum ecosystem
+
+This "universe of chains" aligns with Ethereum's vision of a decentralized web by providing flexible security, execution environments, and governance, enabling ecosystems of interconnected chains that can exchange data and liquidity seamlessly. For instance, Arbitrum chains can onboard users and liquidity from Ethereum or other Arbitrum chains in seconds, fostering true interoperability. They also contribute to the ecosystem's growth by accessing shared upgrades and potentially participating in programs like the Arbitrum Expansion Program (AEP) for chains settling outside traditional Arbitrum L2s, which may involve additional licensing terms.
+
+Overall, as an Arbitrum chain owner, you will contribute to and benefit from a scalable, Ethereum-aligned ecosystem that prioritizes customization without compromising compatibility or security.
+
+## Where do you go from here?
+
+If you've decided to create a chain, click the Next button below, or go to the [Configuration Selector].
+
+<!-- page is under development under a different PR -->
+
+If you want to read more about Arbitrum chains before making a decision, the [Gentle Introduction](/launch-arbitrum-chain/01-a-gentle-introduction.md) is a good starting point.
