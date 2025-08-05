@@ -1,8 +1,8 @@
-import globalVars from '../resources/globalVars.js';
+import globalVars from '../src/resources/globalVars.js';
 import {
   precompilesInformation,
   nodeInterfaceInformation,
-} from '../resources/precompilesInformation.js';
+} from '../src/resources/precompilesInformation.js';
 import fs from 'fs';
 
 type PrecompileMethodInfo = {
