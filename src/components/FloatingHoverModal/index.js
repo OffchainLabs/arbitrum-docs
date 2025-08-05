@@ -14,7 +14,7 @@ import {
   useMergeRefs,
 } from '@floating-ui/react';
 import { MDXProvider } from '@mdx-js/react';
-// Remove Link import - we'll use a span instead to avoid broken link detection
+// Remove Link import - we'll use a span instead to avoid Docusaurus broken link detection (Docusaurus's build will fail if a <Link> points to a non-existent page)
 import './styles.css';
 
 // Import all config partials statically to avoid CSP issues
