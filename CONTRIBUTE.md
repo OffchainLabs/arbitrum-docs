@@ -119,6 +119,15 @@ Every document should be a specific _type_ of document. Each type of document ha
 
 This isn't an exhaustive list, but it includes most of the document types that we use.
 
+
+:::info About Promotional Content
+
+While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept promotional content in our core docs. 
+
+Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as third-party docs, either.
+
+:::
+
 ### Style conventions
 
 The following style guidelines provide recommendations that help us deliver **a consistent content experience** across our docs:
