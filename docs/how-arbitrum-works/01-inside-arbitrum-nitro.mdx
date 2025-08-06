@@ -436,13 +436,15 @@ Who will be validators? Anyone will be able to do it, but most people will choos
 
 ## ArbOS
 
-ArbOS is a trusted "system glue" component that runs at Layer 2 as part of the State Transition Function. ArbOS provides functions needed for a Layer 2 system, such as cross-chain communication, resource accounting and Layer 2 related fee economics, and chain management.
+ArbOS is a trusted "system glue" component that acts as the hypervisor and facilitates the State Transition Function (execution environment) on the child chain. ArbOS provides functions needed for a Layer 2 system, such as cross-chain communication, resource accounting and Layer 2 related fee economics, and chain management.
 
 ### Why ArbOS?
 
 In Arbitrum, much of the work that would otherwise have to be done expensively at Layer 1 is instead done by ArbOS, trustlessly performing these functions at the speed and low cost of Layer 2.
 
 Supporting these functions in Layer 2 trusted software, rather than building them in to the L1-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at Layer 2, instead of having to manage those resources as part of a Layer 1 contract. Having a trusted operating system at Layer 2 also has significant advantages in flexibility, because Layer 2 code is easier to evolve, or to customize for a particular chain, then a Layer-1 enforced architecture would be.
+
+ArbOS also provides child chain-specific precompiles with methods smart contracts can call the same way they can Solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a full reference of the precompiles available in Arbitrum chains.
 
 ## Full Nodes
 
