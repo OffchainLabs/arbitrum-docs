@@ -14,7 +14,7 @@ import path from 'path';
  * Run with: `yarn update-variable-refs`
  */
 
-import globalVars from '../resources/globalVars.js';
+import globalVars from '../src/resources/globalVars.js';
 
 // Find all .md and .mdx files recursively
 function findDocFiles(dir: string): string[] {
@@ -62,7 +62,7 @@ function processFile(filePath: string, docsPath: string) {
 function main() {
   console.log('Scanning for variable references...');
 
-  const docsPath = path.resolve(__dirname, '../../../arbitrum-docs');
+  const docsPath = path.resolve(__dirname, '../docs');
   const stats = findDocFiles(docsPath)
     .map((file) => processFile(file, docsPath))
     .reduce(
