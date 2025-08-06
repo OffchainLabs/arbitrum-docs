@@ -92,10 +92,11 @@ function htmlToMarkdown(html: string): string {
     .replace(/\n{3,}/g, '\n\n') // Remove excessive newlines
     .replace(/^\s+|\s+$/g, '') // Trim whitespace
     
-  // Fix escaped backticks that break MDX compilation
+  // Fix escaped backticks and asterisks that break MDX compilation
   markdown = markdown
     .replace(/\\`/g, '`') // Unescape backticks
     .replace(/\\\\/g, '\\') // Fix double-escaped backslashes
+    .replace(/\\\*/g, '*') // Unescape asterisks used in bold formatting
   
   // Fix malformed links that can break MDX compilation
   markdown = markdown
@@ -106,6 +107,11 @@ function htmlToMarkdown(html: string): string {
     .replace(/\[([^\]]+)\]\(>(\[.*?\]\(.*?\))\)/g, '$2') // Fix malformed nested link patterns like [text](>[text](url))
     .replace(/\[([^\]]+)\]\(>\[([^\]]+)\]\(([^)]+)\)\)/g, '[$2]($3)') // Fix specific pattern [text](>[text](url))
     .replace(/\]\(>\[/g, '][') // Fix remaining ](>[ patterns
+    .replace(/\[([^\]]+)\]\[([^\]]+)\]\(([^)]+)\)/g, '[$1]($3)') // Fix duplicate link syntax [text][text](url)
+    .replace(/\*{4,}/g, '**') // Fix excessive asterisks (more than 4 becomes 2)
+    .replace(/\*\*\*\*\.\*\*/g, '**.') // Fix specific pattern ****.** to **.
+    .replace(/\*\*\.\*\*/g, '**.') // Fix specific pattern **.** to **.
+    .replace(/\*\*\*\*/g, '**') // Fix quadruple asterisks
   
   return markdown
 }
