@@ -35,8 +35,8 @@
       "name": "Arbitrum Orbit SDK",
       "repo": "https://github.com/OffchainLabs/arbitrum-orbit-sdk",
       "currentDocsVersion": "0.23.1",
-      "latestRelease": "v0.23.4",
-      "latestReleaseDate": "2025-07-22",
+      "latestRelease": "v0.23.5",
+      "latestReleaseDate": "2025-07-30",
       "docsPath": "docs/arbitrum-docs/launch-arbitrum-chain",
       "description": "SDK for building Arbitrum Orbit chains"
     },
@@ -55,8 +55,8 @@
       "name": "Arbitrum Token Bridge Contracts",
       "repo": "https://github.com/OffchainLabs/token-bridge-contracts",
       "currentDocsVersion": "v1.2.3",
-      "latestRelease": "v1.2.3",
-      "latestReleaseDate": "2024-08-19",
+      "latestRelease": "v1.2.4",
+      "latestReleaseDate": "2025-08-05",
       "docsPath": "docs/arbitrum-docs/build-decentralized-apps/token-bridging",
       "description": "Smart contracts for the Arbitrum token bridge"
     }
