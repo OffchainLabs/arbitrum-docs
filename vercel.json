@@ -196,6 +196,16 @@
       "permanent": false
     },
     {
+      "source": "/(docs/how-arbitrum-works/l1-to-l2-messaging/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/l2-to-l1-messaging/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/how-arbitrum-works/sequencer/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/sequencer/?)",
       "permanent": false
