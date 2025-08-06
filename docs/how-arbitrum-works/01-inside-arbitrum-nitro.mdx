@@ -85,6 +85,12 @@ The state transition function is deterministic, which means that its behavior de
 
 It follows that anyone who knows the transaction sequence can computate the state transition function for themselves - and all honest parties who do this are guaranteed to get identical results. This is the normal way that Nitro nodes operate: get the transaction sequence, and run the state transition function locally. No consensus mechanism is needed for this.
 
+:::info More information
+
+For additional reading on STF inputs see the [STF Inputs deep-dive](/how-arbitrum-works/deep-dives/stf-inputs.mdx).
+
+:::
+
 ## How the Sequencer Publishes the Sequence
 
 So how do nodes get the sequence? The Sequencer publishes it in two ways: a real-time feed, and batches posted on L1 Ethereum.
