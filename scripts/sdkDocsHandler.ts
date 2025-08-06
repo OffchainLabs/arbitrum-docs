@@ -16,7 +16,7 @@ const { parseMarkdownContentTitle } = require('@docusaurus/utils');
  */
 function load(app) {
   const sdkOutputDir = app.options.getValue('out'); // This is the SDK directory
-  const sourceDir = path.join(sdkOutputDir, '../../arbitrum-sdk/docs');
+  const sourceDir = path.join(sdkOutputDir, '../../submodules/arbitrum-sdk/docs');
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(sdkOutputDir, ['index.mdx', 'migrate.mdx']); // Preserve manual files
