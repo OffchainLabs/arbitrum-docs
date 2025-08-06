@@ -85,6 +85,12 @@ import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.m
 
 ## Putting it into practice: run a node
 
+:::warning Caution
+
+If you are running more than on node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+
+:::
+
 - To ensure the database persists across restarts, mount an external volume when running the Docker image. Use the mount point `/home/user/.arbitrum` within the Docker image.
 - Here is an example of how to run `nitro-node`:
 
