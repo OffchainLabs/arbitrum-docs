@@ -18,6 +18,7 @@ import {
 } from '@offchainlabs/notion-docs-generator'
 import fs from 'fs'
 import dotenv from 'dotenv'
+import TurndownService from 'turndown'
 dotenv.config()
 
 // Types
@@ -36,6 +37,32 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 })
 
+// Initialize Turndown for HTML to Markdown conversion
+const turndownService = new TurndownService({
+  headingStyle: 'atx',
+  codeBlockStyle: 'fenced',
+  linkStyle: 'inlined',
+  bulletListMarker: '-',
+})
+
+// Configure turndown to handle MDX-specific cases
+turndownService.addRule('removeEmptyParagraphs', {
+  filter: (node) => {
+    return (
+      node.nodeName === 'P' &&
+      node.textContent &&
+      node.textContent.trim() === ''
+    )
+  },
+  replacement: () => '',
+})
+
+// Escape MDX-problematic characters
+turndownService.addRule('escapeMDXCharacters', {
+  filter: () => false, // We'll handle this in post-processing
+  replacement: () => '',
+})
+
 // Helper functions
 export function recordValidity(record: Record): LinkValidity {
   if (record.status != '4 - Continuously publishing') {
@@ -48,6 +75,74 @@ export function recordValidity(record: Record): LinkValidity {
 }
 const isValid = (item: KnowledgeItem) => {
   return recordValidity(item) === 'Valid'
+}
+
+// Convert HTML to clean Markdown
+function htmlToMarkdown(html: string): string {
+  // Clean up the HTML before conversion
+  let cleanHtml = html
+    .replace(/\n\s*\n/g, '\n') // Remove excessive newlines
+    .trim()
+  
+  // Convert to Markdown
+  let markdown = turndownService.turndown(cleanHtml)
+  
+  // Post-process to clean up common issues
+  markdown = markdown
+    .replace(/\n{3,}/g, '\n\n') // Remove excessive newlines
+    .replace(/^\s+|\s+$/g, '') // Trim whitespace
+    
+  // Fix escaped backticks and asterisks that break MDX compilation
+  markdown = markdown
+    .replace(/\\`/g, '`') // Unescape backticks
+    .replace(/\\\\/g, '\\') // Fix double-escaped backslashes
+    .replace(/\\\*/g, '*') // Unescape asterisks used in bold formatting
+  
+  // Fix malformed links that can break MDX compilation
+  markdown = markdown
+    .replace(/\]\(<a href=[^)]*\)"/g, '](') // Remove malformed <a href= fragments
+    .replace(/\[([^\]]+)\]\(<a href=([^>]*)>\)"\>\[([^\]]+)\]\(([^)]+)\)/g, '[$1]($4)') // Fix nested link structures
+    .replace(/\[([^\]]+)\]\(<a href=\)"/g, '[$1](') // Fix incomplete href attributes
+    .replace(/\]\(<a href=\)"/g, '](') // Fix bare <a href= fragments
+    .replace(/\[([^\]]+)\]\(>(\[.*?\]\(.*?\))\)/g, '$2') // Fix malformed nested link patterns like [text](>[text](url))
+    .replace(/\[([^\]]+)\]\(>\[([^\]]+)\]\(([^)]+)\)\)/g, '[$2]($3)') // Fix specific pattern [text](>[text](url))
+    .replace(/\]\(>\[/g, '][') // Fix remaining ](>[ patterns
+    .replace(/\[([^\]]+)\]\[([^\]]+)\]\(([^)]+)\)/g, '[$1]($3)') // Fix duplicate link syntax [text][text](url)
+    .replace(/\*{4,}/g, '**') // Fix excessive asterisks (more than 4 becomes 2)
+    .replace(/\*\*\*\*\.\*\*/g, '**.') // Fix specific pattern ****.** to **.
+    .replace(/\*\*\.\*\*/g, '**.') // Fix specific pattern **.** to **.
+    .replace(/\*\*\*\*/g, '**') // Fix quadruple asterisks
+  
+  return markdown
+}
+
+// Properly escape HTML entities for JSON
+function escapeHtmlEntities(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
+// Extract title text from Notion rich text object
+function extractTitleText(title: any): string {
+  if (typeof title === 'string') {
+    return title
+  }
+  if (Array.isArray(title) && title.length > 0) {
+    return title.map(item => item.plain_text || item.text?.content || '').join('')
+  }
+  return 'Unknown Title'
+}
+
+// Extract key from term object (use the rendered term's key)
+function extractKey(renderedTerm: any): string {
+  if (renderedTerm && renderedTerm.key && typeof renderedTerm.key === 'string') {
+    return renderedTerm.key
+  }
+  return 'unknown-key'
 }
 
 // Content getter
@@ -251,13 +346,55 @@ const renderJSONFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
   return '[\n' + faqs.map(printItem).join(',\n') + '\n]'
 }
 
-// Renderer for FAQ questions and answers
+// Renderer for FAQ questions and answers as pure Markdown
 const renderFAQs = (faqs: RenderedKnowledgeItem[]) => {
   const printItem = (faq: RenderedKnowledgeItem) => {
-    return `### ${faq.title}` + '\n' + `${faq.text}`
+    // Convert HTML content to Markdown
+    const markdownText = htmlToMarkdown(faq.text)
+    return `### ${faq.title}\n\n${markdownText}`
   }
 
-  return faqs.map(printItem).join('\n')
+  return faqs.map(printItem).join('\n\n')
+}
+
+// Custom glossary JSON renderer with proper HTML escaping
+function renderGlossaryJSONWithEscaping(
+  terms: Definition[], 
+  linkableTerms: LinkableTerms
+): string {
+  const glossaryData: Record<string, {title: string, text: string}> = {}
+  
+  for (const term of terms) {
+    const renderedTerm = renderKnowledgeItem(term, linkableTerms)
+    const titleText = extractTitleText(term.title)
+    const keyText = extractKey(renderedTerm)
+    
+    // Keep the HTML content but ensure it's properly escaped
+    glossaryData[keyText] = {
+      title: titleText,
+      text: escapeHtmlEntities(renderedTerm.text) + '\n'
+    }
+  }
+  
+  // Return compact JSON format
+  return JSON.stringify(glossaryData)
+}
+
+// Render glossary as pure Markdown
+function renderGlossaryAsMarkdown(
+  terms: Definition[], 
+  linkableTerms: LinkableTerms
+): string {
+  const items = terms.map(term => {
+    const renderedTerm = renderKnowledgeItem(term, linkableTerms)
+    const markdownText = htmlToMarkdown(renderedTerm.text)
+    const titleText = extractTitleText(term.title)
+    const keyText = extractKey(renderedTerm)
+    
+    return `### ${titleText} {#${keyText}}\n\n${markdownText}`
+  })
+  
+  return '\n\n' + items.join('\n\n') + '\n'
 }
 
 async function generateFiles() {
@@ -281,14 +418,20 @@ async function generateFiles() {
   }
 
   const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
+    .sort((a, b) => {
+      const titleA = extractTitleText(a.title).toLowerCase()
+      const titleB = extractTitleText(b.title).toLowerCase()
+      return titleA.localeCompare(titleB)
+    })
   addItems(validGlossaryTerms, '/intro/glossary')
-  const glossaryJSON = renderGlossaryJSON(validGlossaryTerms, linkableTerms)
+  
+  // Use our custom glossary JSON renderer with proper HTML escaping
+  const glossaryJSON = renderGlossaryJSONWithEscaping(validGlossaryTerms, linkableTerms)
   fs.writeFileSync('static/glossary.json', glossaryJSON)
-  const definitionsHTML = `\n\n${renderGlossary(
-    validGlossaryTerms,
-    linkableTerms
-  )}\n`
-  fs.writeFileSync('docs/partials/_glossary-partial.mdx', definitionsHTML)
+  
+  // Generate glossary partial as pure Markdown
+  const glossaryMarkdown = renderGlossaryAsMarkdown(validGlossaryTerms, linkableTerms)
+  fs.writeFileSync('docs/partials/_glossary-partial.mdx', glossaryMarkdown)
 
   // FAQs
   // ----
