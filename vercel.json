@@ -216,6 +216,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/run-arbitrum-node/sequencer/run-feed-relay/?)",
+      "destination": "/(docs/run-arbitrum-node/run-feed-relay/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/tx_lifecycle/?)",
       "destination": "/how-arbitrum-works/transaction-lifecycle",
       "permanent": false
