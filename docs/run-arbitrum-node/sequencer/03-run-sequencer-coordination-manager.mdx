@@ -13,7 +13,7 @@ The tool offers keyboard-only support. Any changes you make are stored locally u
 - Clone and enter nitro repository:
 
   ```shell
-  git clone --branch @@nitroVersionTag=v3.6.5@@ https://github.com/OffchainLabs/nitro.git
+  git clone --branch @@nitroVersionTag=v3.6.8@@ https://github.com/OffchainLabs/nitro.git
   cd nitro
   ```
 
@@ -50,6 +50,8 @@ After selecting a sequencer from the non-priority list, you are given the option
 <ImageZoom src="/img/run-node-add-to-priority.png" alt="Add to priority" className="img-600px" />
 
 You can also add a new sequencer to the priority list by pressing `a` from the keyboard shortcuts. This action will bring up a form to enter the sequencer details. After adding the sequencer URL, you can click `Add` to see the changes or `Cancel` to abort the operation.
+
+There is a flag in the sequencer's config, `--node.seq-coordinator.my-url`, which needs to be set to your sequencer's endpoint URL. Ensure that the URL of your sequencer added to the sequencer coordinator manager matches this flag.
 
 <ImageZoom src="/img/run-node-add-new-seq.png" alt="Add new Sequencer" className="img-600px" />
 
