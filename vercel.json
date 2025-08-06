@@ -201,6 +201,51 @@
       "permanent": false
     },
     {
+      "source": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/arbos/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/arbos/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/ethereum-vs-arbitrum/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/ethereum-vs-arbitrum/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/modified-geth-on-arbitrum/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/modified-geth-on-arbitrum/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/stf-gentle-intro/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/stf-gentle-intro/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/stf-inputs/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/stf-inputs/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/stylus-execution-path/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/stylus-execution-path/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/validation-and-proving/proving-and-challenges/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/proving-and-challenges/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/validation-and-proving/rollup-protocol/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/rollup-protocol/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/validation-and-proving/validation-and-proving/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/validation-and-proving/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/how-arbitrum-works/gas-fees/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/gas-fees/?)",
       "permanent": false
