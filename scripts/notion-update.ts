@@ -418,6 +418,11 @@ async function generateFiles() {
   }
 
   const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
+    .sort((a, b) => {
+      const titleA = extractTitleText(a.title).toLowerCase()
+      const titleB = extractTitleText(b.title).toLowerCase()
+      return titleA.localeCompare(titleB)
+    })
   addItems(validGlossaryTerms, '/intro/glossary')
   
   // Use our custom glossary JSON renderer with proper HTML escaping
