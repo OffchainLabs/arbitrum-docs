@@ -196,6 +196,36 @@
       "permanent": false
     },
     {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/arbos/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/arbos/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/ethereum-vs-arbitrum/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/ethereum-vs-arbitrum/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/modified-geth-on-arbitrum/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/stf-gentle-intro/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/stf-gentle-intro/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/stf-inputs/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/stf-inputs/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/stylus-execution-path/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/stylus-execution-path/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/how-arbitrum-works/transaction-lifecycle/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/transaction-lifecycle/?)",
       "permanent": false
