@@ -45,6 +45,7 @@
     "@types/mdx": "^2.0.11",
     "@types/prismjs": "^1.26.5",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@types/turndown": "^5.0.5",
     "classnames": "^2.5.1",
     "clsx": "^1.2.1",
     "docusaurus-plugin-fathom": "^1.2.0",
@@ -63,7 +64,8 @@
     "rehype-katex": "7",
     "remark-math": "6",
     "sass": "^1.66.1",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "turndown": "^7.2.0"
   },
   "devDependencies": {
     "@actions/core": "^1.10.1",
@@ -76,8 +78,8 @@
     "@types/react": "^19.0.10",
     "@types/semver": "^7.7.0",
     "docusaurus-plugin-typedoc": "^1.0.1",
-    "gray-matter": "^4.0.3",
     "glob": "^7.2.0",
+    "gray-matter": "^4.0.3",
     "husky": "^9.1.7",
     "markdown-link-extractor": "^3.1.0",
     "prettier": "^2.8.3",
