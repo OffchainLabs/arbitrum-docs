@@ -191,6 +191,16 @@
       "permanent": false
     },
     {
+      "source": "/(docs/how-arbitrum-works/anytrust-protocol/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/anytrust-protocol/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/data-availability/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/data-availability/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/how-arbitrum-works/gas-fees/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/gas-fees/?)",
       "permanent": false
