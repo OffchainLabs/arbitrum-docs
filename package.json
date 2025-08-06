@@ -35,6 +35,7 @@
     "@docusaurus/preset-classic": "^3.6.3",
     "@docusaurus/theme-live-codeblock": "^3.6.3",
     "@docusaurus/theme-mermaid": "^3.6.3",
+    "@floating-ui/react": "^0.27.15",
     "@inkeep/cxkit-docusaurus": "^0.5.91",
     "@mdx-js/react": "^3.0.0",
     "@radix-ui/react-dialog": "^1.0.5",
