@@ -81,15 +81,6 @@ Once the transactions are sequenced, they are run through the _state transition 
 
 Because the protocol doesn't trust the Sequencer not to put garbage into its sequence, the state transition function will detect and discard any invalid (e.g., improperly formed) transactions in the sequence. A well-behaved Sequencer will filter out invalid transactions so the state transition function never sees them - and this reduces cost and therefore keeps transactions fees low - but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the fees are signed by their senders, so the Sequencer can't create forged transactions.)
 
-<!--
-
-:::info More information
-
-To learn more about the Sequencer Feed take a look at the [Sequencer Feed Deep Dive](/how-arbitrum-works/04-state-transition-function/02-stf-inputs.mdx)
-
-:::
--->
-
 The state transition function is deterministic, which means that its behavior depends only on the current state and the contents of the next transaction - and nothing else. Because of this determinism, the result of a transaction `T` will depend only on the genesis state of the chain, the transactions before `T` in the sequence, and `T` itself.
 
 It follows that anyone who knows the transaction sequence can computate the state transition function for themselves - and all honest parties who do this are guaranteed to get identical results. This is the normal way that Nitro nodes operate: get the transaction sequence, and run the state transition function locally. No consensus mechanism is needed for this.
@@ -104,13 +95,11 @@ The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically
 
 The Sequencer's batches are compressed using a general-purpose data compression algorithm called "Brotli", on its highest-compression setting.
 
-<!--
 :::info More information
 
-For a deep dive into the Sequencer, batching, compression and all things Sequencer, refer to the [Sequencer Deep Dive](/how-arbitrum-works/03-sequencer.mdx).
+To learn more about the Sequencer in depth take a look at the [Sequencer Deep Dive](/how-arbitrum-works/deep-dives/sequencer.mdx)
 
 :::
--->
 
 ## Geth at the Core
 
@@ -128,12 +117,10 @@ Because the top and bottom layers rely heavily on code from Geth, this structure
 
 The State Transition Function consists of the bottom Geth layer, and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code, and implicitly includes all of the code called by that function. The STF takes as input the bytes of a transaction received in the inbox, and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state, and at the end will emit the header of a new block (in Ethereum's block header format) which will be appended to the Nitro chain.
 
-<!--
-
 :::info More information
-For a deep dive into the Geth Sandwich, refer to the [Geth Sandwich Deep Dive](/how-arbitrum-works/04-state-transition-function/03-ethereum-vs-arbitrum.mdx)
+For a deep dive into the Geth, refer to the [Geth Deep Dive](/how-arbitrum-works/deep-dives/modified-geth-on-arbitrum.mdx)
 
--->
+:::
 
 ## Separating Execution from Proving
 
@@ -530,15 +517,11 @@ When the ticket is redeemed, the pre-packaged transaction runs with sender and o
 
 This mechanism is a bit more cumbersome than ordinary L1 to L2 transactions, but it has the advantage that the submission cost is predictable and the ticket will always be available for redemption if the submission cost is paid. As long as there is some user who is willing to redeem the ticket, the L2 transaction will eventually be able to execute and will not be silently dropped.
 
-<!--
-
 :::info More information
 
-For a deeper look into L1-to-L2 Messaging read more in the [deep dive](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+For a deeper look into L1-to-L2 Messaging read more in the [deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 
 :::
-
--->
 
 ### L2 to L1 ticket-based calls
 
@@ -546,13 +529,9 @@ Calls from L2 and L1 operate in a similar way, with a ticket-based system. An L2
 
 These L2-to-L1 tickets have unlimited lifetime, until they're successfully redeemed. No rent is required, as the tickets (actually a Merkle hash of the tickets) are recorded in Ethereum storage, which does not require rent. (The cost of allocating storage for the ticket Merkle roots is covered by L2 transaction fees.)
 
-<!--
-
 :::info More information
 
-For further reading take a look at the [L2-to-L1-messaging](/how-arbitrum-works/11-l2-to-l1-messaging.mdx) deep dive.
-
--->
+For further reading take a look at the [L2-to-L1-messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) deep dive.
 
 ## Gas and Fees
 
@@ -669,10 +648,8 @@ Once the Sequencer has collected enough signatures, it can aggregate the signatu
 
 If the Sequencer fails to collect enough signatures within a few minutes, it will abandon the attempt to use the Committee, and will "fall back to rollup" by posting the full data directly to the L1 chain, as it would do in a non-AnyTrust chain. The L2 software can understand both data posting formats (via DACert or via full data) and will handle each one correctly.
 
-<!--
 :::info More information
 
-For a deep dive into AnyTrust, refer to the [AnyTrust Deep Dive](/how-arbitrum-works/08-anytrust-protocol.mdx).
+For a deep dive into AnyTrust, refer to the [AnyTrust Deep Dive](/how-arbitrum-works/deep-dive/anytrust-protocol.mdx).
 
 :::
--->
