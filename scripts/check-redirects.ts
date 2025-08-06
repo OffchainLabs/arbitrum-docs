@@ -236,9 +236,9 @@ export class RedirectChecker {
       try {
         const gitRoot = this.findGitRoot();
         const relativePath = this.vercelJsonPath.replace(gitRoot + '/', '');
-        execSync(`git add ${relativePath}`, { 
+        execSync(`git add ${relativePath}`, {
           cwd: gitRoot,
-          encoding: 'utf8' 
+          encoding: 'utf8',
         });
         console.log('📝 vercel.json was automatically formatted and staged.');
       } catch (error) {
@@ -321,7 +321,10 @@ export class RedirectChecker {
       // In commit-hook mode, check for unstaged changes
       if (this.mode === 'commit-hook') {
         const gitRoot = this.findGitRoot();
-        const initialStatus = execSync('git status --porcelain', { cwd: gitRoot, encoding: 'utf8' });
+        const initialStatus = execSync('git status --porcelain', {
+          cwd: gitRoot,
+          encoding: 'utf8',
+        });
         const vercelJsonStatus = initialStatus
           .split('\n')
           .find((line) => line.includes(basename(this.vercelJsonPath)));
