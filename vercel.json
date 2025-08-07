@@ -206,6 +206,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/how-arbitrum-works/deep-dives/modified-geth-on-arbitrum/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/geth/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/arbos/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/arbos/?)",
       "permanent": false

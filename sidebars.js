@@ -990,78 +990,57 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'how-arbitrum-works/a-gentle-introduction',
-          label: 'A gentle introduction',
+          id: 'how-arbitrum-works/01-inside-arbitrum-nitro',
+          label: 'Inside Arbitrum Nitro',
         },
         {
-          type: 'doc',
-          id: 'how-arbitrum-works/transaction-lifecycle',
-          label: 'Sequencing, Followed by Deterministic Execution',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/sequencer',
-          label: 'The Sequencer and Censorship Resistance',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/l1-to-l2-messaging',
-          label: 'Parent to Child chain messaging',
+          type: 'link',
+          href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+          label: 'Nitro whitepaper',
         },
         {
           type: 'category',
-          label: 'State Transition Function',
+          label: 'Deep dives',
           items: [
             {
               type: 'doc',
-              label: 'STF Overview',
-              id: 'how-arbitrum-works/state-transition-function/stf-gentle-intro',
+              label: 'AnyTrust',
+              id: 'how-arbitrum-works/deep-dives/anytrust-protocol',
+            },
+            {
+              type: 'doc',
+              label: 'Assertions',
+              id: 'how-arbitrum-works/deep-dives/assertions',
+            },
+            {
+              type: 'doc',
+              label: 'L1 to L2 Messaging',
+              id: 'how-arbitrum-works/deep-dives/l1-to-l2-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'L2 to L1 Messaging',
+              id: 'how-arbitrum-works/deep-dives/l2-to-l1-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'Geth',
+              id: 'how-arbitrum-works/deep-dives/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Sequencer',
+              id: 'how-arbitrum-works/deep-dives/sequencer',
             },
             {
               type: 'doc',
               label: 'STF inputs',
-              id: 'how-arbitrum-works/state-transition-function/stf-inputs',
+              id: 'how-arbitrum-works/deep-dives/stf-inputs',
             },
             {
               type: 'doc',
-              label: 'Ethereum vs Arbitrum',
-              id: 'how-arbitrum-works/state-transition-function/ethereum-vs-arbitrum',
-            },
-            {
-              type: 'doc',
-              label: 'Modified Geth on Arbitrum',
-              id: 'how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum',
-            },
-            {
-              type: 'doc',
-              label: 'ArbOS',
-              id: 'how-arbitrum-works/state-transition-function/arbos',
-            },
-            {
-              type: 'doc',
-              label: 'Stylus execution path',
-              id: 'how-arbitrum-works/state-transition-function/stylus-execution-path',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Validation and Proving',
-          items: [
-            {
-              type: 'doc',
-              label: 'Validation and proving overview',
-              id: 'how-arbitrum-works/validation-and-proving/validation-and-proving',
-            },
-            {
-              type: 'doc',
-              label: 'Rollup protocol',
-              id: 'how-arbitrum-works/validation-and-proving/rollup-protocol',
-            },
-            {
-              type: 'doc',
-              label: 'Proving and challenges',
-              id: 'how-arbitrum-works/validation-and-proving/proving-and-challenges',
+              label: 'Transaction lifecycle',
+              id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
             },
           ],
         },
@@ -1080,12 +1059,6 @@ const sidebars = {
           id: 'how-arbitrum-works/gas-fees',
           label: 'Gas and fees',
         },
-        {
-          type: 'link',
-          href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
-          label: 'Nitro whitepaper',
-        },
-
         {
           type: 'category',
           label: 'The BoLD dispute protocol',
