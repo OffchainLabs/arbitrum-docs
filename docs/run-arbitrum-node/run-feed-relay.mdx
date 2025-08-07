@@ -7,13 +7,15 @@ content_type: how-to
 
 :::caution
 
-If running a single node, there is no need to run a feed relay. When running more that one node, it is strongly suggested to run a single feed relay per datacenter, which will reduce ingress fees and improve stability.
+If running a single node, there is no need to run a feed relay. When running more that one node, it is strongly suggested to run a single feed relay per
+datacenter, which will reduce ingress fees and improve stability.
 
 :::
 
 :::caution
 
-Feed endpoints will soon require compression with a custom dictionary, so if connecting to feed with anything other than a standard node, it is strongly suggested to run a local feed relay which will provide an uncompressed feed by default.
+Feed endpoints will soon require compression with a custom dictionary, so if connecting to feed with anything other than a standard node, it is strongly
+suggested to run a local feed relay which will provide an uncompressed feed by default.
 
 :::
 
@@ -32,4 +34,6 @@ Note that Arbitrum classic does not communicate with Nitro sequencer, so classic
 
 ## Helm charts (Kubernetes)
 
-If you are using [Kubernetes](https://kubernetes.io/) to run your feed relay, a helm chart is available at [ArtifactHUB](https://artifacthub.io/packages/helm/offchainlabshelm/relay). It supports running a Nitro relay by providing the feed input URL. Find more information in the [OCL community Helm charts repository](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/relay).
+If you are using [Kubernetes](https://kubernetes.io/) to run your feed relay, a helm chart is available at
+[ArtifactHUB](https://artifacthub.io/packages/helm/offchainlabshelm/relay). It supports running a Nitro relay by providing the feed input URL. Find more
+information in the [OCL community Helm charts repository](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/relay).

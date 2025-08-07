@@ -10,13 +10,17 @@ content_type: How-To
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
-Switching from LevelDB to Pebble in Ethereum's Geth client provides several advantages, particularly in terms of resilience to data corruption during unexpected shutdowns, which helps maintain the integrity of your Ethereum node's database.
+Switching from LevelDB to Pebble in Ethereum's Geth client provides several advantages, particularly in terms of resilience to data corruption during unexpected
+shutdowns, which helps maintain the integrity of your Ethereum node's database.
 
-While Pebble provides better resilience and potentially improved performance, deciding to switch should consider your specific needs and the possible effects of a full resync on your operations.
+While Pebble provides better resilience and potentially improved performance, deciding to switch should consider your specific needs and the possible effects of
+a full resync on your operations.
 
 <VanillaAdmonition type="note">
 
-It's important to understand that transitioning to Pebble may necessitate a complete resynchronization of your Ethereum node. This process can take many days/weeks and could lead to downtime. If you are not facing significant issues with LevelDB and do not need Pebble's specific advantages, there may not be a strong reason to make the switch at this time.
+It's important to understand that transitioning to Pebble may necessitate a complete resynchronization of your Ethereum node. This process can take many
+days/weeks and could lead to downtime. If you are not facing significant issues with LevelDB and do not need Pebble's specific advantages, there may not be a
+strong reason to make the switch at this time.
 
 </VanillaAdmonition>
 
@@ -71,7 +75,8 @@ docker run \
 
 `dbconv` tool can be used to:
 
-- Convert single database - copy all entries from a single source database to the destination database that may use a different database engine (`leveldb` or `pebble`)
+- Convert single database - copy all entries from a single source database to the destination database that may use a different database engine (`leveldb` or
+  `pebble`)
 - Compact single database - run compaction on the destination database
 - Verify database contents - check if all keys (and optionally values) from the source database are present in the destination database
 
@@ -103,7 +108,8 @@ To see all possible configuration options, run: `dbconv --help`
 ./target/bin/dbconv --src.data /path/to/source/database/ --src.db-engine leveldb --dst.data /path/to/destination/database/ --dst.db-engine "pebble" --verify "keys"
 ```
 
-- Converting the `leveldb` database to `pebble`, compacting the resulting database, and then verifying that all keys from the source database exist in the destination database
+- Converting the `leveldb` database to `pebble`, compacting the resulting database, and then verifying that all keys from the source database exist in the
+  destination database
 
 ```shell
 ./target/bin/dbconv --src.data /path/to/source/database/ --src.db-engine leveldb --dst.data /path/to/destination/database/ --dst.db-engine "pebble" --convert --compact --verify "keys"

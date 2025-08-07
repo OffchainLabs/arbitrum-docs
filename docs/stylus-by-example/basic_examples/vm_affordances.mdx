@@ -31,8 +31,12 @@ Allows you to inspect the current block:
 - `chainid`: gets the unique chain identifier of the Arbitrum chain
 - `coinbase`: gets the coinbase of the current block, which on Arbitrum chains is the L1 batch poster's address
 - `gas_limit`: gets the gas limit of the current block
-- `number`: gets a bounded estimate of the L1 block number at which the sequencer sequenced the transaction. See [Block gas limit, numbers and time](https://docs.arbitrum.io/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how this value is determined
-- `timestamp`: gets a bounded estimate of the Unix timestamp at which the sequencer sequenced the transaction. See [Block gas limit, numbers and time](https://docs.arbitrum.io/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how this value is determined
+- `number`: gets a bounded estimate of the L1 block number at which the sequencer sequenced the transaction. See
+  [Block gas limit, numbers and time](https://docs.arbitrum.io/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how
+  this value is determined
+- `timestamp`: gets a bounded estimate of the Unix timestamp at which the sequencer sequenced the transaction. See
+  [Block gas limit, numbers and time](https://docs.arbitrum.io/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how
+  this value is determined
 
 ```rust
 use stylus_sdk::{block};
@@ -53,7 +57,8 @@ Allows you to inspect the contract itself:
 - `args`: reads the invocation's calldata. The entrypoint macro uses this under the hood
 - `balance`: gets the balance of the current program
 - `output`: writes the contract's return data. The entrypoint macro uses this under the hood
-- `read_return_data`: copies the bytes of the last EVM call or deployment return result. Note: this function does not revert if out of bounds, but rather will copy the overlapping portion
+- `read_return_data`: copies the bytes of the last EVM call or deployment return result. Note: this function does not revert if out of bounds, but rather will
+  copy the overlapping portion
 - `return_data_len`: returns the length of the last EVM call or deployment return result, or 0 if neither have happened during the program's execution
 
 ```rust
@@ -85,11 +90,14 @@ let hash = crypto::keccak(&preimage);
 
 Allows you to access affordances for the Ethereum Virtual Machine:
 
-- `gas_left`: gets the amount of gas remaining. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute pricing
-- `ink_left`: gets the amount of ink remaining. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute pricing
+- `gas_left`: gets the amount of gas remaining. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute
+  pricing
+- `ink_left`: gets the amount of ink remaining. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute
+  pricing
 - `log`: emits a typed alloy log
 - `pay_for_memory_grow`: this function exists to force the compiler to import this symbol. Calling it will unproductively consume gas
-- `raw_log`: emits an EVM log from its raw topics and data. Most users should prefer the alloy-typed [raw_log](https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/fn.raw_log.html)
+- `raw_log`: emits an EVM log from its raw topics and data. Most users should prefer the alloy-typed
+  [raw_log](https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/fn.raw_log.html)
 
 ```rust
 use stylus_sdk::{evm};
@@ -124,7 +132,8 @@ fn foo() {
 Allows you to inspect the current call
 
 - `reentrant`: whether the current call is reentrant
-- `sender`: gets the address of the account that called the program. For normal L2-to-L2 transactions the semantics are equivalent to that of the EVM's [CALLER](https://www.evm.codes/#33) opcode, including in cases arising from [DELEGATE_CALL](https://www.evm.codes/#f4)
+- `sender`: gets the address of the account that called the program. For normal L2-to-L2 transactions the semantics are equivalent to that of the EVM's
+  [CALLER](https://www.evm.codes/#33) opcode, including in cases arising from [DELEGATE_CALL](https://www.evm.codes/#f4)
 - `value`: gets the ETH value in wei sent to the program
 
 ```rust
@@ -140,9 +149,12 @@ let value = msg::value();
 Allows you to inspect the current transaction
 
 - `gas_price`: gets the gas price in wei per gas, which on Arbitrum chains equals the basefee
-- `gas_to_ink`: converts evm gas to ink. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute-pricing model
-- `ink_price`: gets the price of ink in evm gas basis points. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute-pricing model
-- `ink_to_gas`: converts ink to evm gas. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute-pricing model
+- `gas_to_ink`: converts evm gas to ink. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute-pricing
+  model
+- `ink_price`: gets the price of ink in evm gas basis points. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on
+  Stylus's compute-pricing model
+- `ink_to_gas`: converts ink to evm gas. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/stylus-gas) for more information on Stylus's compute-pricing
+  model
 - `origin`: gets the top-level sender of the transaction. The semantics are equivalent to that of the EVM's [ORIGIN](https://www.evm.codes/#32) opcode
 
 ```rust

@@ -5,15 +5,18 @@ author: circle-cooper
 sme: circle-cooper
 ---
 
-`USDC` provides the ability to transfer dollars over the Arbitrum network using a smart contract. The smart contract enables users to send, receive, and store dollars on-chain with a wallet.
+`USDC` provides the ability to transfer dollars over the Arbitrum network using a smart contract. The smart contract enables users to send, receive, and store
+dollars on-chain with a wallet.
 
-This guide will walk you through using the [viem](https://viem.sh/) framework to build a simple app that enables a user to connect their wallet and interact with the blockchain by sending a `USDC` transaction from their address.
+This guide will walk you through using the [viem](https://viem.sh/) framework to build a simple app that enables a user to connect their wallet and interact
+with the blockchain by sending a `USDC` transaction from their address.
 
 ## Prerequisites
 
 Before you start building the sample app to perform a `USDC` transfer, ensure you meet the following prerequisites:
 
-1. **Node.js and npm**: Ensure that you have Node.js and npm installed on your machine. You can download and install Node.js from [nodejs.org](https://nodejs.org). npm comes with Node.js.
+1. **Node.js and npm**: Ensure that you have Node.js and npm installed on your machine. You can download and install Node.js from
+   [nodejs.org](https://nodejs.org). npm comes with Node.js.
 
 2. [**MetaMask**](https://metamask.io/): Install the MetaMask browser extension and set up your wallet. Ensure that your wallet is funded with:
 
@@ -74,7 +77,8 @@ const walletClient = createWalletClient({
 
 ## Define `USDC` contract details
 
-Define the `USDC` contract address and ABI (Application Binary Interface). The ABI specifies the functions available in the contract. (The `USDC` Token Contract Address referenced in the code is on Ethereum Sepolia)
+Define the `USDC` contract address and ABI (Application Binary Interface). The ABI specifies the functions available in the contract. (The `USDC` Token Contract
+Address referenced in the code is on Ethereum Sepolia)
 
 ```javascript
 const USDC_CONTRACT_ADDRESS = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d';
@@ -138,7 +142,9 @@ useEffect(() => {
 
 ## Final step: build your `USDC` transfer sample app
 
-Now that you understand the core components for programmatically performing your first `USDC` transaction, create the following **index.tsx** and **index.html** files to build a sample app. This app will enable you to send `USDC` from one wallet to another. Ensure that your wallet is funded with both the native gas token and `USDC`.
+Now that you understand the core components for programmatically performing your first `USDC` transaction, create the following **index.tsx** and **index.html**
+files to build a sample app. This app will enable you to send `USDC` from one wallet to another. Ensure that your wallet is funded with both the native gas
+token and `USDC`.
 
 ```javascript title="index.tsx"
 import React, { useEffect, useState } from 'react';
@@ -262,4 +268,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 </html>
 ```
 
-By combining these **index.tsx** and **index.html** files, you will have a complete setup that allows you to perform a `USDC` transfer from your wallet. Simply connect your wallet, input the recipient's address and the amount of `USDC` to transfer, and click the “Send” button to execute the transaction. You will receive a transaction receipt once the transaction is confirmed on the blockchain.
+By combining these **index.tsx** and **index.html** files, you will have a complete setup that allows you to perform a `USDC` transfer from your wallet. Simply
+connect your wallet, input the recipient's address and the amount of `USDC` to transfer, and click the “Send” button to execute the transaction. You will
+receive a transaction receipt once the transaction is confirmed on the blockchain.

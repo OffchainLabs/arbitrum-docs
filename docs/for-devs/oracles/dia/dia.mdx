@@ -6,18 +6,23 @@ user_story: As a developer, I want to understand how to use oracles in Arbitrum 
 content_type: how-to
 ---
 
-[DIA](https://www.diadata.org/) is a cross-chain oracle provider that enhances data transparency, customization, and accessibility. With a novel architecture aggregating raw trade data directly from first-party sources, namely centralized and decentralized exchanges, DIA offers 100% source transparency, bespoke customization, and chain-native asset price feeds.
+[DIA](https://www.diadata.org/) is a cross-chain oracle provider that enhances data transparency, customization, and accessibility. With a novel architecture
+aggregating raw trade data directly from first-party sources, namely centralized and decentralized exchanges, DIA offers 100% source transparency, bespoke
+customization, and chain-native asset price feeds.
 
 You can find an example on how to use DIA in your project on this [page](https://docs.diadata.org/introduction/intro-to-dia-oracles/request-an-oracle).
 
 ### How to use DIA oracles on Arbitrum
 
-**Requesting a custom oracle**: DIA deploys oracles tailored to each dApp’s needs. Each oracle is customizable, including data sources, cleansing filters, pricing, computational methodologies, update mechanisms, and more. This flexibility ensures that the data and oracle remain robust and resilient to the market conditions and provide a global market price and specific individual or cross-chain market prices.
-→ [Request a Custom Oracle for your dApp | DIA Documentation](https://docs.diadata.org/introduction/intro-to-dia-oracles/request-an-oracle)
+**Requesting a custom oracle**: DIA deploys oracles tailored to each dApp’s needs. Each oracle is customizable, including data sources, cleansing filters,
+pricing, computational methodologies, update mechanisms, and more. This flexibility ensures that the data and oracle remain robust and resilient to the market
+conditions and provide a global market price and specific individual or cross-chain market prices. →
+[Request a Custom Oracle for your dApp | DIA Documentation](https://docs.diadata.org/introduction/intro-to-dia-oracles/request-an-oracle)
 
 ### Token Price Feeds
 
-DIA token price feeds provide smart contracts with real-time price information for [3,000+ cryptocurrencies](https://diadata.org/app/price), sourced from [80+ trusted, high-volume DEXs and CEXs](https://diadata.org/app/source/defi).
+DIA token price feeds provide smart contracts with real-time price information for [3,000+ cryptocurrencies](https://diadata.org/app/price), sourced from
+[80+ trusted, high-volume DEXs and CEXs](https://diadata.org/app/source/defi).
 
 ### How to access DIA oracles?
 
@@ -30,16 +35,19 @@ Here is an example of how to access a price value on DIA oracles:
 - The current asset price in `USD` with a fix-comma notation of 8 decimals.
 - The UNIX timestamp of the last oracle update.
 
-You can find DIA's oracle integration samples in Solidity and Vyper languages by visiting:
-→ [Access the Oracle | DIA Documentation](https://docs.diadata.org/products/token-price-feeds/access-the-oracle)
+You can find DIA's oracle integration samples in Solidity and Vyper languages by visiting: →
+[Access the Oracle | DIA Documentation](https://docs.diadata.org/products/token-price-feeds/access-the-oracle)
 
 ### Arbitrum demo price oracles
 
-DIA has deployed the following demo oracles for the Arbitrum community. It provides a limited selection of cryptocurrency price feeds with predefined configuration settings.
+DIA has deployed the following demo oracles for the Arbitrum community. It provides a limited selection of cryptocurrency price feeds with predefined
+configuration settings.
 
 :::note
 
-DIA demo oracles are not intended for use in production environments. Developers can request a dedicated, production-ready oracle with custom price feeds and configuration settings. Start the request process: [Request a Custom Oracle | DIA Documentation](https://docs.diadata.org/introduction/intro-to-dia-oracles/request-an-oracle)
+DIA demo oracles are not intended for use in production environments. Developers can request a dedicated, production-ready oracle with custom price feeds and
+configuration settings. Start the request process:
+[Request a Custom Oracle | DIA Documentation](https://docs.diadata.org/introduction/intro-to-dia-oracles/request-an-oracle)
 
 :::
 
@@ -52,16 +60,21 @@ DIA demo oracles are not intended for use in production environments. Developers
 
 ### Included Price Feeds
 
-[DIA/USD](https://diadata.org/app/price/asset/Ethereum/0x84cA8bc7997272c7CfB4D0Cd3D55cd942B3c9419/), [BTC/USD](https://diadata.org/app/price/asset/Bitcoin/0x0000000000000000000000000000000000000000/), [USDC/USD](https://diadata.org/app/price/asset/Ethereum/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/)
+[DIA/USD](https://diadata.org/app/price/asset/Ethereum/0x84cA8bc7997272c7CfB4D0Cd3D55cd942B3c9419/),
+[BTC/USD](https://diadata.org/app/price/asset/Bitcoin/0x0000000000000000000000000000000000000000/),
+[USDC/USD](https://diadata.org/app/price/asset/Ethereum/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/)
 
 ### Supported token API endpoints
 
-DIA supports API and GraphQL endpoints to return cryptocurrency price data. You can [visit the DIA Documentation](https://docs.diadata.org/products/token-price-feeds/access-api-endpoints) to see all API endpoints.
+DIA supports API and GraphQL endpoints to return cryptocurrency price data. You can
+[visit the DIA Documentation](https://docs.diadata.org/products/token-price-feeds/access-api-endpoints) to see all API endpoints.
 
 ### NFT Price Feeds
 
-DIA NFT floor price feeds provide smart contracts with real-time price information of [18,000+ NFT collections](https://diadata.org/app/floor-price), sourced onchain with 100% transparency from [multiple, cross-chain NFT marketplaces](https://diadata.org/app/source/nft).
+DIA NFT floor price feeds provide smart contracts with real-time price information of [18,000+ NFT collections](https://diadata.org/app/floor-price), sourced
+onchain with 100% transparency from [multiple, cross-chain NFT marketplaces](https://diadata.org/app/source/nft).
 
 ### Supported NFT API endpoints
 
-DIA supports API endpoints to return cryptocurrency price data. Developers can directly access the example endpoints listed below or [visit the DIA Documentation](https://docs.diadata.org/use-nexus-product/readme/token-price-feeds/access-api-endpoints) to see all API endpoints.
+DIA supports API endpoints to return cryptocurrency price data. Developers can directly access the example endpoints listed below or
+[visit the DIA Documentation](https://docs.diadata.org/use-nexus-product/readme/token-price-feeds/access-api-endpoints) to see all API endpoints.

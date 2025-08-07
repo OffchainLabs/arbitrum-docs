@@ -13,7 +13,8 @@ import CustomizeCautionBannerPartial from '../partials/_arbitrum-chain-customize
 
 :::caution
 
-The guidance in this document will only work if you use `eth_call` to call the new precompiles. If you call them from other contracts or add non-view/pure methods, this approach will break the block validation.
+The guidance in this document will only work if you use `eth_call` to call the new precompiles. If you call them from other contracts or add non-view/pure
+methods, this approach will break the block validation.
 
 To support these additional use-cases, follow the instructions described in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx).
 
@@ -21,7 +22,8 @@ To support these additional use-cases, follow the instructions described in [How
 
 There are five primary ways to customize your chain's precompiles:
 
-1.  Add new methods to an existing [precompile](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/).
+1.  Add new methods to an existing
+    [precompile](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/).
 2.  Create a new precompile.
 3.  Define a new event.
 4.  Customize gas usage for a specific method.
@@ -39,7 +41,10 @@ git submodule update --init --recursive --force
 
 ## Option 1: Add new methods to an existing precompile
 
-Using your favorite code editor, open an existing precompile from the [precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/) directory, `/@@nitroPathToPrecompiles=precompiles@@`. We'll use `ArbSys.go` as an example. Open the corresponding Go implementation file (`ArbSys.go`) and add a simple `SayHi` method:
+Using your favorite code editor, open an existing precompile from the
+[precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/)
+directory, `/@@nitroPathToPrecompiles=precompiles@@`. We'll use `ArbSys.go` as an example. Open the corresponding Go implementation file (`ArbSys.go`) and add a
+simple `SayHi` method:
 
 ```go
 func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
@@ -47,13 +52,17 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd@@/@@nitroContractsPathToPrecompilesInterface=@@/) directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the
+[precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd@@/@@nitroContractsPathToPrecompilesInterface=@@/)
+directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, and add the required interface. Ensure that the method name on the interface matches the name of
+the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 function sayHi() external view returns(string memory);
 ```
 
-Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
+Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified
+Arbitrum Nitro node docker image and run it.
 
 Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -88,7 +97,10 @@ hi
 
 ## Option 2: Create a new precompile
 
-First, navigate to the [precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/) directory, `/@@nitroPathToPrecompiles=precompiles@@`, and create a new precompile implementation file called `ArbHi.go`. We'll define a new method, and we'll give it an address:
+First, navigate to the
+[precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/)
+directory, `/@@nitroPathToPrecompiles=precompiles@@`, and create a new precompile implementation file called `ArbHi.go`. We'll define a new method, and we'll
+give it an address:
 
 ```go
 package precompiles
@@ -103,13 +115,18 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, update [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go) to register the new precompile under the `Precompiles()` method:
+Then, update
+[precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go)
+to register the new precompile under the `Precompiles()` method:
 
 ```go
 insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
-Navigate to the [precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd@@/@@nitroContractsPathToPrecompilesInterface=@@/) directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Navigate to the
+[precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd@@/@@nitroContractsPathToPrecompilesInterface=@@/)
+directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface
+matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 pragma solidity >=0.4.21 <0.9.0;
@@ -122,7 +139,8 @@ interface ArbHi {
 }
 ```
 
-Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
+Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified
+Arbitrum Nitro node docker image and run it.
 
 Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -157,7 +175,9 @@ hi
 
 We'll reuse the `Arbsys` precompile from Option 1 above to demonstrate how to emit a simple `Hi` event from the `SayHi` method in `ArbSys.sol`.
 
-First, go to the [precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/) directory, find `ArbSys.go`, and edit the `ArbSys` struct:
+First, go to the
+[precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/)
+directory, find `ArbSys.go`, and edit the `ArbSys` struct:
 
 ```go
 // ArbSys provides system-level functionality for interacting with L1 and understanding the call stack.
@@ -189,25 +209,31 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Now navigate to the [precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd@@/@@nitroContractsPathToPrecompilesInterface=@@/) directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
+Now navigate to the
+[precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd@@/@@nitroContractsPathToPrecompilesInterface=@@/)
+directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in
+`ArbSys` struct in the previous step:
 
 ```solidity
 event Hi(address caller);
 ```
 
-If you want to [index the parameter](https://docs.soliditylang.org/en/latest/contracts.html#events) of the event (if you want to filter by that parameter in the future, for example), just add `indexed` to the Solidity interface:
+If you want to [index the parameter](https://docs.soliditylang.org/en/latest/contracts.html#events) of the event (if you want to filter by that parameter in the
+future, for example), just add `indexed` to the Solidity interface:
 
 ```solidity
 event Hi(address indexed caller);
 ```
 
-Our function now emits an event, which means that when calling it, the state will change and a gas cost will be incurred. So we have to remove the `view` function behavior:
+Our function now emits an event, which means that when calling it, the state will change and a gas cost will be incurred. So we have to remove the `view`
+function behavior:
 
 ```solidity
 function sayHi() external returns(string memory);
 ```
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've
+already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -252,11 +278,15 @@ Note the `logs` field within the transaction receipt:
 
 ## Option 4: Customize gas usage for a specific method
 
-The above instructions demonstrate how you can define a new precompile function. However, if this new function is simply defined without performing gas collection within the function, your precompile will be vulnerable to Denial-of-Service (DOS) attacks. These attacks exploit the function by flooding it with excessive requests without bearing the computational cost.
+The above instructions demonstrate how you can define a new precompile function. However, if this new function is simply defined without performing gas
+collection within the function, your precompile will be vulnerable to Denial-of-Service (DOS) attacks. These attacks exploit the function by flooding it with
+excessive requests without bearing the computational cost.
 
-To deter this type of attack, you can implement a gas collection mechanism within your precompile. The event itself doesn't need to specify the gas cost; the program will calculate the gas cost when the event's execution is initially triggered.
+To deter this type of attack, you can implement a gas collection mechanism within your precompile. The event itself doesn't need to specify the gas cost; the
+program will calculate the gas cost when the event's execution is initially triggered.
 
-In addition to introducing gas costs where they don't exist, you can also customize gas costs where they're already being incurred. To demonstrate, consider the `GetBalance` method in `ArbInfo.go`:
+In addition to introducing gas costs where they don't exist, you can also customize gas costs where they're already being incurred. To demonstrate, consider the
+`GetBalance` method in `ArbInfo.go`:
 
 ```
 // GetBalance retrieves an account's balance
@@ -268,7 +298,9 @@ func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
 }
 ```
 
-The purpose of this method is to retrieve the balance of an address. As defined in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code (opcode) for obtaining the address balance has an associated gas cost of 700 gas. The function accounts for this cost by deducting the specified amount of gas, indicated by the protocol constant `BalanceGasEIP1884`, which is set to `700`, through the call to `c.Burn(int64)`.
+The purpose of this method is to retrieve the balance of an address. As defined in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code
+(opcode) for obtaining the address balance has an associated gas cost of 700 gas. The function accounts for this cost by deducting the specified amount of gas,
+indicated by the protocol constant `BalanceGasEIP1884`, which is set to `700`, through the call to `c.Burn(int64)`.
 
 To customize the gas cost, let's implement an alternative to `GetBalance`, called `GetBalanceCustom`:
 
@@ -285,7 +317,8 @@ func (con ArbInfo) GetBalanceCustom(c ctx, evm mech, account addr) (huge, error)
 
 To register this new precompile method, refer to Option 1 above.
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've
+already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -295,8 +328,7 @@ docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0
 
 ### Send the transaction and get the transaction receipt
 
-In order to obtain the gas used, we can use the `eth_sendRawTransaction` RPC method to test execution on the chain.
-First, call:
+In order to obtain the gas used, we can use the `eth_sendRawTransaction` RPC method to test execution on the chain. First, call:
 
 ```
 cast send 0x0000000000000000000000000000000000000065 "GetBalance()({Any_Address})"
@@ -368,17 +400,23 @@ Result 2:
 }
 ```
 
-Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
+Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by
+the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
 
 To learn more about the gas cost model, see [how to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx).
 
 ## Option 5: Call and modify state
 
-In this example, we'll demonstrate how to _read from_ and _write to_ a precompile contract's [ArbOS state](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38).
+In this example, we'll demonstrate how to _read from_ and _write to_ a precompile contract's
+[ArbOS state](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38).
 
-First, open the [arbosstate.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go) file and locate the [ArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38) structure. This is where ArbOS state is defined.
+First, open the
+[arbosstate.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go)
+file and locate the [ArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38) structure. This is where ArbOS state is
+defined.
 
-Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in [storage.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToStorage=arbos/storage@@/storage.go):
+Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in
+[storage.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToStorage=arbos/storage@@/storage.go):
 
 ```
 type ArbosState struct {
@@ -407,7 +445,8 @@ const (
 )
 ```
 
-Then, initialize the state under the [OpenArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L89) and [InitializeArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L212) methods:
+Then, initialize the state under the [OpenArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L89) and
+[InitializeArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L212) methods:
 
 OpenArbosState:
 
@@ -445,8 +484,9 @@ func (state *ArbosState) GetMyNumber() (uint64, error) {
 }
 ```
 
-Next, head back to the [precompiles directory](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/) and create a new `ArbHi.go` (introduced in Option 2).
-This time, we'll add two new methods to read and write the ArbOS state:
+Next, head back to the
+[precompiles directory](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.6.8@@/@@nitroPathToPrecompiles=precompiles@@/)
+and create a new `ArbHi.go` (introduced in Option 2). This time, we'll add two new methods to read and write the ArbOS state:
 
 ```
 package precompiles
@@ -508,7 +548,8 @@ You should see something like this:
 
 ## Incorporate your changes to precompile into the ArbOS upgrade
 
-If you do not customize the precompile before launching your Arbitrum chain network, please continue to follow [customize arbos](./customize-arbos.mdx) to perform an ArbOS version control to avoid blockchain reorg.
+If you do not customize the precompile before launching your Arbitrum chain network, please continue to follow [customize arbos](./customize-arbos.mdx) to
+perform an ArbOS version control to avoid blockchain reorg.
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--

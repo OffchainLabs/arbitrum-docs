@@ -7,9 +7,12 @@ description: "How to send Ether in your Rust smart contracts using Arbitrum's St
 
 # Sending Ether
 
-We have three main ways to send Ether in Rust Stylus: using the `transfer_eth` method, using low level `call` method, and sending value while calling an external contract.
+We have three main ways to send Ether in Rust Stylus: using the `transfer_eth` method, using low level `call` method, and sending value while calling an
+external contract.
 
-It's important to note that the `transfer_eth` method in Rust Stylus invokes the recipient contract, which may subsequently call other contracts. All the gas is supplied to the recipient, which it may burn. Conversely, the transfer method in Solidity is capped at 2300 gas. In Rust Stylus, you can cap the gas by using the low-level call method with a specified gas. An example of this is provided in the code on bottom of the page.
+It's important to note that the `transfer_eth` method in Rust Stylus invokes the recipient contract, which may subsequently call other contracts. All the gas is
+supplied to the recipient, which it may burn. Conversely, the transfer method in Solidity is capped at 2300 gas. In Rust Stylus, you can cap the gas by using
+the low-level call method with a specified gas. An example of this is provided in the code on bottom of the page.
 
 These two methods are exactly equivalent under the hood:
 
@@ -27,11 +30,14 @@ call(Call::new_in(self).value(value), recipient, &[])?;
 
 1. **Externally Owned Account (EOA) Addresses**: Directly send Ether to an EOA address.
 
-2. **Solidity Smart Contracts with Receive Function (No Calldata)**: Send Ether to a Solidity smart contract that has a `receive` function without providing any calldata.
+2. **Solidity Smart Contracts with Receive Function (No Calldata)**: Send Ether to a Solidity smart contract that has a `receive` function without providing any
+   calldata.
 
-3. **Solidity Smart Contracts with Fallback Function (With Calldata)**: Send Ether to a Solidity smart contract that has a `fallback` function by providing the necessary calldata.
+3. **Solidity Smart Contracts with Fallback Function (With Calldata)**: Send Ether to a Solidity smart contract that has a `fallback` function by providing the
+   necessary calldata.
 
-4. **Smart Contracts with Payable Methods (both Solidity and Stylus)**: Send Ether to smart contracts that have defined payable methods. Payable methods are identified by the `payable` modifier in Solidity, and the `#[payable]` macro in Rust.
+4. **Smart Contracts with Payable Methods (both Solidity and Stylus)**: Send Ether to smart contracts that have defined payable methods. Payable methods are
+   identified by the `payable` modifier in Solidity, and the `#[payable]` macro in Rust.
 
 Below you can find examples for each of these methods and how to define them in a Rust Stylus smart contract using the Stylus SDK:
 

@@ -7,7 +7,8 @@ description: 'How to log events to the chain using the Arbitrum Stylus Rust SDK.
 
 # Events
 
-Events allow for data to be logged publicly to the blockchain. Log entries provide the contract's address, a series of up to four topics, and some arbitrary length binary data. The Stylus Rust SDK provides a few ways to publish event logs described below.
+Events allow for data to be logged publicly to the blockchain. Log entries provide the contract's address, a series of up to four topics, and some arbitrary
+length binary data. The Stylus Rust SDK provides a few ways to publish event logs described below.
 
 ## Learn More
 
@@ -17,7 +18,10 @@ Events allow for data to be logged publicly to the blockchain. Log entries provi
 
 ## Log
 
-Using the `evm::log` function in the Stylus SDK is the preferred way to log events. It ensures that an event will be logged in a Solidity ABI-compatible format. The `log` function takes any type that implements Alloy `SolEvent` trait. It's not recommended to attempt to implement this trait on your own. Instead, make use of the provided `sol!` macro to declare your Events and their schema using Solidity-style syntax to declare the parameter types. Alloy will create ABI-compatible Rust types which you can instantiate and pass to the `evm::log` function.
+Using the `evm::log` function in the Stylus SDK is the preferred way to log events. It ensures that an event will be logged in a Solidity ABI-compatible format.
+The `log` function takes any type that implements Alloy `SolEvent` trait. It's not recommended to attempt to implement this trait on your own. Instead, make use
+of the provided `sol!` macro to declare your Events and their schema using Solidity-style syntax to declare the parameter types. Alloy will create
+ABI-compatible Rust types which you can instantiate and pass to the `evm::log` function.
 
 ### Log Usage
 
@@ -57,9 +61,12 @@ fn user_main(_input: Vec<u8>) -> ArbResult {
 
 ## Raw Log
 
-The `evm::raw_log` affordance offers the ability to send anonymous events that do not necessarily conform to the Solidity ABI. Instead, up to four raw 32-byte indexed topics are published along with any arbitrary bytes appended as data.
+The `evm::raw_log` affordance offers the ability to send anonymous events that do not necessarily conform to the Solidity ABI. Instead, up to four raw 32-byte
+indexed topics are published along with any arbitrary bytes appended as data.
 
-**NOTE**: It's still possible to achieve Solidity ABI compatibility using this construct. To do so you'll have to manually compute the ABI signature for the event, [following the equation set in the Solidity docs](https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#events). The result of that should be assigned to `TOPIC_0`, the first topic in the slice passed to `raw_log`.
+**NOTE**: It's still possible to achieve Solidity ABI compatibility using this construct. To do so you'll have to manually compute the ABI signature for the
+event, [following the equation set in the Solidity docs](https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#events). The result of that should be assigned
+to `TOPIC_0`, the first topic in the slice passed to `raw_log`.
 
 ### Raw Log Usage
 
@@ -83,7 +90,8 @@ evm::raw_log(topics.as_slice(), data.as_ref()).unwrap();
 
 ## Result
 
-Combining the above examples into the boiler plate provided below this section, deploying to a Stylus chain and then invoking the deployed contract will result in the following three events logged to the chain:
+Combining the above examples into the boiler plate provided below this section, deploying to a Stylus chain and then invoking the deployed contract will result
+in the following three events logged to the chain:
 
 ### logs
 
@@ -91,10 +99,7 @@ Combining the above examples into the boiler plate provided below this section, 
 [
   {
     "address": "0x6cf4a18ac8efd6b0b99d3200c4fb9609dd60d4b3",
-    "topics": [
-      "0x0738f4da267a110d810e6e89fc59e46be6de0c37b1d5cd559b267dc3688e74e0",
-      "0x0000000000000000000000001111111111111111111111111111111111111111"
-    ],
+    "topics": ["0x0738f4da267a110d810e6e89fc59e46be6de0c37b1d5cd559b267dc3688e74e0", "0x0000000000000000000000001111111111111111111111111111111111111111"],
     "data": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000c48656c6c6f20776f726c64210000000000000000000000000000000000000000",
     "blockHash": "0xfef880025dc87b5ab4695a0e1a6955dd7603166ecba79ce0f503a568b2ec8940",
     "blockNumber": "0x94",
