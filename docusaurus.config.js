@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
 const sdkSidebarGenerator = require('./scripts/sdk-sidebar-generator');
-const sdkCodebasePath = './arbitrum-sdk';
+const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
