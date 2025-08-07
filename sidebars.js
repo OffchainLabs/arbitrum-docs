@@ -822,6 +822,11 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
+          type: 'doc',
+          id: 'run-arbitrum-node/data-availability',
+          label: 'Data Availability',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
@@ -1074,11 +1079,6 @@ const sidebars = {
           type: 'doc',
           id: 'how-arbitrum-works/gas-fees',
           label: 'Gas and fees',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/data-availability',
-          label: 'Data Availability',
         },
         {
           type: 'link',
