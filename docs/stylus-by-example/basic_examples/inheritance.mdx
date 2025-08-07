@@ -1,7 +1,9 @@
 ---
-title: 'Inheritance • Stylus by Example'
-description: 'How to leverage inheritance using the Arbitrum Stylus Rust SDK.'
+title: "Inheritance • Stylus by Example"
+description: "How to leverage inheritance using the Arbitrum Stylus Rust SDK."
 ---
+
+
 
 {/* Begin Content */}
 
@@ -16,6 +18,7 @@ Let's see an example:
 import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
 <NotForProductionBannerPartial />
+
 
 ```rust
 #[public]
@@ -88,7 +91,6 @@ impl C {
 ```
 
 In the code above:
-
 - calling `foo()` will search the method in `A`, find it, and execute `A.foo()`
 - calling `bar()` will search the method in `A` first, then in `B`, find it, and execute `B.bar()`
 - calling `baz()` will search the method in `A`, `B` and finally `C`, so it will execute `C.baz()`

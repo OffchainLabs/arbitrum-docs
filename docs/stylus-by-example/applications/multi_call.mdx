@@ -1,13 +1,16 @@
 ---
-title: 'Multi Call • Stylus by Example'
-description: 'An example implementation of the Multi Call contract in Rust using Arbitrum Stylus.'
+title: "Multi Call • Stylus by Example"
+description: "An example implementation of the Multi Call contract in Rust using Arbitrum Stylus."
 ---
+
+
 
 {/* Begin Content */}
 
 # Multicall
 
 An Arbitrum Stylus version implementation of [Solidity Multi Call contract](https://solidity-by-example.org/app/multi-call/) that aggregates multiple queries using a for loop and RawCall.
+
 
 Example implementation of a Multi Call contract written in Rust:
 Here is the interface for TimeLock.
@@ -29,12 +32,12 @@ interface IMultiCall {
     error CallFailed(uint256);
 }
 ```
-
 ### src/lib.rs
 
 import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
 <NotForProductionBannerPartial />
+
 
 ```rust
 #![cfg_attr(not(feature = "export-abi"), no_main)]

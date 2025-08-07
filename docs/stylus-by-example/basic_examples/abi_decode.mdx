@@ -1,7 +1,9 @@
 ---
-title: 'ABI Encode • Stylus by Example'
-description: 'A simple solidity ABI encode and decode example'
+title: "ABI Encode • Stylus by Example"
+description: "A simple solidity ABI encode and decode example"
 ---
+
+
 
 {/* Begin Content */}
 
@@ -15,10 +17,11 @@ import NotForProductionBannerPartial from '../../partials/_not-for-production-ba
 
 <NotForProductionBannerPartial />
 
+
 ```rust
 // This should always return true
 pub fn encode_and_decode(
-    &self,
+    &self, 
     target: Address,
     value: U256,
     func: String,
@@ -35,17 +38,16 @@ pub fn encode_and_decode(
     let tx_hash_data_encode = TxIdHashType::abi_encode_sequence(&tx_hash_data);
 
     let validate = true;
-
+    
     // Check the result
     match TxIdHashType::abi_decode_sequence(&tx_hash_data_encode, validate) {
         Ok(res) => Ok(res == tx_hash_data),
         Err(_) => {
             return Err(HasherError::DecodedFailed(DecodedFailed{}));
         },
-    }
+    }   
 }
 ```
-
 # Full Example code:
 
 ### src/lib.rs
@@ -83,8 +85,8 @@ pub struct Decoder;
 impl Decoder {
     // This should always return true
     pub fn encode_and_decode(
-        &self,
-        address: Address,
+        &self, 
+        address: Address, 
         amount: U256
     ) -> Result<bool, DecoderError> {
         // define sol types tuple
@@ -95,14 +97,14 @@ impl Decoder {
         let tx_hash_data_encode = TxIdHashType::abi_encode_params(&tx_hash_data);
 
         let validate = true;
-
+        
         // Check the result
         match TxIdHashType::abi_decode_params(&tx_hash_data_encode, validate) {
             Ok(res) => Ok(res == tx_hash_data),
             Err(_) => {
                 return Err(DecoderError::DecodedFailed(DecodedFailed{}));
             },
-        }
+        }   
     }
 
 }
