@@ -24,7 +24,7 @@ Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permission
 
 By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees; data availability is managed by a Data Availability Committee (DAC), a fixed, permissioned set of entities. We introduce some threshold, `K`, with the assumption that at least `K` members of the committee are honest. For simplicity, we'll hereby assume a committee of size 20 and a `K` value of 2:
 
-If 19 out of the 20 committee members *and* the Sequencer are malicious and colluding together, they can break the chain's safety (and, e.g., steal users' funds); this is the new trust assumption.
+If 19 out of the 20 committee members _and_ the Sequencer are malicious and colluding together, they can break the chain's safety (and, e.g., steal users' funds); this is the new trust assumption.
 
 If anywhere between 2 and 18 of the committee members are well behaved, the AnyTrust chain operates in "Rollup mode"; i.e., data gets posted on L1.
 
@@ -48,7 +48,7 @@ Nope; once an Arbitrum transaction is included on L1, there is no way it can be 
 
 ### ...okay but if there's a dispute, will my transaction get delayed?
 
-The only thing that a dispute can add delay to is the confirmation of L2-to-L1 messages. All other transactions continue to be processed, even while a dispute is still undergoing. (Additionally: in practice, most L2-to-L1 messages represent withdrawals of fungible assets; these can be trustlessly completed *even during a dispute* via trustless fast "liquidity exit" applications. See [L2-to-L1 Messages](https://developer.arbitrum.io/arbos/l2-to-l1-messaging)).
+The only thing that a dispute can add delay to is the confirmation of L2-to-L1 messages. All other transactions continue to be processed, even while a dispute is still undergoing. (Additionally: in practice, most L2-to-L1 messages represent withdrawals of fungible assets; these can be trustlessly completed _even during a dispute_ via trustless fast "liquidity exit" applications. See [L2-to-L1 Messages](https://developer.arbitrum.io/arbos/l2-to-l1-messaging)).
 
 ### Are "Sequencers" the same entities as "Validators"? Can a centralized Sequencer act maliciously (e.g., steal all my money)?
 
@@ -56,15 +56,15 @@ No and no!
 
 An Arbitrum Chain's Sequencer(s) and Validators and completely distinct entities, with their own distinct roles.
 
-The [Sequencer](https://developer.arbitrum.io/sequencer) is the entity granted specific privileges over ordering transactions; once the Sequencer commits to an ordering (by posting a batch on Ethereum), it has no say over what happens next (i.e., execution). A malicious/faulty Sequencer can do things like reordering transactions or *temporarily* delaying a transaction's inclusion — things which could be, to be sure, annoying and bad — but can do nothing to compromise the chain's safety.
+The [Sequencer](https://developer.arbitrum.io/sequencer) is the entity granted specific privileges over ordering transactions; once the Sequencer commits to an ordering (by posting a batch on Ethereum), it has no say over what happens next (i.e., execution). A malicious/faulty Sequencer can do things like reordering transactions or _temporarily_ delaying a transaction's inclusion — things which could be, to be sure, annoying and bad — but can do nothing to compromise the chain's safety.
 
-The *Validators* are the ones responsible for the safety of the chain; i.e., making staked claims about the chain state, disputing each other, etc.
+The _Validators_ are the ones responsible for the safety of the chain; i.e., making staked claims about the chain state, disputing each other, etc.
 
-Currently, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, we expect the single Sequencer to be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't *strictly* necessary for Arbitrum One to achieve its most fundamental properties.
+Currently, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, we expect the single Sequencer to be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't _strictly_ necessary for Arbitrum One to achieve its most fundamental properties.
 
-In other words: ***An Arbitrum Rollup chain with a centralized Sequencer could theoretically still be trustless!***
+In other words: _**An Arbitrum Rollup chain with a centralized Sequencer could theoretically still be trustless!**_
 
-Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the *Validators*.
+Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the _Validators_.
 
 Arbitrum One's validator set is currently allowlisted; over time, we expect [governance](https://docs.arbitrum.foundation/) to expand the allowlist and eventually be removed entirely.
 
@@ -88,8 +88,8 @@ Yes, you can find a list of Fiat on-ramps that support Arbitrum [on our portal](
 
 There are two levels of finality in a [transaction lifecycle](https://developer.arbitrum.io/tx-lifecycle):
 
-- Soft finality: once the Sequencer receives and processes a transaction, it emits a receipt through the Sequencer's feed. At this point, if the Sequencer is trusted, the transaction will not be reordered and the state of the chain after processing the transaction can be determined.
-- Hard finality: at this stage, assuming there's at least one well-behaved active Arbitrum validator, the client can treat their transaction's finality as equivalent to an ordinary Ethereum transaction.
+-   Soft finality: once the Sequencer receives and processes a transaction, it emits a receipt through the Sequencer's feed. At this point, if the Sequencer is trusted, the transaction will not be reordered and the state of the chain after processing the transaction can be determined.
+-   Hard finality: at this stage, assuming there's at least one well-behaved active Arbitrum validator, the client can treat their transaction's finality as equivalent to an ordinary Ethereum transaction.
 
 ### Where can I find stats for Arbitrum?
 
