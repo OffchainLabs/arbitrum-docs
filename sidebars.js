@@ -375,6 +375,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
                 {
+                  type: 'doc',
+                  label: 'Native mint and burn',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/enable-mint-burn',
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
