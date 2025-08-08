@@ -151,7 +151,7 @@ helm install fullnode offchainlabs/nitro \
   --set configmap.data.parent-chain.id=<parent-chain-id> \
   --set configmap.data.parent-chain.connection.url=<parent-node-url> \
   --set configmap.data.chain.id=<child-chain-id> \
-  --set configmap.data.execution.sequencer.forwarder.redis-url=redis://<redis-url>:6379
+  --set configmap.data.execution.forwarder.redis-url=redis://<redis-url>:6379
 ```
 
 #### Mutating-only endpoint (optional)
