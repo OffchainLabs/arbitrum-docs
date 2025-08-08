@@ -8,7 +8,8 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus), a CLI toolkit to help developers manage, compile, deploy, and optimize their Stylus contracts efficiently.
+This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus), a CLI toolkit to help developers manage, compile, deploy,
+and optimize their Stylus contracts efficiently.
 
 This overview will help you discover and learn how to uses cargo stylus tools.
 
@@ -21,7 +22,8 @@ Cargo stylus is a plugin to the standard cargo tool for developing Rust programs
 <details>
 <summary>Rust toolchain</summary>
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on
+your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </details>
 
@@ -44,7 +46,8 @@ You can download Docker from [Docker's website](https://www.docker.com/products/
 <details>
 <summary>Nitro devnode</summary>
 
-Stylus is available on Arbitrum Sepolia, but we'll use Nitro devnode, which has a pre-funded wallet, saving us the effort of wallet provisioning or running out of tokens to send transactions.
+Stylus is available on Arbitrum Sepolia, but we'll use Nitro devnode, which has a pre-funded wallet, saving us the effort of wallet provisioning or running out
+of tokens to send transactions.
 
 ```shell title="Install your devnode"
 git clone https://github.com/OffchainLabs/nitro-devnode.git
@@ -65,7 +68,8 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust
+toolchain to 1.80 as well as adding the WASM build target:
 
 ```shell
 rustup default 1.80

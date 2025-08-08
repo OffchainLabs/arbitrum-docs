@@ -10,16 +10,18 @@ sidebar_position: 1
 import CustomDetails from '@site/src/components/CustomDetails';
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
-Inheritance allows you to build upon existing smart contract functionality without duplicating code. In Stylus, the Rust SDK provides tools to implement inheritance patterns similar to Solidity, but with some important differences. This guide walks you through implementing trait-based composition in your Stylus smart contracts.
+Inheritance allows you to build upon existing smart contract functionality without duplicating code. In Stylus, the Rust SDK provides tools to implement
+inheritance patterns similar to Solidity, but with some important differences. This guide walks you through implementing trait-based composition in your Stylus
+smart contracts.
 
 <VanillaAdmonition type="caution" title="For Solidity developers">
-  There's no direct equivalent of inheritance in Rust, but the following will show you the Rust-way
-  of achieving similar results.
+  There's no direct equivalent of inheritance in Rust, but the following will show you the Rust-way of achieving similar results.
 </VanillaAdmonition>
 
 ## Overview
 
-The Stylus SDK offers trait-based composition using traits and the `#[implements]` annotation. This approach follows Rust's composition patterns and provides stronger type safety.
+The Stylus SDK offers trait-based composition using traits and the `#[implements]` annotation. This approach follows Rust's composition patterns and provides
+stronger type safety.
 
 ## Getting started
 
@@ -27,7 +29,8 @@ Before implementing trait-based composition, ensure you have:
 
 <CustomDetails summary="Rust toolchain">
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on
+your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </CustomDetails>
 
@@ -39,7 +42,8 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.81 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust
+toolchain to 1.81 as well as adding the WASM build target:
 
 ```shell
 rustup default 1.88
@@ -169,22 +173,22 @@ This approach is aligned with Rust's composition patterns and offers better type
 
 ### Method overriding
 
-If both parent and child implement the same method, the one in the child will override the one in the parent. This allows for customizing inherited functionality.
+If both parent and child implement the same method, the one in the child will override the one in the parent. This allows for customizing inherited
+functionality.
 
 <VanillaAdmonition type="caution" title="No explicit override keywords">
-  Stylus does not currently contain explicit override or virtual keywords for marking override
-  functions. It is important to carefully ensure that contracts are only overriding the functions
-  you intend to override.
+  Stylus does not currently contain explicit override or virtual keywords for marking override functions. It is important to carefully ensure that contracts are
+  only overriding the functions you intend to override.
 </VanillaAdmonition>
 
 ### ABI export considerations with trait-based composition
 
-When using trait-based composition, you need to be careful about function selectors to ensure correct ABI generation. Due to how Rust handles traits, you may need to explicitly set selectors for methods to match Solidity's expected function signatures.
+When using trait-based composition, you need to be careful about function selectors to ensure correct ABI generation. Due to how Rust handles traits, you may
+need to explicitly set selectors for methods to match Solidity's expected function signatures.
 
 <VanillaAdmonition type="caution" title="Selector precision">
-  When implementing traits with methods that have matching names, you must manually use the
-  `#[selector(name = "ActualName")]` attribute to avoid method selector collisions. This is
-  particularly important when implementing standard interfaces like `ERC-20` or `ERC-721`.
+  When implementing traits with methods that have matching names, you must manually use the `#[selector(name = "ActualName")]` attribute to avoid method
+  selector collisions. This is particularly important when implementing standard interfaces like `ERC-20` or `ERC-721`.
 </VanillaAdmonition>
 
 <CustomDetails summary="Selector issue example: ERC-721">
@@ -193,18 +197,9 @@ When using trait-based composition, you need to be careful about function select
 // function safeTransferFrom(address from, address to, uint256 tokenId)
 // function safeTransferFrom(address from, address to, uint256 tokenId, bytes data)
 
-// In Rust, we need to use different method names, but want the same selectors: #[public]
-impl<T: Erc721Params> Erc721<T> {
-// Use the #[selector] attribute to specify the correct Solidity-compatible name #[selector(name = "safeTransferFrom")]
-pub fn safe_transfer_from_with_data<S: TopLevelStorage + BorrowMut<Self>>(
-storage: &mut S,
-from: Address,
-to: Address,
-token_id: U256,
-data: Bytes,
-) -> Result<(), Erc721Error> {
-// Implementation
-}
+// In Rust, we need to use different method names, but want the same selectors: #[public] impl<T: Erc721Params> Erc721<T> { // Use the #[selector] attribute to
+specify the correct Solidity-compatible name #[selector(name = "safeTransferFrom")] pub fn safe_transfer_from_with_data<S: TopLevelStorage + BorrowMut<Self>>(
+storage: &mut S, from: Address, to: Address, token_id: U256, data: Bytes, ) -> Result<(), Erc721Error> { // Implementation }
 
     // This method also needs the same selector name
     #[selector(name = "safeTransferFrom")]

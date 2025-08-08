@@ -1,11 +1,15 @@
 ---
 title: 'LayerZero'
-description: 'Omnichain interoperability protocol enabling secure cross-chain communication for Arbitrum applications. Connect to 100+ blockchains, send messages, and deploy omnichain tokens.'
+description:
+  'Omnichain interoperability protocol enabling secure cross-chain communication for Arbitrum applications. Connect to 100+ blockchains, send messages, and
+  deploy omnichain tokens.'
 ---
 
 # LayerZero
 
-[LayerZero](https://layerzero.network) is an **omnichain interoperability protocol** that enables smart contracts to seamlessly communicate between different blockchain networks. With LayerZero V2, applications deployed on Arbitrum can connect and interact with 100+ supported blockchains through secure, configurable messaging channels.
+[LayerZero](https://layerzero.network) is an **omnichain interoperability protocol** that enables smart contracts to seamlessly communicate between different
+blockchain networks. With LayerZero V2, applications deployed on Arbitrum can connect and interact with 100+ supported blockchains through secure, configurable
+messaging channels.
 
 ## Key Features
 
@@ -19,9 +23,11 @@ LayerZero enables powerful cross-chain capabilities for builders on Arbitrum:
 ## How it works
 
 1. **DVNs** independently verify that a message is valid, waiting for a configured number of block confirmations on the source chain.
-2. When the message is verified, **Executors** on the destination chain deliver the message to the target contract, paying for the destination gas automatically in the background. The user only pays for gas on the source chain.
+2. When the message is verified, **Executors** on the destination chain deliver the message to the target contract, paying for the destination gas automatically
+   in the background. The user only pays for gas on the source chain.
 
-Because each application can configure its own DVN sets, your security is not locked into a single aggregator or middlechain. For more details, check out the [LayerZero docs](https://docs.layerzero.network/).
+Because each application can configure its own DVN sets, your security is not locked into a single aggregator or middlechain. For more details, check out the
+[LayerZero docs](https://docs.layerzero.network/).
 
 To run your own DVN as part of your security set, check out the [DVN docs](https://docs.layerzero.network/v2/developers/evm/off-chain/build-dvns).
 
@@ -63,9 +69,7 @@ When integrating with LayerZero, there are two key aspects to understand:
       <td>42170</td>
       <td>30175</td>
       <td>
-        <a href="https://layerzeroscan.com/api/explorer/nova/address/0x1a44076050125825900e736c501f859c50fE728c">
-          0x1a44076050125825900e736c501f859c50fE728c
-        </a>
+        <a href="https://layerzeroscan.com/api/explorer/nova/address/0x1a44076050125825900e736c501f859c50fE728c">0x1a44076050125825900e736c501f859c50fE728c</a>
       </td>
     </tr>
     <tr>
@@ -81,7 +85,8 @@ When integrating with LayerZero, there are two key aspects to understand:
   </tbody>
 </table>
 
-Once a transaction is submitted, you can trace it on [LayerZero Scan](https://layerzeroscan.com/), which shows cross-chain message flow from source to destination in real time.
+Once a transaction is submitted, you can trace it on [LayerZero Scan](https://layerzeroscan.com/), which shows cross-chain message flow from source to
+destination in real time.
 
 ## Getting Started
 

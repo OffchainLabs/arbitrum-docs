@@ -1,34 +1,35 @@
 ---
 title: 'A gentle introduction: Arbitrum chains'
-description: 'Launch your own Arbitrum chain using the Arbitrum Nitro codebase. Build an L2 or an L3 with the ability to customize every aspect of the chain specifically for your needs.'
+description:
+  'Launch your own Arbitrum chain using the Arbitrum Nitro codebase. Build an L2 or an L3 with the ability to customize every aspect of the chain specifically
+  for your needs.'
 author: symbolpunk
 sme: oliviaJ3388
 target_audience: technical decision-makers, people familiar with web3 who will decide to use Arbitrum chain on behalf of their organizations
 sidebar_position: 1
 ---
 
-This document is for developers and decision-makers who want to learn more about **Arbitrum chains**, a new product offering that lets you create your own Arbitrum <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains.
+This document is for developers and decision-makers who want to learn more about **Arbitrum chains**, a new product offering that lets you create your own
+Arbitrum <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains.
 
-If you'd prefer to learn by doing, see the [Orbit SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth) for step-by-step instructions that walk you through the process of how to use orbit-sdk to configure and launch your own Arbitrum chain.
+If you'd prefer to learn by doing, see the
+[Orbit SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth) for step-by-step instructions that
+walk you through the process of how to use orbit-sdk to configure and launch your own Arbitrum chain.
 
 ### In a nutshell:
 
 - Arbitrum chains is the **permissionless path** for launching customizable dedicated chains using Arbitrum technology.
-- Arbitrum chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can settle to any Ethereum L2, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
-- Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more, **the possibilities are endless**.
+- Arbitrum chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can
+  settle to any Ethereum L2, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
+- Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more, **the
+  possibilities are endless**.
 - **You own your Arbitrum chain** and can decentralize its ownership, validation, and other dependencies.
-- Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](/stylus/gentle-introduction.mdx), and continuous improvements.
+- Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression,
+  [EVM+ compatibility via Stylus](/stylus/gentle-introduction.mdx), and continuous improvements.
 
 ### What's an Arbitrum chain?
 
-import {
-  MermaidWithHtml,
-  Nodes,
-  Node,
-  Connection,
-  NodeDescriptions,
-  NodeDescription,
-} from '/src/components/MermaidWithHtml/MermaidWithHtml';
+import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
 <MermaidWithHtml>
   <Nodes>
@@ -44,12 +45,10 @@ import {
   </Nodes>
   <NodeDescriptions>
     <NodeDescription for="1,2,4">
-      <strong>Arbitrum chains</strong> are a new product offering that lets you create your own
-      customizable L2 or L3 chain.
+      <strong>Arbitrum chains</strong> are a new product offering that lets you create your own customizable L2 or L3 chain.
     </NodeDescription>
     <NodeDescription for="3">
-      L3 Arbitrum chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which
-      settles to Ethereum.
+      L3 Arbitrum chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which settles to Ethereum.
     </NodeDescription>
     <NodeDescription for="5">
       <strong>Ethereum</strong> is a public Layer 1 (L1) chain.
@@ -59,30 +58,44 @@ import {
 
 - You can think of Arbitrum chains as **deployable, configurable instances of the Arbitrum Nitro tech stack**.
 - You can also think of them as **tailored chains** - chains tailored precisely to **your exact use-case and business needs**.
-- This gives you another way to **progressively decentralize** your applications and **incrementally adopt** the properties and security assumptions of Ethereum's base layer.
-- Every Arbitrum chain can be configured to be either a <a data-quicklook-from='arbitrum-rollup-protocol'>Rollup</a> or <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> Chain.
-  - Note that <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an example of a rollup, and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> is an example of an AnyTrust chain.
-- Arbitrum One and Arbitrum Nova are owned and governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao). With Arbitrum chains, _you_ determine the way that your chain is governed.
+- This gives you another way to **progressively decentralize** your applications and **incrementally adopt** the properties and security assumptions of
+  Ethereum's base layer.
+- Every Arbitrum chain can be configured to be either a <a data-quicklook-from='arbitrum-rollup-protocol'>Rollup</a> or
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> Chain. - Note that <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an example of a rollup,
+  and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> is an example of an AnyTrust chain.
+- Arbitrum One and Arbitrum Nova are owned and governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao). With Arbitrum chains,
+  _you_ determine the way that your chain is governed.
 
 ### What problem do Arbitrum chains solve?
 
-The Ethereum ecosystem is supported by a **decentralized network of nodes** that each run Ethereum's Layer 1 (L1) client software. Ethereum's block space is in high demand, so users are often stuck waiting for the network to become less congested (and thus, less expensive).
+The Ethereum ecosystem is supported by a **decentralized network of nodes** that each run Ethereum's Layer 1 (L1) client software. Ethereum's block space is in
+high demand, so users are often stuck waiting for the network to become less congested (and thus, less expensive).
 
-Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> L2 chains, respectively.
+Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address
+this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the
+
+<a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> L2 chains, respectively.
 
 There are important differences between these chains. The choice between Rollup and AnyTrust represents a **tradeoff** between decentralization and performance:
 
 - **Arbitrum One** implements the Rollup protocol, which stores raw transaction data on Ethereum L1, while
-- **Arbitrum Nova** implements the AnyTrust protocol, which uses a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data, expediting settlement and reducing costs by introducing a security assumption.
+- **Arbitrum Nova** implements the AnyTrust protocol, which uses a <a data-quicklook-from='data-availability-committee-dac'>data availability committee
+  (DAC)</a> to store raw transaction data, expediting settlement and reducing costs by introducing a security assumption.
 
-**These two public chains will meet most projects' needs** - they already support thousands of apps and millions of users! But shared public chains aren't for everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's features and governance (remember, these public L2 chains and their protocols are governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/gentle-intro-dao-governance)).
+**These two public chains will meet most projects' needs** - they already support thousands of apps and millions of users! But shared public chains aren't for
+everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's
+features and governance (remember, these public L2 chains and their protocols are governed by the
+[Arbitrum DAO](https://docs.arbitrum.foundation/gentle-intro-dao-governance)).
 
-Arbitrum chains give you the ability to create your own AnyTrust and Rollup chains using your own infrastructure. You can think of your Arbitrum chain as a **self-managed priority lane on Ethereum**. Each Arbitrum chain is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security.
+Arbitrum chains give you the ability to create your own AnyTrust and Rollup chains using your own infrastructure. You can think of your Arbitrum chain as a
+**self-managed priority lane on Ethereum**. Each Arbitrum chain is capable of supporting many times the capacity of Ethereum, all while benefitting directly
+from Ethereum's security.
 
 Said simply:
 
 - **Arbitrum One** and **Arbitrum Nova** chains unlocked two options that scale Ethereum and meet most projects' needs.
-- **Arbitrum chains** unlock an **[infinite garden](https://ethereum.foundation/infinitegarden)** that scale Ethereum even further, with each individual Arbitrum chain being tailored precisely to its owner's needs.
+- **Arbitrum chains** unlock an **[infinite garden](https://ethereum.foundation/infinitegarden)** that scale Ethereum even further, with each individual
+  Arbitrum chain being tailored precisely to its owner's needs.
 
 ### How do Arbitrum chains help me build decentralized apps?
 
@@ -115,7 +128,9 @@ Arbitrum helps Ethereum move towards a **multi-chain future**. This is valuable 
 
 ### Are Arbitrum chains the same thing as "app chains"?
 
-It depends on your definition of "app chain". Arbitrum chains can be used as application-specific chains (often referred to as "app chains" or "appchains"). But **they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute resources away from Arbitrum's public L2 chains** based on your unique needs.
+It depends on your definition of "app chain". Arbitrum chains can be used as application-specific chains (often referred to as "app chains" or "appchains"). But
+**they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute resources away from
+Arbitrum's public L2 chains** based on your unique needs.
 
 - You can use your Arbitrum chain to host the smart contracts that support one app, two apps, an ecosystem of apps, or no apps at all.
 - You can use your Arbitrum chain to host a private, centralized service.
@@ -124,17 +139,20 @@ It depends on your definition of "app chain". Arbitrum chains can be used as app
 
 ### What's the best model: AnyTrust or Rollup?
 
-The AnyTrust and Rollup data availability models reflect prioritization choices within the blockchain trilemma (scalability vs. security vs. decentralization), so the best option depends on what features matter most for your use case.
+The AnyTrust and Rollup data availability models reflect prioritization choices within the blockchain trilemma (scalability vs. security vs. decentralization),
+so the best option depends on what features matter most for your use case.
 
 Here's a short list to help you pick the model that meets your chain's requirements:
 
 #### I need my chain to be cost-efficient
 
-- **AnyTrust:** By leveraging a Data Availability Committee (DAC), AnyTrust significantly reduces data availability costs compared to storing all data on Ethereum L1.
+- **AnyTrust:** By leveraging a Data Availability Committee (DAC), AnyTrust significantly reduces data availability costs compared to storing all data on
+  Ethereum L1.
 
 #### I need the most robust security model
 
-- **Rollup:** By storing raw transaction data on Arbitrum One or Ethereum L1, Rollup chains inherit Ethereum's robust security model, offering high resilience against attacks.
+- **Rollup:** By storing raw transaction data on Arbitrum One or Ethereum L1, Rollup chains inherit Ethereum's robust security model, offering high resilience
+  against attacks.
 
 #### I need my chain to use a custom gas token
 
@@ -142,28 +160,42 @@ Here's a short list to help you pick the model that meets your chain's requireme
 
 #### I want my chain to be trust-minimized and decentralized
 
-- **Rollup:** If your Rollup Arbitrum chain settles to Arbitrum One or Ethereum, it inherits the highest levels of trustlessness and decentralization of the Ethereum environment.
+- **Rollup:** If your Rollup Arbitrum chain settles to Arbitrum One or Ethereum, it inherits the highest levels of trustlessness and decentralization of the
+  Ethereum environment.
 
 ### Can my Arbitrum chain talk to other Arbitrum chains?
 
-Yes! All Arbitrum chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both **AnyTrust** and **Rollup** protocols; your Arbitrum chain can be configured to use either.
+Yes! All Arbitrum chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node
+software. This software implements both **AnyTrust** and **Rollup** protocols; your Arbitrum chain can be configured to use either.
 
-This means that your Arbitrum chain **isn't a completely isolated blockchain network**. When you launch an Arbitrum chain, you’re joining an ecosystem of connected chains that can exchange information.
+This means that your Arbitrum chain **isn't a completely isolated blockchain network**. When you launch an Arbitrum chain, you’re joining an ecosystem of
+connected chains that can exchange information.
 
-Our small-but-mighty team is hard at work developing tools and patterns that make it easy to launch natively interoperable Arbitrum chains. Interop features haven't been released just yet, but let us know if you need them - we'd like to learn from you as this capability matures.
+Our small-but-mighty team is hard at work developing tools and patterns that make it easy to launch natively interoperable Arbitrum chains. Interop features
+haven't been released just yet, but let us know if you need them - we'd like to learn from you as this capability matures.
 
-Arbitrum chain's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one that makes it easy for users to carry their digital swords, spells, skins, art, tokens, and other assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
+Arbitrum chain's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one that makes it easy for users to carry their digital
+swords, spells, skins, art, tokens, and other assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
 
 ### What should I know about Arbitrum chain's licensing?
 
-You can launch any Arbitrum chain permissionlessly. Nitro is licensed under a Business Source license, similar to DeFi protocols like Uniswap and Aave, among others. This license contains an Additional Use Grant that permits the permissionless deployment of Nitro software on blockchains that settle to Arbitrum One or Nova. However, Arbitrum chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the [AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
+You can launch any Arbitrum chain permissionlessly. Nitro is licensed under a Business Source license, similar to DeFi protocols like Uniswap and Aave, among
+others. This license contains an Additional Use Grant that permits the permissionless deployment of Nitro software on blockchains that settle to Arbitrum One or
+Nova. However, Arbitrum chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the
+[AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
 
 ### I'd love to tinker with Arbitrum chains! What should I do next?
 
-Visit the [Orbit SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth), start tinkering, and let us know how it goes - we're excited to learn and grow with you! 🚀
+Visit the [Orbit SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth), start tinkering, and let
+us know how it goes - we're excited to learn and grow with you! 🚀
 
 ### How can I launch an Arbitrum chain on mainnet?
 
-While launching a chain on your own is possible, there are multiple infrastructure providers such as [Caldera](https://caldera.xyz/), [Conduit](https://conduit.xyz/), [AltLayer](https://altlayer.io/), [Zeeve](https://www.zeeve.io/), and [Gelato](https://www.gelato.network/raas) that are enabling developers to quickly launch their own rollups.
+While launching a chain on your own is possible, there are multiple infrastructure providers such as [Caldera](https://caldera.xyz/),
+[Conduit](https://conduit.xyz/), [AltLayer](https://altlayer.io/), [Zeeve](https://www.zeeve.io/), and [Gelato](https://www.gelato.network/raas) that are
+enabling developers to quickly launch their own rollups.
 
-[^1]: Although your Arbitrum chain will be able to exchange information with other Arbitrum chains (and the L2 chain that it settles to) by default, you're free to modify your Arbitrum chain's code as much as you'd like. You can even intentionally make your Arbitrum chain _incompatible_ with other Arbitrum chains and L2s.
+[^1]:
+    Although your Arbitrum chain will be able to exchange information with other Arbitrum chains (and the L2 chain that it settles to) by default, you're free
+    to modify your Arbitrum chain's code as much as you'd like. You can even intentionally make your Arbitrum chain _incompatible_ with other Arbitrum chains
+    and L2s.

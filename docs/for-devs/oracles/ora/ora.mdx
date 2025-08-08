@@ -8,15 +8,15 @@ sidebar_label: 'ORA'
 content_type: how-to
 ---
 
-[ORA](https://ora.io) is Ethereum's Trustless AI.
-As a verifiable oracle protocol, ORA brings AI and complex compute onchain.
-Its main product, **Onchain AI Oracle (OAO)**, integrates AI capabilities directly onchain.
+[ORA](https://ora.io) is Ethereum's Trustless AI. As a verifiable oracle protocol, ORA brings AI and complex compute onchain. Its main product, **Onchain AI
+Oracle (OAO)**, integrates AI capabilities directly onchain.
 
 ORA breaks down the limitations of smart contracts by offering verifiable AI inference so that developers can innovate freely.
 
 ## OAO quickstart
 
-This quickstart is designed to help you build a smart contract on Arbitrum able to interact with OAO. You can find more details in [our docs Quickstart](https://docs.ora.io/doc/oao-onchain-ai-oracle/develop-guide).
+This quickstart is designed to help you build a smart contract on Arbitrum able to interact with OAO. You can find more details in
+[our docs Quickstart](https://docs.ora.io/doc/oao-onchain-ai-oracle/develop-guide).
 
 ### Workflow
 
@@ -27,7 +27,8 @@ This quickstart is designed to help you build a smart contract on Arbitrum able 
    1. During the challenge period, the opML validators will check the result and challenge it if the submitted result is incorrect.
    2. If the submitted result is successfully challenged by one of the validators, the submitted result will be updated on Arbitrum.
    3. After the challenge period, the submitted result onchain is finalized.
-5. When the result is uploaded or updated on Arbitrum, the provided AI inference in opML will be dispatched to the user's smart contract via its specific callback function.
+5. When the result is uploaded or updated on Arbitrum, the provided AI inference in opML will be dispatched to the user's smart contract via its specific
+   callback function.
 
 ## Integration
 
@@ -61,7 +62,8 @@ aiOracle.requestCallback(modelId, input, address(this), gas_limit, callbackData)
 
 **4 models** are available on Arbitrum One: Stable Diffusion (ID: 50), Llama3 8B Instruct (ID: 11), OpenLM Score 7B (ID: 14) and OpenLM Chat 7B (ID: 15).
 
-[Prompt](https://docs.ora.io/doc/oao-onchain-ai-oracle/reference) and [SimplePrompt](https://docs.ora.io/doc/oao-onchain-ai-oracle/reference) are both example smart contracts interacted with OAO.
+[Prompt](https://docs.ora.io/doc/oao-onchain-ai-oracle/reference) and [SimplePrompt](https://docs.ora.io/doc/oao-onchain-ai-oracle/reference) are both example
+smart contracts interacted with OAO.
 
 For simpler application scenarios (e.g., Prompt Engineering based AI like GPTs), you can directly use Prompt or SimplePrompt.
 

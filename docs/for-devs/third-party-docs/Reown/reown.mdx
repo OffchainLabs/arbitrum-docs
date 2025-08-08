@@ -16,17 +16,21 @@ Shoutout to [@rohit-710](https://github.com/rohit-710) for contributing the foll
 
 :::
 
-**[Reown](https://reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks)** gives developers the tools to build user experiences that make digital ownership effortless, intuitive, and secure.
+**[Reown](https://reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks)** gives developers the tools to build user experiences that make
+digital ownership effortless, intuitive, and secure.
 
 ## AppKit
 
-AppKit is a powerful, free, and fully open-source SDK for developers looking to integrate wallet connections and other Web3 functionalities into their apps on any EVM and non-EVM chain. In just a few simple steps, you can provide your users with seamless wallet access, one-click authentication, social logins, and notifications—streamlining their experience while enabling advanced features like on-ramp functionality, in-app token swaps and smart accounts.
+AppKit is a powerful, free, and fully open-source SDK for developers looking to integrate wallet connections and other Web3 functionalities into their apps on
+any EVM and non-EVM chain. In just a few simple steps, you can provide your users with seamless wallet access, one-click authentication, social logins, and
+notifications—streamlining their experience while enabling advanced features like on-ramp functionality, in-app token swaps and smart accounts.
 
 ## How to get started with AppKit on Arbitrum?
 
 Learn how to use Reown AppKit to enable wallet connections and interact with the Arbitrum network.
 
-With AppKit, you can provide seamless wallet connections, including email and social logins, on-ramp functionality, smart accounts, one-click authentication, and wallet notifications, all designed to deliver an exceptional user experience.
+With AppKit, you can provide seamless wallet connections, including email and social logins, on-ramp functionality, smart accounts, one-click authentication,
+and wallet notifications, all designed to deliver an exceptional user experience.
 
 In this tutorial, you will learn how to:
 
@@ -55,7 +59,8 @@ The above command creates a Next app and sets the name of the Next app as `appki
 
 #### Install AppKit
 
-Now, we need to install AppKit and other dependencies that we need for our app to function as expected. For this tutorial, we will be using “wagmi” as our preferred Ethereum library. However, you can also use [Ethers](https://docs.reown.com/appkit/next/core/installation?platform=ethers).
+Now, we need to install AppKit and other dependencies that we need for our app to function as expected. For this tutorial, we will be using “wagmi” as our
+preferred Ethereum library. However, you can also use [Ethers](https://docs.reown.com/appkit/next/core/installation?platform=ethers).
 
 ```bash
 npm install @reown/appkit @reown/appkit-wagmi-adapter wagmi @tanstack/react-query
@@ -65,7 +70,9 @@ npm install @reown/appkit @reown/appkit-wagmi-adapter wagmi @tanstack/react-quer
 
 #### Create a new project on Reown Cloud
 
-Now, we need to get a project Id from Reown Cloud that we will use to set up AppKit with Wagmi config. Navigate to [cloud.reown.com](https://cloud.reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks) and sign in. If you have not created an account yet, please do so before we proceed.
+Now, we need to get a project Id from Reown Cloud that we will use to set up AppKit with Wagmi config. Navigate to
+[cloud.reown.com](https://cloud.reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks) and sign in. If you have not created an account yet,
+please do so before we proceed.
 
 After you have logged in, please navigate to the “**Projects**” section of the Cloud and click on **Create Project**.
 
@@ -83,7 +90,8 @@ Select the framework as “**Next.js**” and click on **Create**. Reown Cloud w
 
 <ImageZoom src="/img/third-party-reown4.png" alt="" className="img-600px" />
 
-You will notice that your project was successfully created. On the top left corner, you will be able to find your Project Id. Please copy that as you will need that later.
+You will notice that your project was successfully created. On the top left corner, you will be able to find your Project Id. Please copy that as you will need
+that later.
 
 <ImageZoom src="/img/third-party-reown6.png" alt="" className="img-600px" />
 
@@ -91,7 +99,8 @@ You will notice that your project was successfully created. On the top left corn
 
 Before we build the app, let’s first configure our `.env` file. On the root level of your code directory, create a new file named `.env`.
 
-Open that file and create a new variable `NEXT_PUBLIC_PROJECT_ID`. You will assign the project Id that you copied in the previous step to this environment variable that you just created. This is what it will look like:
+Open that file and create a new variable `NEXT_PUBLIC_PROJECT_ID`. You will assign the project Id that you copied in the previous step to this environment
+variable that you just created. This is what it will look like:
 
 ```jsx
 NEXT_PUBLIC_PROJECT_ID = <YOUR_PROJECT_ID_HERE>
@@ -99,13 +108,15 @@ NEXT_PUBLIC_PROJECT_ID = <YOUR_PROJECT_ID_HERE>
 
 :::info
 
-Please make sure you follow the best practices when you are working with secret keys and other sensitive information. Environment variables that start with `NEXT_PUBLIC` will be exposed by your app which can be misused by bad actors.
+Please make sure you follow the best practices when you are working with secret keys and other sensitive information. Environment variables that start with
+`NEXT_PUBLIC` will be exposed by your app which can be misused by bad actors.
 
 :::
 
 #### Configure AppKit
 
-On the root level of your code directory, create a new folder named `config` and within that folder, create a new code file named `config/index.tsx`. Now, paste the code snippet shared below inside the code file, i.e., `config/index.tsx`.
+On the root level of your code directory, create a new folder named `config` and within that folder, create a new code file named `config/index.tsx`. Now, paste
+the code snippet shared below inside the code file, i.e., `config/index.tsx`.
 
 ```tsx
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
@@ -136,13 +147,15 @@ So what's happening in the above code? Let's understand it step-by-step:
 
 1. First, we need to import the necessary functions from their respective packages.
    1. `WagmiAdapter` - this is used to create a WAGMI configuration which is then initialized to the `wagmiAdapter`
-   2. `cookieStorage`**,** `createStorage` **-** this provides a storage mechanism using cookies and a function to create custom storage solutions (in this case, using cookies).
+   2. `cookieStorage`**,** `createStorage` **-** this provides a storage mechanism using cookies and a function to create custom storage solutions (in this
+      case, using cookies).
 
 #### Create the Modal for your app
 
 Now, we need to create a context provider to wrap our application in and initialize AppKit.
 
-On the root level of your code directory, create a new folder named `context` and within that folder, create a new code file named `context/index.tsx`. Now, paste the code snippet shared below inside the code file, i.e., `context/index.tsx`.
+On the root level of your code directory, create a new folder named `context` and within that folder, create a new code file named `context/index.tsx`. Now,
+paste the code snippet shared below inside the code file, i.e., `context/index.tsx`.
 
 ```tsx
 'use client';
@@ -199,9 +212,13 @@ export default ContextProvider;
 Let’s understand what is happening in the above code:
 
 1. First, we import the necessary functions from their respective packages. After this, we need to create the modal component for our app.
-2. `metadata` - (_optional_)This object contains information about our application that will be used by AppKit. This includes the name of the app, the description, the url and the icons representing our app.
-3. `createAppKit` - this is called to initialize the AppKit component, which handles the user interface for connecting to blockchain wallets. The function is configured with various options, such as the app's metadata, theming, and enabling features like analytics and onramp services.
-   1. `networks` - these are the networks that we want our app to support. So import the chains you want your app to support from `@reown/appkit/network` and assign it to this network parameter. Since we want to enable wallet interactions on the Arbitrum network, we import the Arbitrum mainnet and testnet. You can view the complete list of supported chains [here](https://wagmi.sh/core/api/chains).
+2. `metadata` - (_optional_)This object contains information about our application that will be used by AppKit. This includes the name of the app, the
+   description, the url and the icons representing our app.
+3. `createAppKit` - this is called to initialize the AppKit component, which handles the user interface for connecting to blockchain wallets. The function is
+   configured with various options, such as the app's metadata, theming, and enabling features like analytics and onramp services.
+   1. `networks` - these are the networks that we want our app to support. So import the chains you want your app to support from `@reown/appkit/network` and
+      assign it to this network parameter. Since we want to enable wallet interactions on the Arbitrum network, we import the Arbitrum mainnet and testnet. You
+      can view the complete list of supported chains [here](https://wagmi.sh/core/api/chains).
 4. `WagmiProvider`: Provides blockchain and wallet connection context to the app.
    1. `QueryClientProvider`: Provides the React Query context for managing server-state data.
 
@@ -241,7 +258,9 @@ export default function RootLayout({
 
 #### Create the UI for your app
 
-For our app to have the UI with which your users can interact, you need to set a simple UI and configure the modal. Since, we have already set up AppKit, you can use `<w3m-button>` which will serve as a “Connect Wallet” button or you can build your own custom button using the [hooks](https://docs.walletconnect.com/appkit/next/core/hooks) that AppKit provides.
+For our app to have the UI with which your users can interact, you need to set a simple UI and configure the modal. Since, we have already set up AppKit, you
+can use `<w3m-button>` which will serve as a “Connect Wallet” button or you can build your own custom button using the
+[hooks](https://docs.walletconnect.com/appkit/next/core/hooks) that AppKit provides.
 
 Open the `app/page.tsx` file and remove the existing boilerplate code, and then replace it with the code snippet given below.
 
@@ -271,9 +290,7 @@ export default function Home() {
         <br></br>
         {isConnected && (
           <div className="grid bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-            <h3 className="text-sm font-semibold bg-gray-100 p-2 text-center">
-              Network selection button
-            </h3>
+            <h3 className="text-sm font-semibold bg-gray-100 p-2 text-center">Network selection button</h3>
             <div className="flex justify-center items-center p-4">
               <w3m-network-button />
             </div>
@@ -285,7 +302,8 @@ export default function Home() {
 }
 ```
 
-The code above uses the AppKit configuration to provide two buttons: one for users to connect their wallet to the app, and another to allow users to switch networks.
+The code above uses the AppKit configuration to provide two buttons: one for users to connect their wallet to the app, and another to allow users to switch
+networks.
 
 You can now run the app and test it out. In order to do so, run the command given below.
 
@@ -299,7 +317,10 @@ npm run dev
 
 And that’s it! You have now learned how to create a simple app using AppKit that allows users to connect their wallet and interact with the Arbitrum network.
 
-**Reown AppKit** is a powerful solution for developers looking to integrate wallet connections and other Web3 functionalities into their apps on any EVM chain. In just a few simple steps, you can provide your users with seamless wallet access, one-click authentication, social logins, and notifications—streamlining their experience while enabling advanced features like on-ramp functionality and smart accounts. By following this guide, you'll quickly get up and running with Reown’s AppKit, enhancing your app’s user experience and interaction with blockchain technology.
+**Reown AppKit** is a powerful solution for developers looking to integrate wallet connections and other Web3 functionalities into their apps on any EVM chain.
+In just a few simple steps, you can provide your users with seamless wallet access, one-click authentication, social logins, and notifications—streamlining
+their experience while enabling advanced features like on-ramp functionality and smart accounts. By following this guide, you'll quickly get up and running with
+Reown’s AppKit, enhancing your app’s user experience and interaction with blockchain technology.
 
 You can view the complete code repository [here](https://github.com/rohit-710/reown-appkit-evm).
 

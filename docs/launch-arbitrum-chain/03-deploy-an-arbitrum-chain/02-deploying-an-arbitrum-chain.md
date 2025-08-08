@@ -20,23 +20,32 @@ Creating a new Arbitrum chain involves deploying a set of contracts on your chai
 
 You can explore the code of these contracts in the [nitro-contracts repository](https://github.com/OffchainLabs/nitro-contracts).
 
-Upon deployment, an Arbitrum chain can be configured as a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain, and use `ETH` or any standard `ERC-20 `token as its gas token.
+Upon deployment, an Arbitrum chain can be configured as a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or
 
-This page explains how to deploy an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> using the Arbitrum chain (Orbit) SDK. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to the process of creating and configuring an Arbitrum chain.
+<a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain, and use `ETH` or any standard `ERC-20 `token as its gas token.
+
+This page explains how to deploy an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> using the Arbitrum chain (Orbit) SDK. See the
+[Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to the process of creating and configuring an Arbitrum chain.
 
 :::info About custom gas token Arbitrum chains
 
-Custom gas token Arbitrum chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard `ERC-20` tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the `ERC-20` token to be used must be deployed on your chain's parent chain.
+Custom gas token Arbitrum chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard `ERC-20` tokens can be used as gas
+tokens, while more complex tokens with additional functionality must fulfill
+[these requirements](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx#requirements-of-the-custom-gas-token)
+to be used as gas tokens. Remember that the `ERC-20` token to be used must be deployed on your chain's parent chain.
 
 :::
 
 ## Parameters used when deploying a new chain
 
-Before we describe the process of creating a chain using the Arbitrum chain (Orbit) SDK, let's see what configuration options we have available when creating a chain.
+Before we describe the process of creating a chain using the Arbitrum chain (Orbit) SDK, let's see what configuration options we have available when creating a
+chain.
 
-Deploying a new Arbitrum chain is done through a [RollupCreator](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain.
+Deploying a new Arbitrum chain is done through a [RollupCreator](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract
+that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain.
 
-`RollupCreator` has a `createRollup` function that deploys your chain's core contracts to the parent chain. `createRollup` takes a complex struct called `RollupDeploymentParams` as its only input. This struct defines the parameters of the Arbitrum chain to be created.
+`RollupCreator` has a `createRollup` function that deploys your chain's core contracts to the parent chain. `createRollup` takes a complex struct called
+`RollupDeploymentParams` as its only input. This struct defines the parameters of the Arbitrum chain to be created.
 
 ```solidity
 struct RollupDeploymentParams {
@@ -92,7 +101,8 @@ struct Config {
 }
 ```
 
-Most of these parameters don't need to be configured, since the Arbitrum chain (Orbit) SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
+Most of these parameters don't need to be configured, since the Arbitrum chain (Orbit) SDK will provide the right default values for them. However, the
+following table describes some of the parameters that you might want to configure:
 
 | Parameter             | Type    | Description                                                                                                                                                                                                                                                                                         |
 | :-------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -141,7 +151,8 @@ The `chainConfig` parameter within the `Config` struct is a stringified `JSON` o
 }
 ```
 
-Again, most of these parameters don't need to be configured, since the Arbitrum chain (Orbit) SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
+Again, most of these parameters don't need to be configured, since the Arbitrum chain (Orbit) SDK will provide the right default values for them. However, the
+following table describes some of the parameters that you might want to configure:
 
 | Parameter                            | Type    | Description                                                                                                                                                     |
 | :----------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -164,10 +175,13 @@ Now, let's look at the methods to use when creating a new Arbitrum chain with th
 
 :::info Example script
 
-The Arbitrum chain (Orbit) SDK includes an example script for creating an Arbitrum chain. We recommend that you first understand the process described in this section and then check the following example scripts:
+The Arbitrum chain (Orbit) SDK includes an example script for creating an Arbitrum chain. We recommend that you first understand the process described in this
+section and then check the following example scripts:
 
-- [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) for creating an Arbitrum AnyTrust chain with `ETH` as the gas token.
-- [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-custom-fee-token) for creating an Arbitrum AnyTrust chain with an ERC-20 as the gas token.
+- [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) for creating an Arbitrum AnyTrust chain
+  with `ETH` as the gas token.
+- [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-custom-fee-token) for creating an
+  Arbitrum AnyTrust chain with an ERC-20 as the gas token.
 
 :::
 
@@ -181,7 +195,8 @@ Here are the steps involved in the deployment process:
 
 ### 1. Create the chain's configuration object
 
-The `prepareChainConfig` function creates a `chainConfig` structure like the one defined in the previous section. It sets the appropriate defaults for most of the parameters, allowing you to override any of these defaults. However, the `chainId` and `InitialChainOwner` parameters must be set to the desired values.
+The `prepareChainConfig` function creates a `chainConfig` structure like the one defined in the previous section. It sets the appropriate defaults for most of
+the parameters, allowing you to override any of these defaults. However, the `chainId` and `InitialChainOwner` parameters must be set to the desired values.
 
 Below is an example of how to use `prepareChainConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `InitialChainOwner`:
 
@@ -198,9 +213,13 @@ const chainConfig = prepareChainConfig({
 });
 ```
 
-Once we have the `chainConfig`, we can use the function `createRollupPrepareDeploymentParamsConfig` to craft a `Config` structure like the one defined in the section above. Again, this function will set the appropriate defaults for most parameters, allowing you to override any of these defaults. However, the `chainId` and `owner` parameters must be set to the desired values. Additionally, a public client of the parent chain must be passed as an argument to the function.
+Once we have the `chainConfig`, we can use the function `createRollupPrepareDeploymentParamsConfig` to craft a `Config` structure like the one defined in the
+section above. Again, this function will set the appropriate defaults for most parameters, allowing you to override any of these defaults. However, the
+`chainId` and `owner` parameters must be set to the desired values. Additionally, a public client of the parent chain must be passed as an argument to the
+function.
 
-Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to obtain the chain configuration for a chain with a specific `chainId` and `owner`:
+Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to obtain the chain configuration for a chain with a specific `chainId` and
+`owner`:
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -220,17 +239,23 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
 
 ### 2. Deploy the Arbitrum chain
 
-With the new crafted configuration, we can call the `createRollup` method which will send the transaction to the `RollupCreator` contract and wait until it is executed.
+With the new crafted configuration, we can call the `createRollup` method which will send the transaction to the `RollupCreator` contract and wait until it is
+executed.
 
-Besides the `Config` structure created in the previous step, other parameters from the `RollupDeploymentParams` structure can be passed to override the defaults set by the Arbitrum chain (Orbit) SDK. Batch poster and validator addresses must be set to the desired values. Additionally, a public client of the parent chain and a deployer PrivateKeyAccount must be passed as arguments to the function.
+Besides the `Config` structure created in the previous step, other parameters from the `RollupDeploymentParams` structure can be passed to override the defaults
+set by the Arbitrum chain (Orbit) SDK. Batch poster and validator addresses must be set to the desired values. Additionally, a public client of the parent chain
+and a deployer PrivateKeyAccount must be passed as arguments to the function.
 
 :::info Additional step for custom gas token chains
 
-If you want to configure a custom gas token, the deployer needs to give allowance to the `RollupCreator` contract before starting the deployment process, so that it can spend enough tokens to send the correspondant `Parent-to-Child` messages during the deployment process. This process is handled within the `createRollup` function, but the deployer must own enough tokens to create these messages.
+If you want to configure a custom gas token, the deployer needs to give allowance to the `RollupCreator` contract before starting the deployment process, so
+that it can spend enough tokens to send the correspondant `Parent-to-Child` messages during the deployment process. This process is handled within the
+`createRollup` function, but the deployer must own enough tokens to create these messages.
 
 :::
 
-If you want to configure a custom gas token, you can pass the address in the parent chain of the `ERC-20` token to use in the `nativeToken` parameter of the `createRollup` function.
+If you want to configure a custom gas token, you can pass the address in the parent chain of the `ERC-20` token to use in the `nativeToken` parameter of the
+`createRollup` function.
 
 Below is an example of how to use `createRollup` using the `createRollupConfig` crafted in the previous step:
 
@@ -275,15 +300,22 @@ type CreateRollupResults = {
 
 ### 4. Set the DAC keyset in the `SequencerInbox` (for AnyTrust chains)
 
-If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/01-get-started.mdx) to learn more about setting up a DAC.
+If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This
+process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See
+[How to configure a DAC](/run-arbitrum-node/data-availability-committees/01-get-started.mdx) to learn more about setting up a DAC.
 
 :::info
 
-The Arbitrum chain (Orbit) SDK includes an example script for setting up the keyset in the `SequencerInbox`. We recommend that you first understand the process described in this section and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
+The Arbitrum chain (Orbit) SDK includes an example script for setting up the keyset in the `SequencerInbox`. We recommend that you first understand the process
+described in this section and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts)
+script.
 
 :::
 
-The Arbitrum chain (Orbit) SDK includes a `setValidKeyset` function to help set the keyset in the SequencerInbox. From the last step, you can gather the `sequencerInbox` and `upgradeExecutor` addresses and pass them to the function along with the `keyset`, a public client of the parent chain, and a wallet client of an account that has executor privileges in the `UpgradeExecutor` contract (to learn more about `UpgradeExecutor`, see [Ownership structure and access control](/launch-arbitrum-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx)).
+The Arbitrum chain (Orbit) SDK includes a `setValidKeyset` function to help set the keyset in the SequencerInbox. From the last step, you can gather the
+`sequencerInbox` and `upgradeExecutor` addresses and pass them to the function along with the `keyset`, a public client of the parent chain, and a wallet client
+of an account that has executor privileges in the `UpgradeExecutor` contract (to learn more about `UpgradeExecutor`, see
+[Ownership structure and access control](/launch-arbitrum-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx)).
 
 Below is an example of how to use `setValidKeyset` using the parameters described above:
 
@@ -318,4 +350,5 @@ This function will send the transaction and wait for its execution, returning th
 
 ### 5. Next step
 
-Once the chain's contracts are created, you can move to the next step: [configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md).
+Once the chain's contracts are created, you can move to the next step:
+[configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md).

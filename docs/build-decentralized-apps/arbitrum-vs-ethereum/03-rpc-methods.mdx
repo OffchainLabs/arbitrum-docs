@@ -1,27 +1,35 @@
 ---
 title: 'RPC methods'
 sidebar_position: 3
-description: This concept page provides information about the differences between Arbitrum and Ethereum in terms of RPC methods, so developers can easily understand what to expect when deploying to Arbitrum
+description:
+  This concept page provides information about the differences between Arbitrum and Ethereum in terms of RPC methods, so developers can easily understand what
+  to expect when deploying to Arbitrum
 target_audience: developers who want to build on Arbitrum
 author: dzgoldman
 content_type: concept
 ---
 
-Although the majority of RPC methods follow the same behavior as in Ethereum, some methods might produce a different result, or add more information, when used on an Arbitrum chain. This page covers the differences in response body fields you'll find when calling RPC methods on an Arbitrum chain vs on Ethereum.
+Although the majority of RPC methods follow the same behavior as in Ethereum, some methods might produce a different result, or add more information, when used
+on an Arbitrum chain. This page covers the differences in response body fields you'll find when calling RPC methods on an Arbitrum chain vs on Ethereum.
 
 :::info
 
-Comprehensive documentation on all generally available JSON-RPC methods for Ethereum can be found at [ethereum.org](https://ethereum.org/en/developers/docs/apis/json-rpc/). As Arbitrum has `go-ethereum` at its core, most of the documented methods there can be used with no modifications.
+Comprehensive documentation on all generally available JSON-RPC methods for Ethereum can be found at
+[ethereum.org](https://ethereum.org/en/developers/docs/apis/json-rpc/). As Arbitrum has `go-ethereum` at its core, most of the documented methods there can be
+used with no modifications.
 
 :::
 
 ## Transactions
 
-When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionbyhash) and other methods that return a transaction, Arbitrum includes a few additional fields and leverages some existing fields in different ways than Ethereum.
+When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionbyhash) and other methods that return a
+transaction, Arbitrum includes a few additional fields and leverages some existing fields in different ways than Ethereum.
 
 ### Transaction types
 
-In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/04-state-transition-function/04-modified-geth-on-arbitrum.mdx#transaction-types).
+In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum,
+Arbitrum adds additional types listed below and
+[documented in full detail here](/how-arbitrum-works/04-state-transition-function/04-modified-geth-on-arbitrum.mdx#transaction-types).
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
@@ -52,7 +60,8 @@ On RPC calls that return transactions, the following fields will have a differen
 
 ## Transaction receipts
 
-When calling [`eth_getTransactionReceipt`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionreceipt), Arbitrum includes a few additional fields and leverages some existing fields in different ways than Ethereum.
+When calling [`eth_getTransactionReceipt`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionreceipt), Arbitrum includes a few additional
+fields and leverages some existing fields in different ways than Ethereum.
 
 ### Additional fields
 
@@ -65,7 +74,8 @@ On RPC calls that return transaction receipts, the following fields are added to
 
 ## Blocks
 
-When calling [`eth_getBlockByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbyhash) and other methods that return a block, Arbitrum includes a few additional fields and leverages some existing fields in different ways than Ethereum.
+When calling [`eth_getBlockByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbyhash) and other methods that return a block, Arbitrum
+includes a few additional fields and leverages some existing fields in different ways than Ethereum.
 
 ### Additional fields
 
@@ -92,11 +102,15 @@ On RPC calls that return a block, the following fields will have a different con
 
 ### `eth_syncing`
 
-Calling `eth_syncing` returns false when the node is fully synced (just like on Ethereum). If the node is still syncing, `eth_syncing` returns an object with data about the synchronization status. Here, we provide more details.
+Calling `eth_syncing` returns false when the node is fully synced (just like on Ethereum). If the node is still syncing, `eth_syncing` returns an object with
+data about the synchronization status. Here, we provide more details.
 
 #### Understanding messages, batches, and blocks
 
-Nitro nodes receive transactions from their parent chain and the sequencer feed in the form of messages. These messages may contain multiple transactions that are executed by the node, which then produces blocks. Each message produces exactly one block. In most Nitro chains, the message number and the block number are the same. However, Arbitrum One has pre-Nitro (classic) blocks, so for that chain, message 0 produced block `22207818` (blocks prior to that one are 'classic' blocks). Keep in mind that the offset between message and block number is constant in the chain.
+Nitro nodes receive transactions from their parent chain and the sequencer feed in the form of messages. These messages may contain multiple transactions that
+are executed by the node, which then produces blocks. Each message produces exactly one block. In most Nitro chains, the message number and the block number are
+the same. However, Arbitrum One has pre-Nitro (classic) blocks, so for that chain, message 0 produced block `22207818` (blocks prior to that one are 'classic'
+blocks). Keep in mind that the offset between message and block number is constant in the chain.
 
 On the parent chain, messages appear in batches. The number of messages per batch changes between batches.
 
@@ -104,7 +118,8 @@ On the parent chain, messages appear in batches. The number of messages per batc
 
 :::info
 
-Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitro node is not considered a stable API. It is still being actively developed and can be modified without notice between versions.
+Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitro node is not considered a stable API. It is still being actively developed and
+can be modified without notice between versions.
 
 :::
 
@@ -129,19 +144,20 @@ If the sync process encounters an error while trying to collect the data above (
 #### Understanding common scenarios
 
 - If `batchSeen` > `batchProcessed`, some batches have still not been processed
-- If `msgCount` > `messageOfLastBlock`, some messages have been processed, but not all relevant blocks have been built (this is usually the longest stage while syncing a new node)
+- If `msgCount` > `messageOfLastBlock`, some messages have been processed, but not all relevant blocks have been built (this is usually the longest stage while
+  syncing a new node)
 - If `broadcasterQueuedMessagesPos` > `msgCount`, the feed is ahead of the last message known to the node
 
 ### `debug_traceTransaction`
 
-- [ ] The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
-      HostIOs are calls the WasmVM makes to read and write data in the EVM.
-      With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
+- [ ] The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the
+      metadata for each executed HostIO. HostIOs are calls the WasmVM makes to read and write data in the EVM. With the result of this tracer and the code for
+      the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
 
 :::info
 
-The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger.
-More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/how-tos/debugging-tx).
+The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger. More information can be found on
+[How to debug Stylus transactions using Cargo Stylus Replay](/stylus/how-tos/debugging-tx).
 
 :::
 

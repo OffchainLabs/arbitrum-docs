@@ -7,11 +7,13 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
 
-This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/gas-metering).
+This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and
+ink, see [Gas and ink (Stylus)](/stylus/concepts/gas-metering).
 
 ## Opcode costs
 
-The Stylus VM charges for WASM opcodes according to the following table, which was determined via a conservative statistical analysis and is expected to change as Stylus matures. Prices may fluctuate across upgrades as our analysis evolves and optimizations are made.
+The Stylus VM charges for WASM opcodes according to the following table, which was determined via a conservative statistical analysis and is expected to change
+as Stylus matures. Prices may fluctuate across upgrades as our analysis evolves and optimizations are made.
 
 | Hex    | Opcode        | Ink          | Gas            | Notes                         |
 | ------ | ------------- | ------------ | -------------- | ----------------------------- |
@@ -129,9 +131,11 @@ The Stylus VM charges for WASM opcodes according to the following table, which w
 
 ## Host I/O costs
 
-Certain operations require suspending WASM execution so that the Stylus VM can perform tasks natively in the host. This costs about `0.84 gas` to do. Though we’ll publish a full specification later, the following table details the costs of simple operations that run in the host.
+Certain operations require suspending WASM execution so that the Stylus VM can perform tasks natively in the host. This costs about `0.84 gas` to do. Though
+we’ll publish a full specification later, the following table details the costs of simple operations that run in the host.
 
-Note that the values in this table were determined via a conservative statistical analysis and are expected to change as Stylus matures. Prices may fluctuate across upgrades as our analysis evolves and optimizations are made.
+Note that the values in this table were determined via a conservative statistical analysis and are expected to change as Stylus matures. Prices may fluctuate
+across upgrades as our analysis evolves and optimizations are made.
 
 | Host I/O         | Ink             | Gas            | Notes                      |
 | ---------------- | --------------- | -------------- | -------------------------- |

@@ -10,7 +10,8 @@ content_type: how-to
 
 # Enabling Timeboost for your Arbitrum (Orbit) chain
 
-This guide walks you through the process of enabling Timeboost for your Arbitrum Orbit chain. For a conceptual introduction to Timeboost, see the [Timeboost Introduction](https://docs.arbitrum.io/how-arbitrum-works/timeboost/gentle-introduction).
+This guide walks you through the process of enabling Timeboost for your Arbitrum Orbit chain. For a conceptual introduction to Timeboost, see the
+[Timeboost Introduction](https://docs.arbitrum.io/how-arbitrum-works/timeboost/gentle-introduction).
 
 ## Prerequisites
 
@@ -89,11 +90,13 @@ Example output:
 
 ## Step 2: Run auctioneer services
 
-There are two distinct services to run: the bid validator and the auction server. The bid validator verifies submitted bids, while the auction server sends the winning bid on-chain.
+There are two distinct services to run: the bid validator and the auction server. The bid validator verifies submitted bids, while the auction server sends the
+winning bid on-chain.
 
 ### Prerequisites
 
-The services require the `autonomous-auctioneer` binary, which is included in the Nitro Docker image. Alternatively, you can build it locally by following the [Build Nitro Locally](https://docs.arbitrum.io/run-arbitrum-node/nitro/build-nitro-locally) guide.
+The services require the `autonomous-auctioneer` binary, which is included in the Nitro Docker image. Alternatively, you can build it locally by following the
+[Build Nitro Locally](https://docs.arbitrum.io/run-arbitrum-node/nitro/build-nitro-locally) guide.
 
 To build only the `autonomous-auctioneer` component during the local build process:
 
@@ -185,11 +188,12 @@ After finishing a bid request, look for messages in your sequencer logs such as:
 AuctionResolved: New express lane controller assigned round
 ```
 
-This message confirms that your sequencer is processing express queue transactions from the express lane controller, and that Timeboost is functioning correctly.
+This message confirms that your sequencer is processing express queue transactions from the express lane controller, and that Timeboost is functioning
+correctly.
 
 ### User interaction verification
 
-Users can interact with Timeboost by submitting bids through the `auctioneer_submitBid` endpoint of your auctioneer service.
-For detailed instructions on how users can interact with Timeboost, see [How to Use Timeboost](https://docs.arbitrum.io/how-arbitrum-works/timeboost/how-to-use-timeboost).
+Users can interact with Timeboost by submitting bids through the `auctioneer_submitBid` endpoint of your auctioneer service. For detailed instructions on how
+users can interact with Timeboost, see [How to Use Timeboost](https://docs.arbitrum.io/how-arbitrum-works/timeboost/how-to-use-timeboost).
 
 A successful bid submission will trigger the auction resolution process and generate the corresponding logs mentioned above.

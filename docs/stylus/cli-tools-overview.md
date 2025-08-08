@@ -4,7 +4,8 @@ title: CLI Tools (cargo-stylus)
 sidebar_label: CLI tools overview
 ---
 
-The CLI tools provided for Stylus, specifically the `cargo-stylus` tool, are designed to help developers manage, compile, and optimize their Stylus contracts efficiently. This overview provides a summary of the tools available and how to use them effectively.
+The CLI tools provided for Stylus, specifically the `cargo-stylus` tool, are designed to help developers manage, compile, and optimize their Stylus contracts
+efficiently. This overview provides a summary of the tools available and how to use them effectively.
 
 ## Available tools
 
@@ -40,4 +41,5 @@ For more advanced usage and detailed guides, refer to the following resources:
 - **[Troubleshooting](/stylus/troubleshooting-building-stylus.md)**
 - **[Run a Stylus dev node](/run-arbitrum-node/03-run-local-full-chain-simulation.mdx)**
 
-This overview page serves as the starting point for mastering the CLI tools available for Stylus development. From optimizing your contracts to debugging and verifying them, the `cargo-stylus` toolset is integral to a smooth development experience.
+This overview page serves as the starting point for mastering the CLI tools available for Stylus development. From optimizing your contracts to debugging and
+verifying them, the `cargo-stylus` toolset is integral to a smooth development experience.

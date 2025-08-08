@@ -8,13 +8,17 @@ sidebar_label: 'pyth'
 content_type: how-to
 ---
 
-The [Pyth network](https://pyth.network/) a first-party oracle network, securely and transparently delivering real-time market data to [multiple chains](https://docs.pyth.network/price-feeds/contract-addresses).
+The [Pyth network](https://pyth.network/) a first-party oracle network, securely and transparently delivering real-time market data to
+[multiple chains](https://docs.pyth.network/price-feeds/contract-addresses).
 
-The network comprises some of the world’s [largest exchanges, market makers, and financial services providers](https://pyth.network/publishers). These publish proprietary data onchain for aggregation and distribution to smart contract applications.
+The network comprises some of the world’s [largest exchanges, market makers, and financial services providers](https://pyth.network/publishers). These publish
+proprietary data onchain for aggregation and distribution to smart contract applications.
 
 ## Pyth price feeds
 
-The Pyth network introduces an innovative low-latency [pull oracle design](https://docs.pyth.network/price-feeds/pull-updates), where users can pull price updates onchain when needed, enabling everyone in the blockchain environment to access that data point. Pyth network updates the prices every 400ms, making Pyth the fastest onchain oracle.
+The Pyth network introduces an innovative low-latency [pull oracle design](https://docs.pyth.network/price-feeds/pull-updates), where users can pull price
+updates onchain when needed, enabling everyone in the blockchain environment to access that data point. Pyth network updates the prices every 400ms, making Pyth
+the fastest onchain oracle.
 
 Here is a working example of a contract that fetches the latest price of `ARB/USD` on the Arbitrum network.
 
@@ -53,7 +57,9 @@ contract MyFirstPythContract {
 }
 ```
 
-Here you can fetch the `updateData` from Pyth's [Hermes](https://hermes.pyth.network/docs/) feed, which listens to Pythnet and Wormhole for price updates; or you can use the [pyth-evm-js](https://github.com/pyth-network/pyth-crosschain/blob/main/target_chains/ethereum/sdk/js/src/EvmPriceServiceConnection.ts#L15) SDK. Check [How to Fetch Price Updates](https://docs.pyth.network/price-feeds/fetch-price-updates) to pull the latest data.
+Here you can fetch the `updateData` from Pyth's [Hermes](https://hermes.pyth.network/docs/) feed, which listens to Pythnet and Wormhole for price updates; or
+you can use the [pyth-evm-js](https://github.com/pyth-network/pyth-crosschain/blob/main/target_chains/ethereum/sdk/js/src/EvmPriceServiceConnection.ts#L15) SDK.
+Check [How to Fetch Price Updates](https://docs.pyth.network/price-feeds/fetch-price-updates) to pull the latest data.
 
 ## Pyth Entropy
 

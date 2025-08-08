@@ -7,7 +7,9 @@ description: 'Defines some of the basic primitives used in Arbitrum Stylus Rust 
 
 # Primitive Data Types
 
-The **Stylus SDK** makes use of the popular **Alloy** library (from the developers of **ethers-rs** and **Foundry**) to represent various native Solidity types as Rust types and to seamlessly convert between them when needed. These are needed since there are a number of custom types (like address) and large integers that are not natively supported in Rust.
+The **Stylus SDK** makes use of the popular **Alloy** library (from the developers of **ethers-rs** and **Foundry**) to represent various native Solidity types
+as Rust types and to seamlessly convert between them when needed. These are needed since there are a number of custom types (like address) and large integers
+that are not natively supported in Rust.
 
 In this section, we'll focus on the following types:
 
@@ -17,7 +19,8 @@ In this section, we'll focus on the following types:
 - `Boolean`
 - `Bytes`
 
-More in-depth documentation about the available methods and types in the Alloy library can be found in their docs. It also helps to cross-reference with Solidity docs if you don't already have a solid understanding of those types.
+More in-depth documentation about the available methods and types in the Alloy library can be found in their docs. It also helps to cross-reference with
+Solidity docs if you don't already have a solid understanding of those types.
 
 ## Learn More
 
@@ -31,7 +34,8 @@ More in-depth documentation about the available methods and types in the Alloy l
 
 ## Integers
 
-Alloy defines a set of convenient Rust types to represent the typically sized integers used in Solidity. The type `U256` represents a 256-bit _unsigned_ integer, meaning it cannot be negative. The range for a `U256` number is 0 to 2^256 - 1.
+Alloy defines a set of convenient Rust types to represent the typically sized integers used in Solidity. The type `U256` represents a 256-bit _unsigned_
+integer, meaning it cannot be negative. The range for a `U256` number is 0 to 2^256 - 1.
 
 Negative numbers are allowed for I types, such as `I256`. These represent signed integers.
 
@@ -93,7 +97,8 @@ console!("{:#x}, {:#x}, {:#x}, {:#x}", f, g, h, i);
 
 ## Address
 
-Ethereum addresses are 20 bytes in length, or 160 bits. Alloy provides a number of helper utilities for converting to addresses from strings, bytes, numbers, and addresses.
+Ethereum addresses are 20 bytes in length, or 160 bits. Alloy provides a number of helper utilities for converting to addresses from strings, bytes, numbers,
+and addresses.
 
 ### Address Usage
 

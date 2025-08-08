@@ -1,39 +1,47 @@
 Thank you for considering to contribute to the Arbitrum documentation! We're excited to have you on board.
 
-The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
+The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product
+portfolio. Contributions are welcome from the entire Ethereum community.
 
-This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
+This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax,
+Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
 
 ### Add a new core document
 
 If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
 
 1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
-2.  Issue a `Draft` pull request into `master`. Pull requests into `master` generate a preview of your changes via a PR-specific Docusaurus deployment; this preview will update as you push commits to your remote.
+2.  Issue a `Draft` pull request into `master`. Pull requests into `master` generate a preview of your changes via a PR-specific Docusaurus deployment; this
+    preview will update as you push commits to your remote.
 3.  Include answers to the following questions in your PR description:
     - Audience: Who am I writing for?
     - Problem: What specific problem are they trying to solve?
     - Discovery: How are they looking for a solution to this problem? What search terms are they using?
     - Document type: Which document type is most suitable?
     - Policy acknowledgment (Third-party docs only): Do you agree to the third-party content policy outlined within "Contribute docs"?
-4.  As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions below.
+4.  As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions
+    below.
 5.  Mark your PR as `Open` when it's ready for review.
 
 ### Add a new third-party document
 
-**Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
+**Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the
+[Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
 
 See [Contribute third-party docs](/for-devs/third-party-docs/contribute) for detailed instructions.
 
 ### Request an update
 
-If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
+If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement
+yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can
+use to elaborate on your request or suggestion.
 
 ### Add a new translation page
 
 If you would like to participate in translating the Arbitrum docs, you can:
 
-1. Check whether `i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
+1. Check whether `i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding
+   French as an example):
 
 ```shell
 npm run write-translations -- --locale fr
@@ -49,7 +57,9 @@ mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/
 
 3. Translate one of more docs files located in `docs/`.
 
-4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in i18n should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
+4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in
+   `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in i18n should be
+   `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
 
 Test run:
 
@@ -115,8 +125,9 @@ This isn't an exhaustive list, but it includes most of the document types that w
 
 :::info About Promotional Content
 
-While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept promotional content in our core docs.
-Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as third-party docs, either.
+While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept
+promotional content in our core docs. Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as
+third-party docs, either.
 
 :::
 
@@ -130,7 +141,8 @@ Sentence-case "content labels": document titles, sidebar titles, menu items, sec
 
 #### 2. Linking
 
-Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, try to link to the document's title verbatim.
+Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous
+links. When linking to docs, try to link to the document's title verbatim.
 
 #### 3. Titling
 
@@ -138,7 +150,9 @@ Titles should balance brevity with precision - _Node running overview_ is prefer
 
 #### 4. Separate procedural from conceptual (most of the time)
 
-Within procedural docs like how-tos and quickstarts, avoid including too much conceptual content. Provide only the conceptual information that the target reader _needs_ in order to complete the task at hand. Otherwise, organize conceptual information within conceptual docs, and link to them "just in case" from other docs.
+Within procedural docs like how-tos and quickstarts, avoid including too much conceptual content. Provide only the conceptual information that the target reader
+_needs_ in order to complete the task at hand. Otherwise, organize conceptual information within conceptual docs, and link to them "just in case" from other
+docs.
 
 #### 5. Voice
 
@@ -149,7 +163,8 @@ Within procedural docs like how-tos and quickstarts, avoid including too much co
 
 #### 6. Formality
 
-- Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through guidance.
+- Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through
+  guidance.
 - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
 
 #### 7. Targeting
@@ -159,28 +174,35 @@ Within procedural docs like how-tos and quickstarts, avoid including too much co
 
 #### 8. Flow
 
-- Set expectations: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
-- Value up front: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task completion as efficiently as possible.
+- Set expectations: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are
+  you making about their prior knowledge? Are there any prerequisites?
+- Value up front: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task
+  completion as efficiently as possible.
 
 #### 9. Cross-linking
 
-We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
+We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful
+for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
 
 #### 10. Things to avoid
 
 - Symbols where words will do: Minimize usage of `&` and `/` - spell out words like "_and_" and "_or_".
-- Jargon: Using precise technical terminology is ok, as long as your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
+- Jargon: Using precise technical terminology is ok, as long as your target audience is likely to understand the terminology. When in doubt, opt for clear,
+  unambiguous, _accessible_ language.
 
-Don't stress too much about checking off all of these boxes; we periodically review and edit our most heavily-trafficked docs, bringing them up to spec with the latest style guidelines.
+Don't stress too much about checking off all of these boxes; we periodically review and edit our most heavily-trafficked docs, bringing them up to spec with the
+latest style guidelines.
 
 Some important disclaimers:
 
 - This isn't an exhaustive list. These are just the min-bar guidelines that will be applied to all new content moving forward.
-- Many of our docs don't yet follow this guidance. Our small-but-mighty team is working on it! If you notice an obvious content bug, feel free to submit an [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
+- Many of our docs don't yet follow this guidance. Our small-but-mighty team is working on it! If you notice an obvious content bug, feel free to submit an
+  [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
 
 ### Banner conventions
 
-You can use banners (Docusaurus refers to them as ["admonitions"](https://docusaurus.io/docs/markdown-features/admonitions)) to set expectations for your readers and to emphasize important callouts. Use these conservatively, as they interrupt the flow of the document.
+You can use banners (Docusaurus refers to them as ["admonitions"](https://docusaurus.io/docs/markdown-features/admonitions)) to set expectations for your
+readers and to emphasize important callouts. Use these conservatively, as they interrupt the flow of the document.
 
 #### Under construction banner
 
@@ -188,7 +210,8 @@ Example:
 
 :::caution UNDER CONSTRUCTION
 
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an
+update** at the top of this document if you have any feedback along the way.
 
 :::
 
@@ -197,7 +220,8 @@ Usage:
 ```markdown
 :::caution UNDER CONSTRUCTION
 
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an
+update** at the top of this document if you have any feedback along the way.
 
 :::
 ```
@@ -228,12 +252,16 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 
 These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
 
-Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
+Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally,
+third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at
+hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
 
 #### How long does it take for my third-party content contribution to be reviewed?
 
-Our small-but-mighty team is continuously balancing competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. They're processed in the order in which they're received, generally within a week or two.
+Our small-but-mighty team is continuously balancing competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. They're
+processed in the order in which they're received, generally within a week or two.
 
 #### Is there any way to expedite third-party content contribution reviews?
 
-The most effective way to expedite processing is to ensure that your PR incorporates the conventions outlined in this document. Please don't ask for status updates - if you've submitted a PR, it's on our radar!
+The most effective way to expedite processing is to ensure that your PR incorporates the conventions outlined in this document. Please don't ask for status
+updates - if you've submitted a PR, it's on our radar!

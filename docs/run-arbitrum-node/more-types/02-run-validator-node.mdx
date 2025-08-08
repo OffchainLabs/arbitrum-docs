@@ -6,7 +6,10 @@ sidebar_position: 4
 content_type: how-to
 ---
 
-Validators are nodes that choose to participate in the rollup protocol to advance the state of the chain securely. Since the activation of <a data-quicklook-from="bold">BoLD</a>, chains can now choose to make validation permissionless. You can learn more in the [BoLD introduction](/how-arbitrum-works/bold/gentle-introduction.mdx).
+Validators are nodes that choose to participate in the rollup protocol to advance the state of the chain securely. Since the activation of
+
+<a data-quicklook-from="bold">BoLD</a>, chains can now choose to make validation permissionless. You can learn more in the [BoLD
+introduction](/how-arbitrum-works/bold/gentle-introduction.mdx).
 
 This page describes the different strategies a validator may follow and provides instructions on how to run a validator for an Arbitrum chain.
 
@@ -14,7 +17,8 @@ This how-to assumes that you're familiar with the following:
 
 - How to run a full node (see instructions [here](/run-arbitrum-node/02-run-full-node.mdx))
 - [How the Rollup protocol works](/how-arbitrum-works/05-validation-and-proving/02-rollup-protocol.mdx)
-- [How BoLD works](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
+- [How BoLD works](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD
+  activated
 
 ## Validation strategies
 
@@ -29,7 +33,8 @@ Validators can be configured to follow a specific validation strategy. Here we d
 
 ### The watchtower strategy
 
-One more validation strategy is available for all types of nodes: `watchtower`. This strategy is enabled by default in all nodes (full and archive), and it doesn't require a wallet, as it never takes any action onchain.
+One more validation strategy is available for all types of nodes: `watchtower`. This strategy is enabled by default in all nodes (full and archive), and it
+doesn't require a wallet, as it never takes any action onchain.
 
 A node in `watchtower` mode will immediately log an error if an onchain assertion deviates from the locally computed chain state.
 
@@ -48,7 +53,8 @@ Additionally, the following logs indicate whether all components are working cor
 - The log line `validation succeeded` shows that the node is validating chain blocks successfully
 - The log line `found correct assertion` shows that the node is finding assertions on the parent chain successfully
 
-Watchtower mode adds a small amount of execution and memory overhead to your node. You can deactivate this mode using the parameter `--node.staker.enable=false`.
+Watchtower mode adds a small amount of execution and memory overhead to your node. You can deactivate this mode using the parameter
+`--node.staker.enable=false`.
 
 ## How to run a validator node
 
@@ -56,7 +62,8 @@ This section explains how to configure your node to act as a validator.
 
 ### Step 0: prerequisites
 
-A validator node is a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions [here](/run-arbitrum-node/02-run-full-node.mdx).
+A validator node is a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions
+[here](/run-arbitrum-node/02-run-full-node.mdx).
 
 Additionally, you'll need a wallet with enough funds to perform actions onchain and enough tokens to bond. Keep in mind that:
 
@@ -100,7 +107,9 @@ Furthermore, the following logs will indicate that all components are working as
 
 ## Run a validator for an Arbitrum chain
 
-Validation for Arbitrum chains (Orbit) works the same way as for DAO-governed Arbitrum chains. However, as specified in [How to run a node](/run-arbitrum-node/02-run-full-node.mdx#required-parameters), you need to include the information of the chain when configuring your node by using `--chain.info-json`.
+Validation for Arbitrum chains (Orbit) works the same way as for DAO-governed Arbitrum chains. However, as specified in
+[How to run a node](/run-arbitrum-node/02-run-full-node.mdx#required-parameters), you need to include the information of the chain when configuring your node by
+using `--chain.info-json`.
 
 ```shell
 --chain.info-json=<Orbit chain's info>
@@ -114,11 +123,13 @@ Additionally, keep in mind that some chains might not have BoLD activated yet, s
 
 ::::warning Clear passwords in the command line
 
-This section shows how to manage a validator wallet using a password. Like any command that requires passing a password or private key, you should take extra precautions to secure your credentials. Failure to protect your password may compromise your validator wallet.
+This section shows how to manage a validator wallet using a password. Like any command that requires passing a password or private key, you should take extra
+precautions to secure your credentials. Failure to protect your password may compromise your validator wallet.
 
 ::::
 
-Nitro includes a tool to create a validator wallet for a specific chain automatically. You can access it by using the option `--node.staker.parent-chain-wallet.only-create-key` and setting a password for the wallet with `--node.staker.parent-chain-wallet.password`.
+Nitro includes a tool to create a validator wallet for a specific chain automatically. You can access it by using the option
+`--node.staker.parent-chain-wallet.only-create-key` and setting a password for the wallet with `--node.staker.parent-chain-wallet.password`.
 
 Here is an example of how to create a validator wallet for Arbitrum One and exit:
 
@@ -126,26 +137,33 @@ Here is an example of how to create a validator wallet for Arbitrum One and exit
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
 ```
 
-The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or `nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet file, as it will be the only way to withdraw the bond when desired.
+The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or
+`nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet file, as it will be the only way to withdraw the bond when desired.
 
-Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
+Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"`
+when running your node.
 
 ::::tip Use environment variables
 
-If you prefer not to include your password in the command line, you can use environment variables or a secure secrets management solution to supply the password at runtime.
+If you prefer not to include your password in the command line, you can use environment variables or a secure secrets management solution to supply the password
+at runtime.
 
 ::::
 
 ### How to add new validators to the allowlist (Arbitrum chains)
 
-On permissioned validation setups, the set of validators that can act on a given chain is limited to the ones added to the allowlist of validators in the Rollup contract.
+On permissioned validation setups, the set of validators that can act on a given chain is limited to the ones added to the allowlist of validators in the Rollup
+contract.
 
-Follow these instructions to add a new validator address to the allowlist. Remember that you need to be able to perform admin actions to the chain to complete this operation.
+Follow these instructions to add a new validator address to the allowlist. Remember that you need to be able to perform admin actions to the chain to complete
+this operation.
 
 1. Find your `upgradeExecutor` contract address
 2. Call the `executeCall` method of the `upgradeExecutor` contract:
    - set the `target` address to your Rollup contract's address
-   - set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}` (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`). For example, if you want to add the address `0x1234567890123456789012345678901234567890`, your `targetCalldata` should be `0xa3ffb7721234567890123456789012345678901234567890`.
+   - set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}` (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`). For
+     example, if you want to add the address `0x1234567890123456789012345678901234567890`, your `targetCalldata` should be
+     `0xa3ffb7721234567890123456789012345678901234567890`.
 3. Call your Rollup contract's `isValidator(address)` and check the result
 
 After performing this operation, the new validator will be able to run a validator node to participate in the chain.
