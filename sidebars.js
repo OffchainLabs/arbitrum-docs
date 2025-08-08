@@ -306,6 +306,11 @@ const sidebars = {
                   label: `Enable blob transactions`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality',
+                  label: `Configure delayed inbox finality`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -521,11 +526,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/customize-your-chain/customize-arbos',
               label: `Customize ArbOS version`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-finality',
-              label: `Configure delayed inbox finality`,
             },
           ],
         },

@@ -201,6 +201,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/launch-arbitrum-chain/how-tos/arbitrum-chain-finality/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/mainnet-beta/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
