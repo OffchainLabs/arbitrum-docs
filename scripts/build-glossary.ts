@@ -166,7 +166,7 @@ async function main(): Promise<void> {
   // Generate import statements for each term (unused in current implementation)
   // This could be used if implementing a React component approach to term rendering
   let imports = terms
-    .map((item) => `import ${renderKey(item.data.key)} from './glossary/${item.data.key}.mdx';`)
+    .map((item) => `import ${renderKey(item.data.key)} from './docs/glossary/${item.data.key}.mdx';`)
     .join('\n');
 
   // Generate component references for each term (unused in current implementation)
