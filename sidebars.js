@@ -306,6 +306,11 @@ const sidebars = {
                   label: `Enable blob transactions`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality',
+                  label: `Configure delayed inbox finality`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -521,11 +526,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/customize-your-chain/customize-arbos',
               label: `Customize ArbOS version`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-finality',
-              label: `Configure delayed inbox finality`,
             },
           ],
         },
@@ -822,6 +822,11 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
+          type: 'doc',
+          id: 'run-arbitrum-node/run-feed-relay',
+          label: 'Run a feed relay',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
@@ -900,11 +905,6 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/sequencer/run-sequencer-node',
               label: 'Run a sequencer node',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/sequencer/run-feed-relay',
-              label: 'Run a feed relay',
             },
             {
               type: 'doc',
