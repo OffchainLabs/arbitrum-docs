@@ -58,8 +58,8 @@ Three components make up the Native Mint/Burn feature:
 
 - **Time lock gate (safety switch)**: a safety feature that tells the chain owners when the feature is live. The default value is seven days to give chain owners sufficient time to identify and prevent a malicious owner addition.
 - **Mint and burn precompile**: the primary component that gives access control and admin interface.
-	- `mintNativeToken(uint256 amount)`: mints to the caller (the adapter), the adapter then transfers to the end user in the same transaction.
-	- `burnNativeToken(uint256 amount)`: burns the caller’s balance as part of an exit.
+  - `mintNativeToken(uint256 amount)`: mints to the caller (the adapter), the adapter then transfers to the end user in the same transaction.
+  - `burnNativeToken(uint256 amount)`: burns the caller’s balance as part of an exit.
 - **Collateral-safety track**: this ensures that all withdrawals are processed through the adapter and includes an L1 helper contract to sweep any native gas stuck in the bridge to the adapter's escrow.
 
 Below is a high-level data-flow diagram:
@@ -120,11 +120,12 @@ To resolve the problem stated above, we can implement:
 1. **Collateral Sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated third-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain Adapter contract).
 2. **Disable Orbit Bridge Withdrawals:** Disabling withdrawals on the Orbit chain, which ensures the third-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
 
-The **Collateral Sweep** is implemented by adding an Outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a third-party contract. This keeps all collateral in one place when mint/burn is enabled. 
+The **Collateral Sweep** is implemented by adding an Outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a third-party contract. This keeps all collateral in one place when mint/burn is enabled.
 
 **[This PR contains additional details about the Outbox contract](https://github.com/OffchainLabs/nitro-contracts/pull/339):**
-  - Outbox contracts are authorized to spend funds from the bridge. They can be registered using the admin function `setOutbox`.
-  - Typically, an Outbox contract requires verification of proof for an authorized withdrawal to occur. We can design one that permissionlessly sends native gas to a destination on the parent chain.
+
+- Outbox contracts are authorized to spend funds from the bridge. They can be registered using the admin function `setOutbox`.
+- Typically, an Outbox contract requires verification of proof for an authorized withdrawal to occur. We can design one that permissionlessly sends native gas to a destination on the parent chain.
 
 **Disabling Withdrawals** can be achieved by adapting the Nitro node to prevent non-zero value withdrawals. This approach still maintains our censorship-resistant properties, allowing the user to [initiate a withdrawal from L1](https://github.com/OffchainLabs/nitro/pull/3255https://github.com/OffchainLabs/nitro/pull/3255).
 
