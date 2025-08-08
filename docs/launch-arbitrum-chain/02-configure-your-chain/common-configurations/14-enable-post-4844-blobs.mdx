@@ -9,7 +9,8 @@ user_story: 'As an Arbitrum chain operator, I want to enable EIP-4844 blob trans
 
 # Enabling blob transactions for Arbitrum batch poster
 
-This guide explains how to configure your Arbitrum node to post EIP-4844 blob transactions to the parent chain, which can significantly reduce data availability costs.
+This guide explains how to configure your Arbitrum node to post EIP-4844 blob transactions to the parent chain, which can significantly reduce data availability
+costs.
 
 ## Prerequisites
 
@@ -30,8 +31,7 @@ Your parent chain (typically Ethereum mainnet or a testnet) must support **EIP-4
 
 Your ArbOS version must be **20 or higher**. To check your current version:
 
-**Method 1: Smart contract call**
-Call the `arbOSVersion()` function on the ArbSys precompile contract:
+**Method 1: Smart contract call** Call the `arbOSVersion()` function on the ArbSys precompile contract:
 
 - Contract address: `0x0000000000000000000000000000000000000064`
 - Function: `arbOSVersion()` returns `uint256`
@@ -92,7 +92,8 @@ numBlobs=1
 
 Your node may continue using calldata in these scenarios:
 
-1. **Cost optimization**: When blob gas prices are high, calldata posting may be more economical, but you can set the `--node.batch-poster.ignore-blob-price` flag to `true` to force the batch poster to use blobs.
+1. **Cost optimization**: When blob gas prices are high, calldata posting may be more economical, but you can set the `--node.batch-poster.ignore-blob-price`
+   flag to `true` to force the batch poster to use blobs.
 2. **Batch Type Switching Protection**: After a non-blob transaction is posted, the next 16 transactions will also use calldata to prevent frequent switching
 
 Check your node logs for blob-related error messages and verify that your parent chain is accessible and fully synced.

@@ -9,11 +9,14 @@ user_story: As an Arbitrum developer, I want to learn how to use oracles in my d
 content_type: get-started
 ---
 
-[API3](https://api3.org/) is a collaborative project to deliver price feeds to smart contract platforms in a decentralized and trust-minimized way. The Price feeds provided by API3 allow dapps to regain lost value with Oracle Extractable Value built in to the price feed allowing the ability to earn additional revenue for your dapp.
+[API3](https://api3.org/) is a collaborative project to deliver price feeds to smart contract platforms in a decentralized and trust-minimized way. The Price
+feeds provided by API3 allow dapps to regain lost value with Oracle Extractable Value built in to the price feed allowing the ability to earn additional revenue
+for your dapp.
 
 ### Querying the price of `ARB` through API3
 
-Here’s an example of how to use an API3 data feed to query the current price of `ARB` onchain. The [API3 market](https://market.api3.org/arbitrum) provides a list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
+Here’s an example of how to use an API3 data feed to query the current price of `ARB` onchain. The [API3 market](https://market.api3.org/arbitrum) provides a
+list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
 
 API3 provides an npm package with the contracts needed to access their feeds. We first install that package in our project:
 
@@ -27,11 +30,13 @@ To use a data feed, we retrieve the information through the specific proxy addre
 import "@api3/contracts/interfaces/IApi3ReaderProxy.sol";
 ```
 
-In this case, we want to obtain the current price of `ARB` in `USD` in Arbitrum One, so we need to know the proxy address that will provide that information. We will search the feed on the API3 Market and connect our wallet. We would then want to see if the feed is active, and if it is, we can check its configuration parameters, deploy the proxy contract and click on `Integrate.` You can find the proxy address of ARB/USD [here](https://market.api3.org/arbitrum?search=ARB%2FUSD).
+In this case, we want to obtain the current price of `ARB` in `USD` in Arbitrum One, so we need to know the proxy address that will provide that information. We
+will search the feed on the API3 Market and connect our wallet. We would then want to see if the feed is active, and if it is, we can check its configuration
+parameters, deploy the proxy contract and click on `Integrate.` You can find the proxy address of ARB/USD
+[here](https://market.api3.org/arbitrum?search=ARB%2FUSD).
 
-:::info
-If a dAPI is already active, you can use the proxy address directly. If it is not active, you can activate it by clicking on **Activate** and following the instructions to deploy a proxy contract.
-:::
+:::info If a dAPI is already active, you can use the proxy address directly. If it is not active, you can activate it by clicking on **Activate** and following
+the instructions to deploy a proxy contract. :::
 
 We can now build the function to get the latest price of `ARB`. We’ll use this example contract:
 
@@ -59,7 +64,9 @@ contract ARBPriceConsumer {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network and to
+**deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) available that goes
+through the process of compiling and deploying a contract.
 
 ### More examples
 

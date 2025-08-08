@@ -9,13 +9,18 @@ description: "An explanation of the types of variables available as part of the 
 
 # Variables
 
-In Solidity, there are 3 types of variables: local, state, and global. Local variables are not stored on the blockchain, while state variables are (and incur a much higher cost as a result). This is true of Arbitrum Stylus Rust smart contracts as well, although how they're defined is quite different.
+In Solidity, there are 3 types of variables: local, state, and global. Local variables are not stored on the blockchain, while state variables are (and incur a
+much higher cost as a result). This is true of Arbitrum Stylus Rust smart contracts as well, although how they're defined is quite different.
 
-In Rust, **local variables** are just ordinary variables you assign with `let` or `let mut` statements. Local variables are far cheaper than state variables, even on the EVM, however, Stylus local variables are more than 100x cheaper to allocate in memory than their Solidity equivalents.
+In Rust, **local variables** are just ordinary variables you assign with `let` or `let mut` statements. Local variables are far cheaper than state variables,
+even on the EVM, however, Stylus local variables are more than 100x cheaper to allocate in memory than their Solidity equivalents.
 
-Unlike Solidity, Rust was not built inherently with the blockchain in mind. It is a general purpose programming language. We therefore define specific _storage_ types to explicitly denote values intended to be stored permanently as part of the contract's state. **State variables** cost the same to store as their Solidity equivalents.
+Unlike Solidity, Rust was not built inherently with the blockchain in mind. It is a general purpose programming language. We therefore define specific _storage_
+types to explicitly denote values intended to be stored permanently as part of the contract's state. **State variables** cost the same to store as their
+Solidity equivalents.
 
-**Global variables** in Solidity, such as `msg.sender` and `block.timestamp`, are available as function calls pulled in from the `stylus_sdk` with their Rust equivalents being `msg::sender()` and `block::timestamp()`, respectively. These variables provide information about the blockchain or the active transaction.
+**Global variables** in Solidity, such as `msg.sender` and `block.timestamp`, are available as function calls pulled in from the `stylus_sdk` with their Rust
+equivalents being `msg::sender()` and `block::timestamp()`, respectively. These variables provide information about the blockchain or the active transaction.
 
 ## Learn more
 

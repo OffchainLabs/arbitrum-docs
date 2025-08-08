@@ -11,37 +11,84 @@
  */
 
 import matter from 'gray-matter'; // For parsing frontmatter in Markdown files
-import { marked } from 'marked'; // For converting Markdown to HTML
 import { GrayMatterFile } from 'gray-matter'; // TypeScript type for parsed frontmatter files
 import * as fs from 'fs/promises'; // Async filesystem operations
 import * as path from 'path'; // Path manipulation utilities
-import { escapeForJSON } from '@offchainlabs/notion-docs-generator'; // String escaping utility
+
+/**
+ * Simple JSON escape function to avoid dependency on external packages
+ * Escapes quotes, backslashes, and newlines for safe JSON string values
+ */
+function escapeForJSON(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+}
+
+/**
+ * Type definition for glossary term frontmatter
+ */
+interface GlossaryTermData {
+  key: string;
+  title: string;
+  titleforSort: string;
+}
+
+/**
+ * Type guard to check if frontmatter has required glossary properties
+ */
+function isValidGlossaryTerm(data: any): data is GlossaryTermData {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    typeof data.key === 'string' &&
+    typeof data.title === 'string' &&
+    typeof data.titleforSort === 'string'
+  );
+}
 
 /**
  * Converts an array of parsed glossary terms into a JSON string format
  *
  * This function:
- * 1. Parses the Markdown content to HTML using marked
- * 2. Creates a structured JSON object with key, title, and HTML content
+ * 1. Keeps the Markdown content as-is (no HTML conversion)
+ * 2. Creates a structured JSON object with key, title, and Markdown content
  * 3. Escapes special characters to prevent JSON syntax errors
  *
  * @param {GrayMatterFile<string>[]} terms - Array of parsed Markdown files with frontmatter
- * @returns {Promise<string>} JSON string containing all glossary terms
+ * @returns {string} JSON string containing all glossary terms
  */
-async function renderGlossaryJSON(terms: GrayMatterFile<string>[]): Promise<string> {
-  // Process each term to convert Markdown to HTML and format as a JSON property
-  let rendered = terms.map(async (item) => {
-    // Convert Markdown content to HTML
-    let content = await marked.parse(item.content.trim());
+function renderGlossaryJSON(terms: GrayMatterFile<string>[]): string {
+  // Process each term sequentially to avoid overwhelming the system
+  const rendered: string[] = [];
 
-    // Format as a JSON property with escaped values
-    return `"${escapeForJSON(item.data.key)}":{"title":"${escapeForJSON(
-      item.data.title,
-    )}","text":"${escapeForJSON(content)}"}`;
-  });
+  for (const item of terms) {
+    if (!isValidGlossaryTerm(item.data)) {
+      console.warn(`Skipping term with invalid frontmatter: ${JSON.stringify(item.data)}`);
+      continue;
+    }
+
+    try {
+      // Use the Markdown content directly (no HTML conversion)
+      const content = item.content.trim();
+
+      // Format as a JSON property with escaped values
+      const jsonProperty = `"${escapeForJSON(item.data.key)}":{"title":"${escapeForJSON(
+        item.data.title,
+      )}","text":"${escapeForJSON(content)}"}`;;
+
+      rendered.push(jsonProperty);
+    } catch (error) {
+      console.error(`Error processing term '${item.data.key}':`, error);
+      throw error;
+    }
+  }
 
   // Combine all terms into a JSON object string with nice formatting
-  return '{\n' + (await Promise.all(rendered)).join(',\n') + '\n}';
+  return '{\n' + rendered.join(',\n') + '\n}';
 }
 
 /**
@@ -114,12 +161,12 @@ function renderKey(key: string): string {
  */
 async function main(): Promise<void> {
   // Read and parse all glossary term files
-  let terms = await readFilesInDirectory('./partials/glossary/');
+  let terms = await readFilesInDirectory('docs/partials/glossary/');
 
   // Generate import statements for each term (unused in current implementation)
   // This could be used if implementing a React component approach to term rendering
   let imports = terms
-    .map((item) => `import ${renderKey(item.data.key)} from './glossary/${item.data.key}.mdx';`)
+    .map((item) => `import ${renderKey(item.data.key)} from './docs/glossary/${item.data.key}.mdx';`)
     .join('\n');
 
   // Generate component references for each term (unused in current implementation)
@@ -128,7 +175,7 @@ async function main(): Promise<void> {
   // Generate and write the consolidated glossary partial MDX file
   // This creates a single file with all terms formatted as Markdown headings
   await fs.writeFile(
-    './partials/_glossary-partial.mdx',
+    'docs/partials/_glossary-partial.mdx',
     terms
       .map((item) => `### ${item.data.title} {#${item.data.key}}\n${item.content.trim()}`)
       .join('\n\n'),
@@ -136,8 +183,8 @@ async function main(): Promise<void> {
 
   // Generate and write the JSON glossary file for client-side usage
   // This is used for search, tooltips, or other dynamic functionality
-  const glossaryJSON = await renderGlossaryJSON(terms);
-  await fs.writeFile('./static/glossary.json', glossaryJSON);
+  const glossaryJSON = renderGlossaryJSON(terms);
+  await fs.writeFile('static/glossary.json', glossaryJSON);
 }
 
 /**

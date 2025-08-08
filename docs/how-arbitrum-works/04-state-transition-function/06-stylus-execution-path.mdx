@@ -7,11 +7,15 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-This article details how <a data-quicklook-from="stylus">Stylus</a> integrates into the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF), covering execution flow, messaging handling, caching, and interactions with <a data-quicklook-from="arbos">ArbOS</a> and <a data-quicklook-from="geth">Geth</a>.
+This article details how <a data-quicklook-from="stylus">Stylus</a> integrates into the <a data-quicklook-from="state-transition-function">State Transition
+Function</a> (STF), covering execution flow, messaging handling, caching, and interactions with <a data-quicklook-from="arbos">ArbOS</a> and
+
+<a data-quicklook-from="geth">Geth</a>.
 
 ## 1. Execution flow of a Stylus transaction
 
-When a <a data-quicklook-from="transaction">Transaction</a> interacts with a Stylus contract, its execution follows a distinct path compared to EVM transactions:
+When a <a data-quicklook-from="transaction">Transaction</a> interacts with a Stylus contract, its execution follows a distinct path compared to EVM
+transactions:
 
 ### Transaction submission and routing
 
@@ -85,7 +89,8 @@ Stylus contracts leverage an advanced caching system to minimize execution overh
 
 - **Persistent long-term caching**: Caching for selected contracts may occur across blocks based on an economic auction model.
 
-- **Init costs and execution pricing**: Instead of a flat gas cost, Stylus contracts have dynamic execution costs based on WASM complexity. ArbOS maintains pricing parameters (`initCost`, `cachedCost`) that adjust based on future optimizations in WASM execution.
+- **Init costs and execution pricing**: Instead of a flat gas cost, Stylus contracts have dynamic execution costs based on WASM complexity. ArbOS maintains
+  pricing parameters (`initCost`, `cachedCost`) that adjust based on future optimizations in WASM execution.
 
 ## 3. Interaction with ArbOS and Geth
 
@@ -98,12 +103,15 @@ Stylus contracts leverage an advanced caching system to minimize execution overh
 
 ## 4. Go-WASI and co-threads in Stylus execution
 
-ArbOS executes Stylus contracts using Go-WASI, a WASM-compatible runtime with custom optimizations for <a data-quicklook-from="arbitrum">Arbitrum</a>. Key features include:
+ArbOS executes Stylus contracts using Go-WASI, a WASM-compatible runtime with custom optimizations for <a data-quicklook-from="arbitrum">Arbitrum</a>. Key
+features include:
 
 - **Memory management**: WASM modules execute in a sandboxed environment with strict memory allocation policies.
 
-- **Co-threads for efficient execution**: Instead of traditional synchronous execution, Stylus employs co-threading, enabling lightweight task switching and parallelism where possible.
+- **Co-threads for efficient execution**: Instead of traditional synchronous execution, Stylus employs co-threading, enabling lightweight task switching and
+  parallelism where possible.
 
 - **Deterministic execution**: Ensures that Stylus contracts remain fully deterministic and compatible with Ethereum's consensus model.
 
-These optimizations make Stylus an extremely efficient execution environment, capable of outperforming the EVM while maintaining security and compatibility with Ethereum's state model.
+These optimizations make Stylus an extremely efficient execution environment, capable of outperforming the EVM while maintaining security and compatibility with
+Ethereum's state model.

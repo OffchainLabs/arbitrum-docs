@@ -9,7 +9,9 @@ description: "How to leverage inheritance using the Arbitrum Stylus Rust SDK."
 
 # Inheritance
 
-The Stylus Rust SDK replicates the composition pattern of Solidity. The `#[public]` macro provides the [Router](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html) trait, which can be used to connect types via inheritance, via the `#[inherit]` macro.
+The Stylus Rust SDK replicates the composition pattern of Solidity. The `#[public]` macro provides the
+[Router](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html) trait, which can be used to connect types via inheritance, via the `#[inherit]`
+macro.
 
 **Please note:** Stylus doesn't support contract multi-inheritance yet.
 
@@ -37,9 +39,12 @@ impl Erc20 {
 }
 ```
 
-In the above code, we can see how `Token` inherits from `Erc20`, meaning that it will inherit the public methods available in `Erc20`. If someone called the `Token` contract on the function `balanceOf`, the function `Erc20.balance_of()` would be executed.
+In the above code, we can see how `Token` inherits from `Erc20`, meaning that it will inherit the public methods available in `Erc20`. If someone called the
+`Token` contract on the function `balanceOf`, the function `Erc20.balance_of()` would be executed.
 
-Additionally, the inheriting type must implement the [Borrow](https://doc.rust-lang.org/core/borrow/trait.Borrow.html) trait for borrowing data from the inherited type. In the case above, `Token` should implement `Borrow<Erc20>`. For simplicity, `#[storage]` and `sol_storage!` provide a `#[borrow]` annotation that can be used instead of manually implementing the trait:
+Additionally, the inheriting type must implement the [Borrow](https://doc.rust-lang.org/core/borrow/trait.Borrow.html) trait for borrowing data from the
+inherited type. In the case above, `Token` should implement `Borrow<Erc20>`. For simplicity, `#[storage]` and `sol_storage!` provide a `#[borrow]` annotation
+that can be used instead of manually implementing the trait:
 
 ```rust
 sol_storage! {
@@ -58,7 +63,9 @@ sol_storage! {
 
 ## Methods search order
 
-A type can inherit multiple other types (as long as they use the `#[public]` macro). Since execution begins in the type that uses the `#[entrypoint]` macro, that type will be first checked when searching a specific method. If the method is not found in that type, the search will continue in the inherited types, in order of inheritance. If the method is not found in any of the inherited methods, the call will revert.
+A type can inherit multiple other types (as long as they use the `#[public]` macro). Since execution begins in the type that uses the `#[entrypoint]` macro,
+that type will be first checked when searching a specific method. If the method is not found in that type, the search will continue in the inherited types, in
+order of inheritance. If the method is not found in any of the inherited methods, the call will revert.
 
 Let's see an example:
 
@@ -97,13 +104,17 @@ In the code above:
 
 Notice that `C.bar()` won't ever be reached, since the inheritance goes through `B` first, which has a method named `bar()` too.
 
-Finally, since the inherited types can also inherit other types themselves, keep in mind that method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
+Finally, since the inherited types can also inherit other types themselves, keep in mind that method resolution finds the first matching method by
+[Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
 
 ## Overriding methods
 
-Because methods are checked in the inherited order, if two types implement the same method, the one in the higher level in the hierarchy will override the one in the lower levels, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like ERC-20, and then adds or overrides just the methods they want to without modifying the imported ERC-20 type.
+Because methods are checked in the inherited order, if two types implement the same method, the one in the higher level in the hierarchy will override the one
+in the lower levels, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like ERC-20, and then adds
+or overrides just the methods they want to without modifying the imported ERC-20 type.
 
-**Important warning**: The Stylus Rust SDK does not currently contain explicit `override` or `virtual` keywords for explicitly marking override functions. It is important, therefore, to carefully ensure that contracts are only overriding the functions.
+**Important warning**: The Stylus Rust SDK does not currently contain explicit `override` or `virtual` keywords for explicitly marking override functions. It is
+important, therefore, to carefully ensure that contracts are only overriding the functions.
 
 Let's see an example:
 

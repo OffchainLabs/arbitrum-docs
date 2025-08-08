@@ -9,19 +9,23 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-This document details the mechanisms for proving correct execution and resolving disputes in the Rollup Protocol. It explains how the system separates ordinary execution from proving, transforms <a data-quicklook-from="wasm">WASM</a> into a specialized proving format (WAVM), and employs interactive fraud proofs to resolve disputes efficiently.
+This document details the mechanisms for proving correct execution and resolving disputes in the Rollup Protocol. It explains how the system separates ordinary
+execution from proving, transforms <a data-quicklook-from="wasm">WASM</a> into a specialized proving format (WAVM), and employs interactive fraud proofs to
+resolve disputes efficiently.
 
 ## 1. Separating execution from proving
 
 <ImageZoom src="/img/haw-geth-sandwich.svg" alt="" className="img-600px" />
 
-One of the key challenges in designing a practical Rollup system is balancing fast, ordinary execution with the need for reliable proofs of that execution. Nitro addresses this <a data-quicklook-from="challenge">challenge</a> by using the same source code for both purposes but compiling it to different targets:
+One of the key challenges in designing a practical Rollup system is balancing fast, ordinary execution with the need for reliable proofs of that execution.
+Nitro addresses this <a data-quicklook-from="challenge">challenge</a> by using the same source code for both purposes but compiling it to different targets:
 
 - **Execution compilation**:
   - The [Nitro node software](https://github.com/OffchainLabs/nitro) is compiled with the ordinary Go compiler into native code for the target architecture.
   - This native binary is distributed as source code and as a Docker image, making it deployable on various nodes.
 - **Proving compilation**:
-  - For proving, only the portion of the code that is the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) gets compiled by the Go compiler into WebAssembly (WASM).
+  - For proving, only the portion of the code that is the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) gets compiled
+    by the Go compiler into WebAssembly (WASM).
   - The generated WASM code transforms into a specialized format called WAVM.
   - In any dispute regarding the STF, the WAVM code is referenced to resolve the correct result.
 
@@ -35,15 +39,17 @@ WAVM is a modified version of WASM designed to meet the needs of fraud proofs. T
   - **Removal of unused features**:
     - WAVM removes some WASM features that the Go compiler never generates. The transformation phase ensures these features are absent.
   - **Restrictions on certain features**:
-    - Floating-point instructions: WAVM does not contain floating-point instructions. Instead, any floating-point operations get replaced by calls to the Berkeley SoftFloat library.
+    - Floating-point instructions: WAVM does not contain floating-point instructions. Instead, any floating-point operations get replaced by calls to the
+      Berkeley SoftFloat library.
       - Rationale: Using software floating-point libraries reduces the risk of incompatibilities between different architecture.
   - **Nested control flow**:
     - WAVM flattens control flow constructs by converting them into jump instructions.
-  - **Variable-time instructions**:
-    -Some instructions in WASM may take a variable amount of time to execute. WAVM transforms these into constructs with fixed-cost instructions to simplify proving.
+  - **Variable-time instructions**: -Some instructions in WASM may take a variable amount of time to execute. WAVM transforms these into constructs with
+    fixed-cost instructions to simplify proving.
   - **Additional opcodes for <a data-quicklook-from="blockchain">blockchain</a> interaction**:
     - WAVM adds new opcodes to enable the code to interact with the blockchain environment.
-    - For example, new instructions allow the WAVM code to read and write the chain's global state, retrieve the next message from the chain's inbox, or signal a successful end to the STF execution.
+    - For example, new instructions allow the WAVM code to read and write the chain's global state, retrieve the next message from the chain's inbox, or signal
+      a successful end to the STF execution.
 
 ## 3. `ReadPreImage` and the hash oracle trick
 
@@ -65,7 +71,8 @@ An interesting instruction in WAVM is `ReadPreImage`, which the "hash oracle tri
 
 :::info Historical Note
 
-This "hash oracle trick" originates from the original <a data-quicklook-from="arbitrum">Arbitrum</a> design, where the Merkle hash of a data structure is stored and full contents are retrievable on demand.
+This "hash oracle trick" originates from the original <a data-quicklook-from="arbitrum">Arbitrum</a> design, where the Merkle hash of a data structure is stored
+and full contents are retrievable on demand.
 
 :::
 
@@ -93,11 +100,7 @@ Zero-knowledge Rollups avoid the dispute situation by directly proving correctne
 
 Arbitrum favors interactive proving due to its efficiency and flexibility.
 
-<ImageZoom
-  src="/img/haw-interactive-fraud-proof.svg"
-  alt="Interactive fraud proof"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-interactive-fraud-proof.svg" alt="Interactive fraud proof" className="img-600px" />
 
 #### The interactive proving process
 
@@ -159,14 +162,17 @@ Interactive fraud proofs form the basis for resolving proposer disputes when con
 - **Initiation of the challenge**:
   - An interactive challenge is initiated automatically when two proposers place bonds on sibling assertions.
   - Multiple assertions may participate in a single challenge.
-  - The protocol records and referees the challenge and eventually declares a winner, confiscating the bonds of the losing parties and removing them as proposers.
+  - The protocol records and referees the challenge and eventually declares a winner, confiscating the bonds of the losing parties and removing them as
+    proposers.
 
 ### 5.2 The two-phase challenge game
 
 1. **Bisection phase**:
    - The goal is to narrow the dispute to a single execution step.
-   - At each stage, claims are bisected into smaller segments (first over child chain blocks, then over "big steps" of 2²⁶ instructions, and finally to a single instruction).
-   - The parent chain referee only checks that the moves have "the right shape" (e.g., that the bisection was performed correctly) without evaluating the correctness of execution.
+   - At each stage, claims are bisected into smaller segments (first over child chain blocks, then over "big steps" of 2²⁶ instructions, and finally to a single
+     instruction).
+   - The parent chain referee only checks that the moves have "the right shape" (e.g., that the bisection was performed correctly) without evaluating the
+     correctness of execution.
 2. **One-step proof phase**:
    - Once the dispute reduces to one instruction, any player can initiate the one-step proof.
    - The parent chain executes the disputed instruction using the proof data provided.
@@ -226,7 +232,8 @@ The one-step proof (OSP) is the final arbiter of a single disputed instruction. 
   - In challenges between malicious assertions, unreachable cases may occur and can be handled arbitrarily by the one-step proof.
 - **Safety in honest challenges**:
   - An honest party never needs to prove an unreachable case.
-  - If a dishonest party attempts to force an unreachable case, it will be preceded by an invalid reachable case, ensuring that the dishonest party eventually loses the challenge.
+  - If a dishonest party attempts to force an unreachable case, it will be preceded by an invalid reachable case, ensuring that the dishonest party eventually
+    loses the challenge.
 
 ### 6.3 Additional safety assumptions
 
@@ -240,7 +247,8 @@ The one-step proof (OSP) is the final arbiter of a single disputed instruction. 
 
 ## 7. WASM to WAVM transformation
 
-Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transformation design simplifies execution for proving and enables additional blockchain interactions.
+Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transformation design simplifies execution for proving and enables additional blockchain
+interactions.
 
 ### 7.1 Transformation process overview
 
@@ -249,7 +257,8 @@ Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transform
 - **Transformation**:
   - A simple transformation stage converts the WASM code into WAVM code.
 - **Purpose**:
-  - Ensure that the WAVM code is free from unused features, restricted in its functionality where necessary, and augmented with additional opcodes for blockchain interaction.
+  - Ensure that the WAVM code is free from unused features, restricted in its functionality where necessary, and augmented with additional opcodes for
+    blockchain interaction.
 
 ### 7.2 Key differences between WASM and WAVM
 
@@ -382,7 +391,8 @@ WASM's notion of modules is extended in WAVM to support multi-module programs. T
 - **Mechanism**:
   - Libraries can call exports of the main module using the naming scheme `"env"` `"wavm_guest_call__*"`.
 - **Usage example**:
-  - `go-stub` calls Go's resume function when queueing asynchronous events via `wavm_guest_call_resume()`, and retrieves the new stack pointer with `wavm_guest_call_getsp()`.
+  - `go-stub` calls Go's resume function when queueing asynchronous events via `wavm_guest_call_resume()`, and retrieves the new stack pointer with
+    `wavm_guest_call_getsp()`.
 
 ### 9.4 Caller module internals call
 
@@ -395,11 +405,9 @@ WASM's notion of modules is extended in WAVM to support multi-module programs. T
 
 ## 10. Stylus proving and fraud detection
 
-<a data-quicklook-from="stylus">Stylus</a> introduces an execution path alongside the EVM, enabling <a data-quicklook-from="smart-contract">
-  smart Contract
-</a> execution in WebAssembly (WASM). Given that Stylus program are fraud-proven directly rather than
-interpreted via Geth's EVM implementation––the proving mechanism required modifications to the standard
-Arbitrum proving architecture.
+<a data-quicklook-from="stylus">Stylus</a> introduces an execution path alongside the EVM, enabling <a data-quicklook-from="smart-contract">smart Contract</a> execution
+in WebAssembly (WASM). Given that Stylus program are fraud-proven directly rather than interpreted via Geth's EVM implementation––the proving mechanism required
+modifications to the standard Arbitrum proving architecture.
 
 ### 10.1 Proving Stylus programs
 
@@ -412,7 +420,8 @@ These opcodes ensure that Stylus contracts are treated as part as part of the re
 
 ### 10.2 Execution-proving separation
 
-Stylus leverages Arbitrum's execution-proving separation, where the replay machine runs in WAVM, and disputes over Stylus transactions follow the standard interactive fraud-proof protocol (<a data-quicklook-from="bold">BoLD</a>), which means:
+Stylus leverages Arbitrum's execution-proving separation, where the replay machine runs in WAVM, and disputes over Stylus transactions follow the standard
+interactive fraud-proof protocol (<a data-quicklook-from="bold">BoLD</a>), which means:
 
 1. A challenge initiates if a <a data-quicklook-from="validator">validator</a> disputes the execution of a Stylus transaction.
 2. The dispute narrows to a single WAVM opcode via the bisection protocol.
@@ -420,7 +429,8 @@ Stylus leverages Arbitrum's execution-proving separation, where the replay machi
 
 ### 10.3 Internal function calls in proofs
 
-Since Stylus programs interact with the blockchain through host I/O's, fraud proofs must ensure correct execution of cross-module calls. The following additional proving opcodes facilitate Stylus program execution:
+Since Stylus programs interact with the blockchain through host I/O's, fraud proofs must ensure correct execution of cross-module calls. The following
+additional proving opcodes facilitate Stylus program execution:
 
 - **`CrossModuleInternalCall`**: Allows internal functions within a Stylus module to be proven independently.
 - **`CrossModuleForward`**: Ensures host I/O calls are accurately relayed through `forward.wat`, maintaining consistency in fraud proofs.
@@ -441,4 +451,5 @@ The One-Step Prover extends to validate Stylus-specific opcodes, which include:
 - **Host I/O's** (e.g., `storage_load_bytes32`, `return_data`)
 - **Gas metering** within WASM execution
 
-By integrating these functionalities, Stylus ensures WASM contract execution can be fraud-proven like EVM transactions, while leveraging Arbitrum's existing BoLD fraud-proof architecture.
+By integrating these functionalities, Stylus ensures WASM contract execution can be fraud-proven like EVM transactions, while leveraging Arbitrum's existing
+BoLD fraud-proof architecture.

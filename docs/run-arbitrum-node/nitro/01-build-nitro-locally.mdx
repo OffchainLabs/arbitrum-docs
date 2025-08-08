@@ -6,7 +6,9 @@ sidebar_position: 7
 content_type: how-to
 ---
 
-Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to shows how you can build a Docker image, or binaries, directly from Nitro's source code. If you want to run a node for one of the Arbitrum chains, however, it is recommended that you use the docker image available on DockerHub, as explained in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx).
+Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to shows how you can build a Docker image, or binaries, directly from Nitro's source
+code. If you want to run a node for one of the Arbitrum chains, however, it is recommended that you use the docker image available on DockerHub, as explained in
+[How to run a full node](/run-arbitrum-node/02-run-full-node.mdx).
 
 This how-to assumes that you're running one of the following operating systems:
 
@@ -47,7 +49,8 @@ If you are running Ubuntu 22.04, you might get an `Unable to locate package dock
 
 #### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
 
-Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from [Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
+Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from
+[Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
 
 #### [Optional] Run Docker from a different user
 
@@ -79,7 +82,8 @@ That command will build a Docker image called `nitro-node` from the local source
 
 ## Build Nitro's binaries natively
 
-If you want to build the node binaries natively, execute Steps 1-3 of the [Build a Docker image](#build-a-docker-image) section and continue with the steps described here. Notice that even though we are building the binaries outside of Docker, it is still used to help build some WebAssembly components.
+If you want to build the node binaries natively, execute Steps 1-3 of the [Build a Docker image](#build-a-docker-image) section and continue with the steps
+described here. Notice that even though we are building the binaries outside of Docker, it is still used to help build some WebAssembly components.
 
 ### Step 4. Configure prerequisites
 
@@ -240,7 +244,8 @@ To run your node using the generated binaries, use the following command from th
 
 #### WASM module root error (v2.3.4 or later)
 
-Since v2.3.4, the State Transition Function (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might receive the following error when connecting your built node to those chains:
+Since v2.3.4, the State Transition Function (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might
+receive the following error when connecting your built node to those chains:
 
 ```shell
 ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat {WASM_MODULE_ROOT}: no such file or directory"

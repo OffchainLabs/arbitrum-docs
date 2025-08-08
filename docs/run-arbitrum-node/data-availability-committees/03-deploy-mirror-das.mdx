@@ -8,27 +8,31 @@ content_type: how-to
 
 :::caution Running a regular DAS vs running a mirror DAS
 
-The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx) if needed.
+The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main
+DAS first, and then configure the mirror DAS. Refer to [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx) if needed.
 
 :::
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
-  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
-  <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
-  members of the DAC run a Data Availability Server (DAS) to handle these operations.
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it
+  on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The members of the DAC run a Data
+  Availability Server (DAS) to handle these operations.
 </p>
 
-In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the [Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.mdx).
+In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a
+refresher on DACs, refer to the [Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.mdx).
 
 This how-to assumes that you're familiar with:
 
-- How a regular DAS works and what configuration options are available. Refer to [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx) for a refresher.
+- How a regular DAS works and what configuration options are available. Refer to
+  [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx) for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## What is a mirror DAS?
 
-To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
+To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in
+[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#security-considerations)), you can choose to run a mirror DAS to
+complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
 
 In general, mirror DA servers serve two main purposes:
 
@@ -37,7 +41,8 @@ In general, mirror DA servers serve two main purposes:
 
 ## Configuration options
 
-A mirror DAS will use the same tool and, thus, the same configuration options as your main DAS. You can find an explanation of those options in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#configuration-options).
+A mirror DAS will use the same tool and, thus, the same configuration options as your main DAS. You can find an explanation of those options in
+[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#configuration-options).
 
 ## How to deploy a mirror DAS
 
@@ -46,7 +51,9 @@ A mirror DAS will use the same tool and, thus, the same configuration options as
 Gather the following information:
 
 - The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@`
-- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/02-run-full-node.mdx) to prevent being rate limited.
+- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a
+  [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or
+  [run your own node](/run-arbitrum-node/02-run-full-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
 - URL of the list of REST endpoints of other DA servers to configure the REST aggregator.
 
@@ -109,9 +116,11 @@ Finally, for the storage backends you wish to configure, use the following param
 
 ::::warning Local Badger database deprecated
 
-The local badger DB storage option (set with `local-db-storage`) has been deprecated and should be replaced with the local files storage option (set with `local-file-storage`).
+The local badger DB storage option (set with `local-db-storage`) has been deprecated and should be replaced with the local files storage option (set with
+`local-file-storage`).
 
-A migration tool has been included in Nitro to migrate all data from the local badger db to local files. You can activate it by using the parameter `--data-availability.migrate-local-db-to-file-storage`.
+A migration tool has been included in Nitro to migrate all data from the local badger db to local files. You can activate it by using the parameter
+`--data-availability.migrate-local-db-to-file-storage`.
 
 ::::
 
@@ -235,7 +244,8 @@ spec:
 
 ## Archive DA servers
 
-Archive DA servers are servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to ensure all historical data is available.
+Archive DA servers are servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to ensure all historical data
+is available.
 
 To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to `false` in your storage method. For example:
 
@@ -245,7 +255,9 @@ To activate the "archive mode" in your DAS, set the parameter `discard-after-tim
 
 :::note
 
-The `s3-storage` **doesn't support** expiration of data, instead that can be enabled from user side by setting `Expiration` as a rule in Lifecycle Configuration of the corresponding S3 bucket. More information available at [AWS Expiring objects](https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-expire-general-considerations.html).
+The `s3-storage` **doesn't support** expiration of data, instead that can be enabled from user side by setting `Expiration` as a rule in Lifecycle Configuration
+of the corresponding S3 bucket. More information available at
+[AWS Expiring objects](https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-expire-general-considerations.html).
 
 :::
 
@@ -259,7 +271,9 @@ Archive servers should make use of the `--data-availability.rest-aggregator.sync
 
 ## Helm charts
 
-A helm chart is available at [ArtifactHUB](https://artifacthub.io/packages/helm/offchainlabshelm/das). It supports running a mirror DAS by providing the parameters for your server. Find more information in the [OCL community Helm charts repository](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/das).
+A helm chart is available at [ArtifactHUB](https://artifacthub.io/packages/helm/offchainlabshelm/das). It supports running a mirror DAS by providing the
+parameters for your server. Find more information in the
+[OCL community Helm charts repository](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/das).
 
 ## Testing the DAS
 
@@ -267,7 +281,8 @@ Once the DAS is running, we can test if everything is working correctly using th
 
 ### Test 1: REST health check
 
-The REST interface enabled in the mirror DAS has a health check on the path `/health` which will return `200` if the underlying storage is working, otherwise `503`.
+The REST interface enabled in the mirror DAS has a health check on the path `/health` which will return `200` if the underlying storage is working, otherwise
+`503`.
 
 Example:
 
@@ -279,11 +294,14 @@ curl -I <YOUR REST ENDPOINT>/health
 
 Keep in mind the following information when running the mirror DAS.
 
-For a mirror DAS, using a load balancer is recommended to manage incoming traffic effectively. Additionally, as the REST interface is cacheable, consider deploying a Content Delivery Network (CDN) or caching proxy in front of your REST endpoint. The URL for the REST interface will be publicly known; ensure that it is sufficiently distinct from the RPC endpoint to prevent the latter from being easily discovered.
+For a mirror DAS, using a load balancer is recommended to manage incoming traffic effectively. Additionally, as the REST interface is cacheable, consider
+deploying a Content Delivery Network (CDN) or caching proxy in front of your REST endpoint. The URL for the REST interface will be publicly known; ensure that
+it is sufficiently distinct from the RPC endpoint to prevent the latter from being easily discovered.
 
 ## What to do next?
 
-Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and configure the sequencer:
+Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and
+configure the sequencer:
 
 - The https URL for the REST endpoint (e.g., `das.your-chain.io/rest`)
 

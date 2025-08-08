@@ -9,9 +9,11 @@ description: "How to declare constants in your Rust smart contracts using Arbitr
 
 # Constants
 
-Constants are values that are bound to a name and cannot change. They are always immutable. In Rust, constants are declared with the `const` keyword. Unlike variables declared with the `let` keyword, constants _must_ be annotated with their type.
+Constants are values that are bound to a name and cannot change. They are always immutable. In Rust, constants are declared with the `const` keyword. Unlike
+variables declared with the `let` keyword, constants _must_ be annotated with their type.
 
-Constants are valid for the entire length of the transaction. They are essentially _inlined_ wherever they are used, meaning that their value is copied directly into whatever context invokes them.
+Constants are valid for the entire length of the transaction. They are essentially _inlined_ wherever they are used, meaning that their value is copied directly
+into whatever context invokes them.
 
 Since their value is hardcoded, they can save on gas cost as their value does not need to be fetched from storage.
 

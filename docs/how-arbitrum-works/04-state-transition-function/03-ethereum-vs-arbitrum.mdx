@@ -9,7 +9,8 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-This section explains the architecture and implementation of the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) in Ethereum and the <a data-quicklook-from="arbitrum">Arbitrum</a> Nitro stack, highlighting their similarities and key differences.
+This section explains the architecture and implementation of the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) in
+Ethereum and the <a data-quicklook-from="arbitrum">Arbitrum</a> Nitro stack, highlighting their similarities and key differences.
 
 ## STF in Ethereum
 
@@ -17,13 +18,15 @@ In Ethereum, the STF receives transactions as inputs, processes them via the EVM
 
 The Ethereum state is a vast data structure represented by a modified Merkle Patricia Trie. This structure holds all accounts and reduces the entire state to a single root hash stored on the <a data-quicklook-from="blockchain">blockchain</a>.
 
-The Ethereum Virtual Machine (EVM) operates similarly to a mathematical function: given an input, it produces a deterministic output. Ethereum's STF encapsulates this behavior:
+The Ethereum Virtual Machine (EVM) operates similarly to a mathematical function: given an input, it produces a deterministic output. Ethereum's STF
+encapsulates this behavior:
 
 $$
 Y(S, T) = S'
 $$
 
-Here, `S` represents the current state, `T` denotes the <a data-quicklook-from="transaction">transaction</a>, and `S'` is the new state resulting from the execution of `T`.
+Here, `S` represents the current state, `T` denotes the <a data-quicklook-from="transaction">transaction</a>, and `S'` is the new state resulting from the
+execution of `T`.
 
 The EVM operates as a stack machine with a maximum depth of 1024 items. Each item is a _256-bit_ word, compatible with _Keccak-256_ hashes and _secp256k1_ signatures.
 
@@ -48,11 +51,14 @@ The Arbitrum Nitro stack implements a modified version of Ethereum's STF with ke
 
 ### Gas accounting
 
-In Arbitrum, executing a transaction incurs two costs, one for executing on the <a data-quicklook-from="child-chain">child chain</a> and another for submitting transaction batches to the <a data-quicklook-from="parent-chain">parent chain</a>. This dual fee structure requires a different approach to gas accounting.
+In Arbitrum, executing a transaction incurs two costs, one for executing on the <a data-quicklook-from="child-chain">child chain</a> and another for submitting
+transaction batches to the <a data-quicklook-from="parent-chain">parent chain</a>. This dual fee structure requires a different approach to gas accounting.
 
 ### Base fee mechanism
 
-Gas prices and base fees on Arbitrum change differently from Ethereum's. Arbitrum maintains two base fees: one to track the cost of execution on the child chain and another to estimate the cost of posting batches to the parent chain. The mechanism that changes the child chain's base fee differs from what is currently on Ethereum.
+Gas prices and base fees on Arbitrum change differently from Ethereum's. Arbitrum maintains two base fees: one to track the cost of execution on the child chain
+and another to estimate the cost of posting batches to the parent chain. The mechanism that changes the child chain's base fee differs from what is currently on
+Ethereum.
 
 ### Cross-chain <a data-quicklook-from="bridge">bridge</a> functionalities
 
@@ -60,23 +66,31 @@ Arbitrum supports cross-chain messaging and regular transactions, facilitating s
 
 ### Block time and block number
 
-The <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> uses two block numbers: the child chain's block number, and the block number of the first non-Arbitrum ancestor chain. Additionally, block times are determined by the child chain's sequencer clock, as described in the [Block numbers and time documentation](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx).
+The <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> uses two block numbers: the child chain's block number, and the block number of the first
+non-Arbitrum ancestor chain. Additionally, block times are determined by the child chain's sequencer clock, as described in the
+[Block numbers and time documentation](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx).
 
 ### Precompiles
 
-Specific precompiled contracts on the Arbitrum chain will process Arbitrum-specific features. Moreover, individual Arbitrum chains may implement their own custom precompiles.
+Specific precompiled contracts on the Arbitrum chain will process Arbitrum-specific features. Moreover, individual Arbitrum chains may implement their own
+custom precompiles.
 
 ### Custom transaction types
 
 Nitro Geth introduces several child chain-specific transaction types that utilize the non-standard [_EIP-2718_: Typed Transaction Envelope](https://eips.ethereum.org/EIPS/eip-2718). These types represent different transactions on the Arbitrum chain, such as retryable transactions.
 
+
 ### <a data-quicklook-from="stylus">Stylus</a> in the STF
 
-With the introduction of Stylus, Arbitrum Nitro now supports executing smart contracts written in Rust, C, and C++, offering a high-performance alternative to the EVM. Unlike standard Ethereum transactions, Stylus contracts execute in a <a data-quicklook-from="wasm">WASM</a>-based runtime within <a data-quicklook-from="arbos">ArbOS</a>, leveraging efficient host I/O operations and optimized caching mechanisms.
+With the introduction of Stylus, Arbitrum Nitro now supports executing smart contracts written in Rust, C, and C++, offering a high-performance alternative to
+the EVM. Unlike standard Ethereum transactions, Stylus contracts execute in a <a data-quicklook-from="wasm">WASM</a>-based runtime within
+
+<a data-quicklook-from="arbos">ArbOS</a>, leveraging efficient host I/O operations and optimized caching mechanisms.
 
 ## Implementation overview
 
-The Arbitrum STF is implemented using a modified version of Geth and integrated with ArbOS. This combination allows Arbitrum to support additional functionalities while maintaining compatibility with Ethereum's core execution model. The following diagram provides an abstract overview:
+The Arbitrum STF is implemented using a modified version of Geth and integrated with ArbOS. This combination allows Arbitrum to support additional
+functionalities while maintaining compatibility with Ethereum's core execution model. The following diagram provides an abstract overview:
 
 <ImageZoom src="/img/haw-geth-sandwich.svg" alt="Geth sandwich" className="img-600px" />
 
@@ -86,7 +100,8 @@ The organization of the Nitro node software has three main layers:
 
 2. **Middle layer (ArbOS)**: Custom software that extends child chain functionalities. It decompresses and parses <a data-quicklook-from="sequencer">Sequencer</a> data batches, accounts for parent chain gas costs (collecting fees for reimbursement), and supports cross-chain bridge operations (e.g., Ether and token deposits and withdrawals). More details about ArbOS are in the [next section](#arbos-overview).
 
-3. **Top layer (Node software)**: Primarily derived from Geth, this layer handles network connections, incoming RPC requests, and other high-level functionalities required to operate an Ethereum-compatible blockchain node.
+3. **Top layer (Node software)**: Primarily derived from Geth, this layer handles network connections, incoming RPC requests, and other high-level
+   functionalities required to operate an Ethereum-compatible blockchain node.
 
 Because both the top and bottom layers are Geth-based, this architecture is often referred to as a "geth sandwich," with Geth as the "bread" and ArbOS as the "filling."
 
@@ -102,7 +117,8 @@ The STF combines the modified Geth core (base layer) with a portion of ArbOS (mi
 
 ## Modified Geth on Nitro
 
-[Nitro's](https://github.com/OffchainLabs/nitro) design builds upon the robust foundation of Geth with targeted modifications that enable it to support child chain-specific functionalities. These modifications include:
+[Nitro's](https://github.com/OffchainLabs/nitro) design builds upon the robust foundation of Geth with targeted modifications that enable it to support child
+chain-specific functionalities. These modifications include:
 
 ### Custom hooks and interface adaptions
 
@@ -110,21 +126,26 @@ Nitro integrates a series of custom hooks within Geth's transaction processing f
 
 ### Strategic re-appropriations of core types
 
-By adapting key data structures and interfaces within Geth, Nitro ensures that state transitions and transaction executions can seamlessly accommodate child chain optimizations. These adaptations maintain compatibility with Ethereum's existing architecture while enabling enhanced functionality.
+By adapting key data structures and interfaces within Geth, Nitro ensures that state transitions and transaction executions can seamlessly accommodate child
+chain optimizations. These adaptations maintain compatibility with Ethereum's existing architecture while enabling enhanced functionality.
 
 ### Minimal yet essential adjustments
 
-The modifications made to Geth are deliberately minimal to preserve its stability and security properties. This "modified Geth" layer, in tandem with ArbOS, provides the necessary enhancements for Nitro's STF without compromising the deterministic behavior of the EVM.
+The modifications made to Geth are deliberately minimal to preserve its stability and security properties. This "modified Geth" layer, in tandem with ArbOS,
+provides the necessary enhancements for Nitro's STF without compromising the deterministic behavior of the EVM.
 
 ### Stylus-specific features
 
-Geth is modified to route Stylus transactions, handle custom gas accounting, and track Stylus-specific state changes, ensuring seamless execution within Arbitrum Nitro.
+Geth is modified to route Stylus transactions, handle custom gas accounting, and track Stylus-specific state changes, ensuring seamless execution within
+Arbitrum Nitro.
 
-Detailed technical explanations of these modifications are in the following sections, where we dive deeper into how Nitro's custom hooks, interface implementations, and Geth adaptations come together to support an advanced, high-performance STF.
+Detailed technical explanations of these modifications are in the following sections, where we dive deeper into how Nitro's custom hooks, interface
+implementations, and Geth adaptations come together to support an advanced, high-performance STF.
 
 ## ArbOS overview
 
-ArbOS is the child chain EVM hypervisor that provides the execution environment for the Arbitrum chain. Acting as a trusted "system glue" component within the STF, ArbOS is responsible for:
+ArbOS is the child chain EVM hypervisor that provides the execution environment for the Arbitrum chain. Acting as a trusted "system glue" component within the
+STF, ArbOS is responsible for:
 
 ### Managing network resources
 
@@ -144,8 +165,13 @@ ArbOS operates its instrumented instance of Geth to execute smart contracts, inc
 
 ### Stylus-specific tasks in ArbOS
 
-ArbOS manages host I/O calls, memory operations, and execution context for Stylus transactions, ensuring efficient and deterministic processing with the WASM runtime.
+ArbOS manages host I/O calls, memory operations, and execution context for Stylus transactions, ensuring efficient and deterministic processing with the WASM
+runtime.
 
-By offloading tasks that would execute at a high cost on the parent chain, ArbOS enables these operations to be performed quickly and cost-effectively on the child chain. This design reduces computational and storage costs and offers significant flexibility, allowing the child chain code to evolve or be customized more easily than a parent chain-enforced architecture.
+By offloading tasks that would execute at a high cost on the parent chain, ArbOS enables these operations to be performed quickly and cost-effectively on the
+child chain. This design reduces computational and storage costs and offers significant flexibility, allowing the child chain code to evolve or be customized
+more easily than a parent chain-enforced architecture.
+
 
 Arbitrum's Nitro stack builds on Ethereum's STF with key modifications (ranging from dual gas accounting to cross-chain messaging) to optimize performance and flexibility. With Stylus, Arbitrum extends its execution model beyond the EVM, enabling high-performance WASM-based smart contracts through additional Geth modifications that ensure compatibility while preserving Ethereum-like execution guarantees.
+

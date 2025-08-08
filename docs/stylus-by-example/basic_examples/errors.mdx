@@ -9,11 +9,18 @@ description: "How to define and use Errors on Stylus Rust smart contracts"
 
 # Errors
 
-In Rust Stylus contracts, error handling is a crucial aspect of writing robust and reliable smart contracts. Rust differentiates between recoverable and unrecoverable errors. Recoverable errors are represented using the `Result` type, which can either be `Ok`, indicating success, or `Err`, indicating failure. This allows developers to manage errors gracefully and maintain control over the flow of execution. Unrecoverable errors are handled with the `panic!` macro, which stops execution, unwinds the stack, and returns a dataless error.
+In Rust Stylus contracts, error handling is a crucial aspect of writing robust and reliable smart contracts. Rust differentiates between recoverable and
+unrecoverable errors. Recoverable errors are represented using the `Result` type, which can either be `Ok`, indicating success, or `Err`, indicating failure.
+This allows developers to manage errors gracefully and maintain control over the flow of execution. Unrecoverable errors are handled with the `panic!` macro,
+which stops execution, unwinds the stack, and returns a dataless error.
 
-In Stylus contracts, error types are often explicitly defined, providing clear and structured ways to handle different failure scenarios. This structured approach promotes better error management, ensuring that contracts are secure, maintainable, and behave predictably under various conditions. Similar to Solidity and EVM, errors in Stylus will undo all changes made to the state during a transaction by reverting the transaction. Thus, there are two main types of errors in Rust Stylus contracts:
+In Stylus contracts, error types are often explicitly defined, providing clear and structured ways to handle different failure scenarios. This structured
+approach promotes better error management, ensuring that contracts are secure, maintainable, and behave predictably under various conditions. Similar to
+Solidity and EVM, errors in Stylus will undo all changes made to the state during a transaction by reverting the transaction. Thus, there are two main types of
+errors in Rust Stylus contracts:
 
-- **Recoverable Errors**: The Stylus SDK provides features that make using recoverable errors in Rust Stylus contracts convenient. This type of error handling is strongly recommended for Stylus contracts.
+- **Recoverable Errors**: The Stylus SDK provides features that make using recoverable errors in Rust Stylus contracts convenient. This type of error handling
+  is strongly recommended for Stylus contracts.
 - **Unrecoverable Errors**: These can be defined similarly to Rust code but are not recommended for smart contracts if recoverable errors can be used instead.
 
 ## Learn More
@@ -25,7 +32,8 @@ In Stylus contracts, error types are often explicitly defined, providing clear a
 
 ## Recoverable Errors
 
-Recoverable errors are represented using the `Result` type, which can either be `Ok`, indicating success, or `Err`, indicating failure. The Stylus SDK provides tools to define custom error types and manage recoverable errors effectively.
+Recoverable errors are represented using the `Result` type, which can either be `Ok`, indicating success, or `Err`, indicating failure. The Stylus SDK provides
+tools to define custom error types and manage recoverable errors effectively.
 
 #### Example: Recoverable Errors
 
@@ -87,10 +95,13 @@ impl MultiCall {
 }
 ```
 
-- **Using `SolidityError` Derive Macro**: The `#[derive(SolidityError)]` attribute is used for the `MultiCallErrors` enum, automatically implementing the necessary traits for error handling.
-- **Defining Errors**: Custom errors `ArraySizeNotMatch` and `CallFailed` is declared in `MultiCallErrors` enum. `CallFailed` error includes a `call_index` parameter to indicate which call failed.
+- **Using `SolidityError` Derive Macro**: The `#[derive(SolidityError)]` attribute is used for the `MultiCallErrors` enum, automatically implementing the
+  necessary traits for error handling.
+- **Defining Errors**: Custom errors `ArraySizeNotMatch` and `CallFailed` is declared in `MultiCallErrors` enum. `CallFailed` error includes a `call_index`
+  parameter to indicate which call failed.
 - **ArraySizeNotMatch Error Handling**: The `multicall` function returns `ArraySizeNotMatch` if the size of addresses and data vectors are not equal.
-- **CallFailed Error Handling**: The `multicall` function returns a `CallFailed` error with the index of the failed call if any call fails. Note that we're using match to check if the result of the call is an error or a return data. We'll describe match pattern in the further sections.
+- **CallFailed Error Handling**: The `multicall` function returns a `CallFailed` error with the index of the failed call if any call fails. Note that we're
+  using match to check if the result of the call is an error or a return data. We'll describe match pattern in the further sections.
 
 ## Unrecoverable Errors
 
@@ -157,7 +168,8 @@ Uses the `?` operator to propagate the error if the call fails, including the in
 
 Handling Call Failure with `?` Operator: The function uses the `?` operator to propagate the error if any call fails, including the index of the failed call.
 
-Each method demonstrates a different way to handle unrecoverable errors in the `multicall` function of a Rust Stylus contract, providing a comprehensive approach to error management.
+Each method demonstrates a different way to handle unrecoverable errors in the `multicall` function of a Rust Stylus contract, providing a comprehensive
+approach to error management.
 
 **Note** that as mentioned above, it is strongly recommended to use custom error handling instead of unrecoverable error handling.
 

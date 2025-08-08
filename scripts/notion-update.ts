@@ -15,10 +15,10 @@ import {
   KnowledgeItem,
   LinkableTerms,
   LinkValidity,
+  RenderMode,
 } from '@offchainlabs/notion-docs-generator'
 import fs from 'fs'
 import dotenv from 'dotenv'
-import TurndownService from 'turndown'
 dotenv.config()
 
 // Types
@@ -37,32 +37,6 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 })
 
-// Initialize Turndown for HTML to Markdown conversion
-const turndownService = new TurndownService({
-  headingStyle: 'atx',
-  codeBlockStyle: 'fenced',
-  linkStyle: 'inlined',
-  bulletListMarker: '-',
-})
-
-// Configure turndown to handle MDX-specific cases
-turndownService.addRule('removeEmptyParagraphs', {
-  filter: (node) => {
-    return (
-      node.nodeName === 'P' &&
-      node.textContent &&
-      node.textContent.trim() === ''
-    )
-  },
-  replacement: () => '',
-})
-
-// Escape MDX-problematic characters
-turndownService.addRule('escapeMDXCharacters', {
-  filter: () => false, // We'll handle this in post-processing
-  replacement: () => '',
-})
-
 // Helper functions
 export function recordValidity(record: Record): LinkValidity {
   if (record.status != '4 - Continuously publishing') {
@@ -77,44 +51,6 @@ const isValid = (item: KnowledgeItem) => {
   return recordValidity(item) === 'Valid'
 }
 
-// Convert HTML to clean Markdown
-function htmlToMarkdown(html: string): string {
-  // Clean up the HTML before conversion
-  let cleanHtml = html
-    .replace(/\n\s*\n/g, '\n') // Remove excessive newlines
-    .trim()
-  
-  // Convert to Markdown
-  let markdown = turndownService.turndown(cleanHtml)
-  
-  // Post-process to clean up common issues
-  markdown = markdown
-    .replace(/\n{3,}/g, '\n\n') // Remove excessive newlines
-    .replace(/^\s+|\s+$/g, '') // Trim whitespace
-    
-  // Fix escaped backticks and asterisks that break MDX compilation
-  markdown = markdown
-    .replace(/\\`/g, '`') // Unescape backticks
-    .replace(/\\\\/g, '\\') // Fix double-escaped backslashes
-    .replace(/\\\*/g, '*') // Unescape asterisks used in bold formatting
-  
-  // Fix malformed links that can break MDX compilation
-  markdown = markdown
-    .replace(/\]\(<a href=[^)]*\)"/g, '](') // Remove malformed <a href= fragments
-    .replace(/\[([^\]]+)\]\(<a href=([^>]*)>\)"\>\[([^\]]+)\]\(([^)]+)\)/g, '[$1]($4)') // Fix nested link structures
-    .replace(/\[([^\]]+)\]\(<a href=\)"/g, '[$1](') // Fix incomplete href attributes
-    .replace(/\]\(<a href=\)"/g, '](') // Fix bare <a href= fragments
-    .replace(/\[([^\]]+)\]\(>(\[.*?\]\(.*?\))\)/g, '$2') // Fix malformed nested link patterns like [text](>[text](url))
-    .replace(/\[([^\]]+)\]\(>\[([^\]]+)\]\(([^)]+)\)\)/g, '[$2]($3)') // Fix specific pattern [text](>[text](url))
-    .replace(/\]\(>\[/g, '][') // Fix remaining ](>[ patterns
-    .replace(/\[([^\]]+)\]\[([^\]]+)\]\(([^)]+)\)/g, '[$1]($3)') // Fix duplicate link syntax [text][text](url)
-    .replace(/\*{4,}/g, '**') // Fix excessive asterisks (more than 4 becomes 2)
-    .replace(/\*\*\*\*\.\*\*/g, '**.') // Fix specific pattern ****.** to **.
-    .replace(/\*\*\.\*\*/g, '**.') // Fix specific pattern **.** to **.
-    .replace(/\*\*\*\*/g, '**') // Fix quadruple asterisks
-  
-  return markdown
-}
 
 // Properly escape HTML entities for JSON
 function escapeHtmlEntities(text: string): string {
@@ -315,22 +251,22 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
     glossaryTerms,
     getStartedFAQs: getStartedFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     nodeRunningFAQs: nodeRunningFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     buildingFAQs: buildingFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     buildingStylusFAQs: buildingStylusFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     orbitFAQs: orbitFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     bridgingFAQs: bridgingFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
   }
 }
 
@@ -350,7 +286,7 @@ const renderJSONFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
 const renderFAQs = (faqs: RenderedKnowledgeItem[]) => {
   const printItem = (faq: RenderedKnowledgeItem) => {
     // Convert HTML content to Markdown
-    const markdownText = htmlToMarkdown(faq.text)
+    const markdownText = faq.text // Already in Markdown format
     return `### ${faq.title}\n\n${markdownText}`
   }
 
@@ -365,7 +301,7 @@ function renderGlossaryJSONWithEscaping(
   const glossaryData: Record<string, {title: string, text: string}> = {}
   
   for (const term of terms) {
-    const renderedTerm = renderKnowledgeItem(term, linkableTerms)
+    const renderedTerm = renderKnowledgeItem(term, linkableTerms, RenderMode.Markdown)
     const titleText = extractTitleText(term.title)
     const keyText = extractKey(renderedTerm)
     
@@ -386,8 +322,8 @@ function renderGlossaryAsMarkdown(
   linkableTerms: LinkableTerms
 ): string {
   const items = terms.map(term => {
-    const renderedTerm = renderKnowledgeItem(term, linkableTerms)
-    const markdownText = htmlToMarkdown(renderedTerm.text)
+    const renderedTerm = renderKnowledgeItem(term, linkableTerms, RenderMode.Markdown)
+    const markdownText = renderedTerm.text // Already in Markdown format
     const titleText = extractTitleText(term.title)
     const keyText = extractKey(renderedTerm)
     

@@ -14,7 +14,8 @@ The `ABI Encode` has 2 types which are [`encode`](https://docs.soliditylang.org/
 - `encode`  will concatenate all values and add padding to fit into 32 bytes for each values.
 - `encode_packed` will concatenate all values in the exact byte representations without padding. (For example, `encode_packed("a", "bc") == encode_packed("ab", "c")`)
 
-Suppose we have a tuple of values: `(target, value, func, data, timestamp)` to encode, and their `alloy primitives type` are `(Address, U256, String, Bytes, U256)`.
+Suppose we have a tuple of values: `(target, value, func, data, timestamp)` to encode, and their `alloy primitives type` are
+`(Address, U256, String, Bytes, U256)`.
 
 Firstly we need to import those types we need from `alloy_primitives`, `stylus_sdk::abi` and `alloc::string`:
 
@@ -30,7 +31,10 @@ use stylus_sdk::{alloy_primitives::{U256, Address, FixedBytes}, abi::Bytes, prel
 use alloc::string::String;
 ```
 
-Secondly because we will use the method [`abi_encode_sequence`](https://docs.rs/alloy-sol-types/latest/alloy_sol_types/trait.SolValue.html#method.abi_encode_sequence) and [`abi_encode_packed`](https://docs.rs/alloy-sol-types/latest/alloy_sol_types/trait.SolValue.html#method.abi_encode_packed) under `alloy_sol_types` to encode data, we also need to import the types from `alloy_sol_types`:
+Secondly because we will use the method
+[`abi_encode_sequence`](https://docs.rs/alloy-sol-types/latest/alloy_sol_types/trait.SolValue.html#method.abi_encode_sequence) and
+[`abi_encode_packed`](https://docs.rs/alloy-sol-types/latest/alloy_sol_types/trait.SolValue.html#method.abi_encode_packed) under `alloy_sol_types` to encode
+data, we also need to import the types from `alloy_sol_types`:
 
 ```rust
 // Becauce the naming of alloy_primitives and alloy_sol_types is the same, so we need to re-name the types in alloy_sol_types

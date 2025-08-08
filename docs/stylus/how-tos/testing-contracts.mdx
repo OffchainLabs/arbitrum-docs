@@ -12,7 +12,8 @@ import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
 ## Introduction
 
-The Stylus SDK provides a robust testing framework that allows developers to write and run tests for their contracts directly in Rust without deploying to a blockchain. This guide will walk you through the process of writing and running tests for Stylus contracts using the built-in testing framework.
+The Stylus SDK provides a robust testing framework that allows developers to write and run tests for their contracts directly in Rust without deploying to a
+blockchain. This guide will walk you through the process of writing and running tests for Stylus contracts using the built-in testing framework.
 
 The Stylus testing framework allows you to:
 
@@ -29,7 +30,9 @@ Before you begin, make sure you have:
 
 - Basic familiarity with Rust and smart contract development
 - Understanding of unit testing concepts
-- Rust toolchain: follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+- Rust toolchain: follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain
+  (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal
+  application.
 
 ## The Stylus Testing Framework
 
@@ -151,8 +154,8 @@ mod test {
 
 ### Using the TestVM
 
-The `TestVM` simulates the execution environment for your Stylus contract, removing the need to run your tests against a test node.
-The `TestVM` allows you to control aspects like:
+The `TestVM` simulates the execution environment for your Stylus contract, removing the need to run your tests against a test node. The `TestVM` allows you to
+control aspects like:
 
 - Block timestamp and number
 - Account balances
@@ -430,7 +433,8 @@ cargo test test_give_cupcake
 
 ## Migrating from Global Accessors to VM Accessors
 
-As of Stylus SDK 0.8.0, there's a shift away from global host function invocations to using the `.vm()` method. This is a safer approach that makes testing easier. For example:
+As of Stylus SDK 0.8.0, there's a shift away from global host function invocations to using the `.vm()` method. This is a safer approach that makes testing
+easier. For example:
 
 ```rust
 // Old style (deprecated)
