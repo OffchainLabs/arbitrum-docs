@@ -267,6 +267,16 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-arbitrum-chain/configuration-options',
+          label: 'Configuration options',
+        },
+        {
+          type: 'doc',
+          id: 'launch-arbitrum-chain/partials/config-alt-da',
+          label: 'Configuring alt data availability',
+        },
+        {
+          type: 'doc',
           id: 'launch-arbitrum-chain/aep-license',
           label: 'Arbitrum chain licensing',
         },
