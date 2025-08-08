@@ -67,11 +67,21 @@ Stylus contract: `cargo stylus export-abi`.
 
 If you're using the Stylus Rust SDK, you'll need to enable the export-abi feature in your Cargo.toml file like so:
 
-`rust \[features\] export-abi = \["stylus-sdk/export-abi"\] `
+```rust
+[features]
+export-abi = ["stylus-sdk/export-abi"]
+```
 
 You'll also need to have a `main.rs` file that selects that feature.
 
 This is an example of a main.rs file that allows you to export the abi of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) example
 project:
 
-`rust #!\[cfg\_attr(not(feature = "export-abi"), no\_main)\] #\[cfg(feature = "export-abi")\] fn main() { stylus\_hello\_world::main(); } `
+```rust
+#![cfg_attr(not(feature = "export-abi"), no_main)]
+
+#[cfg(feature = "export-abi")]
+fn main() {
+    stylus_hello_world::main();
+}
+```

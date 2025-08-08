@@ -30,8 +30,7 @@ Arbitrum Orbit currently supports 3 different DA solutions:
 - Rollup, posting data to the parent chain which ultimately posts the data to Ethereum.
 - AnyTrust, posting data to a Data Availability Committee, selected by the chain owner.
 - Celestia, posting data to [Celestia network](https://blog.celestia.org/celestia-is-first-modular-data-availability-network-to-integrate-with-arbitrum-orbit/).
-
-Note that using AnyTrust gives the chain owner the most flexibility and cheapest fees.
+  Note that using AnyTrust gives the chain owner the most flexibility and cheapest fees.
 
 ### What token is used to pay gas fees on Orbit chains?
 
@@ -73,7 +72,10 @@ contract size limit parameters can't be changed via upgrade after deployment.
 Forcing an invalid assertion in the chain is not supported at the moment. However, if you're building Nitro locally, you can run the following test that goes
 through the whole rollup/challenge mechanism:
 
-`shell go test ./system\_tests/ -tags=challengetest -run=TestChallenge `
+```shell
+go test ./system_tests/ -tags=challengetest -run=TestChallenge
+
+```
 
 ### What fee collectors can be configured on my chain?
 
@@ -87,15 +89,13 @@ There are 4 fee types that can be configured on an Orbit chain:
   poster can be set by calling `SequencerInbox.setIsBatchPoster()` on the parent chain. And a different fee collector for that batch poster can be specified by
   calling `ArbAggregator.setFeeCollector()`.
 - L1 surplus fee: Any extra fees rewarded to the batch poster. This is paid to a specific L1RewardRecipient, which can be set by calling
-  `ArbOwner.setL1PricingRewardRecipient()`
-
-More detailed information about fees can be found in the [L1 fees](https://docs.arbitrum.io/arbos/l1-pricing) and [L2 fees](https://docs.arbitrum.io/arbos/gas)
-pages.
+  `ArbOwner.setL1PricingRewardRecipient()` More detailed information about fees can be found in the [L1 fees](https://docs.arbitrum.io/arbos/l1-pricing) and
+  [L2 fees](https://docs.arbitrum.io/arbos/gas) pages.
 
 Information about the precompiles methods can be found in the
 [Precompiles reference page](https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference).
 
-### What is the lowest you can set the `base fee` to?
+### What is the lowest you can set the base fee to?
 
 You can set the base fee to any amount to charge users less. You can even set it to `0` (however, this would open the chain to DOS attacks). If the Orbit base
 fee is `0`, users are then only paying for the cost of DA.
@@ -112,13 +112,11 @@ There are 4 fee types that can be configured on Nitro:
   set the batch poster by calling `SequencerInbox.setIsBatchPoster()`, on the parent chain, and specify a different fee collector for that batch poster by
   calling `ArbAggregator.setFeeCollector()`.
 - L1 surplus fee: Any extra fees rewarded to the batch poster. This is paid to a specific `L1RewardRecipient`, and you can set it by calling
-  `ArbOwner.setL1PricingRewardRecipient()`
+  `ArbOwner.setL1PricingRewardRecipient()` You can find more detailed information about fees in these pages:
 
-You can find more detailed information about fees in these pages:
+- [L1 fees](https://docs.arbitrum.io/arbos/l1-pricing)
 
-\- [L1 fees](https://docs.arbitrum.io/arbos/l1-pricing)
-
-\- [L2 fees](https://docs.arbitrum.io/arbos/gas)
+- [L2 fees](https://docs.arbitrum.io/arbos/gas)
 
 And information about the precompiles methods in the [Precompile References](https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference).
 
@@ -150,13 +148,13 @@ being included immediately in the fork-choice.
 
 Test this thoroughly on a testnet first.
 
-1.  This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this
-    [procedure](https://www.notion.so/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx) to create a new WASM module root with an updated max L2
-    message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest
-    version, which includes a couple of extra safety checks that may help prevent issues.
-2.  You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.
-3.  Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus
-    respecting L2 transaction size limits.
+1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this
+   [procedure](https://www.notion.so/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx) to create a new WASM module root with an updated max L2
+   message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest
+   version, which includes a couple of extra safety checks that may help prevent issues.
+2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.
+3. Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus
+   respecting L2 transaction size limits.
 
 ### What is the max theoretical TPS for an Arbitrum Chain?
 
@@ -172,9 +170,8 @@ The actual maximum throughput depends on the configurable execution parameters:
 - Max L2 gas per second: 128M gas/sec
 - These parameters are entirely configurable, for example, by dropping the block time to 100ms or by increasing the block gas limit (which comes at the cost of
   faster state bloat).
-- Dropping to 100ms and doubling the block gas limit to 64m L2 gas would achieve 640m L2 gas per second.
-
-**The actual TPS varies depending on the gas cost per transaction:**
+- Dropping to 100ms and doubling the block gas limit to 64m L2 gas would achieve 640m L2 gas per second. **The actual TPS varies depending on the gas cost per
+  transaction:**
 
 - A simple transfer (~21,000 gas) could approximately achieve around 6,000 TPS.
 - A more complex transaction (~200,000 gas) would enable approximately 640 TPS.
@@ -187,10 +184,9 @@ again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum (Orbit
 
 If you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.
 
-### How do we verify if an `ERC-20` was bridged using the native bridge?
+### How do we verify if an ERC-20 was bridged using the native bridge?
 
-The following applies to a parent-side bridge deployed on Arbitrum One:  
-If the token was bridged using the native token bridge, you can go to
+The following applies to a parent-side bridge deployed on Arbitrum One: If the token was bridged using the native token bridge, you can go to
 [parent_side_bridge_contract](https://github.com/OffchainLabs/token-bridge-contracts/blob/5bdf33259d2d9ae52ddc69bc5a9cbc558c4c40c7/contracts/tokenbridge/arbitrum/gateway/L2ERC20Gateway.sol#L47)
 
 Call the `calculateL2TokenAddress` address with the address of the token on the parent chain.
@@ -205,21 +201,22 @@ monthly cost would be $1,500 for the Sequencer.
 
 ### What are the different validator modes?
 
-- **Defensive (allowlist required)**:
-  - Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is
-    found.
-- **StakeLatest (allowlist required)**:
-  - Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
-- **ResolveNodes (allowlist required)**:
-  - Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some
-    gas every time an unconfirmed assertion is resolved or a new assertion is created)
-- **MakeNodes (allowlist required)**:
-  - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
-  - Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will
-    be successful, and the others will have still spent gas on reverted calls that did nothing.
-- **Watchtower**:
-  - A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet,
-    as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
+- **Defensive (allowlist required)**:- Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post
+  stake onchain if a bad assertion is found.
+
+- **StakeLatest (allowlist required)**:- Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some
+  gas every time new assertion created)
+
+- **ResolveNodes (allowlist required)**:- Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found
+  (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
+
+- **MakeNodes (allowlist required)**:- Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive
+  node to run)
+- Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be
+  successful, and the others will have still spent gas on reverted calls that did nothing.
+
+- **Watchtower**:- A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't
+  require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
 
 ### What are the costs to run a validator?
 
@@ -229,14 +226,13 @@ The estimated monthly cost for Watchtower validators will be approximately $500.
 
 To participate in a fraud-proof game, your validator will need funds (can be any `ERC-20`) for two things:
 
-1.  Gas costs to post assertions
-    - Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost
-      per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will
-      scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.
-2.  Bonds to participate
-    - Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then 555+79 `ETH` per
-      each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There
-      could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
+1. Gas costs to post assertions- Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you
+   can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more
+   assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.
+
+2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then
+   555+79 `ETH` per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for
+   Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
 
 ### How do I export snapshots for nitro-based chains? Is there any tooling for this?
 
@@ -263,7 +259,9 @@ value in Geth for the idle timeout is, as noted in
 
 Using Nitro's split validation, it can be run as a separate container using:
 
-`plain text node.block-validator.validation-server-configs-list `
+```plain text
+node.block-validator.validation-server-configs-list
+```
 
 It's possible to run it in the same container. That is the default way, and then Nitro uses a loopback connection. You can read more about this in
 [running a split-validator](https://www.notion.so/run-arbitrum-node/more-types/04-run-split-validator-node.mdx).
