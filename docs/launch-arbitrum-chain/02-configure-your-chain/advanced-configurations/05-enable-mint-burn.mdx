@@ -18,7 +18,7 @@ Native Mint/Burn ships with ArbOS 41. We expect it to be included in ArbOS 50, b
 
 Arbitrum chains are designed to “lock and mint” the native gas token in the canonical bridge. This process ensures the child chain's representation of the gas token is always backed by the parent chain's gas token, locked in the canonical bridge.
 
-This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a burn-and-mint approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s USDC.
+This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a burn-and-mint approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s USDC (possible with Circle-supplied adapter).
 
 ArbOS 41 introduces the ability for native-interop tokens to work seamlessly as the gas token of an Arbitrum chain. This feature allows a chain owner (`ArbOwner`) to manage:
 
@@ -58,7 +58,7 @@ Three components make up the Native Mint/Burn feature:
 
 - **Time lock gate (safety switch)**: a safety feature that tells the chain owners when the feature is live. The default value is seven days to give chain owners sufficient time to identify and prevent a malicious owner addition.
 - **Mint and burn precompile**: the primary component that gives access control and admin interface.
-- **Collateral-safety track**: this ensures that all withdrawals are processed through the adapter and includes an L1 helper contract to sweep any native gas stuck in the bridge to the adapter escrow to the adapter's escrow.
+- **Collateral-safety track**: this ensures that all withdrawals are processed through the adapter and includes an L1 helper contract to sweep any native gas stuck in the bridge to the adapter's escrow.
 
 Below is a high-level data-flow diagram:
 
@@ -72,7 +72,7 @@ Below is a high-level data-flow diagram:
 
 As Native Mint/Burn introduces a security risk (an ArbOwner-level attacker can mint unlimited native gas), we will introduce a **speed bump/delay** feature that presents a **hard-coded delay** for enabling Native Mint/Burn capabilities.
 
-Our hard-coded default for this period is seven **days**, commensurate with existing L2beat advisories on time locks. This period should give the chain owner time to respond to an attacker’s attempt to mint/burn the native gas token.
+Our hard-coded default for this period is seven **days**, commensurate with existing L2BEAT advisories on time locks. This period should give the chain owner time to respond to an attacker’s attempt to mint/burn the native gas token.
 
 Details for the time lock switch are:
 
@@ -118,11 +118,10 @@ To resolve the problem stated above, we can implement:
 1. **Collateral Sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated third-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain Adapter contract).
 2. **Disable Orbit Bridge Withdrawals:** Disabling withdrawals on the Orbit chain, which ensures the third-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
 
-The **Collateral Sweep** is implemented by adding an Outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a third-party contract.
+The **Collateral Sweep** is implemented by adding an Outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a third-party contract. This keeps all collateral in one place when mint/burn is enabled. 
 
-- **[PR](https://github.com/OffchainLabs/nitro-contracts/pull/339):**
-  - Additional details about the Outbox contract
-  - Outbox contracts are authorized to spend funds from the bridge. They can be registered using the admin function [`setOutbox`](https://www.notion.so/1e601a3f59f880868d4dde88e7701a74?pvs=21).
+**[This PR contains additional details about the Outbox contract](https://github.com/OffchainLabs/nitro-contracts/pull/339):**
+  - Outbox contracts are authorized to spend funds from the bridge. They can be registered using the admin function `setOutbox`.
   - Typically, an Outbox contract requires verification of proof for an authorized withdrawal to occur. We can design one that permissionlessly sends native gas to a destination on the parent chain.
 
 **Disabling Withdrawals** can be achieved by adapting the Nitro node to prevent non-zero value withdrawals. This approach still maintains our censorship-resistant properties, allowing the user to [initiate a withdrawal from L1](https://github.com/OffchainLabs/nitro/pull/3255https://github.com/OffchainLabs/nitro/pull/3255).
