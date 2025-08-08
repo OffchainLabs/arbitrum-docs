@@ -98,3 +98,6 @@
 .wrapcode code {
   white-space: pre-wrap;
 }
+
+/* Import Lidia component styles */
+@import './lidia.css';
