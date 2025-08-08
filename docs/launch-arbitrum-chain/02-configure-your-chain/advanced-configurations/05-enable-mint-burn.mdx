@@ -8,6 +8,8 @@ user_story: As a current or prospective Arbitrum chain owner, I need to understa
 content_type: get-started
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 ::warning Understand the risk
 
 Native Mint/Burn ships with ArbOS 41. We expect it to be included in ArbOS 50, but it will be turned off by default. **Only enable this feature** if your chain needs the gas token to use an external mint/burn bridge and you are comfortable running a fork that is still under active hardening. Our team will be unable to provide extensive technical support for this feature with ArbOS 41. We recommend that teams wait for ArbOS 50 to use this feature, as it will be a more stable release.
@@ -65,9 +67,11 @@ Three components make up the Native Mint/Burn feature:
 
 Below is a high-level data-flow diagram:
 
-========= IMAGE =========
-========= IMAGE =========
-========= IMAGE =========
+<ImageZoom
+  src="/img/native-mint-burn-high-level-data-flow.svg"
+  alt="High level data flow for Native Mint and Burn"
+  className="img-600px"
+/>
 
 ### Security time lock
 
@@ -95,10 +99,11 @@ A seven-day time lock gates the feature. Call [`ArbOwner.setNativeTokenManagemen
    - [`addNativeTokenOwner(address)`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/arbos-41/ArbOwner.sol#L19-L21)
    - [`removeNativeTokenOwner(address)`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/arbos-41/ArbOwner.sol#L24-L26)
 
-![A third-party messaging layer triggers its Adapter to unlock to a specific address. The Adapter mints new tokens and distributes them to the user.](attachment:bff2931c-7993-4a24-85f4-c52b508dd4e7:Bridge_provider_mint-burn_diagram.png)
-
-========= IMAGE =========
-========= IMAGE =========
+<ImageZoom
+  src="/img/native-mint-burn-third-party-messaging-layer.svg"
+  alt="A third-party messaging layer triggers its Adapter to unlock to a specific address. The Adapter mints new tokens and distributes them to the user."
+  className="img-600px"
+/>
 
 A third-party messaging layer triggers its Adapter to unlock to a specific address. The Adapter mints new tokens and distributes them to the user.
 
