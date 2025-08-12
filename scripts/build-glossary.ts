@@ -15,7 +15,41 @@ import { marked } from 'marked'; // For converting Markdown to HTML
 import { GrayMatterFile } from 'gray-matter'; // TypeScript type for parsed frontmatter files
 import * as fs from 'fs/promises'; // Async filesystem operations
 import * as path from 'path'; // Path manipulation utilities
-import { escapeForJSON } from '@offchainlabs/notion-docs-generator'; // String escaping utility
+
+/**
+ * Simple JSON escape function to avoid dependency on external packages
+ * Escapes quotes, backslashes, and newlines for safe JSON string values
+ */
+function escapeForJSON(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+}
+
+/**
+ * Type definition for glossary term frontmatter
+ */
+interface GlossaryTermData {
+  key: string;
+  title: string;
+  titleforSort: string;
+}
+
+/**
+ * Type guard to check if frontmatter has required glossary properties
+ */
+function isValidGlossaryTerm(data: any): data is GlossaryTermData {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    typeof data.key === 'string' &&
+    typeof data.title === 'string' &&
+    typeof data.titleforSort === 'string'
+  );
+}
 
 /**
  * Converts an array of parsed glossary terms into a JSON string format
@@ -29,19 +63,33 @@ import { escapeForJSON } from '@offchainlabs/notion-docs-generator'; // String e
  * @returns {Promise<string>} JSON string containing all glossary terms
  */
 async function renderGlossaryJSON(terms: GrayMatterFile<string>[]): Promise<string> {
-  // Process each term to convert Markdown to HTML and format as a JSON property
-  let rendered = terms.map(async (item) => {
-    // Convert Markdown content to HTML
-    let content = await marked.parse(item.content.trim());
+  // Process each term sequentially to avoid overwhelming the system
+  const rendered: string[] = [];
 
-    // Format as a JSON property with escaped values
-    return `"${escapeForJSON(item.data.key)}":{"title":"${escapeForJSON(
-      item.data.title,
-    )}","text":"${escapeForJSON(content)}"}`;
-  });
+  for (const item of terms) {
+    if (!isValidGlossaryTerm(item.data)) {
+      console.warn(`Skipping term with invalid frontmatter: ${JSON.stringify(item.data)}`);
+      continue;
+    }
+
+    try {
+      // Convert Markdown content to HTML
+      const content = await marked.parse(item.content.trim());
+
+      // Format as a JSON property with escaped values
+      const jsonProperty = `"${escapeForJSON(item.data.key)}":{"title":"${escapeForJSON(
+        item.data.title,
+      )}","text":"${escapeForJSON(content)}"}`;
+
+      rendered.push(jsonProperty);
+    } catch (error) {
+      console.error(`Error processing term '${item.data.key}':`, error);
+      throw error;
+    }
+  }
 
   // Combine all terms into a JSON object string with nice formatting
-  return '{\n' + (await Promise.all(rendered)).join(',\n') + '\n}';
+  return '{\n' + rendered.join(',\n') + '\n}';
 }
 
 /**
@@ -57,7 +105,7 @@ async function renderGlossaryJSON(terms: GrayMatterFile<string>[]): Promise<stri
  * @returns {Promise<GrayMatterFile<string>[]>} Array of parsed glossary terms
  */
 async function readFilesInDirectory(directory: string): Promise<GrayMatterFile<string>[]> {
-  let definitions: GrayMatterFile<string>[] = [];
+  const definitions: GrayMatterFile<string>[] = [];
 
   try {
     // Get all filenames in the specified directory
@@ -66,41 +114,45 @@ async function readFilesInDirectory(directory: string): Promise<GrayMatterFile<s
     // Process each file
     for (const file of files) {
       const filePath = path.join(directory, file);
-      const stats = await fs.stat(filePath);
 
-      // Only process markdown files (not directories or other file types)
-      if (stats.isFile() && (filePath.endsWith('.md') || filePath.endsWith('.mdx'))) {
-        // Read the file content
-        const content = await fs.readFile(filePath, 'utf-8');
+      try {
+        const stats = await fs.stat(filePath);
 
-        // Parse frontmatter and content
-        definitions.push(matter(content));
+        // Only process markdown files (not directories or other file types)
+        if (stats.isFile() && (filePath.endsWith('.md') || filePath.endsWith('.mdx'))) {
+          // Read the file content
+          const content = await fs.readFile(filePath, 'utf-8');
+
+          // Parse frontmatter and content
+          const parsed = matter(content);
+
+          // Validate that required frontmatter exists
+          if (!isValidGlossaryTerm(parsed.data)) {
+            console.warn(
+              `Skipping file ${file}: missing required frontmatter (key, title, titleforSort)`,
+            );
+            continue;
+          }
+
+          definitions.push(parsed);
+        }
+      } catch (fileError) {
+        console.error(`Error processing file ${file}:`, fileError);
+        // Continue processing other files instead of failing completely
       }
     }
   } catch (error) {
     console.error('Error reading directory:', error);
+    throw error; // Re-throw directory errors as they're more critical
   }
 
   // Sort terms alphabetically based on titleforSort frontmatter property
-  return definitions.sort((a, b) => a.data.titleforSort.localeCompare(b.data.titleforSort));
-}
-
-/**
- * Converts a term key to a valid React component name
- *
- * This function:
- * 1. Capitalizes the first letter (React components must start with uppercase)
- * 2. Removes hyphens to ensure valid JavaScript identifier syntax
- *
- * @param {string} key - The raw term key (usually kebab-case from filenames)
- * @returns {string} A PascalCase string suitable for use as a React component name
- */
-function renderKey(key: string): string {
-  // Capitalize the first letter
-  let capitalized = String(key).charAt(0).toUpperCase() + String(key).slice(1);
-
-  // Remove hyphens to create a valid JavaScript identifier
-  return capitalized.replace(/[\-]/gi, '');
+  // Safe to access titleforSort now due to validation above
+  return definitions.sort((a, b) => {
+    const aSort = (a.data as GlossaryTermData).titleforSort;
+    const bSort = (b.data as GlossaryTermData).titleforSort;
+    return aSort.localeCompare(bSort);
+  });
 }
 
 /**
@@ -108,36 +160,42 @@ function renderKey(key: string): string {
  *
  * This function:
  * 1. Reads all glossary term files from the specified directory
- * 2. Generates import statements and component references (although unused in current implementation)
- * 3. Creates a consolidated Markdown partial file with all terms
- * 4. Generates a JSON file with all terms for client-side usage
+ * 2. Creates a consolidated Markdown partial file with all terms
+ * 3. Generates a JSON file with all terms for client-side usage
  */
 async function main(): Promise<void> {
-  // Read and parse all glossary term files
-  let terms = await readFilesInDirectory('./docs/partials/glossary/');
+  try {
+    // Read and parse all glossary term files
+    const terms = await readFilesInDirectory('docs/partials/glossary/');
 
-  // Generate import statements for each term (unused in current implementation)
-  // This could be used if implementing a React component approach to term rendering
-  let imports = terms
-    .map((item) => `import ${renderKey(item.data.key)} from './docs/glossary/${item.data.key}.mdx';`)
-    .join('\n');
+    if (terms.length === 0) {
+      console.warn('No valid glossary terms found');
+      return;
+    }
 
-  // Generate component references for each term (unused in current implementation)
-  let items = terms.map((item) => `<${renderKey(item.data.key)} />`).join('\n');
+    console.log(`Processing ${terms.length} glossary terms`);
 
-  // Generate and write the consolidated glossary partial MDX file
-  // This creates a single file with all terms formatted as Markdown headings
-  await fs.writeFile(
-    './docs/partials/_glossary-partial.mdx',
-    terms
-      .map((item) => `### ${item.data.title} {#${item.data.key}}\n${item.content.trim()}`)
-      .join('\n\n'),
-  );
+    // Generate and write the consolidated glossary partial MDX file
+    // This creates a single file with all terms formatted as Markdown headings
+    const partialContent = terms
+      .map((item) => {
+        const data = item.data as GlossaryTermData;
+        return `### ${data.title} {#${data.key}}\n${item.content.trim()}`;
+      })
+      .join('\n\n');
 
-  // Generate and write the JSON glossary file for client-side usage
-  // This is used for search, tooltips, or other dynamic functionality
-  const glossaryJSON = await renderGlossaryJSON(terms);
-  await fs.writeFile('./static/glossary.json', glossaryJSON);
+    await fs.writeFile('docs/partials/_glossary-partial.mdx', partialContent);
+    console.log('Generated glossary partial at docs/partials/_glossary-partial.mdx');
+
+    // Generate and write the JSON glossary file for client-side usage
+    // This is used for search, tooltips, or other dynamic functionality
+    const glossaryJSON = await renderGlossaryJSON(terms);
+    await fs.writeFile('static/glossary.json', glossaryJSON);
+    console.log('Generated glossary JSON at static/glossary.json');
+  } catch (error) {
+    console.error('Failed to build glossary:', error);
+    throw error;
+  }
 }
 
 /**
