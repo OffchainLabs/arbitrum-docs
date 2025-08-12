@@ -1,18 +1,18 @@
 ---
-title: "ABI Decode • Stylus by Example"
-description: "A simple solidity ABI encode and decode example"
+title: 'ABI Decode • Stylus by Example'
+description: 'A simple solidity ABI encode and decode example'
 ---
-
-
 
 {/* Begin Content */}
 
 # ABI Encode
 
-The `ABI Encode` has 2 types which are [`encode`](https://docs.soliditylang.org/en/latest/abi-spec.html#strict-encoding-mode) and [`encode_packed`](https://docs.soliditylang.org/en/latest/abi-spec.html#non-standard-packed-mode). 
+The `ABI Encode` has 2 types which are [`encode`](https://docs.soliditylang.org/en/latest/abi-spec.html#strict-encoding-mode) and
+[`encode_packed`](https://docs.soliditylang.org/en/latest/abi-spec.html#non-standard-packed-mode).
 
-- `encode`  will concatenate all values and add padding to fit into 32 bytes for each values.
-- `encode_packed` will concatenate all values in the exact byte representations without padding. (For example, `encode_packed("a", "bc") == encode_packed("ab", "c")`)
+- `encode` will concatenate all values and add padding to fit into 32 bytes for each values.
+- `encode_packed` will concatenate all values in the exact byte representations without padding. (For example,
+  `encode_packed("a", "bc") == encode_packed("ab", "c")`)
 
 Suppose we have a tuple of values: `(target, value, func, data, timestamp)` to encode, and their `alloy primitives type` are
 `(Address, U256, String, Bytes, U256)`.
@@ -22,7 +22,6 @@ Firstly we need to import those types we need from `alloy_primitives`, `stylus_s
 import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
 <NotForProductionBannerPartial />
-
 
 ```rust
 // Import items from the SDK. The prelude contains common traits and macros.
@@ -40,9 +39,11 @@ data, we also need to import the types from `alloy_sol_types`:
 // Becauce the naming of alloy_primitives and alloy_sol_types is the same, so we need to re-name the types in alloy_sol_types
 use alloy_sol_types::{sol_data::{Address as SOLAddress, String as SOLString, Bytes as SOLBytes, *}, SolType};
 ```
+
 ## encode
 
 Then `encode` them:
+
 ```rust
 // define sol types tuple
 type TxIdHashType = (SOLAddress, Uint<256>, SOLString, SOLBytes, Uint<256>);
@@ -57,6 +58,7 @@ let tx_hash_bytes = TxIdHashType::abi_encode_sequence(&tx_hash_data);
 There are 2 methods to `encode_packed` data:
 
 1. `encode_packed` them:
+
 ```rust
 // define sol types tuple
 type TxIdHashType = (SOLAddress, Uint<256>, SOLString, SOLBytes, Uint<256>);
@@ -67,6 +69,7 @@ let tx_hash_data_encode_packed = TxIdHashType::abi_encode_packed(&tx_hash_data);
 ```
 
 2. We can also use the following method to `encode_packed` them:
+
 ```rust
 let tx_hash_data_encode_packed = [&target.to_vec(), &value.to_be_bytes_vec(), func.as_bytes(), &data.to_vec(), &timestamp.to_be_bytes_vec()].concat();
 ```
@@ -104,7 +107,7 @@ impl Encoder {
         let result = hasher.finalize();
         // convert the result hash to FixedBytes<32>
         let result_vec = result.to_vec();
-        FixedBytes::<32>::from_slice(&result_vec)   
+        FixedBytes::<32>::from_slice(&result_vec)
     }
 }
 
@@ -114,7 +117,7 @@ impl Encoder {
 
      // Encode the data and hash it
      pub fn encode(
-        &self, 
+        &self,
         target: Address,
         value: U256,
         func: String,
@@ -132,7 +135,7 @@ impl Encoder {
 
     // Packed encode the data and hash it, the same result with the following one
     pub fn packed_encode(
-        &self, 
+        &self,
         target: Address,
         value: U256,
         func: String,
@@ -150,7 +153,7 @@ impl Encoder {
 
     // Packed encode the data and hash it, the same result with the above one
     pub fn packed_encode_2(
-        &self, 
+        &self,
         target: Address,
         value: U256,
         func: String,
@@ -165,9 +168,9 @@ impl Encoder {
 
     // The func example: "transfer(address,uint256)"
     pub fn encode_with_signature(
-        &self, 
-        func: String, 
-        address: Address, 
+        &self,
+        func: String,
+        address: Address,
         amount: U256
     ) -> Vec<u8> {
         type TransferType = (SOLAddress, Uint<256>);

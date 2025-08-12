@@ -1,12 +1,9 @@
 ---
-title: "Hasing with keccak256 • Stylus by Example"
-description: "A simple solidity ABI encode and decode example"
+title: 'Hasing with keccak256 • Stylus by Example'
+description: 'A simple solidity ABI encode and decode example'
 ---
 
-
-
 {/* Begin Content */}
-
 
 ## Hashing with keccak256
 
@@ -17,9 +14,10 @@ Keccak256 is a member of the [SHA-3](https://en.wikipedia.org/wiki/SHA-3) family
 keccak256 computes the Keccak-256 hash of the input.
 
 Some use cases are:
- - Creating a deterministic unique ID from a input
- - Commit-Reveal scheme
- - Compact cryptographic signature (by signing the hash instead of a larger input)
+
+- Creating a deterministic unique ID from a input
+- Commit-Reveal scheme
+- Compact cryptographic signature (by signing the hash instead of a larger input)
 
 Here we will use [`stylus-sdk::crypto::keccak`](https://docs.rs/stylus-sdk/latest/stylus_sdk/crypto/fn.keccak.html) to calculate the keccak256 hash of the input
 data:
@@ -27,7 +25,6 @@ data:
 import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
 <NotForProductionBannerPartial />
-
 
 ```rust
 pub fn keccak<T: AsRef<[u8]>>(bytes: T) -> B256
@@ -68,10 +65,10 @@ pub struct Hasher {
 /// Declare that `Hasher` is a contract with the following external methods.
 #[public]
 impl Hasher {
-    
+
     // Encode the data and hash it
     pub fn encode_and_hash(
-        &self, 
+        &self,
         target: Address,
         value: U256,
         func: String,
@@ -90,8 +87,8 @@ impl Hasher {
 
     // This should always return true
     pub fn encode_and_decode(
-        &self, 
-        address: Address, 
+        &self,
+        address: Address,
         amount: U256
     ) -> Result<bool, HasherError> {
         // define sol types tuple
@@ -102,19 +99,19 @@ impl Hasher {
         let tx_hash_data_encode = TxIdHashType::abi_encode_sequence(&tx_hash_data);
 
         let validate = true;
-        
+
         // Check the result
         match TxIdHashType::abi_decode_sequence(&tx_hash_data_encode, validate) {
             Ok(res) => Ok(res == tx_hash_data),
             Err(_) => {
                 return Err(HasherError::DecodedFailed(DecodedFailed{}));
             },
-        }   
+        }
     }
-        
+
     // Packed encode the data and hash it, the same result with the following one
     pub fn packed_encode_and_hash_1(
-        &self, 
+        &self,
         target: Address,
         value: U256,
         func: String,
@@ -133,7 +130,7 @@ impl Hasher {
 
     // Packed encode the data and hash it, the same result with the above one
     pub fn packed_encode_and_hash_2(
-        &self, 
+        &self,
         target: Address,
         value: U256,
         func: String,
@@ -149,9 +146,9 @@ impl Hasher {
 
     // The func example: "transfer(address,uint256)"
     pub fn encode_with_signature(
-        &self, 
-        func: String, 
-        address: Address, 
+        &self,
+        func: String,
+        address: Address,
         amount: U256
     ) -> Vec<u8> {
         type TransferType = (SOLAddress, Uint<256>);
@@ -166,9 +163,9 @@ impl Hasher {
 
     // The func example: "transfer(address,uint256)"
     pub fn encode_with_signature_and_hash(
-        &self, 
-        func: String, 
-        address: Address, 
+        &self,
+        func: String,
+        address: Address,
         amount: U256
     ) -> FixedBytes<32> {
         type TransferType = (SOLAddress, Uint<256>);

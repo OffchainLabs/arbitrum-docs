@@ -32,8 +32,11 @@ Stylus introduces new pricing models for WASM programs. Intended for high-comput
   [quadratic memory pricing policy](https://notes.ethereum.org/@vbuterin/proposals_to_adjust_memory_gas_costs). For the first time ever, high-memory
   applications are possible on an EVM-equivalent chain.
 - Storage, for which the Rust SDK promotes better access patterns and type choices. Note that while the underlying
-  <a href="https://www.evm.codes/#54"><code>SLOAD</code></a> and <a href="https://www.evm.codes/#55"><code>SSTORE</code></a> operations cost as they do in the
-  EVM, the Rust SDK implements an optimal caching policy that minimizes their use. Exact savings depends on the program.
+  <a href="https://www.evm.codes/#54">
+    <code>SLOAD</code>
+  </a> and <a href="https://www.evm.codes/#55">
+    <code>SSTORE</code>
+  </a> operations cost as they do in the EVM, the Rust SDK implements an optimal caching policy that minimizes their use. Exact savings depends on the program.
 - VM affordances, including common operations like `keccak` and reentrancy detection. No longer is it expensive to make safety the default.
 
 There are, however, minor overheads to using Stylus that may matter to your application:
@@ -93,8 +96,10 @@ It is important to note that users never need to worry about this notion of ink.
 automatically under the hood as the VMs pass execution back and forth.
 
 However, developers optimizing contracts may choose to measure performance in ink to pin down the exact cost of executing various routines. The
-<a href="https://docs.rs/stylus-sdk/0.3.0/stylus_sdk/evm/fn.ink_left.html"><code>ink_left</code></a> function exposes this value, and various methods throughout
-the Rust SDK optionally accept ink amounts too.
+
+<a href="https://docs.rs/stylus-sdk/0.3.0/stylus_sdk/evm/fn.ink_left.html">
+  <code>ink_left</code>
+</a> function exposes this value, and various methods throughout the Rust SDK optionally accept ink amounts too.
 
 ### See also
 

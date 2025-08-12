@@ -1,9 +1,7 @@
 ---
-title: "ERC-721 • Stylus by Example"
-description: "An example implementation of the ERC-721 token standard in Rust using Arbitrum Stylus."
+title: 'ERC-721 • Stylus by Example'
+description: 'An example implementation of the ERC-721 token standard in Rust using Arbitrum Stylus.'
 ---
-
-
 
 {/* Begin Content */}
 
@@ -38,7 +36,6 @@ Example implementation of an ERC-721 token contract written in Rust.
 import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
 <NotForProductionBannerPartial />
-
 
 ```rust
 //! Implementation of the ERC-721 standard
@@ -194,7 +191,7 @@ impl<T: Erc721Params> Erc721<T> {
 
         // cleaning app the approved mapping for this token
         self.token_approvals.delete(token_id);
-        
+
         evm::log(Transfer { from, to, token_id });
         Ok(())
     }
