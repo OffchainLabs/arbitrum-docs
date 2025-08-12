@@ -6,7 +6,7 @@ sme:
 content_type: how-to
 ---
 
-To configure gas behavior on an Arbitrum Orbit chain, you primarily use the ArbOwner precompile (at address `0x0000000000000000000000000000000000000070`), which allows the chain owner to manage key parameters via function calls. These are invoked with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`.The defaults inherit from the parent chain or standard Nitro settings, but customization is possible for Arbitrum chains as they are permissioned by design.
+To configure gas behavior on an Arbitrum Orbit chain using the [Arbitrum Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk), you primarily use the `ArbOwner` precompile (at address `0x0000000000000000000000000000000000000070`), which allows the chain owner to manage key parameters via function calls. These are invoked with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`.The defaults inherit from the parent chain or standard Nitro settings, but customization is possible for Arbitrum chains as they are permissioned by design.
 
 Below is a breakdown of each specified parameter, including its role, typical defaults (based on Arbitrum One for reference), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security—e.g., setting limits too high could lead to state bloat or slower block processing.
 
@@ -28,7 +28,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 
 ## Block Gas Limit
 
-- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the speed limit and gas pools, but this sets a hard cap (often aligned with the maximum gas per transaction in the documentation, as blocks can contain multiple transactions).
+- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block - for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the speed limit and gas pools, but this sets a hard cap (often aligned with the maximum gas per transaction in the documentation, as blocks can contain multiple transactions).
 - **Default (Arbitrum One)**: 32,000,000 gas per block.
 - **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 
