@@ -7,7 +7,104 @@
       <th>Description</th>
     </tr>
   </thead>
-  <tbody></tbody>
+  <tbody>
+    <tr>
+      <td>
+        <code>becomeChainOwner()</code>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L13" target="_blank">
+          Interface
+        </a>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L58" target="_blank">
+          Implementation
+        </a>
+      </td>
+      <td>Caller becomes a chain owner</td>
+    </tr>
+    <tr>
+      <td>
+        <code>events(bool flag, bytes32 value)</code>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L16" target="_blank">
+          Interface
+        </a>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L28" target="_blank">
+          Implementation
+        </a>
+      </td>
+      <td>Emits events with values based on the args provided</td>
+    </tr>
+    <tr>
+      <td>
+        <code>eventsView()</code>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L19" target="_blank">
+          Interface
+        </a>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L47" target="_blank">
+          Implementation
+        </a>
+      </td>
+      <td>Tries (and fails) to emit logs in a view context</td>
+    </tr>
+    <tr>
+      <td>
+        <code>customRevert()</code>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L30" target="_blank">
+          Interface
+        </a>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L53" target="_blank">
+          Implementation
+        </a>
+      </td>
+      <td>Throws a custom error</td>
+    </tr>
+    <tr>
+      <td>
+        <code>panic()</code>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L34" target="_blank">
+          Interface
+        </a>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L63" target="_blank">
+          Implementation
+        </a>
+      </td>
+      <td>Halts the chain by panicking in the STF</td>
+    </tr>
+    <tr>
+      <td>
+        <code>legacyError()</code>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L36" target="_blank">
+          Interface
+        </a>
+      </td>
+      <td>
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L68" target="_blank">
+          Implementation
+        </a>
+      </td>
+      <td>Throws a hardcoded error</td>
+    </tr>
+  </tbody>
 </table>
 <table>
   <thead>
@@ -21,18 +118,15 @@
   <tbody>
     <tr>
       <td>
-        <code>undefined</code>
+        <code>Basic</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/node-interface/ArbDebug.sol#Lundefined"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L22" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#Lundefined" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L33" target="_blank">
           Implementation
         </a>
       </td>
@@ -42,18 +136,15 @@
     </tr>
     <tr>
       <td>
-        <code>undefined</code>
+        <code>Mixed</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/node-interface/ArbDebug.sol#Lundefined"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L23" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#Lundefined" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L38" target="_blank">
           Implementation
         </a>
       </td>
@@ -63,18 +154,15 @@
     </tr>
     <tr>
       <td>
-        <code>undefined</code>
+        <code>Store</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/node-interface/ArbDebug.sol#Lundefined"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbDebug.sol#L26" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#Lundefined" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbDebug.go#L0" target="_blank">
           Implementation
         </a>
       </td>
