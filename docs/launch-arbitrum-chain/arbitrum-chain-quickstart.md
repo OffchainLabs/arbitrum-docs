@@ -18,7 +18,7 @@ This quickstart is intended for development purposes only and is not suitable fo
 
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Sepolia testnet**. Familiarity with Ethereum, Ethereum's testnets, and Arbitrum is expected.
 
-If you're looking for a conceptual introduction to Arbitrum chains, see the [Gentle introduction to Arbitrum chains](/launch-arbitrum-chain/01-a-gentle-introduction.md).
+If you're looking for a conceptual introduction to Arbitrum chains, see the [Gentle introduction to Arbitrum chains](/launch-arbitrum-chain/01-a-gentle-introduction.mdx).
 
 ## Prerequisites
 
