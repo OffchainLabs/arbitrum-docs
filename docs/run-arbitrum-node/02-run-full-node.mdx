@@ -42,7 +42,7 @@ Although there are beta and release candidate versions of the Arbitrum Nitro sof
 
 :::
 
-Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.5-89cef87@@</code>
+Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@</code>
 
 ### Database snapshots
 
@@ -84,6 +84,12 @@ import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.m
 </div>
 
 ## Putting it into practice: run a node
+
+:::warning Caution
+
+If you are running more than on node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+
+:::
 
 - To ensure the database persists across restarts, mount an external volume when running the Docker image. Use the mount point `/home/user/.arbitrum` within the Docker image.
 - Here is an example of how to run `nitro-node`:
