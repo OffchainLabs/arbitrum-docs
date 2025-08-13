@@ -29,38 +29,32 @@ run_yarn_command() {
   fi
 }
 
-# Check if globalVars.js has staged changes
-if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
-  log_info "Detected changes in globalVars.js"
-
-  # Run variable references update
-  log_info "Updating variable references..."
-  run_yarn_command "update-variable-refs" "Failed to update variable references"
-
-  # Run the globalVars update checker script
-  run_yarn_command "tsx scripts/check-globalvars-updates.ts" "globalVars update check failed"
-
-  log_info "Running precompiles reference table generator..."
-  run_yarn_command "generate-precompiles-ref-tables" "Failed to generate precompiles reference tables"
-
-  log_info "Running formatter..."
-  run_yarn_command "format" "Formatting failed"
-fi
-
-# Check redirects
+# Check redirects (validation only, no file generation)
 log_info "Checking redirects..."
 run_yarn_command "check-redirects" "The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
 
-# Final formatting pass
+# Final formatting pass (formatting only, no file generation)
 log_info "Running final formatting pass..."
 run_yarn_command "format" "Final formatting failed"
 
 # Auto-stage any files that were reformatted during the pre-commit process
+# Only stage files that already exist and were modified by formatting
 if [ -n "$(git diff --name-only)" ]; then
-  log_info "Auto-staging files modified by formatters..."
-  git add $(git diff --name-only)
-  log_success "Auto-staged formatted files"
+  # Filter out any new files and only add existing modified files
+  modified_files=$(git diff --name-only | while read file; do
+    if [ -f "$file" ] && git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
+      echo "$file"
+    fi
+  done)
+  
+  if [ -n "$modified_files" ]; then
+    log_info "Auto-staging existing files modified by formatters..."
+    echo "$modified_files" | xargs git add
+    log_success "Auto-staged formatted files"
+  fi
 fi
 
 log_success "Pre-commit tasks completed"
-log_info "Note: To bypass hooks, use git commit --no-verify"
+log_info "Note: File generation commands (precompiles, variable refs, etc.) have been removed from pre-commit"
+log_info "Run these manually when needed: yarn generate-precompiles-ref-tables, yarn update-variable-refs"
+log_info "To bypass hooks, use git commit --no-verify"
