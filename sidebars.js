@@ -990,7 +990,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'how-arbitrum-works/01-inside-arbitrum-nitro',
+          id: 'how-arbitrum-works/inside-arbitrum-nitro',
           label: 'Inside Arbitrum Nitro',
         },
         {
@@ -1043,21 +1043,6 @@ const sidebars = {
               id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
             },
           ],
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/anytrust-protocol',
-          label: 'AnyTrust protocol',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/l2-to-l1-messaging',
-          label: 'Child to parent chain messaging',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/gas-fees',
-          label: 'Gas and fees',
         },
         {
           type: 'category',
