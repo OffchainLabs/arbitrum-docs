@@ -1,0 +1,330 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Build dApps (Solidity)": {
+    "message": "Build dApps (Solidity)",
+    "description": "The label for category Build dApps (Solidity) in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.How-tos": {
+    "message": "How-tos",
+    "description": "The label for category How-tos in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Concepts": {
+    "message": "Concepts",
+    "description": "The label for category Concepts in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Differences between Arbitrum and Ethereum": {
+    "message": "Differences between Arbitrum and Ethereum",
+    "description": "The label for category Differences between Arbitrum and Ethereum in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Build dApps (Rust) (TESTNET)": {
+    "message": "Build dApps (Rust) (TESTNET)",
+    "description": "The label for category Build dApps (Rust) (TESTNET) in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Developer reference": {
+    "message": "Developer reference",
+    "description": "The label for category Developer reference in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Launch your own chain (Orbit)": {
+    "message": "Launch your own chain (Orbit)",
+    "description": "The label for category Launch your own chain (Orbit) in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Reference": {
+    "message": "Reference",
+    "description": "The label for category Reference in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Bridge tokens between chains": {
+    "message": "Bridge tokens between chains",
+    "description": "The label for category Bridge tokens between chains in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.More": {
+    "message": "More",
+    "description": "The label for category More in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Third-party docs": {
+    "message": "Third-party docs",
+    "description": "The label for category Third-party docs in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.category.Supra": {
+    "message": "Supra",
+    "description": "The label for category Supra in sidebar buildDecentralizedAppsSidebar"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.link.Rust crate docs": {
+    "message": "Rust crate docs",
+    "description": "The label for link Rust crate docs in sidebar buildDecentralizedAppsSidebar, linking to https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.link.Source code repository": {
+    "message": "Source code repository",
+    "description": "The label for link Source code repository in sidebar buildDecentralizedAppsSidebar, linking to https://github.com/OffchainLabs/stylus"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.link.Arbitrum SDK": {
+    "message": "Arbitrum SDK",
+    "description": "The label for link Arbitrum SDK in sidebar buildDecentralizedAppsSidebar, linking to /sdk"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.link.Tutorials": {
+    "message": "Tutorials",
+    "description": "The label for link Tutorials in sidebar buildDecentralizedAppsSidebar, linking to https://github.com/OffchainLabs/arbitrum-tutorials"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.A gentle introduction": {
+    "message": "A gentle introduction",
+    "description": "The label for the doc item A gentle introduction in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/gentle-introduction-dapps"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Estimate gas": {
+    "message": "Estimate gas",
+    "description": "The label for the doc item Estimate gas in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/how-to-estimate-gas"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Use oracles": {
+    "message": "Use oracles",
+    "description": "The label for the doc item Use oracles in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/oracles/how-to-use-oracles"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Arbitrum chains": {
+    "message": "Arbitrum chains",
+    "description": "The label for the doc item Arbitrum chains in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/public-chains"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Cross-chain messaging": {
+    "message": "Cross-chain messaging",
+    "description": "The label for the doc item Cross-chain messaging in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/cross-chain-messaging"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Precompiles": {
+    "message": "Precompiles",
+    "description": "The label for the doc item Precompiles in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/precompiles/reference"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Oracles": {
+    "message": "Oracles",
+    "description": "The label for the doc item Oracles in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/oracles/reference"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Troubleshooting": {
+    "message": "Troubleshooting",
+    "description": "The label for the doc item Troubleshooting in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/troubleshooting-building"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Overview": {
+    "message": "Overview",
+    "description": "The label for the doc item Overview in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/get-started"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Standard gateway": {
+    "message": "Standard gateway",
+    "description": "The label for the doc item Standard gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Generic-custom gateway": {
+    "message": "Generic-custom gateway",
+    "description": "The label for the doc item Generic-custom gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Custom gateway": {
+    "message": "Custom gateway",
+    "description": "The label for the doc item Custom gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.RPC endpoints and providers": {
+    "message": "RPC endpoints and providers",
+    "description": "The label for the doc item RPC endpoints and providers in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/node-providers"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Smart contract addresses": {
+    "message": "Smart contract addresses",
+    "description": "The label for the doc item Smart contract addresses in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/useful-addresses"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Chain Params": {
+    "message": "Chain Params",
+    "description": "The label for the doc item Chain Params in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/chain-params"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Development frameworks": {
+    "message": "Development frameworks",
+    "description": "The label for the doc item Development frameworks in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/development-frameworks"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Web3 libraries and tools": {
+    "message": "Web3 libraries and tools",
+    "description": "The label for the doc item Web3 libraries and tools in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/web3-libraries-tools"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Monitoring tools and block explorers": {
+    "message": "Monitoring tools and block explorers",
+    "description": "The label for the doc item Monitoring tools and block explorers in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/monitoring-tools-block-explorers"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Debugging tools": {
+    "message": "Debugging tools",
+    "description": "The label for the doc item Debugging tools in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/debugging-tools"
+  },
+  "sidebar.buildDecentralizedAppsSidebar.doc.Mainnet risks": {
+    "message": "Mainnet risks",
+    "description": "The label for the doc item Mainnet risks in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/mainnet-risks"
+  },
+  "sidebar.bridgeTokensSidebar.category.Get started": {
+    "message": "Get started",
+    "description": "The label for category Get started in sidebar bridgeTokensSidebar"
+  },
+  "sidebar.bridgeTokensSidebar.category.Concepts": {
+    "message": "Concepts",
+    "description": "The label for category Concepts in sidebar bridgeTokensSidebar"
+  },
+  "sidebar.bridgeTokensSidebar.category.More": {
+    "message": "More",
+    "description": "The label for category More in sidebar bridgeTokensSidebar"
+  },
+  "sidebar.bridgeTokensSidebar.doc.A gentle introduction": {
+    "message": "A gentle introduction",
+    "description": "The label for the doc item A gentle introduction in sidebar bridgeTokensSidebar, linking to the doc bridge-tokens/gentle-introduction-bridge"
+  },
+  "sidebar.bridgeTokensSidebar.doc.Quickstart": {
+    "message": "Quickstart",
+    "description": "The label for the doc item Quickstart in sidebar bridgeTokensSidebar, linking to the doc arbitrum-bridge/quickstart"
+  },
+  "sidebar.bridgeTokensSidebar.doc.Troubleshooting": {
+    "message": "Troubleshooting",
+    "description": "The label for the doc item Troubleshooting in sidebar bridgeTokensSidebar, linking to the doc arbitrum-bridge/troubleshooting"
+  },
+  "sidebar.runNodesSidebar.category.Get started": {
+    "message": "Get started",
+    "description": "The label for category Get started in sidebar runNodesSidebar"
+  },
+  "sidebar.runNodesSidebar.category.How-tos": {
+    "message": "How-tos",
+    "description": "The label for category How-tos in sidebar runNodesSidebar"
+  },
+  "sidebar.runNodesSidebar.category.More": {
+    "message": "More",
+    "description": "The label for category More in sidebar runNodesSidebar"
+  },
+  "sidebar.runNodesSidebar.doc.A gentle introduction": {
+    "message": "A gentle introduction",
+    "description": "The label for the doc item A gentle introduction in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/overview"
+  },
+  "sidebar.runNodesSidebar.doc.Quickstart": {
+    "message": "Quickstart",
+    "description": "The label for the doc item Quickstart in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/quickstart"
+  },
+  "sidebar.runNodesSidebar.doc.Troubleshooting": {
+    "message": "Troubleshooting",
+    "description": "The label for the doc item Troubleshooting in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/troubleshooting"
+  },
+  "sidebar.runNodesSidebar.doc.Frequently asked questions": {
+    "message": "Frequently asked questions",
+    "description": "The label for the doc item Frequently asked questions in sidebar runNodesSidebar, linking to the doc node-running/faq"
+  },
+  "sidebar.runNodesSidebar.doc.Command-line options": {
+    "message": "Command-line options",
+    "description": "The label for the doc item Command-line options in sidebar runNodesSidebar, linking to the doc node-running/command-line-options"
+  },
+  "sidebar.learnMoreSidebar.category.Get started": {
+    "message": "Get started",
+    "description": "The label for category Get started in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.category.Introductory concepts": {
+    "message": "Introductory concepts",
+    "description": "The label for category Introductory concepts in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.category.Gas / fees": {
+    "message": "Gas / fees",
+    "description": "The label for category Gas / fees in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.category.Advanced concepts": {
+    "message": "Advanced concepts",
+    "description": "The label for category Advanced concepts in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.category.Cross-chain messaging": {
+    "message": "Cross-chain messaging",
+    "description": "The label for category Cross-chain messaging in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.category.ArbOS": {
+    "message": "ArbOS",
+    "description": "The label for category ArbOS in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.category.Fraud proofs": {
+    "message": "Fraud proofs",
+    "description": "The label for category Fraud proofs in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.category.More": {
+    "message": "More",
+    "description": "The label for category More in sidebar learnMoreSidebar"
+  },
+  "sidebar.learnMoreSidebar.link.Deeper dive: Whitepaper": {
+    "message": "Deeper dive: Whitepaper",
+    "description": "The label for link Deeper dive: Whitepaper in sidebar learnMoreSidebar, linking to https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf"
+  },
+  "sidebar.learnMoreSidebar.doc.A gentle introduction": {
+    "message": "A gentle introduction",
+    "description": "The label for the doc item A gentle introduction in sidebar learnMoreSidebar, linking to the doc intro/intro"
+  },
+  "sidebar.learnMoreSidebar.doc.Frequently asked questions": {
+    "message": "Frequently asked questions",
+    "description": "The label for the doc item Frequently asked questions in sidebar learnMoreSidebar, linking to the doc learn-more/faq"
+  },
+  "sidebar.learnMoreSidebar.doc.Glossary": {
+    "message": "Glossary",
+    "description": "The label for the doc item Glossary in sidebar learnMoreSidebar, linking to the doc intro/glossary"
+  },
+  "sidebar.learnMoreSidebar.doc.Why Nitro?": {
+    "message": "Why Nitro?",
+    "description": "The label for the doc item Why Nitro? in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/why-nitro"
+  },
+  "sidebar.learnMoreSidebar.doc.Transaction lifecycle": {
+    "message": "Transaction lifecycle",
+    "description": "The label for the doc item Transaction lifecycle in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/tx-lifecycle"
+  },
+  "sidebar.learnMoreSidebar.doc.Sequencer": {
+    "message": "Sequencer",
+    "description": "The label for the doc item Sequencer in sidebar learnMoreSidebar, linking to the doc sequencer"
+  },
+  "sidebar.learnMoreSidebar.doc.AnyTrust protocol": {
+    "message": "AnyTrust protocol",
+    "description": "The label for the doc item AnyTrust protocol in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/inside-anytrust"
+  },
+  "sidebar.learnMoreSidebar.doc.L2 gas": {
+    "message": "L2 gas",
+    "description": "The label for the doc item L2 gas in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/gas-fees"
+  },
+  "sidebar.learnMoreSidebar.doc.L1 pricing": {
+    "message": "L1 pricing",
+    "description": "The label for the doc item L1 pricing in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/l1-gas-pricing"
+  },
+  "sidebar.learnMoreSidebar.doc.Deep dive: Inside Arbitrum": {
+    "message": "Deep dive: Inside Arbitrum",
+    "description": "The label for the doc item Deep dive: Inside Arbitrum in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/inside-arbitrum-nitro"
+  },
+  "sidebar.learnMoreSidebar.doc.Assertion tree": {
+    "message": "Assertion tree",
+    "description": "The label for the doc item Assertion tree in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/assertion-tree"
+  },
+  "sidebar.learnMoreSidebar.doc.L1-to-L2 messaging": {
+    "message": "L1-to-L2 messaging",
+    "description": "The label for the doc item L1-to-L2 messaging in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/arbos/l1-l2-messaging"
+  },
+  "sidebar.learnMoreSidebar.doc.L2-to-L1 messaging": {
+    "message": "L2-to-L1 messaging",
+    "description": "The label for the doc item L2-to-L1 messaging in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/arbos/l2-l1-messaging"
+  },
+  "sidebar.learnMoreSidebar.doc.ArbOS": {
+    "message": "ArbOS",
+    "description": "The label for the doc item ArbOS in sidebar learnMoreSidebar, linking to the doc arbos/arbos"
+  },
+  "sidebar.learnMoreSidebar.doc.Geth": {
+    "message": "Geth",
+    "description": "The label for the doc item Geth in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/arbos/geth"
+  },
+  "sidebar.learnMoreSidebar.doc.Interactive challenges": {
+    "message": "Interactive challenges",
+    "description": "The label for the doc item Interactive challenges in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/challenge-manager"
+  },
+  "sidebar.learnMoreSidebar.doc.One step proof assumptions": {
+    "message": "One step proof assumptions",
+    "description": "The label for the doc item One step proof assumptions in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/osp-assumptions"
+  },
+  "sidebar.learnMoreSidebar.doc.Wasm To WAVM": {
+    "message": "Wasm To WAVM",
+    "description": "The label for the doc item Wasm To WAVM in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wasm-wavm"
+  },
+  "sidebar.learnMoreSidebar.doc.Custom WAVM opcodes": {
+    "message": "Custom WAVM opcodes",
+    "description": "The label for the doc item Custom WAVM opcodes in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wavm-custom-opcodes"
+  },
+  "sidebar.learnMoreSidebar.doc.WAVM floats": {
+    "message": "WAVM floats",
+    "description": "The label for the doc item WAVM floats in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wavm-floats"
+  },
+  "sidebar.learnMoreSidebar.doc.WAVM modules": {
+    "message": "WAVM modules",
+    "description": "The label for the doc item WAVM modules in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wavm-modules"
+  },
+  "sidebar.learnMoreSidebar.doc.Audit reports": {
+    "message": "Audit reports",
+    "description": "The label for the doc item Audit reports in sidebar learnMoreSidebar, linking to the doc audit-reports"
+  }
+}

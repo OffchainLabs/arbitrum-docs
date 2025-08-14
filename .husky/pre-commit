@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# Function to handle errors
+handle_error() {
+  echo "❌ Error: $1"
+  exit 1
+}
+
+# Function to log success messages
+log_success() {
+  echo "✅ $1"
+}
+
+# Function to log info messages
+log_info() {
+  echo "💡 $1"
+}
+
+# Function to run yarn command and check exit code
+run_yarn_command() {
+  local command=$1
+  local error_message=$2
+
+  yarn $command
+  local exit_code=$?
+
+  if [ $exit_code -ne 0 ]; then
+    handle_error "$error_message"
+  fi
+}
+
+# Check redirects (validation only, no file generation)
+log_info "Checking redirects..."
+run_yarn_command "check-redirects" "The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
+
+# Final formatting pass (formatting only, no file generation)
+log_info "Running final formatting pass..."
+run_yarn_command "format" "Final formatting failed"
+
+# Auto-stage any files that were reformatted during the pre-commit process
+# Only stage files that already exist and were modified by formatting
+if [ -n "$(git diff --name-only)" ]; then
+  # Filter out any new files and only add existing modified files
+  modified_files=$(git diff --name-only | while read file; do
+    if [ -f "$file" ] && git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
+      echo "$file"
+    fi
+  done)
+  
+  if [ -n "$modified_files" ]; then
+    log_info "Auto-staging existing files modified by formatters..."
+    echo "$modified_files" | xargs git add
+    log_success "Auto-staged formatted files"
+  fi
+fi
+
+log_success "Pre-commit tasks completed"
+log_info "Note: File generation commands (precompiles, variable refs, etc.) have been removed from pre-commit"
+log_info "Run these manually when needed: yarn generate-precompiles-ref-tables, yarn update-variable-refs"
+log_info "To bypass hooks, use git commit --no-verify"

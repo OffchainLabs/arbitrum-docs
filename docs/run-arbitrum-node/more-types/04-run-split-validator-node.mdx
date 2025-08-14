@@ -1,0 +1,152 @@
+---
+title: 'Run a split validator node'
+description: How to run a split validator node
+author: jason-w123
+sidebar_position: 4
+content_type: how-to
+---
+
+## Running split validators for Arbitrum chains
+
+Split validators separate the validation work to a stateless worker, which provides several key benefits:
+
+- **Resource management**: Easier to scale and manage compute resources independently
+- **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
+- **Flexibility**: Allows running multiple validation workers for horizontal scalability
+
+This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
+
+Before you read this doc, please ensure you have already walked through [run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx) docs to understand the basics of a validator node.
+
+### Prerequisites
+
+- Docker or Kubernetes with Helm installed
+- Staker private key
+- Chain information JSON for your Arbitrum chain
+
+### Docker deployment guide
+
+#### Step 1: Set up the validation node
+
+First, generate a JWT secret for secure communication:
+
+```bash
+xxd -l 32 -ps -c 40 /dev/urandom > /tmp/nitro-val.jwt
+```
+
+Start the validation node with the JWT secret:
+
+```bash
+docker run --rm -it \
+  --entrypoint nitro-val \
+  -p 0.0.0.0:5200:5200 \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@ \
+  --auth.addr 127.0.0.1 \
+  --auth.origins 0.0.0.0 \
+  --auth.jwtsecret /tmp/nitro-val.jwt \
+  --auth.port 5200
+```
+
+The validation node will listen on port 5200.
+
+#### Step 2: Set up the staker node
+
+Copy the JWT secret to your mount directory:
+
+```bash
+cp /tmp/nitro-val.jwt /some/local/dir/arbitrum
+```
+
+Start the staker node with the following command, connecting it to your validation node:
+
+```bash
+docker run --rm -it \
+  -v /some/local/dir/arbitrum:/home/user/.arbitrum \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@ \
+  --parent-chain.connection.url=<parent-chain-endpoint> \
+  --node.staker.enable=true \
+  --node.staker.strategy=MakeNodes \
+  --node.staker.parent-chain-wallet.private-key=<staker_private_key> \
+  --chain.info-json=<Your_chain_info> \
+  --execution.forwarding-target=<forwarding_target> \
+  --node.block-validator.validation-server-configs-list="[{\"jwtsecret\":\"/home/user/.arbitrum/nitro-val.jwt\",\"url\":\"ws://Your_validation_address\"}]"
+```
+
+Replace the placeholders with your specific values:
+
+- `<parent-chain-endpoint>`: Your parent chain RPC endpoint
+- `<staker_private_key>`: Your staker's private key
+- `<Your_chain_info>`: Chain information JSON
+- `<forwarding_target>`: Your forwarding node URL (usually is the sequencer endpoint)
+- `Your_validation_address`: Address of your validation node (including port)
+
+### Kubernetes deployment with Helm
+
+Arbitrum provides a [community Helm chart](https://github.com/OffchainLabs/community-helm-charts) for Kubernetes deployment.
+
+#### Step 1: Create validation node configuration
+
+Create a file named `validation_values.yaml`:
+
+```yaml
+configmap:
+  data:
+    parent-chain:
+      id: 1 # Use appropriate parent chain ID
+      connection:
+        url: 'https://your-parent-chain-rpc'
+    execution:
+      forwarding-target: 'https://your-forwarding-node'
+    node:
+      staker:
+        enable: true
+        strategy: 'MakeNodes'
+        parent-chain-wallet:
+          private-key: 'your-staker-private-key'
+    chain:
+      name: 'Your Chain Name'
+      id: 42161 # Your chain ID
+      info-json: '[Your chain info JSON]'
+
+jwtSecret:
+  enabled: true
+  value: 'Your 32 bytes hex jwt'
+
+validator:
+  enabled: true
+  splitvalidator:
+    deployments:
+      - name: 'current'
+```
+
+#### Step 2: Deploy the validation node
+
+```bash
+helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
+```
+
+### Monitoring and maintenance
+
+- Monitor your validator and staker logs regularly:
+
+  ```bash
+  # For Docker
+  docker logs -f <container_id>
+
+  # For Kubernetes
+  kubectl logs -f <POD>
+  ```
+
+- Check validator and staker status through the Arbitrum dashboard or API
+
+### Additional configurations for validation nodes
+
+To get a full list of parameters for the validation node, you can run the following command:
+
+```bash
+docker run --rm -it --entrypoint nitro-val  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.8-d6c96a5@@  --help
+```
+
+### Additional configurations for helm charts
+
+For more advanced helm chart configurations, please refer to the Arbitrum community Helm Chart [README](https://github.com/OffchainLabs/community-helm-charts/blob/main/charts/nitro/README.md)

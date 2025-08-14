@@ -1,0 +1,112 @@
+/* used to hide all but the topmost tabs when using the multidimensional content widget */
+
+@mixin hidden {
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.hide-tabs .tabs {
+  @include hidden;
+}
+
+.dynamic-content-tabs {
+  position: relative;
+  margin-bottom: 25px;
+
+  .tabgroup {
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    overflow: hidden;
+    position: static;
+    margin-bottom: 10px;
+
+    .tabs__item {
+      font-size: 13px;
+      font-weight: 500;
+      border-top: 1px solid var(--tab-gray);
+      border-bottom: 1px solid var(--tab-gray);
+      padding: 10px 15px;
+      border-radius: 0px !important;
+      position: relative;
+
+      &:first-child {
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+        border-left: 1px solid var(--tab-gray);
+        border-right: 0px !important;
+      }
+
+      &:last-child {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+        border-right: 1px solid var(--tab-gray);
+        border-top: 1px solid var(--tab-gray);
+        border-bottom: 1px solid var(--tab-gray);
+        border-left: 0px;
+      }
+
+      &.tabs__item--active {
+        font-size: 13px;
+        font-weight: 500;
+        background-color: var(--tab-active-color) !important;
+        border-color: var(--tab-active-color) !important;
+        color: white !important;
+      }
+
+      &.disabled-tab {
+        color: #999 !important;
+      }
+    }
+
+    &:after {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 15px;
+      position: relative;
+      border-color: transparent !important;
+      transition: all 0.15s linear;
+      background: transparent;
+      color: transparent;
+      display: inline-block;
+      content: 'Content updated!';
+    }
+
+    &.updated {
+      &:after {
+        color: var(--tab-active-color);
+      }
+    }
+  }
+
+  .tabgroup-with-label {
+    @extend .tabgroup;
+
+    .tabs__item {
+      &:first-child {
+        cursor: default !important;
+        color: black;
+        width: 150px;
+        border: 1px solid transparent !important;
+        border-right: 0px !important;
+
+        &:hover {
+          background-color: transparent !important;
+          cursor: default !important;
+        }
+      }
+
+      &:nth-child(2) {
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+        border-left: 1px solid var(--tab-gray);
+        border-right: 0px !important;
+        z-index: 2;
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.defaultSidebar.category.Module: assetBridger": {
+    "message": "Module: assetBridger",
+    "description": "The label for category Module: assetBridger in sidebar defaultSidebar"
+  },
+  "sidebar.defaultSidebar.category.Module: dataEntities": {
+    "message": "Module: dataEntities",
+    "description": "The label for category Module: dataEntities in sidebar defaultSidebar"
+  },
+  "sidebar.defaultSidebar.category.Module: inbox": {
+    "message": "Module: inbox",
+    "description": "The label for category Module: inbox in sidebar defaultSidebar"
+  },
+  "sidebar.defaultSidebar.category.Module: message": {
+    "message": "Module: message",
+    "description": "The label for category Module: message in sidebar defaultSidebar"
+  },
+  "sidebar.defaultSidebar.category.Module: utils": {
+    "message": "Module: utils",
+    "description": "The label for category Module: utils in sidebar defaultSidebar"
+  }
+}

@@ -1,0 +1,100 @@
+/* Centralized Auction Diagram styles */
+.cls-5 {
+  fill: #e30663;
+}
+
+.cls-5-light {
+  fill: #ff4081;
+}
+
+.cls-10 {
+  fill: #fff;
+}
+
+.cls-10-light {
+  fill: #000;
+}
+
+/* ImageZoom Component styles */
+.image-zoom__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.image-zoom__container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-zoom__image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.image-zoom__close {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.image-zoom__close:hover {
+  opacity: 0.8;
+}
+
+.image-zoom__loading {
+  color: white;
+  font-size: 18px;
+  padding: 20px;
+}
+
+/* Image width presets */
+.img-20px {
+  width: 20px;
+}
+.img-50px {
+  width: 50px;
+}
+.img-100px {
+  width: 100px;
+}
+.img-200px {
+  width: 200px;
+}
+.img-400px {
+  width: 400px;
+}
+.img-500px {
+  width: 500px;
+}
+.img-600px {
+  width: 600px;
+}
+.img-900px {
+  width: 900px;
+}
+
+/* Wrap code in code blocks by default */
+.wrapcode code {
+  white-space: pre-wrap;
+}

@@ -1,0 +1,57 @@
+name: Check Undocumented Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  check-issue-content:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Check issue content
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+
+            // Get the issue body and title
+            const body = issue.body || '';
+            const title = issue.title || '';
+
+            // Check if this is a docs update request
+            const isDocsRequest = title.startsWith('Docs update request:');
+
+            if (!isDocsRequest) {
+              return;
+            }
+
+            // Split body into lines and remove empty ones
+            const bodyLines = body.split('\n').filter(line => line.trim());
+
+            // Check if only contains the template content
+            const hasOnlyTemplate =
+              bodyLines.length <= 3 && // Updated to match 3 lines
+              bodyLines[0]?.startsWith('Source:') &&
+              bodyLines[1]?.startsWith('Request: (how can we help?)') &&
+              bodyLines[2]?.includes('Psst, this issue will be closed'); // Added check for the warning message
+
+            if (hasOnlyTemplate) {
+              // Close the issue with a comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: 'This issue is being closed automatically as it appears to be an empty documentation update request. Please provide specific details about what needs to be updated or improved in the documentation. You can create a new issue with more details if needed.\n\nSome helpful details to include:\n- What specific part of the documentation needs updating?\n- What is unclear or missing?\n- What would make the documentation more helpful?\n\nThank you for helping us improve our documentation!'
+              });
+
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'not_planned'
+              });
+            }

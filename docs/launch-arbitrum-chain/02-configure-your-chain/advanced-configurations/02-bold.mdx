@@ -1,0 +1,30 @@
+---
+title: 'BoLD configuration parameters'
+sidebar_label: 'BoLD configuration parameters'
+description: 'Learn about the various parameters that can be configured for Arbitrum BoLD'
+author: dlee
+sme: dlee
+user_story: As a current or prospective Arbitrum chain owner, I need to understand the various configuration parameters with Arbitrum BoLD
+content_type: how-to
+---
+
+<a data-quicklook-from="bold">Arbitrum BoLD</a> is the latest iteration of the Optimistic Rollup dispute
+protocol used by Arbitrum chains today, like Arbitrum One. This page is intended for Arbitrum chain owners/operators
+and assumes knowledge of Arbitrum BoLD is and experience upgrading an Arbitrum chain's Rollup contracts.
+This page assumes you have read and followed the guide on [How to upgrade to BoLD](../../04-maintain-your-chain/05-upgrade-to-bold.mdx)
+and our guide on [BoLD adoption for Arbitrum chains](../../bold-adoption-for-arbitrum-chains.mdx). Please
+read these two guides first before proceeding with changing any of the parameters relating to BoLD below.
+
+To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for BoLD](../../../how-arbitrum-works/bold/gentle-introduction.mdx).
+
+:::caution
+As mentioned in our guide on [BoLD adoption for Arbitrum chains](../../bold-adoption-for-arbitrum-chains.mdx), the recommendation is that Arbitrum chains keep validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the whitelist via the `validators[]` array. Furthermore, it is recommended that the [Censorship Timeout](../../../how-arbitrum-works/03-sequencer.mdx#censorship-timeout) feature be kept disabled.
+:::
+
+## Table of Arbitrum BoLD parameters
+
+The following configuration parameters can be applied when deploying or managing your Arbitrum chain. For an example of a configuration, feel free to reference this [sample configuration](/launch-arbitrum-chain/04-maintain-your-chain/05-upgrade-to-bold.mdx#step-2-configure-your-chain-parameters) in our guide on how to upgrade your chain to use BoLD.
+
+import OptionalOrbitCompatibleCLIFlagsPartial from '../../../partials/_bold-config-params.mdx';
+
+<OptionalOrbitCompatibleCLIFlagsPartial />

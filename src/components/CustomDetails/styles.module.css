@@ -1,0 +1,65 @@
+.details {
+  --docusaurus-details-summary-arrow-size: 0.5rem;
+  --docusaurus-details-transition: transform 300ms ease;
+  --docusaurus-details-decoration-color: var(--ifm-color-primary);
+  margin: 1rem 0;
+  padding: 0.1rem 1rem;
+  --ifm-alert-background-color: transparent;
+}
+
+.details[open] {
+  padding: 1rem;
+}
+
+.details > summary {
+  position: relative;
+  cursor: pointer;
+  list-style: none;
+  padding: 0.25rem 0.25rem 0.25rem 1.5rem;
+  margin: 0;
+}
+
+.details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.details > summary::before {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.5rem;
+  content: '';
+  border-width: var(--docusaurus-details-summary-arrow-size);
+  border-style: solid;
+  border-color: transparent transparent transparent var(--docusaurus-details-decoration-color);
+  transform: rotate(0deg);
+  transition: var(--docusaurus-details-transition);
+  transform-origin: calc(var(--docusaurus-details-summary-arrow-size) / 2) 50%;
+}
+
+.details[open]:not(.isBrowser) > summary::before,
+.details[data-collapsed='false'].isBrowser > summary::before {
+  transform: rotate(90deg);
+}
+
+.details > div > .collapsibleContent {
+  margin-top: 0.2rem;
+  border-top: 1px solid var(--docusaurus-details-decoration-color);
+  padding: 0.1rem !important;
+  background: none !important;
+  background-color: unset !important;
+  --ifm-alert-background-color: unset !important;
+}
+
+.details > div > .collapsibleContent p:last-child {
+  margin-bottom: 0;
+}
+
+.details > summary > p:last-child {
+  margin: 0;
+}
+
+.details > div > .collapsibleContent img {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+}
