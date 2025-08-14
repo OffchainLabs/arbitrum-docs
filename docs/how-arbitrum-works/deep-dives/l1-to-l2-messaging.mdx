@@ -105,7 +105,7 @@ modifier onlyFromMyL1Contract() override {
 Arbitrum provides a _Delayed Inbox_ contract on the parent chain that can deliver arbitrary messages to the child chain. This functionality is important for two reasons:
 
 1. **General cross-chain messaging**: Allows parent chain EOAs or parent chain contracts to send messages or transactions to a child chain. This functionality is critical for bridging assets (other than the chain's native token) and performing cross-chain operations.
-2. **Censorship resistance**: It ensures the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> remains censorship-resistant, even if the Sequencer misbehaves or excludes certain transactions; refer to [Bypassing the Sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdxtransaction-lifecycle.mdx#bypassing-the-sequencer) for more details.
+2. **Censorship resistance**: It ensures the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> remains censorship-resistant, even if the Sequencer misbehaves or excludes certain transactions; refer to [Bypassing the Sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#bypassing-the-sequencer) for more details.
 
 Users can send child chain transactions through the Delayed Inbox in two primary ways:
 
