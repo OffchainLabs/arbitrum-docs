@@ -8,6 +8,7 @@ SME: srinjoyc
 user_story: As an Ethereum developer/project owner, I need to vet the Stylus.
 content_type: concept
 ---
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
 There are four main steps for bringing a Stylus program to life: **coding, activation, execution, and proving**.
 
@@ -30,6 +31,13 @@ Starting from a high-level language (such as Rust, C, or C++), the first compila
 Activating a Stylus program requires a new precompile, ArbWasm. This precompile produces efficient binary code tailored to a node's native assembly. During this step, a series of middlewares ensure that user programs execute safely and are deterministically fraud-proven. Instrumentation includes gas metering, depth-checking, memory charging, and more to guarantee all WASM programs are safe for the chain to execute. Stylus contracts can be called only after activation.
 
 Gas metering is essential for certifying that computational resources are paid for. In Stylus, the unit for measuring cost is called **ink**, which is similar to Ethereum's gas but thousands of times smaller. There are two reasons why a new measurement is used: First, WASM execution is so much faster than the EVM that executing thousands of WASM opcodes could be done in the same amount of time it takes the EVM to execute one. Second, the conversion rate of ink to gas can change based on future hardware or VM improvements. For a conceptual introduction to Stylus gas and ink, see [gas and ink (Stylus)](/stylus/concepts/gas-metering.mdx).
+
+<VanillaAdmonition type="note">
+  **Note that Stylus smart contracts will need to be re-activated once per year (365 days) or
+  whenever a upgrade to Stylus (which will always involve an ArbOS upgrade), even if they are in the
+  cache. This re-activation can be done using
+  [`cargo-stylus`](https://docs.arbitrum.io/stylus/using-cli#cargo-stylus-commands-reference). If contracts are not re-activated, they will no longer be callable.
+</VanillaAdmonition>
 
 ## Execution
 
