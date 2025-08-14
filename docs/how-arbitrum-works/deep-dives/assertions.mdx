@@ -56,7 +56,7 @@ The assertion is assigned a deadline, which indicates how much time other valida
 
 Even if the Assertion Tree has multiple conflicting assertions and multiple disputes are in progress, validators can continue making new assertions. Honest validators will build on one valid assertion (intuitively, an assertion is also an implicit claim of the validity of all of its parent assertions). Likewise, users can continue transacting on the child chain since transactions will continue to post in the chain's inbox.
 
-The only delay users experience during a dispute is their [Child to parent chain messages](/how-arbitrum-works/11-l2-to-l1-messaging.mdx) (i.e., withdrawals). A key property of BoLD is that we can guarantee that, in the common case, their withdrawals/messages will only get delayed for one challenge period. In the case of an actual dispute, the withdrawals/messages will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
+The only delay users experience during a dispute is their [Child to parent chain messages](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) (i.e., withdrawals). A key property of BoLD is that we can guarantee that, in the common case, their withdrawals/messages will only get delayed for one challenge period. In the case of an actual dispute, the withdrawals/messages will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
 
 ## Staking and validator incentives
 

@@ -1042,6 +1042,11 @@ const sidebars = {
               label: 'Transaction lifecycle',
               id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
             },
+            {
+              type: 'doc',
+              label: 'Gas and fees',
+              id: 'how-arbitrum-works/deep-dives/gas-and-fees',
+            },
           ],
         },
         {

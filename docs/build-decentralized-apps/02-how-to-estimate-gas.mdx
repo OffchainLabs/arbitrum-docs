@@ -11,7 +11,7 @@ Head over to [the Stylus gas docs](/stylus/reference/opcode-hostio-pricing) for 
 
 :::
 
-This how-to is intended for users and developers interested in understanding how gas operates in Arbitrum, how it's calculated, and how to estimate it before submitting transactions. More detailed information about these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/how-arbitrum-works/09-gas-fees.mdx) page.
+This how-to is intended for users and developers interested in understanding how gas operates in Arbitrum, how it's calculated, and how to estimate it before submitting transactions. More detailed information about these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) page.
 
 ## Skip the formula, focus on practical know-how
 
@@ -46,7 +46,7 @@ This buffer takes into account the cost of posting the transaction, batched and 
 - L1S, which estimates the amount of data the transaction will take up in the batch by compressing the transaction with Brotli.
 - L1P, which is the child chain's estimated view of the current parent chain's price of data (per byte), which the child chain dynamically adjusts over time.
 
-More information is available [in this page](/how-arbitrum-works/09-gas-fees.mdx).
+More information is available [in this page](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 ```
 L1 Estimated Cost (L1C) = L1 price per byte of data (L1P) * Size of data to be posted in bytes (L1S)

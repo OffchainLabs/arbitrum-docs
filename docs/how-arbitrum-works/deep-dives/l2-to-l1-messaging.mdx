@@ -15,7 +15,7 @@ allows for arbitrary <a data-quicklook-from="child-chain">child chain</a> to <a 
 </a> contract calls, i.e., messages initiated from the child chain, which eventually resolve in
 execution on the parent chain. Child-to-parent chain messages (aka "outgoing" messages) bear some
 things in common with Arbitrum's [parent chain to child chain
-messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx), which are "in reverse" though with
+messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx), which are "in reverse" though with
 differences, which we'll explore in this section.
 
 ## Protocol flow
@@ -69,7 +69,7 @@ We refer to `NodeInterface` as a "virtual" contract; its methods are accessible 
 
 ### Why child to parent chain messages require manual execution
 
-Unlike [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx), which can execute automatically with pre-funded gas, child-to-parent chain message must undergo manual execution because Ethereum (parent chain) does not support scheduled execution.
+Unlike [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx), which can execute automatically with pre-funded gas, child-to-parent chain message must undergo manual execution because Ethereum (parent chain) does not support scheduled execution.
 
 However, applications can implement execution markets that allow third parties to execute messages for a fee.
 
@@ -108,7 +108,7 @@ The following diagram depicts the process that funds follow during a withdrawal 
 
 ## `ERC-20` token withdrawal
 
-Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#token-bridging) section of Bridging from a parent chain to a child chain article. This section will explain how the Arbitrum canonical bridge works on the child-to-parent chain token bridging.
+Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#token-bridging) section of Bridging from a parent chain to a child chain article. This section will explain how the Arbitrum canonical bridge works on the child-to-parent chain token bridging.
 
 1. Initiation of a child-to-parent chain transfer occurs via the `L2GatewayRouter` contract on the child chain.
 2. The token's gateway contract (`L2ArbitrumGateway`) on the child chain gets called.
