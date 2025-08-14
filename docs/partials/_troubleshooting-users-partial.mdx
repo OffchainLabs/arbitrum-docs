@@ -8,7 +8,7 @@ Since transactions are processed in the order that the Sequencer receives them, 
 
 ### How can I see the balance of ETH and other tokens in my wallet on Arbitrum?
 
-Most wallets are "connected" to one given network at a time. To view your ETH or token balances, ensure that you are connected to the appropriate Arbitrum chain. In MetaMask and OKX Wallet, you can switch networks via the "networks" dropdown. In this dropdown, select your desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your desired network hasn't been added to your wallet yet, you can add it at [https://bridge.arbitrum.io/](https://bridge.arbitrum.io/).
+Most wallets are "connected" to one given network at a time. To view your ETH or token balances, ensure that you are connected to the appropriate Arbitrum chain. In MetaMask and OKX Wallet, you can switch networks via the "networks" dropdown. In this dropdown, select your desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your desired network hasn't been added to your wallet yet, you can add it at <a href="[https://bridge.arbitrum.io/](https://bridge.arbitrum.io/)">[https://bridge.arbitrum.io/](https://bridge.arbitrum.io/)</a>.
 
 ### What happens if I send my funds to an exchange that doesn't support Arbitrum?
 
@@ -24,7 +24,7 @@ Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permission
 
 By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees; data availability is managed by a Data Availability Committee (DAC), a fixed, permissioned set of entities. We introduce some threshold, `K`, with the assumption that at least `K` members of the committee are honest. For simplicity, we'll hereby assume a committee of size 20 and a `K` value of 2:
 
-If 19 out of the 20 committee members _and_ the Sequencer are malicious and colluding together, they can break the chain's safety (and, e.g., steal users' funds); this is the new trust assumption.
+If 19 out of the 20 committee members *and* the Sequencer are malicious and colluding together, they can break the chain's safety (and, e.g., steal users' funds); this is the new trust assumption.
 
 If anywhere between 2 and 18 of the committee members are well behaved, the AnyTrust chain operates in "Rollup mode"; i.e., data gets posted on L1.
 
@@ -32,11 +32,11 @@ In what should be the common and happy case, however, in which at least 19 of th
 
 Variants of the AnyTrust model in which the new trust assumption is minimized are under consideration; stay tuned.
 
-For more, see [Inside AnyTrust](https://developer.arbitrum.io/inside-anytrust).
+For more, see [Inside AnyTrust](https://developer.arbitrum.io/inside-anytrust).
 
 ### How can I check the status of my cross chain message?
 
-You can check the status of _any_ Arbitrum cross chain message at [https://retryable-dashboard.arbitrum.io/](https://retryable-dashboard.arbitrum.io/) (you will also be able to execute the cross chain message there, if applicable).
+You can check the status of *any *Arbitrum cross chain message at [https://retryable-dashboard.arbitrum.io/](https://retryable-dashboard.arbitrum.io/) (you will also be able to execute the cross chain message there, if applicable).
 
 You'll need the transaction hash of the "initiating transaction": the L1 transaction hash for an L1-to-L2 message (e.g., a deposit), or the L2 transaction hash for an L2-to-L1 message (e.g., a withdrawal).
 
@@ -44,11 +44,11 @@ If you cross-chain message was initiated from [https://bridge.arbitrum.io/](http
 
 ### If there is a dispute, can my L2 transaction get reorged / thrown out / "yeeted"?
 
-Nope; once an Arbitrum transaction is included on L1, there is no way it can be reorged (unless the L1 itself reorgs, of course). A "dispute" involves Validators disagreeing over execution, i.e., the outputted state of a chain. The inputs, however, can't be disputed; they are determined by the Inbox on L1. (See [Transaction Lifecycle](https://developer.arbitrum.io/tx-lifecycle))
+Nope; once an Arbitrum transaction is included on L1, there is no way it can be reorged (unless the L1 itself reorgs, of course). A "dispute" involves Validators disagreeing over execution, i.e., the outputted state of a chain. The inputs, however, can't be disputed; they are determined by the Inbox on L1. (See [Transaction Lifecycle](https://developer.arbitrum.io/tx-lifecycle))
 
 ### ...okay but if there's a dispute, will my transaction get delayed?
 
-The only thing that a dispute can add delay to is the confirmation of L2-to-L1 messages. All other transactions continue to be processed, even while a dispute is still undergoing. (Additionally: in practice, most L2-to-L1 messages represent withdrawals of fungible assets; these can be trustlessly completed _even during a dispute_ via trustless fast "liquidity exit" applications. See [L2-to-L1 Messages](https://developer.arbitrum.io/arbos/l2-to-l1-messaging)).
+The only thing that a dispute can add delay to is the confirmation of L2-to-L1 messages. All other transactions continue to be processed, even while a dispute is still undergoing. (Additionally: in practice, most L2-to-L1 messages represent withdrawals of fungible assets; these can be trustlessly completed *even during a dispute* via trustless fast "liquidity exit" applications. See [L2-to-L1 Messages](https://developer.arbitrum.io/arbos/l2-to-l1-messaging)).
 
 ### Are "Sequencers" the same entities as "Validators"? Can a centralized Sequencer act maliciously (e.g., steal all my money)?
 
@@ -56,19 +56,19 @@ No and no!
 
 An Arbitrum Chain's Sequencer(s) and Validators and completely distinct entities, with their own distinct roles.
 
-The [Sequencer](https://developer.arbitrum.io/sequencer) is the entity granted specific privileges over ordering transactions; once the Sequencer commits to an ordering (by posting a batch on Ethereum), it has no say over what happens next (i.e., execution). A malicious/faulty Sequencer can do things like reordering transactions or _temporarily_ delaying a transaction's inclusion — things which could be, to be sure, annoying and bad — but can do nothing to compromise the chain's safety.
+The [Sequencer](https://developer.arbitrum.io/sequencer) is the entity granted specific privileges over ordering transactions; once the Sequencer commits to an ordering (by posting a batch on Ethereum), it has no say over what happens next (i.e., execution). A malicious/faulty Sequencer can do things like reordering transactions or *temporarily* delaying a transaction's inclusion — things which could be, to be sure, annoying and bad — but can do nothing to compromise the chain's safety.
 
-The _Validators_ are the ones responsible for the safety of the chain; i.e., making staked claims about the chain state, disputing each other, etc.
+The *Validators* are the ones responsible for the safety of the chain; i.e., making staked claims about the chain state, disputing each other, etc.
 
-Currently, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, we expect the single Sequencer to be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't _strictly_ necessary for Arbitrum One to achieve its most fundamental properties.
+Currently, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, we expect the single Sequencer to be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't *strictly* necessary for Arbitrum One to achieve its most fundamental properties.
 
-In other words: _**An Arbitrum Rollup chain with a centralized Sequencer could theoretically still be trustless!**_
+In other words: **_An Arbitrum Rollup chain with a centralized Sequencer could theoretically still be trustless!_**
 
-Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the _Validators_.
+Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the *Validators*.
 
-Arbitrum One's validator set is currently allowlisted; over time, we expect [governance](https://docs.arbitrum.foundation/) to expand the allowlist and eventually be removed entirely.
+Arbitrum One's validator set is currently allowlisted; over time, we expect [governance](https://docs.arbitrum.foundation/) to expand the allowlist and eventually be removed entirely.
 
-For more info see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization).
+For more info see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization).
 
 ### Why was "one week" chosen for Arbitrum One's dispute window?
 
@@ -78,7 +78,7 @@ A week is expected to be more than enough time for validators to carry out an in
 
 ### What's the state of Arbitrum One's decentralization?
 
-See **["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)**, or check out the work of our friends at **[L2BEAT](https://l2beat.com/scaling/risk/)**.
+See **["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)**, or check out the work of our friends at **[L2BEAT](https://l2beat.com/scaling/risk/)\*\***.\*\*
 
 ### Are there any Fiat on-ramps that support Arbitrum?
 
@@ -101,11 +101,11 @@ There is no notion of mempool on Arbitrum, transactions are processed on a first
 
 ### Where can I find a list of the current validators of the Arbitrum chains?
 
-Validation on both Arbitrum One and Arbitrum Nova is currently allow-listed to a committee of public entities. You can see the list of validators **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators)**. Governance currently has the power to change this status.
+Validation on both Arbitrum One and Arbitrum Nova is currently allow-listed to a committee of public entities. You can see the list of validators **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators)**. Governance currently has the power to change this status.
 
 ### Where can I find the current Data Availability Committee members?
 
-The Arbitrum Nova chain has a 7-party DAC, whose members can be seen **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members)**. Governance has the ability to remove or add members to the committee.
+The Arbitrum Nova chain has a 7-party DAC, whose members can be seen **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members)**. Governance has the ability to remove or add members to the committee.
 
 ### Can I withdraw my funds from Arbitrum back to Ethereum without going through the Sequencer? What about funds that are in a contract?
 

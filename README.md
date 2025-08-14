@@ -32,13 +32,13 @@ This repository is organized as follows:
   - `css/` - Styling and themes
   - `pages/` - Custom pages and landing pages
   - `resources/` - Global variables and configuration
-  - `scripts/` - Build scripts and content generators
+  - `scripts/` - Build scripts 
   - `theme/` - Docusaurus theme customizations
 
 ### Configuration & Dependencies
 - **`arbitrum-sdk/`** - Git submodule containing SDK source code
 - **`stylus-by-example/`** - Git submodule containing Stylus examples
-- **`scripts/`** - Repository maintenance and build scripts
+- **`scripts/`** - Repository maintenance, build scripts, and content generators
 - **`static/`** - Static assets (images, files, JSON data)
 
 ## Contribution
