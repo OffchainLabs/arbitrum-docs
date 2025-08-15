@@ -531,6 +531,18 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Migrate your chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/migrate-between-raases',
+              label: 'Migrate between RaaSes',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Third-party integrations and features',
           collapsed: true,
           items: [
@@ -601,11 +613,6 @@ const sidebars = {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
           label: 'Public preview',
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/migrate-between-raases',
-          label: 'Migrate between RaaSes',
         },
         {
           type: 'doc',
