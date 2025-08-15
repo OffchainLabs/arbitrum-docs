@@ -8,27 +8,30 @@ content_type: get-started
 ---
 
 A <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) is a core mechanism in
-<a data-quicklook-from="blockchain">blockchain</a> systems that defines how the system evolves from one state to another when transactions are processed. At its
-essence, the STF takes the current state of the blockchain–a comprehensive snapshot of account balances, <a data-quicklook-from="smart-contract">smart
-contract</a> data, and other ledger information–and an input (such as a <a data-quicklook-from="transaction">transaction</a> or a block of transactions) and
-deterministically computes the new state. This deterministic property is crucial because it ensures that all nodes in a decentralized network arrive at the same
-result when applying transactions, thereby maintaining consensus across the system.
+
+<a data-quicklook-from="blockchain">Blockchain</a> systems that defines how the system evolves from one state to another when transactions are processed. At its
+essence, the STF takes the current state of the blockchain–a comprehensive snapshot of account balances, <a data-quicklook-from="smart-contract">
+  smart contract
+</a> data, and other ledger information–and an input (such as a <a data-quicklook-from="transaction">Transaction</a> or a block of transactions) and deterministically
+computes the new state. This deterministic property is crucial because it ensures that all nodes in a decentralized network arrive at the same result when applying
+transactions, thereby maintaining consensus across the system.
 
 With <a data-quicklook-from="arbitrum">Arbitrum</a>, the STF plays an even more pivotal role. Offchain transactions are executed in batches according to this
-function, with the STF periodically submitting a concise summary of changes to the <a data-quicklook-from="parent-chain">parent chain</a>. This approach
+function, with the STF periodically submitting a concise summary of changes to the <a data-quicklook-from="parent-chain">Parent chain</a>. This approach
 leverages offchain computation to boost throughput and reduce gas costs while anchoring the process to Ethereum's robust security model. To safeguard against
-incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism known as fraud proofs. If a dispute
+incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">Challenge</a> mechanism known as fraud proofs. If a dispute
 arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of the offchain computations and ensure that the errors or
 fraudulent behavior are detected and rectified.
 
 Beyond these foundational aspects, the STF on the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> Stack closely mirrors Ethereum's STF in its overall
 structure but incorporates several key modifications to accommodate the unique requirements of the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>.
 Essentially, the function receives a sequence of ordered transactions as its input, applies a defined set of rules to these inputs, and produces a new final
-state that reflects all the updates from the <a data-quicklook-from="batch">batch</a> of transactions.
+state that reflects all the updates from the <a data-quicklook-from="batch">Batch</a> of transactions.
 
 With the introduction of <a data-quicklook-from="stylus">Stylus</a>, Arbitrum expands its execution model beyond the Ethereum Virtual Machine (EVM) by adding
-WebAssembly (<a data-quicklook-from="wasm">WASM</a>)–based smart contract execution. This enhancement allows high-performance smart contracts written in Rust,
-C, and C++ to run alongside traditional EVM contracts. The integration of Stylus introduces several modifications to the STF, including:
+WebAssembly (<a data-quicklook-from="wasm">WASM</a>)–based <a data-quicklook-from="smart-contract">Smart Contract</a> execution. This enhancement allows
+high-performance smart contracts written in Rust, C, and C++ to run alongside traditional EVM contracts. The integration of Stylus introduces several
+modifications to the STF, including:
 
 ### Stylus-specific transaction processing
 
@@ -42,6 +45,7 @@ computation.
 ### Stylus gas accounting and pricing
 
 Unlike standard EVM transactions, Stylus transactions introduce new gas pricing models that account for factors such as opcode pricing, host I/O operations, and
+
 <a data-quicklook-from="ink">Ink</a> usage costs.
 
 ### Interoperability with the EVM

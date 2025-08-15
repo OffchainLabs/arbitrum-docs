@@ -7,7 +7,7 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-<a data-quicklook-from="arbitrum">Arbitrum</a> nodes receive <a data-quicklook-from="transaction">transaction</a> inputs through a dual-channel approach that enhances
+<a data-quicklook-from="arbitrum">Arbitrum</a> nodes receive <a data-quicklook-from="transaction">Transaction</a> inputs through a dual-channel approach that enhances
 reliability and consistency.
 
 First, nodes subscribe to the <a data-quicklook-from="sequencer">Sequencer</a> feed, receiving the upcoming ordered transactions published in real time. To
@@ -15,7 +15,7 @@ learn more, refer to the [real-time sequencer feed documentation](/how-arbitrum-
 
 In addition to the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a>, Arbitrum nodes subscribe to the `SequencerBatchDelivered` event on the
 
-<a data-quicklook-from="parent-chain">parent chain</a>. This event occurs whenever a <a data-quicklook-from="batch">batch</a> of transactions gets delivered to
+<a data-quicklook-from="parent-chain">Parent chain</a>. This event occurs whenever a <a data-quicklook-from="batch">Batch</a> of transactions gets delivered to
 the parent chain via the batch poster. Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those previously
 provided by the Sequencer feed. If discrepancies arise, nodes re-organize to adopt the transactions confirmed on the parent chain, using the parent chain as the
 definitive source of truth.
@@ -32,7 +32,7 @@ ensuring consistency and security across the network.
 
 Arbitrum supports submitting a variety of message types to its chains. These messages fall into two broad categories:
 
-- Messages submitted directly to the Sequencer as <a data-quicklook-from="child-chain">child chain</a> messages
+- Messages submitted directly to the Sequencer as <a data-quicklook-from="child-chain">Child chain</a> messages
 - Messages submitted to the parent chain
 
 For more details on message types beyond standard child chain transactions, please refer to the
@@ -68,13 +68,14 @@ uint8 constant INITIALIZATION_MSG_TYPE = 11;
 
 - `L1MessageType_batchPostingReport` (13): Used by the Sequencer to update the pricing model based on payment(s) by the batch poster.
 
-- `L2MessageType_unsignedEOATx` (0): Child chain messages submitted by externally owned accounts (EOAs) to the parent chain that does not include a signature.
+- `L2MessageType_unsignedEOATx` (0): Child chain messages submitted by <a data-quicklook-from="externally-owned-accounts">Externally Owned Accounts</a> (EOAs)
+  to the parent chain that does not include a signature.
 
 - `L2MessageType_unsignedContractTx` (1): Child chain messages submitted on the parent chain that does not include a signature.
 
 - `ROLLUP_PROTOCOL_EVENT_TYPE` (8): <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> used it for messages sent to
 
-  <a data-quicklook-from="bridge">bridge</a>, Nitro does not use it.
+  <a data-quicklook-from="bridge">Bridge</a>, Nitro does not use it.
 
 - `INITIALIZATION_MSG_TYPE` (11): The first message added to a new Rollup inbox. Its presence indicates proper initialization of the Rollup.
 
