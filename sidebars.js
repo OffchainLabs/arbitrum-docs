@@ -604,6 +604,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-arbitrum-chain/migrate-between-raases',
+          label: 'Migrate between RaaSes',
+        },
+        {
+          type: 'doc',
           id: 'launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain',
           label: 'FAQ',
         },
