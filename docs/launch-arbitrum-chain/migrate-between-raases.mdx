@@ -1,0 +1,65 @@
+---
+title: 'Migrate between RaaSes'
+sidebar_label: 'Migrate between RaaSes'
+description: 'Learn how to migrate your chain from a RaaS provider'
+sidebar_position: '2'
+author: 'Lam'
+sme: ''
+editor: 'anegg0'
+target_audience: 'Chain owners and operators using RaaS providers'
+---
+
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+## Overview of the provider migration process
+
+A migration between <a data-quicklook-from="raas">RaaS</a> providers is an operational handoff, not a redeployment of the rollup. With planning, downtime can be kept to minutes, while the total transfer spans several days for infrastructure, partners, and communications. The new operator must stand up shadow infrastructure, replicate data, and pass health checks before the DNS and <a data-quicklook-from="batch">Batch</a>‑poster handover.
+
+<VanillaAdmonition type="warning">
+
+This document is provided for informational purposes only and does not constitute an end-to-end guide for executing the migration. An infrastructure migration between RaaS providers will require significant planning between the two providers. <a data-quicklook-from="offchain-labs">Offchain Labs</a> is unable to support a third party in an infrastructure handoff. OCL does not have special knowledge or a private “fast path.” This document provides the extent of our guidance. All questions about handoff planning should be between the two RaaS teams. We can provide [introductions to RaaSes](https://docs.arbitrum.io/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
+
+</VanillaAdmonition>
+
+#### Who should read this doc?
+
+Chain owners and operators.
+
+#### What are the must-transfer items?
+
+<a data-quicklook-from="sequencer">Sequencer</a> runtime, batch poster, staker/validators, DAC signer
+set for AnyTrust, RPC/explorer domains, alerting/monitoring credentials. Your RaaS may have other requirements.
+
+#### Do chain ID or L1 contracts change?
+
+Normally, no, the chain will stay on the same chain ID and L1 rollup contracts.
+
+#### Who coordinates ecosystem partners?
+
+<a data-quicklook-from="chain-owner">Chain Owner</a>. Typical partners include oracles, indexers,
+bridges, wallets, analytics, and custody, among others.
+
+#### How long is the downtime?
+
+With planning, you can keep downtime to minutes. RPC nodes will stop serving write transactions like `eth_sendRawTransaction` a few minutes before downtime.
+
+The full transfer (infra spin-up, partner handovers, comms) typically spans several days.
+
+#### What should we monitor during handover?
+
+Retryables creation, batch posting cadence, <a data-quicklook-from="assertion">Assertion</a> <a data-quicklook-from="confirmation">Confirmation</a>, base fee, sequencer health, DAC signer liveness. Please see '[Monitoring Tools and Considerations](https://docs.arbitrum.io/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations)’ for more information.
+
+#### What legal/administrative assets need to move?
+
+Domains (RPC/explorer), CDN accounts, SSL certificates, and GitHub/S3 buckets that host snapshots. Your RaaS provider may have different requirements.
+
+#### What is the process involved in migrating an existing Arbitrum (Orbit) chain from one RaaS operator to another?
+
+Chain migration will require close coordination between the old and new chain operators. With proper planning and coordination, a migration can result in only a few minutes of downtime, with the total transfer process occurring over several days.
+
+An end-to-end migration will require:
+
+1. The new operator will spin up appropriate nodes & infrastructure (e.g., validators, sequencers)
+2. Ownership transfer of any on-chain contracts.
+3. Ownership transfer of any important community assets / URLs (e.g., RPC or explorer URLs)
+4. Updating onchain parameters responsible for identifying nodes (e.g., <a data-quicklook-from="validator">Validator</a> whitelist)
