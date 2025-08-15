@@ -531,6 +531,18 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Migrate your chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/migrate-from-another-stack',
+              label: 'Migrate from another stack',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Third-party integrations and features',
           collapsed: true,
           items: [
