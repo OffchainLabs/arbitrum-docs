@@ -1,21 +1,39 @@
 ---
-title: Sequencing, Followed by Deterministic Execution
-description: 'Learn the fundamentals of the Arbitrum Transaction Lifecycle, sequencing, and deterministic execution.'
+title: Transaction lifecycle on Arbitrum
+description: 'Learn how transactions are submitted and processed on Arbitrum, including sequencer and non-sequencer pathways.'
 author: pete-vielhaber
 sme: Mehdi
 user_story: As a current or prospective Arbitrum user, I need to learn more about the transaction lifecycle.
-content_type: get-started
+content_type: concept
 ---
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-This section explores the various methods users can employ to submit transactions for inclusion on the <a data-quicklook-from="arbitrum">Arbitrum</a> chain. We discuss the different pathways available—sending transactions to the <a data-quicklook-from="sequencer">Sequencer</a> or bypassing it by submitting transactions through the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the <a data-quicklook-from="parent-chain">parent chain</a>. By outlining these options, we aim to clarify how users can interact with the network, detail the processes involved in each method, and identify the modules responsible for handling these transactions. This overview will enhance your understanding of the initial steps in Arbitrum ecosystem's <a data-quicklook-from="transaction">Transaction</a> lifecycle and prepare you for a detailed exploration of transaction inclusion mechanisms in the subsequent sections.
+You can submit transactions to the <a data-quicklook-from="arbitrum">Arbitrum</a> chain through two main pathways:
 
-The first subsection, [Submitting Transactions to the Sequencer](#submitting-transactions-to-the-sequencer), presents four different methods users can utilize to send their transactions to the sequencer: via Public RPC, Third-Party RPC, Arbitrum Nodes, and the Sequencer Endpoint. Transactions sent through the first three pathways will route through our Load Balancer before reaching the sequencer. In contrast, the Sequencer Endpoint allows transactions to bypass the Load Balancer and be sent directly to the sequencer.
+1. **Through the <a data-quicklook-from="sequencer">Sequencer</a>** - The standard method for most transactions
+2. **Bypassing the Sequencer** - Using the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the Parent chain
 
-The second subsection, [Bypassing the Sequencer](#bypassing-the-sequencer), describes an alternative method where users can include their transactions on the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> without relying on the sequencer. By sending transactions directly to the Delayed Inbox contract on the parent chain, users gain additional flexibility, ensuring that their transactions can be processed even if the sequencer is unavailable or if they prefer not to use it.
+This guide explains both methods, when to use each one, and how they work within Arbitrum's <a data-quicklook-from="transaction">transaction</a> lifecycle.
 
-This diagram illustrates the various pathways for submitting transactions to the Arbitrum chain. It highlights the options for sending transactions through the sequencer or bypassing it and using the Delayed Inbox contract on the parent chain.
+## Transaction submission methods
+
+### Sequencer pathways
+
+You can send transactions to the Sequencer through four methods:
+
+- Public RPC endpoints
+- Third-party RPC providers
+- Self-hosted Arbitrum nodes
+- Direct Sequencer endpoint
+
+The first three options route through a load balancer, while the Sequencer endpoint connects directly.
+
+### Non-sequencer pathway
+
+You can also submit transactions directly to the Delayed Inbox contract on the Parent chain. This method works even when the Sequencer is unavailable and provides additional censorship resistance.
+
+The following diagram shows the different ways you can submit transactions to Arbitrum:
 
 <ImageZoom
   src="/img/haw-transaction-lifecycle.svg"
@@ -25,31 +43,49 @@ This diagram illustrates the various pathways for submitting transactions to the
 
 ## Submitting transactions to the Sequencer
 
-This section outlines the different methods for users to submit transactions to the sequencer on the Arbitrum chain. There are four primary ways to do this: Public RPC, Third-Party RPCs, Arbitrum Nodes, and the Sequencer Endpoint. We will explore these methods in detail, explaining when to choose one over the other and how to use each to effectively submit transactions to the Arbitrum sequencer.
+The Sequencer processes most transactions on Arbitrum. You have four options for sending transactions to the Sequencer, each with different benefits depending on your needs.
 
-### 1. Public RPC
+### Public RPC
 
-Arbitrum provides public RPCs for its main chains: <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia. Due to their rate-limited nature, these RPC endpoints are suitable for less resource-intensive operations. Public RPCs can be an accessible option for general use cases and light interactions with the network.
+Arbitrum provides public RPC endpoints for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia. These endpoints are rate-limited, making them best for:
+
+- Testing and development
+- Light usage and general interactions
+- Applications with low transaction volume
 
 For more details on the specific RPC endpoints for each chain, please see [this section](https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers#arbitrum-public-rpc-endpoints) of the documentation.
 
-### 2. Third-Party RPC
+### Third-party RPC
 
-Users also have the option to interact with Arbitrum's public chains using third-party node providers. These providers are often the same popular ones used for Ethereum, making them reliable choices for resource-intensive operations. We recommend using these third-party providers when performance and scalability are critical.
+Third-party node providers offer enhanced performance and higher rate limits. Many providers that support Ethereum also support Arbitrum chains. Use third-party RPCs when you need:
+
+- Higher throughput
+- Better performance
+- More reliable uptime
+- Advanced features like analytics
 
 You can find a list of supported third-party providers [here](https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers#third-party-rpc-providers).
 
-### 3. Arbitrum Nodes
+### Arbitrum nodes
 
-Another approach for sending transactions to the sequencer is through self-hosted Arbitrum nodes. Running a node gives you direct control over your transactions, which go to the sequencer via the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a>.
+Running your own Arbitrum node provides maximum control and privacy. Your transactions connect to the Sequencer through the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a>. Consider this option if you need:
+
+- Complete control over transaction handling
+- Maximum privacy
+- Custom node configurations
 
 Please see the [Arbitrum Node](https://docs.arbitrum.io/run-arbitrum-node/overview) documentation to learn more about setting up and running a node.
 
-### 4. Sequencer Endpoint
+### Sequencer endpoint
 
-The Sequencer Endpoint is the most direct method for users looking to minimize delays in their transactions reaching the sequencer. Unlike standard RPC URLs, the Sequencer Endpoint supports only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls, bypassing the load balancer entirely. This endpoint makes it an optimal choice for users who require the quickest transaction processing time.
+The Sequencer endpoint provides the fastest path to transaction submission by bypassing the load balancer. This endpoint only supports:
 
-The diagram below shows different ways to submit transactions to the Sequencer:
+- `eth_sendRawTransaction`
+- `eth_sendRawTransactionConditional`
+
+Use this method when you need the lowest possible latency for time-sensitive transactions.
+
+The following diagram shows the four methods for submitting transactions to the Sequencer:
 
 <ImageZoom
   src="/img/haw-submit-tx-to-sequencer.svg"
@@ -59,9 +95,20 @@ The diagram below shows different ways to submit transactions to the Sequencer:
 
 ## Bypassing the Sequencer
 
-This section delves into an alternative method for submitting transactions to the Arbitrum chain, bypassing the Sequencer. This page focuses on how users can send their transactions directly to the Delayed Inbox contract on the parent chain rather than through the Sequencer. This method offers two distinct paths a transaction can take, with each route interacting with the network differently to achieve transaction inclusion. This approach provides users with greater flexibility and ensures that transactions can still be processed if the Sequencer is unavailable or if users choose not to depend on it. This section highlights these alternative submission mechanisms and underscores the robustness and decentralization features inherent in the Arbitrum network.
+You can submit transactions directly to the Delayed Inbox contract on the Parent chain without using the Sequencer. This method provides:
 
-In **Diagram 3**, we demonstrate how users can submit their transactions using the Delayed Inbox contract to bypass the Sequencer. As illustrated in the diagram, there are two possible paths for transaction handling. When a transaction is submitted to the Delayed Inbox, the Sequencer may automatically pick it up, include it as an ordered transaction, and send it to the Sequencer feed. However, if the Sequencer does not process the transaction within 24 hours, users have the reliable option to call the `forceInclude` function on the `SequencerInbox` contract. This action ensures that the Sequencer to picks up the transaction and includes it in the ordered transaction list, providing users with a sense of security about their transactions.
+- **Censorship resistance** - Your transaction will be included even if the Sequencer refuses to process it
+- **Availability guarantee** - Transactions work even when the Sequencer is offline
+- **Decentralization** - Reduces dependency on the Sequencer
+
+There are two paths your transaction can take through the Delayed Inbox.
+
+When you submit a transaction to the Delayed Inbox, two things can happen:
+
+1. **Automatic processing** - The Sequencer picks up your transaction and includes it in the normal transaction flow
+2. **Force inclusion** - If 24 hours pass without processing, you can call the `forceInclude` function on the `SequencerInbox` contract to guarantee inclusion
+
+This two-path system ensures your transaction will always be processed, even if the Sequencer is unresponsive or censoring transactions.
 
 <ImageZoom
   src="/img/haw-bypassing-the-sequencer.svg"
@@ -69,8 +116,24 @@ In **Diagram 3**, we demonstrate how users can submit their transactions using t
   className="img-600px"
 />
 
-To send a transaction to the Delayed Inbox instead of submitting it to the sequencer, users can construct their transaction and then call the [`sendL2Message`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/AbsInbox.sol#L150) function, passing the data of the serialized signed transaction as an argument. This function allows users to send a generic child chain messages to the chain, suitable for any message that does not require parent chain validation.
+### Using the Delayed Inbox
 
-If the sequencer is not back online within 24 hours or decides to censor the transaction, users can invoke the [`forceInclusion`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/SequencerInbox.sol#L284) function on the `SequencerInbox` contract. This action ensures their transaction is included on the chain, bypassing the sequencer's role.
+To submit a transaction through the Delayed Inbox:
 
-Additionally, the Arbitrum SDK provides the [`InboxTools`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L64C14-L64C24) class, which simplifies the process of submitting transactions to the Delayed Inbox. Users can utilize the [`sendChildSignedTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L401C16-L401C33) method to send the transaction and the [`forceInclude`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L367) method to ensure its inclusion. The SDK also offers helper methods like [`signChildTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L429) to assist with signing the transaction during the creation of the serialized signed transaction hex string, streamlining the entire process.
+1. **Construct your transaction** and serialize it
+2. **Call [`sendL2Message`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/AbsInbox.sol#L150)** with your serialized transaction data
+3. **Wait for processing** or force inclusion after 24 hours
+
+### Force inclusion after delays
+
+If your transaction isn't processed within 24 hours, call the [`forceInclusion`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/SequencerInbox.sol#L284) function on the `SequencerInbox` contract. This guarantees your transaction will be included regardless of Sequencer status.
+
+### Using the Arbitrum SDK
+
+The Arbitrum SDK simplifies Delayed Inbox interactions through the [`InboxTools`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L64C14-L64C24) class:
+
+| Method                                                                                                                                                   | Purpose                                    |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| [`sendChildSignedTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L401C16-L401C33) | Submit transaction to Delayed Inbox        |
+| [`forceInclude`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L367)                 | Force transaction inclusion after 24 hours |
+| [`signChildTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L429)                  | Helper for transaction signing             |
