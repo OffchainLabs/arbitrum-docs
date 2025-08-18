@@ -103,7 +103,7 @@ Validators are configured during chain deployment and can be run post-launch. Ar
 
 6. Deploy the chain; validators are now bonded with the base stake.
 
-### Adding Validators Post-Deployment (Permissioned Chains)
+### Adding validators post-deployment (permissioned chains)
 
 1. As the upgrade executor (chain admin), call `setValidator(address[] calldata validators, bool[] calldata isValidator)` on the Rollup contract to update the allowlist.
 2. Ensure the new validator has a wallet funded with the base stake amount in the stake token.
