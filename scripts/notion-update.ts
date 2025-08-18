@@ -50,6 +50,25 @@ const isValid = (item: KnowledgeItem) => {
   return recordValidity(item) === 'Valid'
 }
 
+// Formatting helper function
+async function formatContent(content: string, filepath: string): Promise<string> {
+  try {
+    const prettier = require('prettier')
+    const options = await prettier.resolveConfig(process.cwd()) || {}
+    
+    const parser = filepath.endsWith('.json') ? 'json' : 'markdown'
+    
+    return prettier.format(content, {
+      ...options,
+      parser,
+      filepath,
+    })
+  } catch (error) {
+    console.warn(`⚠️ Prettier formatting failed for ${filepath}, using content as-is:`, error)
+    return content
+  }
+}
+
 // Content getter
 const getContentFromCMS = async (): Promise<CMSContents> => {
   const devDocsV2Project = await lookupProject(
@@ -283,73 +302,99 @@ async function generateFiles() {
   const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
   addItems(validGlossaryTerms, '/intro/glossary')
   const glossaryJSON = renderGlossaryJSON(validGlossaryTerms, linkableTerms)
-  fs.writeFileSync('static/glossary.json', glossaryJSON)
+  const formattedGlossaryJSON = await formatContent(glossaryJSON, 'static/glossary.json')
+  fs.writeFileSync('static/glossary.json', formattedGlossaryJSON)
   const definitionsHTML = `\n\n${renderGlossary(
     validGlossaryTerms,
     linkableTerms
   )}\n`
-  fs.writeFileSync('docs/partials/_glossary-partial.mdx', definitionsHTML)
+  const formattedDefinitionsHTML = await formatContent(definitionsHTML, 'docs/partials/_glossary-partial.mdx')
+  fs.writeFileSync('docs/partials/_glossary-partial.mdx', formattedDefinitionsHTML)
 
   // FAQs
   // ----
   // Get started
+  const getStartedFAQsJSON = renderJSONFAQStructuredData(cmsContents.getStartedFAQs)
+  const formattedGetStartedFAQsJSON = await formatContent(getStartedFAQsJSON, 'static/get-started-faqs.json')
   fs.writeFileSync(
     'static/get-started-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.getStartedFAQs)
+    formattedGetStartedFAQsJSON
   )
+  const getStartedFAQsHTML = renderFAQs(cmsContents.getStartedFAQs)
+  const formattedGetStartedFAQsHTML = await formatContent(getStartedFAQsHTML, 'docs/partials/_troubleshooting-users-partial.mdx')
   fs.writeFileSync(
     'docs/partials/_troubleshooting-users-partial.mdx',
-    renderFAQs(cmsContents.getStartedFAQs)
+    formattedGetStartedFAQsHTML
   )
 
   // Node running
+  const nodeRunningFAQsJSON = renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
+  const formattedNodeRunningFAQsJSON = await formatContent(nodeRunningFAQsJSON, 'static/node-running-faqs.json')
   fs.writeFileSync(
     'static/node-running-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
+    formattedNodeRunningFAQsJSON
   )
+  const nodeRunningFAQsHTML = renderFAQs(cmsContents.nodeRunningFAQs)
+  const formattedNodeRunningFAQsHTML = await formatContent(nodeRunningFAQsHTML, 'docs/partials/_troubleshooting-nodes-partial.mdx')
   fs.writeFileSync(
     'docs/partials/_troubleshooting-nodes-partial.mdx',
-    renderFAQs(cmsContents.nodeRunningFAQs)
+    formattedNodeRunningFAQsHTML
   )
 
   // Building
+  const buildingFAQsJSON = renderJSONFAQStructuredData(cmsContents.buildingFAQs)
+  const formattedBuildingFAQsJSON = await formatContent(buildingFAQsJSON, 'static/building-faqs.json')
   fs.writeFileSync(
     'static/building-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.buildingFAQs)
+    formattedBuildingFAQsJSON
   )
+  const buildingFAQsHTML = renderFAQs(cmsContents.buildingFAQs)
+  const formattedBuildingFAQsHTML = await formatContent(buildingFAQsHTML, 'docs/partials/_troubleshooting-building-partial.mdx')
   fs.writeFileSync(
     'docs/partials/_troubleshooting-building-partial.mdx',
-    renderFAQs(cmsContents.buildingFAQs)
+    formattedBuildingFAQsHTML
   )
 
   // Stylus
+  const stylusFAQsJSON = renderJSONFAQStructuredData(cmsContents.buildingStylusFAQs)
+  const formattedStylusFAQsJSON = await formatContent(stylusFAQsJSON, 'static/building-stylus-faqs.json')
   fs.writeFileSync(
     'static/building-stylus-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.buildingStylusFAQs)
+    formattedStylusFAQsJSON
   )
+  const stylusFAQsHTML = renderFAQs(cmsContents.buildingStylusFAQs)
+  const formattedStylusFAQsHTML = await formatContent(stylusFAQsHTML, 'docs/partials/_troubleshooting-stylus-partial.mdx')
   fs.writeFileSync(
     'docs/partials/_troubleshooting-stylus-partial.mdx',
-    renderFAQs(cmsContents.buildingStylusFAQs)
+    formattedStylusFAQsHTML
   )
 
   // Orbit
+  const orbitFAQsJSON = renderJSONFAQStructuredData(cmsContents.orbitFAQs)
+  const formattedOrbitFAQsJSON = await formatContent(orbitFAQsJSON, 'static/building-orbit-faqs.json')
   fs.writeFileSync(
     'static/building-orbit-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.orbitFAQs)
+    formattedOrbitFAQsJSON
   )
+  const orbitFAQsHTML = renderFAQs(cmsContents.orbitFAQs)
+  const formattedOrbitFAQsHTML = await formatContent(orbitFAQsHTML, 'docs/partials/_troubleshooting-arbitrum-chain-partial.mdx')
   fs.writeFileSync(
     'docs/partials/_troubleshooting-arbitrum-chain-partial.mdx',
-    renderFAQs(cmsContents.orbitFAQs)
+    formattedOrbitFAQsHTML
   )
 
   // Bridging
+  const bridgingFAQsJSON = renderJSONFAQStructuredData(cmsContents.bridgingFAQs)
+  const formattedBridgingFAQsJSON = await formatContent(bridgingFAQsJSON, 'static/bridging-faqs.json')
   fs.writeFileSync(
     'static/bridging-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.bridgingFAQs)
+    formattedBridgingFAQsJSON
   )
+  const bridgingFAQsHTML = renderFAQs(cmsContents.bridgingFAQs)
+  const formattedBridgingFAQsHTML = await formatContent(bridgingFAQsHTML, 'docs/partials/_troubleshooting-bridging-partial.mdx')
   fs.writeFileSync(
     'docs/partials/_troubleshooting-bridging-partial.mdx',
-    renderFAQs(cmsContents.bridgingFAQs)
+    formattedBridgingFAQsHTML
   )
 }
 
