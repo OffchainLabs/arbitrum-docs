@@ -1,6 +1,6 @@
 const fs = require('fs')
 const glob = require('glob')
-const quicklookKeysJSON = require('../../static/glossary.json')
+const quicklookKeysJSON = require('../static/glossary.json')
 
 const QUICKLOOKS_PREFIX = 'data-quicklook-from='
 
@@ -14,7 +14,7 @@ function findQuotedTextAfter(string: string, input: string) {
   return matches
 }
 
-glob('../../docs/**/*', function (err: any, res: any) {
+glob('docs/**/*', function (err: any, res: any) {
   if (err) {
     throw new Error(err)
   } else {

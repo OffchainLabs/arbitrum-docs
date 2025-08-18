@@ -120,7 +120,7 @@ The STF (State Transition Function) defines how new blocks are produced from inp
 3. While in the root directory, run the following command:
 
 ```shell
-npx tsx src/scripts/build-glossary.ts
+npx tsx scripts/build-glossary.ts
 ```
 
 This part will update the glossary.
