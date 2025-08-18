@@ -77,7 +77,7 @@ The loser stake escrow is the address where a validator's bonded funds are sent 
 
 - **During deployment**: Set in the `loserStakeEscrow` field of the `RollupCreator` configuration.
 - **Post-deployment**:
-  1. As the chain owner or upgrade executor, call the `Rollup.setLoserStakeEscrow(address newEscrow)` function on the Rollup contract.
+  1. As the chain owner or upgrade executor, call the `Rollup.setLoserStakeEscrow`(address `newEscrow`) function on the Rollup contract.
   2. Use tools like Etherscan or a wallet (e.g., MetaMask) to interact with the contract on the parent chain.
 
 ### Default
