@@ -311,6 +311,7 @@ const sidebars = {
                   label: `Configure delayed inbox finality`,
                 },
                 {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools',
                   label: `Gas optimization tools`,
                 },
