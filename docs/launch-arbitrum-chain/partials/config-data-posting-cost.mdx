@@ -1,29 +1,65 @@
-chains, including Orbit L2s and L3s, data posting costs refer to the fees incurred when the sequencer or batch posters submit compressed transaction batches to the parent chain (e.g., Ethereum L1 or an Arbitrum L2 like One/Nova) for data availability (DA). This ensures verifiability and security. Key elements include:
+## Data Posting Costs
 
-- **Parent Chain Base Fee**: Covers the core cost of posting data to the parent chain, estimated based on the transaction's compressed size (in data units) and the parent's current base fee. Retrieved via `ArbGasInfo.getL1BaseFeeEstimate()`. Automatically adjusted from batch poster reports, but can be manually set via `ArbOwner.setL1PricePerUnit(uint256)`. For chains using custom ERC-20 gas tokens, this should be disabled (set to 0) to avoid mischarges, as no ETH is used on the parent.
-- **Parent Chain Surplus Fee**: An optional reward to incentivize batch posters, calculated as a rate (wei per gas unit) on top of the base fee. Retrieved via `ArbGasInfo.getL1RewardRate()` and set via `ArbOwner.setL1PricingRewardRate(uint64)`. Proceeds go to the `L1RewardRecipient` address.
-- **Compression Mechanism**: Uses Brotli to minimize data size and costs. Each transaction is compressed individually at the lowest level for estimation, then batched. Compression levels adjust dynamically based on backlog size (e.g., level 6 for small backlogs, up to user-configured max for larger ones). This approximates per-transaction contributions (size × 16 gas per non-zero byte), though not exact due to shared patterns in batches.
-- **Adaptive Pricing Algorithm**: Tracks funds collected vs. spent, updating the data unit price to minimize surpluses/deficits. Incorporates factors like surplus (S), derivative of surplus (D), and smoothing (α). Batch posting reports calculate actual costs by byte count and gas usage.
-- **Fee Collection and Apportioning**: Fees are apportioned among transactions based on estimated data units. Collected via the reimbursement fund, with base fees to the batch poster's fee collector (via `ArbAggregator`) and surplus to `L1RewardRecipient`. Infrastructure costs (e.g., $600/month per sequencer replica) and validator bonds (e.g., 3600 ETH equivalent) add indirect expenses.
-- **DA Options Impacting Costs**:
-  - **Rollup**: Posts all data to the parent (ultimately Ethereum), incurring higher calldata/blob costs but maximal security.
-  - **AnyTrust**: Uses a Data Availability Committee (DAC) for off-chain storage, reducing fees (cheapest option) with fallback to on-chain posting.
-  - **Celestia**: Integrates alt DA for potentially lower costs via modular layers.
-- **Estimation Tools**: Use `NodeInterface.gasEstimateComponents()` or `NodeInterface.gasEstimateL1Component()` for previews; receipts show `gasUsedForL1`.
+This guide breaks down the key aspects of data posting costs in Arbitrum chains (including Orbit L2s and L3s) to help you make informed decisions about cost, security, and user experience. Data posting costs arise when submitting transaction batches to a parent chain (e.g., Ethereum or Arbitrum L2) for data availability, which ensures security and verifiability. Below, we explain the core components, decisions, and trade-offs in a concise, business-friendly format.
 
-Overall, configurations aim for cost efficiency while ensuring sequencer reimbursement, with auto-adjustments for volatility.
+### Key Cost Components
 
-### Decisions Regarding Data Posting Costs
+1. **Parent Chain Base Fee**: Covers the cost of posting compressed transaction data to the parent chain.
 
-Decisions are made at deployment (via Orbit SDK) or post-launch (via ArbOwner/ArbAggregator precompiles), often immutable or requiring governance. Focus on balancing cost, security, and UX; test on Sepolia. The table below outlines key areas:
+- Determined by transaction size and the parent chain’s current fee.
+- Automatically adjusts based on batch poster reports, but can be manually set.
+- For chains using custom `ERC-20` tokens, turn off to avoid incorrect charges.
 
-| Decision Area                       | Key Considerations                                                                                                           | Trade-offs                                                                                                                                |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **DA Solution**                     | Choose Rollup (Ethereum DA), AnyTrust (DAC), or Celestia (alt DA). Set at genesis; AnyTrust offers ERC-20 gas token support. | Rollup: High security but costly DA; AnyTrust: Cheapest/flexible but trust in DAC; Celestia: Scalable/low-cost but external dependencies. |
-| **Parent Chain Base Fee**           | Set estimate via `setL1PricePerUnit`; auto-adjusts from reports. Disable (0) for custom gas tokens.                          | Accurate estimates prevent deficits but overestimation raises user fees; disabling avoids errors in non-ETH setups.                       |
-| **Parent Chain Surplus Fee**        | Set reward rate via `setL1PricingRewardRate`; choose `L1RewardRecipient`.                                                    | Higher rates incentivize posters but increase user costs; low/no reward may deter participation.                                          |
-| **Batch Poster Management**         | Add posters via `addBatchPoster`; set fee collectors via `setFeeCollector`. Align with SequencerInbox.                       | More posters enhance decentralization but coordination complexity; fee distribution affects incentives.                                   |
-| **Compression and Batch Configs**   | Set user-configured level (UC); adjust max tx data size via WASM root.                                                       | Higher compression reduces costs but increases compute; larger batches lower frequency/costs but risk delays.                             |
-| **Challenge Period and Base Stake** | Set `confirmPeriodBlocks` (e.g., ~1 week); define base stake (ETH/ERC-20 bond).                                              | Longer periods boost security but delay finality/costs; higher stakes deter attacks but limit validators.                                 |
-| **Gas Token and Min Base Fee**      | Choose ETH or ERC-20; set min L2 base fee via `setMinimumL2BaseFee`.                                                         | Custom tokens add utility but overhead (e.g., funding for DA); low min fee risks DoS but lowers barriers.                                 |
-| **When to Customize**               | For high-throughput chains, optimize compression/stakes; defaults suit general use.                                          | Customization reduces costs but adds complexity/risks (e.g., DoS); consult Offchain Labs for non-standard.                                |
+2. **Parent Chain Surplus Fee**: Optional fee to reward batch posters.
+
+- Set as a rate on top of the base fee; proceeds go to a designated recipient.
+- Higher rates incentivize batch posters but increase user costs.
+
+3. **Compression**: Uses Brotli to reduce data size and lower costs.
+
+- Compression adjusts dynamically based on transaction backlog.
+- Higher compression saves costs but requires more computing power.
+
+4. **Adaptive Pricing**: Balances fees collected with actual costs.
+
+- Tracks surpluses/deficits to adjust pricing dynamically.
+- Ensures batch posters receive reimbursement without overcharging users.
+
+5. **Fee Collection**: Fees are divided based on estimated transaction sizes.
+
+- Batch posters receive base fees, while surplus fees are allocated to a designated recipient.
+- Additional costs include infrastructure (e.g., ~$600/month per sequencer) and validator bonds (e.g., ~3600 `ETH` equivalent).
+
+6. **Data Availability (DA) Options**:
+
+- **Rollup**: Posts all data to Ethereum for maximum security but higher costs.
+- **AnyTrust**: utilizes a Data Availability Committee (DAC) for cost-effective offchain storage with an onchain fallback.
+- **Celestia**: Leverages modular DA for potentially lower costs but relies on external systems.
+
+### Key Decisions and Trade-Offs
+
+The following table summarizes critical decisions to optimize costs, security, and user experience. These are set at chain deployment or adjusted post-launch via governance.
+
+| Decision Area                | Key Questions                                                     | Trade-Offs                                                                                                                                                           |
+| ---------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **DA Solution**              | Should you use Rollup, AnyTrust, or Celestia?                     | **Rollup**: Most secure, highest cost. **AnyTrust**: Cheapest, flexible, but relies on DAC trust. **Celestia**: Scalable, low-cost, but depends on external systems. |
+| **Base Fee**                 | How should base fees be set?                                      | Accurate estimates prevent losses but overestimating raises user fees. Disable for custom tokens to avoid errors.                                                    |
+| **Surplus Fee**              | How much reward for batch posters?                                | Higher rewards attract posters but increase user costs. Low rewards may reduce poster participation.                                                                 |
+| **Batch Posters**            | How many posters and who collects fees?                           | More posters increase decentralization but add complexity. Fee distribution impacts incentives.                                                                      |
+| **Compression**              | What compression level suits your chain?                          | Higher compression lowers costs but requires more compute. Larger batches reduce frequency but may delay transactions.                                               |
+| **Challenge Period & Stake** | How long is the challenge period, and what’s the validator stake? | Longer periods and higher stakes enhance security but increase costs and delay finality.                                                                             |
+| **Gas Token**                | Use `ETH` or a custom `ERC-20` token?                             | Custom tokens add flexibility but require funding for DA. Low minimum fees reduce barriers but risk denial-of-service attacks.                                       |
+
+### Recommendations
+
+- Test first: Use the Sepolia testnet to experiment with configurations before deployment.
+- Balance Cost and Security: For high-throughput chains, optimize compression and stakes. For general use, default settings are often sufficient.
+- **Consider user experience**: High fees or delays can deter users, so prioritize cost-efficient DA options like AnyTrust or Celestia if security needs allow.
+- **Consult experts**: For non-standard setups, work with Offchain Labs to minimize risks like DoS attacks.
+
+### Tools for Cost Estimation
+
+- Use `NodeInterface.gasEstimateComponents()` or `NodeInterface.gasEstimateL1Component()` to preview costs.
+- Check transaction receipts for `gasUsedForL1` to understand actual costs.
+
+By carefully configuring these elements, you can achieve cost efficiency while maintaining security and a seamless user experience.
