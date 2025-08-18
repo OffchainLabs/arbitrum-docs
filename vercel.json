@@ -201,6 +201,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/launch-arbitrum-chain/how-tos/arbitrum-chain-finality/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/mainnet-beta/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
@@ -213,6 +218,11 @@
     {
       "source": "/(docs/rollup_protocol/?)",
       "destination": "/how-arbitrum-works/optimistic-rollup",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/run-arbitrum-node/sequencer/run-feed-relay/?)",
+      "destination": "/(docs/run-arbitrum-node/run-feed-relay/?)",
       "permanent": false
     },
     {
@@ -528,6 +538,11 @@
     {
       "source": "/(intro/?)",
       "destination": "/welcome/arbitrum-gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/arbitrum-chain-quickstart/?)",
+      "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
     },
     {

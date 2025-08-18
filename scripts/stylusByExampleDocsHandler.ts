@@ -29,11 +29,11 @@ function load(app) {
   const applicationsOutputDir = path.join(outputDir, 'applications');
   const sourceDirBasicExamples = path.join(
     app.options.getValue('out'),
-    '../../stylus-by-example/src/app/basic_examples',
+    '../../submodules/stylus-by-example/src/app/basic_examples',
   );
   const sourceDirApplications = path.join(
     app.options.getValue('out'),
-    '../../stylus-by-example/src/app/applications',
+    '../../submodules/stylus-by-example/src/app/applications',
   );
 
   app.renderer.on(RendererEvent.START, async () => {
