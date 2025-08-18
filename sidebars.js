@@ -311,6 +311,7 @@ const sidebars = {
                   label: `Stake and validator configuration`,
                 },
                 {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality',
                   label: `Configure delayed inbox finality`,
                 },
