@@ -311,6 +311,11 @@ const sidebars = {
                   label: `Stake and validator configuration`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations',
+                  label: `Stake and validator configuration`,
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
