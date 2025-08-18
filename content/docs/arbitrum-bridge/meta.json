@@ -1,0 +1,8 @@
+{
+  "title": "Arbitrum Bridge",
+  "pages": [
+    "01-quickstart",
+    "02-usdc-arbitrum-one", 
+    "03-troubleshooting"
+  ]
+}

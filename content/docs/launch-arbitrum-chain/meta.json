@@ -1,0 +1,25 @@
+{
+  "title": "Launch Arbitrum Chain",
+  "pages": [
+    "01-a-gentle-introduction",
+    "02-start-your-journey",
+    "02-configure-your-chain",
+    "03-arbitrum-license",
+    "03-deploy-an-arbitrum-chain",
+    "04-maintain-your-chain",
+    "05-customize-your-chain",
+    "06-third-party-integrations",
+    "07-arbitrum-node-runners",
+    "08-ecosystem-support",
+    "09-faq-troubleshooting",
+    "arbitrum-chain-sdk-introduction",
+    "arbitrum-chain-supported-parent-chains",
+    "bold-adoption-for-arbitrum-chains",
+    "timeboost-for-arbitrum-chains",
+    "aep-license",
+    "concepts",
+    "how-tos",
+    "reference",
+    "partials"
+  ]
+}

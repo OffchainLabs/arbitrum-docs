@@ -1,0 +1,15 @@
+{
+  "title": "Oracles",
+  "pages": [
+    "oracles-content-map",
+    "api3",
+    "chainlink",
+    "chronicle",
+    "dia",
+    "ora",
+    "pyth",
+    "quex",
+    "supra",
+    "trellor"
+  ]
+}

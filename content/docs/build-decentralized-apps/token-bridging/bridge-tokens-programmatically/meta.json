@@ -1,0 +1,9 @@
+{
+  "title": "Bridge Tokens Programmatically",
+  "pages": [
+    "01-get-started",
+    "02-how-to-bridge-tokens-standard",
+    "03-how-to-bridge-tokens-generic-custom",
+    "04-how-to-bridge-tokens-custom-gateway"
+  ]
+}

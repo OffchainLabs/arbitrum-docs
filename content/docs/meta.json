@@ -1,0 +1,20 @@
+{
+  "title": "Arbitrum Documentation",
+  "pages": [
+    "welcome",
+    "intro",
+    "arbitrum-bridge",
+    "build-decentralized-apps",
+    "stylus",
+    "how-arbitrum-works",
+    "launch-arbitrum-chain",
+    "run-arbitrum-node",
+    "node-running",
+    "for-devs",
+    "sdk",
+    "for-users",
+    "learn-more",
+    "partials",
+    "hosted-audit-reports"
+  ]
+}

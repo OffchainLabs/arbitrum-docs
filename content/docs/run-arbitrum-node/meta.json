@@ -1,0 +1,18 @@
+{
+  "title": "Run Arbitrum Node",
+  "pages": [
+    "01-overview",
+    "02-run-full-node",
+    "03-run-local-full-chain-simulation",
+    "04-l1-ethereum-beacon-chain-rpc-providers",
+    "05-run-nitro-dev-node",
+    "06-troubleshooting",
+    "arbos-releases",
+    "data-availability-committees",
+    "more-types",
+    "nitro",
+    "sequencer",
+    "run-feed-relay",
+    "partials"
+  ]
+}

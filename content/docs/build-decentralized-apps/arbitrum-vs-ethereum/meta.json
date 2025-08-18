@@ -1,0 +1,9 @@
+{
+  "title": "Arbitrum vs Ethereum",
+  "pages": [
+    "01-comparison-overview",
+    "02-block-numbers-and-time",
+    "03-rpc-methods",
+    "04-solidity-support"
+  ]
+}

@@ -1,0 +1,26 @@
+---
+title: 'Arbitrum glossary'
+description: A list of terms and definitions related to Arbitrum.
+user_story: As a user, I want to review a list of terms and definitions that are related to Arbitrum.
+content_type: glossary
+---
+
+# Arbitrum Glossary
+
+This glossary provides definitions for key terms and concepts related to Arbitrum.
+
+## Active Validator {#active-validator}
+
+A bonded [Validator](/intro/glossary#validator) that makes disputable assertions to advance the state of an Arbitrum chain or to challenge the validity of others' assertions. (Not to be confused with the [Sequencer](/intro/glossary#sequencer).)
+
+## Address Alias {#address-alias}
+
+An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.
+
+## Arb Token Bridge {#arb-token-bridge}
+
+A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of `ERC-20` tokens between the two layers.
+
+## Arbitrum {#arbitrum}
+
+A suite of Ethereum child chain scaling technologies built with the [Arbitrum Nitro](/intro/glossary#arbitrum-nitro) tech stack that includes [Arbitrum One](/intro/glossary#arbitrum-one) (a live implementation of the [Arbitrum Rollup Protocol](/intro/glossary#arbitrum-rollup-protocol)) and [Arbitrum Nova](/intro/glossary#arbitrum-nova) (a live implementation of the [Arbitrum AnyTrust Protocol](/intro/glossary#arbitrum-anytrust-protocol)).

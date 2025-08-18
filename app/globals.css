@@ -1,0 +1,4 @@
+@import 'fumadocs-ui/style.css';
+
+/* Import KaTeX CSS for math equations if needed */
+@import 'katex/dist/katex.css';

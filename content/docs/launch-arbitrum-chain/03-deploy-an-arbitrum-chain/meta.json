@@ -1,0 +1,8 @@
+{
+  "title": "Deploy an Arbitrum Chain",
+  "pages": [
+    "02-deploying-an-arbitrum-chain",
+    "05-deploying-token-bridge",
+    "07-canonical-factory-contracts"
+  ]
+}

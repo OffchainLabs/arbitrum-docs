@@ -1,0 +1,9 @@
+{
+  "title": "Data Availability Committees",
+  "pages": [
+    "01-get-started",
+    "02-deploy-das",
+    "03-deploy-mirror-das",
+    "04-configure-dac"
+  ]
+}

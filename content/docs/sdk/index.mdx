@@ -1,0 +1,135 @@
+---
+title: "Arbitrum SDK"
+description: "TypeScript library for seamless interactions with Arbitrum networks, featuring token bridging and cross-chain messaging capabilities."
+---
+
+# Arbitrum SDK
+
+The Arbitrum SDK is a powerful TypeScript library that streamlines interactions with Arbitrum networks. It offers robust tools for bridging tokens and passing messages between networks through an intuitive interface to the underlying smart contracts.
+
+## Key Features
+
+- **Token Bridging**: Effortlessly bridge tokens between Ethereum and Arbitrum networks
+- **Message Passing**: Seamlessly pass messages across networks with built-in retry mechanisms
+- **Contracts Interface**: Leverage a strongly-typed interface for interacting with smart contracts
+- **Network Support**: Built-in support for Arbitrum One, Nova, and custom Orbit chains
+
+## Quick Start
+
+<Steps>
+
+### Install the SDK
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+
+<Tab value="npm">
+```bash
+npm install @arbitrum/sdk
+```
+</Tab>
+
+<Tab value="yarn">
+```bash
+yarn add @arbitrum/sdk
+```
+</Tab>
+
+<Tab value="pnpm">
+```bash
+pnpm install @arbitrum/sdk
+```
+</Tab>
+
+</Tabs>
+
+### Bridge ETH to Arbitrum One
+
+```ts
+import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk'
+import { utils } from 'ethers'
+
+// Get the Arbitrum network configuration
+const childNetwork = await getArbitrumNetwork(42161) // Arbitrum One
+const ethBridger = new EthBridger(childNetwork)
+
+// Deposit ETH from Ethereum to Arbitrum One
+const ethDepositTxResponse = await ethBridger.deposit({
+  amount: utils.parseEther('0.1'),
+  parentSigner, // ethers v5 signer connected to Ethereum mainnet
+  childProvider, // ethers v5 provider connected to Arbitrum One
+})
+
+const ethDepositTxReceipt = await ethDepositTxResponse.wait()
+console.log('ETH deposited successfully!')
+```
+
+### Withdraw ETH from Arbitrum One
+
+```ts
+// Withdraw ETH from Arbitrum One to Ethereum
+const withdrawTx = await ethBridger.withdraw({
+  amount: utils.parseEther('0.1'),
+  childSigner, // ethers v5 signer connected to Arbitrum One
+  destinationAddress: await childSigner.getAddress(),
+})
+
+const withdrawReceipt = await withdrawTx.wait()
+console.log('ETH withdrawal initiated!')
+```
+
+</Steps>
+
+## Core Concepts
+
+### Asset Bridgers
+
+The SDK provides specialized bridgers for different asset types:
+
+- **[EthBridger](./assetBridger/ethBridger)** - For bridging ETH between networks
+- **[Erc20Bridger](./assetBridger/erc20Bridger)** - For bridging ERC-20 tokens
+- **[L1L3Bridger](./assetBridger/l1l3Bridger)** - For direct L1 to L3 bridging
+
+### Cross-Chain Messages
+
+When assets are moved, cross-chain messages are automatically created. The SDK provides classes to track and manage these messages:
+
+- **[ParentToChildMessage](./message/ParentToChildMessage)** - Track deposits and L1→L2 messages
+- **[ChildToParentMessage](./message/ChildToParentMessage)** - Track withdrawals and L2→L1 messages
+
+### Network Configuration
+
+The SDK comes pre-configured for Arbitrum networks, but can be extended for custom Orbit chains:
+
+```ts
+import { registerCustomArbitrumNetwork } from '@arbitrum/sdk'
+
+registerCustomArbitrumNetwork({
+  chainId: 123456,
+  name: 'My Custom Orbit Chain',
+  parentChainId: 1, // Ethereum mainnet
+  // ... other configuration
+})
+```
+
+## Migration Guide
+
+If you're upgrading from SDK v3 to v4, see the [migration guide](./migrate) for detailed information about breaking changes and how to update your code.
+
+## API Reference
+
+Browse the complete API documentation using the navigation menu. Key sections include:
+
+- **[Asset Bridgers](./assetBridger/assetBridger)** - Core bridging functionality
+- **[Data Entities](./dataEntities/networks)** - Network configurations and constants
+- **[Message Handling](./message/ParentToChildMessage)** - Cross-chain message management
+- **[Utilities](./utils/eventFetcher)** - Helper functions and tools
+
+## Examples & Tutorials
+
+For complete working examples, visit the [Arbitrum Tutorials](https://github.com/OffchainLabs/arbitrum-tutorials) repository.
+
+<Cards>
+  <Card href="https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit" title="ETH Deposit Tutorial" description="Learn how to deposit ETH from Ethereum to Arbitrum" />
+  <Card href="https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit" title="Token Bridging Tutorial" description="Bridge ERC-20 tokens between networks" />
+  <Card href="https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/redeem-failed-retryable" title="Message Management" description="Handle failed retryable tickets" />
+</Cards>

@@ -1,0 +1,11 @@
+{
+  "title": "Maintain Your Chain",
+  "pages": [
+    "01-bridging",
+    "02-monitoring",
+    "03-ownership-structure-access-control",
+    "04-guidance",
+    "05-upgrade-to-bold",
+    "06-monitoring-tools-and-considerations"
+  ]
+}

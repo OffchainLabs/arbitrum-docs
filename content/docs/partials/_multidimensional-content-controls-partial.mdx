@@ -1,0 +1,28 @@
+---
+title: 'Multidimensional Content Controls Partial'
+description: 'Multidimensional content controls for documentation'
+content_type: 'partial'
+---
+
+{/* Multidimensional content controls widget */}
+<div>
+  <p><em>Note: Content filtering controls for operating system, network, and node type selections.</em></p>
+</div>
+
+{/* Multidimensional content controls - functionality handled by the MultiDimensionalContentWidget component */}
+<div className='dynamic-content-tabs'>
+  {/* Operating System Selection */}
+  <div className="tabgroup-with-label os-tabgroup">
+    <div>Operating system: Linux, MacOS, Arm64, Windows</div>
+  </div>
+
+  {/* Network Selection */}
+  <div className="tabgroup-with-label network-tabgroup">
+    <div>Networks: Arbitrum One (Nitro), Arbitrum One (Classic), Arbitrum Nova, Arbitrum Sepolia, Localhost</div>
+  </div>
+
+  {/* Node Type Selection */}
+  <div className="tabgroup-with-label node-type-tabgroup">
+    <div>Node types: Full node, Archive node, Validator node</div>
+  </div>
+</div>

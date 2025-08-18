@@ -1,0 +1,8 @@
+{
+  "title": "How-Tos",
+  "pages": [
+    "arbitrum-chain-sdk-preparing-node-config",
+    "customize-deployment-configuration",
+    "how-to-configure-your-chain"
+  ]
+}

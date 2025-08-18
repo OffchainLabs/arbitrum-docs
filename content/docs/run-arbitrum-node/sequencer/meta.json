@@ -1,0 +1,9 @@
+{
+  "title": "Sequencer",
+  "pages": [
+    "02-read-sequencer-feed",
+    "03-run-sequencer-coordination-manager",
+    "04-run-sequencer-node",
+    "05-high-availability-sequencer-docs"
+  ]
+}

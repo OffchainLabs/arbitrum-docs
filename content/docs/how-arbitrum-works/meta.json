@@ -1,0 +1,17 @@
+{
+  "title": "How Arbitrum Works",
+  "pages": [
+    "01-a-gentle-introduction",
+    "02-transaction-lifecycle",
+    "03-sequencer",
+    "04-state-transition-function",
+    "05-validation-and-proving",
+    "08-anytrust-protocol",
+    "09-gas-fees",
+    "10-l1-to-l2-messaging",
+    "11-l2-to-l1-messaging",
+    "12-data-availability",
+    "bold",
+    "timeboost"
+  ]
+}

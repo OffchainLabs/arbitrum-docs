@@ -1,0 +1,11 @@
+{
+  "title": "Reference",
+  "pages": [
+    "additional-configuration-parameters",
+    "arbitrum-chain-batch-poster-configuration",
+    "arbitrum-chain-configuration-parameters",
+    "arbitrum-chain-fast-block-times",
+    "arbitrum-chain-sequencer-configuration",
+    "arbitrum-chain-smart-contract-size-limit"
+  ]
+}

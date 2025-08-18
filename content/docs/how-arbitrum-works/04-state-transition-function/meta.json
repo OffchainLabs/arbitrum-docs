@@ -1,0 +1,11 @@
+{
+  "title": "State Transition Function",
+  "pages": [
+    "01-stf-gentle-intro",
+    "02-stf-inputs",
+    "03-ethereum-vs-arbitrum",
+    "04-modified-geth-on-arbitrum",
+    "05-arbos",
+    "06-stylus-execution-path"
+  ]
+}

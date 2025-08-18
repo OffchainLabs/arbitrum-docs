@@ -1,0 +1,16 @@
+{
+  "title": "Build Decentralized Apps",
+  "pages": [
+    "01-quickstart-solidity-remix",
+    "02-how-to-estimate-gas",
+    "03-public-chains",
+    "04-cross-chain-messaging",
+    "custom-gas-token-sdk",
+    "arbitrum-vs-ethereum",
+    "oracles",
+    "precompiles",
+    "nodeinterface",
+    "token-bridging",
+    "reference"
+  ]
+}

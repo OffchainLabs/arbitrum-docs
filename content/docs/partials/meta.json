@@ -1,0 +1,26 @@
+{
+  "title": "Partials",
+  "pages": [
+    "_additional-config-params",
+    "_bold-config-params",
+    "_contribute-docs-partial",
+    "_gentle-intro-partial",
+    "_glossary-partial",
+    "_local-devnet-flags",
+    "_macos-verify-tx-issue-banner-partial",
+    "_multidimensional-content-controls-partial",
+    "_not-for-production-banner-partial",
+    "_public-preview-banner-partial",
+    "_reference-arbitrum-contract-addresses-partial",
+    "_reference-arbitrum-rpc-endpoints-partial",
+    "_reference-third-party-rpc-endpoints-partial",
+    "_troubleshooting-arbitrum-chain-partial",
+    "_troubleshooting-bridging-partial",
+    "_troubleshooting-building-partial",
+    "_troubleshooting-nodes-partial",
+    "_troubleshooting-stylus-partial",
+    "_troubleshooting-users-partial",
+    "_under-construction-banner-partial",
+    "glossary"
+  ]
+}

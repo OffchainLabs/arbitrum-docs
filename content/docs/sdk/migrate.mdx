@@ -1,0 +1,314 @@
+---
+title: "Migrating from v3 to v4"
+description: "Complete guide for upgrading from Arbitrum SDK v3 to v4, including breaking changes and migration steps."
+---
+
+# Migrating from v3 to v4
+
+## Overview
+
+Arbitrum SDK v4 introduces significant improvements to support Orbit chains and provides a more intuitive API. This guide outlines all breaking changes and provides step-by-step migration instructions.
+
+<Callout type="info">
+**Migration Timeline**: Most projects can complete the migration in 1-2 hours by following this guide systematically.
+</Callout>
+
+## Breaking Changes Summary
+
+### 1. Terminology: L1/L2 → Parent/Child
+
+The most significant change is the shift from "L1/L2" terminology to "parent/child" to better reflect the hierarchical nature of Arbitrum networks.
+
+<Tabs items={['v3 (old)', 'v4 (new)']}>
+
+<Tab value="v3 (old)">
+```ts
+import { L2Network, getL2Network } from '@arbitrum/sdk'
+
+const l2Network = await getL2Network(42161)
+const ethBridger = new EthBridger(l2Network)
+
+await ethBridger.deposit({
+  amount: utils.parseEther('1'),
+  l1Signer: parentSigner,
+  l2Provider: childProvider,
+})
+```
+</Tab>
+
+<Tab value="v4 (new)">
+```ts
+import { ArbitrumNetwork, getArbitrumNetwork } from '@arbitrum/sdk'
+
+const childNetwork = await getArbitrumNetwork(42161)
+const ethBridger = new EthBridger(childNetwork)
+
+await ethBridger.deposit({
+  amount: utils.parseEther('1'),
+  parentSigner: parentSigner,
+  childProvider: childProvider,
+})
+```
+</Tab>
+
+</Tabs>
+
+### 2. Network Types & Functions
+
+| v3 | v4 | Notes |
+|---|---|---|
+| `L2Network` | `ArbitrumNetwork` | Renamed and simplified |
+| `getL2Network()` | `getArbitrumNetwork()` | Same functionality |
+| `l2Networks` | `getArbitrumNetworks()` | Now a function |
+| `addCustomNetwork()` | `registerCustomArbitrumNetwork()` | Clearer naming |
+| `L1Network` | ❌ _Removed_ | No longer needed |
+| `getL1Network()` | ❌ _Removed_ | No longer needed |
+
+### 3. AssetBridger Changes
+
+All bridger classes have been updated with the new terminology:
+
+#### Method Parameters
+
+| v3 Parameter | v4 Parameter |
+|---|---|
+| `l1Provider` | `parentProvider` |
+| `l2Provider` | `childProvider` |
+| `l1Signer` | `parentSigner` |
+| `l2Signer` | `childSigner` |
+| `erc20L1Address` | `erc20ParentAddress` |
+
+#### EthBridger Methods
+
+| v3 Method | v4 Method |
+|---|---|
+| `checkL1Network()` | `checkParentNetwork()` |
+| `checkL2Network()` | `checkChildNetwork()` |
+
+#### Erc20Bridger Methods
+
+| v3 Method | v4 Method |
+|---|---|
+| `getL1GatewayAddress()` | `getParentGatewayAddress()` |
+| `getL2GatewayAddress()` | `getChildGatewayAddress()` |
+| `getL1TokenContract()` | `getParentTokenContract()` |
+| `getL2TokenContract()` | `getChildTokenContract()` |
+| `getL1ERC20Address()` | `getParentErc20Address()` |
+| `getL2ERC20Address()` | `getChildErc20Address()` |
+| `l1TokenIsDisabled()` | `isDepositDisabled()` |
+
+### 4. Message Classes
+
+All message-related classes have been renamed:
+
+| v3 Class | v4 Class |
+|---|---|
+| `L1TransactionReceipt` | `ParentTransactionReceipt` |
+| `L2TransactionReceipt` | `ChildTransactionReceipt` |
+| `L1ToL2Message` | `ParentToChildMessage` |
+| `L2ToL1Message` | `ChildToParentMessage` |
+| `L1ToL2MessageStatus` | `ParentToChildMessageStatus` |
+| `L2ToL1MessageStatus` | `ChildToParentMessageStatus` |
+
+#### Status Enums
+
+| v3 Status | v4 Status |
+|---|---|
+| `FUNDS_DEPOSITED_ON_L2` | `FUNDS_DEPOSITED_ON_CHILD` |
+
+## Step-by-Step Migration
+
+### Step 1: Update Imports
+
+<Tabs items={['Before', 'After']}>
+
+<Tab value="Before">
+```ts
+import {
+  L2Network,
+  getL2Network,
+  EthBridger,
+  L1TransactionReceipt,
+  L1ToL2Message,
+  L1ToL2MessageStatus
+} from '@arbitrum/sdk'
+```
+</Tab>
+
+<Tab value="After">
+```ts
+import {
+  ArbitrumNetwork,
+  getArbitrumNetwork,
+  EthBridger,
+  ParentTransactionReceipt,
+  ParentToChildMessage,
+  ParentToChildMessageStatus
+} from '@arbitrum/sdk'
+```
+</Tab>
+
+</Tabs>
+
+### Step 2: Update Network Configuration
+
+<Tabs items={['Before', 'After']}>
+
+<Tab value="Before">
+```ts
+const l2Network = await getL2Network(42161)
+```
+</Tab>
+
+<Tab value="After">
+```ts
+const childNetwork = await getArbitrumNetwork(42161)
+```
+</Tab>
+
+</Tabs>
+
+### Step 3: Update Bridger Usage
+
+<Tabs items={['Before', 'After']}>
+
+<Tab value="Before">
+```ts
+const ethBridger = new EthBridger(l2Network)
+
+await ethBridger.deposit({
+  amount: utils.parseEther('1'),
+  l1Signer: signer,
+  l2Provider: provider,
+})
+```
+</Tab>
+
+<Tab value="After">
+```ts
+const ethBridger = new EthBridger(childNetwork)
+
+await ethBridger.deposit({
+  amount: utils.parseEther('1'),
+  parentSigner: signer,
+  childProvider: provider,
+})
+```
+</Tab>
+
+</Tabs>
+
+### Step 4: Update Message Handling
+
+<Tabs items={['Before', 'After']}>
+
+<Tab value="Before">
+```ts
+const l1TxReceipt = new L1TransactionReceipt(receipt)
+const messages = await l1TxReceipt.getL1ToL2Messages(l2Signer)
+
+if (message.status === L1ToL2MessageStatus.FUNDS_DEPOSITED_ON_L2) {
+  // Handle success
+}
+```
+</Tab>
+
+<Tab value="After">
+```ts
+const parentTxReceipt = new ParentTransactionReceipt(receipt)
+const messages = await parentTxReceipt.getParentToChildMessages(childSigner)
+
+if (message.status === ParentToChildMessageStatus.FUNDS_DEPOSITED_ON_CHILD) {
+  // Handle success
+}
+```
+</Tab>
+
+</Tabs>
+
+## Migration Checklist
+
+<Steps>
+
+### Update Dependencies
+
+```bash
+npm install @arbitrum/sdk@^4.0.0
+```
+
+### Search and Replace
+
+Use your IDE's search and replace functionality to update terminology:
+
+1. `L2Network` → `ArbitrumNetwork`
+2. `getL2Network` → `getArbitrumNetwork`  
+3. `l1Signer` → `parentSigner`
+4. `l2Signer` → `childSigner`
+5. `l1Provider` → `parentProvider`
+6. `l2Provider` → `childProvider`
+
+### Test Your Application
+
+- Run your test suite to catch any remaining issues
+- Verify token bridging functionality works correctly
+- Test message status tracking and redemption
+
+### Update Type Annotations
+
+If you use TypeScript, update all type annotations to use the new interface names.
+
+</Steps>
+
+## Common Migration Issues
+
+### Issue: Import Errors
+
+**Problem**: `Cannot find module` errors after upgrading
+
+**Solution**: Update all imports to use the new naming convention. The old class names no longer exist.
+
+### Issue: Network Registration
+
+**Problem**: Custom networks not working
+
+**Solution**: Use `registerCustomArbitrumNetwork` instead of `addCustomNetwork`:
+
+```ts
+// Old
+addCustomNetwork({
+  chainID: 123,
+  name: 'My Chain'
+})
+
+// New  
+registerCustomArbitrumNetwork({
+  chainId: 123, // Note: chainId not chainID
+  name: 'My Chain'
+})
+```
+
+### Issue: Message Status Checking
+
+**Problem**: Status enums have changed
+
+**Solution**: Update status checks to use new enum values:
+
+```ts
+// Old
+if (status === L1ToL2MessageStatus.FUNDS_DEPOSITED_ON_L2)
+
+// New
+if (status === ParentToChildMessageStatus.FUNDS_DEPOSITED_ON_CHILD)
+```
+
+## Getting Help
+
+If you encounter issues during migration:
+
+1. Check the [GitHub Issues](https://github.com/OffchainLabs/arbitrum-sdk/issues) for known problems
+2. Review the [examples repository](https://github.com/OffchainLabs/arbitrum-tutorials) for updated code patterns
+3. Join the [Arbitrum Discord](https://discord.gg/arbitrum) for community support
+
+<Callout type="tip">
+**Pro Tip**: Start with a single integration (like ETH bridging) to verify your migration before updating all bridging operations.
+</Callout>

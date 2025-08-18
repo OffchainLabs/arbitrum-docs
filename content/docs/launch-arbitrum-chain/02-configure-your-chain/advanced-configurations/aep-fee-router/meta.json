@@ -1,0 +1,9 @@
+{
+  "title": "AEP Fee Router",
+  "pages": [
+    "01-aep-fee-router-introduction",
+    "02-set-up-aep-fee-router",
+    "03-calculate-aep-fees",
+    "04-reporting-on-fees"
+  ]
+}

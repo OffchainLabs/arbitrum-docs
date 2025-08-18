@@ -1,0 +1,13 @@
+{
+  "title": "Reference",
+  "pages": [
+    "01-node-providers",
+    "02-contract-addresses",
+    "03-chain-params",
+    "04-development-frameworks",
+    "05-web3-libraries-tools",
+    "06-monitoring-tools-block-explorers",
+    "07-debugging-tools",
+    "08-mainnet-risks"
+  ]
+}

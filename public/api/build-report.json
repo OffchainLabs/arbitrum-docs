@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-08-14T13:10:37.548Z",
+  "duration": "0.1s",
+  "stages": {
+    "completed": [
+      "Directory Setup",
+      "SDK Generation",
+      "Glossary Generation",
+      "Precompile Generation",
+      "Content Validation"
+    ],
+    "total": 5,
+    "success": true
+  },
+  "issues": {
+    "errors": [],
+    "warnings": []
+  },
+  "performance": {
+    "averageStageTime": "0.0s"
+  }
+}

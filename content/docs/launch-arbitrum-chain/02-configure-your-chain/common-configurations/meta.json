@@ -1,0 +1,20 @@
+{
+  "title": "Common Configurations",
+  "pages": [
+    "01-use-a-custom-gas-token-anytrust",
+    "02-use-a-custom-gas-token-rollup",
+    "03-customizable-challenge-period",
+    "04-stake-and-validator-configurations",
+    "05-arbos-configuration",
+    "06-gas-optimization-tools",
+    "07-fee-management",
+    "08-batch-posting-assertion-control",
+    "09-sequencer-timing-adjustments",
+    "10-per-batch-gas-cost",
+    "11-smart-contract-size-limit",
+    "12-customizing-anytrust",
+    "13-arbos-upgrade",
+    "14-enable-post-4844-blobs",
+    "arbitrum-chain-finality"
+  ]
+}
