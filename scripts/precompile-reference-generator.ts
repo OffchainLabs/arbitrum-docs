@@ -1,8 +1,8 @@
-import globalVars from '../resources/globalVars.js';
+import globalVars from '../src/resources/globalVars.js';
 import {
   precompilesInformation,
   nodeInterfaceInformation,
-} from '../resources/precompilesInformation.js';
+} from '../src/resources/precompilesInformation.js';
 import fs from 'fs';
 
 type PrecompileMethodInfo = {
@@ -252,12 +252,19 @@ const generatePrecompileReferenceTables = async (
       .replace('github.com', 'raw.githubusercontent.com')
       .replace('blob/', '')}${precompileName}.sol`,
   );
+  if (!interfaceCodeRawResponse.ok) {
+    throw new Error(`Failed fetching precompile ${precompileName} interface with status ${interfaceCodeRawResponse.status}`);
+  }
+  
   const interfaceCode = await interfaceCodeRawResponse.text();
   const implementationCodeRawResponse = await fetch(
     `${implementationBaseUrl
       .replace('github.com', 'raw.githubusercontent.com')
       .replace('blob/', '')}${precompileName}.go`,
   );
+  if (!implementationCodeRawResponse.ok) {
+    throw new Error(`Failed fetching precompile ${precompileName} implementation with status ${implementationCodeRawResponse.status}`);
+  }
   const implementationCode = await implementationCodeRawResponse.text();
 
   const methodsTable = renderMethodsInTable(

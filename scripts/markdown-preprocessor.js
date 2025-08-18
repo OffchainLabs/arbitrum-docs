@@ -1,4 +1,4 @@
-const globalVars = require('../resources/globalVars.js');
+const globalVars = require('../src/resources/globalVars.js');
 
 /**
  * This preprocessor uses globalVars as the source of truth to work around Vercel's caching behavior.
