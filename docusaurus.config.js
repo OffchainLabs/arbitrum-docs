@@ -9,6 +9,9 @@ const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
+// Check if SDK docs generation should be skipped
+const skipSdkDocs = process.env.SKIP_SDK_DOCS === 'true';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -70,6 +73,65 @@ const config = {
     ],
   ],
   plugins: [
+    // Only skip TypeDoc plugin if explicitly requested via environment variable
+    ...(skipSdkDocs
+      ? []
+      : [
+          [
+            'docusaurus-plugin-typedoc',
+            {
+              id: 'arbitrum-sdk',
+              tsconfig: `${sdkCodebasePath}/tsconfig.json`,
+              entryPoints: [`${sdkCodebasePath}/src/lib`],
+              entryPointStrategy: 'expand',
+              exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+              excludeNotDocumented: true,
+              excludeInternal: true,
+              excludeExternals: true,
+              readme: 'none',
+
+              // Output options
+              out: './docs/sdk',
+              hideGenerator: true,
+              validation: {
+                notExported: false,
+                invalidLink: true,
+                notDocumented: true,
+              },
+              logLevel: 'Verbose',
+              sidebar: {
+                autoConfiguration: false,
+              },
+
+              plugin: [
+                'typedoc-plugin-markdown',
+                `typedoc-plugin-frontmatter`,
+                './scripts/sdkDocsHandler.ts',
+                './scripts/stylusByExampleDocsHandler.ts',
+              ],
+
+              // typedoc-plugin-markdown options
+              // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+              outputFileStrategy: 'modules',
+              excludeGroups: false,
+              hidePageHeader: true,
+              hidePageTitle: true,
+              hideBreadcrumbs: true,
+              useCodeBlocks: true,
+              expandParameters: true,
+              parametersFormat: 'table',
+              propertiesFormat: 'table',
+              enumMembersFormat: 'table',
+              typeDeclarationFormat: 'table',
+              sanitizeComments: true,
+              frontmatterGlobals: {
+                layout: 'docs',
+                sidebar: true,
+                toc_max_heading_level: 5,
+              },
+            },
+          ],
+        ]),
     [
       '@inkeep/cxkit-docusaurus',
       {
@@ -146,60 +208,6 @@ const config = {
               'What is Arbitrum Stylus?',
             ],
           },
-        },
-      },
-    ],
-    [
-      'docusaurus-plugin-typedoc',
-      {
-        id: 'arbitrum-sdk',
-        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-        entryPoints: [`${sdkCodebasePath}/src/lib`],
-        entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
-        excludeNotDocumented: true,
-        excludeInternal: true,
-        excludeExternals: true,
-        readme: 'none',
-
-        // Output options
-        out: './docs/sdk',
-        hideGenerator: true,
-        validation: {
-          notExported: false,
-          invalidLink: true,
-          notDocumented: true,
-        },
-        logLevel: 'Verbose',
-        sidebar: {
-          autoConfiguration: false,
-        },
-
-        plugin: [
-          'typedoc-plugin-markdown',
-          `typedoc-plugin-frontmatter`,
-          './scripts/sdkDocsHandler.ts',
-          './scripts/stylusByExampleDocsHandler.ts',
-        ],
-
-        // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-        outputFileStrategy: 'modules',
-        excludeGroups: false,
-        hidePageHeader: true,
-        hidePageTitle: true,
-        hideBreadcrumbs: true,
-        useCodeBlocks: true,
-        expandParameters: true,
-        parametersFormat: 'table',
-        propertiesFormat: 'table',
-        enumMembersFormat: 'table',
-        typeDeclarationFormat: 'table',
-        sanitizeComments: true,
-        frontmatterGlobals: {
-          layout: 'docs',
-          sidebar: true,
-          toc_max_heading_level: 5,
         },
       },
     ],
