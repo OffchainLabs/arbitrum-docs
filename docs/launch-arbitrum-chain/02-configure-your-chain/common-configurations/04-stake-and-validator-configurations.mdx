@@ -7,11 +7,19 @@ content_type: how-to
 tags: ['hide-from-search']
 ---
 
-Arbitrum Orbit chains are customizable Layer 3 (L3) chains that settle to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support validator configurations to ensure chain security through bonding (staking) and assertion challenges. Validators post assertions about the chain's state on the parent L2 chain and can challenge incorrect assertions. Orbit chains can be permissioned, meaning validators must be allowlisted.
+<a data-quicklook-from="arbitrum">Arbitrum</a> Orbit chains are customizable Layer 3 (L3) chains that
+settle to an Arbitrum Layer 2 (L2) chain, such as <a data-quicklook-from="arbitrum-one">
+  Arbitrum One
+</a>
+. They support <a data-quicklook-from="validator">validator</a> configurations to ensure chain
+security through bonding (staking) and <a data-quicklook-from="assertion">assertion</a> challenges.
+Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
+  challenge
+</a> incorrect assertions. Orbit chains can be permissioned, meaning validators must be allowlisted.
 
 Staking is required for active validation, where validators bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bonded stake is escrowed or burned. Configurations such as stake token, base stake, and loser stake escrow are configurable during chain deployment or post-deployment via contract calls.
 
-Arbitrum (Orbit) chains may utilize the BoLD (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects staking tokens (e.g., `WETH` for BoLD-enabled chains like Arbitrum One/Nova, or `ETH`/native for other chains).
+Arbitrum (Orbit) chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects staking tokens (e.g., `WETH` for BoLD-enabled chains like Arbitrum One/Nova, or `ETH`/native for other chains).
 
 ## Key concepts
 
@@ -28,13 +36,13 @@ The stake token is the asset that validators must bond to participate in asserti
 
 - Can be `ETH` (native gas token) or an `ERC-20` token.
 - **For BoLD-enabled chains** (e.g., settling to Arbitrum One or Nova), it defaults to `WETH`.
-- **For non-BoLD chains**, it defaults to the parent chain's native token (usually `ETH`).
+- **For non-BoLD chains**, it defaults to the <a data-quicklook-from="parent-chain">parent chain</a>'s native token (usually `ETH`).
 - Currently, it's often hardcoded to `ETH` in basic deployments, but customizable to an `ERC-20` contract address in advanced setups. Future updates will expand `ERC-20` support.
 
 ### How to Configure
 
 - During deployment in the [Arbitrum Orbit deployment portal](https://orbit.arbitrum.io/):
-  1.  Connect your wallet (may require switching to Arbitrum Sepolia for testnets).
+  1.  Connect your <a data-quicklook-from="wallet">wallet</a> (may require switching to Arbitrum Sepolia for testnets).
   2.  In the configuration form, enter the stake token's contract address on the parent L2 chain.
   3.  Use `0x0000000000000000000000000000000000000000` for `ETH`.
 - **Post-deployment**: Not directly modifiable; set during initial Rollup contract creation.
@@ -55,10 +63,10 @@ The base stake is the minimum amount of the stake token that validators must dep
 
 ### How to configure
 
-- During deployment in the Orbit portal:
+- During deployment in the Orbit <a data-quicklook-from="portal">portal</a>:
   1.  In the configuration form, enter the base stake amount as a float.
   2.  Review and deploy the chain (submits transactions to the parent chain).
-- **Post-deployment**: Adjustable via the Rollup contract if permissions allow (e.g., as chain owner).
+- **Post-deployment**: Adjustable via the Rollup contract if permissions allow (e.g., as <a data-quicklook-from="chain-owner">chain Owner</a>).
 
 ### Default
 
