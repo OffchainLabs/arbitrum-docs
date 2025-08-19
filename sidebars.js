@@ -538,6 +538,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/migrate-from-another-stack',
               label: 'Migrate from another stack',
+            },                   
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/migrate-between-raases',
+              label: 'Migrate between RaaSes',
             },
           ],
         },
