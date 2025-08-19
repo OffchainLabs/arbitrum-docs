@@ -85,7 +85,7 @@ Pause withdrawals earlier than the main freeze window to ensure no funds get tra
 
 You can use the chain-state migration process. The two common approaches are:
 
-- State replay: re-execute legacy blocks into the Arbitrum (Orbit) chain. This process can be heavy, but it can preserve more historical information. **Caution**: If the legacy stack has different opcode semantics, precompiles, or system contracts, replay can diverge, resulting in a different end state even with identical transactions. Validate equivalence early on a testnet.
+- State replay: re-execute legacy blocks into the Arbitrum (Orbit) chain. This process can be heavy, but it can preserve more historical information. **Caution**: If the legacy stack has different opcode semantics, precompiles, or system contracts, replay can diverge, resulting in a different end state even with identical transactions. Validate equivalence early on a private testnet before committing.
 - Genesis import: export balances/storage and pre-seed them in the chain’s genesis. This process is lighter and can preserve the state at a chosen block.
 
 ### How can I migrate without affecting my Apps/ecosystem on my chain?
@@ -121,11 +121,11 @@ The rest of this answer assumes that the team wants to perform the latter. For c
 1. Freeze legacy chain writes and make RPC read-only:
    1. Stop the legacy chain’s proposer/sequencer so no new blocks or transactions get created after the chosen upgrade block.
    2. Configure the legacy RPC to reject write methods (e.g., `eth_sendRawTransaction`) and only serve readable requests for historical data.
-2. There is a current Geth-based client that can extract data.
-3. Upgrade will require a few hours of downtime (also depends on the size of their state)
-4. Nitro nodes will be used as full nodes, which include the previous chain’s history
-5. Full archive functionality (fetching data from the state) will require an archive node from the previous stack to be running in parallel. This archive node wouldn’t try to advance beyond the upgrade block.
-6. For the dual-node full-archive mode, the Nitro node needs to be able to detect which requests are getting directed to the previous stack’s node and forward them
+2. Ensure that you can export required state from your EVM-compatible client at the upgrade block. 
+3. Expect a freeze window of hours (depends on state size) for snapshot integrity. 
+4. Run Nitro nodes for post-migration traffic. 
+5. Run a legacy archive node in parallel. This archive node wouldn’t try to advance beyond the upgrade block.
+6. Put a dual-RPC gateway in front that routes pre-migration ranges to the legacy archive node and post-migration ranges to Nitro, so apps keep a single RPC URL. 
 
 The only example of a chain that has done this is Powerloom, and they have also [documented this in their records](https://docs.powerloom.io/category/chain-migration/).
 
