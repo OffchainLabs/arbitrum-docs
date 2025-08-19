@@ -19,34 +19,12 @@ import './styles.css';
 
 // Import all config partials statically to avoid CSP issues
 import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/partials/config-custom-gas-token.mdx';
-import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/partials/config-native-eth.mdx';
-import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/config-rollup.mdx';
-import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/config-anytrust.mdx';
 import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/config-alt-da.mdx';
-import ConfigFastWithdrawals from '@site/docs/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx';
-import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/config-bold.mdx';
-import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/config-permissioned-validators.mdx';
-import ConfigChallengePeriodOnL1 from '@site/docs/launch-arbitrum-chain/partials/config-challenge-period-on-l1.mdx';
-import ConfigForceInclusion from '@site/docs/launch-arbitrum-chain/partials/config-force-inclusion.mdx';
-import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/config-timeboost.mdx';
-import ConfigDataPostingCost from '@site/docs/launch-arbitrum-chain/partials/config-data-posting-cost.mdx';
-import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-hardware.mdx';
 
 // Static content mapping
 const contentMap = {
   'config-custom-gas-token': ConfigCustomGasToken,
-  'config-native-eth': ConfigNativeEth,
-  'config-rollup': ConfigRollup,
-  'config-anytrust': ConfigAnytrust,
   'config-alt-da': ConfigAltDa,
-  'config-fast-withdrawals': ConfigFastWithdrawals,
-  'config-bold': ConfigBold,
-  'config-permissioned-validators': ConfigPermissionedValidators,
-  'config-challenge-period-on-l1': ConfigChallengePeriodOnL1,
-  'config-force-inclusion': ConfigForceInclusion,
-  'config-timeboost': ConfigTimeboost,
-  'config-data-posting-cost': ConfigDataPostingCost,
-  'config-hardware': ConfigHardware,
 };
 
 // MDX components for proper rendering
