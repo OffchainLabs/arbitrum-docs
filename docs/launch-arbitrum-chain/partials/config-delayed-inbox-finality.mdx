@@ -4,6 +4,7 @@ The Delayed Inbox in Arbitrum chains (including Orbit L2s and L3s) allows users 
 
 Configurations are set at deployment (via RollupCreator) or post-launch (via contract calls like SequencerInbox.setMaxTimeVariation). For Orbit chains, use the Orbit SDK for testing; changes may require governance (e.g., DAO) for public chains. Always audit and test on devnet to avoid re-org risks.
 
+<!-- 
 #### Steps to Configure Delayed Inbox Finality
 
 1. **Understand Key Components**:
@@ -56,6 +57,7 @@ Configurations are set at deployment (via RollupCreator) or post-launch (via con
 - **futureSeconds**: Max seconds for postdating (default: 3600, 1 hour).
 - **use-merge-finality**: Flag to use L1 (true, default) or L2 finality (false).
 - **finalize-distance**: L2 blocks to wait for confirmation (default: higher value; set to 1 for ~1-minute finality).
+-->
 
 #### Decisions Regarding Configuration
 
@@ -65,7 +67,7 @@ Use the table below for key decisions, focusing on trade-offs between speed, sec
 | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Finality Layer (L1 vs. L2)**                          | Set `--node.delayed-sequencer.use-merge-finality=false` for L2 reliance in L3s settling to Arbitrum One/Nova. Use for faster deposits via L2 DACerts. | L2 finality speeds up (~tens of minutes) but risks if L2 re-orgs; L1 (default) is more secure but slower (waits for Ethereum finality).                                   |
 | **Force-Inclusion Period (delayBlocks/delaySeconds)**   | Shorten for quicker user-forced inclusions; set via contract call or config. Ideal for high-UX apps.                                                  | Shorter periods reduce censorship resistance wait times but increase spam/DoS risks; longer (default 24h) enhances security but frustrates users during sequencer issues. |
-| **Confirmation Distance (finalize-distance)**           | Set to 1 for ~1-minute finality; configure in sequencer flags.                                                                                        | Faster finality improves deposits/bridges but heightens re-org risks on un-finalized blocks; higher values prioritize safety over speed.                                  |
+| **Confirmation Distance (finalize-distance)**           | Set to 1 for ~one-minute finality; configure in sequencer flags.                                                                                      | Faster finality improves deposits/bridges but heightens re-org risks on un-finalized blocks; higher values prioritize safety over speed.                                  |
 | **Timestamp Manipulation (futureBlocks/futureSeconds)** | Adjust for sequencer flexibility in posting; defaults allow minor adjustments.                                                                        | Higher values aid in handling network variability but risk sequencer abuse (e.g., MEV); lower limits enhance predictability.                                              |
 | **Deployment vs. Upgrade**                              | Set at genesis for new Orbit chains; update post-launch for live ones.                                                                                | Genesis is simpler/no disruption; upgrades require governance and may cause temporary delays but allow iteration.                                                         |
 | **Chain Mode (Rollup vs. AnyTrust)**                    | Applies to both; AnyTrust may layer with DAC for DA.                                                                                                  | Rollup ties directly to L1 finality (more secure); AnyTrust enables faster configs but adds committee trust.                                                              |

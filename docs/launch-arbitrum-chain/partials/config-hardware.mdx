@@ -1,6 +1,6 @@
 ### Hardware Requirements for Arbitrum Chains
 
-Arbitrum chains, including Arbitrum One, Nova, and customizable Orbit L2/L3 chains, have varying hardware needs depending on the node type. Requirements are generally modest compared to Ethereum L1 nodes, focusing on accessibility for decentralized participation. As of July 2025, official docs emphasize that specs are for nodes handling limited RPC requests; scale up for high traffic. Full nodes form the base, with validators and sequencers building on them. Archive nodes require more storage for historical data.
+Arbitrum chains, including Arbitrum One, Nova, and customizable Orbit L2/L3 chains, have varying hardware needs depending on the node type. Requirements are generally modest compared to Ethereum L1 nodes, focusing on accessibility for decentralized participation. The specs are for nodes handling limited RPC requests; scale up for high traffic. Full nodes form the base, with validators and sequencers building on them. Archive nodes require more storage for historical data.
 
 Key considerations:
 
@@ -24,14 +24,14 @@ Runs the chain state, serves RPCs, and syncs data. Non-archive by default.
 
 #### Validator Node
 
-Monitors assertions and challenges fraud. Runs on top of a full node with staker software enabled. BoLD upgrade (activated 2025) makes it more efficient, assuming one honest party.
+Monitors assertions and challenges fraud. Runs on top of a full node with staker software enabled. BoLD upgrade makes it more efficient, assuming one honest party.
 
 | Component     | Minimum                     | Recommended          | Notes                                                                         |
 | ------------- | --------------------------- | -------------------- | ----------------------------------------------------------------------------- |
 | **CPU**       | 4 cores                     | 8 cores              | Needs fast computation for disputes; BoLD reduces multi-challenge load.       |
 | **RAM**       | 8 GB                        | 16-32 GB             | Similar to full node; more if running defensive mode.                         |
 | **Storage**   | 400 GB SSD                  | 1 TB+                | Includes chain data; archive mode adds history.                               |
-| **Bandwidth** | 100 Mbps                    | 500 Mbps+            | For monitoring and bonding (e.g., 3600 ETH equivalent stake).                 |
+| **Bandwidth** | 100 Mbps                    | 500 Mbps+            | For monitoring and bonding (e.g., 3,600 `ETH` equivalent stake).              |
 | **Other**     | Bonding funds; WASM support | VPS/cloud for uptime | Permissioned for low-TVL chains; permissionless needs higher bonds/resources. |
 
 #### Sequencer Node

@@ -4,6 +4,7 @@ Customizing precompiles in Arbitrum chains, including Orbit L2s and L3s, allows 
 
 This process is advanced and affects the State Transition Function (STF), so it's recommended for experienced developers or teams partnering with Rollup-as-a-Service (RaaS) providers (e.g., Caldera, Zeeve) for implementation, audits, and maintenance. Customizations must maintain backward compatibility, as WASM module roots are designed to be forward-compatible with future ArbOS versions. Offchain Labs does not review individual changes, so ensure thorough testing and security audits to avoid vulnerabilities.
 
+<!-- Probably Remove
 #### Steps to Customize Precompiles
 
 1. **Prepare the Nitro Source Code**:
@@ -94,6 +95,8 @@ This process is advanced and affects the State Transition Function (STF), so it'
 5. **Upgrade and Test**:
    - For live chains, propose an ArbOS upgrade via governance (e.g., DAO for public chains) to activate the changes.
    - Test on a devnet using the Orbit SDK, then deploy to mainnet. Audit for security and performance impacts.
+
+-->
 
 #### Decisions and Considerations
 
