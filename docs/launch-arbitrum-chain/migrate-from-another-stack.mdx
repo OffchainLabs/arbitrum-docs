@@ -121,11 +121,11 @@ The rest of this answer assumes that the team wants to perform the latter. For c
 1. Freeze legacy chain writes and make RPC read-only:
    1. Stop the legacy chain’s proposer/sequencer so no new blocks or transactions get created after the chosen upgrade block.
    2. Configure the legacy RPC to reject write methods (e.g., `eth_sendRawTransaction`) and only serve readable requests for historical data.
-2. Ensure that you can export required state from your EVM-compatible client at the upgrade block. 
-3. Expect a freeze window of hours (depends on state size) for snapshot integrity. 
-4. Run Nitro nodes for post-migration traffic. 
+2. Ensure that you can export required state from your EVM-compatible client at the upgrade block.
+3. Expect a freeze window of hours (depends on state size) for snapshot integrity.
+4. Run Nitro nodes for post-migration traffic.
 5. Run a legacy archive node in parallel. This archive node wouldn’t try to advance beyond the upgrade block.
-6. Put a dual-RPC gateway in front that routes pre-migration ranges to the legacy archive node and post-migration ranges to Nitro, so apps keep a single RPC URL. 
+6. Put a dual-RPC gateway in front that routes pre-migration ranges to the legacy archive node and post-migration ranges to Nitro, so apps keep a single RPC URL.
 
 The only example of a chain that has done this is Powerloom, and they have also [documented this in their records](https://docs.powerloom.io/category/chain-migration/).
 
