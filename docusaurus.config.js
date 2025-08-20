@@ -153,10 +153,10 @@ const config = {
       'docusaurus-plugin-typedoc',
       {
         id: 'arbitrum-sdk',
-        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-        entryPoints: [`${sdkCodebasePath}/src/lib`],
+        tsconfig: `${sdkCodebasePath}/packages/sdk/tsconfig.json`,
+        entryPoints: [`${sdkCodebasePath}/packages/sdk/src/lib`],
         entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`, `**/tests/**/*`, `**/*.test.ts`],
         excludeNotDocumented: true,
         excludeInternal: true,
         excludeExternals: true,
