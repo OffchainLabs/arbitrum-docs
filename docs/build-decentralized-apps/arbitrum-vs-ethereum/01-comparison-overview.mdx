@@ -12,32 +12,78 @@ Arbitrum is designed to be as compatible and consistent with Ethereum as possibl
 
 This section describes the differences, perks, and gotchas that devs are advised to be aware of when working with Arbitrum. This first page serves as an overview of where you might find these differences, with links to the relevant pages when needed.
 
-## Block numbers and time
+## STF in Ethereum
+
+In Ethereum, the STF receives transactions as inputs, processes them via the EVM, and produces the final state as output.
+
+The Ethereum state is a vast data structure represented by a modified Merkle Patricia Trie. This structure holds all accounts, linking them via hashes and reducing the entire state to a single root hash stored on the <a data-quicklook-from="blockchain">blockchain</a>.
+
+The Ethereum Virtual Machine (EVM) operates similarly to a mathematical function: given an input, it produces a deterministic output. Ethereum's STF encapsulates this behavior:
+
+$$
+Y(S, T) = S'
+$$
+
+Here, `S` represents the current state, `T` denotes the <a data-quicklook-from="transaction">transaction</a>, and `S'` is the new state resulting from the execution of `T`.
+
+The EVM operates as a stack machine with a maximum depth of 1024 items. Each item is a 256-bit word, chosen for compatibility with 256-bit cryptography (e.g., Keccak-256 hashes and secp256k1 signatures).
+
+During execution, the EVM uses transient _memory_ (a word-addresses byte array) that only persists for the duration of a transaction. In contrast, each contract maintains a persistent Merkle Patricia _storage_ trie–a word-addressable word array–that forms part of the global state.
+
+<a data-quicklook-from="smart-contract">smart contract</a> bytecode compiles into a series of EVM opcodes
+that perform standard stack operations (such as `XOR`, `AND`, `ADD`, `SUB`) and blockchain-specific operations
+(such as `ADDRESS`, `BALANCE`, `BLOCKHASH`).
+
+<a data-quicklook-from="geth">Geth</a> (go-Ethereum) is one of the primary <a data-quicklook-from="client">
+  client
+</a> implementations of Ethereum, serving as the practical embodiment of both the STF and the EVM execution
+engine. It processes transactions by executing the smart contract's bytecode and updating the global
+state, ensuring that every state change is deterministic and secure.
+
+In essence, Geth converts transaction inputs into precise computational steps within the EVM, maintaining the intricate data structures that underpin Ethereum's blockchain. Its robust design not only powers the core operations of Ethereum but also provides the foundation for advanced modificaitons in platforms like the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack.
+
+## STF on Arbitrum
+
+The Arbitrum Nitro stack implements a modified version of Ethereum's STF. While it retains the core principles of Ethereum, several Arbitrum-specific features and processes distinguish it from Ethereum's implementation. Key differences include:
+
+### Block numbers and time
 
 Time in Arbitrum chains is tricky. The timing assumptions one is used to making about Ethereum blocks don't exactly carry over into the timing of Arbitrum blocks. See [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) for details about how block numbers and time are handled in Arbitrum.
 
-## RPC methods
+### RPC methods
 
 Although the majority of RPC methods follow the same behavior as Ethereum, some methods might produce a different result, or add more information, when used on an Arbitrum chain. You can find more information about these differences in [RPC methods](/build-decentralized-apps/arbitrum-vs-ethereum/03-rpc-methods.mdx).
 
-## Solidity support
+### Solidity support
 
 You can deploy Solidity contracts onto Arbitrum just like you do on Ethereum. There are only a few minor differences in behavior. Find more information about it in [Solidity support](/build-decentralized-apps/arbitrum-vs-ethereum/04-solidity-support.mdx).
 
-## Fees
+### Gas accounting
 
-The fees for executing an Arbitrum transaction work like gas fees on Ethereum. However, Arbitrum transactions must also pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, a child chain, is posted to Ethereum, a parent chain). Find more information about the two components of gas fees in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) and parent chain pricing.
+In Arbitrum, executing a transaction incurs two costs, one for executing on the <a data-quicklook-from="child-chain">child chain</a> and another for submitting transaction batches to the <a data-quicklook-from="parent-chain">parent chain</a>. This dual fee structure requires a different approach to gas accounting.
 
-## Cross-chain messaging
+### Base fee mechanism
+
+Gas prices and base fees on Arbitrum change differently from Ethereum's. Arbitrum maintains two base fees: one to track the cost of execution on the child chain and another to estimate the cost of posting batches to the parent chain. The mechanism that changes the child chain's base fee differs from what is currently on Ethereum.
+
+### Cross-chain messaging
 
 Arbitrum chains support arbitrary message passing from a parent chain (for example, a parent chain like Ethereum) to a child chain (for example, a child chain like Arbitrum One or Arbitrum Nova). These are commonly known as "parent chain to child chain messages". Developers using this functionality should familiarize themselves with how they work. Find more information about it in [Parent chain to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 
 Similarly, Arbitrum chains can also send messages to the parent chain. Find more information about them in [Child chain to parent chain messaging and the outbox](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx).
 
-## Precompiles
+### Precompiles
 
 Besides supporting all precompiles available in Ethereum, Arbitrum provides child chain-specific precompiles with methods smart contracts can call the same way they can solidity functions. You can find a full reference of them in [Precompiles](/build-decentralized-apps/precompiles/01-overview.mdx).
 
-## NodeInterface
+### NodeInterface
 
 The Arbitrum Nitro software includes a special `NodeInterface` contract available at address `0xc8` that is only accessible via RPCs (it's not actually deployed onchain, and thus can't be called by smart contracts). Find more information about this interface in [NodeInterface](/build-decentralized-apps/nodeinterface/01-overview.mdx).
+
+### Custom transaction types
+
+Nitro Geth introduces several child chain-specific transaction types that utilize the non-standard [EIP-2718: Typed Transaction Envelope](https://eips.ethereum.org/EIPS/eip-2718). These types represent different transactions on the Arbitrum chain, such as retryable transactions.
+
+### <a data-quicklook-from="stylus">Stylus</a> in the STF
+
+With the introduction of Stylus, Arbitrum Nitro now supports executing smart contracts written in Rust, C, and C++, offering a high-performance alternative to the EVM. Unlike standard Ethereum transactions, Stylus contracts execute in a <a data-quicklook-from="wasm">WASM</a>-based runtime within <a data-quicklook-from="arbos">ArbOS</a>, leveraging efficient host I/O operations and optimized caching mechanisms.

@@ -7,9 +7,37 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-<!-- build-decentralized-apps/precompiles/01-overview.mdx? -->
+ArbOS is the child chain EVM hypervisor that provides the execution environment for the Arbitrum chain. Acting as a trusted "system glue" component within the STF, ArbOS is responsible for:
 
-## Precompiles
+### Managing network resources
+
+It allocates and tracks resources necessary for executing transcations on the child chain.
+
+### Block production
+
+ArbOS processes incoming sequencer data batches to produce child chain blocks, ensuring the state is updated correctly.
+
+### Cross-chain messaging
+
+It facilitates communication between the parent and child chains, supporting functionalities like Ether and token deposits and withdrawals.
+
+### Enhanced EVM execution
+
+ArbOS operates its instrumented instance of Geth to execute smart contracts, incorporating additional logic specific to the child chain environment.
+
+### Stylus-specific tasks in ArbOS
+
+ArbOS manages host I/O calls, memory operations, and execution context for Stylus transactions, ensuring efficient and deterministic processing with the WASM runtime.
+
+By offloading tasks that would execute at a high cost on the parent chain, ArbOS enables these operations to be performed quickly and cost-effectively on the child chain. This design reduces computational and storage costs and offers significant flexibility, allowing the child chain code to evolve or be customized more easily than a parent chain-enforced architecture.
+
+While Ethereum's STF forms the basis for secure and deterministic state updates, Arbitrum's Nitro stack builds on this foundation with key modifications–ranging from dual gas accounting to cross-chain messaging–to optimize performance and flexibility. These innovations are realized through minimal yet strategic modifications to Geth, integrated seamlessly with ArbOS, forming the "geth sandwich."
+
+With the introduction of Stylus, Arbitrum extends its execution model beyond the EVM, enabling high-performance WASM-based smart contracts. This integration introduces additional modifications to Geth, ensuring compatibility with Stylus transactions while preserving Ethereum-like execution guarantees. These changes include handling Stylus-specific transaction types and ensuring smooth interaction between the EVM and WASM environments.
+
+In the following section, we'll dive deep into these modifications, exploring how Nitro leverages 'Geth at the core' and the custom enhancements provided by ArbOS to deliver an advanced, high-performance STF. Stylus-specific tasks within ArbOS are covered separately to highlight its role in managing execution, host I/O, and memory operations.
+
+## How precompiles work
 
 A precompile consists of a Solidity interface in `contracts/src/precompiles/` and a corresponding Golang implementation in `precompiles/`. Using Geth's ABI generator, `solgen/gen.go` generates `solgen/go/precompilesgen/precompilesgen.go`, which collects the ABI data of the precompiles. The [runtime installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses this generated file to check the type safety of each precompile's implementer.
 
@@ -35,10 +63,10 @@ ArbOS's state is viewed and modified via [`ArbosState`](https://github.com/Offch
 
 Because two [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36) objects with the same [`backingStorage`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L51) contain and mutate the same underlying state, different `ArbosState` objects can provide different views of ArbOS's contents. [`Burner`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/burn/burn.go#L11) objects, which track gas usage while working with the `ArbosState`, provide the internal mechanism. Some are read-only, causing transactions to revert with `vm.ErrWriteProtection` upon a mutating request. Others demand the caller have elevated privileges. Meanwhile, others dynamically charge users when doing stateful work. This view is chosen for safety when [`OpenArbosState()`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L57) creates the object and may never change.
 
-Must of ArbOS's state exists to facilitate its [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). The parts that aren't are detailed below.
-
 [`arbosVersion`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L37), [`updgradeVersion`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L38) and [`upgradeTimestamp`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L39)
 ArbOS upgrades are scheduled to happen [when finalizing the first block](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L350) after the `upgradeTimestamp`.
+
+Most of ArbOS's state exists to facilitate its [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). The parts that aren't are detailed below.
 
 ### [`blockhashes`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/blockhash/blockhash.go#L15)
 
@@ -49,8 +77,6 @@ This component maintains the last 256 parent chain block hashes in a circular bu
 In addition to supporting the [`ArbAggregator precompile`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator), the parent chain pricing state provides tools for determining the parent chain component of a transaction's gas costs. This part of the state tracks the total amount of funds collected from transactions in parent chain gas fees and the funds spent by batch posters to post data breaches on the parent chain.
 
 Based on this information, ArbOS maintains a parent chain data fee, which is also tracked as part of this state, determining how much transaction fees will cost for parent chain fees. ArbOS dynamically adjusts this value so that fees collected are approximately equal to batch posting costs.
-
-<!-- build-decentralized-apps/how-to-estimate-gas.mdx? -->
 
 ## Parent chain pricing model
 
