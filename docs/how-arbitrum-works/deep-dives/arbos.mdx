@@ -7,6 +7,38 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
+## ArbOS overview
+
+ArbOS is the child chain EVM hypervisor that provides the execution environment for the Arbitrum chain. Acting as a trusted "system glue" component within the STF, ArbOS is responsible for:
+
+### Managing network resources
+
+It allocates and tracks resources necessary for executing transcations on the child chain.
+
+### Block production
+
+ArbOS processes incoming sequencer data batches to produce child chain blocks, ensuring the state is updated correctly.
+
+### Cross-chain messaging
+
+It facilitates communication between the parent and child chains, supporting functionalities like Ether and token deposits and withdrawals.
+
+### Enhanced EVM execution
+
+ArbOS operates its instrumented instance of Geth to execute smart contracts, incorporating additional logic specific to the child chain environment.
+
+### Stylus-specific tasks in ArbOS
+
+ArbOS manages host I/O calls, memory operations, and execution context for Stylus transactions, ensuring efficient and deterministic processing with the WASM runtime.
+
+By offloading tasks that would execute at a high cost on the parent chain, ArbOS enables these operations to be performed quickly and cost-effectively on the child chain. This design reduces computational and storage costs and offers significant flexibility, allowing the child chain code to evolve or be customized more easily than a parent chain-enforced architecture.
+
+While Ethereum's STF forms the basis for secure and deterministic state updates, Arbitrum's Nitro stack builds on this foundation with key modifications–ranging from dual gas accounting to cross-chain messaging–to optimize performance and flexibility. These innovations are realized through minimal yet strategic modifications to Geth, integrated seamlessly with ArbOS, forming the "geth sandwich."
+
+With the introduction of Stylus, Arbitrum extends its execution model beyond the EVM, enabling high-performance WASM-based smart contracts. This integration introduces additional modifications to Geth, ensuring compatibility with Stylus transactions while preserving Ethereum-like execution guarantees. These changes include handling Stylus-specific transaction types and ensuring smooth interaction between the EVM and WASM environments.
+
+In the following section, we'll dive deep into these modifications, exploring how Nitro leverages 'Geth at the core' and the custom enhancements provided by ArbOS to deliver an advanced, high-performance STF. Stylus-specific tasks within ArbOS are covered separately to highlight its role in managing execution, host I/O, and memory operations.
+
 <!-- build-decentralized-apps/precompiles/01-overview.mdx? -->
 
 ## Precompiles
