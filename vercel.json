@@ -196,11 +196,6 @@
       "permanent": false
     },
     {
-      "source": "/(docs/how-arbitrum-works/data-availability/?)",
-      "destination": "/(docs/how-arbitrum-works/deep-dives/data-availability/?)",
-      "permanent": false
-    },
-    {
       "source": "/(docs/how-arbitrum-works/deep-dives/data-availability/?)",
       "destination": "/(docs/run-arbitrum-node/data-availability/?)",
       "permanent": false
@@ -262,7 +257,7 @@
     },
     {
       "source": "/(docs/how-arbitrum-works/gas-fees/?)",
-      "destination": "/(docs/how-arbitrum-works/deep-dives/gas-fees/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/gas-and-fees/?)",
       "permanent": false
     },
     {
