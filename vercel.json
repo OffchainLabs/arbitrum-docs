@@ -282,12 +282,22 @@
     },
     {
       "source": "/(docs/how-arbitrum-works/state-transition-function/arbos/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/arbos/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/arbos/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/arbos/?)",
       "permanent": false
     },
     {
       "source": "/(docs/how-arbitrum-works/state-transition-function/ethereum-vs-arbitrum/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/state-transition-function/ethereum-vs-arbitrum/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/geth/?)",
       "permanent": false
     },
     {
