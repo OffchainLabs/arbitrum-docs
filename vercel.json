@@ -196,7 +196,7 @@
       "permanent": false
     },
     {
-      "source": "/(docs/how-arbitrum-works/deep-dives/data-availability/?)",
+      "source": "/(docs/how-arbitrum-works/data-availability/?)",
       "destination": "/(docs/run-arbitrum-node/data-availability/?)",
       "permanent": false
     },
