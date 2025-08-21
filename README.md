@@ -28,16 +28,17 @@ This repository is organized as follows:
 
 ### Application Code
 - **`src/`** - Docusaurus application source code
-  - `components/` - React components for the documentation site
-  - `css/` - Styling and themes
-  - `pages/` - Custom pages and landing pages
-  - `resources/` - Global variables and configuration
-  - `scripts/` - Build scripts 
-  - `theme/` - Docusaurus theme customizations
+    - `components/` - React components for the documentation site
+    - `css/` - Styling and themes
+    - `pages/` - Custom pages and landing pages
+    - `resources/` - Global variables and configuration
+    - `scripts/` - Build scripts 
+    - `theme/` - Docusaurus theme customizations
 
 ### Configuration & Dependencies
-- **`arbitrum-sdk/`** - Git submodule containing SDK source code
-- **`stylus-by-example/`** - Git submodule containing Stylus examples
+- **`submodules/`** - Git submodule containing SDK source code
+    - **`arbitrum-sdk/`** - Git submodule containing SDK source code
+    - **`stylus-by-example/`** - Git submodule containing Stylus examples
 - **`scripts/`** - Repository maintenance, build scripts, and content generators
 - **`static/`** - Static assets (images, files, JSON data)
 
