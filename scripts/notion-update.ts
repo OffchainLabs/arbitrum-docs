@@ -1,17 +1,12 @@
 import { Client } from '@notionhq/client'
 import {
-  Definition,
   FAQ,
   RenderedKnowledgeItem,
   renderKnowledgeItem,
-  escapeForJSON,
   lookupProject,
-  lookupGlossaryTerms,
   lookupFAQs,
   handleRenderError,
-  renderGlossary,
   Record,
-  renderGlossaryJSON,
   KnowledgeItem,
   LinkableTerms,
   LinkValidity,
@@ -23,7 +18,6 @@ dotenv.config()
 
 // Types
 type CMSContents = {
-  glossaryTerms: Definition[]
   getStartedFAQs: RenderedKnowledgeItem[]
   nodeRunningFAQs: RenderedKnowledgeItem[]
   buildingFAQs: RenderedKnowledgeItem[]
@@ -57,15 +51,6 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
     notion,
     'Arbitrum developer docs portal v2.0'
   )
-
-  const glossaryTerms = await lookupGlossaryTerms(notion, {
-    filter: {
-      property: 'Project(s)',
-      relation: {
-        contains: devDocsV2Project,
-      },
-    },
-  })
 
   const getStartedFAQs = await lookupFAQs(notion, {
     filter: {
@@ -218,7 +203,6 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
   })
 
   return {
-    glossaryTerms,
     getStartedFAQs: getStartedFAQs
       .filter(isValid)
       .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
@@ -261,62 +245,6 @@ const renderFAQs = (faqs: RenderedKnowledgeItem[]) => {
   return faqs.map(printItem).join('\n\n')
 }
 
-// Custom glossary rendering functions for consistent Markdown output
-function extractTitleText(title: any): string {
-  if (typeof title === 'string') {
-    return title
-  }
-  if (Array.isArray(title) && title.length > 0) {
-    return title.map(item => item.plain_text || item.text?.content || '').join('')
-  }
-  return 'Unknown Title'
-}
-
-function extractKey(renderedTerm: RenderedKnowledgeItem): string {
-  if (renderedTerm && renderedTerm.key && typeof renderedTerm.key === 'string') {
-    return renderedTerm.key
-  }
-  return 'unknown-key'
-}
-
-// Custom glossary JSON renderer with proper escaping for Markdown content
-function renderGlossaryJSONWithMarkdown(
-  terms: Definition[], 
-  linkableTerms: LinkableTerms
-): string {
-  const glossaryData: Record<string, {title: string, text: string}> = {}
-  
-  for (const term of terms) {
-    const renderedTerm = renderKnowledgeItem(term, linkableTerms, RenderMode.Markdown)
-    const titleText = extractTitleText(term.title)
-    const keyText = extractKey(renderedTerm)
-    
-    // Use the clean Markdown content directly
-    glossaryData[keyText] = {
-      title: titleText,
-      text: renderedTerm.text.trim()
-    }
-  }
-  
-  return JSON.stringify(glossaryData, null, 2)
-}
-
-// Render glossary as pure Markdown for MDX compatibility
-function renderGlossaryAsMarkdown(
-  terms: Definition[], 
-  linkableTerms: LinkableTerms
-): string {
-  const items = terms.map(term => {
-    const renderedTerm = renderKnowledgeItem(term, linkableTerms, RenderMode.Markdown)
-    const titleText = extractTitleText(term.title)
-    const keyText = extractKey(renderedTerm)
-    
-    return `### ${titleText} {#${keyText}}\n\n${renderedTerm.text.trim()}`
-  })
-  
-  return '\n\n' + items.join('\n\n') + '\n'
-}
-
 async function generateFiles() {
   const linkableTerms: LinkableTerms = {}
 
@@ -336,22 +264,6 @@ async function generateFiles() {
       }
     }
   }
-
-  const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
-    .sort((a, b) => {
-      const titleA = extractTitleText(a.title).toLowerCase()
-      const titleB = extractTitleText(b.title).toLowerCase()
-      return titleA.localeCompare(titleB)
-    })
-  addItems(validGlossaryTerms, '/intro/glossary')
-  
-  // Use our custom glossary renderers for clean Markdown output
-  const glossaryJSON = renderGlossaryJSONWithMarkdown(validGlossaryTerms, linkableTerms)
-  fs.writeFileSync('static/glossary.json', glossaryJSON)
-  
-  // Generate glossary partial as pure Markdown
-  const glossaryMarkdown = renderGlossaryAsMarkdown(validGlossaryTerms, linkableTerms)
-  fs.writeFileSync('docs/partials/_glossary-partial.mdx', glossaryMarkdown)
 
   // FAQs
   // ----
