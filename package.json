@@ -9,7 +9,7 @@
     "update-variable-refs": "tsx scripts/update-variable-references.ts",
     "prepare": "husky || true",
     "start": "SKIP_SDK_DOCS=true yarn clear && yarn build-glossary && docusaurus start",
-    "start:with-docs": "yarn clear && yarn build-glossary && docusaurus start",
+    "start:generate-docs": "yarn clear && yarn build-glossary && docusaurus start",
     "generate-sdk-docs": "npx docusaurus generate-typedoc",
     "build-glossary": "tsx scripts/build-glossary.ts",
     "build-translation": "yarn tsx ./scripts/move-untranslated-files.ts",
