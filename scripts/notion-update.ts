@@ -16,6 +16,16 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 dotenv.config()
 
+// Local implementation of escapeForJSON utility
+function escapeForJSON(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t')
+}
+
 // Types
 type CMSContents = {
   getStartedFAQs: RenderedKnowledgeItem[]
