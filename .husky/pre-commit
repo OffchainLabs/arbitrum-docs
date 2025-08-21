@@ -29,6 +29,17 @@ run_yarn_command() {
   fi
 }
 
+# Update submodules to ensure they are properly initialized and updated
+log_info "Updating submodules..."
+git submodule update --init --recursive
+submodule_exit_code=$?
+
+if [ $submodule_exit_code -ne 0 ]; then
+  handle_error "Submodule update failed. Please check submodule configuration and try again."
+fi
+
+log_success "Submodules updated successfully"
+
 # Check redirects (validation only, no file generation)
 log_info "Checking redirects..."
 run_yarn_command "check-redirects" "The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
