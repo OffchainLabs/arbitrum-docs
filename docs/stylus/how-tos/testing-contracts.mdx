@@ -181,7 +181,6 @@ The `TestVM` allows you to control aspects like:
 
 Let's create a test suite that covers all aspects of our contract, we'll go over the code features one by one:
 
-
 <CustomDetails summary="Test Vending Machine Contract">
 
 ```rust
@@ -250,6 +249,7 @@ This test shows how you can use advanced configuration and usage of the TestVM b
 <CustomDetails summary="Advanced TestVM Configuration">
 
 #### 1: TestVM Setup and Configuration
+
 ```rust
 #[test]
 fn test_advanced_testvm_configuration() {
@@ -272,8 +272,10 @@ fn test_advanced_testvm_configuration() {
     // Note: The chain ID is set to 42161 (Arbitrum One) by default in the TestVM
     // We don't need to set it explicitly as it's already configured in the VM state
 ```
-#### 2: Contract Initialization and User Setup 
-``` rust
+
+#### 2: Contract Initialization and User Setup
+
+```rust
     // Initialize our VendingMachine contract with the configured VM
     // The `from` method connects our contract to the test environment
     let mut contract = VendingMachine::from(&vm);
@@ -295,7 +297,8 @@ fn test_advanced_testvm_configuration() {
 ```
 
 #### 4: Contract Interaction
-``` rust
+
+```rust
     // Give a cupcake to the user and verify the operation succeeds
     // The contract should return true when a cupcake is successfully given
     assert!(contract.give_cupcake_to(user).unwrap());
@@ -307,8 +310,10 @@ fn test_advanced_testvm_configuration() {
         U256::from(1)
     );
 ```
+
 #### 5: VM State Inspection
-``` rust
+
+```rust
     // Take a snapshot of the current VM state for inspection
     // This captures all storage, balances, and blockchain parameters
     let snapshot = vm.snapshot();
@@ -319,8 +324,10 @@ fn test_advanced_testvm_configuration() {
     // Message value should match what we configured (1 wei)
     assert_eq!(snapshot.msg_value, U256::from(1));
 ```
+
 #### 6: Mocking External Contract Calls
-``` rust
+
+```rust
     // Define an external contract we might want to interact with
     let external_contract = address!("0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199");
     // Define example call data we would send to that contract
@@ -332,8 +339,10 @@ fn test_advanced_testvm_configuration() {
     // This allows testing contract interactions without deploying external contracts
     vm.mock_call(external_contract, call_data, Ok(expected_response));
 ```
+
 #### 7: Time-Dependent Behavior Testing
-``` rust
+
+```rust
     // Set a specific block timestamp
     // This simulates the passage of time on the blockchain
     vm.set_block_timestamp(1006);
@@ -349,8 +358,10 @@ fn test_advanced_testvm_configuration() {
         U256::from(2)
     );
 ```
+
 #### 8: Testing Event Logs
-``` rust
+
+```rust
     // Test that events are emitted when cupcakes are distributed
     let vm_logs = TestVM::new();
     let mut contract_logs = VendingMachine::from(&vm_logs);
@@ -418,6 +429,7 @@ fn test_advanced_testvm_configuration() {
     );
 }
 ```
+
 </CustomDetails>
 
 Here is a `cargo.toml` file to add the required dependencies:
