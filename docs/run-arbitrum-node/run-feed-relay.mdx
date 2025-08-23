@@ -17,6 +17,24 @@ Feed endpoints will soon require compression with a custom dictionary, so if con
 
 :::
 
+:::info Websocket connection stability
+
+Websocket connections to feed endpoints may occasionally be reset by infrastructure providers. The feed client in the relay automatically restarts immediately on disconnect. For most users, a delay of several blocks is not noticeable.
+
+For latency-sensitive applications, you can configure a redundant feed connection at the relay level by providing multiple comma-separated URLs to the same endpoint:
+```
+--node.feed.input.url=wss://arb1.arbitrum.io/feed,wss://arb1.arbitrum.io/feed
+```
+
+**Important considerations:**
+- This doubles the bandwidth usage at the relay
+- Excessive connections to feed endpoints may be rate limited
+- This redundancy should be implemented at the relay level, not at individual nodes
+- Generally not recommended unless your application specifically requires minimal latency
+- Do not use more than one redundant feed connection
+
+:::
+
 The feed relay is in the same docker image as the Nitro node.
 
 - Here is an example of how to run the feed relay for Arbitrum One:
