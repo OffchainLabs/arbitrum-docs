@@ -8,8 +8,7 @@
     "generate-precompiles-ref-tables": "tsx scripts/precompile-reference-generator.ts",
     "update-variable-refs": "tsx scripts/update-variable-references.ts",
     "prepare": "husky || true",
-    "start": "SKIP_SDK_DOCS=true yarn clear && yarn build-glossary && docusaurus start",
-    "start:generate-docs": "yarn clear && yarn build-glossary && docusaurus start",
+    "start": "yarn clear && yarn build-glossary && docusaurus start",
     "generate-sdk-docs": "npx docusaurus generate-typedoc",
     "build-glossary": "tsx scripts/build-glossary.ts",
     "build-translation": "yarn tsx ./scripts/move-untranslated-files.ts",
@@ -37,6 +36,7 @@
     "@arbitrum/sdk": "^3.0.0",
     "@cmfcmf/docusaurus-search-local": "^0.11.0",
     "@docusaurus/core": "^3.6.3",
+    "@docusaurus/theme-common": "^3.6.3",
     "@docusaurus/preset-classic": "^3.6.3",
     "@docusaurus/theme-live-codeblock": "^3.6.3",
     "@docusaurus/theme-mermaid": "^3.6.3",
@@ -54,6 +54,8 @@
     "docusaurus-plugin-sass": "^0.2.5",
     "dotenv": "^17.0.1",
     "ethers": "5.7.2",
+    "@ethersproject/address": "^5.7.0",
+    "mermaid": "^10.0.0",
     "got": "11.8.5",
     "marked": "^15.0.7",
     "posthog-docusaurus": "^2.0.0",
@@ -94,7 +96,7 @@
     "vitest": "^3.0.7"
   },
   "resolutions": {
-    "image-size": "~1.0.2"
+    "image-size": "latest"
   },
   "browserslist": {
     "production": [
@@ -109,6 +111,6 @@
     ]
   },
   "engines": {
-    "node": "22.x"
+    "node": ">=22.0.0"
   }
 }

@@ -60,10 +60,11 @@ git clone git@github.com:OffchainLabs/arbitrum-docs.git
 ```shell
 yarn
 ```
-3. Generate SDK docs
+3. Start the development server
 ```shell
-start:start:generate-docs
+yarn start
 ```
+Note: SDK docs are generated automatically on fresh clones. Use `SKIP_SDK_DOCS=true` to skip generation when docs already exist.
 ### Dev Build
 
 To start a build server to serve the docs site locally, run this command from the root directory:
