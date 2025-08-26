@@ -4203,9 +4203,9 @@
   dependencies:
     "@octokit/openapi-types" "^24.2.0"
 
-"@offchainlabs/notion-docs-generator@github:anegg0/notion-docs-generator#update-to-markdown-output":
-  version "1.0.0"
-  resolved "https://codeload.github.com/anegg0/notion-docs-generator/tar.gz/4c2809dff166b0bdaabe7154bd2b82335e247042"
+"@offchainlabs/notion-docs-generator@github:OffchainLabs/notion-docs-generator":
+  version "0.1.0"
+  resolved "https://codeload.github.com/OffchainLabs/notion-docs-generator/tar.gz/f66d1d38bd9d0964f18400d86ae633b0d62619f0"
   dependencies:
     "@notionhq/client" "^2.2.3"
     "@types/node" "^18.11.18"
