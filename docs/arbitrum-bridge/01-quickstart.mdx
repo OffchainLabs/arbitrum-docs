@@ -8,17 +8,17 @@ content_type: quickstart
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-This quickstart is for users who want to deposit `ETH` or any `ERC-20` tokens from a parent chain to a child chain or vice versa, using [Arbitrum's bridge](https://bridge.arbitrum.io/). For example, from Ethereum to Arbitrum One, or from Arbitrum One to a Layer 3 Arbitrum chain.
+This quickstart is for users who want to deposit `ETH` or any `ERC-20` tokens from a <a data-quicklook-from="parent-chain">Parent chain</a> to a <a data-quicklook-from="child-chain">Child chain</a> or vice versa, using [Arbitrum's bridge](https://bridge.arbitrum.io/). For example, from Ethereum to Arbitrum One, or from <a data-quicklook-from="arbitrum-one">Arbitrum One</a> to a Layer 3 Arbitrum chain.
 
 We will walk you through the entire process step by step, providing as much detail as possible. If you feel stuck at any step, don't hesitate to contact us through our [Discord](https://discord.gg/arbitrum), and we will be happy to help you complete the process.
 
-The only prerequisite for this quickstart is to have a Web3 wallet installed, such as MetaMask or OKX Wallet. If you don't have one installed, visit [Arbitrum's portal](https://portal.arbitrum.io/?categories=wallet) for a list of wallets to choose from to download.
+The only prerequisite for this quickstart is to have a Web3 <a data-quicklook-from="wallet">Wallet</a> installed, such as MetaMask or OKX Wallet. If you don't have one installed, visit [Arbitrum's portal](https://portal.arbitrum.io/?categories=wallet) for a list of wallets to choose from to download.
 
 ## Deposit `ETH` or `ERC-20` tokens (from parent chain to child chain)
 
 ### Step 1: Get some native currency
 
-You'll need the native currency of the parent chain to bridge your assets to the destination chain. For example, if you want to bridge assets from Ethereum to Arbitrum One, you'll need `ETH` on Ethereum to initiate the process.
+You'll need the native currency of the parent chain to <a data-quicklook-from="bridge">Bridge</a> your assets to the destination chain. For example, if you want to bridge assets from Ethereum to Arbitrum One, you'll need `ETH` on Ethereum to initiate the process.
 
 There are several ways to obtain the native currency:
 
@@ -41,9 +41,9 @@ You'll also need to add the desired chain's RPC endpoint to your wallet. Here, w
   className="img-600px"
 />
 
-- Here, we display information about the most common Arbitrum chains. For a more exhaustive list, please visit our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) page.
+- Here, we display information about the most common Arbitrum Chains. For a more exhaustive list, please visit our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) page.
 
-| Parameter          | Arbitrum One                 | Arbitrum Nova                | Arbitrum Sepolia (testnet)             |
+| Parameter          | Arbitrum One                 | <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>                | Arbitrum Sepolia (testnet)             |
 | ------------------ | ---------------------------- | ---------------------------- | -------------------------------------- |
 | Network name       | Arbitrum One                 | Arbitrum Nova                | Arbitrum Sepolia                       |
 | RPC URL            | https://arb1.arbitrum.io/rpc | https://nova.arbitrum.io/rpc | https://sepolia-rollup.arbitrum.io/rpc |
@@ -95,7 +95,7 @@ Please ensure you have sufficient `ETH` in your wallet to cover the transation c
   className="img-600px"
 />
 
-After you submit the transaction through your Web3 wallet, you can expect your funds to arrive on the destination chain within roughly 15-30 minutes (depending on the chain congestion).
+After you submit the <a data-quicklook-from="transaction">Transaction</a> through your Web3 wallet, you can expect your funds to arrive on the destination chain within roughly 15-30 minutes (depending on the chain congestion).
 
 Also, ensure your wallet is set to the destination chain so you can see when your funds arrive.
 
