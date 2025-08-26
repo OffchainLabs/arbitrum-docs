@@ -313,7 +313,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   label: 'Configure Batch Poster and Assertion Control',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-batch-poster-assertion-control',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control',
                 },
                 {
                   type: 'category',
