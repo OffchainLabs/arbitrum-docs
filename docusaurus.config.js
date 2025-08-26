@@ -230,10 +230,17 @@ const config = {
       fathomAnalytics: {
         siteId: 'DOHOZGJO',
       },
+      announcementBar: {
+        backgroundColor: '#e3246e',
+        textColor: 'white',
+        content:
+          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/concepts/how-it-works#activation" target="_blank">here’s how to do it.</a>',
+        isCloseable: false,
+      },
       navbar: {
         title: 'Arbitrum Docs',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
           href: '/welcome/arbitrum-gentle-introduction',
         },
