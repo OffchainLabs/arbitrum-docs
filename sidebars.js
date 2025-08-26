@@ -311,6 +311,11 @@ const sidebars = {
                   label: `Configure delayed inbox finality`,
                 },
                 {
+                  type: 'doc',
+                  label: 'Configure Batch Poster and Assertion Control',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-batch-poster-assertion-control',
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -373,11 +378,6 @@ const sidebars = {
                   type: 'doc',
                   label: 'Use Layer Leap',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
-                },
-                {
-                  type: 'doc',
-                  label: 'Configure Batch Poster and Assertion Control',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-batch-poster-assertion-control',
                 },
                 {
                   type: 'category',
