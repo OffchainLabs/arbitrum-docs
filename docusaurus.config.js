@@ -3,9 +3,9 @@
 
 require('dotenv').config();
 
-const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
-const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
-const sdkCodebasePath = './arbitrum-sdk';
+const markdownPreprocessor = require('./scripts/markdown-preprocessor');
+const sdkSidebarGenerator = require('./scripts/sdk-sidebar-generator');
+const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
@@ -178,8 +178,8 @@ const config = {
         plugin: [
           'typedoc-plugin-markdown',
           `typedoc-plugin-frontmatter`,
-          './src/scripts/sdkDocsHandler.ts',
-          './src/scripts/stylusByExampleDocsHandler.ts',
+          './scripts/sdkDocsHandler.ts',
+          './scripts/stylusByExampleDocsHandler.ts',
         ],
 
         // typedoc-plugin-markdown options
