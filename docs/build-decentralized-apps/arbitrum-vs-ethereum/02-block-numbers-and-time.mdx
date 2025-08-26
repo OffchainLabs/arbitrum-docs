@@ -57,7 +57,7 @@ As a general rule, any timing assumptions a contract makes about block numbers a
 
 :::info EIP-2935 difference
 
-[EIP-2935](https://eips.ethereum.org/EIPS/eip-2935) adds another way to retrieve block hashes by making a call to a contract. The contract is at the same address and has the same interface as the original. It was modified to have a larger ring buffer (8191 hashes, ~one day of hashes) and different code, but it remains usable in the same way to retrieve past L2 block hashes.
+[EIP-2935](https://eips.ethereum.org/EIPS/eip-2935) adds another way to retrieve block hashes by making a call to a contract. The contract is at the same address and has the same interface as the original. It was modified to have a larger buffer and different code, but it remains usable in the same way to retrieve past L2 block hashes.
 
 :::
 
