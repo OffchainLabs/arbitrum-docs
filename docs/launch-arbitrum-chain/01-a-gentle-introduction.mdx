@@ -7,9 +7,8 @@ target_audience: technical decision-makers, people familiar with web3 who will d
 sidebar_position: 1
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
 import { FloatingHoverModal } from '@site/src/components/FloatingHoverModal';
-
-<!-- generalize the chain not DA layer: rollup v anytrust -->
 
 This document is for developers and decision-makers who want to learn more about **Arbitrum chains**, a product offering that lets you create your own Arbitrum chains.
 
@@ -18,50 +17,18 @@ If you'd prefer to learn by doing, see the [Orbit SDK Rollup creation example](h
 ### In a nutshell:
 
 - Arbitrum chains is the **permissionless path** for launching customizable dedicated chains using Arbitrum technology.
-- Arbitrum chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can settle to any Ethereum L2, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
 - Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more, **the possibilities are endless**.
 - **You own your Arbitrum chain** and can decentralize its ownership, validation, and other dependencies.
 - Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](/stylus/gentle-introduction.mdx), and continuous improvements.
+- Arbitrum chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can settle to any Ethereum L2, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
+
+<ImageZoom
+  src="/img/orbit-settlement-layers.png"
+  alt="Arbitrum Orbit chain settlement layers"
+  className="img-600px"
+/>
 
 ### What's an Arbitrum chain?
-
-<!-- redo this diagram -->
-
-import {
-  MermaidWithHtml,
-  Nodes,
-  Node,
-  Connection,
-  NodeDescriptions,
-  NodeDescription,
-} from '/src/components/MermaidWithHtml/MermaidWithHtml';
-
-<MermaidWithHtml>
-  <Nodes>
-    <Node id="1">Arbitrum chain L2</Node>
-    <Node id="2">Arbitrum chain L3</Node>
-    <Node id="3">Arbitrum One (L2)</Node>
-    <Node id="4">Arbitrum chain L2</Node>
-    <Node id="5">Ethereum (L1)</Node>
-    <Connection from="1" to="5" />
-    <Connection from="2" to="3" />
-    <Connection from="3" to="5" />
-    <Connection from="4" to="5" />
-  </Nodes>
-  <NodeDescriptions>
-    <NodeDescription for="1,2,4">
-      <strong>Arbitrum chains</strong> are a new product offering that lets you create your own
-      customizable L2 or L3 chain.
-    </NodeDescription>
-    <NodeDescription for="3">
-      L3 Arbitrum chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which
-      settles to Ethereum.
-    </NodeDescription>
-    <NodeDescription for="5">
-      <strong>Ethereum</strong> is a public Layer 1 (L1) chain.
-    </NodeDescription>
-  </NodeDescriptions>
-</MermaidWithHtml>
 
 - You can think of Arbitrum chains as **deployable, configurable instances of the Arbitrum Nitro tech stack**.
 - You can also think of them as **tailored chains** - chains tailored precisely to **your exact use-case and business needs**.
@@ -90,8 +57,6 @@ Arbitrum's protocols address this challenge by offloading some of the Ethereum n
 | Cost                  | Data posting costs                                                                                                                             |
 | Infrastructure        | Hardware footprint                                                                                                                             |
 | Interop               | XYZ                                                                                                                                            |
-| Permissioning         | **WIP**                                                                                                                                        |
-| Privacy               | **WIP**                                                                                                                                        |
 
 ### How do Arbitrum chains help the Ethereum ecosystem?
 

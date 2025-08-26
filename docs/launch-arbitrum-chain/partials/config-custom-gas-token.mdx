@@ -1,4 +1,4 @@
-One key feature is the ability to use an `ERC-20` token (other than `ETH`) as the native gas token for transaction fees. This is particularly supported in AnyTrust chains, with recent expansions making it available for chains posting data to Ethereum.
+One key feature is the ability to use an `ERC-20` token (other than `ETH`) as the native gas token for transaction fees. This is supported in AnyTrust chains, with recent expansions making it available for chains posting data to Ethereum.
 
 ### Pros
 
@@ -7,12 +7,12 @@ One key feature is the ability to use an `ERC-20` token (other than `ETH`) as th
 - **Improved user experience and onboarding**: Users can pay fees with a single native token, eliminating the need to manage multiple assets (e.g., acquiring `ETH` separately). Using a single token can reduce friction, simplifying fee estimation, and enabling features like gas subsidies where projects pay fees on behalf of users, which is ideal for mainstream adoption in gaming or social platforms.
 - **Unified brand and ecosystem identity**: Interactions stay within the project's token economy, reinforcing branding and immersion (e.g., in-game currencies handling all fees).
 - **Stability and predictability (with stablecoins)**: Using a stable token like USDC mitigates volatility in transaction costs compared to `ETH`, providing consistent and affordable fees.
-- **Integration with existing tools**: Native implementation in Arbitrum Orbit ensures compatibility with EVM tooling, deterministic gas accounting, and seamless deployment, as demonstrated in case studies such as Degen Chain (which experienced rapid growth with over 14 million transactions in its first week) and DeFi Kingdoms.
+- **Integration with existing tools**: Native implementation in Arbitrum Orbit ensures compatibility with EVM tooling, deterministic gas accounting, and seamless deployment.
 - **Flexibility via account abstraction alternative**: Although not native, it enables support for multiple tokens or changes without requiring protocol upgrades, offering granular control.
 
 ### Cons
 
-- **Limited Flexibility (Native Implementation)**: Once deployed, it's difficult to support multiple gas tokens or switch tokens, requiring users to acquire the specific ERC-20 token, which can complicate onboarding and limit ecosystem diversity.
+- **Limited Flexibility (Native Implementation)**: Once deployed, it's difficult to support multiple gas tokens or switch tokens, requiring users to acquire the specific `ERC-20` token, which can complicate onboarding and limit ecosystem diversity.
 - **Potential sell pressure and economic risks**: Fees must be converted to the parent chain's token (e.g., `ETH`) for data availability costs, creating systematic sell pressure on the custom token. Significant price declines (e.g., 50%) could lead to operational deficits, necessitating advanced economic modeling for forecasting, hedging, and reserve management.
 - **Compatibility issues**: May not work well with applications or tools expecting `ETH`, potentially impacting integration with broader Ethereum ecosystems.
 - **Increased complexity (account abstraction implementation)**: This adds infrastructure, such as paymasters and bundlers, which complicates gas estimation, transaction flows, and tooling configuration (e.g., for explorers or indexers), with the risk of inconsistent adoption.
