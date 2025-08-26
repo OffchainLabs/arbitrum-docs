@@ -1,6 +1,6 @@
 ---
-title: 'Stake and validator configurations'
-description: 'Learn how to configure your Arbitrum chain with a custom stake and validator configurations'
+title: 'Bond and validator configurations'
+description: 'Learn how to configure your Arbitrum chain with a custom bond and validator configurations'
 author: pete-vielhaber
 sme:
 content_type: how-to
@@ -10,23 +10,23 @@ tags: ['hide-from-search']
 <a data-quicklook-from="arbitrum">Arbitrum</a> Orbit chains are customizable Layer 3 (L3) chains that
 settle to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">
   validator
-</a> configurations to ensure chain security through bonding (staking) and <a data-quicklook-from="assertion">
+</a> configurations to ensure chain security through bonding and <a data-quicklook-from="assertion">
   assertion
 </a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
   challenge
 </a> incorrect assertions. Arbitrum (Orbit) chains can be permissioned, meaning validators must be allowlisted.
 
-Staking is required for active validation, where validators bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bonded stake is escrowed or burned. Configurations such as stake token, base stake, and loser stake escrow are configurable during chain deployment or post-deployment via contract calls.
+Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
-Arbitrum (Orbit) chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects staking tokens (e.g., `WETH` for BoLD-enabled chains like Arbitrum One/Nova, or `ETH`/native for other chains).
+Arbitrum (Orbit) chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects bonding tokens (e.g., `WETH` for BoLD-enabled chains like Arbitrum One/Nova, or `ETH`/native for other chains).
 
-## Stake token
+## `stakeToken`
 
-The stake token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. The default is `ETH` (or parent chain's native token).
+The bonded token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. The default is `ETH` (or parent chain's native token).
 
 ### Configuration details
 
-- Can be `ETH` (native gas token) or an `ERC-20` token.
+- Can be `ETH` (native gas token) or any `ERC-20` token.
 - **For BoLD-enabled chains** (e.g., settling to Arbitrum One or Nova), it defaults to `WETH`.
 - **For non-BoLD chains**, it defaults to the <a data-quicklook-from="parent-chain">parent chain</a>'s native token (usually `ETH`).
 - Currently, it's often hardcoded to `ETH` in basic deployments, but customizable to an `ERC-20` contract address in advanced setups. Future updates will expand `ERC-20` support.
@@ -35,13 +35,13 @@ The stake token is the asset that validators must bond to participate in asserti
 
 - During deployment in the [Arbitrum Orbit deployment portal](https://orbit.arbitrum.io/):
   1.  Connect your <a data-quicklook-from="wallet">wallet</a> (may require switching to Arbitrum Sepolia for testnets).
-  2.  In the configuration form, enter the stake token's contract address on the parent L2 chain.
+  2.  In the configuration form, enter the bond token's contract address on the parent L2 chain.
   3.  Use `0x0000000000000000000000000000000000000000` for `ETH`.
-- **Post-deployment**: Not directly modifiable; set during initial Rollup contract creation.
+- **Post-deployment**: Not directly modifiable; set during initial [Rollup contract](https://github.com/OffchainLabs/arbitrum-orbit-deployment-ui/blob/e4e82fca2428ad4c8a20ef19b7b958293ffef958/src/types/rollupConfigDataType.ts) creation.
 
-## Base stake
+## `baseStake`
 
-The base stake is the minimum amount of the stake token that validators must deposit to bond and post assertions. No specific default; must be set >0 during deployment.
+The `baseStake` is the minimum amount of the bond token that validators must deposit to bond and post assertions.
 
 ### Configuration details
 
@@ -52,34 +52,34 @@ The base stake is the minimum amount of the stake token that validators must dep
 ### How to configure
 
 - During deployment in the Orbit <a data-quicklook-from="portal">portal</a>:
-  1.  In the configuration form, enter the base stake amount as a float.
+  1.  In the configuration form, enter the `baseStake` amount as a float.
   2.  Review and deploy the chain (submits transactions to the parent chain).
-- **Post-deployment**: Adjustable via the Rollup contract if permissions allow (e.g., as <a data-quicklook-from="chain-owner">chain owner</a>).
+- **Post-deployment**: Adjustable via the [Rollup contract](https://github.com/OffchainLabs/arbitrum-orbit-deployment-ui/blob/e4e82fca2428ad4c8a20ef19b7b958293ffef958/src/types/rollupConfigDataType.ts) if permissions allow (e.g., as <a data-quicklook-from="chain-owner">chain owner</a>).
 
-## Loser stake escrow
+## `loserStakeEscrow`
 
-The loser stake escrow is the address where a validator's bonded funds are sent if they lose a challenge (e.g., due to an incorrect assertion). This mechanism acts as a penalty. The default configuration has no default specified; must be configured.
+The `loserStakeEscrow` is the address where a validator's bonded funds are sent if they lose a challenge (e.g., due to an incorrect assertion). This mechanism acts as a penalty. The default configuration has no default specified; must be configured.
 
 ### Configuration details
 
-- Funds are escrowed (held) rather than immediately burned, allowing potential recovery or governance decisions.
-- Recommended: Set to an address controlled by chain owners for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
+- Funds are escrowed rather than immediately burned, allowing potential recovery or governance decisions.
+- Recommended: Set to an address controlled by the chain owner(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
 
 ### How to configure
 
 - **During deployment**: Set in the `loserStakeEscrow` field of the `RollupCreator` configuration.
 - **Post-deployment**:
-  1. As the chain owner or upgrade executor, call the `Rollup.setLoserStakeEscrow`(address `newEscrow`) function on the Rollup contract.
+  1. As the chain owner or upgrade executor, call the `Rollup.setLoserStakeEscrow`(address `newEscrow`) function on the [Rollup contract](https://github.com/OffchainLabs/arbitrum-orbit-deployment-ui/blob/e4e82fca2428ad4c8a20ef19b7b958293ffef958/src/types/rollupConfigDataType.ts).
   2. Use tools like Etherscan or a wallet (e.g., MetaMask) to interact with the contract on the parent chain.
 
 ## Validator configurations and how to setup them up
 
-Validators are configured during chain deployment and can be run post-launch. Arbitrum (Orbit) chains support permissioned validators, added to an allowlist.
+Validators are configured during chain deployment and can be run post-launch. Arbitrum (Orbit) chains support permissioned validators, that can be added to an allowlist.
 
 ### During deployment (initial setup)
 
 1. In the Orbit deployment portal:
-   - Specify the number of initial validators (e.g., 1 for devnets, more for production).
+   - Specify the number of initial validators (e.g., `1` for devnets, more for production).
    - The first validator address is auto-generated with a private key (stored in downloaded JSON configs).
    - Add additional validator addresses (e.g., your wallet addresses); they get allowlisted in the Rollup contract.
 2. Download `nodeConfig.json` and `orbitSetupScriptConfig.json` (these files contain validator private keys—back them up securely).
@@ -89,7 +89,7 @@ Validators are configured during chain deployment and can be run post-launch. Ar
 
 - Example command to fund: `yarn run fund-bonder --privateKey 0xYourPrivateKey --l2rpc https://sepolia.arbitrum.io/rpc --l3rpc http://localhost:8449`.
 
-6. Deploy the chain; validators are now bonded with the base stake.
+6. Deploy the chain; validators can now bonded with the specified `baseStake` token.
 
 ### Adding validators post-deployment (permissioned chains)
 
