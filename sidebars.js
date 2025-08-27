@@ -282,6 +282,16 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
+                  label: 'BoLD configuration parameters',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
+                  label: 'Deploy and configure Timeboost',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
                   label: `Configure a custom AnyTrust gas token`,
                 },
@@ -358,16 +368,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
                   label: `Enable fast withdrawals`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
-                  label: 'BoLD configuration parameters',
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
-                  label: 'Deploy and configure Timeboost',
                 },
                 {
                   type: 'doc',
