@@ -7,7 +7,14 @@ import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
 import { NumberComponentProps } from './types';
 
 export const NumberComponent = ({ number }) => {
-  const { isDarkTheme } = useColorMode();
+  // Safe check for SSG - default to false when context is not available
+  let isDarkTheme = false;
+  try {
+    const colorMode = useColorMode();
+    isDarkTheme = colorMode.isDarkTheme;
+  } catch (e) {
+    // During SSG, useColorMode throws an error - use default
+  }
 
   const animationProps =
     number === 1 || number === 5
