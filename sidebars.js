@@ -311,6 +311,11 @@ const sidebars = {
                   label: `Configure delayed inbox finality`,
                 },
                 {
+                  type: 'doc',
+                  label: 'Configure Batch Poster and Assertion Control',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control',
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
