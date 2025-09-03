@@ -16,13 +16,6 @@ This introduction will walk you through <a data-quicklook-from='timeboost'>Arbit
 
 Timeboost is the culmination of over a year of [research and development](https://arxiv.org/abs/2306.02179) by the team at Offchain Labs. It is currently live on Arbitrum One and Arbitrum Nova, and is available for Arbitrum Orbit chains, whose owners can adopt and customize it as they choose.
 
-### In a nutshell
-
-- The old <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> ordering policy has many benefits, including a great UX and protection from harmful types of MEV. However, nearly all MEV on the chain is extracted by searchers who invest wastefully in hardware and spamming to win latency races (which negatively strains the network and leads to congestion). Timeboost is a new transaction ordering policy that preserves many of the great benefits of FCFS while unlocking a path for chain owners to capture some of the available MEV on their network and introducing an auction to reduce latency, racing, and, ultimately, spam.
-- Timeboost introduces a few new components to an Arbitrum chain’s infrastructure: a sealed-bid second-price auction and a new <a data-quicklook-from='express-lane'>"express lane"</a> at an Arbitrum chain’s sequencer. Valid transactions submitted to the express lane will be sequenced immediately with no delay, while all other transactions submitted to the chain’s sequencer will experience a nominal delay (default: 200ms). The auction winner is granted the sole right to control the express lane for pre-defined, temporary intervals. The default block time for Arbitrum chains will continue to be industry-leading at 250ms, even with Timeboost enabled. What will change with Timeboost is that some transactions not in the express lane will be delayed to the next block.
-- Timeboost is an optional feature for Arbitrum chains aimed at two types of groups of entities: (1) chain owners and their ecosystems and (2) sophisticated onchain actors and searchers. Chain owners can use Timeboost to capture additional revenue from the MEV their chain generates already, and sophisticated onchain actors and searchers will spend their resources on buying rights for the express lane (instead of spending those resources on winning latency races, which otherwise leads to spam and congestion on the network).
-- Timeboost will work with both centralized and [decentralized sequencer setups](https://medium.com/@espressosys/espresso-systems-and-offchain-labs-publish-decentralized-timeboost-specification-b29ff20c5db8). The specification for a centralized sequencer is public ([here](https://github.com/OffchainLabs/timeboost-design)); implementing this spec [allowed us to deliver Timeboost to market](https://forum.arbitrum.foundation/t/constitutional-aip-proposal-to-adopt-timeboost-a-new-transaction-ordering-policy/25167/1) sooner, instead of waiting for the completion of the design and implementation of a decentralized sequencer.
-
 ## Why do Arbitrum chains need Timeboost?
 
 Today, Arbitrum chains order incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. This ordering policy was chosen as the default for Arbitrum chains because it is simple to understand and implement, enables fast block times (starting at 250ms and down to 100ms if desired), and protects users from harmful types of MEV like front-running & sandwich attacks.
@@ -91,21 +84,11 @@ Before placing a bid in the auction, a party must deposit funds into the `Auctio
 
 Once the autonomous auctioneer determines an auction winner, the `Auction` contract will deduct the second-highest bid amount from the account of the highest bidder and transfer those funds to a `beneficiary` account designated by the chain owner by default. The `expressLaneControllerAddress` specified in the highest bid will become the express lane controller for the round.
 
-### Default parameters
+                   |
 
-Below are a few of the default Timeboost parameters mentioned earlier. All these parameters and more are configurable by the chain owner.
+## FAQs
 
-| Parameter name          | Description                                                                                                                                                                                                                  | Recommended default value                  |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                           | 60 seconds                                 |
-| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                           | 15 seconds                                 |
-| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                          | An address controlled by the chain's owner |
-| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any `ERC-20` token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard `ERC-20` logic). | `WETH`                                     |
-| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                             | 0.2 seconds, or 200 milliseconds           |
-| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                   | None                                       |
-| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                  | 0.001 `WETH`                               |
-
-## Who is Timeboost for, and how do I use it?
+#### Who is Timeboost for, and how do I use it?
 
 Timeboost is an optional addition to an Arbitrum chain’s infrastructure, meaning that enabling Timeboost is at the discretion of the chain owner and that an Arbitrum chain can fully function normally without Timeboost.
 
@@ -128,3 +111,9 @@ Timeboost adds a unique twist to your existing or prospective MEV strategies tha
 As with many new features and upgrades to Arbitrum Nitro, Timeboost is an optional feature that chain owners may choose to deploy and customize however they see fit. Deploying and enabling/disabling Timeboost on a live Arbitrum chain will not halt or impact the chain but will instead influence the chain's transaction ordering policy. An Arbitrum chain will, by default, fall back to FCFS if Timeboost is deployed but disabled or if there is no express lane controller for a given round.
 
 It is recommended that Arbitrum teams holistically assess the applicability and use cases of Timeboost for their chain before deploying and enabling Timeboost. This is because some Arbitrum chains may not have that much MEV (e.g., arbitrage) to begin with. Furthermore, we recommend that Arbitrum chains start with the default parameters recommended by Offchain Labs and closely monitor the results and impacts on your chain’s ecosystem over time before considering adjusting any of the parameters.
+
+:::info Additional FAQs
+
+For more frequently asked questions refer to the [Timeboost FAQ](/how-arbitrum-works/timeboost/timeboost-faq.mdx).
+
+:::
