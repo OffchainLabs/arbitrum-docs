@@ -1,28 +1,33 @@
 import { Client } from '@notionhq/client'
 import {
-  Definition,
   FAQ,
   RenderedKnowledgeItem,
   renderKnowledgeItem,
-  escapeForJSON,
   lookupProject,
-  lookupGlossaryTerms,
   lookupFAQs,
   handleRenderError,
-  renderGlossary,
   Record,
-  renderGlossaryJSON,
   KnowledgeItem,
   LinkableTerms,
   LinkValidity,
+  RenderMode,
 } from '@offchainlabs/notion-docs-generator'
 import fs from 'fs'
 import dotenv from 'dotenv'
 dotenv.config()
 
+// Local implementation of escapeForJSON utility
+function escapeForJSON(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t')
+}
+
 // Types
 type CMSContents = {
-  glossaryTerms: Definition[]
   getStartedFAQs: RenderedKnowledgeItem[]
   nodeRunningFAQs: RenderedKnowledgeItem[]
   buildingFAQs: RenderedKnowledgeItem[]
@@ -56,15 +61,6 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
     notion,
     'Arbitrum developer docs portal v2.0'
   )
-
-  const glossaryTerms = await lookupGlossaryTerms(notion, {
-    filter: {
-      property: 'Project(s)',
-      relation: {
-        contains: devDocsV2Project,
-      },
-    },
-  })
 
   const getStartedFAQs = await lookupFAQs(notion, {
     filter: {
@@ -217,25 +213,24 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
   })
 
   return {
-    glossaryTerms,
     getStartedFAQs: getStartedFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     nodeRunningFAQs: nodeRunningFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     buildingFAQs: buildingFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     buildingStylusFAQs: buildingStylusFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     orbitFAQs: orbitFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
     bridgingFAQs: bridgingFAQs
       .filter(isValid)
-      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {}, RenderMode.Markdown)),
   }
 }
 
@@ -257,7 +252,7 @@ const renderFAQs = (faqs: RenderedKnowledgeItem[]) => {
     return `### ${faq.title}` + '\n' + `${faq.text}`
   }
 
-  return faqs.map(printItem).join('\n')
+  return faqs.map(printItem).join('\n\n')
 }
 
 async function generateFiles() {
@@ -279,16 +274,6 @@ async function generateFiles() {
       }
     }
   }
-
-  const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
-  addItems(validGlossaryTerms, '/intro/glossary')
-  const glossaryJSON = renderGlossaryJSON(validGlossaryTerms, linkableTerms)
-  fs.writeFileSync('static/glossary.json', glossaryJSON)
-  const definitionsHTML = `\n\n${renderGlossary(
-    validGlossaryTerms,
-    linkableTerms
-  )}\n`
-  fs.writeFileSync('docs/partials/_glossary-partial.mdx', definitionsHTML)
 
   // FAQs
   // ----

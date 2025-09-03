@@ -15,7 +15,15 @@ import { marked } from 'marked'; // For converting Markdown to HTML
 import { GrayMatterFile } from 'gray-matter'; // TypeScript type for parsed frontmatter files
 import * as fs from 'fs/promises'; // Async filesystem operations
 import * as path from 'path'; // Path manipulation utilities
-import { escapeForJSON } from '@offchainlabs/notion-docs-generator'; // String escaping utility
+// Local implementation of escapeForJSON utility
+function escapeForJSON(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t')
+}
 
 /**
  * Converts an array of parsed glossary terms into a JSON string format

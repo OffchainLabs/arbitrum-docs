@@ -14,11 +14,6 @@ build
 .docusaurus
 .cache-loader
 
-# Generated docs
-docs/sdk/
-!docs/sdk/index.mdx
-!docs/sdk/migrate.mdx
-
 # Misc
 .DS_Store
 .env
