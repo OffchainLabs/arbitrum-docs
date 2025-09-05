@@ -37,8 +37,8 @@ some of the available Maximum Extractable Value (MEV) on their blockchain and re
 spamming, in exchange for a small impact on user response times (despite block times not changing). It
 is therefore recommended that chains only consider deploying and enabling Timeboost if there is substantial
 DeFi and related MEV activity (e.g. liquidations, arbitrage, backrunning) on the chain. Please read the
-[gentle introduction to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx) to learn
-more about how Timeboost works.
+[gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) to learn more
+about how Timeboost works.
 
 As with all features on the Arbitrum stack, Arbitrum chains can adopt Timeboost at their own discretion and on their own timeline. To deploy and enable Arbitrum Timeboost on your chain, please refer to this guide on how to [deploy and configure Timeboost](/launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/04-deploy-timeboost.mdx).
 
@@ -50,7 +50,7 @@ Again, Arbitrum chains can adopt Timeboost at their discretion and on their time
 
 ## Benefits of adopting Timeboost
 
-Timeboost enables a chain owner to capture a portion of the available MEV on their blockchain, reducing latency-related spam while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy. A more in-depth overview of the benefits of Timeboost is explored in the [gentle introduction to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx), and also a paper on how Timeboost is more profitable for arbitrageurs compared to other forms of MEV capture, like Priority Gas Auctions (PGA) [here](https://arxiv.org/abs/2410.10797).
+Timeboost enables a chain owner to capture a portion of the available MEV on their blockchain, reducing latency-related spam while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy. A more in-depth overview of the benefits of Timeboost is explored in the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), and also a paper on how Timeboost is more profitable for arbitrageurs compared to other forms of MEV capture, like Priority Gas Auctions (PGA) [here](https://arxiv.org/abs/2410.10797).
 
 #### Fair(er) MEV capture
 
@@ -82,7 +82,7 @@ Often times, the cost required to set up, configure, and maintain the infrastruc
 
 #### User experience
 
-As explained in the [gentle introduction to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost express lane time advantage is implemented by imposing an artificial delay (default: `200ms`) on all non-express lane transactions whenever there is an express lane controller for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `250ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artificial delay and the block time of the chain. Note that this artificial delay is only applied when there is an express lane controller for a round, meaning there is no change in user experience if nobody is using Timeboost, even though it is enabled (for the duration of that round).
+As explained in the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost express lane time advantage is implemented by imposing an artificial delay (default: `200ms`) on all non-express lane transactions whenever there is an express lane controller for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `250ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artificial delay and the block time of the chain. Note that this artificial delay is only applied when there is an express lane controller for a round, meaning there is no change in user experience if nobody is using Timeboost, even though it is enabled (for the duration of that round).
 
 ## Configuring Timeboost's Parameters
 
