@@ -158,4 +158,11 @@ For more advanced helm chart configurations, please refer to the Arbitrum commun
 
 ### Monitoring
 
-We recommend monitoring the valnode with metric:
+To check if your validation node is running correctly, you can check `rpc_duration_validation_validate_success_count` metric in your metrics server.
+
+This metric is a counter of the number of successful validation calls, if it is increasing, it means your validation node is running correctly.
+
+You can also check where this log (`validation node started`):
+
+- If this log appears on validation node, it means your validation node is running correctly.
+- If this log appears on staker node (validator node), it means your staker node is still validating itself and indicates your staker node doesn't connect to the validation node correctly, you need to double check your configuration.
