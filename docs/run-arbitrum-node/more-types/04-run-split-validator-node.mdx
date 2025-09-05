@@ -50,9 +50,7 @@ docker run --rm -it \
   --metrics-server.port=6070
 ```
 
-The validation node will listen on port 5200.
-
-This will also enable the metrics server on port 6070.
+The validation node will listen on port 5200, which will also enable the metrics server on port 6070.
 
 #### Step 2: Set up the staker node
 
@@ -158,11 +156,11 @@ For more advanced helm chart configurations, please refer to the Arbitrum commun
 
 ### Monitoring
 
-To check if your validation node is running correctly, you can check `rpc_duration_validation_validate_success_count` metric in your metrics server.
+To check if your validation node is running correctly, you can check the `rpc_duration_validation_validate_success_count` metric in your metrics server.
 
-This metric is a counter of the number of successful validation calls, if it is increasing, it means your validation node is running correctly.
+This metric is a counter of the number of successful validation calls; if it is increasing, it means your validation node is running correctly.
 
 You can also check where this log (`validation node started`) appears:
 
-- If this log appears on validation node, it means your validation node is running correctly.
-- If this log appears on staker node (validator node), it means your staker node is still validating itself and indicates your staker node doesn't connect to the validation node correctly, you need to double check your configuration.
+- If this log appears on the validation node, it means your validation node is running correctly.
+- If this log appears on the staker node (validator node), it means your staker node is still validating itself. It indicates that your staker node is not connecting to the validation node correctly; you need to double-check your configuration.
