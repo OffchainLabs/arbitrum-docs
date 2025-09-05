@@ -45,9 +45,14 @@ docker run --rm -it \
   --auth.origins 0.0.0.0 \
   --auth.jwtsecret /tmp/nitro-val.jwt \
   --auth.port 5200
+  --metrics \
+  --metrics-server.addr=0.0.0.0 \
+  --metrics-server.port=6070
 ```
 
 The validation node will listen on port 5200.
+
+This will also enable the metrics server on port 6070.
 
 #### Step 2: Set up the staker node
 
@@ -150,3 +155,7 @@ docker run --rm -it --entrypoint nitro-val  @@latestNitroNodeImage=offchainlabs/
 ### Additional configurations for helm charts
 
 For more advanced helm chart configurations, please refer to the Arbitrum community Helm Chart [README](https://github.com/OffchainLabs/community-helm-charts/blob/main/charts/nitro/README.md)
+
+### Monitoring
+
+We recommend monitoring the valnode with metric:
