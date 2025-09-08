@@ -4,13 +4,10 @@
   Yes! Arbitrum Orbit's core technology has undergone a comprehensive audit and is now capable of
   supporting deployments to mainnet. You can read more about it{' '}
   <a href="https://docs.arbitrum.io/launch-orbit-chain/concepts/public-preview-expectations#arbitrum-orbit-is-mainnet-ready-but-deploy-to-testnet-first">
+    {' '}
     here
   </a>
   .
-</p>
-
-<p>
-
 </p>
 
 ### Do I need permission/license to launch an Orbit chain?
@@ -39,17 +36,9 @@
   chain on your behalf.
 </p>
 
-<p>
-
-</p>
-
 ### Can I modify Orbit's underlying technology to customize my chain?
 
 <p>Yes, you can make any changes you require to the underlying Nitro code base.</p>
-
-<p>
-
-</p>
 
 ### What Data Availability (DA) solutions are currently available for Orbit chains?
 
@@ -66,6 +55,7 @@
     .
   </li>
 </ul>
+
 <p>
   Note that using AnyTrust provides the chain owner with the most flexibility and the most
   cost-effective fees.
@@ -77,10 +67,6 @@
   By default, Arbitrum Orbit chains pay gas in <code>ETH</code>. However, Arbitrum Orbit chains that
   use AnyTrust are configurable to use any <code>ERC-20</code> token for the gas fee token of the
   chain.
-</p>
-
-<p>
-
 </p>
 
 ### Can I use Ethereum toolkits to develop on my Orbit chain?
@@ -95,10 +81,6 @@
   .
 </p>
 
-<p>
-
-</p>
-
 ### Do Orbit chains have any built-in AA solution?
 
 <p>Not by default, but they can be customized to have native AA.</p>
@@ -111,20 +93,12 @@
   expressed interest in supporting Arbitrum Orbit chains.
 </p>
 
-<p>
-
-</p>
-
 ### Is there an official block explorer for Orbit chains?
 
 <p>
   Arbitrum Orbit chains deployments usually come with an open-source Blockscout explorer by default,
   but there are many third-party solutions that have expressed interest in supporting Arbitrum Orbit
   chains.
-</p>
-
-<p>
-
 </p>
 
 ### Is there any indexing solution that supports Orbit chains?
@@ -148,11 +122,8 @@
     <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29">
       MaxCodeSize
     </a>
-  </code>
-  <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29">
-    {' '}
-    and{' '}
-  </a>
+  </code>{' '}
+  and{' '}
   <code>
     <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29">
       MaxInitCodeSize
@@ -168,10 +139,6 @@
   upgrade.
 </p>
 
-<p>
-
-</p>
-
 ### How can I modify Nitro to force posting an invalid assertion and test the fraud proof mechanism?
 
 <p>
@@ -182,7 +149,6 @@
 
 ```shell
 go test ./system_tests/ -tags=challengetest -run=TestChallenge
-
 ```
 
 <p>
@@ -251,18 +217,11 @@ go test ./system_tests/ -tags=challengetest -run=TestChallenge
 </ul>
 <p>
 You can find more detailed information about fees in these pages:
-<br />
-
-<br />
 - <a href="https://docs.arbitrum.io/arbos/l1-pricing">L1 fees</a>
-</p>
+- <a href="https://docs.arbitrum.io/arbos/gas">L2 fees</a>
 
-<p>
-- <a href="https://docs.arbitrum.io/arbos/gas">L2 fees</a> 
-<br />
-
-<br />
 And information about the precompiles methods in the <a href="https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference">Precompile References</a>.
+
 </p>
 
 <p>
@@ -291,10 +250,6 @@ And information about the precompiles methods in the <a href="https://docs.arbit
     how to configure delayed inbox finality
   </a>
   .
-</p>
-
-<p>
-
 </p>
 
 <p>
@@ -409,16 +364,12 @@ on the child chain, as Arb One has an ultra-low re-org risk (having never re-org
   <a href="https://github.com/OffchainLabs/token-bridge-contracts/blob/5bdf33259d2d9ae52ddc69bc5a9cbc558c4c40c7/contracts/tokenbridge/arbitrum/gateway/L2ERC20Gateway.sol#L47">
     parent_side_bridge_contract
   </a>
+  .
 </p>
 
 <p>
-
-</p>
-
-<p>
-Call the <code>calculateL2TokenAddress</code> address with the address of the token on the parent chain.
-<br />
-
+  Call the <code>calculateL2TokenAddress</code> address with the address of the token on the parent
+  chain.
 </p>
 
 <p>
@@ -438,27 +389,61 @@ Call the <code>calculateL2TokenAddress</code> address with the address of the to
 ### What are the different validator modes?
 
 <ul>
-<li><strong>Defensive (allowlist required)</strong>:<ul>
-<li>Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.</li></ul>
+  <li>
+    <strong>Defensive (allowlist required)</strong>:
+  </li>
+  <li>
+    Post stake and create a challenge if local state disagrees with the onchain assertion (wallet
+    required, will only post stake onchain if a bad assertion is found.
+  </li>
+</ul>
 
-</li>
-<li><strong>StakeLatest (allowlist required)</strong>:<ul>
-<li>Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)</li></ul>
+<ul>
+  <li>
+    <strong>StakeLatest (allowlist required)</strong>:
+  </li>
+  <li>
+    Stay staked on the latest assertion and challenge any bad assertions found (wallet required,
+    always staked, uses some gas every time new assertion created)
+  </li>
+</ul>
 
-</li>
-<li><strong>ResolveNodes (allowlist required)</strong>:<ul>
-<li>Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)</li></ul>
+<ul>
+  <li>
+    <strong>ResolveNodes (allowlist required)</strong>:
+  </li>
+  <li>
+    Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad
+    assertions found (wallet required, always staked, uses some gas every time an unconfirmed
+    assertion is resolved or a new assertion is created)
+  </li>
+</ul>
 
-</li>
-<li><strong>MakeNodes (allowlist required)</strong>:<ul>
-<li>Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)</li>
-<li>Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.</li></ul>
+<ul>
+  <li>
+    <strong>MakeNodes (allowlist required)</strong>:
+  </li>
+  <li>
+    Continuously create new assertions, challenging any bad assertions found (wallet required,
+    always staked, most expensive node to run)
+  </li>
+  <li>
+    Note that if there is more than one MakeNodes validator running, they might all try to create a
+    new assertion at the same time. In that case, only one will be successful, and the others will
+    have still spent gas on reverted calls that did nothing.
+  </li>
+</ul>
 
-</li>
-<li><strong>Watchtower</strong>:<ul>
-<li>A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).</li></ul>
-
-</li></ul>
+<ul>
+  <li>
+    <strong>Watchtower</strong>:
+  </li>
+  <li>
+    A node in Watchtower mode will immediately log an error if an onchain assertion deviates from
+    the locally computed chain state. It doesn't require a wallet, as it never takes any action
+    onchain. This mode is the default-enabled strategy for all nodes (full and archive).
+  </li>
+</ul>
 
 ### What are the costs to run a validator?
 
@@ -474,15 +459,27 @@ Call the <code>calculateL2TokenAddress</code> address with the address of the to
   <code>ERC-20</code>) for two things:
 </p>
 
-<ol>
-<li>Gas costs to post assertions<ul>
-<li>Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.</li></ul>
+<ul>
+  <li>Gas costs to post assertions</li>
+  <li>
+    Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume
+    one assertion per hour, then you can multiply your gas cost per hour to calculate the annual
+    cost. This assumption holds under normal operation, but during a challenge, you may post more
+    assertions (these will scale with the number of challenges), so it might be one assertion every
+    10 minutes, depending on how many challenges are ongoing.
+  </li>
+</ul>
 
-</li>
-<li>Bonds to participate<ul>
-<li>Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 <code>ETH</code> initially and then 555+79 <code>ETH</code> per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.</li></ul>
-
-</li></ol>
+<ul>
+  <li>Bonds to participate</li>
+  <li>
+    Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum
+    One, this is 3600 <code>ETH</code> initially and then 555+79 <code>ETH</code> per each
+    subsequent challenge. These amounts were carefully selected and designed, with extensive
+    research behind them, specifically for Arbitrum One. There could be one or multiple challenges,
+    and so there will always be a possibility where more funds are needed.
+  </li>
+</ul>
 
 ### How do I export snapshots for nitro-based chains? Is there any tooling for this?
 
@@ -495,13 +492,13 @@ Call the <code>calculateL2TokenAddress</code> address with the address of the to
 
 <p>
   Over time, without creating assertions, the validator whitelist in the Rollup contract can become
-  disabled. If you look at the{' '}
+  disabled. If you look at the
   <code>
     <a href="https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62">
       removeWhitelistAfterValidatorAfk
     </a>
-  </code>{' '}
-  method, it allows you to disable the whitelist after{' '}
+  </code>
+  method, it allows you to disable the whitelist after
   <code>confirmPeriodBlocks + VALIDATOR_AFK_BLOCKS</code> L1 blocks have passed since the last
   assertion created.
 </p>
@@ -509,12 +506,12 @@ Call the <code>calculateL2TokenAddress</code> address with the address of the to
 <p>
   As a default, that's 7200 + 45818 blocks (a bit less than eight days). Disabling the whitelist is
   not a significant issue if you continue to monitor the chain and run a validator. It can be
-  enabled using{' '}
+  enabled using
   <code>
     <a href="https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378">
       setValidatorWhitelistDisabled()
     </a>
-  </code>{' '}
+  </code>
   by the chain owner. But it's always better to avoid reaching that point.
 </p>
 
