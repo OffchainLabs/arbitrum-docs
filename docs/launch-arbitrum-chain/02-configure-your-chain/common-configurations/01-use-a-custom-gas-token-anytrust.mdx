@@ -11,7 +11,7 @@ When deploying your AnyTrust Arbitrum chain you have the option of using a custo
 
 ## Requirements of the custom gas token
 
-The main requirements for a custom gas token is that it must be an `ERC-20` token, and it must be natively deployed on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain.
+The main requirements for a custom gas token is that it must be an `ERC-20` token, and there _must be some representation_ on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain.
 
 There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the `ERC-20` token include:
 

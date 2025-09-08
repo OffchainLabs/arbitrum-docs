@@ -282,6 +282,16 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
+                  label: 'BoLD configuration parameters',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
+                  label: 'Deploy and configure Timeboost',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
                   label: `Configure a custom AnyTrust gas token`,
                 },
@@ -304,6 +314,21 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs',
                   label: `Enable blob transactions`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality',
+                  label: `Configure delayed inbox finality`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains',
+                  label: 'BoLD for Arbitrum chains',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains',
+                  label: 'Timeboost for Arbitrum chains',
                 },
                 {
                   type: 'category',
@@ -353,16 +378,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
                   label: `Enable fast withdrawals`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
-                  label: 'BoLD configuration parameters',
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
-                  label: 'Deploy and configure Timeboost',
                 },
                 {
                   type: 'doc',
@@ -522,10 +537,22 @@ const sidebars = {
               id: 'launch-arbitrum-chain/customize-your-chain/customize-arbos',
               label: `Customize ArbOS version`,
             },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Migrate your chain',
+          collapsed: true,
+          items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-finality',
-              label: `Configure delayed inbox finality`,
+              id: 'launch-arbitrum-chain/migrate-from-another-stack',
+              label: 'Migrate from another stack',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/migrate-between-raases',
+              label: 'Migrate between RaaSes',
             },
           ],
         },
@@ -586,17 +613,6 @@ const sidebars = {
           id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
         },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
-          label: 'BoLD for Arbitrum chains',
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
-          label: 'Timeboost for Arbitrum chains',
-        },
-
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
@@ -822,6 +838,11 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
+          type: 'doc',
+          id: 'run-arbitrum-node/run-feed-relay',
+          label: 'Run a feed relay',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
@@ -900,11 +921,6 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/sequencer/run-sequencer-node',
               label: 'Run a sequencer node',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/sequencer/run-feed-relay',
-              label: 'Run a feed relay',
             },
             {
               type: 'doc',
