@@ -73,8 +73,13 @@
 
 // Fix for mobile navigation: ensure right-positioned navbar items appear in hamburger menu
 @media (max-width: 996px) {
-  // Show right navbar items in mobile navigation
+  // Hide right navbar items by default on mobile
   .navbar__items.navbar__items--right {
+    display: none;
+  }
+
+  // Only show right navbar items when mobile sidebar is open
+  .navbar-sidebar--show .navbar__items.navbar__items--right {
     display: flex !important;
     flex-direction: column;
     width: 100%;
@@ -83,14 +88,14 @@
     border-top: 1px solid var(--ifm-toc-border-color);
   }
 
-  // Ensure all right navbar items are visible
-  .navbar__items.navbar__items--right > * {
+  // Ensure all right navbar items are visible when mobile menu is open
+  .navbar-sidebar--show .navbar__items.navbar__items--right > * {
     display: block !important;
     position: static !important;
   }
 
-  // Style navbar links consistently in mobile menu
-  .navbar__items.navbar__items--right .navbar__link {
+  // Style navbar links consistently in mobile menu when open
+  .navbar-sidebar--show .navbar__items.navbar__items--right .navbar__link {
     padding: 0.75rem 1rem;
     width: 100%;
     text-align: left;
@@ -102,8 +107,8 @@
     }
   }
 
-  // Handle dropdown items in mobile menu
-  .navbar__items.navbar__items--right .dropdown {
+  // Handle dropdown items in mobile menu when open
+  .navbar-sidebar--show .navbar__items.navbar__items--right .dropdown {
     width: 100%;
 
     .dropdown__menu {
