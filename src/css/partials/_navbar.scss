@@ -12,6 +12,9 @@
   > .navbar__items--right {
     display: flex;
     flex: 1;
+    gap: 8px; // Add spacing between navbar items
+    justify-content: flex-end;
+    align-items: center;
 
     #search_input_react {
       justify-content: flex-end;
@@ -20,5 +23,50 @@
     .DocSearch-Button-Keys {
       display: none;
     }
+
+    // Ensure navbar items don't get squished
+    .navbar__item {
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+
+    // Optimize dark mode toggle spacing
+    [class*='toggle'],
+    [class*='colorModeToggle'] {
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Adjust main content to account for the fixed top navigation
+.main-wrapper {
+  margin-top: 0;
+}
+
+// Ensure proper spacing between navbar and top navigation
+.navbar {
+  border-bottom: none;
+}
+
+// Inkeep search widget responsive behavior
+#inkeep-widget,
+[id*='inkeep'] {
+  // Allow natural sizing while ensuring navbar items have space
+  flex-shrink: 1;
+  min-width: 180px;
+  max-width: 300px;
+
+  @media (max-width: 1200px) {
+    max-width: 250px;
+  }
+
+  @media (max-width: 996px) {
+    max-width: 200px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 180px;
+    min-width: 140px;
   }
 }

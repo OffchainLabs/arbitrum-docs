@@ -45,6 +45,10 @@ const config = {
       integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
+    {
+      href: '/css/inkeep-custom.css',
+      type: 'text/css',
+    },
   ],
   presets: [
     [
@@ -144,6 +148,14 @@ const config = {
               syntaxHighlighter: {
                 lightTheme: require('prism-react-renderer/themes/github'),
                 darkTheme: require('prism-react-renderer/themes/palenight'),
+              },
+              components: {
+                SearchBarTrigger: {
+                  // Configure responsive sizing behavior
+                  defaultSize: 'medium',
+                  minWidth: '180px',
+                  maxWidth: '320px',
+                },
               },
             },
           },
@@ -246,29 +258,47 @@ const config = {
         },
         items: [
           {
-            type: 'doc',
-            docId: 'build-decentralized-apps/quickstart-solidity-remix',
-            position: 'left',
+            type: 'docSidebar',
+            sidebarId: 'buildDecentralizedAppsSidebar',
+            position: 'right',
             label: 'Build dApps',
           },
-          // {
-          //   type: 'doc',
-          //   docId: 'getting-started-users',
-          //   position: 'left',
-          //   label: 'Users (Bridge)',
-          // },
-          // {
-          //   type: 'doc',
-          //   docId: 'node-running/quickstart-running-a-node',
-          //   label: 'Node runners',
-          //   position: 'left',
-          // },
-          // {
-          //   type: 'doc',
-          //   docId: 'intro/intro',
-          //   position: 'left',
-          //   label: 'How it works',
-          // },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runArbitrumChainSidebar',
+            position: 'right',
+            label: 'Run an ArbChain',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'stylusSidebar',
+            position: 'right',
+            label: 'Use Stylus',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runNodeSidebar',
+            position: 'right',
+            label: 'Run a node',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'bridgeSidebar',
+            position: 'right',
+            label: 'Use the bridge',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'howItWorksSidebar',
+            position: 'right',
+            label: 'How it works',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'additionalResourcesSidebar',
+            position: 'right',
+            label: 'Resources',
+          },
         ],
       },
       footer: {
