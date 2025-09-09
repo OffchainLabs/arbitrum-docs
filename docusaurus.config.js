@@ -245,13 +245,30 @@ const config = {
           href: '/welcome/arbitrum-gentle-introduction',
         },
         items: [
-          // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
-          //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
-          //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
+          {
+            type: 'doc',
+            docId: 'build-decentralized-apps/quickstart-solidity-remix',
+            position: 'left',
+            label: 'Build dApps',
+          },
           // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          // }
+          //   type: 'doc',
+          //   docId: 'getting-started-users',
+          //   position: 'left',
+          //   label: 'Users (Bridge)',
+          // },
+          // {
+          //   type: 'doc',
+          //   docId: 'node-running/quickstart-running-a-node',
+          //   label: 'Node runners',
+          //   position: 'left',
+          // },
+          // {
+          //   type: 'doc',
+          //   docId: 'intro/intro',
+          //   position: 'left',
+          //   label: 'How it works',
+          // },
         ],
       },
       footer: {
