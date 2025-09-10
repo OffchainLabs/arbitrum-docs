@@ -260,43 +260,36 @@ const config = {
           {
             type: 'docSidebar',
             sidebarId: 'buildDecentralizedAppsSidebar',
-            position: 'right',
             label: 'Build dApps',
           },
           {
             type: 'docSidebar',
             sidebarId: 'runArbitrumChainSidebar',
-            position: 'right',
             label: 'Run an ArbChain',
           },
           {
             type: 'docSidebar',
             sidebarId: 'stylusSidebar',
-            position: 'right',
             label: 'Use Stylus',
           },
           {
             type: 'docSidebar',
             sidebarId: 'runNodeSidebar',
-            position: 'right',
             label: 'Run a node',
           },
           {
             type: 'docSidebar',
             sidebarId: 'bridgeSidebar',
-            position: 'right',
             label: 'Use the bridge',
           },
           {
             type: 'docSidebar',
             sidebarId: 'howItWorksSidebar',
-            position: 'right',
             label: 'How it works',
           },
           {
             type: 'docSidebar',
             sidebarId: 'additionalResourcesSidebar',
-            position: 'right',
             label: 'Resources',
           },
         ],
