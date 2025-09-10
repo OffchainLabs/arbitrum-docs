@@ -152,7 +152,7 @@ const renderMethodsInTable = (
 
   const deprecationNotice = showDeprecationFlag ? defaultDeprecationNotice : '';
 
-  return tableHtml + deprecationNotice;
+  return tableHtml + '\n\n' + deprecationNotice;
 };
 
 const renderEventsInTable = (

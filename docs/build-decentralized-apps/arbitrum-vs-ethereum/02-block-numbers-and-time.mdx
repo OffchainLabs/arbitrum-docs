@@ -55,6 +55,12 @@ block.number // => returns the approximate block number of the first non-Arbitru
 
 As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (It so happens these are generally the same assumptions one should operate under when using block numbers directly on Ethereum!)
 
+:::info EIP-2935 difference
+
+[EIP-2935](https://eips.ethereum.org/EIPS/eip-2935) adds another way to retrieve block hashes by making a call to a contract. The contract is at the same address and has the same interface as the original. It was modified to have a larger buffer and different code, but it remains usable in the same way to retrieve past L2 block hashes.
+
+:::
+
 ### Arbitrum block numbers
 
 Arbitrum blocks have their own block numbers, starting at 0 at the Arbitrum genesis block and updating sequentially.
