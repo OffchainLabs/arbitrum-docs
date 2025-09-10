@@ -45,7 +45,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 ## Gas price floor
 
 - **Description**: This is the minimum L2 base fee (in `wei` per gas unit), preventing fees from dropping too low during periods of low activity. The actual base fee fluctuates based on demand, but it will not fall below this set floor. It will affect user transaction costs.
-- **Default**: 0.01 `gwei` (10,000,000 `wei`).
+- **Default**: 0.1 `gwei` (100,000,000 `wei`).
 - **Configuration**:
   - **During deployment**: Set the `minL2BaseFee` field in the Orbit setup script's config JSON.
   - **Post-deployment**: Call the `setMinimumL2BaseFee(uint256 newMinBaseFee)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newMinBaseFee` is the value in `wei`.
