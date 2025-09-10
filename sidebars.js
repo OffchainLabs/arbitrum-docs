@@ -321,6 +321,16 @@ const sidebars = {
                   label: `Configure delayed inbox finality`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains',
+                  label: 'BoLD for Arbitrum chains',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains',
+                  label: 'Timeboost for Arbitrum chains',
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -603,17 +613,6 @@ const sidebars = {
           id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
         },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
-          label: 'BoLD for Arbitrum chains',
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
-          label: 'Timeboost for Arbitrum chains',
-        },
-
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
