@@ -282,6 +282,16 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
+                  label: 'BoLD configuration parameters',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
+                  label: 'Deploy and configure Timeboost',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
                   label: `Configure a custom AnyTrust gas token`,
                 },
@@ -314,6 +324,16 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality',
                   label: `Configure delayed inbox finality`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains',
+                  label: 'BoLD for Arbitrum chains',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains',
+                  label: 'Timeboost for Arbitrum chains',
                 },
                 {
                   type: 'category',
@@ -363,16 +383,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
                   label: `Enable fast withdrawals`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
-                  label: 'BoLD configuration parameters',
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
-                  label: 'Deploy and configure Timeboost',
                 },
                 {
                   type: 'doc',
@@ -608,17 +618,6 @@ const sidebars = {
           id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
         },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
-          label: 'BoLD for Arbitrum chains',
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
-          label: 'Timeboost for Arbitrum chains',
-        },
-
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
