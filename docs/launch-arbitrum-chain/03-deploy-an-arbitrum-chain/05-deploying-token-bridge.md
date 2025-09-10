@@ -278,3 +278,9 @@ if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
   );
 }
 ```
+
+:::warning You must verify Arbitrum (Orbit) chain contracts' source code
+
+We have provided a script that will perform the source code verification of all the contracts deployed by the `L1AtomicTokenBridgeCreator` to the specific Arbitrum chain. The script is available in the [Token Bridge Contracts repo](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/docs/deployment.md#verify-orbit-contracts-source-code-on-the-blockscout).
+
+:::
