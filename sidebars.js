@@ -317,6 +317,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/smart-contract-size-limit',
+                  label: `Configure the smart contract size limit`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality',
                   label: `Configure delayed inbox finality`,
                 },
