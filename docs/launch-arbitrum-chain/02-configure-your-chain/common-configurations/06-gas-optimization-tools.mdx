@@ -63,7 +63,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 ## Per batch gas cost
 
 - **Description**: This refers to the fixed L1 base charge applied for the overhead of posting each batch to the parent chain. It is used in transaction pricing to amortize the parent chain's fixed costs (like calldata posting) over the batch's transactions. It can be adjusted to reflect actual posting costs or incentivize batching. The surplus (if any) gets rewarded to the batch poster.
-- **Default**: Varies based on parent chain fees, but typically around 100,000 gas (adjustable to match).
+- **Default**: Varies based on parent chain fees, but typically around 210,000 gas (adjustable to match).
 - **Configuration**: Call the `setPerBatchGasCharge(int64 newCharge)` on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newCharge` is the fixed gas units per batch. This configuration adjusts the allocation of L2 gas for batch overhead in pricing. Additionally, you can configure related surplus fees (extra reward to batch poster) via `setL1PricingRewardRate(uint64 rate)`. The parent chain base fee estimates influence the actual cost, which is dynamic; therefore, monitor them via `ArbGasInfo`'s `getPricesInWei()` method.
 
 Example using `cast` (for per batch charge):
