@@ -9,9 +9,6 @@ const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
-// Check if SDK docs generation should be skipped
-const skipSdkDocs = process.env.SKIP_SDK_DOCS === 'true' && sdkDocsExist();
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
