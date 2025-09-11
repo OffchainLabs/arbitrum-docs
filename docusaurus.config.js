@@ -10,7 +10,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 // Check if SDK docs generation should be skipped
-const skipSdkDocs = process.env.SKIP_SDK_DOCS === 'true' && sdkDocsExist();
+const skipSdkDocs = process.env.SKIP_SDK_DOCS === 'true';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -400,24 +400,6 @@ if (isRunningLocally && isRunningOnWindows) {
   // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
   config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
   config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
-}
-
-// Helper function to check if SDK docs exist
-// If SDK docs don't exist, always generate them regardless of SKIP_SDK_DOCS
-function sdkDocsExist() {
-  const fs = require('fs');
-  const path = require('path');
-
-  try {
-    const sdkDocsPath = path.join(__dirname, 'docs/sdk');
-    if (!fs.existsSync(sdkDocsPath)) {
-      return false;
-    }
-    const files = fs.readdirSync(sdkDocsPath);
-    return files.some((file) => file.endsWith('.md') || file.endsWith('.mdx'));
-  } catch (error) {
-    return false;
-  }
 }
 
 module.exports = config;
