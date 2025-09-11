@@ -40,7 +40,7 @@ DeFi and related MEV activity (e.g. liquidations, arbitrage, backrunning) on the
 [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) to learn more
 about how Timeboost works.
 
-As with all features on the Arbitrum stack, Arbitrum chains can adopt Timeboost at their own discretion and on their own timeline. To deploy and enable Arbitrum Timeboost on your chain, please refer to this guide on how to [deploy and configure Timeboost](#enabling-timeboost-for-your-arbitrum-orbit-chain).
+As with all features on the Arbitrum stack, Arbitrum chains can adopt Timeboost at their own discretion and on their own timeline. To deploy and enable Arbitrum Timeboost on your chain, please refer to this guide on how to [deploy and configure Timeboost](#enabling-timeboost-for-your-arbitrum-chain).
 
 ## Recommended adoption path
 
@@ -84,7 +84,7 @@ Often times, the cost required to set up, configure, and maintain the infrastruc
 
 As explained in the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost express lane time advantage is implemented by imposing an artificial delay (default: `200ms`) on all non-express lane transactions whenever there is an express lane controller for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `250ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artificial delay and the block time of the chain. Note that this artificial delay is only applied when there is an express lane controller for a round, meaning there is no change in user experience if nobody is using Timeboost, even though it is enabled (for the duration of that round).
 
-## Enabling Timeboost for your Arbitrum (Orbit) chain
+## Enabling Timeboost for your Arbitrum chain
 
 This guide walks you through the process of enabling Timeboost for your Arbitrum Orbit chain. For a conceptual introduction to Timeboost, see the [Timeboost Introduction](https://docs.arbitrum.io/how-arbitrum-works/timeboost/gentle-introduction).
 
