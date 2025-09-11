@@ -282,16 +282,6 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
-                  label: 'BoLD configuration parameters',
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
-                  label: 'Deploy and configure Timeboost',
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
                   label: `Configure a custom AnyTrust gas token`,
                 },
@@ -509,11 +499,6 @@ const sidebars = {
                   label: `Post-launch deployments`,
                 },
               ],
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold',
-              label: 'Upgrade to BoLD',
             },
             {
               type: 'doc',
