@@ -322,6 +322,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools',
+                  label: `Gas optimization tools`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains',
                   label: 'BoLD for Arbitrum chains',
                 },
