@@ -138,8 +138,8 @@ async function main(): Promise<void> {
   await fs.writeFile(
     './docs/partials/_glossary-partial.mdx',
     terms
-      .map((item) => `### ${item.data.title} {#${item.data.key}}\n${item.content.trim()}`)
-      .join('\n\n'),
+      .map((item) => `### ${item.data.title} {#${item.data.key}}\n\n${item.content.trim()}`)
+      .join('\n\n') + '\n',
   );
 
   // Generate and write the JSON glossary file for client-side usage
