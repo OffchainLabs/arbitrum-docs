@@ -1,0 +1,114 @@
+/* Inkeep Widget Custom Styles */
+/* This file contains non-aggressive styling for the Inkeep search widget */
+/* Avoid !important declarations to maintain compatibility with Inkeep's built-in functionality */
+
+/* Main widget container */
+#inkeep-widget,
+[data-testid="inkeep-search-bar"],
+.inkeep-search-container {
+  /* Use flex properties for natural responsive behavior */
+  flex-shrink: 1;
+  /* Set reasonable bounds without being too restrictive */
+  min-width: 180px;
+  max-width: 320px;
+}
+
+/* Search input styling - work with Inkeep's existing styles */
+#inkeep-widget input,
+[data-testid="inkeep-search-bar"] input,
+.inkeep-search-container input {
+  /* Adjust font size for better navbar integration */
+  font-size: 14px;
+  /* Ensure proper width scaling */
+  width: 100%;
+  max-width: none;
+}
+
+/* Search button styling */
+#inkeep-widget button,
+[data-testid="inkeep-search-bar"] button,
+.inkeep-search-container button {
+  /* Compact button styling */
+  padding: 6px 12px;
+  font-size: 14px;
+  /* Ensure proper flex behavior */
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  #inkeep-widget,
+  [data-testid="inkeep-search-bar"],
+  .inkeep-search-container {
+    max-width: 280px;
+  }
+  
+  #inkeep-widget input,
+  [data-testid="inkeep-search-bar"] input,
+  .inkeep-search-container input {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 996px) {
+  #inkeep-widget,
+  [data-testid="inkeep-search-bar"],
+  .inkeep-search-container {
+    max-width: 240px;
+  }
+  
+  #inkeep-widget input,
+  [data-testid="inkeep-search-bar"] input,
+  .inkeep-search-container input {
+    font-size: 13px;
+  }
+  
+  #inkeep-widget button,
+  [data-testid="inkeep-search-bar"] button,
+  .inkeep-search-container button {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  #inkeep-widget,
+  [data-testid="inkeep-search-bar"],
+  .inkeep-search-container {
+    max-width: 200px;
+    min-width: 140px;
+  }
+  
+  #inkeep-widget input,
+  [data-testid="inkeep-search-bar"] input,
+  .inkeep-search-container input {
+    font-size: 12px;
+  }
+  
+  #inkeep-widget button,
+  [data-testid="inkeep-search-bar"] button,
+  .inkeep-search-container button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+/* Dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+  #inkeep-widget,
+  [data-testid="inkeep-search-bar"],
+  .inkeep-search-container {
+    /* Ensure proper dark mode integration */
+    color-scheme: dark;
+  }
+}
+
+/* Focus states - ensure accessibility */
+#inkeep-widget:focus-within,
+[data-testid="inkeep-search-bar"]:focus-within,
+.inkeep-search-container:focus-within {
+  /* Maintain focus visibility */
+  outline: 2px solid var(--ifm-color-primary, #213147);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

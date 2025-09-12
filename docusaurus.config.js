@@ -45,6 +45,10 @@ const config = {
       integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
+    {
+      href: '/css/inkeep-custom.css',
+      type: 'text/css',
+    },
   ],
   presets: [
     [
@@ -144,6 +148,14 @@ const config = {
               syntaxHighlighter: {
                 lightTheme: require('prism-react-renderer/themes/github'),
                 darkTheme: require('prism-react-renderer/themes/palenight'),
+              },
+              components: {
+                SearchBarTrigger: {
+                  // Configure responsive sizing behavior
+                  defaultSize: 'medium',
+                  minWidth: '180px',
+                  maxWidth: '320px',
+                },
               },
             },
           },
@@ -245,13 +257,48 @@ const config = {
           href: '/welcome/arbitrum-gentle-introduction',
         },
         items: [
-          // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
-          //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
-          //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          // }
+          {
+            type: 'docSidebar',
+            sidebarId: 'buildDecentralizedAppsSidebar',
+            position: 'right',
+            label: 'Build dApps',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runArbitrumChainSidebar',
+            position: 'right',
+            label: 'Run an ArbChain',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'stylusSidebar',
+            position: 'right',
+            label: 'Use Stylus',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runNodeSidebar',
+            position: 'right',
+            label: 'Run a node',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'bridgeSidebar',
+            position: 'right',
+            label: 'Use the bridge',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'howItWorksSidebar',
+            position: 'right',
+            label: 'How it works',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'additionalResourcesSidebar',
+            position: 'right',
+            label: 'Resources',
+          },
         ],
       },
       footer: {
