@@ -32,7 +32,9 @@ Maximum size of a batch, if total queued but not posted transation size achive t
 - **Prevention of Issues**: A smaller max size reduces the opportunity for transaction reordering by minimizing the time transactions sit uncommitted in the sequencer's mempool. It also limits exposure to chain reorgs, as batches post sooner, anchoring them to the parent chain before potential L1 fluctuations can invalidate sequencing. However, extremely low settings (e.g., seconds) could spam the parent chain with tiny batches, resulting in increased costs without any benefits.
 - **Recommended Settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, stick to the default one hour to avoid unnecessary postings.
 
-## Validator Node Creation Frequency: Interval Between Validator Assertions posting
+## Validator Action Minimum Frequency:
+
+### Validator Node Creation Frequency: Interval Between Validator Assertions posting
 
 The validator assertion posting frequency is controlled by the `--node.staker.make-assertion-interval` (legacy) or `--node.bold.assertion-posting-interval` (bold) parameter in the Nitro node's configuration. This parameter sets the minimum time to wait since the last assertion before posting a new one (if the validator configuration is to make new assertions via the `MakeNodes` strategy). The default value is one hour (3600 seconds) for legacy and fiften minutes (900 seconds) for bold. This interval must always exceed the rollup contract's `minimumAssertionPeriod`, which defaults to 75 L1 blocks (approximately 15 minutes at 12-second block times).
 
@@ -42,7 +44,7 @@ The validator assertion posting frequency is controlled by the `--node.staker.ma
 - **Recommended Settings**: Set to 20-30 minutes for chains needing low-latency finality, but ensure it's >15 minutes to comply with the minimum period. Higher values (e.g., two hours) are suitable for low-stakes chains to reduce validator operational costs.
 - **Note**: Validators require staking (bonding `ETH` or tokens on the parent chain) to post assertions, with the minimum stake set via the rollup contract during chain deployment. If an incorrect assertion is detected, the interval is bypassed, and a new challenge begins. No new assertions get posted if no new batches arrive or force inclusions occur.
 
-## Validator Node confirmation Frequency: Interval Between Validator Assertions confirming
+### Validator Node confirmation Frequency: Interval Between Validator Assertions confirming
 
 The validator assertion confirming frequency is controlled by the --node.staker.staker-interval (legacy) or `--node.bold.assertion-confirming-interval` (bold) parameter in the Nitro node's configuration. This parameter sets the minimum time to wait since the last assertion before confirming a new one (if the validator configuration is to confirm assertions via the `ResolveNodes` strategy). The default value is one minute (1m0s) for both legacy and bold.
 
