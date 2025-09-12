@@ -98,26 +98,3 @@
 .wrapcode code {
   white-space: pre-wrap;
 }
-
-/* Mobile navbar dropdown control */
-@media (max-width: 996px) {
-  /* Prevent auto-expansion of first dropdown in mobile menu */
-  .navbar-sidebar__items .navbar__item.dropdown:first-child .navbar__link::after {
-    transform: rotate(0deg);
-  }
-  
-  /* Collapse all dropdowns by default on mobile */
-  .navbar-sidebar__items .navbar__item.dropdown .dropdown__menu {
-    display: none !important;
-  }
-  
-  /* Show dropdown menu only when explicitly expanded */
-  .navbar-sidebar__items .navbar__item.dropdown.dropdown--show .dropdown__menu {
-    display: block !important;
-  }
-  
-  /* Ensure arrow rotation matches expanded state */
-  .navbar-sidebar__items .navbar__item.dropdown.dropdown--show .navbar__link::after {
-    transform: rotate(180deg);
-  }
-}
