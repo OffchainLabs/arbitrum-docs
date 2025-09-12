@@ -53,7 +53,9 @@ The validator assertion confirming frequency is controlled by the --node.staker.
 - **Recommended Settings**: Use the default setting will be fine.
 - **Note**: Validators require staking (bonding `ETH` or tokens on the parent chain) to confirm assertions.
 
-## Reorg Resistance Margin
+## Reorganization Prevention:
+
+### Reorg Resistance Margin
 
 The reorganization resistance margin is configurable via the `--node.batch-poster.reorg-resistance-margin` parameter, which specifies a time duration (e.g., in minutes) during which the batch poster will avoid posting batches if their minimum L1 block number or timestamp is too close to the current L1 head. This margin serves as a safety buffer to prevent posting batches that reference recent L1 states, which are prone to reorganization. The default value is ten minutes (600 seconds), based on observed usage in deployments and error logs.
 
@@ -62,7 +64,7 @@ The reorganization resistance margin is configurable via the `--node.batch-poste
 - **Recommended Settings**: The default of ten minutes is suitable for most Orbit chains settling to Arbitrum One/Nova, as Ethereum reorgs rarely exceed a few blocks (1-2 minutes). For chains on more volatile bases (e.g., alt L1s), increase the time to 15-20 minutes. Test on devnets to observe behavior.
 - **Trade-offs Between Consistency and Latency**: A higher margin prioritizes consistency by reducing the chance of orphaned posted batches due to L1 reorgs, which could force manual intervention or state rollbacks—critical for high-value chains. However, it increases latency, as batches may wait longer to post, delaying confirmation times (e.g., from seconds to minutes). A lower margin reduces latency for a better user experience (faster transaction finality) but risks more frequent disablements or invalid postings, potentially leading to temporary chain halts or increased operational overhead. Balance based on chain use case: low margin for gaming/dex chains that require speed; high margin for DeFi/financial apps that emphasize reliability.
 
-## Sequencer Max Time Variation
+### Sequencer Max Time Variation
 
 The sequencer max time variation is configurable via the method `setMaxTimeVariation` of Sequencer Inbox Contract, which will also be set to prevent reorg of a chain when long time no batches.
 
@@ -79,38 +81,27 @@ struct MaxTimeVariation {
 
 The MaxTimeVariation struct defines time boundaries that determine whether your chain remains safe or triggers a reorganization (reorg) when posting batches. It uses both block-based and time-based limits to create acceptable windows for message processing between L1 and L2.
 
-### How the Safety Check Works
+#### How the Safety Check Works
 
 When your chain attempts to send a batch, it performs a critical timing validation by comparing the first transaction timestamp in that batch with the current (batch sending) time against the configured `MaxTimeVariation` limits:
 
-- For MAX bound violations
+- For MAX bound violations → Stop adding new messages to the batch
 - For MIN bound violations → Completely prevents batch posting with error: "batch is within reorg resistance margin from layer 1 minimum block or timestamp bounds"
 
-### Timeline Example
+We will explain how the safety check works in more detail in the next section.
 
-Consider this sequence:
-
-- Time A: Chain sends previous batch
-- Time B: First transaction arrives on your chain
-- Time C: Last transaction in this batch arrive
-- Time D: Chain attempts to send new batch
-
-The safety check compares Time B (first transaction) and Time C (last transactions) with Time D (batch attempt).
-
-This mechanism explains why batch poster timing is critical. If your batch poster experiences delays and cannot send batches promptly after receiving transactions, the growing time gap between transaction receipt (Time B) and batch submission (Time D) increases the risk of exceeding `MaxTimeVariation` limits and triggering unwanted reorgs.
-
-## Relationship Between `ReorgResistanceMargin` and `MaxTimeVariation`
+### Relationship Between `ReorgResistanceMargin` and `MaxTimeVariation`
 
 While both ReorgResistanceMargin and MaxTimeVariation are timing-related security parameters in Arbitrum, they serve complementary but distinct purposes in the batch posting mechanism.
 
-### How They Work Together
+#### How They Work Together
 
 `MaxTimeVariation` establishes the fundamental time bounds for message validity, while `ReorgResistanceMargin` adds an additional safety buffer on top of MaxTimeVariation's minimum bounds:
 
 1. Calculate L1 bounds using MaxTimeVariation:
 
 ```
-   l1BoundMaxBlockNumber = l1BoundMinTimestamp + maxTimeVariation.futureBlocks
+   l1BoundMaxBlockNumber = latestL1BlockNumber + maxTimeVariation.futureBlocks
    l1BoundMinBlockNumber = latestL1BlockNumber - maxTimeVariation.delayBlocks
    l1BoundMaxTimestamp = latestL1Timestamp + maxTimeVariation.futureSeconds
    l1BoundMinTimestamp = latestL1Timestamp - maxTimeVariation.delaySeconds
@@ -119,8 +110,8 @@ While both ReorgResistanceMargin and MaxTimeVariation are timing-related securit
 2. Add `ReorgResistanceMargin` to L1 minimum bounds:
 
 ```
-      safeTimestampThreshold = l1BoundMinTimestamp + (ReorgResistanceMargin / 1 second)
-      safeBlockThreshold = l1BoundMinBlockNumber + (ReorgResistanceMargin / 12 seconds)
+   safeBlockThreshold = l1BoundMinBlockNumber + (ReorgResistanceMargin / 12 seconds)
+   safeTimestampThreshold = l1BoundMinTimestamp + (ReorgResistanceMargin / 1 second)
 ```
 
 3. Stop adding new messages to the batch if MAX bound violations:
@@ -135,5 +126,5 @@ While both ReorgResistanceMargin and MaxTimeVariation are timing-related securit
 
 This layered approach provides defense in depth:
 
-- MaxTimeVariation ensures message timestamps stay within acceptable bounds for normal operation
-- ReorgResistanceMargin prevents batch posting when approaching those bounds, reducing the risk that an L1 reorganization could make a recently posted batch invalid
+- `MaxTimeVariation` ensures message timestamps stay within acceptable bounds for normal operation
+- `ReorgResistanceMargin` prevents batch posting when approaching those bounds, reducing the risk that an L1 reorganization could make a recently posted batch invalid
