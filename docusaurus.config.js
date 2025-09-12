@@ -70,65 +70,60 @@ const config = {
     ],
   ],
   plugins: [
-    // Only skip TypeDoc plugin if explicitly requested via environment variable
-    ...(skipSdkDocs
-      ? []
-      : [
-          [
-            'docusaurus-plugin-typedoc',
-            {
-              id: 'arbitrum-sdk',
-              tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-              entryPoints: [`${sdkCodebasePath}/src/lib`],
-              entryPointStrategy: 'expand',
-              exclude: [`abi`, `node_modules`, `tests`, `scripts`],
-              excludeNotDocumented: true,
-              excludeInternal: true,
-              excludeExternals: true,
-              readme: 'none',
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        id: 'arbitrum-sdk',
+        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
+        entryPoints: [`${sdkCodebasePath}/src/lib`],
+        entryPointStrategy: 'expand',
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        excludeNotDocumented: true,
+        excludeInternal: true,
+        excludeExternals: true,
+        readme: 'none',
 
-              // Output options
-              out: './docs/sdk',
-              hideGenerator: true,
-              validation: {
-                notExported: false,
-                invalidLink: true,
-                notDocumented: true,
-              },
-              logLevel: 'Verbose',
-              sidebar: {
-                autoConfiguration: false,
-              },
+        // Output options
+        out: './docs/sdk',
+        hideGenerator: true,
+        validation: {
+          notExported: false,
+          invalidLink: true,
+          notDocumented: true,
+        },
+        logLevel: 'Verbose',
+        sidebar: {
+          autoConfiguration: false,
+        },
 
-              plugin: [
-                'typedoc-plugin-markdown',
-                `typedoc-plugin-frontmatter`,
-                './scripts/sdkDocsHandler.ts',
-                './scripts/stylusByExampleDocsHandler.ts',
-              ],
+        plugin: [
+          'typedoc-plugin-markdown',
+          `typedoc-plugin-frontmatter`,
+          './scripts/sdkDocsHandler.ts',
+          './scripts/stylusByExampleDocsHandler.ts',
+        ],
 
-              // typedoc-plugin-markdown options
-              // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-              outputFileStrategy: 'modules',
-              excludeGroups: false,
-              hidePageHeader: true,
-              hidePageTitle: true,
-              hideBreadcrumbs: true,
-              useCodeBlocks: true,
-              expandParameters: true,
-              parametersFormat: 'table',
-              propertiesFormat: 'table',
-              enumMembersFormat: 'table',
-              typeDeclarationFormat: 'table',
-              sanitizeComments: true,
-              frontmatterGlobals: {
-                layout: 'docs',
-                sidebar: true,
-                toc_max_heading_level: 5,
-              },
-            },
-          ],
-        ]),
+        // typedoc-plugin-markdown options
+        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        outputFileStrategy: 'modules',
+        excludeGroups: false,
+        hidePageHeader: true,
+        hidePageTitle: true,
+        hideBreadcrumbs: true,
+        useCodeBlocks: true,
+        expandParameters: true,
+        parametersFormat: 'table',
+        propertiesFormat: 'table',
+        enumMembersFormat: 'table',
+        typeDeclarationFormat: 'table',
+        sanitizeComments: true,
+        frontmatterGlobals: {
+          layout: 'docs',
+          sidebar: true,
+          toc_max_heading_level: 5,
+        },
+      },
+    ],
     [
       '@inkeep/cxkit-docusaurus',
       {
