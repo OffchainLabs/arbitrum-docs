@@ -5,8 +5,8 @@
       "name": "Arbitrum Nitro",
       "repo": "https://github.com/OffchainLabs/nitro",
       "currentDocsVersion": "v3.6.0",
-      "latestRelease": "v3.7.1",
-      "latestReleaseDate": "2025-08-27",
+      "latestRelease": "v3.7.2",
+      "latestReleaseDate": "2025-09-11",
       "docsPath": "docs/arbitrum-docs/how-arbitrum-works",
       "description": "Core Arbitrum protocol implementation"
     },
