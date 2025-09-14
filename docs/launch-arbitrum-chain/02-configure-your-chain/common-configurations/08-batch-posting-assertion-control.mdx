@@ -34,7 +34,7 @@ Maximum size of a batch, if total queued but not posted transaction size archive
 
 ## Validator action minimum frequency:
 
-### Validator bode creation frequency: Interval etween validator assertions posting
+### Validator node creation frequency: Interval between validator assertions posting
 
 The validator assertion posting frequency is controlled by the `--node.staker.make-assertion-interval` (legacy) or `--node.bold.assertion-posting-interval` (bold) parameter in the Nitro node's configuration. This parameter sets the minimum time to wait since the last assertion before posting a new one (if the validator configuration is to make new assertions via the `MakeNodes` strategy). The default value is one hour (3600 seconds) for legacy and fifteen minutes (900 seconds) for bold. This interval must always exceed the rollup contract's `minimumAssertionPeriod`, which defaults to 75 L1 blocks (approximately 15 minutes at 12-second block times).
 
@@ -96,7 +96,7 @@ While both `ReorgResistanceMargin` and `MaxTimeVariation` are timing-related sec
 
 #### How they work together
 
-```establishes the fundamental time bounds for message validity, while`ReorgResistanceMargin`adds a safety buffer on top of`MaxTimeVariation`'s minimum bounds:
+`MaxTimeVariation` establishes the fundamental time bounds for message validity, while `ReorgResistanceMargin` adds a safety buffer on top of`MaxTimeVariation`'s minimum bounds:
 
 1. Calculate L1 bounds using `MaxTimeVariation`:
 
