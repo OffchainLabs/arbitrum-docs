@@ -250,23 +250,32 @@ const config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'buildDecentralizedAppsSidebar',
+            type: 'dropdown',
+            label: 'Build apps',
             position: 'right',
-            label: 'Build dApps',
+            items: [
+              {
+                label: 'Quickstart',
+                to: '/build-decentralized-apps/quickstart-solidity-remix',
+              },
+              {
+                label: 'Stylus',
+                to: '/stylus/gentle-introduction',
+              },
+            ],
           },
           {
             type: 'docSidebar',
             sidebarId: 'runArbitrumChainSidebar',
             position: 'right',
-            label: 'Run an ArbChain',
+            label: 'Launch a chain',
           },
-          {
-            type: 'docSidebar',
-            sidebarId: 'stylusSidebar',
-            position: 'right',
-            label: 'Use Stylus',
-          },
+          // {
+          //   type: 'docSidebar',
+          //   sidebarId: 'stylusSidebar',
+          //   position: 'right',
+          //   label: 'Use Stylus',
+          // },
           {
             type: 'docSidebar',
             sidebarId: 'runNodeSidebar',
