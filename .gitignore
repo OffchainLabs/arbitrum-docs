@@ -40,3 +40,5 @@ yarn-error.log*
 .yarn
 
 /i18n/*/docusaurus-plugin-content-docs/current/*
+
+sdk-sidebar.js
