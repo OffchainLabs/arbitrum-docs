@@ -322,8 +322,13 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  label: 'Configure Batch Poster and Assertion Control',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control',
+                  label: 'Configure Batch Poster and Assertion Control',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools',
+                  label: `Gas optimization tools`,
                 },
                 {
                   type: 'doc',
