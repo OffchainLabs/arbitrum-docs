@@ -15,6 +15,7 @@ build
 .cache-loader
 
 # Misc
+.env
 .DS_Store
 .env
 .env.local
