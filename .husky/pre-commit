@@ -3,3 +3,6 @@
 
 echo "Running git submodule update..."
 git submodule update --init --recursive
+
+echo "Running yarn format..."
+yarn format
