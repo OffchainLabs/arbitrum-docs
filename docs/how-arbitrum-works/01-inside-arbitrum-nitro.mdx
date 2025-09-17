@@ -34,7 +34,7 @@ Nitro is a major upgrade to Arbitrum, improving over "classic" Arbitrum in sever
 - **Geth Tracing**, for even broader debugging support.
 - Any many, many more changes.
 
-## The Big Picture
+## The big picture
 
 At the most basic level, an Arbitrum chain works like this:
 
@@ -47,7 +47,7 @@ People and contracts put messages into the inbox. The chain reads the messages o
 
 If you want an Arbitrum chain to process a transaction for you, you need to put that transaction into the chain's inbox. Then, the chain will process your transaction, execute it, and produce some outputs: a transaction receipt and any withdrawals that your transaction initiated.
 
-Execution is deterministic - which means that the contents of its inbox uniquely determine the chain's behavior. Because of this, the result of your transaction is knowable as soon as it gets placed in the inbox. Any Arbitrum node will be able to tell you the result. (And you can run an Arbitrum node yourself if you want.)
+Execution is deterministic—which means that the contents of its inbox uniquely determine the chain's behavior. Because of this, the result of your transaction is knowable as soon as it gets placed in the inbox. Any Arbitrum node will be able to tell you the result. (And you can run an Arbitrum node yourself if you want.)
 
 All of the technical details in this document connect to this diagram (shown above). To get from this diagram to a full description of Arbitrum, we'll need to answer questions like these:
 
@@ -58,7 +58,7 @@ All of the technical details in this document connect to this diagram (shown abo
 - How are `ETH` and tokens transferred into and out of Arbitrum chains, and how are they managed while on chain?
 - How can I run my own Arbitrum node or validator?
 
-## Nitro's Design: The Four Big Ideas
+## Nitro's design: The four big ideas
 
 The essence of Nitro, and its key innovations, lie in four big ideas. We'll list them here with a summary of each, and then we'll unpack them in more detail in later sections.
 
@@ -67,7 +67,7 @@ The essence of Nitro, and its key innovations, lie in four big ideas. We'll list
 - **Separate Execution from Proving**: Nitro takes the same source and compiles it twice, once to native code for execution in a Nitro node, optimized for speed, and again to WASM for use in proving, optimized for portability and security.
 - **Optimistic Rollup with Interactive Fraud Proofs**: Nitro settles transactions to the Layer 1 Ethereum chain using an optimistic rollup protocol, including the interactive fraud proofs pioneered by Arbitrum.
 
-## Sequencing, Followed by Deterministic Execution
+## Sequencing, followed by deterministic execution
 
 This diagram illustrates the process of how transaction processing works in Nitro.
 
@@ -79,7 +79,7 @@ First, the user creates a transaction, uses their wallet to sign it, and sends i
 
 Once the transactions are sequenced, they go to the _State Transition Function (STF)_ for processing, one by one, in order. The STF takes as input the current state of the chain (account balances, contract code, and so on), along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
 
-Because the protocol doesn't trust the Sequencer not to put garbage into its sequence, the STF will detect and discard any invalid (e.g., improperly formed) transactions in the sequence. A well-behaved Sequencer will filter out invalid transactions, so the STF never sees them - and this reduces cost and therefore keeps transaction fees low - but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the fees are signed by their senders, so the Sequencer can't create forged transactions.)
+Because the protocol doesn't trust the Sequencer not to put garbage into its sequence, the STF will detect and discard any invalid (e.g., improperly formed) transactions in the sequence. A well-behaved Sequencer will filter out invalid transactions, so the STF never sees them—and this reduces cost and therefore keeps transaction fees low—but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the fees are signed by their senders, so the Sequencer can't create forged transactions.)
 
 The state transition function is deterministic, meaning its behavior depends only on the current state and the contents of the next transaction, and nothing else. Because of this determinism, the result of a transaction `T` will depend only on the genesis state of the chain, the transactions before `T` in the sequence, and `T` itself.
 
@@ -91,7 +91,7 @@ For additional reading on STF inputs, see the [STF Inputs deep-dive](/how-arbitr
 
 :::
 
-## How the Sequencer Publishes the Sequence
+## How the Sequencer publishes the sequence
 
 So how do nodes get the sequence? The Sequencer publishes it in two ways: a real-time feed and batches posted on L1 Ethereum.
 
@@ -109,7 +109,7 @@ To learn more about the Sequencer in depth, take a look at the [Sequencer Deep D
 
 :::
 
-## Geth at the Core
+## Geth at the core
 
 The second key design idea in Nitro is "Geth at the Core." Here, "Geth" refers to go-ethereum, the most common node software for Ethereum. As its name suggests, go-ethereum is written in the Go programming language, as is almost all of Nitro.
 
@@ -131,7 +131,7 @@ For a deep dive into the Geth, refer to the [Geth Deep Dive](/how-arbitrum-works
 
 :::
 
-## Separating Execution from Proving
+## Separating execution from proving
 
 One of the challenges in designing a practical rollup system is the tension between wanting the system to perform well in ordinary execution and being able to reliably prove the results of execution. Nitro resolves this tension by using the same source code for both execution and proving, but compiling it to different targets for the two cases.
 
@@ -149,9 +149,9 @@ Second, WAVM restricts a few features of WASM. For example, WAVM does not contai
 
 Third, WAVM introduces a few additional opcodes to facilitate interaction with the blockchain environment. For example, new instructions enable the WAVM code to read and write the chain's global state, retrieve the next message from the chain's inbox, or signal a successful completion of executing the State Transition Function.
 
-### ReadPreImage and the Hash Oracle Trick
+### `ReadPreImage` and the Hash Oracle Trick
 
-The most interesting new instruction is `ReadPreImage` which takes as input a hash `H` and a offest `I`, and returns the word of data at offset `I` of the preimage of `H` (and the number of bytes written, which is zer ofi `I` is at or after the end of the preimage). Of course, it is not feasible in general to produce a preimage from an arbitrary hash. For safety, the `ReadPreImage` instructions are only usable in a context where the preimage is publicly known and the size of the preimage is known to be less than a fixed upper bound of approximately 110 kbytes.
+The most interesting new instruction is `ReadPreImage` which takes as input a hash `H` and a offest `I`, and returns the word of data at offset `I` of the preimage of `H` (and the number of bytes written, which is zero if `I` is at or after the end of the preimage). Of course, it is not feasible in general to produce a preimage from an arbitrary hash. For safety, the `ReadPreImage` instructions are only usable in a context where the preimage is publicly known and the size of the preimage is known to be less than a fixed upper bound of approximately 110 kbytes.
 
 (In this context, "publicly known" information is information that can be derived or recovered efficiently by any honest party, assuming that the full history of the L1 Ethereum chain is available. For convenience, providing a hash preimage by a third party, such as a public server, and the correctness of the supplied value is easily verified.)
 
