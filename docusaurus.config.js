@@ -54,6 +54,7 @@ const config = {
       ({
         docs: {
           // path: './docs',
+          exclude: ['**/api/**'],
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
