@@ -28,36 +28,14 @@ const sidebars = {
   // Welcome sidebar - shared entry point
   welcomeSidebar: [
     {
-      type: 'category',
+      type: 'doc',
+      id: 'welcome/arbitrum-gentle-introduction',
+      label: 'A gentle introduction',
+    },
+    {
+      type: 'doc',
+      id: 'welcome/get-started',
       label: 'Get started',
-      collapsed: false,
-      items: [
-        {
-          type: 'doc',
-          id: 'welcome/arbitrum-gentle-introduction',
-          label: 'A gentle introduction',
-        },
-        {
-          type: 'doc',
-          id: 'welcome/get-started',
-          label: 'Get started',
-        },
-        {
-          type: 'doc',
-          id: 'for-devs/dev-tools-and-resources/chain-info',
-          label: 'Chain info',
-        },
-      ],
-    },
-    {
-      type: 'doc',
-      id: 'learn-more/faq',
-      label: 'FAQ',
-    },
-    {
-      type: 'doc',
-      id: 'intro/glossary',
-      label: 'Glossary',
     },
   ],
 
@@ -68,16 +46,6 @@ const sidebars = {
       label: 'Get started',
       collapsed: false,
       items: [
-        {
-          type: 'doc',
-          id: 'welcome/arbitrum-gentle-introduction',
-          label: 'A gentle introduction',
-        },
-        {
-          type: 'doc',
-          id: 'welcome/get-started',
-          label: 'Get started',
-        },
         {
           type: 'doc',
           id: 'for-devs/dev-tools-and-resources/chain-info',
