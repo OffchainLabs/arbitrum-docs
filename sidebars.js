@@ -29,8 +29,8 @@ const sidebars = {
   getStartedSidebar: [
     {
       type: 'doc',
-      id: 'get-started/arbitrum-gentle-introduction',
-      label: 'A gentle introduction',
+      id: 'get-started/arbitrum-faq',
+      label: 'FAQ',
     },
     {
       type: 'doc',

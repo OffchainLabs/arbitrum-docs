@@ -73,7 +73,7 @@ navbar: {
     logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
-        href: '/get-started/arbitrum-gentle-introduction',
+        href: '/get-started/arbitrum-faq',
     },
     items: [
         // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
