@@ -1,5 +1,74 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
 
-echo "Running git submodule update..."
-git submodule update --init --recursive
+# Pre-commit hook for arbitrum-docs repository
+# Enforces: redirect validation, submodule updates, code formatting
+# Compatible with Husky v10 (no husky.sh sourcing required)
+
+# Color codes for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Error handling functions
+log_info() {
+    echo "${BLUE}[INFO]${NC} $1"
+}
+
+log_success() {
+    echo "${GREEN}[SUCCESS]${NC} $1"
+}
+
+log_error() {
+    echo "${RED}[ERROR]${NC} $1"
+}
+
+log_warning() {
+    echo "${YELLOW}[WARNING]${NC} $1"
+}
+
+# Function to exit with error code and message
+exit_with_error() {
+    log_error "$1"
+    exit 1
+}
+
+# Function to check command availability
+check_command() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        exit_with_error "Command '$1' not found. Please ensure it's installed and in your PATH."
+    fi
+}
+
+# Pre-flight checks
+log_info "Starting pre-commit hook validation..."
+
+# Check required commands
+check_command "yarn"
+check_command "git"
+
+# 1. Redirect validation
+log_info "Running redirect validation (yarn check-redirects)..."
+if ! yarn check-redirects; then
+    exit_with_error "Redirect validation failed. Please fix redirect issues before committing."
+fi
+log_success "Redirect validation passed"
+
+# 2. Submodule updates with error checking
+log_info "Running git submodule update --init --recursive..."
+if ! git submodule update --init --recursive; then
+    exit_with_error "Git submodule update failed. Please check submodule configuration."
+fi
+log_success "Git submodules updated successfully"
+
+# 3. Code formatting with error checking
+log_info "Running yarn format..."
+if ! yarn format; then
+    exit_with_error "Code formatting failed. Please check for syntax errors."
+fi
+log_success "Code formatting completed"
+
+# Final success message
+log_success "All pre-commit checks passed successfully!"
+log_info "Commit can proceed..."
