@@ -29,13 +29,13 @@ const sidebars = {
   getStartedSidebar: [
     {
       type: 'doc',
-      id: 'get-started/arbitrum-faq',
-      label: 'FAQ',
+      id: 'get-started/get-started',
+      label: 'Get started',
     },
     {
       type: 'doc',
-      id: 'get-started/get-started',
-      label: 'Get started',
+      id: 'get-started/arbitrum-faq',
+      label: 'FAQ',
     },
   ],
 

@@ -246,7 +246,7 @@ const config = {
         logo: {
           alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
-          href: '/get-started/arbitrum-faq',
+          href: '/get-started',
         },
         items: [
           {
