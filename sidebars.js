@@ -29,7 +29,7 @@ const sidebars = {
   welcomeSidebar: [
     {
       type: 'category',
-      label: 'Welcome',
+      label: 'Get started',
       collapsed: false,
       items: [
         {
@@ -65,7 +65,7 @@ const sidebars = {
   buildDecentralizedAppsSidebar: [
     {
       type: 'category',
-      label: 'Welcome',
+      label: 'Get started',
       collapsed: false,
       items: [
         {
