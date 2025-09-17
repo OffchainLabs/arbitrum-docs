@@ -250,6 +250,12 @@ const config = {
         },
         items: [
           {
+            type: 'docSidebar',
+            sidebarId: 'welcomeSidebar',
+            position: 'right',
+            label: 'Get started',
+          },
+          {
             type: 'dropdown',
             label: 'Build apps',
             position: 'right',
