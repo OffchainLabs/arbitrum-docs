@@ -122,7 +122,9 @@ function copyFiles(source, target, allowList) {
           const content = fs.readFileSync(sourcePath, 'utf8');
           const convertedContent = convertMetadataToFrontmatter(content);
           const validatedContent = validateContent(convertedContent, sourcePath);
-          fs.writeFileSync(path.join(newTargetPath, entry.name), validatedContent);
+          const targetFilePath = path.join(newTargetPath, entry.name);
+          const formattedContent = formatMDXFile(validatedContent, targetFilePath);
+          fs.writeFileSync(targetFilePath, formattedContent);
         }
       });
     } else {
@@ -135,12 +137,14 @@ function copyFiles(source, target, allowList) {
         }
         const sourcePath = path.join(dirPath, mdxFile.name);
         const newFileName = `${parentDirName}.mdx`;
+        const targetFilePath = path.join(targetPath, newFileName);
         const content = fs.readFileSync(sourcePath, 'utf8');
         const convertedContent = convertMetadataToFrontmatter(content);
         const validatedContent = validateContent(convertedContent, sourcePath);
         const convertedContentWithBanner =
           addAdmonitionOneLineAboveFirstCodeBlock(validatedContent);
-        fs.writeFileSync(path.join(targetPath, newFileName), convertedContentWithBanner);
+        const formattedContent = formatMDXFile(convertedContentWithBanner, targetFilePath);
+        fs.writeFileSync(targetFilePath, formattedContent);
       }
     }
   }
@@ -333,6 +337,32 @@ function validateContent(content, filePath) {
   }
   
   return validatedContent;
+}
+
+/**
+ * Formats MDX file with Prettier
+ */
+function formatMDXFile(content, filePath) {
+  try {
+    // Try to format with Prettier
+    const formattedResult = prettier.formatWithCursor(content, {
+      cursorOffset: 0,
+      parser: 'mdx',
+      filepath: filePath,
+      printWidth: 100,
+      tabWidth: 2,
+      useTabs: false,
+      singleQuote: true,
+      trailingComma: 'all',
+      proseWrap: 'preserve',
+    });
+    
+    return formattedResult.formatted;
+  } catch (error) {
+    console.error(`Failed to format MDX file ${filePath}:`, error.message);
+    // Return the unformatted content as fallback
+    return content;
+  }
 }
 
 /**
