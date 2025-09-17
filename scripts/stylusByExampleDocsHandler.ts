@@ -92,12 +92,10 @@ function cleanDirectory(directory) {
 function copyFiles(source, target, allowList) {
   // Validate source directory
   if (!fs.existsSync(source)) {
-    console.error(`Source path does not exist: ${source}`);
     return;
   }
 
   if (!fs.lstatSync(source).isDirectory()) {
-    console.error(`Source path is not a directory: ${source}`);
     return;
   }
 
@@ -181,7 +179,7 @@ function addAdmonitionOneLineAboveFirstCodeBlock(content) {
   const index = content.indexOf(firstCodeBlock);
   
   if (index === -1) {
-    console.log('firstCodeBlock not found');
+    // firstCodeBlock not found
     return content; // Return original content instead of undefined
   }
 
@@ -189,7 +187,7 @@ function addAdmonitionOneLineAboveFirstCodeBlock(content) {
   const lines = content.substring(0, index).split('\n');
   
   if (lines.length < 2) {
-    console.warn('Not enough lines before code block for banner insertion');
+    // Not enough lines before code block for banner insertion
     return content;
   }
   
@@ -230,7 +228,7 @@ function convertMetadataToFrontmatter(content) {
         metadataObj = func();
       }
     } catch (error) {
-      console.error('Error parsing metadata:', error);
+      // Error parsing metadata
       return content;
     }
 
@@ -491,8 +489,7 @@ function validateContent(content, filePath) {
   
   // Log all fixes applied
   if (fixesApplied.length > 0) {
-    console.log(`\n📝 Content fixes applied to ${path.basename(filePath)}:`);
-    fixesApplied.forEach(fix => console.log(`  ✓ ${fix}`));
+    // Content fixes applied
   }
   
   return validatedContent;
@@ -532,11 +529,10 @@ function formatMDXFile(content, filePath) {
     // Post-format validation
     const finalContent = postProcessMDXContent(formattedResult.formatted, filePath);
     
-    console.log(`✅ Successfully formatted MDX file: ${path.basename(filePath)}`);
+    // Successfully formatted MDX file
     return finalContent;
   } catch (error) {
-    console.error(`❌ Failed to format MDX file ${filePath}:`, error.message);
-    console.warn(`⚠️  Returning unformatted content as fallback`);
+    // Failed to format MDX file - returning unformatted content as fallback
     return content;
   }
 }
@@ -598,7 +594,7 @@ function postProcessMDXContent(content, filePath) {
     const before = processed.length;
     processed = processed.replace(fix.pattern, fix.replacement);
     if (before !== processed.length) {
-      console.log(`  ✓ Applied post-format fix: ${fix.description}`);
+      // Applied post-format fix
     }
   });
   
@@ -685,7 +681,7 @@ function validateSidebarConfig(config: SidebarConfig, filePath: string): { isVal
       const isProperSentenceCase = /^[A-Z][a-z]/.test(item.label) || /^[A-Z]+$/.test(item.label);
       
       if (!isProperSentenceCase) {
-        console.warn(`⚠️  Label '${item.label}' at ${currentPath} should use sentence case`);
+        // Label should use sentence case
       }
     }
     
@@ -714,12 +710,11 @@ function formatSidebarFile(sidebarConfig: SidebarConfig, filePath: string): stri
     const validation = validateSidebarConfig(sidebarConfig, filePath);
     
     if (!validation.isValid) {
-      console.error(`\n❌ Sidebar validation errors in ${path.basename(filePath)}:`);
-      validation.errors.forEach(error => console.error(`  • ${error}`));
+      // Sidebar validation errors detected
       throw new Error(`Invalid sidebar configuration: ${validation.errors.join(', ')}`);
     }
     
-    console.log(`✅ Sidebar validation passed for ${path.basename(filePath)}`);
+    // Sidebar validation passed
     
     // Optimize sidebar configuration for better formatting
     const optimizedConfig = optimizeSidebarConfig(sidebarConfig);
@@ -750,15 +745,14 @@ function formatSidebarFile(sidebarConfig: SidebarConfig, filePath: string): stri
     // Post-format validation and cleanup
     const finalContent = postProcessSidebarContent(formattedResult.formatted, filePath);
     
-    console.log(`✅ Successfully formatted sidebar file: ${path.basename(filePath)}`);
+    // Successfully formatted sidebar file
     return finalContent;
   } catch (error) {
-    console.error(`\n❌ Failed to format sidebar file ${filePath}:`);
-    console.error(`   Error: ${error.message}`);
+    // Failed to format sidebar file
     
     // Create a robust fallback sidebar
     const fallbackContent = generateFallbackSidebar(sidebarConfig, filePath);
-    console.warn(`⚠️  Using fallback sidebar configuration for ${path.basename(filePath)}`);
+    // Using fallback sidebar configuration
     return fallbackContent;
   }
 }
@@ -851,7 +845,7 @@ function postProcessSidebarContent(content: string, filePath: string): string {
     processed = processed.replace(fix.pattern, fix.replacement);
     
     if (before !== processed.length) {
-      console.log(`  ✓ Applied sidebar post-format fix: ${fix.description}`);
+      // Applied sidebar post-format fix
     }
   });
   
@@ -887,7 +881,7 @@ module.exports = sidebar.items;
 `;
   } catch (fallbackError) {
     // Ultimate fallback - empty sidebar
-    console.error(`❌ Critical error generating fallback sidebar:`, fallbackError.message);
+    // Critical error generating fallback sidebar
     return `// @ts-check
 // CRITICAL ERROR: Unable to generate sidebar configuration
 // Generated: ${timestamp}
