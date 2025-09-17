@@ -9,9 +9,6 @@ const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
-// Check if SDK docs generation should be skipped
-const skipSdkDocs = process.env.SKIP_SDK_DOCS === 'true' && sdkDocsExist();
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -45,6 +42,10 @@ const config = {
       integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
+    {
+      href: '/css/inkeep-custom.css',
+      type: 'text/css',
+    },
   ],
   presets: [
     [
@@ -73,65 +74,60 @@ const config = {
     ],
   ],
   plugins: [
-    // Only skip TypeDoc plugin if explicitly requested via environment variable
-    ...(skipSdkDocs
-      ? []
-      : [
-          [
-            'docusaurus-plugin-typedoc',
-            {
-              id: 'arbitrum-sdk',
-              tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-              entryPoints: [`${sdkCodebasePath}/src/lib`],
-              entryPointStrategy: 'expand',
-              exclude: [`abi`, `node_modules`, `tests`, `scripts`],
-              excludeNotDocumented: true,
-              excludeInternal: true,
-              excludeExternals: true,
-              readme: 'none',
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        id: 'arbitrum-sdk',
+        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
+        entryPoints: [`${sdkCodebasePath}/src/lib`],
+        entryPointStrategy: 'expand',
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        excludeNotDocumented: true,
+        excludeInternal: true,
+        excludeExternals: true,
+        readme: 'none',
 
-              // Output options
-              out: './docs/sdk',
-              hideGenerator: true,
-              validation: {
-                notExported: false,
-                invalidLink: true,
-                notDocumented: true,
-              },
-              logLevel: 'Verbose',
-              sidebar: {
-                autoConfiguration: false,
-              },
+        // Output options
+        out: './docs/sdk',
+        hideGenerator: true,
+        validation: {
+          notExported: false,
+          invalidLink: true,
+          notDocumented: true,
+        },
+        logLevel: 'Verbose',
+        sidebar: {
+          autoConfiguration: false,
+        },
 
-              plugin: [
-                'typedoc-plugin-markdown',
-                `typedoc-plugin-frontmatter`,
-                './scripts/sdkDocsHandler.ts',
-                './scripts/stylusByExampleDocsHandler.ts',
-              ],
+        plugin: [
+          'typedoc-plugin-markdown',
+          `typedoc-plugin-frontmatter`,
+          './scripts/sdkDocsHandler.ts',
+          './scripts/stylusByExampleDocsHandler.ts',
+        ],
 
-              // typedoc-plugin-markdown options
-              // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-              outputFileStrategy: 'modules',
-              excludeGroups: false,
-              hidePageHeader: true,
-              hidePageTitle: true,
-              hideBreadcrumbs: true,
-              useCodeBlocks: true,
-              expandParameters: true,
-              parametersFormat: 'table',
-              propertiesFormat: 'table',
-              enumMembersFormat: 'table',
-              typeDeclarationFormat: 'table',
-              sanitizeComments: true,
-              frontmatterGlobals: {
-                layout: 'docs',
-                sidebar: true,
-                toc_max_heading_level: 5,
-              },
-            },
-          ],
-        ]),
+        // typedoc-plugin-markdown options
+        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        outputFileStrategy: 'modules',
+        excludeGroups: false,
+        hidePageHeader: true,
+        hidePageTitle: true,
+        hideBreadcrumbs: true,
+        useCodeBlocks: true,
+        expandParameters: true,
+        parametersFormat: 'table',
+        propertiesFormat: 'table',
+        enumMembersFormat: 'table',
+        typeDeclarationFormat: 'table',
+        sanitizeComments: true,
+        frontmatterGlobals: {
+          layout: 'docs',
+          sidebar: true,
+          toc_max_heading_level: 5,
+        },
+      },
+    ],
     [
       '@inkeep/cxkit-docusaurus',
       {
@@ -144,6 +140,14 @@ const config = {
               syntaxHighlighter: {
                 lightTheme: require('prism-react-renderer/themes/github'),
                 darkTheme: require('prism-react-renderer/themes/palenight'),
+              },
+              components: {
+                SearchBarTrigger: {
+                  // Configure responsive sizing behavior
+                  defaultSize: 'medium',
+                  minWidth: '180px',
+                  maxWidth: '320px',
+                },
               },
             },
           },
@@ -242,16 +246,66 @@ const config = {
         logo: {
           alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
-          href: '/welcome/arbitrum-gentle-introduction',
+          href: '/get-started',
         },
         items: [
-          // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
-          //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
-          //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
+          {
+            type: 'docSidebar',
+            sidebarId: 'getStartedSidebar',
+            position: 'right',
+            label: 'Get started',
+          },
+          {
+            type: 'dropdown',
+            label: 'Build apps',
+            position: 'right',
+            items: [
+              {
+                label: 'Get started',
+                to: '/build-decentralized-apps/quickstart-solidity-remix',
+              },
+              {
+                label: 'Stylus',
+                to: '/stylus/gentle-introduction',
+              },
+            ],
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runArbitrumChainSidebar',
+            position: 'right',
+            label: 'Launch a chain',
+          },
           // {
-          //   type: 'localeDropdown',
+          //   type: 'docSidebar',
+          //   sidebarId: 'stylusSidebar',
           //   position: 'right',
-          // }
+          //   label: 'Use Stylus',
+          // },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runNodeSidebar',
+            position: 'right',
+            label: 'Run a node',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'bridgeSidebar',
+            position: 'right',
+            label: 'Use the bridge',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'howItWorksSidebar',
+            position: 'right',
+            label: 'How it works',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'additionalResourcesSidebar',
+            position: 'right',
+            label: 'Resources',
+          },
         ],
       },
       footer: {
@@ -400,24 +454,6 @@ if (isRunningLocally && isRunningOnWindows) {
   // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
   config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
   config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
-}
-
-// Helper function to check if SDK docs exist
-// If SDK docs don't exist, always generate them regardless of SKIP_SDK_DOCS
-function sdkDocsExist() {
-  const fs = require('fs');
-  const path = require('path');
-
-  try {
-    const sdkDocsPath = path.join(__dirname, 'docs/sdk');
-    if (!fs.existsSync(sdkDocsPath)) {
-      return false;
-    }
-    const files = fs.readdirSync(sdkDocsPath);
-    return files.some((file) => file.endsWith('.md') || file.endsWith('.mdx'));
-  } catch (error) {
-    return false;
-  }
 }
 
 module.exports = config;

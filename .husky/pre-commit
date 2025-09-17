@@ -1,71 +1,74 @@
 #!/bin/sh
 
-# Function to handle errors
-handle_error() {
-  echo "❌ Error: $1"
-  exit 1
-}
+# Pre-commit hook for arbitrum-docs repository
+# Enforces: redirect validation, submodule updates, code formatting
+# Compatible with Husky v10 (no husky.sh sourcing required)
 
-# Function to log success messages
-log_success() {
-  echo "✅ $1"
-}
+# Color codes for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
-# Function to log info messages
+# Error handling functions
 log_info() {
-  echo "💡 $1"
+    echo "${BLUE}[INFO]${NC} $1"
 }
 
-# Function to run yarn command and check exit code
-run_yarn_command() {
-  local command=$1
-  local error_message=$2
-
-  yarn $command
-  local exit_code=$?
-
-  if [ $exit_code -ne 0 ]; then
-    handle_error "$error_message"
-  fi
+log_success() {
+    echo "${GREEN}[SUCCESS]${NC} $1"
 }
 
-# Update submodules to ensure they are properly initialized and updated
-log_info "Updating submodules..."
-git submodule update --init --recursive
-submodule_exit_code=$?
+log_error() {
+    echo "${RED}[ERROR]${NC} $1"
+}
 
-if [ $submodule_exit_code -ne 0 ]; then
-  handle_error "Submodule update failed. Please check submodule configuration and try again."
-fi
+log_warning() {
+    echo "${YELLOW}[WARNING]${NC} $1"
+}
 
-log_success "Submodules updated successfully"
+# Function to exit with error code and message
+exit_with_error() {
+    log_error "$1"
+    exit 1
+}
 
-# Check redirects (validation only, no file generation)
-log_info "Checking redirects..."
-run_yarn_command "check-redirects" "The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
-
-# Final formatting pass (formatting only, no file generation)
-log_info "Running final formatting pass..."
-run_yarn_command "format" "Final formatting failed"
-
-# Auto-stage any files that were reformatted during the pre-commit process
-# Only stage files that already exist and were modified by formatting
-if [ -n "$(git diff --name-only)" ]; then
-  # Filter out any new files and only add existing modified files
-  modified_files=$(git diff --name-only | while read file; do
-    if [ -f "$file" ] && git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
-      echo "$file"
+# Function to check command availability
+check_command() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        exit_with_error "Command '$1' not found. Please ensure it's installed and in your PATH."
     fi
-  done)
-  
-  if [ -n "$modified_files" ]; then
-    log_info "Auto-staging existing files modified by formatters..."
-    echo "$modified_files" | xargs git add
-    log_success "Auto-staged formatted files"
-  fi
-fi
+}
 
-log_success "Pre-commit tasks completed"
-log_info "Note: File generation commands (precompiles, variable refs, etc.) have been removed from pre-commit"
-log_info "Run these manually when needed: yarn generate-precompiles-ref-tables, yarn update-variable-refs"
-log_info "To bypass hooks, use git commit --no-verify"
+# Pre-flight checks
+log_info "Starting pre-commit hook validation..."
+
+# Check required commands
+check_command "yarn"
+check_command "git"
+
+# 1. Redirect validation
+log_info "Running redirect validation (yarn check-redirects)..."
+if ! yarn check-redirects; then
+    exit_with_error "Redirect validation failed. Please fix redirect issues before committing."
+fi
+log_success "Redirect validation passed"
+
+# 2. Submodule updates with error checking
+log_info "Running git submodule update --init --recursive..."
+if ! git submodule update --init --recursive; then
+    exit_with_error "Git submodule update failed. Please check submodule configuration."
+fi
+log_success "Git submodules updated successfully"
+
+# 3. Code formatting with error checking
+log_info "Running yarn format..."
+if ! yarn format; then
+    exit_with_error "Code formatting failed. Please check for syntax errors."
+fi
+log_success "Code formatting completed"
+
+# Final success message
+log_success "All pre-commit checks passed successfully!"
+log_info "Commit can proceed..."
