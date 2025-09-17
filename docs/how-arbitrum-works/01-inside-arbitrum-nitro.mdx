@@ -246,7 +246,7 @@ An assertion implicitly claims that its predecessor assertion is correct. This c
 
 An assertion also implicitly claims that its older siblings (older assertions with the same predecessor, if any) are incorrect. If two assertions are siblings, and the older sibling is correct, then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 
-The assertion is assigned a deadline, which says how long other validators have to respond to it. If you're a validator, and you agree that an assertion is correct, you don't need to do anything. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the first assertion's bonder. (More on challenges below.)
+The assertion is assigned a deadline, which says how long other validators have to respond to it. If you're a validator, and you agree that an assertion is correct, you don't need to do anything. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the first assertion's bonder. (More on [challenges](#challenges) below.)
 
 In the normal case, the rollup chain will look like this:
 
