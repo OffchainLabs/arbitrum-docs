@@ -246,12 +246,12 @@ const config = {
         logo: {
           alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
-          href: '/welcome/arbitrum-gentle-introduction',
+          href: '/get-started/arbitrum-gentle-introduction',
         },
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'welcomeSidebar',
+            sidebarId: 'getStartedSidebar',
             position: 'right',
             label: 'Get started',
           },

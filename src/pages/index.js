@@ -15,7 +15,7 @@ function HomepageHeader(props) {
     <header className={styles.heroBanner}>
       <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
       {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
-      <Link to="/welcome/arbitrum-gentle-introduction">
+      <Link to="/get-started/arbitrum-gentle-introduction">
         <button className={styles.button}>A gentle introduction</button>
       </Link>
     </header>

@@ -22,7 +22,7 @@ This repository is organized as follows:
   - `sdk/` - Auto-generated SDK documentation - Do not edit
   - `stylus/` - Stylus smart contract development
   - `stylus-by-example/` - Generated Stylus examples - Do not edit
-  - `welcome/` - Getting started content
+  - `get-started/` - Getting started content
 
 ### Application Code
 - **`src/`** - Docusaurus application source code

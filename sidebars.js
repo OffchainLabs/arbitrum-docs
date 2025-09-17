@@ -25,16 +25,16 @@ const sdkSidebar = {
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
-  // Welcome sidebar - shared entry point
-  welcomeSidebar: [
+  // Get started sidebar - shared entry point
+  getStartedSidebar: [
     {
       type: 'doc',
-      id: 'welcome/arbitrum-gentle-introduction',
+      id: 'get-started/arbitrum-gentle-introduction',
       label: 'A gentle introduction',
     },
     {
       type: 'doc',
-      id: 'welcome/get-started',
+      id: 'get-started/get-started',
       label: 'Get started',
     },
   ],
