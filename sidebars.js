@@ -37,22 +37,15 @@ const sidebars = {
       id: 'get-started/arbitrum-faq',
       label: 'FAQ',
     },
+    {
+      type: 'doc',
+      id: 'for-devs/dev-tools-and-resources/chain-info',
+      label: 'Chain info',
+    },
   ],
 
   // Build dApps sidebar
   buildDecentralizedAppsSidebar: [
-    {
-      type: 'category',
-      label: 'Get started',
-      collapsed: false,
-      items: [
-        {
-          type: 'doc',
-          id: 'for-devs/dev-tools-and-resources/chain-info',
-          label: 'Chain info',
-        },
-      ],
-    },
     {
       type: 'category',
       label: 'Build decentralized apps',
@@ -259,6 +252,11 @@ const sidebars = {
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
+    },
+    {
+      type: 'doc',
+      id: 'for-devs/dev-tools-and-resources/chain-info',
+      label: 'Chain info',
     },
   ],
 
@@ -637,6 +635,11 @@ const sidebars = {
           id: 'launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain',
           label: 'FAQ',
         },
+        {
+          type: 'doc',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
+        },
       ],
     },
   ],
@@ -992,6 +995,11 @@ const sidebars = {
           label: 'FAQ',
           id: 'node-running/faq',
         },
+        {
+          type: 'doc',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
+        },
       ],
     },
   ],
@@ -1017,6 +1025,11 @@ const sidebars = {
           type: 'doc',
           id: 'arbitrum-bridge/troubleshooting',
           label: 'Troubleshooting',
+        },
+        {
+          type: 'doc',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
         },
       ],
     },
@@ -1221,6 +1234,11 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: 'doc',
+      id: 'for-devs/dev-tools-and-resources/chain-info',
+      label: 'Chain info',
+    },
   ],
 
   // Additional resources sidebar
@@ -1304,6 +1322,11 @@ const sidebars = {
       type: 'link',
       label: 'Prysm docs',
       href: 'https://www.offchainlabs.com/prysm/docs',
+    },
+    {
+      type: 'doc',
+      id: 'for-devs/dev-tools-and-resources/chain-info',
+      label: 'Chain info',
     },
   ],
 };
