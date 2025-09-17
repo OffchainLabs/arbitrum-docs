@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { RendererEvent } = require('typedoc');
 const { parseMarkdownContentTitle } = require('@docusaurus/utils');
+const prettier = require('prettier');
 
 const allowList = [
   'hello_world',
@@ -49,15 +50,8 @@ function load(app) {
     const basicExamplesSidebarConfig = { items: basicExamplesSidebarItems };
     const basicExamplesSidebarPath = path.join(basicExamplesOutputDir, 'sidebar.js');
 
-    fs.writeFileSync(
-      basicExamplesSidebarPath,
-      `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
-        basicExamplesSidebarConfig,
-        null,
-        2,
-      )};\nmodule.exports = sidebar.items;`,
-      'utf8',
-    );
+    const basicSidebarContent = formatSidebarFile(basicExamplesSidebarConfig, basicExamplesSidebarPath);
+    fs.writeFileSync(basicExamplesSidebarPath, basicSidebarContent, 'utf8');
 
     // Copy applications into their directory
     copyFiles(sourceDirApplications, applicationsOutputDir, appsAllowList);
@@ -67,15 +61,8 @@ function load(app) {
     const applicationsSidebarConfig = { items: applicationsSidebarItems };
     const applicationsSidebarPath = path.join(applicationsOutputDir, 'sidebar.js');
 
-    fs.writeFileSync(
-      applicationsSidebarPath,
-      `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
-        applicationsSidebarConfig,
-        null,
-        2,
-      )};\nmodule.exports = sidebar.items;`,
-      'utf8',
-    );
+    const appsSidebarContent = formatSidebarFile(applicationsSidebarConfig, applicationsSidebarPath);
+    fs.writeFileSync(applicationsSidebarPath, appsSidebarContent, 'utf8');
   });
 }
 
@@ -134,7 +121,8 @@ function copyFiles(source, target, allowList) {
         } else if (entry.name === 'page.mdx') {
           const content = fs.readFileSync(sourcePath, 'utf8');
           const convertedContent = convertMetadataToFrontmatter(content);
-          fs.writeFileSync(path.join(newTargetPath, entry.name), convertedContent);
+          const validatedContent = validateContent(convertedContent, sourcePath);
+          fs.writeFileSync(path.join(newTargetPath, entry.name), validatedContent);
         }
       });
     } else {
@@ -149,8 +137,9 @@ function copyFiles(source, target, allowList) {
         const newFileName = `${parentDirName}.mdx`;
         const content = fs.readFileSync(sourcePath, 'utf8');
         const convertedContent = convertMetadataToFrontmatter(content);
+        const validatedContent = validateContent(convertedContent, sourcePath);
         const convertedContentWithBanner =
-          addAdmonitionOneLineAboveFirstCodeBlock(convertedContent);
+          addAdmonitionOneLineAboveFirstCodeBlock(validatedContent);
         fs.writeFileSync(path.join(targetPath, newFileName), convertedContentWithBanner);
       }
     }
@@ -171,12 +160,17 @@ function addAdmonitionOneLineAboveFirstCodeBlock(content) {
   const index = content.indexOf(firstCodeBlock);
   if (index === -1) {
     console.log('firstCodeBlock not found');
-    return;
+    return content; // Return original content instead of undefined
   }
 
   // Find the position two lines before firstCodeBlock
   const lines = content.substring(0, index).split('\n');
-  const insertLineIndex = lines.length - 2;
+  if (lines.length < 2) {
+    console.warn('Not enough lines before code block for banner insertion');
+    return content;
+  }
+  
+  const insertLineIndex = Math.max(0, lines.length - 2);
   lines.splice(insertLineIndex, 0, admonitionNotForProduction);
 
   const newText = lines.join('\n') + content.substring(index);
@@ -190,7 +184,27 @@ function convertMetadataToFrontmatter(content) {
   if (match) {
     let metadataObj;
     try {
-      metadataObj = eval(`(${match[1]})`);
+      // Safer parsing without eval()
+      // First, try to parse as a JavaScript object literal
+      const metadataString = match[1]
+        .trim()
+        // Handle single quotes to double quotes
+        .replace(/'/g, '"')
+        // Handle unquoted keys
+        .replace(/(\w+):/g, '"$1":')
+        // Handle template literals (basic conversion)
+        .replace(/`([^`]*)`/g, '"$1"')
+        // Clean up any double-double quotes
+        .replace(/""/g, '"');
+      
+      try {
+        metadataObj = JSON.parse(metadataString);
+      } catch (jsonError) {
+        // If JSON parsing fails, try a more lenient approach
+        // Create a Function constructor (safer than eval but still evaluate the code)
+        const func = new Function('return ' + match[1]);
+        metadataObj = func();
+      }
     } catch (error) {
       console.error('Error parsing metadata:', error);
       return content;
@@ -290,6 +304,68 @@ function getTitleFromFileContent(filePath) {
   const { contentTitle } = parseMarkdownContentTitle(fileContent);
 
   return contentTitle || '';
+}
+
+/**
+ * Validates and fixes common typos in content
+ */
+function validateContent(content, filePath) {
+  // Common typos to fix
+  const commonTypos = {
+    'followinge': 'following',
+    'recieve': 'receive',
+    'occured': 'occurred',
+    'seperate': 'separate',
+    'definately': 'definitely',
+    'occassion': 'occasion',
+    'untill': 'until',
+    'acheive': 'achieve',
+    'arguement': 'argument',
+    'existance': 'existence',
+  };
+  
+  let validatedContent = content;
+  for (const [typo, correction] of Object.entries(commonTypos)) {
+    if (validatedContent.includes(typo)) {
+      console.warn(`Found typo "${typo}" in ${filePath}, auto-correcting to "${correction}"`);
+      validatedContent = validatedContent.replace(new RegExp(typo, 'g'), correction);
+    }
+  }
+  
+  return validatedContent;
+}
+
+/**
+ * Formats sidebar file with Prettier
+ */
+function formatSidebarFile(sidebarConfig, filePath) {
+  // Generate properly formatted JavaScript code
+  const sidebarContent = `// @ts-check
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+const sidebar = ${JSON.stringify(sidebarConfig, null, 2)};
+module.exports = sidebar.items;
+`;
+
+  try {
+    // Try to format with Prettier (synchronous API)
+    // Note: Using formatWithCursor for synchronous operation
+    const formattedResult = prettier.formatWithCursor(sidebarContent, {
+      cursorOffset: 0,
+      parser: 'babel',
+      filepath: filePath,
+      singleQuote: true,
+      trailingComma: 'all',
+      printWidth: 100,
+      tabWidth: 2,
+      semi: true,
+    });
+    
+    return formattedResult.formatted;
+  } catch (error) {
+    console.error(`Failed to format sidebar file ${filePath}:`, error.message);
+    // Return the unformatted content as fallback
+    return sidebarContent;
+  }
 }
 
 exports.load = load;
