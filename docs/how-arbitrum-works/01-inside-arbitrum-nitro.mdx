@@ -187,7 +187,7 @@ There are basically two options: interactive proving or re-executing transaction
 
 The idea of interactive proving is that Alice and Bob will engage in a back-and-forth protocol, mediated by an L1 contract, to resolve their dispute with minimal work required from any L1 contract.
 
-Arbitrum's approach involves dissecting the dispute. If Alice's claim covers `N` steps of execution, she posts two claims of size `N/2`, which combine to yield her initial `N-step` claim. Then, Bob picks one of Alice's `N/2-step` claims to challenge. Now the size of the dispute has been halved. This process continues, cutting the dispute in half at each stage, until they are disagreeing about a single step of execution. Note that so far, the L1 referee hasn't had to think about execution "on the merits." It is only once the dispute narrows to a single step that the L1 mediator (referee) needs to resolve the dispute by looking at what the instruction does and whether Alice's claim about it is correct.
+Arbitrum's approach involves dissecting the dispute. If Alice's claim covers `N` steps of execution, she posts two claims of size `N/2`, which combine to yield her initial `N`-step claim. Then, Bob picks one of Alice's `N/2`-step claims to challenge. Now the size of the dispute has been halved. This process continues, cutting the dispute in half at each stage, until they are disagreeing about a single step of execution. Note that so far, the L1 referee hasn't had to think about execution "on the merits." It is only once the dispute narrows to a single step that the L1 mediator (referee) needs to resolve the dispute by looking at what the instruction does and whether Alice's claim about it is correct.
 
 The key principle behind interactive proving is that if Alice and Bob are in a dispute, they should perform as much offchain work as possible to resolve it, rather than delegating that work to a Layer 1 (L1) contract.
 
@@ -345,19 +345,22 @@ For further reading on Assertions and how to create them, refer to the [Assertio
 
 ### Dissection Protocol: Simplified Version
 
-Alice is defending the claim that starting with the state in the predecessor assertion, the state of the Virtual Machine can advance to the state specified in assertion A. Essentially she is claiming that the Virtual Machine can execute `N` instructions, and that that execution will consume `M` inbox messages and transform the hash of outputs from `H` to `H`.
+Alice is defending the claim that starting with the state in the predecessor assertion, the state of the Virtual Machine can advance to the state specified in assertion `A`. Essentially she is claiming that the Virtual Machine can execute `N` instructions, and that the execution will consume `M` inbox messages and transform the hash of outputs from `H` to `H`.
 
-Alice's first move requires her to dissect her claims about intermediate states between the beginning (0 instructions executed) and the end (`N` instructions executed). Therefore, we require Alice to divide her claim in half and post the state at the halfway point, after executing `N/2` instructions.
+Alice's first move requires her to dissect her claims about intermediate states between the beginning (zero instructions executed) and the end (`N` instructions executed). Therefore, we require Alice to divide her claim in half and post the state at the halfway point, after executing `N/2` instructions.
 
-Now Alice has effectively bisected her `N-step` assertion into two (`N/2`)-step assertions. Bob has to point to one of those two half-size assertions and claim it is wrong.
+Now Alice has effectively bisected her `N`-step assertion into two `N/2`-step assertions. Bob has to point to one of those two half-size assertions and claim it is wrong.
 
 At this point, we're effectively back in the original situation: Alice having asserted that Bob disagrees with. But we have cut the size of the assertion in half, from `N` to `N/2`. We can apply the same method again, with Alice bisecting and Bob choosing one of the halves, to reduce the size to `N/4`. And we can continue bisecting, so that after a logarithmic number of rounds, Alice and Bob will be disagreeing about a single step of execution. That's where the dissection phase of the protocol ends, and Alice must provide a one-step proof, which the EthBridge will verify.
 
 ### Why Dissection Correctly Identifies a Cheater
 
-Before discussing the complexities of the real challenge protocol, let's pause to understand why the simplified version of the protocol is correct. Here, correctness means two things: (1) if Alice's initial claim is correct, Alice can always win the challenge, and (2) if Alice's initial claim is incorrect, Bob can always win the challenge.
+Before discussing the complexities of the real challenge protocol, let's pause to understand why the simplified version of the protocol is correct. Here, correctness means two things:
 
-To prove (1), observe that if Alice's initial claim is correct, she can offer a truthful midpoint claim, and both of the implied half-size claims will be correct. So whichever half Bob objects to, Alice will again be in the position of defending an accurate claim. At each stage of the protocol, Alice will be defending a correct claim. At the end, Alice will have a correct one-step claim to prove so that that claim will be provable and Alice can win the challenge.
+1. If Alice's initial claim is correct, Alice can always win the challenge, and
+2. If Alice's initial claim is incorrect, Bob can always win the challenge.
+
+To prove (1), observe that if Alice's initial claim is correct, she can offer a truthful midpoint claim, and both of the implied half-size claims will be correct. So whichever half Bob objects to, Alice will again be in the position of defending an accurate claim. At each stage of the protocol, Alice will be defending a correct claim. At the end, Alice will have a correct one-step claim to prove so that the claim will be provable and Alice can win the challenge.
 
 To prove (2), observe that if Alice's initial claim is incorrect, this can only be because her claimed endpoint after `N` steps is incorrect, then when Alice offers her midpoint state claim, that midpoint claim is either correct or incorrect. If it's incorrect, then Bob can challenge Alice's first-half claim, which will be incorrect. If Alice's midpoint state claim is correct, then her second-half claim must be incorrect so that Bob can challenge that. So whatever Alice does, Bob will be able to challenge an incorrect half-size claim. At each stage of the protocol, Bob can identify an incorrect claim to challenge. Ultimately, Alice will have an incorrect one-step claim to prove, which she will be unable to do, allowing Bob to win the challenge.
 
@@ -369,7 +372,7 @@ The real dissection protocol is conceptually similar to the simplified one descr
 
 - **Dissection over L2 blocks, then over instructions**: Alice's assertion is over an assertion, which asserts the results of creating some number of Layer 2 Nitro blocks. Dissection first occurs over these Layer 2 blocks, to narrow the dispute down to a dispute about a single Layer 2 Nitro block. At this point, the dispute shifts to a dispute about a single execution of the State Transition Function, or in other words, about the execution of a sequence of WAVM instructions. The protocol then executes the recursive dissection sub-protocol again, this time over WAVM instructions, to narrow the dispute to a single instruction. The dispute concludes with a one-step proof of a single instruction (or a party failing to act and losing by timeout).
 - **K-way dissection**: Rather than dividing a claim into two segments of size `N/2`, we divide it into `K` segments of size `N/K`. This division requires posting `K-1` intermediate claims at points evenly spaced through the claimed execution, which reduces the number of rounds by a factor of log(`K`)/log(`2`).
-- **Answer a dissection with a dissection**: Rather than having each round of the protocol require two moves, where Alice dissects and Bob chooses a segment to challenge, we instead require Bob, in challenging a segment, to post his own claimed endpoint state for that segment. Alice will then respond by identifying a subsegment, posting an alternative endpoint for that segment, and dissecting it. This segmentation reduces the number of moves in the game by an additional factor of 2, because the size is cut by a factor of `K` for every move, rather than for every two moves.
+- **Answer a dissection with a dissection**: Rather than having each round of the protocol require two moves, where Alice dissects and Bob chooses a segment to challenge, we instead require Bob, in challenging a segment, to post his own claimed endpoint state for that segment. Alice will then respond by identifying a subsegment, posting an alternative endpoint for that segment, and dissecting it. This segmentation reduces the number of moves in the game by an additional factor of `2`, because the size is cut by a factor of `K` for every move, rather than for every two moves.
 - **Deal With The Empty-Inbox Case**: The real AVM can't always execute `N` units of gas without getting stuck. The machine might halt, or it might have to wait because its inbox is exhausted, so it cannot proceed until more messages arrive. So Bob must be allowed to respond to Alice's claim of `N` units of execution by claiming that `N` steps are not possible. The real protocol thus allows any response (except the initial claim) to claim a special end state, which means that the specified amount of execution is not possible under the current conditions.
 - **Time Limits**: Each player has a time allowance. The total time a player uses for all of their moves must be less than the time allowance, or they lose the game. Consider the time allowance to be approximately one week.
 
@@ -415,11 +418,11 @@ ArbOS is a trusted "system glue" component that acts as the hypervisor, facilita
 
 In Arbitrum, much of the work that would otherwise have to be done expensively at Layer 1 is instead done by ArbOS, trustlessly performing these functions at the speed and low cost of Layer 2.
 
-Supporting these functions in Layer 2 trusted software, rather than building them into the L1-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at Layer 2, instead of having to manage those resources as part of a Layer 1 contract. Having a trusted operating system at Layer 2 also offers significant advantages in flexibility, as Layer 2 code is easier to evolve or customize for a particular chain than a Layer 1-enforced architecture would be.
+Supporting these functions in Layer 2 trusted software, rather than building them into the L1-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at Layer 2, instead of having to manage those resources as part of a Layer 1 contract. In addition, ArbOS also offers significant advantages in flexibility, as Layer 2 code is easier to evolve or customize for a particular chain than a Layer 1-enforced architecture would be.
 
 <!-- Below is content from ArbOS merged into Ed's original paper -->
 
-ArbOS also provides child chain-specific precompiles with methods that smart contracts can call the same way they can Solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a full reference of the precompiles available in Arbitrum chains.
+ArbOS also provides child chain-specific precompiles with methods that smart contracts can call the same way they can Solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a full reference of the precompiles available for Arbitrum chains.
 
 ## Full Nodes
 
@@ -443,7 +446,7 @@ The Sequencer does have control over ordering, allowing it to assign its clients
 
 ### Inboxes, fast and slow
 
-When we add a Sequencer, the operation of the inbox changes.
+When we add a Sequencer, the operation of the inbox changes:
 
 - Only the Sequencer can put new messages directly into the inbox. The Sequencer tags the messages it is submitting with an Ethereum block number and timestamp. (ArbOS ensures that these are non-decreasing, adjusting them upward if necessary to avoid decreases.)
 - Anyone else can submit a message, but messages submitted by non-Sequencer nodes will go into the "delayed inbox" queue (managed by an L1 Ethereum contract).
@@ -478,7 +481,7 @@ Achieving this is more complicated. Research by a team at Cornell Tech, includin
 
 ## Bridging
 
-We have already covered how users interact with L2 contracts - they submit transactions by putting messages into the chain's inbox, or having a full node Sequencer or aggregator do so on their behalf. Let's talk about how contracts interact between L1 and L2 - how an L1 contract calls an L2 contract, and vice versa.
+We have already covered how users interact with L2 contracts - they submit transactions by putting messages into the chain's inbox, or having a full node Sequencer or aggregator do so on their behalf. Let's talk about how contracts interact between L1 and L2—specifically how an L1 contract calls an L2 contract, and vice versa.
 
 The L1 and L2 chains operate asynchronously, so it is not possible to make a cross-chain call that produces a result within the same transaction as the caller. Instead, cross-chain calls must be asynchronous, meaning that the caller submits the call at some point in time, and the call runs later. As a consequence, a cross-chain contract-to-contract call can never produce a result that is available to the calling contract (except for acknowledgement that the call was submitted successfully for later execution).
 
@@ -498,9 +501,9 @@ When saving a transaction for retry, Nitro records the sender's address, destina
 
 If the redemption is successful, the transaction completes, a receipt is issued, and the `ticketID` is canceled and can't be used again. If the redemption fails, for example, because the packaged transaction fails, the redemption reports failure, and the `ticketID` remains available for redemption.
 
-Normally, the original submitter will attempt to ensure their transaction succeeds immediately, so it never needs to be recovered or retried. As an example, our "token deposit" use case above should, in the happy, common case, still only require a single signature from the user. If this initial execution fails, the `ticketID` will still exist as a backstop, which others can redeem later.
+Normally, the original submitter will attempt to ensure their transaction succeeds immediately, so it never needs to be recovered or retried. As an example, our "token deposit" use case above should, in the happy, common case, still only requires a single signature from the user. If this initial execution fails, the `ticketID` will still exist as a backstop, which others can redeem later.
 
-Submitting a transaction in this way carries a price in'ETH` which the submitter must pay, which varies based on the calldata size of the transaction. Once submitted, the ticket remains valid for approximately one week. If the ticket redemption doesn't occur within that period, it will get deleted.
+Submitting a transaction in this way carries a price in 'ETH` which the submitter must pay, which varies based on the calldata size of the transaction. Once submitted, the ticket remains valid for approximately one week. If the ticket redemption doesn't occur within that period, it will get deleted.
 
 When the ticket is redeemed, the pre-packaged transaction runs with the sender and origin equal to the original submitted values, and with the destination, callvalue, and calldata provided by the submitter at the time of submission.
 
@@ -521,6 +524,8 @@ These L2-to-L1 tickets have an unlimited lifetime, until they're successfully re
 :::info More information
 
 For further reading, take a look at the [L2-to-L1-messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) deep dive.
+
+:::
 
 ## Gas and Fees
 
