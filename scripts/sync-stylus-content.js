@@ -145,10 +145,39 @@ async function syncContent() {
   try {
     // Check if source exists
     if (!await fs.pathExists(SOURCE_DIR)) {
-      console.error(`❌ Source directory not found: ${SOURCE_DIR}`);
-      console.log('Make sure the submodule is initialized:');
+      console.warn(`⚠️  Source directory not found: ${SOURCE_DIR}`);
+      console.log('Skipping Stylus by Example content sync.');
+      console.log('To include this content, initialize the submodule:');
       console.log('  git submodule update --init --recursive');
-      process.exit(1);
+      
+      // Create empty target directory with marker
+      await fs.ensureDir(TARGET_DIR);
+      await fs.writeFile(
+        path.join(TARGET_DIR, DONT_EDIT_MARKER),
+        `This folder would contain auto-generated content from submodules/stylus-by-example
+The submodule was not available during build.
+Generated: ${new Date().toISOString()}
+`
+      );
+      
+      // Create empty sidebar files for the expected directories
+      const expectedDirs = ['basic_examples', 'applications'];
+      for (const dir of expectedDirs) {
+        await fs.ensureDir(path.join(TARGET_DIR, dir));
+        const emptySidebar = `// @ts-check
+/**
+ * @fileoverview Empty sidebar configuration (submodule not available)
+ * @generated ${new Date().toISOString()}
+ */
+
+/** @type {import('@docusaurus/plugin-content-docs').SidebarItem[]} */
+module.exports = [];
+`;
+        await fs.writeFile(path.join(TARGET_DIR, dir, 'sidebar.js'), emptySidebar);
+      }
+      
+      console.log('✅ Created empty Stylus by Example structure');
+      return;
     }
     
     // Clean target directory
