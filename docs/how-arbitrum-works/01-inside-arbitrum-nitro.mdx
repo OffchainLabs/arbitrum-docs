@@ -529,7 +529,7 @@ For further reading, take a look at the [L2-to-L1-messaging](/how-arbitrum-works
 
 ## Gas and Fees
 
-NitroGas (so-called to avoid confusion with Layer 1 Ethereum gas) is used by Arbitrum to track the execution cost on a Nitro chain. It works similarly to Ethereum gas, in that every EVM instruction incurs the same amount of gas as it would on Ethereum.
+Gas is used by Arbitrum to track the execution cost on a Nitro chain. It works similarly to Ethereum gas, in that every EVM instruction incurs the same amount of gas as it would on Ethereum.
 
 ## The Speed Limit
 
@@ -558,7 +558,7 @@ The algorithm compares gas usage against a parameter called the "speed limit," w
 
 Intuitively, if the backlog grows, the algorithm should increase the gas price to slow gas usage, as usage exceeds the sustainable level. If the backlog shrinks, the price should decrease again because usage has been below the sustainable limit, allowing for the accommodation of more gas usage.
 
-To make this more precise, the basefee is an exponential function of the backlog, $$ F = exp(-a(B-b)) $$, where `a' and `b`are suitably chosen constants:`a' controls how rapidly the price escalates with backlog, and `b` allows a small backlog before the basefee escalation begins.
+To make this more precise, the basefee is an exponential function of the backlog, $$ F = exp(-a(B-b)) $$, where `a` and `b` are suitably chosen constants: `a` controls how rapidly the price escalates with backlog, and `b` allows a small backlog before the basefee escalation begins.
 
 ### L1 calldata fees
 
@@ -593,13 +593,13 @@ A Keyset contains:
 - the number of Committee signatures required
 
 Keysets are identifiable by their hashes.
-An L1 KeysetManager contract maintains a list of currently valid Keysets. The L2 chain's Owner can add or remove Keysets from this list. When a Keyset becomes valid, the KeysetManager contract emits an L1 Ethereum event containing the Keyset's hash and full contents. This emission allows the contents to be recovered later by anyone, provided only the Keyset hash is known.
+An L1 `KeysetManager` contract maintains a list of currently valid Keysets. The L2 chain's Owner can add or remove Keysets from this list. When a Keyset becomes valid, the `KeysetManager` contract emits an L1 Ethereum event containing the Keyset's hash and full contents. This emission allows the contents to be recovered later by anyone, provided only the Keyset hash is known.
 
 Although the API does not limit the number of Keysets that can be valid at the same time, normally, only one Keyset will be valid.
 
 ### Data Availability Certificates
 
-A central concept in AnyTrust is the Data Availability Certificate (hereinafter referred to as a "DACert"). A DACert contains:
+A central concept in AnyTrust is the Data Availability Certificate (hereafter referred to as a "DACert"). A DACert contains:
 
 - The hash of a data block, and
 - An expiration, and
