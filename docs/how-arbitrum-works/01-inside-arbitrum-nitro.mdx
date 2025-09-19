@@ -524,7 +524,7 @@ For a deeper look into L1-to-L2 Messaging, read more in the [deep dive](/how-arb
 
 ### L2 to L1 ticket-based calls
 
-Calls from L2 and L1 operate similarly, utilizing a ticket-based system. An L2 contract can call a method of the precompiled ArbSys contract to send a transaction to L1. When the execution of the L2 transaction containing the submission receives confirmation on L1 (potentially some days later), a ticket gets created in the L1 outbox contract. The ticket is triggerable by anyone who calls an L1 outbox method and submits the `ticketID`. The ticket is only marked as redeemed if the L1 transaction does not revert.
+Calls from L2 and L1 operate similarly, utilizing a ticket-based system. An L2 contract can call a method of the precompiled [`ArbSys`](/build-decentralized-apps/precompiles/02-references.mdx#arbsys) contract to send a transaction to L1. When the execution of the L2 transaction containing the submission receives confirmation on L1 (potentially some days later), a ticket gets created in the L1 outbox contract. The ticket is triggerable by anyone who calls an L1 outbox method and submits the `ticketID`. The ticket is only marked as redeemed if the L1 transaction does not revert.
 
 These L2-to-L1 tickets have an unlimited lifetime, until they're successfully redeemed. No rent is required, as a record of the ticket (actually a Merkle hash of the tickets) gets stored on Ethereum storage, which does not require rent. (L2 transaction fees cover the cost of allocating storage for the ticket Merkle roots.)
 
@@ -559,7 +559,7 @@ Two types of resources can incur fees during a transaction:
 
 L2 gas fees work very similarly to gas on Ethereum. A transaction consumes a certain amount of gas, which gets multiplied by the current base fee to determine the L2 gas fee for the transaction..
 
-A version of the "exponential mechanism" sets the L2 base fee, which has been widely discussed in the Ethereum community and shown to be equivalent to Ethereum's EIP-1559 gas pricing mechanism.
+A version of the "exponential mechanism" sets the L2 base fee, which has been widely discussed in the Ethereum community and shown to be equivalent to [Ethereum's EIP-1559 gas pricing mechanism](https://eips.ethereum.org/EIPS/eip-1559).
 
 The algorithm compares gas usage against a parameter called the "speed limit," which is the target amount of gas per second that the chain can handle sustainably over time. (Currently, the speed limit on Arbitrum One is 7,000,000 gas per second.) The algorithm tracks a gas backlog. Whenever a transaction consumes gas, that gas gets added to the backlog. Whenever the clock ticks one second, the speed limit gets subtracted from the backlog; however, the backlog can never go below zero.
 
@@ -573,7 +573,9 @@ L1 calldata fees exist because the Sequencer, or the batch poster, which posts t
 
 Every transaction that comes in through the Sequencer will pay an L1 calldata fee. Transactions that come in through the delayed inbox do not incur this fee because they don't contribute to batch posting costs. However, these transactions do pay gas fees to Ethereum when added to the delayed inbox.
 
-The L1 pricing algorithm assigns an L1 calldata fee to each Sequencer transaction. First, it computes the transaction's size, which is an estimate of the number of bytes the transaction will add to the compressed batch it is in; the formula for this calculation includes an estimate of how compressible the transaction is. Second, it multiplies the computed size estimate by the current price per estimated byte to determine the transaction's L1 calldata `wei`, in `wei`. Finally, it divides this cost by the current L2 base fee to translate the fee into L2 gas units. The result gets reported as the "poster fee" for the transaction.
+The L1 pricing algorithm assigns an L1 calldata fee to each Sequencer transaction. First, it computes the transaction's size, which is an estimate of the number of bytes the transaction will add to the compressed batch it is in; the formula for this calculation includes an estimate of how compressible the transaction is.
+
+Second, it multiplies the computed size estimate by the current price per estimated byte to determine the transaction's L1 calldata `wei`, in `wei`. Finally, it divides this cost by the current L2 base fee to translate the fee into L2 gas units. The result gets reported as the "poster fee" for the transaction.
 
 The dynamic algorithm determines the price per estimated byte by comparing the total L1 calldata fees collected to the total fees paid by batch posters. It aims to align these two amounts as closely as possible. If batch posters pay less than the collected fees, the algorithm will adjust the price accordingly. Conversely, if their costs exceed the collected fees, it will result in a decrease in the price.
 
