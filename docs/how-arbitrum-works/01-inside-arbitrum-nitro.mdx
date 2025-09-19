@@ -524,7 +524,7 @@ For a deeper look into L1-to-L2 Messaging, read more in the [deep dive](/how-arb
 
 ### L2 to L1 ticket-based calls
 
-Calls from L2 and L1 operate similarly, utilizing a ticket-based system. An L2 contract can call a method of the precompiled [`ArbSys`](/build-decentralized-apps/precompiles/02-references.mdx#arbsys) contract to send a transaction to L1. When the execution of the L2 transaction containing the submission receives confirmation on L1 (potentially some days later), a ticket gets created in the L1 outbox contract. The ticket is triggerable by anyone who calls an L1 outbox method and submits the `ticketID`. The ticket is only marked as redeemed if the L1 transaction does not revert.
+Calls from L2 and L1 operate similarly, utilizing a ticket-based system. An L2 contract can call a method of the precompiled [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) contract to send a transaction to L1. When the execution of the L2 transaction containing the submission receives confirmation on L1 (potentially some days later), a ticket gets created in the L1 outbox contract. The ticket is triggerable by anyone who calls an L1 outbox method and submits the `ticketID`. The ticket is only marked as redeemed if the L1 transaction does not revert.
 
 These L2-to-L1 tickets have an unlimited lifetime, until they're successfully redeemed. No rent is required, as a record of the ticket (actually a Merkle hash of the tickets) gets stored on Ethereum storage, which does not require rent. (L2 transaction fees cover the cost of allocating storage for the ticket Merkle roots.)
 

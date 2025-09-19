@@ -9,6 +9,9 @@ const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
+// Check if SDK docs generation should be skipped
+const skipSdkDocs = process.env.SKIP_SDK_DOCS === 'true' && sdkDocsExist();
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -70,6 +73,65 @@ const config = {
     ],
   ],
   plugins: [
+    // Only skip TypeDoc plugin if explicitly requested via environment variable
+    ...(skipSdkDocs
+      ? []
+      : [
+          [
+            'docusaurus-plugin-typedoc',
+            {
+              id: 'arbitrum-sdk',
+              tsconfig: `${sdkCodebasePath}/tsconfig.json`,
+              entryPoints: [`${sdkCodebasePath}/src/lib`],
+              entryPointStrategy: 'expand',
+              exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+              excludeNotDocumented: true,
+              excludeInternal: true,
+              excludeExternals: true,
+              readme: 'none',
+
+              // Output options
+              out: './docs/sdk',
+              hideGenerator: true,
+              validation: {
+                notExported: false,
+                invalidLink: true,
+                notDocumented: true,
+              },
+              logLevel: 'Verbose',
+              sidebar: {
+                autoConfiguration: false,
+              },
+
+              plugin: [
+                'typedoc-plugin-markdown',
+                `typedoc-plugin-frontmatter`,
+                './scripts/sdkDocsHandler.ts',
+                './scripts/stylusByExampleDocsHandler.ts',
+              ],
+
+              // typedoc-plugin-markdown options
+              // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+              outputFileStrategy: 'modules',
+              excludeGroups: false,
+              hidePageHeader: true,
+              hidePageTitle: true,
+              hideBreadcrumbs: true,
+              useCodeBlocks: true,
+              expandParameters: true,
+              parametersFormat: 'table',
+              propertiesFormat: 'table',
+              enumMembersFormat: 'table',
+              typeDeclarationFormat: 'table',
+              sanitizeComments: true,
+              frontmatterGlobals: {
+                layout: 'docs',
+                sidebar: true,
+                toc_max_heading_level: 5,
+              },
+            },
+          ],
+        ]),
     [
       '@inkeep/cxkit-docusaurus',
       {
@@ -150,60 +212,6 @@ const config = {
       },
     ],
     [
-      'docusaurus-plugin-typedoc',
-      {
-        id: 'arbitrum-sdk',
-        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-        entryPoints: [`${sdkCodebasePath}/src/lib`],
-        entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
-        excludeNotDocumented: true,
-        excludeInternal: true,
-        excludeExternals: true,
-        readme: 'none',
-
-        // Output options
-        out: './docs/sdk',
-        hideGenerator: true,
-        validation: {
-          notExported: false,
-          invalidLink: true,
-          notDocumented: true,
-        },
-        logLevel: 'Verbose',
-        sidebar: {
-          autoConfiguration: false,
-        },
-
-        plugin: [
-          'typedoc-plugin-markdown',
-          `typedoc-plugin-frontmatter`,
-          './scripts/sdkDocsHandler.ts',
-          './scripts/stylusByExampleDocsHandler.ts',
-        ],
-
-        // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-        outputFileStrategy: 'modules',
-        excludeGroups: false,
-        hidePageHeader: true,
-        hidePageTitle: true,
-        hideBreadcrumbs: true,
-        useCodeBlocks: true,
-        expandParameters: true,
-        parametersFormat: 'table',
-        propertiesFormat: 'table',
-        enumMembersFormat: 'table',
-        typeDeclarationFormat: 'table',
-        sanitizeComments: true,
-        frontmatterGlobals: {
-          layout: 'docs',
-          sidebar: true,
-          toc_max_heading_level: 5,
-        },
-      },
-    ],
-    [
       'posthog-docusaurus',
       {
         apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
@@ -222,10 +230,17 @@ const config = {
       fathomAnalytics: {
         siteId: 'DOHOZGJO',
       },
+      announcementBar: {
+        backgroundColor: '#e3246e',
+        textColor: 'white',
+        content:
+          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/concepts/how-it-works#activation" target="_blank">here’s how to do it.</a>',
+        isCloseable: false,
+      },
       navbar: {
         title: 'Arbitrum Docs',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
           href: '/welcome/arbitrum-gentle-introduction',
         },
@@ -385,6 +400,24 @@ if (isRunningLocally && isRunningOnWindows) {
   // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
   config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
   config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
+}
+
+// Helper function to check if SDK docs exist
+// If SDK docs don't exist, always generate them regardless of SKIP_SDK_DOCS
+function sdkDocsExist() {
+  const fs = require('fs');
+  const path = require('path');
+
+  try {
+    const sdkDocsPath = path.join(__dirname, 'docs/sdk');
+    if (!fs.existsSync(sdkDocsPath)) {
+      return false;
+    }
+    const files = fs.readdirSync(sdkDocsPath);
+    return files.some((file) => file.endsWith('.md') || file.endsWith('.mdx'));
+  } catch (error) {
+    return false;
+  }
 }
 
 module.exports = config;
