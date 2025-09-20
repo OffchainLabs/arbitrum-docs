@@ -53,6 +53,24 @@ function convertMetadataToFrontmatter(content) {
 }
 
 /**
+ * Transform relative links to work with Docusaurus structure
+ */
+function fixRelativeLinks(content) {
+  // Fix relative links that point to sibling directories
+  // When file name matches directory name, Docusaurus simplifies the URL
+  // Pattern: [text](./directory_name) should become [text](/stylus-by-example/basic_examples/directory_name)
+  content = content.replace(
+    /\[([^\]]+)\]\(\.\/([\w_]+)\)/g,
+    (match, linkText, dirName) => {
+      // Convert to absolute Docusaurus path (simplified URL when filename matches directory)
+      return `[${linkText}](/stylus-by-example/basic_examples/${dirName})`;
+    }
+  );
+  
+  return content;
+}
+
+/**
  * Process and copy a single MDX file
  */
 async function processFile(sourcePath, targetPath) {
@@ -62,6 +80,9 @@ async function processFile(sourcePath, targetPath) {
     
     // Transform metadata to frontmatter
     content = convertMetadataToFrontmatter(content);
+    
+    // Fix relative links
+    content = fixRelativeLinks(content);
     
     // Add content begin marker if not present
     if (!content.includes('{/* Begin Content */}')) {
