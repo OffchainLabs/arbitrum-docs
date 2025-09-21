@@ -5,8 +5,8 @@
       "name": "Arbitrum Nitro",
       "repo": "https://github.com/OffchainLabs/nitro",
       "currentDocsVersion": "v3.6.0",
-      "latestRelease": "v3.7.2",
-      "latestReleaseDate": "2025-09-11",
+      "latestRelease": "v3.7.3",
+      "latestReleaseDate": "2025-09-18",
       "docsPath": "docs/arbitrum-docs/how-arbitrum-works",
       "description": "Core Arbitrum protocol implementation"
     },
@@ -35,8 +35,8 @@
       "name": "Arbitrum Orbit SDK",
       "repo": "https://github.com/OffchainLabs/arbitrum-orbit-sdk",
       "currentDocsVersion": "0.23.1",
-      "latestRelease": "v0.24.0",
-      "latestReleaseDate": "2025-08-13",
+      "latestRelease": "v0.24.1",
+      "latestReleaseDate": "2025-09-16",
       "docsPath": "docs/arbitrum-docs/launch-arbitrum-chain",
       "description": "SDK for building Arbitrum Orbit chains"
     },
