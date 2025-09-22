@@ -64,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.6.8@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.7.2@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -115,15 +115,15 @@ sudo mkdir -p /usr/local/bin
 echo "export PATH=/opt/homebrew/opt/llvm/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
 
-### Step 5. Configure node [18](https://github.com/nvm-sh/nvm)
+### Step 5. Configure node [23](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
 
 ```shell
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source "$HOME/.bashrc"
-nvm install 18
-nvm use 18
+nvm install 23
+nvm use 23
 ```
 
 #### For MacOS
@@ -132,8 +132,8 @@ nvm use 18
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install 18
-nvm use 18
+nvm install 23
+nvm use 23
 ```
 
 ### Step 6. Configure [Rust](https://www.rust-lang.org/tools/install)
