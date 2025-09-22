@@ -1,0 +1,236 @@
+# Deploying Arbitrum Orbit Chains Using Genesis Configuration
+
+## Overview
+
+This guide demonstrates how to deploy an Arbitrum Orbit chain using a custom genesis.json configuration with the orbit-cli-tool and nitro's genesis generator. This approach allows you to deploy chains with pre-configured accounts, balances, and smart contracts in the genesis block.
+
+The deployment workflow consists of three main steps:
+
+1. **Genesis Generation**: Using orbit-cli-tool (with orbit-sdk) to generate `genesis.json`
+2. **Assertion Hash Calculation**: Using nitro's genesis generator to calculate the assertion hash
+3. **Contract Deployment**: Using orbit-cli-tool to deploy rollup contracts
+
+## Prerequisites
+
+- Node.js and npm/yarn installed
+- orbit-cli-tool repository cloned and configured
+- nitro repository with genesis-generator compiled
+- Access to Arbitrum Sepolia testnet for rollup deployment
+- Custom genesis configuration requirements (accounts, balances, contracts)
+
+## Step 1: Generate Genesis Configuration
+
+This step creates a custom genesis.json file that includes your specific chain parameters, account allocations, and any pre-deployed contracts needed for your Orbit chain.
+
+### Setup
+
+Navigate to your orbit-cli-tool directory and install dependencies:
+
+```bash
+cd orbit-cli-tool
+npm install
+# or
+yarn install
+```
+
+### Create Account Allocations (Optional)
+
+If you need to allocate funds or deploy contracts in the genesis block, create an `alloc.json` file:
+
+```json
+{
+  "0x0000000000000000000000000000000000007070": {
+    "balance": "1000000000000000000000",
+    "nonce": "1",
+    "code": "0x608060405234801561000f575f80fd5b...",
+    "storage": {
+      "0x0000000000000000000000000000000000000000000000000000000000000404": "8ce8c13d816fe6daf12d6fd9e4952e1fc88850af0001"
+    }
+  }
+}
+```
+
+**Note**: Account addresses can be specified with or without the `0x` prefix.
+
+### Generate Genesis File
+
+Run the genesis generation command:
+
+```bash
+node index.js saveGenesis
+```
+
+This command performs the following actions:
+
+- Generates a random chain ID for your Orbit chain
+- Creates chain configuration with Arbitrum-specific parameters
+- Loads account allocations from `alloc.json` (if present)
+- Outputs a properly formatted `genesis.json` file
+
+The generated `genesis.json` follows a specific format where:
+
+- The `config` field is compact (single line) for Go tool compatibility
+- Other fields use 2-space indentation for readability
+
+### Verify Genesis File
+
+After generation, verify that your `genesis.json` contains:
+
+- Valid chain ID
+- Proper chain configuration parameters
+- Account allocations (if specified)
+- Correct formatting for subsequent processing
+
+## Step 2: Calculate Genesis Block Hash and Assertion Hash
+
+Using nitro's genesis generator, we calculate the hashes required for rollup deployment. The genesis generator processes your custom genesis.json and computes the assertion hash that will be used in the rollup contracts.
+
+### Calculate Genesis Block Hash
+
+You can calculate the genesis block hash using either a local build or Docker. Choose the method that best fits your environment.
+
+#### Method 1: Using Local Build
+
+**Step 1: Install Prerequisites**
+
+Visit the [official nitro build documentation](https://docs.arbitrum.io/run-arbitrum-node/nitro/build-nitro-locally) to install the required **prerequisite tools**.
+
+**Step 2: Build Genesis Generator**
+
+Clone the nitro repository and build the genesis generator:
+
+```bash
+cd /path/to/nitro
+make target/bin/genesis-generator
+```
+
+**Step 3: Calculate Hash**
+
+Run the genesis generator with your genesis.json file:
+
+```bash
+./target/bin/genesis-generator --genesis-json-file ./genesis.json --initial-l1-base-fee {Your_estimate_parent_chain_gas_price}
+```
+
+#### Method 2: Using Docker
+
+This method is simpler and doesn't require building nitro locally.
+
+```bash
+docker run -v $(pwd):/data/genesisDir --entrypoint genesis-generator offchainlabs/nitro-node:v3.7.2-42be4fe --genesis-json-file /data/genesisDir/genesis.json --initial-l1-base-fee {Your_estimate_parent_chain_gas_price}
+```
+
+**Note**: Replace `{Your_estimate_parent_chain_gas_price}` with your estimated parent chain (Arbitrum Sepolia) gas price in wei (e.g., `1000000000` for 1 gwei).
+
+#### Expected Output
+
+After running either method, you will see output similar to:
+
+```
+BlockHash: 0x6d429f9c36b7fd56c4296b5e1f963e465179d170a3d64be49b17c0af59c95794, SendRoot: 0xf5cac8d69a469505fbe822c19c6b534ded192b9db3cf6bd9063dc6dcb10212d6, Batch: 1, PosInBatch: 0
+```
+
+**Save the BlockHash**: Copy the `BlockHash` value (e.g., `0x6d429f9c36b7fd56c4296b5e1f963e465179d170a3d64be49b17c0af59c95794`) as you'll need it for the rollup deployment step.
+
+#### ⚠️ Critical Requirement
+
+**The L1 gas price used in `--initial-l1-base-fee` MUST be exactly identical to the actual gas price when deploying the rollup contracts.** Any difference will cause deployment failure.
+
+**Important Steps**:
+
+- Record the exact gas price value used in `--initial-l1-base-fee`
+- When deploying the rollup, ensure the gas price for the deployment transaction is exactly the same
+- If gas prices have changed at all, you must regenerate the genesis block hash with the current gas price
+
+## Step 3: Deploy Rollup Contracts
+
+The final step involves deploying the actual rollup contracts to Arbitrum Sepolia using the calculated genesis block hash.
+
+### Deploy Rollup
+
+Execute the rollup creation command with your genesis block hash:
+
+```bash
+node index.js createRollup <genesis_block_hash>
+```
+
+Replace `<genesis_block_hash>` with the BlockHash value obtained from step 2.
+
+**⚠️ Critical Requirement**: The gas price used for the rollup deployment transaction MUST be exactly identical to the `--initial-l1-base-fee` value used when generating the genesis block hash. Any difference will cause deployment failure. If gas prices have changed at all, regenerate the genesis block hash first.
+
+### Deployment Process
+
+The rollup deployment will:
+
+- Read the previously generated `genesis.json`
+- Extract chain configuration and chain ID
+- Deploy rollup contracts to Arbitrum Sepolia testnet
+
+## Configuration Reference
+
+### Genesis Configuration Structure
+
+```json
+{
+  "config": {
+    "chainId": 123,
+    "homesteadBlock": 0,
+    "daoForkBlock": null,
+    "daoForkSupport": true,
+    "eip150Block": 0,
+    "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "muirGlacierBlock": 0,
+    "berlinBlock": 0,
+    "londonBlock": 0,
+    "clique": { "period": 0, "epoch": 0 },
+    "arbitrum": {
+      "EnableArbOS": true,
+      "AllowDebugPrecompiles": false,
+      "DataAvailabilityCommittee": false,
+      "InitialArbOSVersion": 40,
+      "InitialChainOwner": "0xYour_Chain_Owner_Address",
+      "GenesisBlockNum": 0,
+      "MaxCodeSize": 24576,
+      "MaxInitCodeSize": 49152
+    }
+  },
+  "nonce": "0x0",
+  "timestamp": "0x0",
+  "extraData": "0x",
+  "gasLimit": "0x1c9c380",
+  "difficulty": "0x1",
+  "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "coinbase": "0x0000000000000000000000000000000000000000",
+  "alloc": {
+    // Account allocations from alloc.json
+  }
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Genesis Generation Fails**
+
+- Verify all dependencies are installed
+- Check that `alloc.json` has valid JSON format
+- Ensure sufficient disk space for file generation
+
+**Genesis Generator Issues**
+
+- Confirm nitro's genesis generator is properly compiled
+- Verify genesis.json format matches expected input
+- Check for any missing dependencies in the nitro environment
+
+**Rollup Deployment Fails**
+
+- Verify genesis block hash is correct and properly formatted
+- Ensure sufficient funds for gas fees on Arbitrum Sepolia
+- Check network connectivity and RPC endpoint availability
