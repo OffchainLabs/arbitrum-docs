@@ -61,6 +61,7 @@ git clone git@github.com:OffchainLabs/arbitrum-docs.git
 yarn
 ```
 3. Start the development server
+
 ```shell
 yarn start
 ```
