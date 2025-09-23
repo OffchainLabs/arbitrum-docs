@@ -1,17 +1,19 @@
 .navbar__inner {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+  flex-wrap: nowrap;
 
   > .navbar__items:first-child {
-    position: absolute;
-    display: block;
-    left: 10px;
-    top: 6px;
-    flex: 0;
+    flex: 0 0 auto;
+    margin-right: auto;
+    padding-left: 10px;
   }
 
   > .navbar__items--right {
     display: flex;
-    flex: 1;
+    flex: 0 0 auto;
     gap: 8px; // Add spacing between navbar items
     justify-content: flex-end;
     align-items: center;
