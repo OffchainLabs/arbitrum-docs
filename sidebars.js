@@ -819,7 +819,7 @@ const sidebars = {
       collapsed: false,
       link: {
         type: 'doc',
-        id: 'node-running/node-running-content-map',
+        id: 'run-arbitrum-node/overview',
       },
       items: [
         {
