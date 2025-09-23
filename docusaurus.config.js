@@ -261,7 +261,7 @@ const config = {
             position: 'right',
             items: [
               {
-                label: 'Get started',
+                label: 'Quickstart',
                 to: '/build-decentralized-apps/quickstart-solidity-remix',
               },
               {
