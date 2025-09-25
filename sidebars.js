@@ -984,6 +984,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'arbitrum-bridge/embedded-bridge-widget',
+          label: 'Embedded bridge widget',
+        },
+        {
+          type: 'doc',
           id: 'arbitrum-bridge/troubleshooting',
           label: 'Troubleshooting',
         },
