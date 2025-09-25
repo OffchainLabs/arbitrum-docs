@@ -7,7 +7,7 @@
 
 ## Cons
 
-- **Introduced trust assumptions**: Shifts security from the fully decentralization optimistic rollup model to reliance on a validator committee. For Rollup-mode chains, this means it's no longer a "true" Rollup, as users must trust the committee for fast confirmations. In AnyTrust mode, it assumes at least two honest members in the Data Availability Committee (DAC), which could be a risk if the committee is compromised.
+- **Introduced trust assumptions**: Shifts security from the fully decentralized optimistic Rollup model to reliance on a validator committee. For Rollup-mode chains, this means it's no longer a "true" Rollup, as users must trust the committee for fast confirmations. In AnyTrust mode, it assumes at least two honest members in the Data Availability Committee (DAC), which could be a risk if the committee is compromised.
 - **Potential delays under high load**: High network throughput can cause confirmation delays beyond the configured rate, with a practical minimum of 1-2 minutes in busy scenarios. Initial setup may also slow the chain temporarily due to backlog processing.
-- **Setup complexity and requirements**: Requires upgrading to specific versions, creating multi-signature Safe wallet for the committee, and running at least three validators. This adds operational overhead and potential costs.
+- **Setup complexity and requirements**: Requires upgrading to specific versions, creating a multi-signature Safe wallet for the committee, and running at least three validators. This adds operational overhead and potential costs.
 - **Security trade-offs compared to standard withdrawals**: While standard withdrawals maintain full Ethereum-level security via the challenge period, fast withdrawals prioritize speed over decentralization, potentially exposing users to risks if the committee fails or is attacked.
