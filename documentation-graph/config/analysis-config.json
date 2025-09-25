@@ -32,8 +32,8 @@
     ]
   },
   "stopWords": [
-    "api","githubcom","offchainlabs","github","https","the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
-    "of", "with", "by", "from", "up", "about", "into", "through", "during",
+    "api","github.com",".com","github","offchainlabs","ethereum","arbitrum","github","https","the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+    "of", "with", "td td","data-quicklook","targetblank","arbretryabletx", "by", "from", "up", "about", "into", "through", "during",
     "before", "after", "above", "below", "between", "among", "through",
     "this", "that", "these", "those", "is", "are", "was", "were", "be",
     "been", "being", "have", "has", "had", "do", "does", "did", "will",

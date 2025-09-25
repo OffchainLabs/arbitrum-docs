@@ -772,7 +772,7 @@ async function generateIssueReport(analysis, conceptData, documents, graphStats,
   // Get top concepts for the report
   const topConcepts = Array.from(conceptData.frequency.entries())
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 7)
+    .slice(0, 40)
     .map(([concept, frequency], index) => {
       const conceptInfo = conceptData.concepts.get(concept);
       return `${index + 1}. **${concept}** (${frequency.toLocaleString()} mentions) - ${getConceptDescription(concept)}`;
@@ -978,19 +978,77 @@ This **analysis** provides the foundation for **data-driven restructuring decisi
 
 function getConceptDescription(concept) {
   const descriptions = {
-    'Arbitrum': 'Core blockchain platform',
-    'Ethereum': 'Parent chain reference',
-    'Nitro': 'Current Arbitrum technology stack',
-    'Rust': 'Programming language for Stylus',
-    'Timeboost': 'Transaction ordering mechanism',
-    'Token': 'Digital asset references',
-    'Stylus': 'WebAssembly smart contract support',
-    'Chain': 'Blockchain infrastructure',
-    'Contract': 'Smart contract references',
-    'Node': 'Network infrastructure'
+    // Core Arbitrum concepts
+    'arbitrum': 'Core blockchain platform',
+    'arbitrum one': 'Main Arbitrum rollup network',
+    'nitro': 'Current Arbitrum technology stack',
+    'arbos': 'Arbitrum operating system',
+    'stylus': 'WebAssembly smart contract support',
+    
+    // Transaction and execution
+    'transaction': 'Blockchain transaction operations',
+    'sequencer': 'Transaction ordering service',
+    'stf': 'State transition function',
+    'gas': 'Execution cost measurement',
+    'block': 'Blockchain data structure',
+    
+    // Cross-chain and bridging
+    'bridge': 'Cross-chain asset transfer',
+    'gateway': 'Bridge contract interface',
+    'custom gateway': 'Custom bridge implementation',
+    'parent chain': 'Layer 1 blockchain (Ethereum)',
+    'child chain': 'Layer 2 blockchain (Arbitrum)',
+    'cross-chain': 'Inter-blockchain communication',
+    
+    // Smart contracts and development
+    'smart contract': 'Programmable blockchain code',
+    'contract': 'Smart contract references',
+    'solidity': 'Smart contract language',
+    'evm': 'Ethereum Virtual Machine',
+    'wasm': 'WebAssembly runtime',
+    'precompile': 'Built-in contract functions',
+    'nodeinterface': 'Node interaction interface',
+    
+    // Tokens and assets
+    'token': 'Digital asset references',
+    'nft': 'Non-fungible tokens',
+    'wallet': 'Cryptocurrency wallet',
+    'metamask': 'Popular web3 wallet',
+    
+    // Technical infrastructure
+    'rpc': 'Remote procedure call interface',
+    'sdk': 'Software development kit',
+    'blockchain': 'Distributed ledger technology',
+    'node': 'Network infrastructure',
+    'vrf': 'Verifiable random function',
+    
+    // Development and tools
+    'dapp': 'Decentralized application',
+    'go-ethereum': 'Ethereum client implementation',
+    'rust': 'Programming language for Stylus',
+    
+    // Arbitrum-specific precompiles
+    'arbowner': 'Owner precompile contract',
+    'arbretryabletx': 'Retryable transaction precompile',
+    'nitro-precompile': 'Nitro precompile contracts',
+    'nitro-precompile-interfaces': 'Precompile interface definitions',
+    
+    // Other concepts
+    'dia': 'Data availability',
+    'timeboost': 'Transaction ordering mechanism',
+    'ethereum': 'Parent chain reference',
+    'chain': 'Blockchain infrastructure',
+    
+    // Data/UI elements (likely from tables)
+    'v372': 'Version or data reference',
+    'td td': 'Table data element',
+    'data-quicklook': 'UI data element',
+    'targetblank ': 'Link target attribute'
   };
   
-  return descriptions[concept] || 'Technical terminology';
+  // Normalize the concept to lowercase for matching
+  const normalizedConcept = concept.toLowerCase();
+  return descriptions[normalizedConcept] || 'Technical terminology';
 }
 
 function getIssueTitle(issueType) {
