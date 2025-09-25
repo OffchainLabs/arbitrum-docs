@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  
+  <text x="400" y="50" text-anchor="middle" fill="#28a745" font-size="24" font-weight="bold">Component B Details</text>
+  
+  <!-- Central hub -->
+  <circle cx="400" cy="300" r="80" fill="#28a745"/>
+  <text x="400" y="310" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Component B</text>
+  
+  <!-- Surrounding modules -->
+  <circle cx="250" cy="150" r="50" fill="#20c997"/>
+  <text x="250" y="160" text-anchor="middle" fill="white" font-size="14">Module 1</text>
+  
+  <circle cx="550" cy="150" r="50" fill="#20c997"/>
+  <text x="550" y="160" text-anchor="middle" fill="white" font-size="14">Module 2</text>
+  
+  <circle cx="250" cy="450" r="50" fill="#20c997"/>
+  <text x="250" y="460" text-anchor="middle" fill="white" font-size="14">Module 3</text>
+  
+  <circle cx="550" cy="450" r="50" fill="#20c997"/>
+  <text x="550" y="460" text-anchor="middle" fill="white" font-size="14">Module 4</text>
+  
+  <!-- Connections -->
+  <line x1="340" y1="240" x2="290" y2="190" stroke="#6c757d" stroke-width="2"/>
+  <line x1="460" y1="240" x2="510" y2="190" stroke="#6c757d" stroke-width="2"/>
+  <line x1="340" y1="360" x2="290" y2="410" stroke="#6c757d" stroke-width="2"/>
+  <line x1="460" y1="360" x2="510" y2="410" stroke="#6c757d" stroke-width="2"/>
+  
+  <text x="400" y="550" text-anchor="middle" fill="#6c757d" font-size="14">Component B has no further drill-down</text>
+</svg>

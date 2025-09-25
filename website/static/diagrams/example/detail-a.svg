@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  
+  <text x="400" y="50" text-anchor="middle" fill="#007bff" font-size="24" font-weight="bold">Component A Details</text>
+  
+  <!-- Main component -->
+  <rect x="250" y="100" width="300" height="200" fill="#007bff" rx="10"/>
+  <text x="400" y="210" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Component A</text>
+  
+  <!-- Sub-component 1 -->
+  <g id="sub-1">
+    <rect x="100" y="350" width="150" height="100" fill="#0056b3" rx="8"/>
+    <text x="175" y="410" text-anchor="middle" fill="white" font-size="16">Sub-component 1</text>
+  </g>
+  
+  <!-- Sub-component 2 -->
+  <rect x="325" y="350" width="150" height="100" fill="#0056b3" rx="8"/>
+  <text x="400" y="410" text-anchor="middle" fill="white" font-size="16">Sub-component 2</text>
+  
+  <!-- Sub-component 3 -->
+  <rect x="550" y="350" width="150" height="100" fill="#0056b3" rx="8"/>
+  <text x="625" y="410" text-anchor="middle" fill="white" font-size="16">Sub-component 3</text>
+  
+  <!-- Connections -->
+  <line x1="400" y1="300" x2="175" y2="350" stroke="#6c757d" stroke-width="2"/>
+  <line x1="400" y1="300" x2="400" y2="350" stroke="#6c757d" stroke-width="2"/>
+  <line x1="400" y1="300" x2="625" y2="350" stroke="#6c757d" stroke-width="2"/>
+  
+  <text x="400" y="550" text-anchor="middle" fill="#6c757d" font-size="14">Click Sub-component 1 to dive deeper</text>
+</svg>

@@ -1,0 +1,47 @@
+{
+  "id": "example-diagram",
+  "title": "Example Interactive Diagram",
+  "initialStateId": "overview",
+  "states": [
+    {
+      "id": "overview",
+      "svgPath": "/diagrams/example/overview.svg",
+      "clickableAreas": [
+        {
+          "id": "component-a",
+          "selector": "#component-a",
+          "nextStateId": "detail-a",
+          "tooltip": "Click to explore Component A"
+        },
+        {
+          "id": "component-b",
+          "selector": "#component-b",
+          "nextStateId": "detail-b",
+          "tooltip": "Click to explore Component B"
+        }
+      ]
+    },
+    {
+      "id": "detail-a",
+      "svgPath": "/diagrams/example/detail-a.svg",
+      "clickableAreas": [
+        {
+          "id": "sub-component-1",
+          "selector": "#sub-1",
+          "nextStateId": "deep-dive-1",
+          "tooltip": "Dive deeper into Sub-component 1"
+        }
+      ]
+    },
+    {
+      "id": "detail-b",
+      "svgPath": "/diagrams/example/detail-b.svg",
+      "clickableAreas": []
+    },
+    {
+      "id": "deep-dive-1",
+      "svgPath": "/diagrams/example/deep-dive-1.svg",
+      "clickableAreas": []
+    }
+  ]
+}
