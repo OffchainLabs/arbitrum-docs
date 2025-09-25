@@ -43,3 +43,5 @@ yarn-error.log*
 /i18n/*/docusaurus-plugin-content-docs/current/*
 
 sdk-sidebar.js
+documentation-graph/dist/
+documentation-graph/node_modules/

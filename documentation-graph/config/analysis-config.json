@@ -1,0 +1,93 @@
+{
+  "domainSpecificTerms": {
+    "blockchain": [
+      "arbitrum", "ethereum", "rollup", "layer2", "layer 2", "l2", "l1",
+      "smart contract", "dapp", "decentralized", "blockchain", "validator",
+      "sequencer", "bridge", "gas", "transaction", "block", "consensus",
+      "proof", "merkle", "hash", "signature", "wallet", "token", "erc20",
+      "erc721", "erc1155", "nft", "defi", "yield", "liquidity", "swap",
+      "stake", "unstake", "delegate", "governance", "dao", "proposal"
+    ],
+    "arbitrum": [
+      "nitro", "classic", "nova", "orbit", "stylus", "bold", "anytrust",
+      "arbos", "retryable", "inbox", "outbox", "challenge", "assertion",
+      "fraud proof", "data availability", "das", "committee", "batching",
+      "compression", "aliasing", "precompile", "nodeinterface", "gateway",
+      "canonical", "custom gateway", "generic gateway", "weth gateway",
+      "fast withdrawal", "timeboost", "express lane", "auction"
+    ],
+    "technical": [
+      "api", "sdk", "rpc", "json", "rest", "graphql", "websocket", "http",
+      "https", "ssl", "tls", "tcp", "udp", "p2p", "ipfs", "docker",
+      "kubernetes", "aws", "gcp", "azure", "terraform", "ansible",
+      "nginx", "apache", "redis", "postgresql", "mysql", "mongodb",
+      "elasticsearch", "kafka", "rabbitmq", "prometheus", "grafana"
+    ],
+    "development": [
+      "javascript", "typescript", "react", "nodejs", "npm", "yarn", "webpack",
+      "babel", "eslint", "prettier", "jest", "mocha", "chai", "cypress",
+      "hardhat", "truffle", "remix", "metamask", "ethers", "web3", "viem",
+      "solidity", "vyper", "rust", "go", "python", "java", "cplusplus", "wasm",
+      "git", "github", "gitlab", "cicd", "docker", "kubernetes"
+    ]
+  },
+  "stopWords": [
+    "api","githubcom","offchainlabs","github","https","the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+    "of", "with", "by", "from", "up", "about", "into", "through", "during",
+    "before", "after", "above", "below", "between", "among", "through",
+    "this", "that", "these", "those", "is", "are", "was", "were", "be",
+    "been", "being", "have", "has", "had", "do", "does", "did", "will",
+    "would", "could", "should", "may", "might", "must", "can", "shall",
+    "you", "your", "yours", "we", "our", "ours", "they", "their", "theirs",
+    "some", "many", "most", "other", "such", "only", "own", "same", "so",
+    "than", "too", "very", "can", "will", "just", "now", "also", "each",
+    "which", "she", "he", "it", "they", "them", "what", "who", "when",
+    "where", "why", "how", "all", "any", "both", "each", "few", "more"
+  ],
+  "frontmatterExcludedFileTypes": [
+    "**/static/**/*.md",
+    "**/static/**/*.mdx", 
+    "**/i18n/**/*.md",
+    "**/i18n/**/*.mdx",
+    "**/node_modules/**/*.md",
+    "**/node_modules/**/*.mdx",
+    "**/build/**/*.md",
+    "**/build/**/*.mdx",
+    "**/dist/**/*.md",
+    "**/dist/**/*.mdx",
+    "**/.docusaurus/**/*.md",
+    "**/.docusaurus/**/*.mdx",
+    "**/versioned_docs/**/*.md",
+    "**/versioned_docs/**/*.mdx",
+    "**/*.en.md",
+    "**/*.en.mdx",
+    "**/README.md",
+    "**/CHANGELOG.md",
+    "**/CONTRIBUTING.md",
+"**/partials/**/*.mdx"
+  ],
+  "internalLinkingExcludedFileTypes": [
+    "**/static/**/*.md",
+    "**/static/**/*.mdx",
+    "**/i18n/**/*.md", 
+    "**/i18n/**/*.mdx",
+    "**/node_modules/**/*.md",
+    "**/node_modules/**/*.mdx",
+    "**/build/**/*.md",
+    "**/build/**/*.mdx",
+    "**/dist/**/*.md",
+    "**/dist/**/*.mdx",
+    "**/.docusaurus/**/*.md",
+    "**/.docusaurus/**/*.mdx",
+    "**/versioned_docs/**/*.md",
+    "**/versioned_docs/**/*.mdx",
+    "**/*.en.md",
+    "**/*.en.mdx",
+    "**/partials/**/*.md",
+    "**/partials/**/*.mdx",
+    "**/README.md",
+    "**/CHANGELOG.md",
+    "**/CONTRIBUTING.md",
+    "**/LICENSE.md"
+  ]
+}
