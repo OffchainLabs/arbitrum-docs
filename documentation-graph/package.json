@@ -1,0 +1,38 @@
+{
+  "name": "arbitrum-docs-knowledge-graph",
+  "version": "1.0.0",
+  "description": "Documentation Graph Builder for Arbitrum Documentation Repository",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --max-old-space-size=8192 --expose-gc --optimize-for-size src/index.js",
+    "start:basic": "node src/index.js",
+    "help": "node src/index.js --help",
+    "analyze": "node src/analyzer.js",
+    "visualize": "node src/visualizer.js",
+    "extract": "node src/extractor.js",
+    "build-graph": "node src/graphBuilder.js",
+    "serve": "npx http-server dist -p 8080",
+    "report": "node --max-old-space-size=8192 --expose-gc --optimize-for-size src/index.js --config config/analysis-config.json --issue-report"
+  },
+  "keywords": ["documentation", "knowledge-graph", "analysis", "arbitrum", "docusaurus"],
+  "author": "Documentation Graph Builder Agent",
+  "license": "MIT",
+  "dependencies": {
+    "graphology": "^0.25.4",
+    "gray-matter": "^4.0.3",
+    "compromise": "^14.11.0",
+    "natural": "^6.10.0",
+    "fs-extra": "^11.2.0",
+    "glob": "^10.3.12",
+    "progress": "^2.0.3",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "leven": "^4.0.0",
+    "stopword": "^2.0.8",
+    "csv-writer": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
