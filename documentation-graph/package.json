@@ -54,6 +54,7 @@
     "gray-matter": "^4.0.3",
     "leven": "^4.0.0",
     "natural": "^6.10.0",
+    "npm": "^11.6.1",
     "progress": "^2.0.3",
     "stopword": "^2.0.8"
   },

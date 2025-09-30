@@ -13,11 +13,17 @@ build
 # Generated files
 .docusaurus
 .cache-loader
-
-# Generated docs
+sdk-sidebar.js
 docs/sdk/
 !docs/sdk/index.mdx
 !docs/sdk/migrate.mdx
+docs/partials/_glossary-partial.mdx
+docs/stylus-by-example/
+docs/api/
+
+
+#documentation-graph
+documentation-graph/dist/
 
 # Misc
 .DS_Store
