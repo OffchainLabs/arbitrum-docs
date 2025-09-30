@@ -50,6 +50,22 @@ const config = {
   markdown: {
     mermaid: true,
     preprocessor: markdownPreprocessor,
+    parseFrontMatter: async (params) => {
+      // Use the default parser
+      const result = await params.defaultParseFrontMatter(params);
+
+      // Check if this is a partial file (starts with underscore)
+      const fileName = params.filePath.split('/').pop();
+      const isPartialFile = fileName && fileName.startsWith('_');
+
+      // For partial files, clear frontmatter to prevent Docusaurus warnings
+      // The documentation-graph tool reads raw files directly, so this doesn't affect analysis
+      if (isPartialFile) {
+        result.frontMatter = {};
+      }
+
+      return result;
+    },
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
