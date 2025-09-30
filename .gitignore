@@ -14,13 +14,9 @@ build
 .docusaurus
 .cache-loader
 sdk-sidebar.js
-docs/sdk/assetBridger/
-docs/sdk/dataEntities/
-docs/sdk/inbox/
-docs/sdk/message/
-docs/sdk/utils/
-docs/sdk/index.mdx
-docs/sdk/migrate.mdx
+docs/sdk/
+!docs/sdk/index.mdx
+!docs/sdk/migrate.mdx
 docs/partials/_glossary-partial.mdx
 docs/stylus-by-example/
 docs/api/
