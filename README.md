@@ -73,7 +73,13 @@ yarn
 git submodule update --init --recursive
 ```
 
-4. Start the development server
+4. Build
+
+```shell
+yarn build
+```
+
+5. Start the development server
 
 ```shell
 yarn start
