@@ -21,6 +21,12 @@ export const extractionConfig = {
     minLength: 3,
     maxLength: 50,
     minFrequency: 2,
+
+    // Memory management limits
+    maxConcepts: 10000,              // Maximum number of unique concepts to extract
+    maxCooccurrenceRecords: 50000,   // Maximum co-occurrence pairs to track
+    maxConceptsPerDocument: 200,     // Maximum concepts to extract per document
+
     stopWords: [
       'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
       'of', 'with', 'by', 'from', 'up', 'about', 'into', 'through', 'during',

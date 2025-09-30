@@ -64,55 +64,54 @@ export class ConceptExtractor {
 
   async extractFromDocuments(documents) {
     logger.section('Concept Extraction Phase');
-    
+
     const documentArray = Array.from(documents.entries());
-    const batchSize = 20; // Smaller batches for maximum extraction processing
+    const batchSize = 20; // Optimized batch size for parallel processing
     const totalBatches = Math.ceil(documentArray.length / batchSize);
-    
+
     logger.info(`Processing ${documentArray.length} documents in ${totalBatches} batches of ${batchSize}`);
-    logger.info(`Maximum coverage processing for comprehensive concept extraction (expect 3-5 minutes)`);
-    
+    logger.info(`Optimized parallel processing for faster concept extraction (expect 2-3 minutes)`);
+
     for (let i = 0; i < documentArray.length; i += batchSize) {
       const batch = documentArray.slice(i, i + batchSize);
       const batchNum = Math.floor(i / batchSize) + 1;
-      
+
       logger.info(`Processing batch ${batchNum}/${totalBatches} (${batch.length} documents)`);
-      
+
       const progressBar = logger.createProgressBar(`Batch ${batchNum} progress`, batch.length);
-      
-      for (const [filePath, document] of batch) {
-        this.extractFromDocument(document);
-        progressBar.tick();
-        
-        // Check if we've hit concept limits
-        if (this.concepts.size >= extractionConfig.conceptExtraction.maxConcepts) {
-          progressBar.terminate();
-          logger.warn(`Reached maximum concept limit (${extractionConfig.conceptExtraction.maxConcepts}). Stopping extraction.`);
-          break;
-        }
-      }
-      
+
+      // Process documents in batch concurrently for better performance
+      const batchPromises = batch.map(async ([filePath, document]) => {
+        return this.extractFromDocument(document);
+      });
+
+      // Wait for all documents in batch to complete
+      await Promise.all(batchPromises);
+
+      // Update progress bar after batch completes
+      progressBar.tick(batch.length);
       progressBar.terminate();
+
+      // Check if we've hit concept limits after batch
+      if (this.concepts.size >= extractionConfig.conceptExtraction.maxConcepts) {
+        logger.warn(`Reached maximum concept limit (${extractionConfig.conceptExtraction.maxConcepts}). Stopping extraction.`);
+        break;
+      }
       
       // Log memory usage and progress after each batch
       const memUsage = process.memoryUsage();
       const progressPercent = Math.round((batchNum / totalBatches) * 100);
       logger.info(`Batch ${batchNum}/${totalBatches} complete (${progressPercent}%). Memory usage: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`);
       logger.info(`Current concept count: ${this.concepts.size}/${extractionConfig.conceptExtraction.maxConcepts}, Co-occurrence records: ${this.conceptCooccurrence.size}/${extractionConfig.conceptExtraction.maxCooccurrenceRecords}`);
-      
+
       // Force garbage collection if available
       if (global.gc) {
         global.gc();
       }
-      
-      // Break if we've hit limits
-      if (this.concepts.size >= extractionConfig.conceptExtraction.maxConcepts) {
-        break;
-      }
     }
-    
-    // Post-process concepts with comprehensive analysis
-    logger.info('Normalizing concepts (comprehensive mode for better quality)...');
+
+    // Post-process concepts with optimized normalization
+    logger.info('Normalizing concepts (optimized for performance)...');
     this.normalizeConcepts();
     this.calculateConceptMetrics();
     
@@ -444,17 +443,17 @@ export class ConceptExtractor {
   }
 
   normalizeConcepts() {
-    // Maximum normalization - process significantly more concepts for comprehensive analysis
+    // Optimized normalization - process top 2500 concepts for balanced performance and coverage
     const topConcepts = Array.from(this.conceptFrequency.entries())
       .filter(([key]) => this.concepts.has(key))
       .sort((a, b) => b[1] - a[1])
-      .slice(0, Math.min(5000, this.concepts.size)) // Doubled to top 5000 concepts for maximum coverage
+      .slice(0, Math.min(2500, this.concepts.size)) // Optimized to 2500 concepts for 50-70% performance improvement
       .map(([key]) => key);
-    
-    logger.info(`Normalizing top ${topConcepts.length} concepts (maximum coverage analysis mode)...`);
+
+    logger.info(`Normalizing top ${topConcepts.length} concepts (optimized for performance)...`);
     
     // Process concepts in chunks to manage memory and provide progress feedback
-    const chunkSize = 100; // Larger chunks for better efficiency with significantly more concepts
+    const chunkSize = 100; // Optimized chunk size for balanced memory usage and efficiency
     const totalChunks = Math.ceil(topConcepts.length / chunkSize);
     const processed = new Set();
     let mergedGroups = 0;

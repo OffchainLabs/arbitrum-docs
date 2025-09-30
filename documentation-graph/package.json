@@ -1,8 +1,8 @@
 {
   "name": "arbitrum-docs-knowledge-graph",
-  "version": "1.0.0",
-  "description": "Documentation Graph Builder for Arbitrum Documentation Repository",
-  "main": "index.js",
+  "version": "1.1.0",
+  "description": "Documentation Graph Builder for Arbitrum Documentation Repository - Analyzes MDX/Markdown documentation to build interactive knowledge graphs with NLP-powered concept extraction",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
     "start": "node --max-old-space-size=8192 --expose-gc --optimize-for-size src/index.js",
@@ -13,26 +13,56 @@
     "extract": "node src/extractor.js",
     "build-graph": "node src/graphBuilder.js",
     "serve": "npx http-server dist -p 8080",
-    "report": "node --max-old-space-size=8192 --expose-gc --optimize-for-size src/index.js --config config/analysis-config.json --issue-report"
+    "report": "node --max-old-space-size=8192 --expose-gc --optimize-for-size src/index.js --config config/analysis-config.json --issue-report",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "test:unit": "NODE_OPTIONS=--experimental-vm-modules jest --testPathPattern=unit",
+    "test:integration": "NODE_OPTIONS=--experimental-vm-modules jest --testPathPattern=integration"
   },
-  "keywords": ["documentation", "knowledge-graph", "analysis", "arbitrum", "docusaurus"],
+  "keywords": [
+    "documentation",
+    "knowledge-graph",
+    "analysis",
+    "arbitrum",
+    "docusaurus",
+    "nlp",
+    "concept-extraction",
+    "graph-analysis",
+    "documentation-tools",
+    "markdown",
+    "mdx"
+  ],
   "author": "Documentation Graph Builder Agent",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OffchainLabs/arbitrum-docs.git",
+    "directory": "documentation-graph"
+  },
+  "bugs": {
+    "url": "https://github.com/OffchainLabs/arbitrum-docs/issues"
+  },
   "dependencies": {
-    "graphology": "^0.25.4",
-    "gray-matter": "^4.0.3",
-    "compromise": "^14.11.0",
-    "natural": "^6.10.0",
-    "fs-extra": "^11.2.0",
-    "glob": "^10.3.12",
-    "progress": "^2.0.3",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
+    "compromise": "^14.11.0",
+    "csv-writer": "^1.6.0",
+    "fs-extra": "^11.2.0",
+    "glob": "^10.3.12",
+    "graphology": "^0.25.4",
+    "gray-matter": "^4.0.3",
     "leven": "^4.0.0",
-    "stopword": "^2.0.8",
-    "csv-writer": "^1.6.0"
+    "natural": "^6.10.0",
+    "progress": "^2.0.3",
+    "stopword": "^2.0.8"
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.2.0",
+    "jest": "^30.2.0",
+    "jest-extended": "^6.0.0"
   }
 }
