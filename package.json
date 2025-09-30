@@ -9,6 +9,7 @@
     "update-variable-refs": "tsx scripts/update-variable-references.ts",
     "prepare": "husky || true",
     "start": "yarn clear && yarn sync-stylus-content && yarn build-glossary && docusaurus start",
+    "start:with-docs": "yarn clear && yarn sync-stylus-content && yarn build-glossary && yarn generate-sdk-docs && docusaurus start",
     "generate-sdk-docs": "npx docusaurus generate-typedoc",
     "sync-stylus-content": "node scripts/sync-stylus-content.js",
     "build-glossary": "tsx scripts/build-glossary.ts",
@@ -35,7 +36,6 @@
   },
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
-    "@cmfcmf/docusaurus-search-local": "^0.11.0",
     "@docusaurus/core": "^3.6.3",
     "@docusaurus/theme-common": "^3.6.3",
     "@docusaurus/preset-classic": "^3.6.3",
