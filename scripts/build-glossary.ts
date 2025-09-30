@@ -135,9 +135,20 @@ async function main(): Promise<void> {
 
   // Generate and write the consolidated glossary partial MDX file
   // This creates a single file with all terms formatted as Markdown headings
+  const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  const frontmatter = `---
+partial_type: glossary
+title: "Arbitrum Glossary Definitions"
+description: "Comprehensive glossary of Arbitrum terminology and definitions"
+author: anegg0
+last_reviewed: ${currentDate}
+---
+
+`;
+  
   await fs.writeFile(
     './docs/partials/_glossary-partial.mdx',
-    terms
+    frontmatter + terms
       .map((item) => `### ${item.data.title} {#${item.data.key}}\n${item.content.trim()}`)
       .join('\n\n'),
   );
