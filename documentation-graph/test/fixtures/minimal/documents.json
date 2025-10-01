@@ -1,0 +1,77 @@
+{
+  "documents": [
+    {
+      "path": "docs/quickstart.mdx",
+      "relativePath": "quickstart.mdx",
+      "frontmatter": {
+        "title": "Quickstart Guide",
+        "content_type": "how-to",
+        "sidebar_label": "Quickstart"
+      },
+      "wordCount": 500,
+      "links": {
+        "internal": ["docs/concepts.mdx", "docs/setup.mdx"],
+        "external": ["https://ethereum.org"],
+        "anchor": []
+      }
+    },
+    {
+      "path": "docs/concepts.mdx",
+      "relativePath": "concepts.mdx",
+      "frontmatter": {
+        "title": "Core Concepts",
+        "content_type": "concept"
+      },
+      "wordCount": 800,
+      "links": {
+        "internal": ["docs/quickstart.mdx"],
+        "external": [],
+        "anchor": []
+      }
+    },
+    {
+      "path": "docs/setup.mdx",
+      "relativePath": "setup.mdx",
+      "frontmatter": null,
+      "wordCount": 150,
+      "links": {
+        "internal": [],
+        "external": [],
+        "anchor": []
+      }
+    },
+    {
+      "path": "docs/partials/config.mdx",
+      "relativePath": "partials/config.mdx",
+      "frontmatter": {
+        "title": "Configuration Partial"
+      },
+      "wordCount": 200,
+      "links": {
+        "internal": [],
+        "external": [],
+        "anchor": []
+      }
+    },
+    {
+      "path": "docs/api/reference.mdx",
+      "relativePath": "api/reference.mdx",
+      "frontmatter": {
+        "title": "API Reference",
+        "content_type": "reference",
+        "sidebar_label": "API"
+      },
+      "wordCount": 1200,
+      "links": {
+        "internal": ["docs/concepts.mdx"],
+        "external": ["https://docs.arbitrum.io"],
+        "anchor": []
+      }
+    }
+  ],
+  "metadata": {
+    "purpose": "Minimal dataset for unit testing",
+    "documentCount": 5,
+    "expectedIssues": ["missing_frontmatter", "poor_linking", "shallow_content"]
+  }
+}

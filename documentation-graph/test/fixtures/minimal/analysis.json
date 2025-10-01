@@ -1,0 +1,134 @@
+{
+  "basic": {
+    "nodesByType": {
+      "document": 5,
+      "concept": 5,
+      "section": 2,
+      "directory": 2
+    },
+    "edgesByType": {
+      "contains": 7,
+      "links-to": 4,
+      "parent-child": 3,
+      "mentions": 25
+    }
+  },
+  "centrality": {
+    "degree": {},
+    "betweenness": {},
+    "closeness": {}
+  },
+  "connectivity": {
+    "totalComponents": 1,
+    "largestComponent": 14,
+    "bridges": 0
+  },
+  "documents": {
+    "total": 5,
+    "byDirectory": {
+      "docs": 3,
+      "docs/api": 1,
+      "docs/partials": 1
+    },
+    "byType": {
+      "how-to": 1,
+      "concept": 1,
+      "reference": 1,
+      "unspecified": 2
+    },
+    "hubs": [
+      {
+        "path": "docs/concepts.mdx",
+        "degree": 3
+      }
+    ],
+    "orphans": [
+      {
+        "node": "docs/setup.mdx",
+        "label": "setup.mdx",
+        "directory": "docs",
+        "degree": 0
+      }
+    ]
+  },
+  "navigation": {
+    "available": true,
+    "metrics": {
+      "totalSidebars": 1,
+      "totalEntries": 4,
+      "totalCategories": 1,
+      "maxDepth": 2,
+      "externalLinks": 0
+    },
+    "coverage": {
+      "totalDocuments": 5,
+      "inNavigation": 4,
+      "notInNavigation": 1,
+      "coveragePercentage": "80.0%",
+      "duplicateEntries": 0,
+      "accuracy": {
+        "orphanedRate": "20.0%",
+        "duplicateRate": "0.0%"
+      }
+    },
+    "quality": {
+      "overallScore": 0.7,
+      "strengths": ["Clear entry points"],
+      "weaknesses": ["One orphaned document"]
+    },
+    "orphanedDocuments": {
+      "count": 1,
+      "documents": [
+        {
+          "path": "docs/setup.mdx",
+          "label": "setup.mdx"
+        }
+      ]
+    },
+    "entryPoints": {
+      "count": 2
+    },
+    "maxDepth": 2,
+    "orphanedEntries": 0
+  },
+  "quality": {
+    "overallScore": 65,
+    "issues": [
+      {
+        "type": "missing_frontmatter",
+        "severity": "medium",
+        "count": 1,
+        "description": "1 document lacks frontmatter metadata"
+      },
+      {
+        "type": "orphaned_documents",
+        "severity": "high",
+        "count": 1,
+        "description": "1 document has minimal connections"
+      },
+      {
+        "type": "poor_connectivity",
+        "severity": "medium",
+        "count": 1,
+        "description": "Low average degree centrality"
+      }
+    ],
+    "strengths": ["Good concept coverage in core documents", "Clear documentation structure"]
+  },
+  "recommendations": [
+    {
+      "priority": "high",
+      "title": "Connect Orphaned Documents",
+      "description": "1 document (setup.mdx) has no connections to other content",
+      "action": "Add internal links to connect isolated documents",
+      "impact": "Improved content discoverability"
+    },
+    {
+      "priority": "medium",
+      "title": "Add Missing Frontmatter",
+      "description": "1 document lacks metadata",
+      "action": "Standardize frontmatter across all documents",
+      "impact": "Better navigation and SEO"
+    }
+  ]
+}

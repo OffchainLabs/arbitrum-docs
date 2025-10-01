@@ -1,0 +1,28 @@
+{
+  "contentQuality": {
+    "shallowWordCount": 200,
+    "lowConceptDensity": 5,
+    "highSimilarityThreshold": 0.8
+  },
+  "structural": {
+    "minHubDocuments": 3,
+    "oversizedDirMultiplier": 2
+  },
+  "coverage": {
+    "lowConceptsPerDoc": 2,
+    "minDirFileCount": 3,
+    "underrepresentedTypeCount": 3
+  },
+  "discoverability": {
+    "substantialDocWordCount": 300,
+    "poorLinkingThreshold": 2,
+    "deepNestingDepth": 3,
+    "deepNestingCount": 10
+  },
+  "navigation": {
+    "goodCoveragePercent": 90,
+    "minEntryPoints": 5,
+    "maxDeadEnds": 10,
+    "maxDepth": 5
+  }
+}

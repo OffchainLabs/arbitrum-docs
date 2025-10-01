@@ -1,0 +1,62 @@
+{
+  "concepts": {
+    "arbitrum": {
+      "text": "arbitrum",
+      "type": "domain",
+      "category": "platform",
+      "files": ["docs/quickstart.mdx", "docs/concepts.mdx"],
+      "totalWeight": 15
+    },
+    "transaction": {
+      "text": "transaction",
+      "type": "technical",
+      "category": "blockchain",
+      "files": ["docs/concepts.mdx", "docs/api/reference.mdx"],
+      "totalWeight": 10
+    },
+    "smart contract": {
+      "text": "smart contract",
+      "type": "technical",
+      "category": "development",
+      "files": ["docs/quickstart.mdx", "docs/api/reference.mdx"],
+      "totalWeight": 8
+    },
+    "bridge": {
+      "text": "bridge",
+      "type": "technical",
+      "category": "infrastructure",
+      "files": ["docs/concepts.mdx"],
+      "totalWeight": 6
+    },
+    "ethereum": {
+      "text": "ethereum",
+      "type": "domain",
+      "category": "platform",
+      "files": ["docs/quickstart.mdx"],
+      "totalWeight": 5
+    }
+  },
+  "frequency": {
+    "arbitrum": 15,
+    "transaction": 10,
+    "smart contract": 8,
+    "bridge": 6,
+    "ethereum": 5
+  },
+  "cooccurrence": {
+    "arbitrum": {
+      "transaction": 5,
+      "ethereum": 3
+    },
+    "transaction": {
+      "arbitrum": 5,
+      "smart contract": 4
+    }
+  },
+  "metadata": {
+    "purpose": "Minimal concept set for testing",
+    "totalConcepts": 5,
+    "domainConcepts": 2,
+    "technicalConcepts": 3
+  }
+}
