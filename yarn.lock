@@ -43,14 +43,6 @@
   resolved "https://registry.npmjs.org/@actions/io/-/io-1.1.3.tgz"
   integrity sha512-wi9JjgKLYS7U/z8PPbco+PvTb/nRWjeoFlJ1Qer83k/3C5PHQi28hiVdeE2kHXmIL99mQFawx8qt/JPjZilJ8Q==
 
-"@algolia/autocomplete-core@1.17.0":
-  version "1.17.0"
-  resolved "https://registry.npmjs.org/@algolia/autocomplete-core/-/autocomplete-core-1.17.0.tgz"
-  integrity sha512-6E4sVb5+fGtSQs9mULlxUH84OWFUVZPMapa5dMCtUc7KyDRLY6+X/dA8xbDA8CX5phdBn1plLUET1B6NZnrZuw==
-  dependencies:
-    "@algolia/autocomplete-plugin-algolia-insights" "1.17.0"
-    "@algolia/autocomplete-shared" "1.17.0"
-
 "@algolia/autocomplete-core@1.9.3":
   version "1.9.3"
   resolved "https://registry.npmjs.org/@algolia/autocomplete-core/-/autocomplete-core-1.9.3.tgz"
@@ -59,37 +51,12 @@
     "@algolia/autocomplete-plugin-algolia-insights" "1.9.3"
     "@algolia/autocomplete-shared" "1.9.3"
 
-"@algolia/autocomplete-js@^1.5.1":
-  version "1.17.0"
-  resolved "https://registry.npmjs.org/@algolia/autocomplete-js/-/autocomplete-js-1.17.0.tgz"
-  integrity sha512-RbD98hXtZOl6VohSAo7kMOFWQHR1x4wWaJFadJradFQ1TAA9hFEyirSIM+yT96UpKkdi08V2EBI+YwZ3/VETvw==
-  dependencies:
-    "@algolia/autocomplete-core" "1.17.0"
-    "@algolia/autocomplete-preset-algolia" "1.17.0"
-    "@algolia/autocomplete-shared" "1.17.0"
-    htm "^3.1.1"
-    preact "^10.13.2"
-
-"@algolia/autocomplete-plugin-algolia-insights@1.17.0":
-  version "1.17.0"
-  resolved "https://registry.npmjs.org/@algolia/autocomplete-plugin-algolia-insights/-/autocomplete-plugin-algolia-insights-1.17.0.tgz"
-  integrity sha512-zbWImu+VxBDzUQONEhQXq3OzlipHLEtWbL4Nf/VOb1p1qHG/f96jCegOzzEZVPiQvZpRJnmhCUmsYNHlIBxKWw==
-  dependencies:
-    "@algolia/autocomplete-shared" "1.17.0"
-
 "@algolia/autocomplete-plugin-algolia-insights@1.9.3":
   version "1.9.3"
   resolved "https://registry.npmjs.org/@algolia/autocomplete-plugin-algolia-insights/-/autocomplete-plugin-algolia-insights-1.9.3.tgz"
   integrity sha512-a/yTUkcO/Vyy+JffmAnTWbr4/90cLzw+CC3bRbhnULr/EM0fGNvM13oQQ14f2moLMcVDyAx/leczLlAOovhSZg==
   dependencies:
     "@algolia/autocomplete-shared" "1.9.3"
-
-"@algolia/autocomplete-preset-algolia@1.17.0":
-  version "1.17.0"
-  resolved "https://registry.npmjs.org/@algolia/autocomplete-preset-algolia/-/autocomplete-preset-algolia-1.17.0.tgz"
-  integrity sha512-DhTkMs/9BzThhTU2nSTpQxVxHLzaRDZLid4Tf56D8s9IhEGfmzbNuLRmJNzgAOPv1smHtUErndmC+S9QNMDEJA==
-  dependencies:
-    "@algolia/autocomplete-shared" "1.17.0"
 
 "@algolia/autocomplete-preset-algolia@1.9.3":
   version "1.9.3"
@@ -98,20 +65,10 @@
   dependencies:
     "@algolia/autocomplete-shared" "1.9.3"
 
-"@algolia/autocomplete-shared@1.17.0":
-  version "1.17.0"
-  resolved "https://registry.npmjs.org/@algolia/autocomplete-shared/-/autocomplete-shared-1.17.0.tgz"
-  integrity sha512-7su4KH/2q2Fhud2VujUNhCMbIh7yp6wqWR3UuVje5P3kDRhTotPRmg3iRQi48YRYkk9o+airsrLl+rxJ/9FWng==
-
 "@algolia/autocomplete-shared@1.9.3":
   version "1.9.3"
   resolved "https://registry.npmjs.org/@algolia/autocomplete-shared/-/autocomplete-shared-1.9.3.tgz"
   integrity sha512-Wnm9E4Ye6Rl6sTTqjoymD+l8DjSTHsHboVRYrKgEt8Q7UHm9nYbqhN/i0fhUYA3OAEH7WA8x3jfpnmJm3rKvaQ==
-
-"@algolia/autocomplete-theme-classic@^1.5.1":
-  version "1.17.0"
-  resolved "https://registry.npmjs.org/@algolia/autocomplete-theme-classic/-/autocomplete-theme-classic-1.17.0.tgz"
-  integrity sha512-FsW/J/mG1YIPv93/QQ7KxMVNXAiVi9accGgoK2y3zDz58WpVgUug97SUoQzP4I9EMZAZAHQo0QbWXxpqTWkcOA==
 
 "@algolia/cache-browser-local-storage@4.23.3":
   version "4.23.3"
@@ -168,7 +125,7 @@
     "@algolia/requester-common" "4.23.3"
     "@algolia/transporter" "4.23.3"
 
-"@algolia/client-search@4.23.3", "@algolia/client-search@^4.12.0":
+"@algolia/client-search@4.23.3":
   version "4.23.3"
   resolved "https://registry.npmjs.org/@algolia/client-search/-/client-search-4.23.3.tgz"
   integrity sha512-P4VAKFHqU0wx9O+q29Q8YVuaowaZ5EM77rxfmGnkHUJggh28useXQdopokgwMeYw2XUht49WX5RcTQ40rZIabw==
@@ -2193,20 +2150,6 @@
   version "11.0.3"
   resolved "https://registry.npmjs.org/@chevrotain/utils/-/utils-11.0.3.tgz"
   integrity sha512-YslZMgtJUyuMbZ+aKvfF3x1f5liK4mWNxghFRv7jqRR9C3R3fAOGTTKvxXDa2Y1s9zSbcpuO0cAxDYsc9SrXoQ==
-
-"@cmfcmf/docusaurus-search-local@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/@cmfcmf/docusaurus-search-local/-/docusaurus-search-local-0.11.0.tgz"
-  integrity sha512-UzJ0G7JfrhuXJ9h79vforQZs05C5rWhXqrK7C5ie1ImHLTC4RPW7FHagIpZULhcA2PbDkc4ewnWVIufLKq+KzA==
-  dependencies:
-    "@algolia/autocomplete-js" "^1.5.1"
-    "@algolia/autocomplete-theme-classic" "^1.5.1"
-    "@algolia/client-search" "^4.12.0"
-    algoliasearch "^4.12.0"
-    cheerio "^1.0.0-rc.9"
-    clsx "^1.1.1"
-    lunr-languages "^1.4.0"
-    mark.js "^8.11.1"
 
 "@colors/colors@1.5.0":
   version "1.5.0"
@@ -6346,7 +6289,7 @@ algoliasearch-helper@^3.13.3:
   dependencies:
     "@algolia/events" "^4.0.1"
 
-algoliasearch@^4.12.0, algoliasearch@^4.18.0, algoliasearch@^4.19.1:
+algoliasearch@^4.18.0, algoliasearch@^4.19.1:
   version "4.23.3"
   resolved "https://registry.npmjs.org/algoliasearch/-/algoliasearch-4.23.3.tgz"
   integrity sha512-Le/3YgNvjW9zxIQMRhUHuhiUjAlKY/zsdZpfq4dlLqg6mEm0nL6yk+7f2hDOtLpxsgE4jSzDmvHL7nXdBp5feg==
@@ -6922,7 +6865,7 @@ cheerio-select@^2.1.0:
     domhandler "^5.0.3"
     domutils "^3.0.1"
 
-cheerio@1.0.0-rc.12, cheerio@^1.0.0-rc.10, cheerio@^1.0.0-rc.9:
+cheerio@1.0.0-rc.12, cheerio@^1.0.0-rc.10:
   version "1.0.0-rc.12"
   resolved "https://registry.npmjs.org/cheerio/-/cheerio-1.0.0-rc.12.tgz"
   integrity sha512-VqR8m68vM46BNnuZ5NtnGBKIE/DfN0cRIzg9n40EIq9NOv90ayxLBXA8fXC5gquFRGJSTRqBq25Jt2ECLR431Q==
@@ -7038,7 +6981,7 @@ clsx@2.1.1, clsx@^2.0.0, clsx@^2.1.1:
   resolved "https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz"
   integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
 
-clsx@^1.1.1, clsx@^1.2.1:
+clsx@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/clsx/-/clsx-1.2.1.tgz"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
@@ -9422,11 +9365,6 @@ hpack.js@^2.1.6:
     readable-stream "^2.0.1"
     wbuf "^1.1.0"
 
-htm@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.npmjs.org/htm/-/htm-3.1.1.tgz"
-  integrity sha512-983Vyg8NwUE7JkZ6NmOqpCZ+sh1bKv2iYTlUkzlWmA5JD2acKoxd4KVxbMmxX/85mtfdnDmTFoNKcg5DGAvxNQ==
-
 html-entities@^2.3.2:
   version "2.5.2"
   resolved "https://registry.npmjs.org/html-entities/-/html-entities-2.5.2.tgz"
@@ -10342,11 +10280,6 @@ lucide-react@^0.503.0:
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.503.0.tgz#4ac55b262fa613f9497531c9df50ea0e883d2de2"
   integrity sha512-HGGkdlPWQ0vTF8jJ5TdIqhQXZi6uh3LnNgfZ8MHiuxFfX3RZeA79r2MW2tHAZKlAVfoNE8esm3p+O6VkIvpj6w==
 
-lunr-languages@^1.4.0:
-  version "1.14.0"
-  resolved "https://registry.npmjs.org/lunr-languages/-/lunr-languages-1.14.0.tgz"
-  integrity sha512-hWUAb2KqM3L7J5bcrngszzISY4BxrXn/Xhbb9TTCJYEGqlR1nG67/M14sp09+PTIRklobrn57IAxcdcO/ZFyNA==
-
 lunr@^2.3.9:
   version "2.3.9"
   resolved "https://registry.npmjs.org/lunr/-/lunr-2.3.9.tgz"
@@ -10365,11 +10298,6 @@ magic-string@^0.30.17:
   integrity sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.0"
-
-mark.js@^8.11.1:
-  version "8.11.1"
-  resolved "https://registry.npmjs.org/mark.js/-/mark.js-8.11.1.tgz"
-  integrity sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==
 
 markdown-extensions@^2.0.0:
   version "2.0.0"
@@ -12682,11 +12610,6 @@ posthog-js@^1.219.6:
     fflate "^0.4.8"
     preact "^10.19.3"
     web-vitals "^4.2.0"
-
-preact@^10.13.2:
-  version "10.21.0"
-  resolved "https://registry.npmjs.org/preact/-/preact-10.21.0.tgz"
-  integrity sha512-aQAIxtzWEwH8ou+OovWVSVNlFImL7xUCwJX3YMqA3U8iKCNC34999fFOnWjYNsylgfPgMexpbk7WYOLtKr/mxg==
 
 preact@^10.19.3:
   version "10.26.2"
