@@ -1,6 +1,6 @@
-### Hardware Requirements for Arbitrum Chains
+### Hardware requirements for Arbitrum chains
 
-Arbitrum chains, including Arbitrum One, Nova, and customizable Orbit L2/L3 chains, have varying hardware needs depending on the node type. Requirements are generally modest compared to Ethereum L1 nodes, focusing on accessibility for decentralized participation. The specs are for nodes handling limited RPC requests; scale up for high traffic. Full nodes form the base, with validators and sequencers building on them. Archive nodes require more storage for historical data.
+Arbitrum chains, including Arbitrum One, Nova, and customizable Orbit L2/L3 chains, have varying hardware needs depending on the node type. Requirements are generally modest compared to Ethereum L1 nodes, with a focus on accessibility for decentralized participation. The specs are for nodes handling limited RPC requests; scale up for high traffic. Full nodes form the base, with validators and sequencers building on them. Archive nodes require more storage for historical data.
 
 Key considerations:
 
@@ -8,10 +8,10 @@ Key considerations:
 - **Bandwidth**: At least 100 Mbps for syncing and RPC; higher for sequencers to minimize latency.
 - **Storage**: NVMe SSD preferred for speed; data grows over time (e.g., Arbitrum One chain data ~1TB+).
 - **Scaling**: Increase CPU/RAM for multiple RPC requests or during disputes (e.g., BoLD challenges). Use cloud providers like AWS t3.xlarge for baseline.
-- **Orbit-Specific**: Custom chains (e.g., AnyTrust mode) may have lower needs due to off-chain DA, but test with Orbit SDK.
-- **General Tip**: Start with minimums and monitor; overprovision for reliability. No internet access needed post-sync, but initial sync requires stable connection.
+- **Orbit-Specific**: Storage requirements are similar. If running AnyTrust, you will need to run your own DAS or use a third-party DA service provider.
+- **General Tip**: Start with minimums and monitor; overprovision for reliability. No internet access needed post-sync, but initial sync requires a stable connection.
 
-#### Full Node (Base for Most Setups)
+#### Full node (base for most setups)
 
 Runs the chain state, serves RPCs, and syncs data. Non-archive by default.
 
@@ -22,7 +22,7 @@ Runs the chain state, serves RPCs, and syncs data. Non-archive by default.
 | **Storage**   | 1 TB NVMe SSD                  | 2 TB+                                    | Depends on chain traffic; Arbitrum One ~1TB, grows ~100GB/month.    |
 | **Bandwidth** | 100 Mbps                       | 1 Gbps                                   | For initial sync (days to weeks).                                   |
 
-#### Validator Node
+#### Validator node
 
 Monitors assertions and challenges fraud. Runs on top of a full node with staker software enabled. BoLD upgrade makes it more efficient, assuming one honest party.
 
@@ -30,11 +30,11 @@ Monitors assertions and challenges fraud. Runs on top of a full node with staker
 | ------------- | --------------------------- | -------------------- | ----------------------------------------------------------------------------- |
 | **CPU**       | 4 cores                     | 8 cores              | Needs fast computation for disputes; BoLD reduces multi-challenge load.       |
 | **RAM**       | 8 GB                        | 16-32 GB             | Similar to full node; more if running defensive mode.                         |
-| **Storage**   | 400 GB SSD                  | 1 TB+                | Includes chain data; archive mode adds history.                               |
+| **Storage**   | 1 TB NVMe SSD               | 2 TB+                | Includes chain data                                                           |
 | **Bandwidth** | 100 Mbps                    | 500 Mbps+            | For monitoring and bonding (e.g., 3,600 `ETH` equivalent stake).              |
 | **Other**     | Bonding funds; WASM support | VPS/cloud for uptime | Permissioned for low-TVL chains; permissionless needs higher bonds/resources. |
 
-#### Sequencer Node
+#### Sequencer node
 
 Orders transactions, posts batches. Centralized in main chains (run by Offchain Labs), but customizable in Orbit (e.g., via RaaS like Gelato/Caldera). Focus on low latency; hardware similar to full node but optimized for throughput.
 
@@ -46,7 +46,7 @@ Orders transactions, posts batches. Centralized in main chains (run by Offchain 
 | **Bandwidth** | 1 Gbps             | 10 Gbps+               | Low-latency network; private mempool integration.                   |
 | **Other**     | Docker/Nitro stack | Dedicated server/cloud | In Orbit AnyTrust, lower due to DAC; self-host or RaaS for control. |
 
-#### Archive Node
+#### Archive node
 
 Optional for full history querying; builds on full node.
 
@@ -59,9 +59,9 @@ Optional for full history querying; builds on full node.
 **Decisions to Make**:
 
 - **Node Type**: Full for basic, validator for security contribution, sequencer for Orbit sovereignty.
-- **Chain Mode**: Rollup needs more storage/CPU for DA; AnyTrust lowers via DAC.
+- **Chain Mode**: Storage requirements are similar for Rollup or AnyTrust.
 - **Hosting**: Self-host (control, cost) vs. RaaS/cloud (ease, fees). Start local, scale to VPS.
-- **BoLD Enablement**: For validators, reduces hardware during disputes but requires upgrade.
+- **BoLD Enablement**: For validators, reduces hardware during disputes but requires an upgrade.
 - **Monitoring**: Use tools like Prometheus; budget for growth (e.g., +20% resources yearly).
 - **When to Upgrade**: If CPU >80% or sync lags, add resources. Test on Sepolia.
 

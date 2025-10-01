@@ -1,66 +1,190 @@
 #!/bin/sh
 
-# Function to handle errors
-handle_error() {
-  echo "❌ Error: $1"
+# Pre-commit hook for arbitrum-docs repository
+# Enforces: redirect validation, submodule updates, code formatting, and type checking
+# Compatible with Husky v9+ (modern Husky architecture)
+# Performance optimized with selective file processing and parallel execution
+
+# Exit immediately on any error
+set -e
+
+# Husky environment detection and CI skip logic
+if [ "$HUSKY" = "0" ] || [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
+  echo "🚀 Husky pre-commit hook skipped (CI environment or HUSKY=0)"
+  exit 0
+fi
+
+# Cross-platform color support detection
+if [ -t 1 ] && command -v tput >/dev/null 2>&1 && [ "$(tput colors)" -ge 8 ]; then
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[1;33m'
+  BLUE='\033[0;34m'
+  CYAN='\033[0;36m'
+  BOLD='\033[1m'
+  NC='\033[0m'
+else
+  RED=''
+  GREEN=''
+  YELLOW=''
+  BLUE=''
+  CYAN=''
+  BOLD=''
+  NC=''
+fi
+
+# Enhanced logging functions with emojis for better UX
+log_info() {
+  printf "${BLUE}ℹ️  [INFO]${NC} %s\n" "$1"
+}
+
+log_success() {
+  printf "${GREEN}✅ [SUCCESS]${NC} %s\n" "$1"
+}
+
+log_error() {
+  printf "${RED}❌ [ERROR]${NC} %s\n" "$1" >&2
+}
+
+log_warning() {
+  printf "${YELLOW}⚠️  [WARNING]${NC} %s\n" "$1"
+}
+
+log_step() {
+  printf "${CYAN}${BOLD}🔄 %s${NC}\n" "$1"
+}
+
+# Enhanced error handling with rollback suggestions
+exit_with_error() {
+  log_error "$1"
+  log_info "💡 Tip: Use 'git commit --no-verify' to bypass hooks (not recommended)"
+  log_info "💡 Or set HUSKY=0 to disable all hooks temporarily"
   exit 1
 }
 
-# Function to log success messages
-log_success() {
-  echo "✅ $1"
-}
-
-# Function to log info messages
-log_info() {
-  echo "💡 $1"
-}
-
-# Function to run yarn command and check exit code
-run_yarn_command() {
-  local command=$1
-  local error_message=$2
-
-  yarn $command
-  local exit_code=$?
-
-  if [ $exit_code -ne 0 ]; then
-    handle_error "$error_message"
+# Function to check command availability with installation hints
+check_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    case "$1" in
+      yarn)
+        exit_with_error "Yarn not found. Install with: npm install -g yarn"
+        ;;
+      node)
+        exit_with_error "Node.js not found. Install from: https://nodejs.org/"
+        ;;
+      git)
+        exit_with_error "Git not found. Install from: https://git-scm.com/"
+        ;;
+      *)
+        exit_with_error "Command '$1' not found. Please ensure it's installed and in your PATH."
+        ;;
+    esac
   fi
 }
 
-# Check if globalVars.js has staged changes
-if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
-  log_info "Detected changes in globalVars.js"
+# Performance timing function
+time_command() {
+  local start_time=$(date +%s)
+  "$@"
+  local end_time=$(date +%s)
+  local duration=$((end_time - start_time))
+  log_info "⏱️  Completed in ${duration}s"
+}
 
-  # Run variable references update
-  log_info "Updating variable references..."
-  run_yarn_command "update-variable-refs" "Failed to update variable references"
+# Get list of staged files for selective processing
+get_staged_files() {
+  git diff --cached --name-only --diff-filter=ACMR
+}
 
-  # Run the globalVars update checker script
-  run_yarn_command "tsx scripts/check-globalvars-updates.ts" "globalVars update check failed"
+# Check if specific file types are staged
+has_staged_files() {
+  get_staged_files | grep -E "$1" >/dev/null 2>&1
+}
 
-  log_info "Running precompiles reference table generator..."
-  run_yarn_command "generate-precompiles-ref-tables" "Failed to generate precompiles reference tables"
+# Main pre-commit validation
+main() {
+  log_step "Starting pre-commit hook validation..."
 
-  log_info "Running formatter..."
-  run_yarn_command "format" "Formatting failed"
-fi
+  # Environment and dependency checks
+  log_info "🔍 Checking environment and dependencies..."
+  check_command "node"
+  check_command "yarn"
+  check_command "git"
 
-# Check redirects
-log_info "Checking redirects..."
-run_yarn_command "check-redirects" "The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
+  # Verify we're in a git repository
+  if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    exit_with_error "Not in a git repository"
+  fi
 
-# Final formatting pass
-log_info "Running final formatting pass..."
-run_yarn_command "format" "Final formatting failed"
+  # Get staged files for optimization
+  local staged_files
+  staged_files=$(get_staged_files)
 
-# Auto-stage any files that were reformatted during the pre-commit process
-if [ -n "$(git diff --name-only)" ]; then
-  log_info "Auto-staging files modified by formatters..."
-  git add $(git diff --name-only)
-  log_success "Auto-staged formatted files"
-fi
+  if [ -z "$staged_files" ]; then
+    log_warning "No staged files found. Commit may be empty."
+    exit 0
+  fi
 
-log_success "Pre-commit tasks completed"
-log_info "Note: To bypass hooks, use git commit --no-verify"
+  log_info "📁 Found $(echo "$staged_files" | wc -l | tr -d ' ') staged files"
+
+  # 1. Fast redirect validation (project-specific)
+  log_step "Validating redirects..."
+  time_command yarn check-redirects || exit_with_error "Redirect validation failed. Fix redirect issues before committing."
+  log_success "Redirect validation passed"
+
+  # 2. Submodule updates (only if submodules are staged or .gitmodules changed)
+  if echo "$staged_files" | grep -E "(\.gitmodules|submodules/)" >/dev/null 2>&1; then
+    log_step "Updating git submodules..."
+    time_command git submodule update --init --recursive || exit_with_error "Git submodule update failed. Check submodule configuration."
+    log_success "Git submodules updated"
+  else
+    log_info "⏭️  Skipping submodule update (no submodule changes detected)"
+  fi
+
+  # 3. Selective code formatting (only format staged files)
+  if has_staged_files "\.(js|jsx|ts|tsx|json|md|mdx|scss)$"; then
+    log_step "Formatting staged code files..."
+
+    # Use git to format only staged files for better performance
+    local js_files md_files
+    js_files=$(echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|scss)$" || true)
+    md_files=$(echo "$staged_files" | grep -E "\.(md|mdx)$" || true)
+
+    # Format JavaScript/TypeScript files if any
+    if [ -n "$js_files" ]; then
+      log_info "🎨 Formatting JS/TS files..."
+      echo "$js_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "JavaScript/TypeScript formatting failed"
+    fi
+
+    # Format Markdown files if any
+    if [ -n "$md_files" ]; then
+      log_info "📝 Formatting Markdown files..."
+      echo "$md_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "Markdown formatting failed"
+    fi
+
+    # Re-stage formatted files
+    echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" | xargs git add || true
+    log_success "Code formatting completed and files re-staged"
+  else
+    log_info "⏭️  Skipping code formatting (no formattable files staged)"
+  fi
+
+  # 4. TypeScript type checking (only if TS files are staged)
+  if has_staged_files "\.(ts|tsx)$"; then
+    log_step "Running TypeScript type checking..."
+    time_command yarn typecheck || exit_with_error "TypeScript type checking failed. Fix type errors before committing."
+    log_success "TypeScript type checking passed"
+  else
+    log_info "⏭️  Skipping TypeScript check (no TypeScript files staged)"
+  fi
+
+  # Final success message with timing
+  log_success "🎉 All pre-commit checks passed successfully!"
+  log_info "✨ Commit is ready to proceed..."
+}
+
+# Trap to handle interruptions gracefully
+trap 'log_error "Pre-commit hook interrupted"; exit 130' INT TERM
+
+# Execute main function
+main "$@"

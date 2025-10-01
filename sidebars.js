@@ -282,16 +282,6 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
-                  label: 'BoLD configuration parameters',
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
-                  label: 'Deploy and configure Timeboost',
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
                   label: `Configure a custom AnyTrust gas token`,
                 },
@@ -319,6 +309,26 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality',
                   label: `Configure delayed inbox finality`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control',
+                  label: 'Configure Batch Poster and Assertion Control',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools',
+                  label: `Gas optimization tools`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains',
+                  label: 'BoLD for Arbitrum chains',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains',
+                  label: 'Timeboost for Arbitrum chains',
                 },
                 {
                   type: 'category',
@@ -497,11 +507,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold',
-              label: 'Upgrade to BoLD',
-            },
-            {
-              type: 'doc',
               id: 'launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations',
               label: 'Monitoring tools and considerations',
             },
@@ -603,17 +608,6 @@ const sidebars = {
           id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
         },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
-          label: 'BoLD for Arbitrum chains',
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/timeboost-for-arbitrum-chains',
-          label: 'Timeboost for Arbitrum chains',
-        },
-
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
@@ -987,6 +981,11 @@ const sidebars = {
           type: 'doc',
           id: 'arbitrum-bridge/usdc-arbitrum-one',
           label: 'USDC on Arbitrum One',
+        },
+        {
+          type: 'doc',
+          id: 'arbitrum-bridge/embedded-bridge-widget',
+          label: 'Embedded bridge widget',
         },
         {
           type: 'doc',

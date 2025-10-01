@@ -21,10 +21,6 @@ docs/partials/_glossary-partial.mdx
 docs/stylus-by-example/
 docs/api/
 
-
-#documentation-graph
-documentation-graph/dist/
-
 # Misc
 .DS_Store
 .env
