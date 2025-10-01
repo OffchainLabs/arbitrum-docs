@@ -23,6 +23,7 @@ docs/api/
 
 # documentation-graph/dist/
 documentation-graph/dist/
+documentation-graph/documentation/
 
 # Misc
 .DS_Store
