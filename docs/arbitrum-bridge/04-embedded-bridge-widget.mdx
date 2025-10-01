@@ -1,0 +1,76 @@
+---
+title: 'Arbitrum embedded bridge widget'
+description: Learn how to integrate and configure the Arbitrum bridge widget in your dApp
+author: dzgoldman
+user_story: As a developer, I want to integrate the Arbitrum bridge widget into my application.
+content_type: how-to
+---
+
+The embedded <a data-quicklook-from="bridge">bridge</a> is available to all builders in the <a data-quicklook-from="arbitrum">Arbitrum</a> ecosystem, whether you're building a dApp on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>. Integrating the embedded bridge provides a universal, Arbitrum-native experience for onboarding your users' assets from other chains. Note that the embedded bridge doesn't currently support mobile experiences.
+
+You can embed the widget onto your webpage using a simple iframe and configure colors and window sizing by modifying the iframe code. Transactions are routed through [Li.fi's API](http://Li.fi), which then requests quotes from various third-party bridging providers, such as Layer Zero, Across, or Relay. The fastest and cheapest paths are highlighted to users based on the quotes. Users can pick their preferred bridging option.
+
+## Functionalities
+
+### Core functionalities
+
+- Deposits from Base, Ethereum Mainnet, and other <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a>
+- Withdrawals to Arbitrum One or other Arbitrum chains
+- Configuration of supported chains for both deposits and withdrawals
+- Batch transactions
+- Long-tail assets on supported bridges and DEXes if liquidity is available
+- Fiat on-ramps via Moonpay
+
+### Visual features
+
+- Normal mode, widget mode
+- Layout options
+- Visual customization
+
+### Arbitrum bridge playground
+
+You can experiment with Arbitrum bridge configurations in real-time using the bridge playground. This interactive tool allows you to:
+
+- **Test different modes**: Switch between normal and widget modes to see how they differ
+- **Configure feature flags**: Toggle network selection and batch transfers to understand their impact
+- **Explore layout options**: Try vertical and horizontal layouts for the widget interface
+- **Generate embed code**: Get ready-to-use iframe code for your integration
+- **See live preview**: Watch changes reflect immediately in the embedded bridge interface
+
+:::info
+
+If you'd like access to the playground's early release, please contact us at [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com).
+
+:::
+
+## Integration details
+
+The widget uses an `iframe` under the hood, enabling easy integration for any frontend. Visit the bridge playground to generate `iframe` code with your configured features.
+
+## Support
+
+Before integrating, review the current chain offerings to ensure that your desired routes are shown. The embedded bridge uses [Li.fi's](https://docs.li.fi/api-reference/fetch-all-known-tokens) token lists to populate supported routes and quotes. If you plan to use the on-ramp functionalities, notify [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com) to facilitate seamless support.
+
+Contact [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com) to discuss specific chain and token support.
+
+For transaction support, users should [create a support ticket ](https://support.arbitrum.io/hc/en-gb/requests/new) with the Arbitrum Foundation and select the "Widget" option in the dropdown.
+
+### Chain and bridge support
+
+The embedded bridge currently supports Arbitrum One, Base, Ethereum Mainnet, Ape Chain, and Superposition.
+
+## Frequently asked questions
+
+#### 1. If I'm a dApp on Arbitrum One (or an Arbitrum chain), what do I need to do to adopt?
+
+You can adopt the bridge functionality permissionlessly if your chain is already supported. If your chain is already supported, visit the playground and accept the developer terms of service to generate code for the embedded bridge.
+
+To receive a link to the playground, contact [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com). If you are interested in on-ramp support, please mention this in your email.
+
+#### 2. If I'm an Orbit chain and I want support, how do I adopt?
+
+You'll need an integration with Li.fi and a minimum number of bridges to enable a good experience. Contact [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com) to discuss adding support for your chain.
+
+#### 3. Are there any fees associated with the embedded bridge?
+
+The embedded bridge routes orders through Li.fi's route aggregator, which charges a 16-basis-point fee on all transactions.
