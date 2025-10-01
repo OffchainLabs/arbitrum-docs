@@ -1,17 +1,28 @@
 ---
 title: 'Inside Arbitrum Nitro'
-description: 'Learn the fundamentals of the Arbitrum Nitro stack.'
+description: 'Learn the fundamentals of the Arbitrum Nitro stack and its advanced features.'
 author: pete-vielhaber
 sme: edfelten
-user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's design and capabilities.
 content_type: get-started
 ---
 
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
 
-This document provides a comprehensive explanation of Arbitrum Nitro's design and the rationale behind it. This document isn't API documentation, nor is it a guided tour of the code—look elsewhere for those. "Inside Arbitrum Nitro" is for individuals who want to gain a deeper understanding of Nitro's design.
+Arbitrum is a scaling technology suite designed to enhance Ethereum by offering **cheaper, faster transactions** without sacrificing security. The core product, **Arbitrum Rollup**, is an **Optimistic Rollup protocol** that processes transactions off-chain and posts succinct proofs to Ethereum for verification. This approach allows users to interact with Web3 apps and deploy smart contracts just like on Ethereum but with significantly reduced fees and higher throughput.
+
+This document provides a **comprehensive, end-to-end walkthrough** of how Arbitrum works. It combines a **high-level overview** with a **step-by-step technical explanation**, following a transaction from the moment it's submitted all the way through **execution, proving, and bridging**. Each section corresponds to a core protocol component and collectively paints a full picture of how Arbitrum achieves **scalability with Ethereum-grade trustlessness**.
 
 The body of this document will describe Arbitrum Rollup, the primary use case of the Nitro technology, used on the Arbitrum One chain. There is a variant use case, called AnyTrust, deployed on the Arbitrum Nova chain. AnyTrust is a configuration that introduces mild trust assumptions and utilizes alternative data availability (Alt-DA), as discussed in a section at the end of this document.
+
+## What's New in Arbitrum
+
+Arbitrum has evolved significantly with several major innovations:
+
+- **BoLD (Bounded Liquidity Delay)**: A new permissionless validation protocol that enables anyone to validate Arbitrum chains without permission, bringing Arbitrum closer to Stage 2 rollup status
+- **Timeboost**: A novel transaction ordering policy that allows chain owners to capture MEV while protecting users from harmful MEV like sandwich attacks
+- **Stylus**: WebAssembly-based smart contracts that enable high-performance contracts in Rust, C, and C++ alongside traditional EVM contracts
+- **Enhanced Sequencer**: Improved batch posting with blob support and dynamic compression for better efficiency
 
 ## Why use Arbitrum? Why use Nitro?
 
@@ -229,9 +240,29 @@ You might wonder why we need the Rollup protocol. If everyone already knows the 
 
 With those preliminaries behind us, let's jump into the details of the Rollup protocol.
 
-Some parties that participate in the protocol are **validators**. Some validators will choose to be bonders; they will place an `ETH` deposit, which they can recover if they're not cheating. In the common case, the expectation is that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see [State of Progressive Decentralization](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any onchain actions, can be run permissionlessly (see [Validators](#validators) below).
+### BoLD: Permissionless Validation
+
+Arbitrum has evolved from a permissioned validation system to **BoLD (Bounded Liquidity Delay)**, a new permissionless validation protocol. This represents a major advancement in Arbitrum's decentralization journey.
+Some parties that participate in the protocol are **validators**. Some validators will choose to be bonders; they will place an `ETH` deposit, which they can recover if they're not
+cheating. In the common case, the expectation is that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's
+no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see
+[State of Progressive Decentralization](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any onchain
+actions, can be run permissionlessly (see [Validators](#validators) below).
+
+**Key improvements with BoLD:**
+
+- **Permissionless validation**: Anyone can validate Arbitrum chains without needing permission
+- **Time-bounded disputes**: Disputes are guaranteed to resolve within a fixed timeframe (6.4 days)
+- **Enhanced security**: Stronger guarantees for withdrawals and cross-chain messaging
+- **Stage 2 rollup status**: Moves Arbitrum closer to being recognized as a fully decentralized rollup
 
 The key security property of the Rollup protocol is that any one honest validator can ensure the correct execution of the chain is confirmed. This security means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire), can ensure that your transactions are processed correctly. And that is true no matter how many malicious people are trying to stop you.
+
+:::info More information
+
+For detailed information about BoLD, see the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) and [BoLD technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx).
+
+:::
 
 ## The Rollup chain
 
@@ -427,9 +458,26 @@ In Arbitrum, much of the work that would otherwise have to be done expensively a
 
 Supporting these functions in Layer 2 trusted software, rather than building them into the L1-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at Layer 2, instead of having to manage those resources as part of a Layer 1 contract. In addition, ArbOS also offers significant advantages in flexibility, as Layer 2 code is easier to evolve or customize for a particular chain than a Layer 1-enforced architecture would be.
 
+### Stylus Integration
+
+ArbOS now supports **Stylus**, which enables WebAssembly-based smart contracts alongside traditional EVM contracts. This integration allows developers to write high-performance contracts in Rust, C, and C++ while maintaining full interoperability with existing Solidity contracts.
+
+**Key Stylus features:**
+
+- **WASM Runtime**: Executes WebAssembly contracts with enhanced performance
+- **Host I/O Operations**: Efficient blockchain state access through specialized operations
+- **Gas Pricing**: Multi-dimensional pricing model accounting for computation, memory, and I/O
+- **Caching System**: Advanced caching for frequently accessed contracts
+
 <!-- Below is content from ArbOS merged into Ed's original paper -->
 
 ArbOS also provides child chain-specific precompiles with methods that smart contracts can call the same way they can Solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a full reference of the precompiles available for Arbitrum chains.
+
+:::info More information
+
+For detailed information about ArbOS and Stylus, see the [ArbOS deep dive](/how-arbitrum-works/deep-dives/arbos.mdx).
+
+:::
 
 ## Full nodes
 
@@ -444,6 +492,21 @@ The Sequencer is a specially designated full node, which has limited power to co
 Clients interact with the Sequencer in the same way they would with any full node, for example, by providing their wallet software with a network URL that happens to point to the Sequencer.
 
 Currently, on the Arbitrum One and Arbitrum Nova chains, the Sequencer is run by Offchain Labs.
+
+### Enhanced Sequencer Features
+
+The modern Arbitrum Sequencer includes several advanced features:
+
+- **Blob Support**: Uses EIP-4844 blobs for more efficient batch posting when available
+- **Dynamic Compression**: Adjusts compression levels based on network conditions and backlog
+- **Timeboost Integration**: Supports advanced transaction ordering policies for MEV capture
+- **Improved Batching**: More efficient transaction batching and posting mechanisms
+
+:::info More information
+
+For detailed information about the Sequencer, see the [Sequencer deep dive](/how-arbitrum-works/deep-dives/sequencer.mdx).
+
+:::
 
 ### Instant confirmation
 
@@ -583,6 +646,25 @@ The dynamic algorithm determines the price per estimated byte by comparing the t
 
 The total fee charged for a transaction is the L2 base fee multiplied by the sum of the L2 gas used and the L1 calldata charge. As on Ethereum, a transaction will fail if it fails to supply enough gas, or if it specifies a base fee limit that is below the current base fee. Ethereum also allows a "tip," but Nitro ignores this field and never collects any tips.
 
+## Advanced Features
+
+### Timeboost: MEV and Transaction Ordering
+
+**Timeboost** is a novel transaction ordering policy that allows chain owners to capture MEV while protecting users from harmful MEV like sandwich attacks. It introduces an "express lane" for transactions and an auction system to determine who controls this lane.
+
+**Key benefits:**
+
+- **MEV Capture**: Chain owners can capture a portion of available MEV
+- **User Protection**: Maintains protection against harmful MEV like front-running
+- **Reduced Spam**: May reduce MEV-driven spam on the network
+- **Customizable**: Chain owners can configure Timeboost parameters
+
+:::info More information
+
+For detailed information about Timeboost, see the [Timeboost gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+
+:::
+
 ## Inside AnyTrust
 
 AnyTrust is a variant of Arbitrum Nitro technology that lowers costs by accepting a mild trust assumption.
@@ -654,3 +736,15 @@ If the Sequencer fails to collect enough signatures within a few minutes, it wil
 For more information about AnyTrust, refer to the [AnyTrust deep dive](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx).
 
 :::
+
+## Additional Resources
+
+This document provides a comprehensive overview of Arbitrum Nitro. For more detailed information on specific topics, explore these deep dives:
+
+- **[Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx)**: How transactions are submitted and processed
+- **[L1 to L2 Messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)**: Cross-chain communication from parent to child chains
+- **[L2 to L1 Messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)**: Cross-chain communication from child to parent chains
+- **[Gas and Fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx)**: Understanding Arbitrum's fee structure
+- **[Geth at the Core](/how-arbitrum-works/deep-dives/geth.mdx)**: How Arbitrum modifies Geth for L2 execution
+- **[STF Inputs](/how-arbitrum-works/deep-dives/stf-inputs.mdx)**: Understanding State Transition Function inputs
+- **[Assertions](/how-arbitrum-works/deep-dives/assertions.mdx)**: How assertions work in the rollup protocol
