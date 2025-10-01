@@ -4,10 +4,39 @@
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
-const sdkSidebarGenerator = require('./scripts/sdk-sidebar-generator');
 const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+
+// Shared Inkeep configuration
+const inkeepBaseSettings = {
+  apiKey: process.env.INKEEP_API_KEY,
+  primaryBrandColor: '#213147',
+  organizationDisplayName: 'Arbitrum',
+  theme: {
+    syntaxHighlighter: {
+      lightTheme: require('prism-react-renderer/themes/github'),
+      darkTheme: require('prism-react-renderer/themes/palenight'),
+    },
+  },
+};
+
+const inkeepModalSettings = {
+  placeholder: 'Search documentation...',
+  defaultQuery: '',
+  maxResults: 40,
+  debounceTimeMs: 300,
+  shouldOpenLinksInNewTab: true,
+};
+
+const inkeepExampleQuestions = [
+  'How to estimate gas in Arbitrum?',
+  'What is the difference between Arbitrum One and Nova?',
+  'How to deploy a smart contract on Arbitrum?',
+  'What are Arbitrum Orbit chains?',
+  'How does Arbitrum handle L1 to L2 messaging?',
+  'What is Arbitrum Stylus?',
+];
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -21,6 +50,22 @@ const config = {
   markdown: {
     mermaid: true,
     preprocessor: markdownPreprocessor,
+    parseFrontMatter: async (params) => {
+      // Use the default parser
+      const result = await params.defaultParseFrontMatter(params);
+
+      // Check if this is a partial file (starts with underscore)
+      const fileName = params.filePath.split('/').pop();
+      const isPartialFile = fileName && fileName.startsWith('_');
+
+      // For partial files, clear frontmatter to prevent Docusaurus warnings
+      // The documentation-graph tool reads raw files directly, so this doesn't affect analysis
+      if (isPartialFile) {
+        result.frontMatter = {};
+      }
+
+      return result;
+    },
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -42,10 +87,6 @@ const config = {
       integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
-    {
-      href: '/css/inkeep-custom.css',
-      type: 'text/css',
-    },
   ],
   presets: [
     [
@@ -53,7 +94,6 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          // path: './docs',
           exclude: ['**/api/**'],
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
@@ -132,85 +172,22 @@ const config = {
       '@inkeep/cxkit-docusaurus',
       {
         SearchBar: {
-          baseSettings: {
-            apiKey: process.env.INKEEP_API_KEY,
-            primaryBrandColor: '#213147', // Arbitrum's primary brand color
-            organizationDisplayName: 'Arbitrum',
-            theme: {
-              syntaxHighlighter: {
-                lightTheme: require('prism-react-renderer/themes/github'),
-                darkTheme: require('prism-react-renderer/themes/palenight'),
-              },
-              components: {
-                SearchBarTrigger: {
-                  // Configure responsive sizing behavior
-                  defaultSize: 'medium',
-                  minWidth: '180px',
-                  maxWidth: '320px',
-                },
-              },
-            },
-          },
-          modalSettings: {
-            placeholder: 'Search documentation...',
-            defaultQuery: '',
-            maxResults: 40,
-            debounceTimeMs: 300,
-            shouldOpenLinksInNewTab: true,
-          },
-          searchSettings: {
-            // optional settings
-          },
+          baseSettings: inkeepBaseSettings,
+          modalSettings: inkeepModalSettings,
           aiChatSettings: {
-            aiAssistantAvatar: '/img/logo.svg', // Using Arbitrum logo as AI assistant avatar
-            exampleQuestions: [
-              'How to estimate gas in Arbitrum?',
-              'What is the difference between Arbitrum One and Nova?',
-              'How to deploy a smart contract on Arbitrum?',
-              'What are Arbitrum Orbit chains?',
-              'How does Arbitrum handle L1 to L2 messaging?',
-              'What is Arbitrum Stylus?',
-            ],
+            aiAssistantAvatar: '/img/logo.svg',
+            exampleQuestions: inkeepExampleQuestions,
             botName: 'Arbitrum Assistant',
             getStartedMessage:
               "Hi! I'm here to help you navigate Arbitrum documentation. Ask me anything about building on Arbitrum, deploying contracts, or understanding our technology.",
           },
         },
         ChatButton: {
-          baseSettings: {
-            // see https://docusaurus.io/docs/deployment#using-environment-variables to use docusaurus environment variables
-            apiKey: process.env.INKEEP_API_KEY,
-            primaryBrandColor: '#213147', // Arbitrum's primary brand color
-            organizationDisplayName: 'Arbitrum',
-            // ...optional settings
-            theme: {
-              syntaxHighlighter: {
-                lightTheme: require('prism-react-renderer/themes/github'),
-                darkTheme: require('prism-react-renderer/themes/palenight'),
-              },
-            },
-          },
-          modalSettings: {
-            placeholder: 'Search documentation...',
-            defaultQuery: '',
-            maxResults: 40,
-            debounceTimeMs: 300,
-            shouldOpenLinksInNewTab: true,
-          },
-          searchSettings: {
-            // optional settings
-          },
+          baseSettings: inkeepBaseSettings,
+          modalSettings: inkeepModalSettings,
           aiChatSettings: {
-            // optional settings
-            aiAssistantAvatar: '/img/logo.svg', // optional -- use your own AI assistant avatar
-            exampleQuestions: [
-              'How to estimate gas in Arbitrum?',
-              'What is the difference between Arbitrum One and Nova?',
-              'How to deploy a smart contract on Arbitrum?',
-              'What are Arbitrum Orbit chains?',
-              'How does Arbitrum handle L1 to L2 messaging?',
-              'What is Arbitrum Stylus?',
-            ],
+            aiAssistantAvatar: '/img/logo.svg',
+            exampleQuestions: inkeepExampleQuestions,
           },
         },
       },
@@ -311,7 +288,6 @@ const config = {
       footer: {
         style: 'dark',
         links: [
-          {},
           {
             items: [
               {
@@ -413,6 +389,8 @@ const config = {
       },
       prism: {
         additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
+        theme: require('prism-react-renderer/themes/github'),
+        darkTheme: require('prism-react-renderer/themes/palenight'),
       },
       liveCodeBlock: {
         /**
@@ -436,24 +414,5 @@ const config = {
       },
     }),
 };
-
-// HACK
-// this was originally included above
-// it broke local builds on Windows, not sure why yet. Works fine on Mac
-// `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
-const isRunningLocally = process.env.NODE_ENV === 'development';
-const isRunningOnWindows = process.platform === 'win32';
-if (isRunningLocally && isRunningOnWindows) {
-  config.plugins = config.plugins.filter((plugin) => {
-    if (Array.isArray(plugin) && plugin[0] === '@docusaurus/plugin-content-docs') {
-      return false; // remove the offending plugin config
-    }
-    return true; // keep everything else
-  });
-} else {
-  // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
-  config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
-  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
-}
 
 module.exports = config;
