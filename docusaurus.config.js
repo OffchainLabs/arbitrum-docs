@@ -234,15 +234,15 @@ const config = {
           },
           {
             type: 'dropdown',
-            label: 'Build apps',
+            label: 'Build dApps',
             position: 'right',
             items: [
               {
-                label: 'Quickstart',
+                label: 'Build with Solidity',
                 to: '/build-decentralized-apps/quickstart-solidity-remix',
               },
               {
-                label: 'Stylus',
+                label: 'Build with Stylus',
                 to: '/stylus/gentle-introduction',
               },
             ],
