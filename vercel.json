@@ -226,16 +226,6 @@
       "permanent": false
     },
     {
-      "source": "/(docs/partials/glossary/_fast-exit--liquidity-exit/?)",
-      "destination": "/(docs/partials/glossary/_fast-exit-liquidity-exit/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/partials/glossary/_fast-exit-liquidity-exit/?)",
-      "destination": "/(docs/partials/glossary/_fast-exit--liquidity-exit/?)",
-      "permanent": false
-    },
-    {
       "source": "/(docs/rollup_protocol/?)",
       "destination": "/how-arbitrum-works/optimistic-rollup",
       "permanent": false
