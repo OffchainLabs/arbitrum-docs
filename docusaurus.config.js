@@ -243,7 +243,7 @@ const config = {
               },
               {
                 label: 'Build with Stylus',
-                to: '/stylus/gentle-introduction',
+                to: '/stylus/quickstart',
               },
             ],
           },
