@@ -23,6 +23,9 @@ import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/config-alt-da
 import ConfigDedicatedThroughput from '@site/docs/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx';
 import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/partials/config-native-eth.mdx';
 import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-hardware.mdx';
+import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/config-rollup.mdx';
+import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/config-anytrust.mdx';
+import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx';
 
 // Static content mapping
 const contentMap = {
@@ -31,6 +34,9 @@ const contentMap = {
   'config-dedicated-throughput': ConfigDedicatedThroughput,
   'config-native-eth': ConfigNativeEth,
   'config-hardware': ConfigHardware,
+  'config-rollup': ConfigRollup,
+  'config-anytrust': ConfigAnytrust,
+  'config-fast-withdrawals': ConfigFastwithdrawals,
 };
 
 // MDX components for proper rendering
