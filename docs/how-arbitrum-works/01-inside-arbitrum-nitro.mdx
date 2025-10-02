@@ -9,92 +9,126 @@ content_type: get-started
 
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
 
-Arbitrum is a scaling technology suite designed to enhance Ethereum by offering **cheaper, faster transactions** without sacrificing security. The core product, **Arbitrum Rollup**, is an **Optimistic Rollup protocol** that processes transactions off-chain and posts succinct proofs to Ethereum for verification. This approach allows users to interact with Web3 apps and deploy smart contracts just like on Ethereum but with significantly reduced fees and higher throughput.
+## What is Arbitrum?
 
-This document provides a **comprehensive, end-to-end walkthrough** of how Arbitrum works. It combines a **high-level overview** with a **step-by-step technical explanation**, following a transaction from the moment it's submitted all the way through **execution, proving, and bridging**. Each section corresponds to a core protocol component and collectively paints a full picture of how Arbitrum achieves **scalability with Ethereum-grade trustlessness**.
+Arbitrum is a Layer 2 scaling solution for Ethereum that achieves **10x lower fees** and **100x faster transactions** while maintaining Ethereum-level security guarantees through an optimistic rollup architecture.
 
-The body of this document will describe Arbitrum Rollup, the primary use case of the Nitro technology, used on the Arbitrum One chain. There is a variant use case, called AnyTrust, deployed on the Arbitrum Nova chain. AnyTrust is a configuration that introduces mild trust assumptions and utilizes alternative data availability (Alt-DA), as discussed in a section at the end of this document.
+Arbitrum processes transactions off-chain and posts cryptographic proofs to Ethereum for verification, enabling high-throughput execution while inheriting Ethereum's security model. The system maintains full EVM compatibility, allowing existing Ethereum applications to deploy without modification while benefiting from significantly improved performance characteristics.
 
-## What's New in Arbitrum
+**Technical Overview:** Arbitrum implements an optimistic rollup protocol that executes transactions in a deterministic environment, posts transaction data to Ethereum for data availability, and uses interactive fraud proofs to ensure execution correctness. The result is a system that provides Ethereum-equivalent security with substantially improved scalability.
 
-Arbitrum has evolved significantly with several major innovations:
+## Technical Benefits and Architecture
 
-- **BoLD (Bounded Liquidity Delay)**: A new permissionless validation protocol that enables anyone to validate Arbitrum chains without permission, bringing Arbitrum closer to Stage 2 rollup status
-- **Timeboost**: A novel transaction ordering policy that allows chain owners to capture MEV while protecting users from harmful MEV like sandwich attacks
-- **Stylus**: WebAssembly-based smart contracts that enable high-performance contracts in Rust, C, and C++ alongside traditional EVM contracts
-- **Enhanced Sequencer**: Improved batch posting with blob support and dynamic compression for better efficiency
+Arbitrum provides a comprehensive scaling solution with the following technical advantages:
 
-## Why use Arbitrum? Why use Nitro?
+- **Cost Efficiency**: 10-100x reduction in transaction fees through optimized data posting and compression
+- **Performance**: Sub-second transaction finality with deterministic execution guarantees
+- **Security**: Ethereum-equivalent security through cryptographic proofs and economic incentives
+- **Compatibility**: Full EVM compatibility enabling seamless migration of existing applications
+- **Ecosystem**: Extensive DeFi and dApp ecosystem with established infrastructure
 
-Arbitrum is an L2 scaling solution for Ethereum, offering a unique combination of benefits:
+**Performance Characteristics**: Arbitrum provides significantly lower transaction costs and faster confirmation times compared to Ethereum mainnet.
 
-- **Trustless security**: security rooted in Ethereum, with any one party able to ensure correct Layer 2 results
-- **Compatibility with Ethereum**: able to run unmodified EVM contracts and unmodified Ethereum transactions
-- **Scalability**: moving contracts' computation and storage off of the main Ethereum chain, allowing much higher throughput
-- **Minimum cost**: designed and engineered to minimize the L1 gas footprint of the system, minimizing per-transaction cost
+## Document Structure and Scope
 
-Some other Layer 2 systems offer some of these features, but to our knowledge, no other system provides the same combination of features at the same cost.
+This technical documentation provides a comprehensive analysis of Arbitrum's architecture, implementation, and operational characteristics. The document is structured to progress from high-level architectural concepts to detailed protocol specifications.
 
-Nitro is a major upgrade to Arbitrum, improving over "classic" Arbitrum in several ways:
+**Target Audience**: Developers, researchers, and technical stakeholders seeking to understand Arbitrum's design principles, implementation details, and operational mechanisms.
 
-- **Advanced calldata compression**, which further drives down transaction costs on Arbitrum by reducing the amount of data posted to L1.
-- **Separate contexts for common execution and fault proving**, increasing the performance of L1 nodes, and thus offering lower fees.
-- **Ethereum L1 gas compatibility**, bringing pricing and accounting for EVM operations perfectly in line with Ethereum.
-- **Additional L1 interoperability**, including tighter synchronization with L1 block numbers, and full support for all Ethereum L1 precompiles.
-- **Safe retryables**, eliminating the failure mode where a retryable ticket fails to get created.
-- **Geth tracing**, for even broader debugging support.
-- Any many, many more changes.
+**Scope**: This document covers the complete Arbitrum Nitro stack, including transaction processing, security mechanisms, consensus protocols, and advanced features such as BoLD, Stylus, and Timeboost.
 
-## The big picture
+## Core Architecture Overview
 
-At the most basic level, an Arbitrum chain works like this:
+Arbitrum's fundamental architecture follows a deterministic state transition model:
 
 <ImageWithCaption
   caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten"
   src="/img/haw-eds-napkin-drawing.png"
 />
 
-People and contracts put messages into the inbox. The chain reads the messages one at a time and processes each one. This processing updates the state of the chain and produces some outputs.
+**System Components:**
 
-If you want an Arbitrum chain to process a transaction for you, you need to put that transaction into the chain's inbox. Then, the chain will process your transaction, execute it, and produce some outputs: a transaction receipt and any withdrawals that your transaction initiated.
+1. **Inbox**: Receives and queues incoming transactions
+2. **State Transition Function (STF)**: Processes transactions deterministically
+3. **Outputs**: Produces transaction results and state updates
 
-Execution is deterministic—which means that the contents of its inbox uniquely determine the chain's behavior. Because of this, the result of your transaction is knowable as soon as it gets placed in the inbox. Any Arbitrum node will be able to tell you the result. (And you can run an Arbitrum node yourself if you want.)
+The system operates on a deterministic execution model where transaction inputs uniquely determine outputs. This determinism ensures that all honest nodes will produce identical results when processing the same transaction sequence, enabling consensus without requiring complex coordination protocols.
 
-All of the technical details in this document connect to this diagram (shown above). To get from this diagram to a full description of Arbitrum, we'll need to answer questions like these:
+**Technical Significance**: Deterministic execution is fundamental to Arbitrum's security model, as it enables fraud proofs and dispute resolution mechanisms that rely on verifiable computation.
 
-- Who keeps track of the inbox, chain state, and outputs?
-- How does Arbitrum make sure that the chain state and outputs are correct?
-- How can Ethereum users and contracts interact with Arbitrum?
-- How does Arbitrum support Ethereum-compatible contracts and transactions?
-- How are `ETH` and tokens transferred into and out of Arbitrum chains, and how are they managed while on chain?
-- How can I run my own Arbitrum node or validator?
+## Technical Analysis Framework
 
-## Nitro's design: The four big ideas
+This document addresses the following technical questions:
 
-The essence of Nitro, and its key innovations, lie in four big ideas. We'll list them here with a summary of each, and then we'll unpack them in more detail in later sections.
+- **System Architecture**: Sequencer design, validator roles, and node infrastructure
+- **Security Mechanisms**: Fraud proof systems, dispute resolution protocols, and economic security models
+- **Interoperability**: Cross-chain messaging, bridging protocols, and Ethereum compatibility
+- **Advanced Features**: BoLD validation, Stylus execution environment, and Timeboost ordering policies
 
-- **Sequencing, followed by deterministic execution**: Nitro processes transactions with a two-phase strategy. First, transactions get organized into a single ordered sequence, and Nitro commits to that sequence. Then, the transactions are processed in that sequence by a deterministic State Transition Function (STF).
-- **Geth at the core**: Nitro supports Ethereum's data structures, formats, and virtual machine by compiling in the core code of the popular go-ethereum (Geth) Ethereum node software. Using Geth as a library in this way ensures a very high degree of compatibility with Ethereum.
-- **Separate execution from proving**: Nitro takes the same source and compiles it twice, once to native code for execution in a Nitro node, optimized for speed, and again to WASM for use in proving, optimized for portability and security.
-- **Optimistic Rollup with interactive fraud proofs**: Nitro settles transactions to the Layer 1 Ethereum chain using an Optimistic Rollup protocol, including the interactive fraud proofs pioneered by Arbitrum.
+## Nitro Architecture: Core Design Principles
 
-## Sequencing, followed by deterministic execution
+Arbitrum Nitro implements four fundamental architectural innovations that enable its performance and security characteristics:
 
-This diagram illustrates the process of how transaction processing works in Nitro.
+### 1. **Sequencing and Deterministic Execution**
+
+Arbitrum employs a two-phase transaction processing model: sequencing followed by deterministic execution. This separation enables efficient transaction ordering while maintaining execution determinism, which is essential for fraud proof mechanisms.
+
+### 2. **Geth Integration at the Core**
+
+Nitro integrates the go-ethereum (Geth) codebase as a core component, ensuring complete EVM compatibility and behavioral consistency with Ethereum. This integration enables seamless migration of existing Ethereum applications without modification.
+
+### 3. **Dual Compilation Strategy**
+
+The system compiles source code to two targets: native code for high-performance execution and WebAssembly (WASM) for fraud proof verification. This dual compilation approach optimizes for both execution speed and proof generation efficiency.
+
+#### WAVM (WebAssembly Arbitrum Virtual Machine)
+
+Nitro uses a modified version of WASM called WAVM for fraud proof verification. WAVM differs from standard WASM in several key ways:
+
+**Technical Modifications**:
+
+- **Feature Removal**: Eliminates WASM features not generated by the Go compiler
+- **Restriction Implementation**: Removes floating-point instructions and nested control flow
+- **Fixed-Cost Operations**: Transforms variable-time instructions into fixed-cost constructs
+- **Blockchain Integration**: Adds specialized opcodes for blockchain environment interaction
+
+**ReadPreImage Instruction**: The most significant addition is the ReadPreImage instruction, which enables hash-based data retrieval. This instruction takes a hash H and offset I, returning the data word at offset I of the preimage of H. This enables the "hash oracle trick" where the system stores only Merkle hashes while relying on protocol participants to maintain full data structures.
+
+**Technical Significance**: WAVM enables efficient fraud proof verification while maintaining the security and determinism required for dispute resolution.
+
+### 4. **Optimistic Rollup with Interactive Fraud Proofs**
+
+Arbitrum implements an optimistic execution model with interactive fraud proofs, enabling fast transaction processing while maintaining cryptographic security guarantees through dispute resolution mechanisms.
+
+**Architectural Significance**: These design principles collectively enable Arbitrum to achieve Ethereum-equivalent security with substantially improved performance characteristics.
+
+## Transaction Processing Pipeline
+
+The following section details the complete transaction lifecycle within the Arbitrum system:
 
 <ImageWithCaption caption="Transaction lifecycle" src="/img/haw-transaction-lifecycle.svg" />
 
-Let's follow a user's transaction through this process.
+### Phase 1: Transaction Submission and Sequencing
 
-First, the user creates a transaction, uses their wallet to sign it, and sends it to the Nitro chain's Sequencer. The Sequencer's job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
+Transactions are submitted to the Arbitrum Sequencer, which is responsible for ordering and batching transactions. The Sequencer maintains a real-time feed of transaction ordering and periodically posts compressed batches to Ethereum for data availability.
 
-Once the transactions are sequenced, they go to the State Transition Function (STF) for processing, one by one, in order. The STF takes as input the current state of the chain (account balances, contract code, and so on), along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
+### Phase 2: State Transition Function Execution
 
-Because the protocol doesn't trust the Sequencer not to put garbage into its sequence, the STF will detect and discard any invalid (e.g., improperly formed) transactions in the sequence. A well-behaved Sequencer will filter out invalid transactions, so the STF never sees them—and this reduces cost and therefore keeps transaction fees low—but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the fees are signed by their senders, so the Sequencer can't create forged transactions.)
+The State Transition Function (STF) processes transactions deterministically in the order established by the Sequencer. The STF:
 
-The State Transition Function is deterministic, meaning its behavior depends only on the current state and the contents of the next transaction, and nothing else. Because of this determinism, the result of a transaction `T` will depend only on the genesis state of the chain, the transactions before `T` in the sequence, and `T` itself.
+- Maintains the current chain state (account balances, contract storage, etc.)
+- Executes transactions according to EVM semantics
+- Updates state and produces transaction receipts
+- Emits Layer 2 block headers
 
-Anyone who knows the transaction sequence can compute the STF independently, and all honest parties who do so are guaranteed to obtain identical results. Nitro nodes normally operate as follows: retrieve the transaction sequence and execute the State Transition Function locally. There is no requirement for a consensus mechanism.
+### Phase 3: Validation and Finality
+
+The system validates transaction execution and establishes finality through two mechanisms:
+
+- **Soft Finality**: Immediate confirmation based on Sequencer promises
+- **Hard Finality**: Cryptographic finality achieved when batches are confirmed on Ethereum
+
+**Technical Implementation**: The deterministic nature of the STF ensures that all honest nodes produce identical results, enabling consensus without complex coordination protocols.
 
 :::info More information
 
@@ -102,17 +136,28 @@ For additional reading on STF inputs, see the [STF Inputs deep dive](/how-arbitr
 
 :::
 
-## How the Sequencer publishes the sequence
+## Finality and Security Mechanisms
 
-So how do nodes get the sequence? The Sequencer publishes it in two ways: a real-time feed and batches posted on L1 Ethereum.
+Arbitrum implements a dual-finality model that balances user experience with security guarantees:
 
-The real-time feed is published by the Sequencer so that anyone who subscribes to the feed receives instant notifications of each transaction as it is sequenced. Nitro nodes can subscribe to the feed directly from the Sequencer, or through a relay that forwards the feed. The feed represents the Sequencer's promise to record transactions in a particular order. If the Sequencer is honest and doesn't experience prolonged downtime, the Sequencer will fulfill its promise. Anyone who trusts the Sequencer to keep its promises can rely on the feed to obtain instant information about the transaction sequence. They can then run the sequenced transactions through the STF to immediately learn the results of each transaction. This process is called "soft finality" for transactions; it's "soft" because it relies on the Sequencer keeping its promises.
+### Soft Finality: Immediate Confirmation
 
-The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically, every few minutes in production, the Sequencer concatenates the next group of transactions in the feed, compresses them for efficiency, and posts the result as calldata (blobs) on Ethereum. This process is the final and official record of the transaction sequence.
+The Sequencer provides immediate transaction confirmation based on its ordering commitments. This mechanism enables fast user experience while relying on the Sequencer's honesty for correctness.
 
-As soon as this Ethereum transaction achieves finality on the Ethereum blockchain, the Layer 2 Nitro transactions it records will also achieve finality. These transactions are final because their position in the sequence has finality, and the outcome of the transactions is deterministic and knowable to any party. This process is "hard finality."
+**Technical Implementation**: Soft finality is achieved through the Sequencer's real-time feed, which provides immediate transaction ordering and execution results.
 
-The Sequencer compresses its batches using the Brotli algorithm at its highest compression setting.
+### Hard Finality: Cryptographic Security
+
+Hard finality is achieved when transaction batches are posted to and confirmed on Ethereum. This mechanism provides Ethereum-equivalent security guarantees through cryptographic proofs and economic incentives.
+
+**Technical Implementation**: The system posts compressed transaction batches to Ethereum using calldata or blob storage (EIP-4844), with confirmation achieved through Ethereum's consensus mechanism.
+
+### Security Model
+
+- **Immediate feedback** through soft finality for optimal user experience
+- **Cryptographic security** through hard finality with Ethereum-level guarantees
+- **Economic security** through validator bonds and dispute resolution mechanisms
+- **Data compression** to minimize L1 posting costs
 
 :::info More information
 
@@ -120,21 +165,39 @@ To learn more about the Sequencer in-depth, take a look at the [Sequencer deep d
 
 :::
 
-## Geth at the core
+## Geth Integration and EVM Compatibility
 
-The second key design idea in Nitro is "Geth at the Core." Here, "Geth" refers to go-ethereum, the most common node software for Ethereum. As its name suggests, go-ethereum is written in the Go programming language, as is almost all of Nitro.
+Arbitrum achieves complete Ethereum compatibility through a layered architecture that integrates the go-ethereum (Geth) codebase:
 
 <ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
-You can think of the software that comprises a Nitro node as being organized into three primary layers (shown above):
+### Three-Layer Architecture
 
-- The base layer is the core of Geth—the parts of Geth that emulate the execution of EVM contracts and maintain the data structures that make up the Ethereum state. Nitro compiles in this code as a library, with a few minor modifications to add necessary hooks.
-- The middle layer, which we call ArbOS, is custom software that provides additional functions associated with Layer 2 functionality, such as decompressing the parsing the Sequencer's data batches, accounting for Layer 1 gas costs and collecting fees to reimburse for them, and supporting cross-chain bridge functionalities such as deposits of Ether and tokens from L1 and withdrawals of the same back to L1. We'll delve into the details of ArbOS below.
-- The top layer consists of node software, mostly drawn from Geth. This layer handles connections, incoming RPC requests from clients, and provides the other top-level functionality required to operate an Ethereum-compatible blockchain node.
+#### 1. **Base Layer: Geth Core**
 
-Because the top and bottom layers rely heavily on code from Geth, this structure has been dubbed a "Geth sandwich." Strictly speaking, Geth plays the role of the bread in the sandwich, and ArbOS is the filling, but this sandwich receives its name from the bread.
+The foundation layer consists of the core Geth components that handle EVM execution, state management, and Ethereum protocol compliance. This layer ensures behavioral consistency with Ethereum.
 
-The State Transition Function consists of the bottom Geth layer and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code, and implicitly includes all of the code called by that function. The STF takes as input the bytes of a transaction received in the inbox and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state, and it will ultimately emit the header of a new block (in Ethereum's block header format), which will be appended to the Nitro chain.
+#### 2. **Middle Layer: ArbOS (Arbitrum Operating System)**
+
+ArbOS provides Layer 2-specific functionality including:
+
+- Cross-chain messaging and bridging protocols
+- Fee accounting and gas price management
+- Deposit and withdrawal processing
+- Advanced features such as Stylus WebAssembly execution
+
+#### 3. **Top Layer: Node Interface**
+
+The interface layer handles RPC connections, API requests, and provides Ethereum-compatible node functionality for client applications.
+
+### Technical Benefits
+
+- **Complete EVM Compatibility**: Existing Ethereum applications deploy without modification
+- **Proven Security Model**: Leverages battle-tested Geth codebase
+- **Enhanced Functionality**: Adds Layer 2 capabilities while maintaining compatibility
+- **Seamless Integration**: Provides identical developer and user experience to Ethereum
+
+**Implementation Impact**: This architecture enables developers to use existing Ethereum tooling, wallets, and smart contracts while benefiting from Arbitrum's improved performance characteristics.
 
 :::info More information
 
@@ -142,121 +205,224 @@ For more information about Geth, refer to the [Geth deep dive](/how-arbitrum-wor
 
 :::
 
-## Separating execution from proving
+## Advanced Features and Capabilities
 
-One of the challenges in designing a practical rollup system is the tension between wanting the system to perform well in ordinary execution and being able to reliably prove the results of execution. Nitro resolves this tension by using the same source code for both execution and proving, but compiling it to different targets for the two cases.
+Arbitrum implements several advanced features that extend its capabilities beyond basic Layer 2 functionality:
 
-The Go compiler compiles the Nitro node software for **execution**, producing native code for the target architecture, which, of course, differs for each node deployment. (The node software distribution is in source code form, and as a Docker image containing a compiled binary.)
+### Stylus: WebAssembly Smart Contract Execution
 
-Separately, for **proving**, the portion of the code that is the State Transition Function is compiled by the Go compiler to WebAssembly (WASM), a typed and portable machine code format. The WASM code then undergoes a simple transformation into a format we call WAVM, which is described in detail below. If there is a dispute about the correct result of computing the STF, achieving a resolution comes from referencing the WAVM code.
+Stylus enables smart contract development in multiple programming languages through WebAssembly (WASM) compilation:
 
-### WAVM
+**Technical Specifications**:
 
-The WASM format has many features that make it a good vehicle for fraud proofs—it is portable, structured, well-specified, and has reasonably good tools and support—but it requires a few modifications to do the job completely. Nitro uses a slightly modified version of WASM, which we call WAVM. A simple transformation stage turns the WASM code produced by the Go compiler into WAVM code suitable for proving.
+- **Performance**: 10-70x faster execution compared to EVM
+- **Memory Efficiency**: 100-500x improvement in memory usage
+- **Language Support**: Rust, C, C++, and other WASM-compatible languages
+- **Interoperability**: Full compatibility with existing Solidity contracts
 
-WAVM differs from WASM in three main ways:
+**Implementation Details**: Stylus contracts execute in a coequal WASM virtual machine alongside the EVM, enabling seamless cross-contract calls and shared state access.
 
-First, WAVM removes certain features of WASM that are not generated by the Go compiler; the transformation phase ensures that these features are not present.
+### BoLD: Permissionless Validation Protocol
 
-Second, WAVM restricts a few features of WASM. For example, WAVM does not contain floating-point instructions, so the transformer replaces floating-point instructions with calls to the Berkeley SoftFloat library. (We use software floating-point to reduce the risk of floating-point incompatibilities between architectures. The core Nitro functions never use floating-point, but the Go runtime does use some floating-point operations.) WAVM does not contain nested control flow, so the transformer flattens control flow constructs by turning control flow instructions into jumps. Some WASM instructions take a variable amount of time to execute, which we avoid in WAVM by transforming them into constructs using fixed cost instructions. These transformations simplify proving.
+BoLD (Bounded Liquidity Delay) implements a permissionless validation system with time-bounded dispute resolution:
 
-Third, WAVM introduces a few additional opcodes to facilitate interaction with the blockchain environment. For example, new instructions enable the WAVM code to read and write the chain's global state, retrieve the next message from the chain's inbox, or signal a successful completion of executing the State Transition Function.
+**Technical Characteristics**:
 
-### `ReadPreImage` and the hash oracle trick
+- **Permissionless Access**: Any party can participate in validation
+- **Dispute Resolution**: Guaranteed resolution within 6.4 days
+- **Security Model**: Enhanced guarantees for withdrawals and cross-chain messaging
+- **Decentralization**: Progresses toward Stage 2 rollup status
 
-The most interesting new instruction is `ReadPreImage` which takes as input a hash `H` and a offset `I`, and returns the word of data at offset `I` of the preimage of `H` (and the number of bytes written, which is zero if `I` is at or after the end of the preimage). Of course, it is not feasible in general to produce a preimage from an arbitrary hash. For safety, the `ReadPreImage` instructions are only usable in a context where the preimage is publicly known and the size of the preimage is known to be less than a fixed upper bound of approximately 110 kbytes.
+**Protocol Implementation**: BoLD modifies the existing dispute protocol to enable permissionless participation while maintaining security through economic incentives and time-bounded challenges.
 
-(In this context, "publicly known" information is information that can be derived or recovered efficiently by any honest party, assuming that the full history of the L1 Ethereum chain is available. For convenience, providing a hash preimage by a third party, such as a public server, and the correctness of the supplied value is easily verified.)
+### Timeboost: MEV-Aware Transaction Ordering
 
-As an example, maintaining the state of a Nitro chain mimics Ethereum's state tree format, which is a Merkle tree. Nodes of the tree are stored in a database, indexed by the Merkle hash of the node. In Nitro, the state tree is kept outside of the State Transition Function's storage, with the STF only knowing the root hash of the tree. Given the hash of a tree node, the STF can recover the tree node's contents by using `ReadPreImage`, relying on the fact that the full contents of the tree are publicly known and that nodes in the Ethereum state tree will always be smaller than the upper bound on preimage size. In this manner, the STF can arbitrarily read and write to the state tree, despite only storing its root hash.
+Timeboost implements a novel transaction ordering policy that enables MEV capture while maintaining user protection:
 
-The only other use of `ReadPreImage` is to fetch the contents of recent L2 block headers, given the header hash. This method is safe because the block headers are publicly known and have a bounded size.
+**Technical Features**:
 
-The "hash oracle trick" of storing the Merkle hash of a data structure and relying on protocol participants to store the full structure, thereby supporting fetch-by-hash of the contents, dates back to the original Arbitrum design.
+- **MEV Capture**: Chain owners can capture a portion of available MEV
+- **User Protection**: Maintains protection against front-running and sandwich attacks
+- **Spam Reduction**: Reduces MEV-driven network congestion
+- **Configurable Parameters**: Chain owners can customize ordering policies
 
-## Optimistic Rollup
+**Implementation**: Timeboost uses an auction-based system to determine transaction ordering while preserving user protection mechanisms.
 
-Arbitrum is an Optimistic Rollup. Let's unpack that term.
+## Security Architecture: Fraud Proof System
 
-#### Rollup
+Arbitrum implements a sophisticated fraud proof system that ensures transaction correctness through cryptographic verification and economic incentives:
 
-Arbitrum is a Rollup, which means that the inputs to the chain—the messages that go into the inbox—are all recorded on the Ethereum chain as calldata. Because of this, everyone has the information they need to determine the current correct state of the chain. They have the full history of the inbox, and the inbox history uniquely determines the results, allowing them to reconstruct the state of the chain based only on public information, if needed.
+### Optimistic Execution Model
 
-This posting of calldata enables anyone to be a full participant in the Arbitrum protocol, allowing them to run an Arbitrum node or participate as a validator. Nothing about the history or state of the chain is a secret.
+The system assumes transaction execution is correct by default, enabling fast processing while maintaining security through post-execution verification mechanisms.
 
-#### Optimistic
+### Interactive Fraud Proof Protocol
 
-Arbitrum is optimistic, which means that Arbitrum advances the state of its chain by allowing any party (a "validator") to post a rollup block (assertion) on Layer 1 that the party claims is correct, and then giving everyone else the opportunity to challenge that claim. If the challenge period (roughly a week) passes and nobody has challenged the claimed rollup block, Arbitrum confirms the rollup block as correct. If someone challenges the claim during the challenge period, then Arbitrum uses an efficient dispute resolution protocol (detailed below) to identify which party is lying. The liar will forfeit a deposit, and the truth-teller will receive part of that deposit as a reward for their efforts (some of the deposit is burned, guaranteeing that the liar is punished even if collusion is involved.)
+When disputes arise regarding transaction execution, Arbitrum employs an interactive fraud proof system:
 
-Because a party that tries to cheat will lose a deposit, attempts to cheat should be very rare. The normal case will be a single party posting a correct rollup block, with nobody challenging it.
+1. **Claim Submission**: A validator submits a claim about transaction execution results
+2. **Challenge Mechanism**: Other validators can challenge incorrect claims
+3. **Interactive Resolution**: Disputing parties engage in a structured protocol to narrow the disagreement
+4. **Final Verification**: The system verifies the specific disputed computation step
+5. **Economic Settlement**: Incorrect parties forfeit bonds, honest parties receive rewards
 
-### Resolving disputes using interactive fraud proofs
+### Security Properties
 
-Among Optimistic Rollups, the most important design decision is how to resolve disputes. Suppose Alice claims that the chain will produce a particular result, and Bob disagrees. How will the protocol decide which version to accept?
+- **Efficiency**: Verification occurs only when disputes arise
+- **Cryptographic Security**: Any honest party can detect and prove fraud
+- **Performance**: Normal operation proceeds without verification overhead
+- **Economic Security**: Financial incentives ensure honest behavior
 
-There are basically two options: interactive proving or re-executing transactions. Arbitrum uses interactive proving, which we believe is more efficient and more flexible. Much of Arbitrum's design follows from this fact.
+**Technical Implementation**: The fraud proof system enables Ethereum-equivalent security guarantees while maintaining high performance through optimistic execution.
 
-### Interactive proving
+## Optimistic Rollup Architecture
 
-The idea of interactive proving is that Alice and Bob will engage in a back-and-forth protocol, mediated by an L1 contract, to resolve their dispute with minimal work required from any L1 contract.
+Arbitrum implements an Optimistic Rollup protocol that combines data availability guarantees with optimistic execution:
 
-Arbitrum's approach involves dissecting the dispute. If Alice's claim covers `N` steps of execution, she posts two claims of size `N/2`, which combine to yield her initial `N`-step claim. Then, Bob picks one of Alice's `N/2`-step claims to challenge. Now the size of the dispute has been halved. This process continues, cutting the dispute in half at each stage, until they are disagreeing about a single step of execution. Note that so far, the L1 referee hasn't had to think about execution "on the merits." It is only once the dispute narrows to a single step that the L1 mediator (referee) needs to resolve the dispute by looking at what the instruction does and whether Alice's claim about it is correct.
+### Rollup Component
 
-The key principle behind interactive proving is that if Alice and Bob are in a dispute, they should perform as much offchain work as possible to resolve it, rather than delegating that work to a Layer 1 (L1) contract.
+The rollup mechanism ensures that all transaction data is posted to Ethereum, providing:
 
-### Re-executing transactions
+- **Data Availability**: Complete transaction history is publicly accessible
+- **State Reconstructability**: Any party can rebuild chain state from posted data
+- **Permissionless Participation**: Anyone can run nodes or participate as validators
+- **Transparency**: All system operations are publicly verifiable
 
-The alternative to interactive proving would be to have a rollup block contain a claimed machine state hash after every individual transaction. In the event of a dispute, the L1 referee would emulate the execution of an entire transaction to determine whether the outcome matches Alice's claim.
+### Optimistic Component
 
-### Why interactive proving is better
+The optimistic execution model operates under the assumption that transactions are processed correctly:
 
-We strongly believe that interactive proving is the superior approach for the following reasons.
+1. **Execution Claims**: Validators submit claims about transaction processing results
+2. **Challenge Period**: Other validators can challenge incorrect claims within a specified timeframe
+3. **Dispute Resolution**: Interactive fraud proofs resolve disagreements about execution
+4. **Economic Incentives**: Financial penalties for incorrect claims, rewards for honest behavior
 
-- **More efficient in the optimistic case**: Because interactive proving can resolve disputes that are larger than one transaction, it can allow a rollup block to contain only a single claim about the end state of the chain after all of the execution covered by the block. By contrast, re-execution requires posting a state claim for each transaction within the rollup block. With hundreds or thousands of transactions per rollup block, this represents a substantial difference in L1 footprint, which is the main component of the cost.
-- **More efficient in the pessimistic case**: In the case of a dispute, interactive proving requires the L1 referee contract only to check that Alice and Bob's actions "have the right shape," for example, that Alice has divided her `N-step` claim into two claims half as large. (The referee doesn't need to evaluate the correctness of Alice's claims—Bob does that, offchain.) Only one instruction needs to be re-executed. By contrast, re-execution requires the L1 referee to emulate the execution of an entire transaction.
-- **Higher per-transaction gas limit**: Interactive proving can escape from Ethereum's tight per-transaction gas limit. The gas limit isn't infinite, for obvious reasons, but it can be larger than on Ethereum. As far as Ethereum is concerned, the only downside of a gas-heavy Arbitrum transaction is that it may require an interactive fraud proof with slightly more steps (and only if the transaction is indeed fraudulent). By contrast, re-execution of the transaction (which is more expensive than executing it directly) is within a single Ethereum transaction.
-- **More implementation flexibility**: Interactive proving allows more flexibility in implementation. All that is necessary is the ability to verify a one-step proof on Ethereum. By contrast, re-execution approaches have limitations based on the EVM.
+### Architectural Benefits
 
-### Interactive proving drives the design of Arbitrum
+- **Rollup Properties**: Ensures transparency and permissionless participation
+- **Optimistic Execution**: Enables high-performance processing by assuming correctness
+- **Fraud Proof Security**: Cryptographic verification catches and corrects errors
+- **Economic Security**: Financial incentives maintain system integrity
 
-Much of Arbitrum's design is driven by the opportunities opened up by interactive proving. Suppose you're reading about a feature of Arbitrum and wondering why it exists. In that case, two good questions to ask are: "How does this support interactive proving?" and "How does this take advantage of interactive proving?" The answers to most "why" questions about Arbitrum relate to interactive proving.
+**Technical Impact**: This architecture provides Ethereum-equivalent security with substantially improved performance characteristics.
 
-## Arbitrum Rollup protocol
+## Interactive Fraud Proof Protocol
 
-Before diving into the Rollup protocol, there are two things we need to cover:
+Arbitrum's dispute resolution mechanism employs an interactive fraud proof system that efficiently resolves disagreements about transaction execution:
 
-#### 1. If you're an Arbitrum user or developer, you don't need to understand the Rollup protocol.
+### Protocol Overview
 
-You don't ever need to think about it, unless you want to. Your relationship with it can be like a train passenger's relationship with the train's engine: you know it exists, you rely on it to keep working.
+When parties disagree about transaction execution results, they engage in a structured interactive protocol:
 
-Still, you don't spend your time monitoring it or studying its inner workings.
-You're welcome to study, observe, and even participate in the Rollup protocol, but it's not required, and most people won't. So if you're a typical train passenger who wants to read or talk to your neighbor, you can skip right to the [next section](#validators) of this document. If not, read on!
+1. **Initial Claim**: A validator submits a claim about transaction execution results
+2. **Challenge Response**: Another validator challenges the claim with a different result
+3. **Interactive Bisection**: Parties iteratively narrow the disagreement to specific computation steps
+4. **Final Verification**: The system verifies the disputed computation step
+5. **Resolution**: The protocol determines the correct result and applies economic penalties
 
-#### 2. The protocol doesn't decide the results of transactions, it only confirms the results.
+### Technical Advantages
 
-The results are uniquely determined by the sequence of messages in the chain's inbox. Once your transaction message is in the chain's inbox, its result is knowable—and Arbitrum nodes will report that your transaction is complete. The role of the Rollup protocol is to confirm transaction results that, from the perspective of Arbitrum users, have already occurred. (This is why Arbitrum users can effectively ignore the Rollup protocol.)
+**Computational Efficiency**: The system verifies only the disputed computation step rather than re-executing entire transactions.
 
-You might wonder why we need the Rollup protocol. If everyone already knows the results of transactions, why bother confirming them? The Rollup protocol exists for two reasons. First, somebody might lie about a result, and we need a definitive, trustless way to tell who is lying. Second, Ethereum doesn't know the results. The primary purpose of a Layer 2 scaling system is to process transactions without requiring Ethereum to handle all the work. Indeed, Arbitrum can execute transactions at a speed that Ethereum cannot match, while monitoring every transaction on Arbitrum. However, once a result is confirmed, Ethereum is aware of it and can rely on it, enabling operations on Ethereum, such as processing withdrawals of funds from Nitro back to L1.
+**Cost Optimization**: Most protocol steps occur off-chain, minimizing on-chain verification costs.
 
-With those preliminaries behind us, let's jump into the details of the Rollup protocol.
+**Scalability**: Handles complex transactions that would be prohibitively expensive to verify entirely on-chain.
 
-### BoLD: Permissionless Validation
+**Security Guarantees**: The protocol ensures that honest parties can always prove their claims.
 
-Arbitrum has evolved from a permissioned validation system to **BoLD (Bounded Liquidity Delay)**, a new permissionless validation protocol. This represents a major advancement in Arbitrum's decentralization journey.
-Some parties that participate in the protocol are **validators**. Some validators will choose to be bonders; they will place an `ETH` deposit, which they can recover if they're not
-cheating. In the common case, the expectation is that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's
-no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see
-[State of Progressive Decentralization](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any onchain
-actions, can be run permissionlessly (see [Validators](#validators) below).
+### Economic Security Model
 
-**Key improvements with BoLD:**
+- **Validator Bonds**: Participants must stake funds to make execution claims
+- **Challenge Mechanism**: Any party can challenge incorrect claims
+- **Reward Distribution**: Honest validators receive rewards for detecting fraud
+- **Penalty Enforcement**: Dishonest validators forfeit their staked funds
 
-- **Permissionless validation**: Anyone can validate Arbitrum chains without needing permission
-- **Time-bounded disputes**: Disputes are guaranteed to resolve within a fixed timeframe (6.4 days)
-- **Enhanced security**: Stronger guarantees for withdrawals and cross-chain messaging
-- **Stage 2 rollup status**: Moves Arbitrum closer to being recognized as a fully decentralized rollup
+**Technical Implementation**: This economic model ensures system security through financial incentives while maintaining protocol efficiency.
 
-The key security property of the Rollup protocol is that any one honest validator can ensure the correct execution of the chain is confirmed. This security means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire), can ensure that your transactions are processed correctly. And that is true no matter how many malicious people are trying to stop you.
+### Dissection Protocol Details
+
+The interactive fraud proof system employs a sophisticated dissection protocol that efficiently narrows disputes:
+
+#### Simplified Dissection Protocol
+
+The basic protocol operates through iterative bisection:
+
+1. **Initial Claim**: Alice claims execution of N instructions with specific results
+2. **Bisection**: Alice divides her claim into two N/2-step assertions
+3. **Challenge Selection**: Bob selects one half to challenge
+4. **Iteration**: Process repeats until dispute narrows to a single instruction
+5. **Final Verification**: One-step proof determines correctness
+
+#### Advanced Dissection Features
+
+The production protocol includes several optimizations:
+
+**K-way Dissection**: Instead of binary division, claims are divided into K segments, reducing rounds by a factor of log(K)/log(2).
+
+**Dual-Phase Dissection**:
+
+- **L2 Block Level**: First narrows disputes to individual Layer 2 blocks
+- **Instruction Level**: Then narrows to specific WAVM instructions
+
+**Bidirectional Challenges**: Bob responds with his own endpoint claims, reducing moves by factor of 2.
+
+**Empty Inbox Handling**: Protocol accounts for execution halts due to exhausted inbox.
+
+**Time Limits**: Each participant has approximately one week total time allowance.
+
+#### Protocol Efficiency
+
+The dissection protocol minimizes on-chain work by:
+
+- **Shape Verification**: L1 contracts only verify move structure, not correctness
+- **Single-Step Proof**: Only final disputed instruction requires on-chain verification
+- **Off-Chain Resolution**: Most dispute resolution occurs off-chain
+
+**Technical Advantage**: This approach enables verification of complex transactions that would be prohibitively expensive to re-execute entirely on-chain.
+
+## Rollup Protocol Implementation
+
+This section provides detailed technical information about Arbitrum's rollup protocol implementation for developers and researchers.
+
+### Protocol Necessity
+
+The rollup protocol serves three critical functions:
+
+1. **Execution Verification**: Prevents validators from submitting incorrect transaction execution claims
+2. **Ethereum Integration**: Enables Ethereum to process Arbitrum withdrawals and cross-chain operations
+3. **Security Guarantees**: Maintains Ethereum-level security through cryptographic verification
+
+### Protocol Architecture
+
+The rollup protocol operates through a chain of "assertions" - cryptographic claims about Arbitrum state transitions:
+
+- **Assertion Creation**: Validators submit claims about transaction execution results
+- **Challenge Mechanism**: Other validators can challenge incorrect assertions
+- **Dispute Resolution**: Interactive fraud proofs resolve disagreements
+- **Final Confirmation**: Ethereum records confirmed assertions for cross-chain operations
+
+### Technical Implementation
+
+**Key Principle**: The protocol does not determine transaction outcomes - it only confirms execution results that have already been determined. Transaction results are fixed upon processing, and the protocol ensures consensus about these results.
+
+**Implementation Details**: The protocol functions as a verification layer that confirms the authenticity and correctness of state transitions without modifying the underlying execution results.
+
+### BoLD: Permissionless Validation Protocol
+
+BoLD (Bounded Liquidity Delay) implements a permissionless validation system that enhances Arbitrum's decentralization and security:
+
+**Technical Specifications**:
+
+- **Permissionless Access**: Any party can participate in validation without authorization
+- **Time-Bounded Disputes**: Disputes are guaranteed to resolve within 6.4 days
+- **Enhanced Security**: Improved guarantees for withdrawals and cross-chain messaging
+- **Decentralization**: Progresses toward Stage 2 rollup status
+
+**Protocol Implementation**: Validators participate by staking bonds to make execution claims. Honest validators recover their bonds, while dishonest validators forfeit their stakes.
+
+**Current Status**: BoLD is operational on Arbitrum One, Nova, and Sepolia. While designed for permissionless operation, validators are currently allowlisted as part of Arbitrum's progressive decentralization strategy.
+
+**Technical Significance**: BoLD enhances Arbitrum's decentralization by enabling permissionless participation in network security, similar to Ethereum's validation model.
 
 :::info More information
 
@@ -597,17 +763,53 @@ For further reading, take a look at the [L2-to-L1-messaging](/how-arbitrum-works
 
 :::
 
-## Gas and fees
+## Gas and Fees
 
 Gas is used by Arbitrum to track the execution cost on a Nitro chain. It works similarly to Ethereum gas, in that every EVM instruction incurs the same amount of gas as it would on Ethereum.
 
-## The Speed limit
+### Speed Limit
 
-The security of Nitro chains relies on the assumption that when one validator creates an assertion, other validators will verify it and respond with a correct assertion and a challenge if it is incorrect. This assumption requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for assertions.
+The security of Nitro chains relies on the assumption that validators can verify assertions and respond with challenges if necessary. This requirement sets an effective speed limit on chain execution: the chain cannot progress faster than a validator can emulate its execution.
 
-This security feature sets an effective speed limit on execution of a Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will go further into the future. Due to the limit imposed by the Rollup protocol contracts on how far into the future a deadline can be, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
+**Technical Implementation**: If assertions are published faster than the speed limit, their deadlines extend further into the future. Due to protocol limits on deadline extension, this eventually slows down new assertions, enforcing the effective speed limit.
 
-Being able to set the speed limit accurately depends on being able to estimate the time required to validate an assertion, with some accuracy. Any uncertainty in estimating validation time will force us to set the speed limit lower to ensure safety. We do not want to lower the speed limit, so we aim to enable accurate estimation of the speed limit.
+**Speed Limit Parameter**: Currently set to 7,000,000 gas per second on Arbitrum One. This parameter must be set accurately to ensure security while maximizing throughput.
+
+### L2 Gas Fee Algorithm
+
+L2 gas fees operate similarly to Ethereum's EIP-1559 mechanism using an exponential pricing model:
+
+**Algorithm Components**:
+
+- **Speed Limit**: Target gas per second (7,000,000 on Arbitrum One)
+- **Gas Backlog**: Tracks accumulated gas usage over time
+- **Base Fee Calculation**: Exponential function of backlog: F = exp(-a(B-b))
+
+**Technical Implementation**:
+
+- Gas consumption adds to backlog
+- Each second, speed limit is subtracted from backlog
+- Backlog cannot go below zero
+- Base fee adjusts exponentially based on backlog level
+
+**Parameters**:
+
+- **a**: Controls price escalation rate with backlog
+- **b**: Allows small backlog before price escalation begins
+
+### L1 Calldata Fees
+
+L1 calldata fees compensate batch posters for Ethereum posting costs:
+
+**Fee Calculation**:
+
+1. **Size Estimation**: Calculate transaction's contribution to compressed batch
+2. **Price Multiplication**: Multiply by current price per estimated byte
+3. **Gas Conversion**: Convert L1 cost to L2 gas units using current base fee
+
+**Dynamic Pricing**: Algorithm adjusts price per byte to align collected fees with batch poster costs.
+
+**Scope**: Only applies to Sequencer transactions; delayed inbox transactions pay Ethereum gas directly.
 
 ## Fees
 
@@ -646,90 +848,171 @@ The dynamic algorithm determines the price per estimated byte by comparing the t
 
 The total fee charged for a transaction is the L2 base fee multiplied by the sum of the L2 gas used and the L1 calldata charge. As on Ethereum, a transaction will fail if it fails to supply enough gas, or if it specifies a base fee limit that is below the current base fee. Ethereum also allows a "tip," but Nitro ignores this field and never collects any tips.
 
-## Advanced Features
+## Cross-Chain Asset Transfer: Bridging Protocol
 
-### Timeboost: MEV and Transaction Ordering
+Arbitrum implements a bridging protocol that enables secure asset transfer between Ethereum and Arbitrum chains.
 
-**Timeboost** is a novel transaction ordering policy that allows chain owners to capture MEV while protecting users from harmful MEV like sandwich attacks. It introduces an "express lane" for transactions and an auction system to determine who controls this lane.
+### Bridge Architecture
 
-**Key benefits:**
+**Deposit Mechanism (Ethereum → Arbitrum):**
 
-- **MEV Capture**: Chain owners can capture a portion of available MEV
-- **User Protection**: Maintains protection against harmful MEV like front-running
-- **Reduced Spam**: May reduce MEV-driven spam on the network
-- **Customizable**: Chain owners can configure Timeboost parameters
+1. Users send tokens to the bridge contract on Ethereum
+2. The bridge contract locks tokens in escrow
+3. Arbitrum mints equivalent tokens on the L2
+4. Users receive tokens on Arbitrum for immediate use
 
-:::info More information
+**Withdrawal Mechanism (Arbitrum → Ethereum):**
 
-For detailed information about Timeboost, see the [Timeboost gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+1. Users burn tokens on Arbitrum
+2. The system processes withdrawal requests
+3. After the challenge period, users can claim tokens on Ethereum
+4. The bridge contract releases escrowed tokens
 
-:::
+### Bridge Types
 
-## Inside AnyTrust
+**Standard Bridge**: Official Arbitrum bridge implementation
 
-AnyTrust is a variant of Arbitrum Nitro technology that lowers costs by accepting a mild trust assumption.
+- Supports ETH and ERC-20 tokens
+- Uses official Arbitrum bridge contracts
+- Implements standard 7-day challenge period
+- Provides maximum security guarantees
 
-The Arbitrum protocol requires that all Arbitrum nodes, including validators, have access to the data of every L2 transaction in the Arbitrum chain's inbox. An Arbitrum Rollup provides data access by posting the data (in batched, compressed form) on L1 Ethereum as calldata. The Ethereum gas to pay for this is the largest component of the cost in Arbitrum.
+**Custom Bridges**: Third-party implementations
 
-AnyTrust relies instead on an external Data Availability Committee (hereinafter referred to as "the Committee") to store data and provide it on demand. The Committee has `N` members, of which AnyTrust assumes at least two are honest. This assumption means that if `N-1` Committee members promise to provide access to some data, at least one of the promising parties must be honest, ensuring that the data will be available so that the Rollup protocol can function correctly.
+- Built by external developers
+- May implement different security models
+- Often provide faster withdrawal mechanisms
+- May have different trust assumptions
+
+### Security Model
+
+**Challenge Period**: Withdrawals require a 7-day challenge period during which validators can challenge incorrect withdrawal requests.
+
+**Fast Withdrawals**: Some services provide immediate liquidity for withdrawals, charging fees for the convenience.
+
+**Technical Implementation**: The bridging protocol ensures asset security through cryptographic proofs and economic incentives.
+
+## AnyTrust: Alternative Data Availability Model
+
+AnyTrust implements a variant of Arbitrum that reduces costs by accepting a mild trust assumption about data availability.
+
+### Architecture Comparison
+
+**Standard Arbitrum (Rollup):**
+
+- Posts all transaction data to Ethereum for data availability
+- Provides maximum security through cryptographic guarantees
+- Used by Arbitrum One
+- Higher costs due to L1 data posting requirements
+
+**AnyTrust:**
+
+- Uses a Data Availability Committee (DAC) for data storage
+- Accepts mild trust assumptions about committee honesty
+- Used by Arbitrum Nova
+- Lower costs through reduced L1 data posting
 
 ### Keysets
 
-A Keyset specifies the public keys of Committee members and the number of signatures required for a Data Availability Certificate to be valid. Keysets enable Committee membership changes and provide Committee members with the ability to update their keys.
+Keysets specify the public keys of Committee members and signature requirements:
 
-A Keyset contains:
+**Keyset Components**:
 
-- the number of Committee members, and
-- for each Committee member, a BLS public key, and
-- the number of Committee signatures required
+- Number of Committee members
+- BLS public key for each member
+- Number of required signatures
 
-Keysets are identifiable by their hashes.
-An L1 `KeysetManager` contract maintains a list of currently valid Keysets. The L2 chain's Owner can add or remove Keysets from this list. When a Keyset becomes valid, the `KeysetManager` contract emits an L1 Ethereum event containing the Keyset's hash and full contents. This emission allows the contents to be recovered later by anyone, provided only the Keyset hash is known.
+**Management**: Keysets are identifiable by hashes and managed by an L1 KeysetManager contract. The L2 chain Owner can add or remove Keysets, with L1 events emitted for recovery.
 
-Although the API does not limit the number of Keysets that can be valid at the same time, normally, only one Keyset will be valid.
+### Data Availability Certificates (DACerts)
 
-### Data Availability Certificates
+DACerts provide cryptographic proof of data availability:
 
-A central concept in AnyTrust is the Data Availability Certificate (hereafter referred to as a "DACert"). A DACert contains:
+**Certificate Contents**:
 
-- The hash of a data block, and
-- An expiration, and
-- Proof that `N-1` Committee members have signed the (hash, expiration time) pair, consisting of:
-  - The hash of the Keyset used in signing, and
-  - A bitmap saying which Committee members signed, and
-  - A BLS aggregated signature (over the BLS12-381 curve) proving that those parties signed
+- Hash of data block
+- Expiration time
+- Proof of N-1 Committee member signatures
+- Keyset hash and signature bitmap
+- BLS aggregated signature (BLS12-381 curve)
 
-Because of the `2-of-N` trust assumption, a DACert constitutes proof that the block's data (i.e., the preimage of the hash in the DACert) will be available from at least one honest Committee member, at least until the expiration time.
+**Trust Model**: Based on 2-of-N assumption, ensuring at least one honest member will provide data until expiration.
 
-AnyTrust provides the Sequencer with two options for posting a data block on L1: it can post the full data as described above, or it can post a DACert proving the availability of the data. The L1 inbox contract will reject any DACert that uses an invalid Keyset; the other aspects of DACert validity get checked by L2 code.
+### Data Availability Servers (DAS)
 
-In ordinary (non-AnyTrust) Nitro, the Arbitrum Sequencer posts data blocks on the L1 chains as calldata. The L1 inbox contract commits the hashes of the data blocks, making the data reliably readable to L2 code.
+Committee members run DAS software with two APIs:
 
-The L2 code that reads data from the inbox reads a full data block, just like in ordinary Nitro. If it sees a DACert instead, it checks the validity of the DACert, regarding the Keyset specified by the DACert (which is known to be valid because the L1 inbox verified that). The L2 code verifies that:
+**Sequencer API**: JSON-RPC interface for Sequencer to submit data blocks
+**REST API**: Public HTTP(S) interface for fetching data blocks by hash
 
-- The number of signers is at least the number required by the Keyset, and
-- The aggregated signature is valid for the claimed signers, and
-- The expiration time is at least two weeks after the current L2 timestamp
+**Storage Options**: Local files, Badger database, Amazon S3, or redundant multi-store configurations with optional caching.
 
-If the DACert is invalid, the L2 code discards the DACert and moves on to the next data block. If the DACert is valid, the L2 code reads the data block, which is guaranteed to be available because the DACert is valid.
+### Sequencer-Committee Interaction
 
-### Data Availability Servers
+**Data Submission Process**:
 
-Committee members run the Data Availability Server (DAS) software. The DAS exposes two APIs:
+1. Sequencer sends data batch with expiration time to all Committee members
+2. Members store data and sign (hash, expiration) pairs
+3. Sequencer aggregates signatures to create DACert
+4. Sequencer posts DACert to L1 inbox contract
 
-- The Sequencer API, which is to be called only by the Arbitrum chain's Sequencer, is a JSON-RPC interface allowing the Sequencer to submit data blocks to the DAS for storage. Deployments will typically block access to this API from callers other than the Sequencer.
-- The REST API, which is to be available to the world, is a RESTful HTTP(S) based protocol that allows fetching data blocks by hash. This API is fully cacheable, and deployments can utilize a caching proxy or CDN to increase scalability and protect against DoS attacks.
-  Only Committee members have reason to support the Sequencer API. We expect others to run the REST API, and that is helpful. (More on that below.)
+**Fallback Mechanism**: If insufficient signatures collected within minutes, Sequencer falls back to posting full data directly to L1.
 
-The DAS software, based on configuration options, can store its data in local files, a Badger database, Amazon S3, or redundantly across multiple backing stores. The software also supports optional caching in memory (using Bigcache) or in a Redis instance.
+**Technical Specifications**: The committee maintains transaction data and provides it on-demand, with cryptographic proofs ensuring data integrity.
 
-### Sequencer-Committee interaction
+**Use Cases**: AnyTrust is optimized for applications requiring very low costs and willing to accept mild trust assumptions, such as gaming or social applications.
 
-When the Arbitrum Sequencer produces a data batch that it wants to post using the Committee, it sends the batch's data, along with an expiration time (usually three weeks in the future) via RPC to all Committee members in parallel. Each Committee member stores the data in its backing store, indexed by the data's hash. Then, the member signs the (hash, expiration time) pair using its BLS key and returns the signature along with a success indicator to the Sequencer.
+**Performance Characteristics**: Arbitrum Nova (AnyTrust implementation) offers lower fees than Arbitrum One, making it suitable for high-volume, low-value transactions.
 
-Once the Sequencer has collected enough signatures, it can aggregate the signatures and create a valid DACert for the (hash, expiration time) pair. The Sequencer then posts that DACert to the L1 inbox contract, making it available to the AnyTrust chain software at L2.
+## Recent Technical Innovations
 
-If the Sequencer fails to collect enough signatures within a few minutes, it will abandon the attempt to use the Committee and "fall back to rollup" by posting the full data directly to the L1 chain, as it would in a non-AnyTrust chain. The L2 software can understand both data posting formats (via DACert or full data) and handles each one correctly.
+Arbitrum has implemented several major technical innovations that enhance its capabilities:
+
+### BoLD (Bounded Liquidity Delay)
+
+A permissionless validation protocol that enables decentralized participation in network security:
+
+**Technical Specifications**:
+
+- **Permissionless Access**: Any party can participate in validation without authorization
+- **Time-Bounded Disputes**: Disputes resolve within 6.4 days
+- **Enhanced Security**: Improved guarantees for withdrawals and cross-chain messaging
+- **Decentralization**: Progresses toward Stage 2 rollup status
+
+### Timeboost: MEV-Aware Transaction Ordering
+
+A novel transaction ordering policy that enables MEV capture while maintaining user protection:
+
+**Technical Features**:
+
+- **MEV Capture**: Chain owners can capture a portion of available MEV
+- **User Protection**: Maintains protection against front-running and sandwich attacks
+- **Spam Reduction**: Reduces MEV-driven network congestion
+- **Configurable Parameters**: Chain owners can customize ordering policies
+
+### Stylus: WebAssembly Smart Contract Execution
+
+WebAssembly-based smart contract execution environment:
+
+**Technical Specifications**:
+
+- **Performance**: 10-70x faster execution compared to EVM
+- **Memory Efficiency**: 100-500x improvement in memory usage
+- **Language Support**: Rust, C, C++, and other WASM-compatible languages
+- **Interoperability**: Full compatibility with existing Solidity contracts
+
+### Enhanced Sequencer Features
+
+Improved batch posting with advanced compression and blob support:
+
+**Technical Improvements**:
+
+- **Blob Support**: Uses EIP-4844 blobs for more efficient batch posting
+- **Dynamic Compression**: Adjusts compression levels based on network conditions
+- **Timeboost Integration**: Supports advanced transaction ordering policies
+- **Improved Batching**: More efficient transaction batching and posting mechanisms
+
+**Technical Impact**: These innovations collectively enhance Arbitrum's performance, security, and developer experience.
 
 :::info More information
 
