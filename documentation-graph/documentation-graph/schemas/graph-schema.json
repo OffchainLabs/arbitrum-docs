@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arbitrum.io/schemas/knowledge-graph.json",
+  "title": "Knowledge Graph",
+  "description": "Schema for documentation knowledge graph structure representing relationships between documents, concepts, and navigation elements",
+  "type": "object",
+  "required": ["metadata", "nodes", "edges"],
+  "additionalProperties": false,
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Graph metadata including version, generation timestamp, and source information",
+      "required": ["version", "generated", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Semantic version of the graph schema",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "generated": {
+          "type": "string",
+          "description": "ISO 8601 timestamp when the graph was generated",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "object",
+          "description": "Source information about the documentation being analyzed",
+          "required": ["inputPath", "fileCount", "totalNodes", "totalEdges"],
+          "additionalProperties": false,
+          "properties": {
+            "inputPath": {
+              "type": "string",
+              "description": "Path to the documentation source directory"
+            },
+            "fileCount": {
+              "type": "integer",
+              "description": "Total number of documentation files processed",
+              "minimum": 0
+            },
+            "totalNodes": {
+              "type": "integer",
+              "description": "Total number of nodes in the graph",
+              "minimum": 0
+            },
+            "totalEdges": {
+              "type": "integer",
+              "description": "Total number of edges connecting nodes",
+              "minimum": 0
+            },
+            "processing": {
+              "type": "object",
+              "description": "Optional processing statistics",
+              "properties": {
+                "chunkSize": {
+                  "type": "integer",
+                  "description": "Size of processing chunks used during analysis"
+                },
+                "chunksProcessed": {
+                  "type": "integer",
+                  "description": "Number of chunks processed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "description": "Collection of graph nodes representing documentation entities",
+      "items": {
+        "type": "object",
+        "description": "A single node in the knowledge graph",
+        "required": ["id", "type", "label"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the node"
+          },
+          "type": {
+            "enum": ["document", "concept", "section", "directory", "tag", "navigation"],
+            "description": "Node type: document (MD/MDX file), concept (extracted term), section (document heading), directory (folder), tag (frontmatter tag), navigation (nav item)"
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable label for the node"
+          },
+          "data": {
+            "type": "object",
+            "description": "Additional node-specific data and metadata",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Collection of graph edges representing relationships between nodes",
+      "items": {
+        "type": "object",
+        "description": "A single edge connecting two nodes",
+        "required": ["id", "source", "target", "type"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the edge"
+          },
+          "source": {
+            "type": "string",
+            "description": "ID of the source node"
+          },
+          "target": {
+            "type": "string",
+            "description": "ID of the target node"
+          },
+          "type": {
+            "enum": [
+              "contains",
+              "mentions",
+              "links_to",
+              "similar",
+              "parent_child",
+              "co_occurs",
+              "navigation"
+            ],
+            "description": "Edge type: contains (document contains section), mentions (document mentions concept), links_to (hyperlink), similar (shared concepts), parent_child (directory hierarchy), co_occurs (concepts appear together), navigation (sidebar relationship)"
+          },
+          "data": {
+            "type": "object",
+            "description": "Additional edge-specific data like weights or metadata",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "metadata": {
+        "version": "1.0.0",
+        "generated": "2025-10-02T00:00:00Z",
+        "source": {
+          "inputPath": "/docs",
+          "fileCount": 10,
+          "totalNodes": 25,
+          "totalEdges": 40
+        }
+      },
+      "nodes": [],
+      "edges": []
+    }
+  ]
+}

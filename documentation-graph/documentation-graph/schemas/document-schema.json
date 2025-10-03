@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arbitrum.io/schemas/document.json",
+  "title": "Document",
+  "description": "Schema for extracted documentation file structure including content, metadata, headings, and links",
+  "type": "object",
+  "required": ["path", "extension", "content", "frontmatter", "headings", "links"],
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "File system path to the document"
+    },
+    "extension": {
+      "type": "string",
+      "description": "File extension indicating document format",
+      "enum": [".md", ".mdx"]
+    },
+    "content": {
+      "type": "string",
+      "description": "Full text content of the document"
+    },
+    "frontmatter": {
+      "type": "object",
+      "description": "YAML frontmatter metadata from the document header",
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Document title (displays as H1)"
+        },
+        "sidebar_label": {
+          "type": "string",
+          "description": "Shortened title for sidebar navigation"
+        },
+        "description": {
+          "type": "string",
+          "description": "SEO-friendly document description"
+        },
+        "content_type": {
+          "type": "string",
+          "description": "Type of content (how-to, concept, reference, etc.)"
+        }
+      }
+    },
+    "headings": {
+      "type": "array",
+      "description": "Hierarchical structure of document headings (H1-H6)",
+      "items": {
+        "type": "object",
+        "description": "A single heading within the document",
+        "required": ["level", "text"],
+        "properties": {
+          "level": {
+            "type": "integer",
+            "description": "Heading level (1=H1, 2=H2, etc.)",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "text": {
+            "type": "string",
+            "description": "Heading text content"
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "description": "Collection of links found in the document",
+      "required": ["internal", "external"],
+      "properties": {
+        "internal": {
+          "type": "array",
+          "description": "Links to other documentation pages within the same site",
+          "items": {
+            "type": "string"
+          }
+        },
+        "external": {
+          "type": "array",
+          "description": "Links to external websites and resources",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "wordCount": {
+      "type": "integer",
+      "description": "Total word count of the document content",
+      "minimum": 0
+    }
+  }
+}
