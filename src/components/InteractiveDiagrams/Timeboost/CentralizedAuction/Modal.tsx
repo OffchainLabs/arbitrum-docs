@@ -33,15 +33,25 @@ const components = {
   pre: ({ children }) => children,
   code: ({ children, className }) => {
     const language = className?.replace('language-', '') || 'text';
+
+    // Safe check for SSG - default to false when context is not available
+    let isDarkTheme = false;
+    try {
+      const colorMode = useColorMode();
+      isDarkTheme = colorMode.isDarkTheme;
+    } catch (e) {
+      // During SSG, useColorMode throws an error - use default
+    }
+
     return (
       <SyntaxHighlighter
         language={language}
-        style={useColorMode().isDarkTheme ? oneDark : oneLight}
+        style={isDarkTheme ? oneDark : oneLight}
         customStyle={{
           margin: 0,
           padding: '16px',
           borderRadius: '4px',
-          backgroundColor: useColorMode().isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
+          backgroundColor: isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
         }}
       >
         {children}
@@ -52,7 +62,15 @@ const components = {
 
 export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { isDarkTheme } = useColorMode();
+
+  // Safe check for SSG - default to false when context is not available
+  let isDarkTheme = false;
+  try {
+    const colorMode = useColorMode();
+    isDarkTheme = colorMode.isDarkTheme;
+  } catch (e) {
+    // During SSG, useColorMode throws an error - use default
+  }
   const stepContent = {
     1: step1Content,
     2: step2Content,
