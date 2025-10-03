@@ -1,0 +1,53 @@
+{
+  "name": "arbitrum-documentation-graph",
+  "version": "1.0.0",
+  "description": "Documentation analysis toolset for Arbitrum Docusaurus documentation that builds interactive knowledge graphs",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
+    "test:unit": "NODE_OPTIONS='--experimental-vm-modules' jest test/unit",
+    "test:integration": "NODE_OPTIONS='--experimental-vm-modules' jest test/integration",
+    "test:performance": "NODE_OPTIONS='--experimental-vm-modules --expose-gc' jest test/performance",
+    "test:verbose": "NODE_OPTIONS='--experimental-vm-modules' jest --verbose",
+    "start": "node --max-old-space-size=8192 --expose-gc src/index.js",
+    "start:basic": "node src/index.js",
+    "report": "node src/reporters/MarkdownReportGenerator.js",
+    "serve": "npx http-server dist -p 8080",
+    "help": "node src/index.js --help"
+  },
+  "keywords": [
+    "documentation",
+    "knowledge-graph",
+    "docusaurus",
+    "arbitrum",
+    "nlp",
+    "graph-analysis",
+    "visualization"
+  ],
+  "author": "Arbitrum",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "commander": "^11.1.0",
+    "compromise": "^14.10.0",
+    "graphology": "^0.25.4",
+    "gray-matter": "^4.0.3",
+    "natural": "^6.10.1",
+    "progress": "^2.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.5",
+    "@babel/preset-env": "^7.23.5",
+    "@jest/globals": "^29.7.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-extended": "^4.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

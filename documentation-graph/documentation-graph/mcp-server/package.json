@@ -1,0 +1,43 @@
+{
+  "name": "documentation-analysis-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for interactive documentation analysis - content duplication and topic scattering detection",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "docs-analysis-mcp": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "lint": "eslint src/"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "documentation",
+    "analysis",
+    "duplication-detection",
+    "knowledge-graph"
+  ],
+  "author": "Arbitrum",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "chokidar": "^3.5.3",
+    "compromise": "^14.10.0",
+    "graphology": "^0.25.4",
+    "natural": "^6.10.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
