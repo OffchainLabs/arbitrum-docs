@@ -256,6 +256,41 @@
       "permanent": false
     },
     {
+      "source": "/(documentation-graph/documentation-graph/GATE_CHECKPOINT_STATUS/?)",
+      "destination": "/(documentation-graph/GATE_CHECKPOINT_STATUS/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/ARCHITECTURE/?)",
+      "destination": "/(documentation-graph/mcp-server/ARCHITECTURE/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/EXAMPLES/?)",
+      "destination": "/(documentation-graph/mcp-server/EXAMPLES/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/IMPLEMENTATION_SUMMARY/?)",
+      "destination": "/(documentation-graph/mcp-server/IMPLEMENTATION_SUMMARY/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/QUICKSTART/?)",
+      "destination": "/(documentation-graph/mcp-server/QUICKSTART/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/README/?)",
+      "destination": "/(documentation-graph/mcp-server/README/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/SETUP_COMPLETE/?)",
+      "destination": "/(documentation-graph/mcp-server/SETUP_COMPLETE/?)",
+      "permanent": false
+    },
+    {
       "source": "/(for-devs/chain-params/?)",
       "destination": "/build-decentralized-apps/reference/chain-params",
       "permanent": false

@@ -3,7 +3,7 @@
     "documentation-analysis": {
       "command": "node",
       "args": [
-        "/Users/allup/dev/OCL/arbitrum-docs_documentation-graph/documentation-graph/documentation-graph/mcp-server/src/index.js"
+        "/Users/allup/dev/OCL/arbitrum-docs_documentation-graph/documentation-graph/mcp-server/src/index.js"
       ],
       "env": {
         "LOG_LEVEL": "INFO"

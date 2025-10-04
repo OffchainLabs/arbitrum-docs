@@ -24,6 +24,7 @@ export class CacheManager {
 
     if (!this.cache.has(key)) {
       this.stats.misses++;
+      logger.logCacheMiss();
       return null;
     }
 
@@ -36,10 +37,12 @@ export class CacheManager {
       this.cache.delete(key);
       this.timestamps.delete(key);
       this.stats.misses++;
+      logger.logCacheMiss();
       return null;
     }
 
     this.stats.hits++;
+    logger.logCacheHit();
     return this.cache.get(key);
   }
 

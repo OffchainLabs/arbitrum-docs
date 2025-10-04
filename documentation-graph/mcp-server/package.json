@@ -1,7 +1,7 @@
 {
   "name": "documentation-analysis-mcp-server",
-  "version": "1.0.0",
-  "description": "MCP server for interactive documentation analysis - content duplication and topic scattering detection",
+  "version": "2.0.0",
+  "description": "Production-ready MCP server for interactive documentation analysis - content duplication and topic scattering detection with health monitoring, metrics, and security",
   "type": "module",
   "main": "src/index.js",
   "bin": {
