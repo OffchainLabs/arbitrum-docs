@@ -312,6 +312,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control',
+                  label: 'Configure Batch Poster and Assertion Control',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools',
                   label: `Gas optimization tools`,
                 },
@@ -981,6 +986,11 @@ const sidebars = {
           type: 'doc',
           id: 'arbitrum-bridge/usdc-arbitrum-one',
           label: 'USDC on Arbitrum One',
+        },
+        {
+          type: 'doc',
+          id: 'arbitrum-bridge/embedded-bridge-widget',
+          label: 'Embedded bridge widget',
         },
         {
           type: 'doc',

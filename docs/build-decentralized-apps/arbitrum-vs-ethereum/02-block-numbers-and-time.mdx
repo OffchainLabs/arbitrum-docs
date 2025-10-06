@@ -10,28 +10,26 @@ content_type: concept
 
 :::info block number vs `block.number`
 
-Throughout this and other pages, we mention how the block number of a chain does not match the value obtained on `block.number`. When using `block.number` in a smart contract, the value obtained will be the block of the first non-Arbitrum ancestor chain. That is:
+Throughout this and other pages, we note that the block number of a chain does not match the value obtained from `block.number`. When using `block.number` in a smart contract, the value obtained will be the block of the first non-Arbitrum ancestor chain. That is:
 
-- Ethereum if the chain is a Layer 2 (L2) chain on top of Ethereum, or a Layer 3 (L3) chain on top of an Arbitrum chain
+- Ethereum, if the chain is a Layer 2 (L2) chain on top of Ethereum, or a Layer 3 (L3) chain on top of an Arbitrum chain
 - The parent chain, if it's not Ethereum or an Arbitrum chain (for example, a chain that settles to Base)
 
 :::
 
-As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#sequencing-followed-by-deterministic-execution) or via the chain's [Delayed Inbox](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#inboxes-fast-and-slow).
+As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/how-arbitrum-works/03-sequencer.mdx) or via the chain's [Delayed Inbox](/how-arbitrum-works/03-sequencer.mdx).
 
-## Sequencing, Followed by Deterministic Execution
+Once in the chain's core inbox contract, transaction processing occurs in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
-Once in the chain's core inbox contract, transactions are processed in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
+Additionally, since the calldata of Arbitrum transactions (or the DAC certificate on <a data-quicklook-from= "arbitrum-anytrust-chain">AnyTrust</a>chains) is posted to Ethereum, the gas paid when executing them includes a component for the parent chain to cover the costs of the batch poster.
 
-Additionally, since the calldata of Arbitrum transactions (or the DAC certificate on <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a>chains) is posted to Ethereum, the gas paid when executing them includes a parent chain component to cover the costs of the batch poster.
-
-This page describes what this mechanism means for the block gas limit, block numbers, and the time assumptions of the transactions submitted to Arbitrum.
+This page explains the implications of this mechanism for the block gas limit, block numbers, and the time assumptions associated with transactions submitted to Arbitrum.
 
 ## Block gas limit
 
-When submitting a transaction to Arbitrum, users are charged for both the execution cost on Arbitrum and the cost of posting its calldata to Ethereum. This dual cost structure is managed by adjusting the transaction's gas limit to reflect these two dimensions, resulting in a higher gas limit value than what would be seen for pure execution.
+When submitting a transaction to Arbitrum, users incur fees for both the execution cost on Arbitrum and the cost of posting its calldata to Ethereum. Managing the dual cost structure involves adjusting the transaction's gas limit to reflect these two dimensions, resulting in a higher gas limit value than would be seen for pure execution.
 
-The gas limit of an Arbitrum block is set as the sum of all transaction gas limits, including the costs related to parent chain data posting. To accommodate potential variations in parent chain costs, Arbitrum assigns an artificially large gas limit (`1,125,899,906,842,624`) for each block. However, the effective execution gas limit is capped at 32 million. This means that while the visible gas limit might appear very high, the actual execution costs are constrained within this limit. Understanding this distinction helps clarify why querying a block might show an inflated gas limit that doesn’t match the effective execution costs.
+The gas limit of an Arbitrum block is set to the sum of all transaction gas limits, including the costs associated with posting parent chain data. To accommodate potential variations in parent chain costs, Arbitrum assigns an artificially large gas limit (`1,125,899,906,842,624`) for each block. However, the effective execution gas limit has a cap of 32 million. This cap means that, although the visible gas limit may appear very high, the actual execution costs are constrained within this limit. Understanding this distinction helps clarify why querying a block might show an inflated gas limit that doesn't match the effective execution costs.
 
 For a more detailed breakdown of the gas model, refer to [this article on Arbitrum's 2-dimensional fee structure](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9).
 
@@ -39,7 +37,7 @@ For a more detailed breakdown of the gas model, refer to [this article on Arbitr
 
 Arbitrum blocks are assigned their own child chain block numbers, distinct from Ethereum's block numbers.
 
-A single Ethereum block could include multiple Arbitrum blocks within it; however, an Arbitrum block cannot span across multiple Ethereum blocks. Thus, any given Arbitrum transaction is associated with exactly one Ethereum block and one Arbitrum block.
+A single Ethereum block can include multiple Arbitrum blocks; however, an Arbitrum block cannot span across multiple Ethereum blocks. Thus, any given Arbitrum transaction is associated with exactly one Ethereum block and one Arbitrum block.
 
 ### Ethereum (or parent chain) block numbers within Arbitrum
 
@@ -47,7 +45,7 @@ Accessing block numbers within an Arbitrum smart contract (i.e., `block.number` 
 
 The "first non-Arbitrum ancestor chain" is:
 
-- Ethereum if the chain is an L2 chain on top of Ethereum, or an L3 chain on top of an Arbitrum chain
+- Ethereum, if the chain is an L2 chain on top of Ethereum, or an L3 chain on top of an Arbitrum chain
 - The parent chain, if it's not Ethereum or an Arbitrum chain (for example, a chain that settles to Base)
 
 ```solidity
@@ -55,7 +53,7 @@ The "first non-Arbitrum ancestor chain" is:
 block.number // => returns the approximate block number of the first non-Arbitrum ancestor chain
 ```
 
-As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (It so happens these are generally the same assumptions one should operate under when using block numbers directly on Ethereum!)
+As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!)
 
 :::info EIP-2935 difference
 
@@ -65,9 +63,9 @@ As a general rule, any timing assumptions a contract makes about block numbers a
 
 ### Arbitrum block numbers
 
-Arbitrum blocks have their own block numbers, starting at 0 at the Arbitrum genesis block and updating sequentially.
+Arbitrum blocks have their own block numbers, starting at `0` at the Arbitrum genesis block and updating sequentially.
 
-ArbOS and the sequencer are responsible for delineating when one Arbitrum block ends and the next one begins. However, block creation depends entirely on chain usage, meaning that blocks are only produced when there are transactions to sequence. In active chains, one can expect to see Arbitrum blocks produced at a relatively steady rate. In more quiet chains, block production might be sporadic depending on the rate at which transactions are received.
+ArbOS and the sequencer are responsible for delineating when one Arbitrum block ends and the next one begins. However, block creation depends entirely on chain usage, meaning that block production only occurs when there are transactions to sequence. In active chains, one can expect to see Arbitrum blocks produced at a relatively steady rate. In less active chains, block production might be sporadic depending on the rate at which transactions are received.
 
 A client that queries an Arbitrum node's RPC interface (e.g., transaction receipts) will receive the transaction's Arbitrum block number as the standard block number field. The block number of the first non-Arbitrum ancestor chain will also be included in the added `l1BlockNumber` field.
 
@@ -87,7 +85,7 @@ The Arbitrum block number can also be retrieved within an Arbitrum contract via 
 
 ### Example
 
-The following example shows timings on a chain that settles to Ethereum (like Arbitrum One), although it also corresponds to L3 chains that settle to an Arbitrum chain.
+The following example illustrates timings on a chain that settles to Ethereum (similar to Arbitrum One), although it also applies to L3 chains that settle to an Arbitrum chain.
 
 | Wall clock time                       | 12:00 am | 12:00:15 am | 12:00:30 am | 12:00:45 am | 12:01 am | 12:01:15 am |
 | ------------------------------------- | -------- | ----------- | ----------- | ----------- | -------- | ----------- |
@@ -101,21 +99,21 @@ _\*\* **Chain's block number from RPCs:** note that this can be updated multiple
 
 ### Case study: the Multicall contract
 
-The Multicall contract offers a great case study for the differences between the different block numbers.
+The Multicall contract provides a valuable case study for the differences between various block numbers.
 
-The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behavior.
+The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. When used out of the box, some applications may exhibit unintended behavior.
 
 You can find a version of the adapted `Multicall2` deployed on Arbitrum One at [0x842eC2c7D803033Edf55E478F461FC547Bc54EB2](https://arbiscan.io/address/0x842eC2c7D803033Edf55E478F461FC547Bc54EB2#code).
 
-By default the `getBlockNumber`, `tryBlockAndAggregate`, and `aggregate` functions return the child chain block number. This allows you to use this value to compare your state against the tip of the chain.
+By default, the `getBlockNumber`, `tryBlockAndAggregate`, and `aggregate` functions return the child chain block number. This function allows you to use this value to compare your state against the tip of the chain.
 
-The `getL1BlockNumber` function can be queried if applications need to surface the block number of the first non-Arbitrum ancestor chain.
+The `getL1BlockNumber` function is queriable if applications need to surface the block number of the first non-Arbitrum ancestor chain.
 
 ## Block timestamps: Arbitrum vs. Ethereum
 
 Block timestamps on Arbitrum are not linked to the timestamp of the parent chain block. They are updated every child chain block based on the sequencer's clock. These timestamps must follow these two rules:
 
-1. Must be always equal or greater than the previous child chain block timestamp
+1. Must always be equal to or greater than the previous child chain block timestamp
 2. Must fall within the established boundaries (24 hours earlier than the current time or one hour in the future). More on this below.
 
 Furthermore, for transactions that are force-included from the parent chain (bypassing the Sequencer), the block timestamp will be equal to either the parent chain timestamp when the transaction was put in the Delayed Inbox on the parent chain (not when it was force-included), or the child chain timestamp of the previous child chain block, whichever of the two timestamps is greater.

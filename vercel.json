@@ -87,7 +87,7 @@
     },
     {
       "source": "/(bold/concepts/public-preview-expectations/?)",
-      "destination": "/how-arbitrum-works/bold/public-preview-expectations",
+      "destination": "/how-arbitrum-works/bold/gentle-introduction",
       "permanent": false
     },
     {
@@ -371,6 +371,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/partials/glossary/_fast-exit--liquidity-exit/?)",
+      "destination": "/(docs/partials/glossary/_fast-exit-liquidity-exit/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/rollup_protocol/?)",
       "destination": "/how-arbitrum-works/optimistic-rollup",
       "permanent": false
@@ -578,6 +583,11 @@
     {
       "source": "/(how-arbitrum-works/assertion-tree/?)",
       "destination": "/how-arbitrum-works/optimistic-rollup",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/bold/public-preview-expectations/?)",
+      "destination": "/how-arbitrum-works/bold/gentle-introduction",
       "permanent": false
     },
     {
