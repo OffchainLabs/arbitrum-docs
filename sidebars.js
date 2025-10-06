@@ -34,8 +34,8 @@ const sidebars = {
     },
     {
       type: 'doc',
-      id: 'get-started/arbitrum-faq',
-      label: 'FAQ',
+      id: 'get-started/arbitrum-introduction',
+      label: 'Arbitrum: introduction',
     },
     {
       type: 'category',

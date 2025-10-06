@@ -191,6 +191,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/get-started/arbitrum-faq/?)",
+      "destination": "/(docs/get-started/arbitrum-introduction/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/inside_arbitrum/?)",
       "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
@@ -247,7 +252,7 @@
     },
     {
       "source": "/(docs/welcome/arbitrum-gentle-introduction/?)",
-      "destination": "/(docs/get-started/arbitrum-faq/?)",
+      "destination": "/(docs/get-started/arbitrum-introduction/?)",
       "permanent": false
     },
     {
@@ -367,7 +372,7 @@
     },
     {
       "source": "/(for-devs/gentle-introduction-dapps/?)",
-      "destination": "/get-started/arbitrum-faq",
+      "destination": "/get-started/arbitrum-introduction",
       "permanent": false
     },
     {
@@ -565,7 +570,11 @@
       "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
     },
-    { "source": "/(intro/?)", "destination": "/get-started/arbitrum-faq", "permanent": false },
+    {
+      "source": "/(intro/?)",
+      "destination": "/get-started/arbitrum-introduction",
+      "permanent": false
+    },
     {
       "source": "/(launch-arbitrum-chain/arbitrum-chain-quickstart/?)",
       "destination": "/launch-arbitrum-chain/a-gentle-introduction",
@@ -1851,7 +1860,11 @@
       "destination": "/how-arbitrum-works/transaction-lifecycle",
       "permanent": false
     },
-    { "source": "/(welcome/?)", "destination": "/get-started/arbitrum-faq", "permanent": false },
+    {
+      "source": "/(welcome/?)",
+      "destination": "/get-started/arbitrum-introduction",
+      "permanent": false
+    },
     {
       "source": "/(why-nitro/?)",
       "destination": "/how-arbitrum-works/a-gentle-introduction",
