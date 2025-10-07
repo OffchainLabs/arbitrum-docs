@@ -60,13 +60,13 @@ You can deploy Solidity contracts onto Arbitrum just like you do on Ethereum. Th
 
 ### Gas accounting
 
-The fees for executing an Arbitrum transaction function similarly to gas fees on Ethereum. However, Arbitrum transactions must also pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, a child chain, is posted to Ethereum, a parent chain). Find more information about the two components of gas fees in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx) and parent chain pricing.
+The fees for executing an Arbitrum transaction function similarly to gas fees on Ethereum. However, Arbitrum transactions must also pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, a child chain, is posted to Ethereum, a parent chain). Find more information about the two components of gas fees in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) and parent chain pricing.
 
 ### Base fee mechanism
 
-Arbitrum chains support arbitrary message passing from a parent chain (e.g., Ethereum) to a child chain (e.g., Arbitrum One). These messages are commonly referred to as "parent chain to child chain messages." Developers using this functionality should familiarize themselves with how messaging works. For more information, refer to [Parent chain to child chain messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+Arbitrum chains support arbitrary message passing from a parent chain (e.g., Ethereum) to a child chain (e.g., Arbitrum One). These messages are commonly referred to as "parent chain to child chain messages." Developers using this functionality should familiarize themselves with how messaging works. For more information, refer to [Parent chain to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 
-Similarly, Arbitrum chains can also send messages to the parent chain—more information about this is available in [Child Chain to Parent Chain Messaging and the Outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx).
+Similarly, Arbitrum chains can also send messages to the parent chain—more information about this is available in [Child Chain to Parent Chain Messaging and the Outbox](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx).
 
 Arbitrum chains support arbitrary message passing from a parent chain (for example, a parent chain like Ethereum) to a child chain (for example, a child chain like Arbitrum One or Arbitrum Nova). These are commonly known as "parent chain to child chain messages". Developers using this functionality should familiarize themselves with how they work. Find more information about it in [Parent chain to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 

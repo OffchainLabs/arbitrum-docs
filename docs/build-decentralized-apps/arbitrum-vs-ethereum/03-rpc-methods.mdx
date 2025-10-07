@@ -25,14 +25,14 @@ In addition to the [three transaction types](https://ethereum.org/en/developers/
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
-| Transaction type code | Transaction type name           | Description                                                                                                                                                                |
-| --------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `100`                 | `ArbitrumDepositTxType`         | Used to deposit `ETH` from a parent chain to a child chain via the Arbitrum bridge                                                                                         |
-| `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parent chain, originated by a user through the Arbitrum bridge                                                                  |
-| `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                              |
-| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
-| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#submission) via the Arbitrum bridge on the parent chain                                  |
-| `106`                 | `ArbitrumInternalTxType`        | Internal transactions created by the ArbOS itself for certain state updates, like the parent chain base fee and the block number                                           |
+| Transaction type code | Transaction type name           | Description                                                                                                                                                                        |
+| --------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `100`                 | `ArbitrumDepositTxType`         | Used to deposit `ETH` from a parent chain to a child chain via the Arbitrum bridge                                                                                                 |
+| `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parent chain, originated by a user through the Arbitrum bridge                                                                          |
+| `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                                      |
+| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
+| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#submission) via the Arbitrum bridge on the parent chain                                  |
+| `106`                 | `ArbitrumInternalTxType`        | Internal transactions created by the ArbOS itself for certain state updates, like the parent chain base fee and the block number                                                   |
 
 ### Additional fields
 
@@ -61,7 +61,7 @@ On RPC calls that return transaction receipts, the following fields are added to
 | Field name      | Description                                                                                                                                                                                                                   |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `l1BlockNumber` | The block number of the first non-Arbitrum ancestor chain that is usable for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `gasUsedForL1`  | The amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx)                                                                         |
+| `gasUsedForL1`  | The amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx)                                                             |
 
 ## Blocks
 
