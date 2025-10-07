@@ -856,6 +856,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos50',
+              label: 'Dia (ArbOS 50)',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos40',
               label: 'Callisto (ArbOS 40)',
             },
