@@ -253,12 +253,6 @@ const config = {
             position: 'right',
             label: 'Launch a chain',
           },
-          // {
-          //   type: 'docSidebar',
-          //   sidebarId: 'stylusSidebar',
-          //   position: 'right',
-          //   label: 'Use Stylus',
-          // },
           {
             type: 'docSidebar',
             sidebarId: 'runNodeSidebar',
