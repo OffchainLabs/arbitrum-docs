@@ -108,6 +108,21 @@ Support and implementation for the following EIPs are not planned to be part of 
 - [EIP-7907](https://eips.ethereum.org/EIPS/eip-7907), since this EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by client teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We are currently exploring alternative ways to increase the contract size limit that do not interfere with the ability for Arbitrum chains to support EIP-7907 in the future. Please see this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this.
 - [EIP-7935](https://eips.ethereum.org/EIPS/eip-7935), since Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned [here](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).
 
+
+### Special notes about Ethereum’s PeerDAS ([EIP-7594](https://eips.ethereum.org/EIPS/eip-7594)) for Nitro operators
+
+:::caution
+
+Action Required: Orbit Chains must upgrade to Nitro v3.8.0 before Sepolia/Mainnet Fusaka. Read more [here](#)
+
+:::
+
+:::caution
+
+Breaking Change Notice: RPC nodes, Arbitrum One / Nova node operators, Orbit Chain node operators, will need to make sure they connect to a L1 Ethereum Beacon Chain node that has historical blob data in order for the Nitro node software to function properly. Read more [here](https://www.notion.so/arbitrum/EXT-Comms-Breaking-Change-Notice-PeerDAS-Upgrade-in-Fusaka-28401a3f59f880d68e83ce2779b79ce3#28401a3f59f880d68e83ce2779b79ce3)
+
+:::
+
 ### Special note about ArbOS 50 Dia for chains who have not yet upgraded to use Arbitrum BoLD
 
 While ArbOS 50 Dia will be compatible with `nitro-contracts 3.1.1`, `nitro-contracts 3.1.0` and `nitro-contracts 2.1.3`, only chains that have Arbitrum BoLD enabled can use `nitro-contracts 3.x`. This requirement means that if your chain has not yet upgraded to use BoLD, please only use `nitro-contracts 2.1.3` for your ArbOS 50 Dia upgrade.
