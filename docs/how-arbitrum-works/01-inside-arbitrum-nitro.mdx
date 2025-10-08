@@ -99,7 +99,7 @@ The Sequencer immediately publishes your transaction through its **real-time fee
 - **State Synchronization**: All nodes stay synchronized with the latest transaction sequence
 - **Soft Finality**: You can act on your transaction immediately, knowing it's been properly ordered
 
-<ImageWithCaption src="/img/haw-sequencer-feed.svg" alt="Sequencer feed" />
+<ImageWithCaption caption="Sequencer feed" src="/img/haw-sequencer-feed.svg" />
 
 ### Batching and Compression
 
@@ -117,7 +117,7 @@ The Sequencer uses the **Brotli compression algorithm** to minimize the data tha
 - **Cost Optimization**: Higher compression reduces L1 posting costs but requires more computation
 - **Adaptive Strategy**: System prioritizes speed over compression when backlog is high
 
-<ImageWithCaption src="/img/haw-compression.svg" alt="Compression" />
+<ImageWithCaption caption="Compression" src="/img/haw-compression.svg" />
 
 ### Posting to Ethereum
 
@@ -135,7 +135,10 @@ Once batched and compressed, your transaction data is posted to Ethereum through
 - **Direct Inclusion**: Transaction data included directly in calldata
 - **Compatibility**: Works with all Ethereum configurations
 
-<ImageWithCaption src="/img/haw-submit-to-sequencer-inbox.svg" alt="Submit to Sequencer inbox" />
+<ImageWithCaption
+  caption="Submit to Sequencer inbox"
+  src="/img/haw-submit-to-sequencer-inbox.svg"
+/>
 
 **Why This Matters**: The batching and compression system enables Arbitrum to achieve 10-100x cost reduction compared to posting individual transactions to Ethereum, while the dual posting strategy ensures optimal cost efficiency under varying network conditions.
 
@@ -237,7 +240,10 @@ Arbitrum uses **BoLD (Bounded Liquidity Delay)**, a next-generation dispute prot
 - **All-vs-All Battle Royale**: Single honest party can defend against unlimited malicious challengers
 - **Stage 2 Rollup**: Enables Arbitrum to achieve full decentralization
 
-<ImageWithCaption src="/img/bold-before-vs-after-with-bold.png" alt="Before and after with BoLD" />
+<ImageWithCaption
+  caption="Before and after with BoLD"
+  src="/img/bold-before-vs-after-with-bold.png"
+/>
 
 ### Assertions: Claims About Chain State
 
@@ -395,7 +401,7 @@ When you want to send assets or data from Ethereum to Arbitrum, you have several
 - **Signed Messages**: From EOAs with signature verification
 - **Unsigned Messages**: From contracts with address aliasing for security
 
-<ImageWithCaption src="/img/haw-l1-to-l2.svg" alt="Parent to child messaging" />
+<ImageWithCaption caption="Parent to child messaging" src="/img/haw-l1-to-l2.svg" />
 
 ### L2 to L1 Messaging: From Arbitrum to Ethereum
 
@@ -414,7 +420,7 @@ Moving assets or data from Arbitrum back to Ethereum follows a different pattern
 - **Merkle Proofs**: Messages are proven using Merkle inclusion proofs
 - **Unlimited Lifetime**: Messages persist until successfully executed
 
-<ImageWithCaption src="/img/haw-canonical-bridge.svg" alt="Canonical bridge" />
+<ImageWithCaption caption="Canonical bridge" src="/img/haw-canonical-bridge.svg" />
 
 ### The Canonical Bridge Architecture
 
