@@ -89,6 +89,11 @@ const sidebars = {
       value:
         '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
     },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/learn-more/faq">FAQ<span class="other-section-icon">↑</span></a>',
+    },
   ],
   // Run Arbitrum Chain sidebar
   runArbitrumChainSidebar: [
