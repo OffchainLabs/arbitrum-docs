@@ -75,9 +75,9 @@ const sidebars = {
       href: 'how-arbitrum-works/a-gentle-introduction',
     },
     {
-      type: 'doc',
-      id: 'for-devs/dev-tools-and-resources/chain-info',
-      label: 'Chain info',
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
     },
   ],
   // Run Arbitrum Chain sidebar
@@ -446,9 +446,9 @@ const sidebars = {
           label: 'FAQ',
         },
         {
-          type: 'doc',
-          id: 'for-devs/dev-tools-and-resources/chain-info',
-          label: 'Chain info',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
         },
       ],
     },
@@ -624,9 +624,9 @@ const sidebars = {
           id: 'node-running/faq',
         },
         {
-          type: 'doc',
-          id: 'for-devs/dev-tools-and-resources/chain-info',
-          label: 'Chain info',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
         },
       ],
     },
@@ -660,9 +660,9 @@ const sidebars = {
           label: 'Troubleshooting',
         },
         {
-          type: 'doc',
-          id: 'for-devs/dev-tools-and-resources/chain-info',
-          label: 'Chain info',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
         },
       ],
     },
@@ -868,9 +868,9 @@ const sidebars = {
       ],
     },
     {
-      type: 'doc',
-      id: 'for-devs/dev-tools-and-resources/chain-info',
-      label: 'Chain info',
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
     },
   ],
 
@@ -1253,11 +1253,12 @@ const sidebars = {
       ],
     },
     {
-      type: 'doc',
-      id: 'for-devs/dev-tools-and-resources/chain-info',
-      label: 'Chain info',
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
     },
   ],
+
   // Additional resources sidebar
   additionalResourcesSidebar: [
     {
@@ -1309,6 +1310,21 @@ const sidebars = {
           dirName: 'for-devs/third-party-docs',
         },
       ],
+    },
+    {
+      type: 'doc',
+      id: 'intro/glossary',
+      label: 'Glossary',
+    },
+    {
+      type: 'doc',
+      id: 'for-devs/contribute',
+      label: 'Contribute',
+    },
+    {
+      type: 'doc',
+      id: 'for-devs/dev-tools-and-resources/chain-info',
+      label: 'Chain info',
     },
     {
       type: 'doc',
