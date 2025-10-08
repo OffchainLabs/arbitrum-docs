@@ -79,6 +79,16 @@ const sidebars = {
       value:
         '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
     },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
   ],
   // Run Arbitrum Chain sidebar
   runArbitrumChainSidebar: [
@@ -1255,12 +1265,42 @@ const sidebars = {
     {
       type: 'html',
       value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
         '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
     },
   ],
 
   // Additional resources sidebar
   additionalResourcesSidebar: [
+    {
+      type: 'doc',
+      id: 'intro/glossary',
+      label: 'Glossary',
+    },
+    {
+      type: 'doc',
+      id: 'for-devs/contribute',
+      label: 'Contribute',
+    },
+    {
+      type: 'doc',
+      id: 'for-devs/dev-tools-and-resources/chain-info',
+      label: 'Chain info',
+    },
+    {
+      type: 'doc',
+      label: 'Audit reports',
+      id: 'audit-reports',
+    },
     {
       type: 'category',
       label: 'Third-party docs',
@@ -1310,26 +1350,6 @@ const sidebars = {
           dirName: 'for-devs/third-party-docs',
         },
       ],
-    },
-    {
-      type: 'doc',
-      id: 'intro/glossary',
-      label: 'Glossary',
-    },
-    {
-      type: 'doc',
-      id: 'for-devs/contribute',
-      label: 'Contribute',
-    },
-    {
-      type: 'doc',
-      id: 'for-devs/dev-tools-and-resources/chain-info',
-      label: 'Chain info',
-    },
-    {
-      type: 'doc',
-      label: 'Audit reports',
-      id: 'audit-reports',
     },
     {
       type: 'link',
