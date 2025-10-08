@@ -122,3 +122,34 @@
     }
   }
 }
+
+// Keep "Build dApps" dropdown highlighted when on child pages
+// Target the dropdown link when any of its menu items are active
+.navbar__item.dropdown:has(.dropdown__menu .dropdown__link--active) > .navbar__link {
+  color: var(--ifm-navbar-link-active-color);
+
+  &::after {
+    border-bottom-color: var(--ifm-navbar-link-active-color);
+    border-right-color: var(--ifm-navbar-link-active-color);
+  }
+}
+
+// Alternative approach for browsers that don't support :has() (fallback)
+// Specifically target Build dApps dropdown based on URL patterns
+[data-theme='light'] body[class*='build-decentralized-apps'],
+[data-theme='light'] body[class*='stylus'] {
+  .navbar__item.dropdown .navbar__link[aria-label*='Build dApps'],
+  .navbar__item.dropdown .navbar__link:has(+ .dropdown__menu a[href*='/build-decentralized-apps/']),
+  .navbar__item.dropdown .navbar__link:has(+ .dropdown__menu a[href*='/stylus/']) {
+    color: var(--ifm-navbar-link-active-color);
+  }
+}
+
+[data-theme='dark'] body[class*='build-decentralized-apps'],
+[data-theme='dark'] body[class*='stylus'] {
+  .navbar__item.dropdown .navbar__link[aria-label*='Build dApps'],
+  .navbar__item.dropdown .navbar__link:has(+ .dropdown__menu a[href*='/build-decentralized-apps/']),
+  .navbar__item.dropdown .navbar__link:has(+ .dropdown__menu a[href*='/stylus/']) {
+    color: var(--ifm-navbar-link-active-color);
+  }
+}
