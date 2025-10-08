@@ -2,7 +2,7 @@
 title: 'Inside Arbitrum Nitro'
 description: "Follow a transaction's journey through the complete Arbitrum Nitro stack, from submission to finality."
 author: pete-vielhaber
-sme: edfelten
+sme: mehdi salehi
 user_story: "As a developer, I need to understand how transactions flow through Arbitrum's architecture and how the system ensures security and performance."
 content_type: get-started
 ---
@@ -99,8 +99,6 @@ The Sequencer immediately publishes your transaction through its **real-time fee
 - **State Synchronization**: All nodes stay synchronized with the latest transaction sequence
 - **Soft Finality**: You can act on your transaction immediately, knowing it's been properly ordered
 
-<ImageWithCaption caption="Sequencer feed" src="/img/haw-sequencer-feed.svg" />
-
 ### Batching and Compression
 
 The Sequencer doesn't process transactions individually. Instead, it collects multiple transactions into **batches** for efficient processing:
@@ -117,8 +115,6 @@ The Sequencer uses the **Brotli compression algorithm** to minimize the data tha
 - **Cost Optimization**: Higher compression reduces L1 posting costs but requires more computation
 - **Adaptive Strategy**: System prioritizes speed over compression when backlog is high
 
-<ImageWithCaption caption="Compression" src="/img/haw-compression.svg" />
-
 ### Posting to Ethereum
 
 Once batched and compressed, your transaction data is posted to Ethereum through the **Sequencer Inbox Contract**. The Sequencer uses two primary methods:
@@ -134,11 +130,6 @@ Once batched and compressed, your transaction data is posted to Ethereum through
 - **Fallback Method**: When blob fees are high or EIP-4844 unavailable
 - **Direct Inclusion**: Transaction data included directly in calldata
 - **Compatibility**: Works with all Ethereum configurations
-
-<ImageWithCaption
-  caption="Submit to Sequencer inbox"
-  src="/img/haw-submit-to-sequencer-inbox.svg"
-/>
 
 **Why This Matters**: The batching and compression system enables Arbitrum to achieve 10-100x cost reduction compared to posting individual transactions to Ethereum, while the dual posting strategy ensures optimal cost efficiency under varying network conditions.
 
@@ -240,11 +231,6 @@ Arbitrum uses **BoLD (Bounded Liquidity Delay)**, a next-generation dispute prot
 - **All-vs-All Battle Royale**: Single honest party can defend against unlimited malicious challengers
 - **Stage 2 Rollup**: Enables Arbitrum to achieve full decentralization
 
-<ImageWithCaption
-  caption="Before and after with BoLD"
-  src="/img/bold-before-vs-after-with-bold.png"
-/>
-
 ### Assertions: Claims About Chain State
 
 Validators post **assertions**—claims about Arbitrum's execution state—to Ethereum. Each assertion contains:
@@ -339,22 +325,6 @@ BoLD validators can adopt different strategies based on their resources and goal
 
 **Challenge Participant Strategy**: Participates in ongoing challenges by posting challenge bonds (555/79 ETH) and making moves in dispute resolution.
 
-### Trustless Bonding Pools: Democratizing Validation
-
-To address the high bond requirements, BoLD includes **trustless bonding pools**:
-
-**How Bonding Pools Work:**
-
-- **Crowdsourced Funding**: Multiple parties can pool funds to meet bond requirements
-- **Trustless Operation**: No need to trust other pool participants
-- **Automatic Deployment**: Validator software can auto-deploy pools when needed
-- **Proportional Rewards**: Participants receive rewards proportional to their contribution
-
-**Pool Types:**
-
-- **Assertion Pools**: For posting assertions (3600 ETH total)
-- **Challenge Pools**: For participating in challenges (555/79 ETH per level)
-
 ### Economic Security and Resource Ratios
 
 BoLD uses sophisticated economic mechanisms to ensure security:
@@ -401,8 +371,6 @@ When you want to send assets or data from Ethereum to Arbitrum, you have several
 - **Signed Messages**: From EOAs with signature verification
 - **Unsigned Messages**: From contracts with address aliasing for security
 
-<ImageWithCaption caption="Parent to child messaging" src="/img/haw-l1-to-l2.svg" />
-
 ### L2 to L1 Messaging: From Arbitrum to Ethereum
 
 Moving assets or data from Arbitrum back to Ethereum follows a different pattern:
@@ -419,8 +387,6 @@ Moving assets or data from Arbitrum back to Ethereum follows a different pattern
 - **Manual Execution Required**: Ethereum doesn't support scheduled execution
 - **Merkle Proofs**: Messages are proven using Merkle inclusion proofs
 - **Unlimited Lifetime**: Messages persist until successfully executed
-
-<ImageWithCaption caption="Canonical bridge" src="/img/haw-canonical-bridge.svg" />
 
 ### The Canonical Bridge Architecture
 
@@ -529,28 +495,6 @@ Arbitrum includes several advanced features that extend its capabilities beyond 
 5. If insufficient signatures collected, Sequencer falls back to posting full data
 
 **Use Cases**: Optimized for applications requiring very low costs and willing to accept mild trust assumptions, such as gaming or social applications. Arbitrum Nova uses AnyTrust to achieve lower fees than Arbitrum One.
-
-## Conclusion: The Complete Journey
-
-Your transaction's journey through Arbitrum is now complete. From the moment you submitted it to the Sequencer, through execution in the State Transition Function, to final confirmation on Ethereum, your transaction has been processed securely and efficiently.
-
-### What Makes Arbitrum Special
-
-**Performance**: 10x lower fees and 100x faster transactions compared to Ethereum
-**Security**: Ethereum-equivalent security through cryptographic proofs and economic incentives
-**Compatibility**: Full EVM compatibility with seamless migration of existing applications
-**Innovation**: Advanced features like Stylus, BoLD, and Timeboost that extend beyond basic Layer 2
-
-### The Technical Achievement
-
-Arbitrum's architecture represents a sophisticated balance of competing requirements:
-
-- **Speed vs. Security**: Soft finality for immediate feedback, hard finality for cryptographic security
-- **Efficiency vs. Decentralization**: Optimized performance while maintaining permissionless validation
-- **Compatibility vs. Innovation**: Full Ethereum compatibility while enabling new capabilities
-- **Cost vs. Features**: Minimal fees while providing advanced Layer 2 functionality
-
----
 
 ## Deep Dive Resources
 
