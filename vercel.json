@@ -191,7 +191,7 @@
       "permanent": false
     },
     {
-      "source": "/(docs/get-started/arbitrum-faq/?)",
+      "source": "/(docs/get-started/arbitrum-introduction/?)",
       "destination": "/(docs/get-started/arbitrum-introduction/?)",
       "permanent": false
     },

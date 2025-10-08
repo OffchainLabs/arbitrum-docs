@@ -57,22 +57,22 @@ const sidebars = {
     {
       type: 'link',
       label: 'Run an Arbitrum (Orbit) chain',
-      href: 'launch-arbitrum-chain/a-gentle-introduction',
+      href: '/launch-arbitrum-chain/a-gentle-introduction',
     },
     {
       type: 'link',
       label: 'Run an Arbitrum node',
-      href: 'run-arbitrum-node/overview',
+      href: '/run-arbitrum-node/overview',
     },
     {
       type: 'link',
       label: 'Arbitrum bridge',
-      href: 'run-arbitrum-node/overview',
+      href: '/arbitrum-bridge/quickstart',
     },
     {
       type: 'link',
       label: 'How Arbitrum works',
-      href: 'how-arbitrum-works/a-gentle-introduction',
+      href: '/how-arbitrum-works/a-gentle-introduction',
     },
     {
       type: 'html',
