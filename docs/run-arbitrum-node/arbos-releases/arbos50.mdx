@@ -13,13 +13,13 @@ ArbOS 50 Dia is still pre-release. This document may change.
 
 :::caution
 
-**Action Required:** Before Ethereum L1 Sepolia/Mainnet upgrade to Fusaka, **(1)** Nitro node operators must upgrade to Nitro `v3.8.0`, and **(2)** need to make sure they connect to a L1 Ethereum Beacon Chain node that has historical blob data, for the Nitro node software to function properly. **Read more [here](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
+**Action Required:** Before Ethereum L1 Sepolia/Mainnet upgrade to Fusaka, **(1)** Nitro node operators must upgrade to Nitro `v3.9.0`, and **(2)** need to make sure they connect to a L1 Ethereum Beacon Chain node that has historical blob data, for the Nitro node software to function properly. **Read more [here](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
 
 :::
 
-The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.8.0-rc.X](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0-rc.5), which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
+The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0), which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
 
-Please note that it is important to run Nitro v3.8.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the Arbitrum Nitro node inside Docker.
+Please note that it is important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the Arbitrum Nitro node inside Docker.
 
 The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.mdx).
 
@@ -27,8 +27,8 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 
 ### Requirements:
 
-- [Nitro v3.8.0-rc.X](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0-rc.5) or higher
-- [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0), [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1), or higher
+- [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) or higher
+- [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
 - WASM module root: `Need to update - 0xb90895a56a59c0267c2004a0e103ad725bd98d5a05c3262806ab4ccb3f997558`
 
 :::caution
@@ -104,6 +104,12 @@ Native Token Mint/Burn is proposed to be included in ArbOS 50 Dia for the benefi
 
 To read more about this feature, go [here](https://arbitrum.notion.site/Enable-Native-Mint-Burn-for-your-chain-s-gas-token-22601a3f59f880be9b99d3d55f982a17).
 
+:::caution
+
+If you want to enable Native Token Mint/Burn for your chain, please use nitro-contracts v3.1.1 instead.
+
+:::
+
 ### Fusaka EIPs that are not proposed to be in ArbOS 50 Dia
 
 Support and implementation for the following EIPs are not planned to be part of ArbOS 50 Dia:
@@ -114,39 +120,18 @@ Support and implementation for the following EIPs are not planned to be part of 
 - [EIP-7907](https://eips.ethereum.org/EIPS/eip-7907), since this EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by client teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We are currently exploring alternative ways to increase the contract size limit that do not interfere with the ability for Arbitrum chains to support EIP-7907 in the future. Please see this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this.
 - [EIP-7935](https://eips.ethereum.org/EIPS/eip-7935), since Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned [here](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).
 
-### Special notes about Ethereum’s PeerDAS for Nitro operators
-
-:::caution
-
-**Action Required:** Before Ethereum L1 Sepolia/Mainnet upgrade to Fusaka, **(1)** Nitro node operators must upgrade to Nitro `v3.8.0`, and **(2)** need to make sure they connect to a L1 Ethereum Beacon Chain node that has historical blob data, for the Nitro node software to function properly. **Read more [here](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
-
-:::
-
-As part of the Fulu consensus node upgrade in Fusaka, Ethereum’s PeerDAS ([EIP-7594](https://eips.ethereum.org/EIPS/eip-7594)) will be activated.
-
-This change optimizes data availability by removing the requirement for all nodes to download all blob data, while still guaranteeing full data availability network-wide. However, this means that node operators for Layer 2 networks, such as Arbitrum One and other Arbitrum L2 chains, will need to →
-
-1. Make sure they connect to a L1 Ethereum Beacon Chain node that has historical blob data in order for the Nitro node software to function properly.
-2. Send blob transactions with cell proofs rather than blob proofs.
-
-Failure to act on these will result in Arbitrum L2 Nitro nodes →
-
-1. Failing to fetch blob data properly from Ethereum (Sepolia or Mainnet).
-2. Failing to post batches to Ethereum (Sepolia or Mainnet).
-
-To read more about these required actions, go [here](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link).
-
 ### Special note about ArbOS 50 Dia for chains who have not yet upgraded to use Arbitrum BoLD
 
 While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.x` and `nitro-contracts 2.1.3`, only chains that have Arbitrum BoLD enabled can use `nitro-contracts 3.x`. This requirement means that if your chain has not yet upgraded to use BoLD, please only use `nitro-contracts 2.1.3` for your ArbOS 50 Dia upgrade.
 
 ### Reference links for ArbOS 50 Dia
 
-- [Nitro v3.8.0-rc.X](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0-rc.5)
-- [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1)
+- [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0)
 - [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
+- [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) (only relevant for Arbitrum chains that want Native Token Mint/Burn enabled)
 - [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) (only relevant for Arbitrum chains that do not have BoLD enabled yet)
 - [README for how to upgrade your rollup contracts to support ArbOS 50 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
+- [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx)
 - [AIP: ArbOS Version 50 Dia Forum Post](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-version-50-dia/)
 - [Temperature check vote on Snapshot for ArbOS 50 Dia](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x33754da4006d0ef38666ec5d5e85fd0966a891a594ab9dc21f23beedea2d330b)
 - Coming Soon - ArbOS 50 Audit Report, from Trail of Bits
