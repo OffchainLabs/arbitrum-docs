@@ -380,11 +380,6 @@ const sidebars = {
                   label: `Enable fast withdrawals`,
                 },
                 {
-                  type: 'doc',
-                  label: 'Use Layer Leap',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
-                },
-                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
