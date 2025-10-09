@@ -305,7 +305,7 @@ Moving assets or data from Arbitrum back to Ethereum follows a different pattern
 
 **The Process:**
 
-1. **Message Creation**: A contract or user sends a message from the child chain by calling: [`ArbSys.sendTxToL1()`](/for-devs/dev-tools-and-resources/partials/precompile-tables/_arbsys.mdx)
+1. **Message Creation**: A contract or user sends a message from the child chain by calling: [`ArbSys.sendTxToL1()`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)
 2. **Inclusion in Assertion**: A rollup assertion will include the message
 3. **Challenge Period**: 6.4-day window for potential challenges
 4. **Manual Execution**: After confirmation, anyone can execute the message on L1
@@ -411,7 +411,7 @@ Arbitrum features several advanced capabilities that extend its functionality be
 
 **Technical Implementation**: Stylus contracts execute in a coequal WASM virtual machine alongside the EVM, with specialized host I/O operations for blockchain state access.
 
-For more in-depth information about Stylus, refer to the [Stylus Gentle Intro]().
+For more in-depth information about Stylus, refer to the [Stylus Gentle Intro](/stylus/gentle-introduction.mdx).
 
 ### Timeboost: MEV-aware transaction ordering
 
@@ -422,7 +422,7 @@ For more in-depth information about Stylus, refer to the [Stylus Gentle Intro]()
 - **Spam Reduction**: Reduces MEV-driven network congestion
 - **Configurable Parameters**: Chain owners can customize ordering policies
 
-For more information about Timeboost, refer to the [Timeboost Gentle introduction]().
+For more information about Timeboost, refer to the [Timeboost Gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
 ### AnyTrust: Alternative Data Availability (DA)
 
@@ -452,7 +452,7 @@ For more information about Timeboost, refer to the [Timeboost Gentle introductio
 
 **Use Cases**: Optimized for applications requiring very low costs and willing to accept mild trust assumptions, such as gaming or social applications. Arbitrum Nova utilizes AnyTrust to achieve lower fees compared to Arbitrum One.
 
-For more in-depth information about AnyTrust, refer to the [AnyTrust protocol]().
+For more in-depth information about AnyTrust, refer to the [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx).
 
 ## Additional deep dive resources
 
