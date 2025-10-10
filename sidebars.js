@@ -25,240 +25,82 @@ const sdkSidebar = {
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
-  buildDecentralizedAppsSidebar: [
+  // Get started sidebar - shared entry point
+  getStartedSidebar: [
     {
-      type: 'category',
-      label: 'Welcome',
-      collapsed: false,
-      items: [
-        {
-          type: 'doc',
-          id: 'welcome/arbitrum-gentle-introduction',
-          label: 'A gentle introduction',
-        },
-        {
-          type: 'doc',
-          id: 'welcome/get-started',
-          label: 'Get started',
-        },
-        {
-          type: 'doc',
-          id: 'for-devs/dev-tools-and-resources/chain-info',
-          label: 'Chain info',
-        },
-      ],
+      type: 'doc',
+      id: 'get-started/overview',
+      label: 'Get started',
+    },
+    {
+      type: 'doc',
+      id: 'get-started/arbitrum-introduction',
+      label: 'Arbitrum: introduction',
     },
     {
       type: 'category',
-      label: 'Build decentralized apps',
+      label: 'Build apps',
       collapsed: true,
       items: [
         {
           type: 'doc',
           id: 'build-decentralized-apps/quickstart-solidity-remix',
-          label: 'Quickstart (Solidity)',
+          label: 'Build apps with Solidity',
         },
         {
           type: 'doc',
-          label: 'Estimate gas',
-          id: 'build-decentralized-apps/how-to-estimate-gas',
-        },
-        {
-          type: 'doc',
-          label: 'Chains and testnets',
-          id: 'build-decentralized-apps/public-chains',
-        },
-        {
-          type: 'doc',
-          label: 'Cross-chain messaging',
-          id: 'build-decentralized-apps/cross-chain-messaging',
-        },
-        {
-          type: 'doc',
-          id: 'build-decentralized-apps/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
-        },
-        {
-          type: 'category',
-          label: 'Arbitrum vs Ethereum',
-          items: [
-            {
-              type: 'doc',
-              label: 'Comparison overview',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview',
-            },
-            {
-              type: 'doc',
-              label: 'Block gas limit, numbers and time',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
-            },
-            {
-              type: 'doc',
-              label: 'RPC methods',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods',
-            },
-            {
-              type: 'doc',
-              label: 'Solidity support',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          label: 'Oracles',
-          id: 'build-decentralized-apps/oracles/overview-oracles',
-        },
-        {
-          type: 'category',
-          label: 'Precompiles',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/precompiles/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Reference',
-              id: 'build-decentralized-apps/precompiles/reference',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'NodeInterface',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/nodeinterface/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Reference',
-              id: 'build-decentralized-apps/nodeinterface/reference',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Token bridging',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/token-bridging/overview',
-            },
-            {
-              type: 'doc',
-              label: 'ETH bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
-            },
-            {
-              type: 'doc',
-              label: 'ERC-20 token bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
-            },
-            {
-              type: 'category',
-              label: 'Bridge tokens programmatically',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Get started',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the generic-custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Reference',
-          items: [
-            {
-              type: 'doc',
-              id: 'build-decentralized-apps/reference/node-providers',
-              label: 'RPC endpoints and providers',
-            },
-            {
-              type: 'doc',
-              label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/contract-addresses',
-            },
-            {
-              type: 'doc',
-              label: 'Chain parameters',
-              id: 'build-decentralized-apps/reference/chain-params',
-            },
-            {
-              type: 'doc',
-              label: 'Development frameworks',
-              id: 'build-decentralized-apps/reference/development-frameworks',
-            },
-            {
-              type: 'doc',
-              label: 'Web3 libraries and tools',
-              id: 'build-decentralized-apps/reference/web3-libraries-tools',
-            },
-            {
-              type: 'doc',
-              label: 'Monitoring tools and block explorers',
-              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
-            },
-            {
-              type: 'doc',
-              label: 'Debugging tools',
-              id: 'build-decentralized-apps/reference/debugging-tools',
-            },
-
-            {
-              type: 'doc',
-              id: 'build-decentralized-apps/reference/mainnet-risks',
-              label: 'Mainnet risks',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          label: 'Troubleshooting',
-          id: 'for-devs/troubleshooting-building',
-        },
-        {
-          type: 'category',
-          label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
-        },
-        {
-          type: 'link',
-          label: 'Tutorials',
-          href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
+          id: 'stylus/quickstart',
+          label: 'Build apps with Stylus',
         },
       ],
     },
     {
+      type: 'link',
+      label: 'Run an Arbitrum (Orbit) chain',
+      href: '/launch-arbitrum-chain/a-gentle-introduction',
+    },
+    {
+      type: 'link',
+      label: 'Run an Arbitrum node',
+      href: '/run-arbitrum-node/overview',
+    },
+    {
+      type: 'link',
+      label: 'Arbitrum bridge',
+      href: '/arbitrum-bridge/quickstart',
+    },
+    {
+      type: 'link',
+      label: 'How Arbitrum works',
+      href: '/how-arbitrum-works/a-gentle-introduction',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/learn-more/faq">FAQ<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+  // Run Arbitrum Chain sidebar
+  runArbitrumChainSidebar: [
+    {
       type: 'category',
       label: 'Run an Arbitrum (Orbit) chain',
-      collapsed: true,
+      collapsed: false,
       items: [
         {
           type: 'doc',
@@ -620,191 +462,33 @@ const sidebars = {
         },
       ],
     },
+
     {
-      type: 'category',
-      label: 'Write Stylus Contracts',
-      collapsed: true,
-      link: {
-        type: 'doc',
-        id: 'stylus/stylus-content-map',
-      },
-      items: [
-        {
-          type: 'doc',
-          id: 'stylus/gentle-introduction',
-          label: 'A gentle introduction',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/quickstart',
-          label: 'Quickstart',
-        },
-        {
-          type: 'category',
-          label: 'Rust SDK',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/overview',
-              label: 'Overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/project-structure',
-              label: 'Structure of a Contract',
-            },
-            ...stylusByExampleBasicExamples,
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/using-inheritance',
-              label: 'Composition and trait-based routing model',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/rust-sdk-guide',
-              label: 'Advanced features',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/recommended-libraries',
-              label: 'Recommended Rust Crates',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Rust CLI',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/using-cli',
-              label: 'Overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/debugging-tx',
-              label: 'Debug transactions',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/testing-contracts',
-              label: 'Testing contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts',
-              label: 'Verify contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/caching-contracts',
-              label: 'Cache contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts-arbiscan',
-              label: 'Verify on Arbiscan',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/optimizing-binaries',
-              label: 'Optimize WASM binaries',
-            },
-          ],
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
-        },
-        {
-          type: 'category',
-          label: 'Concepts',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/concepts/how-it-works',
-              label: 'Architecture overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/gas-metering',
-              label: 'Gas metering',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Examples',
-          collapsed: true,
-          items: [
-            ...stylusByExampleApplications,
-            {
-              type: 'link',
-              label: 'Awesome Stylus',
-              href: 'https://github.com/OffchainLabs/awesome-stylus',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Reference',
-          collapsed: true,
-          items: [
-            {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/opcode-hostio-pricing',
-              label: 'Gas & Ink Pricing',
-            },
-            {
-              type: 'link',
-              label: 'Stylus by Example',
-              href: 'https://stylus-by-example.org/',
-            },
-            {
-              type: 'link',
-              label: 'Cargo Stylus CLI GitHub',
-              href: 'https://github.com/OffchainLabs/cargo-stylus',
-            },
-            {
-              type: 'link',
-              label: 'Rust SDK Crate',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-            },
-            {
-              type: 'link',
-              label: 'Source Code Repository',
-              href: 'https://github.com/OffchainLabs/stylus',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-          label: 'Using other languages',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/troubleshooting-building-stylus',
-          label: 'Troubleshooting',
-        },
-      ],
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
     },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+
+  // Run Node sidebar
+  runNodeSidebar: [
     {
       type: 'category',
       label: 'Run an Arbitrum node',
-      collapsed: true,
+      collapsed: false,
       link: {
         type: 'doc',
-        id: 'node-running/node-running-content-map',
+        id: 'run-arbitrum-node/overview',
       },
       items: [
         {
@@ -968,9 +652,28 @@ const sidebars = {
       ],
     },
     {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+
+  // Bridge sidebar
+  bridgeSidebar: [
+    {
       type: 'category',
       label: 'Arbitrum bridge',
-      collapsed: true,
+      collapsed: false,
       items: [
         {
           type: 'doc',
@@ -995,9 +698,28 @@ const sidebars = {
       ],
     },
     {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+
+  // How it Works sidebar
+  howItWorksSidebar: [
+    {
       type: 'category',
       label: 'How Arbitrum works',
-      collapsed: true,
+      collapsed: false,
       items: [
         {
           type: 'doc',
@@ -1192,9 +914,423 @@ const sidebars = {
       ],
     },
     {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+
+  // Unified build apps sidebar (combines build apps and Stylus)
+  buildAppsSidebar: [
+    {
+      type: 'category',
+      label: 'Build apps with Solidity',
+      collapsed: false,
+      items: [
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/quickstart-solidity-remix',
+          label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          label: 'Estimate gas',
+          id: 'build-decentralized-apps/how-to-estimate-gas',
+        },
+        {
+          type: 'doc',
+          label: 'Chains and testnets',
+          id: 'build-decentralized-apps/public-chains',
+        },
+        {
+          type: 'doc',
+          label: 'Cross-chain messaging',
+          id: 'build-decentralized-apps/cross-chain-messaging',
+        },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/custom-gas-token-sdk',
+          label: 'Custom gas token SDK',
+        },
+        {
+          type: 'category',
+          label: 'Arbitrum vs Ethereum',
+          items: [
+            {
+              type: 'doc',
+              label: 'Comparison overview',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview',
+            },
+            {
+              type: 'doc',
+              label: 'Block gas limit, numbers and time',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
+            },
+            {
+              type: 'doc',
+              label: 'RPC methods',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods',
+            },
+            {
+              type: 'doc',
+              label: 'Solidity support',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          label: 'Oracles',
+          id: 'build-decentralized-apps/oracles/overview-oracles',
+        },
+        {
+          type: 'category',
+          label: 'Precompiles',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'build-decentralized-apps/precompiles/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Reference',
+              id: 'build-decentralized-apps/precompiles/reference',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'NodeInterface',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'build-decentralized-apps/nodeinterface/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Reference',
+              id: 'build-decentralized-apps/nodeinterface/reference',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Token bridging',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'build-decentralized-apps/token-bridging/overview',
+            },
+            {
+              type: 'doc',
+              label: 'ETH bridging',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
+            },
+            {
+              type: 'doc',
+              label: 'ERC-20 token bridging',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
+            },
+            {
+              type: 'category',
+              label: 'Bridge tokens programmatically',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Get started',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the standard gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the generic-custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          items: [
+            {
+              type: 'doc',
+              id: 'build-decentralized-apps/reference/node-providers',
+              label: 'RPC endpoints and providers',
+            },
+            {
+              type: 'doc',
+              label: 'Smart contract addresses',
+              id: 'build-decentralized-apps/reference/contract-addresses',
+            },
+            {
+              type: 'doc',
+              label: 'Chain parameters',
+              id: 'build-decentralized-apps/reference/chain-params',
+            },
+            {
+              type: 'doc',
+              label: 'Development frameworks',
+              id: 'build-decentralized-apps/reference/development-frameworks',
+            },
+            {
+              type: 'doc',
+              label: 'Web3 libraries and tools',
+              id: 'build-decentralized-apps/reference/web3-libraries-tools',
+            },
+            {
+              type: 'doc',
+              label: 'Monitoring tools and block explorers',
+              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
+            },
+            {
+              type: 'doc',
+              label: 'Debugging tools',
+              id: 'build-decentralized-apps/reference/debugging-tools',
+            },
+
+            {
+              type: 'doc',
+              id: 'build-decentralized-apps/reference/mainnet-risks',
+              label: 'Mainnet risks',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          label: 'Troubleshooting',
+          id: 'for-devs/troubleshooting-building',
+        },
+        {
+          type: 'category',
+          label: 'Arbitrum SDK',
+          items: sdkSidebar.sdkSidebar,
+        },
+        {
+          type: 'link',
+          label: 'Tutorials',
+          href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Build apps with Stylus',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'stylus/gentle-introduction',
+          label: 'A gentle introduction',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/quickstart',
+          label: 'Quickstart',
+        },
+        {
+          type: 'category',
+          label: 'Rust SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/project-structure',
+              label: 'Structure of a Contract',
+            },
+            ...stylusByExampleBasicExamples,
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Composition and trait-based routing model',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/rust-sdk-guide',
+              label: 'Advanced features',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended Rust Crates',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Rust CLI',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/using-cli',
+              label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/debugging-tx',
+              label: 'Debug transactions',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/testing-contracts',
+              label: 'Testing contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts',
+              label: 'Verify contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/caching-contracts',
+              label: 'Cache contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
+              label: 'Verify on Arbiscan',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimize WASM binaries',
+            },
+          ],
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
+        },
+        {
+          type: 'category',
+          label: 'Concepts',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/concepts/how-it-works',
+              label: 'Architecture overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/gas-metering',
+              label: 'Gas metering',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Examples',
+          collapsed: true,
+          items: [
+            ...stylusByExampleApplications,
+            {
+              type: 'link',
+              label: 'Awesome Stylus',
+              href: 'https://github.com/OffchainLabs/awesome-stylus',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/reference/opcode-hostio-pricing',
+              label: 'Gas & Ink Pricing',
+            },
+            {
+              type: 'link',
+              label: 'Stylus by Example',
+              href: 'https://stylus-by-example.org/',
+            },
+            {
+              type: 'link',
+              label: 'Cargo Stylus CLI GitHub',
+              href: 'https://github.com/OffchainLabs/cargo-stylus',
+            },
+            {
+              type: 'link',
+              label: 'Rust SDK Crate',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Source Code Repository',
+              href: 'https://github.com/OffchainLabs/stylus',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          id: 'stylus/how-tos/adding-support-for-new-languages',
+          label: 'Using other languages',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/troubleshooting-building-stylus',
+          label: 'Troubleshooting',
+        },
+      ],
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+
+  // Additional resources sidebar
+  additionalResourcesSidebar: [
+    {
       type: 'doc',
-      id: 'learn-more/faq',
-      label: 'FAQ',
+      id: 'for-devs/dev-tools-and-resources/chain-info',
+      label: 'Chain info',
     },
     {
       type: 'doc',
@@ -1204,6 +1340,17 @@ const sidebars = {
     {
       type: 'doc',
       id: 'for-devs/contribute',
+      label: 'Contribute',
+    },
+    {
+      type: 'doc',
+      id: 'learn-more/faq',
+      label: 'FAQ',
+    },
+    {
+      type: 'doc',
+      label: 'Audit reports',
+      id: 'audit-reports',
     },
     {
       type: 'category',
@@ -1253,16 +1400,7 @@ const sidebars = {
           type: 'autogenerated',
           dirName: 'for-devs/third-party-docs',
         },
-        {
-          type: 'doc',
-          id: 'for-devs/contribute',
-        },
       ],
-    },
-    {
-      type: 'doc',
-      label: 'Audit reports',
-      id: 'audit-reports',
     },
     {
       type: 'link',
