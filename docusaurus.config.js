@@ -234,7 +234,7 @@ const config = {
           },
           {
             type: 'dropdown',
-            label: 'Build dApps',
+            label: 'Build apps',
             position: 'right',
             items: [
               {

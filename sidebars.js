@@ -39,18 +39,18 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Build dApps',
+      label: 'Build apps',
       collapsed: true,
       items: [
         {
           type: 'doc',
           id: 'build-decentralized-apps/quickstart-solidity-remix',
-          label: 'Build dApps with Solidity',
+          label: 'Build apps with Solidity',
         },
         {
           type: 'doc',
           id: 'stylus/quickstart',
-          label: 'Build dApps with Stylus',
+          label: 'Build apps with Stylus',
         },
       ],
     },
@@ -930,11 +930,11 @@ const sidebars = {
     },
   ],
 
-  // Unified build apps sidebar (combines build dApps and Stylus)
+  // Unified build apps sidebar (combines build apps and Stylus)
   buildAppsSidebar: [
     {
       type: 'category',
-      label: 'Build dApps with Solidity',
+      label: 'Build apps with Solidity',
       collapsed: false,
       items: [
         {
@@ -1141,7 +1141,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Build dApps with Stylus',
+      label: 'Build apps with Stylus',
       collapsed: true,
       items: [
         {
