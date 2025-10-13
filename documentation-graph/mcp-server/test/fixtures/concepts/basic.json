@@ -1,0 +1,40 @@
+{
+  "topConcepts": [
+    {
+      "term": "rollup",
+      "frequency": 15,
+      "documents": ["doc1", "doc2"],
+      "totalWeight": 13.5,
+      "averageWeight": 6.75,
+      "category": "blockchain",
+      "type": "domain"
+    },
+    {
+      "term": "gas",
+      "frequency": 12,
+      "documents": ["doc3"],
+      "totalWeight": 8.2,
+      "averageWeight": 8.2,
+      "category": "blockchain",
+      "type": "domain"
+    },
+    {
+      "term": "optimization",
+      "frequency": 8,
+      "documents": ["doc3"],
+      "totalWeight": 5.3,
+      "averageWeight": 5.3,
+      "category": "technical",
+      "type": "domain"
+    },
+    {
+      "term": "ethereum",
+      "frequency": 10,
+      "documents": ["doc1"],
+      "totalWeight": 7.8,
+      "averageWeight": 7.8,
+      "category": "blockchain",
+      "type": "domain"
+    }
+  ]
+}

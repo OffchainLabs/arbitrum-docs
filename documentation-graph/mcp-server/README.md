@@ -1,20 +1,6 @@
-# Documentation Analysis MCP Server v2.0.0
+# Documentation Analysis MCP Server
 
-A production-ready Model Context Protocol (MCP) server for interactive documentation analysis, specializing in content duplication detection and topic scattering analysis for the Arbitrum documentation.
-
-## What's New in v2.0.0 🚀
-
-Following MCP 2025 specification and best practices:
-
-- ✅ **Environment-based Configuration** - Configure via `.env` file, no code changes
-- ✅ **Structured Error Handling** - MCP-compliant errors with codes and context
-- ✅ **Enhanced Logging** - Request IDs, structured logs, performance metrics
-- ✅ **Health Monitoring** - Track component status and system health
-- ✅ **Tool Middleware** - Automatic validation, timeouts, circuit breakers
-- ✅ **Security Enhancements** - Path validation, input sanitization, rate limiting
-- ✅ **Performance Metrics** - Track tool execution, cache hits, error rates
-
-**See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for upgrading from v1.0.0**
+A Model Context Protocol (MCP) server for interactive documentation analysis, specializing in content duplication detection and topic scattering analysis for the Arbitrum documentation.
 
 ## Overview
 
@@ -24,7 +10,6 @@ This MCP server provides AI-powered tools for technical writers to identify and 
 - **Topic Scattering Analysis**: Identify topics fragmented across multiple documents
 - **Consolidation Recommendations**: Get actionable suggestions for merging, reorganizing, or creating canonical references
 - **Interactive Workflows**: Chain multiple queries together for comprehensive analysis
-- **Production-Ready**: Error handling, monitoring, security, and observability built-in
 
 ## Features
 
@@ -70,9 +55,7 @@ This MCP server provides AI-powered tools for technical writers to identify and 
 ```
 mcp-server/
 ├── src/
-│   ├── index.js                 # Main MCP server (v2.0.0)
-│   ├── config/
-│   │   └── serverConfig.js      # Environment-based configuration
+│   ├── index.js                 # Main MCP server
 │   ├── core/
 │   │   ├── DataLoader.js        # Load and index analysis outputs
 │   │   ├── SimilarityEngine.js  # Duplication detection algorithms
@@ -81,19 +64,12 @@ mcp-server/
 │   │   ├── CacheManager.js      # In-memory caching
 │   │   ├── QueryParser.js       # Natural language query parsing
 │   │   └── FileWatcher.js       # Auto-refresh on file changes
-│   ├── middleware/
-│   │   └── toolMiddleware.js    # Tool execution middleware
 │   ├── tools/
 │   │   └── ToolRegistry.js      # MCP tool definitions and handlers
 │   ├── resources/
 │   │   └── ResourceManager.js   # MCP resource definitions
 │   └── utils/
-│       ├── logger.js            # Enhanced structured logging
-│       ├── errors.js            # MCP error classes
-│       ├── healthCheck.js       # Health monitoring system
-│       └── security.js          # Path validation & sanitization
-├── .env.example                 # Environment configuration template
-├── MIGRATION_GUIDE.md           # v1 → v2 migration guide
+│       └── logger.js            # Structured logging
 ├── package.json
 └── README.md
 ```
@@ -161,48 +137,22 @@ Add to your Claude Code configuration file (`~/.config/claude-code/config.json` 
 
 ### Environment Variables
 
-**v2.0.0 uses environment-based configuration. Copy `.env.example` to `.env` and customize:**
+- `LOG_LEVEL`: Set logging level (`DEBUG`, `INFO`, `WARN`, `ERROR`). Default: `INFO`
 
-```bash
-# Paths
-DIST_PATH=/absolute/path/to/dist
-DOCS_PATH=/absolute/path/to/docs
+### Server Configuration
 
-# Server Behavior
-ENABLE_AUTO_REFRESH=true
-ENABLE_CACHE=true
+Edit `src/index.js` to customize:
 
-# Cache Settings
-CACHE_TTL=300000                # 5 minutes
-CACHE_CLEANUP_INTERVAL=60000    # 1 minute
-
-# Performance
-PERFORMANCE_TARGET=20000         # 20 seconds
-TOOL_TIMEOUT=30000              # 30 seconds
-
-# Logging
-LOG_LEVEL=INFO                  # DEBUG, INFO, WARN, ERROR
-ENABLE_STRUCTURED_LOGS=false
-ENABLE_METRICS=true
-
-# Health Monitoring
-ENABLE_HEALTH_CHECK=true
-HEALTH_CHECK_INTERVAL=30000     # 30 seconds
-
-# Security
-ENABLE_PATH_VALIDATION=true
-ENABLE_INPUT_SANITIZATION=true
-
-# Circuit Breaker
-ENABLE_CIRCUIT_BREAKER=true
-CIRCUIT_BREAKER_THRESHOLD=5
-CIRCUIT_BREAKER_TIMEOUT=60000   # 1 minute
-
-# Environment
-NODE_ENV=production
+```javascript
+this.config = {
+  distPath: '../dist', // Path to analysis outputs
+  docsPath: '../../docs', // Path to source documentation
+  enableAutoRefresh: true, // Auto-reload on file changes
+  cacheEnabled: true, // Enable in-memory caching
+  cacheTTL: 300000, // Cache TTL in ms (5 minutes)
+  performanceTarget: 20000, // Target response time in ms
+};
 ```
-
-**See `.env.example` for complete configuration options and examples.**
 
 ## Available Tools
 
@@ -563,195 +513,7 @@ Scores candidates based on:
 - First query on a topic is slowest (cache miss)
 - Subsequent queries on same topic are fast (cache hit)
 - Auto-refresh clears cache but preserves indexes
-- Disable caching for debugging: set `ENABLE_CACHE=false`
-
-## Monitoring and Observability (v2.0.0)
-
-### Performance Metrics
-
-Track server performance automatically:
-
-```bash
-# Enable metrics tracking
-ENABLE_METRICS=true node src/index.js
-```
-
-**Metrics tracked:**
-
-- Tool execution count and average time
-- Cache hit/miss rates
-- Error counts by type
-- Total requests and average response time
-
-**View metrics:**
-
-```bash
-# Metrics printed on shutdown (Ctrl+C)
-# Or enable DEBUG logging to see periodic metrics
-
-LOG_LEVEL=DEBUG ENABLE_METRICS=true node src/index.js
-```
-
-**Example output:**
-
-```
-=== Performance Metrics ===
-Total requests: 25
-Average execution time: 1,250ms
-
-Cache performance:
-  Hits: 20
-  Misses: 5
-  Hit rate: 80.00%
-
-Tool execution stats:
-  find_duplicate_content: 10 calls, 1,200ms avg, 100.0% success
-  find_scattered_topics: 8 calls, 1,100ms avg, 100.0% success
-  suggest_consolidation: 7 calls, 1,500ms avg, 100.0% success
-
-Error summary:
-  TIMEOUT: 1
-===========================
-```
-
-### Health Monitoring
-
-Monitor component health automatically:
-
-```bash
-# Enable health checks (runs every 30s)
-ENABLE_HEALTH_CHECK=true node src/index.js
-```
-
-**Components monitored:**
-
-- Data loader (documents/concepts loaded)
-- Cache (hit rate, size)
-- Memory usage (heap, RSS)
-- Similarity engine
-- Scattering analyzer
-- Tool registry
-- File watcher (if enabled)
-
-**Health statuses:**
-
-- `healthy` - Component operating normally
-- `degraded` - Component working but performance issues
-- `unhealthy` - Component not functioning
-- `unknown` - Component not checked yet
-
-**View health status:**
-
-```bash
-# Health checks logged periodically
-# Warnings logged if any component is degraded/unhealthy
-```
-
-### Error Handling and Codes
-
-All errors include structured information:
-
-```javascript
-{
-  "name": "DocumentNotFoundError",
-  "message": "Document not found: invalid/path.md",
-  "code": "DOCUMENT_NOT_FOUND",
-  "details": {
-    "docPath": "invalid/path.md",
-    "suggestion": "Check the path is correct"
-  },
-  "timestamp": "2025-01-15T10:30:00.000Z"
-}
-```
-
-**Common error codes:**
-
-- `TOOL_NOT_FOUND` - Invalid tool name
-- `RESOURCE_NOT_FOUND` - Invalid resource URI
-- `DOCUMENT_NOT_FOUND` - Document path not in dataset
-- `CONCEPT_NOT_FOUND` - Concept not in analysis
-- `VALIDATION_ERROR` - Invalid input parameters
-- `TIMEOUT` - Operation exceeded timeout
-- `RATE_LIMIT_EXCEEDED` - Too many requests
-- `CIRCUIT_BREAKER_OPEN` - Circuit breaker triggered
-- `SERVER_NOT_INITIALIZED` - Server startup incomplete
-
-### Structured Logging
-
-**Request ID tracking:**
-Every request gets a unique ID for tracing:
-
-```
-[2025-01-15T10:30:00.000Z] [INFO] {"requestId":"abc-123"} Tool call received
-[2025-01-15T10:30:01.250Z] [INFO] {"requestId":"abc-123"} Tool execution complete
-```
-
-**Structured logs (production):**
-
-```bash
-# Enable JSON logs
-ENABLE_STRUCTURED_LOGS=true NODE_ENV=production node src/index.js
-```
-
-Output:
-
-```json
-{
-  "timestamp": "2025-01-15T10:30:00.000Z",
-  "level": "INFO",
-  "message": "Tool call received",
-  "requestId": "abc-123",
-  "toolName": "find_duplicate_content"
-}
-```
-
-**Human-readable logs (development):**
-
-```bash
-# Disable structured logs
-ENABLE_STRUCTURED_LOGS=false LOG_LEVEL=DEBUG node src/index.js
-```
-
-Output:
-
-```
-[2025-01-15T10:30:00.000Z] [DEBUG] {"requestId":"abc-123"} Tool call received {"toolName":"find_duplicate_content","hasArgs":true}
-```
-
-### Security Features
-
-**Path Validation:**
-
-- Prevents directory traversal attacks (`../../../etc/passwd`)
-- Validates all path inputs (doc_path, doc_paths, filter_directory)
-- Ensures paths are within allowed directories
-
-**Input Sanitization:**
-
-- Removes dangerous characters (`<`, `>`, `&`, `'`, `"`)
-- Prevents XSS and injection attacks
-- Sanitizes all string inputs automatically
-
-**Rate Limiting (optional):**
-
-```bash
-ENABLE_RATE_LIMIT=true
-RATE_LIMIT_WINDOW=60000  # 1 minute
-RATE_LIMIT_MAX=60        # 60 requests per minute
-```
-
-**Circuit Breaker:**
-Prevents cascading failures:
-
-- Opens after 5 consecutive failures (configurable)
-- Blocks requests for 60 seconds (configurable)
-- Automatically resets on success
-
-```bash
-ENABLE_CIRCUIT_BREAKER=true
-CIRCUIT_BREAKER_THRESHOLD=5
-CIRCUIT_BREAKER_TIMEOUT=60000
-```
+- Disable caching for debugging: set `cacheEnabled: false`
 
 ## Troubleshooting
 

@@ -1,0 +1,110 @@
+{
+  "nodes": [
+    {
+      "id": "doc1",
+      "type": "document",
+      "label": "intro",
+      "filePath": "/docs/guide/intro.md",
+      "relativePath": "guide/intro.md",
+      "directory": "guide",
+      "title": "Introduction to Arbitrum",
+      "description": "Learn about Arbitrum rollup technology",
+      "contentType": "guide",
+      "wordCount": 500,
+      "headingCount": 5,
+      "size": 1
+    },
+    {
+      "id": "doc2",
+      "type": "document",
+      "label": "setup",
+      "filePath": "/docs/guide/setup.md",
+      "relativePath": "guide/setup.md",
+      "directory": "guide",
+      "title": "Setup Guide",
+      "description": "Setting up Arbitrum development",
+      "contentType": "how-to",
+      "wordCount": 350,
+      "headingCount": 4,
+      "size": 1
+    },
+    {
+      "id": "doc3",
+      "type": "document",
+      "label": "gas-optimization",
+      "filePath": "/docs/tutorials/gas-optimization.md",
+      "relativePath": "tutorials/gas-optimization.md",
+      "directory": "tutorials",
+      "title": "Gas Optimization",
+      "description": "Optimize gas usage on Arbitrum",
+      "contentType": "tutorial",
+      "wordCount": 800,
+      "headingCount": 8,
+      "size": 1
+    },
+    {
+      "id": "concept1",
+      "type": "concept",
+      "label": "rollup",
+      "name": "rollup",
+      "frequency": 15,
+      "weight": 10.5,
+      "size": 0.5
+    },
+    {
+      "id": "concept2",
+      "type": "concept",
+      "label": "gas",
+      "name": "gas",
+      "frequency": 12,
+      "weight": 8.2,
+      "size": 0.5
+    },
+    {
+      "id": "concept3",
+      "type": "concept",
+      "label": "optimization",
+      "name": "optimization",
+      "frequency": 8,
+      "weight": 5.3,
+      "size": 0.5
+    }
+  ],
+  "edges": [
+    {
+      "source": "doc1",
+      "target": "concept1",
+      "type": "mentions",
+      "weight": 5
+    },
+    {
+      "source": "doc2",
+      "target": "concept1",
+      "type": "mentions",
+      "weight": 3
+    },
+    {
+      "source": "doc3",
+      "target": "concept2",
+      "type": "mentions",
+      "weight": 7
+    },
+    {
+      "source": "doc3",
+      "target": "concept3",
+      "type": "mentions",
+      "weight": 6
+    },
+    {
+      "source": "doc1",
+      "target": "doc2",
+      "type": "links_to"
+    },
+    {
+      "source": "doc1",
+      "target": "doc3",
+      "type": "similar",
+      "weight": 0.65
+    }
+  ]
+}

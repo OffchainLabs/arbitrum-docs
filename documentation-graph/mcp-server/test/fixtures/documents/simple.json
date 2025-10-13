@@ -1,0 +1,78 @@
+[
+  {
+    "id": "doc1",
+    "path": "/docs/guide/intro.md",
+    "relativePath": "guide/intro.md",
+    "fileName": "intro",
+    "directory": "guide",
+    "extension": ".md",
+    "frontmatter": {
+      "title": "Introduction to Arbitrum",
+      "description": "Learn about Arbitrum rollup technology",
+      "content_type": "guide"
+    },
+    "content": "Introduction to Arbitrum rollup technology. Arbitrum is a Layer 2 scaling solution for Ethereum. It uses optimistic rollups to achieve high throughput and low costs.",
+    "headings": [
+      { "level": 1, "text": "Introduction", "id": "introduction" },
+      { "level": 2, "text": "What is Arbitrum", "id": "what-is-arbitrum" }
+    ],
+    "links": {
+      "internal": ["/docs/guide/setup.md"],
+      "external": ["https://arbitrum.io"],
+      "anchor": []
+    },
+    "wordCount": 500,
+    "concepts": ["rollup", "ethereum", "layer2"]
+  },
+  {
+    "id": "doc2",
+    "path": "/docs/guide/setup.md",
+    "relativePath": "guide/setup.md",
+    "fileName": "setup",
+    "directory": "guide",
+    "extension": ".md",
+    "frontmatter": {
+      "title": "Setup Guide",
+      "description": "Setting up Arbitrum development",
+      "content_type": "how-to"
+    },
+    "content": "Setting up your Arbitrum development environment. Install Node.js, configure your wallet, and deploy your first contract.",
+    "headings": [
+      { "level": 1, "text": "Setup", "id": "setup" },
+      { "level": 2, "text": "Prerequisites", "id": "prerequisites" }
+    ],
+    "links": {
+      "internal": [],
+      "external": ["https://nodejs.org"],
+      "anchor": []
+    },
+    "wordCount": 350,
+    "concepts": ["setup", "development", "deployment"]
+  },
+  {
+    "id": "doc3",
+    "path": "/docs/tutorials/gas-optimization.md",
+    "relativePath": "tutorials/gas-optimization.md",
+    "fileName": "gas-optimization",
+    "directory": "tutorials",
+    "extension": ".md",
+    "frontmatter": {
+      "title": "Gas Optimization",
+      "description": "Optimize gas usage on Arbitrum",
+      "content_type": "tutorial"
+    },
+    "content": "Gas optimization is crucial for reducing transaction costs on Arbitrum. Use batch transactions to save gas. Optimize contract code for efficiency. Consider using calldata compression.",
+    "headings": [
+      { "level": 1, "text": "Gas Optimization", "id": "gas-optimization" },
+      { "level": 2, "text": "Batch Transactions", "id": "batch-transactions" },
+      { "level": 2, "text": "Code Optimization", "id": "code-optimization" }
+    ],
+    "links": {
+      "internal": [],
+      "external": [],
+      "anchor": []
+    },
+    "wordCount": 800,
+    "concepts": ["gas", "optimization", "transactions", "efficiency"]
+  }
+]

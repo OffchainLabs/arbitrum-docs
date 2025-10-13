@@ -1,0 +1,50 @@
+[
+  {
+    "id": "doc_dup1",
+    "path": "/docs/guide/gas-v1.md",
+    "relativePath": "guide/gas-v1.md",
+    "fileName": "gas-v1",
+    "directory": "guide",
+    "extension": ".md",
+    "frontmatter": {
+      "title": "Gas Optimization Guide v1",
+      "description": "Learn to optimize gas",
+      "content_type": "guide"
+    },
+    "content": "Gas optimization is crucial for reducing transaction costs on Arbitrum. Use batch transactions to save gas. Optimize contract code for efficiency. Batch multiple operations together. Use calldata compression techniques.",
+    "wordCount": 300,
+    "concepts": ["gas", "optimization", "transactions", "efficiency"]
+  },
+  {
+    "id": "doc_dup2",
+    "path": "/docs/tutorials/gas-v2.md",
+    "relativePath": "tutorials/gas-v2.md",
+    "fileName": "gas-v2",
+    "directory": "tutorials",
+    "extension": ".md",
+    "frontmatter": {
+      "title": "Gas Optimization Tutorial v2",
+      "description": "Optimize gas usage",
+      "content_type": "tutorial"
+    },
+    "content": "Gas optimization is crucial for reducing transaction costs on Arbitrum. Batch transactions help save gas. Write efficient contract code. Combine operations in batches. Consider calldata compression.",
+    "wordCount": 280,
+    "concepts": ["gas", "optimization", "transactions", "contracts"]
+  },
+  {
+    "id": "doc_unique",
+    "path": "/docs/concepts/fees.md",
+    "relativePath": "concepts/fees.md",
+    "fileName": "fees",
+    "directory": "concepts",
+    "extension": ".md",
+    "frontmatter": {
+      "title": "Understanding Fees",
+      "description": "Fee structure explanation",
+      "content_type": "concept"
+    },
+    "content": "Understanding Arbitrum fee structure and cost models. Fees are calculated based on L1 costs and L2 execution. Different transaction types have different fee structures.",
+    "wordCount": 200,
+    "concepts": ["fees", "costs", "transactions"]
+  }
+]

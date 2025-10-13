@@ -11,7 +11,12 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:unit": "NODE_OPTIONS='--experimental-vm-modules' jest --config jest.config.unit.js",
+    "test:integration": "NODE_OPTIONS='--experimental-vm-modules' jest --config jest.config.integration.js",
+    "test:performance": "NODE_OPTIONS='--experimental-vm-modules --expose-gc' jest --config jest.config.performance.js",
     "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
+    "test:ci": "npm run test:unit && npm run test:integration",
     "lint": "eslint src/"
   },
   "keywords": [
