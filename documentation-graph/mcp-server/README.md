@@ -55,24 +55,60 @@ This MCP server provides AI-powered tools for technical writers to identify and 
 ```
 mcp-server/
 ├── src/
-│   ├── index.js                 # Main MCP server
+│   ├── index.js                  # Main MCP server
 │   ├── core/
-│   │   ├── DataLoader.js        # Load and index analysis outputs
-│   │   ├── SimilarityEngine.js  # Duplication detection algorithms
+│   │   ├── DataLoader.js         # Load and index analysis outputs
+│   │   ├── DataPreprocessor.js   # Generate optimized metadata
+│   │   ├── SmartCache.js         # LRU cache with prefetching
+│   │   ├── SimilarityEngine.js   # Duplication detection algorithms
 │   │   ├── ScatteringAnalyzer.js # Topic scattering detection
 │   │   ├── ConsolidationEngine.js # Consolidation recommendations
-│   │   ├── CacheManager.js      # In-memory caching
-│   │   ├── QueryParser.js       # Natural language query parsing
-│   │   └── FileWatcher.js       # Auto-refresh on file changes
+│   │   ├── CacheManager.js       # In-memory caching (enhanced)
+│   │   ├── QueryParser.js        # Natural language query parsing
+│   │   └── FileWatcher.js        # Auto-refresh on file changes
 │   ├── tools/
-│   │   └── ToolRegistry.js      # MCP tool definitions and handlers
+│   │   └── ToolRegistry.js       # MCP tool definitions and handlers
 │   ├── resources/
-│   │   └── ResourceManager.js   # MCP resource definitions
+│   │   └── ResourceManager.js    # MCP resource definitions
 │   └── utils/
-│       └── logger.js            # Structured logging
+│       └── logger.js             # Structured logging
+├── test/
+│   ├── unit/                     # Unit tests
+│   ├── integration/              # Integration tests
+│   ├── performance/              # Performance benchmarks
+│   ├── fixtures/                 # Test data
+│   ├── mocks/                    # Mock implementations
+│   └── helpers/                  # Test utilities
+├── jest.config.js                # Main Jest configuration
+├── jest.config.unit.js           # Unit test configuration
+├── jest.config.integration.js    # Integration test configuration
+├── jest.config.performance.js    # Performance test configuration
 ├── package.json
 └── README.md
 ```
+
+### Core Modules
+
+#### DataPreprocessor
+
+Generates optimized data formats for fast querying:
+
+- **Metadata Generation**: Compressed summaries under 100KB
+- **Inverted Indexing**: Concept ↔ Document bidirectional mapping
+- **Similarity Matrices**: Sparse matrix generation for similarity calculations
+- **File Chunking**: Splits large files into 500KB chunks
+- **Statistics Generation**: Comprehensive preprocessing metrics
+
+#### SmartCache
+
+Intelligent caching system with predictive capabilities:
+
+- **LRU Cache**: Size-limited (50MB) with TTL expiration
+- **Pattern Detection**: Learns query patterns over time
+- **Predictive Prefetching**: Preloads related data based on patterns
+- **Query Planning**: Selects optimal data access strategy
+- **Cache Warming**: Initializes from access logs on startup
+- **Memory Management**: Automatic eviction when size limits reached
 
 ### Data Flow
 
@@ -83,14 +119,52 @@ mcp-server/
    ↓
 3. MCP server loads and indexes data
    ↓
-4. File watcher monitors for changes
+4. DataPreprocessor generates optimized metadata
    ↓
-5. Claude Code CLI calls MCP tools
+5. SmartCache initializes with warmup data
    ↓
-6. Tools execute with cached results
+6. File watcher monitors for changes
    ↓
-7. Formatted output returned to Claude
+7. Claude Code CLI calls MCP tools
+   ↓
+8. Query planner selects optimal strategy
+   ↓
+9. Tools execute with cached/chunked results
+   ↓
+10. Formatted output returned to Claude
 ```
+
+## Data Access Strategy
+
+The server implements a three-tier data access strategy optimized for Claude's consumption of large documentation graphs:
+
+### Tier 1: Metadata Summary (<100KB)
+
+Fast initial responses with compressed metadata containing:
+
+- Node/edge type counts
+- Top 100 concepts with frequencies
+- Document index (path → metadata)
+- Concept index (concept → document count)
+- Inverted indexes for rapid lookups
+
+### Tier 2: Cached Data (50MB LRU Cache)
+
+Frequently accessed data with intelligent caching:
+
+- **SmartCache**: LRU eviction with TTL (5 minutes default)
+- **Predictive Prefetching**: Pattern-based data preloading
+- **Query Planning**: Optimal strategy selection (METADATA_ONLY, CACHED, FULL_LOAD)
+- **Request Deduplication**: Prevents duplicate concurrent requests
+- **Performance Tracking**: Query execution time analysis
+
+### Tier 3: Full Data Load
+
+Complete graph data for comprehensive analysis:
+
+- **Chunked Loading**: 500KB chunks for memory efficiency
+- **Sparse Matrices**: Optimized similarity calculations
+- **Progressive Enhancement**: Start with metadata, load details as needed
 
 ## Installation
 
@@ -508,12 +582,57 @@ Scores candidates based on:
 
 2. **TF-IDF Model**: Pre-computed for all documents
 
+### Data Preprocessing Pipeline
+
+The DataPreprocessor runs during server initialization:
+
+1. **Metadata Generation** (~2 seconds for 500 documents)
+
+   - Compressed to <100KB for instant loading
+   - Contains 80% of commonly needed information
+
+2. **Index Building** (~1 second)
+
+   - Inverted indexes for O(1) concept lookups
+   - Sparse similarity matrices for fast comparisons
+
+3. **Chunk Generation** (as needed)
+   - Large files split into 500KB chunks
+   - Loaded on-demand to reduce memory footprint
+
+### Smart Caching Strategy
+
+The SmartCache optimizes repeated queries:
+
+1. **Pattern Learning**
+
+   - Tracks last 100 queries for pattern detection
+   - Threshold of 5 occurrences triggers pattern recognition
+
+2. **Predictive Prefetching**
+
+   - Automatically loads related data based on patterns
+   - Maximum 10MB prefetch to prevent memory bloat
+
+3. **Query Planning**
+   - METADATA_ONLY: For simple lookups (<100ms)
+   - CACHED: For frequently accessed data (<500ms)
+   - FULL_LOAD: For comprehensive analysis (5-20s)
+
+### Memory Management
+
+- **Cache Size**: 50MB maximum with automatic LRU eviction
+- **Chunk Size**: 500KB for streaming large files
+- **TTL**: 5-minute expiration for stale data cleanup
+- **Pattern History**: Last 100 queries tracked for learning
+
 ### Optimization Tips
 
 - First query on a topic is slowest (cache miss)
 - Subsequent queries on same topic are fast (cache hit)
 - Auto-refresh clears cache but preserves indexes
 - Disable caching for debugging: set `cacheEnabled: false`
+- Use metadata queries when full graph not needed
 
 ## Troubleshooting
 
@@ -564,9 +683,55 @@ Uses `--watch` flag for auto-restart on code changes.
 
 ### Testing
 
+The MCP server follows Test-Driven Development (TDD) practices with comprehensive test coverage.
+
+#### Test Infrastructure
+
+- **Framework**: Jest with ES modules support
+- **Coverage Target**: 70% branches, 75% functions/lines/statements
+- **Test Types**: Unit, Integration, and Performance tests
+- **Execution Time**: <1 second for unit tests, optimized for rapid feedback
+
+#### Running Tests
+
 ```shell
+# Run all tests
 npm test
+
+# Run specific test suites
+npm run test:unit          # Unit tests only
+npm run test:integration   # Integration tests only
+npm run test:performance   # Performance benchmarks
+
+# Development mode
+npm run test:watch         # Watch mode for TDD workflow
+npm run test:coverage      # Generate coverage report
 ```
+
+#### Test Organization
+
+```
+test/
+├── unit/              # Unit tests for individual modules
+│   └── core/          # Core module tests (DataPreprocessor, SmartCache, etc.)
+├── integration/       # Integration tests for module interactions
+├── performance/       # Performance benchmarks and load tests
+├── fixtures/          # Test data organized by type
+│   ├── concepts/      # Concept extraction test data
+│   ├── documents/     # Document analysis test data
+│   └── graphs/        # Knowledge graph test data
+├── mocks/            # Mock implementations for external dependencies
+├── helpers/          # Test utilities (fixture loaders, assertions)
+└── setup/            # Jest configuration and global setup
+```
+
+#### Test Naming Convention
+
+Tests follow a structured naming pattern for traceability:
+
+- Format: `[MODULE]-[TYPE]-[NUMBER]: [Description]`
+- Example: `DP-U-003: Should generate summary under 100KB`
+- Types: U (Unit), I (Integration), P (Performance)
 
 ### Debugging
 
@@ -584,6 +749,36 @@ View cache statistics in logs after queries.
 2. Implement handler method in `ToolRegistry`
 3. Add tests
 4. Update documentation
+
+### Test-Driven Development Workflow
+
+The project follows RED-GREEN-REFACTOR cycle:
+
+1. **RED Phase**: Write failing tests first
+
+   ```shell
+   # Create test file
+   touch test/unit/core/NewModule.test.js
+
+   # Run tests (should fail)
+   npm run test:unit -- NewModule
+   ```
+
+2. **GREEN Phase**: Implement minimum code to pass
+
+   ```shell
+   # Implement module
+   touch src/core/NewModule.js
+
+   # Run tests until passing
+   npm run test:watch -- NewModule
+   ```
+
+3. **REFACTOR Phase**: Optimize while maintaining green
+   ```shell
+   # Refactor with confidence
+   npm run test:coverage
+   ```
 
 ## Architecture Decisions
 
