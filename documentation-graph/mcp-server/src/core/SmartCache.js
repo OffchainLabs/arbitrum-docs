@@ -6,16 +6,26 @@
  */
 
 export class SmartCache {
+  // Configuration constants
+  static DEFAULT_MAX_SIZE = 50 * 1024 * 1024; // 50MB
+  static DEFAULT_TTL = 300000; // 5 minutes
+  static DEFAULT_PATTERN_THRESHOLD = 5;
+  static DEFAULT_PREFETCH_SIZE = 10 * 1024 * 1024; // 10MB
+  static MAX_QUERY_HISTORY = 100;
+  static MAX_PERFORMANCE_HISTORY = 10;
+  static TOP_ACCESS_LOG_ITEMS = 20;
+  static HIGH_LIMIT_THRESHOLD = 50;
+
   constructor({
     enabled = true,
-    maxSize = 50 * 1024 * 1024, // 50MB default
-    ttl = 300000, // 5 minutes
+    maxSize = SmartCache.DEFAULT_MAX_SIZE,
+    ttl = SmartCache.DEFAULT_TTL,
     enablePrefetch = false,
     enableQueryPlanning = false,
     warmOnInit = false,
     warmingData = null,
-    patternThreshold = 5,
-    maxPrefetchSize = 10 * 1024 * 1024, // 10MB
+    patternThreshold = SmartCache.DEFAULT_PATTERN_THRESHOLD,
+    maxPrefetchSize = SmartCache.DEFAULT_PREFETCH_SIZE,
     enableRequestDeduplication = false,
     patternLearningEnabled = false,
   } = {}) {
@@ -79,6 +89,21 @@ export class SmartCache {
   }
 
   /**
+   * Check if item is expired
+   */
+  _isExpired(key) {
+    const timestamp = this.timestamps.get(key);
+    return timestamp && Date.now() - timestamp > this.ttl;
+  }
+
+  /**
+   * Mark key as recently accessed
+   */
+  _updateAccessOrder(key) {
+    this.accessOrder.set(key, Date.now());
+  }
+
+  /**
    * Get item from cache
    * Returns null if not found or expired
    */
@@ -94,16 +119,14 @@ export class SmartCache {
     }
 
     // Check TTL
-    const timestamp = this.timestamps.get(key);
-    if (timestamp && Date.now() - timestamp > this.ttl) {
-      // Expired - remove and return null
+    if (this._isExpired(key)) {
       this.delete(key);
       this.stats.misses++;
       return null;
     }
 
-    // Update access order with current timestamp (makes it most recently used)
-    this.accessOrder.set(key, Date.now());
+    // Update access order (makes it most recently used)
+    this._updateAccessOrder(key);
 
     this.stats.hits++;
     return this.cache.get(key);
@@ -266,13 +289,35 @@ export class SmartCache {
       timestamp: Date.now(),
     });
 
-    // Keep only recent history (last 100 queries)
-    if (this.queryHistory.length > 100) {
+    // Keep only recent history
+    if (this.queryHistory.length > SmartCache.MAX_QUERY_HISTORY) {
       this.queryHistory.shift();
     }
 
     // Analyze patterns
     await this._analyzePatterns();
+  }
+
+  /**
+   * Count sequential pattern occurrences in query history
+   */
+  _countSequentialPattern(currentTool, nextTool) {
+    let count = 0;
+    for (let j = 0; j < this.queryHistory.length - 1; j++) {
+      if (this.queryHistory[j].tool === currentTool && this.queryHistory[j + 1].tool === nextTool) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Check if pattern already detected
+   */
+  _hasDetectedPattern(currentTool, nextTool) {
+    return this.detectedPatterns.some(
+      (p) => p.sequence[0] === currentTool && p.sequence[1] === nextTool,
+    );
   }
 
   /**
@@ -286,32 +331,18 @@ export class SmartCache {
       const current = this.queryHistory[i];
       const next = this.queryHistory[i + 1];
 
-      // Check if this sequence appears multiple times
-      let count = 0;
-      for (let j = 0; j < this.queryHistory.length - 1; j++) {
-        if (
-          this.queryHistory[j].tool === current.tool &&
-          this.queryHistory[j + 1].tool === next.tool
-        ) {
-          count++;
-        }
-      }
+      // Count pattern occurrences
+      const count = this._countSequentialPattern(current.tool, next.tool);
 
-      // If appears >= threshold, add as pattern
-      if (count >= this.patternThreshold) {
-        const existingPattern = this.detectedPatterns.find(
-          (p) => p.sequence[0] === current.tool && p.sequence[1] === next.tool,
-        );
-
-        if (!existingPattern) {
-          // Confidence should be greater than 0.5 for patterns
-          const confidence = count / (this.queryHistory.length - 1); // Adjust denominator
-          this.detectedPatterns.push({
-            sequence: [current.tool, next.tool],
-            count,
-            confidence,
-          });
-        }
+      // If appears >= threshold and not already detected, add as pattern
+      if (count >= this.patternThreshold && !this._hasDetectedPattern(current.tool, next.tool)) {
+        // Confidence should be greater than 0.5 for patterns
+        const confidence = count / (this.queryHistory.length - 1);
+        this.detectedPatterns.push({
+          sequence: [current.tool, next.tool],
+          count,
+          confidence,
+        });
       }
     }
   }
@@ -351,6 +382,15 @@ export class SmartCache {
   }
 
   /**
+   * Find and sort matching patterns by probability
+   */
+  _findMatchingPatterns(trigger) {
+    const matchingPatterns = this.learnedPatterns.filter((p) => p.trigger === trigger);
+    matchingPatterns.sort((a, b) => (b.probability || 0) - (a.probability || 0));
+    return matchingPatterns;
+  }
+
+  /**
    * Trigger prefetch based on patterns
    */
   async triggerPrefetch(trigger) {
@@ -359,12 +399,9 @@ export class SmartCache {
     this.prefetchStats.attemptedPrefetches++;
 
     // Find matching patterns
-    const matchingPatterns = this.learnedPatterns.filter((p) => p.trigger === trigger);
+    const matchingPatterns = this._findMatchingPatterns(trigger);
 
     if (matchingPatterns.length === 0) return false;
-
-    // Sort by probability
-    matchingPatterns.sort((a, b) => (b.probability || 0) - (a.probability || 0));
 
     // Record prefetch order
     this.lastPrefetchOrder = matchingPatterns.map((p) => p.id);
@@ -472,6 +509,21 @@ export class SmartCache {
   // Query planning methods
 
   /**
+   * Check if query is metadata-only type
+   */
+  _isMetadataQuery(tool, queryType) {
+    const metadataTools = ['list_concepts', 'list_documents', 'get_document_count'];
+    return metadataTools.includes(tool) || queryType === 'list_concepts';
+  }
+
+  /**
+   * Build cache key from tool and params
+   */
+  _buildCacheKey(tool, params) {
+    return `${tool}:${JSON.stringify(params)}`;
+  }
+
+  /**
    * Analyze query and determine strategy
    */
   async analyzeQuery(query) {
@@ -483,42 +535,34 @@ export class SmartCache {
       };
     }
 
-    const { tool, params } = query;
-
-    // Simple heuristics for strategy
-    let strategy = 'FULL_LOAD';
-    let estimatedTime = 5000;
-    const dataSources = [];
+    const { tool, params, type } = query;
 
     // Metadata-only queries
-    if (
-      tool === 'list_concepts' ||
-      tool === 'list_documents' ||
-      tool === 'get_document_count' ||
-      query.type === 'list_concepts'
-    ) {
-      strategy = 'METADATA_ONLY';
-      estimatedTime = 200;
-      dataSources.push('metadata');
-    }
-    // Cached queries
-    else if (this.has(`${tool}:${JSON.stringify(params)}`)) {
-      strategy = 'CACHED';
-      estimatedTime = 50;
-      dataSources.push('cache');
-    }
-    // Full load queries
-    else {
-      strategy = 'FULL_LOAD';
-      estimatedTime = this._estimateQueryTime(tool);
-      dataSources.push('graph-nodes', 'graph-edges');
+    if (this._isMetadataQuery(tool, type)) {
+      return {
+        strategy: 'METADATA_ONLY',
+        estimatedTime: 200,
+        dataSources: ['metadata'],
+        useFullGraph: false,
+      };
     }
 
+    // Cached queries
+    if (this.has(this._buildCacheKey(tool, params))) {
+      return {
+        strategy: 'CACHED',
+        estimatedTime: 50,
+        dataSources: ['cache'],
+        useFullGraph: false,
+      };
+    }
+
+    // Full load queries
     return {
-      strategy,
-      estimatedTime,
-      dataSources,
-      useFullGraph: strategy === 'FULL_LOAD',
+      strategy: 'FULL_LOAD',
+      estimatedTime: this._estimateQueryTime(tool),
+      dataSources: ['graph-nodes', 'graph-edges'],
+      useFullGraph: true,
     };
   }
 
@@ -562,8 +606,8 @@ export class SmartCache {
     const history = this.queryPerformance.get(tool);
     history.push(time);
 
-    // Keep only recent 10 measurements
-    if (history.length > 10) {
+    // Keep only recent measurements
+    if (history.length > SmartCache.MAX_PERFORMANCE_HISTORY) {
       history.shift();
     }
   }
@@ -575,11 +619,11 @@ export class SmartCache {
     const suggestions = [];
 
     // Check if limit is too high
-    if (query.params?.limit > 50) {
+    if (query.params?.limit > SmartCache.HIGH_LIMIT_THRESHOLD) {
       suggestions.push({
         optimization: 'Reduce limit parameter',
         expectedSpeedup: '2x',
-        details: 'Limiting results to 50 or less can significantly improve performance',
+        details: `Limiting results to ${SmartCache.HIGH_LIMIT_THRESHOLD} or less can significantly improve performance`,
       });
     }
 
@@ -613,11 +657,12 @@ export class SmartCache {
    * Warm cache from access log
    */
   async warmFromAccessLog(accessLog) {
-    // Sort by access count
+    // Sort by access count and get top items
     const sorted = [...accessLog].sort((a, b) => b.count - a.count);
+    const topItems = sorted.slice(0, SmartCache.TOP_ACCESS_LOG_ITEMS);
 
     // Cache top items
-    for (const entry of sorted.slice(0, 20)) {
+    for (const entry of topItems) {
       if (this.loader) {
         try {
           const data = await this.loader(entry.key);

@@ -6,6 +6,12 @@
  */
 
 export class DataPreprocessor {
+  // Configuration constants
+  static MAX_TOP_CONCEPTS = 100;
+  static MAX_DOCS_PER_CONCEPT = 100;
+  static MAX_CONCEPTS_PER_DOC = 50;
+  static DEFAULT_CHUNK_SIZE = 500 * 1024; // 500KB
+
   constructor({ graph, documents, concepts }) {
     if (!graph) {
       throw new Error('Graph data is required');
@@ -14,6 +20,27 @@ export class DataPreprocessor {
     this.graph = graph;
     this.documents = documents || [];
     this.concepts = concepts || { topConcepts: [] };
+  }
+
+  /**
+   * Normalize document path (prefer relativePath over path)
+   */
+  _getDocumentPath(doc) {
+    return doc.relativePath || doc.path;
+  }
+
+  /**
+   * Calculate JSON size in bytes
+   */
+  _calculateJsonSize(data) {
+    return JSON.stringify(data).length;
+  }
+
+  /**
+   * Sort and limit array by property
+   */
+  _sortAndLimit(array, sortFn, limit) {
+    return array.slice(0, limit).sort(sortFn);
   }
 
   /**
@@ -45,20 +72,23 @@ export class DataPreprocessor {
 
     // Extract and sort top concepts (max 100)
     const conceptsList = this.concepts.topConcepts || [];
-    summary.topConcepts = conceptsList
-      .slice(0, 100)
-      .sort((a, b) => b.frequency - a.frequency)
-      .map((c) => ({
-        concept: c.term,
-        frequency: c.frequency,
-        fileCount: c.documents?.length || 0,
-        weight: c.totalWeight || 0,
-      }));
+    const topConcepts = this._sortAndLimit(
+      conceptsList,
+      (a, b) => b.frequency - a.frequency,
+      DataPreprocessor.MAX_TOP_CONCEPTS,
+    );
+    summary.topConcepts = topConcepts.map((c) => ({
+      concept: c.term,
+      frequency: c.frequency,
+      fileCount: c.documents?.length || 0,
+      weight: c.totalWeight || 0,
+    }));
 
-    // Build document index (relativePath -> nodeId)
+    // Build document index (path -> nodeId)
     for (const doc of this.documents) {
-      if (doc.relativePath) {
-        summary.documentIndex[doc.relativePath] = {
+      const docPath = this._getDocumentPath(doc);
+      if (docPath) {
+        summary.documentIndex[docPath] = {
           id: doc.id,
           title: doc.frontmatter?.title || doc.fileName,
           directory: doc.directory,
@@ -102,13 +132,12 @@ export class DataPreprocessor {
       const docIds = concept.documents || [];
       const docsWithWeights = [];
 
-      for (const docId of docIds.slice(0, 100)) {
-        // Limit to 100 docs per concept
+      for (const docId of docIds.slice(0, DataPreprocessor.MAX_DOCS_PER_CONCEPT)) {
         const doc = this.documents.find((d) => d.id === docId);
         if (doc) {
           docsWithWeights.push({
             id: doc.id,
-            path: doc.relativePath || doc.path,
+            path: this._getDocumentPath(doc),
             weight: concept.averageWeight || 1,
           });
         }
@@ -121,40 +150,53 @@ export class DataPreprocessor {
 
     // Build document -> concepts mapping
     for (const doc of this.documents) {
-      const docPath = doc.relativePath || doc.path;
-      const docConcepts = [];
+      const docPath = this._getDocumentPath(doc);
+      const docConcepts = this._buildDocumentConcepts(doc, conceptsList);
 
-      // Find concepts that mention this document
-      for (const concept of conceptsList) {
-        if (concept.documents?.includes(doc.id)) {
-          docConcepts.push({
-            concept: concept.term,
-            weight: concept.averageWeight || 1,
-            frequency: concept.frequency,
-          });
-        }
-      }
-
-      // Also include concepts from document's concept array
-      if (doc.concepts && Array.isArray(doc.concepts)) {
-        for (const conceptName of doc.concepts) {
-          if (!docConcepts.find((c) => c.concept === conceptName)) {
-            const conceptData = conceptsList.find((c) => c.term === conceptName);
-            docConcepts.push({
-              concept: conceptName,
-              weight: conceptData?.averageWeight || 1,
-              frequency: conceptData?.frequency || 1,
-            });
-          }
-        }
-      }
-
-      // Sort by weight descending and limit to 50 concepts
-      docConcepts.sort((a, b) => b.weight - a.weight);
-      indexes.documentToConcepts.set(docPath, docConcepts.slice(0, 50));
+      // Sort by weight descending and limit
+      const sortedConcepts = this._sortAndLimit(
+        docConcepts,
+        (a, b) => b.weight - a.weight,
+        DataPreprocessor.MAX_CONCEPTS_PER_DOC,
+      );
+      indexes.documentToConcepts.set(docPath, sortedConcepts);
     }
 
     return indexes;
+  }
+
+  /**
+   * Build concepts list for a document
+   */
+  _buildDocumentConcepts(doc, conceptsList) {
+    const docConcepts = [];
+
+    // Find concepts that mention this document
+    for (const concept of conceptsList) {
+      if (concept.documents?.includes(doc.id)) {
+        docConcepts.push({
+          concept: concept.term,
+          weight: concept.averageWeight || 1,
+          frequency: concept.frequency,
+        });
+      }
+    }
+
+    // Also include concepts from document's concept array
+    if (doc.concepts && Array.isArray(doc.concepts)) {
+      for (const conceptName of doc.concepts) {
+        if (!docConcepts.find((c) => c.concept === conceptName)) {
+          const conceptData = conceptsList.find((c) => c.term === conceptName);
+          docConcepts.push({
+            concept: conceptName,
+            weight: conceptData?.averageWeight || 1,
+            frequency: conceptData?.frequency || 1,
+          });
+        }
+      }
+    }
+
+    return docConcepts;
   }
 
   /**
@@ -183,8 +225,8 @@ export class DataPreprocessor {
 
         if (similarity >= minSimilarity) {
           matrix.push({
-            doc1: doc1.relativePath || doc1.path,
-            doc2: doc2.relativePath || doc2.path,
+            doc1: this._getDocumentPath(doc1),
+            doc2: this._getDocumentPath(doc2),
             similarity: Math.round(similarity * 1000) / 1000, // 3 decimal places
           });
         }
@@ -216,7 +258,11 @@ export class DataPreprocessor {
    * Chunk large data into smaller files
    * Returns chunks array and optional manifest
    */
-  async chunkLargeFiles({ data, maxChunkSize = 500 * 1024, createManifest = false }) {
+  async chunkLargeFiles({
+    data,
+    maxChunkSize = DataPreprocessor.DEFAULT_CHUNK_SIZE,
+    createManifest = false,
+  }) {
     const chunks = [];
     const warnings = [];
     const itemToChunkMap = {};
@@ -225,7 +271,7 @@ export class DataPreprocessor {
     let currentSize = 0;
 
     for (const item of data) {
-      const itemSize = JSON.stringify(item).length;
+      const itemSize = this._calculateJsonSize(item);
 
       // If single item exceeds max size, put in its own chunk with warning
       if (itemSize > maxChunkSize) {
@@ -296,9 +342,9 @@ export class DataPreprocessor {
 
     // Calculate original sizes
     const originalSizes = {
-      graph: JSON.stringify(this.graph).length,
-      documents: JSON.stringify(this.documents).length,
-      concepts: JSON.stringify(this.concepts).length,
+      graph: this._calculateJsonSize(this.graph),
+      documents: this._calculateJsonSize(this.documents),
+      concepts: this._calculateJsonSize(this.concepts),
     };
 
     // Generate metadata summary
@@ -320,17 +366,17 @@ export class DataPreprocessor {
     const chunkStart = Date.now();
     result.chunks = await this.chunkLargeFiles({
       data: this.documents,
-      maxChunkSize: 500 * 1024,
+      maxChunkSize: DataPreprocessor.DEFAULT_CHUNK_SIZE,
       createManifest: true,
     });
     const chunkTime = Date.now() - chunkStart;
 
     // Calculate preprocessed sizes
     const preprocessedSizes = {
-      metadata: JSON.stringify(result.metadata).length,
-      indexes: this._calculateIndexSize(result.indexes),
-      similarityMatrix: JSON.stringify(result.similarityMatrix).length,
-      chunks: result.chunks.chunks.reduce((sum, c) => sum + JSON.stringify(c).length, 0),
+      metadata: this._calculateJsonSize(result.metadata),
+      indexes: this._calculateMapIndexSize(result.indexes),
+      similarityMatrix: this._calculateJsonSize(result.similarityMatrix),
+      chunks: result.chunks.chunks.reduce((sum, c) => sum + this._calculateJsonSize(c), 0),
     };
 
     // Calculate stats
@@ -356,15 +402,15 @@ export class DataPreprocessor {
   /**
    * Calculate size of Map-based indexes
    */
-  _calculateIndexSize(indexes) {
+  _calculateMapIndexSize(indexes) {
     let size = 0;
 
     for (const [key, value] of indexes.conceptToDocuments || new Map()) {
-      size += key.length + JSON.stringify(value).length;
+      size += key.length + this._calculateJsonSize(value);
     }
 
     for (const [key, value] of indexes.documentToConcepts || new Map()) {
-      size += key.length + JSON.stringify(value).length;
+      size += key.length + this._calculateJsonSize(value);
     }
 
     return size;
