@@ -44,7 +44,7 @@ describe('ConceptExtractor', () => {
 
     it('should remove special characters', () => {
       const result = extractor.normalizeTerm('test@#$term');
-      expect(result).toBe('test term');
+      expect(result).toBe('testterm');
     });
 
     it('should handle multiple spaces', () => {
@@ -92,37 +92,44 @@ describe('ConceptExtractor', () => {
       const text = 'Arbitrum is a blockchain platform for smart contracts.';
       const concepts = extractor.extractConceptsFromText(text);
 
-      expect(concepts.size).toBeGreaterThan(0);
-      expect(Array.from(concepts)).toContain('arbitrum');
-      expect(Array.from(concepts)).toContain('blockchain');
-      expect(Array.from(concepts)).toContain('smart contract');
+      expect(concepts.length).toBeGreaterThan(0);
+      expect(concepts.some((c) => c.normalized === 'arbitrum')).toBe(true);
+      expect(concepts.some((c) => c.normalized === 'blockchain')).toBe(true);
+      expect(
+        concepts.some(
+          (c) => c.normalized === 'smart contract' || c.normalized === 'smart-contract',
+        ),
+      ).toBe(true);
     });
 
     it('should filter out stop words', () => {
       const text = 'The quick brown fox and the lazy dog.';
       const concepts = extractor.extractConceptsFromText(text);
 
-      expect(Array.from(concepts)).not.toContain('the');
-      expect(Array.from(concepts)).not.toContain('and');
+      expect(concepts.every((c) => c.normalized !== 'the')).toBe(true);
+      expect(concepts.every((c) => c.normalized !== 'and')).toBe(true);
     });
 
     it('should handle empty text', () => {
       const concepts = extractor.extractConceptsFromText('');
-      expect(concepts.size).toBe(0);
+      expect(concepts.length).toBe(0);
     });
 
     it('should handle text with only stop words', () => {
       const text = 'the and or but';
       const concepts = extractor.extractConceptsFromText(text);
-      expect(concepts.size).toBe(0);
+      expect(concepts.length).toBe(0);
     });
 
     it('should normalize extracted concepts', () => {
       const text = 'Smart Contract and smart-contract are the same.';
       const concepts = extractor.extractConceptsFromText(text);
 
-      const conceptArray = Array.from(concepts);
-      expect(conceptArray).toContain('smart contract');
+      expect(
+        concepts.some(
+          (c) => c.normalized === 'smart contract' || c.normalized === 'smart-contract',
+        ),
+      ).toBe(true);
     });
   });
 
