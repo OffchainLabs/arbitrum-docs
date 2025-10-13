@@ -66,7 +66,7 @@ describe('DocumentExtractor', () => {
       expect(result.headings).toBeDefined();
       expect(result.headings.length).toBeGreaterThan(0);
 
-      const h1Headings = result.headings.filter(h => h.level === 1);
+      const h1Headings = result.headings.filter((h) => h.level === 1);
       expect(h1Headings.length).toBeGreaterThan(0);
       expect(h1Headings[0].text).toBe('Test Document');
     });
@@ -78,7 +78,7 @@ describe('DocumentExtractor', () => {
       expect(result.links).toBeDefined();
       expect(result.links.internal).toBeDefined();
       expect(result.links.internal.length).toBeGreaterThan(0);
-      expect(result.links.internal).toContain('./other-doc.md');
+      expect(result.links.internal.some((link) => link.href === './other-doc.md')).toBe(true);
     });
 
     it('should extract external links', async () => {
@@ -87,7 +87,7 @@ describe('DocumentExtractor', () => {
 
       expect(result.links.external).toBeDefined();
       expect(result.links.external.length).toBeGreaterThan(0);
-      expect(result.links.external[0]).toContain('https://example.com');
+      expect(result.links.external[0].href).toContain('https://example.com');
     });
 
     it('should identify code blocks', async () => {
@@ -96,15 +96,15 @@ describe('DocumentExtractor', () => {
 
       expect(result.codeBlocks).toBeDefined();
       expect(result.codeBlocks.length).toBeGreaterThan(0);
-      expect(result.codeBlocks[0]).toContain('const test');
+      expect(result.codeBlocks[0].code).toContain('const test');
     });
 
     it('should count words accurately', async () => {
       const testFile = path.join(fixturesDir, 'valid-document.mdx');
       const result = await extractor.extractDocument(testFile);
 
-      expect(result.wordCount).toBeDefined();
-      expect(result.wordCount).toBeGreaterThan(0);
+      expect(result.stats.wordCount).toBeDefined();
+      expect(result.stats.wordCount).toBeGreaterThan(0);
     });
 
     it('should return null for non-existent file', async () => {
@@ -167,22 +167,22 @@ describe('DocumentExtractor', () => {
 [Anchor Link](#section)
       `;
 
-      const links = extractor.extractLinks(content);
+      const links = extractor.extractLinks(content, '/docs/test.md');
 
-      expect(links.internal).toContain('./page.md');
-      expect(links.external[0]).toContain('https://example.com');
-      expect(links.anchor).toContain('#section');
+      expect(links.internal.some((link) => link.href === './page.md')).toBe(true);
+      expect(links.external[0].href).toContain('https://example.com');
+      expect(links.anchor.some((link) => link.href === '#section')).toBe(true);
     });
 
     it('should handle links with special characters', () => {
       const content = `[Link](./path/to/file-name_123.md)`;
-      const links = extractor.extractLinks(content);
+      const links = extractor.extractLinks(content, '/docs/test.md');
 
-      expect(links.internal).toContain('./path/to/file-name_123.md');
+      expect(links.internal.some((link) => link.href === './path/to/file-name_123.md')).toBe(true);
     });
 
     it('should return empty arrays for no links', () => {
-      const links = extractor.extractLinks('No links here');
+      const links = extractor.extractLinks('No links here', '/docs/test.md');
 
       expect(links.internal).toEqual([]);
       expect(links.external).toEqual([]);
@@ -196,7 +196,7 @@ describe('DocumentExtractor', () => {
       const blocks = extractor.extractCodeBlocks(content);
 
       expect(blocks.length).toBe(1);
-      expect(blocks[0]).toContain('const x = 1;');
+      expect(blocks[0].code).toContain('const x = 1;');
     });
 
     it('should extract code blocks with language tags', () => {
