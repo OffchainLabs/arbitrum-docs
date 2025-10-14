@@ -82,38 +82,36 @@ This will:
 
 ### Available Commands
 
-#### Core Commands (Original)
-
 - **`npm start`**: Run the complete analysis pipeline with memory optimizations (recommended)
+- **`npm run start:basic`**: Run analysis without memory optimizations
+- **`npm run start:optimized`**: Run with optimized visualization for large graphs
 - **`npm run help`**: Display help and available options
-- **`npm run serve`**: Start a local web server to view visualizations
-
-#### Enhanced CLI Commands (New)
-
-- **`npm run topic <topic>`**: Filter documentation by specific topics (e.g., "Arbitrum chain", "Node", "How-tos")
-- **`npm run keyword <keywords...>`**: Search documentation using keywords with logical operators
-- **`npm run analyze:topic <topic>`**: Alias for topic analysis
-- **`npm run analyze:keyword <keywords...>`**: Alias for keyword analysis
+- **`npm run serve`**: Start a local web server to view visualizations (port 8080)
+- **`npm run report`**: Generate timestamped issue report after analysis
+- **`npm test`**: Run the test suite
+- **`npm run test:watch`**: Run tests in watch mode
+- **`npm run test:coverage`**: Run tests with coverage report
+- **`npm run test:unit`**: Run only unit tests
+- **`npm run test:integration`**: Run only integration tests
 
 ### Quick Examples
 
 ```bash
-# Original command - analyze everything
+# Run complete analysis
 npm start
 
-# New - Analyze Arbitrum chain documentation
-npm run topic "Arbitrum chain" -- --fuzzy
+# Run with custom input/output directories
+node src/index.js -i /path/to/docs -o /path/to/output
 
-# New - Search for node and validator docs
-npm run keyword node validator -- --operator OR
+# Generate timestamped issue report
+npm run report
 
-# New - Find all how-to guides
-npm run topic "How-tos" -- --format html
+# View results in browser
+npm run serve
+# Then open http://localhost:8080/knowledge-graph-visualization.html
 ```
 
 ### Command Line Options
-
-#### Basic CLI Options
 
 For more control, use the CLI directly:
 
@@ -129,40 +127,18 @@ node src/index.js --skip-concepts --skip-analysis
 
 # Run only visualization (useful after making changes)
 node src/index.js --skip-extraction --skip-concepts --skip-analysis
+
+# Generate issue report
+node src/index.js --issue-report
+
+# Use optimized visualization for large graphs
+node src/index.js --optimized-viz
 ```
 
-#### Topic Analyzer Options
+All available options can be viewed with:
 
 ```bash
-npm run topic <topic> [options]
-
-Options:
-  -i, --input <path>    Input directory (default: docs)
-  -o, --output <path>   Output directory (default: ./dist)
-  -v, --verbose         Enable verbose logging
-  -f, --format <type>   Output format: html, json, markdown, all (default: all)
-  --use-cache           Use cached extraction results (default: true)
-  --case-sensitive      Use case-sensitive matching
-  --fuzzy               Enable fuzzy matching for broader results
-  --threshold <n>       Minimum relevance score 0-1 (default: 0.3)
-```
-
-#### Keyword Analyzer Options
-
-```bash
-npm run keyword <keywords...> [options]
-
-Options:
-  -i, --input <path>    Input directory (default: docs)
-  -o, --output <path>   Output directory (default: ./dist)
-  -v, --verbose         Enable verbose logging
-  -f, --format <type>   Output format: html, json, markdown, csv, all (default: all)
-  --use-cache           Use cached extraction results (default: true)
-  --operator <op>       Logical operator: AND, OR (default: OR)
-  --include-related     Include related concepts and documents
-  --depth <n>           Depth of related content 1-3 (default: 1)
-  --min-score <n>       Minimum relevance score 0-1 (default: 0.2)
-  --max-results <n>     Maximum number of results (default: 100)
+npm run help
 ```
 
 ### Configuration
@@ -252,24 +228,14 @@ After running the analysis, check the `dist/` directory for:
 #### Technical Files
 
 - **`extracted-concepts.json`**: Raw concept extraction results
-- **`similarity-matrix.json`**: Document similarity calculations
+- **`extracted-documents.json`**: Raw document extraction results
+- **`similarity-matrix.json`**: Document similarity calculations (when generated)
 
-### Topic Analysis Outputs (New)
+#### Timestamped Reports
 
-When you run topic analysis, the following files are generated:
+When you run with `--issue-report` or `npm run report`:
 
-- **`knowledge-graph-visualization-{topic}.html`**: Interactive filtered visualization
-- **`topic-analysis-{topic}.json`**: Complete analysis data in JSON format
-- **`topic-report-{topic}.md`**: Markdown report with findings and recommendations
-
-### Keyword Analysis Outputs (New)
-
-When you run keyword analysis, the following files are generated:
-
-- **`knowledge-graph-visualization-{keywords}.html`**: Interactive filtered visualization
-- **`keyword-analysis-{keywords}.json`**: Complete analysis data in JSON format
-- **`keyword-report-{keywords}.md`**: Markdown report with findings
-- **`keyword-matches-{keywords}.csv`**: CSV file with matching documents
+- **`ANALYSIS_REPORT_{timestamp}.md`**: Timestamped comprehensive analysis report
 
 ## Understanding the Results
 
@@ -330,26 +296,29 @@ Apply insights to:
 - Balance content distribution across categories
 - Enhance internal linking strategies
 
-### Topic-Specific Analysis (New)
+### Advanced Analysis
 
-Use the enhanced CLI features for:
+Use command-line options for targeted analysis:
 
-- **Deep-dive analysis**: Focus on specific areas like "Arbitrum chain" or "Node" documentation
-- **How-to coverage**: Analyze completeness of tutorial and guide documentation
-- **Keyword tracking**: Monitor coverage of important terms and concepts
-- **Targeted improvements**: Generate focused reports for specific documentation areas
+- **Phase control**: Skip specific phases for faster iteration
+- **Custom directories**: Analyze specific subdirectories or external documentation
+- **Issue reporting**: Generate detailed analysis reports with recommendations
+- **Optimized visualization**: Handle large documentation sets efficiently
 
 Example workflows:
 
 ```bash
-# Analyze Arbitrum chain documentation health
-npm run topic "Arbitrum chain" -- --format markdown
+# Analyze specific directory
+node src/index.js -i /path/to/specific/docs -o ./specific-analysis
 
-# Find all security-related documentation
-npm run keyword security vulnerability audit -- --operator OR
+# Generate comprehensive report
+npm run report
 
-# Check how-to guide coverage
-npm run topic "How-tos" -- --fuzzy --threshold 0.4
+# Fast iteration - skip expensive phases
+node src/index.js --skip-concepts --verbose
+
+# Handle large documentation sets
+node src/index.js --optimized-viz
 ```
 
 ## Technical Details
@@ -438,23 +407,23 @@ Memory usage scales with repository size and complexity.
 
 - The default `npm start` command includes memory optimizations for large datasets
 - If experiencing memory issues, try `npm run start:basic` for simpler analysis
-- Consider filtering to specific document subdirectories
-- Run analysis on subsets of content for iterative improvements
-- Use topic/keyword filtering to focus on specific areas: `npm run topic "specific area"`
+- Use `--skip-concepts` or `--skip-analysis` to skip expensive phases during iteration
+- Consider analyzing subdirectories separately using `-i` option
+- Use `--optimized-viz` for large graphs (500+ nodes)
 
 **Memory usage:**
 
 - Default command uses up to 8GB heap space with garbage collection optimizations
 - Large repositories (500+ files) may use 1-2GB of memory during processing
 - Processing automatically optimizes similarity calculations for datasets with 500+ concepts
-- Topic and keyword analysis use cached data for faster processing
+- Memory usage peaks during concept extraction and graph building phases
 
-**Optimizing enhanced CLI features:**
+**Optimization tips:**
 
-- Use `--use-cache` (default) to leverage existing extraction results
-- Adjust `--threshold` to balance result quality vs. quantity
-- Use `--max-results` to limit output size for keyword searches
-- Enable `--fuzzy` matching cautiously as it may include less relevant results
+- Skip phases you don't need with `--skip-extraction`, `--skip-concepts`, etc.
+- Use `--verbose` to monitor which phases are taking the most time
+- Run analysis incrementally on subdirectories for very large codebases
+- Use `--optimized-viz` to enable chunked loading for large visualizations
 
 ### Getting Help
 
@@ -464,10 +433,9 @@ For issues specific to:
 - **Concept extraction**: Review `src/extractors/conceptExtractor.js` and adjust domain terms
 - **Graph structure**: Modify parameters in `config/thresholds.js` or `src/builders/graphBuilder.js`
 - **Visualization**: Check browser console for Cytoscape.js errors
-- **Performance**: Monitor memory usage and consider batch processing
-- **Topic analysis**: Run with `--verbose` flag to see detailed filtering logs
-- **Keyword search**: Try different operators (AND/OR) and adjust thresholds
-- **No results**: Use `--fuzzy` matching and lower `--threshold` values
+- **Performance**: Use `--verbose` flag and skip expensive phases during iteration
+- **Memory issues**: Try `npm run start:basic` or analyze subdirectories separately
+- **Empty results**: Check input directory path and file patterns
 
 ## Testing
 
