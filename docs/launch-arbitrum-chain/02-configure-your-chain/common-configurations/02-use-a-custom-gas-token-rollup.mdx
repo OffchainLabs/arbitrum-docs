@@ -19,7 +19,9 @@ When deploying an Arbitrum chain in [Rollup mode](/how-arbitrum-works/12-data-av
 Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
 ## Requirements of the custom gas token
+
 A key requirement for a custom gas token is that there is some representation on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain. Additional requirements include:
+
 - Must be a standard `ERC-20` token
 - Transfers and approvals must occur directly via the token contract, not via proxies or hooks
 - Must not be rebasing or include transfer fees and
