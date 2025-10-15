@@ -20,7 +20,7 @@ Enabling a custom fee token for a Rollup chain requires additional configuration
 
 ## Requirements of the custom gas token
 
-A key requirement for a custom gas token is that there is some representation on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain. Additional requirements include:
+A key requirement for a custom gas token is that it has a representation on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain. Additional requirements include:
 
 - Must be a standard `ERC-20` token
 - Transfers and approvals must occur directly via the token contract, not via proxies or hooks
