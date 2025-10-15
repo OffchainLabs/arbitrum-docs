@@ -17,7 +17,7 @@ Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Ru
 
 :::
 
-This quickstart is for web developers who want to start building **decentralized applications** (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
+This quickstart is for web developers who want to start building **decentralized applications** (apps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 import CustomDetails from '@site/src/components/CustomDetails';
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
@@ -85,15 +85,15 @@ We'll address any remaining dependencies as we go.
   - The data within Ethereum's blockchain data structure changes one transaction at a time.
   - <a data-quicklook-from="smart-contract">Smart contracts</a> are small programs that execute transactions
     according to predefined rules. Ethereum's nodes host and execute smart contracts.
-  - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data. Think of smart contracts as your dApp's backend
-  - DApps let users carry their data and identity between applications without trusting centralized service providers.
-  - People who run Ethereum validator nodes[^3] can earn `ETH` for processing and validating transactions on behalf of users and dApps.
+  - You can use smart contracts to build decentralized apps (apps) that use Ethereum's network to process transactions and store data. Think of smart contracts as your app's backend
+  - Apps let users carry their data and identity between applications without trusting centralized service providers.
+  - People who run Ethereum validator nodes[^3] can earn `ETH` for processing and validating transactions on behalf of users and apps.
   - These transactions can be expensive when the network is under heavy load.
 - **Arbitrum**
-  - Arbitrum is a suite of child chain scaling solutions for dApp developers.
+  - Arbitrum is a suite of child chain scaling solutions for app developers.
   - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is a child chain that implements the
     <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup protocol</a>.
-  - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high-security standards[^4].
+  - You can use Arbitrum One to build user-friendly apps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high-security standards[^4].
 
  <!-- Note: add simple diagrams representing smart contracts development cycle  -\-> -->
 
@@ -224,7 +224,7 @@ Let's first add our smart contract to Remix following these steps:
 
 <CustomDetails summary="File explorer > Workspaces > Create blank">
   <ImageZoom
-    src="/img/dapps-remix-create-blank-project-2025-01-07.gif"
+    src="/img/apps-remix-create-blank-project-2025-01-07.gif"
     alt=""
     className="img-600px"
   />
@@ -236,7 +236,7 @@ Let's first add our smart contract to Remix following these steps:
 
 <CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
   <ImageZoom
-    src="/img/dapps-remix-paste-vending-machine-contract-2025-01-07.gif"
+    src="/img/apps-remix-paste-vending-machine-contract-2025-01-07.gif"
     alt=""
     className="img-600px"
   />
@@ -247,7 +247,7 @@ Let's first add our smart contract to Remix following these steps:
 #### 5. Compile your contract in Remix
 
 <CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
-  <ImageZoom src="/img/dapps-remix-compile-contract-2025-01-07.gif" alt="" className="img-600px" />
+  <ImageZoom src="/img/apps-remix-compile-contract-2025-01-07.gif" alt="" className="img-600px" />
 </CustomDetails>
 
 <VanillaAdmonition type="note">
@@ -344,13 +344,13 @@ Next, click Metamask's network selector dropdown and click the **Add Network** b
 - Currency Symbol: `ETH`
 
 <CustomDetails summary="Add Localhost 8545 to Metamask">
-  <ImageZoom src="/img/dapps-metamask-add-localhost-2025-01-13.png" alt="" className="img-600px" />
+  <ImageZoom src="/img/apps-metamask-add-localhost-2025-01-13.png" alt="" className="img-600px" />
 </CustomDetails>
 
 Your wallet won't have a balance on your local testnet's node, but you can import one of the test accounts into Metamask to access to 10,000 testnet `ETH`. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g., `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80` or `ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`) and import it into Metamask. Metamask will ask you if you want to connect this new account to Remix, to which you should answer "yes":
 
 <ImageZoom
-  src="/img/dapps-quickstart-import-metamask.png"
+  src="/img/apps-quickstart-import-metamask.png"
   alt="Connect Metamask to Localhost 8545"
   className="img-600px"
 />
@@ -372,7 +372,7 @@ As we interact with our cupcake vending machine, we'll use Metamask's network se
 In the last step, we'll connect Remix to Metamask so we can deploy our smart contract to the local chain using Remix.
 
 <CustomDetails summary="Connect remix to Metamask">
-  <ImageZoom src="/img/dapps-remix-connect-metamask-2025-01-13.gif" alt="" className="img-600px" />
+  <ImageZoom src="/img/apps-remix-connect-metamask-2025-01-13.gif" alt="" className="img-600px" />
 </CustomDetails>
 
 At this point, we're ready to deploy our smart contract to any chain we want.
@@ -384,7 +384,7 @@ At this point, we're ready to deploy our smart contract to any chain we want.
 
 <CustomDetails summary="Deploy the VendingMachine contract to the Localhost network">
   <ImageZoom
-    src="/img/dapps-remix-deploy-to-local-chain-2025-01-14.gif"
+    src="/img/apps-remix-deploy-to-local-chain-2025-01-14.gif"
     alt=""
     className="img-600px"
   />
@@ -399,7 +399,7 @@ Then copy and paste your **contract address** below and click **Get cupcake!**. 
 Our first `VendingMachine` is labeled "Web2" because it demonstrates traditional client-server web application architecture: the back-end lives in a centralized network of servers.
 
 <ImageZoom
-  src="/img/dapps-quickstart-vending-machine-architecture.png"
+  src="/img/apps-quickstart-vending-machine-architecture.png"
   alt="Architecture diagram"
   className="img-600px"
 />

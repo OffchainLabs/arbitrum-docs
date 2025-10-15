@@ -45,15 +45,15 @@ Our architecture consists of three types of contracts:
 2. **Gateways**: Pairs of contracts (one on the parent chain, one on the child chain) that implement a particular type of cross-chain asset bridging.
 3. **Routers**: Exactly two contracts (one on the parent chain, one on the child chain) that route each asset to its designated gateway.
 
-<ImageZoom src="/img/dapps-gatewayUML.svg" alt="" className="img-600px" />
+<ImageZoom src="/img/apps-gatewayUML.svg" alt="" className="img-600px" />
 
 All Ethereum-to-Arbitrum token transfers are initiated via the router contract on the parent chain, specifically the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child chain address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
 
-<ImageZoom src="/img/dapps-bridge_deposits.png" alt="" className="img-600px" />
+<ImageZoom src="/img/apps-bridge_deposits.png" alt="" className="img-600px" />
 
 Similarly, Arbitrum-to-Ethereum transfers initiate via the router contract on the child chain, specifically the `L2GatewayRouter` contract, which in turn calls the token's gateway contract on the child chain. This `L2ArbitrumGateway` contract in turn communicates to its corresponding gateway contract on the parent chain, the `L1ArbitrumGateway` contract (typically/expectedly via [sending child-to-parent messages to the outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)).
 
-<ImageZoom src="/img/dapps-bridge_withdrawals.png" alt="" className="img-600px" />
+<ImageZoom src="/img/apps-bridge_withdrawals.png" alt="" className="img-600px" />
 
 For any given gateway pairing, we require that calls initiate through the corresponding router (`L1GatewayRouter` or `L2GatewayRouter`), and that the gateways conform to the [`TokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
