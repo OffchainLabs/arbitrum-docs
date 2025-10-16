@@ -7,9 +7,9 @@
     "title": "Address Alias",
     "text": "<p>An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.</p>\n"
   },
-  "app": {
-    "title": "App",
-    "text": "<p>Short for &quot;decentralized application.&quot; An App typically consists of smart contracts as well as a user-interface for interacting with them.</p>\n"
+  "dapp": {
+    "title": "Decentralized application",
+    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.</p>\n"
   },
   "arb-token-bridge": {
     "title": "Arb Token Bridge",
