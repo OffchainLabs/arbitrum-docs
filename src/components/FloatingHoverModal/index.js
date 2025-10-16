@@ -29,6 +29,7 @@ import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/con
 import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/config-timeboost.mdx';
 import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/config-bold.mdx';
 import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/config-permissioned-validators.mdx';
+import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
 
 // Static content mapping
 const contentMap = {
@@ -43,6 +44,7 @@ const contentMap = {
   'config-timeboost': ConfigTimeboost,
   'config-bold': ConfigBold,
   'config-permissioned-validators': ConfigPermissionedValidators,
+  'config-l1-challenge-period': ConfigL1ChallengePeriod,
 };
 
 // MDX components for proper rendering
