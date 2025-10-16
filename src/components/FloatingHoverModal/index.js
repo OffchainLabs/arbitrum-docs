@@ -28,6 +28,7 @@ import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/config-any
 import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx';
 import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/config-timeboost.mdx';
 import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/config-bold.mdx';
+import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/config-permissioned-validators.mdx';
 
 // Static content mapping
 const contentMap = {
@@ -41,6 +42,7 @@ const contentMap = {
   'config-fast-withdrawals': ConfigFastwithdrawals,
   'config-timeboost': ConfigTimeboost,
   'config-bold': ConfigBold,
+  'config-permissioned-validators': ConfigPermissionedValidators,
 };
 
 // MDX components for proper rendering
