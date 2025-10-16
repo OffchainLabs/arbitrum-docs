@@ -9,7 +9,7 @@
   },
   "dapp": {
     "title": "Decentralized application",
-    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nIn our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
+    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nNote: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
   },
   "arb-token-bridge": {
     "title": "Arb Token Bridge",
