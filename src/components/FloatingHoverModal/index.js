@@ -26,6 +26,7 @@ import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-har
 import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/config-rollup.mdx';
 import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/config-anytrust.mdx';
 import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx';
+import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/config-timeboost.mdx';
 
 // Static content mapping
 const contentMap = {
@@ -37,6 +38,7 @@ const contentMap = {
   'config-rollup': ConfigRollup,
   'config-anytrust': ConfigAnytrust,
   'config-fast-withdrawals': ConfigFastwithdrawals,
+  'config-timeboost': ConfigTimeboost,
 };
 
 // MDX components for proper rendering
