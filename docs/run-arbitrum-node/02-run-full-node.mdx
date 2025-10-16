@@ -61,9 +61,11 @@ We provide a summary of the available parameters here, but we recommend reading 
 - Note that these parameters get ignored if a database already exists
 - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
 
-import FusakaHistoricalBlobs from '../partials/_fusaka-historical-blobs.mdx';
+:::warning Fusaka upgrade: Historical blobs
 
-<FusakaHistoricalBlobs />
+If running a beacon node, historical data will now be in blobs. To make this transition to using historical blobs refer to the [Historical Blobs: Beacon Nodes](/run-arbitrum-node/beacon-nodes-historical-blobs.mdx) guide.
+
+:::
 
 ### Required parameters
 
