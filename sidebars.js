@@ -72,7 +72,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'How Arbitrum works',
-      href: '/how-arbitrum-works/a-gentle-introduction',
+      href: '/how-arbitrum-works/inside-arbitrum-nitro',
     },
     {
       type: 'html',
