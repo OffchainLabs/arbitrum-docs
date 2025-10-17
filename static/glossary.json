@@ -73,7 +73,7 @@
   },
   "assertion": {
     "title": "Assertion",
-    "text": "<p>A bonded claim made by an Arbitrum <a href=\"/intro/glossary#validator\">Validator</a> representing a claim about an Arbitrum chain&#39;s state. An <a href=\"/intro/glossary#assertion\">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href=\"/intro/glossary#challenge\">Challenge</a>.</p>\n<p>Assertions can have different states:</p>\n<ul>\n<li><strong>Proposed</strong>: When a validator submits an assertion</li>\n<li><strong>Challenged</strong>: If another validator disputes the assertion, an interactive fraud-proof initiates.</li>\n<li><strong>Confirmed</strong>: An assertion becomes final if no one challenges it within the dispute window (6.4 days).</li>\n</ul>\n"
+    "text": "<p>A bonded claim made by an Arbitrum <a href=\"/intro/glossary#validator\">Validator</a> representing a claim about an Arbitrum chain&#39;s state. An <a href=\"/intro/glossary#assertion\">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href=\"/intro/glossary#challenge\">Challenge</a>.</p>\n"
   },
   "auction-contract": {
     "title": "Auction Contract",
@@ -361,7 +361,7 @@
   },
   "state-transition-function": {
     "title": "State Transition Function",
-    "text": "<p>The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain. The State Transition Function&#39;s output is the result of applying those input messages (transactions).</p>\n"
+    "text": "<p>The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.</p>\n"
   },
   "stylus": {
     "title": "Stylus",
