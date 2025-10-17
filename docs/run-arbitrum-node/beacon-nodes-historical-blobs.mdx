@@ -56,26 +56,15 @@ The Offchain Labs team hasn't verified the accuracy of the flags below, includin
 
 :::
 
-### Sepolia Consensus layer client support
+### Sepolia: Consensus client support
 
-| Client        | Confirmed works with Nitro `v3.7.6` | Confirmed works with Nitro `v3.8.0` | Required Nitro Flag                                                 | Required BN Flag                              | Supports `/blobs` | Return blob proofs on `/blob_sidecars` |
-| ------------- | ----------------------------------- | ----------------------------------- | ------------------------------------------------------------------- | --------------------------------------------- | ----------------- | -------------------------------------- |
-| Prysm         | ✅                                  | ✅                                  | None                                                                | `--subscribe-all-data-subnets`                | ✅                | ✅                                     |
-| Lighthouse    | ✅                                  | ✅                                  | None                                                                | `--supernode`                                 | ✅                | ❌                                     |
-| Teku          | ✅                                  | ✅                                  | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--p2p-subscribe-all-custody-subnets-enabled` | ❌                | ❌                                     |
-| Lodestar      | ✅                                  | ✅                                  | None                                                                | `--supernode`                                 | ✅                | ✅                                     |
-| Nimbus        | ✅                                  |                                     | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--debug-peerdas-supernode`                   | ✅                | ❌                                     |
-| Erigon Caplin | ❌                                  | ❌                                  |                                                                     | None, subscribes by default                   |                   |                                        |
-
-## Recommended Nitro node version
-
-| Node                           | Nitro Version              |
-| ------------------------------ | -------------------------- |
-| Batch-poster                   | `3.8.0-rc.11`              |
-| Sequencer + Batch-poster combo | `3.8.0-rc.11`              |
-| Sequencer (alone)              | `3.7.6`                    |
-| Validators                     | `v3.7.6-c0fe95e-validator` |
-| RPC nodes                      | `3.7.6`                    |
+| Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required Beacon Node Flag                     |
+| ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- |
+| Prysm         | ✅                    | None                                                                | `--subscribe-all-data-subnets`                |
+| Lighthouse    | ✅                    | None                                                                | `--supernode`                                 |
+| Teku          | ✅                    | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--p2p-subscribe-all-custody-subnets-enabled` |
+| Lodestar      | ✅                    | None                                                                | `--supernode`                                 |
+| Erigon Caplin | ❌                    |                                                                     |                                               |
 
 ## Checklist
 
