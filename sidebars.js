@@ -522,6 +522,11 @@ const sidebars = {
           label: 'Run a feed relay',
         },
         {
+          type: 'doc',
+          id: 'run-arbitrum-node/beacon-nodes-historical-blobs',
+          label: 'Historical blobs',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
