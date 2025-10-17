@@ -524,7 +524,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'run-arbitrum-node/beacon-nodes-historical-blobs',
-          label: 'Beacon nodes: Historical blobs',
+          label: 'Historical blobs',
         },
         {
           type: 'html',

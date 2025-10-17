@@ -29,7 +29,13 @@ Required action will be required from: RPC nodes, Arbitrum One / Nova node opera
 - Add the new flag (refer to [specific client flags](#specific-client-flags)) to your beacon node's configuration before the Ethereum Fusaka hard fork. For chains that post data to Ethereum Sepolia, the Ethereum Sepolia Fusaka hard fork is expected on October 14th, 2025.
 - For chains that post data to Ethereum Mainnet, the Ethereum Mainnet Fusaka hard fork is expected around the first week of December 2025.
 - If you haven't added the new flag before the above deadlines, temporarily switch to an external L1 beacon chain RPC URL while your local Ethereum beacon chain node syncs up.
-  - **Note**: Ensure that the external L1 beacon chain RPC provider you're using subscribes to all subnets.
+
+:::info Note
+
+Ensure that the external L1 beacon chain RPC provider you're using subscribes to all subnets.
+
+:::
+
 - Once your beacon chain node is fully synchronized, you can switch back to your own L1 beacon chain RPC URL (from an external L1 beacon chain RPC URL).
 
 ## L1 beacon chain node flags
