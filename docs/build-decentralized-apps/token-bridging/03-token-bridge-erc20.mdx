@@ -47,11 +47,11 @@ Our architecture consists of three types of contracts:
 
 <ImageZoom src="/img/apps-gatewayUML.svg" alt="" className="img-600px" />
 
-All Ethereum-to-Arbitrum token transfers are initiated via the router contract on the parent chain, specifically the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child chain address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
+All Ethereum-to-Arbitrum token transfers are initiated via the router contract on the parent chain, specifically the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child chain address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)).
 
 <ImageZoom src="/img/apps-bridge_deposits.png" alt="" className="img-600px" />
 
-Similarly, Arbitrum-to-Ethereum transfers initiate via the router contract on the child chain, specifically the `L2GatewayRouter` contract, which in turn calls the token's gateway contract on the child chain. This `L2ArbitrumGateway` contract in turn communicates to its corresponding gateway contract on the parent chain, the `L1ArbitrumGateway` contract (typically/expectedly via [sending child-to-parent messages to the outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)).
+Similarly, Arbitrum-to-Ethereum transfers initiate via the router contract on the child chain, specifically the `L2GatewayRouter` contract, which in turn calls the token's gateway contract on the child chain. This `L2ArbitrumGateway` contract in turn communicates to its corresponding gateway contract on the parent chain, the `L1ArbitrumGateway` contract (typically/expectedly via [sending child-to-parent messages to the outbox](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)).
 
 <ImageZoom src="/img/apps-bridge_withdrawals.png" alt="" className="img-600px" />
 

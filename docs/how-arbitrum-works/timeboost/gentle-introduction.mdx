@@ -90,21 +90,11 @@ The chain owner sets the minimum reserve price, which can be updated at any time
 
 Once the autonomous auctioneer determines an auction winner, the `Auction` contract will deduct the second-highest bid amount from the account of the highest bidder and transfer those funds to a `beneficiary` account designated by the chain owner by default. The `expressLaneControllerAddress` specified in the highest bid will become the express lane controller for the round.
 
-### Default parameters
+                   |
 
-Below are a few of the default Timeboost parameters mentioned earlier. All these parameters and more are configurable by the chain owner.
+## FAQs
 
-| Parameter name          | Description                                                                                                                                                                                                                  | Recommended default value                  |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                           | 60 seconds                                 |
-| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                           | 15 seconds                                 |
-| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                          | An address controlled by the chain's owner |
-| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any `ERC-20` token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard `ERC-20` logic). | `WETH`                                     |
-| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                             | 0.2 seconds, or 200 milliseconds           |
-| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                   | None                                       |
-| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                  | 0.001 `WETH`                               |
-
-## Who is Timeboost for, and how do I use it?
+#### Who is Timeboost for, and how do I use it?
 
 Timeboost is an optional addition to an Arbitrum chain’s infrastructure, meaning that enabling Timeboost is at the discretion of the chain owner and that an Arbitrum chain can fully function normally without Timeboost.
 
@@ -127,3 +117,9 @@ Timeboost adds a unique twist to your existing or prospective MEV strategies tha
 As with many new features and upgrades to Arbitrum Nitro, Timeboost is an optional feature that chain owners may choose to deploy and customize however they see fit. Deploying and enabling/disabling Timeboost on a live Arbitrum chain will not halt or impact the chain but will instead influence the chain's transaction ordering policy. An Arbitrum chain will, by default, fall back to FCFS in scenarios where Timeboost is deployed but disabled, or if there is no express lane controller for a given round.
 
 We recommend that Arbitrum chains holistically assess the applicability and use cases of Timeboost for their chain before deploying and enabling Timeboost. This assessment is necessary because some Arbitrum chains may not have that much MEV (e.g., arbitrage) to begin with. Furthermore, we recommend that Arbitrum chains start with the default parameters recommended by Offchain Labs and closely monitor the results and impacts on their chain’s ecosystem over time before considering any adjustments to the parameters.
+
+:::info Additional FAQs
+
+For more frequently asked questions refer to the [Timeboost FAQ](/how-arbitrum-works/timeboost/timeboost-faq.mdx).
+
+:::
