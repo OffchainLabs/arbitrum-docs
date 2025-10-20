@@ -1,0 +1,82 @@
+---
+title: 'Beacon Nodes: Historical Blobs'
+description: Learn more about the impacts of the Fusaka upgrade when running a beacon node.
+author-objective: Build a how-to to guide users in how to transition to using historical blobs.
+reader-audience: Technical readers who are familiar with command lines and familiar with Arbitrum and Ethereum
+reader-task: Learn how to upgrade to using historical blobs post the Fusaka upgrade when running a beacon node.
+content_type: overview
+---
+
+The Fulu consensus node upgrade in Fusaka will activate Ethereum's PeerDAS ([`EIP-7594`](https://eips.ethereum.org/EIPS/eip-7594)), with Sepolia's upgrade on October 14th and Mainnet targeting the week of December 3rd.
+
+Layer 2 network operators must connect to an Ethereum beacon chain node with historical blob data to ensure proper functioning of the Nitro node software, or risk failure in fetching blob data.
+
+## Impacted audiences
+
+Required action will be required from: RPC nodes, Arbitrum One / Nova node operators, Arbitrum (Orbit) chain node operators
+
+#### If you run a Nitro node and use an external L1 Ethereum beacon chain RPC URL
+
+- Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets **before the Ethereum Fusaka hard fork**. For chains that post data to Ethereum Sepolia, the Ethereum Sepolia Fusaka hard fork is expected on October 14th, 2025.
+- For chains that post data to Ethereum Mainnet, the Ethereum Mainnet Fusaka hard fork is expected around the first week of December 2025.
+
+#### If your external L1 beacon chain RPC doesn't subscribe to all subnets:
+
+- Switch to a provider that does before the dates above.
+
+#### If you run a Nitro node and operate your own L1 Ethereum beacon chain node:
+
+- Add the new flag (refer to [specific client flags](#specific-client-flags)) to your beacon node's configuration before the Ethereum Fusaka hard fork. For chains that post data to Ethereum Sepolia, the Ethereum Sepolia Fusaka hard fork is expected on October 14th, 2025.
+- For chains that post data to Ethereum Mainnet, the Ethereum Mainnet Fusaka hard fork is expected around the first week of December 2025.
+- If you haven't added the new flag before the above deadlines, temporarily switch to an external L1 beacon chain RPC URL while your local Ethereum beacon chain node syncs up.
+
+:::info Note
+
+Ensure that the external L1 beacon chain RPC provider you're using subscribes to all subnets.
+
+:::
+
+- Once your beacon chain node is fully synchronized, you can switch back to your own L1 beacon chain RPC URL (from an external L1 beacon chain RPC URL).
+
+## L1 beacon chain node flags
+
+### Prysm Consensus Layer clients
+
+Prysm nodes have a new beacon node flag `--subscribe-all-data-subnets` that needs to be added to P2P options. Refer to the [Prysm command-line options documentation](https://prysm.offchainlabs.com/docs/configure-prysm/parameters/) for configuration details.
+
+This flag is available as of Prysm v6.1.0. We recommend upgrading to the [latest stable Prysm releases](https://github.com/OffchainLabs/prysm/releases) to ensure you have the most recent features and security updates.
+
+### Other Consensus Layer clients
+
+Other Consensus Layer nodes also have flags to ensure they sync data from across all subnets.
+
+:::warning Verification
+
+The Offchain Labs team hasn't verified the accuracy of the flags below, including the corresponding versions that support these flags. Consult the respective release notes and documentation for non-Prysm consensus layer clients to ensure you're adding the correct flags.
+
+:::
+
+### Specific client flags
+
+:::note Sepolia only
+
+Currently, the following clients are supported for Sepolia only.
+
+:::
+
+| Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required Beacon Node Flag                     |
+| ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- |
+| Prysm         | ✅                    | None                                                                | `--subscribe-all-data-subnets`                |
+| Lighthouse    | ✅                    | None                                                                | `--supernode`                                 |
+| Teku          | ✅                    | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--p2p-subscribe-all-custody-subnets-enabled` |
+| Lodestar      | ✅                    | None                                                                | `--supernode`                                 |
+| Erigon Caplin | ❌                    |                                                                     |                                               |
+
+## Checklist
+
+To maintain uninterrupted node operation and blob availability:
+
+- Add the appropriate flag for your consensus layer client.
+- Verify your Sepolia beacon endpoint’s configuration before October 14th.
+- Verify your Mainnet beacon endpoint’s configuration before the first week of December.
+- If you can't update your configuration in time, we recommend using temporary hosted beacon endpoints.
