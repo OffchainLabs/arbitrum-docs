@@ -3,7 +3,6 @@ title: 'Why choose to customize the challenge period for your Arbitrum chain'
 description: 'Learn about the challenge period and the pros and cons of choosing to customize it.'
 author: pete-vielhaber
 sme:
-sidebar_position:
 content_type: configuration
 ---
 
@@ -52,4 +51,4 @@ It's set by the chain owner and can be chosen based on the application's risk to
 - **During Deployment**: Specified in the `RollupCreator` configuration (e.g., via the Orbit SDK deployment portal or scripts like `createRollup.ts`). For example, set `confirmPeriodBlocks` to 30,000 for ~4.5 days.
 - **Post-Deployment**: Dynamically updated via owner-privileged contract calls, such as `Rollup.setConfirmPeriodBlocks(newValue)` for the primary period or `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` for the extra buffer (e.g., using tools like cast for onchain transactions).
 
-This parameter underscores Arbitrum's modular design, allowing chains to fine-tune validation without compromising core fraud-proof security. For implementation, refer to the official docs, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).
+This parameter underscores Arbitrum's modular design, allowing chains to fine-tune validation without compromising core fraud-proof security. For implementation, refer to the official docs, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

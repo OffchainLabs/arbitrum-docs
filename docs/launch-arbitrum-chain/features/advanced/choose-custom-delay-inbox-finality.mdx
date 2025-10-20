@@ -3,7 +3,6 @@ title: 'Why choose to customize the delayed inbox finality on your Arbitrum chai
 description: 'Learn about delayed inbox finality and the pros and cons of choosing to customize it on your chain.'
 author: pete-vielhaber
 sme:
-sidebar_position:
 content_type: configuration
 ---
 
@@ -22,7 +21,7 @@ It's recommended for teams with expertise or partners (e.g., RaaS providers), as
 
 ### Compatibility
 
-- Works with all DA modes (Rollup, AnyTrust, Alt-DA), gas tokens, and validation (BoLD/permissioned), as long as changes meet STF rules (deterministic, pure, <1s/block).
+- Works with all DA modes (Rollup, AnyTrust, Alt-DA), gas tokens, and validation (BoLD/permissioned), as long as changes meet STF rules (deterministic, pure, < 1s/block).
 - Backward-compatible by design; WASM roots support old versions.
 - For public chains like One/Nova, requires DAO governance; Orbit chains have owner discretion.
 
@@ -53,4 +52,4 @@ It's recommended for teams with expertise or partners (e.g., RaaS providers), as
 4. **Schedule Upgrade**: Call `scheduleArbOSUpgrade` on ArbOwner precompile with the new version and timestamp (0 for immediate).
 5. **Enable Features**: Post-upgrade, configure any version-specific flags.
 
-This feature reflects Orbit's modularity but demands rigorous testing. Refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).
+This feature reflects Orbit's modularity but demands rigorous testing. Refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
