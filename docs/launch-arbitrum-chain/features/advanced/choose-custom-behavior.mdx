@@ -1,0 +1,53 @@
+---
+title: 'Why choose to customize the behavior on your Arbitrum chain'
+description: 'Learn about custom behaviors and the pros and cons of choosing to customize the behavior it on your chain.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+In the context of Arbitrum, particularly when deploying custom layer-2 (L2) or layer-3 (L3) chains via Arbitrum Orbit, "customizing your chain's behavior" refers to modifying the core logic that governs how the chain processes transactions, produces blocks, and transitions states—primarily by altering the State Transition Function (STF) within the Nitro software stack. This goes beyond surface-level configurations (e.g., gas tokens or DA modes) and involves code-level changes to ArbOS (Arbitrum's operating system layer), such as adding new EVM opcodes, precompiles, or state variables, while ensuring compatibility with fraud proofs and backward compatibility. Such customizations enable highly tailored chains for specific use cases but require building custom Nitro nodes and handling upgrades carefully to avoid disruptions like chain re-orgs or invalid fraud proofs. It's an advanced feature recommended for teams with expertise or partners (e.g., Rollup-as-a-Service providers), as Offchain Labs does not review individual changes—audits and maintenance are the developer's responsibility.
+
+### Key Concepts
+
+- **State Transition Function (STF)**: The deterministic logic that computes new chain states from inputs (e.g., transactions). Customizations here affect block production, execution outcomes, or state (e.g., balances), requiring updates to fraud proofs to recognize the changes as valid.
+- **ArbOS**: The operating system-like layer in Nitro that manages STF components, including precompiles, state, and upgrades. Customizations often involve versioning ArbOS to activate changes safely on live chains.
+- **WASM Module Root**: A 32-byte hash representing the STF's implementation, which must be updated on the parent chain for fraud proofs to work with customizations.
+- **Backward Compatibility**: Changes must not alter results for old blocks; they activate at specific ArbOS versions or timestamps to prevent re-orgs.
+- **STF Requirements**: Must be deterministic, pure (no external resources), performant (<1 second per block), and state-managed only via the Ethereum trie or block headers.
+
+### Compatibility
+
+- Works with all Orbit DA modes (Rollup, AnyTrust, Alt-DA), gas tokens, and validation (BoLD or permissioned), but STF changes must meet strict rules (e.g., no non-determinism).
+- Backward-compatible by design; upgrades activate features sequentially, including all intermediate ones.
+- Incompatible with external dependencies or changes that violate STF purity/performance.
+
+### Pros
+
+- Enables innovative, use-case-specific behaviors (e.g., custom rewards or opcodes) for competitive advantages.
+- Supports seamless live upgrades without downtime.
+- Builds on canonical releases for reliability.
+
+### Cons
+
+- High complexity; errors (e.g., in versioning) can cause re-orgs, security vulnerabilities, or proof failures.
+- Requires audits, expertise, and maintenance; no official support for custom code.
+- Trade-offs in performance/cost; skipping versions activates unintended features.
+
+### Examples
+
+- **Adding a New Precompile Method**: Extend ArbSys with a "sayHi" function that activates at ArbOS v32, returning different strings pre/post-upgrade.
+- **New State Variable**: Add "myNumber" initialized during upgrade to v21, modifiable only post-upgrade.
+- **STF Logic Change**: Modify a method to use new behavior if ArbOS version >= target, e.g., altering gas rewards for deployers.
+- **Non-STF**: Adding an RPC for multi-block queries (no STF/fraud updates needed).
+
+## How to configure
+
+1. **Clone Nitro Source**: Use a specific branch (e.g., v3.7.2): `git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git` and initialize submodules.
+2. **Implement Changes**: Edit Go files (e.g., in `/precompiles` or `arbosstate.go`) for new methods, states, or logic. Add version gates (e.g., `if state.ArbOSVersion() >= targetVersion`) for compatibility.
+3. **Build Custom Node**: Create Docker images (dev and production) with changes; extract and set the new WASM module root on the parent chain via contract calls.
+4. **Run and Verify**: Start the node (initially without fraud proofs), test transactions, and confirm validation logs. For live upgrades, schedule ArbOS version increases.
+5. **Upgrade ArbOS (for Live Chains)**: Target a new version (e.g., from v18 to v25), initializing states during the upgrade function to avoid re-orgs.
+
+Refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).

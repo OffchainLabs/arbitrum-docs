@@ -1,0 +1,54 @@
+---
+title: 'Why choose to use native Ethereum for gas on your Arbitrum chain'
+description: 'Learn about the pros and cons of choosing to use native Ethereum as the gas token for your chain.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+Choosing native Ethereum refers to configuring the chain to use `ETH`—the native currency of Ethereum—as the gas token for paying transaction fees. This is the default option in Orbit deployments, in contrast to selecting a custom `ERC-20` token for gas. The choice is set during chain deployment via genesis parameters and is immutable afterward, directly impacting how users pay for gas and how operators handle revenue and costs.
+
+Selecting native `ETH` means users must hold and spend `ETH` for all onchain activities, simplifying the fee mechanism without additional layers like token swaps or pricers. For operators, revenue is collected directly in `ETH`, which can be used seamlessly for data availability (DA) costs on the parent chain (e.g., posting to Ethereum).
+
+This option prioritizes straightforward integration with Ethereum's ecosystem, avoiding complexities associated with custom tokens. It's ideal for chains where `ETH` is naturally used or where minimal operational overhead is desired, such as general-purpose rollups or those focused on DeFi interoperability with Ethereum.
+
+## Key Concepts
+
+- **Gas and Fees in Arbitrum**: Gas measures computational work for transactions and executions, with fees equaling gas used times gas price. These cover sequencer operations, data posting to the parent chain (e.g., Ethereum), and network upkeep. In native `ETH` setups, all fees are denominated, paid, and settled in `ETH`.
+- **Native `ETH` as Gas Token**: The chain validates transactions against users' `ETH` balances, deducting fees directly in `ETH`. No token conversions are needed, aligning the chain's economics with Ethereum's standard model.
+
+## How Fees Are Handled
+
+- Gas calculations and deductions occur directly in `ETH` during transaction processing.
+- No conversions or hedging are required for DA payments, as `ETH` is the native asset on the parent chain.
+- Fees remain subject to `ETH`'s price volatility, which can affect user predictability.
+
+## Compatibility with Chain Types
+
+- Works with all Orbit DA modes, including Rollup (posting to Ethereum), AnyTrust (DAC-based), and Alt-DA (e.g., Celestia), without restrictions.
+- No special setup beyond standard deployment tools like the Orbit portal or scripts.
+
+## How It Differs from Custom Gas Tokens
+
+- **Custom Tokens**: Fees are paid in an `ERC-20` (e.g., `USDC` or a project token), requiring users to hold that token instead of `ETH`. Operators must convert collected tokens to `ETH` for DA costs, which introduces volatility risks and necessitates mechanisms like pricer contracts for exchange rates.
+- **Native `ETH`**: Eliminates conversions, swaps, and associated risks, but requires users to manage `ETH` specifically for gas, which may not align with app-specific ecosystems.
+
+## Pros
+
+- **Simplicity and Low Risk**: No need for token conversions, hedging, or pricers, reducing operational complexity and economic losses from volatility.
+- **Seamless Ethereum Integration**: Direct compatibility with Ethereum DA and broader tools, making it easier for `ETH`-centric users and developers.
+- **Predictable Revenue**: Operators receive `ETH` directly, usable without intermediaries.
+
+## Cons
+
+- **User Friction**: Requires holding `ETH` even in ecosystems where it's not otherwise needed (e.g., gaming appchains), potentially complicating onboarding.
+- **Limited Tokenomics**: Doesn't create demand for project-specific tokens, missing opportunities for ecosystem utility or incentives like airdrops.
+- **Volatility Exposure**: Fees in `ETH` can fluctuate with market prices, affecting user costs without stablecoin benefits.
+
+## Examples
+
+- Standard Arbitrum chains like Arbitrum One use native `ETH` for broad Ethereum compatibility and simplicity.
+- In contrast, some Orbit chains opt for custom tokens like bridged `USDC` for stable fees, but native `ETH` suits projects prioritizing Ethereum alignment over custom economics.
+
+This default choice emphasizes reliability and Ethereum-native operations within Arbitrum's modular framework. For deployment details, consult the official docs, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).

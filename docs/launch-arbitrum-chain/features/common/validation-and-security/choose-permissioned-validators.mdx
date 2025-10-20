@@ -1,0 +1,42 @@
+---
+title: 'Why choose permissioned validators for your Arbitrum chain'
+description: 'Learn about permissioned validators and the pros and cons of choosing to use them.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+Choosing permissioned validators refers to configuring the chain to use a legacy dispute resolution protocol where only an allowlisted set of entities (e.g., approved by the chain owner or DAO) can participate in validation activities, such as posting state assertions, opening challenges, and resolving disputes. This contrasts with enabling the Bounded Liquidity Delay (BoLD) protocol for permissionless validation. The choice is made during chain deployment or via upgrades, often through governance, and prioritizes controlled oversight over broad decentralization. It's suitable for chains where limiting participants reduces operational complexity or economic risks, but it introduces trust assumptions in the allowlist.
+
+Chain owners add/remove validators from the allowlist using tools like the Orbit SDK or precompiles, ensuring only trusted parties (e.g., the project's team or selected partners) can validate. For validation, this limits who can defend against invalid assertions, requiring the allowlisted group to monitor and respond actively. Disputes follow the legacy protocol, potentially leading to sequential challenges without time bounds. Security is maintained through fraud proofs but depends on the allowlist's honesty and availability—e.g., if validators collude or go offline, the chain could stall or face unaddressed fraud.
+
+This choice is configurable for all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens, but it's often retained for low-TVL chains to avoid the high bonds needed in permissionless setups, which could centralize around wealthy participants.
+
+## Key Concepts
+
+- **Validation in Arbitrum**: Validators monitor and advance the chain's state by posting assertions (claims about block hashes, history commitments, and inbox messages) to the parent chain (e.g., Ethereum or an L2 like Arbitrum One). If an assertion is suspected of being invalid, challengers initiate interactive fraud proofs during a challenge window (typically ~6.4 days), bisecting disagreements down to verifiable one-step proofs executed on-chain. Security relies on economic incentives, where invalid claims lead to bond forfeitures.
+- **Permissioned Validators**: Participation is restricted to a whitelist managed by the chain owner (via the ArbOwner precompile or DAO governance). Only these entities can stake bonds, post assertions, or engage in disputes. This setup uses the pre-BoLD fraud proof system, where challenges are handled in a 1-vs-1 tournament style without parallel resolution.
+
+## Compatibility with Chain Types
+
+Works with L2/L3 Arbitrum chains settling to Ethereum or other L2s. For AnyTrust chains (e.g., like Arbitrum Nova), validation typically remains permissioned even post-BoLD upgrades, as the Data Availability Committee (DAC) already introduces trust assumptions, and permissionless bonds could invite griefing attacks.
+
+## Pros
+
+- **Controlled Security**: Easier to manage and audit a small, trusted group, reducing risks from unvetted participants or spam attacks on low-value chains.
+- **Lower Barriers**: Avoids requiring massive bonds (e.g., thousands of ETH equivalents in BoLD), making it feasible for early-stage or niche Orbit chains without attracting centralized stakers.
+- **Faster Setup**: Simpler for chains prioritizing speed over full decentralization, with potential for quicker withdrawals in trusted environments like AnyTrust.
+
+## Cons
+
+- **Centralization Risks**: Relies on the allowlist's integrity; collusion or downtime could compromise the chain without community backups.
+- **Vulnerability to Delays**: Susceptible to "delay attacks" where malicious validators prolong disputes indefinitely, stalling confirmations and withdrawals (e.g., beyond the standard ~7-day window).
+- **Limited Decentralization**: Prevents achieving "Stage 2" rollup status, as it doesn't allow unrestricted validation, potentially reducing user trust in high-value applications.
+
+## Examples
+
+- **Arbitrum Nova**: Retains permissioned validation post-BoLD due to its lower TVL and AnyTrust model, where the DAC members double as validators for controlled security.
+- **Custom Orbit Chains**: Early-stage gaming or enterprise L3s might choose permissioned to limit access to internal teams, avoiding the economic overhead of BoLD while testing.
+
+This option balances security with practicality in Arbitrum's ecosystem, but for maximum trust-minimization, BoLD's permissionless model is recommended for mature chains. Consult the latest official docs, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).

@@ -1,0 +1,45 @@
+---
+title: 'Why choose to use alt-DA for data availability on your Arbitrum chain'
+description: 'Learn about alt-DA and the pros and cons of choosing to use it for DA on your chain.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+Choosing alternative data availability (Alt-DA) refers to configuring the chain to use a third-party data availability layer instead of Arbitrum's native options. This feature allows developers to post transaction batch data to external DA providers for storage and accessibility, rather than relying solely on Ethereum (L1) or Arbitrum's built-in mechanisms. Alt-DA integrations expand the flexibility of the Arbitrum Nitro stack, enabling optimized trade-offs in cost, scalability, and security.
+
+Selecting Alt-DA means integrating an external provider into your Orbit chain's configuration, often via modifications to the Nitro software stack. Developers can also set fallback preferences (e.g., try Alt-DA first, then AnyTrust, then Ethereum) to ensure resilience if the primary DA fails. This choice is ideal for applications prioritizing ultra-low fees and massive scalability, such as gaming, social, or data-intensive dApps, where the cost of posting to Ethereum would be prohibitive.
+
+## Key Concepts
+
+- **Data Availability (DA) in Arbitrum Orbit**: DA ensures that transaction data is stored and retrievable for verification, fraud proofs, and node synchronization in optimistic rollups. Arbitrum chains are customizable with different DA setups to suit specific needs, such as high-throughput apps or cost-sensitive projects.
+  - **Alt-DA**: Posting transaction batches post to an external, modular DA network (e.g., specialized blockchains designed for DA). Only proofs of availability (e.g., commitments or certificates) post to the parent chain. This process decouples DA from settlement, allowing for specialized optimization.
+
+## How It Differs:
+
+- From **Rollup**: Alt-DA moves data off Ethereum entirely, avoiding L1 gas costs but potentially sacrificing some decentralization if the external layer has different security properties (e.g., Celestia uses data availability sampling for efficiency).
+- From **AnyTrust**: While both are off-chain, AnyTrust uses Arbitrum's own DAC (permissioned and integrated), whereas Alt-DA leverages independent networks with their own consensus and incentives, offering more modularity but requiring additional setup and trust in the provider's model.
+
+## Pros
+
+- Dramatically lower costs (e.g., up to orders of magnitude cheaper than L1 posting) and higher throughput.
+- Modular design allows specialization (e.g., Celestia focuses solely on DA for efficiency).
+- Fallback mechanisms enhance reliability.
+
+## Cons
+
+- Introduces new trust assumptions based on the provider (e.g., reliance on the external layer's validators or sampling protocols).
+- Potential for integration complexity, including custom code and bridges for proofs.
+- May have varying uptime or finality compared to native options.
+
+## Examples of Alt-DA Providers
+
+Arbitrum Orbit supports integrations with several Alt-DA solutions, including:
+
+- **Celestia**: A modular DA blockchain using data availability sampling for lightweight verification.
+- **Avail**: Focuses on high-throughput DA with erasure coding.
+- **EigenDA (via EigenLayer)**: Leverages restaking for secure, decentralized DA.
+- For a list of Alt-DA providers, refer to the [Third-party providers page](launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#data-availability-providers-for-anytrust-chains)
+
+This option reflects the growing trend toward modular blockchain architectures, where DA handling is separate to scale ecosystems like Arbitrum without compromising core security. For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).

@@ -1,0 +1,24 @@
+---
+title: 'Why choose to use rollup for data availability on your Arbitrum chain'
+description: 'Learn about data availability using rollups and the pros and cons of choosing to use it for DA on your chain.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+Choosing a rollup refers to selecting the Arbitrum Rollup protocol for a chain's data availability (DA) mechanism. This choice is relevant when deploying custom chains or configuring Arbitrum-based systems.
+
+The rollup option prioritizes security and decentralization over cost efficiency. It's ideal for applications needing Ethereum's ironclad guarantees, such as high-value DeFi protocols or where users demand minimal trust in third parties. In contrast, opting out of Rollup (e.g., for AnyTrust) is better for high-throughput, low-cost use cases like gaming or social apps, where slight trade-offs in trust are acceptable for better performance.
+
+This flexibility allows developers to tailor chains to specific needs while building on Arbitrum's optimistic execution framework.
+
+## Key Concepts
+
+- **Data Availability (DA) in Rollups**: DA ensures that all transaction data is publicly accessible for verification, fraud proofs, and security. In optimistic rollups like Arbitrum, this is critical to allow challengers to dispute invalid state transitions.
+- **Arbitrum Rollup Mode**:
+  - All batch transaction data is posted directly to the parent chain (Ethereum L1) as calldata or blobs.
+  - This inherits Ethereum's full security and decentralization, with no additional trust assumptions—data is always available on-chain for anyone to access and verify.
+  - Example: Arbitrum One operates in this mode.
+
+For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).

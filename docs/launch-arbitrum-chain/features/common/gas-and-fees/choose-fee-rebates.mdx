@@ -1,0 +1,59 @@
+---
+title: 'Why choose to leverage fee rebates on your Arbitrum chain'
+description: 'Learn about the pros and cons of choosing to enable fee rebates for your chain.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+Choosing fee rebates refers to configuring the chain's fee management system to enable the distribution or return of a portion of collected transaction fees (gas fees) back to users, developers, dApps, or other stakeholders. This is achieved through customizable fee collectors and optional distributor contracts, allowing chain owners to implement rebate mechanisms as part of the chain's economic model.
+
+Rebates can incentivize usage, reward high-volume participants, or align with project tokenomics, but they are not a default setting—instead, they require intentional configuration during or after deployment. This choice contrasts with directing all fees to a single owner or treasury address without redistribution.
+
+Configuration requires chain owner privileges and can be done post-deployment using precompiles or the Arbitrum Orbit SDK. It's compatible with all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native `ETH` or custom), though custom tokens add complexity in exchange rate management for reimbursements. For example, surplus fees could be rebated to high-activity users or contributed to a community fund.
+
+## Key Concepts
+
+- **Gas and Fees in Arbitrum Orbit**: Fees are charged for transaction execution and data posting, denominated in the chain's gas token (`ETH` by default or a custom `ERC-20`). They cover operational costs like sequencing, data availability, and parent chain interactions. Surplus fees (beyond minimum costs) can accumulate during congestion, providing a pool for potential rebates.
+- **Fee Rebates**: Rebates involve returning part of the paid fees, often as incentives. In Orbit chains, this isn't an explicit "rebate toggle" but is facilitated by routing fees to smart contracts that automate distributions (e.g., proportional payouts). This can mimic rebate programs seen in dApps on Arbitrum (e.g., trading fee rebates funded by incentives), but applied at the chain level.
+
+## Types of Fees Available for Rebates
+
+- **Orbit Base Fee**: Minimum execution fee; routed to an infrastructure account.
+- **Orbit Surplus Fee**: Congestion-based extra; routed to a network account.
+- **Parent Chain Base Fee**: Data posting cost; routed to batch poster collectors.
+- **Parent Chain Surplus Fee**: Optional batch poster reward; routed to a reward recipient.
+
+## Compatibility and Considerations
+
+- **With Custom Gas Tokens**: Rebates work but require a fee token pricer for parent chain reimbursements (e.g., converting custom tokens to `ETH`). Pricers (manual, oracle-based, or trade-tracking) ensure accurate reimbursements to batch posters, which can include refund-like mechanics if reserves are managed.
+- **With Native `ETH`**: Simpler, as no conversions are needed; rebates can be direct `ETH` payouts.
+
+## Pros
+
+- Boosts user engagement by reducing effective costs (e.g., 75-100% rebates in dApp examples).
+- Flexible tokenomics, such as funding rebates with surplus or incentives like `ARB` grants.
+- Enhances competitiveness for high-throughput apps like gaming or DeFi.
+
+## Cons
+
+- Reduces chain revenue, potentially impacting sustainability.
+- Adds complexity in setup and management (e.g., monitoring distributions, handling custom token risks like volatility).
+- Requires careful design to avoid abuse (e.g., sybil attacks on rebates).
+
+## Examples
+
+- **dApp-Level Rebates**: Protocols like GMX or Synthetix on Arbitrum rebate 75%+ of trading fees using `ARB` incentives, which Orbit chains can emulate at the chain level.
+- **Chain-Level**: Set surplus fees to a distributor that rebates to top users or integrates with programs like ArbiFuel for sponsored (rebated) gas in early stages.
+
+## How to configure
+
+1. **Set Fee Collectors**: Use the `ArbOwner` precompile (0x70) to assign addresses for each fee type (e.g., setInfraFeeAccount for Orbit base fees). Collectors can be simple addresses or smart contracts.
+2. **Deploy a Distributor Contract**: For rebates, deploy a contract like `RewardDistributor.sol` on the chain. Set recipients and proportions (e.g., 80% to treasury, 20% to user rebate pool using basis points).
+3. **Assign Distributor as Collector**: Update the relevant fee collector to the distributor's address (e.g., via `setNetworkFeeAccount` for surplus fees).
+4. **Trigger Distributions**: Call distributeRewards on the contract to execute rebates, specifying recipients and shares.
+
+- Tools: Use command-line (cast) or SDK extensions like `arbOwnerActions` for programmatic setup.
+
+This feature underscores Arbitrum's modularity, allowing tailored fee economics while inheriting Ethereum security. For implementation, refer to official docs, SDK examples, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).

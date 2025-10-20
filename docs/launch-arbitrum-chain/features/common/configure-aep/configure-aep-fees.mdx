@@ -1,0 +1,50 @@
+---
+title: 'Why choose to configure AEP fees for your Arbitrum chain'
+description: 'Learn about AEP fee configuration and the pros and cons of choosing to configure it.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+Configuring the AEP fees refers to setting up an optional but recommended smart contract system (the AEP fee router) to automate the calculation, collection, and transfer of the required 10% license fee on the chain's Protocol Net Revenue to the Arbitrum DAO treasury. This feature is part of the Arbitrum Expansion Program (AEP). This self-service licensing model permits developers to use Arbitrum's technology stack (e.g., Nitro) for custom chains in exchange for sharing revenue.
+
+The configuration ensures compliance with the AEP terms, streamlines reporting, and avoids manual transfers, while allowing chains to retain 90% of profits. It's not a core chain parameter like gas tokens but an advanced economic setup for revenue-sharing, applicable only to AEP-licensed chains (i.e., those not settling directly to Arbitrum One or Nova without special approval).
+
+## Key Concepts
+
+- **Arbitrum Expansion Program (AEP)**: A licensing framework for deploying Orbit chains on any blockchain that derives security from Ethereum (e.g., settling to Ethereum mainnet, other L2s, or even non-Ethereum chains with DAO approval). It requires no upfront permission but mandates paying 10% of net revenue (8% to the DAO treasury, 2% to ecosystem growth funds) on chains generating over $60,000 USD annually in profit. This framework applies to modifications of the stack, including custom DA, gas tokens, or governance.
+- **Protocol Net Revenue**: The chain's profit, calculated as total fees collected (e.g., from gas, surplus, or custom mechanisms) minus Settlement Costs. Settlement Costs include gas fees for posting data to the parent chain (e.g., Ethereum calldata or blobs) and any other direct operational expenses like batch posting. Only positive net revenue triggers the 10% fee; losses or zero profit incur no payment.
+- **AEP Fee Router**: A set of deployable contracts (e.g., `RewardDistributor` or custom distributors) that automatically routes the 10% share. It integrates with the chain's fee collectors (e.g., for surplus fees) and handles cross-chain transfers (e.g., bridging to Ethereum then to a DAO-controlled address on Arbitrum One).
+
+## Compatibility
+
+- **DA Modes**: Applies across Rollup, AnyTrust, and Alt-DA, as settlement costs vary by mode (e.g., lower in Alt-DA).
+- **Gas Tokens**: For custom ERC-20s, requires conversion mechanisms; native `ETH` simplifies bridging.
+- **Validation**: No impact on BoLD or permissioned setups.
+
+## Pros
+
+- Automates compliance, reducing administrative burden and errors in manual calculations.
+- Contributes to Arbitrum ecosystem growth (e.g., funding grants), potentially increasing chain visibility and integrations.
+- Flexible for revenue models; only applies to profits, not gross fees.
+
+## Cons
+
+- Reduces net profits by 10%, which could impact low-margin chains (though waived below $60K USD/year).
+- Adds deployment and monitoring complexity, especially for cross-chain transfers.
+- Reporting requirements may involve audits or transparency, with non-compliance risking license revocation.
+
+## Examples
+
+- **DeFi-Focused Orbit Chain**: Configures the router to route 10% of surplus fees (after Ethereum posting costs) to the DAO, using a custom gas token with oracle-based pricing for accurate `ETH` conversion.
+- **Gaming L3 Chain**: Low-revenue setups might skip full configuration initially but enable it upon profitability, bridging fees quarterly.
+
+## How to configure
+
+1. **Calculate Net Revenue**: Use tools or scripts to track total fees minus settlement costs (e.g., via on-chain queries or off-chain monitoring). For custom tokens, deploy a pricer contract to value fees in `ETH` equivalents.
+2. **Deploy Fee Router**: Use the Orbit SDK script (e.g., `aep-fee-router.ts`) to deploy contracts like RewardDistributor on your chain. Set it as a fee collector (e.g., for surplus fees via `ArbOwner` precompile).
+3. **Route and Bridge Fees**: Configure the router to send the 10% share to Ethereum (e.g., via native bridges), then deposit to the DAO address on Arbitrum One. Use functions like `flushBeneficiaryBalance` for periodic transfers.
+4. **Report Fees**: Submit quarterly reports to the Arbitrum Foundation, including calculations and proofs of payment, to maintain license compliance.
+
+This setup reflects Arbitrum's collaborative model, ensuring custom chains contribute back while benefiting from the ecosystem. For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).

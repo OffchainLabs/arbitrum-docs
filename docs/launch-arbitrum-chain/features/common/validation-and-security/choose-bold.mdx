@@ -1,0 +1,47 @@
+---
+title: 'Why choose to enable BoLD for your Arbitrum chain'
+description: 'Learn about BoLD and the pros and cons of choosing to enable it.'
+author: pete-vielhaber
+sme:
+sidebar_position:
+content_type: configuration
+---
+
+Upgrading or configuring the chain to use the Bounded Liquidity Delay (BoLD) protocol as its dispute resolution mechanism means replacing the legacy 1-vs-1 challenge system with a permissionless, all-vs-all dispute framework that enhances validation and security by allowing anyone to participate in challenging invalid state assertions through bonding, while ensuring disputes resolve within a fixed time bound (up to two challenge periods, typically ~12.8 days on Ethereum). It's enabled via an administrative upgrade on the parent chain (e.g., Ethereum) and is mandatory for certain Arbitrum chain configurations, such as using custom gas tokens in Rollup mode when posting directly to Ethereum.
+
+For the chain, it resets the challenge clock for in-flight withdrawals (adding up to 6.4 days delay, with a max of 12.8 days total), handles overflow assertions for accumulated blocks during upgrade, and requires at least one active proposer (validator in MakeNodes mode) to advance the chain. Chain owners configure bond sizes (e.g., 3600 `ETH` for assertions on Arbitrum One equivalents) and can add incentives like service fees or bounties. This choice prioritizes enhanced security and decentralization over the legacy system's potential for centralized control, making the chain more resilient to attacks but introducing economic considerations for participation.
+
+## Key Concepts
+
+- **Validation in Arbitrum**: In optimistic rollups like Arbitrum, validators (sequencers or stakers) post assertions about the chain's state (e.g., block hashes, history commitments as Merkle roots, batch numbers, and inbox message counts) to the parent chain. These assertions can be challenged during a fixed window (typically 6.4 days on Ethereum) if suspected invalid, leading to interactive fraud proofs verified onchain via a WASM VM.
+- **Security Through Disputes**: Disputes narrow disagreements via bisections (binary search over computation steps, up to `2^69` in total space) across levels (block, BigStep for WASM ranges, SmallStep for single steps). Honest validators use offchain software (e.g., Nitro in Defensive mode) to automatically challenge invalid assertions, generating deterministic fraud proofs. Security relies on economic incentives: bonds are posted and forfeited by losers, deterring malice.
+- **BoLD Protocol**: BoLD introduces an "all-vs-all" (battle royale) model where multiple parties can challenge and defend simultaneously via "edges" (claims about history segments). It uses timers based on parent chain blocks, trustless bonding pools for crowdsourced stakes, and recursive sub-challenges to ensure a single honest party can always win against any number of adversaries. This bounds liquidity delays (hence the name) and mitigates "delay attacks" where malicious parties could previously prolong disputes indefinitely.
+
+## Compatibility with Chain Types
+
+BoLD is required for Rollup mode with custom gas tokens posting to Ethereum (to handle conversions securely). It's compatible with AnyTrust and Alt-DA modes but focuses on L2/L3 chains settling on Ethereum for maximum security. Post-upgrade, the chain uses BoLD for all new assertions.
+
+## How It Differs from Legacy Protocols
+
+- **Legacy (Pre-BoLD)**: Used 1-vs-1 tournament-style challenges, vulnerable to delay attacks (malicious parties forcing sequential games to stall confirmations) and reliant on permissioned validators, limiting decentralization.
+- **BoLD**: Shifts to permissionless, all-vs-all disputes with bounded delays (constant upper limit), trustless pooling for bonds, and exponential cost ratios (~6.46:1 malicious-to-honest for Arbitrum One) to deter spam. It guarantees honest wins and resolves in a fixed time, even against coordinated attacks.
+
+## Pros
+
+- **Improved Security**: Mitigates delay attacks and ensures only valid states are confirmed, with high bonds (e.g., millions in USD equivalent) deterring malice while allowing trustless defense.
+- **Permissionless Decentralization**: Anyone can validate via bonds, reducing reliance on centralized entities and enabling community participation through pools.
+- **Bounded Delays**: Caps withdrawal delays at ~12.8 days during disputes, providing predictability.
+- **Incentives**: Includes bounties (1% of confiscated bonds) and reimbursements for honest defenders, plus optional chain-specific rewards.
+
+## Cons
+
+- **High Economic Barriers**: Large bonds (e.g., 3600 `ETH` for assertions) may limit small-scale participation without pools, and disputes impose opportunity costs on users (e.g., ~$3.27M USD/week for Arbitrum One's TVL).
+- **Upgrade Disruptions**: Enabling BoLD delays pending withdrawals and requires careful overflow handling during the upgrade.
+- **Complexity**: Adds operational needs for proposers and parameter tuning (e.g., bond sizes, resource ratios) to maintain security.
+
+## Examples
+
+- **Arbitrum One and Nova**: Upgraded to BoLD for permissionless validation, allowing public testnets and community validators to secure the chains.
+- **Custom Orbit Chains**: Projects like gaming or DeFi appchains choose BoLD to enable decentralized validation, especially when using Rollup mode with Ethereum settlement for high-security needs.
+
+This upgrade aligns with Arbitrum's modular ethos, bolstering trust-minimization while inheriting Ethereum's security. For implementation, refer to the official docs, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/third-party-integrations/third-party-providers.mdx#rollup-as-a-service-raas-providers).
