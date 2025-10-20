@@ -1,0 +1,17 @@
+Arbitrum chains, as optimistic rollups, utilize a challenge period (typically 6.4 days on mainnet chains like Arbitrum One, though customizable in Orbit chains) during which assertions about the L2 state—such as batch submissions of transactions—are posted to Ethereum (L1) and remain open to disputes. This process enables a validator that suspects an invalid state transition or fraudulent batch they initiate a challenge via fraud proofs submitted to L1 smart contracts. The enforcement on L1 involves the entire dispute resolution process occurring on Ethereum mainnet: assertions occur on L1, challenges trigger an interactive protocol, and if no valid challenge succeeds by the end of the period, the assertion is confirmed, enabling finality for actions like asset withdrawals or cross-layer messages. This protocol leverages Ethereum's consensus and security without requiring immediate on-chain verification for every L2 transaction, assuming optimism (i.e., batches are presumed correct unless proven otherwise).
+
+## Pros of Having the Challenge Period Enforced on Layer 1
+
+- **High Security and Fraud Deterrence**: Relies on Ethereum's robust consensus and economic incentives (e.g., staking and slashing) to make fraudulent assertions costly and detectable, ensuring only valid states achieve finality while protecting against malicious sequencers or validators.
+- **Permissionless Validation**: Anyone can participate as a challenger on L1, promoting decentralization and reducing reliance on centralized entities, with the period providing ample time to respond to threats like DoS attacks or L1 consensus failures.
+- **Cost Efficiency for L2 Operations**: Offloads heavy computation to L2 while using L1 only for disputes, enabling lower fees and higher throughput on Arbitrum chains without compromising on Ethereum's security model.
+- **Finality Assurance**: Once the period passes without challenges, L2 states achieve L1-equivalent finality, supporting reliable cross-layer interactions and protecting against reversion of confirmed batches.
+- **Customizability**: In setups like Arbitrum Orbit, the period can be adjusted (e.g., shorter for lower-risk chains), balancing security with specific use case needs while still enforcing via L1 contracts.
+
+## Cons of Having the Challenge Period Enforced on L1
+
+- **Withdrawal and Finality Delays**: Users must wait the entire period (e.g., 6.4 days) for L2-to-L1 exits or messages, leading to poor user experience and capital inefficiency compared to faster alternatives like ZK rollups.
+- **Potential for Extended Disputes**: In case of challenges, resolution can add further delays (up to another period or more), and malicious actors could exploit this to disrupt the chain temporarily.
+- **Economic and Operational Overhead**: Challengers need to monitor and stake on L1, which can be resource-intensive; additionally, the fixed length (like 6.4 days) may not be optimal for all batches, potentially making low-value transactions overly secure at the cost of efficiency.
+- **Vulnerability to L1 Issues**: Depends on Ethereum's stability; events like network congestion, high gas fees, or consensus failures could hinder timely challenges, though the challenge period's design is to outlast such issues.
+- **Lack of Dynamism in Standard Setup**: The uniform application across all assertions ignores variables like sequencer reputation or batch value, leading to unnecessary delays.

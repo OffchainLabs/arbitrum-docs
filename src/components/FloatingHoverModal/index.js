@@ -26,6 +26,12 @@ import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-har
 import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/config-rollup.mdx';
 import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/config-anytrust.mdx';
 import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx';
+import ConfigAccountAbstraction from '@site/docs/launch-arbitrum-chain/partials/config-account-abstraction.mdx';
+import ConfigChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-challenge-period-l1.mdx';
+import ConfigCustomizableGovernance from '@site/docs/launch-arbitrum-chain/partials/config-customizable-governance.mdx';
+import ConfigDataPostingCosts from '@site/docs/launch-arbitrum-chain/partials/config-data-posting-costs.mdx';
+import ConfigEVMCompatibility from '@site/docs/launch-arbitrum-chain/partials/config-evm-compatbility.mdx';
+import ConfigOtherLanguageSupport from '@site/docs/launch-arbitrum-chain/partials/config-other-language-support.mdx';
 
 // Static content mapping
 const contentMap = {
@@ -37,6 +43,12 @@ const contentMap = {
   'config-rollup': ConfigRollup,
   'config-anytrust': ConfigAnytrust,
   'config-fast-withdrawals': ConfigFastwithdrawals,
+  'config-account-abstraction': ConfigAccountAbstraction,
+  'config-challenge-period-l1': ConfigChallengePeriod,
+  'config-customizable-governance': ConfigCustomizableGovernance,
+  'config-data-posting-costs': ConfigDataPostingCosts,
+  'config-evm-compatibility': ConfigEVMCompatibility,
+  'config-other-language-support': ConfigOtherLanguageSupport,
 };
 
 // MDX components for proper rendering
