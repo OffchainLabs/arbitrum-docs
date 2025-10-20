@@ -89,6 +89,8 @@ This change does not affect the `GasTarget`, and therefore does not affect how m
   - This change standardizes the calculation of gas units for compressed batch calldata across the codebase by replacing hard-coded values with a method call (tokenGasUnits).
 - EIP-7702 Precompile Delegation Behavior Divergence
   - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 50 Dia will update code to align with EIP-7702 spec to treat precompile code as empty during delegation.
+- ARM / x86 Divergence
+  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for problematic transactions execution on ARM architecture. This was added in to hardcode one transaction that caused a divergence on Arbitrum Sepolia, as disclosed [here](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
 
 #### A Constraint-Based Pricing Change: STF instrumentation to track multi-gas
 
