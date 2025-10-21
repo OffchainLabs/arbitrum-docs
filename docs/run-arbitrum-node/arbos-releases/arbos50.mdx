@@ -13,7 +13,7 @@ ArbOS 50 Dia is still pre-release. This document may change.
 
 :::caution ACTION REQUIRED
 
-Before Ethereum parent chain Sepolia and mainnet upgrade to Fusaka, **(1)** Nitro node operators need to make sure they connect to a parent chain Ethereum Beacon Chain node that has historical blob data, and **(2)** must upgrade to Nitro [v3.8.0-rc.7](https://github.com/OffchainLabs/nitro/releases/) or higher, for the Nitro node software to function properly. **Read more [here](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
+Before Ethereum parent chain Sepolia and mainnet upgrade to Fusaka, **(1)** Nitro node operators need to make sure they connect to a parent chain Ethereum Beacon Chain node that has historical blob data, and **(2)** must upgrade to Nitro [v3.8.0-rc.7](https://github.com/OffchainLabs/nitro/releases/) or higher, for the Nitro node software to function properly. **Read more about the [required actions](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
 
 :::
 
@@ -90,7 +90,7 @@ This change doesn't affect the `GasTarget`, and therefore doesn't affect how muc
 - `EIP-7702` precompile delegation behavior divergence
   - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 50 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
 - ARM and x86 divergence
-  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for problematic transactions execution on ARM architecture. This was added in to hardcode one transaction that caused a divergence on Arbitrum Sepolia, as disclosed [here](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
+  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for problematic transactions execution on ARM architecture. This was added in to hardcode one transaction that caused a divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
 - Default WASM stack call depth to 22,000
   - TODO: Do we need to include this?
 
