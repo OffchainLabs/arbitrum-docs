@@ -15,6 +15,8 @@ As a developer initiating a transaction on Arbitrum, gaining a clear understandi
 
 This overview methodically traces the transaction lifecycle, emphasizing how Arbitrum's architecture ensures precise, efficient, and secure handling at every stage. This article encompasses the complete Arbitrum Nitro stack, beginning with the Sequencer responsible for transaction ordering, advancing to the State Transition Function for execution, and culminating in validation mechanisms that uphold integrity.
 
+<ImageWithCaption caption="Transaction lifecycle" src="/img/haw-transaction-lifecycle.png" />
+
 Along the way, we will highlight Arbitrum's ability to deliver security on par with Ethereum, while achieving fee reductions by a factor of ten and transaction speeds accelerated by a factor of 100 through optimized scaling techniques.
 
 ### The Foundation: Arbitrum's Core Architecture Overview
@@ -31,23 +33,9 @@ From there, the State Transition Function (STF) processes them in a deterministi
 Finally, the Outputs component generates the resulting data and state updates, completing the cycle.
 This deterministic model means that identical inputs always produce the same outputs among honest nodes, forming the bedrock of Arbitrum's security. It supports efficient fraud proofs and dispute resolution, allowing verification of execution correctness without the need to rerun entire transactions, thereby minimizing computational overhead.
 
-### Nitro's Four Key Innovations
-
-Arbitrum Nitro's design draws from four pivotal innovations that collectively enhance its efficiency, security, and compatibility.
-
-1. The first involves a two-phase approach to transaction handling: sequencing followed by deterministic execution. In this method, the ordering of transactions forms a single, committed sequence, after which the STF executes them in that fixed order, ensuring predictability and order integrity.
-
-2. The second innovation centers on deep integration with Geth, the core codebase of go-ethereum, a prominent Ethereum node software. By embedding Geth as a library, Nitro fully supports Ethereum's data structures, formats, and virtual machine, delivering near-perfect compatibility and allowing seamless migration of Ethereum applications.
-
-3. Third, Nitro separates execution from proving by compiling its source code twice—once to native code for high-speed operation in Nitro nodes, and once to WebAssembly (WASM) for secure, portable proving processes. This dual compilation optimizes for both performance during runtime and reliability in validation scenarios.
-
-4. Finally, Nitro employs an Optimistic Rollup protocol with interactive fraud proofs, settling transactions on Ethereum's Layer 1 while using Arbitrum's pioneering proof system to resolve disputes efficiently. Together, these innovations enable Arbitrum to match Ethereum's security guarantees, boost overall performance, and maintain full interoperability with existing Ethereum tools and dApps.
-
 ### Step 1: Submitting a Transaction
 
 The submission process for a transaction on Arbitrum starts with the user sending the request, with options tailored to balance factors like speed, control, and reliability according to specific needs. Most transactions route through the Sequencer, a specialized node that orders them and issues quick confirmations. This path accommodates various submission methods, including public RPC for development and light usage, third-party RPC for improved throughput, direct Sequencer endpoints for minimal latency in critical operations, and self-hosted Arbitrum nodes for ultimate privacy and customization.
-
-<ImageWithCaption caption="Transaction lifecycle" src="/img/haw-transaction-lifecycle.png" />
 
 Alternatively, to counter risks of exclusion or delay by the Sequencer, users can submit directly to the Delayed Inbox contract on Ethereum, bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed beyond 24 hours, any network participant can force inclusion into the main inbox, limiting the Sequencer's influence to temporary delays rather than permanent blocks. While the Sequencer route offers faster soft finality and streamlined workflows, the Delayed Inbox path doubles processing time but emphasizes censorship resistance. Overall, the Sequencer's commitment to ordered inclusion provides "soft finality" for a responsive experience, complemented by these alternatives for robust, flexible operations across applications. For more technical detail about the transaction lifecycle, refer to the [Transaction Lifecycle deep dive](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx).
 
@@ -93,19 +81,19 @@ BoLD facilitates a challenge-based defense where honest parties can protect the 
 
 ### Step 6: Bridging: Cross-Chain Communication
 
-Many transactions involve asset or data transfers between Ethereum and Arbitrum, managed through secure bridging protocols. For L1-to-L2 messaging from Ethereum to Arbitrum, options include native token bridging for direct `ETH` deposits, `ERC-20` transfers via the canonical bridge, or support for custom gas tokens. Retryable tickets enable atomic operations with guaranteed retries if execution fails, featuring predictable gas costs and a one-week validity period redeemable by anyone. Direct messaging handles signed EOA messages with verification or unsigned contract messages using address aliasing for security. See the [L1-to-L2 messaging deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for details.
+Many transactions involve asset or data transfers between Ethereum and Arbitrum, managed through secure bridging protocols. For Parent-to-Child messaging from Ethereum to Arbitrum, options include native token bridging for direct `ETH` deposits, `ERC-20` transfers via the canonical bridge, or support for custom gas tokens. Retryable tickets enable atomic operations with guaranteed retries if execution fails, featuring predictable gas costs and a one-week validity period redeemable by anyone. Direct messaging handles signed EOA messages with verification or unsigned contract messages using address aliasing for security. See the [Parent-to-Child messaging deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for details.
 
-L2-to-L1 transfers from Arbitrum to Ethereum begin with message creation via [`ArbSys.sendTxToL1()`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys), followed by inclusion in a rollup assertion, a 6.4-day challenge period, and manual Layer 1 execution by any party. Messages validate through Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints. See the [L2-to-L1 messaging deep dive](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) documentation for more details.
+Parent-to-Child transfers from Arbitrum to Ethereum begin with message creation via [`ArbSys.sendTxToL1()`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys), followed by inclusion in a rollup assertion, a 6.4-day challenge period, and manual Layer 1 execution by any party. Messages validate through Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints. See the [Child-to-Parent messaging deep dive](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) documentation for more details.
 
 The canonical bridge architecture comprises asset contracts on both chains, gateway pairs for specific logic, and routers to direct flows. Its security locks tokens on one layer while minting equivalents on the other, with a seven-day challenge period guarding withdrawals. This setup fosters seamless, unified interactions while safeguarding each chain's integrity.
 
 ### Step 7: The Economics of Execution: Gas and Fees
 
-Fees accumulate across the transaction lifecycle to fund processing and security. Arbitrum's dual-fee model separates L2 gas fees, which cover EVM computation and storage with [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)-style dynamic pricing targeting 7,000,000 gas per second on Arbitrum One, adjusting for congestion, from L1 calldata fees. L1 calldata fees account for Ethereum data posting based on compressed batch contributions and apply only to Sequencer submissions.
+Fees accumulate across the transaction lifecycle to fund processing and security. Arbitrum's dual-fee model separates child chain gas fees, which cover EVM computation and storage with [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)-style dynamic pricing targeting 7,000,000 gas per second on Arbitrum One, adjusting for congestion, from Parent chain calldata fees. Parent chain calldata fees account for Ethereum data posting based on compressed batch contributions and apply only to Sequencer submissions.
 
 A gas speed limit protects infrastructure by capping throughput at 7,000,000 gas per second for Arbitrum One and Nova. Exceeding this triggers [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) fee escalations to prevent node overloads and maintain liveness. This limit prioritizes high-value transactions during peaks while deterring spam, ensuring that validators and the Sequencer stay operational for optimal performance, even though parent contracts handle ultimate security.
 
-Fee calculation during execution involves assessing L2 gas via EVM standards, estimating L1 batch impact, applying current pricing, and collecting `ETH` totals. This model covers all costs effectively, with the speed limit reinforcing security by keeping validation in sync. Refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) for more.
+Fee calculation during execution involves assessing child chain gas via EVM standards, estimating parent chain batch impact, applying current pricing, and collecting `ETH` totals. This model covers all costs effectively, with the speed limit reinforcing security by keeping validation in sync. Refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) for more.
 
 ### Step 8: Advanced Features
 
