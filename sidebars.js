@@ -129,8 +129,8 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-alt-da',
-                      label: `Alt-DA`,
+                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-rollup',
+                      label: `Rollup`,
                     },
                     {
                       type: 'doc',
@@ -139,8 +139,8 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-rollup',
-                      label: `Rollup`,
+                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-alt-da',
+                      label: `Alt-DA`,
                     },
                   ],
                 },
