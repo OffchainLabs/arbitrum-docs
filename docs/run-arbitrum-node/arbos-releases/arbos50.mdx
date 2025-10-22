@@ -7,6 +7,10 @@ author: zk-Lumi
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
+This page summarize what changes with ArbOS 50 Dia, and what you should do to ensure a seamless upgrade.
+
+This page is intended for all Arbitrum (Orbit) chains and validator node operators.
+
 <VanillaAdmonition type="warning">
 
 <a data-quicklook-from="arbos">ArbOS</a> 50 Dia is still pre-release. This document may change.
@@ -23,14 +27,14 @@ The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.9.0](https:/
 
 Note that it's important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
 
-The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.mdx).
-
 As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 50 Dia is an upgrade that builds upon [ArbOS 40 Callisto](./arbos40.mdx).
 
 ### Requirements
 
-- [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) or higher
-- [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
+- Having read and understood the [ArbOS Software Releases Overview page](./01-overview.mdx).
+
+- Running [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) or higher
+- Running [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
 - WASM module root: `Need to update - 0xb90895a56a59c0267c2004a0e103ad725bd98d5a05c3262806ab4ccb3f997558`
 
 <VanillaAdmonition type="warning">
