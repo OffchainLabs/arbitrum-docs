@@ -5,17 +5,19 @@ sidebar_position: 2
 author: zk-Lumi
 ---
 
-:::caution
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
+
+<VanillaAdmonition type="warning">
 
 <a data-quicklook-from="arbos">ArbOS</a> 50 Dia is still pre-release. This document may change.
 
-:::
+</VanillaAdmonition>
 
-:::caution ACTION REQUIRED
+<VanillaAdmonition type="warning" title="ACTION REQUIRED">
 
 Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and mainnet upgrade to Fusaka, **(1)** Nitro node operators need to make sure they connect to a parent chain Ethereum Beacon Chain node that has historical blob data, and **(2)** must upgrade to Nitro [v3.8.0-rc.7](https://github.com/OffchainLabs/nitro/releases/) or higher, for the Nitro node software to function properly. **Read more about the [required actions](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
 
-:::
+</VanillaAdmonition>
 
 The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0), which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
 
@@ -31,11 +33,11 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 - [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
 - WASM module root: `Need to update - 0xb90895a56a59c0267c2004a0e103ad725bd98d5a05c3262806ab4ccb3f997558`
 
-:::caution
+<VanillaAdmonition type="warning">
 
 If your chain isn't ready to activate <a data-quicklook-from="bold">BoLD</a>, use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher can't be used without activating BoLD.
 
-:::
+</VanillaAdmonition>
 
 ### High-level description of ArbOS 50 changes
 
@@ -87,21 +89,23 @@ Native token mint and burn is proposed to be included in ArbOS 50 Dia for the be
 
 To read more about this feature, see the [native mint and burn enablement guide](https://arbitrum.notion.site/Enable-Native-Mint-Burn-for-your-chain-s-gas-token-22601a3f59f880be9b99d3d55f982a17).
 
-:::caution
+<VanillaAdmonition type="warning">
 
 If you want to enable native token mint and burn for your chain, use nitro-contracts v3.1.1 instead.
 
-:::
+</VanillaAdmonition>
 
 ### Fusaka EIPs that aren't proposed to be in ArbOS 50 Dia
 
 Support and implementation for the following EIPs aren't planned to be part of ArbOS 50 Dia:
 
-- `EIP-7594`, `EIP-7918`, and `EIP-7892`, since Arbitrum chains don't have blob data markets (though they do support posting blob data to a non-Arbitrum parent chain)
-- `EIP-7917`, since Arbitrum chains don't have a beacon chain and therefore don't have a peer-to-peer layer like Ethereum does
-- `EIP-7934`, this EIP is to help propagating blocks between nodes. Arbitrum doesn't do that - it sends messages (which are limited) and each node builds every block by itself
-- `EIP-7907`, since this EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by <a data-quicklook-from="client">Client</a> teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We're currently exploring alternative ways to increase the Smart Contract size limit that don't interfere with the ability for Arbitrum chains to support `EIP-7907` in the future. See this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this.
-- `EIP-7935`, since Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned in [Scaling Arbitrum everywhere](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).
+| EIP                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EIP-7594`, `EIP-7918`, and `EIP-7892` | Arbitrum chains don't have blob data markets (though they do support posting blob data to a non-Arbitrum parent chain)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `EIP-7917`                             | Arbitrum chains don't have a beacon chain and therefore don't have a peer-to-peer layer like Ethereum does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `EIP-7934`                             | This EIP is to help propagating blocks between nodes. Arbitrum doesn't do that - it sends messages (which are limited) and each node builds every block by itself                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `EIP-7907`                             | This EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by <a data-quicklook-from="client">Client</a> teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We're currently exploring alternative ways to increase the Smart Contract size limit that don't interfere with the ability for Arbitrum chains to support `EIP-7907` in the future. See this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this. |
+| `EIP-7935`                             | Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned in [Scaling Arbitrum everywhere](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 ### Special note about ArbOS 50 Dia for chains that haven't yet upgraded to use Arbitrum BoLD
 
@@ -111,11 +115,11 @@ While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.x` and `nitro
 
 - [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx)
 
-:::caution This link is broken
+<VanillaAdmonition type="warning" title="This link is broken, it's a placeholder for the upcoming Nitro v3.9.0 release">
 
 - [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0)
 
-:::
+</VanillaAdmonition>
 
 - [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
 - [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) (only relevant for Arbitrum chains that want native token mint and burn enabled)
