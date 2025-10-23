@@ -36,10 +36,15 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-      - name: Switch to dependencies-updates branch
+      - name: Switch to dependencies-updates branch and sync with master
         if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
         run: |
+          # Create or switch to dependencies-updates branch
           git checkout -B dependencies-updates || git checkout dependencies-updates
+          
+          # Sync with master branch
+          git fetch origin master
+          git merge origin/master --no-edit
 
       - name: Commit and push changes
         if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
