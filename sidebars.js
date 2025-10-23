@@ -777,6 +777,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/deep-dives/parent-chain-pricing',
+            },
+            {
+              type: 'doc',
               label: 'Sequencer',
               id: 'how-arbitrum-works/deep-dives/sequencer',
             },
