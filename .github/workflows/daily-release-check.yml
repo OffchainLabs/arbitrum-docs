@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,7 +30,29 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn tsx scripts/check-releases.ts
 
-      - name: Check for PR creation
-        if: ${{ steps.check-releases.outputs.pr_url }}
+      - name: Configure Git
+        if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
         run: |
-          echo "Pull request created: ${{ steps.check-releases.outputs.pr_url }}"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Switch to dependencies-updates branch and sync with master
+        if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
+        run: |
+          # Create or switch to dependencies-updates branch
+          git checkout -B dependencies-updates || git checkout dependencies-updates
+          
+          # Sync with master branch
+          git fetch origin master
+          git merge origin/master --no-edit
+
+      - name: Commit and push changes
+        if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
+        run: |
+          git add dependencies.json
+          git commit -m "chore: update dependencies to latest versions
+
+          Updated projects:
+          ${{ steps.check-releases.outputs.updated_projects }}"
+          git push origin dependencies-updates
+
