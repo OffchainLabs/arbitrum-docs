@@ -752,6 +752,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'ArbOS',
+              id: 'how-arbitrum-works/deep-dives/arbos',
+            },
+            {
+              type: 'doc',
               label: 'Assertions',
               id: 'how-arbitrum-works/deep-dives/assertions',
             },
