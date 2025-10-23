@@ -757,12 +757,12 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'L1 to L2 Messaging',
+              label: 'Parent to Child chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l1-to-l2-messaging',
             },
             {
               type: 'doc',
-              label: 'L2 to L1 Messaging',
+              label: 'Child to Parent chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l2-to-l1-messaging',
             },
             {
