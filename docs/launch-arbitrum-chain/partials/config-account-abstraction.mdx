@@ -12,6 +12,6 @@ Arbitrum chains support account abstraction (AA) primarily through `ERC-4337`, a
 
 - **Infrastructure Complexity**: Relies on additional components like `bundlers`, `paymasters`, and `EntryPoints`, which can fragment wallet experiences, require extra setup, and introduce dependencies on third-party services.
 - **Gas Overhead**: Verification of signatures and authorization logic adds minor gas costs, potentially offsetting some efficiency gains, though mitigated on Arbitrum's low-fee environment.
-- **Security Risks**: Delegated contracts must be validated to avoid malicious exploits; incomplete abstraction (e.g., ERC-4337 acts more as a relayer) may not eliminate vulnerabilities like replay attacks if not implemented carefully.
+- **Security Risks**: Delegated contracts must be validated to avoid malicious exploits; incomplete abstraction (e.g., `ERC-4337` acts more as a relayer) may not eliminate vulnerabilities like replay attacks if not implemented carefully.
 - **Adoption Barriers**: Requires widespread ecosystem support from dApps, wallets, and providers; inconsistent implementations across chains could lead to user confusion or limited interoperability.
 - **Not Full Protocol-Level Abstraction**: Depends on higher-layer infrastructure rather than core consensus changes, limiting depth compared to potential future upgrades and potentially increasing reliance on centralized elements like relayers.
