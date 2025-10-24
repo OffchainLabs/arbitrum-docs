@@ -8,7 +8,7 @@ Arbitrum chains, as optimistic rollups, utilize a challenge period (typically 6.
 - **Finality Assurance**: Once the period passes without challenges, L2 states achieve L1-equivalent finality, supporting reliable cross-layer interactions and protecting against reversion of confirmed batches.
 - **Customizability**: In setups like Arbitrum Orbit, the period can be adjusted (e.g., shorter for lower-risk chains), balancing security with specific use case needs while still enforcing via L1 contracts.
 
-## Cons of Having the Challenge Period Enforced on L1
+## Cons of having the challenge period enforced on L1
 
 - **Withdrawal and Finality Delays**: Users must wait the entire period (e.g., 6.4 days) for L2-to-L1 exits or messages, leading to poor user experience and capital inefficiency compared to faster alternatives like ZK rollups.
 - **Potential for Extended Disputes**: In case of challenges, resolution can add further delays (up to another period or more), and malicious actors could exploit this to disrupt the chain temporarily.
