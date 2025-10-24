@@ -75,9 +75,8 @@ This change doesn't affect the `GasTarget`, and therefore doesn't affect how muc
 - `EIP-7702` precompile delegation behavior divergence
   - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 50 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
 - ARM and x86 divergence
-  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for problematic transactions execution on ARM architecture. This was added in to hardcode one transaction that caused a divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
-- Default WASM stack call depth to 22,000
-  - TODO: Do we need to include this?
+  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
+  - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
 
 #### A constraint-based pricing change: STF instrumentation to track multi-gas
 
@@ -98,6 +97,9 @@ To read more about this feature, see the [native mint and burn enablement guide]
 If you want to enable native token mint and burn for your chain, use nitro-contracts v3.1.1 instead.
 
 </VanillaAdmonition>
+
+### Raise the gas target & implement improvements to the pricing algorithm
+TODO
 
 ### Fusaka EIPs that aren't proposed to be in ArbOS 50 Dia
 
@@ -131,4 +133,6 @@ While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.x` and `nitro
 - [README for how to upgrade your rollup contracts to support ArbOS 50 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
 - [AIP: ArbOS Version 50 Dia Forum Post](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-version-50-dia/)
 - [Temperature check vote on Snapshot for ArbOS 50 Dia](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x33754da4006d0ef38666ec5d5e85fd0966a891a594ab9dc21f23beedea2d330b)
+- [AIP: Raising the gas target & improvements to pricing algorithm](#)
+- [Temperature check vote on Snapshot for Raising the gas target & improvements to pricing algorithm](#)
 - Coming Soon - ArbOS 50 Audit Report, from Trail of Bits
