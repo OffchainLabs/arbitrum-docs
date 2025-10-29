@@ -8,8 +8,6 @@ user_story:
 content_type: get-started
 ---
 
-The page for an Arbitrum Orbit chain should describe the available configurations for batch posting (handled by the batch poster) and assertion posting (handled by validators) as follows:
-
 Batch posting configurations allow the sequencer to group, compress, and post transaction batches from the Arbitrum chain (L3) to its parent chain (typically an L2 such as Arbitrum One or Nova). Key parameters include the maximum delay before posting a batch and the maximum size of a batch to be posted, both of which control the frequency and timeliness of postings. These help prevent transaction reordering by ensuring that the sequencer commits batches in the order transactions are received, posting them atomically to the parent chain's inbox contract. This batch posting creates an immutable record on L1 (via the L2), reducing the risk of malicious reordering. For chain reorganizations, timely batch posting minimizes the window for L1 reorgs to affect unposted data, as posted batches become part of the canonical chain history.
 
 Assertion posting configurations enable validators to periodically create and post assertions (state roots) of the Arbitrum chain's execution to the parent chain. Parameters control the interval between assertions and staking requirements. These prevent reordering and reorgs by allowing any honest validator to challenge incorrect assertions during a dispute window (typically seven days on Arbitrum chains). Regular assertions ensure state commitments are frequent enough to detect discrepancies early, triggering onchain resolution via bisection games, which enforce the correct chain state and deter reorganizations.
