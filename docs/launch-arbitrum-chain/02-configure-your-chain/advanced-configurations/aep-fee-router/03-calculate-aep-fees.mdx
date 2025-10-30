@@ -16,9 +16,9 @@ Before we define “Protocol Net Revenue”, let's explain how fees work in a st
 
 In a vanilla Arbitrum chain (a chain without customizations, transaction ordering policies, or other add-ons), users and dApps will pay a single gas fee to submit their transactions. Under the hood, however, a user’s fee is allocated across four components used by the network in different ways. These four fee components are split as follows:
 
-- `l2BaseFee`: fees paid to execute a transaction on the Arbitrum chain (Orbit).
-- `l2SurplusFee`: surplus fees are charged in addition to the base fee when an Arbitrum chain (Orbit) is congested.
-- `l1SurplusFee`: an additional surplus fee that can be configured to award extra fees to the batch poster.
+- **`l2BaseFee`**: Fees paid to execute a transaction on the Arbitrum chain (Orbit).
+- **`l2SurplusFee`**: Surplus fees are charged in addition to the base fee when an Arbitrum chain (Orbit) is congested.
+- **`l1SurplusFee`**: An additional surplus fee that can be configured to award extra fees to the batch poster.
 
 Based on the above, we interpret that an Arbitrum chain’s revenue sources include all fee components: `l2BaseFee`, `l2SurplusFee`, and `l1SurplusFee`.
 
