@@ -49,7 +49,7 @@ This approach generally makes sense if:
 - The chain owner and the batch poster are the same entity
 - You are operating in a tightly controlled or experimental environment
 
-An (unaudited) example to reference is: [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
+An (unaudited) example to reference is: [`OwnerAdjustableExchangeRatePricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
 
       <CustomDetails summary="OwnerAdjustableExchangeRatePricer.sol">
 
@@ -100,7 +100,7 @@ This approach generally makes sense if:
 - Reducing trust in the chain owner is important for your implementation
 - You, as the chain owner, want to avoid manual exchange rate updates
 
-See an (unaudited) example here using a TWAP oracle: [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
+See an (unaudited) example here using a TWAP oracle: [`UniswapV2TwapPricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
 
 <CustomDetails summary="UniswapV2TwapPricer.sol">
 
@@ -223,7 +223,7 @@ This approach generally makes sense if:
 - You want reimbursement to be precise and not over- or under-charge users
 - You want to minimize reliance on the chain owner or external oracles
 
-Consider this (unaudited) example: [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
+Consider this (unaudited) example: [`TradeTracker.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
 
 <CustomDetails summary="TradeTracker.sol">
 ```solidity
@@ -340,7 +340,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
 2. **Deploy your fee token pricer**
    Choose a pricer approach that best meets your needs; unaudited examples are:
 
-   - [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
+   - [`OwnerAdjustableExchangeRatePricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
 
       <CustomDetails summary="OwnerAdjustableExchangeRatePricer.sol">
 
@@ -381,7 +381,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
       ```
       </CustomDetails>
 
-   - [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
+   - [`UniswapV2TwapPricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
 
       <CustomDetails summary="UniswapV2TwapPricer.sol">
 
@@ -494,7 +494,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
       ```
       </CustomDetails>
 
-   - [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
+   - [`TradeTracker.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
 
       <CustomDetails summary="TradeTracker.sol">
 
@@ -602,20 +602,20 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
 
    Make sure the pricer is deployed successfully on the parent chain.
 
-3. **Configure the fee token and pricer when creating the rollup**
-   Use the [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts) script, which accepts environment variables for:
+3. **Configure the fee token and pricer when creating the Rollup**
+   Use the [`createERC20Rollup.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts) script, which accepts environment variables for:
 
    - `FEE_TOKEN_ADDRESS` = your `ERC-20` gas token
    - `FEE_TOKEN_PRICER_ADDRESS` = your deployed pricer
-   - `ROLLUP_CREATOR_ADDRESS` = the rollup creator contract on L1
+   - `ROLLUP_CREATOR_ADDRESS` = the Rollup creator contract on L1
    - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
 
    The script will deploy and initialize the Rollup accordingly.
 
 You can refer to the source files for more details on:
 
-- [fee-token-pricers](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
-- [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
+- [`fee-token-pricers`](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
+- [`createERC20Rollup.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
 
 You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/09-gas-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
 ````
