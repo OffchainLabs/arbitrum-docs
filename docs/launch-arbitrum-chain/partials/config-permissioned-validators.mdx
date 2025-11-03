@@ -1,0 +1,15 @@
+By default, Arbitrum chains can use permissioned validators, where only pre-approved entities can participate in validation (e.g., challenging state assertions). This model contrasts with permissionless validation, enabled via protocols like BoLD, which opens validation to anyone.
+
+## Pros
+
+- **Enhanced control and security in trusted environments**: Permissioned validators allow the chain owner to select and vet participants, reducing risks from unknown or malicious actors, which is ideal for enterprise or private chains where trust among validators is present, minimizing the chance of spam or uncoordinated attacks.
+- **Regulatory compliance and privacy**: Easier to implement access controls, such as restricting who can read chain data or participate, which helps with legal requirements (e.g., KYC for validators) in regulated industries like finance.
+- **Simpler setup and lower operational overhead**: Without needing to support open participation, the chain can operate with fewer nodes, potentially leading to faster consensus, reduced complexity in dispute resolution, and lower costs for maintaining the network. Permissioned validation is beneficial for smaller or specialized Arbitrum chains focused on specific use cases.
+- **Established and proven model**: Permissioned validation mirrors the initial setup of chains like Arbitrum One, providing a reliable baseline without requiring additional protocols like BoLD for permissionless features.
+
+## Cons
+
+- **Vulnerability to delay attacks**: In permissioned systems, malicious validators can exploit the challenge window by repeatedly posting false claims, forcing honest validators to spend resources on defenses and delaying confirmations or withdrawals. This potential exploitation could raise costs and risks of liveness issues.
+- **Centralization risks**: The system relies on a limited set of trusted validators; if they collude, fail, or are compromised, the integrity of the chain could be at risk. This centralization could make the chain less appealing to users who value trustlessness.
+- **Limited robustness against adversaries**: Unlike permissionless models, where any honest party can defend the chain, permissioned validation depends on the availability and honesty of the approved set. A single point of failure (e.g., if validators go offline) could halt progress.
+- **Potentially for reduced adoption**: Developers or users seeking Ethereum-like decentralization might prefer permissionless options, limiting the chain's appeal in open ecosystems. Enabling permissionless later (via BoLD) requires upgrades and community/DAO approval, adding complexity.
