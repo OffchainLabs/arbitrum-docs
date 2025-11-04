@@ -7,7 +7,7 @@
 
   > .navbar__items:first-child {
     flex: 0 0 auto;
-    margin-right: auto;
+    margin-right: 24px; // Fixed spacing instead of auto to bring items closer
     padding-left: 10px;
   }
 
@@ -49,6 +49,27 @@
 // Ensure proper spacing between navbar and top navigation
 .navbar {
   border-bottom: none;
+}
+
+// Center navbar__inner vertically within navbar--fixed-top
+.navbar--fixed-top {
+  display: flex;
+  align-items: center;
+
+  .navbar__inner {
+    align-items: center;
+  }
+}
+
+// Position navbar search container all the way to the right
+.navbarsearchcontainer {
+  margin-left: auto !important;
+  order: 999; // Ensure it appears last
+}
+
+.navbar__inner .navbarsearchcontainer {
+  margin-left: auto !important;
+  flex-shrink: 0;
 }
 
 // Inkeep search widget responsive behavior
