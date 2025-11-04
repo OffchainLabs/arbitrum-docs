@@ -6,6 +6,8 @@ sme:
 content_type: configuration
 ---
 
+import TimeboostPCPartial from '../../partials/_timeboost-pc.mdx';
+
 Enabling Timeboost refers to activating a novel transaction ordering policy that modifies the default first-come-first-served (FCFS) mechanism to allow chain owners to capture a portion of Maximum Extractable Value (MEV) through timed auctions. This protocol introduces an "express lane" where auction winners gain a temporary time advantage (default 200ms) for submitting transactions, enabling them to potentially extract MEV (e.g., arbitrage or liquidations) more efficiently, while proceeds from the auction flow to the chain owner or designated beneficiary. Timeboost is designed to reduce latency-based spam from MEV searchers (who might otherwise invest in hardware for speed advantages) and preserve user protections against harmful MEV, such as frontrunning or sandwich attacks, by maintaining a private mempool and not granting reordering rights. It does not create new MEV types but adjusts how existing MEV is accessed and monetized.
 
 Enabling it is an owner-level decision, typically for chains with significant DeFi activity where MEV opportunities justify the trade-offs, and it can be done without halting operations (falling back to FCFS if no auction winner).
@@ -23,17 +25,9 @@ It's ideal for DeFi-heavy chains with substantial MEV (e.g., arbitrage opportuni
 
 Works with any Arbitrum chain (L2/L3), all DA modes (Rollup, AnyTrust, Alt-DA), gas tokens (native `ETH` or custom), and validation (BoLD or permissioned). Compatible with centralized or future decentralized sequencers; no prerequisites beyond a bid token and infrastructure. Not formally supported yet.
 
-## Pros
+<!-- Render Timeboost Pros & Cons partial -->
 
-- Revenue generation for chain owners. Proceeds can fund ecosystems or burn tokens.
-- Reduces spam/congestion from latency races; fairer, predictable MEV access for searchers.
-- Maintains security (no harmful MEV increase) and fast blocks; open auctions prevent monopolies.
-
-## Cons
-
-- Adds ~200ms delay to non-express user transactions (~450ms average response), potentially impacting UX.
-- Setup/maintenance costs (e.g., auctioneer servers, Redis) may exceed revenue on low-MEV chains.
-- No guaranteed revenue; ineffective without MEV activity. Minor risks like bid limits for DDoS mitigation.
+<TimeboostPCPartial />
 
 ## Examples
 
@@ -42,7 +36,7 @@ Works with any Arbitrum chain (L2/L3), all DA modes (Rollup, AnyTrust, Alt-DA), 
 
 ## How to configure
 
-1. **Deploy Auction Contract**: Use Orbit scripts (e.g., from orbit-actions repo) with a .env file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
+1. **Deploy Auction Contract**: Use Orbit scripts (e.g., from `orbit-actions` repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
 2. **Run Auctioneer Services**: Set up Redis for coordination; run bid validator (verifies bids) and auction server (resolves auctions) using the `autonomous-auctioneer` binary from Nitro (Docker or local build).
 3. **Configure Sequencer**: Update node config to enable `timeboost` and `auctioneer` APIs, pointing to the contract and Redis.
 
