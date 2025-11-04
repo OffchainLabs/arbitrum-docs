@@ -6,6 +6,8 @@ sme:
 content_type: configuration
 ---
 
+import FastwithdrawalsPCPartial from '../../partials/_fast-withdrawals_-pc.mdx';
+
 Enabling fast withdrawals refers to configuring the chain to use a fast confirmation mechanism that allows transactions and state assertions to achieve finality much quicker than the standard multi-day challenge period in optimistic rollups. This is achieved by routing assertions through a permissioned committee of validators (often overlapping with the Data Availability Committee or DAC in AnyTrust mode) that unanimously confirms them via a multisig wallet, bypassing the full fraud-proof window. As a result, users can withdraw assets or access finalized states in as little as 15 minutes for L2 chains or 15 seconds for L3 chains, significantly enhancing user experience by reducing wait times and enabling faster cross-chain interactions.
 
 Enabling this feature shifts the chain from relying solely on time-based fraud proofs to a committee-driven confirmation process, where validators (recommended to be at least three for reduced trust risks) must agree unanimously. It's primarily recommended for AnyTrust chains, as it leverages the existing DAC trust model without adding new assumptions—ideally, DAC members run the validators.
@@ -25,17 +27,9 @@ For pure Rollup chains, enabling it effectively introduces a committee trust lay
 - **Gas Tokens**: No restrictions; compatible with native `ETH` or custom `ERC-20`s.
 - **Parent Chain**: Frequency must exceed the parent's finality time (e.g., >12.8 minutes for Ethereum L2s).
 
-## Pros
+<!-- Render Fast Withdrawals Pros & Cons partial -->
 
-- Dramatically faster finality (15s-15m vs. days), improving UX for withdrawals and dApps.
-- Configurable frequency for tailored performance.
-- No new trust if validators are DAC members in AnyTrust.
-
-## Cons
-
-- Introduces reliance on a unanimous committee, potentially increasing trust assumptions (mitigated with ≥3 members).
-- Minor delays possible under high load; initial backlog post-enable.
-- Not ideal for pure Rollups; requires upgrades and careful parent-chain alignment.
+<FastwithdrawalsPCPartial />
 
 ## Impact on User Experience
 
