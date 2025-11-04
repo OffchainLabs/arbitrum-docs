@@ -6,6 +6,8 @@ sme:
 content_type: configuration
 ---
 
+import NativeETHPCPartial from '../../partials/_native-eth-pc.mdx';
+
 Choosing native Ethereum refers to configuring the chain to use `ETH`—the native currency of Ethereum—as the gas token for paying transaction fees. This is the default option in Orbit deployments, in contrast to selecting a custom `ERC-20` token for gas. The choice is set during chain deployment via genesis parameters and is immutable afterward, directly impacting how users pay for gas and how operators handle revenue and costs.
 
 Selecting native `ETH` means users must hold and spend `ETH` for all onchain activities, simplifying the fee mechanism without additional layers like token swaps or pricers. For operators, revenue is collected directly in `ETH`, which can be used seamlessly for data availability (DA) costs on the parent chain (e.g., posting to Ethereum).
@@ -33,17 +35,9 @@ This option prioritizes straightforward integration with Ethereum's ecosystem, a
 - **Custom Tokens**: Fees are paid in an `ERC-20` (e.g., `USDC` or a project token), requiring users to hold that token instead of `ETH`. Operators must convert collected tokens to `ETH` for DA costs, which introduces volatility risks and necessitates mechanisms like pricer contracts for exchange rates.
 - **Native `ETH`**: Eliminates conversions, swaps, and associated risks, but requires users to manage `ETH` specifically for gas, which may not align with app-specific ecosystems.
 
-## Pros
+<!-- Render Native ETH Pros & Cons partial -->
 
-- **Simplicity and Low Risk**: No need for token conversions, hedging, or pricers, reducing operational complexity and economic losses from volatility.
-- **Seamless Ethereum Integration**: Direct compatibility with Ethereum DA and broader tools, making it easier for `ETH`-centric users and developers.
-- **Predictable Revenue**: Operators receive `ETH` directly, usable without intermediaries.
-
-## Cons
-
-- **User Friction**: Requires holding `ETH` even in ecosystems where it's not otherwise needed (e.g., gaming appchains), potentially complicating onboarding.
-- **Limited Tokenomics**: Doesn't create demand for project-specific tokens, missing opportunities for ecosystem utility or incentives like airdrops.
-- **Volatility Exposure**: Fees in `ETH` can fluctuate with market prices, affecting user costs without stablecoin benefits.
+<NativeETHPCPartial />
 
 ## Examples
 
