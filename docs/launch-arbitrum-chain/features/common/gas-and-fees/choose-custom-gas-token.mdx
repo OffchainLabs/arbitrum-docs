@@ -6,6 +6,8 @@ sme:
 content_type: configuration
 ---
 
+import CustomGasTokenPCPartial from '../../partials/_custom-gas-token-pc.mdx';
+
 Choosing a custom gas token refers to configuring the chain to use a specific `ERC-20` token—rather than `ETH`—as the native currency for paying transaction fees (gas costs) on your chain. This allows developers to tailor the fee structure to their project's ecosystem, such as using a stablecoin like `USDC`, a yield-bearing asset, or the project's own native token. The choice is made during chain deployment and is generally immutable afterward, integrating directly into the chain's genesis parameters.
 
 ## Key Concepts
@@ -23,19 +25,9 @@ Choosing a custom gas token refers to configuring the chain to use a specific `E
   - **AnyTrust Mode**: Directly supported with simpler configuration (no heavy pricer emphasis), ideal for cost-sensitive setups.
   - **Alt-DA (Alternative Data Availability)**: Compatible, especially with cheaper DA providers like Celestia or EigenDA, which reduce conversion risks from token volatility.
 
-## Pros
+<!-- Render Custom Gas Token Pros & Cons partial -->
 
-- Enhances token utility and ecosystem alignment (e.g., demand sink for project tokens).
-- Improves user experience by avoiding `ETH` dependency and enabling stable or yield-bearing fees.
-- Supports onboarding strategies like airdrops and compliance via token controls.
-- More feasible with low-cost DA, minimizing economic risks.
-
-## Cons
-
-- Adds deployment and operational complexity (e.g., pricers, funding for conversions).
-- Introduces risks from exchange rate fluctuations, potentially causing losses for operators or higher fees for users.
-- Immutable post-deployment; token must adhere to strict standards.
-- Not ideal for high-volatility tokens without hedging, especially on expensive DA like Ethereum mainnet.
+<CustomGasTokenPCPartial />
 
 ## Examples
 

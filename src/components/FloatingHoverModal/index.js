@@ -18,7 +18,7 @@ import { MDXProvider } from '@mdx-js/react';
 import './styles.css';
 
 // Import all config partials statically to avoid CSP issues
-import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/partials/config-custom-gas-token.mdx';
+import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/features/partials/_custom-gas-token-pc.mdx';
 import ConfigAltDa from '@site/docs/launch-arbitrum-chain/features/partials/_alt-da-pc.mdx';
 import ConfigDedicatedThroughput from '@site/docs/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx';
 import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/features/partials/_native-eth-pc.mdx';
