@@ -5,13 +5,23 @@ user_story: As an Arbitrum chain owner or node operator, I want to configure my 
 content_type: notice
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
+
 Learn how to prepare for the Fusaka upgrade
 
-This page provides external-facing information about the Fusaka readiness upgrade for OP Stack chains. It summarizes scope, timelines, required actions, and resources for chain operators and partners. This upgrade is necessary for all OP Stack chains deriving from an L1 chain which is due to activate Fusaka (including Ethereum Mainnet and Sepolia).
+This is for Arbitrum chain owners and node operators deriving from an L1 chain which is due to activate Fusaka (including Ethereum Mainnet and Sepolia).
 
-This is NOT Fusaka adoption on L2. It's a readiness upgrade to make the Optimism protocol compatible with L1 that activates the Fusaka fork. L2 adoption will happen in a future upgrade.
+<VanillaAdmonition type="warning">
 
-<Info>All of the tasks below must be performed before Fusaka activates on L1.</Info>
+All of the tasks below must be performed before Fusaka activates on L1.
+
+</VanillaAdmonition>
+
+<VanillaAdmonition type="note">
+
+<a data-quicklook-from="arbos">ArbOS</a> 50 Dia is still pre-release. This document may change.
+
+</VanillaAdmonition>
 
 ## What's included in Fusaka
 
@@ -55,54 +65,54 @@ L1 Beacon Chain Node flags:
 
 ## For chain operators
 
-<Info>
-  Be ready to restart your batcher with the new configuration immediately after the Fusaka fork on
-  L1: e.g. for Sepolia this is at Unix timestamp 1760427360 (Tue Oct 14 2025 07:36:00 UTC). For
-  Mainnet this is at Unix timestamp 1764798551 (Wed Dec 03 2025 21:49:11 UTC).
-</Info>
+<VanillaAdmonition type="warning">
 
-<Info>
-  Although new chains deriving from Holesky are supported, exising chains deriving from Holesky are
-  not supported since Holesky already activated Fusaka on L1.
-</Info>
+Be ready to restart your batcher with the new configuration immediately after the Fusaka fork on
+L1: e.g. for Sepolia this is at Unix timestamp 1760427360 (Tue Oct 14 2025 07:36:00 UTC). For
+Mainnet this is at Unix timestamp 1764798551 (Wed Dec 03 2025 21:49:11 UTC).
+
+</VanillaAdmonition>
+
+<VanillaAdmonition type="warning">
+
+Although new chains deriving from Holesky are supported, exising chains deriving from Holesky are
+not supported since Holesky already activated Fusaka on L1.
+
+</VanillaAdmonition>
 
 Update the following:
 
-| Component       | Version                                                                                        | Notes                                                                                                                                                        |
-| --------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `proxyd`        | [v4.19.0](https://github.com/ethereum-optimism/infra/releases/tag/proxyd%2Fv4.19.0) or greater | You need to whitelist `eth_blobBaseFee` rpc if using proxyd for L1 load balancing. If you use `dugtrio` ensure this is also updated to the latest release.   |
-| `op-batcher`    | [v1.16.0](https://github.com/ethereum-optimism/optimism/releases/tag/op-batcher%2Fv1.16.0)     | `OP_BATCHER_TXMGR_ENABLE_CELL_PROOFS`: `true` or equivalent CLI flag needs to be set and the batcher restarted just after Fusaka activates on L1.            |
-| `op-node`       | [v1.14.1](https://github.com/ethereum-optimism/optimism/releases/tag/op-node%2Fv1.14.1)        | L1 chain config must be supplied via a new flag (see the release notes). Not necessary for chains deriving from Ethereum Mainnet, Sepolia, Holesky or Hoodi. |
-| `op-geth`       | [v1.101603.1](https://github.com/ethereum-optimism/op-geth/releases/tag/v1.101603.1)           |                                                                                                                                                              |
-| `op-challenger` | [v1.6.0](https://github.com/ethereum-optimism/optimism/releases/tag/op-challenger%2Fv1.6.0)    | L1 chain config must be supplied via a new flag (see the release notes). Not necessary for chains deriving from Ethereum Mainnet, Sepolia, Holesky or Hoodi. |
-| `kona-node`     | [v1.1.6](https://github.com/op-rs/kona/releases/tag/kona-node%2Fv1.1.6)                        |                                                                                                                                                              |
-| `kona-host`     | [v1.1.6](https://github.com/op-rs/kona/releases/tag/kona-host%2Fv1.1.6)                        |                                                                                                                                                              |
-| `kona-client`   | [v1.1.6](https://github.com/op-rs/kona/releases/tag/kona-client%2Fv1.1.6)                      |                                                                                                                                                              |
-| `op-reth`       | [v1.8.2](https://github.com/paradigmxyz/reth/releases/tag/v1.8.2)                              |                                                                                                                                                              |
+| Component | Version                                                           | Notes |
+| --------- | ----------------------------------------------------------------- | ----- |
+| ``        | [v1.8.2](https://github.com/paradigmxyz/reth/releases/tag/v1.8.2) |       |
 
-<Info>
-  **Note:** `op-node` v1.14.1 uses the new `/eth/v1/beacon/blobs/` API for fetching blob data from L1 beacon nodes. If you run a proxy/load balancer in front of your beacon API, ensure it correctly forwards all query parameters.
+<VanillaAdmonition type="warning">
+
+**Note:** `op-node` v1.14.1 uses the new `/eth/v1/beacon/blobs/` API for fetching blob data from L1 beacon nodes. If you run a proxy/load balancer in front of your beacon API, ensure it correctly forwards all query parameters.
 
 Misconfigured proxies may cause blob fetch failures or derivation stalls after the Fusaka fork.
 
-</Info>
+</VanillaAdmonition>
 
 ### For Permissionless Fault Proof enabled chains
 
 Chains running permissionless fault proofs will need to deploy new dispute game contracts with new absolute prestates. The new 64 bit version of cannon will be utilized moving forward. The Sepolia Superchain, will utilize [op-program/v1.7.0-rc.3](https://github.com/ethereum-optimism/optimism/tree/op-program/v1.7.0-rc.3).
 
-<Info>
-  Optimism will complete the on-chain prestate update (including Dispute Game deployment and implementation set) on OP Sepolia, Base Sepolia, Ink Sepolia, and Uni Sepolia. However, off-chain components (op-challenger) must still be configured by operators to use the new prestate.
+<VanillaAdmonition type="warning">
+
+Optimism will complete the on-chain prestate update (including Dispute Game deployment and implementation set) on OP Sepolia, Base Sepolia, Ink Sepolia, and Uni Sepolia. However, off-chain components (op-challenger) must still be configured by operators to use the new prestate.
 
 If you are a Permissionless FP–enabled chain not included in the list above, you must perform all steps below yourself.
 
-</Info>
+</VanillaAdmonition>
 
-<Steps>
-  <Step title="Verify the new absolute prestate">
-    <Info>
+#### 1. Verify the new absolute prestate
+
+    <VanillaAdmonition type="warning">
+
       As of upgrade 14, the 64 bit multi-threaded version of cannon is utilized.
-    </Info>
+
+</VanillaAdmonition>
 
     The absolute prestate is generated with the [op-program/v1.7.0-rc.3](https://github.com/ethereum-optimism/optimism/tree/op-program/v1.7.0-rc.3). You can use this new absolute prestate (`0x0339db503776757491b9f3038bf6f1d37b7988a2f75e823fe2656c1352ef2f91`) for chains in the superchain registry.
 
@@ -112,28 +122,22 @@ If you are a Permissionless FP–enabled chain not included in the list above, y
     make reproducible-prestate
     ```
 
-  </Step>
+#### 2. Upload your new preimage file
 
-  <Step title="Upload your new preimage file">
     During the previous step, you also generated the preimage of the absolute prestate, which is basically the op-program serialized into a binary file. You'll find that new file at `optimism/op-program/bin/prestate-mt64.bin.gz`. Rename that file to have the absolute prestate hash as the filename so it looks like `0x0339db503776757491b9f3038bf6f1d37b7988a2f75e823fe2656c1352ef2f91.bin.gz`.
 
     Upload that file to where you're storing your other absolute preimage files. This should be the location where you're pointing your `--cannon-prestates-url` at. The `op-challenger` will grab this file and use it when it needs to challenge games.
 
-  </Step>
+#### 3. Deploy new dispute game contracts
 
-{' '}
-<Step title="Deploy new dispute game contracts">
-  You will then take the absolute prestate and deploy new `FaultDisputeGame` and
-  `PermissionedDisputeGame` contracts with that value.
-</Step>
+You will then take the absolute prestate and deploy new `FaultDisputeGame` and
+`PermissionedDisputeGame` contracts with that value.
 
-{' '}
-<Step title="Update the DisputeGameFactory">
-  You will then need to update the `DisputeGameFactory` to point to the new `FaultDisputeGame` and
-  `PermissionedDisputeGame` contracts by calling `DisputeGameFactory.setImplementation`.
-</Step>
+#### 4. Update the DisputeGameFactory
 
-  <Step title="Execute the upgrade">
+You will then need to update the `DisputeGameFactory` to point to the new `FaultDisputeGame` and
+`PermissionedDisputeGame` contracts by calling `DisputeGameFactory.setImplementation`.
+
+#### 5. Execute the upgrade
+
     Once your `op-challenger` is ready with the new preimage, you can execute the "Set Dispute Game Implementation" transaction. Please simulate and validate that the expected output prior to executing the transaction.
-  </Step>
-</Steps>
