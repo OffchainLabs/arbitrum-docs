@@ -6,7 +6,7 @@ sme:
 content_type: configuration
 ---
 
-import FastwithdrawalsPCPartial from '../../partials/_fast-withdrawals_-pc.mdx';
+import FastwithdrawalsPCPartial from '../../partials/_fast-withdrawals-pc.mdx';
 
 Enabling fast withdrawals refers to configuring the chain to use a fast confirmation mechanism that allows transactions and state assertions to achieve finality much quicker than the standard multi-day challenge period in optimistic rollups. This is achieved by routing assertions through a permissioned committee of validators (often overlapping with the Data Availability Committee or DAC in AnyTrust mode) that unanimously confirms them via a multisig wallet, bypassing the full fraud-proof window. As a result, users can withdraw assets or access finalized states in as little as 15 minutes for L2 chains or 15 seconds for L3 chains, significantly enhancing user experience by reducing wait times and enabling faster cross-chain interactions.
 
