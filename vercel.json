@@ -231,6 +231,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-permissioned-validators/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_permissioned-validators-pc/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/launch-arbitrum-chain/partials/config-rollup/?)",
       "destination": "/(docs/launch-arbitrum-chain/features/partials/_rollup-pc/?)",
       "permanent": false
