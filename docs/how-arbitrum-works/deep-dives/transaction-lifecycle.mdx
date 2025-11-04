@@ -97,7 +97,7 @@ The following diagram shows the four methods for submitting transactions to the 
 
 You can submit transactions directly to the Delayed Inbox contract on the Parent chain without using the Sequencer. This method provides:
 
-- **Censorship resistance** - Your transaction will be included even if the Sequencer refuses to process it
+- **Censorship resistance** - Transaction inclusion even if the Sequencer refuses to process it
 - **Availability guarantee** - Transactions work even when the Sequencer is offline
 - **Decentralization** - Reduces dependency on the Sequencer
 
@@ -126,7 +126,7 @@ To submit a transaction through the Delayed Inbox:
 
 ### Force inclusion after delays
 
-If your transaction isn't processed within 24 hours, call the [`forceInclusion`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/SequencerInbox.sol#L284) function on the `SequencerInbox` contract. This guarantees your transaction will be included regardless of Sequencer status.
+If your transaction doesn't get processed within 24 hours, call the [`forceInclusion`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/SequencerInbox.sol#L284) function on the `SequencerInbox` contract. This function ensures that transactions get included regardless of the Sequencer's status.
 
 ### Using the Arbitrum SDK
 

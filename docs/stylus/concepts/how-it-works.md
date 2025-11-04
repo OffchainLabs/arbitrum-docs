@@ -79,4 +79,4 @@ Stylus doesn't just improve on cost and speed. WASM programs are also safer. Ree
 
 ### Fully interoperable
 
-Solidity programs and WASM programs are completely composable. If working in Solidity, a developer can call a Rust program or rely on another dependency in a different language. If working in Rust, all Solidity functionalities are accessible out of the box.gas-
+Solidity programs and WASM programs are completely composable. If working in Solidity, a developer can call a Rust program or rely on another dependency in a different language. If working in Rust, all Solidity functionalities are accessible out of the box.
