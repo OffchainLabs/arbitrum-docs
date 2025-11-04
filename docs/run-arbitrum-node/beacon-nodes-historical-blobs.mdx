@@ -58,13 +58,19 @@ The Offchain Labs team hasn't verified the accuracy of the flags below, includin
 
 ### Specific client flags
 
-| Client     | Flag                                          |
-| ---------- | --------------------------------------------- |
-| Lighthouse | `--supernode`                                 |
-| Teku       | `--p2p-subscribe-all-custody-subnets-enabled` |
-| Grandine   | `--subscribe-all-data-column-subnets`         |
-| Lodestar   | `--supernode`                                 |
-| Nimbus     | `--debug-peerdas-supernode`                   |
+:::note Sepolia only
+
+Currently, the following clients are supported for Sepolia only.
+
+:::
+
+| Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required Beacon Node Flag                     |
+| ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- |
+| Prysm         | ✅                    | None                                                                | `--subscribe-all-data-subnets`                |
+| Lighthouse    | ✅                    | None                                                                | `--supernode`                                 |
+| Teku          | ✅                    | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--p2p-subscribe-all-custody-subnets-enabled` |
+| Lodestar      | ✅                    | None                                                                | `--supernode`                                 |
+| Erigon Caplin | ❌                    |                                                                     |                                               |
 
 ## Checklist
 

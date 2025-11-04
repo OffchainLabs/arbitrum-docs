@@ -53,7 +53,7 @@ Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [pr
 function sayHi() external view returns(string memory);
 ```
 
-Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
+Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node Docker image and run it.
 
 Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -122,7 +122,7 @@ interface ArbHi {
 }
 ```
 
-Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
+Next, follow the steps in [How to customize your Arbitrum chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node Docker image and run it.
 
 Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -310,7 +310,7 @@ cast send 0x0000000000000000000000000000000000000065 "GetBalanceCustom()({Any_Ad
 
 The two responses will look like this, respectively:
 
-Result 1:
+#### Result 1:
 
 ```
 {
@@ -339,7 +339,7 @@ Result 1:
 }
 ```
 
-Result 2:
+#### Result 2:
 
 ```
 {
@@ -407,9 +407,9 @@ const (
 )
 ```
 
-Then, initialize the state under the [OpenArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L89) and [InitializeArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L212) methods:
+Then, initialize the state under the [`OpenArbosState`](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L89) and [`InitializeArbosState`](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L212) methods:
 
-OpenArbosState:
+`OpenArbosState`:
 
 ```
 return &ArbosState{
@@ -422,7 +422,7 @@ return &ArbosState{
 	}, nil
 ```
 
-InitializeArbosState:
+`InitializeArbosState`:
 
 ```
 	_ = sto.SetUint64ByUint64(uint64(versionOffset), 1) // initialize to version 1; upgrade at end of this func if needed
@@ -508,7 +508,7 @@ You should see something like this:
 
 ## Incorporate your changes to precompile into the ArbOS upgrade
 
-If you do not customize the precompile before launching your Arbitrum chain network, please continue to follow [customize arbos](./customize-arbos.mdx) to perform an ArbOS version control to avoid blockchain reorg.
+If you do not customize the precompile before launching your Arbitrum chain network, please continue to follow the instructions on [Customize ArbOS](./customize-arbos.mdx) to perform an ArbOS version control to avoid blockchain reorg.
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--

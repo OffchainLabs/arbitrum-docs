@@ -34,13 +34,21 @@ Note that if `deployFactoriesToL2` is set to `true` when calling `createRollup()
 
 To deploy a contract post-launch:
 
-**1. Fund the deployer address on the child chain:** Send `ETH` to the child chain address that will send the deployment transaction. Funding is possible using a retryable ticket or Parent-to-Child chain deposit.
+#### 1. Fund the deployer address on the child chain:
 
-**2. Create the signed child chain transaction:** Construct and sign a raw child chain transaction that performs the contract deployment (e.g., using `create2`). [`DeployHelper.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/DeployHelper.sol) can be used as a reference for formatting the transaction.
+Send `ETH` to the child chain address that will send the deployment transaction. Funding is possible using a retryable ticket or Parent-to-Child chain deposit.
 
-**3. Send the message from the parent chain:** Call `Inbox.sendL2Message(bytes calldata message)` on the Arbitrum chain’s inbox contract. Provide the signed transaction as the input.
+#### 2. Create the signed child chain transaction:
 
-**4. Wait for the transaction to be executed on the child chain:** The child chain will process and execute the message as a regular transaction. This flow does not use retryables, so if the transaction fails, it is not auto-retried and the nonce is consumed. This means the same transaction cannot be replayed, and a new transaction with a higher nonce must be created and submitted.
+Construct and sign a raw child chain transaction that performs the contract deployment (e.g., using `create2`). [`DeployHelper.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/DeployHelper.sol) can be used as a reference for formatting the transaction.
+
+#### 3. Send the message from the parent chain:
+
+Call `Inbox.sendL2Message(bytes calldata message)` on the Arbitrum chain’s inbox contract. Provide the signed transaction as the input.
+
+#### 4. Wait for the transaction to be executed on the child chain:
+
+The child chain will process and execute the message as a regular transaction. This flow does not use retryables, so if the transaction fails, it is not auto-retried and the nonce is consumed. This means the same transaction cannot be replayed, and a new transaction with a higher nonce must be created and submitted.
 
 :::warning
 
