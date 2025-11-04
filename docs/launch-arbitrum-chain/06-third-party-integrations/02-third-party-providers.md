@@ -19,7 +19,7 @@ This list is not exhaustive, and will be continuously updated as the Arbitrum ec
 
 For most production use-cases, we encourage Arbitrum chain (Orbit) operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Arbitrum chain deployments:
 
-- [QuickNode](https://www.quicknode.com/rollup?utm_source=arb-docs)
+- [QuickNode](https://www.quicknode.com/chains?utm_source=arb-docs)
 - [Caldera](https://www.caldera.xyz/)
 - [Conduit](https://conduit.xyz/)
 - [AltLayer](https://altlayer.io/)
