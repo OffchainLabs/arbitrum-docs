@@ -231,6 +231,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-native-eth/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_native-eth-pc/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/launch-arbitrum-chain/partials/config-permissioned-validators/?)",
       "destination": "/(docs/launch-arbitrum-chain/features/partials/_permissioned-validators-pc/?)",
       "permanent": false
