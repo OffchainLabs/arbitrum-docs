@@ -6,6 +6,8 @@ sme:
 content_type: configuration
 ---
 
+import RollupPCPartial from '../../partials/_rollup-pc.mdx';
+
 Choosing a rollup refers to selecting the Arbitrum Rollup protocol for a chain's data availability (DA) mechanism. This choice is relevant when deploying custom chains or configuring Arbitrum-based systems.
 
 The rollup option prioritizes security and decentralization over cost efficiency. It's ideal for applications needing Ethereum's ironclad guarantees, such as high-value DeFi protocols or where users demand minimal trust in third parties. In contrast, opting out of Rollup (e.g., for AnyTrust) is better for high-throughput, low-cost use cases like gaming or social apps, where slight trade-offs in trust are acceptable for better performance.
@@ -19,5 +21,9 @@ This flexibility allows developers to tailor chains to specific needs while buil
   - All batch transaction data is posted directly to the parent chain (Ethereum L1) as calldata or blobs.
   - This inherits Ethereum's full security and decentralization, with no additional trust assumptions—data is always available on-chain for anyone to access and verify.
   - Example: Arbitrum One operates in this mode.
+
+<!-- Render Rollup Pros & Cons Partial -->
+
+<RollupPCPartial />
 
 For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
