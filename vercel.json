@@ -226,6 +226,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-anytrust/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_anytrust-pc/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/launch-arbitrum-chain/partials/config-custom-gas-token/?)",
       "destination": "/(docs/launch-arbitrum-chain/features/partials/_custom-gas-token-pc/?)",
       "permanent": false
