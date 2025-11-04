@@ -1399,8 +1399,8 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
-      id: 'notices/arbos-50',
-      label: 'Arbos-50',
+      id: 'notices/arbos-50-fusaka',
+      label: 'Prepare for Arbos-50',
     },
   ],
 };
