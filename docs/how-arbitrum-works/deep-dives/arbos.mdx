@@ -9,23 +9,23 @@ content_type: get-started
 
 ArbOS is the child chain EVM hypervisor that provides the execution environment for the Arbitrum chain. Acting as a trusted "system glue" component within the STF, ArbOS is responsible for:
 
-### Managing network resources
+### 1. Managing network resources
 
-It allocates and tracks resources necessary for executing transcations on the child chain.
+It allocates and tracks resources necessary for executing transactions on the child chain.
 
-### Block production
+### 2. Block production
 
 ArbOS processes incoming sequencer data batches to produce child chain blocks, ensuring the state is updated correctly.
 
-### Cross-chain messaging
+### 3. Cross-chain messaging
 
 It facilitates communication between the parent and child chains, supporting functionalities like Ether and token deposits and withdrawals.
 
-### Enhanced EVM execution
+### 4. Enhanced EVM execution
 
 ArbOS operates its instrumented instance of Geth to execute smart contracts, incorporating additional logic specific to the child chain environment.
 
-### Stylus-specific tasks in ArbOS
+### 5. Stylus-specific tasks in ArbOS
 
 ArbOS manages host I/O calls, memory operations, and execution context for Stylus transactions, ensuring efficient and deterministic processing with the WASM runtime.
 
