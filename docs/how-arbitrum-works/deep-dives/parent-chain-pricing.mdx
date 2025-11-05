@@ -1,0 +1,282 @@
+---
+title: 'A gentle introduction'
+description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
+author: petevielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
+content_type: get-started
+---
+
+## Parent chain pricing model
+
+Efficient handling of parent chain gas costs is crucial for the Arbitrum network's scalability and economic sustainability. The Sequencer implements a dynamic parent chain pricing model to ensure that fees collected from transactions closely match the actual costs incurred when posting data to the parent chain. This section details the challenges in pricing parent chain resources, how fees are collected and allocated, and how the system adjusts to maintain equilibrium over time.
+
+## Challenges in pricing parent chain resources
+
+There are two main challenges in accurately pricing parent chain resources:
+
+### 1. Apportioning batch costs among transactions:
+
+- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm (Brotli). The effectiveness of compression depends on shared patterns among transactions in a batch.
+
+- **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the overall compressibility of the batch.
+
+- **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
+
+### 2. Assessing parent chain fees at sequencing time:
+
+- **Determinism requirement**: The parent chain fee charged to a transaction must be known when the transaction is sequenced to maintain the determinism of the STF.
+
+- **Future uncertainty**: At sequencing time, the actual cost of the batch is unknown because it depends on:
+
+  - The parent chain base fee at the future time of batch posting
+
+  - The remaining contents of the batch affect its size and compressability
+
+- **Impossibility of exact charges**: Charging based on future information is not feasible, so the system must rely on estimations.
+
+## Nitro's approach to addressing the challenges
+
+To overcome these challenges, Arbitrum's Nitro implements a two-fold strategy:
+
+### 1. Estimated relative footprint
+
+- Estimated size is calculated for each transaction and measured in data units to approximate its impact on batch size.
+
+### 2. Adaptive fee per data unit
+
+- A dynamic fee per data unit is determined at any given time, adjusting to align collected fees with actual costs.
+
+## Apprortioning costs among transactions
+
+To approximate each transaction's contribution to parent chain costs, Arbitrum employs the following method:
+
+- **Compression estimation**:
+
+  - Each transaction individually compresses using the Brotli compressor at its lowest compression level (fastest setting).
+
+  - This approach reduces computational overhead within the STF.
+
+- **Data unit calculation**:
+
+  - The size of the compressed transaction is multiplied by 16 (since Ethereum charges 16 gas per non-zero byte).
+
+  - This product represents the transaction's estimated footprint in data units.
+
+- **Rationale**:
+
+  - This method approximates the transaction's size after full batch compression.
+
+  - While not exact, it's computationally efficient and suitable for real-time processing.
+
+## Determining cost per data unit
+
+Charging a transaction based on the parent chain base fee is not viable due to:
+
+- **ArbOS limitations**:
+
+  - ArbOS cannot directly measure the parent chain base fee
+
+  - Relying on the Sequencer to report the parent chain base fee isn't secure, as it could manipulate fees for profit
+
+- **Approximation errors**:
+
+  - The estimated data units per transaction don't precisely reflect parent chain costs
+
+  - The total number of data units charged may not be directly proportional to the Sequencer's expenses
+
+### Adaptive pricing algorithm
+
+To align collected fees with actual costs, Arbitrum uses an adaptive algorithm with two primary goals:
+
+1. **Cost alignment**
+
+   - Minimize the long-term difference between collected fees and the Sequencer's parent chain costs
+
+2. **Stability**
+
+   - Avoid sudden fluctuations in the data price, ensuring a stable fee environment
+
+### Pricer components
+
+The pricer module within ArbOS tracks:
+
+- **Amount owed to the Sequencer**:
+
+  - The cumulative parent chain costs incurred by the Sequencer for batch posting
+
+- **Reimbursement fund**:
+
+  - Collects all funds charged to transactions for parent chain fees
+
+  - Acts as a pool to reimburse the Sequencer
+
+- **Data unit count**:
+
+  - The total number of recent data units processed
+
+  - Increases with each transaction's estimated data units
+
+- **Current parent chain data unit price**:
+
+  - The adaptive fee per data unit expressed in `wei`
+
+### Algorithm for price adjustment
+
+When the Sequencer posts a batch to the parent chain inbox:
+
+1. **Batch posting report generation**:
+
+   - The parent chain inbox inserts a "batch posting report" transaction into the chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>
+
+   - After a delay, this report gets processed by ArbOS's pricer module
+
+2. **Processing the batch posting report**:
+
+   - **Compute batch cost**:
+
+     - ArbOS calculates the actual cost of posting the batch by:
+
+       - Retrieving the batch data from the inbox state
+
+       - Counting zero and non-zero bytes to determine parent chain gas usage
+
+     - The cost is added to the amount owed to the Sequencer
+
+   - **Update data units**:
+
+     - Calculate the data units assigned to this update $(U_{\text{upd}})$
+
+       $$
+       U_{\text{upd}} = U \times \frac{T_{\text{upd}} - T_{\text{prev}}}{T - T_{\text{prev}}}
+       $$
+
+     - $U$: Total recent data units
+
+     - $T$: Current time
+
+     - $T_{\text{upd}}$: Time when the update occurred
+
+     - $T_{\text{prev}}$: Time of the previous update
+
+     - Subtract $U_{\text{upd}}$ from the total $U$
+
+   - **Reimburse the Sequencer**:
+
+     - Pay the Sequencer from the reimbursement fund:
+
+       - The amount paid is the lesser of the amount owed or the fund balance.
+
+     - Deduct the paid amount from both the reimbursement fund and the amount owed
+
+   - **Compute surplus and derivative**:
+
+     - Surplus ($S$):
+
+       $$
+       S = \text{Reimbursement Fund Balance} - \text{Amount Owed}
+       $$
+
+     - Derivative of surplus ($D$):
+
+       - $D = \frac{S - S_{\text{prev}}}{U_{\text{upd}}}$
+
+       - $S_{\text{prev}}$: Surplus at the previous update
+
+   - **Compute derivative goal($D'$)**:
+
+     - Establish a target derivative to eliminate surplus over time:
+
+       - $D' = -\frac{S}{E}$
+
+       - $E$: Equilibration constant (time horizon for balancing surplus).
+
+   - **Adjust price ($\Delta P)$)**:
+
+     - Calculate the change in the data unit price:
+
+       - $\Delta P = \frac{(D' - D) \times U_{\text{upd}}}{\alpha + U_{\text{upd}}}$
+
+       - $\alpha$: Smoothing parameter to prevent abrupt changes
+
+     - Update the price:
+
+       - $P = \max(0, P_{\text{prev}} + \Delta P)$
+
+   - **Outcome**:
+
+     - The adaptive algorithm adjusts the parent chain-data unit price to align collected fees with actual costs.
+
+     - Ensures that the Sequencer gets fairly reimbursed while avoiding surpluses or deficits.
+
+### Additional Considerations
+
+- **Per-unit rewards**:
+
+  - An optional per-unit reward can be included and payable to a designated address.
+
+  - Useful for covering additional expenses such as infrastructure or operations.
+
+- **Recompression scenarios**:
+
+  - Recompression of existing batch segments may occur if:
+
+    - The batch exceeds the maximum size limits
+
+    - The batch hasn't been properly closed
+
+- **Compression levels**:
+
+  - Dynamic adjustments of compression levels based on backlog size ($B$):
+
+    - **Compression level ($CL$)**:
+
+      - For $B \leq 20$
+
+        - $CL = \min(6, UC)$
+
+      - For $20 < B < 60$
+
+        - $CL = UC$
+
+      - For $B > 60$
+
+        - $CL = \min(4, UC)$
+
+    - **Recompression level ($RL$)**:
+
+      - For $B < 40$:
+
+        - $RL = UC$
+
+      - For $B \geq 40$:
+
+        - $RL = \min(6, UC)$
+
+    - $UC$: User-configured compression level
+
+## Retrieving parent chain fee information
+
+Users and developers can access parent chain fee-related data through the following methods:
+
+- Parent chain gas base fee estimate:
+
+  - **Method**: `ArbGasInfo.getL1BaseFeeEstimate()`
+
+  - **Purpose**: Retrieves the current estimated parent–gas base fee for calculating transaction costs.
+
+- Estimating transaction parent chain fees:
+
+  - **Methods**:
+
+    - `NodeInterface.gasEstimateComponents()`
+
+    - `NodeInterface.gasEstimateL1Component()`
+
+  - **Purpose**: Provides an estimate of the parent chain gas a transaction will consume.
+
+- Transaction receipts:
+
+  - **Field**: `gasUsedForL1`
+
+  - **Description**: Indicates the child chain gas used to cover parent chain costs.
