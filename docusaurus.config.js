@@ -136,7 +136,6 @@ const config = {
           invalidLink: true,
           notDocumented: true,
         },
-        skipErrorChecking: true,
         logLevel: 'Verbose',
         sidebar: {
           autoConfiguration: false,
