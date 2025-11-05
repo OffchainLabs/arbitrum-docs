@@ -6,7 +6,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import styled from 'styled-components';
 
 interface ImageZoomProps {
   src: string;
@@ -14,63 +13,6 @@ interface ImageZoomProps {
   className?: string;
   caption?: string;
 }
-
-const Modal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-`;
-
-const ImageContainer = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 90vw;
-  height: 90vh;
-`;
-
-const ZoomedImage = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-`;
-
-const CloseButton = styled.button`
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 8px;
-  z-index: 100000;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const Figure = styled.figure`
-  margin: 1rem 0;
-  text-align: center;
-`;
-
-const FigCaption = styled.figcaption`
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  font-style: italic;
-  color: var(--ifm-color-emphasis-600);
-  text-align: center;
-`;
 
 export default function ImageZoom({ src, alt, className, caption }: ImageZoomProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -97,21 +39,69 @@ export default function ImageZoom({ src, alt, className, caption }: ImageZoomPro
   };
 
   const renderModal = () => (
-    <Modal onClick={handleClose}>
-      <ImageContainer onClick={(e) => e.stopPropagation()}>
+    <div
+      onClick={handleClose}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(0, 0, 0, 0.8)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 99999,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '90vw',
+          height: '90vh',
+        }}
+      >
         {imageLoaded ? (
-          <ZoomedImage src={src} alt={alt || ''} />
+          <img
+            src={src}
+            alt={alt || ''}
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              objectFit: 'contain',
+            }}
+          />
         ) : (
           <div style={{ color: 'white' }}>Loading...</div>
         )}
-        <CloseButton onClick={handleClose}>✕</CloseButton>
-      </ImageContainer>
-    </Modal>
+        <button
+          onClick={handleClose}
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            padding: '8px',
+            zIndex: 100000,
+            fontSize: '24px',
+          }}
+        >
+          ✕
+        </button>
+      </div>
+    </div>
   );
 
   return (
     <>
-      <Figure>
+      <figure style={{ margin: '1rem 0', textAlign: 'center' }}>
         <img
           src={src}
           alt={alt || ''}
@@ -119,8 +109,20 @@ export default function ImageZoom({ src, alt, className, caption }: ImageZoomPro
           onClick={handleImageClick}
           style={{ cursor: 'zoom-in' }}
         />
-        {caption && <FigCaption>{caption}</FigCaption>}
-      </Figure>
+        {caption && (
+          <figcaption
+            style={{
+              marginTop: '0.5rem',
+              fontSize: '0.9rem',
+              fontStyle: 'italic',
+              color: 'var(--ifm-color-emphasis-600)',
+              textAlign: 'center',
+            }}
+          >
+            {caption}
+          </figcaption>
+        )}
+      </figure>
       {isOpen && typeof document !== 'undefined' && createPortal(renderModal(), document.body)}
     </>
   );
