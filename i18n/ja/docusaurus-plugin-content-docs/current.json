@@ -540,7 +540,7 @@
   },
   "sidebar.getStartedSidebar.link.How Arbitrum works": {
     "message": "How Arbitrum works",
-    "description": "The label for link How Arbitrum works in sidebar getStartedSidebar, linking to /how-arbitrum-works/a-gentle-introduction"
+    "description": "The label for link How Arbitrum works in sidebar getStartedSidebar, linking to /how-arbitrum-works/inside-arbitrum-nitro"
   },
   "sidebar.getStartedSidebar.link.Run an Arbitrum (Orbit) chain": {
     "message": "Run an Arbitrum (Orbit) chain",
