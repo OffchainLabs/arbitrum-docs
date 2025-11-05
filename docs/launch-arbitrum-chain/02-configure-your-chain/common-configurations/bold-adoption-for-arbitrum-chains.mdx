@@ -70,7 +70,7 @@ Arbitrum BoLD is not an upgrade to a different type of proving architecture and 
 
 #### Use of your project's native token as the bonding asset to secure the chain
 
-Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and we do not recommend teams to use alternative tokens as the bonding asset. For more information on the rationale, we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](/how-arbitrum-works/bold/gentle-introduction.mdx#q-why-is-arb-not-the-bonding-token-used-for-bold-on-arbitrum-one) (and not `ARB`).
+Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and we do not recommend teams to use alternative tokens as the bonding asset. For more information on the rationale, we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](/how-arbitrum-works/bold/gentle-introduction.mdx#q-why-is-arb-not-the-bonding-token-used-in-bold-on-arbitrum-one) (and not `ARB`).
 
 #### Increased censorship resistance for `L3` Arbitrum chains
 
@@ -116,7 +116,7 @@ To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for B
 
 :::caution
 
-As mentioned in our guide on [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx), the recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](../../../how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout) feature disabled.
+As mentioned in our guide on [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx), the recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](../../../how-arbitrum-works/03-sequencer.mdx#censorship-timeout) feature disabled.
 
 :::
 
