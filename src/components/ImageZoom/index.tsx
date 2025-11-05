@@ -12,6 +12,7 @@ interface ImageZoomProps {
   src: string;
   alt?: string;
   className?: string;
+  caption?: string;
 }
 
 const Modal = styled.div`
@@ -58,7 +59,20 @@ const CloseButton = styled.button`
   }
 `;
 
-export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
+const Figure = styled.figure`
+  margin: 1rem 0;
+  text-align: center;
+`;
+
+const FigCaption = styled.figcaption`
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--ifm-color-emphasis-600);
+  text-align: center;
+`;
+
+export default function ImageZoom({ src, alt, className, caption }: ImageZoomProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -98,13 +112,16 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
   return (
     <>
       <div className="markdown">
-        <img
-          src={src}
-          alt={alt || ''}
-          className={className}
-          onClick={handleImageClick}
-          style={{ cursor: 'zoom-in' }}
-        />
+        <Figure>
+          <img
+            src={src}
+            alt={alt || ''}
+            className={className}
+            onClick={handleImageClick}
+            style={{ cursor: 'zoom-in' }}
+          />
+          {caption && <FigCaption>{caption}</FigCaption>}
+        </Figure>
       </div>
       {isOpen && typeof document !== 'undefined' && createPortal(renderModal(), document.body)}
     </>
