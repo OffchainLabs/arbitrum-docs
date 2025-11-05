@@ -12,11 +12,15 @@ interface ImageZoomProps {
   alt?: string;
   className?: string;
   caption?: string;
+  children?: React.ReactNode;
 }
 
-export default function ImageZoom({ src, alt, className, caption }: ImageZoomProps) {
+export default function ImageZoom({ src, alt, className, caption, children }: ImageZoomProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Use children as caption if provided, otherwise use caption prop
+  const captionText = children || caption;
 
   useEffect(() => {
     if (isOpen) {
@@ -109,7 +113,7 @@ export default function ImageZoom({ src, alt, className, caption }: ImageZoomPro
           onClick={handleImageClick}
           style={{ cursor: 'zoom-in' }}
         />
-        {caption && (
+        {captionText && (
           <figcaption
             style={{
               marginTop: '0.5rem',
@@ -119,7 +123,7 @@ export default function ImageZoom({ src, alt, className, caption }: ImageZoomPro
               textAlign: 'center',
             }}
           >
-            {caption}
+            {captionText}
           </figcaption>
         )}
       </figure>
