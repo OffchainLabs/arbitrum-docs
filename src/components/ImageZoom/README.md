@@ -14,6 +14,7 @@ A React component that adds a click-to-zoom feature to images with smooth animat
 - Maintains image aspect ratio
 - Accessible by default
 - Supports width presets via CSS classes
+- Optional image captions
 
 ## Installation
 
@@ -49,6 +50,29 @@ The component supports predefined width classes. Use the `className` prop to spe
 />
 ```
 
+### Using Captions:
+
+You can add an optional caption that displays below the image:
+
+```mdx
+<ImageZoom
+  src="/img/example.png"
+  alt="A detailed diagram showing the system architecture"
+  caption="Transaction lifecycle diagram showing the complete flow"
+/>
+```
+
+You can combine width presets with captions:
+
+```mdx
+<ImageZoom
+  src="/img/example.png"
+  alt="A detailed diagram showing the system architecture"
+  className="img-500px"
+  caption="Transaction lifecycle diagram showing the complete flow"
+/>
+```
+
 Available width classes:
 
 - `img-20px`
@@ -67,6 +91,7 @@ Available width classes:
 | src       | string | Yes      | The source URL of the image                     |
 | alt       | string | Yes      | Descriptive text for accessibility              |
 | className | string | No       | CSS class for width control (e.g., "img-500px") |
+| caption   | string | No       | Optional caption text displayed below the image |
 
 ## Accessibility
 
@@ -101,10 +126,13 @@ The component follows accessibility best practices:
 The component uses:
 
 - styled-components for modal and zoom functionality
+- Semantic HTML (`<figure>` and `<figcaption>`) for proper structure
 - CSS classes for width presets
+- Docusaurus CSS variables for theme-aware styling (`--ifm-color-emphasis-600`)
 - Dark overlay (rgba(0, 0, 0, 0.8))
 - Proper z-indexing for modal layers
 - Hover effects on interactive elements
+- Centered, italic captions with appropriate spacing
 
 ## Browser Support
 
