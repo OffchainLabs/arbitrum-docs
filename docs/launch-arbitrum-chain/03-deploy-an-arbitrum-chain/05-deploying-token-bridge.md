@@ -29,7 +29,7 @@ Before we describe the process of deploying a token bridge using the Arbitrum ch
 
 Deploying a new token bridge for an Arbitrum chain is done through a [`TokenBridgeCreator`](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the appropriate `ParentToChild` messages from the parent chain to the child chain so the counterpart contracts of the token bridge are created in the Arbitrum chain.
 
-`TokenBridgeCreator` has a `createTokenBridge` function that creates the parent chain contracts of the token bridge and sends the creation message to the arbitrum chain via retryable tickets. `createTokenBridge` takes four parameters as input:
+`TokenBridgeCreator` has a `createTokenBridge` function that creates the parent chain contracts of the token bridge and sends the creation message to the Arbitrum chain via retryable tickets. `createTokenBridge` takes four parameters as input:
 
 ```solidity
 address inbox,

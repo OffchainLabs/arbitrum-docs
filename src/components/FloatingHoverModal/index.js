@@ -26,6 +26,11 @@ import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-har
 import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/config-rollup.mdx';
 import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/config-anytrust.mdx';
 import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx';
+import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/config-timeboost.mdx';
+import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/config-bold.mdx';
+import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/config-permissioned-validators.mdx';
+import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
+import ConfigForceInclusion from '@site/docs/launch-arbitrum-chain/partials/config-force-inclusion.mdx';
 import ConfigAccountAbstraction from '@site/docs/launch-arbitrum-chain/partials/config-account-abstraction.mdx';
 import ConfigChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-challenge-period-l1.mdx';
 import ConfigCustomizableGovernance from '@site/docs/launch-arbitrum-chain/partials/config-customizable-governance.mdx';
@@ -43,6 +48,11 @@ const contentMap = {
   'config-rollup': ConfigRollup,
   'config-anytrust': ConfigAnytrust,
   'config-fast-withdrawals': ConfigFastwithdrawals,
+  'config-timeboost': ConfigTimeboost,
+  'config-bold': ConfigBold,
+  'config-permissioned-validators': ConfigPermissionedValidators,
+  'config-l1-challenge-period': ConfigL1ChallengePeriod,
+  'config-force-inclusion': ConfigForceInclusion,
   'config-account-abstraction': ConfigAccountAbstraction,
   'config-challenge-period-l1': ConfigChallengePeriod,
   'config-customizable-governance': ConfigCustomizableGovernance,
