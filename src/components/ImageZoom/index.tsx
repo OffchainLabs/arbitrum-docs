@@ -111,18 +111,16 @@ export default function ImageZoom({ src, alt, className, caption }: ImageZoomPro
 
   return (
     <>
-      <div className="markdown">
-        <Figure>
-          <img
-            src={src}
-            alt={alt || ''}
-            className={className}
-            onClick={handleImageClick}
-            style={{ cursor: 'zoom-in' }}
-          />
-          {caption && <FigCaption>{caption}</FigCaption>}
-        </Figure>
-      </div>
+      <Figure>
+        <img
+          src={src}
+          alt={alt || ''}
+          className={className}
+          onClick={handleImageClick}
+          style={{ cursor: 'zoom-in' }}
+        />
+        {caption && <FigCaption>{caption}</FigCaption>}
+      </Figure>
       {isOpen && typeof document !== 'undefined' && createPortal(renderModal(), document.body)}
     </>
   );
