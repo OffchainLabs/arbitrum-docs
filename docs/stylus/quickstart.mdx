@@ -94,11 +94,11 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.81 as well as adding the WASM build target:
 
 ```shell
-rustup default 1.80
-rustup target add wasm32-unknown-unknown --toolchain 1.80
+rustup default 1.81
+rustup target add wasm32-unknown-unknown --toolchain 1.81
 ```
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
@@ -273,6 +273,8 @@ interface ICounter {
     function addNumber(uint256 new_number) external;
 
     function increment() external;
+
+    function addFromMsgValue() external payable;
 }
 ```
 
