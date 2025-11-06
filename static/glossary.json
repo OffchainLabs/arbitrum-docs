@@ -7,10 +7,6 @@
     "title": "Address Alias",
     "text": "<p>An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.</p>\n"
   },
-  "dapp": {
-    "title": "Decentralized application",
-    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nNote: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
-  },
   "arb-token-bridge": {
     "title": "Arb Token Bridge",
     "text": "<p>A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of <code>ERC-20</code> tokens between the two layers.</p>\n"
@@ -155,6 +151,10 @@
     "title": "Custom gateway",
     "text": "<p>Any <a href=\"/intro/glossary#token-gateway\">Token Gateway</a> that isn&#39;t the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a>.</p>\n"
   },
+  "dapp": {
+    "title": "dApp",
+    "text": "<p>Short for &quot;decentralized application.&quot; A dApp typically consists of smart contracts as well as a user-interface for interacting with them.</p>\n"
+  },
   "data-availability-certificate": {
     "title": "Data Availability Certificate",
     "text": "<p>Signed promise from a <a href=\"/intro/glossary#data-availability-committee-dac\">Data Availability Committee (DAC)</a> attesting to the availability of a batch of data for an <a href=\"/intro/glossary#arbitrum-anytrust-chain\">Arbitrum AnyTrust Chain</a>.</p>\n"
@@ -171,6 +171,10 @@
     "title": "Delayed Inbox",
     "text": "<p>A contract that holds <a href=\"/intro/glossary#parent-chain\">Parent chain</a> initiated messages to be eventually included in the <a href=\"/intro/glossary#sequencer\">Sequencer Inbox</a>. Inclusion of messages doesn&#39;t depend on the <a href=\"/intro/glossary#sequencer\">Sequencer</a>.</p>\n"
   },
+  "deterministic-proving": {
+    "title": "Deterministic proving",
+    "text": "<p>If challenged, state transitions are replayable and verified onchain.</p>\n<p>To achieve this, Arbitrum compiles the State Transition Function (STF) into different formats:</p>\n<ul>\n<li><p><strong>Execution mode</strong>: Uses Go&#39;s native compiler for high-performance execution on <a data-quicklook-from=\"validator\">validator</a> nodes.</p>\n</li>\n<li><p><strong>Proving mode</strong>: Compiles to WebAssembly (<a data-quicklook-from=\"wasm\">WASM</a>), which transforms into WebAssembly for Arbitrum Virtual Machine (WAVM) for fraud-proof verification.</p>\n</li>\n</ul>\n"
+  },
   "devtools-dashboard": {
     "title": "Dev-Tools Dashboard",
     "text": "<p>Web application built and maintained by <a href=\"/intro/glossary#offchain-labs\">Offchain Labs</a> for developers and users to debug Arbitrum transactions; i.e., executing or checking the status of <a href=\"/intro/glossary#crosschain-message\">Cross-chain messages</a>; visit it <a href=\"https://retryable-dashboard.arbitrum.io/\">here</a>.</p>\n"
@@ -186,6 +190,10 @@
   "evm": {
     "title": "EVM+",
     "text": "<p>The paradigm introduced by <a href=\"/intro/glossary#stylus\">Stylus</a> in which Arbitrum&#39;s EVM compatibility is preserved while new features and improvements are introduced.</p>\n"
+  },
+  "execution-claim": {
+    "title": "Execution claim",
+    "text": "<p>A cryptographic commitment to the computed state.</p>\n"
   },
   "express-lane": {
     "title": "Express Lane",
@@ -275,9 +283,17 @@
     "title": "Parent chain",
     "text": "<p>EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka <a href=\"/intro/glossary#child-chain\">Child chain</a> ). E.g., Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with &quot;underlying chain.&quot;</p>\n"
   },
+  "permissionless-validation": {
+    "title": "Permissionless validation",
+    "text": "<p>Anyone can become a validator by running an Arbitrum node, without permission.</p>\n"
+  },
   "portal": {
     "title": "Portal",
     "text": "<p>A web application maintained by <a href=\"/intro/glossary#offchain-labs\">Offchain Labs</a> showcasing the Arbitrum ecosystem; visit it <a href=\"https://portal.arbitrum.io/\">here</a>.</p>\n"
+  },
+  "predecessor-assertion": {
+    "title": "Predecessor Assertion",
+    "text": "<p>The last confirmed valid state of the chain.</p>\n"
   },
   "raas": {
     "title": "raas",
@@ -370,6 +386,10 @@
   "trustless": {
     "title": "Trustless",
     "text": "<p>In the context of Ethereum, trustless refers to the ability of a system to operate without reliance on a central authority or intermediary. Instead, users place their trust in math and protocols.</p>\n<p>This is achieved through the use of cryptographic techniques and decentralized consensus mechanisms that let users verify the integrity of network transactions using open-source software. Trustless systems are considered to be more secure and resistant to fraud or tampering because they don&#39;t rely on a single point of failure that can be exploited by attackers.</p>\n"
+  },
+  "trustless-verification": {
+    "title": "Trustless verification",
+    "text": "<h4>Trustless verification</h4>\n<p>Validators confirm assertions, ensuring transactions adhere to the protocol rules.</p>\n"
   },
   "underlying-chain": {
     "title": "Underlying Chain",
