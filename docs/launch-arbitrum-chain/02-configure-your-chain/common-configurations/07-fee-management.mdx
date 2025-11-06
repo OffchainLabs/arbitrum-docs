@@ -396,7 +396,7 @@ const networkFeeAccount = await orbitChainClient.arbAggregatorReadContract({
 #### Setting a fee collector
 
 :::important
-Before calling `ArbAggregator.setFeeCollector()`, you must ensure the batch poster address is already registered in the BatchPostersTable. This happens either by:
+Before calling `ArbAggregator.setFeeCollector()`, you must ensure the batch poster address is already registered in the `BatchPostersTable`. This is done either by:
 
 - Manually calling `ArbAggregator.addBatchPoster()` for the address, or
 - The address having successfully posted at least one batch
