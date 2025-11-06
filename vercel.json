@@ -201,6 +201,36 @@
       "permanent": false
     },
     {
+      "source": "/(docs/how-arbitrum-works/deep-dives/anytrust-protocol/?)",
+      "destination": "/(docs/how-arbitrum-works/anytrust-protocol/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/gas-and-fees/?)",
+      "destination": "/(docs/how-arbitrum-works/gas-fees/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/geth/?)",
+      "destination": "/(docs/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging/?)",
+      "destination": "/(docs/how-arbitrum-works/l1-to-l2-messaging/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging/?)",
+      "destination": "/(docs/how-arbitrum-works/l2-to-l1-messaging/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/deep-dives/sequencer/?)",
+      "destination": "/(docs/how-arbitrum-works/sequencer/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/inside_arbitrum/?)",
       "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
@@ -248,6 +278,11 @@
     {
       "source": "/(docs/rollup_protocol/?)",
       "destination": "/how-arbitrum-works/optimistic-rollup",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/run-arbitrum-node/data-availability/?)",
+      "destination": "/(docs/how-arbitrum-works/data-availability/?)",
       "permanent": false
     },
     {
