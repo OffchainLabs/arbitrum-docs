@@ -72,7 +72,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'How Arbitrum works',
-      href: '/how-arbitrum-works/a-gentle-introduction',
+      href: '/how-arbitrum-works/inside-arbitrum-nitro',
     },
     {
       type: 'doc',
@@ -583,6 +583,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/data-availability',
+          label: 'Data Availability',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/run-feed-relay',
           label: 'Run a feed relay',
         },
@@ -798,107 +803,75 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'how-arbitrum-works/a-gentle-introduction',
-          label: 'A gentle introduction',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/transaction-lifecycle',
-          label: 'Sequencing, Followed by Deterministic Execution',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/sequencer',
-          label: 'The Sequencer and Censorship Resistance',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/l1-to-l2-messaging',
-          label: 'Parent to Child chain messaging',
-        },
-        {
-          type: 'category',
-          label: 'State Transition Function',
-          items: [
-            {
-              type: 'doc',
-              label: 'STF Overview',
-              id: 'how-arbitrum-works/state-transition-function/stf-gentle-intro',
-            },
-            {
-              type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/state-transition-function/stf-inputs',
-            },
-            {
-              type: 'doc',
-              label: 'Ethereum vs Arbitrum',
-              id: 'how-arbitrum-works/state-transition-function/ethereum-vs-arbitrum',
-            },
-            {
-              type: 'doc',
-              label: 'Modified Geth on Arbitrum',
-              id: 'how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum',
-            },
-            {
-              type: 'doc',
-              label: 'ArbOS',
-              id: 'how-arbitrum-works/state-transition-function/arbos',
-            },
-            {
-              type: 'doc',
-              label: 'Stylus execution path',
-              id: 'how-arbitrum-works/state-transition-function/stylus-execution-path',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Validation and Proving',
-          items: [
-            {
-              type: 'doc',
-              label: 'Validation and proving overview',
-              id: 'how-arbitrum-works/validation-and-proving/validation-and-proving',
-            },
-            {
-              type: 'doc',
-              label: 'Rollup protocol',
-              id: 'how-arbitrum-works/validation-and-proving/rollup-protocol',
-            },
-            {
-              type: 'doc',
-              label: 'Proving and challenges',
-              id: 'how-arbitrum-works/validation-and-proving/proving-and-challenges',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/anytrust-protocol',
-          label: 'AnyTrust protocol',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/l2-to-l1-messaging',
-          label: 'Child to parent chain messaging',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/gas-fees',
-          label: 'Gas and fees',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/data-availability',
-          label: 'Data Availability',
+          id: 'how-arbitrum-works/inside-arbitrum-nitro',
+          label: 'Inside Arbitrum Nitro',
         },
         {
           type: 'link',
           href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
           label: 'Nitro whitepaper',
         },
-
+        {
+          type: 'category',
+          label: 'Deep dives',
+          items: [
+            {
+              type: 'doc',
+              label: 'AnyTrust',
+              id: 'how-arbitrum-works/deep-dives/anytrust-protocol',
+            },
+            {
+              type: 'doc',
+              label: 'ArbOS',
+              id: 'how-arbitrum-works/deep-dives/arbos',
+            },
+            {
+              type: 'doc',
+              label: 'Assertions',
+              id: 'how-arbitrum-works/deep-dives/assertions',
+            },
+            {
+              type: 'doc',
+              label: 'Parent to Child chain Messaging',
+              id: 'how-arbitrum-works/deep-dives/l1-to-l2-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'Child to Parent chain Messaging',
+              id: 'how-arbitrum-works/deep-dives/l2-to-l1-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'Geth',
+              id: 'how-arbitrum-works/deep-dives/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/deep-dives/parent-chain-pricing',
+            },
+            {
+              type: 'doc',
+              label: 'Sequencer',
+              id: 'how-arbitrum-works/deep-dives/sequencer',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/deep-dives/stf-inputs',
+            },
+            {
+              type: 'doc',
+              label: 'Transaction lifecycle',
+              id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
+            },
+            {
+              type: 'doc',
+              label: 'Gas and fees',
+              id: 'how-arbitrum-works/deep-dives/gas-and-fees',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'The BoLD dispute protocol',
