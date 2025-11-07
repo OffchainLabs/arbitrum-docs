@@ -206,10 +206,37 @@ async function main() {
     }
 
     if (updatedProjects.length > 0) {
-      console.log('Creating pull request with updates...');
-      await createPullRequest(updatedProjects);
+      console.log('\n📋 Dependencies with available updates:');
+      updatedProjects.forEach((project) => {
+        console.log(
+          `  • ${project.name}: ${project.currentDocsVersion} → ${project.latestRelease} (released ${project.latestReleaseDate})`,
+        );
+      });
+
+      // Update dependencies.json file
+      console.log('\n🔄 Updating dependencies.json...');
+      const updatedConfig: DependenciesConfig = {
+        ...config,
+        projects: config.projects.map((project) => {
+          const updatedProject = updatedProjects.find((up) => up.id === project.id);
+          return updatedProject || project;
+        }),
+      };
+
+      await fs.writeFile(
+        dependenciesFilePath,
+        JSON.stringify(updatedConfig, null, 2) + '\n',
+        'utf-8',
+      );
+
+      console.log('✅ dependencies.json updated successfully');
+
+      // Set output to indicate updates were made
+      core.setOutput('updates_made', 'true');
+      core.setOutput('updated_projects', updatedProjects.map((p) => p.name).join(', '));
     } else {
       console.log('All dependencies are up to date.');
+      core.setOutput('updates_made', 'false');
     }
   } catch (error) {
     console.error('Error:', error);

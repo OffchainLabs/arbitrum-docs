@@ -236,6 +236,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/notices/arbos-50/?)",
+      "destination": "/(docs/notices/arbos-fusaka/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/partials/_fusaka-historical-blobs/?)",
       "destination": "/(docs/run-arbitrum-node/beacon-nodes-historical-blobs/?)",
       "permanent": false
