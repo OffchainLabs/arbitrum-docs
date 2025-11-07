@@ -98,8 +98,8 @@ The Arbitrum chain (Orbit) SDK includes an example script for generating a node 
 
 To generate the configuration file for your node, you'll need the following information:
 
-- Core contracts: you'll have to configure your node with all the core contracts created on deployment.
-- Chain config: the same configuration used when deploying the chain must be passed to the node.
+- **Core contracts**: you'll have to configure your node with all the core contracts created on deployment.
+- **Chain config**: the same configuration used when deploying the chain must be passed to the node.
 - Private keys of the accounts that will operate the chain, like the batch poster and the validator
 - Any extra configuration desired for the sequencer, batch poster and validator, like batch posting frequency or maximum block speed.
 
@@ -107,7 +107,13 @@ To generate the configuration file for your node, you'll need the following info
 
 The `prepareNodeConfig` method generates a JSON object with the configuration for the node. It sets the appropriate defaults for most parameters, allowing you to override any of these defaults.
 
-Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash` (**Note**: _This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node_):
+Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash`
+
+:::note
+
+This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node.
+
+:::
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -150,7 +156,7 @@ const nodeConfig = prepareNodeConfig({
 });
 ```
 
-Note that `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
+`prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
 
 After generating the node configuration object, it can be saved to a file for later use by the Nitro node.
 

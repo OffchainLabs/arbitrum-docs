@@ -4,7 +4,7 @@
   "installCommand": "bash scripts/init-submodules.sh && yarn install",
   "framework": "docusaurus-2",
   "redirects": [
-    { "source": "/", "destination": "/welcome/get-started", "permanent": false },
+    { "source": "/", "destination": "/get-started/overview", "permanent": false },
     {
       "source": "/(/build-decentralized-apps/oracles/how-to-use-oracles/?)",
       "destination": "/build-decentralized-apps/oracles/overview-oracles",
@@ -87,7 +87,7 @@
     },
     {
       "source": "/(bold/concepts/public-preview-expectations/?)",
-      "destination": "/how-arbitrum-works/bold/public-preview-expectations",
+      "destination": "/how-arbitrum-works/bold/gentle-introduction",
       "permanent": false
     },
     {
@@ -191,6 +191,81 @@
       "permanent": false
     },
     {
+      "source": "/(docs/get-started/arbitrum-introduction/?)",
+      "destination": "/(docs/get-started/arbitrum-introduction/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/get-started/get-started/?)",
+      "destination": "/(docs/get-started/overview/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/anytrust-protocol/?)",
+      "destination": "docs/how-arbitrum-works/deep-dives/anytrust-protocol",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/arbos/geth/?)",
+      "destination": "docs/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/arbos/l1-l2-messaging/?)",
+      "destination": "docs/how-arbitrum-works/l1-to-l2-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/arbos/l2-l1-messaging/?)",
+      "destination": "docs/how-arbitrum-works/l2-to-l1-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/assertion-tree/?)",
+      "destination": "docs/how-arbitrum-works/optimistic-rollup",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/bold/public-preview-expectations/?)",
+      "destination": "docs/how-arbitrum-works/bold/gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/data-availability/?)",
+      "destination": "docs/run-arbitrum-node/data-availability",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/gas-fees/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/gas-and-fees/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/l1-to-l2-messaging/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/l2-to-l1-messaging/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/sequencer/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/sequencer/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/arbos/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/arbos/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/geth/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/inside_arbitrum/?)",
       "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
@@ -201,8 +276,18 @@
       "permanent": false
     },
     {
+      "source": "/(docs/launch-arbitrum-chain/bold-adoption-for-arbitrum-chains/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/launch-arbitrum-chain/how-tos/arbitrum-chain-finality/?)",
       "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/launch-arbitrum-chain/timeboost-for-arbitrum-chains/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains/?)",
       "permanent": false
     },
     {
@@ -213,6 +298,16 @@
     {
       "source": "/(docs/mainnet/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/partials/_fusaka-historical-blobs/?)",
+      "destination": "/(docs/run-arbitrum-node/beacon-nodes-historical-blobs/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/partials/glossary/_fast-exit--liquidity-exit/?)",
+      "destination": "/(docs/partials/glossary/_fast-exit-liquidity-exit/?)",
       "permanent": false
     },
     {
@@ -228,6 +323,16 @@
     {
       "source": "/(docs/tx_lifecycle/?)",
       "destination": "/how-arbitrum-works/transaction-lifecycle",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/welcome/arbitrum-gentle-introduction/?)",
+      "destination": "/(docs/get-started/arbitrum-introduction/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/welcome/get-started/?)",
+      "destination": "/(docs/get-started/overview/?)",
       "permanent": false
     },
     {
@@ -342,7 +447,7 @@
     },
     {
       "source": "/(for-devs/gentle-introduction-dapps/?)",
-      "destination": "/welcome/arbitrum-gentle-introduction",
+      "destination": "/get-started/arbitrum-introduction",
       "permanent": false
     },
     {
@@ -401,31 +506,6 @@
       "permanent": false
     },
     {
-      "source": "/(how-arbitrum-works/arbos/geth/?)",
-      "destination": "/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/arbos/introduction/?)",
-      "destination": "/how-arbitrum-works/state-transition-function/arbos",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/arbos/l1-l2-messaging/?)",
-      "destination": "/how-arbitrum-works/l1-to-l2-messaging",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/arbos/l2-l1-messaging/?)",
-      "destination": "/how-arbitrum-works/l2-to-l1-messaging",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/assertion-tree/?)",
-      "destination": "/how-arbitrum-works/optimistic-rollup",
-      "permanent": false
-    },
-    {
       "source": "/(how-arbitrum-works/fraud-proofs/challenge-manager/?)",
       "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
@@ -466,6 +546,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/gas-fees/?)",
+      "destination": "/how-arbitrum-works/deep-dives/gas-and-fees",
+      "permanent": false
+    },
+    {
       "source": "/(how-arbitrum-works/geth-at-the-core/?)",
       "destination": "/how-arbitrum-works/state-transition-function/stf-gentle-intro",
       "permanent": false
@@ -496,6 +581,16 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/l1-to-l2-messaging/?)",
+      "destination": "/how-arbitrum-works/deep-dives/l1-to-l2-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/l2-to-l1-messaging/?)",
+      "destination": "/how-arbitrum-works/deep-dives/l2-to-l1-messaging",
+      "permanent": false
+    },
+    {
       "source": "/(how-arbitrum-works/nitro-vs-classic/?)",
       "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
@@ -508,6 +603,21 @@
     {
       "source": "/(how-arbitrum-works/separating-execution-from-proving/?)",
       "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/sequencer/?)",
+      "destination": "/how-arbitrum-works/deep-dives/sequencer",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/state-transition-function/arbos/?)",
+      "destination": "/how-arbitrum-works/deep-dives/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum/?)",
+      "destination": "/how-arbitrum-works/deep-dives/geth",
       "permanent": false
     },
     {
@@ -537,7 +647,7 @@
     },
     {
       "source": "/(intro/?)",
-      "destination": "/welcome/arbitrum-gentle-introduction",
+      "destination": "/get-started/arbitrum-introduction",
       "permanent": false
     },
     {
@@ -1827,7 +1937,7 @@
     },
     {
       "source": "/(welcome/?)",
-      "destination": "/welcome/arbitrum-gentle-introduction",
+      "destination": "/get-started/arbitrum-introduction",
       "permanent": false
     },
     {
@@ -1887,7 +1997,7 @@
     },
     {
       "source": "/docs/developer_quickstart",
-      "destination": "/welcome/get-started",
+      "destination": "/get-started/overview",
       "permanent": false
     },
     {
@@ -2003,7 +2113,7 @@
       "destination": "/faqs/protocol-faqs#q-seq-vs-val",
       "permanent": false
     },
-    { "source": "/faqs/the-merge", "destination": "/welcome/get-started", "permanent": false },
+    { "source": "/faqs/the-merge", "destination": "/get-started/overview", "permanent": false },
     {
       "source": "/faqs/tooling-faqs",
       "destination": "/for-devs/troubleshooting-building",

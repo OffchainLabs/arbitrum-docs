@@ -1,3 +1,11 @@
+---
+partial_type: glossary
+title: 'Arbitrum Glossary Definitions'
+description: 'Comprehensive glossary of Arbitrum terminology and definitions'
+author: anegg0
+last_reviewed: 2025-10-16
+---
+
 ### Active Validator {#active-validator}
 
 A bonded [Validator](/intro/glossary#validator) that makes disputable assertions to advance the state of an Arbitrum chain or to challenge the validity of others' assertions. (Not to be confused with the [Sequencer](/intro/glossary#sequencer).)
@@ -5,6 +13,11 @@ A bonded [Validator](/intro/glossary#validator) that makes disputable assertions
 ### Address Alias {#address-alias}
 
 An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.
+
+### Decentralized application {#dapp}
+
+A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.
+Note: In our documentation, "apps" and "decentralized applications" are used interchangeably.
 
 ### Arb Token Bridge {#arb-token-bridge}
 
@@ -73,6 +86,12 @@ Arbitrum's "operating system" that trustlessly handles system-level operations; 
 ### Assertion {#assertion}
 
 A bonded claim made by an Arbitrum [Validator](/intro/glossary#validator) representing a claim about an Arbitrum chain's state. An [Assertion](/intro/glossary#assertion) may, e.g., propose a new assertion, or may be a step in a [Challenge](/intro/glossary#challenge).
+
+Assertions can have different states:
+
+- **Proposed**: When a validator submits an assertion
+- **Challenged**: If another validator disputes the assertion, an interactive fraud-proof initiates.
+- **Confirmed**: An assertion becomes final if no one challenges it within the dispute window (6.4 days).
 
 ### Auction Contract {#auction-contract}
 
@@ -151,10 +170,6 @@ Any child chain token contract registered to the [Arb Token Bridge](/intro/gloss
 
 Any [Token Gateway](/intro/glossary#token-gateway) that isn't the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway).
 
-### dApp {#dapp}
-
-Short for "decentralized application." A dApp typically consists of smart contracts as well as a user-interface for interacting with them.
-
 ### Data Availability Certificate {#data-availability-certificate}
 
 Signed promise from a [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac) attesting to the availability of a batch of data for an [Arbitrum AnyTrust Chain](/intro/glossary#arbitrum-anytrust-chain).
@@ -173,6 +188,16 @@ A [Validator](/intro/glossary#validator) that watches an Arbitrum chain and take
 
 A contract that holds [Parent chain](/intro/glossary#parent-chain) initiated messages to be eventually included in the [Sequencer Inbox](/intro/glossary#sequencer). Inclusion of messages doesn't depend on the [Sequencer](/intro/glossary#sequencer).
 
+### Deterministic proving {#deterministic-proving}
+
+If challenged, state transitions are replayable and verified onchain.
+
+To achieve this, Arbitrum compiles the State Transition Function (STF) into different formats:
+
+- **Execution mode**: Uses Go's native compiler for high-performance execution on <a data-quicklook-from="validator">validator</a> nodes.
+
+- **Proving mode**: Compiles to WebAssembly (<a data-quicklook-from="wasm">WASM</a>), which transforms into WebAssembly for Arbitrum Virtual Machine (WAVM) for fraud-proof verification.
+
 ### Dev-Tools Dashboard {#devtools-dashboard}
 
 Web application built and maintained by [Offchain Labs](/intro/glossary#offchain-labs) for developers and users to debug Arbitrum transactions; i.e., executing or checking the status of [Cross-chain messages](/intro/glossary#crosschain-message); visit it [here](https://retryable-dashboard.arbitrum.io/).
@@ -188,6 +213,10 @@ A software application used for transacting with the Ethereum [Blockchain](/intr
 ### EVM+ {#evm}
 
 The paradigm introduced by [Stylus](/intro/glossary#stylus) in which Arbitrum's EVM compatibility is preserved while new features and improvements are introduced.
+
+### Execution claim {#execution-claim}
+
+A cryptographic commitment to the computed state.
 
 ### Express Lane {#express-lane}
 
@@ -277,13 +306,21 @@ A parent chain contract responsible for tracking [Child to parent chain Message]
 
 EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka [Child chain](/intro/glossary#child-chain) ). E.g., Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with "underlying chain."
 
+### Permissionless validation {#permissionless-validation}
+
+Anyone can become a validator by running an Arbitrum node, without permission.
+
 ### Portal {#portal}
 
 A web application maintained by [Offchain Labs](/intro/glossary#offchain-labs) showcasing the Arbitrum ecosystem; visit it [here](https://portal.arbitrum.io/).
 
+### Predecessor Assertion {#predecessor-assertion}
+
+The last confirmed valid state of the chain.
+
 ### raas {#raas}
 
-RaaS (Rollup as a Service) is a platform that provides the infrastructure and tools needed to deploy and operate blockchain Rollups without requiring teams to build the underlying technical infrastructure themselves. It typically includes pre-built Rollup software, node hosting, data availability solutions, and monitoring tools, allowing developers to focus on their application logic rather than the complex technical implementation of Rollup technology.
+RaaS (Rollup as a Service) is a platform that provides the necessary infrastructure and tools to deploy and operate blockchain Rollups, eliminating the need for teams to build the underlying technical infrastructure themselves. It typically includes pre-built Rollup software, node hosting, data availability solutions, and monitoring tools, allowing developers to focus on their application logic rather than the complex technical implementation of Rollup technology.
 
 ### RBlock {#rblock}
 
@@ -347,7 +384,7 @@ An token contract on an Arbitrum chain deployed via the [`StandardERC20` gateway
 
 ### State Transition Function {#state-transition-function}
 
-The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.
+The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain. The State Transition Function's output is the result of applying those input messages (transactions).
 
 ### Stylus {#stylus}
 
@@ -374,6 +411,12 @@ The rules and logic employed by a chain to order incoming transactions into a bl
 In the context of Ethereum, trustless refers to the ability of a system to operate without reliance on a central authority or intermediary. Instead, users place their trust in math and protocols.
 
 This is achieved through the use of cryptographic techniques and decentralized consensus mechanisms that let users verify the integrity of network transactions using open-source software. Trustless systems are considered to be more secure and resistant to fraud or tampering because they don't rely on a single point of failure that can be exploited by attackers.
+
+### Trustless verification {#trustless-verification}
+
+#### Trustless verification
+
+Validators confirm assertions, ensuring transactions adhere to the protocol rules.
 
 ### Underlying Chain {#underlying-chain}
 
