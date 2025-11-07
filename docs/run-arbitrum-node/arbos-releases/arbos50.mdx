@@ -13,16 +13,21 @@ This page summarize what changes with ArbOS 50 Dia, and what you should do to en
 
 This page is intended for all Arbitrum (Orbit) chains and validator node operators.
 
-<VanillaAdmonition type="warning" title="ACTION REQUIRED">
+<VanillaAdmonition type="warning">
 
-Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and mainnet upgrade to Fusaka, Nitro node operators need to:
-
-1. Make sure they connect to a parent Beacon Chain node that has historical blob data
-2. Upgrade to Nitro [v3.8.0-rc.7](https://github.com/OffchainLabs/nitro/releases/) or higher, for the Nitro node software to function properly. **Read more about the [required actions](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
+<a data-quicklook-from="arbos">ArbOS</a> 50 Dia is still pre-release. This document may change.
 
 </VanillaAdmonition>
 
-This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
+<VanillaAdmonition type="warning" title="ACTION REQUIRED">
+
+Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and mainnet upgrade to Fusaka, **(1)** Nitro node operators need to make sure they connect to a parent chain Ethereum Beacon Chain node that has historical blob data, and **(2)** must upgrade to Nitro [v3.8.0-rc.7](https://github.com/OffchainLabs/nitro/releases/) or higher, for the Nitro node software to function properly. **Read more about the [required actions](https://arbitrum.notion.site/EXT-Comms-Action-Required-for-Nitro-Node-Operators-Before-Sepolia-Mainnet-Fusaka-28601a3f59f880feb846c203d8480e73?source=copy_link)**.
+
+</VanillaAdmonition>
+
+The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0), which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
+
+Note that it's important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
 
 As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 50 Dia is an upgrade that builds upon [ArbOS 40 Callisto](./arbos40.mdx).
 
@@ -72,9 +77,8 @@ This change doesn't affect the `GasTarget`, and therefore doesn't affect how muc
 - `EIP-7702` precompile delegation behavior divergence
   - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 50 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
 - ARM and x86 divergence
-  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for problematic transactions execution on ARM architecture. This was added in to hardcode one transaction that caused a divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
-- Default WASM stack call depth to 22,000
-  - TODO: Do we need to include this?
+  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
+  - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
 
 #### A constraint-based pricing change: STF instrumentation to track multi-gas
 
@@ -95,6 +99,9 @@ To read more about this feature, see the [native mint and burn enablement guide]
 If you want to enable native token mint and burn for your chain, use nitro-contracts v3.1.1 instead.
 
 </VanillaAdmonition>
+
+### Raise the gas target & implement improvements to the pricing algorithm
+TODO
 
 ### Fusaka EIPs that aren't proposed to be in ArbOS 50 Dia
 
@@ -128,4 +135,6 @@ While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.x` and `nitro
 - [README for how to upgrade your rollup contracts to support ArbOS 50 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
 - [AIP: ArbOS Version 50 Dia Forum Post](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-version-50-dia/)
 - [Temperature check vote on Snapshot for ArbOS 50 Dia](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x33754da4006d0ef38666ec5d5e85fd0966a891a594ab9dc21f23beedea2d330b)
+- [AIP: Raising the gas target & improvements to pricing algorithm](#)
+- [Temperature check vote on Snapshot for Raising the gas target & improvements to pricing algorithm](#)
 - Coming Soon - ArbOS 50 Audit Report, from Trail of Bits
