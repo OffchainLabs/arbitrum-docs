@@ -11,6 +11,56 @@
       "permanent": false
     },
     {
+      "source": "/(/docs/how-arbitrum-works/a-gentle-introduction/?)",
+      "destination": "/(docs/how-arbitrum-works/inside-arbitrum-nitro/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/state-transition-function/arbos/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/arbos/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/state-transition-function/ethereum-vs-arbitrum/?)",
+      "destination": "/(docs/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/state-transition-function/stf-gentle-intro/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/stf-gentle-intro/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/state-transition-function/stf-inputs/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/stf-inputs/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/state-transition-function/stylus-execution-path/?)",
+      "destination": "/(docs/how-arbitrum-works/inside-arbitrum-nitro/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/transaction-lifecycle/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/transaction-lifecycle/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/validation-and-proving/proving-and-challenges/?)",
+      "destination": "/(docs/how-arbitrum-works/bold/gentle-introduction/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/validation-and-proving/rollup-protocol/?)",
+      "destination": "/(docs/how-arbitrum-works/inside-arbitrum-nitro/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/how-arbitrum-works/validation-and-proving/validation-and-proving/?)",
+      "destination": "/(docs/how-arbitrum-works/bold/gentle-introduction/?)",
+      "permanent": false
+    },
+    {
       "source": "/(/docs/precompiles/?)",
       "destination": "/(docs/build-decentralized-apps/precompiles/reference/?)",
       "permanent": false
