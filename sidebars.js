@@ -1377,8 +1377,8 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
-      id: 'notices/arbos-50-fusaka',
-      label: 'Prepare for Arbos-50',
+      id: 'notices/fusaka-upgrade-notice',
+      label: 'Upgrade for the Fusaka transition',
     },
   ],
 };
