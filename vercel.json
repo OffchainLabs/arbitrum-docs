@@ -2137,7 +2137,7 @@
       "permanent": false
     },
     {
-      "source": "/build-decentralized-apps/troubleshooting/?",
+      "source": "/build-decentralized-apps/troubleshooting/",
       "destination": "/for-devs/troubleshooting-building",
       "permanent": false
     },
