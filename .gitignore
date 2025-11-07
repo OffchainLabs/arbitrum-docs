@@ -25,6 +25,7 @@ docs/stylus-by-example/
 docs/api/
 
 # Misc
+.env
 .DS_Store
 .env
 .env.local
