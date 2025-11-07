@@ -397,6 +397,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/notices/arbos-fusaka/?)",
+      "destination": "/(docs/notices/fusaka-upgrade-notice/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/partials/_fusaka-historical-blobs/?)",
       "destination": "/(docs/run-arbitrum-node/beacon-nodes-historical-blobs/?)",
       "permanent": false
