@@ -43,7 +43,7 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 
   If your chain isn't ready to activate <a data-quicklook-from="bold">BoLD</a>, use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher can't be used without activating BoLD.
 
-- WASM module root: `Need to update - 0xb90895a56a59c0267c2004a0e103ad725bd98d5a05c3262806ab4ccb3f997558`
+- WASM module root: `0x2c54f6e9e378ba320ed9c713a1d9f067a572b1437e4f1c40b1a915d3066c04f2`
 
 ### High-level description of ArbOS 50 changes
 
@@ -85,6 +85,17 @@ This change doesn't affect the `GasTarget`, and therefore doesn't affect how muc
 We've instrumented Arbitrum's State Transition Function (STF) to track gas usage across multiple resource types including computation, storage access, storage growth, and history growth, rather than only a single total based on opcodes. This work lays the foundation for dynamic, constraint-based pricing where gas fees can adjust based on the most constrained resource at the network level. The goal is to create more stable prices, improve responsiveness to spikes, and allow the network to safely increase throughput without overloading node hardware. In this release, none of the constraints are enabled, so there won't be any impact on current gas prices. This update simply adds the ability to measure and record per-resource usage, with actual pricing changes coming in a later version once constraints are configured, benchmarked and tested.
 
 To read more about this feature, see the [dynamic pricing explainer](https://blog.arbitrum.io/dynamic-pricing-explainer/).
+
+#### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
+
+As part of our strategy for scaling Arbitrum technology, this update includes the AIP to improve the pricing algorithm for Arbitrum One and Nova to reduce the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the proposed changes are to:
+
+- Replace the current single gas target and single adjustment window, with a new model that employs multiple (higher) gas targets, measured over multiple adjustment windows,
+- Raise the long term effective gas target, up from today's single gas target of 7 Mgas/s (up to a maximum of 100 Mgas/s),
+- Grant Offchain Labs the permission to make additional changes gradually to scale the chain sustainably, and
+- Increase the minimum L2 base fee from 0.01 gwei per gas to 0.02 gwei per gas.
+
+To read more about this feature, see the [AIP for raising the gas target & improvements to the pricing algorithm](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182).
 
 #### Native token mint and burn
 
@@ -136,6 +147,6 @@ While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.x` and `nitro
 - [README for how to upgrade your rollup contracts to support ArbOS 50 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
 - [AIP: ArbOS Version 50 Dia Forum Post](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-version-50-dia/)
 - [Temperature check vote on Snapshot for ArbOS 50 Dia](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x33754da4006d0ef38666ec5d5e85fd0966a891a594ab9dc21f23beedea2d330b)
-- [AIP: Raising the gas target & improvements to pricing algorithm](#)
-- [Temperature check vote on Snapshot for Raising the gas target & improvements to pricing algorithm](#)
+- [AIP: Raising the gas target & improvements to pricing algorithm Forum Post](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182)
+- Coming Soon - Temperature check vote on Snapshot for Raising the gas target & improvements to pricing algorithm
 - Coming Soon - ArbOS 50 Audit Report, from Trail of Bits
