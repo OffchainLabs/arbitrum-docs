@@ -42,7 +42,7 @@ The configuration ensures compliance with the AEP terms, streamlines reporting, 
 ## How to configure
 
 1. **Calculate Net Revenue**: Use tools or scripts to track total fees minus settlement costs (e.g., via on-chain queries or off-chain monitoring). For custom tokens, deploy a pricer contract to value fees in `ETH` equivalents.
-2. **Deploy Fee Router**: Use the Orbit SDK script (e.g., `aep-fee-router.ts`) to deploy contracts like RewardDistributor on your chain. Set it as a fee collector (e.g., for surplus fees via `ArbOwner` precompile).
+2. **Deploy Fee Router**: Use the Orbit SDK script (e.g., [`aep-fee-router`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router)) to deploy contracts like RewardDistributor on your chain. Set it as a fee collector (e.g., for surplus fees via `ArbOwner` precompile).
 3. **Route and Bridge Fees**: Configure the router to send the 10% share to Ethereum (e.g., via native bridges), then deposit to the DAO address on Arbitrum One. Use functions like `flushBeneficiaryBalance` for periodic transfers.
 4. **Report Fees**: Submit quarterly reports to the Arbitrum Foundation, including calculations and proofs of payment, to maintain license compliance.
 
