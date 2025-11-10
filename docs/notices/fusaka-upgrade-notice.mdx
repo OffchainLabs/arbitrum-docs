@@ -1,7 +1,7 @@
 ---
 title: 'Fusaka-enabled Parent Upgrade Notice'
 description: Upgrade notices for the transition to Fusaka
-user_story: As an Arbitrum chain owner or node operator, I need to know how to upgrade if I operate a chain or a node running on a Fusaka-enabled Parent.
+user_story: As an Arbitrum chain owner or node operator, I want to configure my chain/nodes to run on Fusaka-enabled parent.
 content_type: notice
 ---
 
@@ -17,7 +17,9 @@ For ArbOS 50 release information, please visit our [Arbos release notes](run-arb
 
 ## Date of required actions
 
-Dec 3rd 2025 for L2 chains that post L2 assertions on Ethereum Mainnet
+Dec 3rd 2025 for L2 chains that post L2 assertions Ethereum Mainnet
+
+> > > > > > > origin/add-notices-section
 
 - L1 Mainnet upgrades to Fusaka: `Dec 3rd 2025`
   - Applicable to Orbit chains & ArbOne/Nova operators
@@ -26,17 +28,17 @@ Dec 3rd 2025 for L2 chains that post L2 assertions on Ethereum Mainnet
 - Arb One/Nova upgrades to ArbOS 50
   - Learn more about the [ArbOS 50 release](docs/run-arbitrum-node/arbos-releases/arbos50.mdx)
 
-## Required Node/Client Configurations
-
 This is for Arbitrum chains and ArbOne/Nova operating on Fusaka-enabled parent chain
 
-| Layer | Data Availability | Fallback to blobs enabled            | Nitro version      | Consenus Layer Client |
-| ----- | ----------------- | ------------------------------------ | ------------------ | --------------------- |
-| L2    | Rollup            | N/A                                  | `3.8.0` or `3.7.6` | See table below       |
-| L2    | AltDA / AnyTrust  | Yes > Fallback to blobs              | `3.8.1`            | See table below       |
-| L2    | AltDA / AnyTrust  | No > Fallback to Calldata or disable | `3.8.0`            | No action needed      |
-| L3    | Rollup            | No action needed                     | No action needed   | No action needed      |
-| L3    | AltDA / AnyTrust  | No action needed                     | No action needed   | No action needed      |
+## Required Node/Client Configurations for Orbit chains and ArbOne/Nova operators on Fusaka enabled parent chain
+
+| Layer | Data Availability | Fallback to blobs enabled             | Nitro version      | Consenus Layer Client |
+| ----- | ----------------- | ------------------------------------- | ------------------ | --------------------- |
+| L2    | Rollup            | N/A                                   | `3.8.0` or `3.7.6` | See table below       |
+| L2    | AnyTrust / AltDA  | Yes > Fallback to blobs               | `3.8.0` or `3.7.6` | See table below       |
+| L2    | AnyTrust / AltDA  | No > Fallback to Calldata or disabled | No action required | No action required    |
+| L3    | Rollup            | No action needed                      | No action required | No action required    |
+| L3    | AnyTrust / AltDA  | No action needed                      | No action required | No action required    |
 
 ## Required configuration if you post blobs to a Fusaka-enabled parent chain
 
@@ -49,3 +51,5 @@ Consensus Client / Nitro Flags for operators (orbit or one/nova) chains that
 | Teku          | ✅                    | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--p2p-subscribe-all-custody-subnets-enabled` |
 | Lodestar      | ✅                    | None                                                                | `--supernode`                                 |
 | Erigon Caplin | ❌                    |                                                                     |                                               |
+
+To read more about PeerDAS changes and why Layer 2 network operators must connect to an Ethereum beacon chain node with historical blob data, see the [historical blobs docs](../run-arbitrum-node/beacon-nodes-historical-blobs.mdx).
