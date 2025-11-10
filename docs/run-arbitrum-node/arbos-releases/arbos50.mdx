@@ -2,8 +2,10 @@
 title: 'ArbOS 50 Dia'
 sidebar_label: 'ArbOS 50 Dia'
 sidebar_position: 2
+description: 'Learn about ArbOS 50 Dia release, including Fusaka upgrade support, new EIPs, bug fixes, and upgrade requirements for Arbitrum chain owners and node operators.'
 user_story: As an Arbitrum chain owner or node operator, I want to know what ArbOS 50 implements.
 author: zk-Lumi
+sme: zk-Lumi
 content_type: release note
 ---
 
@@ -11,7 +13,7 @@ import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
 This page is intended for all Arbitrum (Orbit) chains and validator node operators.
 
-This page summarize what changes brought by ArbOS 50 Dia, and what you should do to ensure a seamless upgrade.
+This page summarizes the changes brought by ArbOS 50 Dia, and what you should do to ensure a seamless upgrade.
 
 <VanillaAdmonition type="note">
 
@@ -62,7 +64,7 @@ Here's the list of all changes included in ArbOS 50 Dia:
 | [EIP-7910: eth_config JSON-RPC method](https://eips.ethereum.org/EIPS/eip-7910)                   | This EIP provides a new RPC method that allows the Arbitrum Nitro node to respond with key configuration variables, offering node operators the ability to gain greater confidence that their Nitro nodes are correctly configured and prepared for upcoming forks. In future Nitro releases, we expect to include additional fields specific to Arbitrum chains. This update is at the RPC level and may be enabled later than the ArbOS 50 Dia upgrade.                                                                                                                                                                                       |
 | [EIP-2537: Precompile for BLS12-381 curve operations](https://eips.ethereum.org/EIPS/eip-2537)    | As [disclosed previously](https://forum.arbitrum.foundation/t/disclosure-of-support-for-eip-2537-on-arbitrum-one-and-nova/29720), the precompiled contracts for performing various operations over the BLS12-381 elliptic curve, including <a data-quicklook-from="bls-signature">BLS Signature</a> verification, were added but not properly enabled in [ArbOS 40 Callisto](./arbos40.mdx) as originally expected. ArbOS 50 Dia will now enable `EIP-2537`.                                                                                                                                                                                    |
 
-#### ArbOS block limit change "Effective block gas limit"
+#### ArbOS block limit change: Effective block gas limit
 
 Since ArbOS 50 introduces a `MaxTxGasLimit`, the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) will be relaxed in ArbOS 50 to allow the final transaction in a block to use up to the `MaxTxGasLimit` even if it would cause the block to exceed `MaxBlockGasLimit`. This means that the "Effective Block Gas Limit" is really `MaxBlockGasLimit + MaxTxGasLimit`. In previous versions of ArbOS, the <a data-quicklook-from="sequencer">Sequencer</a> would skip transactions if the transaction request's `GasLimit` minus the parent chain data posting gas exceeded the gas remaining in the block.
 
