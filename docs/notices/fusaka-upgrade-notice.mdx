@@ -1,26 +1,34 @@
 ---
 title: 'Fusaka-enabled Parent Upgrade Notice'
 description: Upgrade notices for the transition to Fusaka
-user_story: As an Arbitrum chain owner or node operator, I want to configure my chain/nodes to run ArbOS 50.
+user_story: As an Arbitrum chain owner or node operator, I need to know how to upgrade if I operate a chain or a node running on a Fusaka-enabled Parent.
 content_type: notice
 ---
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
-`Note separate from ArbOS 50 release - learn more **here (coming later)**`
+This upgrade notice explains what you need to do if you operate a chain or a node running on a Fusaka-enabled Parent.
+
+<VanillaAdmonition type="note">
+
+For ArbOS 50 release information, please visit our [Arbos release notes](run-arbitrum-node/arbos-releases/arbos50.mdx)
+
+</VanillaAdmonition>
 
 ## Date of required actions
 
-Dec 3rd 2025 for L2 chains that post L2 assertions Ethereum Mainnet
+Dec 3rd 2025 for L2 chains that post L2 assertions on Ethereum Mainnet
 
 - L1 Mainnet upgrades to Fusaka: `Dec 3rd 2025`
   - Applicable to Orbit chains & ArbOne/Nova operators
 - L1 Sepolia upgrades to Fusaka: `October 14th 2025`
   - Applicable to Orbit chains & ArbOne/Nova operators
-- Arb One/Nova upgrades to ArbOS50
-  - `ArbOS 50 release - learn more **here** **(coming later)**`
+- Arb One/Nova upgrades to ArbOS 50
+  - Learn more about the [ArbOS 50 release](docs/run-arbitrum-node/arbos-releases/arbos50.mdx)
 
-## Required Node/Client Configurations for Orbit chains and ArbOne/Nova operators on Fusaka enabled parent chain
+## Required Node/Client Configurations
+
+This is for Arbitrum chains and ArbOne/Nova operating on Fusaka-enabled parent chain
 
 | Layer | Data Availability | Fallback to blobs enabled            | Nitro version      | Consenus Layer Client |
 | ----- | ----------------- | ------------------------------------ | ------------------ | --------------------- |
@@ -30,7 +38,9 @@ Dec 3rd 2025 for L2 chains that post L2 assertions Ethereum Mainnet
 | L3    | Rollup            | No action needed                     | No action needed   | No action needed      |
 | L3    | AltDA / AnyTrust  | No action needed                     | No action needed   | No action needed      |
 
-## Required Consensus Client / Nitro Flags for operators (orbit or one/nova) chains that post blobs to Fusaka enabled parent chain
+## Required configuration if you post blobs to a Fusaka-enabled parent chain
+
+Consensus Client / Nitro Flags for operators (orbit or one/nova) chains that
 
 | Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required Beacon Node Flag                     |
 | ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- |
