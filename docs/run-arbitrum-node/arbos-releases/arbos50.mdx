@@ -9,22 +9,22 @@ content_type: release note
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
-This page summarize what changes with ArbOS 50 Dia, and what you should do to ensure a seamless upgrade.
-
 This page is intended for all Arbitrum (Orbit) chains and validator node operators.
 
-<VanillaAdmonition type="warning">
+This page summarize what changes brought by ArbOS 50 Dia, and what you should do to ensure a seamless upgrade.
+
+<VanillaAdmonition type="note">
 
 <a data-quicklook-from="arbos">ArbOS</a> 50 Dia is still pre-release. This document may change.
 
 </VanillaAdmonition>
 
-<VanillaAdmonition type="warning" title="ACTION REQUIRED">
+<VanillaAdmonition type="warning" title="Action Required">
 
-Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and mainnet upgrade to Fusaka, **(1)** Nitro node operators need to make sure they connect to a parent chain Ethereum Beacon Chain node that has historical blob data, and **(2)** must upgrade Nitro versions, for the Nitro node software to function properly. **Read more about the [required actions](../../notices/fusaka-upgrade-notice.mdx)**.
+Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and mainnet upgrade to Fusaka: **(1)** Nitro node operators need to make sure they connect to a parent chain Ethereum Beacon Chain node that has historical blob data, and **(2)** must upgrade Nitro versions, for the Nitro node software to function properly. **Read more about the [required actions](../../notices/fusaka-upgrade-notice.mdx)**.
 
 </VanillaAdmonition>
-Nitro v3.8.0 will be the minimum version for any chain with Fusaka parent
+Nitro `v3.8.0` will be the minimum version for any chain with Fusaka parent
 The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0), which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
 
 Note that it's important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
