@@ -26,10 +26,7 @@ This page summarizes the changes brought by ArbOS 50 Dia, and what you should do
 Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and mainnet upgrade to Fusaka: **(1)** Nitro node operators need to make sure they connect to a parent chain Ethereum Beacon Chain node that has historical blob data, and **(2)** must upgrade Nitro versions, for the Nitro node software to function properly. **Read more about the [required actions](../../notices/fusaka-upgrade-notice.mdx)**.
 
 </VanillaAdmonition>
-Nitro `v3.8.0` will be the minimum version for any chain with Fusaka parent
-The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0), which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
-
-Note that it's important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
+The minimum Nitro version that supports ArbOS 50 "Dia" is [Nitro v3.8.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0), which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> validators. For Arbitrum One and Nova, the ArbOS 50 "Dia" upgrade will require a governance vote to activate.
 
 As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 50 Dia is an upgrade that builds upon [ArbOS 40 Callisto](./arbos40.mdx).
 
@@ -37,9 +34,9 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 
 - Having read and understood the [ArbOS Software Releases Overview page](./01-overview.mdx).
 
-- Running [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) or higher, which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`.
+- Running [Nitro v3.8.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or higher, which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`.
 
-  Note that it's important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
+  Note that it's important to run Nitro v3.8.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
 
 - Running [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
 
@@ -133,9 +130,9 @@ While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.x` and `nitro
 
 - [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx)
 
-<VanillaAdmonition type="warning" title="This link is broken, it's a placeholder for the upcoming Nitro v3.9.0 release">
+<VanillaAdmonition type="warning" title="This link is broken, it's a placeholder for the upcoming Nitro v3.8.0 release">
 
-- [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0)
+- [Nitro v3.8.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0)
 
 </VanillaAdmonition>
 
