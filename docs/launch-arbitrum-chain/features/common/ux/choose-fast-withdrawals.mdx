@@ -47,6 +47,6 @@ From a UX perspective, enabling fast withdrawals transforms slow, multi-day proc
 3. **Configure Nodes**:
    - Batch Poster: Set `--node.batch-poster.max-delay` to match the assertion period (e.g., 15m).
    - Validators (BoLD mode): Enable `--node.bold.enable-fast-confirmation=true` and set `--node.bold.assertion-posting-interval` to the period.
-   - Validators (pre-BoLD): Similar flags like `--node.staker.enable-fast-confirmation=true`.
+   - Validators (pre-BoLD): Similar flags like `--node.staker.enable-fast-confirmation=true` and `--node.staker.make-assertion-interval`.
 
 This feature aligns with Arbitrum's focus on scalable, user-friendly chains while maintaining core security. For setup, consult the official docs, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
