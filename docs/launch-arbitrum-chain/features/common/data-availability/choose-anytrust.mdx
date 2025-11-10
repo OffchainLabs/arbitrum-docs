@@ -19,7 +19,7 @@ It's ideal for use cases where ultra-low fees are a priority over Ethereum's ful
 - **Data Availability (DA) in Arbitrum**: DA ensures transaction data is accessible for verification, fraud proofs, and maintaining security in optimistic rollups. Without reliable DA, users couldn't independently validate the chain's state.
 - **AnyTrust Mode**:
   - Transaction data is initially submitted off-chain to a permissioned group of nodes called the Data Availability Committee (DAC), typically consisting of around 20 members (though configurable).
-  - The DAC stores the data and signs a Data Availability Certificate (DACert), which posts to the parent chain (Ethereum L1). Full data is not posted onchain unless requested (e.g., during a challenge).
+  - The DAC stores the data and signs a Data Availability Certificate (DACert), which posts to the parent chain. Full data is not posted onchain unless requested (e.g., during a challenge).
   - Security relies on a "keyset" where at least two honest members are assumed to prevent data withholding—far milder than centralized assumptions but not fully trustless like Rollup mode.
 
 <!-- Render AnyTrust Pros & Cons Partial -->
