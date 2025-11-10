@@ -6,50 +6,62 @@ sme:
 content_type: configuration
 ---
 
-Customizing the ArbOS version involves modifying the Nitro codebase to introduce a new, version-controlled iteration of ArbOS (Arbitrum's operating system-like layer). This process activates custom behaviors, features, or state changes in a way that maintains backward compatibility and determinism for fraud proofs.
+Configuring the delayed inbox finality refers to adjusting sequencer node flags to control the timing and dependencies for when transactions (e.g., cross-chain messages or deposits) sent through the Delayed Inbox achieve finality on the child chain. The Delayed Inbox is a fallback mechanism for parent-to-child communications that bypasses the sequencer for direct inclusion, ensuring censorship resistance.
 
-This is an advanced customization primarily for live chains, allowing developers to extend or alter the State Transition Function (STF)—the core logic for block production and state updates—while ensuring safe, non-disruptive upgrades. Unlike standard upgrades (e.g., to canonical versions like ArbOS 20 "Atlas"), customization involves creating intermediate or project-specific versions (e.g., ArbOS 32 as a fork of 31) to incorporate bespoke elements like new precompiles, EVM opcodes, or state variables, without conflicting with official releases.
+By default, finality for these transactions relies on layer-1 (L1) Ethereum block confirmations (typically tens of minutes). Configuration allows shifting to faster L2-based finality or reducing confirmation waits, trading speed for potential re-org risks. This reduction is an advanced sequencer-level setting, not a deployment-time parameter, and is primarily used to optimize bridging speed for use cases like high-frequency DeFi or gaming.
 
-It's recommended for teams with expertise or partners (e.g., RaaS providers), as it requires audits, maintenance, and careful handling to avoid issues like chain re-orgs or failed fraud proofs.
+## Key concepts
 
-### Key Concepts
+- **Delayed Inbox**: A contract on the parent chain where users can submit transactions (e.g., retryable tickets for token bridges or direct calls) to be force-included on the child chain if the sequencer delays them. These are held until the sequencer releases them based on parent chain progress.
+- **Finality**: The point at which a Delayed Inbox transaction is irreversibly executable on the child chain. By default, this depends on L1 finality (e.g., Ethereum blocks confirming a batch from Arbitrum One or a Data Availability Certificate/DACert from Nova), taking ~10-60 minutes.
+- **L2 vs. L1 Finality**: L3 chains can be configured to rely on the parent L2's quicker "soft finality" (~1-15 minutes) instead of waiting for deeper L1 confirmations, or to reduce L2 block waits for even faster processing.
+- **Relevant Flags**:
+  - `--node.delayed-sequencer.use-merge-finality=false`: Disables L1 dependency, using only L2 finality.
+  - `--node.delayed-sequencer.finalize-distance=1`: Sets the number of L2 block confirmations needed (default is higher; 1 enables ~1-minute finality).
 
-- **ArbOS**: The hypervisor-like layer in Nitro that manages the chain's execution environment, including STF, precompiles, state, and upgrades. Versions are numbered (e.g., starting from 20 in increments of 10 for canonical releases like "Atlas"), with names inspired by planetary moons (e.g., "Atlas" for 20, "Bianca" for 30). Custom versions can use intermediates (e.g., 21-29) for project-specific forks.
-- **State Transition Function (STF)**: The deterministic process for computing new states from transactions. Customizations here (e.g., new logic or states) often necessitate an ArbOS upgrade to integrate changes into the replay binary used for fraud proofs.
-- **WASM Module Root**: A 32-byte hash of the STF's implementation (e.g., `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4` for ArbOS 20). Customizations require updating this on the parent chain for validation compatibility.
-- **Backward compatibility**: Changes must preserve old block results; new features activate only post-upgrade via version gates (e.g., `if state.ArbOSVersion() >= targetVersion`).
+## What It Means to Configure Delayed Inbox Finality
 
-### Compatibility
+This configuration configures the sequencer to release Delayed Inbox messages earlier, prioritizing speed over maximum security. For instance, in a default setup, a deposit from Ethereum to an L3 (via L2 settlement) waits for L1 to finalize the L2's batch posting. Enabling L2-only finality skips this, releasing after L2 confirmations (e.g., when a DACert posts on Nova). Further reducing the finalize-distance minimizes L2 waits, allowing near-instant execution but exposing the chain to parent re-orgs if unconfirmed blocks revert. It's ideal for low-latency apps but requires monitoring for re-org events.
 
-- Works with all DA modes (Rollup, AnyTrust, Alt-DA), gas tokens, and validation (BoLD/permissioned), as long as changes meet STF rules (deterministic, pure, < 1s/block).
-- Backward-compatible by design; WASM roots support old versions.
-- For public chains like One/Nova, requires DAO governance; Orbit chains have owner discretion.
+:::note
 
-### Pros
+This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (child-to-parent) finality uses separate mechanisms, such as DAC in AnyTrust mode, for ~15-minute confirmations.
 
-- Enables precise, version-gated customizations (e.g., new STF logic) for specialized chains.
-- No downtime; upgrades bundle features seamlessly.
-- Supports ecosystem alignment (e.g., adopting mainnet features post-delay).
+:::
 
-### Cons
+### Configuration Process:
 
-- Complexity and risks (e.g., re-orgs from improper state init, proof failures).
-- Requires audits/maintenance; unintended intermediate features may activate.
-- No Offchain Labs review; higher costs for expertise.
+- **Prepare the Sequencer Node**: When running your Orbit chain's sequencer (e.g., via Docker or local build from Nitro source), add the flags to the startup command. Example for a Dockerized sequencer:
+  `docker run --rm -it -p 8547:8547 offchainlabs/nitro-node:v3.7.2 --chain.id=12345 --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1`
+- Replace with your chain's parameters (e.g., parent chain URL).
+- **Test and Deploy**: Verify in a devnet by submitting a Delayed Inbox transaction (e.g., via a token bridge) and monitoring release timing in logs. For production, ensure validators are updated to match the new behavior.
+- **Monitor**: Use tools like chain explorers or sequencer logs to track finality times and re-org incidents.
 
-### Examples
+## How It Differs from Default
 
-- **New Precompile Method**: Add `sayHi()` to ArbSys, gated by `ArbOwner.methodsByName["SayHi"].arbosVersion = 32`.
-- **New Precompile**: Create ArbHi with `ArbHi.arbosVersion = 32` and method gates.
-- **New State Variable**: Add `myNumber` initialized in `UpgradeArbosVersion` switch for v21: `ensure(state.SetNewMyNumber(randomNumber))`.
-- **STF Logic Change**: Branch in a method: `if p.state.ArbOSVersion() >= 32 { return "hi, new version" } else { return "hi" }`.
+- **Default (L1-Dependent)**: Relies on Ethereum L1 finality for batches/DACerts, ensuring maximum security but slower deposits (~tens of minutes).
+- **Configured (L2-Only with Low Distance)**: Shifts to L2 soft finality and minimal confirmations, achieving ~1-minute deposits but introducing re-org risks if the parent L2 reverts unconfirmed blocks.
 
-## How to configure
+## Pros
 
-1. **Clone and Modify Nitro**: Use a branch like v3.7.2 (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`). Edit files (e.g., precompile.go, arbosstate.go) to incorporate changes and add version gates.
-2. **Build Custom Node**: Create Docker images, extract the new WASM module root, and update it on the parent chain via `setWasmModuleRoot` on the rollup contract.
-3. **Upgrade Nodes/Validators**: Update to the custom Nitro version (e.g., v2.3.1+ for ArbOS 20 base).
-4. **Schedule Upgrade**: Call `scheduleArbOSUpgrade` on ArbOwner precompile with the new version and timestamp (0 for immediate).
-5. **Enable Features**: Post-upgrade, configure any version-specific flags.
+- Significantly faster cross-chain deposits (e.g., 1 minute vs. tens), enhancing UX for bridging and dApps.
+- Flexible for L3 setups settling to L2, optimizing for the parent chain's quicker confirmations.
 
-This feature reflects Orbit's modularity but demands rigorous testing. Refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
+## Cons
+
+- Increases re-org vulnerability on the child chain if the parent experiences instability in unconfirmed blocks.
+- Not suitable for high-security applications; requires careful monitoring and may complicate fraud proofs if mismatches occur.
+
+## Compatibility
+
+- Primarily for Orbit L3 chains settling to Arbitrum One or Nova; not directly applicable to L2s settling to Ethereum.
+- Compatible with all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native `ETH` or custom), as it focuses on sequencer logic.
+- Integrates with BoLD or permissioned validation; for AnyTrust, pairs well with DAC for symmetric fast incoming/outgoing flows.
+
+## Examples
+
+- **Default L1 Finality**: A token deposit from Ethereum to an L3 (settling to Arbitrum One) waits for L1 to confirm the L2 batch, finalizing in ~10-30 minutes.
+- **Fast L2 Finality**: For an L3 settling to Arbitrum Nova, configure with `--node.delayed-sequencer.use-merge-finality=false` `--node.delayed-sequencer.finalize-distance=1`. A bridge deposit is released after 1 L2 block (~1 minute), but may be reorg'd if Nova reverts.
+- **DACert-Optimized**: On Nova settlement with default flags, finality ties to DACert posting (~tens of minutes); configuring low-distance speeds reduces this to ~1 minute for gaming apps needing quick asset transfers.
+
+This feature underscores Arbitrum's modularity for performance tuning while inheriting parent security. For implementation, refer to the latest Nitro sequencer docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

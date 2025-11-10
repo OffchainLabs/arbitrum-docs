@@ -48,11 +48,10 @@ Configuration requires chain owner privileges and can be done post-deployment us
 
 ## How to configure
 
-1. **Set Fee Collectors**: Use the `ArbOwner` and `ArbAggregator` precompile (0x70) to assign addresses for each fee type (e.g., setInfraFeeAccount for Orbit base fees). Collectors can be simple addresses or smart contracts.
+1. **Set Fee Collectors**: Use the `ArbOwner` and `ArbAggregator` precompile (0x70) to assign addresses for each fee type (e.g., `setInfraFeeAccount` for Orbit base fees). Collectors can be simple addresses or smart contracts.
 2. **Deploy a Distributor Contract**: For rebates, deploy a contract like `RewardDistributor.sol` on the chain. Set recipients and proportions (e.g., 80% to treasury, 20% to user rebate pool using basis points).
-3. **Assign Distributor as Collector**: Update the relevant fee collector to the distributor's address (e.g., via `setNetworkFeeAccount` for surplus fees).
-4. **Trigger Distributions**: Call distributeRewards on the contract to execute rebates, specifying recipients and shares.
+3. **Trigger Distributions**: Call distributeRewards on the contract to execute rebates, specifying recipients and shares.
 
-- Tools: Use command-line (cast) or SDK extensions like `arbOwnerActions` for programmatic setup.
+- **Tools**: Use command-line (cast) or SDK extensions like `arbOwnerActions` for programmatic setup.
 
 This feature underscores Arbitrum's modularity, allowing tailored fee economics while inheriting Ethereum security. For implementation, refer to official docs, SDK examples, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

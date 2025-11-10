@@ -12,14 +12,14 @@ The configuration ensures compliance with the AEP terms, streamlines reporting, 
 
 ## Key Concepts
 
-- **Arbitrum Expansion Program (AEP)**: A licensing framework for deploying Orbit chains on any blockchain that derives security from Ethereum (e.g., settling to Ethereum mainnet, other L2s, or even non-Ethereum chains with DAO approval). It requires no upfront permission but mandates paying 10% of net revenue (8% to the DAO treasury, 2% to ecosystem growth funds) on chains generating over $60,000 USD annually in profit. This framework applies to modifications of the stack, including custom DA, gas tokens, or governance.
+- **Arbitrum Expansion Program (AEP)**: A licensing framework for deploying arbitrum chains outside of Arbitrum One and Arbitrum Nova (e.g., settling to Ethereum mainnet, other L2s, or even non-Ethereum chains with DAO approval). It requires no upfront permission but mandates paying 10% of net revenue (8% to the DAO treasury, 2% to ecosystem growth funds). This framework applies to modifications of the stack, including custom DA, gas tokens, or governance. For complete information refer to the Arbitrum Foundation's [Creating new Arbitrum chains, Arbitrum Expansion Program (AEP) section](https://docs.arbitrum.foundation/new-arb-chains#arbitrum-expansion-program-aep).
 - **Protocol Net Revenue**: The chain's profit, calculated as total fees collected (e.g., from gas, surplus, or custom mechanisms) minus Settlement Costs. Settlement Costs include gas fees for posting data to the parent chain (e.g., Ethereum calldata or blobs) and any other direct operational expenses like batch posting. Only positive net revenue triggers the 10% fee; losses or zero profit incur no payment.
 - **AEP Fee Router**: A set of deployable contracts (e.g., `RewardDistributor` or custom distributors) that automatically routes the 10% share. It integrates with the chain's fee collectors (e.g., for surplus fees) and handles cross-chain transfers (e.g., bridging to Ethereum then to a DAO-controlled address on Arbitrum One).
 
 ## Compatibility
 
 - **DA Modes**: Applies across Rollup, AnyTrust, and Alt-DA, as settlement costs vary by mode (e.g., lower in Alt-DA).
-- **Gas Tokens**: For custom ERC-20s, requires conversion mechanisms; native `ETH` simplifies bridging.
+- **Gas Tokens**: For custom `ERC-20`'s, requires conversion mechanisms; native `ETH` simplifies bridging.
 - **Validation**: No impact on BoLD or permissioned setups.
 
 ## Pros
