@@ -697,11 +697,6 @@
       "permanent": false
     },
     {
-      "source": "/(how-arbitrum-works/inside-arbitrum-nitro/?)",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
-      "permanent": false
-    },
-    {
       "source": "/(how-arbitrum-works/interactive-fraud-proofs/?)",
       "destination": "/how-arbitrum-works/bold/gentle-introduction",
       "permanent": false
