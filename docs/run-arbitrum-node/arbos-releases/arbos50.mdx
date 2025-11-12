@@ -95,20 +95,20 @@ This change doesn't affect the `GasTarget`, and therefore doesn't affect how muc
   - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
   - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
 
+#### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
+
+As part of our strategy for scaling Arbitrum technology, the ArbOS 50 release includes a slight change to improve the pricing algorithm for Arbitrum One and Nova. This improvement is aimed at reducing the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the changes are to:
+
+- Replace the current single gas target and single adjustment window, with a new model that employs multiple (higher) gas targets, measured over multiple adjustment windows.
+- Increase the default minimum L2 base fee from 0.01 gwei per gas to 0.02 gwei per gas.
+
+To read more about this change, see the [AIP for raising the gas target & improvements to the pricing algorithm](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182).
+
 #### A constraint-based pricing change: STF instrumentation to track multi-gas
 
 We've instrumented Arbitrum's State Transition Function (STF) to track gas usage across multiple resource types including computation, storage access, storage growth, and history growth, rather than only a single total based on opcodes. This work lays the foundation for dynamic, constraint-based pricing where gas fees can adjust based on the most constrained resource at the network level. The goal is to create more stable prices, improve responsiveness to spikes, and allow the network to safely increase throughput without overloading node hardware. In this release, none of the constraints are enabled, so there won't be any impact on current gas prices. This update simply adds the ability to measure and record per-resource usage, with actual pricing changes coming in a later version once constraints are configured, benchmarked and tested.
 
 To read more about this feature, see the [dynamic pricing explainer](https://blog.arbitrum.io/dynamic-pricing-explainer/).
-
-#### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
-
-As part of our strategy for scaling Arbitrum technology, the ArbOS 50 release includes a slight change to improve the pricing algorithm for Arbitrum One and Nova. This improvement is aimed at reducing the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the changes are to:
-
-- Replace the current single gas target and single adjustment window, with a new model that employs multiple (higher) gas targets, measured over multiple adjustment windows,
-- Increase the default minimum L2 base fee from 0.01 gwei per gas to 0.02 gwei per gas.
-
-To read more about this change, see the [AIP for raising the gas target & improvements to the pricing algorithm](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182).
 
 #### Native token mint and burn
 
@@ -120,7 +120,7 @@ To read more about this feature, see the [Native Token Mint/Burn enablement guid
 
 <VanillaAdmonition type="warning">
 
-If you want to enable Native Token Mint/Burn capabilities for your chain, use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) instead.
+If you want to enable Native Token Mint/Burn capabilities for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
 
 </VanillaAdmonition>
 
@@ -128,25 +128,11 @@ If you want to enable Native Token Mint/Burn capabilities for your chain, use [n
 
 Support and implementation for the following EIPs aren't planned to be part of ArbOS 50 Dia:
 
-#### `EIP-7594`, `EIP-7918`, and `EIP-7892`
-
-Arbitrum chains don't have blob data markets (though they do support posting blob data to a non-Arbitrum parent chain)
-
-#### `EIP-7917`
-
-Arbitrum chains don't have a beacon chain and therefore don't have a peer-to-peer layer like Ethereum does
-
-#### `EIP-7934`
-
-This EIP is to help propagating blocks between nodes. Arbitrum doesn't do that - it sends messages (which are limited) and each node builds every block by itself
-
-#### `EIP-7907`
-
-This EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by <a data-quicklook-from="client">Client</a> teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We're currently exploring alternative ways to increase the Smart Contract size limit that don't interfere with the ability for Arbitrum chains to support `EIP-7907` in the future. See this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this.
-
-#### `EIP-7935`
-
-Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned in [Scaling Arbitrum everywhere](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).
+- [EIP-7594](https://eips.ethereum.org/EIPS/eip-7594), [EIP-7918](https://eips.ethereum.org/EIPS/eip-7918), and [EIP-7892](https://eips.ethereum.org/EIPS/eip-7892), since Arbitrum chains don't have blob data markets (though they do support posting blob data to a non-Arbitrum parent chain)
+- [EIP-7917](https://eips.ethereum.org/EIPS/eip-7917), since Arbitrum chains don't have a beacon chain and therefore don't have a peer-to-peer layer like Ethereum does
+- [EIP-7934](https://eips.ethereum.org/EIPS/eip-7934), this EIP is to help propagating blocks between nodes. Arbitrum doesn't do that - it sends messages (which are limited) and each node builds every block by itself
+- [EIP-7907](https://eips.ethereum.org/EIPS/eip-7907), this EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by <a data-quicklook-from="client">Client</a> teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We're currently exploring alternative ways to increase the Smart Contract size limit that don't interfere with the ability for Arbitrum chains to support `EIP-7907` in the future. See this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this.
+- [EIP-7935](https://eips.ethereum.org/EIPS/eip-7935), since Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned in [Scaling Arbitrum everywhere](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).
 
 ### Special note about ArbOS 50 Dia for chains that haven't yet upgraded to use Arbitrum BoLD
 
