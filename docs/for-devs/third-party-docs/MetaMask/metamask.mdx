@@ -12,7 +12,7 @@ The [MetaMask Smart Accounts Kit](https://docs.metamask.io/smart-accounts-kit/) 
 Smart accounts support programmable account behavior and advanced features like delegated permissions, multi-signature approvals, and gas abstraction.
 Delegation is a core feature of smart accounts, enabling secure, rule-based permission sharing.
 
-## Use MetaMask Smart Accounts with Arbitrum
+## Use MetaMask smart accounts with Arbitrum
 
 The MetaMask Smart Accounts Kit
 [supports multiple networks](https://docs.metamask.io/smart-accounts-kit/get-started/supported-networks/), including
@@ -22,9 +22,10 @@ Follow these steps to create your first smart account and send a user operation.
 
 :::note Prerequisites
 Before starting, ensure you have the following installed:
+
 - [Node.js](https://nodejs.org/en/download) v18 or later.
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), [Yarn](https://yarnpkg.com/), or another package manager.
-:::
+  :::
 
 ### 1. Install the Smart Accounts Kit
 
@@ -47,7 +48,7 @@ yarn add @metamask/smart-accounts-kit
 </TabItem>
 </Tabs>
 
-### 2. Set up a Public Client
+### 2. Set up a public client
 
 Set up a [Viem Public Client](https://viem.sh/docs/clients/public) using Viem's `createPublicClient` function.
 This client will let the smart account query the signer's account state and interact with the blockchain network.
@@ -95,7 +96,7 @@ const publicClient = createPublicClient({
 </TabItem>
 </Tabs>
 
-### 3. Set up a Bundler Client
+### 3. Set up a bundler client
 
 Set up a [Viem Bundler Client](https://viem.sh/account-abstraction/clients/bundler) using Viem's `createBundlerClient` function.
 This lets you use the bundler service to estimate gas for user operations and submit transactions to the network.
