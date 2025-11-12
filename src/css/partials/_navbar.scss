@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 60px;
+  min-height: fit-content;
   flex-wrap: nowrap;
 
   > .navbar__items:first-child {
