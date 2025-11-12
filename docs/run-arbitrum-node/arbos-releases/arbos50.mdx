@@ -82,20 +82,18 @@ To read more about this feature, see the [dynamic pricing explainer](https://blo
 
 #### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
 
-As part of our strategy for scaling Arbitrum technology, this update includes the AIP to improve the pricing algorithm for Arbitrum One and Nova to reduce the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the proposed changes are to:
+As part of our strategy for scaling Arbitrum technology, the ArbOS 50 release includes a slight change to improve the pricing algorithm for Arbitrum One and Nova. This improvement is aimed at reducing the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the changes are to:
 
 - Replace the current single gas target and single adjustment window, with a new model that employs multiple (higher) gas targets, measured over multiple adjustment windows,
-- Raise the long term effective gas target, up from today's single gas target of 7 Mgas/s (up to a maximum of 100 Mgas/s),
-- Grant Offchain Labs the permission to make additional changes gradually to scale the chain sustainably, and
-- Increase the minimum L2 base fee from 0.01 gwei per gas to 0.02 gwei per gas.
+- Increase the default minimum L2 base fee from 0.01 gwei per gas to 0.02 gwei per gas.
 
-To read more about this feature, see the [AIP for raising the gas target & improvements to the pricing algorithm](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182).
+To read more about this change, see the [AIP for raising the gas target & improvements to the pricing algorithm](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182).
 
 #### Native token mint and burn
 
 Native token mint and burn is a feature that allows Arbitrum chains to use interoperability-enabled token standards (e.g., LayerZero OFTs, xERC20s, native USDC) as native gas tokens on their chains. Currently, Arbitrum chains are designed to "lock and mint" native gas tokens on the chain's canonical <a data-quicklook-from="bridge">Bridge</a>. However, doing so means that these "locked and minted" native gas tokens can't interact with third-party cross-chain adapter contracts. This new feature lets an Arbitrum chain delegate minting and burning of its native gas token to a trusted bridge provider (e.g., LayerZero OFT).
 
-Native token mint and burn is proposed to be included in ArbOS 50 Dia for the benefit of Arbitrum Orbit chains (reducing the need for forks) and to streamline development and testing into a single codebase. There are no plans to enable this feature on Arbitrum One or Arbitrum Nova, consequently this feature will be explicitly left disabled for Arbitrum One and Arbitrum Nova.
+Native token mint and burn is included in ArbOS 50 Dia for the benefit of Arbitrum Orbit chains (reducing the need for forks) and to streamline development and testing into a single codebase. There are no plans to enable this feature on Arbitrum One or Arbitrum Nova, consequently this feature will be explicitly left disabled for Arbitrum One and Arbitrum Nova.
 
 To read more about this feature, see the [native mint and burn enablement guide](https://arbitrum.notion.site/Enable-Native-Mint-Burn-for-your-chain-s-gas-token-22601a3f59f880be9b99d3d55f982a17).
 
@@ -119,7 +117,7 @@ Support and implementation for the following EIPs aren't planned to be part of A
 
 ### Special note about ArbOS 50 Dia for chains that haven't yet upgraded to use Arbitrum BoLD
 
-While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.x` and `nitro-contracts 2.1.3`, only chains that have Arbitrum BoLD enabled can use `nitro-contracts 3.x`. This requirement means that if your chain hasn't yet upgraded to use BoLD, only use `nitro-contracts 2.1.3` for your ArbOS 50 Dia upgrade.
+While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.1.0` and `nitro-contracts 2.1.3`, only chains that have Arbitrum BoLD enabled can use `nitro-contracts 3.x`. This requirement means that if your chain hasn't yet upgraded to use BoLD, only use `nitro-contracts 2.1.3` for your ArbOS 50 Dia upgrade.
 
 ### Reference links for ArbOS 50 Dia
 
