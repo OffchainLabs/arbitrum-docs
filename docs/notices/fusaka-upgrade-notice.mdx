@@ -42,7 +42,7 @@ Outlined below are different types of Arbitrum chains, along with node software 
 
 #### If you run a Nitro node and use an external L1 Ethereum beacon chain RPC:
 
-Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets before the Ethereum Fusaka hard fork.
+Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets before the Ethereum Fusaka hard fork and have all historical blob data to ensure your Nitro node can sync from periods beyond the blob retention period (or that your RPC provider has backfilled the blob data properly).
 
 #### If you run a Nitro node and operate your own L1 Ethereum beacon chain node:
 
