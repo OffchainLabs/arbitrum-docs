@@ -40,11 +40,17 @@ Customizing the ArbOS version refers to modifying the Nitro codebase to introduc
 - **New State Variable**: Add `myNumber` initialized in `UpgradeArbosVersion` switch for v21: `ensure(state.SetNewMyNumber(randomNumber))`.
 - **STF Logic Change**: Branch in a method: `if p.state.ArbOSVersion() >= 32 { return "hi, new version" } else { return "hi" }`.
 
+:::info
+
+It is important to understand that this is part of customizing the behavior of your chain. You can read more about this on the [Choose Custom Behavior](/launch-arbitrum-chain/features/advanced/choose-custom-behavior.mdx) page.
+
+:::
+
 ## How to configure
 
 1. **Clone and Modify Nitro**: Use a branch like v3.7.2 (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`). Edit files (e.g., precompile.go, arbosstate.go) for changes, adding version gates.
-2. **Build Custom Node**: Create Docker images, extract the new WASM module root, and update it on the parent chain via `setWasmModuleRoot` on the rollup contract.
-3. **Upgrade Nodes/Validators**: Update to the custom Nitro version (e.g., v2.3.1+ for ArbOS 20 base).
+2. **Upgrade Nodes/Validators**: Update to the custom Nitro version (e.g., v2.3.1+ for ArbOS 20 base).
+3. **Build Custom Node**: Create Docker images, extract the new WASM module root, and update it on the parent chain via `setWasmModuleRoot` on the rollup contract.
 4. **Schedule Upgrade**: Call `scheduleArbOSUpgrade` on ArbOwner precompile with the new version and timestamp (0 for immediate).
 5. **Enable Features**: Post-upgrade, configure any version-specific flags.
 
