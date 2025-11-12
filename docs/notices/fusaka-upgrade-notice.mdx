@@ -7,7 +7,7 @@ content_type: notice
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
-This upgrade notice explains what you need to do if you operate a chain or a node running on a Fusaka-enabled Parent.
+This upgrade notice explains what you need to do if you operate a chain or a node running on a Fusaka-enabled parent chain.
 
 <VanillaAdmonition type="note">
 
@@ -17,23 +17,24 @@ For ArbOS 50 release information, please visit our [Arbos release notes](run-arb
 
 ## Date of required actions
 
-| Deadline            | Network upgrade                   | Who needs to upgrade                                                                       |
-| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------------ |
-| `October 14th 2025` | L1 Sepolia                        | Arbitrum (Orbit) chains and Arbitrum One/Nova operators                                    |
-| `Dec 3rd 2025`      | L1 Mainnet                        | Arbitrum (Orbit) chains and Arbitrum One/Nova operators                                    |
-| N/A                 | Arb One/Nova upgrades to ArbOS 50 | Learn more about the [ArbOS 50 release](docs/run-arbitrum-node/arbos-releases/arbos50.mdx) |
+| Deadline            | Network upgrade                        | Who needs to upgrade                                                                       |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `October 14th 2025` | L1 Sepolia                             | Arbitrum (Orbit) chains and Arbitrum One/Nova operators                                    |
+| `Dec 3rd 2025`      | L1 Mainnet                             | Arbitrum (Orbit) chains and Arbitrum One/Nova operators                                    |
+| `Dec 20th 2025`     | Arbitrum Sepolia upgrades to ArbOS 50  | Learn more about the [ArbOS 50 release](docs/run-arbitrum-node/arbos-releases/arbos50.mdx) |
+| N/A                 | Arbitrum One/Nova upgrades to ArbOS 50 | Learn more about the [ArbOS 50 release](docs/run-arbitrum-node/arbos-releases/arbos50.mdx) |
 
-## Required Node/Client Configurations for Arbitrum (Orbit) chains and ArbOne/Nova operators on Fusaka enabled parent chain
+## Required node configurations for Arbitrum Orbit Chains and Arbitrum One/Nova operators
 
-| Layer | Data Availability | Fallback to blobs enabled | Nitro version      | Consenus Layer Client |
-| ----- | ----------------- | ------------------------- | ------------------ | --------------------- |
-| L2    | Rollup            | N/A                       | `3.8.0` or `3.7.6` | See table below       |
-| L2    | AnyTrust / AltDA  | Yes                       | `3.8.0` or `3.7.6` | See table below       |
-| L2    | AnyTrust / AltDA  | No                        | No action required | No action required    |
-| L3    | Rollup            | No action needed          | No action required | No action required    |
-| L3    | AnyTrust / AltDA  | No action needed          | No action required | No action required    |
+| Layer  | Data Availability    | Fallback to blobs   | Nitro version                                                                                                                                | Consenus Layer Client                                                                                 |
+| ------ | -------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **L2** | **Rollup**           | N/A                 | [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) | See [table below](#required-configurations-for-chains-posting-blobs-to-a-fusaka-enabled-parent-chain) |
+| **L2** | **AnyTrust / AltDA** | Enabled             | [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) | See [table below](#required-configurations-for-chains-posting-blobs-to-a-fusaka-enabled-parent-chain) |
+| **L2** | **AnyTrust / AltDA** | Disabled            | No action required                                                                                                                           | No action required                                                                                    |
+| **L3** | **Rollup**           | N/A                 | No action required                                                                                                                           | No action required                                                                                    |
+| **L3** | **AnyTrust / AltDA** | Enabled or Disabled | No action required                                                                                                                           | No action required                                                                                    |
 
-## Required configuration for nodes/chains posting blobs to a Fusaka-enabled parent chain
+## Required configurations for chains posting blobs to a Fusaka-enabled parent chain
 
 Consensus Client / Nitro Flags for operators (Arbitrum chains or Arbitrum One/Nova) chains posting blobs to a Fusaka-enabled parent chain
 
@@ -45,4 +46,4 @@ Consensus Client / Nitro Flags for operators (Arbitrum chains or Arbitrum One/No
 | Lodestar      | ✅                    | None                                                                | `--supernode`                                 |
 | Erigon Caplin | ❌                    |                                                                     |                                               |
 
-To read more about PeerDAS changes and why Layer 2 network operators must connect to an Ethereum beacon chain node with historical blob data, see the [historical blobs docs](../run-arbitrum-node/beacon-nodes-historical-blobs.mdx).
+To read more about Fusaka PeerDAS changes and why Layer 2 network operators must connect to an Ethereum beacon chain node with historical blob data, see the [historical blobs docs](../run-arbitrum-node/beacon-nodes-historical-blobs.mdx).
