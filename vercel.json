@@ -66,6 +66,11 @@
       "permanent": false
     },
     {
+      "source": "/(/docs/welcome/get-started/?)",
+      "destination": "/(docs/get-started/overview/?)",
+      "permanent": true
+    },
+    {
       "source": "/(anytrust/inside-anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
