@@ -1,11 +1,17 @@
 ---
-title: 'Fusaka Upgrade Notice'
+title: 'Fusaka Compatibility Notice'
 description: Upgrade notices for the transition to Fusaka
 user_story: As an Arbitrum chain owner or node operator, I want to configure my chain/nodes to run on Fusaka-enabled parent.
 content_type: notice
 ---
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
+
+<VanillaAdmonition type="note">
+
+Arbitrum chain operators must ensure that their nodes are properly configured before or shortly after the parent chain upgrades to Fusaka or the child chain upgrades to ArbOS 50.
+
+</VanillaAdmonition>
 
 This document explains what you need to do if you operate a chain that settles on a Fusaka-enabled parent chain. This includes actions for Arbitrum Orbit chains as well as actions for Arbitrum One and Arbitrum Nova node operators.
 
@@ -17,32 +23,30 @@ The Fusaka upgrade introduces several breaking changes. Review [EIP-7607](https:
 
 The following dates are relevant for Arbitrum chain operators.
 
-| Date                              | Network upgrade                                                                            | Affected audience                                                                         |
-| --------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| `October 14th 2025, 07:36:00 UTC` | Ethereum Sepolia Fusaka hard fork                                                          | Operators for Arbitrum chains settling on Ethereum Sepolia (Orbit L2s, Arbitrum Sepolia)  |
-| `Dec 3rd 2025, 21:49:11 UTC`      | Ethereum Mainnet Fusaka hard fork                                                          | Operators for Arbitrum chains settling on Ethereum Mainnet (Orbit L2s, Arbitrum One/Nova) |
-| `Dec 20th 2025, 17:00:00 UTC`     | Arbitrum Sepolia upgrade to [ArbOS 50](docs/run-arbitrum-node/arbos-releases/arbos50.mdx)  | Operators for Arbitrum Sepolia                                                            |
-| N/A                               | Arbitrum One/Nova upgrade to [ArbOS 50](docs/run-arbitrum-node/arbos-releases/arbos50.mdx) | Operators for Arbitrum One/Nova                                                           |
-
-Arbitrum chain operators must ensure that their nodes are properly configured before or shortly after the parent chain upgrades to Fusaka or the child chain upgrades to ArbOS 50.
+| Date                              | Network upgrade                                                                            | Affected audience                                                                              |
+| --------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `October 14th 2025, 07:36:00 UTC` | Ethereum Sepolia Fusaka hard fork                                                          | Node operators for Arbitrum chains settling on Ethereum Sepolia (Orbit L2s, Arbitrum Sepolia)  |
+| `Dec 3rd 2025, 21:49:11 UTC`      | Ethereum Mainnet Fusaka hard fork                                                          | Node operators for Arbitrum chains settling on Ethereum Mainnet (Orbit L2s, Arbitrum One/Nova) |
+| `Dec 20th 2025, 17:00:00 UTC`     | Arbitrum Sepolia upgrade to [ArbOS 50](docs/run-arbitrum-node/arbos-releases/arbos50.mdx)  | Node operators for Arbitrum Sepolia                                                            |
+| N/A                               | Arbitrum One/Nova upgrade to [ArbOS 50](docs/run-arbitrum-node/arbos-releases/arbos50.mdx) | Node operators for Arbitrum One/Nova                                                           |
 
 ## For node operators
 
 Outlined below are different types of Arbitrum chains, along with node software required for operators of chains in those configurations.
 
-| Layer  | Data Availability    | Fallback to blobs   | Nitro node version                                                                                                                                                                                                                                          | Consenus Layer client                                                                                    |
-| ------ | -------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| **L2** | **Rollup**           | N/A                 | Update to [`3.9.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) (ArbOS 50); [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) (ArbOS 40 or older) | Requires [historical blob data](#ensure-your-l1-ethereum-beacon-node-has-access-to-historical-blob-data) |
-| **L2** | **AnyTrust / AltDA** | Enabled             | Update to [`3.9.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) (ArbOS 50); [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) (ArbOS 40 or older) | Requires [historical blob data](#ensure-your-l1-ethereum-beacon-node-has-access-to-historical-blob-data) |
-| **L2** | **AnyTrust / AltDA** | Disabled            | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                     |
-| **L3** | **Rollup**           | N/A                 | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                     |
-| **L3** | **AnyTrust / AltDA** | Enabled or Disabled | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                     |
+| Layer  | Data Availability    | Fallback to blobs enabled? | Required Nitro node version                                                                                                                                                                                                                                 | Configuration for the Ethereum Consensus Layer client                                                        |
+| ------ | -------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **L2** | **Rollup**           | N/A                        | Update to [`3.9.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) (ArbOS 50); [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) (ArbOS 40 or older) | Requires [all historical blob data](#ensure-your-l1-ethereum-beacon-node-has-access-to-historical-blob-data) |
+| **L2** | **AnyTrust / AltDA** | Enabled                    | Update to [`3.9.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) (ArbOS 50); [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) (ArbOS 40 or older) | Requires [all historical blob data](#ensure-your-l1-ethereum-beacon-node-has-access-to-historical-blob-data) |
+| **L2** | **AnyTrust / AltDA** | Disabled                   | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                         |
+| **L3** | **Rollup**           | N/A                        | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                         |
+| **L3** | **AnyTrust / AltDA** | Enabled or Disabled        | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                         |
 
-### Ensure your L1 Ethereum beacon node has access to historical blob data
+### How to ensure your node has access to all historical blob data
 
 #### If you run a Nitro node and use an external L1 Ethereum beacon chain RPC:
 
-Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets before the Ethereum Fusaka hard fork.
+Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets before the Ethereum Fusaka hard fork and have all historical blob data to ensure your Nitro node can sync from periods beyond the blob retention period (or that your RPC provider has backfilled the blob data properly).
 
 #### If you run a Nitro node and operate your own L1 Ethereum beacon chain node:
 
