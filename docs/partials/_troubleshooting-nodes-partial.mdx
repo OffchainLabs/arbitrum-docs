@@ -3,7 +3,7 @@ partial_type: troubleshooting
 title: 'Node Running Troubleshooting Guide'
 description: 'Common issues and solutions for running Arbitrum nodes'
 author: anegg0
-last_reviewed: 2025-01-15
+last_reviewed: 2025-11-06
 ---
 
 ### How do I run a node?
@@ -36,7 +36,7 @@ Running an Arbitrum relay locally as a [Feed Relay](https://docs.arbitrum.io/nod
 
 ### How do I run a node locally for development?
 
-See instructions on [how to set up a local dev node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).
+See instructions on [how to set up a local dev node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).
 
 We recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally).
 
@@ -44,7 +44,7 @@ We recommend running Nitro nodes via Docker; to compile directly / run without D
 
 The pre-Nitro stack is also called the "classic" stack. Full Nitro nodes start with a database that contains the information from the "classic" era.
 
-However, a Nitro node can't query archive information contained in "classic" blocks right away. To do that, you also need to run a classic node. You can find detailed instructions ([in this detailed How To](https://developer.arbitrum.io/node-running/how-tos/running-a-classic-node)) and set the parameter `—node.rpc.classic-redirect=your-classic-node-RPC`.
+However, a Nitro node can't query archive information contained in "classic" blocks right away. To do that, you also need to run a classic node. You can find detailed instructions [in this detailed How To](https://developer.arbitrum.io/node-running/how-tos/running-a-classic-node) and set the parameter `—node.rpc.classic-redirect=your-classic-node-RPC`.
 
 Please note that this information only applies to Arbitrum One nodes. Arbitrum Nova and Sepolia nodes started with a Nitro stack, so they don't have "classic" data.
 
@@ -58,7 +58,7 @@ You can make an `eth_syncing` RPC call to your node. Once a Nitro node is fully 
 
 When a Nitro node is still syncing, `eth_syncing` returns a map of values to help understand why the node is not syncing. Nitro execution and bottlenecks differ from those of a normal Geth node, so the `eth_syncing` output is unique to Nitro.
 
-You can find information to understand the output of `eth_syncing` in the [list of RPC methods](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods#eth_syncing) page.
+You can find information to understand the output of `eth_syncing` in the [RPC methods](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods#eth_syncing) page.
 
 ### Is there an alternative to Docker when running a node?
 

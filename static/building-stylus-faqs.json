@@ -6,7 +6,7 @@
   },
   {
     "question": "Is there any analogue of the fallback function from Solidity in the Rust Stylus SDK?",
-    "answer": "Currently, there isn't any analogue. However, you can use a minimal entrypoint and perform raw delegate calls, forwarding your calldata. You can find more information in [the Bytes-in, Bytes-out programming](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) and [call, static_call, and delegate_call](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call) sections.\n\n\n\n",
+    "answer": "Yes, starting with SDK version 0.7.0, the Router trait supports both `fallback` and `receive` methods, similar to their Solidity counterparts. The `fallback` method is called when a transaction has calldata\nthat doesn't match any defined function, while the `receive` method is called when a transaction has empty calldata. You can find more information in [Fallback and receive\nfunctions](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#fallback-and-receive-functions).\n\nFor older SDK versions (pre-0.7.0), you can use a minimal entrypoint and perform raw delegate calls, forwarding your calldata. You can find more information in [Bytes-in, bytes-out\nprogramming](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) and [call, static_call and\ndelegate_call](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call).\n\n\n\n\n\n\n\n",
     "key": "is-there-any-analogue-of-the-fallback-function-from-solidity-in-the-rust-stylus-sdk"
   },
   {
