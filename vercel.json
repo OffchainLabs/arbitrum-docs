@@ -66,6 +66,11 @@
       "permanent": false
     },
     {
+      "source": "/(/docs/welcome/get-started/?)",
+      "destination": "/(docs/get-started/overview/?)",
+      "permanent": true
+    },
+    {
       "source": "/(anytrust/inside-anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
@@ -389,6 +394,16 @@
     {
       "source": "/(docs/mainnet/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/notices/arbos-50/?)",
+      "destination": "/(docs/notices/arbos-fusaka/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/notices/arbos-fusaka/?)",
+      "destination": "/(docs/notices/fusaka-upgrade-notice/?)",
       "permanent": false
     },
     {
