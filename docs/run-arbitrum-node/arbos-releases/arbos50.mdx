@@ -49,7 +49,7 @@ Here's the list of all changes included in ArbOS 50 Dia:
 
 This EIP implements the same functionality and interface as [RIP-7212](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md), which was activated as part of [ArbOS 31 Bianca](https://forum.arbitrum.foundation/t/aip-arbos-31-bianca-activation-of-arbitrum-stylus-rip-7212-support-nova-fee-router-proposal/25904). The main difference here is to add a point-at-infinity check and to update the comparison step in the signature verification algorithm. Developers should expect the same behavior as the EIP being proposed on Ethereum after Fusaka is activated.
 
-#### [EIP-7825: Transaction gas limit cap](https://eips.ethereum.org/EIPS/eip-7825)
+#### [EIP-7825: Transaction gas limit cap](https://eips.ethereum.org/EIPS/eip-7825
 
 This EIP introduces a gas cap for individual transactions. The goal is to ensure fairer access to block space and improve network stability. For Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> we're proposing a 32 million gas limit (<a data-quicklook-from="child-chain">Child chain</a> execution gas, not including parent chain gas) per transaction, which is the same as the current block gas limit. This 32 million gas limit diverges from the EIP's proposed limit of 16 million gas per transaction for Ethereum parent chain. Orbit chains can customize this value according to their chains' needs.
 
