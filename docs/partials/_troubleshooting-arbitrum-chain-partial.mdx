@@ -12,7 +12,7 @@ However, Arbitrum chains that settle to a parent chain other than Arbitrum One o
 
 ### Does Arbitrum officially deploy and/or maintain L3s for external teams?
 
-No. Teams are required to deploy and maintain their Arbitrum Orbit chains. There are, however, several RaaS (Rollup as a Service) providers that can deploy and maintain your Arbitrum Orbit chain on your behalf.
+No. Teams are required to deploy and maintain their Arbitrum chains. There are, however, several RaaS (Rollup as a Service) providers that can deploy and maintain your Arbitrum chain on your behalf.
 
 ### Can I modify the underlying technology to customize my Arbitrum chain?
 
@@ -66,9 +66,9 @@ go test ./system_tests/ -tags=challengetest -run=TestChallenge
 
 ### What fee collectors can be configured on my chain?
 
-Four fee types are configurable on an Orbit chain:
+Four fee types are configurable on an Arbitrum chain:
 
-- **L2 base fee**: L2 execution fees corresponding to the minimum base price of the chain. This fee is deposited into the infraFeeAccount, which can be set by calling `ArbOwner.setInfraFeeAccount().`
+- **L2 base fee**: L2 execution fees corresponding to the minimum base price of the chain. This fee is deposited into the `infraFeeAccount`, which can be set by calling `ArbOwner.setInfraFeeAccount().`
 - **L2 surplus fee**: L2 execution fees above the minimum base price (in the case of congestion). This fee goes to the `networkFeeAccount`, which can be set by calling `ArbOwner.setNetworkFeeAccount().`
 - **L1 base fee**: Relative fees for posting a transaction on the parent chain. This fee is paid ultimately to the fee collector of the active batch poster. A call to `SequencerInbox.setIsBatchPoster()` on the parent chain will set the batch poster. Delegating a different fee collector for that batch poster can be specified by calling `ArbAggregator.setFeeCollector()`.
 - **L1 surplus fee**: Any extra fees rewarded to the batch poster. This is paid to a specific `L1RewardRecipient`, which can be set by calling `ArbOwner.setL1PricingRewardRecipient()`.
@@ -78,7 +78,7 @@ To learn more about precompiles, refer to the [Precompiles reference page](https
 
 ### What is the lowest you can set the base fee to?
 
-You can set the base fee to any amount to charge users less. You can even set it to `0` (however, this would open the chain to DOS attacks). If the Orbit base fee is `0`, users are then only paying for the cost of DA.
+You can set the base fee to any amount to charge users less. You can even set it to `0` (however, this would open the chain to DOS attacks). If the Arbitrum chain base fee is `0`, users are then only paying for the cost of DA.
 
 ### How does fee collection work in Nitro?
 
@@ -126,7 +126,7 @@ Test this thoroughly on a testnet first.
 
 ### What is the max theoretical TPS for an Arbitrum Chain?
 
-Max TPS is a challenging metric to measure, as it relies on network activity and the type of submitted transactions. We can, however, calculate the max throughput using default orbit chain parameters.
+Max TPS is a challenging metric to measure, as it relies on network activity and the type of submitted transactions. We can, however, calculate the max throughput using default Arbitrum chain parameters.
 
 The actual maximum throughput depends on the configurable execution parameters:
 
@@ -144,7 +144,7 @@ The actual maximum throughput depends on the configurable execution parameters:
 
 ### Why is the WETH Gateway not necessary for custom gas token chains?
 
-The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum (Orbit) chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).
+The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).
 
 If you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.
 
