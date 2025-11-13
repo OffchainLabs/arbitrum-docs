@@ -31,7 +31,7 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 ### Requirements
 
 - Having read and understood the [ArbOS Software Releases Overview page](./01-overview.mdx).
-- Running [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) or higher, which is available on Docker Hub with the image tag `Need to update - offchainlabs/nitro-node:v3.8.0-rc.5-6c74ee2-validator`.
+- Running [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) or higher, which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.0-cca645a`.
   - Note that it's important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
 - Running nitro-contracts v3.1.X (e.g. [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1)) or higher
   - If your chain isn't ready to activate <a data-quicklook-from="bold">BoLD</a>, use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher can't be used without activating BoLD.
