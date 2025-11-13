@@ -7,6 +7,10 @@
     "title": "Address Alias",
     "text": "<p>An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.</p>\n"
   },
+  "dapp": {
+    "title": "Decentralized application",
+    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nNote: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
+  },
   "arb-token-bridge": {
     "title": "Arb Token Bridge",
     "text": "<p>A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of <code>ERC-20</code> tokens between the two layers.</p>\n"
@@ -73,7 +77,7 @@
   },
   "assertion": {
     "title": "Assertion",
-    "text": "<p>A bonded claim made by an Arbitrum <a href=\"/intro/glossary#validator\">Validator</a> representing a claim about an Arbitrum chain&#39;s state. An <a href=\"/intro/glossary#assertion\">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href=\"/intro/glossary#challenge\">Challenge</a>.</p>\n"
+    "text": "<p>A bonded claim made by an Arbitrum <a href=\"/intro/glossary#validator\">Validator</a> representing a claim about an Arbitrum chain&#39;s state. An <a href=\"/intro/glossary#assertion\">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href=\"/intro/glossary#challenge\">Challenge</a>.</p>\n<p>Assertions can have different states:</p>\n<ul>\n<li><strong>Proposed</strong>: When a validator submits an assertion</li>\n<li><strong>Challenged</strong>: If another validator disputes the assertion, an interactive fraud-proof initiates.</li>\n<li><strong>Confirmed</strong>: An assertion becomes final if no one challenges it within the dispute window (6.4 days).</li>\n</ul>\n"
   },
   "auction-contract": {
     "title": "Auction Contract",
@@ -135,6 +139,10 @@
     "title": "Client",
     "text": "<p>A program running on a user&#39;s machine, often in the user&#39;s browser, that interacts with contracts on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> and provides a user interface.</p>\n"
   },
+  "commitment": {
+    "title": "Commitment",
+    "text": "<p>In the context of Arbitrum, commitments represents a part of a chain&#39;s history. Commitments are used during the fraud proof dispute resolution process, where validators create a Merkle commitment to the history between two assertions. This allows them to efficiently narrow down disagreements about the chain state by using Merkle proofs to specific blocks or states within that range<a href=\"https://docs.arbitrum.io/how-arbitrum-works/bold/bold-technical-deep-dive\">(1)</a>.</p>\n"
+  },
   "confirmation": {
     "title": "Confirmation",
     "text": "<p>The decision by an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> to finalize an assertion as part of the chain&#39;s history. Once an <a href=\"/intro/glossary#assertion\">assertion</a> is confirmed its <a href=\"/intro/glossary#l2-to-l1-message\">Child to parent chain Messages</a> (e.g., withdrawals) can be executed.</p>\n"
@@ -150,10 +158,6 @@
   "custom-gateway": {
     "title": "Custom gateway",
     "text": "<p>Any <a href=\"/intro/glossary#token-gateway\">Token Gateway</a> that isn&#39;t the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a>.</p>\n"
-  },
-  "dapp": {
-    "title": "dApp",
-    "text": "<p>Short for &quot;decentralized application.&quot; A dApp typically consists of smart contracts as well as a user-interface for interacting with them.</p>\n"
   },
   "data-availability-certificate": {
     "title": "Data Availability Certificate",
@@ -186,10 +190,6 @@
   "ethereum-wallet": {
     "title": "Ethereum Wallet",
     "text": "<p>A software application used for transacting with the Ethereum <a href=\"/intro/glossary#blockchain\">Blockchain</a>.</p>\n"
-  },
-  "evm": {
-    "title": "EVM+",
-    "text": "<p>The paradigm introduced by <a href=\"/intro/glossary#stylus\">Stylus</a> in which Arbitrum&#39;s EVM compatibility is preserved while new features and improvements are introduced.</p>\n"
   },
   "execution-claim": {
     "title": "Execution claim",
@@ -243,6 +243,14 @@
     "title": "Ink",
     "text": "<p>The equivalent of gas in the <a href=\"/intro/glossary#stylus\">Stylus</a> vm. Ink is introduced for finer granularity than gas offers since Stylus&#39;s operations are considerably cheaper than their EVM analogs.</p>\n"
   },
+  "L1": {
+    "title": "L1",
+    "text": "<p>L1, or Layer 1, refers to the underlying blockchain responsible for maintaining the integrity of the distributed ledger. In the context of Arbitrum One and Nova, L1 is the main Ethereum blockchain (Mainnet), and Arbitrum operates as a Layer 2 scaling solution built on top of this base layer. However, any EVM-compatible blockchain can be an L1 to an Arbitrum chain.</p>\n"
+  },
+  "L2": {
+    "title": "L2",
+    "text": "<p>An L2, or Layer 2, is a trustless scaling solution built on top of Ethereum&#39;s Layer 1 (L1) base protocol. Arbitrum is a Layer 2 protocol that increases scalability and reduces the cost of transactions on Ethereum&#39;s Layer 1 without introducing additional trust assumptions. It does that by executing some computation offchain and batch-posting transactions on the underlying Layer 1.</p>\n"
+  },
   "l2-block": {
     "title": "L2 Block",
     "text": "<p>Data structure that represents a group of L2 transactions (analogous to L1 blocks).</p>\n"
@@ -262,6 +270,10 @@
   "layer-3-l3": {
     "title": "Layer 3 (L3)",
     "text": "<p>An Arbitrum chain whose core contract reside on an Arbitrum <a href=\"/intro/glossary#layer-2-l2\">Layer 2 (L2)</a> chain.</p>\n"
+  },
+  "multivm": {
+    "title": "MultiVM",
+    "text": "<p>MultiVM refers Arbitrum&#39;s ability to support multiple virtual machines (VMs). Specifically, Arbitrum Stylus introduces a WebAssembly (WASM)-based virtual machine alongside the traditional Ethereum Virtual Machine (EVM). This means developers can write smart contracts in languages like Rust, C, or C++ (compiled to WASM) or continue using Solidity for the EVM, and both types of contracts can interact seamlessly on the same chain. This approach preserves EVM compatibility while enabling more efficient execution and access to a broader set of programming languages and libraries<a href=\"https://docs.arbitrum.io/stylus/concepts/how-it-works\">(1)</a><a href=\"https://docs.arbitrum.io/launch-arbitrum-chain/partials/config-other-language-support\">(2)</a>.</p>\n"
   },
   "native-fee-token": {
     "title": "Native Fee Token",
@@ -290,6 +302,10 @@
   "portal": {
     "title": "Portal",
     "text": "<p>A web application maintained by <a href=\"/intro/glossary#offchain-labs\">Offchain Labs</a> showcasing the Arbitrum ecosystem; visit it <a href=\"https://portal.arbitrum.io/\">here</a>.</p>\n"
+  },
+  "precompile": {
+    "title": "Precompile",
+    "text": "<p>A precompile is a predefined smart contract with a special address that provides specific functionality executed natively by the Arbitrum client, rather than at the EVM bytecode level. Precompiles are used to introduce functions that would be computationally expensive if run in EVM bytecode, or to facilitate interactions between the parent and child chains. Arbitrum supports all Ethereum precompiles and also provides additional precompiles specific to Arbitrum chains, which can be called from smart contracts like regular Solidity functions<a href=\"https://docs.arbitrum.io/build-decentralized-apps/precompiles/overview\">(1)</a>.</p>\n"
   },
   "predecessor-assertion": {
     "title": "Predecessor Assertion",
@@ -361,7 +377,7 @@
   },
   "state-transition-function": {
     "title": "State Transition Function",
-    "text": "<p>The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.</p>\n"
+    "text": "<p>The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain. The State Transition Function&#39;s output is the result of applying those input messages (transactions).</p>\n"
   },
   "stylus": {
     "title": "Stylus",
