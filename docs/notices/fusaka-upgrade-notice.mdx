@@ -50,7 +50,7 @@ Confirm that your external L1 beacon chain RPC provider has configured their L1 
 
 Ensure that your consensus layer client & Nitro node is configured as per the table below.
 
-| Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required flag for subscribing to all subnets  | Req Flag to serve historical blobs                             |
+| Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required flag for subscribing to all subnets  | Required Flag to serve historical blobs                             |
 | ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------- |
 | Prysm         | ✅                    | None                                                                | `--subscribe-all-data-subnets`                | `--blob-retention-epochs`                                      |
 | Lighthouse    | ✅                    | None                                                                | `--supernode`                                 | `--prune-blobs false` or `--blob-prune-margin-epochs <EPOCHS>` |
