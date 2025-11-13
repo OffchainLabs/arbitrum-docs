@@ -1,0 +1,63 @@
+---
+title: 'Fusaka Compatibility Notice'
+description: Upgrade notices for the transition to Fusaka
+user_story: As an Arbitrum chain owner or node operator, I want to configure my chain/nodes to run on Fusaka-enabled parent.
+content_type: notice
+---
+
+:::danger 🛑 IMPORTANT 🛑
+
+Arbitrum chain operators must ensure that their nodes are properly configured before or shortly after the parent chain upgrades to Fusaka or the child chain upgrades to [ArbOS 50](docs/run-arbitrum-node/arbos-releases/arbos50.mdx).
+
+:::
+
+This document explains what you need to do if you operate a chain that settles on a Fusaka-enabled parent chain. This includes actions for Arbitrum Orbit chains as well as actions for Arbitrum One and Arbitrum Nova node operators.
+
+## What's included in Fusaka
+
+The Fusaka upgrade introduces several breaking changes. Review [EIP-7607](https://eips.ethereum.org/EIPS/eip-7607) for detailed information about the EIPs included in the Fusaka hard fork.
+
+## Important dates
+
+The following dates are relevant for Arbitrum chain operators.
+
+| Date                                     | Network upgrade                                                                            | Affected audience                                                                              |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `Nov 20th 2025, 17:00:00 UTC`            | Arbitrum Sepolia upgrade to [ArbOS 50](docs/run-arbitrum-node/arbos-releases/arbos50.mdx)  | Node operators for Arbitrum Sepolia                                                            |
+| `Jan 8th, 2026, 17:00:00 UTC (proposed)` | Arbitrum One/Nova upgrade to [ArbOS 50](docs/run-arbitrum-node/arbos-releases/arbos50.mdx) | Node operators for Arbitrum One/Nova                                                           |
+| `Oct 14th 2025, 07:36:00 UTC`            | Ethereum Sepolia Fusaka hard fork                                                          | Node operators for Arbitrum chains settling on Ethereum Sepolia (Orbit L2s, Arbitrum Sepolia)  |
+| `Dec 3rd 2025, 21:49:11 UTC`             | Ethereum Mainnet Fusaka hard fork                                                          | Node operators for Arbitrum chains settling on Ethereum Mainnet (Orbit L2s, Arbitrum One/Nova) |
+
+## For node operators
+
+Outlined below are different types of Arbitrum chains, along with node software required for operators of chains in those configurations.
+
+| Layer  | Data Availability    | Fallback to blobs enabled? | Required Nitro node version                                                                                                                                                                                                                                 | Configurations for the Ethereum Consensus Layer client                                                                              |
+| ------ | -------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **L2** | **Rollup**           | N/A                        | Update to [`3.9.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) (ArbOS 50); [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) (ArbOS 40 or older) | Requires all [historical blob data](#how-to-ensure-your-node-has-access-to-all-historical-blob-data-and-blob-data-from-all-subnets) |
+| **L2** | **AnyTrust / AltDA** | Enabled                    | Update to [`3.9.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) (ArbOS 50); [`3.8.0`](https://github.com/OffchainLabs/nitro/releases/tag/v3.8.0) or [`3.7.6`](https://github.com/OffchainLabs/nitro/releases/tag/v3.7.6) (ArbOS 40 or older) | Requires all [historical blob data](#how-to-ensure-your-node-has-access-to-all-historical-blob-data-and-blob-data-from-all-subnets) |
+| **L2** | **AnyTrust / AltDA** | Disabled                   | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                                                |
+| **L3** | **Rollup**           | N/A                        | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                                                |
+| **L3** | **AnyTrust / AltDA** | Enabled or Disabled        | No nitro update required                                                                                                                                                                                                                                    | Doesn't require historical blob data                                                                                                |
+
+### How to ensure your node has access to all historical blob data and blob data from all subnets
+
+#### If you run a Nitro node and use an external L1 Ethereum beacon chain RPC:
+
+Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets before the Ethereum Fusaka hard fork and have all historical blob data to ensure your Nitro node can sync from periods beyond the blob retention period (or that your RPC provider has backfilled the blob data properly).
+
+#### If you run a Nitro node and operate your own L1 Ethereum beacon chain node:
+
+Ensure that your consensus layer client & Nitro node is configured as per the table below.
+
+| Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required flag for subscribing to all subnets  | Required Flag to serve historical blobs                             |
+| ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------- |
+| Prysm         | ✅                    | None                                                                | `--subscribe-all-data-subnets`                | `--blob-retention-epochs`                                      |
+| Lighthouse    | ✅                    | None                                                                | `--supernode`                                 | `--prune-blobs false` or `--blob-prune-margin-epochs` |
+| Teku          | ✅                    | None | `p2p-subscribe-all-subnets-enabled` | N/A                                                            |
+| Lodestar      | ✅                    | None                                                                | `--supernode`                                 | `--chain.archiveDataEpochs`                                    |
+| Erigon Caplin | ❌                    | N/A                                                                 | N/A                                           | N/A                                                            |
+
+For additional information regarding specific client flags visit their docs: [Prysm](https://prysm.offchainlabs.com/docs/learn/concepts/blobs), [Lighthouse](https://lighthouse-book.sigmaprime.io/advanced_blobs.html), [Teku](https://docs.teku.consensys.io/concepts/proto-danksharding#what-are-blobs), and [Lodestar](https://chainsafe.github.io/lodestar/run/beacon-management/beacon-cli/).
+
+To read more about Fusaka PeerDAS changes and why Layer 2 network operators must connect to an Ethereum beacon chain node with historical blob data, see the [historical blobs docs](../run-arbitrum-node/beacon-nodes-historical-blobs.mdx).
