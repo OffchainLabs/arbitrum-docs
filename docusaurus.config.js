@@ -274,9 +274,9 @@ const config = {
           },
           {
             type: 'docSidebar',
-            sidebarId: 'additionalResourcesSidebar',
+            sidebarId: 'noticeSidebar',
             position: 'right',
-            label: 'Resources',
+            label: 'Notices',
           },
         ],
       },
