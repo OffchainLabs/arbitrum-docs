@@ -1,7 +1,0 @@
----
-title: Commitment
-key: Commitment
-titleforSort: Commitment
----
-
-In the context of Arbitrum, a "commitment" is a Merkle commitment, which is a Merkle root representing a set of hashes (such as block hashes or intermediate state hashes) over a specific range or history of the chain. This is used during the dispute resolution process, for example in the BoLD protocol, where validators create a Merkle commitment to the history between two assertions. This allows them to efficiently narrow down disagreements about the chain state by using Merkle proofs to specific blocks or states within that range[(1)](https://docs.arbitrum.io/how-arbitrum-works/bold/bold-technical-deep-dive).
