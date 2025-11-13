@@ -61,7 +61,7 @@ Similar to bridges and block explorers, there are many third-party indexing solu
 
 ### Can I increase the maximum contract size for my Orbit chain?
 
-Yes, Arbitrum Orbit chains support an increased smart contract size limit of up to 96kB. You can use our [Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters `[MaxCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[MaxInitCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)` when calling `[prepareNodeConfig](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43)`. Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.
+Yes, Arbitrum Orbit chains support an increased smart contract size limit of up to 96kB. You can use our [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters `[MaxCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[MaxInitCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)` when calling `[prepareNodeConfig](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43)`. Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.
 
 ### How can I modify Nitro to force posting an invalid assertion and test the fraud proof mechanism?
 

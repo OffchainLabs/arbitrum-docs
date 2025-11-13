@@ -1,10 +1,10 @@
 ---
-title: "How to configure your Arbitrum chain's node using the Arbitrum chain (Orbit) SDK"
-description: 'Learn how to configure a node using the Arbitrum chain (Orbit) SDK'
+title: "How to configure your Arbitrum chain's node using the Chain SDK"
+description: 'Learn how to configure a node using the Chain SDK'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
-user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Arbitrum chain (Orbit) SDK.
+user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Chain SDK.
 content_type: how-to
 ---
 
@@ -84,13 +84,13 @@ For <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</a
 
 You can find information about what these parameters configure in [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx).
 
-## How to generate a node's configuration file using the Arbitrum chain (Orbit) SDK
+## How to generate a node's configuration file using the Arbitrum Chain SDK
 
-Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Arbitrum chain (Orbit) SDK.
+Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Chain SDK.
 
 :::info Example script
 
-The Arbitrum chain (Orbit) SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts) script.
+The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
 :::
 
