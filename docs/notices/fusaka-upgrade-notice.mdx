@@ -54,7 +54,7 @@ Ensure that your consensus layer client & Nitro node is configured as per the ta
 | ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------- |
 | Prysm         | ✅                    | None                                                                | `--subscribe-all-data-subnets`                | `--blob-retention-epochs`                                      |
 | Lighthouse    | ✅                    | None                                                                | `--supernode`                                 | `--prune-blobs false` or `--blob-prune-margin-epochs` |
-| Teku          | ✅                    | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--p2p-subscribe-all-custody-subnets-enabled` | N/A                                                            |
+| Teku          | ✅                    | None | `p2p-subscribe-all-subnets-enabled` | N/A                                                            |
 | Lodestar      | ✅                    | None                                                                | `--supernode`                                 | `--chain.archiveDataEpochs`                                    |
 | Erigon Caplin | ❌                    | N/A                                                                 | N/A                                           | N/A                                                            |
 
