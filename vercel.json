@@ -71,6 +71,11 @@
       "permanent": true
     },
     {
+      "source": "/(/node-running/how-tos/running-an-orbit-node/?)",
+      "destination": "launch-arbitrum-chain/a-gentle-introduction",
+      "permanent": false
+    },
+    {
       "source": "/(anytrust/inside-anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
@@ -1413,7 +1418,7 @@
     },
     {
       "source": "/(launch-orbit-chain/reference/command-line-options/?)",
-      "destination": "/node-running/how-tos/running-an-orbit-node",
+      "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
     },
     {
