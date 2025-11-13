@@ -1,11 +1,3 @@
----
-partial_type: troubleshooting
-title: 'Building Troubleshooting Guide'
-description: 'Common issues and solutions for building on Arbitrum'
-author: anegg0
-last_reviewed: 2025-11-06
----
-
 ### How does gas work on Arbitrum?
 
 Fees on Arbitrum chains are collected on L2 in the chains' native currency (ETH on both Arbitrum One and Nova).
@@ -156,7 +148,7 @@ The WASM module root is a 32-byte hash, which is a Merkelization of the Go repla
 
 The replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.
 
-You can find more information in [How to Customize your Orbit chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).
+You can find more information in [How to Customize your Arbitrum chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).
 
 ### Why do I get a "gas required exceeds allowance" when trying to estimate the gas costs of a request?
 

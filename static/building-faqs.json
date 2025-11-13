@@ -96,7 +96,7 @@
   },
   {
     "question": "What is the WASM module root?",
-    "answer": "The WASM module root is a 32-byte hash, which is a Merkelization of the Go replay binary and its dependencies.\n\nThe replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.\n\nYou can find more information in [How to Customize your Orbit chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).\n\n\n\n",
+    "answer": "The WASM module root is a 32-byte hash, which is a Merkelization of the Go replay binary and its dependencies.\n\nThe replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.\n\nYou can find more information in [How to Customize your Arbitrum chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).\n\n\n\n",
     "key": "what-is-the-wasm-module-root"
   },
   {
