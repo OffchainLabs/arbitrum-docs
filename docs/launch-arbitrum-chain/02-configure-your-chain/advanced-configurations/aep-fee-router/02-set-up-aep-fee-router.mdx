@@ -14,7 +14,7 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 ## Quick start
 
-You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
+You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
 
 ### Canonical contracts
 
@@ -76,7 +76,7 @@ Here are a few flows to help visualize the deployment:
 
 ## Deployment scripts
 
-The Arbitrum chain (Orbit) SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
+The Arbitrum Chain SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
 
 <VanillaAdmonition type="info"  title="Note for L3 chains with custom gas tokens">
 The standard script deploys and sets up the AEP fee router contracts to route funds to the parent chain.
@@ -88,7 +88,7 @@ L3 chains (or further layers) might need to specify a different target address o
 The script performs the following operations:
 
 1. Obtain the rollup and inbox contract of the chain. These are needed to execute the next steps.
-2. Obtain the current fee collectors of the chain: Arbitrum chain (Orbit) base fee collector, Arbitrum chain (Orbit) surplus fee collector, and Parent chain surplus fee collector.
+2. Obtain the current fee collectors of the chain: Arbitrum chain base fee collector, Arbitrum chain surplus fee collector, and Parent chain surplus fee collector.
 3. Deploy the `ChildToParentRouter` contract, configured to send the amounts received to the appropriate target address on the parent chain.
 4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and 10% to the ChildToParentRouter contract deployed in the previous step.
 5. Set each of the fee collectors to the `RewardDistributor` contracts
@@ -103,8 +103,8 @@ To configure the script, you need to specify the following [environment variable
 
 - `ROLLUP_ADDRESS`: address of the rollup contract
 - `CHAIN_OWNER_PRIVATE_KEY`: private key of the account with executor privileges in the `UpgradeExecutor` admin contract for the chain
-- `ORBIT_CHAIN_ID`: chain id of the Arbitrum chain (Orbit)
-- `ORBIT_CHAIN_RPC`: RPC of the Arbitrum chain (Orbit)
+- `ORBIT_CHAIN_ID`: chain id of the Arbitrum chain
+- `ORBIT_CHAIN_RPC`: RPC of the Arbitrum chain
 - `PARENT_CHAIN_ID`: chain id of the parent chain, which shouldn't be an Arbitrum chain
 - `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where 10% of the revenue will be sent to. You can find the potential target addresses in this document's [canonical contracts](#canonical-contracts) section. If the parent chain is not on that list, or if your chain uses a gas token different than the one the router is configured for, contact the Arbitrum Foundation to obtain a specific target address for your chain.
 

@@ -80,13 +80,8 @@
     "key": "will-transactions-with-a-higher-gas-price-bid-be-confirmed-first"
   },
   {
-    "question": "Where can I find a list of the current validators of the Arbitrum chains?",
-    "answer": "Validation on both Arbitrum One and Arbitrum Nova is currently allow-listed to a committee of public entities. You can see the list of validators **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators)**. Governance currently has the power to change this status.\n\n\n\n",
-    "key": "where-can-i-find-a-list-of-the-current-validators-of-the-arbitrum-chains"
-  },
-  {
     "question": "Where can I find the current Data Availability Committee members?",
-    "answer": "The Arbitrum Nova chain has a 7-party DAC, whose members can be seen **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members)**. Governance has the ability to remove or add members to the committee.\n\n\n\n",
+    "answer": "The Arbitrum Nova chain has a 7-party DAC, whose members can be seen in the [Arbitrum Foundation's state of progressive decentralization status document](https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members). Governance has the ability to remove or add members to the committee.\n\n\n\n",
     "key": "where-can-i-find-the-current-data-availability-committee-members"
   },
   {
