@@ -47,7 +47,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4@@/@@nitroContractsPathToPrecompilesInterface=@@/) directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [precompiles interface](https://github.com/OffchainLabs/@@nitroPrecompilesRepositorySlug=nitro-precompile-interfaces@@/blob/@@nitroPrecompilesCommit=f9f65d7c77adf61ad16504a3738a9edcc31e2b2f@@/ArbSys.sol) directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 function sayHi() external view returns(string memory);
@@ -109,7 +109,9 @@ Then, update [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySl
 insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
-Navigate to the [precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4@@/@@nitroContractsPathToPrecompilesInterface=@@/) directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+<!-- should point to root dir -->
+
+Navigate to the [precompiles interface](https://github.com/OffchainLabs/@@nitroPrecompilesRepositorySlug=nitro-precompile-interfaces@@/blob/@@nitroPrecompilesCommit=f9f65d7c77adf61ad16504a3738a9edcc31e2b2f@@/ArbAddressTable.sol) directory, `/@@nitroContractsPathToPrecompilesInterface=@@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 pragma solidity >=0.4.21 <0.9.0;
@@ -157,7 +159,7 @@ hi
 
 We'll reuse the `Arbsys` precompile from Option 1 above to demonstrate how to emit a simple `Hi` event from the `SayHi` method in `ArbSys.sol`.
 
-First, go to the [precompiles implementation](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol) directory, find `ArbSys.go`, and edit the `ArbSys` struct:
+First, go to the [precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToPrecompiles=precompiles@@/ArbSys.go) directory, find `ArbSys.go`, and edit the `ArbSys` struct:
 
 ```go
 // ArbSys provides system-level functionality for interacting with L1 and understanding the call stack.
@@ -189,7 +191,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Now navigate to the [precompiles interface](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol) directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
+Now navigate to the [precompiles interface](https://github.com/OffchainLabs/@@nitroPrecompilesRepositorySlug=nitro-precompile-interfaces@@/blob/@@nitroPrecompilesCommit=f9f65d7c77adf61ad16504a3738a9edcc31e2b2f@@/ArbSys.sol) directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
 
 ```solidity
 event Hi(address caller);
@@ -268,7 +270,7 @@ func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
 }
 ```
 
-The purpose of this method is to retrieve the balance of an address. As defined in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code (opcode) for obtaining the address balance has an associated gas cost of 700 gas. The function accounts for this cost by deducting the specified amount of gas, indicated by the protocol constant `BalanceGasEIP1884`, which is set to `700`, through the call to `c.Burn(int64)`.
+The purpose of this method is to retrieve the balance of an address. As defined in [EIP-1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code (opcode) for obtaining the address balance has an associated gas cost of 700 gas. The function accounts for this cost by deducting the specified amount of gas, indicated by the protocol constant `BalanceGasEIP1884`, which is set to `700`, through the call to `c.Burn(int64)`.
 
 To customize the gas cost, let's implement an alternative to `GetBalance`, called `GetBalanceCustom`:
 
@@ -509,11 +511,3 @@ You should see something like this:
 ## Incorporate your changes to precompile into the ArbOS upgrade
 
 If you do not customize the precompile before launching your Arbitrum chain network, please continue to follow the instructions on [Customize ArbOS](./customize-arbos.mdx) to perform an ArbOS version control to avoid blockchain reorg.
-
-<!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
-<!--
-Note that nitro-contracts repository is hardcoded because atm we use the "nitro" repository for referencing precompiles for the current released nitro version  (for Arb chains),
-but we use the "nitro-contracts" repo for Arbitrum chains (next nitro release version will use "nitro-contracts" for all chains though).
-The same goes for the path to precompiles interface.
-We can use the @@nitroContractsRepositorySlug=nitro-contracts@@ and @@nitroContractsPathToPrecompilesInterface=@@ variables once we release nitro version 2.1.0 or above.
--->
