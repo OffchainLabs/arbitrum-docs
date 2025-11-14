@@ -157,7 +157,7 @@ hi
 
 We'll reuse the `Arbsys` precompile from Option 1 above to demonstrate how to emit a simple `Hi` event from the `SayHi` method in `ArbSys.sol`.
 
-First, go to the [precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToPrecompiles=precompiles@@/) directory, find `ArbSys.go`, and edit the `ArbSys` struct:
+First, go to the [precompiles implementation](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol) directory, find `ArbSys.go`, and edit the `ArbSys` struct:
 
 ```go
 // ArbSys provides system-level functionality for interacting with L1 and understanding the call stack.
@@ -189,7 +189,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Now navigate to the [precompiles interface](https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4@@/@@nitroContractsPathToPrecompilesInterface=@@/) directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
+Now navigate to the [precompiles interface](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol) directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
 
 ```solidity
 event Hi(address caller);
