@@ -7,6 +7,10 @@
     "title": "Address Alias",
     "text": "<p>An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.</p>\n"
   },
+  "dapp": {
+    "title": "Decentralized application",
+    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nNote: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
+  },
   "arb-token-bridge": {
     "title": "Arb Token Bridge",
     "text": "<p>A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of <code>ERC-20</code> tokens between the two layers.</p>\n"
@@ -73,7 +77,7 @@
   },
   "assertion": {
     "title": "Assertion",
-    "text": "<p>A bonded claim made by an Arbitrum <a href=\"/intro/glossary#validator\">Validator</a> representing a claim about an Arbitrum chain&#39;s state. An <a href=\"/intro/glossary#assertion\">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href=\"/intro/glossary#challenge\">Challenge</a>.</p>\n"
+    "text": "<p>A bonded claim made by an Arbitrum <a href=\"/intro/glossary#validator\">Validator</a> representing a claim about an Arbitrum chain&#39;s state. An <a href=\"/intro/glossary#assertion\">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href=\"/intro/glossary#challenge\">Challenge</a>.</p>\n<p>Assertions can have different states:</p>\n<ul>\n<li><strong>Proposed</strong>: When a validator submits an assertion</li>\n<li><strong>Challenged</strong>: If another validator disputes the assertion, an interactive fraud-proof initiates.</li>\n<li><strong>Confirmed</strong>: An assertion becomes final if no one challenges it within the dispute window (6.4 days).</li>\n</ul>\n"
   },
   "auction-contract": {
     "title": "Auction Contract",
@@ -150,10 +154,6 @@
   "custom-gateway": {
     "title": "Custom gateway",
     "text": "<p>Any <a href=\"/intro/glossary#token-gateway\">Token Gateway</a> that isn&#39;t the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a>.</p>\n"
-  },
-  "dapp": {
-    "title": "dApp",
-    "text": "<p>Short for &quot;decentralized application.&quot; A dApp typically consists of smart contracts as well as a user-interface for interacting with them.</p>\n"
   },
   "data-availability-certificate": {
     "title": "Data Availability Certificate",
@@ -361,7 +361,7 @@
   },
   "state-transition-function": {
     "title": "State Transition Function",
-    "text": "<p>The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.</p>\n"
+    "text": "<p>The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain. The State Transition Function&#39;s output is the result of applying those input messages (transactions).</p>\n"
   },
   "stylus": {
     "title": "Stylus",

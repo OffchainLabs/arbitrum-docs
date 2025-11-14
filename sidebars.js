@@ -3,8 +3,6 @@
 // Use the generated SDK sidebar for API reference
 const sdkApiSidebar = require('./sdk-sidebar.js');
 // Use the generated stylus-by-example sidebars
-const stylusByExampleBasicExamples = require('./docs/stylus-by-example/basic_examples/sidebar.js');
-const stylusByExampleApplications = require('./docs/stylus-by-example/applications/sidebar.js');
 
 // Create a custom SDK sidebar that combines manual intro pages with generated API docs
 const sdkSidebar = {
@@ -1217,7 +1215,43 @@ const sidebars = {
               id: 'stylus/reference/project-structure',
               label: 'Structure of a Contract',
             },
-            ...stylusByExampleBasicExamples,
+            {
+              type: 'category',
+              label: 'Data types',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/primitives',
+                  label: 'Primitives',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/compound-types',
+                  label: 'Compound types',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/storage',
+                  label: 'Storage',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/conversions-between-types',
+                  label: 'Conversions Between Types',
+                },
+              ],
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/global-variables-and-functions',
+              label: 'Global variables and functions',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/contracts',
+              label: 'Contracts',
+            },
             {
               type: 'doc',
               id: 'stylus/how-tos/using-inheritance',
@@ -1304,7 +1338,6 @@ const sidebars = {
           label: 'Examples',
           collapsed: true,
           items: [
-            ...stylusByExampleApplications,
             {
               type: 'link',
               label: 'Awesome Stylus',
