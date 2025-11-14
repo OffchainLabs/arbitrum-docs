@@ -128,6 +128,49 @@ cp .env.example .env
 yarn dev
 ```
 
+## Deploying a `ChildToParent` router for a custom `ERC-20` on Base
+
+Some RaaS providers and Arbitrum chains may need to route AEP fees using a non-`ETH` `ERC-20` token on Base, or other L2s.
+
+To support this, the Arbitrum Chain SDK now includes a helper for deploying a `ChildToParentRouter` on Base for any specified `ERC-20`.
+
+Starting with `arbitrum-orbit-sdk` v0.24.2, you can deploy your own `ERC-20` router on Base programmatically.
+
+### When you need this
+
+You should deploy your own `ERC-20` router if:
+
+- Your chain’s gas token or AEP-fee-denominated token is an `ERC-20` on Base
+
+- You want to route AEP fees into the standard AEP router chain
+
+### How it works
+
+- The SDK exposes a function that handles deployment of a `ChildToParentRouter` contract configured for:
+
+- A specific `ERC-20` token address on Base
+
+- A target address on the parent chain (often Ethereum or a parent L2)
+
+The standard AEP withdrawal logic:
+
+```javascript
+import { deployChildToParentRouterForErc20 } from "@arbitrum/orbit-sdk";
+
+async function main() {
+  const tx = await feeRouterDeployOpChildToParentRewardRouter({
+    childChainWalletClient: WalletClient;
+    parentChainTargetAddress: Address;
+    minDistributionInvervalSeconds?: bigint;
+    parentChainTokenAddress?: Address;
+    childChainTokenAddress?: Address;
+  });
+
+  console.log("ChildToParentRouter deployed:", tx.childToParentRouter);
+}
+main();
+```
+
 ## Triggering movement of funds
 
 Any `ChildToParentRouter` contract deployed by an Arbitrum chain must be periodically called to move funds.
