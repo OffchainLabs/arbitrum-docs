@@ -1216,6 +1216,43 @@ const sidebars = {
               label: 'Structure of a Contract',
             },
             {
+              type: 'category',
+              label: 'Data types',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/primitives',
+                  label: 'Primitives',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/compound-types',
+                  label: 'Compound types',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/storage',
+                  label: 'Storage',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/conversions-between-types',
+                  label: 'Conversions Between Types',
+                },
+              ],
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/global-variables-and-functions',
+              label: 'Global variables and functions',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/contracts',
+              label: 'Contracts',
+            },
+            {
               type: 'doc',
               id: 'stylus/how-tos/using-inheritance',
               label: 'Composition and trait-based routing model',
