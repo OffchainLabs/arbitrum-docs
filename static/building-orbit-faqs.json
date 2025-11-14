@@ -1,7 +1,7 @@
 [
   {
     "question": "Can I use the Chain SDK to deploy a mainnet chain?",
-    "answer": "Yes! The Arbitrum Chain SDK's core technology has undergone a comprehensive audit and is now capable of supporting deployments to mainnet. You can read more about it [here](https://docs.arbitrum.io/launch-orbit-chain/concepts/public-preview-expectations#arbitrum-orbit-is-mainnet-ready-but-deploy-to-testnet-first).\n\n\n\n",
+    "answer": "Yes! The Arbitrum Chain SDK's core technology has undergone a comprehensive audit and is now capable of supporting deployments to mainnet. You can read more about it in our [preview expectations notice](https://docs.arbitrum.io/launch-orbit-chain/concepts/public-preview-expectations#arbitrum-orbit-is-mainnet-ready-but-deploy-to-testnet-first).\n\n\n\n",
     "key": "can-i-use-the-chain-sdk-to-deploy-a-mainnet-chain"
   },
   {
@@ -31,7 +31,7 @@
   },
   {
     "question": "Can I use Ethereum toolkits to develop on my Arbitrum chain?",
-    "answer": "Arbitrum chains are fully EVM-compatible. Most tools that support Ethereum should be able to support an Arbitrum chain. There are, however, specific differences that developers need to consider when building on an Arbitrum chain. You can find them [here](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/overview).\n\n\n\n",
+    "answer": "Arbitrum chains are fully EVM-compatible. Most tools that support Ethereum should be able to support an Arbitrum chain. There are, however, specific differences that developers need to consider when building on an Arbitrum chain. You can find them in our [overview of the differences between Arbitrum and Ethereum](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/overview).\n\n\n\n",
     "key": "can-i-use-ethereum-toolkits-to-develop-on-my-arbitrum-chain"
   },
   {
