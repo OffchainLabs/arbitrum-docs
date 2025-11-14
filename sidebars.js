@@ -3,8 +3,6 @@
 // Use the generated SDK sidebar for API reference
 const sdkApiSidebar = require('./sdk-sidebar.js');
 // Use the generated stylus-by-example sidebars
-const stylusByExampleBasicExamples = require('./docs/stylus-by-example/basic_examples/sidebar.js');
-const stylusByExampleApplications = require('./docs/stylus-by-example/applications/sidebar.js');
 
 // Create a custom SDK sidebar that combines manual intro pages with generated API docs
 const sdkSidebar = {
@@ -1217,7 +1215,6 @@ const sidebars = {
               id: 'stylus/reference/project-structure',
               label: 'Structure of a Contract',
             },
-            ...stylusByExampleBasicExamples,
             {
               type: 'doc',
               id: 'stylus/how-tos/using-inheritance',
@@ -1304,7 +1301,6 @@ const sidebars = {
           label: 'Examples',
           collapsed: true,
           items: [
-            ...stylusByExampleApplications,
             {
               type: 'link',
               label: 'Awesome Stylus',
