@@ -7,8 +7,6 @@ reader-task: Learn how to upgrade to using historical blobs post the Fusaka upgr
 content_type: overview
 ---
 
-The Fulu consensus node upgrade in Fusaka will activate Ethereum's PeerDAS ([`EIP-7594`](https://eips.ethereum.org/EIPS/eip-7594)), with Sepolia's upgrade on October 14th and Mainnet targeting the week of December 3rd.
-
 Layer 2 network operators must connect to an Ethereum beacon chain node with historical blob data to ensure proper functioning of the Nitro node software, or risk failure in fetching blob data.
 
 ## Impacted audiences
@@ -64,13 +62,11 @@ Currently, the following clients are supported for Sepolia only.
 
 :::
 
-| Client        | Compatible with Nitro | Required Nitro Flag                                                 | Required Beacon Node Flag                     |
-| ------------- | --------------------- | ------------------------------------------------------------------- | --------------------------------------------- |
-| Prysm         | ✅                    | None                                                                | `--subscribe-all-data-subnets`                |
-| Lighthouse    | ✅                    | None                                                                | `--supernode`                                 |
-| Teku          | ✅                    | `--parent-chain.blob-client.dangerous.skip-blob-proof-verification` | `--p2p-subscribe-all-custody-subnets-enabled` |
-| Lodestar      | ✅                    | None                                                                | `--supernode`                                 |
-| Erigon Caplin | ❌                    |                                                                     |                                               |
+<!-- Import client-flags partial -->
+
+import ClientFlagsTable from '../partials/_client-flags.mdx';
+
+<ClientFlagsTable />
 
 ## Checklist
 

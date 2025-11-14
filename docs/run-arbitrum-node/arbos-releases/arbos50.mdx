@@ -33,7 +33,7 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 - Having read and understood the [ArbOS Software Releases Overview page](./01-overview.mdx).
 - Running [Nitro v3.9.0](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.0) or higher, which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.0-cca645a`.
   - Note that it's important to run Nitro v3.9.0 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
-- Running nitro-contracts v3.1.X (e.g. [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1)) or higher
+- Running [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
   - If your chain isn't ready to activate <a data-quicklook-from="bold">BoLD</a>, use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher can't be used without activating BoLD.
   - If you want to enable [Native Token Mint/Burn capabilities](#native-token-mint-and-burn) for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
 - WASM module root: `0x2c54f6e9e378ba320ed9c713a1d9f067a572b1437e4f1c40b1a915d3066c04f2`
@@ -148,5 +148,5 @@ While ArbOS 50 Dia will be compatible with both `nitro-contracts 3.1.X` and `nit
 - [AIP: ArbOS Version 50 Dia Forum Post](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-version-50-dia/)
 - [Temperature check vote on Snapshot for ArbOS 50 Dia](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x33754da4006d0ef38666ec5d5e85fd0966a891a594ab9dc21f23beedea2d330b)
 - [AIP: Raising the gas target & improvements to pricing algorithm Forum Post](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182)
-- Coming Soon - Temperature check vote on Snapshot for Raising the gas target & improvements to pricing algorithm
+- [Temperature check vote on Snapshot for Raising the gas target & improvements to pricing algorithm](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x4a96a91d162975de0d402b83ca8b8a24e808ca357150120fc0d44ae0bf1cc4a5)
 - Coming Soon - ArbOS 50 Audit Report, from Trail of Bits
