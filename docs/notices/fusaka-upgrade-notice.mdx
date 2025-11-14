@@ -50,11 +50,11 @@ Confirm that your external L1 beacon chain RPC provider has configured their L1 
 
 Ensure that your consensus layer client & Nitro node is configured as per the table below.
 
-| Client        | Compatible with Nitro | Required Nitro Flag | Required flag for subscribing to all subnets | Required Flag to serve historical blobs               |
+| Client        | Compatible with Nitro | Required Nitro Flag | Required flag for subscribing to all subnets | Required flag to serve historical blobs               |
 | ------------- | --------------------- | ------------------- | -------------------------------------------- | ----------------------------------------------------- |
 | Prysm         | ✅                    | None                | `--subscribe-all-data-subnets`               | `--blob-retention-epochs`                             |
 | Lighthouse    | ✅                    | None                | `--supernode`                                | `--prune-blobs false` or `--blob-prune-margin-epochs` |
-| Teku          | ✅                    | None                | `p2p-subscribe-all-subnets-enabled`          | N/A                                                   |
+| Teku          | ✅                    | None                | `--p2p-subscribe-all-subnets-enabled`        | None exists                                           |
 | Lodestar      | ✅                    | None                | `--supernode`                                | `--chain.archiveDataEpochs`                           |
 | Erigon Caplin | ❌                    | N/A                 | N/A                                          | N/A                                                   |
 
