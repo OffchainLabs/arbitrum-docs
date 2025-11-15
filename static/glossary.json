@@ -287,6 +287,10 @@
     "title": "One Step Proof",
     "text": "<p>Final step in a challenge; a single operation of the Arbitrum VM (<a href=\"/intro/glossary#wasm\">WASM</a> ) is executed on the underlying chain, and the validity of its state transition is verified.</p>\n"
   },
+  "oracle": {
+    "title": "Oracle",
+    "text": "<p>Oracles are third-party services that provide smart contracts with external information. They act as a bridge between blockchains and the outside world, which expands their functionality by enabling smart contracts to access data beyond their native networks.</p>\n"
+  },
   "outbox": {
     "title": "Outbox",
     "text": "<p>A parent chain contract responsible for tracking <a href=\"/intro/glossary#l2-to-l1-message\">Child to parent chain Message</a>s, including withdrawals, which can be executed once they are confirmed. The outbox stores a Merkle Root of all outgoing messages.</p>\n"
