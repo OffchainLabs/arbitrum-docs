@@ -310,8 +310,7 @@ const config = {
                 to: 'https://arbitrum.foundation/',
               },
               {
-                label: 'Nitro whitepaper',
-                to: 'https://docs.arbitrum.io/nitro-whitepaper.pdf',
+                html: '<a href="/nitro-whitepaper.pdf">Arbitrum whitepaper</a>',
               },
             ],
           },
