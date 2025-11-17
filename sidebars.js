@@ -809,7 +809,7 @@ const sidebars = {
         {
           type: 'link',
           label: 'Nitro whitepaper',
-          href: '/nitro-whitepaper.pdf',
+          href: 'https://docs.arbitrum.io/nitro-whitepaper.pdf',
         },
         {
           type: 'category',
