@@ -807,9 +807,9 @@ const sidebars = {
           label: 'Inside Arbitrum Nitro',
         },
         {
-          type: 'link',
-          label: 'Nitro whitepaper',
-          href: 'https://docs.arbitrum.io/nitro-whitepaper.pdf',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/nitro-whitepaper.pdf">Nitro whitepaper<span class="other-section-icon">↑</span></a>',
         },
         {
           type: 'category',
