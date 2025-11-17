@@ -310,8 +310,9 @@ const config = {
                 to: 'https://arbitrum.foundation/',
               },
               {
+                type: 'link',
                 label: 'Nitro whitepaper',
-                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+                href: '/nitro-whitepaper.pdf',
               },
             ],
           },
