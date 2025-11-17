@@ -808,8 +808,8 @@ const sidebars = {
         },
         {
           type: 'link',
-          href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
           label: 'Nitro whitepaper',
+          href: '/nitro-whitepaper.pdf',
         },
         {
           type: 'category',
