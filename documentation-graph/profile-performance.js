@@ -470,7 +470,7 @@ async function runPerformanceProfiling() {
 
     // Run analysis with profiling checkpoints
     const options = {
-      input: '/Users/allup/dev/OCL/arbitrum-docs/docs',
+      input: '/Users/allup/OCL/arbitrum-docs/docs',
       output: './dist',
       verbose: false,
       skipExtraction: false,
