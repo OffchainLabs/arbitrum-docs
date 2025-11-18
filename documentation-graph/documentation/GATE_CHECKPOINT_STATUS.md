@@ -22,7 +22,7 @@
 
 ### Step 1: Create package.json
 
-Create `/Users/allup/dev/OCL/arbitrum-docs/documentation-graph/package.json`:
+Create `/Users/allup/OCL/arbitrum-docs/documentation-graph/package.json`:
 
 ```json
 {
@@ -57,7 +57,7 @@ Create `/Users/allup/dev/OCL/arbitrum-docs/documentation-graph/package.json`:
 ### Step 2: Install Dependencies
 
 ```shell
-cd /Users/allup/dev/OCL/arbitrum-docs/documentation-graph
+cd /Users/allup/OCL/arbitrum-docs/documentation-graph
 npm install
 ```
 

@@ -1,5 +1,0 @@
-{
-  "this is not": "a valid schema",
-  "type": "invalid-type",
-  "properties": "not-an-object"
-}
