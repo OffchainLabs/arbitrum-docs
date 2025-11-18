@@ -13,7 +13,7 @@
     "sync-stylus-content": "node scripts/sync-stylus-content.js",
     "build-glossary": "tsx scripts/build-glossary.ts",
     "build-translation": "yarn tsx ./scripts/move-untranslated-files.ts",
-    "build": "yarn install-sdk-dependencies && yarn sync-stylus-content && yarn build-glossary && docusaurus build",
+    "build": "yarn install-sdk-dependencies && yarn sync-stylus-content && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
