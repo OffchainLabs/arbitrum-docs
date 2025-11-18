@@ -54,7 +54,7 @@ program
   .option(
     '-i, --input <path>',
     'Input directory containing documentation',
-    '/Users/allup/dev/OCL/arbitrum-docs/docs',
+    '/Users/allup/OCL/arbitrum-docs/docs',
   )
   .option('-o, --output <path>', 'Output directory for generated files', './dist')
   .option('-c, --config <path>', 'Path to JSON configuration file for analysis customization')
