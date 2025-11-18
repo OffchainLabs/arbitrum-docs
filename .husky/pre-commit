@@ -169,7 +169,16 @@ main() {
     log_info "⏭️  Skipping code formatting (no formattable files staged)"
   fi
 
-  # 4. TypeScript type checking (only if TS files are staged)
+  # 4. Markdown linting (only if markdown files are staged)
+  if has_staged_files "\.(md|mdx)$"; then
+    log_step "Validating Markdown syntax..."
+    time_command yarn lint:markdown || exit_with_error "Markdown validation failed. Fix markdown syntax errors before committing."
+    log_success "Markdown validation passed"
+  else
+    log_info "⏭️  Skipping Markdown validation (no markdown files staged)"
+  fi
+
+  # 5. TypeScript type checking (only if TS files are staged)
   if has_staged_files "\.(ts|tsx)$"; then
     log_step "Running TypeScript type checking..."
     time_command yarn typecheck || exit_with_error "TypeScript type checking failed. Fix type errors before committing."

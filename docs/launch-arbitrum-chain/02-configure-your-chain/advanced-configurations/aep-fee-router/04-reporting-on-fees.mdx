@@ -22,13 +22,13 @@ As a RaaS or Chain Owner, if you require internal daily reporting on fees, we ha
 
 There are two main L1 fee collector addresses:
 
-1. **L1 Base Fee** - Refunds batch poster for parent chain posting costs
-2. **L1 Surplus** - Collects profit on batch posting fees
+1. **L1 Base Fee**: Refunds batch poster for parent chain posting costs
+2. **L1 Surplus**: Collects profit on batch posting fees
 
 #### Important Distinction:
 
-- L1 Base Fee = Cost recovery only (NOT for profit)
-- L1 Surplus = Profit collection
+- L1 Base Fee is for cost recovery only (NOT for profit)
+- L1 Surplus is for profit collection
 - Using L1 Base Fee for profit indicates misconfiguration
 
 ### 2. How the System Works (Same Gas Token Scenario)
@@ -74,17 +74,6 @@ Same as the same gas token scenario, but uses the gas price from the batch posti
 - Creates exchange rate risk
 - Should NOT set artificially high exchange rate for profit
 
-### 4. Monitoring Tool Requirements
-
-#### Purpose:
-
-Detect if operators have misconfigured the L1 base fee mechanism (using it for profit by manipulating exchange rates)
-
-#### Cost Calculation (Same for All Revenue Methods):
-
-- Parent chain tokens spent = gas used × gas price (from batch posting report)
-- Plus percentage for exchange transaction costs
-
 #### Revenue Calculation Methods:
 
 #### Method 1 - Exchange Rate Analysis (Parent Chain Only):
@@ -107,7 +96,11 @@ Detect if operators have misconfigured the L1 base fee mechanism (using it for p
 - **Process**: Track actual collected amounts
 - **Advantage**: More accurate - uses real collection data
 
-**Note**: Method 1 and Method 2 should be roughly equivalent over the long term.
+:::note
+
+Method 1 and Method 2 should be roughly equivalent over the long term.
+
+:::
 
 #### Analysis Criteria (Both Must Be Met):
 
@@ -119,9 +112,11 @@ Detect if operators have misconfigured the L1 base fee mechanism (using it for p
    - Use either Method 1 or Method 2 for revenue
    - Must exceed the deviation threshold
 
-**If both criteria are met → indicates misconfiguration**
+:::warning
 
-### Implementation Details:
+If both criteria are met → indicates misconfiguration
+
+:::
 
 #### Exchange Rate Sources:
 

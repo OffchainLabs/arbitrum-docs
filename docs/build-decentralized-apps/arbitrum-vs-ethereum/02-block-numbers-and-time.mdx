@@ -6,6 +6,7 @@ author: dzgoldman, jose-franco
 sme: jose-franco
 target_audience: developers who want to build on Arbitrum
 content_type: concept
+displayed_sidebar: buildAppsSidebar
 ---
 
 :::info block number vs `block.number`
@@ -17,7 +18,7 @@ Throughout this and other pages, we note that the block number of a chain does n
 
 :::
 
-As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/how-arbitrum-works/03-sequencer.mdx) or via the chain's [Delayed Inbox](/how-arbitrum-works/03-sequencer.mdx).
+As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) or via the chain's [Delayed Inbox](/how-arbitrum-works/deep-dives/sequencer.mdx).
 
 Once in the chain's core inbox contract, transaction processing occurs in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
