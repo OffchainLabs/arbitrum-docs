@@ -17,9 +17,6 @@ build
 # Generated sdk
 sdk-sidebar.js
 docs/sdk/
-# Generated glossary
-docs/partials/_glossary-partial.mdx
-static/glossary.json
 # Generated stylus
 docs/stylus-by-example/
 # Generated api:mutes Typedoc quirk
