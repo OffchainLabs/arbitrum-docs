@@ -37,7 +37,7 @@
     },
     {
       "source": "/(/docs/how-arbitrum-works/state-transition-function/stylus-execution-path/?)",
-      "destination": "/(docs/how-arbitrum-works/inside-arbitrum-nitro/?)",
+      "destination": "/(docs/how-arbitrum-works/deep-dives/arbos#stylus-specific-differences/?)",
       "permanent": false
     },
     {
@@ -58,6 +58,11 @@
     {
       "source": "/(/docs/how-arbitrum-works/validation-and-proving/validation-and-proving/?)",
       "destination": "/(docs/how-arbitrum-works/bold/gentle-introduction/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(/docs/launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains/?)",
       "permanent": false
     },
     {
@@ -614,6 +619,11 @@
     {
       "source": "/(getting-started-users/?)",
       "destination": "/arbitrum-bridge/quickstart",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/arbos/introduction/?)",
+      "destination": "/how-arbitrum-works/deep-dives/arbos",
       "permanent": false
     },
     {
@@ -1288,7 +1298,7 @@
     },
     {
       "source": "/(launch-orbit-chain/how-tos/set-up-aep-fee-router/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/set-up-aep-fee-router",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
       "permanent": false
     },
     {
@@ -2092,6 +2102,11 @@
       "permanent": false
     },
     {
+      "source": "/(stylus/tools/stylus-cli?)",
+      "destination": "stylus/using-cli",
+      "permanent": false
+    },
+    {
       "source": "/(stylus/tools/using-stylus-cli/?)",
       "destination": "/stylus/using-cli",
       "permanent": false
@@ -2148,7 +2163,7 @@
     },
     {
       "source": "/build-decentralized-apps/troubleshooting/",
-      "destination": "/for-devs/troubleshooting-building",
+      "destination": "/for-devs/troubleshooting-building/",
       "permanent": false
     },
     {
