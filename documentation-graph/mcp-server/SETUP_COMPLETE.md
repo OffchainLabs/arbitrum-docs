@@ -4,7 +4,7 @@ The MCP server is now configured to operate on data generated in the parent `doc
 
 ## Configuration Status
 
-✓ **Data Path**: `../dist` (resolves to `/Users/allup/dev/OCL/arbitrum-docs_documentation-graph/documentation-graph/documentation-graph/dist`)
+✓ **Data Path**: `../dist` (resolves to `/Users/allup/OCL/arbitrum-docs/documentation-graph/dist`)
 ✓ **Data Size**: 21 MB
 ✓ **Data Loading**: Successfully verified
 ✓ **Documents**: 429 loaded
