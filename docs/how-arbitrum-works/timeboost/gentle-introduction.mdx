@@ -96,34 +96,8 @@ The chain owner sets the minimum reserve price, which can be updated at any time
 
 Once the autonomous auctioneer determines an auction winner, the `Auction` contract will deduct the second-highest bid amount from the account of the highest bidder and transfer those funds to a `beneficiary` account designated by the chain owner by default. The `expressLaneControllerAddress` specified in the highest bid will become the express lane controller for the round.
 
-## FAQs
-
-#### Who is Timeboost for, and how do I use it?
-
-Timeboost is an optional addition to an Arbitrum chain’s infrastructure, meaning that enabling Timeboost is at the discretion of the chain owner and that an Arbitrum chain can fully function normally without Timeboost.
-
-When enabled, Timeboost serves different groups of parties with varying degrees of impact and benefits. Let’s go through them below:
-
-#### For regular users:
-
-Timeboost will have a minimal impact. Non-express lane transactions will experience a nominal delay of 200ms, which means that, to the average user, their transactions will take approximately 450ms to be sequenced and included in a block (up from approximately 200ms). All users will remain protected from harmful MEV activity, such as sandwich attacks and front-running, through the continued use of a private mempool.
-
-#### For chain owners:
-
-Timeboost represents a unique way to accrue value for its token and generate revenue for the chain. Explicitly, chain owners can set up their Timeboost auction to collect bid proceeds in the same token used for gas on their network and then choose what to do with these proceeds afterward.
-
-#### For searchers/arbitrageurs:
-
-Timeboost adds a unique twist to your existing or prospective MEV strategies that may become more profitable than before. For instance, purchasing the time advantage offered by Timeboost’s auction may end up costing less than the costs of investing in hardware and winning latency races. Another example is the potential new business model of reselling express lane rights to other parties on a time slot or per-transaction basis.
-
-### Special note on Timeboost for chain owners
-
-As with many new features and upgrades to Arbitrum Nitro, Timeboost is an optional feature that chain owners may choose to deploy and customize however they see fit. Deploying and enabling/disabling Timeboost on a live Arbitrum chain will not halt or impact the chain but will instead influence the chain's transaction ordering policy. An Arbitrum chain will, by default, fall back to FCFS in scenarios where Timeboost is deployed but disabled, or if there is no express lane controller for a given round.
-
-We recommend that Arbitrum chains holistically assess the applicability and use cases of Timeboost for their chain before deploying and enabling Timeboost. This assessment is necessary because some Arbitrum chains may not have that much MEV (e.g., arbitrage) to begin with. Furthermore, we recommend that Arbitrum chains start with the default parameters recommended by Offchain Labs and closely monitor the results and impacts on their chain’s ecosystem over time before considering any adjustments to the parameters.
-
 :::info Additional FAQs
 
-For more frequently asked questions refer to the [Timeboost FAQ](/how-arbitrum-works/timeboost/timeboost-faq.mdx).
+For frequently asked questions refer to the [Timeboost FAQ](/how-arbitrum-works/timeboost/timeboost-faq.mdx).
 
 :::
