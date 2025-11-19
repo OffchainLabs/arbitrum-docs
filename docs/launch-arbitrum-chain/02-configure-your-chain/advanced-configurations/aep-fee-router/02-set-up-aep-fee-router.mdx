@@ -140,9 +140,11 @@ Starting with `arbitrum-orbit-sdk` v0.24.2, you can deploy your own `ERC-20` rou
 
 You should deploy your own `ERC-20` router if:
 
-- Your chain’s gas token or AEP-fee-denominated token is an `ERC-20` on Base
+- Your chain uses a custom gas token
 
-- You want to route AEP fees into the standard AEP router chain
+- Your chain is an L3 that settles to base (or another OP chain L2)
+
+- Your chain's custom gas token is represented as an `ERC-20` on Base or the chain that your chain settles to
 
 ### How it works
 
@@ -155,18 +157,18 @@ You should deploy your own `ERC-20` router if:
 The standard AEP withdrawal logic:
 
 ```javascript
-import { deployChildToParentRouterForErc20 } from "@arbitrum/orbit-sdk";
+import { deployChildToParentRouterForErc20 } from 'arbitrum/chain-sdk';
 
 async function main() {
   const tx = await feeRouterDeployOpChildToParentRewardRouter({
-    childChainWalletClient: WalletClient;
-    parentChainTargetAddress: Address;
-    minDistributionInvervalSeconds?: bigint;
-    parentChainTokenAddress?: Address;
-    childChainTokenAddress?: Address;
+    childChainWalletClient,
+    parentChainTargetAddress,
+    minDistributionInvervalSeconds,
+    parentChainTokenAddress,
+    childChainTokenAddress,
   });
 
-  console.log("ChildToParentRouter deployed:", tx.childToParentRouter);
+  console.log('ChildToParentRouter deployed:', tx.childToParentRouter);
 }
 main();
 ```
