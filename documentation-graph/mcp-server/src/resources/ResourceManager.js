@@ -23,9 +23,13 @@
  */
 
 /**
- * ResourceManager - MCP Resources for accessing analysis data
+ * ResourceManager - Optimized MCP Resources with pagination and compact output
  *
- * Exposes documentation analysis outputs as MCP resources
+ * Exposes documentation analysis outputs as MCP resources with:
+ * - Pagination support for large datasets
+ * - Summary views without content fields
+ * - Compact JSON (no pretty printing)
+ * - Granular endpoints for specific data
  */
 
 import { logger } from '../utils/logger.js';
@@ -37,29 +41,60 @@ export class ResourceManager {
 
   listResources() {
     return [
+      // Full data with pagination
       {
         uri: 'docs://graph',
         name: 'Knowledge Graph',
         description:
-          'Complete knowledge graph with nodes (documents, concepts, sections) and edges (relationships)',
+          'Complete knowledge graph with nodes and edges. Supports ?limit and ?offset for pagination',
         mimeType: 'application/json',
       },
       {
         uri: 'docs://documents',
         name: 'Extracted Documents',
-        description: 'All documentation files with metadata, frontmatter, and content',
+        description:
+          'All documentation files with metadata and content. Supports ?limit=20&offset=0 for pagination',
         mimeType: 'application/json',
       },
       {
         uri: 'docs://concepts',
         name: 'Extracted Concepts',
-        description: 'Top concepts with TF-IDF weights and document distribution',
+        description:
+          'Top concepts with TF-IDF weights. Supports ?limit and ?offset for pagination',
         mimeType: 'application/json',
       },
       {
         uri: 'docs://analysis',
         name: 'Graph Analysis',
         description: 'Centrality metrics, hub documents, and structural analysis',
+        mimeType: 'application/json',
+      },
+
+      // Summary views (lightweight, no content)
+      {
+        uri: 'docs://documents/summary',
+        name: 'Documents Summary',
+        description: 'Document metadata only (no content field) for quick overview',
+        mimeType: 'application/json',
+      },
+      {
+        uri: 'docs://documents/list',
+        name: 'Documents List',
+        description: 'Simple list of document paths and titles',
+        mimeType: 'application/json',
+      },
+      {
+        uri: 'docs://graph/summary',
+        name: 'Graph Summary',
+        description: 'Graph statistics without full node/edge data',
+        mimeType: 'application/json',
+      },
+
+      // Granular endpoints
+      {
+        uri: 'docs://concepts/top',
+        name: 'Top Concepts',
+        description: 'Top 20 concepts by frequency',
         mimeType: 'application/json',
       },
       {
@@ -71,67 +106,231 @@ export class ResourceManager {
     ];
   }
 
+  /**
+   * Parse query parameters from URI
+   * @param {string} uri - URI with optional query parameters
+   * @returns {Object} { path: string, params: Object }
+   */
+  parseUri(uri) {
+    const [path, queryString] = uri.split('?');
+    const params = {};
+
+    if (queryString) {
+      const searchParams = new URLSearchParams(queryString);
+      for (const [key, value] of searchParams) {
+        params[key] = value;
+      }
+    }
+
+    return { path, params };
+  }
+
+  /**
+   * Apply pagination to an array
+   * @param {Array} data - Data to paginate
+   * @param {Object} params - Query parameters (limit, offset)
+   * @returns {Object} { data: Array, metadata: Object }
+   */
+  paginate(data, params) {
+    const limit = parseInt(params.limit) || 50;
+    const offset = parseInt(params.offset) || 0;
+
+    const paginatedData = data.slice(offset, offset + limit);
+
+    return {
+      data: paginatedData,
+      metadata: {
+        total: data.length,
+        limit,
+        offset,
+        hasMore: offset + limit < data.length,
+        nextOffset: offset + limit < data.length ? offset + limit : null
+      }
+    };
+  }
+
+  /**
+   * Create a summary view of documents (no content field)
+   * @param {Array} documents - Documents to summarize
+   * @returns {Array} Documents without content field
+   */
+  createDocumentSummary(documents) {
+    return documents.map(doc => ({
+      path: doc.path,
+      title: doc.title,
+      directory: doc.directory,
+      frontmatter: doc.frontmatter,
+      wordCount: doc.wordCount,
+      navigation: doc.navigation,
+      links: {
+        internal: doc.links?.internal?.length || 0,
+        external: doc.links?.external?.length || 0
+      }
+    }));
+  }
+
   async readResource(uri) {
-    logger.debug(`Reading resource: ${uri}`);
+    const { path, params } = this.parseUri(uri);
+    logger.debug(`Reading resource: ${path} with params:`, params);
 
-    switch (uri) {
-      case 'docs://graph':
-        return {
-          contents: [
-            {
-              uri,
-              mimeType: 'application/json',
-              text: JSON.stringify(this.dataLoader.graph, null, 2),
-            },
-          ],
+    switch (path) {
+      case 'docs://graph': {
+        const graphData = {
+          nodes: this.dataLoader.graph.nodes,
+          edges: this.dataLoader.graph.edges
         };
 
-      case 'docs://documents':
-        return {
-          contents: [
-            {
+        // Apply pagination if requested
+        if (params.limit) {
+          const nodesPaginated = this.paginate(graphData.nodes, params);
+          return {
+            contents: [{
               uri,
               mimeType: 'application/json',
-              text: JSON.stringify(this.dataLoader.documents, null, 2),
-            },
-          ],
+              text: JSON.stringify({
+                nodes: nodesPaginated.data,
+                edges: graphData.edges.filter(edge =>
+                  nodesPaginated.data.some(n => n.id === edge.source) ||
+                  nodesPaginated.data.some(n => n.id === edge.target)
+                ),
+                metadata: nodesPaginated.metadata
+              })
+            }]
+          };
+        }
+
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify(graphData)
+          }]
+        };
+      }
+
+      case 'docs://documents': {
+        const paginated = this.paginate(this.dataLoader.documents, params);
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify({
+              documents: paginated.data,
+              metadata: paginated.metadata
+            })
+          }]
+        };
+      }
+
+      case 'docs://documents/summary': {
+        const paginated = this.paginate(this.dataLoader.documents, params);
+        const summaryData = this.createDocumentSummary(paginated.data);
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify({
+              documents: summaryData,
+              metadata: paginated.metadata
+            })
+          }]
+        };
+      }
+
+      case 'docs://documents/list': {
+        const documentList = this.dataLoader.documents.map(doc => ({
+          path: doc.path,
+          title: doc.title || doc.path.split('/').pop()
+        }));
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify(documentList)
+          }]
+        };
+      }
+
+      case 'docs://concepts': {
+        const concepts = this.dataLoader.concepts.topConcepts || [];
+        const paginated = this.paginate(concepts, params);
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify({
+              concepts: paginated.data,
+              metadata: paginated.metadata
+            })
+          }]
+        };
+      }
+
+      case 'docs://concepts/top': {
+        const topConcepts = (this.dataLoader.concepts.topConcepts || [])
+          .slice(0, 20)
+          .map(c => ({
+            concept: c.concept,
+            frequency: c.frequency,
+            fileCount: c.fileCount,
+            weight: c.weight
+          }));
+
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify(topConcepts)
+          }]
+        };
+      }
+
+      case 'docs://analysis': {
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify(this.dataLoader.analysis)
+          }]
+        };
+      }
+
+      case 'docs://graph/summary': {
+        const summary = {
+          statistics: {
+            totalNodes: this.dataLoader.graph.nodes.length,
+            totalEdges: this.dataLoader.graph.edges.length,
+            nodeTypes: this.getNodeTypeDistribution(),
+            edgeTypes: this.getEdgeTypeDistribution()
+          },
+          metrics: {
+            avgDegree: this.calculateAvgDegree(),
+            density: this.calculateGraphDensity(),
+            components: this.dataLoader.analysis?.components || 1
+          }
         };
 
-      case 'docs://concepts':
         return {
-          contents: [
-            {
-              uri,
-              mimeType: 'application/json',
-              text: JSON.stringify(this.dataLoader.concepts, null, 2),
-            },
-          ],
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify(summary)
+          }]
         };
+      }
 
-      case 'docs://analysis':
+      case 'docs://summary': {
         return {
-          contents: [
-            {
-              uri,
-              mimeType: 'application/json',
-              text: JSON.stringify(this.dataLoader.analysis, null, 2),
-            },
-          ],
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify(this.generateSummary())
+          }]
         };
-
-      case 'docs://summary':
-        return {
-          contents: [
-            {
-              uri,
-              mimeType: 'application/json',
-              text: JSON.stringify(this.generateSummary(), null, 2),
-            },
-          ],
-        };
+      }
 
       default:
-        throw new Error(`Unknown resource URI: ${uri}`);
+        throw new Error(`Unknown resource URI: ${path}`);
     }
   }
 
@@ -148,6 +347,7 @@ export class ResourceManager {
         totalEdges: this.dataLoader.graph.edges.length,
         nodeTypes: this.getNodeTypeDistribution(),
         edgeTypes: this.getEdgeTypeDistribution(),
+        density: this.calculateGraphDensity(),
       },
       topConcepts: this.dataLoader.concepts.topConcepts?.slice(0, 10).map((c) => ({
         concept: c.concept,
@@ -155,6 +355,11 @@ export class ResourceManager {
         fileCount: c.fileCount,
       })),
       orphanedDocuments: this.dataLoader.documents.filter((d) => d.navigation?.isOrphaned).length,
+      queryHints: {
+        pagination: 'Use ?limit=20&offset=0 for paginated results',
+        summaryViews: 'Use /summary endpoints for lightweight data without content',
+        granularEndpoints: 'Use /top or /list endpoints for specific data subsets'
+      }
     };
   }
 
@@ -181,5 +386,17 @@ export class ResourceManager {
       distribution.set(edge.type, (distribution.get(edge.type) || 0) + 1);
     }
     return Object.fromEntries(distribution);
+  }
+
+  calculateAvgDegree() {
+    if (this.dataLoader.graph.nodes.length === 0) return 0;
+    return (this.dataLoader.graph.edges.length * 2) / this.dataLoader.graph.nodes.length;
+  }
+
+  calculateGraphDensity() {
+    const n = this.dataLoader.graph.nodes.length;
+    if (n <= 1) return 0;
+    const maxEdges = (n * (n - 1)) / 2;
+    return this.dataLoader.graph.edges.length / maxEdges;
   }
 }
