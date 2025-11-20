@@ -51,9 +51,16 @@ export class ResourceManager {
       },
       {
         uri: 'docs://documents',
-        name: 'Extracted Documents',
+        name: 'Extracted Documents (Summary)',
         description:
-          'All documentation files with metadata and content. Supports ?limit=20&offset=0 for pagination',
+          'Document metadata without content field (lightweight). Supports ?limit=10&offset=0 for pagination. Use docs://documents/full for complete content.',
+        mimeType: 'application/json',
+      },
+      {
+        uri: 'docs://documents/full',
+        name: 'Extracted Documents (Full)',
+        description:
+          'All documentation files with full content. WARNING: Large response. Supports ?limit=10&offset=0 for pagination.',
         mimeType: 'application/json',
       },
       {
@@ -83,12 +90,6 @@ export class ResourceManager {
       },
 
       // Summary views (lightweight, no content)
-      {
-        uri: 'docs://documents/summary',
-        name: 'Documents Summary',
-        description: 'Document metadata only (no content field) for quick overview',
-        mimeType: 'application/json',
-      },
       {
         uri: 'docs://documents/list',
         name: 'Documents List',
@@ -144,7 +145,7 @@ export class ResourceManager {
    * @returns {Object} { data: Array, metadata: Object }
    */
   paginate(data, params) {
-    const limit = parseInt(params.limit) || 50;
+    const limit = parseInt(params.limit) || 10;
     const offset = parseInt(params.offset) || 0;
 
     const paginatedData = data.slice(offset, offset + limit);
@@ -221,6 +222,23 @@ export class ResourceManager {
       }
 
       case 'docs://documents': {
+        // Default to summary view (no content field) to prevent context overflow
+        const paginated = this.paginate(this.dataLoader.documents, params);
+        const summaryData = this.createDocumentSummary(paginated.data);
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify({
+              documents: summaryData,
+              metadata: paginated.metadata
+            })
+          }]
+        };
+      }
+
+      case 'docs://documents/full': {
+        // Full documents with content field - use with caution (large responses)
         const paginated = this.paginate(this.dataLoader.documents, params);
         return {
           contents: [{
@@ -235,6 +253,7 @@ export class ResourceManager {
       }
 
       case 'docs://documents/summary': {
+        // Backwards compatibility alias - redirects to docs://documents
         const paginated = this.paginate(this.dataLoader.documents, params);
         const summaryData = this.createDocumentSummary(paginated.data);
         return {
@@ -415,8 +434,9 @@ export class ResourceManager {
       })),
       orphanedDocuments: this.dataLoader.documents.filter((d) => d.navigation?.isOrphaned).length,
       queryHints: {
-        pagination: 'Use ?limit=20&offset=0 for paginated results',
-        summaryViews: 'Use /summary endpoints for lightweight data without content',
+        pagination: 'Default limit is 10. Use ?limit=20&offset=0 to customize pagination',
+        documents: 'docs://documents returns summary (no content). Use docs://documents/full for complete content',
+        summaryViews: 'Use /summary endpoints for lightweight overviews',
         granularEndpoints: 'Use /top or /list endpoints for specific data subsets',
         analysisEndpoints: 'Use docs://analysis/summary for overview, docs://analysis/hubs?limit=50 for hub documents'
       }
