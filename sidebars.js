@@ -439,6 +439,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/customize-your-chain/customize-arbos',
               label: `Customize ArbOS version`,
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/customize-your-chain/da-api-integration-guide',
+              label: `DA API integration guide`,
+            },
           ],
         },
         {
