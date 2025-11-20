@@ -6,7 +6,7 @@ sme:
 content_type: configuration
 ---
 
-Customizing your chain's precompiles refers to modifying or extending the built-in, system-level smart contract-like functions (precompiles) that provide efficient access to chain-specific operations, such as interacting with the parent chain (L1 or L2), querying state, or performing computations. Precompiles are hardcoded at specific addresses (e.g., 0x64 for `ArbSys`) and executed outside the EVM bytecode level for performance. They inherit from Ethereum's standard precompiles (e.g., for hashing or elliptic curves) while adding Arbitrum-specific ones (e.g., `ArbAddressTable` for address compression).
+Customizing your chain's precompiles refers to modifying or extending the built-in, system-level smart contract-like functions (precompiles) that provide efficient access to chain-specific operations, such as interacting with the parent chain (L1 or L2), querying state, or performing computations. Precompiles are hardcoded at specific addresses (e.g., 0x64 for `ArbSys`) and executed outside the EVM bytecode level for performance. They inherit  Ethereum's standard precompiles (e.g., for hashing or elliptic curves) while adding Arbitrum-specific ones (e.g., `ArbAddressTable` for address compression).
 
 Customization allows developers to add new methods, events, gas logic, or state interactions tailored to the chain's needs, such as app-specific utilities or optimizations. This flexibility is an advanced feature requiring modifications to the Nitro software stack, enabling deeper chain personalization beyond defaults like custom gas tokens or DA modes.
 
