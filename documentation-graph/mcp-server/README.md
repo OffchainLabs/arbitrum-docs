@@ -494,7 +494,6 @@ The server exposes optimized analysis data as resources with pagination and summ
   - Supports: `?limit=20&offset=0` for pagination (default limit: 50)
 - `docs://concepts` - Top concepts with TF-IDF weights
   - Supports: `?limit=20&offset=0` for pagination
-- `docs://analysis` - Graph analysis metrics (centrality, hubs, etc.)
 
 ### Summary Resources (Lightweight, No Content)
 
@@ -505,11 +504,20 @@ The server exposes optimized analysis data as resources with pagination and summ
   - Minimal data for quick document discovery
 - `docs://graph/summary` - Graph statistics without full node/edge data
   - Node/edge counts, type distributions, density metrics
+- `docs://analysis/summary` - High-level analysis metrics without full centrality data
+  - Includes basic graph stats, top 10 hubs by each centrality metric, community summary
+  - Prevents context overflow (replaces 1.2MB full analysis with ~5KB summary)
 
 ### Granular Resources (Specific Data)
 
 - `docs://concepts/top` - Top 20 concepts by frequency
   - Pre-filtered most important concepts
+- `docs://analysis/hubs` - Top hub documents by centrality metrics
+  - Supports: `?limit=50` to control result count (default 50)
+  - Supports: `?metric=degree|betweenness|closeness` to select centrality measure (default degree)
+  - Returns nodes with scores, types, labels, and paths
+- `docs://analysis/communities` - Community detection and clustering results
+  - Community count, modularity score, and cluster information
 - `docs://summary` - High-level analysis summary
   - Includes query hints for optimal usage
 
@@ -532,6 +540,18 @@ Read the docs://concepts/top resource
 
 # Get graph statistics
 Read the docs://graph/summary resource
+
+# Get analysis summary (prevents 1.2MB overflow)
+Read the docs://analysis/summary resource
+
+# Get top 50 hub documents by degree centrality
+Read the docs://analysis/hubs?limit=50&metric=degree resource
+
+# Get top hubs by betweenness centrality
+Read the docs://analysis/hubs?metric=betweenness resource
+
+# Get community structure information
+Read the docs://analysis/communities resource
 ```
 
 ### Performance Improvements
