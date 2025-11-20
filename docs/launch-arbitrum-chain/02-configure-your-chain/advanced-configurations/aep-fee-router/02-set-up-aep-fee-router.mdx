@@ -14,7 +14,7 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 ## Quick start
 
-You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
+You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Arbitrum chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main)
 
 ### Canonical contracts
 
@@ -88,10 +88,14 @@ L3 chains (or further layers) might need to specify a different target address o
 The script performs the following operations:
 
 1. Obtain the rollup and inbox contract of the chain. These are needed to execute the next steps.
+
 2. Obtain the current fee collectors of the chain: Arbitrum chain base fee collector, Arbitrum chain surplus fee collector, and Parent chain surplus fee collector.
+
 3. Deploy the `ChildToParentRouter` contract, configured to send the amounts received to the appropriate target address on the parent chain.
+
 4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and 10% to the ChildToParentRouter contract deployed in the previous step.
-5. Set each of the fee collectors to the `RewardDistributor` contracts
+
+5. Set each of the fee collectors to the `RewardDistributor` contracts.
 
 ::::info
 
@@ -99,7 +103,7 @@ If the same address collects all three fee types, only one `RewardDistributor` c
 
 ::::
 
-To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/setup-aep-fee-router/.env.example):
+To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/setup-aep-fee-router/.env.example):
 
 - `ROLLUP_ADDRESS`: address of the rollup contract
 - `CHAIN_OWNER_PRIVATE_KEY`: private key of the account with executor privileges in the `UpgradeExecutor` admin contract for the chain
@@ -116,7 +120,7 @@ Finally, follow these steps to execute the script (from the `examples/setup-aep-
 yarn install
 ```
 
-2. Create .env file and add the env vars
+2. Create `.env` file and add the env vars
 
 ```shell
 cp .env.example .env
@@ -126,6 +130,51 @@ cp .env.example .env
 
 ```shell
 yarn dev
+```
+
+## Deploying a `ChildToParent` router for a custom `ERC-20` on Base
+
+Some RaaS providers and Arbitrum chains may need to route AEP fees using a non-`ETH` `ERC-20` token on Base, or other L2s.
+
+To support this, the Arbitrum Chain SDK now includes a helper for deploying a `ChildToParentRouter` on Base for any specified `ERC-20`.
+
+Starting with `arbitrum-chain-sdk` v0.24.2, you can deploy your own `ERC-20` router on Base programmatically.
+
+### When you need this
+
+You should deploy your own `ERC-20` router if:
+
+- Your chain uses a custom gas token
+
+- Your chain is an L3 that settles to Base (or another OP chain L2)
+
+- Your chain's custom gas token is represented as an `ERC-20` on Base or the chain that your chain settles to
+
+### How it works
+
+- The SDK exposes a function that handles deployment of a `ChildToParentRouter` contract configured for:
+
+- A specific `ERC-20` token address on Base
+
+- A target address on the parent chain (often Ethereum or a parent L2)
+
+The standard AEP withdrawal logic:
+
+```javascript
+import { feeRouterDeployOpChildToParentRewardRouter } from 'arbitrum/chain-sdk';
+
+async function main() {
+  const tx = await feeRouterDeployOpChildToParentRewardRouter({
+    childChainWalletClient,
+    parentChainTargetAddress,
+    minDistributionInvervalSeconds,
+    parentChainTokenAddress,
+    childChainTokenAddress,
+  });
+
+  console.log('ChildToParentRouter deployed:', tx.childToParentRouter);
+}
+main();
 ```
 
 ## Triggering movement of funds
