@@ -264,22 +264,44 @@ export class ToolMiddleware {
   }
 
   /**
-   * Validate output
+   * Validate output and wrap in MCP format
    */
   async validateOutput(tool, result) {
-    // If tool has output schema, validate it
+    // Validate with output schema if provided
+    let validatedResult = result;
     if (tool.outputSchema) {
       try {
-        return tool.outputSchema.parse(result);
+        validatedResult = tool.outputSchema.parse(result);
       } catch (error) {
         this.logger.warn(`Output validation failed for tool ${tool.name}`, {
           error: error.message,
         });
-        // Don't throw - log warning and return original result
-        return result;
+        // Don't throw - log warning and use original result
       }
     }
-    return result;
+
+    // Check if result is already in MCP format
+    if (
+      validatedResult &&
+      typeof validatedResult === 'object' &&
+      'content' in validatedResult &&
+      Array.isArray(validatedResult.content)
+    ) {
+      return validatedResult; // Already wrapped
+    }
+
+    // Wrap in MCP format
+    return {
+      content: [
+        {
+          type: 'text',
+          text:
+            typeof validatedResult === 'string'
+              ? validatedResult
+              : JSON.stringify(validatedResult, null, 2),
+        },
+      ],
+    };
   }
 
   /**
