@@ -64,9 +64,21 @@ export class ResourceManager {
         mimeType: 'application/json',
       },
       {
-        uri: 'docs://analysis',
-        name: 'Graph Analysis',
-        description: 'Centrality metrics, hub documents, and structural analysis',
+        uri: 'docs://analysis/summary',
+        name: 'Analysis Summary',
+        description: 'High-level analysis metrics without full centrality data',
+        mimeType: 'application/json',
+      },
+      {
+        uri: 'docs://analysis/hubs',
+        name: 'Hub Documents',
+        description: 'Top hub documents by centrality metrics',
+        mimeType: 'application/json',
+      },
+      {
+        uri: 'docs://analysis/communities',
+        name: 'Community Structure',
+        description: 'Community detection and clustering results',
         mimeType: 'application/json',
       },
 
@@ -285,12 +297,59 @@ export class ResourceManager {
         };
       }
 
-      case 'docs://analysis': {
+      case 'docs://analysis/summary': {
+        const summary = {
+          basic: this.dataLoader.analysis.basic,
+          topHubs: {
+            byDegree: this.getTopNodesByCentrality('degree', 10),
+            byBetweenness: this.getTopNodesByCentrality('betweenness', 10),
+            byCloseness: this.getTopNodesByCentrality('closeness', 10)
+          },
+          communities: {
+            count: this.dataLoader.analysis.communities?.count || 0,
+            modularity: this.dataLoader.analysis.communities?.modularity || 0
+          }
+        };
+
         return {
           contents: [{
             uri,
             mimeType: 'application/json',
-            text: JSON.stringify(this.dataLoader.analysis)
+            text: JSON.stringify(summary)
+          }]
+        };
+      }
+
+      case 'docs://analysis/hubs': {
+        const limit = parseInt(params.limit) || 50;
+        const metric = params.metric || 'degree';
+
+        const hubs = this.getTopNodesByCentrality(metric, limit);
+
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify({
+              metric,
+              hubs,
+              metadata: {
+                total: hubs.length,
+                metric
+              }
+            })
+          }]
+        };
+      }
+
+      case 'docs://analysis/communities': {
+        const communities = this.dataLoader.analysis.communities || {};
+
+        return {
+          contents: [{
+            uri,
+            mimeType: 'application/json',
+            text: JSON.stringify(communities)
           }]
         };
       }
@@ -358,7 +417,8 @@ export class ResourceManager {
       queryHints: {
         pagination: 'Use ?limit=20&offset=0 for paginated results',
         summaryViews: 'Use /summary endpoints for lightweight data without content',
-        granularEndpoints: 'Use /top or /list endpoints for specific data subsets'
+        granularEndpoints: 'Use /top or /list endpoints for specific data subsets',
+        analysisEndpoints: 'Use docs://analysis/summary for overview, docs://analysis/hubs?limit=50 for hub documents'
       }
     };
   }
@@ -398,5 +458,35 @@ export class ResourceManager {
     if (n <= 1) return 0;
     const maxEdges = (n * (n - 1)) / 2;
     return this.dataLoader.graph.edges.length / maxEdges;
+  }
+
+  /**
+   * Get top N nodes by centrality metric
+   * @param {string} metric - Centrality metric (degree, betweenness, closeness)
+   * @param {number} limit - Number of top nodes to return
+   * @returns {Array} Top nodes with their centrality scores
+   */
+  getTopNodesByCentrality(metric, limit = 10) {
+    const centralityData = this.dataLoader.analysis.centrality?.[metric];
+    if (!centralityData || !centralityData.values) {
+      return [];
+    }
+
+    // Convert centrality values object to sorted array
+    const entries = Object.entries(centralityData.values)
+      .map(([nodeId, score]) => {
+        const node = this.dataLoader.graph.nodes.find(n => n.id === nodeId);
+        return {
+          nodeId,
+          score,
+          type: node?.type || 'unknown',
+          label: node?.label || nodeId,
+          path: node?.path || null
+        };
+      })
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit);
+
+    return entries;
   }
 }
