@@ -710,6 +710,28 @@ The SmartCache optimizes repeated queries:
 
 ## Troubleshooting
 
+### Tools Not Appearing in Claude Code
+
+**Symptom:** MCP server starts successfully but tools don't appear in Claude Code.
+
+**Check Claude Code debug logs:**
+
+```shell
+grep "Failed to fetch tools" ~/.claude/debug/latest
+```
+
+**Common issue:** "Invalid literal value, expected 'object'" error means the tool schemas aren't properly formatted as JSON Schema.
+
+**Solution:** This should be fixed in the current version (v2.0.0+). If you're still seeing this, verify you're running the latest code with proper Zod-to-JSON-Schema conversion.
+
+**To verify tool schemas are valid:**
+
+```shell
+node test-tool-schema.js
+```
+
+This will validate that all 8 tools have proper JSON Schema format.
+
 ### Server Won't Start
 
 **Check:**
