@@ -1,3 +1,11 @@
+.navbar__brand {
+  min-width: 29px;
+}
+
+.navbar__logo {
+  flex: 1 0 auto;
+}
+
 .navbar__inner {
   display: flex;
   align-items: center;
@@ -6,16 +14,15 @@
   flex-wrap: nowrap;
 
   > .navbar__items:first-child {
-    flex: 0 0 auto;
-    margin-right: auto;
+    margin-right: 24px; // Fixed spacing instead of auto to bring items closer
     padding-left: 10px;
   }
 
   > .navbar__items--right {
+    flex: 1 0 auto;
     display: flex;
-    flex: 0 0 auto;
     gap: 8px; // Add spacing between navbar items
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
 
     #search_input_react {
@@ -29,13 +36,12 @@
     // Ensure navbar items don't get squished
     .navbar__item {
       flex-shrink: 0;
-      margin-right: 8px;
     }
 
     // Optimize dark mode toggle spacing
     [class*='toggle'],
     [class*='colorModeToggle'] {
-      margin-left: 8px;
+      margin-left: auto;
       flex-shrink: 0;
     }
   }
@@ -49,6 +55,27 @@
 // Ensure proper spacing between navbar and top navigation
 .navbar {
   border-bottom: none;
+}
+
+// Center navbar__inner vertically within navbar--fixed-top
+.navbar--fixed-top {
+  display: flex;
+  align-items: center;
+
+  .navbar__inner {
+    align-items: center;
+  }
+}
+
+// Position navbar search container all the way to the right
+.navbarsearchcontainer {
+  margin-left: auto !important;
+  order: 999; // Ensure it appears last
+}
+
+.navbar__inner .navbarsearchcontainer {
+  margin-left: auto !important;
+  flex-shrink: 0;
 }
 
 // Inkeep search widget responsive behavior
@@ -75,8 +102,7 @@
 
 // Fix for mobile navigation: ensure right-positioned navbar items appear in hamburger menu
 @media (max-width: 996px) {
-  // Hide right navbar items by default on mobile
-  .navbar__items.navbar__items--right {
+  .navbar__inner a.navbar__brand {
     display: none;
   }
 
