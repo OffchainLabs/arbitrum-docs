@@ -427,6 +427,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/stylus/recommended-libraries/?)",
+      "destination": "/(docs/stylus/advanced/recommended-libraries/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/tx_lifecycle/?)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
