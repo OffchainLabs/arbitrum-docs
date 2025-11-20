@@ -486,20 +486,25 @@ Recommend the best canonical reference for a topic.
 
 The server exposes optimized analysis data as resources with pagination and summary views to prevent context overflow:
 
-### Full Resources (with Pagination)
+### Document Resources
+
+- `docs://documents` - Document metadata **without content field** (default, lightweight)
+  - Supports: `?limit=10&offset=0` for pagination (default limit: 10)
+  - ~90% smaller than full documents - prevents context overflow
+  - **Recommended for most queries**
+- `docs://documents/full` - Complete documents with full content field
+  - Supports: `?limit=10&offset=0` for pagination (default limit: 10)
+  - ⚠️ **WARNING**: Large responses, use sparingly to avoid context overflow
+  - Only use when you need actual document content
+
+### Other Full Resources (with Pagination)
 
 - `docs://graph` - Complete knowledge graph with nodes and edges
-  - Supports: `?limit=50&offset=0` for pagination
-- `docs://documents` - All extracted documents with full content
-  - Supports: `?limit=20&offset=0` for pagination (default limit: 50)
+  - Supports: `?limit=10&offset=0` for pagination (default limit: 10)
 - `docs://concepts` - Top concepts with TF-IDF weights
-  - Supports: `?limit=20&offset=0` for pagination
+  - Supports: `?limit=10&offset=0` for pagination (default limit: 10)
 
-### Summary Resources (Lightweight, No Content)
-
-- `docs://documents/summary` - Document metadata only (no content field)
-  - Supports: `?limit=20&offset=0` for pagination
-  - ~90% smaller than full documents
+### Summary Resources (Lightweight)
 - `docs://documents/list` - Simple list of document paths and titles
   - Minimal data for quick document discovery
 - `docs://graph/summary` - Graph statistics without full node/edge data
@@ -526,13 +531,15 @@ The server exposes optimized analysis data as resources with pagination and summ
 Access from Claude:
 
 ```
-# Get paginated documents (prevents context overflow)
-Read the docs://documents?limit=20&offset=0 resource
+# Get document summaries (default, no content field - prevents context overflow)
+Read the docs://documents resource
+Read the docs://documents?limit=20&offset=0 resource  # Customize pagination
 
-# Get document metadata without content (90% smaller)
-Read the docs://documents/summary?limit=50 resource
+# Get full documents with content (use sparingly, large responses)
+Read the docs://documents/full resource
+Read the docs://documents/full?limit=5 resource  # Smaller batches recommended
 
-# Get just document paths and titles
+# Get just document paths and titles (minimal data)
 Read the docs://documents/list resource
 
 # Get top concepts only
@@ -557,8 +564,10 @@ Read the docs://analysis/communities resource
 ### Performance Improvements
 
 The optimized ResourceManager provides:
-- **90% reduction** in response size with summary views
-- **Pagination** prevents loading entire datasets
+- **90% reduction** in response size - `docs://documents` now returns summaries by default (no content field)
+- **Reduced default pagination** - Changed from 50 to 10 items per page to prevent context overflow
+- **Explicit full content access** - Use `docs://documents/full` only when you need actual document text
+- **Pagination** prevents loading entire datasets - use `?limit` and `?offset` parameters
 - **Compact JSON** (no pretty printing) saves ~50% in formatting
 - **Granular endpoints** for targeted queries
 - **Query parameters** for flexible data access
