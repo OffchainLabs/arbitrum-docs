@@ -1,0 +1,1735 @@
+---
+title: "How to integrate with the DA API"
+description: "Learn how to implement your own custom DA provider for Nitro"
+author: Tristan-Wilson
+sme: Tristan-Wilson
+sidebar_position: 4
+content_type: how-to
+---
+
+import CustomizeCautionBannerPartial from '../partials/_arbitrum-chain-customize-caution-banner-partial.md';
+
+<CustomizeCautionBannerPartial />
+
+# DA API Integration Guide
+
+This guide helps teams implement their own Data Availability (DA) provider that integrates with Arbitrum Nitro using the DA API.
+
+**NOTE**: The DA API should still be considered experimental until a release of Nitro is made officially announcing its availability.
+
+## 1. Introduction & Overview
+
+### What is the DA API?
+
+The DA API is an extensibility feature in Arbitrum Nitro that allows external data availability providers to integrate with Nitro without requiring any fork of Nitro core or contracts. This enables teams to build and deploy custom DA solutions tailored to their specific needs while maintaining full compatibility with the Nitro stack.
+
+### Why Use the DA API?
+
+- **No Forking Required**: Integrate your DA system without modifying Nitro or contracts
+- **Pluggable Architecture**: Define your own certificate formats and validation logic
+- **Fraud Proof Compatible**: Full support for BOLD challenge protocol and fraud proofs
+- **Multi-Provider Support**: Multiple DA systems can coexist on the same chain
+
+### Architecture Overview
+
+The DA API has four main components:
+
+1. **Reader RPC Methods**: Recovers batch data from certificates and collects preimages for fraud proofs
+2. **Writer RPC Method**: Stores batch data and generates certificates
+3. **Validator RPC Methods**: Generates proofs for fraud proof validation
+4. **On-Chain Validator Contract** (Solidity): Validates proofs on-chain during fraud proof challenges
+
+These components work together to enable:
+- Normal execution: Batch Poster stores data -> generates certificate -> posts to L1
+- Validation: Node reads certificate -> recovers data -> executes
+- Fraud proofs: Prover generates proof -> enhances with DA data -> validates on-chain
+
+### Who is This Guide For?
+
+This guide is for development teams who want to:
+- Integrate an existing DA system with Nitro's DA API
+- Understand how the DA API works under the hood
+
+**Prerequisites**: Familiarity with JSON-RPC, Solidity, Ethereum L1/L2 architecture, and Arbitrum Nitro basics. Experience with any backend programming language.
+
+### Reference Implementation
+
+The Nitro repository includes **ReferenceDA**, a complete working example of a DA provider:
+- Go implementation: `daprovider/referenceda/`
+- Solidity contract: `contracts-local/src/osp/ReferenceDAProofValidator.sol`
+- Example server: `cmd/daprovider/`
+
+Use ReferenceDA as a reference when building your own provider. It demonstrates all the RPC methods and patterns described in this guide.
+
+---
+
+## 2. Quickstart Guide
+
+### What You Need to Implement
+
+To create a DA provider, you need to implement two components:
+
+**1. JSON-RPC Server (Any Language)**
+
+Your DA provider exposes JSON-RPC methods that Nitro nodes call to store and retrieve data. You can implement this in any language.
+
+**Reader Methods** (data retrieval):
+- `daprovider_getSupportedHeaderBytes` - Returns header bytes identifying your provider
+- `daprovider_recoverPayload` - Recovers batch data from certificate (normal execution)
+- `daprovider_collectPreimages` - Collects preimages for validation and fraud proof replay (validation)
+
+**Writer Methods** (for batch posting):
+- `daprovider_store` - Stores batch data and returns certificate
+- `daprovider_startChunkedStore`, `daprovider_sendChunk`, `daprovider_commitChunkedStore` - Optional streaming protocol for large batches (see Appendix A)
+
+**Validator Methods** (fraud proof generation):
+- `daprovider_generateReadPreimageProof` - Generates proof for reading preimage data
+- `daprovider_generateCertificateValidityProof` - Generates proof of certificate validity
+
+**2. On-Chain Validator Contract (Solidity)**
+
+- Implements `ICustomDAProofValidator` interface
+- `validateReadPreimage()` - Validates preimage read proofs on-chain
+- `validateCertificate()` - Validates certificate authenticity on-chain
+
+### Development Workflow
+
+1. **Design your certificate format** (Section 6)
+2. **Implement Reader RPC methods** to recover data from certificates (Section 3)
+3. **Implement Writer RPC method** to generate certificates (Section 4)
+4. **Implement Validator RPC methods** to generate proofs (Section 5)
+5. **Implement the on-chain validator contract** for proof validation (Section 7)
+6. **Create your JSON-RPC server** exposing these methods (Section 9)
+7. **Test your integration** end-to-end (Section 10)
+8. **Deploy** your server and configure Nitro nodes (Section 9)
+
+### Quick Reference: ReferenceDA Example
+
+ReferenceDA is a complete working example you can study:
+
+**ReferenceDA Implementation**:
+- **Certificate format**: 99 bytes (header + SHA256 + ECDSA signature) - see `daprovider/referenceda/certificate.go`
+- **JSON-RPC server**: Complete working server at `cmd/daprovider/daprovider.go`
+  - Implements all required RPC methods
+  - Written in Go, but you can use any language
+  - Shows configuration, server setup, and lifecycle management
+- **On-chain contract**: `contracts-local/src/osp/ReferenceDAProofValidator.sol`
+  - Implements `ICustomDAProofValidator`
+  - Uses ECDSA signature verification with trusted signer mapping
+
+---
+
+## 3. Implementing Reader RPC Methods
+
+Your JSON-RPC server must implement three Reader methods that Nitro nodes call to retrieve batch data. These can be implemented in any language.
+
+### Method 1: `daprovider_getSupportedHeaderBytes`
+
+Returns the header byte strings that identify your DA provider in sequencer messages.
+
+**Parameters**: None
+
+**Returns**:
+```json
+{
+  "headerBytes": ["0x01ff"]  // Array of hex-encoded byte strings
+}
+```
+
+**Example**:
+- ReferenceDA returns `["0x01ff"]` (DA API header 0x01 + provider type 0xFF)
+- Your provider might use `["0x01aa","0x01bbcc"]` or any other hex strings as long as they start with "0x01"
+
+**Purpose**: Nitro uses this to register your provider in its internal routing table. When it sees a sequencer message starting with these bytes, it routes the request to your server. Your provider can return multiple strings in order to support different certificate formats, DA systems, etc at once.
+
+---
+
+### Method 2: `daprovider_recoverPayload`
+
+Recovers the full batch payload data from a certificate. Called during normal node execution.
+
+**Parameters**:
+```json
+{
+  "batchNum": "0x1a2b",           // Batch number (hex-encoded uint64)
+  "batchBlockHash": "0x1234...",  // Block hash when batch was posted
+  "sequencerMsg": "0xabcd..."     // Full sequencer message including certificate
+}
+```
+
+**Returns**:
+```json
+{
+  "Payload": "0x5678..."  // Hex-encoded batch data
+}
+```
+
+**Implementation Requirements**:
+
+1. **Extract the certificate** from `sequencerMsg`:
+   ```
+   sequencerMsg format: [SequencerHeader(40 bytes), DACertificateFlag(0x01), Certificate(...)]
+   ```
+   Skip the first 40 bytes, then extract your certificate.
+
+2. **Validate the certificate**:
+   - Check certificate format/structure
+   - Verify signature or proof
+   - Confirm certificate is authentic according to your DA system's rules
+
+3. **Retrieve the batch data** using information in the certificate
+
+4. **Verify data integrity**:
+   - Check that the data matches the commitment in the certificate
+   - Example: `sha256(data) == certificate.dataHash`
+
+5. **Return the payload** or error
+
+**Error Handling**:
+
+Your implementation must distinguish between three scenarios:
+
+**1. Invalid Certificate -> CertificateValidationError**
+- **When**: Certificate is invalid (bad format, bad signature, untrusted signer, etc.)
+- **Return**: JSON-RPC error with message containing `"certificate validation failed"`
+- **Nitro behavior**: Treats batch as empty (zero transactions), syncing continues
+- **Example**: `"certificate validation failed: untrusted signer"`
+
+**2. Other Errors -> Syncing Stops**
+- **When**: Storage failure, network error, RPC timeout, database down
+- **Return**: JSON-RPC error with any other message
+- **Nitro behavior**: **Stops syncing immediately**
+- **Example**: `"storage unavailable: database connection lost"`
+
+**3. Empty Batch -> Valid Response**
+- **When**: Certificate is valid but batch data is actually empty
+- **Return**: Successful response with `"Payload": null` or `"Payload": "0x"`
+- **Nitro behavior**: Processes empty batch (zero transactions), syncing continues
+- **Important**: Only return nil/empty if the batch is truly empty, not as an error signal
+
+**CRITICAL RULE**: The daprovider is a **trusted component**. Nitro cannot validate what you return, so you must:
+- Return proper errors when there are errors (don't return nil payload)
+- Use CertificateValidationError for invalid certificates (allows processing to continue)
+- Use other errors for infrastructure failures (stops syncing until resolved)
+
+**Detection Mechanism**: Nitro detects CertificateValidationError by checking if the error message **contains the string** `"certificate validation failed"`. The error can include additional context after this string.
+
+**Example Response (Success with Data)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "Payload": "0x000123456789abcdef..."
+  }
+}
+```
+
+**Example Response (Success with Empty Batch)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "Payload": "0x"
+  }
+}
+```
+
+**Example Response (Invalid Certificate - Syncing Continues)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32000,
+    "message": "certificate validation failed: untrusted signer"
+  }
+}
+```
+
+**Example Response (Storage Error - Syncing Stops)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32000,
+    "message": "storage unavailable: database connection timeout"
+  }
+}
+```
+
+---
+
+### Method 3: `daprovider_collectPreimages`
+
+Collects preimage mappings needed for fraud proof replay. Called during validation.
+
+**Parameters**: Same as `daprovider_recoverPayload`
+```json
+{
+  "batchNum": "0x1a2b",
+  "batchBlockHash": "0x1234...",
+  "sequencerMsg": "0xabcd..."
+}
+```
+
+**Returns**:
+```json
+{
+  "Preimages": {
+    "0xabcd1234...": {
+      "Data": "0x5678...",
+      "Type": 3
+    }
+  }
+}
+```
+
+**Implementation Requirements**:
+
+1. **Do the same work as `recoverPayload`**:
+   - Extract certificate
+   - Validate certificate
+   - Retrieve batch data
+
+2. **Build the preimage mapping**:
+   - Compute `certHash = keccak256(certificate)`
+   - Map `certHash -> batch data`
+   - Set preimage type to `3` (DACertificatePreimageType)
+
+**Critical**: The preimage key **must be `keccak256(certificate)`**, not your internal hash. The fraud proof replay binary expects this specific key.
+
+**Example Response**:
+```json
+{
+  "Preimages": {
+    "0xabcd1234...certHash": {
+      "Data": "0x5678...batchData",
+      "Type": 3
+    }
+  }
+}
+```
+
+**Error Handling**:
+
+`collectPreimages` has **identical error handling behavior** to `recoverPayload`:
+- Invalid certificate -> return error containing `"certificate validation failed"` (validator continues, treating batch as empty)
+- Other errors -> return other error (validator stops)
+- Empty batch -> return empty preimages map (valid, validator continues)
+
+See the Error Handling section in `recoverPayload` above for complete details.
+
+**Why Two Separate Methods?**
+
+- `recoverPayload`: Fast path for normal execution (just needs the data)
+- `collectPreimages`: Validation path (needs data + keccak256 mapping for fraud proofs)
+
+This separation avoids unnecessary work in each context.
+
+---
+
+### Parameter Encoding
+
+**All `uint64` parameters must be hex-encoded strings with `0x` prefix**:
+- Correct: `"0x1a2b"`, `"0x0"`, `"0xff"`
+- Incorrect: `42`, `"42"`, `"0x"`
+
+**All byte arrays use hex encoding with `0x` prefix**:
+- Correct: `"0xabcdef"`, `"0x01ff"`
+- Incorrect: `"abcdef"`, `[0xab, 0xcd]`
+
+---
+
+### Reference: ReferenceDA Implementation
+
+The ReferenceDA server (`cmd/daprovider/`) shows a complete working implementation in Go. Key logic:
+
+**Certificate extraction**:
+```go
+certBytes := sequencerMsg[40:]  // Skip 40-byte sequencer header
+```
+
+**Certificate validation** (calls L1 contract):
+```go
+validator, _ := NewReferenceDAProofValidator(validatorAddr, l1Client)
+err := cert.ValidateWithContract(validator, &bind.CallOpts{})
+```
+
+**Preimage recording**:
+```go
+certHash := crypto.Keccak256Hash(certBytes)
+preimages[certHash.Hex()] = PreimageResult{
+    Data: hexutil.Encode(payload),
+    Type: 3,  // DACertificatePreimageType
+}
+```
+
+While ReferenceDA is written in Go, you can implement these methods in any language. You just need to:
+- Parse hex-encoded JSON-RPC requests
+- Query an Ethereum L1 node
+- Query your DA system
+- Store and retrieve data
+- Compute keccak256 hashes
+
+---
+
+## 4. Implementing Writer RPC Method
+
+Your JSON-RPC server implements a Writer method that the Batch Poster calls to store batch data and get a certificate.
+
+### Method: `daprovider_store`
+
+Stores batch data and returns a certificate that will be posted to L1.
+
+**Parameters**:
+```json
+{
+  "message": "0x1234...",  // Batch data to store (hex-encoded)
+  "timeout": "0x67a30580"  // Expiration time as Unix timestamp (hex-encoded uint64)
+}
+```
+
+The `timeout` parameter specifies when the stored data should expire:
+- **Unix timestamp** (seconds since January 1, 1970 UTC)
+- **Minimum retention**: DA provider must retain data AT LEAST until this time
+- **Calculated by batch poster** as: `current_time + retention_period`
+
+**Returns**:
+```json
+{
+  "serialized-da-cert": "0x01..."  // Certificate (hex-encoded)
+}
+```
+
+**Implementation Requirements**:
+
+1. **Store the batch data** in your DA system:
+   - Must be retrievable later using the certificate
+
+2. **Generate a certificate**:
+   - Must start with bytes `0x01` (DA API header) + your optional provider type byte(s). Refer to the description in the section on `daprovider_getSupportedHeaderBytes`
+   - Must contain enough information to retrieve the data later
+   - Should include a data commitment (hash, Merkle root, etc.)
+   - Should include proof of authenticity (signature, BLS signature, etc.)
+
+3. **Return the certificate** as hex-encoded bytes
+
+**Example Request**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "daprovider_store",
+  "params": [{
+    "message": "0x00012345...",
+    "timeout": "0x67a30580"
+  }]
+}
+```
+
+**Example Response (Success)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "serialized-da-cert": "0x011234567890abcdef..."
+  }
+}
+```
+
+---
+
+### Certificate Format
+
+Your certificate should:
+- **Start with `0x01`** (DA API header byte, defined as `DACertificateMessageHeaderFlag`)
+- **Optional provider type bytes**: Your provider type identifier, see description in the section on `daprovider_getSupportedHeaderBytes`
+- **Contain a data commitment**: Hash, Merkle root, KZG commitment, etc.
+- **Contain validity proof**: Signature, BLS signature, or other authentication
+- **Be compact**: Certificates are posted to L1 as calldata
+
+**ReferenceDA Example** (99 bytes total):
+```
+[0]      : 0x01 (DA API header)
+[1]      : 0xFF (ReferenceDA provider type)
+[2-33]   : SHA256(batch data) - 32 bytes
+[34-98]  : ECDSA signature (v, r, s) - 65 bytes
+```
+
+See Section 6 for detailed certificate design guidance.
+
+---
+
+### Fallback Mechanism
+
+The Batch Poster supports multiple DA writers in a sequential fallback chain. If your server wants to trigger fallback to the next writer (e.g., temporary unavailability, overload), return an error containing the string:
+
+```
+"DA provider requests fallback to next writer"
+```
+
+**Example Fallback Response**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32000,
+    "message": "DA provider requests fallback to next writer: storage temporarily unavailable"
+  }
+}
+```
+
+**Important**: This is the **only** way to trigger automatic fallback. Any other error will **stop the batch posting entirely** without trying other writers. This design prevents expensive surprise costs from fixable infrastructure issues.
+
+---
+
+### Error Handling
+
+**Return errors for**:
+- Storage failures (disk full, network down)
+- Invalid batch data
+- Timeout exceeded
+- System overload (use fallback error)
+
+**Example Error Response**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32000,
+    "message": "storage failed: disk quota exceeded"
+  }
+}
+```
+
+---
+
+### Reference: ReferenceDA Implementation
+
+The ReferenceDA server shows a complete implementation. Key logic:
+
+**Store batch data** (in-memory for demo, use real storage in production):
+```go
+storage.Store(message)
+```
+
+**Generate certificate** with SHA256 hash + ECDSA signature:
+```go
+dataHash := sha256.Sum256(message)
+sig, _ := signer(dataHash[:])
+
+certificate := []byte{
+    0x01,  // DA API header
+    0xFF,  // ReferenceDA type
+}
+certificate = append(certificate, dataHash[:]...)   // 32 bytes
+certificate = append(certificate, sig...)            // 65 bytes (v, r, s)
+```
+
+**Return certificate**:
+```go
+return StoreResult{
+    SerializedDACert: hexutil.Encode(certificate),
+}
+```
+
+While ReferenceDA uses Go, you can implement `daprovider_store` in any language. You just need to be able to:
+- Accept JSON-RPC requests
+- Store data persistently
+- Generate cryptographic signatures/commitments
+- Return hex-encoded responses
+
+---
+
+### Streaming Protocol Methods (Optional)
+
+For large batches exceeding HTTP body limits (default: 5MB), implement these three additional RPC methods:
+
+- `daprovider_startChunkedStore` - Initiates chunked storage session
+- `daprovider_sendChunk` - Sends individual chunks (can be sent in parallel)
+- `daprovider_commitChunkedStore` - Finalizes stream and returns certificate
+
+See **Appendix A: Data Streaming Protocol** for complete specifications, parameter details, and implementation guidance.
+
+---
+
+## 5. Implementing Validator RPC Methods
+
+Your JSON-RPC server implements two Validator methods that generate cryptographic proofs for fraud proof validation. These are **critical for security** - the fraud proof system must be able to prove both valid and invalid certificates on-chain.
+
+### Method 1: `daprovider_generateReadPreimageProof`
+
+Generates an **opening proof** for reading a specific **32-byte range** of the committed batch data during fraud proof validation. The `offset` parameter specifies the **32-byte-aligned** starting position (must be a multiple of 32).
+
+**Parameters**:
+```json
+{
+  "certHash": "0xabcd...",     // keccak256 hash of the certificate
+  "offset": "0x0",              // 32-byte-aligned offset (must be multiple of 32, hex-encoded uint64)
+  "certificate": "0x01..."    // Full certificate bytes
+}
+```
+
+**Note**: The `offset` must be 32-byte aligned (0, 32, 64, 96, ...). The proof covers exactly 32 bytes starting at this offset.
+
+**Returns**:
+```json
+{
+  "proof": "0x..."  // Your DA-system-specific proof data (hex-encoded)
+}
+```
+
+**Implementation Approaches**:
+
+Your implementation can use one of two approaches:
+
+**1. Simple Approach (like ReferenceDA)**: Include the full preimage
+- Proof contains the entire batch data
+- Easy to implement - just return the stored data
+- **Inefficient for large batches**: 5MB batch = 5MB proof
+
+**2. Advanced Approach**: Use cryptographic opening proofs
+- Proof contains only a commitment opening for the requested byte range
+- **Efficient for large batches**: 5MB batch = typically <1KB proof
+- Requires cryptographic commitment scheme (see examples below)
+
+**Implementation Steps**:
+
+1. **Parse the certificate** to extract information about the stored data
+
+2. **Retrieve the batch data** from your DA storage
+
+3. **Build a proof** using one of these approaches:
+
+   **Simple (Full Preimage)**:
+   - Include the entire batch payload in the proof
+   - Format: `[version, preimageSize, preimageData]`
+
+   **Advanced (Opening Proof)**:
+   - Generate a cryptographic opening for the 32-byte range at `offset`
+   - Include only the commitment opening, not the full data
+   - See cryptographic scheme examples below
+
+4. **Return the proof** as hex-encoded bytes
+
+---
+
+**Cryptographic Commitment Scheme Examples**:
+
+If you're implementing the advanced approach with opening proofs, here are common schemes:
+
+**KZG Polynomial Commitments** (used in EIP-4844, Celestia, EigenDA):
+- Commit to batch data as a polynomial
+- Generate a **point evaluation proof** for the 32-byte chunk at `offset`
+- Proof size: ~48 bytes (constant, regardless of batch size)
+- Verification: On-chain pairing check proves polynomial evaluates correctly at that position
+- Example: EIP-4844 uses `POINT_EVALUATION_PRECOMPILE` for this
+
+```
+Proof format: [commitment (48 bytes), evaluation (32 bytes), proof (48 bytes)]
+```
+
+**Merkle Tree Commitments**:
+- Organize batch into 32-byte chunks as tree leaves
+- Generate an **inclusion proof** for the leaf at position `offset / 32`
+- Proof size: ~log₂(n) * 32 bytes (e.g., 512 bytes for 64K leaves)
+- Verification: Hash authentication path to prove chunk inclusion
+- Common in Bitcoin, Ethereum state trees
+
+```
+Proof format: [leaf_data, sibling_hash₁, sibling_hash₂, ..., sibling_hashₙ]
+```
+
+**Vector Commitments**:
+- Commit to batch as a vector of elements
+- Generate a **position opening** for the specific index/range
+- Proof size: Constant (scheme-dependent, often ~32-96 bytes)
+- Verification: Algebraic check proves correct opening
+- Used in some modern DA systems
+
+```
+Proof format: [element_value, opening_proof, auxiliary_data]
+```
+
+**Comparison**:
+| Approach | Proof Size (5MB batch) | Pros | Cons |
+|----------|----------------------|------|------|
+| **Full Preimage** | 5MB | Simple to implement | Huge proofs, expensive L1 verification |
+| **KZG Commitments** | ~128 bytes | Constant size, efficient | Requires trusted setup, pairing-friendly curves |
+| **Merkle Trees** | ~512 bytes | No trusted setup, simple | Logarithmic size, multiple hashes to verify |
+| **Vector Commitments** | ~64 bytes | Constant size, flexible | More complex cryptography |
+
+---
+
+**What Happens Next**:
+- The proof enhancer prepends `[certSize(8), certificate]` to your proof
+- The complete proof is sent to your on-chain `validateReadPreimage()` function
+- Your contract extracts up to 32 bytes starting at `offset` and returns them
+
+**Example Request**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "daprovider_generateReadPreimageProof",
+  "params": [{
+    "certHash": "0xabcd1234...",
+    "offset": "0x0",
+    "certificate": "0x01..."
+  }]
+}
+```
+
+**Example Response**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "proof": "0x0100000000000001005678..."
+  }
+}
+```
+
+**ReferenceDA Proof Format** (Simple Approach):
+
+ReferenceDA uses the simple approach, including the full preimage in the proof:
+
+```
+[0]       : version (0x01)
+[1-8]     : preimageSize (8 bytes, big-endian uint64)
+[9...]    : preimageData (full batch payload - entire 5MB for a 5MB batch!)
+```
+
+This is easy to implement but **inefficient** for large batches. Production DA systems should consider using cryptographic commitments (KZG, Merkle, etc.) to generate compact opening proofs instead.
+
+---
+
+### Method 2: `daprovider_generateCertificateValidityProof`
+
+Generates a proof of whether a certificate is valid or invalid according to your DA system's rules.
+
+**Parameters**:
+```json
+{
+  "certificate": "0x01..."  // Certificate to validate
+}
+```
+
+**Returns**:
+```json
+{
+  "proof": "0x..."  // Validity proof (hex-encoded)
+}
+```
+
+**CRITICAL RULE: Invalid Certificates Return Proof, NOT Error**
+
+**Invalid certificates** (bad format, bad signature, untrusted signer) must return a **successful response** with `claimedValid=0` in the proof. Do NOT return an error.
+
+**Only return errors for**:
+- Network failures (can't reach L1, database down)
+- RPC timeouts
+- Other transient issues
+
+**Why?** The fraud proof system needs to prove "this certificate is invalid" on-chain. If you return an error, this proof becomes impossible.
+
+**Implementation Requirements**:
+
+1. **Validate the certificate**:
+   - Check format/structure
+   - Verify signature or cryptographic proof
+   - Check against trusted signers (if applicable)
+
+2. **Determine validity**:
+   - Valid -> `claimedValid = 1`
+   - Invalid (any reason) -> `claimedValid = 0`
+
+3. **Build proof** containing:
+   - `claimedValid` byte (0 or 1)
+   - Any additional data your on-chain validator needs
+   - For ReferenceDA: `[claimedValid(1 byte), version(1 byte)]`
+
+4. **Return the proof** (NOT an error, even for invalid certs!)
+
+**Example Request**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "daprovider_generateCertificateValidityProof",
+  "params": [{
+    "certificate": "0x01ff1234..."
+  }]
+}
+```
+
+**Example Response (Valid Certificate)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "proof": "0x0101"  // claimedValid=1, version=1
+  }
+}
+```
+
+**Example Response (Invalid Certificate - STILL SUCCESS!)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "proof": "0x0001"  // claimedValid=0, version=1
+  }
+}
+```
+
+**Example Response (Network Error - ONLY NOW Return Error)**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32000,
+    "message": "failed to query L1 contract: connection timeout"
+  }
+}
+```
+
+**ReferenceDA Proof Format**:
+```
+[0] : claimedValid (0x00 = invalid, 0x01 = valid)
+[1] : version (0x01)
+```
+
+---
+
+### Proof Flow Summary
+
+**What the proof enhancer does**:
+1. Receives your custom proof from the RPC method
+2. Prepends standardized header: `[certSize(8 bytes), certificate, ...]`
+3. Sends complete proof to your on-chain validator contract
+
+**For `generateReadPreimageProof`**:
+```
+Complete proof = [machineProof..., certSize(8), certificate, yourCustomProof]
+                                                              ↑
+                                              [version, size, preimageData]
+```
+
+**For `generateCertificateValidityProof`**:
+```
+Complete proof = [machineProof..., certSize(8), certificate, claimedValid(1), yourCustomProof]
+                                                              ↑
+                                                    [0 or 1, version, ...]
+```
+
+---
+
+### Reference: ReferenceDA Implementation
+
+The ReferenceDA server demonstrates the complete pattern:
+
+**GenerateCertificateValidityProof** - key logic:
+```go
+// Parse certificate
+cert, err := Deserialize(certificate)
+if err != nil {
+    // Invalid format -> claimedValid=0, NOT an error!
+    return proof{claimedValid: 0, version: 1}
+}
+
+// Verify signature
+signer, err := cert.RecoverSigner()
+if err != nil {
+    // Invalid signature -> claimedValid=0
+    return proof{claimedValid: 0, version: 1}
+}
+
+// Query L1 contract for trusted signers
+isTrusted, err := l1Contract.TrustedSigners(signer)
+if err != nil {
+    // Network error -> return actual error
+    return error(err)
+}
+
+// Build proof
+return proof{claimedValid: boolToByte(isTrusted), version: 1}
+```
+
+**GenerateReadPreimageProof** - key logic:
+```go
+// Parse certificate to get data hash
+cert, err := Deserialize(certificate)
+
+// Retrieve full batch data from storage
+preimageData, err := storage.GetByHash(cert.DataHash)
+
+// Build proof with full data
+return proof{
+    version:      1,
+    preimageSize: len(preimageData),
+    preimageData: preimageData,
+}
+```
+
+While ReferenceDA uses Go, you can implement these methods in any language.
+
+---
+
+## 6. Designing Your Certificate Format
+
+The certificate is the core data structure in your DA system. It's posted to L1 and used to retrieve batch data.
+
+### Header Requirements
+
+All DA API certificates must start with:
+1. **Byte 0**: `0x01` (defined as `daprovider.DACertificateMessageHeaderFlag`)
+2. **Bytes 1-n**: Your certificate may optionally identify itself with provider bytes which are used inside Nitro for routing the request to the right provider server.
+
+### What to Include
+
+Your certificate should contain:
+
+1. **Data Commitment**: A hash or commitment to the batch payload
+   - ReferenceDA uses SHA256 hash of the payload
+   - You could use keccak256, SHA3, Merkle root, KZG commitment, etc.
+
+2. **Validity Proof**: Information that proves the certificate is authentic
+   - ReferenceDA uses ECDSA signature over the data hash
+   - You could use BLS signatures, Merkle proofs, aggregated signatures, etc.
+
+3. **Any Other Metadata**: Whatever your on-chain validator needs
+   - Timestamps, version numbers, provider IDs, etc.
+
+### Size Considerations
+
+Certificates are posted to L1 as calldata, so **smaller is better** for gas costs.
+
+- ReferenceDA: 99 bytes (header(2) + hash(32) + signature(65))
+
+### Format Flexibility
+
+The DA API treats certificates as **opaque blobs**. The core Nitro system only cares about:
+- The initial `0x01` DACertificateMessageHeaderFlag, plus optional provider bytes for routing to the correct external DA system
+- `keccak256(certificate)` as the preimage key
+- The certificate is posted to L1 intact
+
+Everything else is up to you. Your Reader, Writer, Validator, and on-chain contract define the format and validation rules.
+
+### ReferenceDA Certificate Format
+
+File: `daprovider/referenceda/certificate.go`
+
+```
+Byte Layout (99 bytes total):
+[0]      : 0x01 (DA API header, DACertificateMessageHeaderFlag)
+[1]      : 0xFF (ReferenceDA provider type)
+[2-33]   : SHA256 hash of payload (32 bytes)
+[34]     : ECDSA signature V value (1 byte)
+[35-66]  : ECDSA signature R value (32 bytes)
+[67-98]  : ECDSA signature S value (32 bytes)
+```
+
+**Design Rationale**:
+ReferenceDA is a simple example to demonstrate basic features needed by a certificate:
+- SHA256 provides data commitment
+- ECDSA signature proves authenticity (verifiable on-chain with `ecrecover`)
+- Trusted signer mapping determines validity (configured on validator contract)
+
+---
+
+## 7. Implementing the On-Chain Validator Contract
+
+The on-chain validator contract validates proofs during fraud proof challenges. This is the security-critical component that ensures only valid data is accepted.
+
+### Interface Definition
+
+File: `contracts/src/osp/ICustomDAProofValidator.sol`
+
+```solidity
+interface ICustomDAProofValidator {
+    /**
+     * @notice Validates a proof for reading a preimage at a specific offset
+     * @param certHash Keccak256 hash of the certificate
+     * @param offset Offset in the preimage to read
+     * @param proof Complete proof data (format: [certSize(8), certificate, customData...])
+     * @return preimageChunk Up to 32 bytes of preimage data at the specified offset
+     */
+    function validateReadPreimage(
+        bytes32 certHash,
+        uint256 offset,
+        bytes calldata proof
+    ) external view returns (bytes memory preimageChunk);
+
+    /**
+     * @notice Validates whether a certificate is authentic
+     * @param proof Complete proof data (format: [certSize(8), certificate, claimedValid(1), validityProof...])
+     * @return isValid True if certificate is valid, false otherwise
+     *
+     * IMPORTANT: Must NOT revert for invalid certificates - return false instead.
+     */
+    function validateCertificate(
+        bytes calldata proof
+    ) external view returns (bool isValid);
+}
+```
+
+### validateReadPreimage Implementation
+
+This function must:
+
+1. **Extract the certificate** from the proof (first 8 bytes are certificate size, followed by certificate)
+2. **Verify the certificate hash** matches `certHash` (security critical!)
+3. **Extract your custom proof data** (everything after the certificate)
+4. **Validate the custom proof** according to your DA system's rules
+5. **Extract and return** up to 32 bytes of preimage data starting at `offset`
+
+**Security Requirements**:
+- MUST verify `keccak256(certificate)` matches the provided `certHash`
+- MUST validate that the preimage data matches the commitment in the certificate
+- Can revert on invalid proofs (this is a read operation, not validity determination)
+
+### validateCertificate Implementation
+
+This function must:
+
+1. **Extract the certificate** from proof
+2. **Extract claimedValid** byte (at `proof[8 + certSize]`)
+3. **Validate the certificate** according to your DA system's rules
+4. **Return true if valid, false if invalid**
+
+**CRITICAL REQUIREMENT**: This function **MUST NOT revert for invalid certificates**. It should:
+- Return `true` for valid certificates
+- Return `false` for invalid certificates (bad format, bad signature, untrusted signer, etc.)
+- Only revert for truly unexpected conditions (e.g., internal contract errors)
+
+**Why?** The fraud proof system needs to be able to prove "this certificate is invalid" on-chain. If the function reverts, this proof becomes impossible.
+
+### Proof Format
+
+The OneStepProverHostIo contract passes proofs in this format:
+
+**For validateReadPreimage**:
+```
+[certSize(8 bytes), certificate, yourCustomProofData]
+```
+
+**For validateCertificate**:
+```
+[certSize(8 bytes), certificate, claimedValid(1 byte), yourCustomProofData]
+```
+
+Extract components like:
+```solidity
+// Extract certificate size
+uint64 certSize = uint64(bytes8(proof[0:8]));
+
+// Extract certificate
+bytes calldata certificate = proof[8:8 + certSize];
+
+// Extract custom proof (for validateReadPreimage)
+bytes calldata customProof = proof[8 + certSize:];
+
+// Extract claimedValid and custom proof (for validateCertificate)
+uint8 claimedValid = uint8(proof[8 + certSize]);
+bytes calldata customProof = proof[8 + certSize + 1:];
+```
+
+### Security Checks Performed by OSP
+
+The OneStepProverHostIo contract performs critical security checks before calling your validator:
+
+1. **Certificate Hash Verification**: Verifies `keccak256(certificate) == certHash` (prevents certificate substitution)
+2. **Claim Verification** (for validateCertificate): Verifies prover's `claimedValid` matches validator's return value
+
+You don't need to implement these checks—they're enforced by the OSP. You only need to validate your certificate format and proofs.
+
+### Example: ReferenceDA Validator Contract
+
+File: `contracts-local/src/osp/ReferenceDAProofValidator.sol`
+
+**Constructor and Storage**:
+```solidity
+mapping(address => bool) public trustedSigners;
+
+constructor(address[] memory _trustedSigners) {
+    for (uint256 i = 0; i < _trustedSigners.length; i++) {
+        trustedSigners[_trustedSigners[i]] = true;
+    }
+}
+```
+
+**validateCertificate**:
+```solidity
+function validateCertificate(
+    bytes calldata proof
+) external view returns (bool) {
+    // 1. Extract certificate
+    uint64 certSize = uint64(bytes8(proof[0:8]));
+    bytes calldata certificate = proof[8:8 + certSize];
+
+    // 2. Validate certificate structure
+    if (certificate.length != 99) return false;
+    if (certificate[0] != 0x01) return false;  // DA API header
+    if (certificate[1] != 0xFF) return false;  // ReferenceDA type
+
+    // 3. Extract certificate components
+    bytes32 dataHash = bytes32(certificate[2:34]);
+    uint8 v = uint8(certificate[34]);
+    bytes32 r = bytes32(certificate[35:67]);
+    bytes32 s = bytes32(certificate[67:99]);
+
+    // 4. Recover signer using ecrecover
+    address signer = ecrecover(dataHash, v, r, s);
+    if (signer == address(0)) return false;
+
+    // 5. Check if signer is trusted
+    return trustedSigners[signer];
+}
+```
+
+**validateReadPreimage**:
+```solidity
+function validateReadPreimage(
+    bytes32 certHash,
+    uint256 offset,
+    bytes calldata proof
+) external view returns (bytes memory) {
+    // 1. Extract certificate (99 bytes for ReferenceDA)
+    bytes calldata certificate = proof[8:8 + 99];
+
+    // 2. Extract custom proof: [version(1), preimageSize(8), preimageData]
+    uint8 version = uint8(proof[8 + 99]);
+    uint64 preimageSize = uint64(bytes8(proof[8 + 99 + 1:8 + 99 + 9]));
+    bytes calldata preimageData = proof[8 + 99 + 9:8 + 99 + 9 + preimageSize];
+
+    // 3. Extract data hash from certificate
+    bytes32 dataHash = bytes32(certificate[2:34]);
+
+    // 4. Verify preimage matches certificate's hash
+    if (sha256(preimageData) != dataHash) {
+        revert("Preimage hash mismatch");
+    }
+
+    // 5. Return up to 32 bytes at offset
+    if (offset >= preimageSize) {
+        return new bytes(0);
+    }
+
+    uint256 remainingBytes = preimageSize - offset;
+    uint256 chunkSize = remainingBytes > 32 ? 32 : remainingBytes;
+
+    bytes memory chunk = new bytes(chunkSize);
+    for (uint256 i = 0; i < chunkSize; i++) {
+        chunk[i] = preimageData[offset + i];
+    }
+
+    return chunk;
+}
+```
+
+**Key Points**:
+- validateCertificate returns `false` for invalid certificates, never reverts
+- Uses `ecrecover` for signature verification
+- Validates SHA256 hash matches
+- Extracts 32-byte chunks for preimage reads
+
+---
+
+## 8. Understanding Proof Enhancement
+
+Proof enhancement is the bridge between the WASM execution environment (which has no network access) and the on-chain fraud proof validation (which needs DA-specific data).
+
+### The Challenge
+
+During fraud proof challenges:
+- The prover (WASM binary) runs in a fully deterministic environment **without network access**
+- When it encounters DA API operations, it can't call your DA provider to get proofs
+- But the on-chain validator needs these proofs to verify the fraud proof
+
+### How Proof Enhancement Works
+
+**Step 1: WASM Signals Enhancement Needed**
+
+When the replay binary encounters a DA API operation (reading preimage or validating certificate), it:
+1. Sets the `ProofEnhancementFlag (0x80)` in the machine status byte (first byte of proof)
+2. Appends marker data to the end of the proof:
+   - `0xDA` for preimage read operations
+   - `0xDB` for certificate validation operations
+3. Returns the incomplete proof
+
+**Step 2: Proof Enhancer Detects and Routes**
+
+The validator's proof enhancement manager (file: `validator/proofenhancement/proof_enhancer.go`):
+1. Detects the enhancement flag in the proof
+2. Reads the marker byte to determine operation type
+3. Routes to the appropriate enhancer (ReadPreimage or ValidateCertificate)
+
+**Step 3: Certificate Retrieved from L1**
+
+The enhancer retrieves the certificate **from L1, not from the DA provider**:
+1. Finds which batch contains the message: `inboxTracker.FindInboxBatchContainingMessage(messageNum)`
+2. Gets sequencer message bytes: `inboxReader.GetSequencerMessageBytes(ctx, batchNum)`
+3. Extracts certificate: `certificate = sequencerMessage[40:]` (skip 40-byte header)
+4. Validates certificate hash matches what the proof expects
+
+**Step 4: Validator RPC Called**
+
+The enhancer calls your Validator interface:
+- For preimage reads: `validator.GenerateReadPreimageProof(certHash, offset, certificate)`
+- For certificate validation: `validator.GenerateCertificateValidityProof(certificate)`
+
+**Step 5: Complete Proof Built**
+
+The enhancer builds the complete proof:
+```
+[...originalMachineProof, certSize(8), certificate, customProof]
+```
+
+The marker data is **removed**—it was only needed for enhancement routing.
+
+**Step 6: Proof Submitted to OSP**
+
+The BOLD State Provider submits the enhanced proof to the OneStepProverHostIo contract, which validates it on-chain.
+
+### Why Certificates Come from L1
+
+Certificates are **always retrieved from L1 sequencer inbox messages**, never from external DA providers. This ensures:
+- Proofs are always verifiable without network dependencies
+- No trust in DA provider availability during challenges
+- Complete determinism and reproducibility
+
+The sequencer message format is:
+```
+[SequencerHeader(40 bytes), DACertificateFlag(0x01), Rest of certificate(...)]
+```
+
+Certificates are embedded in L1 calldata and always available.
+
+### What Your Validator Must Provide
+
+Your `Validator` interface implementation must return proofs that:
+- Match the format your on-chain validator contract expects
+- Contain all data needed for on-chain verification
+- Don't require any additional network calls or external data
+
+For ReferenceDA:
+- ReadPreimage proof: `[version(1), preimageSize(8), preimageData]`
+- Validity proof: `[claimedValid(1), version(1)]`
+
+---
+
+## 9. Configuration & Deployment
+
+This section covers how to configure Nitro nodes to connect to your DA provider and how to deploy your DA provider server.
+
+### Nitro Node Configuration
+
+Nitro nodes connect to DA providers via JSON-RPC. Configure your provider with these flags:
+
+**Single Provider**:
+```bash
+--node.da.external-provider.enable
+--node.da.external-provider.with-writer
+--node.da.external-provider.rpc.url=http://your-da-provider:8547
+```
+
+**Multiple Providers**:
+```bash
+--node.da.external-providers='[
+  {"rpc":{"url":"http://provider1:8547"},"with-writer":true},
+  {"rpc":{"url":"http://provider2:8547"},"with-writer":true}
+]'
+```
+
+**RPC Connection Options**:
+```bash
+--node.da.external-provider.rpc.url              # RPC endpoint URL
+--node.da.external-provider.rpc.timeout          # Per-response timeout (0 = disabled)
+--node.da.external-provider.rpc.jwtsecret        # Path to JWT secret file for auth
+--node.da.external-provider.rpc.connection-wait  # How long to wait for initial connection
+--node.da.external-provider.rpc.retries=3        # Number of retry attempts
+--node.da.external-provider.rpc.retry-delay      # Delay between retries
+```
+
+**Batch Poster Configuration**:
+```bash
+--node.batch-poster.max-altda-batch-size=1000000               # Max batch size (1MB default)
+--node.batch-poster.disable-dap-fallback-store-data-on-chain   # Disable L1 fallback
+```
+
+### JWT Authentication
+
+Secure communication between Nitro nodes and DA providers using JWT:
+
+**Generate JWT Secret**:
+```bash
+openssl rand -hex 32 > jwt.hex
+```
+
+**Configure Nitro Node**:
+```bash
+--node.da.external-provider.rpc.jwtsecret=/path/to/jwt.hex
+```
+
+**Configure DA Provider Server**:
+Your server implementation should validate JWT tokens in the same way.
+
+### Creating a DA Provider Server
+
+Your DA provider server exposes JSON-RPC methods that Nitro nodes call. You can implement this in any language as long as it speaks JSON-RPC over HTTP.
+
+**Required RPC Methods**:
+
+**Reader Methods**:
+- `daprovider_getSupportedHeaderBytes` - Returns header byte strings
+- `daprovider_recoverPayload` - Recovers batch payload
+- `daprovider_collectPreimages` - Collects preimages for validation
+
+**Writer Methods** (optional, for batch posting):
+- `daprovider_store` - Stores batch and returns certificate
+
+**Validator Methods**:
+- `daprovider_generateReadPreimageProof` - Generates preimage read proof
+- `daprovider_generateCertificateValidityProof` - Generates validity proof
+
+**Example: cmd/daprovider Server (Go)**
+
+The Nitro repository includes a complete reference implementation at `cmd/daprovider/daprovider.go` written in Go:
+
+```go
+func main() {
+    // 1. Parse configuration
+    config, err := parseDAProvider(os.Args[1:])
+
+    // 2. Create DA provider factory based on mode
+    providerFactory, err := factory.NewDAProviderFactory(
+        config.Mode,           // "anytrust" or "referenceda"
+        &config.Anytrust,      // AnyTrust config
+        &config.ReferenceDA,   // ReferenceDA config
+        dataSigner,            // Optional data signer
+        l1Client,              // L1 client
+        l1Reader,              // L1 reader
+        seqInboxAddr,          // Sequencer inbox address
+        enableWriter,          // Enable writer interface
+    )
+
+    // 3. Create reader/writer/validator
+    reader, _, err := providerFactory.CreateReader(ctx)
+    writer, _, err := providerFactory.CreateWriter(ctx)
+    validator, _, err := providerFactory.CreateValidator(ctx)
+
+    // 4. Start JSON-RPC server
+    headerBytes := providerFactory.GetSupportedHeaderBytes()
+    providerServer, err := dapserver.NewServerWithDAPProvider(
+        ctx,
+        &config.ProviderServer,
+        reader,
+        writer,
+        validator,
+        headerBytes,
+        data_streaming.PayloadCommitmentVerifier(),
+    )
+
+    // 5. Run until interrupted
+    <-sigint
+    providerServer.Shutdown(ctx)
+}
+```
+
+**Running the ReferenceDA Example**:
+```bash
+./bin/daprovider \
+  --mode=referenceda \
+  --referenceda.enable \
+  --referenceda.signing-key.private-key=<your-key> \
+  --referenceda.validator-address=<validator-contract-addr> \
+  --parent-chain.node-url=<L1-RPC-URL> \
+  --provider-server.addr=0.0.0.0 \
+  --provider-server.port=8547 \
+  --provider-server.enable-da-writer
+```
+
+### Multi-Provider Registry
+
+Nitro supports multiple DA providers simultaneously using header byte matching:
+
+**How It Works**:
+1. Each provider returns supported header bytes via `getSupportedHeaderBytes()`
+2. Registry maps header prefixes to Reader/Validator pairs
+3. When processing a message, Nitro checks header bytes and routes to correct provider
+4. First-match semantics (prevents shadowing)
+
+**Example**:
+- AnyTrust: `0x80`
+- ReferenceDA: `0x01, 0xFF`
+- Your provider: `0x01, 0xAA`
+
+All three can coexist on the same chain.
+
+---
+
+## 10. Testing Your Integration
+
+Thorough testing is critical for DA provider integrations, as bugs can lead to data loss or fraud proof failures.
+
+### Unit Testing
+
+Test each component in isolation:
+
+**Reader Tests**:
+- Certificate extraction from sequencer messages
+- Certificate deserialization (valid and invalid formats)
+- Certificate validation (valid/invalid signatures, trusted/untrusted signers)
+- Data retrieval from storage
+- Hash verification (data matches certificate commitment)
+- Preimage recording (correct mapping from keccak256(cert) to payload)
+
+**Writer Tests**:
+- Certificate generation
+- Data storage
+- Certificate serialization
+- Signature creation
+- Error handling and fallback mechanism
+
+**Validator Tests**:
+- GenerateReadPreimageProof with various offsets
+- GenerateCertificateValidityProof for valid certificates (returns claimedValid=1)
+- GenerateCertificateValidityProof for invalid certificates (returns claimedValid=0, NOT error)
+- Proof format correctness
+
+**On-Chain Contract Tests**:
+- validateCertificate with valid certificates (returns true)
+- validateCertificate with invalid certificates (returns false, doesn't revert!)
+- validateReadPreimage with correct proofs
+- Hash verification (rejects wrong certificate hashes)
+- Chunk extraction at various offsets
+
+### Integration Testing with Nitro
+
+Test your DA provider connected to a Nitro node:
+
+**Setup**:
+1. Deploy your validator contract to L1
+2. Deploy Nitro contracts (SequencerInbox, OneStepProverHostIo with your validator address)
+3. Start your DA provider server
+4. Configure Nitro node to use your provider
+
+**Test Scenarios**:
+- Post batches via Batch Poster (Writer interface)
+- Recover batches via Reader interface
+- Validate batches in validation node
+- Generate fraud proofs with proof enhancement
+- Submit fraud proofs to L1 (OSP validation)
+
+### System Tests
+
+The Nitro repository includes system tests for the DA API with BOLD challenges:
+
+**BOLD Challenge Protocol Tests** (file: `system_tests/bold_challenge_protocol_test.go`):
+- `TestChallengeProtocolBOLDCustomDA_EvilDataGoodCert` - Corrupted data, valid certificate
+- `TestChallengeProtocolBOLDCustomDA_EvilDataEvilCert` - Corrupted data, invalid certificate
+- `TestChallengeProtocolBOLDCustomDA_UntrustedSignerCert` - Certificate signed by untrusted signer
+- `TestChallengeProtocolBOLDCustomDA_ValidCertClaimedInvalid` - Valid certificate incorrectly claimed invalid
+
+**Block Validator Tests**:
+- `TestBlockValidatorReferenceDAWithProver` - Proof enhancement with prover
+- `TestBlockValidatorReferenceDAWithJIT` - Proof enhancement with JIT
+
+Study these tests to understand expected behavior and edge cases.
+
+### Testing Invalid Certificate Handling
+
+**Critical Test**: Verify your system handles invalid certificates correctly:
+
+**Reader Behavior**:
+- Invalid certificate -> error returned
+- Nitro treats batch as empty (zero transactions)
+- Chain continues processing
+
+**Validator Behavior**:
+- Invalid certificate -> returns `claimedValid=0`, **NOT an error**
+- Proof enhancement completes successfully
+- On-chain validation returns `false`
+
+**On-Chain Contract Behavior**:
+- Invalid certificate -> `validateCertificate` returns `false`
+- **Must NOT revert** (critical requirement!)
+- Fraud proof succeeds, proving the certificate is invalid
+
+**Test Case**:
+```go
+// Generate invalid certificate (bad signature, untrusted signer, etc.)
+invalidCert := generateInvalidCertificate()
+
+// Validator should return claimedValid=0, not error
+result, err := validator.GenerateCertificateValidityProof(invalidCert)
+assert.NoError(t, err)  // No error!
+assert.Equal(t, 0, result.ClaimedValid)  // Claims invalid
+
+// On-chain validation should return false
+isValid, err := contract.ValidateCertificate(proof)
+assert.NoError(t, err)  // No revert!
+assert.False(t, isValid)  // Returns false
+```
+
+---
+
+## 11. Security Considerations
+
+DA API integrations have unique security requirements. Follow these guidelines to build a secure system.
+
+### Certificate Hash as Only Preimage Key
+
+The **only** way to retrieve batch data during fraud proofs is via `keccak256(certificate)`. This hash serves as the preimage key.
+
+**Implications**:
+- Deterministic mapping: Same certificate always maps to same data
+- No certificate substitution: Can't swap a valid cert for another valid cert
+- Hash collision resistance: Must use keccak256 (256-bit security)
+
+**Your Reader must**:
+- Record preimages using `keccak256(certificate)` as the key
+- Use `arbutil.DACertificatePreimageType` as the preimage type
+- Store the full batch payload as the preimage value
+
+### Determinism Requirements
+
+All components must be fully deterministic:
+
+**Reader**:
+- Same certificate -> always returns same data
+- Validation rules must be deterministic (no timestamps, no randomness)
+
+**Writer**:
+- Can be non-deterministic (different nodes may generate different certificates for same data)
+- But certificate must deterministically identify the data
+
+**Validator**:
+- Same inputs -> always returns same proofs
+- No network randomness, no timestamps in proofs
+- Proofs must be verifiable on-chain with only the proof data
+
+**On-Chain Contract**:
+- Pure deterministic validation
+- No external calls (except to immutable addresses)
+- No block timestamps, no randomness
+
+### Invalid Certificate Handling
+
+**Reader Behavior** (during normal execution):
+- Invalid certificate -> return error
+- Nitro treats batch as empty (zero transactions)
+- Chain continues without halting
+
+**Validator Behavior** (during fraud proofs):
+- Invalid certificate -> return `claimedValid=0`, **NOT an error**
+- Fraud proof system needs to prove "this certificate is invalid"
+- Errors should only be for transient failures (RPC issues)
+
+**On-Chain Contract Behavior**:
+- Invalid certificate -> `validateCertificate` returns `false`
+- **MUST NOT revert** (would make proving invalidity impossible)
+- Only revert for truly unexpected conditions
+
+### No Trusted External Oracles
+
+Fraud proofs must be verifiable on-chain **without trusting external oracles**:
+
+**What is allowed**:
+- Querying L1 state (trusted signers, contract storage)
+- Using L1 precompiles (ecrecover, sha256, etc.)
+- Reading immutable contract addresses
+
+**Why?** Fraud proofs must be verifiable on chain without depending on external services that could be unavailable or malicious.
+
+### Certificate Hash Verification
+
+The OneStepProverHostIo contract verifies `keccak256(certificate)` matches the hash in the machine proof. This prevents:
+
+**Certificate Substitution Attack**:
+- Attacker posts certificate A to L1
+- During fraud proof, tries to use certificate B (different data)
+- OSP rejects: keccak256(B) ≠ keccak256(A)
+
+**You don't need to implement this check**—the OSP enforces it. But understand it's critical to security.
+
+### Claim Verification
+
+For `validateCertificate`, the OSP verifies the prover's `claimedValid` byte matches the validator contract's return value. This prevents:
+
+**False Validity Claims**:
+- Prover claims invalid certificate is valid -> OSP rejects
+- Prover claims valid certificate is invalid -> OSP rejects
+
+This ensures both honest and malicious provers are held accountable.
+
+### Immutable Validator Address
+
+The OneStepProverHostIo is deployed with an immutable `customDAValidator` address. Once deployed:
+- Validator address cannot be changed
+- Prevents governance attacks or validator swapping
+- Ensures consistent validation rules
+
+**Implication**: Choose your validator contract carefully at deployment. If you need to update logic, you'll need to deploy a new OSP and update BOLD contracts.
+
+### Data Availability Guarantees
+
+The DA API does **not** enforce data availability—that's your responsibility:
+
+**Your DA system must ensure**:
+- Data is actually available when certificates are issued
+- Data remains available for at least the requested period, but maintaining the data forever for genesis syncing is recommended.
+
+**Nitro only ensures**:
+- Invalid certificates can be challenged
+- Valid certificates can be proven valid
+- No invalid data is executed
+
+Data availability itself is your DA system's responsibility.
+
+---
+
+# Appendix A: Streaming protocol
+
+## Context and Protocol Overview
+
+This section outlines the necessity, role, and activation of the Data Availability (DA) streaming subprotocol within Arbitrum Nitro.
+
+### Rationale and Function
+
+Experience with the AnyTrust deployments demonstrated that the Batch Poster's "one-shot" transmission of large data batches to DA Committee Members can be susceptible to network instability, causing submission failures or critical latency.
+
+To address this, the Data Streaming Protocol was introduced:
+
+- It operates as a sub-layer between the Nitro Node's Batch Poster and the DA server.
+- It segments large batches into a sequence of smaller, short messages, which are streamed sequentially. This strategy significantly improves the resilience and reliability of data submission, despite increasing the total message count.
+
+### Opt-in Activation
+
+This protocol is opt-in. Integrators can activate it to ensure robust data submission when dealing with large batches within environments with variable network quality.
+
+To enable data streaming on your Nitro Node, use the following command-line flag:
+
+`-node.da-provider.use-data-streaming`
+
+## Server-Side Protocol Implementation (Integrators)
+
+When the Nitro Node is configured with the streaming flag (`--node.da-provider.use-data-streaming`), it utilizes an internal sender implementation that relies on a server-side JSON-RPC API exposed by the DA provider. Integrators must implement the following three endpoints to enable the streaming protocol.
+
+| `daprovider_startChunkedStore` | Initiates the streaming and allocates a batch identifier. |
+| --- | --- |
+| `daprovider_sendChunk` | Transmits a single data segment (chunk). |
+| `daprovider_commitChunkedStore` | Concludes the stream and requests the final DA Certificate. |
+
+Integrators can customize these names using the following CLI flags on the Nitro Node:
+
+- `-node.da-provider.data-stream.rpc-methods.start-stream`
+- `-node.da-provider.data-stream.rpc-methods.stream-chunk`
+- `-node.da-provider.data-stream.rpc-methods.finalize-stream`
+
+### Note: Universal Integer Encoding Standard
+
+All `uint64` integer parameters (e.g., `timestamp`, `nChunks`, `BatchId`) must be encoded as JSON strings prefixed with `0x` (hexadecimal encoding).
+
+### **Start Stream: (`daprovider_startChunkedStore`)**
+
+**Arguments**:
+
+- timestamp (uint64)
+- nChunks (uint64)
+- chunkSize (uint64)
+- totalSize (uint64)
+- timeout (uint64)
+- signature (bytes)
+
+**Return**:
+
+A JSON object with `BatchId` field (uint64). This is a unique identifier generated by the server for this specific stream instance. This ID must be used in all subsequent `StreamChunk` and `FinalizeStream` calls within this execution.
+
+### Stream Chunk (`daprovider_sendChunk`)
+
+**Arguments**:
+
+- batchId (uint64) - The identifier generated by the start-stream.
+- chunkId (uint64) - The zero-indexed position of the data segment within the full batch.
+- chunk (bytes)
+- signature (bytes)
+
+**Return**:
+
+A successful operation just returns an HTTP 200 status code.
+
+### Finalize Stream (`daprovider_commitChunkedStore`)
+
+**Arguments**:
+
+- batchId (uint64) - The identifier generated by the start-stream.
+- signature (bytes)
+
+**Return**:
+
+A JSON object with `SerializedDACert` field (byte array). This certifies the batch has been successfully stored and made available by the DA layer.
+
+## Security and Configuration Notes
+
+### Signature Handling
+
+The current default client implementation relies on underlying transport encryption (e.g., TLS/JWT) for security. The signature parameter is utilized for basic data integrity checking, not cryptographic authentication.
+
+- Client Behavior: The client populates `signature` with the Keccak256 hash of all other method arguments.
+- Server Implementation: Server integrators may recompute and verify this hash to check data integrity, but this verification is optional and not required for core protocol functionality.
+
+### Operational Constraint: Chunk Size Limit
+
+Integrators can limit the maximum allowed size for individual chunk transmissions to manage server load.
+
+- **Limit Control:** Use the following flag on the Nitro Node:
+`-node.da-provider.data-stream.max-store-chunk-body-size`
+- **Action:** The client will ensure that all `StreamChunk` requests, including overhead, do not exceed the size specified by this flag.
+
+## **Go Implementation Helper**
+
+For integrators implementing the server-side logic in Go, the recommended approach is to reuse the existing `DataStreamReceiver` component provided within the Nitro repository. This object handles all the internal protocol state management and logic for the receiving side.
+
+### Recommended Module and Type
+
+- **Module:** `github.com/offchainlabs/nitro/daprovider/data_streaming`
+- **Core Type:** `DataStreamReceiver`
+
+### Example Implementation Snippets
+
+The implementation of the required JSON-RPC endpoints can be reduced to simple wrappers around the `DataStreamReceiver` methods, as demonstrated below.
+
+> Note: The hexutil types are used here to correctly handle the required 0x-prefixed integer encoding specified in Section II.
+> 
+
+```go
+func (s *Server) StartChunkedStore(ctx context.Context, timestamp, nChunks, chunkSize, totalSize, timeout hexutil.Uint64, sig hexutil.Bytes) (*data_streaming.StartStreamingResult, error) {
+	return s.dataReceiver.StartReceiving(ctx, uint64(timestamp), uint64(nChunks), uint64(chunkSize), uint64(totalSize), uint64(timeout), sig)
+}
+
+func (s *Server) SendChunk(ctx context.Context, messageId, chunkId hexutil.Uint64, chunk hexutil.Bytes, sig hexutil.Bytes) error {
+	return s.dataReceiver.ReceiveChunk(ctx, data_streaming.MessageId(messageId), uint64(chunkId), chunk, sig)
+}
+
+func (s *Server) CommitChunkedStore(ctx context.Context, messageId hexutil.Uint64, sig hexutil.Bytes) (*server_api.StoreResult, error) {
+	message, timeout, _, err := s.dataReceiver.FinalizeReceiving(ctx, data_streaming.MessageId(messageId), sig)
+	if err != nil {
+		return nil, err
+	}
+	
+	// do the actual full data store and generate DA certificate
+	return s.Store(ctx, message, hexutil.Uint64(timeout))
+}
+```
