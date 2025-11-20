@@ -1196,11 +1196,6 @@ const sidebars = {
           label: 'A gentle introduction',
         },
         {
-          type: 'doc',
-          id: 'stylus/quickstart',
-          label: 'Quickstart',
-        },
-        {
           type: 'category',
           label: 'Rust SDK',
           collapsed: true,
@@ -1254,138 +1249,138 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/using-inheritance',
-              label: 'Composition and trait-based routing model',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/rust-sdk-guide',
-              label: 'Advanced features',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/recommended-libraries',
-              label: 'Recommended Rust Crates',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Rust CLI',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/using-cli',
-              label: 'Overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/debugging-tx',
-              label: 'Debug transactions',
-            },
-            {
-              type: 'doc',
               id: 'stylus/how-tos/testing-contracts',
-              label: 'Testing contracts',
+              label: 'Writing Tests',
+            },
+            {
+              type: 'category',
+              label: 'Advanced',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/solidity-differences',
+                  label: 'Solidity differences',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/recommended-libraries',
+                  label: 'Recommended packages',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/minimal-entrypoint-contracts',
+                  label: 'Minimal entrypoint contracts',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/hostio-exports',
+                  label: 'Hostio exports',
+                },
+              ],
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts',
-              label: 'Verify contracts',
+              id: 'stylus/troubleshooting-building-stylus',
+              label: 'Troubleshooting',
             },
             {
-              type: 'doc',
-              id: 'stylus/how-tos/caching-contracts',
-              label: 'Cache contracts',
+              type: 'category',
+              label: 'Using the CLI',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/check-and-deploy',
+                  label: 'Check and deploy',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/verifying-contracts',
+                  label: 'Verify contracts',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/exporting-abi',
+                  label: 'Exporting ABI',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/debugging-tx',
+                  label: 'Debugging with replay',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/optimizing-wasm-binary-size',
+                  label: 'Optimizing WASM binary size',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
+                  label: 'Deploying non-Rust WASM contracts',
+                },
+              ],
             },
             {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts-arbiscan',
-              label: 'Verify on Arbiscan',
+              type: 'category',
+              label: 'WM Concepts',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/concepts/webassembly',
+                  label: 'Check and deploy',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/concepts/evm-differences',
+                  label: 'EVM differences',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/concepts/activation',
+                  label: 'Activation',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/caching-contracts',
+                  label: 'Caching Strategy',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/caching-contracts',
+                  label: 'Caching Strategy',
+                },
+              ],
             },
             {
-              type: 'doc',
-              id: 'stylus/how-tos/optimizing-binaries',
-              label: 'Optimize WASM binaries',
+              type: 'category',
+              label: 'Reference',
+              collapsed: true,
+              items: [
+                {
+                  type: 'link',
+                  label: 'Stylus by Example',
+                  href: 'https://stylus-by-example.org/',
+                },
+                {
+                  type: 'link',
+                  label: 'Cargo Stylus CLI GitHub',
+                  href: 'https://github.com/OffchainLabs/cargo-stylus',
+                },
+                {
+                  type: 'link',
+                  label: 'Rust SDK Crate',
+                  href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+                },
+                {
+                  type: 'link',
+                  label: 'Source Code Repository',
+                  href: 'https://github.com/OffchainLabs/stylus',
+                },
+              ],
             },
           ],
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
-        },
-        {
-          type: 'category',
-          label: 'Concepts',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/concepts/how-it-works',
-              label: 'Architecture overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/gas-metering',
-              label: 'Gas metering',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Examples',
-          collapsed: true,
-          items: [
-            {
-              type: 'link',
-              label: 'Awesome Stylus',
-              href: 'https://github.com/OffchainLabs/awesome-stylus',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Reference',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/opcode-hostio-pricing',
-              label: 'Gas & Ink Pricing',
-            },
-            {
-              type: 'link',
-              label: 'Stylus by Example',
-              href: 'https://stylus-by-example.org/',
-            },
-            {
-              type: 'link',
-              label: 'Cargo Stylus CLI GitHub',
-              href: 'https://github.com/OffchainLabs/cargo-stylus',
-            },
-            {
-              type: 'link',
-              label: 'Rust SDK Crate',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-            },
-            {
-              type: 'link',
-              label: 'Source Code Repository',
-              href: 'https://github.com/OffchainLabs/stylus',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-          label: 'Using other languages',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/troubleshooting-building-stylus',
-          label: 'Troubleshooting',
         },
       ],
     },
