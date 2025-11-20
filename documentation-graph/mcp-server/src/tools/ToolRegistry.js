@@ -216,11 +216,110 @@ export class ToolRegistry {
   }
 
   listTools() {
-    return this.tools.map((tool) => ({
-      name: tool.name,
-      description: tool.description,
-      inputSchema: tool.inputSchema.shape,
-    }));
+    return this.tools.map((tool) => {
+      // Convert Zod schema to JSON Schema format expected by MCP
+      const zodSchema = tool.inputSchema;
+      const jsonSchema = {
+        type: 'object',
+        properties: {},
+        required: [],
+      };
+
+      // Extract properties from Zod schema
+      const shape = zodSchema.shape || zodSchema._def?.shape?.();
+      if (shape) {
+        for (const [key, value] of Object.entries(shape)) {
+          // Convert Zod types to JSON Schema types
+          jsonSchema.properties[key] = this.zodToJsonSchema(value);
+
+          // Check if field is required (not optional)
+          if (!value.isOptional()) {
+            jsonSchema.required.push(key);
+          }
+        }
+      }
+
+      return {
+        name: tool.name,
+        description: tool.description,
+        inputSchema: jsonSchema,
+      };
+    });
+  }
+
+  zodToJsonSchema(zodType) {
+    // Handle Zod type to JSON Schema conversion
+    const typeName = zodType._def?.typeName;
+
+    if (typeName === 'ZodString') {
+      const schema = { type: 'string' };
+      if (zodType._def.description) {
+        schema.description = zodType._def.description;
+      }
+      return schema;
+    }
+
+    if (typeName === 'ZodNumber') {
+      const schema = { type: 'number' };
+      if (zodType._def.description) {
+        schema.description = zodType._def.description;
+      }
+      // Add min/max constraints if present
+      for (const check of zodType._def.checks || []) {
+        if (check.kind === 'min') schema.minimum = check.value;
+        if (check.kind === 'max') schema.maximum = check.value;
+      }
+      return schema;
+    }
+
+    if (typeName === 'ZodBoolean') {
+      const schema = { type: 'boolean' };
+      if (zodType._def.description) {
+        schema.description = zodType._def.description;
+      }
+      return schema;
+    }
+
+    if (typeName === 'ZodArray') {
+      const schema = { type: 'array' };
+      if (zodType._def.description) {
+        schema.description = zodType._def.description;
+      }
+      if (zodType._def.type) {
+        schema.items = this.zodToJsonSchema(zodType._def.type);
+      }
+      // Add min/max items constraints
+      if (zodType._def.minLength) {
+        schema.minItems = zodType._def.minLength.value;
+      }
+      if (zodType._def.maxLength) {
+        schema.maxItems = zodType._def.maxLength.value;
+      }
+      return schema;
+    }
+
+    if (typeName === 'ZodEnum') {
+      const schema = { type: 'string', enum: zodType._def.values };
+      if (zodType._def.description) {
+        schema.description = zodType._def.description;
+      }
+      return schema;
+    }
+
+    if (typeName === 'ZodOptional' || typeName === 'ZodDefault') {
+      // Unwrap optional/default and convert inner type
+      const innerSchema = this.zodToJsonSchema(zodType._def.innerType);
+      if (zodType._def.description) {
+        innerSchema.description = zodType._def.description;
+      }
+      if (typeName === 'ZodDefault' && zodType._def.defaultValue) {
+        innerSchema.default = zodType._def.defaultValue();
+      }
+      return innerSchema;
+    }
+
+    // Fallback for unknown types
+    return { type: 'string', description: zodType._def?.description || '' };
   }
 
   async executeTool(toolName, args) {
