@@ -23,7 +23,7 @@ This choice is configurable for all DA modes (Rollup, AnyTrust, Alt-DA) and gas 
 ## Key Concepts
 
 - **Validation in Arbitrum**: Validators monitor and advance the chain's state by posting assertions (claims about block hashes, history commitments, and inbox messages) to the parent chain (e.g., Ethereum or an L2 like Arbitrum One). If an assertion is suspected of being invalid, challengers initiate interactive fraud proofs during a challenge window (typically ~6.4 days), bisecting disagreements down to verifiable one-step proofs executed on-chain. Security relies on economic incentives, where invalid claims lead to bond forfeitures.
-- **Permissioned Validators**: Participation is restricted to a whitelist managed by the chain owner (via the ArbOwner precompile or DAO governance). Only these entities can stake bonds, post assertions, or engage in disputes. This setup uses the pre-BoLD fraud proof system, where challenges are handled in a 1-vs-1 tournament style without parallel resolution.
+- **Permissioned Validators**: Participation is restricted to a whitelist managed by the chain owner (via the rollupAdmin contract or DAO governance). Only these entities can stake bonds, post assertions, or engage in disputes. This setup uses the pre-BoLD fraud proof system, where challenges are handled in a 1-vs-1 tournament style without parallel resolution.
 
 :::note
 
