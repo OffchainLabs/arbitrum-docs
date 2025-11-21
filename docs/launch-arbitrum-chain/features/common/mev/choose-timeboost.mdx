@@ -36,7 +36,7 @@ Works with any Arbitrum chain (L2/L3), all DA modes (Rollup, AnyTrust, Alt-DA), 
 
 ## How to configure
 
-1. **Deploy Auction Contract**: Use Orbit scripts (e.g., from `orbit-actions` repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
+1. **Deploy Auction Contract**: Use Orbit scripts (e.g., from `[orbit-actions](https://github.com/OffchainLabs/orbit-actions)` repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
 2. **Run Auctioneer Services**: Set up Redis for coordination; run bid validator (verifies bids) and auction server (resolves auctions) using the `autonomous-auctioneer` binary from Nitro (Docker or local build).
 3. **Configure Sequencer**: Update node config to enable `timeboost` and `auctioneer` APIs, pointing to the contract and Redis.
 
