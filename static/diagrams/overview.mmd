@@ -1,0 +1,10 @@
+graph TB
+  User[End User]
+  L1[Ethereum L1]:::link:/diagrams/ethereum-details.mmd
+  L2[Arbitrum L2]:::link:/diagrams/arbitrum-details.mmd
+  Bridge[Token Bridge]
+
+  User --> L2
+  L2 --> L1
+  User --> Bridge
+  Bridge --> L1

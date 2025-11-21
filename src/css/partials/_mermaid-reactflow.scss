@@ -1,0 +1,203 @@
+// Mermaid React Flow Interactive Diagrams
+// Theme-integrated styling for click-through diagram navigation
+
+.mermaid-reactflow-container {
+  width: 100%;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-background-color);
+  margin: var(--ifm-spacing-vertical) 0;
+  overflow: hidden;
+  position: relative;
+
+  // Light mode specific
+  &[data-theme='light'] {
+    .react-flow__node {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .react-flow__edge-path {
+      stroke: var(--ifm-color-primary);
+    }
+
+    .react-flow__controls {
+      background-color: white;
+      border: 1px solid var(--ifm-color-emphasis-300);
+    }
+  }
+
+  // Dark mode specific
+  &[data-theme='dark'] {
+    .react-flow__node {
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    .react-flow__edge-path {
+      stroke: var(--ifm-color-primary-light);
+    }
+
+    .react-flow__controls {
+      background-color: var(--ifm-background-surface-color);
+      border: 1px solid var(--ifm-color-emphasis-600);
+
+      button {
+        background-color: var(--ifm-background-surface-color);
+        border-bottom: 1px solid var(--ifm-color-emphasis-600);
+        color: var(--ifm-font-color-base);
+
+        &:hover {
+          background-color: var(--ifm-color-emphasis-200);
+        }
+      }
+    }
+  }
+}
+
+// Custom node styling
+.custom-node {
+  padding: 12px 20px;
+  font-family: var(--ifm-font-family-base);
+  font-size: 14px;
+  color: var(--ifm-font-color-base);
+  transition: all 0.2s ease;
+  border: 2px solid;
+
+  // Non-clickable nodes (default)
+  &.node-static {
+    cursor: default;
+  }
+
+  // Clickable nodes (has link)
+  &.node-clickable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:focus {
+      outline: 2px solid var(--ifm-color-primary);
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Shape variations
+  &.shape-rect {
+    border-radius: 8px;
+  }
+
+  &.shape-round {
+    border-radius: 15px;
+  }
+
+  &.shape-stadium {
+    border-radius: 30px;
+    padding: 10px 30px;
+  }
+
+  &.shape-circle {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &.shape-diamond {
+    // Rotation handled in component
+    border-radius: 0;
+  }
+
+  .node-content {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    text-align: center;
+  }
+}
+
+// Navigation controls (back button)
+.diagram-nav-controls {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+
+  .back-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: var(--ifm-button-background-color);
+    color: var(--ifm-button-color);
+    border: 1px solid var(--ifm-button-border-color);
+    border-radius: var(--ifm-button-border-radius);
+    font-family: var(--ifm-font-family-base);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background-color: var(--ifm-button-background-color);
+      opacity: 0.9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ifm-color-primary);
+      outline-offset: 2px;
+    }
+
+    .back-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .mermaid-reactflow-container {
+    .custom-node {
+      font-size: 12px;
+      padding: 8px 12px;
+    }
+
+    .back-button {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+  }
+}
+
+// Accessibility - high contrast mode
+@media (prefers-contrast: high) {
+  .custom-node.node-clickable {
+    border-width: 3px;
+  }
+
+  .back-button {
+    border-width: 2px;
+  }
+}
+
+// Accessibility - reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .custom-node,
+  .back-button {
+    transition: none;
+  }
+
+  .custom-node.node-clickable:hover {
+    transform: none;
+  }
+}
