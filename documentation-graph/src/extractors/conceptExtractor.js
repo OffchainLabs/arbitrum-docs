@@ -792,12 +792,25 @@ export class ConceptExtractor {
       .filter(([key]) => this.concepts.has(key))
       .sort((a, b) => b[1] - a[1])
       .slice(0, limit)
-      .map(([key, frequency]) => ({
-        concept: key,
-        data: this.concepts.get(key),
-        frequency,
-        fileCount: this.concepts.get(key).files.size,
-      }));
+      .map(([key, frequency]) => {
+        const conceptData = this.concepts.get(key);
+        return {
+          concept: key,
+          data: {
+            text: conceptData.text,
+            normalized: conceptData.normalized,
+            type: conceptData.type,
+            category: conceptData.category,
+            // Convert Sets to Objects for JSON serialization
+            // Format: { filePath: weight, ... }
+            files: Object.fromEntries(Array.from(conceptData.files).map((file) => [file, 1])),
+            sources: Array.from(conceptData.sources),
+            totalWeight: conceptData.totalWeight,
+          },
+          frequency,
+          fileCount: conceptData.files.size,
+        };
+      });
   }
 
   getStats() {
