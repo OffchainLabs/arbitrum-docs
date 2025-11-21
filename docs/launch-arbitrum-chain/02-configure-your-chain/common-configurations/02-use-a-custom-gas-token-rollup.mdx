@@ -14,11 +14,13 @@ Custom gas token support for Rollups is currently limited to L2s that post data 
 
 :::
 
-When deploying an Arbitrum chain in [Rollup mode](/how-arbitrum-works/12-data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for <a data-quicklook-from="transaction">Transaction</a> fees on that specific Arbitrum chain and reimbursing the <a data-quicklook-from="batch">Batch</a> poster for data posted to Ethereum. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
+When deploying an Arbitrum chain in [Rollup mode](/run-arbitrum-node/data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for <a data-quicklook-from="transaction">Transaction</a> fees on that specific Arbitrum chain and reimbursing the <a data-quicklook-from="batch">Batch</a> poster for data posted to Ethereum. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
 
 Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
 ## Requirements of the custom gas token
+
+A key requirement for a custom gas token is that it has a representation on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain. Additional requirements include:
 
 - Must be a standard `ERC-20` token
 - Transfers and approvals must occur directly via the token contract, not via proxies or hooks
@@ -47,7 +49,7 @@ This approach generally makes sense if:
 - The chain owner and the batch poster are the same entity
 - You are operating in a tightly controlled or experimental environment
 
-An (unaudited) example to reference is: [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
+An (unaudited) example to reference is: [`OwnerAdjustableExchangeRatePricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
 
       <CustomDetails summary="OwnerAdjustableExchangeRatePricer.sol">
 
@@ -98,7 +100,7 @@ This approach generally makes sense if:
 - Reducing trust in the chain owner is important for your implementation
 - You, as the chain owner, want to avoid manual exchange rate updates
 
-See an (unaudited) example here using a TWAP oracle: [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
+See an (unaudited) example here using a TWAP oracle: [`UniswapV2TwapPricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
 
 <CustomDetails summary="UniswapV2TwapPricer.sol">
 
@@ -221,7 +223,7 @@ This approach generally makes sense if:
 - You want reimbursement to be precise and not over- or under-charge users
 - You want to minimize reliance on the chain owner or external oracles
 
-Consider this (unaudited) example: [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
+Consider this (unaudited) example: [`TradeTracker.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
 
 <CustomDetails summary="TradeTracker.sol">
 ```solidity
@@ -338,7 +340,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
 2. **Deploy your fee token pricer**
    Choose a pricer approach that best meets your needs; unaudited examples are:
 
-   - [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
+   - [`OwnerAdjustableExchangeRatePricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
 
       <CustomDetails summary="OwnerAdjustableExchangeRatePricer.sol">
 
@@ -379,7 +381,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
       ```
       </CustomDetails>
 
-   - [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
+   - [`UniswapV2TwapPricer.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
 
       <CustomDetails summary="UniswapV2TwapPricer.sol">
 
@@ -492,7 +494,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
       ```
       </CustomDetails>
 
-   - [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
+   - [`TradeTracker.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
 
       <CustomDetails summary="TradeTracker.sol">
 
@@ -600,20 +602,20 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
 
    Make sure the pricer is deployed successfully on the parent chain.
 
-3. **Configure the fee token and pricer when creating the rollup**
-   Use the [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts) script, which accepts environment variables for:
+3. **Configure the fee token and pricer when creating the Rollup**
+   Use the [`createERC20Rollup.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts) script, which accepts environment variables for:
 
    - `FEE_TOKEN_ADDRESS` = your `ERC-20` gas token
    - `FEE_TOKEN_PRICER_ADDRESS` = your deployed pricer
-   - `ROLLUP_CREATOR_ADDRESS` = the rollup creator contract on L1
-   - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-arbitrum-chain/bold-adoption-for-arbitrum-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
+   - `ROLLUP_CREATOR_ADDRESS` = the Rollup creator contract on L1
+   - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
 
    The script will deploy and initialize the Rollup accordingly.
 
 You can refer to the source files for more details on:
 
-- [fee-token-pricers](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
-- [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
+- [`fee-token-pricers`](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
+- [`createERC20Rollup.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
 
-You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/09-gas-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
+You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
 ````

@@ -9,6 +9,8 @@ user_story: As an Ethereum developer/project owner, I need to vet the Stylus.
 content_type: concept
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 There are four main steps for bringing a Stylus program to life: **coding, activation, execution, and proving**.
 
 ## Coding
@@ -31,6 +33,16 @@ Activating a Stylus program requires a new precompile, ArbWasm. This precompile 
 
 Gas metering is essential for certifying that computational resources are paid for. In Stylus, the unit for measuring cost is called **ink**, which is similar to Ethereum's gas but thousands of times smaller. There are two reasons why a new measurement is used: First, WASM execution is so much faster than the EVM that executing thousands of WASM opcodes could be done in the same amount of time it takes the EVM to execute one. Second, the conversion rate of ink to gas can change based on future hardware or VM improvements. For a conceptual introduction to Stylus gas and ink, see [gas and ink (Stylus)](/stylus/concepts/gas-metering.mdx).
 
+<VanillaAdmonition type="note">
+  Stylus smart contracts will need to be reactivated once per year (365 days) or whenever an upgrade
+  to Stylus (which will always involve an ArbOS upgrade), even if they are in the cache. To complete
+  this reactivation, you can use
+  [`cargo-stylus`](https://docs.arbitrum.io/stylus/using-cli#cargo-stylus-commands-reference) or
+  directly through the [ArbWasm
+  precompile](https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference#arbwasm). If
+  contracts do not get reactivated, they will no longer be callable.
+</VanillaAdmonition>
+
 ## Execution
 
 Stylus programs execute in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than <a data-quicklook-from="geth">Geth</a> executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
@@ -41,9 +53,9 @@ EVM contracts continue to execute the same way they were before Stylus. When cal
 
 Nitro operates in two modes: a "happy case" where it compiles execution history to native code, and a "sad case" during validator disputes, where it compiles execution history to WASM for interactive fraud proofs on Ethereum. Stylus builds on Nitro's fraud-proving technology, allowing it to verify both execution history and WASM programs deployed by developers.
 
-Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven onchain through a [“one-step proof.”](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx#simplified-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
+Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven onchain through a [“one-step proof.”](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#step-5-ensuring-correctness-validation-and-dispute-resolution). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
 
-For more details on Nitro’s architecture, refer to the [documentation](/how-arbitrum-works/01-a-gentle-introduction.mdx) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
+For more details on Nitro’s architecture, refer to the [documentation](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx) or the <a href="/nitro-whitepaper.pdf">Arbitrum whitepaper</a>.
 
 ## Why does this matter?
 

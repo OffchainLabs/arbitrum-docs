@@ -19,7 +19,7 @@ This list is not exhaustive, and will be continuously updated as the Arbitrum ec
 
 For most production use-cases, we encourage Arbitrum chain (Orbit) operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Arbitrum chain deployments:
 
-- [QuickNode](https://www.quicknode.com/rollup?utm_source=arb-docs)
+- [QuickNode](https://www.quicknode.com/)
 - [Caldera](https://www.caldera.xyz/)
 - [Conduit](https://conduit.xyz/)
 - [AltLayer](https://altlayer.io/)
@@ -75,7 +75,7 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 - [Ormi](https://www.ormilabs.xyz/)
 - [The Graph](https://thegraph.com/)
 - [Traceye](https://traceye.io/)
-- [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
+- [QuickNode](https://www.quicknode.com/)
 - [Sequence](https://sequence.xyz/indexer)
 
 ## Oracles
@@ -92,12 +92,13 @@ The following Oracle providers can be used to integrate offchain data with your 
 
 ## RPC endpoints
 
-RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Arbitrum chains (Orbit:
+RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Arbitrum chains:
 
 - [Alchemy](https://www.alchemy.com/)
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
-- [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
+- [Grove](https://grove.city/)
+- [QuickNode](https://www.quicknode.com)
 - [Sequence](https://sequence.xyz/node-gateway)
 
 ## Alternative data availability
@@ -107,5 +108,5 @@ One way to reduce transaction fees for Arbitrum chains (Orbit) is to configure a
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
 - [AvailDA](https://www.availproject.org/)
-- [EspressoDA](https://docs.espressosys.com/network)
-- [Near](https://near.org/data-availability) (coming soon)
+- [EspressoDA](https://docs.espressosys.com/network#data-availability)
+- [Near](https://docs.near.org/chain-abstraction/data-availability)

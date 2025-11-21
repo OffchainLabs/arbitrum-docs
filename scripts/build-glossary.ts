@@ -15,7 +15,15 @@ import { marked } from 'marked'; // For converting Markdown to HTML
 import { GrayMatterFile } from 'gray-matter'; // TypeScript type for parsed frontmatter files
 import * as fs from 'fs/promises'; // Async filesystem operations
 import * as path from 'path'; // Path manipulation utilities
-import { escapeForJSON } from '@offchainlabs/notion-docs-generator'; // String escaping utility
+// Local implementation of escapeForJSON utility
+function escapeForJSON(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+}
 
 /**
  * Converts an array of parsed glossary terms into a JSON string format
@@ -114,12 +122,14 @@ function renderKey(key: string): string {
  */
 async function main(): Promise<void> {
   // Read and parse all glossary term files
-  let terms = await readFilesInDirectory('./partials/glossary/');
+  let terms = await readFilesInDirectory('./docs/partials/glossary/');
 
   // Generate import statements for each term (unused in current implementation)
   // This could be used if implementing a React component approach to term rendering
   let imports = terms
-    .map((item) => `import ${renderKey(item.data.key)} from './glossary/${item.data.key}.mdx';`)
+    .map(
+      (item) => `import ${renderKey(item.data.key)} from './docs/glossary/${item.data.key}.mdx';`,
+    )
     .join('\n');
 
   // Generate component references for each term (unused in current implementation)
@@ -127,11 +137,24 @@ async function main(): Promise<void> {
 
   // Generate and write the consolidated glossary partial MDX file
   // This creates a single file with all terms formatted as Markdown headings
+  const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  const frontmatter = `---
+partial_type: glossary
+title: "Arbitrum Glossary Definitions"
+description: "Comprehensive glossary of Arbitrum terminology and definitions"
+author: anegg0
+last_reviewed: ${currentDate}
+---
+
+`;
+
   await fs.writeFile(
-    './partials/_glossary-partial.mdx',
-    terms
-      .map((item) => `### ${item.data.title} {#${item.data.key}}\n${item.content.trim()}`)
-      .join('\n\n'),
+    './docs/partials/_glossary-partial.mdx',
+    frontmatter +
+      terms
+        .map((item) => `### ${item.data.title} {#${item.data.key}}\n\n${item.content.trim()}`)
+        .join('\n\n') +
+      '\n',
   );
 
   // Generate and write the JSON glossary file for client-side usage
