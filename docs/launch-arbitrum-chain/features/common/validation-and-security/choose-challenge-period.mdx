@@ -8,7 +8,7 @@ content_type: configuration
 
 Choosing or configuring the challenge period refers to setting the duration (measured in parent chain blocks) during which state assertions—claims about the chain's execution history, block hashes, and inbox messages—can be disputed via fraud proofs before they are confirmed as valid on the parent chain (e.g., Ethereum or an Arbitrum L2).
 
-This period is a core security parameter in optimistic rollups, ensuring time for validators to detect and challenge invalid states, after which unchallenged assertions achieve finality, enabling secure withdrawals. Configuration is done during deployment or post-deployment by the chain owner, allowing trade-offs between security (longer periods) and speed (shorter periods). It's composed of two main parameters: the primary challenge period (`confirmPeriodBlocks`) and an extra buffer (`extraChallengeTimeBlocks`).
+This period is a core security parameter in optimistic Rollups, ensuring time for validators to detect and challenge invalid states, after which unchallenged assertions achieve finality, enabling secure withdrawals. Configuration is done during deployment or post-deployment by the chain owner, allowing trade-offs between security (longer periods) and speed (shorter periods). It's composed of two main parameters: the primary challenge period (`confirmPeriodBlocks`) and an extra buffer (`extraChallengeTimeBlocks`).
 
 It's set by the chain owner and can be chosen based on the application's risk tolerance—e.g., high-value DeFi might opt for longer periods, while gaming appchains favor shorter ones.
 
