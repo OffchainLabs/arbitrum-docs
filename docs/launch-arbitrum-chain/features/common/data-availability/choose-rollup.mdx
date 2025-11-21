@@ -8,7 +8,7 @@ content_type: configuration
 
 import RollupPCPartial from '../../partials/_rollup-pc.mdx';
 
-Choosing a Rollup refers to selecting the Arbitrum Rollup protocol for a chain's data availability (DA) mechanism. This choice is relevant when deploying custom chains or configuring Arbitrum-based systems.
+Choosing a Rollup refers to selecting the <a data-quicklook-from="arbitrum">Arbitrum</a> Rollup protocol for a chain's data availability (DA) mechanism. This choice is relevant when deploying custom chains or configuring Arbitrum-based systems.
 
 The Rollup option prioritizes security and decentralization over cost efficiency. It's ideal for applications that require Ethereum's ironclad guarantees, such as high-value DeFi protocols or those where users demand minimal trust in third parties. In contrast, opting out of Rollup (e.g., for AnyTrust) is better for high-throughput, low-cost use cases like gaming or social apps, where slight trade-offs in trust are acceptable for better performance.
 
@@ -16,14 +16,14 @@ This flexibility allows developers to tailor chains to specific needs while buil
 
 ## Key Concepts
 
-- **Data Availability (DA) in Rollups**: DA ensures that all transaction data will be posted to parent chain for verification, fraud proofs, and security. In optimistic Rollups like Arbitrum, this is critical to allow challengers to dispute invalid state transitions.
+- **Data Availability (DA) in Rollups**: DA ensures that all <a data-quicklook-from="transaction">transaction</a> data will be posted to <a data-quicklook-from="parent-chain">parent chain</a> for verification, fraud proofs, and security. In optimistic Rollups like Arbitrum, this is critical to allow challengers to dispute invalid state transitions.
 - **Arbitrum Rollup Mode**:
-  - All batch transaction data is posted directly to the parent chain (Ethereum L1) as calldata or blobs.
+  - All <a data-quicklook-from="batch">batch</a> transaction data is posted directly to the parent chain (Ethereum <a data-quicklook-from="l1">L1</a>) as calldata or blobs.
   - This inherits Ethereum's full security and decentralization, with no additional trust assumptions—data is always available on-chain for anyone to access and verify.
-  - Example: Arbitrum One operates in this mode.
+  - Example: <a data-quicklook-from="arbitrum-one">Arbitrum One</a> operates in this mode.
 
 <!-- Render Rollup Pros & Cons Partial -->
 
 <RollupPCPartial />
 
-For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
+For implementation, refer to the docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

@@ -6,17 +6,17 @@ sme: jason-w123
 content_type: configuration
 ---
 
-Choosing or configuring the challenge period refers to setting the duration (measured in parent chain blocks) during which state assertions—claims about the chain's execution history, block hashes, and inbox messages—can be disputed via fraud proofs before they are confirmed as valid on the parent chain (e.g., Ethereum or an Arbitrum L2).
+Choosing or configuring the <a data-quicklook-from="challenge">challenge</a> period refers to setting the duration (measured in <a data-quicklook-from="parent-chain">parent chain</a> blocks) during which state assertions—claims about the chain's execution history, block hashes, and inbox messages—can be disputed via fraud proofs before they are confirmed as valid on the parent chain (e.g., Ethereum or an <a data-quicklook-from="arbitrum">Arbitrum</a> <a data-quicklook-from="l2">L2</a>).
 
-This period is a core security parameter in optimistic Rollups, ensuring time for validators to detect and challenge invalid states, after which unchallenged assertions achieve finality, enabling secure withdrawals. Configuration is done during deployment or post-deployment by the chain owner, allowing trade-offs between security (longer periods) and speed (shorter periods). It's composed of two main parameters: the primary challenge period (`confirmPeriodBlocks`) and an extra buffer (`extraChallengeTimeBlocks`).
+This period is a core security parameter in optimistic Rollups, ensuring time for validators to detect and challenge invalid states, after which unchallenged assertions achieve finality, enabling secure withdrawals. Configuration is done during deployment or post-deployment by the <a data-quicklook-from="chain-owner">chain owner</a>, allowing trade-offs between security (longer periods) and speed (shorter periods). It's composed of two main parameters: the primary <a data-quicklook-from="challenge-period">challenge period</a> (`confirmPeriodBlocks`) and an extra buffer (`extraChallengeTimeBlocks`).
 
 It's set by the chain owner and can be chosen based on the application's risk tolerance—e.g., high-value DeFi might opt for longer periods, while gaming appchains favor shorter ones.
 
 ## Key Concepts
 
-- **Challenge Period (`confirmPeriodBlocks`)**: The main window for validators to bond stakes and initiate challenges against potentially fraudulent assertions. If no valid challenge is raised, the assertion confirms, and the chain's state advances securely.
+- **Challenge Period (`confirmPeriodBlocks`)**: The main window for validators to bond stakes and initiate challenges against potentially fraudulent assertions. If no valid challenge is raised, the <a data-quicklook-from="assertion">assertion</a> confirms, and the chain's state advances securely.
 - **Extra Challenge Period (`extraChallengeTimeBlocks`)**: A post-main-period buffer to resolve any ongoing disputes or last-minute challenges, preventing premature finalization.
-- **Measurement**: Always denominated in the underlying L1 chain's blocks (e.g., Ethereum's `block.number`, ~12 seconds per block), even for L3 chains settling to an L2 like Arbitrum One. This ensures consistent timing aligned with the parent chain's finality.
+- **Measurement**: Always denominated in the underlying <a data-quicklook-from="l1">L1</a> chain's blocks (e.g., Ethereum's `block.number`, ~12 seconds per block), even for L3 chains settling to an L2 like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>. This ensures consistent timing aligned with the parent chain's finality.
 - **Defaults**:
   - **Primary**: Approximately 45,818 L1 blocks (~1 week or 6.4 days on Ethereum).
   - **Extra**: 200 L1 blocks (~40 minutes).
@@ -26,7 +26,7 @@ It's set by the chain owner and can be chosen based on the application's risk to
 
 - **With DA Modes**: Fully compatible across Rollup (full on-chain DA), AnyTrust (DAC-based), and Alt-DA (e.g., Celestia). In AnyTrust, fast withdrawals can reduce the effective period to 15 minutes by leveraging the DAC for rapid verification, bypassing traditional delays.
 - **With Gas Tokens**: No direct impact; works with native `ETH` or custom `ERC-20`s, as the period governs validation timing rather than fee mechanics.
-- **With Validation (e.g., BoLD)**: Integrates with BoLD's permissionless disputes, where the period sets the initial challenge window, but BoLD bounds total delays to at most two periods (~12.8 days max on Ethereum) during active disputes, mitigating delay attacks.
+- **With Validation (e.g., <a data-quicklook-from="bold">BoLD</a>)**: Integrates with BoLD's permissionless disputes, where the period sets the initial challenge window, but BoLD bounds total delays to at most two periods (~12.8 days max on Ethereum) during active disputes, mitigating delay attacks.
 
 ## Pros
 
@@ -48,7 +48,7 @@ It's set by the chain owner and can be chosen based on the application's risk to
 
 ## When to configure
 
-- **During Deployment**: Specified in the `RollupCreator` configuration (e.g., via the Orbit SDK deployment portal or scripts like `createRollup.ts`). For example, set `confirmPeriodBlocks` to 30,000 for ~4.5 days.
+- **During Deployment**: Specified in the `RollupCreator` configuration (e.g., via the Arbitrum Chain SDK deployment <a data-quicklook-from="portal">portal</a> or scripts like `createRollup.ts`). For example, set `confirmPeriodBlocks` to 30,000 for ~4.5 days.
 - **Post-Deployment**: Dynamically updated via owner-privileged contract calls, such as `Rollup.setConfirmPeriodBlocks(newValue)` for the primary period or `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` for the extra buffer (e.g., using tools like cast for onchain transactions).
 
-This parameter underscores Arbitrum's modular design, allowing chains to fine-tune validation without compromising core fraud-proof security. For implementation, refer to the official docs, or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
+This parameter underscores Arbitrum's modular design, allowing chains to fine-tune validation without compromising core fraud-proof security. For implementation, refer to the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

@@ -8,14 +8,14 @@ content_type: configuration
 
 import AltDAPCPartial from '../../partials/_alt-da-pc.mdx';
 
-Choosing alternative data availability (Alt-DA) refers to configuring the chain to use a third-party data availability layer instead of Arbitrum's native options. This feature allows developers to post transaction batch data to external DA providers for storage and accessibility, rather than relying solely on Ethereum (L1) or Arbitrum's built-in mechanisms. Alt-DA integrations expand the flexibility of the Arbitrum Nitro stack, enabling optimized trade-offs in cost, scalability, and security.
+Choosing alternative data availability (Alt-DA) refers to configuring the chain to use a third-party data availability layer instead of <a data-quicklook-from="arbitrum">Arbitrum</a>'s native options. This feature allows developers to post <a data-quicklook-from="transaction">transaction</a> <a data-quicklook-from="batch">batch</a> data to external DA providers for storage and accessibility, rather than relying solely on Ethereum (<a data-quicklook-from="l1">L1</a>) or Arbitrum's built-in mechanisms. Alt-DA integrations expand the flexibility of the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack, enabling optimized trade-offs in cost, scalability, and security.
 
-Selecting Alt-DA means integrating an external provider into your Orbit chain's configuration, often via modifications to the Nitro software stack. Developers can also set fallback preferences (e.g., try Alt-DA first, then AnyTrust, then Ethereum) to ensure resilience if the primary DA fails. This choice is ideal for applications prioritizing ultra-low fees and massive scalability, such as gaming, social, or data-intensive dApps, where the cost of posting to Ethereum would be prohibitive.
+Selecting Alt-DA means integrating an external provider into your Arbitrum chain's configuration, often via modifications to the Nitro software stack. Developers can also set fallback preferences (e.g., try Alt-DA first, then AnyTrust, then Ethereum) to ensure resilience if the primary DA fails. This choice is ideal for applications prioritizing ultra-low fees and massive scalability, such as gaming, social, or data-intensive dApps, where the cost of posting to Ethereum would be prohibitive.
 
 ## Key Concepts
 
-- **Data Availability (DA) in Arbitrum Orbit**: DA ensures that transaction data is stored and retrievable for verification, fraud proofs, and node synchronization in optimistic rollups. Arbitrum chains are customizable with different DA setups to suit specific needs, such as high-throughput apps or cost-sensitive projects.
-  - **Alt-DA**: Posting transaction batches post to an external, modular DA network (e.g., specialized blockchains designed for DA). Only proofs of availability (e.g., commitments or certificates) post to the parent chain. This process decouples DA from settlement, allowing for specialized optimization.
+- **Data Availability (DA) in Arbitrum chains**: DA ensures that transaction data is stored and retrievable for verification, fraud proofs, and node synchronization in optimistic rollups. <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> are customizable with different DA setups to suit specific needs, such as high-throughput apps or cost-sensitive projects.
+  - **Alt-DA**: Posting transaction batches post to an external, modular DA network (e.g., specialized blockchains designed for DA). Only proofs of availability (e.g., commitments or certificates) post to the <a data-quicklook-from="parent-chain">parent chain</a>. This process decouples DA from settlement, allowing for specialized optimization.
 
 ## How It Differs:
 
@@ -28,11 +28,11 @@ Selecting Alt-DA means integrating an external provider into your Orbit chain's 
 
 ## Examples of Alt-DA Providers
 
-Arbitrum Orbit supports integrations with several Alt-DA solutions, including:
+Arbitrum chains supports integrations with several Alt-DA solutions, including:
 
-- **Celestia**: A modular DA blockchain using data availability sampling for lightweight verification.
+- **Celestia**: A modular DA <a data-quicklook-from="blockchain">blockchain</a> using data availability sampling for lightweight verification.
 - **Avail**: Focuses on high-throughput DA with erasure coding.
 - **EigenDA (via EigenLayer)**: Leverages restaking for secure, decentralized DA.
 - For a list of Alt-DA providers, refer to the [Third-party providers page](launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#data-availability-providers-for-anytrust-chains)
 
-This option reflects the growing trend toward modular blockchain architectures, where DA handling is separate to scale ecosystems like Arbitrum without compromising core security. For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
+This option reflects the growing trend toward modular blockchain architectures, where DA handling is separate to scale ecosystems like Arbitrum without compromising core security. For implementation, refer to the docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
