@@ -805,9 +805,9 @@ const sidebars = {
           label: 'Inside Arbitrum Nitro',
         },
         {
-          type: 'link',
-          href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
-          label: 'Nitro whitepaper',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/nitro-whitepaper.pdf">Nitro whitepaper<span class="other-section-icon">↑</span></a>',
         },
         {
           type: 'category',
