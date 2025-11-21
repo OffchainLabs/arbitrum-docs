@@ -1311,7 +1311,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'stylus/how-tos/optimizing-wasm-binary-size',
+                  id: 'stylus/how-tos/optimizing-binaries',
                   label: 'Optimizing WASM binary size',
                 },
                 {
