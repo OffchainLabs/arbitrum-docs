@@ -29,8 +29,8 @@ This document is currently in **public preview** and may change significantly as
 <a data-quicklook-from="bold">Arbitrum BoLD</a> is an upgrade to the dispute protocol on Arbitrum chains
 that delivers both permissionless validation and core security benefits. As with all features on the
 Arbitrum stack, Arbitrum chains can adopt BoLD at their own discretion and on their own timeline. To
-upgrade to BoLD, it is required to upgrade both the Nitro node software and the rollup's smart contracts
-on its parent chain.{' '}
+upgrade to BoLD, it is required to upgrade both the Nitro node software and the Rollup's smart contracts
+on its parent chain.
 
 ### Recommended Adoption Path
 
@@ -54,7 +54,7 @@ Below is a quick breakdown of the benefits of permissioned BoLD vs. permissionle
 
 Arbitrum BoLD enables an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum chain even if validation is kept permissioned on a BoLD-enabled Arbitrum chain.
 
-Below are some benefits for an Arbitrum chain that come with adopting Arbitrum BoLD - **regardless of whether validation is kept permissioned or not**:
+Below are some benefits for an Arbitrum chain that come with adopting Arbitrum BoLD—**regardless of whether validation is kept permissioned or not**:
 
 #### Improved resistance to delay attacks
 
@@ -70,7 +70,7 @@ Arbitrum BoLD is not an upgrade to a different type of proving architecture and 
 
 #### Use of your project's native token as the bonding asset to secure the chain
 
-Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and we do not recommend teams to use alternative tokens as the bonding asset. For more information on the rationale, we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](/how-arbitrum-works/bold/gentle-introduction.mdx#q-why-is-arb-not-the-bonding-token-used-in-bold-on-arbitrum-one) (and not `ARB`).
+Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and we do not recommend teams to use alternative tokens as the bonding asset. For more information on the rationale, we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](/how-arbitrum-works/bold/gentle-introduction.mdx#q-why-is-arb-not-the-bonding-token-used-for-bold-on-arbitrum-one) (and not `ARB`).
 
 #### Increased censorship resistance for `L3` Arbitrum chains
 
@@ -115,7 +115,9 @@ As mentioned earlier, the upgrade to the dispute protocol involves both a Nitro 
 To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for BoLD](../../../how-arbitrum-works/bold/gentle-introduction.mdx).
 
 :::caution
-As mentioned in our guide on [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx), the recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](../../../how-arbitrum-works/03-sequencer.mdx#censorship-timeout) feature disabled.
+
+As mentioned in our guide on [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx), the recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](../../../how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout) feature disabled.
+
 :::
 
 :::info This is not an ArbOS upgrade
@@ -251,9 +253,10 @@ $ L1_PRIV_KEY=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bo
 
 ```
 
-Note that:
+:::note
+You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
 
-- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+:::
 
 #### Step 4: Gather the information of the current state of the chain
 
@@ -263,7 +266,7 @@ The next script will gather information about the chain's current state (the las
 
 As mentioned, this script will try to find the last confirmed assertion of your chain. Please note that:
 
-- If a new assertion is confirmed between steps 4 and 5, step 5 will revert and step 4 must be repeated.
+- If a new assertion is confirmed between Steps 4 and 5, step 5 will revert and Step 4 must be repeated.
 - The script looks for the `NodeCreated` event of the last confirmed assertion in the last 100,000 blocks. If the `NodeCreated` event was emitted in an older block, it won't be able to find it.
 
 :::
@@ -289,7 +292,7 @@ You are now ready to perform the upgrade. The following script will either perfo
 
 :::warning
 
-The following script will send the upgrade transaction directly if the `L1_PRIV_KEY` specified is the private key of the chain owner. Please note that the script DOES NOT ASK FOR CONFIRMATION.
+The following script will send the upgrade transaction directly if the `L1_PRIV_KEY` specified is the private key of the chain owner. Please note that the script **does not ask for confirmation**.
 
 :::
 

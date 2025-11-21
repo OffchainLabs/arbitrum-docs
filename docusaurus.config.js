@@ -136,6 +136,7 @@ const config = {
           invalidLink: true,
           notDocumented: true,
         },
+        skipErrorChecking: true,
         logLevel: 'Verbose',
         sidebar: {
           autoConfiguration: false,
@@ -273,9 +274,9 @@ const config = {
           },
           {
             type: 'docSidebar',
-            sidebarId: 'additionalResourcesSidebar',
+            sidebarId: 'noticeSidebar',
             position: 'right',
-            label: 'Resources',
+            label: 'Notices',
           },
         ],
       },

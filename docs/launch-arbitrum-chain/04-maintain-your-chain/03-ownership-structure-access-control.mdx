@@ -23,7 +23,7 @@ Some examples:
 
 - The parent chain's core protocol contracts are upgradeable proxies that are controlled by a proxy admin; the proxy admin is owned by the Upgrade Executor on the parent chain.
 - The core Rollup contract's admin role is given to the Upgrade Executor on the parent chain.
-- The affordance to call setters on the ArbOwner procompile — which allows for setting system gas parameters and scheduling ArbOS upgrades (among other things) — is given to the Upgrade Executor on the Arbitrum chain.
+- The affordance to call setters on the `ArbOwner` procompile—which allows for setting system gas parameters and scheduling ArbOS upgrades (among other things)—is given to the Upgrade Executor on the Arbitrum chain.
 
 Calls to an Upgrade Executor can only be made by chain owners; e.g., entities granted the `EXECUTOR_ROLE` affordance on the Upgrade Executor. Upgrade executors also have the `ADMIN_ROLE` affordance granted to themselves, which lets chain owners add or remove chain owners.
 
@@ -33,7 +33,7 @@ With this architecture, the Upgrade Executor represents a single source of truth
 
 Upgrades occur via a chain owner initiating a call to an Upgrade Executor, which in turns calls some chain-owned contract.
 
-Chain owners can either call [UpgradeExecutor.executeCall](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L73), which will in turn call the target contract directly, or [UpgradeExecutor.execute](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L57), which will delegate-call to an "action contract" and use its code to call the target contract.
+Chain owners can either call [`UpgradeExecutor.executeCall`](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L73), which will in turn call the target contract directly, or [`UpgradeExecutor.execute`](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L57), which will delegate-call to an "action contract" and use its code to call the target contract.
 
 ### Ownership flexibility
 
@@ -42,4 +42,7 @@ A chain owner is simply an address; it is set by the Arbitrum chain's deployer a
 The Arbitrum DAO governed chains, while not Arbitrum chains themselves, use a similar architecture and upgrade pattern as Arbitrum chains, with both a governance token and a Multisig (aka, the "Security Council") as chain owners. For more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
 
 :::note
+
 The DAO Governed chains' Upgrade Executor contracts don't have the `.executeCall` method; only the `.execute` method
+
+:::
