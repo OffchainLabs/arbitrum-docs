@@ -94,7 +94,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          exclude: ['**/api/**'],
+          exclude: ['**/api/**', '**/*.pdf'],
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
@@ -310,8 +310,7 @@ const config = {
                 to: 'https://arbitrum.foundation/',
               },
               {
-                label: 'Nitro whitepaper',
-                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+                html: '<a href="/nitro-whitepaper.pdf">Arbitrum whitepaper</a>',
               },
             ],
           },
