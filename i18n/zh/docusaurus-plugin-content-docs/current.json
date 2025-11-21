@@ -3,9 +3,9 @@
     "message": "Next",
     "description": "The label for version current"
   },
-  "sidebar.buildDecentralizedAppsSidebar.category.Build dApps (Solidity)": {
-    "message": "Build dApps (Solidity)",
-    "description": "The label for category Build dApps (Solidity) in sidebar buildDecentralizedAppsSidebar"
+  "sidebar.buildDecentralizeappsSidebar.category.Build apps (Solidity)": {
+    "message": "Build apps (Solidity)",
+    "description": "The label for category Build apps (Solidity) in sidebar buildDecentralizedAppsSidebar"
   },
   "sidebar.buildDecentralizedAppsSidebar.category.How-tos": {
     "message": "How-tos",

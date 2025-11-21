@@ -94,7 +94,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          exclude: ['**/api/**'],
+          exclude: ['**/api/**', '**/*.pdf'],
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
@@ -136,6 +136,7 @@ const config = {
           invalidLink: true,
           notDocumented: true,
         },
+        skipErrorChecking: true,
         logLevel: 'Verbose',
         sidebar: {
           autoConfiguration: false,
@@ -223,9 +224,61 @@ const config = {
         logo: {
           alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
-          href: '/welcome/arbitrum-gentle-introduction',
+          href: '/get-started/overview',
         },
-        items: [],
+        items: [
+          {
+            type: 'docSidebar',
+            sidebarId: 'getStartedSidebar',
+            position: 'right',
+            label: 'Get started',
+          },
+          {
+            type: 'dropdown',
+            label: 'Build apps',
+            position: 'right',
+            items: [
+              {
+                label: 'Build with Solidity',
+                to: '/build-decentralized-apps/quickstart-solidity-remix',
+              },
+              {
+                label: 'Build with Stylus',
+                to: '/stylus/quickstart',
+              },
+            ],
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runArbitrumChainSidebar',
+            position: 'right',
+            label: 'Launch a chain',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runNodeSidebar',
+            position: 'right',
+            label: 'Run a node',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'bridgeSidebar',
+            position: 'right',
+            label: 'Use the bridge',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'howItWorksSidebar',
+            position: 'right',
+            label: 'How it works',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'noticeSidebar',
+            position: 'right',
+            label: 'Notices',
+          },
+        ],
       },
       footer: {
         style: 'dark',
@@ -257,8 +310,7 @@ const config = {
                 to: 'https://arbitrum.foundation/',
               },
               {
-                label: 'Nitro whitepaper',
-                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+                html: '<a href="/nitro-whitepaper.pdf">Arbitrum whitepaper</a>',
               },
             ],
           },

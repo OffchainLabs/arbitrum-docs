@@ -14,26 +14,27 @@ A React component that adds a click-to-zoom feature to images with smooth animat
 - Maintains image aspect ratio
 - Accessible by default
 - Supports width presets via CSS classes
+- Optional image captions
 
 ## Installation
 
 The component requires the following dependencies:
 
 ```bash
-npm install styled-components react-dom
+npm install react-dom
 # or
-yarn add styled-components react-dom
+yarn add react-dom
 ```
 
 ## Usage
 
 IMPORTANT: The component requires zoomed images to be stored in @site/static/img/ directory.
 
+The ImageZoom component is globally available in all MDX files via the MDXComponents configuration. You do not need to import it.
+
 ### Basic Usage in MDX:
 
 ```mdx
-import { ImageZoom } from '@site/src/components/ImageZoom';
-
 <ImageZoom src="/img/example.png" alt="A detailed diagram showing the system architecture" />
 ```
 
@@ -49,6 +50,40 @@ The component supports predefined width classes. Use the `className` prop to spe
 />
 ```
 
+### Using Captions:
+
+You can add an optional caption that displays below the image. There are two ways to add captions:
+
+**Method 1: Using the `caption` prop (legacy support):**
+
+```mdx
+<ImageZoom
+  src="/img/example.png"
+  alt="A detailed diagram showing the system architecture"
+  caption="Transaction lifecycle diagram showing the complete flow"
+/>
+```
+
+**Method 2: Using children (recommended):**
+
+```mdx
+<ImageZoom src="/img/example.png" alt="A detailed diagram showing the system architecture">
+  Transaction lifecycle diagram showing the complete flow
+</ImageZoom>
+```
+
+You can combine width presets with captions:
+
+```mdx
+<ImageZoom
+  src="/img/example.png"
+  alt="A detailed diagram showing the system architecture"
+  className="img-500px"
+>
+  Transaction lifecycle diagram showing the complete flow
+</ImageZoom>
+```
+
 Available width classes:
 
 - `img-20px`
@@ -62,11 +97,13 @@ Available width classes:
 
 ## Props
 
-| Prop      | Type   | Required | Description                                     |
-| --------- | ------ | -------- | ----------------------------------------------- |
-| src       | string | Yes      | The source URL of the image                     |
-| alt       | string | Yes      | Descriptive text for accessibility              |
-| className | string | No       | CSS class for width control (e.g., "img-500px") |
+| Prop      | Type            | Required | Description                                                        |
+| --------- | --------------- | -------- | ------------------------------------------------------------------ |
+| src       | string          | Yes      | The source URL of the image                                        |
+| alt       | string          | No       | Descriptive text for accessibility                                 |
+| className | string          | No       | CSS class for width control (e.g., "img-500px")                    |
+| caption   | string          | No       | Optional caption text displayed below the image (legacy support)   |
+| children  | React.ReactNode | No       | Caption content passed as children (recommended over caption prop) |
 
 ## Accessibility
 
@@ -100,11 +137,14 @@ The component follows accessibility best practices:
 
 The component uses:
 
-- styled-components for modal and zoom functionality
+- Inline styles for all styling (no styled-components dependency)
+- Semantic HTML (`<figure>` and `<figcaption>`) for proper structure
 - CSS classes for width presets
+- Docusaurus CSS variables for theme-aware styling (`--ifm-color-emphasis-600`)
 - Dark overlay (rgba(0, 0, 0, 0.8))
-- Proper z-indexing for modal layers
+- Proper z-indexing for modal layers (99999 for modal, 100000 for close button)
 - Hover effects on interactive elements
+- Centered, italic captions with appropriate spacing (0.5rem top margin, 0.9rem font size)
 
 ## Browser Support
 

@@ -3,6 +3,7 @@ title: "Bridge tokens via Arbitrum's standard `ERC-20` gateway"
 description: Learn how to programmatically bridge tokens between Ethereum and Arbitrum using Arbitrum’s standard ER-C20 gateway
 user_story: As a developer, I want to understand how to bridge tokens between Ethereum and Arbitrum using the standard ER-C20 gateway.
 content_type: how-to
+displayed_sidebar: buildAppsSidebar
 ---
 
 In this how-to, you’ll learn how to bridge your own token between Ethereum (parent chain) and Arbitrum (child chain), using [Arbitrum’s standard `ERC20` gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
@@ -172,7 +173,7 @@ As mentioned before, you can also call the method `outboundTransferCustomRefund`
 
 ## Step 5: Wait for execution on the child chain
 
-After calling the deposit method (or the `outboundTransferCustomRefund` if you’re choosing the manual way), you’ll have to wait a bit until the message executes on the child chain. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page to learn more about [parent-to-child chain messages, also known as retryables](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+After calling the deposit method (or the `outboundTransferCustomRefund` if you’re choosing the manual way), you’ll have to wait a bit until the message executes on the child chain. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page to learn more about [parent-to-child chain messages, also known as retryables](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 
 You can programmatically wait for the execution of the transaction on the child chain using Arbitrum’s SDK. You should first wait for the execution of the submission transaction (the one sent to the router contract) and then the execution of the child chain transaction.
 

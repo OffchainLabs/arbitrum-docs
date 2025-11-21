@@ -1,5 +1,5 @@
 ---
-title: 'How to run a full node for an Arbitrum or Arbitrum chain'
+title: 'How to run a full node for an Arbitrum chain'
 description: Learn how to run an Arbitrum node on your local machine
 sidebar_position: 1
 content_type: how-to
@@ -42,7 +42,7 @@ Although there are beta and release candidate versions of the Arbitrum Nitro sof
 
 :::
 
-Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.7.2-42be4fe@@</code>
+Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.8.0-62c0aa7@@</code>
 
 ### Database snapshots
 
@@ -60,6 +60,12 @@ We provide a summary of the available parameters here, but we recommend reading 
 - Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
 - Note that these parameters get ignored if a database already exists
 - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
+
+:::warning Fusaka upgrade: Historical blobs
+
+If running a beacon node, historical data will now be in blobs. To make this transition to using historical blobs refer to the [Historical Blobs for Beacon Nodes](/run-arbitrum-node/beacon-nodes-historical-blobs.mdx) guide.
+
+:::
 
 ### Required parameters
 

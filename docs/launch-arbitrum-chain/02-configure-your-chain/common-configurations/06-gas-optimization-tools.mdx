@@ -28,7 +28,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 
 ## Block gas limit
 
-- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block - for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the speed limit and gas pools, but this sets a hard cap.
+- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the speed limit and gas pools, but this sets a hard cap.
 - **Default**: 32,000,000 gas per block.
 - **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 
@@ -56,7 +56,7 @@ Example using `cast`:
 cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setMinimumL2BaseFee(uint256)" $NEW_FLOOR_IN_WEI
 ```
 
-You can query the current floor via the ArbGasInfo precompile's `getMinimumGasPrice()`.
+You can query the current floor via the `ArbGasInfo` precompile's `getMinimumGasPrice()`.
 
 Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx), [Additional configuration parameters](/launch-arbitrum-chain/reference/additional-configuration-parameters.md), or the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/07-fee-management.mdx) pages for additional information.
 
