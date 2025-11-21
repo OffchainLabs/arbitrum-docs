@@ -8,18 +8,16 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 displayed_sidebar: buildAppsSidebar
 ---
 
-# Storage
-
 Persistent storage in Stylus contracts provides access to the EVM State Trie, the same key-value storage used by Solidity contracts. The SDK provides type-safe storage access through dedicated storage types that prevent aliasing errors at compile time using Rust's borrow checker.
 
 ## Overview
 
 Stylus contracts share the same persistent storage as Solidity contracts:
 
-- Both Stylus and Solidity access the **same EVM State Trie**
-- Storage is **fully interoperable** between Stylus and Solidity contracts
-- Stylus provides **compile-time safety** through Rust's type system
-- Storage operations are **cached** for gas efficiency
+- Both Stylus and Solidity access the same EVM State Trie
+- Storage is fully interoperable between Stylus and Solidity contracts
+- Stylus provides compile-time safety through Rust's type system
+- Storage operations are cached for gas efficiency
 
 ### Storage Declaration
 
