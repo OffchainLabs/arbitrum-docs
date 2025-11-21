@@ -1,0 +1,12 @@
+## Pros
+
+- **Improved Security**: Mitigates delay attacks and ensures only valid states are confirmed, with high bonds (e.g., millions in USD equivalent) deterring malice while allowing trustless defense.
+- **Permissionless Decentralization**: Anyone can validate via bonds, reducing reliance on centralized entities and enabling community participation through pools.
+- **Bounded Delays**: Caps withdrawal delays at ~12.8 days during disputes, providing predictability.
+- **Incentives**: Includes bounties (1% of confiscated bonds) and reimbursements for honest defenders, plus optional chain-specific rewards.
+
+## Cons
+
+- **High Economic Barriers**: Large bonds (e.g., 3600 `ETH` for assertions) may limit small-scale participation without pools, and disputes impose opportunity costs on users (e.g., ~$3.27M USD/week for Arbitrum One's TVL).
+- **Upgrade Disruptions**: Enabling BoLD delays pending withdrawals and requires careful overflow handling during the upgrade.
+- **Complexity**: Adds operational needs for proposers and parameter tuning (e.g., bond sizes, resource ratios) to maintain security.
