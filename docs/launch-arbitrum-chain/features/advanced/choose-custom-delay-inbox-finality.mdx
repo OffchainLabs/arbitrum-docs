@@ -21,7 +21,7 @@ By default, finality for these transactions relies on layer-1 (L1) Ethereum bloc
 
 ## What It Means to Configure Delayed Inbox Finality
 
-This configuration configures the sequencer to release Delayed Inbox messages earlier, prioritizing speed over maximum security. For instance, in a default setup, a deposit from Ethereum to an L3 (via L2 settlement) waits for L1 to finalize the L2's batch posting. Enabling L2-only finality skips this, releasing after L2 confirmations (e.g., when a DACert posts on Nova). Further reducing the finalize-distance minimizes L2 waits, allowing near-instant execution but exposing the chain to parent re-orgs if unconfirmed blocks revert. It's ideal for low-latency apps but requires monitoring for re-org events.
+This configuration sets up the sequencer to release Delayed Inbox messages earlier, prioritizing speed over maximum security. For instance, in a default setup, a deposit from Ethereum to an L3 (via L2 settlement) waits for L1 to finalize the L2's batch posting. Enabling L2-only finality skips this, releasing after L2 confirmations (e.g., when a DACert posts on Nova). Further reducing the finalize-distance minimizes L2 waits, allowing near-instant execution but exposing the chain to parent re-orgs if unconfirmed blocks revert. It's ideal for low-latency apps but requires monitoring for re-org events.
 
 :::note
 
