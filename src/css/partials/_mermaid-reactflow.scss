@@ -50,6 +50,27 @@
         }
       }
     }
+
+    // Dark mode node text fix
+    .custom-node {
+      color: var(--ifm-font-color-base);
+
+      .node-content {
+        color: var(--ifm-font-color-base);
+      }
+    }
+
+    // Dark mode back button fix
+    .back-button {
+      background-color: var(--ifm-color-emphasis-200);
+      color: var(--ifm-font-color-base);
+      border-color: var(--ifm-color-emphasis-400);
+      font-weight: 600;
+
+      &:hover {
+        background-color: var(--ifm-color-emphasis-300);
+      }
+    }
   }
 }
 
@@ -132,12 +153,12 @@
     gap: 6px;
     padding: 8px 16px;
     background-color: var(--ifm-button-background-color);
-    color: var(--ifm-button-color);
+    color: var(--ifm-font-color-base);
     border: 1px solid var(--ifm-button-border-color);
     border-radius: var(--ifm-button-border-radius);
     font-family: var(--ifm-font-family-base);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
