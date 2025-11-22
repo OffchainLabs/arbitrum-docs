@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import ReactFlow, { Controls, Background, MiniMap } from 'reactflow';
+import ReactFlow, { Controls } from 'reactflow';
 import { useColorMode } from '@docusaurus/theme-common';
 import 'reactflow/dist/style.css';
 import { ClickableNode } from './ClickableNode';
@@ -129,7 +129,6 @@ export function NavigableDiagram({
         attributionPosition="bottom-right"
       >
         {showControls && <Controls />}
-        <Background />
       </ReactFlow>
     </div>
   );
