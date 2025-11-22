@@ -6,13 +6,24 @@ import { ClickableNode } from './ClickableNode';
 import { convertMermaidToReactFlow } from './utils/mermaidToReactFlow';
 import { ReactFlowData, MermaidReactFlowProps } from './types';
 
+// Safe hook to handle context not being available during hydration
+function useSafeColorMode() {
+  try {
+    const { colorMode } = useColorMode();
+    return colorMode;
+  } catch (error) {
+    // Fallback to light mode if context is not available
+    return 'light';
+  }
+}
+
 export function NavigableDiagram({
   diagramFile,
   height = '500px',
   showControls = true,
   className = '',
 }: MermaidReactFlowProps) {
-  const { colorMode } = useColorMode();
+  const colorMode = useSafeColorMode();
   const [flowData, setFlowData] = useState<ReactFlowData>({ nodes: [], edges: [] });
   const [currentDiagram, setCurrentDiagram] = useState<string>(diagramFile);
   const [history, setHistory] = useState<string[]>([]);
