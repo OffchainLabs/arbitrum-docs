@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import ReactFlow, { Controls } from 'reactflow';
 import { useColorMode } from '@docusaurus/theme-common';
+import { motion, AnimatePresence } from 'motion/react';
 import 'reactflow/dist/style.css';
 import { ClickableNode } from './ClickableNode';
 import { convertMermaidToReactFlow } from './utils/mermaidToReactFlow';
@@ -121,15 +122,26 @@ export function NavigableDiagram({
           </button>
         </div>
       )}
-      <ReactFlow
-        nodes={flowData.nodes}
-        edges={flowData.edges}
-        nodeTypes={nodeTypes}
-        fitView
-        attributionPosition="bottom-right"
-      >
-        {showControls && <Controls />}
-      </ReactFlow>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentDiagram}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <ReactFlow
+            nodes={flowData.nodes}
+            edges={flowData.edges}
+            nodeTypes={nodeTypes}
+            fitView
+            attributionPosition="bottom-right"
+          >
+            {showControls && <Controls />}
+          </ReactFlow>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
