@@ -3,7 +3,6 @@
 - **Significantly faster withdrawals and finality**: Reduces withdrawal times from days to minutes, improving user experience and enabling quicker asset movement across chains. This is particularly beneficial for cross-chain dApps, as they can read the finalized state at the same accelerated rate.
 - **Enhanced capital efficiency**: Shorter wait times minimize opportunity costs for users, allowing faster re-deployment of funds and better liquidity in DeFi or other applications.
 - **Improved performance for AnyTrust**: When combined with AnyTrust mode, Fast Withdrawals leverage existing infrastructure without introducing entirely new trust elements, enabling near-instant withdrawals for non-fungible assets.
-- **Flexibility for Layer 3 setups**: For chains settling to Arbitrum One or similar, finality can be configured down to 15 seconds, supporting high-throughput applications.
 
 ## Cons
 
@@ -11,3 +10,4 @@
 - **Potential delays under high load**: High network throughput can cause confirmation delays beyond the configured rate, with a practical minimum of 1-2 minutes in busy scenarios. Initial setup may also slow the chain temporarily due to backlog processing.
 - **Setup complexity and requirements**: Requires upgrading to specific versions, creating a multi-signature Safe wallet for the committee, and running at least three validators. This adds operational overhead and potential costs.
 - **Security trade-offs compared to standard withdrawals**: While standard withdrawals maintain full Ethereum-level security via the challenge period, fast withdrawals prioritize speed over decentralization, potentially exposing users to risks if the committee fails or is attacked.
+- **Layer 3 setups finality**: For chains settling to Arbitrum One or similar and using BoLD, finality cannot be lowered to 15 seconds.
