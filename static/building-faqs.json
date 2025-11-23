@@ -26,7 +26,7 @@
   },
   {
     "question": "Why do I get \"custom tx type\" errors when I use hardhat?",
-    "answer": "In Arbitrum, we use a number of non-standard [EIP-2718](https://eips.ethereum.org/EIPS/eip-2718) typed transactions. See [here](https://developer.arbitrum.io/arbos/geth#transaction-types) for the full list and the rationale.\n\nNote that if you're using Hardhat, [v2.12.2](https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2) added support for forking networks like Arbitrum with custom transaction types (find more information [here](https://github.com/NomicFoundation/hardhat/issues/2995)).\n\n\n\n",
+    "answer": "In Arbitrum, we use a number of non-standard [EIP-2718](https://eips.ethereum.org/EIPS/eip-2718) typed transactions. Feel free to consult the [full list of transaction types](https://developer.arbitrum.io/arbos/geth#transaction-types) and the rationale.\n\nNote that if you're using Hardhat, [v2.12.2](https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2) added support for forking networks like Arbitrum with custom transaction types (find more information [in this HardHat GitHub issue](https://github.com/NomicFoundation/hardhat/issues/2995)).\n\n\n\n",
     "key": "why-do-i-get-custom-tx-type-errors-when-i-use-hardhat"
   },
   {
@@ -96,7 +96,7 @@
   },
   {
     "question": "What is the WASM module root?",
-    "answer": "The WASM module root is a 32-byte hash, which is a Merkelization of the Go replay binary and its dependencies.\n\nThe replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.\n\nYou can find more information in [How to Customize your Orbit chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).\n\n\n\n",
+    "answer": "The WASM module root is a 32-byte hash, which is a Merkelization of the Go replay binary and its dependencies.\n\nThe replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.\n\nYou can find more information in [How to Customize your Arbitrum chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).\n\n\n\n",
     "key": "what-is-the-wasm-module-root"
   },
   {

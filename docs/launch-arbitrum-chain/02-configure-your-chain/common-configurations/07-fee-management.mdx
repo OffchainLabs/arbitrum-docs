@@ -13,11 +13,11 @@ This guide describes the different fees collected on your chain, how to configur
 
 ## What fees are collected on an Arbitrum chain?
 
-There are four fee types that are collected on every transaction of an Arbitrum chain (Orbit):
+There are four fee types that are collected on every transaction of an Arbitrum chain:
 
-- **Orbit base fee**: fees paid for executing the transaction on the chain based on the minimum base price configured.
+- **Arbitrum chain base fee**: fees paid for executing the transaction on the chain based on the minimum base price configured.
 
-- **Orbit surplus fee**: if the chain is congested (i.e., the base price paid for the transaction is higher than the minimum base price), these fees account for executing the transaction on the chain based on any gas price paid above the minimum base price configured.
+- **Arbitrum chain surplus fee**: if the chain is congested (i.e., the base price paid for the transaction is higher than the minimum base price), these fees account for executing the transaction on the chain based on any gas price paid above the minimum base price configured.
 
 - **Parent chain base fee**: relative fees paid for posting the transaction on the parent chain. This amount is calculated based on the transaction's estimated size and the current view of the parent chain's base fee.
 
@@ -32,7 +32,7 @@ You can find more detailed information about these fee types in these pages:
 
 Let's see in what ways we can configure each fee type:
 
-### Arbitrum chain (Orbit) base fee (minimum)
+### Arbitrum chain base fee (minimum)
 
 Your chain is configured with a minimum base fee for execution. This value can be obtained by calling the method `getMinimumGasPrice()(uint256)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
 
@@ -40,7 +40,7 @@ Your chain is configured with a minimum base fee for execution. This value can b
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getMinimumGasPrice() (uint256)"
 ```
 
-Alternatively, you can use the Arbitrum chain (Orbit) SDK to retrieve the minimum Orbit base fee configured:
+Alternatively, you can use the Chain SDK to retrieve the minimum Arbitrum chain base fee configured:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -65,7 +65,7 @@ To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of 
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setMinimumL2BaseFee(uint256) ()" $NEW_MINIMUM_BASE_FEE_IN_WEI
 ```
 
-Or using the Arbitrum chain (Orbit) SDK:
+Or using the Chain SDK:
 
 ```typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
@@ -94,7 +94,7 @@ In periods of congestion, the actual base fee of your Arbitrum chain might be hi
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getPricesInWei() (uint256,uint256,uint256,uint256,uint256,uint256)"
 ```
 
-You can then calculate the current Orbit surplus fees as `currentBaseFee - minimumBaseFee`.
+You can then calculate the current Arbitrum chain surplus fees as `currentBaseFee - minimumBaseFee`.
 
 :::note
 
@@ -102,9 +102,9 @@ You can then calculate the current Orbit surplus fees as `currentBaseFee - minim
 
 :::
 
-:::info Orbit surplus fees are automatically adjusted
+:::info Arbitrum chain surplus fees are automatically adjusted
 
-Arbitrum chains automatically adjust the Orbit surplus fee based on the traffic of the chain. If the gas consumed goes over the speed limit, the chain's base fee will start increasing. Likewise, the base fee will gradually go down if demand of gas returns to below the configured speed limit, until it reaches the minimum base fee configured.
+Arbitrum chains automatically adjust the Arbitrum chain surplus fee based on the traffic of the chain. If the gas consumed goes over the speed limit, the chain's base fee will start increasing. Likewise, the base fee will gradually go down if demand of gas returns to below the configured speed limit, until it reaches the minimum base fee configured.
 
 :::
 
@@ -116,7 +116,7 @@ To obtain the current parent chain base fee of your chain, you can call the meth
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1BaseFeeEstimate() (uint256)"
 ```
 
-Alternatively, you can use the Arbitrum chain (Orbit) SDK to retrieve the current parent chain base fee:
+Alternatively, you can use the Chain SDK to retrieve the current parent chain base fee:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -135,7 +135,7 @@ You can modify the current estimate of the parent chain base fee by calling the 
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricePerUnit(uint256) ()" $NEW_PARENT_CHAIN_BASE_FEE
 ```
 
-Or using the Arbitrum chain (Orbit) SDK:
+Or using the Chain SDK:
 
 ```typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
@@ -176,7 +176,7 @@ The parent chain surplus fee collected is based on a reward rate configured in t
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRate() (uint64)"
 ```
 
-Alternatively, you can obtain this information using the Arbitrum chain (Orbit) SDK:
+Alternatively, you can obtain this information using the Chain SDK:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -195,7 +195,7 @@ To change the reward rate, you can use the method `setL1PricingRewardRate(uint64
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRate(uint64) ()" $NEW_REWARD_RATE
 ```
 
-Or using the Arbitrum chain (Orbit) SDK:
+Or using the Chain SDK:
 
 ```typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
@@ -234,7 +234,7 @@ The [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner
 
 :::
 
-Alternatively, you can use the Arbitrum chain (Orbit) SDK to retrieve the current address configured as `infraFeeAccount`:
+Alternatively, you can use the Chain SDK to retrieve the current address configured as `infraFeeAccount`:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -253,7 +253,7 @@ To set a new `infraFeeAccount`, use the method `setInfraFeeAccount(address)` of 
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setInfraFeeAccount(address) ()" $NEW_INFRAFEEACCOUNT_ADDRESS
 ```
 
-Or using the Arbitrum chain (Orbit) SDK:
+Or using the Chain SDK:
 
 ```typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
@@ -288,7 +288,7 @@ The [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner
 
 :::
 
-Alternatively, you can use the Arbitrum chain (Orbit) SDK to retrieve the current address configured as `networkFeeAccount`:
+Alternatively, you can use the Chain SDK to retrieve the current address configured as `networkFeeAccount`:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -307,7 +307,7 @@ To set a new `networkFeeAccount`, use the method `setNetworkFeeAccount(address)`
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setNetworkFeeAccount(address) ()" $NEW_NETWORKFEEACCOUNT_ADDRESS
 ```
 
-Or using the Arbitrum chain (Orbit) SDK:
+Or using the Chain SDK:
 
 ```typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
@@ -334,7 +334,7 @@ Parent chain base fees are paid to the fee collector of the active batch poster 
 
 #### Getting batch posters
 
-The recommended way to get the current configured batch posters is to use the Arbitrum chain (Orbit) SDK to query the `SequencerInbox` contract on the parent chain. This method reads from events emitted when configuring a new batch poster:
+The recommended way to get the current configured batch posters is to use the Chain SDK to query the `SequencerInbox` contract on the parent chain. This method reads from events emitted when configuring a new batch poster:
 
 ```typescript
 const parentChainClient = createPublicClient({
@@ -356,7 +356,7 @@ cast call --rpc-url $PARENT_CHAIN_RPC $SEQUENCER_INBOX_ADDRESS "isBatchPoster(ad
 
 **Alternative method using ArbAggregator:**
 
-You can also query batch posters by calling the `getBatchPosters()(address[])` method of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile on your Orbit chain:
+You can also query batch posters by calling the `getBatchPosters()(address[])` method of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile on your Arbitrum chain:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
@@ -379,7 +379,7 @@ Once you have the batch poster address, you can obtain the fee collector address
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
 ```
 
-You can also use the Arbitrum chain (Orbit) SDK:
+You can also use the Chain SDK:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -408,7 +408,7 @@ To set a new fee collector for a specific batch poster, use the method `setFeeCo
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "setFeeCollector(address,address) ()" $BATCH_POSTER_ADDRESS $NEW_FEECOLLECTOR_ADDRESS
 ```
 
-Or using the Arbitrum chain (Orbit) SDK:
+Or using the Chain SDK:
 
 ```typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
@@ -439,7 +439,7 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCE
 
 **Optional: Pre-register for fee management**
 
-If you want to configure a fee collector before the batch poster sends its first batch, you can optionally pre-register the address on the Orbit chain by calling `addBatchPoster(address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile:
+If you want to configure a fee collector before the batch poster sends its first batch, you can optionally pre-register the address on the Arbitrum chain by calling `addBatchPoster(address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "addBatchPoster(address) ()" $NEW_BATCH_POSTER_ADDRESS
@@ -459,7 +459,7 @@ Parent chain surplus fees are paid to a specific `L1RewardRecipient` address tha
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRecipient() (address)"
 ```
 
-Alternatively, you can obtain this information using the Arbitrum chain (Orbit) SDK:
+Alternatively, you can obtain this information using the Chain SDK:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -478,7 +478,7 @@ To set a new `L1RewardRecipient` address, you can call the method `setL1PricingR
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRecipient(address) ()" $NEW_L1REWARDRECIPIENT_ADDRESS
 ```
 
-Alternatively, you can use the Arbitrum chain (Orbit) SDK to set the new address:
+Alternatively, you can use the Chain SDK to set the new address:
 
 ```typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
@@ -505,9 +505,9 @@ In the previous section we described how to set the individual collector address
 
 This section shows how to configure a distributor contract to manage the fees of a specific type.
 
-:::info Example scripts available in the Arbitrum chain (Orbit) SDK
+:::info Example scripts available in the Chain SDK
 
-This section will explain the process of deploying and configuring a distribution contract manually, but the Arbitrum chain (Orbit) SDK includes an [example to perform this process through a script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-fee-distributor-contract).
+This section will explain the process of deploying and configuring a distribution contract manually, but the Chain SDK includes an [example to perform this process through a script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-fee-distributor-contract).
 
 :::
 
@@ -517,7 +517,7 @@ An example implementation of a distributor contract can be found [in the fund-di
 
 ### Step 2. Set the contract address as the desired fee type collector address
 
-Use the instructions provided in the previous section to set the address of the deployed distributor contract as the collector of the desired fee type. For example, if you want the distributor contract to manage the Orbit surplus fees, set the `networkFeeAccount` to the address of the deployed contract.
+Use the instructions provided in the previous section to set the address of the deployed distributor contract as the collector of the desired fee type. For example, if you want the distributor contract to manage the Arbitrum chain surplus fees, set the `networkFeeAccount` to the address of the deployed contract.
 
 ### Step 3. Configure the recipients of fees in the contract
 
