@@ -1763,7 +1763,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'stylus/concepts/webassembly',
-                  label: 'webassembly',
+                  label: 'Webassembly',
                 },
                 {
                   type: 'doc',
