@@ -1356,7 +1356,7 @@ const sidebars = {
                 {
                   type: 'link',
                   label: 'Cargo Stylus CLI GitHub',
-                  href: 'https://github.com/OffchainLabs/cargo-stylus',
+                  href: 'https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus',
                 },
                 {
                   type: 'link',
@@ -1366,7 +1366,7 @@ const sidebars = {
                 {
                   type: 'link',
                   label: 'Source Code Repository',
-                  href: 'https://github.com/OffchainLabs/stylus',
+                  href: 'https://github.com/OffchainLabs/stylus-sdk-rs',
                 },
               ],
             },
@@ -1795,7 +1795,7 @@ const sidebars = {
                 {
                   type: 'link',
                   label: 'Cargo Stylus CLI GitHub',
-                  href: 'https://github.com/OffchainLabs/cargo-stylus',
+                  href: 'https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus',
                 },
                 {
                   type: 'link',
@@ -1805,7 +1805,7 @@ const sidebars = {
                 {
                   type: 'link',
                   label: 'Source Code Repository',
-                  href: 'https://github.com/OffchainLabs/stylus',
+                  href: 'https://github.com/OffchainLabs/stylus-sdk-rs',
                 },
               ],
             },
