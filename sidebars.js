@@ -1291,11 +1291,6 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'stylus/how-tos/webassembly',
-                  label: 'Webassembly',
-                },
-                {
-                  type: 'doc',
                   id: 'stylus/how-tos/verifying-contracts',
                   label: 'Verify contracts',
                 },
@@ -1329,7 +1324,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'stylus/concepts/webassembly',
-                  label: 'Check and deploy',
+                  label: 'Webassembly',
                 },
                 {
                   type: 'doc',
