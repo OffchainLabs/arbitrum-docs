@@ -1291,8 +1291,8 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'stylus/how-tos/check-and-deploy',
-                  label: 'Check and deploy',
+                  id: 'stylus/how-tos/webassembly',
+                  label: 'Webassembly',
                 },
                 {
                   type: 'doc',
