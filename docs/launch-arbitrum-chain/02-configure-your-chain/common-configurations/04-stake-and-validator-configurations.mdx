@@ -15,7 +15,9 @@ settle to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support <a 
   assertion
 </a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
   challenge
-</a> incorrect assertions. Arbitrum (Orbit) chains can be permissioned, meaning validators must be allowlisted.
+</a> incorrect assertions. Arbitrum chains can be permissioned, meaning validators must be allowlisted.
+For chains that use that elect to use the BoLD protocol, permissionless validation is an option (BoLD
+also supports permissioned validation).
 
 Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
@@ -32,13 +34,9 @@ The bonded token is the asset that validators must bond to participate in assert
 - **For non-BoLD chains**, it defaults to the <a data-quicklook-from="parent-chain">parent chain</a>'s native token (usually `ETH`).
 - Currently, it's often hardcoded to `ETH` in basic deployments, but customizable to an `ERC-20` contract address in advanced setups. Future updates will expand `ERC-20` support.
 
-### How to Configure
+### How to configure
 
-- During deployment in the [Arbitrum Orbit deployment portal](https://orbit.arbitrum.io/):
-  1.  Connect your <a data-quicklook-from="wallet">wallet</a> (may require switching to Arbitrum Sepolia for testnets).
-  2.  In the configuration form, enter the bond token's contract address on the parent L2 chain.
-  3.  Use `0x0000000000000000000000000000000000000000` for `ETH`.
-- **Post-deployment**: Not directly modifiable; set during initial [Rollup contract](https://github.com/OffchainLabs/arbitrum-orbit-deployment-ui/blob/e4e82fca2428ad4c8a20ef19b7b958293ffef958/src/types/rollupConfigDataType.ts) creation.
+<!-- Need directions not part of the Portal -->
 
 ## `baseStake`
 
@@ -52,10 +50,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 ### How to configure
 
-- During deployment in the Orbit <a data-quicklook-from="portal">portal</a>:
-  1.  In the configuration form, enter the `baseStake` amount as a float.
-  2.  Review and deploy the chain (submits transactions to the parent chain).
-- **Post-deployment**: Adjustable via the [Rollup contract](https://github.com/OffchainLabs/arbitrum-orbit-deployment-ui/blob/e4e82fca2428ad4c8a20ef19b7b958293ffef958/src/types/rollupConfigDataType.ts) if permissions allow (e.g., as <a data-quicklook-from="chain-owner">chain owner</a>).
+<!-- Need directions not part of the Portal -->
 
 ## `loserStakeEscrow`
 
