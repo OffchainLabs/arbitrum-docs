@@ -1346,11 +1346,6 @@ const sidebars = {
                   id: 'stylus/how-tos/caching-contracts',
                   label: 'Caching Strategy',
                 },
-                {
-                  type: 'doc',
-                  id: 'stylus/how-tos/caching-contracts',
-                  label: 'Caching Strategy',
-                },
               ],
             },
             {
