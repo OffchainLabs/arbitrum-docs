@@ -1,13 +1,805 @@
 ---
 id: deploying-non-rust-wasm-contracts
 title: 'Deploying non-Rust WASM contracts'
-description: 'Deploying non-Rust WASM contracts'
+description: 'Deploy WebAssembly contracts from C, C++, and other languages to Arbitrum Stylus'
 author: chrisco
 sme: chrisco
 target_audience: 'Developers who need to deploy non-Rust WASM contracts'
 content_type: how-to
-sidebar_position: 2
+sidebar_position: 3
 displayed_sidebar: buildStylusSidebar
 ---
 
-TBD
+# Deploying Non-Rust WASM Contracts
+
+While Rust provides the best developer experience for Stylus, any language that compiles to WebAssembly can be deployed. This guide explains how to deploy WASM contracts written in C, C++, or even pure WebAssembly Text (WAT).
+
+## Overview
+
+Stylus accepts any valid WebAssembly module that meets its requirements. You can:
+
+- Write contracts in **C or C++** using the Stylus C SDK
+- Use **WebAssembly Text (WAT)** for direct bytecode control
+- Compile from **any language** that targets `wasm32-unknown-unknown`
+- Deploy **pre-compiled WASM** binaries directly
+
+The key is using the `--wasm-file` flag with `cargo stylus` commands to bypass Rust compilation.
+
+## Why Use Non-Rust Languages?
+
+Different languages excel at different tasks:
+
+| Language           | Best For                               | Use Cases                                          |
+| ------------------ | -------------------------------------- | -------------------------------------------------- |
+| **C/C++**          | Low-level control, cryptography        | Hash functions, signature verification, algorithms |
+| **WAT**            | Learning, debugging, minimal contracts | Simple logic, educational examples                 |
+| **AssemblyScript** | TypeScript developers                  | Web3 integration with familiar syntax              |
+| **Other**          | Specific requirements                  | Domain-specific computations                       |
+
+### When to choose non-Rust
+
+- **Existing codebase**: Port existing C/C++ cryptography libraries
+- **Performance-critical**: Hand-optimized assembly-like control
+- **Minimal size**: Ultra-compact contracts for specific operations
+- **Team expertise**: Leverage existing C/C++ knowledge
+
+### When to stick with Rust
+
+- **Full-featured contracts**: Complex DeFi, NFTs, governance
+- **Type safety**: Strong guarantees and tooling
+- **Ecosystem**: Rich library support and examples
+- **Productivity**: Higher-level abstractions and macros
+
+## WASM Requirements
+
+All WASM modules deployed to Stylus must meet these requirements:
+
+### Required exports
+
+```wasm
+(export "user_entrypoint" (func $user_entrypoint))
+(export "memory" (memory 0))
+```
+
+The `user_entrypoint` function:
+
+- **Signature**: `(param i32) (result i32)`
+- **Parameter**: Length of input calldata in bytes
+- **Returns**: Length of output data in bytes
+
+### Allowed imports
+
+Only functions from the `vm_hooks` module are permitted:
+
+```wasm
+(import "vm_hooks" "msg_sender" (func $msg_sender (param i32)))
+(import "vm_hooks" "storage_load_bytes32" (func $storage_load (param i32 i32)))
+(import "vm_hooks" "storage_store_bytes32" (func $storage_store (param i32 i32)))
+```
+
+See the [hostio exports documentation](/stylus/advanced/hostio-exports) for the complete list of available VM hooks.
+
+### Memory requirements
+
+- Linear memory must be exported as `"memory"`
+- Memory growth must be explicitly paid for
+- Initial memory size should be minimal (often `0 0`)
+- Maximum memory is limited by gas costs
+
+### Compilation target
+
+- **Target triple**: `wasm32-unknown-unknown`
+- **No standard library**: WASM runs in a sandboxed environment
+- **No floating point**: Not yet supported by Stylus
+- **No SIMD**: Not yet supported by Stylus
+- **No reference types**: Disabled for compatibility
+
+## WebAssembly Text (WAT)
+
+WAT provides direct control over WASM bytecode using human-readable text format.
+
+### Minimal contract
+
+The simplest valid Stylus contract:
+
+```wasm
+(module
+    ;; Export linear memory
+    (memory 0 0)
+    (export "memory" (memory 0))
+
+    ;; Required entrypoint
+    ;; Takes calldata length, returns output length
+    (func (export "user_entrypoint") (param $args_len i32) (result i32)
+        (i32.const 0)  ;; Return 0 bytes
+    ))
+```
+
+Save as `minimal.wat` and deploy:
+
+```shell
+cargo stylus deploy --wasm-file=minimal.wat --private-key-path=./key.txt
+```
+
+### Echo contract
+
+Returns input data unchanged:
+
+```wasm
+(module
+    (memory 1 1)
+    (export "memory" (memory 0))
+
+    ;; Import VM hook to read calldata
+    (import "vm_hooks" "read_args" (func $read_args (param i32)))
+
+    (func (export "user_entrypoint") (param $args_len i32) (result i32)
+        ;; Read calldata into memory at offset 0
+        (call $read_args (i32.const 0))
+
+        ;; Return the same length (echo)
+        (local.get $args_len)
+    ))
+```
+
+### Storage counter
+
+Increment a value in storage:
+
+```wasm
+(module
+    (memory 1 1)
+    (export "memory" (memory 0))
+
+    ;; Import storage operations
+    (import "vm_hooks" "storage_load_bytes32"
+        (func $storage_load (param i32 i32)))
+    (import "vm_hooks" "storage_store_bytes32"
+        (func $storage_store (param i32 i32)))
+
+    (func (export "user_entrypoint") (param $args_len i32) (result i32)
+        ;; Load current value from storage slot 0
+        (call $storage_load
+            (i32.const 0)    ;; key pointer
+            (i32.const 32))  ;; value destination
+
+        ;; Increment the value at memory[32]
+        (i32.store (i32.const 32)
+            (i32.add
+                (i32.load (i32.const 32))
+                (i32.const 1)))
+
+        ;; Store back to storage
+        (call $storage_store
+            (i32.const 0)    ;; key pointer
+            (i32.const 32))  ;; value pointer
+
+        ;; Return 0 bytes of output
+        (i32.const 0)
+    ))
+```
+
+### Checking WAT contracts
+
+Validate before deploying:
+
+```shell
+cargo stylus check --wasm-file=counter.wat
+```
+
+Output shows validation results:
+
+```
+Reading WASM file at counter.wat
+Compressed WASM size: 142 B
+Contract succeeded Stylus onchain activation checks with Stylus version: 1
+```
+
+## C/C++ Development
+
+The [Stylus C SDK](https://github.com/OffchainLabs/stylus-sdk-c) enables C/C++ smart contract development.
+
+### Installation
+
+Install the C SDK:
+
+```shell
+git clone https://github.com/OffchainLabs/stylus-sdk-c.git
+cd stylus-sdk-c
+```
+
+Install dependencies:
+
+```shell
+# macOS
+brew install llvm binaryen wabt
+
+# Ubuntu/Debian
+sudo apt-get install clang lld wasm-ld binaryen wabt
+```
+
+### Project structure
+
+Basic C project layout:
+
+```
+my-contract/
+├── Makefile
+├── src/
+│   └── main.c
+└── include/
+    └── stylus_sdk.h
+```
+
+### Simple C contract
+
+```c
+// main.c
+#include "stylus_sdk.h"
+
+// Storage slot for counter
+static uint8_t counter_slot[32] = {0};
+
+// Main entrypoint
+int main(int argc, char *argv[]) {
+    // Load counter from storage
+    uint8_t value[32];
+    storage_load_bytes32(counter_slot, value);
+
+    // Increment
+    value[31]++;
+
+    // Store back
+    storage_store_bytes32(counter_slot, value);
+
+    return 0;
+}
+```
+
+### C SDK features
+
+The C SDK provides:
+
+```c
+// Account operations
+void msg_sender(uint8_t *sender);
+void tx_origin(uint8_t *origin);
+void contract_address(uint8_t *addr);
+
+// Storage operations
+void storage_load_bytes32(uint8_t *key, uint8_t *dest);
+void storage_store_bytes32(uint8_t *key, uint8_t *value);
+
+// Block information
+uint64_t block_timestamp(void);
+uint64_t block_number(void);
+void block_basefee(uint8_t *basefee);
+
+// Call operations
+void call_contract(
+    uint8_t *contract,
+    uint8_t *calldata,
+    uint32_t calldata_len,
+    uint8_t *value,
+    uint32_t gas,
+    uint8_t *return_data_len
+);
+
+// And many more...
+```
+
+### Building C contracts
+
+Create a Makefile:
+
+```makefile
+CLANG = clang
+WASM_LD = wasm-ld
+WASM_OPT = wasm-opt
+
+CFLAGS = -target wasm32 -nostdlib -O3
+LDFLAGS = -no-entry --export=user_entrypoint --export=memory
+
+SRC = src/main.c
+OUT = build/contract.wasm
+OUT_OPT = build/contract-opt.wasm
+
+all: $(OUT_OPT)
+
+$(OUT): $(SRC)
+	mkdir -p build
+	$(CLANG) $(CFLAGS) -c $(SRC) -o build/main.o
+	$(WASM_LD) $(LDFLAGS) build/main.o -o $(OUT)
+
+$(OUT_OPT): $(OUT)
+	$(WASM_OPT) -Oz $(OUT) -o $(OUT_OPT)
+
+clean:
+	rm -rf build
+
+deploy: $(OUT_OPT)
+	cargo stylus deploy --wasm-file=$(OUT_OPT) \
+		--private-key-path=$$PRIVATE_KEY_PATH
+
+check: $(OUT_OPT)
+	cargo stylus check --wasm-file=$(OUT_OPT)
+```
+
+Build and deploy:
+
+```shell
+make
+make check
+make deploy
+```
+
+### C cryptography example
+
+Verifying a signature:
+
+```c
+#include "stylus_sdk.h"
+#include <string.h>
+
+// Verify ECDSA signature
+int verify_signature(
+    uint8_t *message_hash,
+    uint8_t *signature,
+    uint8_t *public_key
+) {
+    uint8_t recovered[65];
+
+    // Recover signer from signature
+    if (ecrecover(message_hash, signature, recovered) != 0) {
+        return -1;  // Recovery failed
+    }
+
+    // Compare with expected public key
+    if (memcmp(recovered + 1, public_key, 64) == 0) {
+        return 0;   // Valid signature
+    }
+
+    return -1;      // Invalid signature
+}
+
+int main(int argc, char *argv[]) {
+    uint8_t msg_hash[32];
+    uint8_t sig[65];
+    uint8_t pubkey[64];
+
+    // Read inputs from calldata
+    read_args(0);
+    memcpy(msg_hash, memory, 32);
+    memcpy(sig, memory + 32, 65);
+    memcpy(pubkey, memory + 97, 64);
+
+    // Verify
+    int result = verify_signature(msg_hash, sig, pubkey);
+
+    // Write result
+    memory[0] = (result == 0) ? 1 : 0;
+    write_result(memory, 1);
+
+    return 0;
+}
+```
+
+## AssemblyScript Contracts
+
+AssemblyScript is TypeScript-like language that compiles to WebAssembly.
+
+### Installation
+
+```shell
+npm install -g assemblyscript
+npm install @assemblyscript/loader
+```
+
+### Simple AssemblyScript contract
+
+```typescript
+// contract.ts
+
+// Import Stylus VM hooks
+@external("vm_hooks", "msg_sender")
+declare function msg_sender(ptr: usize): void;
+
+@external("vm_hooks", "storage_load_bytes32")
+declare function storage_load(key: usize, dest: usize): void;
+
+@external("vm_hooks", "storage_store_bytes32")
+declare function storage_store(key: usize, value: usize): void;
+
+// Storage key
+const COUNTER_KEY: StaticArray<u8> = [0, 0, 0, 0, /* ... 32 zeros ... */];
+
+// Entrypoint
+export function user_entrypoint(args_len: i32): i32 {
+    // Load counter
+    let value = new StaticArray<u8>(32);
+    storage_load(
+        changetype<usize>(COUNTER_KEY),
+        changetype<usize>(value)
+    );
+
+    // Increment
+    value[31]++;
+
+    // Store
+    storage_store(
+        changetype<usize>(COUNTER_KEY),
+        changetype<usize>(value)
+    );
+
+    return 0;  // No output
+}
+```
+
+### Compile AssemblyScript
+
+```shell
+asc contract.ts \
+    --target release \
+    --exportRuntime \
+    --exportTable \
+    -o contract.wasm
+```
+
+### Deploy AssemblyScript contract
+
+```shell
+cargo stylus deploy \
+    --wasm-file=contract.wasm \
+    --private-key-path=./key.txt
+```
+
+## Deployment Workflow
+
+### 1. Prepare your WASM
+
+Ensure your WASM module meets requirements:
+
+```shell
+# Check WASM structure with wasm-objdump
+wasm-objdump -x contract.wasm | grep -A 5 "Export\|Import"
+
+# Should show:
+# Export[0]:
+#  - func[0] <user_entrypoint>
+#  - memory[0]
+# Import[0]:
+#  - module="vm_hooks" func=...
+```
+
+### 2. Optimize the WASM
+
+Reduce size with wasm-opt:
+
+```shell
+wasm-opt -Oz contract.wasm -o contract-opt.wasm
+```
+
+### 3. Check before deploying
+
+Validate the contract:
+
+```shell
+cargo stylus check --wasm-file=contract-opt.wasm
+```
+
+### 4. Deploy
+
+Deploy to testnet:
+
+```shell
+cargo stylus deploy \
+    --wasm-file=contract-opt.wasm \
+    --private-key-path=./key.txt \
+    --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+### 5. Verify deployment
+
+Check deployment succeeded:
+
+```shell
+# Output shows:
+Compressed WASM size: 245 B
+Deploying contract to address 0x...
+Confirmed tx 0x...
+Activating contract at address 0x...
+Confirmed tx 0x...
+```
+
+## Best Practices
+
+### 1. Minimize binary size
+
+```shell
+# ✅ Good: Optimize aggressively
+wasm-opt -Oz input.wasm -o output.wasm
+
+# Use wasm-strip to remove symbols
+wasm-strip output.wasm
+
+# Check final size
+ls -lh output.wasm
+```
+
+### 2. Test with cargo stylus check
+
+```shell
+# ✅ Good: Always check before deploying
+cargo stylus check --wasm-file=contract.wasm
+
+# Test on testnet first
+cargo stylus deploy \
+    --wasm-file=contract.wasm \
+    --private-key-path=./key.txt \
+    --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+### 3. Use standard memory layout
+
+```c
+// ✅ Good: Predictable memory layout
+uint8_t calldata[1024];    // 0-1023: Input data
+uint8_t storage[32];       // 1024-1055: Storage scratch
+uint8_t output[256];       // 1056-1311: Output buffer
+
+// ❌ Bad: Unpredictable allocations
+uint8_t *data = malloc(size);  // No malloc in WASM!
+```
+
+### 4. Handle calldata properly
+
+```wasm
+;; ✅ Good: Read calldata into memory
+(call $read_args (i32.const 0))
+
+;; Process the data
+(call $process_calldata (local.get $args_len))
+
+;; ❌ Bad: Assume calldata location
+(i32.load (i32.const 0))  ;; Calldata not automatically loaded
+```
+
+### 5. Export all required functions
+
+```wasm
+;; ✅ Good: Export entrypoint and memory
+(export "user_entrypoint" (func $main))
+(export "memory" (memory 0))
+
+;; ❌ Bad: Missing exports
+(export "main" (func $main))  ;; Wrong name!
+```
+
+### 6. Use VM hooks correctly
+
+```c
+// ✅ Good: Proper VM hook usage
+uint8_t sender[20];
+msg_sender(sender);
+
+// ✅ Good: Check return values
+uint8_t success;
+call_contract(addr, data, len, value, gas, &success);
+if (!success) {
+    revert("Call failed");
+}
+
+// ❌ Bad: Ignoring errors
+call_contract(addr, data, len, value, gas, NULL);
+```
+
+### 7. Mind the size limit
+
+```shell
+# Check compressed size
+cargo stylus check --wasm-file=contract.wasm
+
+# Should show:
+# Compressed WASM size: < 24 KB
+
+# If too large:
+# - Remove debug symbols
+# - Enable aggressive optimization
+# - Minimize code and data sections
+```
+
+## Troubleshooting
+
+### Missing entrypoint
+
+**Error**: `WASM is missing the entrypoint export`
+
+**Solution**: Ensure `user_entrypoint` is exported:
+
+```wasm
+;; WAT
+(func (export "user_entrypoint") (param i32) (result i32)
+    ;; Implementation
+)
+
+// C
+int user_entrypoint(int argc) __attribute__((export_name("user_entrypoint")));
+```
+
+### Invalid imports
+
+**Error**: `contract imports unauthorized function`
+
+**Solution**: Only import from `vm_hooks`:
+
+```wasm
+;; ✅ Allowed
+(import "vm_hooks" "msg_sender" (func $msg_sender (param i32)))
+
+;; ❌ Not allowed
+(import "env" "print" (func $print (param i32)))
+```
+
+### Memory not exported
+
+**Error**: `WASM must export memory`
+
+**Solution**: Export linear memory:
+
+```wasm
+;; WAT
+(memory 1 1)
+(export "memory" (memory 0))
+
+// C Makefile
+LDFLAGS = -no-entry --export=user_entrypoint --export=memory
+```
+
+### Size too large
+
+**Error**: `Compressed WASM exceeds 24KB`
+
+**Solutions**:
+
+1. Optimize with wasm-opt:
+
+   ```shell
+   wasm-opt -Oz input.wasm -o output.wasm
+   ```
+
+2. Strip symbols:
+
+   ```shell
+   wasm-strip output.wasm
+   ```
+
+3. Remove unused code:
+
+   ```c
+   // Use static/inline for internal functions
+   static inline void helper(void) { }
+   ```
+
+4. Minimize data section:
+
+   ```c
+   // ✅ Good: Minimal data
+   const uint8_t PREFIX[4] = {0xEF, 0xF0, 0x00, 0x00};
+
+   // ❌ Bad: Large data
+   const char *STRINGS[1000] = { /* ... */ };
+   ```
+
+### Compilation errors
+
+**Error**: Clang fails to compile
+
+**Solutions**:
+
+1. Target wasm32:
+
+   ```shell
+   clang -target wasm32 -nostdlib -c main.c
+   ```
+
+2. Disable standard library:
+
+   ```c
+   // Don't use stdio, stdlib, etc.
+   // Use SDK-provided functions
+   ```
+
+3. Check imports/exports:
+   ```shell
+   wasm-objdump -x contract.wasm
+   ```
+
+### Runtime errors
+
+**Error**: Contract reverts unexpectedly
+
+**Solutions**:
+
+1. Check gas usage:
+
+   ```shell
+   cargo stylus deploy --estimate-gas --wasm-file=contract.wasm
+   ```
+
+2. Add debug output (testnet only):
+
+   ```c
+   emit_log(error_msg, sizeof(error_msg));
+   ```
+
+3. Test with minimal input:
+   ```shell
+   # Call with empty calldata
+   cast call $CONTRACT "0x"
+   ```
+
+## Examples Repository
+
+Official examples for different languages:
+
+- [**Stylus C SDK**](https://github.com/OffchainLabs/stylus-sdk-c) - C/C++ examples
+- [**Stylus Bf SDK**](https://github.com/OffchainLabs/stylus-sdk-bf) - Brainfuck educational examples
+- [**Awesome Stylus**](https://github.com/OffchainLabs/awesome-stylus) - Community examples
+
+## Language Support Matrix
+
+| Language           | Status          | SDK                                                            | Best Use Case               |
+| ------------------ | --------------- | -------------------------------------------------------------- | --------------------------- |
+| **Rust**           | ✅ Production   | [stylus-sdk-rs](https://github.com/OffchainLabs/stylus-sdk-rs) | Full-featured contracts     |
+| **C/C++**          | ✅ Production   | [stylus-sdk-c](https://github.com/OffchainLabs/stylus-sdk-c)   | Cryptography, algorithms    |
+| **WAT**            | ✅ Supported    | Manual                                                         | Minimal contracts, learning |
+| **AssemblyScript** | 🔶 Community    | Custom                                                         | TypeScript developers       |
+| **Go**             | 🔶 Experimental | TinyGo                                                         | Custom applications         |
+| **Zig**            | 🔶 Experimental | Custom                                                         | Systems programming         |
+
+## Advanced: Custom Languages
+
+To support a new language:
+
+1. **Compile to wasm32-unknown-unknown**
+
+   ```shell
+   your-compiler --target=wasm32-unknown-unknown input.src -o output.wasm
+   ```
+
+2. **Export required functions**
+
+   ```
+   - user_entrypoint(i32) -> i32
+   - memory
+   ```
+
+3. **Import only vm_hooks**
+
+   ```
+   - vm_hooks:msg_sender
+   - vm_hooks:storage_*
+   - etc.
+   ```
+
+4. **Test and deploy**
+   ```shell
+   cargo stylus check --wasm-file=output.wasm
+   cargo stylus deploy --wasm-file=output.wasm --private-key-path=./key.txt
+   ```
+
+## Resources
+
+- [Stylus C SDK](https://github.com/OffchainLabs/stylus-sdk-c)
+- [WebAssembly specification](https://webassembly.github.io/spec/)
+- [WAT format reference](https://webassembly.github.io/spec/core/text/)
+- [Cargo Stylus CLI](https://github.com/OffchainLabs/cargo-stylus)
+- [Awesome Stylus](https://github.com/OffchainLabs/awesome-stylus)
+- [WASM binary toolkit (wabt)](https://github.com/WebAssembly/wabt)
+- [Binaryen optimization tools](https://github.com/WebAssembly/binaryen)
+
+## Sources
+
+- [GitHub - OffchainLabs/stylus-sdk-c: C/C++ Smart Contracts on Arbitrum](https://github.com/OffchainLabs/stylus-sdk-c)
+- [GitHub - OffchainLabs/awesome-stylus](https://github.com/OffchainLabs/awesome-stylus)
+- [GitHub - OffchainLabs/stylus-sdk-rs: Rust Smart Contracts on Arbitrum](https://github.com/OffchainLabs/stylus-sdk-rs)
