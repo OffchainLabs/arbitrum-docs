@@ -1,6 +1,6 @@
 ---
 title: 'Hostio exports'
-description: 'Hostio exports'
+description: 'Learn about low-level hostio functions for direct VM access in Stylus smart contracts'
 author: chrisco
 sme: chrisco
 sidebar_position: 1
@@ -8,4 +8,871 @@ target_audience: Developers who need to understand how to use hostio exports wit
 displayed_sidebar: buildAppsSidebar
 ---
 
-TBD
+Hostio (Host I/O) exports are low-level functions that provide direct access to the Stylus VM runtime. These functions are WebAssembly imports that allow Stylus programs to interact with the blockchain environment, similar to how EVM opcodes work in Solidity.
+
+## Overview
+
+Hostio functions are the foundational layer that powers all Stylus smart contract operations. While most developers will use the higher-level SDK abstractions, understanding hostio functions is valuable for:
+
+- Performance optimization through direct VM access
+- Implementing custom low-level operations
+- Understanding gas costs and execution flow
+- Debugging and troubleshooting contract behavior
+
+:::info
+Most developers should use the high-level SDK wrappers instead of calling hostio functions directly. The SDK provides safe, ergonomic interfaces that handle memory management and error checking automatically.
+:::
+
+## How hostio works
+
+Hostio functions are WebAssembly imports defined in the `vm_hooks` module. When a Stylus program is compiled to WASM, these functions are linked at runtime by the Arbitrum VM:
+
+```rust
+#[link(wasm_import_module = "vm_hooks")]
+extern "C" {
+    pub fn msg_sender(sender: *mut u8);
+    pub fn block_number() -> u64;
+    // ... more functions
+}
+```
+
+During execution, calls to these functions are intercepted by the Stylus VM, which implements the actual functionality using the underlying ArbOS infrastructure.
+
+## Function categories
+
+Hostio functions are organized into several categories based on their purpose.
+
+### Account operations
+
+Query information about accounts on the blockchain.
+
+#### `account_balance`
+
+Gets the ETH balance of an account in wei. Equivalent to EVM's `BALANCE` opcode.
+
+```rust
+pub fn account_balance(address: *const u8, dest: *mut u8);
+```
+
+**Parameters:**
+
+- `address`: Pointer to 20-byte address
+- `dest`: Pointer to write 32-byte balance value
+
+**Usage:**
+
+```rust
+use stylus_sdk::alloy_primitives::{Address, U256};
+
+unsafe {
+    let addr = Address::from([0x11; 20]);
+    let mut balance_bytes = [0u8; 32];
+    hostio::account_balance(addr.as_ptr(), balance_bytes.as_mut_ptr());
+    let balance = U256::from_be_bytes(balance_bytes);
+}
+```
+
+#### `account_code`
+
+Gets a subset of code from an account. Equivalent to EVM's `EXTCODECOPY` opcode.
+
+```rust
+pub fn account_code(
+    address: *const u8,
+    offset: usize,
+    size: usize,
+    dest: *mut u8
+) -> usize;
+```
+
+**Returns:** Number of bytes actually written
+
+#### `account_code_size`
+
+Gets the size of code at an address. Equivalent to EVM's `EXTCODESIZE` opcode.
+
+```rust
+pub fn account_code_size(address: *const u8) -> usize;
+```
+
+#### `account_codehash`
+
+Gets the code hash of an account. Equivalent to EVM's `EXTCODEHASH` opcode.
+
+```rust
+pub fn account_codehash(address: *const u8, dest: *mut u8);
+```
+
+:::note
+Empty accounts return the keccak256 hash of empty bytes: `c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470`
+:::
+
+### Storage operations
+
+Interact with persistent contract storage.
+
+#### `storage_load_bytes32`
+
+Reads a 32-byte value from storage. Equivalent to EVM's `SLOAD` opcode.
+
+```rust
+pub fn storage_load_bytes32(key: *const u8, dest: *mut u8);
+```
+
+**Parameters:**
+
+- `key`: Pointer to 32-byte storage key
+- `dest`: Pointer to write 32-byte value
+
+#### `storage_cache_bytes32`
+
+Writes a 32-byte value to the storage cache. Equivalent to EVM's `SSTORE` opcode.
+
+```rust
+pub fn storage_cache_bytes32(key: *const u8, value: *const u8);
+```
+
+:::warning
+Values are cached and must be persisted using `storage_flush_cache` before they're permanently written to storage.
+:::
+
+#### `storage_flush_cache`
+
+Persists cached storage values to the EVM state trie. Equivalent to multiple `SSTORE` operations.
+
+```rust
+pub fn storage_flush_cache(clear: bool);
+```
+
+**Parameters:**
+
+- `clear`: Whether to drop the cache entirely after flushing
+
+**Storage caching benefits:**
+
+The Stylus VM implements storage caching for improved performance:
+
+- Repeated reads of the same key cost less gas
+- Writes are batched for efficiency
+- Cache is automatically managed by the SDK
+
+### Block information
+
+Access information about the current block.
+
+#### `block_basefee`
+
+Gets the basefee of the current block. Equivalent to EVM's `BASEFEE` opcode.
+
+```rust
+pub fn block_basefee(basefee: *mut u8);
+```
+
+#### `block_chainid`
+
+Gets the chain identifier. Equivalent to EVM's `CHAINID` opcode.
+
+```rust
+pub fn chainid() -> u64;
+```
+
+#### `block_coinbase`
+
+Gets the coinbase (block producer address). On Arbitrum, this is the L1 batch poster's address.
+
+```rust
+pub fn block_coinbase(coinbase: *mut u8);
+```
+
+#### `block_gas_limit`
+
+Gets the gas limit of the current block. Equivalent to EVM's `GASLIMIT` opcode.
+
+```rust
+pub fn block_gas_limit() -> u64;
+```
+
+#### `block_number`
+
+Gets a bounded estimate of the L1 block number when the transaction was sequenced.
+
+```rust
+pub fn block_number() -> u64;
+```
+
+:::info
+See [Arbitrum block numbers and time](https://developer.arbitrum.io/time) for more information on how block numbers work on Arbitrum chains.
+:::
+
+#### `block_timestamp`
+
+Gets a bounded estimate of the Unix timestamp when the transaction was sequenced.
+
+```rust
+pub fn block_timestamp() -> u64;
+```
+
+### Transaction and message context
+
+Access information about the current transaction and call context.
+
+#### `msg_sender`
+
+Gets the address of the caller. Equivalent to EVM's `CALLER` opcode.
+
+```rust
+pub fn msg_sender(sender: *mut u8);
+```
+
+**Parameters:**
+
+- `sender`: Pointer to write 20-byte address
+
+:::note
+For L1-to-L2 retryable ticket transactions, addresses are aliased. See [address aliasing documentation](https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing).
+:::
+
+#### `msg_value`
+
+Gets the ETH value sent with the call in wei. Equivalent to EVM's `CALLVALUE` opcode.
+
+```rust
+pub fn msg_value(value: *mut u8);
+```
+
+#### `msg_reentrant`
+
+Checks if the current call is reentrant.
+
+```rust
+pub fn msg_reentrant() -> bool;
+```
+
+#### `tx_gas_price`
+
+Gets the gas price in wei per gas. On Arbitrum, this equals the basefee. Equivalent to EVM's `GASPRICE` opcode.
+
+```rust
+pub fn tx_gas_price(gas_price: *mut u8);
+```
+
+#### `tx_origin`
+
+Gets the top-level sender of the transaction. Equivalent to EVM's `ORIGIN` opcode.
+
+```rust
+pub fn tx_origin(origin: *mut u8);
+```
+
+#### `tx_ink_price`
+
+Gets the price of ink in EVM gas basis points. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for more information.
+
+```rust
+pub fn tx_ink_price() -> u32;
+```
+
+### Contract calls
+
+Make calls to other contracts.
+
+#### `call_contract`
+
+Calls another contract with optional value and gas limit. Equivalent to EVM's `CALL` opcode.
+
+```rust
+pub fn call_contract(
+    contract: *const u8,
+    calldata: *const u8,
+    calldata_len: usize,
+    value: *const u8,
+    gas: u64,
+    return_data_len: *mut usize
+) -> u8;
+```
+
+**Parameters:**
+
+- `contract`: Pointer to 20-byte contract address
+- `calldata`: Pointer to calldata bytes
+- `calldata_len`: Length of calldata
+- `value`: Pointer to 32-byte value in wei (use 0 for no value)
+- `gas`: Gas to supply (use `u64::MAX` for all available gas)
+- `return_data_len`: Pointer to store length of return data
+
+**Returns:** `0` on success, non-zero on failure
+
+**Gas rules:**
+
+- Follows the 63/64 rule (at most 63/64 of available gas is forwarded)
+- Includes callvalue stipend when value is sent
+
+**Usage:**
+
+```rust
+use stylus_sdk::call::RawCall;
+
+unsafe {
+    let result = RawCall::new(self.vm())
+        .gas(100_000)
+        .value(U256::from(1_000_000))
+        .call(contract_address, &calldata)?;
+}
+```
+
+#### `delegate_call_contract`
+
+Delegate calls another contract. Equivalent to EVM's `DELEGATECALL` opcode.
+
+```rust
+pub fn delegate_call_contract(
+    contract: *const u8,
+    calldata: *const u8,
+    calldata_len: usize,
+    gas: u64,
+    return_data_len: *mut usize
+) -> u8;
+```
+
+:::warning
+Delegate calls execute code in the context of the current contract. Be extremely careful when delegate calling to untrusted contracts as they have full access to your storage.
+:::
+
+#### `static_call_contract`
+
+Static calls another contract (read-only). Equivalent to EVM's `STATICCALL` opcode.
+
+```rust
+pub fn static_call_contract(
+    contract: *const u8,
+    calldata: *const u8,
+    calldata_len: usize,
+    gas: u64,
+    return_data_len: *mut usize
+) -> u8;
+```
+
+### Contract deployment
+
+Deploy new contracts.
+
+#### `create1`
+
+Deploys a contract using CREATE. Equivalent to EVM's `CREATE` opcode.
+
+```rust
+pub fn create1(
+    code: *const u8,
+    code_len: usize,
+    endowment: *const u8,
+    contract: *mut u8,
+    revert_data_len: *mut usize
+);
+```
+
+**Parameters:**
+
+- `code`: Pointer to initialization code (EVM bytecode)
+- `code_len`: Length of initialization code
+- `endowment`: Pointer to 32-byte value to send
+- `contract`: Pointer to write deployed contract address (20 bytes)
+- `revert_data_len`: Pointer to store revert data length on failure
+
+**Deployment rules:**
+
+- Init code must be EVM bytecode
+- Deployed code can be Stylus (WASM) if it starts with `0xEFF000` header
+- Address is determined by sender and nonce
+- On failure, address will be zero
+
+#### `create2`
+
+Deploys a contract using CREATE2. Equivalent to EVM's `CREATE2` opcode.
+
+```rust
+pub fn create2(
+    code: *const u8,
+    code_len: usize,
+    endowment: *const u8,
+    salt: *const u8,
+    contract: *mut u8,
+    revert_data_len: *mut usize
+);
+```
+
+**Parameters:**
+
+- `salt`: Pointer to 32-byte salt value
+
+**Address calculation:**
+
+- Address is deterministic based on sender, salt, and init code hash
+- Allows for pre-computed addresses
+
+### Events and logging
+
+Emit events to the blockchain.
+
+#### `emit_log`
+
+Emits an EVM log with topics and data. Equivalent to EVM's `LOG0`-`LOG4` opcodes.
+
+```rust
+pub fn emit_log(data: *const u8, len: usize, topics: usize);
+```
+
+**Parameters:**
+
+- `data`: Pointer to event data (first bytes should be 32-byte aligned topics)
+- `len`: Total length of data including topics
+- `topics`: Number of topics (0-4)
+
+:::warning
+Requesting more than 4 topics will cause a revert.
+:::
+
+**Higher-level usage:**
+
+```rust
+sol! {
+    event Transfer(address indexed from, address indexed to, uint256 value);
+}
+
+// Emit using the SDK
+self.vm().log(Transfer {
+    from: sender,
+    to: recipient,
+    value: amount,
+});
+```
+
+### Gas and ink metering
+
+Monitor execution costs.
+
+#### `evm_gas_left`
+
+Gets the amount of gas remaining. Equivalent to EVM's `GAS` opcode.
+
+```rust
+pub fn evm_gas_left() -> u64;
+```
+
+#### `evm_ink_left`
+
+Gets the amount of ink remaining. Stylus-specific metering unit.
+
+```rust
+pub fn evm_ink_left() -> u64;
+```
+
+:::info
+Ink is Stylus's compute pricing unit. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for conversion between ink and gas.
+:::
+
+#### `pay_for_memory_grow`
+
+Pays for WASM memory growth. Automatically called when allocating new pages.
+
+```rust
+pub fn pay_for_memory_grow(pages: u16);
+```
+
+:::note
+The `entrypoint!` macro handles importing this hostio. Manual calls will unproductively consume gas.
+:::
+
+### Cryptography
+
+Cryptographic operations.
+
+#### `native_keccak256`
+
+Efficiently computes keccak256 hash. Equivalent to EVM's `SHA3` opcode.
+
+```rust
+pub fn native_keccak256(bytes: *const u8, len: usize, output: *mut u8);
+```
+
+**Parameters:**
+
+- `bytes`: Pointer to input data
+- `len`: Length of input data
+- `output`: Pointer to write 32-byte hash
+
+**Higher-level usage:**
+
+```rust
+use stylus_sdk::crypto::keccak;
+
+let hash = keccak(b"hello world");
+```
+
+### Calldata operations
+
+Read and write calldata and return data.
+
+#### `read_args`
+
+Reads the program calldata. Equivalent to EVM's `CALLDATACOPY` opcode.
+
+```rust
+pub fn read_args(dest: *mut u8);
+```
+
+:::note
+This reads the entirety of the call's calldata.
+:::
+
+#### `read_return_data`
+
+Copies bytes from the last call or deployment return result. Equivalent to EVM's `RETURNDATACOPY` opcode.
+
+```rust
+pub fn read_return_data(dest: *mut u8, offset: usize, size: usize) -> usize;
+```
+
+**Parameters:**
+
+- `dest`: Destination buffer
+- `offset`: Offset in return data to start copying from
+- `size`: Number of bytes to copy
+
+**Returns:** Number of bytes actually written
+
+**Behavior:**
+
+- Does not revert if out of bounds
+- Copies overlapping portion only
+
+#### `return_data_size`
+
+Gets the length of the last return result. Equivalent to EVM's `RETURNDATASIZE` opcode.
+
+```rust
+pub fn return_data_size() -> usize;
+```
+
+#### `write_result`
+
+Writes the final return data for the current call.
+
+```rust
+pub fn write_result(data: *const u8, len: usize);
+```
+
+**Behavior:**
+
+- Does not cause program to exit
+- If not called, return data will be empty
+- Program exits naturally when entrypoint returns
+
+#### `contract_address`
+
+Gets the address of the current program. Equivalent to EVM's `ADDRESS` opcode.
+
+```rust
+pub fn contract_address(address: *mut u8);
+```
+
+### Debug and console
+
+Debug-only functions for development.
+
+#### `log_txt`
+
+Prints UTF-8 text to console. Only available in debug mode.
+
+```rust
+pub fn log_txt(text: *const u8, len: usize);
+```
+
+#### `log_i32` / `log_i64`
+
+Prints integers to console. Only available in debug mode.
+
+```rust
+pub fn log_i32(value: i32);
+pub fn log_i64(value: i64);
+```
+
+#### `log_f32` / `log_f64`
+
+Prints floating-point numbers to console. Only available in debug mode with floating point enabled.
+
+```rust
+pub fn log_f32(value: f32);
+pub fn log_f64(value: f64);
+```
+
+**Higher-level usage:**
+
+```rust
+use stylus_sdk::console;
+
+console!("Value: {}", value);  // Prints in debug mode, no-op in production
+```
+
+## Safety considerations
+
+All hostio functions are marked `unsafe` because they:
+
+1. **Operate on raw pointers**: Require correct memory management
+2. **Lack bounds checking**: Can cause undefined behavior if pointers are invalid
+3. **Have side effects**: Can modify contract state or make external calls
+4. **May revert**: Some operations can cause the transaction to revert
+
+### Safe usage patterns
+
+**Always validate inputs:**
+
+```rust
+// Bad: unchecked pointer usage
+unsafe {
+    hostio::msg_sender(ptr);  // ptr might be invalid
+}
+
+// Good: use safe wrappers
+let sender = self.vm().msg_sender();
+```
+
+**Use SDK wrappers:**
+
+```rust
+// Bad: direct hostio call
+unsafe {
+    let mut balance = [0u8; 32];
+    hostio::account_balance(addr.as_ptr(), balance.as_mut_ptr());
+}
+
+// Good: use SDK wrapper
+use stylus_sdk::evm;
+let balance = evm::balance(addr);
+```
+
+**Handle return values:**
+
+```rust
+// Check return status from calls
+let status = unsafe {
+    hostio::call_contract(
+        contract.as_ptr(),
+        calldata.as_ptr(),
+        calldata.len(),
+        value.as_ptr(),
+        gas,
+        &mut return_len,
+    )
+};
+
+if status != 0 {
+    // Handle call failure
+}
+```
+
+## Higher-level wrappers
+
+The Stylus SDK provides safe, ergonomic wrappers around hostio functions:
+
+### Storage operations
+
+```rust
+// Instead of direct hostio:
+unsafe {
+    hostio::storage_load_bytes32(key.as_ptr(), dest.as_mut_ptr());
+}
+
+// Use storage types:
+use stylus_sdk::storage::StorageU256;
+
+#[storage]
+pub struct Contract {
+    value: StorageU256,
+}
+
+let value = self.value.get();  // Safe, ergonomic
+```
+
+### Contract calls
+
+```rust
+// Instead of direct hostio:
+unsafe {
+    hostio::call_contract(/* many parameters */);
+}
+
+// Use RawCall or typed interfaces:
+use stylus_sdk::call::RawCall;
+
+let result = unsafe {
+    RawCall::new(self.vm())
+        .gas(100_000)
+        .call(contract, &calldata)?
+};
+```
+
+### VM context
+
+```rust
+// Instead of direct hostio:
+unsafe {
+    let mut sender = [0u8; 20];
+    hostio::msg_sender(sender.as_mut_ptr());
+}
+
+// Use VM accessor:
+let sender = self.vm().msg_sender();
+let value = self.vm().msg_value();
+let timestamp = self.vm().block_timestamp();
+```
+
+## Feature flags
+
+Hostio behavior changes based on feature flags:
+
+### `export-abi`
+
+When enabled, hostio functions are stubbed and return `unimplemented!()`. Used for ABI generation.
+
+### `stylus-test`
+
+When enabled, hostio functions panic with an error message. Use `TestVM` for testing instead.
+
+### `debug`
+
+When enabled, console logging functions become available. In production, console functions are no-ops.
+
+## Performance considerations
+
+### Direct hostio vs SDK wrappers
+
+- **Direct hostio**: Slightly lower overhead, requires manual memory management
+- **SDK wrappers**: Minimal overhead (often zero-cost abstractions), much safer
+
+**Recommendation:** Use SDK wrappers unless profiling shows a specific performance bottleneck.
+
+### Storage caching
+
+The Stylus VM automatically caches storage operations:
+
+```rust
+// First read: full SLOAD cost
+let value1 = storage.value.get();
+
+// Subsequent reads: reduced cost from cache
+let value2 = storage.value.get();
+
+// Writes are cached until flush
+storage.value.set(new_value);  // Cached
+
+// Cache is flushed automatically at call boundaries
+```
+
+### Gas vs ink
+
+Stylus uses "ink" for fine-grained gas metering:
+
+- **Ink**: WASM execution cost in Stylus-specific units
+- **Gas**: Standard EVM gas units
+- Conversion happens automatically
+
+Most developers don't need to think about ink vs gas distinction.
+
+## Common patterns
+
+### Check-effects-interactions pattern
+
+```rust
+#[public]
+impl MyContract {
+    pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), Vec<u8>> {
+        // Checks
+        let sender = self.vm().msg_sender();
+        let balance = self.balances.get(sender);
+        if balance < amount {
+            return Err(b"Insufficient balance".to_vec());
+        }
+
+        // Effects
+        self.balances.setter(sender).set(balance - amount);
+        self.balances.setter(to).set(self.balances.get(to) + amount);
+
+        // Interactions (if any)
+        Ok(())
+    }
+}
+```
+
+### Efficient event logging
+
+```rust
+sol! {
+    event DataUpdated(bytes32 indexed key, uint256 value);
+}
+
+// SDK handles hostio::emit_log internally
+self.vm().log(DataUpdated {
+    key: key_hash,
+    value: new_value,
+});
+```
+
+### Gas-limited external calls
+
+```rust
+use stylus_sdk::call::RawCall;
+
+// Limit gas to prevent griefing
+let result = unsafe {
+    RawCall::new(self.vm())
+        .gas(50_000)  // Fixed gas limit
+        .call(untrusted_contract, &calldata)
+};
+
+match result {
+    Ok(data) => { /* process return data */ },
+    Err(_) => { /* handle failure gracefully */ },
+}
+```
+
+## Testing with hostio
+
+Hostio functions are not available in the test environment. Use `TestVM` instead:
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use stylus_sdk::testing::*;
+
+    #[test]
+    fn test_function() {
+        let vm = TestVM::default();
+        let mut contract = MyContract::from(&vm);
+
+        // VM functions work in tests
+        let sender = vm.msg_sender();  // Works
+
+        // Direct hostio would panic
+        // unsafe { hostio::msg_sender(...) }  // Would panic
+    }
+}
+```
+
+## Resources
+
+- [Stylus VM specification](https://github.com/OffchainLabs/stylus)
+- [EVM opcodes reference](https://www.evm.codes/)
+- [Arbitrum block numbers and time](https://developer.arbitrum.io/time)
+- [Ink and gas metering](https://docs.arbitrum.io/stylus/concepts/gas-metering)
+- [stylus-sdk-rs source](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/stylus-sdk/src/hostio.rs)
+
+## Best practices
+
+1. **Use SDK wrappers**: Prefer high-level abstractions over direct hostio calls
+2. **Validate inputs**: Always check pointers and sizes before unsafe operations
+3. **Handle errors**: Check return values from call operations
+4. **Test thoroughly**: Use `TestVM` for comprehensive testing
+5. **Profile first**: Only optimize to direct hostio if profiling shows it's necessary
+6. **Document unsafe code**: Always document why `unsafe` is necessary
+7. **Minimize unsafe blocks**: Keep `unsafe` blocks as small as possible
