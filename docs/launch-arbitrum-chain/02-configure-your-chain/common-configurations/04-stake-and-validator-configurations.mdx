@@ -36,7 +36,109 @@ The bonded token is the asset that validators must bond to participate in assert
 
 ### How to configure
 
-<!-- Need directions not part of the Portal -->
+1. **Prepare the Chain Configuration**:
+   Generate the base chain config using `prepareChainConfig`. Set the `chainId` and initial owner.
+
+   ```typescript
+   import { prepareChainConfig } from '@arbitrum/orbit-sdk';
+
+   const chainConfig = prepareChainConfig({
+     chainId: 123456, // Replace with your desired chain ID
+     arbitrum: {
+       InitialChainOwner: '0xYourOwnerAddressHere', // Wallet address that will own the chain
+       DataAvailabilityCommittee: false, // Set to true for AnyTrust chains (DAC)
+     },
+   });
+   ```
+
+2. **Set Up the Public Client for the Parent Chain**:
+   Create a public client to interact with the parent chain.
+
+   ```typescript
+   import { createPublicClient, http } from 'viem';
+   import { sepolia } from 'viem/chains'; // Example: Use 'mainnet' or 'arbitrumOne' as needed
+
+   const parentChainPublicClient = createPublicClient({
+     chain: sepolia, // Replace with your parent chain (e.g., arbitrumOne)
+     transport: http('https://your-parent-chain-rpc-url'), // Replace with actual RPC URL
+   });
+   ```
+
+3. **Prepare Deployment Parameters, Including `stakeToken`**:
+   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
+
+   ```typescript
+   import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
+
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
+     parentChainPublicClient,
+     {
+       chainId: 123456, // Must match the chainId from Step 1
+       owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
+       chainConfig,
+       stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
+       baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
+       // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
+     },
+   );
+   ```
+
+4. **Deploy the Chain**:
+   Use `createRollup` to deploy. Provide validator and batch poster addresses. This step sends the transaction to the parent chain.
+
+   ```typescript
+   import { createWalletClient } from 'viem';
+   import { privateKeyToAccount } from 'viem/accounts';
+   import { createRollup } from '@arbitrum/orbit-sdk';
+
+   const deployerAccount = privateKeyToAccount('0xYourDeployerPrivateKeyHere'); // Securely manage this
+
+   const walletClient = createWalletClient({
+     account: deployerAccount,
+     chain: sepolia, // Match parent chain
+     transport: http('https://your-parent-chain-rpc-url'),
+   });
+
+   const createRollupResults = await createRollup({
+     params: {
+       config: createRollupConfig,
+       batchPosters: ['0xYourBatchPosterAddressHere'], // Address for posting batches
+       validators: ['0xYourValidatorAddressHere'], // Validator addresses
+       // Optional: nativeToken: '0xCustomGasTokenAddress' for custom fee tokens
+     },
+     account: deployerAccount,
+     publicClient: parentChainPublicClient,
+     walletClient,
+   });
+
+   console.log('Deployment Transaction Hash:', createRollupResults.transactionHash);
+   console.log('Core Contracts:', createRollupResults.coreContracts);
+   ```
+
+5. **Post-Deployment (If Using AnyTrust)**:
+   If `DataAvailabilityCommittee` is `true`, set the DAC keyset in the `SequencerInbox`.
+
+   ```typescript
+   import { setValidKeyset } from '@arbitrum/orbit-sdk';
+
+   // Generate or provide your keyset (BLS public keys for the committee)
+   const keyset = '0xYourGeneratedKeysetHere';
+
+   const setKeysetResults = await setValidKeyset({
+     coreContracts: createRollupResults.coreContracts,
+     keyset,
+     publicClient: parentChainPublicClient,
+     walletClient,
+   });
+   ```
+
+### Additional Notes
+
+- Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
+- Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
+- The owner address gains control over upgrades and settings—use a secure multisig in production.
+- For production, consider a Rollup-as-a-Service (RaaS) provider for monitoring and scaling.
+- **Verification**: This SDK-based method deploys directly via smart contract interactions and does not involve any UI or portal (the portal is for asset bridging, not chain deployment).
 
 ## `baseStake`
 
@@ -50,7 +152,111 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 ### How to configure
 
-<!-- Need directions not part of the Portal -->
+1. **Prepare the Chain Configuration**:
+   Generate the base chain config using `prepareChainConfig`. Set the `chainId` and initial owner.
+
+   ```typescript
+   import { prepareChainConfig } from '@arbitrum/orbit-sdk';
+
+   const chainConfig = prepareChainConfig({
+     chainId: 123456, // Replace with your desired chain ID
+     arbitrum: {
+       InitialChainOwner: '0xYourOwnerAddressHere', // Wallet address that will own the chain
+       DataAvailabilityCommittee: false, // Set to true for AnyTrust chains (DAC)
+     },
+   });
+   ```
+
+2. **Set Up the Public Client for the Parent Chain**:
+   Create a public client to interact with the parent chain.
+
+   ```typescript
+   import { createPublicClient, http } from 'viem';
+   import { sepolia } from 'viem/chains'; // Example: Use 'mainnet' or 'arbitrumOne' as needed
+
+   const parentChainPublicClient = createPublicClient({
+     chain: sepolia, // Replace with your parent chain (e.g., arbitrumOne)
+     transport: http('https://your-parent-chain-rpc-url'), // Replace with actual RPC URL
+   });
+   ```
+
+3. **Prepare Deployment Parameters, Including `stakeToken`**:
+   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
+
+   ```typescript
+   import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
+
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
+     parentChainPublicClient,
+     {
+       chainId: 123456, // Must match the chainId from Step 1
+       owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
+       chainConfig,
+       stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
+       baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
+       // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
+     },
+   );
+   ```
+
+4. **Deploy the Chain**:
+   Use `createRollup` to deploy. Provide validator and batch poster addresses. This step sends the transaction to the parent chain.
+
+   ```typescript
+   import { createWalletClient } from 'viem';
+   import { privateKeyToAccount } from 'viem/accounts';
+   import { createRollup } from '@arbitrum/orbit-sdk';
+
+   const deployerAccount = privateKeyToAccount('0xYourDeployerPrivateKeyHere'); // Securely manage this
+
+   const walletClient = createWalletClient({
+     account: deployerAccount,
+     chain: sepolia, // Match parent chain
+     transport: http('https://your-parent-chain-rpc-url'),
+   });
+
+   const createRollupResults = await createRollup({
+     params: {
+       config: createRollupConfig,
+       batchPosters: ['0xYourBatchPosterAddressHere'], // Address for posting batches
+       validators: ['0xYourValidatorAddressHere'], // Validator addresses
+       // Optional: nativeToken: '0xCustomGasTokenAddress' for custom fee tokens
+     },
+     account: deployerAccount,
+     publicClient: parentChainPublicClient,
+     walletClient,
+   });
+
+   console.log('Deployment Transaction Hash:', createRollupResults.transactionHash);
+   console.log('Core Contracts:', createRollupResults.coreContracts);
+   ```
+
+5. **Post-Deployment (If Using AnyTrust)**:
+   If `DataAvailabilityCommittee` is `true`, set the DAC keyset in the `SequencerInbox`.
+
+   ```typescript
+   import { setValidKeyset } from '@arbitrum/orbit-sdk';
+
+   // Generate or provide your keyset (BLS public keys for the committee)
+   const keyset = '0xYourGeneratedKeysetHere';
+
+   const setKeysetResults = await setValidKeyset({
+     coreContracts: createRollupResults.coreContracts,
+     keyset,
+     publicClient: parentChainPublicClient,
+     walletClient,
+   });
+   ```
+
+### Additional notes
+
+- **Validators and Staking**: After deployment, validators bond by depositing at least `baseStake` of the `stakeToken` into the Rollup contract. This can be done via contract calls (e.g., using the `RollupUserLogic` interface).
+- **Warnings**:
+  - Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
+  - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
+  - The owner address gains control over upgrades and settings—use a secure multisig in production.
+  - For production, consider a Rollup-as-a-Service (RaaS) provider for monitoring and scaling.
+- **Verification**: This SDK-based method deploys directly via smart contract interactions and does not involve any UI or portal (the portal is for asset bridging, not chain deployment).
 
 ## `loserStakeEscrow`
 
@@ -61,12 +267,106 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
 - Funds are escrowed rather than immediately burned, allowing potential recovery or governance decisions.
 - Recommended: Set to an address controlled by the chain owner(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
 
-### How to configure
+### Configuring During Deployment
 
-- **During deployment**: Set in the `loserStakeEscrow` field of the `RollupCreator` configuration.
-- **Post-deployment**:
-  1. As the chain owner or upgrade executor, call the `Rollup.setLoserStakeEscrow`(address `newEscrow`) function on the [Rollup contract](https://github.com/OffchainLabs/arbitrum-orbit-deployment-ui/blob/e4e82fca2428ad4c8a20ef19b7b958293ffef958/src/types/rollupConfigDataType.ts).
-  2. Use tools like Etherscan or a wallet (e.g., MetaMask) to interact with the contract on the parent chain.
+1. **Prepare Chain Config**:
+
+   ```typescript
+   import { prepareChainConfig } from '@arbitrum/orbit-sdk';
+
+   const chainConfig = prepareChainConfig({
+     chainId: 123456, // Your unique chain ID
+     arbitrum: {
+       InitialChainOwner: '0xYourOwnerAddressHere',
+       DataAvailabilityCommittee: false, // True for AnyTrust chains
+     },
+   });
+   ```
+
+2. **Set Up Parent Chain Client**:
+
+   ```typescript
+   import { createPublicClient, http } from 'viem';
+   import { sepolia } from 'viem/chains';
+
+   const parentChainPublicClient = createPublicClient({
+     chain: sepolia, // Replace with your parent chain
+     transport: http('https://your-parent-rpc-url'),
+   });
+   ```
+
+3. **Prepare Deployment Params, Including `loserStakeEscrow`**:
+   Set `loserStakeEscrow` as an address (string). There is no explicit default documented, but if omitted, it may revert to a system default (e.g., zero address)—always specify for control.
+
+   ```typescript
+   import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
+
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
+     parentChainPublicClient,
+     {
+       chainId: 123456,
+       owner: '0xYourOwnerAddressHere',
+       chainConfig,
+       loserStakeEscrow: '0xYourEscrowAddressHere', // e.g., owner-controlled or burn address
+       // Optional: baseStake: 100000000000000000n, stakeToken: '0xERC20Address', etc.
+     },
+   );
+   ```
+
+4. **Deploy the Chain**:
+
+   ```typescript
+   import { createWalletClient } from 'viem';
+   import { privateKeyToAccount } from 'viem/accounts';
+   import { createRollup } from '@arbitrum/orbit-sdk';
+
+   const deployerAccount = privateKeyToAccount('0xYourPrivateKey');
+
+   const walletClient = createWalletClient({
+     account: deployerAccount,
+     chain: sepolia,
+     transport: http('https://your-parent-rpc-url'),
+   });
+
+   const createRollupResults = await createRollup({
+     params: {
+       config: createRollupConfig,
+       batchPosters: ['0xYourBatchPosterAddress'],
+       validators: ['0xYourValidatorAddress'],
+     },
+     account: deployerAccount,
+     publicClient: parentChainPublicClient,
+     walletClient,
+   });
+
+   console.log('Rollup Address:', createRollupResults.coreContracts.rollup);
+   ```
+
+5. **For AnyTrust Chains**:
+   If `DataAvailabilityCommittee` is `true`, configure the DAC keyset post-deployment using `setValidKeyset` from the SDK.
+
+### Updating `loserStakeEscrow` Post-Deployment
+
+The chain owner can update it by calling `setLoserStakeEscrow` on the deployed Rollup contract (address from `createRollupResults.coreContracts.rollup`):
+
+```typescript
+import { parseAbi } from 'viem';
+
+const rollupAbi = parseAbi(['function setLoserStakeEscrow(address newLoserStakedEscrow) external']);
+
+await walletClient.writeContract({
+  address: '0xYourRollupAddress',
+  abi: rollupAbi,
+  functionName: 'setLoserStakeEscrow',
+  args: ['0xNewEscrowAddressHere'],
+});
+```
+
+### Additional Notes
+
+- This process requires the caller to be the owner. Changes affect how challenge losses are handled, so test thoroughly.
+- Setting `loserStakeEscrow` to a burn address increases the cost of failed challenges, enhancing security.
+- Deploy on testnets first; mainnet deployments are costly and permanent.
 
 ## Validator configurations and how to setup them up
 
