@@ -241,12 +241,10 @@ const config = {
               {
                 label: 'Build with Solidity',
                 to: '/build-decentralized-apps/quickstart-solidity-remix',
-                sidebarExpand: 'solidity',
               },
               {
                 label: 'Build with Stylus',
                 to: '/stylus/quickstart',
-                sidebarExpand: 'stylus',
               },
             ],
           },
