@@ -20,11 +20,45 @@ import './styles.css';
 // Import all config partials statically to avoid CSP issues
 import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/partials/config-custom-gas-token.mdx';
 import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/config-alt-da.mdx';
+import ConfigDedicatedThroughput from '@site/docs/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx';
+import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/partials/config-native-eth.mdx';
+import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-hardware.mdx';
+import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/config-rollup.mdx';
+import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/config-anytrust.mdx';
+import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx';
+import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/config-timeboost.mdx';
+import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/config-bold.mdx';
+import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/config-permissioned-validators.mdx';
+import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
+import ConfigForceInclusion from '@site/docs/launch-arbitrum-chain/partials/config-force-inclusion.mdx';
+import ConfigAccountAbstraction from '@site/docs/launch-arbitrum-chain/partials/config-account-abstraction.mdx';
+import ConfigChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-challenge-period-l1.mdx';
+import ConfigCustomizableGovernance from '@site/docs/launch-arbitrum-chain/partials/config-customizable-governance.mdx';
+import ConfigDataPostingCosts from '@site/docs/launch-arbitrum-chain/partials/config-data-posting-costs.mdx';
+import ConfigEVMCompatibility from '@site/docs/launch-arbitrum-chain/partials/config-evm-compatbility.mdx';
+import ConfigOtherLanguageSupport from '@site/docs/launch-arbitrum-chain/partials/config-other-language-support.mdx';
 
 // Static content mapping
 const contentMap = {
   'config-custom-gas-token': ConfigCustomGasToken,
   'config-alt-da': ConfigAltDa,
+  'config-dedicated-throughput': ConfigDedicatedThroughput,
+  'config-native-eth': ConfigNativeEth,
+  'config-hardware': ConfigHardware,
+  'config-rollup': ConfigRollup,
+  'config-anytrust': ConfigAnytrust,
+  'config-fast-withdrawals': ConfigFastwithdrawals,
+  'config-timeboost': ConfigTimeboost,
+  'config-bold': ConfigBold,
+  'config-permissioned-validators': ConfigPermissionedValidators,
+  'config-l1-challenge-period': ConfigL1ChallengePeriod,
+  'config-force-inclusion': ConfigForceInclusion,
+  'config-account-abstraction': ConfigAccountAbstraction,
+  'config-challenge-period-l1': ConfigChallengePeriod,
+  'config-customizable-governance': ConfigCustomizableGovernance,
+  'config-data-posting-costs': ConfigDataPostingCosts,
+  'config-evm-compatibility': ConfigEVMCompatibility,
+  'config-other-language-support': ConfigOtherLanguageSupport,
 };
 
 // MDX components for proper rendering
@@ -77,7 +111,7 @@ export function FloatingHoverModal({ href, children }) {
 
   const hover = useHover(context, {
     move: false,
-    delay: { open: 300, close: 100 },
+    delay: { open: 150, close: 150 },
   });
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
@@ -98,7 +132,7 @@ export function FloatingHoverModal({ href, children }) {
         {children}
       </button>
 
-      {isOpen && ContentComponent && (
+      {isOpen && (
         <FloatingPortal>
           <div
             ref={refs.setFloating}
@@ -116,9 +150,18 @@ export function FloatingHoverModal({ href, children }) {
               </button>
             </div>
             <div className="floating-hover-modal__body">
-              <MDXProvider components={mdxComponents}>
-                <ContentComponent />
-              </MDXProvider>
+              {ContentComponent ? (
+                <MDXProvider components={mdxComponents}>
+                  <ContentComponent />
+                </MDXProvider>
+              ) : (
+                <div className="floating-modal__error">
+                  <h2 className="floating-modal__subtitle">Content Not Available</h2>
+                  <p className="floating-modal__paragraph">
+                    The content for "{contentKey}" is not currently available.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </FloatingPortal>

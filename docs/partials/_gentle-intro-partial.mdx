@@ -1,8 +1,16 @@
+---
+partial_type: content
+title: 'Arbitrum: Introduction'
+description: 'FAQ-style introduction to Arbitrum technology and ecosystem'
+author: anegg0
+last_reviewed: 2025-01-15
+---
+
 import ImageZoom from '@site/src/components/ImageZoom';
 
-#### Q: Hello! What’s Arbitrum?
+#### Q: Hello! What's Arbitrum?
 
-Hi! <a data-quicklook-from='arbitrum'>Arbitrum</a> is a technology suite designed to scale Ethereum. You can use Arbitrum chains to do all things you do on Ethereum — use Web3 apps, deploy smart contracts, etc., but your transactions will be cheaper and faster. Our flagship product — Arbitrum Rollup — is an Optimistic rollup protocol that inherits Ethereum-level security.
+Hi! <a data-quicklook-from='arbitrum'>Arbitrum</a> is a technology suite designed to scale Ethereum. You can use Arbitrum chains to do all things you do on Ethereum—use Web3 apps, deploy smart contracts, etc., but your transactions will be cheaper and faster. Our flagship product—Arbitrum Rollup—is an Optimistic rollup protocol that inherits Ethereum-level security.
 
 #### Q: What, what’s “Ethereum”? What's a “smart contract”? Where am I?
 
@@ -31,7 +39,7 @@ Yes, indeed we can be. This is where the “rollup” part comes in. The data th
 
 #### Q: Who actually does this work (of checking for fraud, proving it, etc?)
 
-The parties who move the Arbitrum chain state forward on L1 — i.e., making claims about the chain’s state, disputing other’s claims, etc. — are called validators.
+The parties who move the Arbitrum chain state forward on L1 — i.e., making claims about the chain’s state, disputing other’s claims, etc.—are called validators.
 In practice, we don’t expect the average Arbitrum user to be interested in running a
 validator, just like the average Ethereum user typically doesn’t run their own layer 1 staking node. The crucial property, however, is that anybody can; becoming an Arbitrum validator requires no special permission ([once the allowlist is lifted](https://docs.arbitrum.foundation/state-of-progressive-decentralization)), only that a user runs the [open source validator software](https://github.com/OffchainLabs/nitro) (and bonds `ETH` when/if they need to take action).
 
@@ -39,11 +47,11 @@ Additionally, as long as there’s even just one honest validator, the chain wil
 
 #### Q: And how exactly is “fraud” “proven”? Sounds complicated.
 
-Oh, it’s not so bad. In essence, if two validators disagree, only one of them (at most) can be telling the truth. In a dispute, the two validators play an interactive, call-and-response game in which they narrow down their dispute to a single computational step (think of something small and simple, like multiplying two numbers). This one step gets executed on L1 and will necessarily prove that the honest party was telling the truth. For a more detailed rundown, see [here](/how-arbitrum-works/05-validation-and-proving/01-validation-and-proving.mdx).
+Oh, it’s not so bad. In essence, if two validators disagree, only one of them (at most) can be telling the truth. In a dispute, the two validators play an interactive, call-and-response game in which they narrow down their dispute to a single computational step (think of something small and simple, like multiplying two numbers). This one step gets executed on L1 and will necessarily prove that the honest party was telling the truth. For a more detailed rundown, see [here](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
 
 #### Q: This dispute game obviously takes some time; does this impose any sort of delay on Arbitrum users' transactions?
 
-The only delay that's felt by a user is in "withdrawing" — moving their funds from Arbitrum back to Ethereum; if users are withdrawing directly from Arbitrum to Ethereum, they must typically wait 1 week before receiving their funds on L1. If users use a fast-<a data-quicklook-from="bridge">Bridge</a> application, however, they can bypass this delay period entirely (likely for a small fee). Anything else a user does — i.e., depositing funds from Ethereum onto Arbitrum, or using a <a data-quicklook-from="dapp">dApp</a> deployed on an Arbitrum chain — doesn't incur this delay period.
+The only delay that's felt by a user is in "withdrawing" — moving their funds from Arbitrum back to Ethereum; if users are withdrawing directly from Arbitrum to Ethereum, they must typically wait 1 week before receiving their funds on L1. If users use a fast-<a data-quicklook-from="bridge">Bridge</a> application, however, they can bypass this delay period entirely (likely for a small fee). Anything else a user does — i.e., depositing funds from Ethereum onto Arbitrum, or using a <a data-quicklook-from="dapp">decentralized app</a> deployed on an Arbitrum chain — doesn't incur this delay period.
 
 #### Q: Okay, so backing up: the “optimistic execution” part is how and why Arbitrum is able to offer low fees, yes?
 
@@ -55,7 +63,7 @@ For one, Arbitrum transactions are submitted on the L1 in batches; typically, a 
 We really meant it, yes.
 Different layer 2 protocols emphasize and optimize for different things; Arbitrum was created with Ethereum compatibility as a top priority. This means users can use Arbitrum with all their favorite Ethereum wallets; developers can build and deploy contracts with all their favorite Ethereum libraries and tooling; in fact, most of the time, the experience of using Arbitrum will feel identical to that of using Ethereum (with the important exception of it being much cheaper and faster).
 
-Much development went into achieving this level of Ethereum compatibility. But at its core: the Arbitrum itself uses a fork of [Geth](/how-arbitrum-works/04-state-transition-function/04-modified-geth-on-arbitrum.mdx) — the most widely used Ethereum implementation — with modifications to transform it into a trustless layer 2. This means most of the code running in Arbitrum is identical to the code running in Ethereum. We call this cutting-edge approach Nitro (developers can see the codebase [here](https://github.com/OffchainLabs/nitro)).
+Much development went into achieving this level of Ethereum compatibility. But at its core: the Arbitrum itself uses a fork of [Geth](/how-arbitrum-works/deep-dives/geth.mdx) — the most widely used Ethereum implementation — with modifications to transform it into a trustless layer 2. This means most of the code running in Arbitrum is identical to the code running in Ethereum. We call this cutting-edge approach Nitro (developers can see the codebase [here](https://github.com/OffchainLabs/nitro)).
 
 #### Q: So builders can do all the stuff they do on Ethereum on Arbitrum, nice! But can they do _more_?
 
@@ -63,7 +71,7 @@ They can; the latest version of the Arbitrum tech stack, called <a data-quickloo
 
 #### Q: So it sounds like Arbitrum Rollup is an ideal solution that solves any and all scaling problems…?
 
-Arbitrum Rollup is very awesome and cool; its design is geared heavily toward avoidance of introducing any centralization or trust assumptions, and it is thus a clear, strict net-win for the Ethereum ecosystem. Decentralization, however, comes at a (literal) price, and not all applications and users necessarily want or need to pay that price. For dapp use-cases with different security considerations, different tools in the Arbitrum suite are appropriate; i.e., Arbitrum AnyTrust chains!
+Arbitrum Rollup is very awesome and cool; its design is geared heavily toward avoidance of introducing any centralization or trust assumptions, and it is thus a clear, strict net-win for the Ethereum ecosystem. Decentralization, however, comes at a (literal) price, and not all applications and users necessarily want or need to pay that price. For <a data-quicklook-from="dapp">app</a> use-cases with different security considerations, different tools in the Arbitrum suite are appropriate; i.e., Arbitrum AnyTrust chains!
 
 #### Q: What’s an AnyTrust chain?
 

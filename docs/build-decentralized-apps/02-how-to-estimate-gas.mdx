@@ -3,6 +3,7 @@ title: 'How to estimate gas in Arbitrum'
 description: Learn how to estimate gas before submitting transactions.
 author: TucksonDev
 content_type: how-to
+displayed_sidebar: buildAppsSidebar
 ---
 
 :::info Looking for Stylus guidance?
@@ -11,7 +12,7 @@ Head over to [the Stylus gas docs](/stylus/reference/opcode-hostio-pricing) for 
 
 :::
 
-This how-to is intended for users and developers interested in understanding how gas operates in Arbitrum, how it's calculated, and how to estimate it before submitting transactions. More detailed information about these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/how-arbitrum-works/09-gas-fees.mdx) page.
+This how-to is intended for users and developers interested in understanding how gas operates in Arbitrum, how it's calculated, and how to estimate it before submitting transactions. More detailed information about these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) page.
 
 ## Skip the formula, focus on practical know-how
 
@@ -21,7 +22,7 @@ Multiplying the value obtained from `eth_estimateGas` by the child chain gas pri
 
 Alternatively, to obtain the gas limit for your transaction, you can call `NodeInterface.gasEstimateComponents()` and then use the first result, which is `gasEstimate`. Next, to find the total cost, you need to multiply this amount by the child chain gas price, which is available in the third result, `baseFee`.
 
-Note that when working with parent to child chain messages (also known as [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)), you can use the function [`L1ToL2MessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.7.1@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
+Note that when working with parent to child chain messages (also known as [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)), you can use the function [`L1ToL2MessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
 
 ## Breaking down the formula
 
@@ -35,7 +36,7 @@ As explained in the Medium article, the transaction fees to pay at any given mom
 Transaction fees (TXFEES) = L2 Gas Price (P) * Gas Limit (G)
 ```
 
-This Gas Limit includes the gas of the child chain computation and an additional buffer to cover the parent chain gas to be paid by the Sequencer when [posting the batch including this transaction on the parent chain](/how-arbitrum-works/03-sequencer.mdx).
+This Gas Limit includes the gas of the child chain computation and an additional buffer to cover the parent chain gas to be paid by the Sequencer when [posting the batch including this transaction on the parent chain](/how-arbitrum-works/deep-dives/sequencer.mdx).
 
 ```
 Gas Limit (G) = Gas used on L2 (L2G) + Extra Buffer for L1 cost (B)
@@ -46,7 +47,7 @@ This buffer takes into account the cost of posting the transaction, batched and 
 - L1S, which estimates the amount of data the transaction will take up in the batch by compressing the transaction with Brotli.
 - L1P, which is the child chain's estimated view of the current parent chain's price of data (per byte), which the child chain dynamically adjusts over time.
 
-More information is available [in this page](/how-arbitrum-works/09-gas-fees.mdx).
+More information is available [in this page](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 ```
 L1 Estimated Cost (L1C) = L1 price per byte of data (L1P) * Size of data to be posted in bytes (L1S)
@@ -75,7 +76,7 @@ We'll use one resource available in Arbitrum: the [`NodeInterface`](/build-decen
 - L1P (L1 estimated price per byte of data) ⇒ Estimated cost of posting 1 byte of data on the parent chain:
   - Call `NodeInterface.GasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
 - L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on the parent chain (140 bytes). We can do a small calculation to obtain this value: call `NodeInterface.GasEstimateComponents()` take the second element, `gasEstimateForL1` (this is equivalent to `B` in our formula), multiply it by P and divide it by L1P.
-  - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/how-arbitrum-works/08-anytrust-protocol.mdx#data-availability-certificates).
+  - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx#data-availability-certificates).
 
 :::note
 For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`

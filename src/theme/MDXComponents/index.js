@@ -4,6 +4,7 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 export default {
   ...MDXComponents,
+  ImageZoom,
   img: (props) => {
     // Don't wrap images that are explicitly marked to not zoom
     if (props.className?.includes('no-zoom')) {
