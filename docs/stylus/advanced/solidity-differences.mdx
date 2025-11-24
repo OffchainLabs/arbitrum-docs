@@ -1,6 +1,6 @@
 ---
 title: 'Differences between Solidity and Stylus'
-description: 'Solidity and Stylus differences'
+description: 'Learn the key differences between writing smart contracts in Solidity versus Stylus Rust'
 author: chrisco
 sme: chrisco
 sidebar_position: 1
@@ -8,4 +8,735 @@ target_audience: Developers who need to compare Stylus with Solidity.
 displayed_sidebar: buildAppsSidebar
 ---
 
-TBD
+Stylus introduces a new paradigm for writing smart contracts on Arbitrum using Rust and other WebAssembly-compatible languages. While Stylus contracts maintain full interoperability with Solidity contracts, there are important differences in how you structure and write code. This guide helps Solidity developers understand these differences.
+
+## Language and syntax
+
+### Contract structure
+
+**Solidity:**
+
+```solidity
+contract MyContract {
+    uint256 private value;
+    address public owner;
+
+    constructor(uint256 initialValue) {
+        value = initialValue;
+        owner = msg.sender;
+    }
+
+    function setValue(uint256 newValue) public {
+        value = newValue;
+    }
+}
+```
+
+**Stylus (Rust):**
+
+```rust
+use stylus_sdk::prelude::*;
+use stylus_sdk::alloy_primitives::{Address, U256};
+
+#[storage]
+#[entrypoint]
+pub struct MyContract {
+    value: StorageU256,
+    owner: StorageAddress,
+}
+
+#[public]
+impl MyContract {
+    #[constructor]
+    pub fn constructor(&mut self, initial_value: U256) {
+        self.value.set(initial_value);
+        self.owner.set(self.vm().msg_sender());
+    }
+
+    pub fn set_value(&mut self, new_value: U256) {
+        self.value.set(new_value);
+    }
+}
+```
+
+### Key structural differences
+
+1. **Attributes over keywords**: Stylus uses Rust attributes (`#[storage]`, `#[entrypoint]`, `#[public]`) instead of Solidity keywords
+2. **Explicit storage types**: Storage variables use special types like `StorageU256`, `StorageAddress`
+3. **Getter/setter pattern**: Storage access requires explicit `.get()` and `.set()` calls
+4. **Module system**: Rust uses `mod` and `use` for imports instead of `import`
+
+## Function visibility and state mutability
+
+### Visibility
+
+**Solidity:**
+
+```solidity
+function publicFunc() public {}
+function externalFunc() external {}
+function internalFunc() internal {}
+function privateFunc() private {}
+```
+
+**Stylus:**
+
+```rust
+#[public]
+impl MyContract {
+    // Public external functions
+    pub fn public_func(&self) {}
+
+    // Internal functions (not in #[public] block)
+    fn internal_func(&self) {}
+
+    // Private functions
+    fn private_func(&self) {}
+}
+```
+
+In Stylus:
+
+- Functions in `#[public]` blocks are externally callable
+- Regular `pub fn` outside `#[public]` blocks are internal
+- Non-pub functions are private to the module
+
+### State mutability
+
+**Solidity:**
+
+```solidity
+function viewFunc() public view returns (uint256) {}
+function pureFunc() public pure returns (uint256) {}
+function payableFunc() public payable {}
+```
+
+**Stylus:**
+
+```rust
+#[public]
+impl MyContract {
+    // View function (immutable reference)
+    pub fn view_func(&self) -> U256 {
+        self.value.get()
+    }
+
+    // Pure function (no self reference)
+    pub fn pure_func(a: U256, b: U256) -> U256 {
+        a + b
+    }
+
+    // Payable function
+    #[payable]
+    pub fn payable_func(&mut self) {
+        // Can receive Ether
+    }
+
+    // Write function (mutable reference)
+    pub fn write_func(&mut self) {
+        self.value.set(U256::from(42));
+    }
+}
+```
+
+State mutability in Stylus is determined by:
+
+- `&self` → View (read-only)
+- `&mut self` → Write (can modify storage)
+- No `self` → Pure (no storage access)
+- `#[payable]` → Can receive Ether
+
+## Constructors
+
+**Solidity:**
+
+```solidity
+constructor(uint256 initialValue) {
+    value = initialValue;
+}
+```
+
+**Stylus:**
+
+```rust
+#[public]
+impl MyContract {
+    #[constructor]
+    pub fn constructor(&mut self, initial_value: U256) {
+        self.value.set(initial_value);
+    }
+}
+```
+
+Key differences:
+
+- Use `#[constructor]` attribute
+- Constructor name is always `constructor`
+- Can be marked `#[payable]` if needed
+- Called only once during deployment
+- Each contract struct can have only one constructor
+
+## Modifiers
+
+Solidity modifiers don't exist in Stylus. Instead, use regular Rust patterns.
+
+**Solidity:**
+
+```solidity
+modifier onlyOwner() {
+    require(msg.sender == owner, "Not owner");
+    _;
+}
+
+function sensitiveFunction() public onlyOwner {
+    // Function logic
+}
+```
+
+**Stylus:**
+
+```rust
+impl MyContract {
+    fn only_owner(&self) -> Result<(), Vec<u8>> {
+        if self.owner.get() != self.vm().msg_sender() {
+            return Err(b"Not owner".to_vec());
+        }
+        Ok(())
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn sensitive_function(&mut self) -> Result<(), Vec<u8>> {
+        self.only_owner()?;
+        // Function logic
+        Ok(())
+    }
+}
+```
+
+Or using custom errors:
+
+```rust
+sol! {
+    error Unauthorized();
+}
+
+#[derive(SolidityError)]
+pub enum MyErrors {
+    Unauthorized(Unauthorized),
+}
+
+impl MyContract {
+    fn only_owner(&self) -> Result<(), MyErrors> {
+        if self.owner.get() != self.vm().msg_sender() {
+            return Err(MyErrors::Unauthorized(Unauthorized {}));
+        }
+        Ok(())
+    }
+}
+```
+
+## Fallback and receive functions
+
+**Solidity:**
+
+```solidity
+receive() external payable {
+    // Handle plain Ether transfers
+}
+
+fallback() external payable {
+    // Handle unmatched calls
+}
+```
+
+**Stylus:**
+
+```rust
+#[public]
+impl MyContract {
+    #[receive]
+    #[payable]
+    pub fn receive(&mut self) -> Result<(), Vec<u8>> {
+        // Handle plain Ether transfers
+        Ok(())
+    }
+
+    #[fallback]
+    #[payable]
+    pub fn fallback(&mut self, calldata: &[u8]) -> ArbResult {
+        // Handle unmatched calls
+        Ok(Vec::new())
+    }
+}
+```
+
+Key differences:
+
+- Use `#[receive]` and `#[fallback]` attributes
+- Receive function takes no parameters
+- Fallback function receives calldata as a parameter
+- Both return `Result` types
+
+## Events
+
+**Solidity:**
+
+```solidity
+event Transfer(address indexed from, address indexed to, uint256 value);
+
+function transfer() public {
+    emit Transfer(msg.sender, recipient, amount);
+}
+```
+
+**Stylus:**
+
+```rust
+sol! {
+    event Transfer(address indexed from, address indexed to, uint256 value);
+}
+
+#[public]
+impl MyContract {
+    pub fn transfer(&mut self, recipient: Address, amount: U256) {
+        self.vm().log(Transfer {
+            from: self.vm().msg_sender(),
+            to: recipient,
+            value: amount,
+        });
+    }
+}
+```
+
+Key differences:
+
+- Define events in `sol!` macro
+- Emit using `self.vm().log()`
+- Up to 3 parameters can be indexed
+- Can also use `raw_log()` for custom logging
+
+## Error handling
+
+**Solidity:**
+
+```solidity
+error InsufficientBalance(uint256 requested, uint256 available);
+
+function withdraw(uint256 amount) public {
+    if (balance < amount) {
+        revert InsufficientBalance(amount, balance);
+    }
+}
+```
+
+**Stylus:**
+
+```rust
+sol! {
+    error InsufficientBalance(uint256 requested, uint256 available);
+}
+
+#[derive(SolidityError)]
+pub enum MyErrors {
+    InsufficientBalance(InsufficientBalance),
+}
+
+#[public]
+impl MyContract {
+    pub fn withdraw(&mut self, amount: U256) -> Result<(), MyErrors> {
+        let balance = self.balance.get();
+        if balance < amount {
+            return Err(MyErrors::InsufficientBalance(InsufficientBalance {
+                requested: amount,
+                available: balance,
+            }));
+        }
+        Ok(())
+    }
+}
+```
+
+Key differences:
+
+- Define errors in `sol!` macro
+- Create error enum with `#[derive(SolidityError)]`
+- Return `Result<T, ErrorType>`
+- Use Rust's `?` operator for error propagation
+
+## Inheritance
+
+**Solidity:**
+
+```solidity
+contract Base {
+    function baseFoo() public virtual {}
+}
+
+contract Derived is Base {
+    function baseFoo() public override {}
+}
+```
+
+**Stylus:**
+
+```rust
+#[public]
+trait IBase {
+    fn base_foo(&self);
+}
+
+#[storage]
+struct Base {}
+
+#[public]
+impl IBase for Base {
+    fn base_foo(&self) {
+        // Implementation
+    }
+}
+
+#[storage]
+#[entrypoint]
+struct Derived {
+    base: Base,
+}
+
+#[public]
+#[implements(IBase)]
+impl Derived {}
+
+#[public]
+impl IBase for Derived {
+    fn base_foo(&self) {
+        // Override implementation
+    }
+}
+```
+
+Key differences:
+
+- Use Rust traits for interfaces
+- Composition through storage fields
+- Use `#[implements()]` to expose inherited interfaces
+- No `virtual` or `override` keywords
+
+## Storage
+
+### Storage slots
+
+**Solidity:**
+
+```solidity
+uint256 public value;
+mapping(address => uint256) public balances;
+uint256[] public items;
+```
+
+**Stylus:**
+
+```rust
+#[storage]
+pub struct MyContract {
+    value: StorageU256,
+    balances: StorageMap<Address, StorageU256>,
+    items: StorageVec<StorageU256>,
+}
+```
+
+### Storage access
+
+**Solidity:**
+
+```solidity
+value = 42;
+uint256 x = value;
+balances[user] = 100;
+```
+
+**Stylus:**
+
+```rust
+self.value.set(U256::from(42));
+let x = self.value.get();
+self.balances.setter(user).set(U256::from(100));
+```
+
+Key differences:
+
+- Explicit storage types (`Storage*`)
+- Must use `.get()` and `.set()`
+- Maps use `.setter()` for write access
+- Storage layout is compatible with Solidity
+
+## Constants and immutables
+
+**Solidity:**
+
+```solidity
+uint256 public constant MAX_SUPPLY = 1000000;
+address public immutable OWNER;
+
+constructor() {
+    OWNER = msg.sender;
+}
+```
+
+**Stylus:**
+
+```rust
+const MAX_SUPPLY: u64 = 1000000;
+
+#[storage]
+#[entrypoint]
+pub struct MyContract {
+    owner: StorageAddress,  // Set in constructor
+}
+
+#[public]
+impl MyContract {
+    #[constructor]
+    pub fn constructor(&mut self) {
+        self.owner.set(self.vm().msg_sender());
+    }
+}
+```
+
+Key differences:
+
+- Use Rust `const` for constants
+- No direct equivalent to `immutable` (use storage set once in constructor)
+- Constants can be defined outside structs
+
+## Type system
+
+### Integer types
+
+| Solidity             | Stylus (Rust)          | Notes                                 |
+| -------------------- | ---------------------- | ------------------------------------- |
+| `uint8` to `uint256` | `u8` to `u128`, `U256` | Native Rust types or Alloy primitives |
+| `int8` to `int256`   | `i8` to `i128`, `I256` | Signed integers                       |
+| `address`            | `Address`              | 20-byte addresses                     |
+| `bytes`              | `Bytes`                | Dynamic bytes                         |
+| `bytesN`             | `FixedBytes<N>`        | Fixed-size bytes                      |
+| `string`             | `String`               | UTF-8 strings                         |
+
+### Arrays and mappings
+
+| Solidity                      | Stylus (Rust)                                                | Notes          |
+| ----------------------------- | ------------------------------------------------------------ | -------------- |
+| `uint256[]`                   | `Vec<U256>` (memory)<br/>`StorageVec<StorageU256>` (storage) | Dynamic arrays |
+| `uint256[5]`                  | `[U256; 5]`                                                  | Fixed arrays   |
+| `mapping(address => uint256)` | `StorageMap<Address, StorageU256>`                           | Key-value maps |
+
+## Global variables and functions
+
+### Block and transaction properties
+
+| Solidity          | Stylus (Rust)                 |
+| ----------------- | ----------------------------- |
+| `msg.sender`      | `self.vm().msg_sender()`      |
+| `msg.value`       | `self.vm().msg_value()`       |
+| `msg.data`        | Access through calldata       |
+| `tx.origin`       | `self.vm().tx_origin()`       |
+| `tx.gasprice`     | `self.vm().tx_gas_price()`    |
+| `block.number`    | `self.vm().block_number()`    |
+| `block.timestamp` | `self.vm().block_timestamp()` |
+| `block.basefee`   | `self.vm().block_basefee()`   |
+| `block.coinbase`  | `self.vm().block_coinbase()`  |
+
+### Cryptographic functions
+
+| Solidity          | Stylus (Rust)                      |
+| ----------------- | ---------------------------------- |
+| `keccak256(data)` | `self.vm().native_keccak256(data)` |
+| `sha256(data)`    | Use external crate                 |
+| `ecrecover(...)`  | Use `crypto::recover()`            |
+
+## External calls
+
+**Solidity:**
+
+```solidity
+(bool success, bytes memory data) = address.call{value: amount}(data);
+```
+
+**Stylus:**
+
+```rust
+use stylus_sdk::call::RawCall;
+
+let result = unsafe {
+    RawCall::new(self.vm())
+        .value(amount)
+        .call(address, &data)
+};
+```
+
+Key differences:
+
+- Use `RawCall` for raw calls
+- Calls are `unsafe` in Rust
+- Use type-safe interfaces when possible via `sol_interface!`
+
+## Contract deployment
+
+**Solidity:**
+
+```solidity
+new MyContract{value: amount}(arg1, arg2);
+```
+
+**Stylus:**
+
+```rust
+use stylus_sdk::deploy::RawDeploy;
+
+let contract_address = unsafe {
+    RawDeploy::new(self.vm())
+        .value(amount)
+        .deploy(&bytecode, salt)?
+};
+```
+
+## Assembly
+
+**Solidity:**
+
+```solidity
+assembly {
+    let x := mload(0x40)
+    sstore(0, x)
+}
+```
+
+**Stylus:**
+
+Stylus does not support inline assembly. Instead:
+
+- Use hostio functions for low-level operations
+- Use Rust's `unsafe` blocks when necessary
+- Direct memory manipulation through safe Rust APIs
+
+## Features not in Stylus
+
+1. **No inline assembly**: Use hostio or safe Rust instead
+2. **No `selfdestruct`**: Deprecated in Ethereum, not available in Stylus
+3. **No `delegatecall` from storage**: Available but requires careful use
+4. **No modifier syntax**: Use regular functions
+5. **No multiple inheritance complexity**: Use trait-based composition
+
+## Features unique to Stylus
+
+1. **Rust's type system**: Strong compile-time guarantees
+2. **Zero-cost abstractions**: No overhead for safe code patterns
+3. **Cargo ecosystem**: Access to thousands of Rust crates
+4. **Memory safety**: Rust's borrow checker prevents common bugs
+5. **Better performance**: Wasm execution can be more efficient
+6. **Testing framework**: Use Rust's built-in testing with `TestVM`
+
+## Memory and gas costs
+
+### Memory management
+
+- **Solidity**: Automatic memory management with gas costs for allocation
+- **Stylus**: Manual control with Rust's ownership system, more efficient memory usage
+
+### Gas efficiency
+
+Stylus programs typically use less gas than equivalent Solidity:
+
+- More efficient Wasm execution
+- Better compiler optimizations
+- Fine-grained control over allocations
+
+## Development workflow
+
+### Compilation
+
+**Solidity:**
+
+```shell
+solc --bin --abi MyContract.sol
+```
+
+**Stylus:**
+
+```shell
+cargo stylus build
+```
+
+### Testing
+
+**Solidity:**
+
+```javascript
+// Hardhat or Foundry tests
+```
+
+**Stylus:**
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use stylus_sdk::testing::*;
+
+    #[test]
+    fn test_function() {
+        let vm = TestVM::default();
+        let mut contract = MyContract::from(&vm);
+        // Test logic
+    }
+}
+```
+
+### Deployment
+
+Both use similar deployment processes but Stylus requires an activation step for new programs.
+
+## Interoperability
+
+Stylus and Solidity contracts can fully interact:
+
+- Stylus can call Solidity contracts
+- Solidity can call Stylus contracts
+- Same ABI encoding/decoding
+- Share storage layout compatibility
+
+Example calling Solidity from Stylus:
+
+```rust
+sol_interface! {
+    interface IToken {
+        function transfer(address to, uint256 amount) external returns (bool);
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn call_token(&self, token: Address, recipient: Address, amount: U256) -> Result<bool, Vec<u8>> {
+        let token_contract = IToken::new(token);
+        let result = token_contract.transfer(self.vm(), recipient, amount)?;
+        Ok(result)
+    }
+}
+```
+
+## Best practices for transitioning
+
+1. **Think in Rust patterns**: Don't translate Solidity directly, use idiomatic Rust
+2. **Leverage the type system**: Use Rust's types to prevent bugs at compile time
+3. **Use composition over inheritance**: Prefer traits and composition
+4. **Handle errors explicitly**: Use `Result` types and the `?` operator
+5. **Write tests in Rust**: Take advantage of `TestVM` for unit testing
+6. **Read existing examples**: Study the stylus-sdk-rs examples directory
+7. **Start small**: Convert simple contracts first to learn the patterns
+
+## Resources
+
+- [Stylus SDK Documentation](https://docs.arbitrum.io/stylus/reference/stylus-sdk)
+- [stylus-sdk-rs Repository](https://github.com/OffchainLabs/stylus-sdk-rs)
+- [Example Contracts](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/examples)
+- [Rust Book](https://doc.rust-lang.org/book/) for learning Rust
