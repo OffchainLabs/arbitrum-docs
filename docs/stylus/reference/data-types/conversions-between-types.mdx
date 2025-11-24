@@ -1,6 +1,6 @@
 ---
-title: 'Conversions Between Types'
-description: 'Conversions Between Types'
+title: 'Conversions between types'
+description: 'Learn how to convert between Rust types, Alloy primitives, and Solidity types in Stylus smart contracts'
 author: chrisco
 sme: chrisco
 sidebar_position: 1
@@ -8,4 +8,370 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 displayed_sidebar: buildAppsSidebar
 ---
 
-TBD
+Stylus smart contracts often need to convert between different type representations: Rust native types, Alloy primitives, and Solidity types. The Stylus SDK provides comprehensive conversion mechanisms through the `AbiType` trait and various standard Rust conversion traits.
+
+## Understanding type relationships
+
+The Stylus SDK establishes a bidirectional relationship between Rust and Solidity types:
+
+- **Alloy provides**: Solidity types → Rust types mapping via `SolType`
+- **Stylus SDK provides**: Rust types → Solidity types mapping via `AbiType`
+
+Together, these create a complete two-way type system for interoperability.
+
+### Key type mappings
+
+| Rust/Alloy type                   | Solidity type             | Notes                                          |
+| --------------------------------- | ------------------------- | ---------------------------------------------- |
+| `bool`                            | `bool`                    | Native boolean                                 |
+| `u8`, `u16`, `u32`, `u64`, `u128` | `uint8` through `uint128` | Native unsigned integers                       |
+| `i8`, `i16`, `i32`, `i64`, `i128` | `int8` through `int128`   | Native signed integers                         |
+| `Uint<BITS, LIMBS>`               | `uintBITS`                | Arbitrary-sized unsigned integers (8-256 bits) |
+| `Signed<BITS, LIMBS>`             | `intBITS`                 | Arbitrary-sized signed integers (8-256 bits)   |
+| `U256`                            | `uint256`                 | 256-bit unsigned integer (most common)         |
+| `Address`                         | `address`                 | 20-byte Ethereum address                       |
+| `FixedBytes<N>`                   | `bytesN`                  | Fixed-size byte array                          |
+| `Bytes`                           | `bytes`                   | Dynamic byte array                             |
+| `String`                          | `string`                  | Dynamic UTF-8 string                           |
+| `Vec<T>`                          | `T[]`                     | Dynamic array                                  |
+| `[T; N]`                          | `T[N]`                    | Fixed-size array                               |
+| `(T1, T2, ...)`                   | `(T1, T2, ...)`           | Tuple types                                    |
+
+**Important**: The SDK treats `Vec<u8>` as Solidity `uint8[]`. For Solidity `bytes`, use `alloy_primitives::Bytes`.
+
+## Converting numeric types
+
+### Creating integers from literals
+
+```rust
+use stylus_sdk::alloy_primitives::{U256, I256, U8, I8};
+
+// From integer literals
+let small: U8 = U8::from(1);
+let large: U256 = U256::from(255);
+
+// For signed integers
+let positive: I8 = I8::unchecked_from(127);
+let negative: I8 = I8::unchecked_from(-1);
+let signed_large: I256 = I256::unchecked_from(0xff_u64);
+```
+
+### Parsing from strings
+
+```rust
+use stylus_sdk::alloy_primitives::I256;
+
+// Parse decimal strings
+let a = I256::try_from(20003000).unwrap();
+let b = "100".parse::<I256>().unwrap();
+
+// Parse hexadecimal strings
+let c = "-0x138f".parse::<I256>().unwrap();
+
+// Underscores are ignored for readability
+let d = "1_000_000".parse::<I256>().unwrap();
+
+// Arithmetic works as expected
+let result = a * b + c - d;
+```
+
+### Integer constants
+
+```rust
+use stylus_sdk::alloy_primitives::I256;
+
+let max = I256::MAX;        // Maximum value
+let min = I256::MIN;        // Minimum value
+let zero = I256::ZERO;      // Zero
+let minus_one = I256::MINUS_ONE; // -1
+```
+
+### Converting between integer sizes
+
+```rust
+use stylus_sdk::alloy_primitives::{Uint, Signed, U256};
+
+// Between Alloy integer types (same bit-width)
+let uint_value = Uint::<128, 2>::from(999);
+let u128_value: u128 = uint_value.try_into()
+    .map_err(|_| "conversion error")
+    .unwrap();
+
+// Between different bit-widths
+let small = Uint::<8, 1>::from(100);
+let large = U256::from(small);
+```
+
+The SDK uses the `ConvertInt` trait internally to enable conversions between Alloy's `Uint<BITS, LIMBS>` types and Rust native integer types like `u8`, `u16`, `u32`, `u64`, and `u128`.
+
+## Converting addresses
+
+### Creating addresses
+
+```rust
+use stylus_sdk::alloy_primitives::{Address, address};
+
+// From a 20-byte array
+let addr1 = Address::from([0x11; 20]);
+
+// Using the address! macro with checksummed string
+let addr2 = address!("d8da6bf26964af9d7eed9e03e53415d37aa96045");
+
+// From a byte slice
+let bytes: [u8; 20] = [0xd8, 0xda, 0x6b, 0xf2, /* ... */];
+let addr3 = Address::from(bytes);
+```
+
+### Converting addresses to bytes
+
+```rust
+use stylus_sdk::alloy_primitives::Address;
+
+let addr = address!("d8da6bf26964af9d7eed9e03e53415d37aa96045");
+
+// Get reference to underlying bytes
+let bytes_ref: &[u8] = addr.as_ref();
+
+// Use in byte concatenation
+let data = [addr.as_ref(), other_data].concat();
+```
+
+## Converting byte types
+
+### Fixed-size bytes
+
+```rust
+use stylus_sdk::alloy_primitives::FixedBytes;
+
+// Create from array
+let fixed = FixedBytes::<32>::new([0u8; 32]);
+
+// Create from slice
+let slice: &[u8] = &[1, 2, 3, 4];
+let fixed = FixedBytes::<4>::from_slice(slice);
+
+// Convert to slice
+let bytes_ref: &[u8] = fixed.as_ref();
+```
+
+### Dynamic bytes
+
+```rust
+use stylus_sdk::abi::Bytes;
+
+// Create from Vec<u8>
+let bytes = Bytes::from(vec![1, 2, 3, 4]);
+
+// Create empty
+let empty = Bytes::new();
+
+// Get reference to underlying data
+let data: &[u8] = bytes.as_ref();
+
+// Convert to Vec<u8>
+let vec: Vec<u8> = bytes.to_vec();
+```
+
+### Byte array conversions
+
+```rust
+use stylus_sdk::alloy_primitives::U256;
+
+// Convert U256 to big-endian bytes
+let value = U256::from(12345);
+let bytes_vec: Vec<u8> = value.to_be_bytes_vec();
+let bytes_array: [u8; 32] = value.to_be_bytes();
+
+// Convert from big-endian bytes
+let from_slice = U256::try_from_be_slice(&bytes_vec).unwrap();
+```
+
+## Converting strings
+
+```rust
+use alloc::string::{String, ToString};
+
+// String conversions
+let rust_string = "hello".to_string();
+let bytes = rust_string.as_bytes();
+
+// For Solidity string parameters in functions
+// the String type is automatically handled by AbiType
+pub fn process_string(&self, text: String) -> String {
+    text
+}
+```
+
+## Converting collections
+
+### Dynamic arrays (Vec)
+
+```rust
+use stylus_sdk::alloy_primitives::U256;
+use alloc::vec::Vec;
+
+// Vec is used directly as Solidity dynamic arrays
+let numbers: Vec<U256> = vec![
+    U256::from(1),
+    U256::from(2),
+    U256::from(3),
+];
+
+// For Vec<u8>, note this maps to uint8[], not bytes
+let uint8_array: Vec<u8> = vec![1, 2, 3];
+```
+
+### Fixed-size arrays
+
+```rust
+use stylus_sdk::alloy_primitives::U256;
+
+// Fixed arrays map directly to Solidity fixed arrays
+let fixed: [U256; 3] = [
+    U256::from(1),
+    U256::from(2),
+    U256::from(3),
+];
+
+// Nested arrays
+let nested: [[u32; 2]; 4] = [[1, 2], [3, 4], [5, 6], [7, 8]];
+```
+
+## ABI encoding and decoding
+
+### Encoding types
+
+```rust
+use stylus_sdk::abi::{encode, encode_params};
+use stylus_sdk::alloy_primitives::{Address, U256};
+use alloy_sol_types::{sol_data::*, SolType};
+
+// Encode a single value
+let value = U256::from(100);
+let encoded = encode(&value);
+
+// Encode tuple of parameters
+type TransferParams = (Address, Uint<256>);
+let params = (address, amount);
+let encoded = TransferParams::abi_encode_params(&params);
+```
+
+### Decoding types
+
+```rust
+use stylus_sdk::abi::decode_params;
+use stylus_sdk::alloy_primitives::{Address, U256};
+use alloy_sol_types::{sol_data::*, SolType};
+
+// Define the expected type structure
+type TransferParams = (Address, Uint<256>);
+
+// Decode from bytes
+let decoded: (Address, U256) = TransferParams::abi_decode_params(&encoded_data)
+    .map_err(|_| "decode error")?;
+```
+
+### Packed encoding
+
+Packed encoding is useful for hashing and signature verification:
+
+```rust
+use stylus_sdk::alloy_primitives::{Address, U256};
+use alloy_sol_types::{sol_data::*, SolType};
+
+// Method 1: Using SolType::abi_encode_packed
+type DataTypes = (Address, Uint<256>, String, Bytes, Uint<256>);
+let data = (target, value, func, bytes, timestamp);
+let packed = DataTypes::abi_encode_packed(&data);
+
+// Method 2: Manual concatenation
+let packed_manual = [
+    target.as_ref(),
+    &value.to_be_bytes_vec(),
+    func.as_bytes(),
+    bytes.as_ref(),
+    &timestamp.to_be_bytes_vec(),
+].concat();
+```
+
+## Error type conversions
+
+Stylus error types can be converted using the `Into` trait:
+
+```rust
+use stylus_sdk::prelude::*;
+
+sol! {
+    error InvalidParam();
+    error NotFound();
+}
+
+#[derive(SolidityError)]
+pub enum MyError {
+    InvalidParam(InvalidParam),
+    NotFound(NotFound),
+}
+
+pub fn check_value(&self, value: U256) -> Result<(), MyError> {
+    if value == U256::ZERO {
+        return Err(InvalidParam {}.into());
+    }
+    Ok(())
+}
+```
+
+## Storage type conversions
+
+Storage types require special handling for persistence:
+
+```rust
+use stylus_sdk::prelude::*;
+use stylus_sdk::alloy_primitives::U256;
+
+#[storage]
+pub struct Counter {
+    count: StorageU256,
+}
+
+#[public]
+impl Counter {
+    // Get value from storage
+    pub fn get_count(&self) -> U256 {
+        self.count.get()
+    }
+
+    // Set value in storage
+    pub fn set_count(&mut self, value: U256) {
+        self.count.set(value);
+    }
+
+    // Increment using arithmetic
+    pub fn increment(&mut self) {
+        let current = self.count.get();
+        self.count.set(current + U256::from(1));
+    }
+}
+```
+
+## Best practices
+
+1. **Use try_from for fallible conversions**: When converting between types where overflow is possible, use `try_from` instead of panicking conversions.
+
+2. **Prefer native types when appropriate**: Use Rust's native `bool`, `u8`-`u128`, and `i8`-`i128` types when they match your needs exactly. They're more efficient and ergonomic.
+
+3. **Be explicit about byte types**: Remember that `Vec<u8>` maps to `uint8[]`, not `bytes`. Use `Bytes` from `stylus_sdk::abi` for Solidity `bytes` type.
+
+4. **Use the address! macro**: For hardcoded addresses, use the `address!` macro which performs compile-time validation and checksumming.
+
+5. **Handle conversion errors**: Always handle potential errors from `try_from`, `try_into`, and `parse` operations rather than using unwrap in production code.
+
+6. **Consider packed encoding for hashing**: When preparing data for hashing or signature verification, packed encoding produces more compact representations.
+
+## Reference
+
+For complete implementation details, see:
+
+- `/stylus-sdk/src/abi/mod.rs` - AbiType trait and encoding functions
+- `/stylus-sdk/src/abi/ints.rs` - Integer type conversions
+- `/stylus-sdk/src/abi/impls.rs` - Implementations for standard types
+- `/stylus-sdk/src/storage/traits.rs` - Storage type conversion traits
