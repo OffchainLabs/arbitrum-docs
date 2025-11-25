@@ -30,6 +30,7 @@ import path from 'path';
 import logger from '../utils/logger.js';
 import performanceMonitor from '../utils/performanceMonitor.js';
 import { extractionConfig } from '../../config/extraction-config.js';
+import { PhraseExtractor } from './phraseExtractor.js';
 
 export class ConceptExtractor {
   constructor(configFilePath = null) {
@@ -44,14 +45,20 @@ export class ConceptExtractor {
       uniqueConcepts: 0,
       domainConcepts: 0,
       technicalTerms: 0,
+      totalPhrases: 0,
+      uniquePhrases: 0,
     };
 
     // OPTIMIZATION 1: Cache for compromise document objects to avoid recreating them
     this.compromiseDocCache = new Map();
     this.maxCacheSize = 100; // Limit cache size to prevent memory issues
 
+    // NEW: Initialize phrase extractor
+    this.phraseExtractor = null;
+
     this.loadConfig(configFilePath);
     this.initializeDomainTerms();
+    this.initializePhraseExtractor();
   }
 
   loadConfig(configFilePath) {
@@ -89,6 +96,33 @@ export class ConceptExtractor {
 
     const source = this.config ? 'custom configuration' : 'default configuration';
     logger.debug(`Initialized ${this.domainTerms.size} domain terms from ${source}`);
+  }
+
+  initializePhraseExtractor() {
+    // Initialize phrase extractor with configuration
+    const phraseConfig = this.config?.phraseExtraction || {
+      minWords: 2,
+      maxWords: 4,
+      minFrequency: 2,
+      maxPhrases: 300,
+      domainPhrases: [
+        'optimistic rollup',
+        'fraud proof',
+        'gas optimization',
+        'layer 2 scaling',
+        'cross-chain messaging',
+        'arbitrum nova',
+        'nitro stack',
+        'sequencer decentralization',
+        'transaction lifecycle',
+        'state transition',
+      ],
+    };
+
+    this.phraseExtractor = new PhraseExtractor(phraseConfig);
+    logger.debug(
+      `Initialized phrase extractor with ${phraseConfig.domainPhrases?.length || 0} domain phrases`,
+    );
   }
 
   async extractFromDocuments(documents) {
@@ -256,6 +290,12 @@ export class ConceptExtractor {
     concepts.push(...this.extractPhrases(doc, weight));
     concepts.push(...this.extractCompoundTerms(doc, weight));
     concepts.push(...this.extractAcronymsAndAbbreviations(doc, weight));
+
+    // NEW: Extract multi-word phrases using phrase extractor
+    if (this.phraseExtractor) {
+      const multiWordPhrases = this.phraseExtractor.extractPhrases(doc, weight);
+      concepts.push(...multiWordPhrases);
+    }
 
     // Filter and normalize
     return concepts
@@ -488,6 +528,17 @@ export class ConceptExtractor {
     const limitedConcepts = concepts
       .sort((a, b) => b.weight - a.weight)
       .slice(0, extractionConfig.conceptExtraction.maxConceptsPerDocument);
+
+    // Separate phrases from single-word concepts for phrase extractor
+    const phrases = limitedConcepts.filter(
+      (c) =>
+        c.type === 'noun_phrase' || c.type === 'technical_compound' || c.type === 'domain_phrase',
+    );
+
+    // Record phrases with phrase extractor
+    if (this.phraseExtractor && phrases.length > 0) {
+      this.phraseExtractor.recordPhrases(phrases, filePath);
+    }
 
     for (const concept of limitedConcepts) {
       const key = concept.normalized;
@@ -788,7 +839,8 @@ export class ConceptExtractor {
   }
 
   getTopConcepts(limit = 50) {
-    return Array.from(this.conceptFrequency.entries())
+    // Get top single-word concepts
+    const topSingleConcepts = Array.from(this.conceptFrequency.entries())
       .filter(([key]) => this.concepts.has(key))
       .sort((a, b) => b[1] - a[1])
       .slice(0, limit)
@@ -799,7 +851,12 @@ export class ConceptExtractor {
           data: {
             text: conceptData.text,
             normalized: conceptData.normalized,
-            type: conceptData.type,
+            type:
+              conceptData.type === 'noun_phrase' ||
+              conceptData.type === 'technical_compound' ||
+              conceptData.type === 'domain_phrase'
+                ? 'phrase'
+                : 'single',
             category: conceptData.category,
             // Convert Sets to Objects for JSON serialization
             // Format: { filePath: weight, ... }
@@ -811,6 +868,22 @@ export class ConceptExtractor {
           fileCount: conceptData.files.size,
         };
       });
+
+    // Get top phrases from phrase extractor
+    let allConcepts = [...topSingleConcepts];
+
+    if (this.phraseExtractor) {
+      const topPhrases = this.phraseExtractor.getTopPhrases(Math.floor(limit / 2));
+      allConcepts = [...topSingleConcepts, ...topPhrases];
+
+      // Update stats
+      const phraseStats = this.phraseExtractor.getStats();
+      this.stats.totalPhrases = phraseStats.totalPhrases;
+      this.stats.uniquePhrases = phraseStats.uniquePhrases;
+    }
+
+    // Sort combined list by frequency and return top N
+    return allConcepts.sort((a, b) => b.frequency - a.frequency).slice(0, limit);
   }
 
   getStats() {

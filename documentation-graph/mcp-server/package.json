@@ -33,7 +33,9 @@
     "@modelcontextprotocol/sdk": "^1.0.0",
     "chokidar": "^3.5.3",
     "compromise": "^14.10.0",
+    "fast-levenshtein": "^3.0.0",
     "graphology": "^0.25.4",
+    "lunr": "^2.3.9",
     "natural": "^6.10.1",
     "zod": "^3.22.4"
   },

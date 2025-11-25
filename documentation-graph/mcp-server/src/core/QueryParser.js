@@ -25,13 +25,34 @@
 /**
  * QueryParser - Natural language query parsing and filtering
  *
- * Parses natural language queries to extract filters and search criteria
+ * Parses natural language queries to extract filters and search criteria.
+ * Enhanced with fuzzy matching, phrase matching, and full-text search fallback.
  */
 
+import { FuzzyMatcher } from '../search/FuzzyMatcher.js';
+import { FullTextSearchEngine } from '../search/FullTextSearch.js';
+import { searchConfig } from '../config/searchConfig.js';
+
 export class QueryParser {
-  constructor(documents, concepts) {
+  constructor(documents, concepts, fullTextSearch = null) {
     this.documents = documents;
     this.concepts = concepts;
+    this.fullTextSearch = fullTextSearch;
+
+    // Initialize fuzzy matcher if concepts are available
+    this.fuzzyMatcher = null;
+    if (concepts && concepts.topConcepts) {
+      this.fuzzyMatcher = new FuzzyMatcher(concepts.topConcepts);
+    }
+  }
+
+  /**
+   * Set full-text search engine (optional, for fallback search)
+   *
+   * @param {FullTextSearchEngine} fullTextSearch - Full-text search engine
+   */
+  setFullTextSearch(fullTextSearch) {
+    this.fullTextSearch = fullTextSearch;
   }
 
   /**
@@ -152,12 +173,17 @@ export class QueryParser {
   }
 
   /**
-   * Find concept by fuzzy matching
+   * Find concept using layered search strategy
+   * 1. Exact match → 2. Fuzzy match → 3. Partial match → 4. Full-text fallback
+   *
+   * @param {string} searchTerm - The term to search for
+   * @param {Object} options - Search options
+   * @returns {string|null} Matched concept or null
    */
-  findConcept(searchTerm) {
+  findConcept(searchTerm, options = {}) {
     const searchLower = searchTerm.toLowerCase();
 
-    // Exact match
+    // LAYER 1: Exact match (case-insensitive)
     const exactMatch = this.concepts.topConcepts?.find(
       (c) => c.concept.toLowerCase() === searchLower,
     );
@@ -165,7 +191,19 @@ export class QueryParser {
       return exactMatch.concept;
     }
 
-    // Partial match
+    // LAYER 2: Fuzzy matching (typos, abbreviations, variants)
+    if (this.fuzzyMatcher && searchConfig.features.fuzzyMatching) {
+      const fuzzyMatches = this.fuzzyMatcher.findFuzzyConcept(searchTerm, {
+        threshold: options.fuzzyThreshold || searchConfig.fuzzy.jaccardThreshold,
+        limit: 1,
+      });
+
+      if (fuzzyMatches.length > 0) {
+        return fuzzyMatches[0].concept;
+      }
+    }
+
+    // LAYER 3: Partial substring match (fallback)
     const partialMatches = this.concepts.topConcepts?.filter((c) =>
       c.concept.toLowerCase().includes(searchLower),
     );
@@ -176,6 +214,135 @@ export class QueryParser {
       return partialMatches[0].concept;
     }
 
+    // No match found
     return null;
+  }
+
+  /**
+   * Enhanced concept search with full details and fallback
+   * Returns detailed match information including score and match type
+   *
+   * @param {string} searchTerm - The term to search for
+   * @param {Object} options - Search options
+   * @returns {Object} Match result with details
+   */
+  findConceptWithFallbacks(searchTerm, options = {}) {
+    const {
+      fuzzyThreshold = searchConfig.fuzzy.jaccardThreshold,
+      enableFuzzy = searchConfig.features.fuzzyMatching,
+      enableFulltext = searchConfig.features.fulltextSearch,
+    } = options;
+
+    const result = {
+      found: false,
+      query: searchTerm,
+      bestMatch: null,
+      attempts: [],
+      confidence: 0,
+    };
+
+    const searchLower = searchTerm.toLowerCase();
+
+    // LAYER 1: Exact match
+    const exactMatch = this.concepts.topConcepts?.find(
+      (c) => c.concept.toLowerCase() === searchLower,
+    );
+
+    if (exactMatch) {
+      result.attempts.push({ layer: 'exact', success: true });
+      result.found = true;
+      result.bestMatch = {
+        concept: exactMatch.concept,
+        matchType: 'exact',
+        score: 1.0,
+        confidence: 1.0,
+        layer: 'exact',
+        explanation: 'Exact match (case-insensitive)',
+      };
+      return result;
+    }
+
+    result.attempts.push({ layer: 'exact', success: false });
+
+    // LAYER 2: Fuzzy matching
+    if (enableFuzzy && this.fuzzyMatcher) {
+      const fuzzyMatches = this.fuzzyMatcher.findFuzzyConcept(searchTerm, {
+        threshold: fuzzyThreshold,
+        limit: 1,
+      });
+
+      if (fuzzyMatches.length > 0 && fuzzyMatches[0].score >= fuzzyThreshold) {
+        result.attempts.push({
+          layer: 'fuzzy',
+          success: true,
+          score: fuzzyMatches[0].score,
+        });
+        result.found = true;
+        result.bestMatch = {
+          ...fuzzyMatches[0],
+          confidence: fuzzyMatches[0].score,
+          layer: 'fuzzy',
+        };
+        return result;
+      }
+
+      result.attempts.push({ layer: 'fuzzy', success: false });
+    }
+
+    // LAYER 3: Partial substring match
+    const partialMatches = this.concepts.topConcepts?.filter((c) =>
+      c.concept.toLowerCase().includes(searchLower),
+    );
+
+    if (partialMatches && partialMatches.length > 0) {
+      partialMatches.sort((a, b) => b.frequency - a.frequency);
+
+      result.attempts.push({ layer: 'partial', success: true });
+      result.found = true;
+      result.bestMatch = {
+        concept: partialMatches[0].concept,
+        matchType: 'partial',
+        score: 0.7,
+        confidence: 0.7,
+        layer: 'partial',
+        explanation: `Partial substring match (contains "${searchTerm}")`,
+      };
+      return result;
+    }
+
+    result.attempts.push({ layer: 'partial', success: false });
+
+    // LAYER 4: Full-text search fallback
+    if (enableFulltext && this.fullTextSearch) {
+      const fulltextResults = this.fullTextSearch.search(searchTerm, {
+        minScore: 0.5,
+        limit: 1,
+        snippets: true,
+      });
+
+      if (fulltextResults.length > 0) {
+        result.attempts.push({
+          layer: 'fulltext',
+          success: true,
+          score: fulltextResults[0].score,
+        });
+        result.found = true;
+        result.bestMatch = {
+          concept: searchTerm,
+          matchType: 'fulltext',
+          score: fulltextResults[0].score,
+          confidence: fulltextResults[0].score,
+          layer: 'fulltext',
+          documents: fulltextResults,
+          explanation: 'Full-text search match (concept not in index)',
+        };
+        return result;
+      }
+
+      result.attempts.push({ layer: 'fulltext', success: false });
+    }
+
+    // No match found
+    return result;
   }
 }
