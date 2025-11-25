@@ -42,6 +42,7 @@ import {
   getThresholds,
   generateContentTypesSection,
 } from './helpers/reportHelpers.js';
+import { FullTextIndexer } from './indexers/fullTextIndexer.js';
 
 const program = new Command();
 
@@ -216,6 +217,23 @@ async function runAnalysis(options) {
   await FileUtils.writeJSON(path.join(outputDir, 'knowledge-graph.json'), graphData);
 
   logger.success(`Saved graph data to: ${path.join(outputDir, 'knowledge-graph.json')}`);
+
+  // Phase 3.5: Build Full-Text Search Index
+  logger.subsection('Building full-text search index');
+  const fullTextIndexer = new FullTextIndexer({
+    stemming: true,
+    stopWords: true,
+  });
+
+  // Convert documents Map to Array for indexing
+  const documentsArray = Array.from(documents.values());
+  const fulltextIndex = fullTextIndexer.buildIndex(documentsArray);
+
+  logger.stat('Indexed documents', fulltextIndex.documents?.length || 0);
+  logger.stat('Total terms', fulltextIndex.terms?.size || 0);
+
+  await FileUtils.writeJSON(path.join(outputDir, 'fulltext-index.json'), fulltextIndex);
+  logger.success(`Saved full-text index to: ${path.join(outputDir, 'fulltext-index.json')}`);
 
   // Phase 4: Graph Analysis
   if (!options.skipAnalysis) {
