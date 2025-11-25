@@ -1,0 +1,256 @@
+---
+title: 'Launch a token using Foundry (Quickstart)'
+description: This quickstart walks you through the process of how to setup the Foundry environment, creating, and launching a token on Arbitrum.
+author: pete-vielhaber
+user_story: As a developer, I want to understand how to launch a token, and what considerations to take along the way.
+content_type: quickstart
+displayed_sidebar: buildAppsSidebar
+---
+
+<!-- waiting on language from Wen -->
+
+This guide will... blah blah blah
+
+## Prerequisites
+
+1. **Install Foundry**:
+   ```bash
+   curl -L https://foundry.paradigm.xyz | bash
+   foundryup
+   ```
+2. **Get Test `ETH`**: Obtain Arbitrum Sepolia `ETH` from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (e.g., MetaMask) configured for Arbitrum Sepolia and request funds.
+
+:::info
+
+You may need to bridge `ETH` from Ethereum Sepolia to Arbitrum Sepolia first, using the official Arbitrum Bridge if the faucet requires it.
+
+:::
+
+3. **Set Up Development Environment**: Configure your wallet and tools for Arbitrum testnet deployment. Sign up for an Arbiscan account to get an API key for contract verification.
+
+## Project Setup
+
+1. **Initialize Foundry Project**:
+   ```bash
+   forge init my-token-project
+   cd my-token-project
+   rm src/Counter.sol script/Counter.s.sol test/Counter.t.sol
+   ```
+2. **Install OpenZeppelin Contracts**:
+   ```bash
+   forge install OpenZeppelin/openzeppelin-contracts
+   ```
+
+## Smart Contract Development
+
+Create `src/MyToken.sol` (this is a standard `ERC-20` contract and works on any EVM chain like Arbitrum):
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract MyToken is ERC20, Ownable {
+    uint256 public constant MAX_SUPPLY = 1_000_000_000 * 10**18;
+
+    constructor(
+        string memory name,
+        string memory symbol,
+        uint256 initialSupply,
+        address initialOwner
+    ) ERC20(name, symbol) Ownable(initialOwner) {
+        require(initialSupply <= MAX_SUPPLY, "Initial supply exceeds max supply");
+        _mint(initialOwner, initialSupply);
+    }
+
+    function mint(address to, uint256 amount) public onlyOwner {
+        require(totalSupply() + amount <= MAX_SUPPLY, "Minting would exceed max supply");
+        _mint(to, amount);
+    }
+
+    function burn(uint256 amount) public {
+        _burn(msg.sender, amount);
+    }
+}
+```
+
+## Deployment Script
+
+Create `script/DeployToken.s.sol`:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import {Script, console} from "forge-std/Script.sol";
+import {MyToken} from "../src/MyToken.sol";
+
+contract DeployToken is Script {
+    function run() external {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        address deployerAddress = vm.addr(deployerPrivateKey);
+
+        string memory name = "My Token";
+        string memory symbol = "MTK";
+        uint256 initialSupply = 100_000_000 * 10**18;
+
+        vm.startBroadcast(deployerPrivateKey);
+        MyToken token = new MyToken(name, symbol, initialSupply, deployerAddress);
+        vm.stopBroadcast();
+
+        console.log("Token deployed to:", address(token));
+        console.log("Token name:", token.name());
+        console.log("Token symbol:", token.symbol());
+        console.log("Initial supply:", token.totalSupply());
+        console.log("Deployer balance:", token.balanceOf(deployerAddress));
+    }
+}
+```
+
+## Environment Configuration
+
+1. **Create `.env` file**:
+
+   ```
+   PRIVATE_KEY=your_private_key_here
+   ARBITRUM_SEPOLIA_RPC_URL=https://sepolia.arbitrum.io/rpc
+   ARBITRUM_ONE_RPC_URL=https://arb1.arbitrum.io/rpc
+   ARBISCAN_API_KEY=your_arbiscan_api_key_here
+   ```
+
+   (RPC URLs from official Arbitrum docs.)
+
+2. **Update `foundry.toml`** (add chain IDs for verification, as Arbiscan requires them for non-Ethereum chains):
+
+   ```toml
+   [profile.default]
+   src = "src"
+   out = "out"
+   libs = ["lib"]
+   remappings = ["@openzeppelin/=lib/openzeppelin-contracts/"]
+
+   [rpc_endpoints]
+   arbitrum_sepolia = "${ARBITRUM_SEPOLIA_RPC_URL}"
+   arbitrum_one = "${ARBITRUM_ONE_RPC_URL}"
+
+   [etherscan]
+   arbitrum_sepolia = { key = "${ARBISCAN_API_KEY}", url = "https://api-sepolia.arbiscan.io/api", chain = 421614 }
+   arbitrum_one = { key = "${ARBISCAN_API_KEY}", url = "https://api.arbiscan.io/api", chain = 42161 }
+   ```
+
+   (Chain IDs: Arbitrum Sepolia is 421614, Arbitrum One (mainnet) is 42161. API URLs from Arbiscan.)
+
+## Testing
+
+1. **Create `test/MyToken.t.sol`**
+
+   ```
+   // SPDX-License-Identifier: MIT
+   pragma solidity ^0.8.19;
+
+   import {Test, console} from "forge-std/Test.sol";
+   import {MyToken} from "../src/MyToken.sol";
+
+   contract MyTokenTest is Test {
+       MyToken public token;
+       address public owner = address(0x1);
+       address public user = address(0x2);
+
+       uint256 constant INITIAL_SUPPLY = 100_000_000 * 10**18;
+
+       function setUp() public {
+           // Deploy token contract before each test
+           vm.prank(owner);
+           token = new MyToken("Test Token", "TEST", INITIAL_SUPPLY, owner);
+       }
+
+       function testInitialState() public {
+           // Verify token was deployed with correct parameters
+           assertEq(token.name(), "Test Token");
+           assertEq(token.symbol(), "TEST");
+           assertEq(token.totalSupply(), INITIAL_SUPPLY);
+           assertEq(token.balanceOf(owner), INITIAL_SUPPLY);
+       }
+
+       function testMinting() public {
+           uint256 mintAmount = 1000 * 10**18;
+
+           // Only owner should be able to mint
+           vm.prank(owner);
+           token.mint(user, mintAmount);
+
+           assertEq(token.balanceOf(user), mintAmount);
+           assertEq(token.totalSupply(), INITIAL_SUPPLY + mintAmount);
+       }
+
+       function testBurning() public {
+           uint256 burnAmount = 1000 * 10**18;
+
+           // Owner burns their own tokens
+           vm.prank(owner);
+           token.burn(burnAmount);
+
+           assertEq(token.balanceOf(owner), INITIAL_SUPPLY - burnAmount);
+           assertEq(token.totalSupply(), INITIAL_SUPPLY - burnAmount);
+       }
+
+       function testFailMintExceedsMaxSupply() public {
+           // This test should fail when trying to mint more than max supply
+           uint256 excessiveAmount = token.MAX_SUPPLY() + 1;
+
+           vm.prank(owner);
+           token.mint(user, excessiveAmount);
+       }
+
+       function testFailUnauthorizedMinting() public {
+           // This test should fail when non-owner tries to mint
+           vm.prank(user);
+           token.mint(user, 1000 * 10**18);
+       }
+   }
+   ```
+
+2. **Run Tests**:
+   ```bash
+   forge test -vv
+   ```
+
+## Deployment and Verification
+
+1. **Deploy to Arbitrum Sepolia** (testnet):
+
+   ```bash
+   source .env
+   forge script script/DeployToken.s.sol:DeployToken \
+       --rpc-url arbitrum_sepolia \
+       --broadcast \
+       --verify
+   ```
+
+   - Uses `https://sepolia.arbitrum.io/rpc` (RPC URL).
+   - Chain ID: 421614.
+   - Verifies on Sepolia Arbiscan (https://sepolia.arbiscan.io/).
+
+2. **Deploy to Arbitrum One** (mainnet):
+   - Replace `arbitrum_sepolia` with `arbitrum_one` in the command.
+   - Uses `https://arb1.arbitrum.io/rpc` (RPC URL).
+   - Chain ID: 42161.
+   - Verifies on Arbiscan (https://arbiscan.io/).
+   - Requires sufficient `ETH` on Arbitrum One for gas fees (bridge from Ethereum mainnet if needed).
+
+## Arbitrum-Specific Configurations
+
+- **RPC URLs**:
+  - Arbitrum Sepolia: `https://sepolia.arbitrum.io/rpc`
+  - Arbitrum One: `https://arb1.arbitrum.io/rpc`
+- **Chain IDs**: Arbitrum Sepolia: 421614; Arbitrum One: 42161.
+- **Contract Addresses**: Logged in console output after deployment (e.g., `console.log("Token deployed to:", address(token));`).
+- **Verification**: Uses Arbiscan API with your API key. The `--verify` flag enables automatic verification.
+
+## Important notes
+
+- Always conduct security audits (e.g., via tools like Slither or professional reviews) before mainnet deployment, as token contracts handle value.
+- Ensure your wallet has enough `ETH` for gas on the target network. Arbitrum fees are low, but mainnet deployments still cost real `ETH`.
+- If you encounter verification issues, double-check your Arbiscan API key and foundry.toml configs. For more advanced deployments, refer to general Foundry deployment docs or Arbitrum developer resources.
