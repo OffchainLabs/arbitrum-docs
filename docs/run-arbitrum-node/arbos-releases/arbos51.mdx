@@ -1,0 +1,43 @@
+---
+title: 'ArbOS 51'
+sidebar_label: 'ArbOS 51'
+sidebar_position: 2
+description: 'Learn about ArbOS 51 release, including Fusaka upgrade support, new EIPs, bug fixes, and upgrade requirements for Arbitrum chain owners and node operators.'
+user_story: As an Arbitrum chain owner or node operator, I want to know what ArbOS 51 implements.
+author: zk-Lumi
+sme: zk-Lumi
+content_type: release note
+---
+
+:::warning
+
+This is a stub/WIP article
+
+:::
+
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
+
+<VanillaAdmonition type="note">
+
+<a data-quicklook-from="arbos">ArbOS</a> 51 is still pre-release. This document may change.
+
+</VanillaAdmonition>
+
+This page is intended for all Arbitrum node operators and Arbitrum chain owners chains. This page summarizes the changes brought by ArbOS 51, and what you should do to ensure a seamless upgrade.
+
+<VanillaAdmonition type="warning" title="Action Required">
+
+Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and Mainnet upgrade to Fusaka: ensure that your Nitro node version is upgraded and consensus layer client is configured as per the [Fusaka upgrade notice](../../notices/fusaka-upgrade-notice.mdx).
+
+</VanillaAdmonition>
+The minimum Nitro version that supports ArbOS 51 is [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3), which is available on Docker Hub with the image tag `Noffchainlabs/nitro-node:v3.9.0-cca645a`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators if adopted. For Arbitrum One and Nova, the ArbOS 51 upgrade will require a governance vote to activate.
+
+As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 50 is an upgrade that builds upon [ArbOS 40 Callisto](./arbos40.mdx).
+
+### Requirements
+
+### High-level description of ArbOS 51 changes
+
+### Reference links for ArbOS 51
+
+- [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx)
