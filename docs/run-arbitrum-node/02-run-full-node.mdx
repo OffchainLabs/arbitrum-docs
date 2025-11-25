@@ -154,6 +154,7 @@ If you are running more than on node, you should [run a feed relay](/run-arbitru
 - `--init.prune <pruning mode>`
   - `minimal`: Only genesis + latest head state is left, takes the least amount of time (several house for Arbitrum One-sized database)
   - `full` : Genesis + head state + state for latest confirmed block (will take a long time ~50 hours or more)
+  - `validator`: All of above + state of latest validated block (will take a little less than twice what `full` will take)
 
 :::note
 
