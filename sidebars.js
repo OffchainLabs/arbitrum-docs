@@ -239,7 +239,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configuration',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations',
                   label: 'Stake and validator config',
                 },
                 {
