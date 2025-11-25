@@ -54,17 +54,30 @@ export class DataLoader {
 
     try {
       // Load all JSON files
-      const [graphData, documentsData, conceptsData, analysisData] = await Promise.all([
-        this.loadJSON('knowledge-graph.json'),
-        this.loadJSON('extracted-documents.json'),
-        this.loadJSON('extracted-concepts.json'),
-        this.loadJSON('graph-analysis.json'),
-      ]);
+      const [graphData, documentsData, conceptsData, analysisData, fulltextIndex] =
+        await Promise.all([
+          this.loadJSON('knowledge-graph.json'),
+          this.loadJSON('extracted-documents.json'),
+          this.loadJSON('extracted-concepts.json'),
+          this.loadJSON('graph-analysis.json'),
+          this.loadJSON('fulltext-index.json').catch(() => null), // Optional, fallback to null
+        ]);
 
       this.graph = graphData;
       this.documents = documentsData;
       this.concepts = conceptsData;
       this.analysis = analysisData;
+
+      // Initialize full-text search engine
+      if (fulltextIndex) {
+        const { FullTextSearchEngine } = await import('../search/FullTextSearch.js');
+        this.fullTextSearch = new FullTextSearchEngine(this.documents, fulltextIndex);
+        logger.info(
+          `Full-text search initialized with ${
+            fulltextIndex.documents?.length || 0
+          } indexed documents`,
+        );
+      }
 
       // Build indexes
       this.buildIndexes();
@@ -135,6 +148,15 @@ export class DataLoader {
     logger.debug(
       `Indexes built: ${this.indexes.documentsByPath.size} documents, ${this.indexes.conceptsByName.size} concepts`,
     );
+
+    // Initialize QueryParser with fullTextSearch
+    this.initializeQueryParser();
+  }
+
+  async initializeQueryParser() {
+    const { QueryParser } = await import('./QueryParser.js');
+    this.queryParser = new QueryParser(this.documents, this.concepts, this.fullTextSearch);
+    logger.debug('QueryParser initialized with layered search support');
   }
 
   getDocument(pathOrRelativePath) {
