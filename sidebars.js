@@ -1380,6 +1380,11 @@ const sidebars = {
       id: 'notices/fusaka-upgrade-notice',
       label: 'Upgrade for the Fusaka transition',
     },
+    {
+      type: 'doc',
+      id: 'notices/arbos51-arbsepolia-upgrade-notice',
+      label: 'Upgrade for ArbOS 51 on ArbSepolia',
+    },
   ],
 };
 
