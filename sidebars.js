@@ -1289,11 +1289,6 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/concepts/how-it-works',
-              label: 'Architecture overview',
-            },
-            {
-              type: 'doc',
               id: 'stylus/concepts/gas-metering',
               label: 'Gas metering',
             },
