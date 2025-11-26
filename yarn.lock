@@ -4189,9 +4189,9 @@
   dependencies:
     "@octokit/openapi-types" "^24.2.0"
 
-"@offchainlabs/notion-docs-generator@github:OffchainLabs/notion-docs-generator#add-question-integration":
+"@offchainlabs/notion-docs-generator@github:OffchainLabs/notion-docs-generator":
   version "0.1.0"
-  resolved "https://codeload.github.com/OffchainLabs/notion-docs-generator/tar.gz/9b6e0d52ef26e182b92edb277024adfa34303b46"
+  resolved "https://codeload.github.com/OffchainLabs/notion-docs-generator/tar.gz/660d51ac1cb5ff6c19691ecaa629c7b8827c11bd"
   dependencies:
     "@notionhq/client" "^2.2.3"
     "@types/node" "^18.11.18"
