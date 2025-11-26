@@ -33,13 +33,19 @@ You may need to bridge `ETH` from Ethereum Sepolia to Arbitrum Sepolia first, us
 ## Project setup
 
 1. **Initialize Foundry Project**:
+
    ```bash
+   # Create new project
    forge init my-token-project
    cd my-token-project
+
+   # Remove extra files
    rm src/Counter.sol script/Counter.s.sol test/Counter.t.sol
    ```
+
 2. **Install OpenZeppelin Contracts**:
    ```bash
+   # Install OpenZeppelin contracts library
    forge install OpenZeppelin/openzeppelin-contracts
    ```
 
@@ -55,6 +61,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MyToken is ERC20, Ownable {
+    // Max number of tokens that will exist
     uint256 public constant MAX_SUPPLY = 1_000_000_000 * 10**18;
 
     constructor(
@@ -64,6 +71,7 @@ contract MyToken is ERC20, Ownable {
         address initialOwner
     ) ERC20(name, symbol) Ownable(initialOwner) {
         require(initialSupply <= MAX_SUPPLY, "Initial supply exceeds max supply");
+        // Mints the initial supply to the contract deployer
         _mint(initialOwner, initialSupply);
     }
 
@@ -91,17 +99,25 @@ import {MyToken} from "../src/MyToken.sol";
 
 contract DeployToken is Script {
     function run() external {
+        // Load contract deployer's private key from environment variables
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployerAddress = vm.addr(deployerPrivateKey);
 
+        // Token configuration parameters
         string memory name = "My Token";
         string memory symbol = "MTK";
         uint256 initialSupply = 100_000_000 * 10**18;
 
+        // Initiates broadcasting transactions
         vm.startBroadcast(deployerPrivateKey);
+
+        // Deploys the token contract
         MyToken token = new MyToken(name, symbol, initialSupply, deployerAddress);
+
+        // Stops broadcasting transactions
         vm.stopBroadcast();
 
+        // Logs deployment information
         console.log("Token deployed to:", address(token));
         console.log("Token name:", token.name());
         console.log("Token symbol:", token.symbol());
@@ -177,7 +193,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
        }
 
        function testInitialState() public {
-           // Verify token was deployed with correct parameters
+           // Verify the token was deployed with the correct parameters
            assertEq(token.name(), "Test Token");
            assertEq(token.symbol(), "TEST");
            assertEq(token.totalSupply(), INITIAL_SUPPLY);
@@ -187,7 +203,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
        function testMinting() public {
            uint256 mintAmount = 1000 * 10**18;
 
-           // Only owner should be able to mint
+           // Only the owner should be able to mint
            vm.prank(owner);
            token.mint(user, mintAmount);
 
@@ -198,7 +214,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
        function testBurning() public {
            uint256 burnAmount = 1000 * 10**18;
 
-           // Owner burns their own tokens
+           // Owner burns their tokens
            vm.prank(owner);
            token.burn(burnAmount);
 
@@ -207,7 +223,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
        }
 
        function testFailMintExceedsMaxSupply() public {
-           // This test should fail when trying to mint more than max supply
+           // This test should fail when attempting to mint more than the max supply
            uint256 excessiveAmount = token.MAX_SUPPLY() + 1;
 
            vm.prank(owner);
@@ -215,7 +231,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
        }
 
        function testFailUnauthorizedMinting() public {
-           // This test should fail when non-owner tries to mint
+           // This test should fail when a non-owner tries to mint tokens
            vm.prank(user);
            token.mint(user, 1000 * 10**18);
        }
@@ -224,6 +240,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
 
 2. **Run Tests**:
    ```bash
+   # Runs all tests with verbose output
    forge test -vv
    ```
 
@@ -232,7 +249,10 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
 1. **Deploy to Arbitrum Sepolia** (testnet):
 
    ```bash
+   # Load environment variables
    source .env
+
+   # Deploy to Arbitrum Sepolia with automatic verification
    forge script script/DeployToken.s.sol:DeployToken \
        --rpc-url arbitrum_sepolia \
        --broadcast \
