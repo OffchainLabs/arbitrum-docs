@@ -1,59 +1,67 @@
-### Can I use the Chain SDK to deploy a mainnet chain?
+---
+partial_type: troubleshooting
+title: 'Arbitrum Chain Troubleshooting Guide'
+description: 'Common issues and solutions for Arbitrum chain operations'
+author: anegg0
+last_reviewed: 2025-11-06
+---
 
-Yes! The Arbitrum Chain SDK's core technology has undergone a comprehensive audit and is now capable of supporting deployments to mainnet. You can read more about it in our [preview expectations notice](https://docs.arbitrum.io/launch-orbit-chain/concepts/public-preview-expectations#arbitrum-orbit-is-mainnet-ready-but-deploy-to-testnet-first).
+### Can I use Orbit to deploy a mainnet chain?
 
-### Do I need permission/license to launch an Arbitrum chain?
+Yes! Arbitrum Orbit's core technology has undergone a comprehensive audit and is now capable of supporting deployments to mainnet. You can read more about it [in our public preview annoucement](https://docs.arbitrum.io/launch-orbit-chain/concepts/public-preview-expectations#arbitrum-orbit-is-mainnet-ready-but-deploy-to-testnet-first).
 
-You can launch any Arbitrum chain permissionlessly.
+### Do I need permission/license to launch an Orbit chain?
+
+You can launch any Arbitrum Orbit chain permissionlessly.
 
 Nitro's license is under a [Business Source license](https://github.com/OffchainLabs/nitro?tab=License-1-ov-file), similar to DeFi protocols like Uniswap and Aave, among others. This license contains an Additional Use Grant that permits the permissionless deployment of Nitro software on blockchains that settle to Arbitrum One or Nova.
 
-However, Arbitrum chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the [AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
+However, Arbitrum Orbit chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the [AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
 
 ### Does Arbitrum officially deploy and/or maintain L3s for external teams?
 
-No. Teams are required to deploy and maintain their Arbitrum chains. There are, however, several RaaS (Rollup as a Service) providers that can deploy and maintain your Arbitrum chain on your behalf.
+No. Teams are required to deploy and maintain their Arbitrum Orbit chains. There are, however, several RaaS (Rollup as a Service) providers that can deploy and maintain your Arbitrum Orbit chain on your behalf.
 
-### Can I modify the underlying technology to customize my Arbitrum chain?
+### Can I modify Orbit's underlying technology to customize my chain?
 
 Yes, you can make any changes you require to the underlying Nitro code base.
 
-### What Data Availability (DA) solutions are currently available for Arbitrum chains?
+### What Data Availability (DA) solutions are currently available for Orbit chains?
 
-Arbitrum chains currently support three different DA solutions:
+Arbitrum Orbit currently supports three different DA solutions:
 
 - Rollup, posting data to the parent chain, which ultimately posts the data to Ethereum.
 - AnyTrust, posting data to a Data Availability Committee, selected by the chain owner.
 - Celestia, posting data to the [Celestia network](https://blog.celestia.org/celestia-is-first-modular-data-availability-network-to-integrate-with-arbitrum-orbit/).
   Note that using AnyTrust provides the chain owner with the most flexibility and the most cost-effective fees.
 
-### What token is used to pay gas fees on Arbitrum chains?
+### What token is used to pay gas fees on Orbit chains?
 
-By default, Arbitrum chains pay gas in `ETH`. However, Arbitrum chains that use AnyTrust are configurable to use any `ERC-20` token for the gas fee token of the chain.
+By default, Arbitrum Orbit chains pay gas in `ETH`. However, Arbitrum Orbit chains that use AnyTrust are configurable to use any `ERC-20` token for the gas fee token of the chain.
 
-### Can I use Ethereum toolkits to develop on my Arbitrum chain?
+### Can I use Ethereum toolkits to develop on my Orbit chain?
 
-Arbitrum chains are fully EVM-compatible. Most tools that support Ethereum should be able to support an Arbitrum chain. There are, however, specific differences that developers need to consider when building on an Arbitrum chain. You can find them in our [overview of the differences between Arbitrum and Ethereum](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/overview).
+Arbitrum Orbit chains are fully EVM-compatible. Most tools that support Ethereum should be able to support an Arbitrum Orbit chain. There are, however, specific differences that developers need to consider when building on an Orbit chain. You can find them [in our Arbitrum vs. Ethereum overview](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/overview).
 
-### Do Arbitrum chains have any built-in AA solution?
+### Do Orbit chains have any built-in AA solution?
 
 Not by default, but they can be customized to have native AA.
 
-### Is there any cross-chain bridging solution between two Arbitrum chains?
+### Is there any cross-chain bridging solution between two Orbit chains?
 
-There is currently no native Arbitrum-to-Arbitrum chain bridging solution, except for going through the parent chain (even if they share the same parent chain). However, many third-party bridges have expressed interest in supporting Arbitrum chains.
+There is currently no native Orbit-to-Orbit chain bridging solution, except for going through the parent chain (even if they share the same parent chain). However, many third-party bridges have expressed interest in supporting Arbitrum Orbit chains.
 
-### Is there an official block explorer for Arbitrum chains?
+### Is there an official block explorer for Orbit chains?
 
-Arbitrum chains deployments usually come with an open-source Blockscout explorer by default, but there are many third-party solutions that have expressed interest in supporting Arbitrum chains.
+Arbitrum Orbit chains deployments usually come with an open-source Blockscout explorer by default, but there are many third-party solutions that have expressed interest in supporting Arbitrum Orbit chains.
 
-### Is there any indexing solution that supports Arbitrum chains?
+### Is there any indexing solution that supports Orbit chains?
 
-Similar to bridges and block explorers, there are many third-party indexing solutions that have expressed interest in supporting Arbitrum chains.
+Similar to bridges and block explorers, there are many third-party indexing solutions that have expressed interest in supporting Arbitrum Orbit chains.
 
-### Can I increase the maximum contract size for my Arbitrum chain?
+### Can I increase the maximum contract size for my Orbit chain?
 
-Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters `[MaxCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[MaxInitCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)` when calling `[prepareNodeConfig](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43)`. Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.
+Yes, Arbitrum Orbit chains support an increased smart contract size limit of up to 96kB. You can use our [Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters `[MaxCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[MaxInitCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)` when calling `[prepareNodeConfig](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43)`. Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.
 
 ### How can I modify Nitro to force posting an invalid assertion and test the fraud proof mechanism?
 
@@ -66,9 +74,9 @@ go test ./system_tests/ -tags=challengetest -run=TestChallenge
 
 ### What fee collectors can be configured on my chain?
 
-Four fee types are configurable on an Arbitrum chain:
+Four fee types are configurable on an Orbit chain:
 
-- **L2 base fee**: L2 execution fees corresponding to the minimum base price of the chain. This fee is deposited into the `infraFeeAccount`, which can be set by calling `ArbOwner.setInfraFeeAccount().`
+- **L2 base fee**: L2 execution fees corresponding to the minimum base price of the chain. This fee is deposited into the infraFeeAccount, which can be set by calling `ArbOwner.setInfraFeeAccount().`
 - **L2 surplus fee**: L2 execution fees above the minimum base price (in the case of congestion). This fee goes to the `networkFeeAccount`, which can be set by calling `ArbOwner.setNetworkFeeAccount().`
 - **L1 base fee**: Relative fees for posting a transaction on the parent chain. This fee is paid ultimately to the fee collector of the active batch poster. A call to `SequencerInbox.setIsBatchPoster()` on the parent chain will set the batch poster. Delegating a different fee collector for that batch poster can be specified by calling `ArbAggregator.setFeeCollector()`.
 - **L1 surplus fee**: Any extra fees rewarded to the batch poster. This is paid to a specific `L1RewardRecipient`, which can be set by calling `ArbOwner.setL1PricingRewardRecipient()`.
@@ -78,7 +86,7 @@ To learn more about precompiles, refer to the [Precompiles reference page](https
 
 ### What is the lowest you can set the base fee to?
 
-You can set the base fee to any amount to charge users less. You can even set it to `0` (however, this would open the chain to DOS attacks). If the Arbitrum chain base fee is `0`, users are then only paying for the cost of DA.
+You can set the base fee to any amount to charge users less. You can even set it to `0` (however, this would open the chain to DOS attacks). If the Orbit base fee is `0`, users are then only paying for the cost of DA.
 
 ### How does fee collection work in Nitro?
 
@@ -126,7 +134,7 @@ Test this thoroughly on a testnet first.
 
 ### What is the max theoretical TPS for an Arbitrum Chain?
 
-Max TPS is a challenging metric to measure, as it relies on network activity and the type of submitted transactions. We can, however, calculate the max throughput using default Arbitrum chain parameters.
+Max TPS is a challenging metric to measure, as it relies on network activity and the type of submitted transactions. We can, however, calculate the max throughput using default orbit chain parameters.
 
 The actual maximum throughput depends on the configurable execution parameters:
 
@@ -144,7 +152,7 @@ The actual maximum throughput depends on the configurable execution parameters:
 
 ### Why is the WETH Gateway not necessary for custom gas token chains?
 
-The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).
+The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum (Orbit) chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).
 
 If you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.
 
