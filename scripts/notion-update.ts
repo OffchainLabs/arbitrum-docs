@@ -49,11 +49,12 @@ function renderQuestion(question: Question, linkableTerms: LinkableTerms): Rende
   const questionText = renderRichTexts(question.question, linkableTerms, RenderMode.Plain).trim();
 
   const answerText = renderRichTexts(question.answer, linkableTerms, RenderMode.Markdown).trim();
-
+  const type = question.questionType;
   return {
     question: questionText,
     answer: answerText,
     key: generateQuestionKey(questionText),
+    category: type,
   };
 }
 
@@ -62,6 +63,7 @@ type RenderedQuestion = {
   question: string; // Plain text question
   answer: string; // Markdown formatted answer
   key: string; // URL-safe key
+  category: string[]; // Type of question (e.g. 'FAQ', 'Question', 'Answer')
 };
 
 // Types
@@ -326,7 +328,8 @@ const renderJSONQuestionStructuredData = (questions: RenderedQuestion[]): string
     const questionText = escapeForJSON(q.question);
     const answerText = escapeForJSON(q.answer);
     const questionKey = escapeForJSON(q.key);
-    return `{"question": "${questionText}","answer": "${answerText}","key": "${questionKey}"}`;
+    const category = escapeForJSON(q.category.join(', '));
+    return `{"question": "${questionText}","answer": "${answerText}","key": "${questionKey}","category": "[${category}]"}`;
   };
 
   return '[\n' + questions.map(printItem).join(',\n') + '\n]';

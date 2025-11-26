@@ -53,7 +53,7 @@ The correct flow is:
 1. A user submits a transaction to an **RPC Node**.
 2. The RPC Node **forwards** the transaction to the **Sequencer**.
 3. The Sequencer **queues and orders** the transaction.
-4. The Sequencer then sends the ordered transaction to the **Validator** via the **Sequencer Feed** for verification.
+4. The Sequencer then sends the ordered transactions to the Validator through the Sequencer Feed. While the Validator can synchronize these transactions directly from the feed, it must still verify their correctness by referencing the corresponding data on the parent chain. This ensures that the final validation process is secured by the parent chain's canonical state.
 
 **Even when a Validator endpoint acts as an RPC Provider, the transaction is immediately forwarded to the Sequencer for ordering, as the Validator's core function is verification.**
 
@@ -138,7 +138,7 @@ Any claims of **billion-scale daily on-chain throughput** should therefore be vi
 For any Nitro chain is **execution plus data availability (DA)** . The main difference between Orbit L2 and L3 lies in the **settlement layer** (the parent chain), since both use the same **Nitro stack**. The assumption that L3 is cheaper is mostly outdated as both L2 and L3 **can** use **AnyTrust mode**, which allows for similarly low gas fees. However with rollup mode, the dominant cost is L1 data posting.
 
 **Gas Fees:**
-Transaction costs depend primarily on **data availability (DA)** rather than on whether a chain is L2 or L3. Since both can adopt AnyTrust DA, their fees are generally comparable. L3 is therefore not inherently cheaper than L2. Since the DAcert from an L3 will be posted on the L2 which will then be posted to the L1.
+Transaction costs depend primarily on **data availability (DA),** not on whether a chain is built as an L2 or an L3. Since both can use AnyTrust DA, their fees are generally similar. Moreover, an L3 is not inherently cheaper because it must still post its data to the L2, which in turn posts data to L1. As a result, the L3 ultimately pays DA fees that settle on L1 as well. This means that the effective DA cost for L2s and L3s remains nearly the same, even when operating in full rollup mode.Since the DAcert from an L3 will be posted on the L2 which will then be posted to the L1.
 
 Even in rollup mode, the pricing difference between L2 and L3 for gas fees are very similar, since when data is posted to the L2 from the L3, the L2 still needs to post that data to the L1 for DA. meaning even on L3 you will still be paying L2 and L1 DA fees.
 
