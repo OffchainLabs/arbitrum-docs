@@ -7,9 +7,9 @@ content_type: quickstart
 displayed_sidebar: buildAppsSidebar
 ---
 
-<!-- waiting on language from Wen -->
+Deploying an `ERC-20` token on Arbitrum is fully permissionless and is possible using standard Ethereum tooling.
 
-This guide will... blah blah blah
+Projects can deploy using **Foundry, Hardhat, or Remix**, then configure bridging, liquidity, and smart-contract infrastructure on Arbitrum One.
 
 ## Prerequisites
 
@@ -19,6 +19,8 @@ This guide will... blah blah blah
    foundryup
    ```
 2. **Get Test `ETH`**: Obtain Arbitrum Sepolia `ETH` from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (e.g., MetaMask) configured for Arbitrum Sepolia and request funds.
+
+A list of faucets is available on the [Chain Info page](/for-devs/dev-tools-and-resources/chain-info.mdx#faucets).
 
 :::info
 
@@ -120,7 +122,7 @@ contract DeployToken is Script {
    ARBISCAN_API_KEY=your_arbiscan_api_key_here
    ```
 
-   (RPC URLs from official Arbitrum docs.)
+   A list of RPCs, and chain IDs are available on the [Chain Info page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info).
 
 2. **Update `foundry.toml`** (add chain IDs for verification, as Arbiscan requires them for non-Ethereum chains):
 
@@ -140,7 +142,7 @@ contract DeployToken is Script {
    arbitrum_one = { key = "${ARBISCAN_API_KEY}", url = "https://api.arbiscan.io/api", chain = 42161 }
    ```
 
-   (Chain IDs: Arbitrum Sepolia is 421614, Arbitrum One (mainnet) is 42161. API URLs from Arbiscan.)
+   A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-and-resources/chain-info.mdx#arbitrum-public-rpc-endpoints).
 
 ## Testing
 
@@ -234,11 +236,21 @@ contract DeployToken is Script {
    - Verifies on Sepolia Arbiscan (https://sepolia.arbiscan.io/).
 
 2. **Deploy to Arbitrum One** (mainnet):
+
    - Replace `arbitrum_sepolia` with `arbitrum_one` in the command.
    - Uses `https://arb1.arbitrum.io/rpc` (RPC URL).
    - Chain ID: 42161.
    - Verifies on Arbiscan (https://arbiscan.io/).
    - Requires sufficient `ETH` on Arbitrum One for gas fees (bridge from Ethereum mainnet if needed).
+
+3. **Example of verifying on Arbiscan**:
+   ```bash
+   forge verify-contract <contract_address> <contract_path>:YourToken \
+     --verifier etherscan \
+     --verifier-url https://api.arbiscan.io/api \
+     --chain-id 42161 \
+     --num-of-optimizations 200
+   ```
 
 ## Arbitrum-Specific Configurations
 
@@ -254,3 +266,28 @@ contract DeployToken is Script {
 - Always conduct security audits (e.g., via tools like Slither or professional reviews) before mainnet deployment, as token contracts handle value.
 - Ensure your wallet has enough `ETH` for gas on the target network. Arbitrum fees are low, but mainnet deployments still cost real `ETH`.
 - If you encounter verification issues, double-check your Arbiscan API key and foundry.toml configs. For more advanced deployments, refer to general Foundry deployment docs or Arbitrum developer resources.
+
+## Bridging considerations
+
+Two deployment paths are possible:
+
+1. **Native Deployment** (recommended)
+
+- Token is deployed directly on Arbitrum One
+- Ideal for a Token Generation Event (TGE), liquidity bootstrapping, airdrops, and L2-native user flows.
+
+2. **Deployment on Ethereum and bridging to Arbitrum One**
+
+- Use the [Arbitrum Token Bridge](https://bridge.arbitrum.io) to create an L2 counterpart
+
+## Post-deployment considerations
+
+After deploying a token contract on Arbitrum, you may choose to complete additional setup steps depending on the needs of your project. These may include:
+
+- Verifying the contract on Arbiscan to improve transparency and readability
+- Creating liquidity pools on Arbitrum-based DEXs
+- Publishing token metadata to relevant indexing or aggregation services
+- Ensuring wallet compatibility by submitting basic token information
+- Configuring operational security components such as multisigs or timelocks
+- Connecting to market infrastructure providers where applicable
+- Setting up monitoring or observability tools for contract activity
