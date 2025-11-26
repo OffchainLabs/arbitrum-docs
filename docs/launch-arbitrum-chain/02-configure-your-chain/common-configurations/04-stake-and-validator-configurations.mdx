@@ -2,9 +2,8 @@
 title: 'Bond and validator configurations'
 description: 'Learn how to configure your Arbitrum chain with a custom bond and validator configurations'
 author: pete-vielhaber
-sme:
+sme: Jason-W123
 content_type: how-to
-tags: ['hide-from-search']
 unlisted: true
 ---
 
@@ -132,7 +131,7 @@ The bonded token is the asset that validators must bond to participate in assert
    });
    ```
 
-### Additional Notes
+### Additional notes
 
 - Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
 - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
@@ -267,7 +266,7 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
 - Funds are escrowed rather than immediately burned, allowing potential recovery or governance decisions.
 - Recommended: Set to an address controlled by the chain owner(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
 
-### Configuring During Deployment
+### Configuring during deployment
 
 1. **Prepare Chain Config**:
 
@@ -345,7 +344,7 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
 5. **For AnyTrust Chains**:
    If `DataAvailabilityCommittee` is `true`, configure the DAC keyset post-deployment using `setValidKeyset` from the SDK.
 
-### Updating `loserStakeEscrow` Post-Deployment
+### Updating `loserStakeEscrow` post-deployment
 
 The chain owner can update it by calling `setLoserStakeEscrow` on the deployed Rollup contract (address from `createRollupResults.coreContracts.rollup`):
 
@@ -362,7 +361,7 @@ await walletClient.writeContract({
 });
 ```
 
-### Additional Notes
+### Additional notes
 
 - This process requires the caller to be the owner. Changes affect how challenge losses are handled, so test thoroughly.
 - Setting `loserStakeEscrow` to a burn address increases the cost of failed challenges, enhancing security.
@@ -429,7 +428,7 @@ docker run --rm -it -v /path/to/local/dir/arbitrum:/home/user/.arbitrum offchain
 
 This creates a wallet file in your mounted directory (e.g., under `arb1/wallet/` for Arbitrum One). Back it up securely, as it's needed to withdraw any staked funds later. Load it in your node run command using the password.
 
-### For Permissioned Chains
+### For permissioned chains
 
 If the Arbitrum chain is permissioned (not fully permissionless), add your validator wallet address to the allowlist:
 
