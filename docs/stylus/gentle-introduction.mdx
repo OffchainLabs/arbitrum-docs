@@ -29,6 +29,40 @@ This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode
 
 With a WASM VM, any programming language compilable to WASM is within Stylus's scope. While many popular programming languages can compile into WASM, some compilers are more suitable for smart contract development than others, like Rust, C, and C++. Other languages like Go, Sway, Move, and Cairo are also supported. Languages that include their own runtimes, like Python and Javascript, are more complex for Stylus to support, although not impossible. Compared to Solidity, WASM programs are much more efficient for memory-intensive applications. There are many reasons for this, including the decades of compiler development for Rust and C. WASM also has a faster runtime than the EVM, resulting in faster execution. Third-party contributions in the form of libraries for new and existing languages are welcomed!
 
+### How Stylus works
+
+Bringing a Stylus program to life involves four stages: **coding, activation, execution, and proving**. Here's what happens at each step.
+
+#### Coding
+
+You write your smart contract in any programming language that compiles to WASM. Right now, Rust has the richest support with an open-source SDK that makes smart contract development straightforward. C and C++ are also supported, so you can deploy existing contracts in those languages onchain with minimal modifications.
+
+The [Stylus SDK for Rust](/stylus/reference/rust-sdk-guide.md) gives you the development framework and language features you'll need. It also provides access to all EVM-specific functionality that smart contract developers use.
+
+#### Activation
+
+Once you've written your contract, you compile it to WASM using the Stylus CLI (or another compiler like Clang for C/C++). Then you post the compiled WASM onchain.
+
+Before your contract can be called, it goes through an activation process. During activation, the WASM gets compiled down to a node's native machine code (like ARM or x86). This step also applies safety checks, including gas metering, depth-checking, and memory charging, to ensure your program runs safely and can be fraud-proven.
+
+One thing to know: Stylus measures computational costs using **ink** instead of gas. Ink works just like gas but is thousands of times smaller. Why? Because WASM executes so much faster than the EVM that a single EVM operation takes as long as thousands of WASM operations. Having a finer-grained unit makes pricing more precise.
+
+:::note
+Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/using-cli.mdx#cargo-stylus-commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference.mdx#arbwasm). If a contract isn't reactivated, it becomes uncallable.
+:::
+
+#### Execution
+
+When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a leading WebAssembly runtime optimized for blockchain use cases. Wasmer runs native code much faster than Geth executes EVM bytecode, which is where the gas savings come from.
+
+The best part? EVM contracts keep working exactly as before. When a contract is called, the system checks whether it's an EVM contract or a WASM program and routes it to the right runtime. Solidity and WASM contracts can call each other freely, so you never have to worry about which language a contract was written in. Everything is interoperable.
+
+#### Proving
+
+Stylus builds on Nitro's fraud-proving technology. In normal operation, execution compiles to native code for speed. But if there's a dispute, the execution history compiles to WASM so validators can run interactive fraud proofs on Ethereum.
+
+This is what makes Stylus possible: Nitro can already replay and verify disputes using WASM. Stylus extends this capability to verify not just execution history, but also the WASM programs you deploy. The result is a system where any program compiled to WASM can be deterministically fraud-proven. For more details, see the [Nitro architecture documentation](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
+
 ### Use Cases
 
 While many developers will be drawn to new use cases, rebuilding existing applications in Stylus will also open the door to innovation and optimization. dApps have never been faster, cheaper, or safer. Stylus can integrate easily into existing Solidity projects by calling a Stylus contract to optimize specific parts of your dApp or building the entire dApp with Stylus. It's impossible to list all of the use cases Stylus enables; think about the properties of all WASM-compatible languages! That said, here are some particularly exciting ideas:
