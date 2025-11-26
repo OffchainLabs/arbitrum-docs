@@ -20,9 +20,9 @@ Projects can deploy using **Foundry, Hardhat, or Remix**, then configure bridgin
    ```
 2. **Get Test `ETH`**: Obtain Arbitrum Sepolia `ETH` from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (e.g., MetaMask) configured for Arbitrum Sepolia and request funds.
 
-A list of faucets is available on the [Chain Info page](/for-devs/dev-tools-and-resources/chain-info.mdx#faucets).
+:::info Resources
 
-:::info
+A list of faucets is available on the [Chain Info page](/for-devs/dev-tools-and-resources/chain-info.mdx#faucets).
 
 You may need to bridge `ETH` from Ethereum Sepolia to Arbitrum Sepolia first, using the official Arbitrum Bridge if the faucet requires it.
 
@@ -122,7 +122,11 @@ contract DeployToken is Script {
    ARBISCAN_API_KEY=your_arbiscan_api_key_here
    ```
 
-   A list of RPCs, and chain IDs are available on the [Chain Info page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info).
+:::info Resources
+
+A list of RPCs, and chain IDs are available on the [Chain Info page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info).
+
+:::
 
 2. **Update `foundry.toml`** (add chain IDs for verification, as Arbiscan requires them for non-Ethereum chains):
 
@@ -142,7 +146,11 @@ contract DeployToken is Script {
    arbitrum_one = { key = "${ARBISCAN_API_KEY}", url = "https://api.arbiscan.io/api", chain = 42161 }
    ```
 
-   A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-and-resources/chain-info.mdx#arbitrum-public-rpc-endpoints).
+:::info Resources
+
+A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-and-resources/chain-info.mdx#arbitrum-public-rpc-endpoints).
+
+:::
 
 ## Testing
 
@@ -233,14 +241,14 @@ contract DeployToken is Script {
 
    - Uses `https://sepolia.arbitrum.io/rpc` (RPC URL).
    - Chain ID: 421614.
-   - Verifies on Sepolia Arbiscan (https://sepolia.arbiscan.io/).
+   - Verifies on [Sepolia Arbiscan](<(https://sepolia.arbiscan.io/)>).
 
 2. **Deploy to Arbitrum One** (mainnet):
 
    - Replace `arbitrum_sepolia` with `arbitrum_one` in the command.
    - Uses `https://arb1.arbitrum.io/rpc` (RPC URL).
    - Chain ID: 42161.
-   - Verifies on Arbiscan (https://arbiscan.io/).
+   - Verifies on [Arbiscan](https://arbiscan.io/).
    - Requires sufficient `ETH` on Arbitrum One for gas fees (bridge from Ethereum mainnet if needed).
 
 3. **Example of verifying on Arbiscan**:
