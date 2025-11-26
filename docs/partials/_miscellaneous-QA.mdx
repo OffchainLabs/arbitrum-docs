@@ -403,7 +403,7 @@ This issue originates from the node responding to an `invalid block range` param
 
 Additionally, if you encounter the error `wrong msgIdx got 167230 expected 167228`, this points to **database inconsistency** between components of your node setup. Resetting only one database can create further synchronization issues.
 
-If the chain is running in **Rollup mode**, the recommended fix is to **delete the entire database** (typically located at `/home/user/.arbitrum/<your_chain_name>`) and **resync the node** from the parent chain. This ensures full consistency across databases and resolves the indexing mismatch.
+If the chain is running in **Rollup mode**, the recommended fix is to **delete the entire database** (typically located at `/home/user/.arbitrum/\<your_chain_name\>`) and **resync the node** from the parent chain. This ensures full consistency across databases and resolves the indexing mismatch.
 
 ### Regarding the configuration below, the default value is 100000. If the compression rate is 11, how many transactions can be included on average?
 
@@ -468,7 +468,7 @@ weth and multi call are usually specific to the chain and be a constant contract
 
 ### What does "resolve any unconfirmed assertions" mean in resolve node explanation? (What does resolve mean here?) This is a question from another team member. Is "resolve any unconfirmed assertions" performed by the rollup contract rather than the validator?
 
-The assertion life cycle is: `assertion created` -> `assertion waiting for challenge` -> `assertion confirmed` in happy case. The resolve mean confirm an assertion, arbitrum is optimistic rollup, the l1 will not do any execution when there is no challenge, so needs to be resolved on rollup contract by validator after it created, I would highly recommend you go through those docs (**[Validation and Proving Mechanisms](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/validation-and-proving)**, [rollup protocol](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/rollup-protocol) and [challenge protocol](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/proving-and-challenges)) for a better understanding.
+The assertion life cycle is: `assertion created` -\> `assertion waiting for challenge` -\> `assertion confirmed` in happy case. The resolve mean confirm an assertion, arbitrum is optimistic rollup, the l1 will not do any execution when there is no challenge, so needs to be resolved on rollup contract by validator after it created, I would highly recommend you go through those docs (**[Validation and Proving Mechanisms](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/validation-and-proving)**, [rollup protocol](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/rollup-protocol) and [challenge protocol](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/proving-and-challenges)) for a better understanding.
 
 ### How can I call smart contract functions and listen to events emitted by said contracts (Original question asked specifically about changing transaction fee receiver and how to call/read smart contract functions/events)
 
@@ -491,7 +491,7 @@ For rpc each specific methods implementation, you can check code here. http/ws p
 
 native token here is 0x0 means you use ethers as gas token, if it is other value, then means this chain will use that as gas token. About proxyAdmin, you can check oz docs. validatorWalletCreator can be used to create wallet for validator to ensure the funds safety.
 
-### if i use the same validator address as a Makenode address at first and then change it to defensive mode, does it re-stacking every time i change the mode?For example, as i can see below, the money is spent twice.https://sepolia.etherscan.io/address/0x65fF9E2256CBaE32f8Ae18776cF1e66A2BEa436d (Mode : MakeNode->defensive) (twice out)https://sepolia.etherscan.io/address/0x9699040F6e8A10F6831884966ceBfaa2E50fe59B (Mode change is not sure but twice out)In this case, how can I withdraw the stake I made in the previous mode? Could you please guide me on the specific method?
+### if i use the same validator address as a Makenode address at first and then change it to defensive mode, does it re-stacking every time i change the mode?For example, as i can see below, the money is spent twice.https://sepolia.etherscan.io/address/0x65fF9E2256CBaE32f8Ae18776cF1e66A2BEa436d (Mode : MakeNode-\>defensive) (twice out)https://sepolia.etherscan.io/address/0x9699040F6e8A10F6831884966ceBfaa2E50fe59B (Mode change is not sure but twice out)In this case, how can I withdraw the stake I made in the previous mode? Could you please guide me on the specific method?
 
 No, it will just **need** stake once, the stake token of your chain is weth (wrapped ethers, which is an erc20 type of ethers). You can click [here](https://sepolia.etherscan.io/address/0x65ff9e2256cbae32f8ae18776cf1e66a2bea436d#tokentxns) to see your weth transfer history, then you will see there is only 1 time that your address transfer the weth token to your rollup contract, although you deposited twice (2 ethrs), only 1 weth is spent and your address still has 1 weth left, you can check it [here](https://sepolia.etherscan.io/address/0x7b79995e5f793a07bc00c21412e50ecae098e7f9#readContract)  by call `balanceOf` and input is your address, if you want to withdraw weth back to eth, then use your address to connect to etherscan and call withdraw [here](https://sepolia.etherscan.io/address/0x7b79995e5f793a07bc00c21412e50ecae098e7f9#writeContract).
 
@@ -589,7 +589,7 @@ Your rollup contract uses weth as stake token, and the node needs to call weth c
 
 No, no relationships I mean is no need to have any specific amount of batch to post the assertion, if your batch number higher than last assertion's, then you are good to post the new one. related logic [here](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol#L471).
 
-### -> --node.bold.assertion-posting-interval (bold) or --node.staker.make-assertion-interval (legacy) What are the differences between these two?
+### -\> --node.bold.assertion-posting-interval (bold) or --node.staker.make-assertion-interval (legacy) What are the differences between these two?
 
 The first one is used for validators using the BoLD protocol, the second one is used for validators running the legacy protocol.
 
@@ -599,7 +599,7 @@ The first one is used for validators using the BoLD protocol, the second one is 
 
 ### Do all L1→L2 message go through the inbox contract?
 
-Yes, even for bridge contract, it will finally call inbox's `createRetryableTicket` , for more about l1->l2 message, please refer to [this](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging) docs.
+Yes, even for bridge contract, it will finally call inbox's `createRetryableTicket` , for more about l1-\>l2 message, please refer to [this](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging) docs.
 
 ### When I try to build nitro binary, I get the following error: make: wat2wasm: No such file or directory
 
@@ -711,7 +711,7 @@ Apply `--conf.file` to your node when starting, and remember if you are running 
 
 Empty batch can be posted after 72 hours this is true, empty batch means there is no user tx within the batch, so no need to have user's tx for a batch posting, **but there will be system tx like** `batchPostingReport` **to create a new block,**  And this block won't contain any **user tx**.
 
-### WARN [06-11|09:12:22.830] error getting max time variation on L1 bound block; falling back on latest block err="429 Too Many Requests: {\"code\":-32007,\"message\":\"50/second request limit reached - reduce calls per second or upgrade your account at quicknode.com\"}"
+### WARN [06-11|09:12:22.830] error getting max time variation on L1 bound block; falling back on latest block err="429 Too Many Requests: \{\"code\":-32007,\"message\":\"50/second request limit reached - reduce calls per second or upgrade your account at quicknode.com\"\}"
 
 This 429 error returned from your parent chain rpc endpoint, you need to check the status of your parent chain rpc endpoint.
 
@@ -756,13 +756,13 @@ Resolution**
 If you want to allow multiple unconfirmed transactions simultaneously, increase the mempool limit:
 **For BOLD validators:**
 
-`--node.bold.data-poster.max-mempool-transactions <value>`
+`--node.bold.data-poster.max-mempool-transactions \<value\>`
 **For legacy validators:**
 
-`--node.staker.data-poster.max-mempool-transactions <value>`
+`--node.staker.data-poster.max-mempool-transactions \<value\>`
 
 **Log Level Logic:**
-• **< 10 minutes:** WARN - considered a temporary issue
+• **\< 10 minutes:** WARN - considered a temporary issue
 • **≥ 10 minutes:** ERROR - problem persisted too long, escalated to error level
 
 ### But if TPS increases, for example, if 100 sequences are sent per second, will the response speed after each transmission be uniform, or will the overall response speed slow down?
@@ -833,7 +833,7 @@ validatorName=default-validator
 This ERROR indicates a transaction (nonce 30) has been pending for **over 10 minutes** without confirmation. This is a serious issue requiring immediate investigation - the transaction is likely stuck due to low gas price, L1 congestion, or RPC issues.**
 Why This Escalated from WARN to ERROR**
 **Log Level Logic:**
-• **< 10 minutes:** WARN - considered a temporary issue
+• **\< 10 minutes:** WARN - considered a temporary issue
 • **≥ 10 minutes:** ERROR - problem persisted too long, escalated to error level
 **Situation:**
 The escalation to ERROR means nonce 30 has been unconfirmed for over 10 minutes, blocking all subsequent assertions. This is **not normal** temporary waiting.**
@@ -842,7 +842,7 @@ Immediate Diagnostic Steps**
 View the validator address on L1 to inspect the stuck transaction:bash
 
 _`# Using Etherscan or similar block explorer# Or query via RPC:`_`
-eth_getTransactionByHash <tx_hash_for_nonce_30>`
+eth_getTransactionByHash \<tx_hash_for_nonce_30\>`
 **2. Identify Root Cause**
 **a. Gas Price Too Low (Most Common)**
 • Transaction gas price is too low for current L1 network conditions
@@ -992,12 +992,12 @@ Might be some reasons;
 The sequencer's max time variation is configurable via the `setMaxTimeVariation` method of the Sequencer Inbox Contract, which will also be set to prevent chain reorganization when there are no batches for an extended period.
 `MaxTimeVariation` struct:
 
-`struct MaxTimeVariation {    
+`struct MaxTimeVariation \{    
 uint256 delayBlocks;    
 uint256 futureBlocks;    
 uint256 delaySeconds;    
 uint256 futureSeconds;
-}`
+\}`
 The `MaxTimeVariation` struct defines time boundaries that determine whether your chain remains safe or triggers a reorganization (reorg) when posting batches. It uses both block-based and time-based limits to create acceptable windows for message processing between L1 and L2.
 
 ### What is the difference between the chain SDK and the Orbit setup script (Orbit now Arbitrum chain)
@@ -1124,11 +1124,11 @@ For sequencer coordinator system (redis can also be used on other system), Redis
 **Data in Redis**
 **1. Leadership Keys**
 • `coordinator.chosen` - URL of currently active sequencer (e.g., "[http://sequencer1:8547](http://sequencer1:8547/)")
-• `coordinator.liveliness.<url>` - Each sequencer's heartbeat signal
+• `coordinator.liveliness.\<url\>` - Each sequencer's heartbeat signal
 **2. Message Synchronization**
 • `coordinator.msgCount` - Current message count (signed)
 • `coordinator.finalizedMsgCount` - Finalized message count (signed)
-• `coordinator.msg.<index>` - Individual messages (JSON encoded)
+• `coordinator.msg.\<index\>` - Individual messages (JSON encoded)
 • Other sync-related keys
 **3. Configuration**
 • `coordinator.priorities` - Comma-separated priority list of sequencer URLs
@@ -1136,7 +1136,7 @@ For sequencer coordinator system (redis can also be used on other system), Redis
 **The election process:**
 
 1. The system reads coordinator.priorities to get the ordered list of sequencer URLs
-2. It checks each URL in priority order to see if that sequencer has set coordinator.liveliness.<url> = "OK"
+2. It checks each URL in priority order to see if that sequencer has set coordinator.liveliness.\<url\> = "OK"
 3. The first sequencer in the priority list that has its liveliness key set becomes the recommended leader
 4. That sequencer attempts to acquire the coordinator.chosen lock **Conditions for a sequencer to become active:**
    • Must be synced with the network
