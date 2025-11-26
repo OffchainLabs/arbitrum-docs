@@ -30,7 +30,7 @@ You may need to bridge `ETH` from Ethereum Sepolia to Arbitrum Sepolia first, us
 
 3. **Set Up Development Environment**: Configure your wallet and tools for Arbitrum testnet deployment. Sign up for an Arbiscan account to get an API key for contract verification.
 
-## Project Setup
+## Project setup
 
 1. **Initialize Foundry Project**:
    ```bash
@@ -43,7 +43,7 @@ You may need to bridge `ETH` from Ethereum Sepolia to Arbitrum Sepolia first, us
    forge install OpenZeppelin/openzeppelin-contracts
    ```
 
-## Smart Contract Development
+## Smart contract development
 
 Create `src/MyToken.sol` (this is a standard `ERC-20` contract and works on any EVM chain like Arbitrum):
 
@@ -78,7 +78,7 @@ contract MyToken is ERC20, Ownable {
 }
 ```
 
-## Deployment Script
+## Deployment script
 
 Create `script/DeployToken.s.sol`:
 
@@ -111,7 +111,7 @@ contract DeployToken is Script {
 }
 ```
 
-## Environment Configuration
+## Environment configuration
 
 1. **Create `.env` file**:
 
@@ -227,7 +227,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
    forge test -vv
    ```
 
-## Deployment and Verification
+## Deployment and verification
 
 1. **Deploy to Arbitrum Sepolia** (testnet):
 
@@ -260,7 +260,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
      --num-of-optimizations 200
    ```
 
-## Arbitrum-Specific Configurations
+## Arbitrum-specific configurations
 
 - **RPC URLs**:
   - Arbitrum Sepolia: `https://sepolia.arbitrum.io/rpc`
