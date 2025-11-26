@@ -20,7 +20,7 @@ It's worth noting that this page is based on a well-behaved sequencer, not one t
 
 - **Delayed Inbox**: A contract on the <a data-quicklook-from="parent-chain">parent chain</a> where users can submit transactions (e.g., retryable tickets for token bridges or direct calls) to be force-included on the child chain if the sequencer delays them. These are held until the sequencer releases them based on parent chain progress.
 - **Finality**: The point at which a Delayed Inbox <a data-quicklook-from="transaction">transaction</a> is irreversibly executable on the child chain. By default, this depends on L1 finality (e.g., Ethereum blocks confirming a <a data-quicklook-from="batch">batch</a> from <a data-quicklook-from="arbitrum">Arbitrum</a> One or a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a>/DACert from Nova), taking ~10-60 minutes.
-- **L2 vs. L1 Finality**: L3 chains can be configured to rely on the parent L2's quicker "soft finality" (~1-15 minutes) instead of waiting for deeper L1 confirmations, or to reduce <a data-quicklook-from="l2-block">L2 block</a> waits for even faster processing.
+- **L2 vs. L1 finality**: L3 chains can be configured to rely on the parent L2's quicker "soft finality" (~1-15 minutes) instead of waiting for deeper L1 confirmations, or to reduce <a data-quicklook-from="l2-block">L2 block</a> waits for even faster processing.
 - **Relevant Flags**:
   - `--node.delayed-sequencer.use-merge-finality=false`: Uses block depth (finalize-distance) instead of Ethereum's finalized/safe block tags to determine L1 finality. .
   - `--node.delayed-sequencer.finalize-distance=1`: Sets the number of L2 block confirmations needed (default is higher; 1 enables ~1-minute finality; only works when `use-merge-finality` sets to false).
@@ -37,16 +37,16 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 
 ### Configuration process:
 
-- **Prepare the Sequencer Node**: When running your Arbitrum chain's sequencer (e.g., via Docker or local build from Nitro source), add the flags to the startup command. Example for a Dockerized sequencer:
+- **Prepare the sequencer node**: When running your Arbitrum chain's sequencer (e.g., via Docker or local build from Nitro source), add the flags to the startup command. Example for a Dockerized sequencer:
   `docker run --rm -it -p 8547:8547 offchainlabs/nitro-node:v3.7.2 --chain.id=12345 --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1`
 - Replace with your chain's parameters (e.g., parent chain URL).
-- **Test and Deploy**: Verify in a devnet by submitting a Delayed Inbox transaction (e.g., via a token <a data-quicklook-from="bridge">bridge</a>) and monitoring release timing in logs. For production, ensure validators are updated to match the new behavior.
+- **Test and deploy**: Verify in a devnet by submitting a Delayed Inbox transaction (e.g., via a token <a data-quicklook-from="bridge">bridge</a>) and monitoring release timing in logs. For production, ensure validators are updated to match the new behavior.
 - **Monitor**: Use tools like chain explorers or sequencer logs to track finality times and re-org incidents.
 
 ## How it differs from default
 
 - **Default (L1-Dependent)**: Relies on Ethereum L1 finality for batches/DACerts, ensuring maximum security but slower deposits (~tens of minutes).
-- **Configured (L2-Only with Low Distance)**: Shifts to L2 soft finality and minimal confirmations, achieving ~1-minute deposits but introducing re-org risks if the parent L2 reverts unconfirmed blocks.
+- **Configured (L2-only with low distance)**: Shifts to L2 soft finality and minimal confirmations, achieving ~1-minute deposits but introducing re-org risks if the parent L2 reverts unconfirmed blocks.
 
 ## Pros
 
@@ -66,8 +66,8 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 
 ## Examples
 
-- **Default L1 Finality**: A token deposit from Ethereum to an L3 (settling to Arbitrum One) waits for L1 to confirm the L2 batch, finalizing in ~10-30 minutes.
-- **Fast L2 Finality**: For an L3 settling to <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, configure with `--node.delayed-sequencer.use-merge-finality=false` `--node.delayed-sequencer.finalize-distance=1`. A bridge deposit is released after 1 L2 block (~1 minute), but may be <a data-quicklook-from="reorg">reorg</a>'d if Nova reverts.
-- **DACert-Optimized**: On Nova settlement with default flags, finality ties to DACert posting (~tens of minutes); configuring low-distance speeds reduces this to ~1 minute for gaming apps needing quick asset transfers.
+- **Default L1 finality**: A token deposit from Ethereum to an L3 (settling to Arbitrum One) waits for L1 to confirm the L2 batch, finalizing in ~10-30 minutes.
+- **Fast L2 finality**: For an L3 settling to <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, configure with `--node.delayed-sequencer.use-merge-finality=false` `--node.delayed-sequencer.finalize-distance=1`. A bridge deposit is released after 1 L2 block (~1 minute), but may be <a data-quicklook-from="reorg">reorg</a>'d if Nova reverts.
+- **DACert-optimized**: On Nova settlement with default flags, finality ties to DACert posting (~tens of minutes); configuring low-distance speeds reduces this to ~1 minute for gaming apps needing quick asset transfers.
 
 This feature underscores Arbitrum's modularity for performance tuning while inheriting parent security. For implementation, refer to the latest Nitro sequencer docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

@@ -17,8 +17,8 @@ It's ideal for DeFi-heavy chains with substantial MEV (e.g., arbitrage opportuni
 ## Key concepts
 
 - **MEV in Arbitrum**: MEV refers to the profit extractable from transaction ordering, such as through arbitrage, liquidations, or backrunning. Under default FCFS, MEV often goes to searchers via latency races (e.g., faster hardware), leading to network spam and no revenue for the chain. Timeboost internalizes this by auctioning a time-based edge, diverting competition to bids while limiting harmful MEV via no reordering or visibility into other transactions.
-- **Express Lane**: A special <a data-quicklook-from="sequencer">Sequencer</a> endpoint (`timeboost_sendExpressLaneTransaction`) where the auction winner (controller) can submit transactions without an artificial delay. Non-express transactions get a default 200ms delay added to their arrival timestamp, potentially pushing them to the next block (but block times remain ~250ms). The controller gets no guarantees of top-of-block positioning or profitability—value comes from predicted MEV during the round (default 60s).
-- **Offchain Auction**: A sealed-bid, second-price auction (winner pays the second-highest bid) run by an <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a> every round. Bids use a configurable `ERC-20` token (e.g., `WETH`; no fee-on-transfer or rebasing tokens) and must meet a minimum reserve price (default 0.001 `WETH`). Auctions close 15s before the round starts, with bids verifiable on-chain. Limit of 5 bids per address per round to prevent DDoS.
+- **Express lane**: A special <a data-quicklook-from="sequencer">Sequencer</a> endpoint (`timeboost_sendExpressLaneTransaction`) where the auction winner (controller) can submit transactions without an artificial delay. Non-express transactions get a default 200ms delay added to their arrival timestamp, potentially pushing them to the next block (but block times remain ~250ms). The controller gets no guarantees of top-of-block positioning or profitability—value comes from predicted MEV during the round (default 60s).
+- **Offchain auction**: A sealed-bid, second-price auction (winner pays the second-highest bid) run by an <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a> every round. Bids use a configurable `ERC-20` token (e.g., `WETH`; no fee-on-transfer or rebasing tokens) and must meet a minimum reserve price (default 0.001 `WETH`). Auctions close 15s before the round starts, with bids verifiable on-chain. Limit of 5 bids per address per round to prevent DDoS.
 - **<a data-quicklook-from="auction-contract">auction contract</a>**: Deployed on-chain, it handles deposits (withdrawable after ~2 minutes), bid resolution, and proceeds transfer to a beneficiary (e.g., chain owner or burn address) via `flushBeneficiaryBalance()`.
 
 ## Compatibility
@@ -32,13 +32,13 @@ Works with any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> (<a da
 ## Examples
 
 - **<a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova**: Generates revenue from MEV auctions while protecting users.
-- **Custom Arbitrum Chains**: DeFi-focused L3s enable it for revenue (e.g., using custom tokens for bids), while low-activity chains skip it.
+- **Custom Arbitrum chains**: DeFi-focused L3s enable it for revenue (e.g., using custom tokens for bids), while low-activity chains skip it.
 
 ## How to configure
 
-1. **Deploy Auction Contract**: Use Arbitrum chain scripts (e.g., from `[orbit-actions](https://github.com/OffchainLabs/orbit-actions)` repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
+1. **Deploy Auction contract**: Use Arbitrum chain scripts (e.g., from `[orbit-actions](https://github.com/OffchainLabs/orbit-actions)` repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
 2. **Run Auctioneer Services**: Set up Redis for coordination; run bid <a data-quicklook-from="validator">validator</a> (verifies bids) and auction server (resolves auctions) using the `autonomous-auctioneer` binary from Nitro (Docker or local build).
-3. **Configure Sequencer**: Update node config to enable `timeboost` and `auctioneer` APIs, pointing to the contract and Redis.
+3. **Configure the sequencer**: Update node config to enable `timeboost` and `auctioneer` APIs, pointing to the contract and Redis.
 
 - Verify via logs (e.g., "New express lane auction round") and test bids/submissions.
 - Post-enable, adjust parameters like round duration (60s default) or delay (200ms) via owner privileges.

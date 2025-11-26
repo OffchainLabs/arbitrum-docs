@@ -13,7 +13,7 @@ Customizing the <a data-quicklook-from="arbos">ArbOS</a> version involves modify
 - **ArbOS**: The hypervisor-like layer in Nitro that manages the chain's execution environment, including STF, precompiles, state, and upgrades. Versions are numbered (e.g., starting from 20 in increments of 10 for canonical releases like "Atlas"), with names taken from planetary moons (e.g., "Atlas" for 20, "Bianca" for 30). Custom versions can use intermediates (e.g., 21-29) for project-specific forks.
 - **State Transition Function (STF)**: The deterministic process for computing new states from transactions. Customizations here (e.g., new logic or states) often necessitate an ArbOS upgrade to integrate changes into the replay binary used for fraud proofs.
 - **<a data-quicklook-from="wasm">WASM</a> Module Root**: A 32-byte hash of the STF's implementation (e.g., 0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4 for ArbOS 20). Customizations require updating this on the <a data-quicklook-from="parent-chain">parent chain</a> for compatibility validation.
-- **Backward Compatibility**: Changes must preserve old block results; new features activate only post-upgrade via version gates (e.g., `if state.ArbOSVersion() >= targetVersion`). For more details, please refer to [ArbOS version control](/launch-arbitrum-chain/05-customize-your-chain/customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result-arbos-version-control).
+- **Backward compatibility**: Changes must preserve old block results; new features activate only post-upgrade via version gates (e.g., `if state.ArbOSVersion() >= targetVersion`). For more details, please refer to [ArbOS version control](/launch-arbitrum-chain/05-customize-your-chain/customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result-arbos-version-control).
 
 ### Compatibility
 
@@ -35,10 +35,10 @@ Customizing the <a data-quicklook-from="arbos">ArbOS</a> version involves modify
 
 ### Examples
 
-- **New <a data-quicklook-from="precompile">Precompile</a> Method**: Add `sayHi()` to ArbSys, gated by `ArbOwner.methodsByName["SayHi"].arbosVersion = 32`.
-- **New Precompile**: Create ArbHi with `ArbHi.arbosVersion = 32` and method gates.
-- **New State Variable**: Add `myNumber` initialized in `UpgradeArbosVersion` switch for v21: `ensure(state.SetNewMyNumber(randomNumber))`.
-- **STF Logic Change**: Branch in a method: `if p.state.ArbOSVersion() >= 32 { return "hi, new version" } else { return "hi" }`.
+- **New <a data-quicklook-from="precompile">precompile</a> method**: Add `sayHi()` to ArbSys, gated by `ArbOwner.methodsByName["SayHi"].arbosVersion = 32`.
+- **New precompile**: Create ArbHi with `ArbHi.arbosVersion = 32` and method gates.
+- **New state variable**: Add `myNumber` initialized in `UpgradeArbosVersion` switch for v21: `ensure(state.SetNewMyNumber(randomNumber))`.
+- **STF Logic change**: Branch in a method: `if p.state.ArbOSVersion() >= 32 { return "hi, new version" } else { return "hi" }`.
 
 :::info
 
@@ -48,10 +48,10 @@ It is important to understand that this is part of customizing the behavior of y
 
 ## How to configure
 
-1. **Clone and Modify Nitro**: Use a branch like v3.7.2 (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`). Edit files (e.g., precompile.go, arbosstate.go) for changes, adding version gates.
-2. **Upgrade Nodes/Validators**: Update to the custom Nitro version (e.g., v2.3.1+ for ArbOS 20 base).
-3. **Build Custom Node**: Create Docker images, extract the new WASM module root, and update it on the parent chain via `setWasmModuleRoot` on the rollup contract.
-4. **Schedule Upgrade**: Call `scheduleArbOSUpgrade` on ArbOwner precompile with the new version and timestamp (0 for immediate).
-5. **Enable Features**: Post-upgrade, configure any version-specific flags.
+1. **Clone and modify Nitro**: Use a branch like v3.7.2 (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`). Edit files (e.g., precompile.go, arbosstate.go) for changes, adding version gates.
+2. **Upgrade nodes/validators**: Update to the custom Nitro version (e.g., v2.3.1+ for ArbOS 20 base).
+3. **Build custom node**: Create Docker images, extract the new WASM module root, and update it on the parent chain via `setWasmModuleRoot` on the rollup contract.
+4. **Schedule upgrade**: Call `scheduleArbOSUpgrade` on ArbOwner precompile with the new version and timestamp (0 for immediate).
+5. **Enable features**: Post-upgrade, configure any version-specific flags.
 
 This reflects Arbitrum's modularity but demands rigorous testing. Refer to the docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

@@ -15,7 +15,7 @@ For the chain, it resets the challenge clock for in-flight withdrawals (adding u
 ## Key concepts
 
 - **Validation in Arbitrum**: In optimistic Rollups like Arbitrum, validators (sequencers or stakers) post assertions about the chain's state (e.g., block hashes, history commitments as Merkle roots, <a data-quicklook-from="batch">batch</a> numbers, and inbox message counts) to the parent chain. These assertions can be challenged during a fixed window (typically 6.4 days on Ethereum) if they are suspected to be invalid, leading to interactive fraud proofs verified onchain via a <a data-quicklook-from="wasm">WASM</a> VM.
-- **Security Through Disputes**: Disputes narrow disagreements via bisections (binary search over computation steps, up to `2^69` in total space) across levels (block, BigStep for WASM ranges, SmallStep for single steps). Honest validators use offchain software (e.g., Nitro in Defensive mode) to automatically challenge invalid assertions, generating deterministic fraud proofs. Security relies on economic incentives: bonds are posted and forfeited by losers, deterring malice.
+- **Security through disputes**: Disputes narrow disagreements via bisections (binary search over computation steps, up to `2^69` in total space) across levels (block, BigStep for WASM ranges, SmallStep for single steps). Honest validators use offchain software (e.g., Nitro in Defensive mode) to automatically challenge invalid assertions, generating deterministic fraud proofs. Security relies on economic incentives: bonds are posted and forfeited by losers, deterring malice.
 - **BoLD Protocol**: BoLD introduces an "all-vs-all" (battle royale) model where multiple parties can challenge and defend simultaneously via "edges" (claims about history segments). It uses timers based on parent chain blocks, <a data-quicklook-from="trustless">trustless</a> bonding pools for crowdsourced stakes, and recursive sub-challenges to ensure a single honest party can always win against any number of adversaries. This bounds liquidity delays (hence the name) and mitigates "delay attacks" where malicious parties could previously prolong disputes indefinitely.
 
 ## Compatibility with chain types
@@ -34,6 +34,6 @@ BoLD is required for Rollup mode with custom gas tokens posting to Ethereum (to 
 ## Examples
 
 - **Arbitrum One and Nova**: Upgraded to BoLD for <a data-quicklook-from="permissionless-validation">permissionless validation</a>, allowing public testnets and community validators to secure the chains.
-- **Custom Arbitrum Chains**: Projects like gaming or DeFi appchains choose BoLD to enable decentralized validation, especially when using Rollup mode with Ethereum settlement for high-security needs.
+- **Custom Arbitrum chains**: Projects like gaming or DeFi appchains choose BoLD to enable decentralized validation, especially when using Rollup mode with Ethereum settlement for high-security needs.
 
 This upgrade aligns with Arbitrum's modular ethos, bolstering trust-minimization while inheriting Ethereum's security. For implementation, refer to the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

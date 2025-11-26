@@ -15,13 +15,13 @@ The configuration ensures compliance with the AEP terms, streamlines reporting, 
 ## Key concepts
 
 - **Arbitrum Expansion Program (AEP)**: A licensing framework for deploying <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> outside of <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> (e.g., settling to Ethereum mainnet, other L2s, or even non-Ethereum chains with DAO approval). It requires no upfront permission but mandates paying 10% of net revenue (8% to the DAO treasury, 2% to ecosystem growth funds). This framework applies to modifications of the stack, including custom DA, gas tokens, or governance. For complete information refer to the Arbitrum Foundation's [Creating new Arbitrum chains, Arbitrum Expansion Program (AEP) section](https://docs.arbitrum.foundation/new-arb-chains#arbitrum-expansion-program-aep).
-- **Protocol Net Revenue**: The chain's profit, calculated as total fees collected (e.g., from gas, surplus, or custom mechanisms) minus Settlement Costs. Settlement Costs include gas fees for posting data to the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum calldata or blobs) and any other direct operational expenses like <a data-quicklook-from="batch">batch</a> posting. Only positive net revenue triggers the 10% fee; losses or zero profit incur no payment.
-- **AEP Fee Router**: A set of deployable contracts (e.g., `RewardDistributor` or custom distributors) that automatically routes the 10% share. It integrates with the chain's fee collectors (e.g., for surplus fees) and handles cross-chain transfers (e.g., bridging to Ethereum then to a DAO-controlled address on Arbitrum One).
+- **Protocol net revenue**: The chain's profit, calculated as total fees collected (e.g., from gas, surplus, or custom mechanisms) minus Settlement Costs. Settlement Costs include gas fees for posting data to the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum calldata or blobs) and any other direct operational expenses like <a data-quicklook-from="batch">batch</a> posting. Only positive net revenue triggers the 10% fee; losses or zero profit incur no payment.
+- **AEP fee router**: A set of deployable contracts (e.g., `RewardDistributor` or custom distributors) that automatically routes the 10% share. It integrates with the chain's fee collectors (e.g., for surplus fees) and handles cross-chain transfers (e.g., bridging to Ethereum then to a DAO-controlled address on Arbitrum One).
 
 ## Compatibility
 
-- **DA Modes**: Applies across Rollup, AnyTrust, and Alt-DA, as settlement costs vary by mode (e.g., lower in Alt-DA).
-- **Gas Tokens**: For custom `ERC-20`'s, requires conversion mechanisms; native `ETH` simplifies bridging.
+- **DA modes**: Applies across Rollup, AnyTrust, and Alt-DA, as settlement costs vary by mode (e.g., lower in Alt-DA).
+- **Gas tokens**: For custom `ERC-20`'s, requires conversion mechanisms; native `ETH` simplifies bridging.
 - **Validation**: No impact on <a data-quicklook-from="bold">BoLD</a> or permissioned setups.
 
 ## Pros
@@ -38,14 +38,14 @@ The configuration ensures compliance with the AEP terms, streamlines reporting, 
 
 ## Examples
 
-- **DeFi-Focused Arbitrum Chain**: Configures the router to route 10% of surplus fees (after Ethereum posting costs) to the DAO, using a custom gas token with <a data-quicklook-from="oracle">oracle</a>-based pricing for accurate `ETH` conversion.
-- **Gaming L3 Chain**: Low-revenue setups might skip full configuration initially but enable it upon profitability, bridging fees quarterly.
+- **DeFi-focused Arbitrum chain**: Configures the router to route 10% of surplus fees (after Ethereum posting costs) to the DAO, using a custom gas token with <a data-quicklook-from="oracle">oracle</a>-based pricing for accurate `ETH` conversion.
+- **Gaming L3 chain**: Low-revenue setups might skip full configuration initially but enable it upon profitability, bridging fees quarterly.
 
 ## How to configure
 
-1. **Calculate Net Revenue**: Use tools or scripts to track total fees minus settlement costs (e.g., via on-chain queries or off-chain monitoring). For custom tokens, deploy a pricer contract to value fees in `ETH` equivalents.
-2. **Deploy Fee Router**: Use the Arbitrum Chain SDK script (e.g., [`aep-fee-router`](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-aep-fee-router)) to deploy contracts like RewardDistributor on your chain. Set it as a fee collector (e.g., for surplus fees via `ArbOwner` precompile).
-3. **Route and <a data-quicklook-from="bridge">bridge</a> Fees**: Configure the router to send the 10% share to Ethereum (e.g., via native bridges), then deposit to the DAO address on Arbitrum One. Use functions like `RewardDistributor.distributeRewards` for periodic transfers.
-4. **Report Fees**: Submit quarterly reports to the Arbitrum Foundation, including calculations and proofs of payment, to maintain license compliance.
+1. **Calculate net revenue**: Use tools or scripts to track total fees minus settlement costs (e.g., via on-chain queries or off-chain monitoring). For custom tokens, deploy a pricer contract to value fees in `ETH` equivalents.
+2. **Deploy fee router**: Use the Arbitrum Chain SDK script (e.g., [`aep-fee-router`](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-aep-fee-router)) to deploy contracts like RewardDistributor on your chain. Set it as a fee collector (e.g., for surplus fees via `ArbOwner` precompile).
+3. **Route and <a data-quicklook-from="bridge">bridge</a> fees**: Configure the router to send the 10% share to Ethereum (e.g., via native bridges), then deposit to the DAO address on Arbitrum One. Use functions like `RewardDistributor.distributeRewards` for periodic transfers.
+4. **Report fees**: Submit quarterly reports to the Arbitrum Foundation, including calculations and proofs of payment, to maintain license compliance.
 
 This setup reflects Arbitrum's collaborative model, ensuring custom chains contribute back while benefiting from the ecosystem. For implementation, refer to the docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

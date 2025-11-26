@@ -17,7 +17,7 @@ This flexibility allows developers to tailor chains to specific needs while buil
 ## Key concepts
 
 - **Data Availability (DA) in Rollups**: DA ensures that all <a data-quicklook-from="transaction">transaction</a> data will be posted to <a data-quicklook-from="parent-chain">parent chain</a> for verification, fraud proofs, and security. In optimistic Rollups like Arbitrum, this is critical to allow challengers to dispute invalid state transitions.
-- **Arbitrum Rollup Mode**:
+- **Arbitrum Rollup mode**:
   - All <a data-quicklook-from="batch">batch</a> transaction data is posted directly to the parent chain (Ethereum <a data-quicklook-from="l1">L1</a>) as calldata or blobs.
   - This inherits Ethereum's full security and decentralization, with no additional trust assumptions—data is always available on-chain for anyone to access and verify.
   - Example: <a data-quicklook-from="arbitrum-one">Arbitrum One</a> operates in this mode.

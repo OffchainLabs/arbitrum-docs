@@ -13,17 +13,17 @@ Customization allows developers to add new methods, events, gas logic, or state 
 ## Key concepts
 
 - **Precompiles in Arbitrum**: These are predefined contracts at fixed addresses that handle operations more efficiently than regular EVM code. Standard ones include ArbSys (for L1 interactions), ArbInfo (for balances and codes), and others for aggregation, retryables, or gas estimation. Customization builds on this by altering their behavior or adding new ones in the Nitro Go implementation.
-- **Customization Scope**: Focuses on extending functionality without full EVM changes, such as adding utility methods (e.g., a local zk-proof function) or integrating chain-specific state (e.g., a stored bytes). It doesn't alter core EVM opcodes but enhances system access.
+- **Customization scope**: Focuses on extending functionality without full EVM changes, such as adding utility methods (e.g., a local zk-proof function) or integrating chain-specific state (e.g., a stored bytes). It doesn't alter core EVM opcodes but enhances system access.
 
 ## Options for customization
 
 There are several approaches, each building on the Nitro codebase:
 
-- **Add New Methods to an Existing <a data-quicklook-from="precompile">Precompile</a>**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
-- **Create a New Precompile**: Define a completely new precompile at a custom address (e.g., 0x011a for ArbHi) with its own methods.
-- **Define a New Event**: Add events to methods for logging, making the method state-modifying and indexable for off-chain querying.
-- **Customize Gas Usage**: Adjust or implement gas costs for methods (e.g., cost 300 gas instead of 700 for a balance query) to optimize efficiency or prevent DoS attacks.
-- **Call and Modify State**: Integrate with <a data-quicklook-from="arbos">ArbOS</a> state by adding storage variables and methods to read/write them, allowing persistent chain-specific data.
+- **Add new methods to an existing <a data-quicklook-from="precompile">precompile</a>**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
+- **Create a new precompile**: Define a completely new precompile at a custom address (e.g., 0x011a for ArbHi) with its own methods.
+- **Define a new event**: Add events to methods for logging, making the method state-modifying and indexable for off-chain querying.
+- **Customize gas usage**: Adjust or implement gas costs for methods (e.g., cost 300 gas instead of 700 for a balance query) to optimize efficiency or prevent DoS attacks.
+- **Call and modify state**: Integrate with <a data-quicklook-from="arbos">ArbOS</a> state by adding storage variables and methods to read/write them, allowing persistent chain-specific data.
 
 ## Compatibility with chain types
 
@@ -62,10 +62,10 @@ It is important to understand that this is part of customizing ArbOS on your cha
 
 Customizing requires building a modified Nitro node, as precompiles are part of the core software:
 
-1. **Clone and Setup Nitro**: Use branch v3.7.2 or later (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`), then initialize submodules.
-2. **Edit Go Files**: Modify `/precompiles` directory (e.g., add methods to ArbSys.go), register new precompiles in precompile.go, and for state changes, update arbosstate.go with variables, offsets, and initialization.
-3. **Update Solidity Interfaces**: Add corresponding methods/events to .sol files in the precompiles interface directory for dApp compatibility. Also, follow the steps in [Choose ArbOS version](/launch-arbitrum-chain/features/advanced/choose-arbos-version.mdx), as it will also modify the STF.
-4. **Build and Run Node**: Compile a custom Docker image and run the node with your configurations (e.g., specifying parent chain URL and chain ID). Test with tools like curl for eth_call or Foundry's cast for calls/sends.
-5. **Post-Launch Changes**: Use ArbOS version upgrades to apply without reorganizing the chain; follow related guides for fraud proofs.
+1. **Clone and setup Nitro**: Use branch v3.7.2 or later (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`), then initialize submodules.
+2. **Edit Go files**: Modify `/precompiles` directory (e.g., add methods to ArbSys.go), register new precompiles in precompile.go, and for state changes, update arbosstate.go with variables, offsets, and initialization.
+3. **Update Solidity interfaces**: Add corresponding methods/events to .sol files in the precompiles interface directory for dApp compatibility. Also, follow the steps in [Choose ArbOS version](/launch-arbitrum-chain/features/advanced/choose-arbos-version.mdx), as it will also modify the STF.
+4. **Build and run node**: Compile a custom Docker image and run the node with your configurations (e.g., specifying parent chain URL and chain ID). Test with tools like curl for eth_call or Foundry's cast for calls/sends.
+5. **Post-launch changes**: Use ArbOS version upgrades to apply without reorganizing the chain; follow related guides for fraud proofs.
 
 This advanced customization aligns with Arbitrum's modular design but demands careful planning and testing. For implementation, refer to the docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

@@ -23,7 +23,7 @@ This choice is configurable for all DA modes (Rollup, AnyTrust, Alt-DA) and gas 
 ## Key concepts
 
 - **Validation in <a data-quicklook-from="arbitrum">Arbitrum</a>**: Validators monitor and advance the chain's state by posting assertions (claims about block hashes, history commitments, and inbox messages) to the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum or an <a data-quicklook-from="l2">L2</a> like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>). If an <a data-quicklook-from="assertion">assertion</a> is suspected of being invalid, challengers initiate interactive fraud proofs during a <a data-quicklook-from="challenge">challenge</a> window (typically ~6.4 days), bisecting disagreements down to verifiable one-step proofs executed on-chain. Security relies on economic incentives, where invalid claims lead to bond forfeitures.
-- **Permissioned Validators**: Participation is restricted to a whitelist managed by the chain owner (via the rollupAdmin contract or DAO governance). Only these entities can stake bonds, post assertions, or engage in disputes. This setup uses the pre-BoLD <a data-quicklook-from="fraud-proof">fraud proof</a> system, where challenges are handled in a 1-vs-1 tournament style without parallel resolution.
+- **Permissioned validators**: Participation is restricted to a whitelist managed by the chain owner (via the rollupAdmin contract or DAO governance). Only these entities can stake bonds, post assertions, or engage in disputes. This setup uses the pre-BoLD <a data-quicklook-from="fraud-proof">fraud proof</a> system, where challenges are handled in a 1-vs-1 tournament style without parallel resolution.
 
 :::note
 
@@ -42,6 +42,6 @@ Works with L2/L3 <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> se
 ## Examples
 
 - **Arbitrum Nova**: Retains permissioned validation post-BoLD due to its lower TVL and AnyTrust model, where the DAC members double as validators for controlled security.
-- **Custom Arbitrum Chains**: Early-stage gaming or enterprise L3s might choose permissioned to limit access to internal teams, avoiding the economic overhead of BoLD while testing.
+- **Custom Arbitrum chains**: Early-stage gaming or enterprise L3s might choose permissioned to limit access to internal teams, avoiding the economic overhead of BoLD while testing.
 
 This option balances security with practicality in Arbitrum's ecosystem, but for maximum trust-minimization, BoLD's permissionless model is recommended for mature chains. Consult the latest official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

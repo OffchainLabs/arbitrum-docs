@@ -13,8 +13,8 @@ Customizing your chain's behavior refers to modifying the core logic that govern
 - **State Transition Function (STF)**: The deterministic logic that computes new chain states from inputs (e.g., transactions). Customizations here affect block production, execution outcomes, or state (e.g., balances), requiring updates to fraud proofs to recognize the changes as valid.
 - **ArbOS**: The operating system-like layer in Nitro that manages STF components, including precompiles, state, and upgrades. Customizations often involve versioning ArbOS to activate changes safely on live chains.
 - **<a data-quicklook-from="wasm">WASM</a> Module Root**: A 32-byte hash representing the STF's implementation, which must be updated on the <a data-quicklook-from="parent-chain">parent chain</a> for fraud proofs to work with customizations.
-- **Backward Compatibility**: Changes must not alter results for old blocks; they activate at specific ArbOS versions or timestamps to prevent re-orgs.
-- **STF Requirements**: Must be deterministic, pure (no external resources), performant (< 1 second per block), and state-managed only via the Ethereum trie or block headers.
+- **Backward compatibility**: Changes must not alter results for old blocks; they activate at specific ArbOS versions or timestamps to prevent re-orgs.
+- **STF requirements**: Must be deterministic, pure (no external resources), performant (< 1 second per block), and state-managed only via the Ethereum trie or block headers.
 
 ### Compatibility
 
@@ -36,17 +36,17 @@ Customizing your chain's behavior refers to modifying the core logic that govern
 
 ### Examples
 
-- **Adding a New <a data-quicklook-from="precompile">Precompile</a> Method**: Extend ArbSys with a "sayHi" function that activates at ArbOS v32, returning different strings pre/post-upgrade.
-- **New State Variable**: Add "myNumber" initialized during upgrade to v21, modifiable only post-upgrade.
-- **STF Logic Change**: Modify a method to use new behavior if ArbOS version >= target, e.g., altering gas rewards for deployers.
+- **Adding a new <a data-quicklook-from="precompile">precompile</a> method**: Extend ArbSys with a "sayHi" function that activates at ArbOS v32, returning different strings pre/post-upgrade.
+- **New state variable**: Add "myNumber" initialized during upgrade to v21, modifiable only post-upgrade.
+- **STF logic change**: Modify a method to use new behavior if ArbOS version >= target, e.g., altering gas rewards for deployers.
 - **Non-STF**: Adding an RPC for multi-block queries (no STF/fraud updates needed).
 
 ## How to configure
 
-1. **Clone Nitro Source**: Use a specific branch (e.g., v3.7.2): `git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git` and initialize submodules.
-2. **Implement Changes**: Edit Go files (e.g., in `/precompiles` or `arbosstate.go`) for new methods, states, or logic. Add version gates (e.g., `if state.ArbOSVersion() >= targetVersion`) for compatibility.
-3. **Build Custom Node**: Create Docker images (dev and production) with changes; extract and set the new WASM module root on the parent chain via contract calls.
-4. **Run and Verify**: Start the node (initially without fraud proofs), test transactions, and confirm validation logs. For live upgrades, schedule ArbOS version increases.
-5. **Upgrade ArbOS (for Live Chains)**: Target a new version (e.g., from v18 to v25), initializing states during the upgrade function to avoid re-orgs.
+1. **Clone Nitro source**: Use a specific branch (e.g., v3.7.2): `git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git` and initialize submodules.
+2. **Implement changes**: Edit Go files (e.g., in `/precompiles` or `arbosstate.go`) for new methods, states, or logic. Add version gates (e.g., `if state.ArbOSVersion() >= targetVersion`) for compatibility.
+3. **Build custom node**: Create Docker images (dev and production) with changes; extract and set the new WASM module root on the parent chain via contract calls.
+4. **Run and verify**: Start the node (initially without fraud proofs), test transactions, and confirm validation logs. For live upgrades, schedule ArbOS version increases.
+5. **Upgrade ArbOS (for live chains)**: Target a new version (e.g., from v18 to v25), initializing states during the upgrade function to avoid re-orgs.
 
 Refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

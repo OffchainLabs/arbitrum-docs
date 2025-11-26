@@ -16,8 +16,8 @@ This option prioritizes straightforward integration with Ethereum's ecosystem, a
 
 ## Key concepts
 
-- **Gas and Fees in <a data-quicklook-from="arbitrum">Arbitrum</a>**: Gas measures computational work for transactions and executions, with fees equaling gas used times gas price. These cover <a data-quicklook-from="sequencer">Sequencer</a> operations, data posting to the parent chain (e.g., Ethereum), and network upkeep. In native `ETH` setups, all fees are denominated, paid, and settled in `ETH`.
-- **Native `ETH` as Gas Token**: The chain executes transactions against users' `ETH` balances, deducting fees directly in `ETH`. No token conversions are needed, aligning the chain's economics with Ethereum's standard model.
+- **Gas and fees in <a data-quicklook-from="arbitrum">Arbitrum</a>**: Gas measures computational work for transactions and executions, with fees equaling gas used times gas price. These cover <a data-quicklook-from="sequencer">Sequencer</a> operations, data posting to the parent chain (e.g., Ethereum), and network upkeep. In native `ETH` setups, all fees are denominated, paid, and settled in `ETH`.
+- **Native `ETH` as gas token**: The chain executes transactions against users' `ETH` balances, deducting fees directly in `ETH`. No token conversions are needed, aligning the chain's economics with Ethereum's standard model.
 
 ## How fees are handled
 
@@ -32,7 +32,7 @@ This option prioritizes straightforward integration with Ethereum's ecosystem, a
 
 ## How it differs from custom gas tokens
 
-- **Custom Tokens**: Fees are paid in an `ERC-20` (e.g., `USDC` or a project token), requiring users to hold that token instead of `ETH`. Operators must convert collected tokens to `ETH` for DA costs, which introduces volatility risks and necessitates mechanisms like pricer contracts for exchange rates.
+- **Custom tokens**: Fees are paid in an `ERC-20` (e.g., `USDC` or a project token), requiring users to hold that token instead of `ETH`. Operators must convert collected tokens to `ETH` for DA costs, which introduces volatility risks and necessitates mechanisms like pricer contracts for exchange rates.
 - **Native `ETH`**: Eliminates conversions, swaps, and associated risks, but requires users to manage `ETH` specifically for gas, which may not align with app-specific ecosystems.
 
 <!-- Render Native ETH Pros & Cons partial -->
