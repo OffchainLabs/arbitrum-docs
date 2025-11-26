@@ -1,7 +1,7 @@
 ---
 id: gentle-introduction
 title: 'A gentle introduction to Stylus'
-description: 'An educational introduction that provides a high-level understanding of Stylus, a new way to write EVM-compatible smart contracts using your favorite programming languages.'
+description: 'An introduction to Stylus, which enables writing EVM-compatible smart contracts in programming languages that compile to WASM, such as Rust, C, and C++.'
 author: amarrazza
 sme: amarrazza
 target_audience: 'Developers who want to build on Arbitrum using popular programming languages, like Rust'
@@ -11,13 +11,11 @@ displayed_sidebar: buildAppsSidebar
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-# A gentle introduction: Stylus
-
 ### In a nutshell:
 
 - Stylus lets you write smart contracts in programming languages that compile to WASM, such as **Rust, C, C++, and many others**, allowing you to tap into their ecosystem of libraries and tools. Rich language and tooling support already exist for Rust. You can try the SDK and CLI with the [quickstart](/stylus/quickstart.mdx).
 - Solidity contracts and Stylus contracts are **fully interoperable**. In Solidity, you can call a Rust program and vice versa, thanks to a second, coequal WASM virtual machine.
-- Stylus contracts offer significantly **faster execution and lower gas fees** for memory and compute-intensive operations, thanks to the superior efficiency of <a data-quicklook-from="wasm">WASM</a> programs.
+- Stylus contracts offer **reduced gas costs** for memory and compute-intensive operations because <a data-quicklook-from="wasm">WASM</a> programs execute more efficiently than EVM bytecode for these workloads.
 
 ### What's Stylus?
 
@@ -25,9 +23,9 @@ Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](/run-arbitrum-node/arbos-rel
 
 <ImageZoom src="/img/stylus-multivm.jpg" alt="Stylus gives you MultiVM" className="img-600px" />
 
-This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a modern binary format popularized by its use in major web standards, browsers, and companies to speed up computation. WASM is built to be fast, portable, and human-readable. It has sandboxed execution environments for security and simplicity. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fully functioning fraud proofs.
+This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a binary format used in web standards and browsers for efficient computation. It is designed to be portable and human-readable, with sandboxed execution environments for security. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fraud proofs.
 
-With a WASM VM, any programming language compilable to WASM is within Stylus's scope. While many popular programming languages can compile into WASM, some compilers are more suitable for smart contract development than others, like Rust, C, and C++. Other languages like Go, Sway, Move, and Cairo are also supported. Languages that include their own runtimes, like Python and Javascript, are more complex for Stylus to support, although not impossible. Compared to Solidity, WASM programs are much more efficient for memory-intensive applications. There are many reasons for this, including the decades of compiler development for Rust and C. WASM also has a faster runtime than the EVM, resulting in faster execution. Third-party contributions in the form of libraries for new and existing languages are welcomed!
+With a WASM VM, any programming language compilable to WASM is within Stylus's scope. While many popular programming languages can compile into WASM, some compilers are more suitable for smart contract development than others, like Rust, C, and C++. Other languages like Go, Sway, Move, and Cairo are also supported. Languages that include their own runtimes, like Python and JavaScript, are more complex for Stylus to support, although not impossible. WASM programs tend to be more efficient than EVM bytecode for memory-intensive applications. This efficiency comes from mature compiler toolchains for languages like Rust and C, which have benefited from decades of optimization work. The WASM runtime also executes faster than the EVM interpreter. Third-party contributions in the form of libraries for new and existing languages are welcome.
 
 ### How Stylus works
 
@@ -53,9 +51,9 @@ Stylus contracts need to be reactivated once per year (365 days) or after any St
 
 #### Execution
 
-When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a leading WebAssembly runtime optimized for blockchain use cases. Wasmer runs native code much faster than Geth executes EVM bytecode, which is where the gas savings come from.
+When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a WebAssembly runtime. Because Wasmer compiles to native machine code, it executes faster than Geth's EVM bytecode interpreter. This performance difference is the source of reduced gas costs for compute-intensive operations.
 
-The best part? EVM contracts keep working exactly as before. When a contract is called, the system checks whether it's an EVM contract or a WASM program and routes it to the right runtime. Solidity and WASM contracts can call each other freely, so you never have to worry about which language a contract was written in. Everything is interoperable.
+EVM contracts continue to work exactly as before. When a contract is called, the system checks whether it's an EVM contract or a WASM program and routes it to the appropriate runtime. Solidity and WASM contracts can call each other, so the language a contract was written in doesn't affect interoperability.
 
 #### Proving
 
@@ -63,26 +61,18 @@ Stylus builds on Nitro's fraud-proving technology. In normal operation, executio
 
 This is what makes Stylus possible: Nitro can already replay and verify disputes using WASM. Stylus extends this capability to verify not just execution history, but also the WASM programs you deploy. The result is a system where any program compiled to WASM can be deterministically fraud-proven. For more details, see the [Nitro architecture documentation](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
 
-### Use Cases
+### Use cases
 
-While many developers will be drawn to new use cases, rebuilding existing applications in Stylus will also open the door to innovation and optimization. dApps have never been faster, cheaper, or safer. Stylus can integrate easily into existing Solidity projects by calling a Stylus contract to optimize specific parts of your dApp or building the entire dApp with Stylus. It's impossible to list all of the use cases Stylus enables; think about the properties of all WASM-compatible languages! That said, here are some particularly exciting ideas:
+Stylus can integrate into existing Solidity projects by calling a Stylus contract to optimize specific parts of your app, or you can build an entire app with Stylus. Developers can also port existing applications written in Rust, C, or C++ to run onchain with minimal modifications. Here are some use cases where Stylus may be a good fit:
 
-- **Efficient Onchain Verification with ZK-Proofs**: Enable cost-effective onchain verification
-  using zero-knowledge proving systems for privacy, interoperability, and more (see [case
-  study](https://blog.arbitrum.io/renegade-stylus-case-study/)).
-- **Advanced DeFi Instruments**: Power complex financial instruments and processes like custom
-  pricing curves for AMMs, synthetic assets, options, and futures with onchain computation via
-  extending current protocols (i.e., Uniswap V4 hooks) or building your own.
-- **High-Performance Onchain Logic**: Support memory and compute-intensive applications like
-  onchain games and generative art either by writing all of the application in Stylus or enhance
-  performance of existing Solidity contracts by optimizing specific parts.
-- **Endless Possibilities**: Enable innovative use cases such as generative art, compute-heavy
-  AI models, onchain games, and projects utilizing advanced cryptography, unlocking the full potential
-  of resource-intensive applications onchain.
+- **Onchain verification with zero-knowledge proofs**: Reduce gas costs for onchain verification using zero-knowledge proving systems. See [case study](https://blog.arbitrum.io/renegade-stylus-case-study/) for an example implementation.
+- **Complex DeFi instruments**: Implement custom pricing curves for AMMs, synthetic assets, options, and futures with onchain computation. You can extend existing protocols (such as Uniswap V4 hooks) or build your own.
+- **Memory and compute-intensive applications**: Build onchain games, generative art, or other applications that benefit from reduced memory costs. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
+- **Cryptographic applications**: Implement applications that require advanced cryptography or other compute-heavy operations that would be cost-prohibitive in Solidity.
 
-### Getting Started
+### Getting started
 
-1. Utilize our [quickstart](/stylus/quickstart.mdx), [Rust SDK](/stylus/reference/overview.md), to help you start building.
-2. Join our Stylus Developer [Telegram](https://t.me/arbitrum_stylus) group and [Arbitrum Discord](https://discord.gg/arbitrum) for support as well as the official Arbitrum ([@Arbitrum](https://twitter.com/arbitrum)) and Arbitrum Developers ([@ArbitrumDevs](https://twitter.com/ArbitrumDevs)) X accounts for announcements.
-3. Check out the [Awesome Stylus](https://github.com/OffchainLabs/awesome-stylus) repository for various community contributed Stylus projects and tools. If you build something useful, we'd be happy to add it there.
-4. Stay updated with the latest from the Stylus community through tutorials, builder interviews, technical deep dives, and more with the [Stylus Saturdays](https://stylus-saturdays.com/) newsletter.
+1. Follow the [quickstart](/stylus/quickstart.mdx) to deploy your first Stylus contract, and explore the [Rust SDK](/stylus/reference/overview.md) documentation.
+2. Join the Stylus Developer [Telegram](https://t.me/arbitrum_stylus) group and [Arbitrum Discord](https://discord.gg/arbitrum) for community support.
+3. Browse the [Awesome Stylus](https://github.com/OffchainLabs/awesome-stylus) repository for community-contributed projects, examples, and tools.
+4. Subscribe to the [Stylus Saturdays](https://stylus-saturdays.com/) newsletter for tutorials and technical content.
