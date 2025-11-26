@@ -418,7 +418,7 @@ Run the command in a persistent setup (e.g., using Docker Compose or a systemd s
 
 If you need a new wallet specifically for validation, use Nitro to generate one:
 
-```
+```shell
 docker run --rm -it -v /path/to/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v3.8.0-62c0aa7 \
   --parent-chain.connection.url=https://your-l1-rpc-url:8545 \
   --chain.id=42161 \
