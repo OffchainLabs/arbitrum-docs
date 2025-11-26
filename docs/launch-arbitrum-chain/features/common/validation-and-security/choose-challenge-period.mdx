@@ -12,7 +12,7 @@ This period is a core security parameter in optimistic Rollups, ensuring time fo
 
 It's set by the chain owner and can be chosen based on the application's risk tolerance—e.g., high-value DeFi might opt for longer periods, while gaming appchains favor shorter ones.
 
-## Key Concepts
+## Key concepts
 
 - **Challenge Period (`confirmPeriodBlocks`)**: The main window for validators to bond stakes and initiate challenges against potentially fraudulent assertions. If no valid challenge is raised, the <a data-quicklook-from="assertion">assertion</a> confirms, and the chain's state advances securely.
 - **Extra Challenge Period (`extraChallengeTimeBlocks`)**: A post-main-period buffer to resolve any ongoing disputes or last-minute challenges, preventing premature finalization. (Legacy only config)

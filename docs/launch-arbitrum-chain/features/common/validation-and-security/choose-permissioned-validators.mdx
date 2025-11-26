@@ -20,7 +20,7 @@ If allowlisted validators were to go offline, after a period, anyone could remov
 
 This choice is configurable for all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens, but it's often retained for low-TVL chains to avoid the high bonds needed in permissionless setups, which could centralize around wealthy participants.
 
-## Key Concepts
+## Key concepts
 
 - **Validation in <a data-quicklook-from="arbitrum">Arbitrum</a>**: Validators monitor and advance the chain's state by posting assertions (claims about block hashes, history commitments, and inbox messages) to the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum or an <a data-quicklook-from="l2">L2</a> like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>). If an <a data-quicklook-from="assertion">assertion</a> is suspected of being invalid, challengers initiate interactive fraud proofs during a <a data-quicklook-from="challenge">challenge</a> window (typically ~6.4 days), bisecting disagreements down to verifiable one-step proofs executed on-chain. Security relies on economic incentives, where invalid claims lead to bond forfeitures.
 - **Permissioned Validators**: Participation is restricted to a whitelist managed by the chain owner (via the rollupAdmin contract or DAO governance). Only these entities can stake bonds, post assertions, or engage in disputes. This setup uses the pre-BoLD <a data-quicklook-from="fraud-proof">fraud proof</a> system, where challenges are handled in a 1-vs-1 tournament style without parallel resolution.
@@ -31,7 +31,7 @@ BoLD allows is configurable to include an allowlist of validators, instead of th
 
 :::
 
-## Compatibility with Chain Types
+## Compatibility with chain types
 
 Works with L2/L3 <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> settling to Ethereum or other L2s. For AnyTrust chains (e.g., like <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>), validation typically remains permissioned even post-BoLD upgrades, as the Data Availability Committee (DAC) already introduces trust assumptions, and permissionless bonds could invite griefing attacks.
 

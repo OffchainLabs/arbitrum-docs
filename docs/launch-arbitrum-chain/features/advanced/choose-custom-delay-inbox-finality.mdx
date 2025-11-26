@@ -25,7 +25,7 @@ It's worth noting that this page is based on a well-behaved sequencer, not one t
   - `--node.delayed-sequencer.use-merge-finality=false`: Uses block depth (finalize-distance) instead of Ethereum's finalized/safe block tags to determine L1 finality. .
   - `--node.delayed-sequencer.finalize-distance=1`: Sets the number of L2 block confirmations needed (default is higher; 1 enables ~1-minute finality; only works when `use-merge-finality` sets to false).
 
-## What It Means to Configure Delayed Inbox Finality
+## What it means to configure delayed inbox finality
 
 This configuration sets up the sequencer to release Delayed Inbox messages earlier, prioritizing speed over maximum security. For instance, in a default setup, a deposit from Ethereum to an L3 (via L2 settlement) waits for L1 to finalize the L2's batch posting. Enabling L2-only finality skips this, releasing after L2 confirmations (e.g., when a DACert posts on Nova). Further reducing the finalize-distance minimizes L2 waits, allowing near-instant execution but exposing the chain to parent re-orgs if unconfirmed blocks revert. It's ideal for low-latency apps but requires monitoring for re-org events.
 
@@ -35,7 +35,7 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 
 :::
 
-### Configuration Process:
+### Configuration process:
 
 - **Prepare the Sequencer Node**: When running your Arbitrum chain's sequencer (e.g., via Docker or local build from Nitro source), add the flags to the startup command. Example for a Dockerized sequencer:
   `docker run --rm -it -p 8547:8547 offchainlabs/nitro-node:v3.7.2 --chain.id=12345 --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1`
@@ -43,7 +43,7 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 - **Test and Deploy**: Verify in a devnet by submitting a Delayed Inbox transaction (e.g., via a token <a data-quicklook-from="bridge">bridge</a>) and monitoring release timing in logs. For production, ensure validators are updated to match the new behavior.
 - **Monitor**: Use tools like chain explorers or sequencer logs to track finality times and re-org incidents.
 
-## How It Differs from Default
+## How it differs from default
 
 - **Default (L1-Dependent)**: Relies on Ethereum L1 finality for batches/DACerts, ensuring maximum security but slower deposits (~tens of minutes).
 - **Configured (L2-Only with Low Distance)**: Shifts to L2 soft finality and minimal confirmations, achieving ~1-minute deposits but introducing re-org risks if the parent L2 reverts unconfirmed blocks.

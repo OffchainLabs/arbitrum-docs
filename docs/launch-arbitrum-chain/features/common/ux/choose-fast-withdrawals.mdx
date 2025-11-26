@@ -14,7 +14,7 @@ Enabling this feature shifts the chain from relying solely on time-based fraud p
 
 For pure Rollup chains, enabling it effectively introduces a committee trust layer, making it less "trust-minimized" than standard mode. Once enabled, the chain processes a potential backlog of unconfirmed assertions before operating at full speed, and confirmations may slightly delay under high load (e.g., >1 Mgas/s throughput), but security remains intact.
 
-## Key Concepts
+## Key concepts
 
 - **Standard Withdrawal Process**: In optimistic Rollups like <a data-quicklook-from="arbitrum">Arbitrum</a>, assertions about the chain's state (e.g., <a data-quicklook-from="transaction">transaction</a> batches) are posted to the <a data-quicklook-from="parent-chain">Parent chain</a> (e.g., Ethereum or <a data-quicklook-from="arbitrum-one">Arbitrum One</a>) and remain challengeable for a configurable period (default ~6.4-7 days) to allow fraud proofs. Unchallenged assertions confirm, enabling secure withdrawals, but this delays user access to funds.
 - **Fast Withdrawals Mechanism**: When enabled, a committee (e.g., an `n/n` multisig Safe wallet) of validators processes and unanimously signs assertions at a set interval. This provides immediate confirmation, with finality tied to the parent chain's block times rather than the full <a data-quicklook-from="challenge-period">challenge period</a>. For example, L2 chains on Ethereum can confirm in ~15 minutes (above Ethereum's ~12.8-minute finality), while L3 chains on Arbitrum One can leverage "soft finality" (~250ms <a data-quicklook-from="sequencer">Sequencer</a> confirmations) for near-instant speeds.
@@ -31,7 +31,7 @@ For pure Rollup chains, enabling it effectively introduces a committee trust lay
 
 <FastwithdrawalsPCPartial />
 
-## Impact on User Experience
+## Impact on user experience
 
 From a UX perspective, enabling fast withdrawals transforms slow, multi-day processes into near-real-time ones, making the chain feel more responsive. Users get quicker access to withdrawn funds (e.g., 15 minutes vs. 6.4 days), reducing frustration and capital lockup. Apps benefit from faster cross-<a data-quicklook-from="chain-state">chain state</a> reads, enabling seamless interactions such as <a data-quicklook-from="oracle">oracle</a> updates and multi-chain DeFi. However, it assumes users trust the committee (e.g., for high-value transfers), and any load-based delays could still impact predictability. Overall, it's ideal for consumer-facing apps like gaming or social, where speed is key.
 

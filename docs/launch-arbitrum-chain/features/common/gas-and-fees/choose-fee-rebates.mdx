@@ -12,19 +12,19 @@ Rebates can incentivize usage, reward high-volume participants, or align with pr
 
 Configuration requires <a data-quicklook-from="chain-owner">chain owner</a> privileges and can be done post-deployment using precompiles or the <a data-quicklook-from="arbitrum">Arbitrum</a> Arbitrum Chain SDK. It's compatible with all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native `ETH` or custom), though custom tokens add complexity in exchange rate management for reimbursements. For example, surplus fees could be rebated to high-activity users or contributed to a community fund.
 
-## Key Concepts
+## Key concepts
 
 - **Gas and Fees in Arbitrum chains**: Fees are charged for transaction execution and data posting, denominated in the chain's gas token (`ETH` by default or a custom `ERC-20`). They cover operational costs like sequencing, data availability, and <a data-quicklook-from="parent-chain">parent chain</a> interactions. Surplus fees (beyond minimum costs) can accumulate during congestion, providing a pool for potential rebates.
 - **Fee Rebates**: Rebates involve returning part of the paid fees, often as incentives. In Orbit chains, this isn't an explicit "rebate toggle" but is facilitated by routing fees to smart contracts that automate distributions (e.g., proportional payouts). This can mimic rebate programs seen in dApps on Arbitrum (e.g., trading fee rebates funded by incentives), but applied at the chain level.
 
-## Types of Fees Available for Rebates
+## Types of fees available for rebates
 
 - **Orbit Base Fee**: Minimum execution fee; routed to an infrastructure account.
 - **Orbit Surplus Fee**: Congestion-based extra; routed to a network account.
 - **Parent Chain Base Fee**: Data posting cost; routed to <a data-quicklook-from="batch">batch</a> poster collectors.
 - **Parent Chain Surplus Fee**: Optional batch poster reward; routed to a reward recipient.
 
-## Compatibility and Considerations
+## Compatibility and considerations
 
 - **With Custom Gas Tokens**: Rebates work but require a fee token pricer for parent chain reimbursements (e.g., converting custom tokens to `ETH`). Pricers (manual, <a data-quicklook-from="oracle">oracle</a>-based, or trade-tracking) ensure accurate reimbursements to batch posters, which can include refund-like mechanics if reserves are managed.
 - **With Native `ETH`**: Simpler, as no conversions are needed; rebates can be direct `ETH` payouts.

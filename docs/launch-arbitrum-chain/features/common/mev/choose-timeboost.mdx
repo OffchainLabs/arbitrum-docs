@@ -14,7 +14,7 @@ Enabling it is an owner-level decision, typically for chains with significant De
 
 It's ideal for DeFi-heavy chains with substantial MEV (e.g., arbitrage opportunities), as low-MEV chains may see costs outweigh benefits. Once enabled, searchers bid continuously (predicting MEV 15s-1m15s ahead), and users experience a minor delay on non-express transactions (~450ms average soft finality vs. ~250ms), but with no impact if no winner.
 
-## Key Concepts
+## Key concepts
 
 - **MEV in Arbitrum**: MEV refers to the profit extractable from transaction ordering, such as through arbitrage, liquidations, or backrunning. Under default FCFS, MEV often goes to searchers via latency races (e.g., faster hardware), leading to network spam and no revenue for the chain. Timeboost internalizes this by auctioning a time-based edge, diverting competition to bids while limiting harmful MEV via no reordering or visibility into other transactions.
 - **Express Lane**: A special <a data-quicklook-from="sequencer">Sequencer</a> endpoint (`timeboost_sendExpressLaneTransaction`) where the auction winner (controller) can submit transactions without an artificial delay. Non-express transactions get a default 200ms delay added to their arrival timestamp, potentially pushing them to the next block (but block times remain ~250ms). The controller gets no guarantees of top-of-block positioning or profitability—value comes from predicted MEV during the round (default 60s).

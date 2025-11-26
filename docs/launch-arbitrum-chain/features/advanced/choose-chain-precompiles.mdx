@@ -10,7 +10,7 @@ Customizing your chain's precompiles refers to modifying or extending the built-
 
 Customization allows developers to add new methods, events, gas logic, or state interactions tailored to the chain's needs, such as app-specific utilities or optimizations. This flexibility is an advanced feature requiring modifications to the Nitro software stack, enabling deeper chain personalization beyond defaults like custom gas tokens or DA modes.
 
-## Key Concepts
+## Key concepts
 
 - **Precompiles in Arbitrum**: These are predefined contracts at fixed addresses that handle operations more efficiently than regular EVM code. Standard ones include ArbSys (for L1 interactions), ArbInfo (for balances and codes), and others for aggregation, retryables, or gas estimation. Customization builds on this by altering their behavior or adding new ones in the Nitro Go implementation.
 - **Customization Scope**: Focuses on extending functionality without full EVM changes, such as adding utility methods (e.g., a local zk-proof function) or integrating chain-specific state (e.g., a stored bytes). It doesn't alter core EVM opcodes but enhances system access.
@@ -25,7 +25,7 @@ There are several approaches, each building on the Nitro codebase:
 - **Customize Gas Usage**: Adjust or implement gas costs for methods (e.g., cost 300 gas instead of 700 for a balance query) to optimize efficiency or prevent DoS attacks.
 - **Call and Modify State**: Integrate with <a data-quicklook-from="arbos">ArbOS</a> state by adding storage variables and methods to read/write them, allowing persistent chain-specific data.
 
-## Compatibility with Chain Types
+## Compatibility with chain types
 
 - Works with all Arbitrum chain DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native ETH or custom), as it's a Nitro-level change.
 - Compatible with <a data-quicklook-from="bold">BoLD</a> or permissioned validation.
