@@ -15,7 +15,7 @@ It's set by the chain owner and can be chosen based on the application's risk to
 ## Key Concepts
 
 - **Challenge Period (`confirmPeriodBlocks`)**: The main window for validators to bond stakes and initiate challenges against potentially fraudulent assertions. If no valid challenge is raised, the <a data-quicklook-from="assertion">assertion</a> confirms, and the chain's state advances securely.
-- **Extra Challenge Period (`extraChallengeTimeBlocks`)**: A post-main-period buffer to resolve any ongoing disputes or last-minute challenges, preventing premature finalization.
+- **Extra Challenge Period (`extraChallengeTimeBlocks`)**: A post-main-period buffer to resolve any ongoing disputes or last-minute challenges, preventing premature finalization. (Legacy only config)
 - **Measurement**: Always denominated in the underlying <a data-quicklook-from="l1">L1</a> chain's blocks (e.g., Ethereum's `block.number`, ~12 seconds per block), even for L3 chains settling to an L2 like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>. This ensures consistent timing aligned with the parent chain's finality.
 - **Defaults**:
   - **Primary**: Approximately 45,818 L1 blocks (~1 week or 6.4 days on Ethereum).
