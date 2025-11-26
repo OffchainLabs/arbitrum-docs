@@ -30,6 +30,11 @@ function escapeForJSON(str: string): string {
     .replace(/\t/g, '\\t');
 }
 
+// Escape special characters for MDX (curly braces and angle brackets are JSX expressions in MDX)
+function escapeForMDX(str: string): string {
+  return str.replace(/{/g, '\\{').replace(/}/g, '\\}').replace(/</g, '\\<').replace(/>/g, '\\>');
+}
+
 // Helper to convert question text to URL-safe key
 function generateQuestionKey(question: string): string {
   return question
@@ -306,7 +311,10 @@ const renderFAQs = (faqs: RenderedKnowledgeItem[]) => {
 // Renderer for Questions in MDX format
 const renderQuestions = (questions: RenderedQuestion[]): string => {
   const printItem = (q: RenderedQuestion) => {
-    return `### ${q.question}\n\n${q.answer}`;
+    // Escape MDX special characters (curly braces) that would be interpreted as JSX
+    const escapedQuestion = escapeForMDX(q.question);
+    const escapedAnswer = escapeForMDX(q.answer);
+    return `### ${escapedQuestion}\n\n${escapedAnswer}`;
   };
 
   return questions.map(printItem).join('\n\n');
