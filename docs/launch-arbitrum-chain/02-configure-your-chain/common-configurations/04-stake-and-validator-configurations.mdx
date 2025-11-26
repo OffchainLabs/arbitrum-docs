@@ -378,7 +378,7 @@ Validators are configured during chain deployment and can be run post-launch. Ar
 
 Start with the base configuration for a full node, then add validator-specific flags. Use a Docker command to run the Nitro node image (replace placeholders like version numbers, RPC URLs, and chain IDs with your specifics). For example, on Arbitrum One (chain ID 42161):
 
-```
+```shell
 docker run --rm -it -v /path/to/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v3.8.0-62c0aa7 \
   --parent-chain.connection.url=https://your-l1-rpc-url:8545 \
   --chain.id=42161 \
