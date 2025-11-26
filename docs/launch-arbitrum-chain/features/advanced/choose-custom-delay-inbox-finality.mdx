@@ -22,7 +22,7 @@ It's worth noting that this page is based on a well-behaved sequencer, not one t
 - **Finality**: The point at which a Delayed Inbox <a data-quicklook-from="transaction">transaction</a> is irreversibly executable on the child chain. By default, this depends on L1 finality (e.g., Ethereum blocks confirming a <a data-quicklook-from="batch">batch</a> from <a data-quicklook-from="arbitrum">Arbitrum</a> One or a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a>/DACert from Nova), taking ~10-60 minutes.
 - **L2 vs. L1 Finality**: L3 chains can be configured to rely on the parent L2's quicker "soft finality" (~1-15 minutes) instead of waiting for deeper L1 confirmations, or to reduce <a data-quicklook-from="l2-block">L2 block</a> waits for even faster processing.
 - **Relevant Flags**:
-  - `--node.delayed-sequencer.use-merge-finality=false`: Disables L1 dependency, using only L2 finality.
+  - `--node.delayed-sequencer.use-merge-finality=false`: Uses block depth (finalize-distance) instead of Ethereum's finalized/safe block tags to determine L1 finality. .
   - `--node.delayed-sequencer.finalize-distance=1`: Sets the number of L2 block confirmations needed (default is higher; 1 enables ~1-minute finality).
 
 ## What It Means to Configure Delayed Inbox Finality
