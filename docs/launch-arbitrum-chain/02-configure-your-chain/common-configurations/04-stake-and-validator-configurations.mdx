@@ -35,7 +35,7 @@ The bonded token is the asset that validators must bond to participate in assert
 
 ### How to configure
 
-1. **Prepare the Chain Configuration**:
+1. **Prepare the chain configuration**:
    Generate the base chain config using `prepareChainConfig`. Set the `chainId` and initial owner.
 
    ```typescript
@@ -50,7 +50,7 @@ The bonded token is the asset that validators must bond to participate in assert
    });
    ```
 
-2. **Set Up the Public Client for the Parent Chain**:
+2. **Set up the public client for the parent chain**:
    Create a public client to interact with the parent chain.
 
    ```typescript
@@ -63,7 +63,7 @@ The bonded token is the asset that validators must bond to participate in assert
    });
    ```
 
-3. **Prepare Deployment Parameters, Including `stakeToken`**:
+3. **Prepare deployment parameters, including `stakeToken`**:
    Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
 
    ```typescript
@@ -82,7 +82,7 @@ The bonded token is the asset that validators must bond to participate in assert
    );
    ```
 
-4. **Deploy the Chain**:
+4. **Deploy the chain**:
    Use `createRollup` to deploy. Provide validator and batch poster addresses. This step sends the transaction to the parent chain.
 
    ```typescript
@@ -114,7 +114,7 @@ The bonded token is the asset that validators must bond to participate in assert
    console.log('Core Contracts:', createRollupResults.coreContracts);
    ```
 
-5. **Post-Deployment (If Using AnyTrust)**:
+5. **Post-deployment (if using AnyTrust)**:
    If `DataAvailabilityCommittee` is `true`, set the DAC keyset in the `SequencerInbox`.
 
    ```typescript
@@ -151,7 +151,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 ### How to configure
 
-1. **Prepare the Chain Configuration**:
+1. **Prepare the chain configuration**:
    Generate the base chain config using `prepareChainConfig`. Set the `chainId` and initial owner.
 
    ```typescript
@@ -166,7 +166,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
    });
    ```
 
-2. **Set Up the Public Client for the Parent Chain**:
+2. **Set up the public client for the parent chain**:
    Create a public client to interact with the parent chain.
 
    ```typescript
@@ -179,7 +179,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
    });
    ```
 
-3. **Prepare Deployment Parameters, Including `stakeToken`**:
+3. **Prepare deployment parameters, including `stakeToken`**:
    Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
 
    ```typescript
@@ -198,7 +198,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
    );
    ```
 
-4. **Deploy the Chain**:
+4. **Deploy the chain**:
    Use `createRollup` to deploy. Provide validator and batch poster addresses. This step sends the transaction to the parent chain.
 
    ```typescript
@@ -230,7 +230,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
    console.log('Core Contracts:', createRollupResults.coreContracts);
    ```
 
-5. **Post-Deployment (If Using AnyTrust)**:
+5. **Post-deployment (if using AnyTrust)**:
    If `DataAvailabilityCommittee` is `true`, set the DAC keyset in the `SequencerInbox`.
 
    ```typescript
@@ -249,7 +249,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 ### Additional notes
 
-- **Validators and Staking**: After deployment, validators bond by depositing at least `baseStake` of the `stakeToken` into the Rollup contract. This can be done via contract calls (e.g., using the `RollupUserLogic` interface).
+- **Validators and staking**: After deployment, validators bond by depositing at least `baseStake` of the `stakeToken` into the Rollup contract. This can be done via contract calls (e.g., using the `RollupUserLogic` interface).
 - **Warnings**:
   - Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
   - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
@@ -264,11 +264,11 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
 ### Configuration details
 
 - Funds are escrowed rather than immediately burned, allowing potential recovery or governance decisions.
-- Recommended: Set to an address controlled by the chain owner(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
+- **Recommended**: Set to an address controlled by the chain owner(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
 
 ### Configuring during deployment
 
-1. **Prepare Chain Config**:
+1. **Prepare chain config**:
 
    ```typescript
    import { prepareChainConfig } from '@arbitrum/chain-sdk';
@@ -282,7 +282,7 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
    });
    ```
 
-2. **Set Up Parent Chain Client**:
+2. **Set up parent chain client**:
 
    ```typescript
    import { createPublicClient, http } from 'viem';
@@ -294,7 +294,7 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
    });
    ```
 
-3. **Prepare Deployment Params, Including `loserStakeEscrow`**:
+3. **Prepare deployment params, including `loserStakeEscrow`**:
    Set `loserStakeEscrow` as an address (string). There is no explicit default documented, but if omitted, it may revert to a system default (e.g., zero address)—always specify for control.
 
    ```typescript
@@ -341,7 +341,7 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
    console.log('Rollup Address:', createRollupResults.coreContracts.rollup);
    ```
 
-5. **For AnyTrust Chains**:
+5. **For AnyTrust chains**:
    If `DataAvailabilityCommittee` is `true`, configure the DAC keyset post-deployment using `setValidKeyset` from the SDK.
 
 ### Updating `loserStakeEscrow` post-deployment
@@ -366,8 +366,6 @@ await walletClient.writeContract({
 - This process requires the caller to be the owner. Changes affect how challenge losses are handled, so test thoroughly.
 - Setting `loserStakeEscrow` to a burn address increases the cost of failed challenges, enhancing security.
 - Deploy on testnets first; mainnet deployments are costly and permanent.
-
-<!-- Need non Portal config -->
 
 ## Validator configurations and how to setup them up
 
