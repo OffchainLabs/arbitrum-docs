@@ -1284,18 +1284,6 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Concepts',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/concepts/gas-metering',
-              label: 'Gas metering',
-            },
-          ],
-        },
-        {
-          type: 'category',
           label: 'Examples',
           collapsed: true,
           items: [
@@ -1338,6 +1326,11 @@ const sidebars = {
               href: 'https://github.com/OffchainLabs/stylus',
             },
           ],
+        },
+        {
+          type: 'doc',
+          id: 'stylus/concepts/gas-metering',
+          label: 'Gas metering',
         },
         {
           type: 'doc',
