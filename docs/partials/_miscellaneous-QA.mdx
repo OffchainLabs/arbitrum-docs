@@ -1,0 +1,1210 @@
+### When building Orbit L2 and Orbit L3 on the mainnet, the advantages of L3 over L2 appear limited to lower gas fees, no Arbitrum DAO approval, and no license fee. Given perceived disadvantages like longer finality and increased bridge processing, what specific features highlight the advantages of Orbit L3? Data or experienced-based insights are needed regarding: 1) Customization, 2) Performance/Operational factors, and 3) Other aspects.
+
+The choice between Orbit L2 and L3 mainly depends on customization needs and settlement preferences.
+
+Some common points of confusion first:
+• **Arbitrum DAO approval:** Not required for Orbit L2 or L3.
+• **AEP license fee:** Applies only if the chain settles directly to Ethereum or any other parent chain. Avoided when settling to Arbitrum One or Nova.
+• **Finality & gas fees:** Comparable for L2 and L3 when using the same parent chain; AnyTrust mode provides low fees for both.
+
+**Key advantages of Orbit L3:**
+
+1. **Cost optimization:** Avoids AEP license fees by settling to Arbitrum One/Nova instead of Ethereum (**USP of L3**)
+2. **Customization:** Greater flexibility in settlement and configuration options, especially when leveraging a parent chain's AnyTrust setup.
+3. **Performance:** Faster, cheaper bridging to its parent chain.
+4. **Ecosystem alignment:** Stronger integration with the Arbitrum ecosystem, benefiting from shared tooling and potential ecosystem support.
+
+### Regarding AnyTrust technology, assuming 500 GB of data is stored per month:
+
+1. What are the costs for DAS storage + server operations?
+2. What are the costs when using Celestia DAS?
+3. Are there any alternative methods recommended?
+   Additionally:
+   • When using the DAS method, is the DACert generation cycle adjustable? How is it set up for Nova?
+   • For Celestia DA, is the price per 1 MB sufficient, or are there other considerations?
+
+With AnyTrust, the **same set of entities act as both validators and committee members**, so no additional trust assumptions are needed.
+
+• **DACert Generation:** There is no fixed generation cycle. DACerts are created **immediately** upon each data store request from the batch poster.
+• **Data Posting Parameters:** DACert/data posting is triggered when either:
+◦ `--node.batch-poster.max-size` (maximum estimated compressed batch size) is reached, or
+◦ `--node.batch-poster.max-delay` (maximum batch posting delay) is reached.
+
+**Costs:**
+Celestia currently costs ~$0.08 USD / MB
+An AnyTrust node will cost ~$200/node/month
+
+### What is the optimal number of validators required to operate a mainnet at the scale of Arbitrum One or Arbitrum Nova? Additionally, how many validators currently participate as stakers in these networks?
+
+On **Arbitrum One**, validation is **permissionless** under the **[BoLD](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction)** protocol. Any participant running a BoLD-capable Nitro validator can take part in validation, meaning the number of active validators (or stakers) is **not fixed** and fluctuates over time based on participation.
+
+In contrast, **Arbitrum Nova** currently uses a **permissioned validation model**. Validation is handled by a set of **approximately 10 whitelisted validators**, with at least **five independent external challengers** apart from the operator to maintain security and integrity.
+
+For up-to-date information on validator participation and network details, refer to:
+• [Arbitrum One – L2BEAT](https://l2beat.com/scaling/projects/arbitrum)
+• [Arbitrum Nova – L2BEAT](https://l2beat.com/scaling/projects/nova)
+
+### Does the Validator receive and process user transactions directly from the RPC Node? It is understood that the RPC Provider represents an RPC Node, and that Validators and the Sequencer are independently connected. Is this understanding of the transaction flow correct?
+
+**The understanding of the direct transaction flow is incorrect.**
+The **Validator cannot queue transactions**. For a transaction to be valid, it must be queued by the **Sequencer**.
+The correct flow is:
+
+1. A user submits a transaction to an **RPC Node**.
+2. The RPC Node **forwards** the transaction to the **Sequencer**.
+3. The Sequencer **queues and orders** the transaction.
+4. The Sequencer then sends the ordered transaction to the **Validator** via the **Sequencer Feed** for verification.
+
+**Even when a Validator endpoint acts as an RPC Provider, the transaction is immediately forwarded to the Sequencer for ordering, as the Validator's core function is verification.**
+
+### Arbitrum Sepolia uses a Rollup method. Is there a separate Arbitrum Nova testnet available?
+
+**No.** Since the **UX** for Arbitrum Rollup and AnyTrust (Nova's underlying technology) is the same, **a separate AnyTrust testnet is not needed.**
+
+### What is the theoretical maximum tps officially announced by Arbitrum and the prerequisites for it, and What is the realistic maximum tps possible in Arbitrum One and the prerequisites for it?
+
+In general we prefer to use throughput (gas /s) over TPS, as TPS is dependent on the transaction type. So for any throughput value you can just divide by the gas of your transaction to get TPS (standard is to use `eth_call` which is 22K gas)
+
+**OFFICIAL TPS:**the maximum official TPS for an orbit chain is, ~14,500 TPS:
+• 32M block gas limit
+• 100ms block times
+• eth_call transactions (22,000 gas/tx)
+• Standard hardwareThis value is useful for PEAK load that can be sustained. In practice, prices start to rise and demand slows down
+
+**REALISTIC TPS:**Taking historical data, during Arbitrum One's highest period of sustained peak usage, Arbitrum One operated at 50M gas/s for several hours. With modifications, several Orbit chains have sustained 100Mgas/s over multiple days with peaks of 400Mgas/s. These chains are built on AnyTrust DA which is our lowest cost configuration for an Orbit chainThe limitation in realistic cases is that higher gas prices caused users to delay their transactions, the hardware/chain operated completely normally.
+
+It's worth noting, two major focuses on our roadmap:
+**1. Scalability**: We have several projects that will improve scalability to ensure Orbit chains can reach 100Megagas/s throughput (10^8 gas units, ~14.2x higher than the current sustainable limit).
+a. Dynamic Pricing: [https://blog.arbitrum.io/dynamic-pricing-explainer/](https://blog.arbitrum.io/dynamic-pricing-explainer/)
+b. Alt Client Developments: [https://blog.arbitrum.io/erigon-and-nethermind-join-arbitrum/](https://blog.arbitrum.io/erigon-and-nethermind-join-arbitrum/)
+c. Nitro Max: we are internally benchmarking our node to allow Orbit chains to operate on higher hardware requirements
+
+**2. Fee Stabilization**
+a. We're exploring several levers / set ups that we can implement to allow partners to deploy a chain that has smoother or near-constant fees on the chain
+
+### Are there any projects currently operating an L3 AnyTrust chain that settles on an L2 AnyTrust chain such as Arbitrum Nova? Additionally, when comparing Rollup and AnyTrust configurations—specifically L2 Rollup + L3 Rollup versus L2 Rollup + L3 AnyTrust—how do transaction fees differ on the L3?
+
+The only project that is an L3 AnyTrust chain settling on top of an L2 AnyTrust is Playblock. However, we don't encourage this setup.
+
+In Arbitrum's design, transaction fees are determined by a **two-dimensional gas model**, consisting of:
+
+1. **Execution cost:** The fee paid on the child chain for computation, storage, and execution resources.
+2. **Data availability (DA) cost:** The fee paid on the parent chain for posting transaction data to ensure it is recorded and verifiable.
+   When execution costs are comparable, the total transaction fee difference primarily depends on the **data availability layer** used.
+
+**AnyTrust mode** provides significantly lower DA costs than **Rollup mode**, so an **L3 AnyTrust chain** will generally have lower fees than an **L3 Rollup chain**, regardless of whether the parent L2 uses Rollup or AnyTrust.
+
+Refer explanation doc [here](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9).
+
+### When connecting to an Orbit L3 node via an AWS Load Balancer (ELB) for HTTPS, issues are seen with Chain ID retrieval, token transfers, and Blockscout layout. The RPC (8449) and Blockscout (4000) ports are forwarded. Are more ports needed, or is the load balancer setup recommended?
+
+The current configuration, only exposing **ports 8449 and 4000**, should be sufficient if only those two services are needed.
+
+It is recommended to **configure WS endpoint** as well. The issues described may be due to a **network problem**.
+
+• **Testing:** Test the connection **without the load balancer** to determine if the issues are caused by the load balancer itself.
+
+Yes, it is better to have a load balancer.
+
+### If a chain is built using Orbit L3, is it possible to issue USDC directly on the L3 through Circle?
+
+A **native deployment of USDC** on an Orbit L3 chain is technically possible; however, only **Circle** can authorize and perform such a deployment. In practice, obtaining a native USDC issuance on an L3 would require coordination and approval from Circle and would likely involve **significant cost and operational complexity**.
+
+### If a custom gas token is used on the L3, does the batch poster need to hold ETH or ARB on the parent chain?
+
+It only needs to hold the **native gas token of the parent chain**, since it submits transactions there. For example, if the parent chain is **Arbitrum One or Arbitrum Nova**, the poster must hold **ETH**. The **ARB token is not used** as a gas token on any Arbitrum chain. [This document here](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup#understanding-the-fee-token-pricer) may help understand more about Custom Gas Token on a rollup chain.
+
+### Is it possible for an Orbit chain to process 1 billion transactions per day (over 10,000 TPS) by adjusting parameters such as block time, gas limit per block, or gas limit per second?
+
+Simply increasing configuration parameters like block time or gas limits provides only **limited performance improvement (And this can onlu higher upper limit)**, as the main bottleneck lies in **EVM execution speed** and **node performance (determines lower limit)**. Additionally, the **minimum gas cost per on-chain transaction (21,000 gas)** is fixed by the EVM and cannot be reduced.
+
+To achieve higher throughput, it is recommended to:
+• **Aggregate transactions** before submitting them on-chain.
+• **Move computation off-chain** and store only the resulting state on-chain.
+• Utilize **Stylus (EVM+)**, which significantly improves execution efficiency and can help achieve higher TPS.
+
+From a technical standpoint, an Orbit chain with **default parameters** achieves a **maximum theoretical throughput of around 6,095 TPS**, but this can be configured up to **approximately 15,238 TPS** (benchmarked against `eth_call` transactions).
+
+Maximum TPS is primarily governed by two parameters:
+• **Block time:** Default is 250 ms, configurable down to 100 ms (a 2.5× increase in TPS).
+• **Gas limit per block:** Default is 32,000,000 gas, and increasing this further boosts TPS but also accelerates **state growth**.
+
+However, it's important to distinguish between **theoretical and practical performance**. In real-world conditions, considering hardware, network latency, and system overhead, an Orbit chain typically achieves **400–700 TPS**, or roughly **33–60 million transactions per day**.
+
+Any claims of **billion-scale daily on-chain throughput** should therefore be viewed skeptically, as such performance is not technically achievable within realistic system and EVM constraints.
+
+### Isn't L3 generally understood to be cheaper than L2? What are the technical advantages of choosing L3 regarding customizability, performance, operational differences, and service operation based on platform experience?
+
+For any Nitro chain is **execution plus data availability (DA)** . The main difference between Orbit L2 and L3 lies in the **settlement layer** (the parent chain), since both use the same **Nitro stack**. The assumption that L3 is cheaper is mostly outdated as both L2 and L3 **can** use **AnyTrust mode**, which allows for similarly low gas fees. However with rollup mode, the dominant cost is L1 data posting.
+
+**Gas Fees:**
+Transaction costs depend primarily on **data availability (DA)** rather than on whether a chain is L2 or L3. Since both can adopt AnyTrust DA, their fees are generally comparable. L3 is therefore not inherently cheaper than L2. Since the DAcert from an L3 will be posted on the L2 which will then be posted to the L1.
+
+Even in rollup mode, the pricing difference between L2 and L3 for gas fees are very similar, since when data is posted to the L2 from the L3, the L2 still needs to post that data to the L1 for DA. meaning even on L3 you will still be paying L2 and L1 DA fees.
+
+**One small point to note:**
+• If it's an L3 chain, the data will be posted to L2 first, afterwards it will be posted to L1 by the L2 chain.
+• If it's an L2 chain, then the data will be posted directly to L1.
+
+**Technical and Operational Advantages of L3:**
+• **Settlement Flexibility:** L3 can settle on an L2 such as Arbitrum One or Nova
+• **No AEP License Fee:** Chains settling on Arbitrum One or Nova avoid the AEP license fee that applies to L2s settling directly to Ethereum.
+
+### If building an Orbit L3 chain designed to handle around 1 billion transactions per day (approximately 12,000 TPS assuming even distribution), how many feed relays, full nodes, sequencer relays, sequencers, and validators would be required? The assumption is 80% write activity, 10% execution, and 10% read activity. Can the High-Availability Sequencer Architecture support this throughput?
+
+The High-Availability Sequencer Architecture is designed to he more reliable than a normal sequencer in that its cannot fail to a single fault point. Before estimating node counts, it is important to understand how **full nodes** and **sequencers** share responsibilities:
+• **Read operations (calls):**
+
+Read-only queries are handled directly by full nodes without involving the sequencer. Read capacity scales horizontally—adding more full nodes increases read throughput. On average, a full node can handle around **1,000–1,500 read requests per second**. To support **10,000 RPS**, roughly **8–10 full nodes** would be needed, with additional nodes recommended for redundancy and traffic spikes.
+• **Write operations (transactions):**
+
+All transactions are sent from full nodes to the sequencer, which orders and executes them. Only the sequencer determines transaction ordering, while full nodes follow and execute in that sequence. Write throughput does **not** scale with the number of full nodes; it is constrained by the **sequencer's single-threaded performance** and the ability of full nodes to keep up.
+
+The current Arbitrum network sustains around **7–12 million gas per second**, translating to roughly **500–600 simple ETH transfers per second.** Actual performance will vary depending on hardware, configuration, and transaction complexity.
+
+**Key Takeaway:**
+• **Read capacity** can be increased by running additional full nodes.
+• **Write capacity** depends on the sequencer's processing power rather than the number of nodes. Along with the power of the full nodes, since they need to be able to keep up with the sequencers transactions.
+• The **High-Availability Sequencer Architecture** can be modified for more reliability within the network.
+
+### Are there any validator nodes directly operated by Arbitrum?
+
+Yes, we (Offchain Labs) run some validators.
+
+### How does the sequencer handle transaction surges? For instance, if 100,000 transactions are submitted simultaneously, will all be processed eventually, or will some fail? Additionally, in such cases, is it necessary to use Retryable Tickets to ensure reliable processing?
+
+The sequencer maintains an internal **transaction queue** to handle incoming transactions. When multiple valid and properly priced transactions arrive simultaneously, they are placed in this queue and processed sequentially over subsequent blocks until the backlog clears. The queue can hold approximately **1,000 transactions by default**, and any remaining transactions will get rejected if they cannot get in the queue within 12 seconds.
+
+Since the **EVM executes transactions sequentially**, the sequencer can process only one transaction at a time. Transactions can fail in the sequencer or during execution. They will fail in the sequencer if a transaction has an incorrect nonce, incorrect signature, insufficient funds, anything that can be checked before execution which will lead to the transaction never being executed. Transactions can also fail mid execution do to reverting which can happen for many many reasons. In cases of sustained congestion, underpriced transactions may be dropped, requiring resubmission with a higher fee.
+
+The **queue timeout** is roughly **12 seconds **by default, after which unprocessed transactions may be removed if not yet included in a block.
+
+**Retryable Tickets** are _not_ used for standard user transactions within an Orbit chain. They are designed for **cross-chain communication** (e.g., L1 → L2 or L2 → L3) to provide a censorship-resistant fallback path, not for managing local transaction load or congestion.
+
+For setups requiring guaranteed service continuity, refer to the [High-Availability Sequencer documentation](https://docs.arbitrum.io/run-arbitrum-node/sequencer/high-availability-sequencer-docs).
+
+### In the case of Arbitrum one, the soft limit is 7M gas/s, and if the soft limit is exceeded, a congestion fee is paid, but transaction processing can increase?
+
+Yes
+
+### Arbitrum One's gas per second limit is reportedly 7 M Gas/s. However, ChainSpect shows a max TPS of 1,358 tx/s. Mathematically, 7 M Gas/s seems to correspond to ~333 TPS. How does the 1,358 TPS figure arise?
+
+Additionally, under what conditions could the theoretical maximum of 40,000 TPS be achieved?
+
+The **7 M Gas/s** is a **soft limit**, not a hard cap. It represents the sustainable throughput target. If the network gas usage exceeds this value, the gas price increases to moderate demand, but transactions can still exceed the soft limit.
+
+• The observed **1,358 TPS** reflects real-world transactions where blocks may temporarily exceed the soft limit, and transactions vary in gas cost, allowing higher throughput than a simple calculation .
+• The **theoretical maximum TPS of 40,000** assumes idealized conditions with **unlimited hardware performance**, minimal transaction gas, and optimal block settings.
+• **Hard limits** are defined by node parameters, e.g., minimum block time of 0.25 s and max gas per block of 32 M, which would theoretically allow up to 128 M gas/s.
+
+Soft limits regulate network congestion, while hard limits define absolute technical boundaries.
+
+### INFO [06-24|21:31:27.118] InboxTracker sequencerBatchCount=12 messageCount=40 l1Block=8,618,759 l1Timestamp=2025-06-24T15:22:39+0900
+
+What does sequencerBatchCount=12 mean and what does messageCount mean here? Does sequencerBatchCount mean that the next batch posting order is 12? And is messageCount the number of L2 blocks so far or is it another messageCount? What does message mean here?
+
+sequencerBatchCount=12 means your node's inbox tracker already tracked 12 batches from inbox. messageCount=40 means the messages number your node tracked and stored. `sequencerBatchCount` doesn't mean the batchposter will post this count batch next, but it might just indicate your node is still syncing, and next will sync this batch number, the batchposter might already posted a much higher batch number.
+
+### INFO [06-24|21:46:38.382] Waiting for more batches to post next assertion latestStakedAssertionBatchCount=12 latestStakedAssertionBlockHash=0xa34898fd
+
+I have a question related to the above, and looking at the log above, is it true that assertions are not processed if the number of batches submitted is small, regardless of the assertion interval? And what is the assertion interval?
+
+No, this just because your node is still syncing and catching up, I will contact team to modify this log to make it more clear.
+
+### But could you explain a little more about the role and function of the jwt file here?
+
+The jwt there will be used when nitro serves `validation_*`, this is used for validator validation communication, you can explore more about this when you test [split validator](https://docs.arbitrum.io/run-arbitrum-node/more-types/run-split-validator-node).
+
+### When withdrawing ETH from an Orbit L3 to Ethereum L1, does it take 7 days for L3 → L2 finalization and another 7 days for L2 → L1 finalization? Since L2 blocks are generated faster, shouldn't the L3 → L2 withdrawal take less time? What are the minimum and maximum withdrawal times for L3 → L2 and L2 → L1?
+
+The **7-day withdrawal period** is not determined by block time but by the **fraud-proof (challenge) window** used for **censorship resistance** and **security guarantees**.
+
+• On **L2 → L1**, the 7-day window is fixed on Arbitrum Rollup chains to allow participants to challenge potentially invalid state transitions.
+• On **L3 → L2**, the withdrawal period depends on the **L3's configuration**. An L3 can set a **shorter challenge window** or implement **fast withdrawal mechanisms** to accelerate the process.
+
+In summary:
+• **L3 → L2:** Duration is configurable; can be shorter or near-instant if fast withdrawals are enabled.
+• **L2 → L1(Arbitrum 1 → Ethereum Main-net ):** Typically **~7 days**, as defined by Arbitrum's fraud-proof protocol. This 7 day protocol can be configured fewer or more days at the risk of potential malicient but
+Thus, total withdrawal time from **L3 → L1** can range from **near-instant (with fast withdrawals)** to **around 14 days** under default Rollup challenge windows.
+
+### The default value below is 95000. Does this refer to a single transaction?--execution.sequencer.max-tx-data-size int
+
+Yes
+
+### INFO [06-24|21:31:41.878] DelayedSequencer: Sequenced              msgnum=1 startpos=24
+
+INFO [06-24|21:31:42.699] Reading message result remotely.         msgIdx=40
+
+What messages does the msgIdx above mean (is it L2 block order number?) and what do the startpos and msgnum above mean here ?
+
+Yes, you can roughly think the message here is block number, blocks was produced from message, as you asked a lot of questions regarding batch, segments and blocks, I would suggest you to take a look at [go-batchHandler](https://github.com/OffchainLabs/go-batchhandler), it can help you understand what the relationships among them.
+
+### https://explorer.anime.xyz/tx/0x46e9e376fd80dc9a67e7607880c9aaedc5cf56ad29238bddf53237db14a03ba4 For the transaction record above, Gas used for L1 is listed as 0. Please explain why.
+
+Gas estimation is based on previous data, so if the previous tx over paid the L1 gas cost, then next one will cost less, so sometimes it comes out some tx pays `0` L1 gas.
+
+### Does the rollback above mean that the amount sent from A to B is returned from B to A and the fee is also refunded? If so, is it usually displayed as revert in explore in this case? Please answer. Thank you.
+
+The re-org in Blockchain means: Let's assume there is a block A (at timestamp T1) with state root S1, and after 3 mins, the blockchain goes to Block B (at timestamp T2, T2=T1+3mins) with state root S2, then the reorg happens, the chain has to reorg to Block A, so at this time, the whole blockchain's state will rollback to S1 too, so no matter what happens after S1, all state will come back to what it was at S1, including your account's balance (So instead of refund, I would say it as fallback). And all those tx after S1 will discard, the explore will even don't show those tx.
+
+### While testing the sequencer stability on an Orbit L3 chain, sending over 2,000 transactions per second, the base gas fee increased sharply and consumed excessive SepoliaETH. Why did this happen, and how can the base fee be fixed?
+
+When sending a large amount of TPS (2000 achieves this) It will cause Arbitrum one to go over its 7 million gas a second speed limit. Once gas per second goes over this [speed limit](https://docs.arbitrum.io/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit#what-is-the-speed-limit-on-an-arbitrum-chain), gas prices will increase.
+
+### Is the Gas Used For L1 displayed in blockscout the actual cost of batch posting or an estimated cost? Is this fee deposited into the Sequencer Fee Pool?
+
+It (Gas Used For L1) is an estimated cost based on previous data.
+
+Yes, the fee will deposit to `L1PricerFundsPoolAddress` first and send to `feeCollector` later.
+
+### What portion of the transaction fee serves as sequencer revenue (e.g., L1/L2 gas, base, and congestion fees)?In an Orbit L3 chain, the batch poster posts to its parent chain (L2). It appears that part of the L3 transaction fee is deposited to the batch poster's L2 address. How exactly is the user-paid transaction fee routed to the batch poster's address?
+
+Refer [docs](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees#sequencing-revenue) for sequencer revenue
+
+The sequencer's revenue and fee flow are determined by how the Orbit chain's fee components are configured. There are four main fee types on an Orbit chain:
+
+1. **L2 Base Fee:**
+   This represents the minimum execution fee for processing transactions on the chain. It is deposited into the **infraFeeAccount**, which can be configured via `ArbOwner.setInfraFeeAccount()`.
+
+2. **L2 Surplus Fee:**
+   When the network experiences congestion and users pay above the base fee, the surplus portion is directed to the **networkFeeAccount**, set through `ArbOwner.setNetworkFeeAccount()`.
+
+3. **L1 Base Fee:**
+   This covers the cost of posting transaction batches to the parent chain. These funds are ultimately paid to the **fee collector** of the **active batch poster**. The batch poster is designated using `SequencerInbox.setIsBatchPoster()` on the parent chain, and its fee collector can be set via `ArbAggregator.setFeeCollector()`.Note: These payments occur **on the child chain**, even though the costs correspond to activity on the parent chain.
+
+4. **L1 Surplus Fee:**
+   Any additional rewards associated with batch posting are paid to a specific **L1RewardRecipient**, which can be configured via `ArbOwner.setL1PricingRewardRecipient()`.
+
+In summary, part of the transaction fee that users pay on the child chain is allocated to cover the posting cost. Then tge fee is directed to the those configured **address** on child chain(or its configured fee collector) as reimbursement for posting batches to the parent chain.
+
+For more details on fee distribution, please refer to [this documentation](https://docs.arbitrum.io/how-arbitrum-works/gas-fees#parent-chain-costs).
+
+### Could you explain the three config differences in more detail?
+
+(config 1)`--node.bold.minimum-gap-to-parent-assertion duration` : If validator creates assertion A, and this validator wants to create assertion B which connect to assertion A, the minimum time gap between assertion A and B(config 2)`--node.staker.make-assertion-interval duration` Your node's minimum time gap during making assertions. (config 3) `--node.bold.assertion-posting-interval duration`(for bold) Your node's minimum time gap during making assertions. (for legacy)If you are deploying your node using the latest version, your node are at bold version. (edited) [https://docs.arbitrum.io/run-arbitrum-node/more-types/run-split-validator-node](https://docs.arbitrum.io/run-arbitrum-node/more-types/run-split-validator-node)
+
+### If L2 ETH for batch posting is deposited in the L2 feeCollector, payment must be made in L1 ETH when the Batch Poster delivers the batch to L1. How does bridging L2 ETH to L1 ETH work?
+
+You can just use the token bridge to withdraw your token to parent chain.
+
+Here is an example UI for Arbitrum One: [https://portal.arbitrum.io/bridge](https://portal.arbitrum.io/bridge).
+
+You can also interact with bridge contract to withdraw back, [here](https://docs.arbitrum.io/arbitrum-bridge/quickstart) is the related document.
+
+### WARN [06-30|12:21:15.071] Could not confirm assertion err="posting this transaction will exceed max mempool size: transaction nonce: 25, unconfirmed nonce: 24, max mempool size: 1" assertionHash=6ee7ff..925542
+
+This happens because your staker just sent a tx to l1 and it hasn't been confirmed, did you restart the node not long ago? If not, you can wait some time to see if it can be resolved, usually when the tx 24 confirmed, this warn will be disappeared. You can also check if there is something preventing your validator's tx hasn't been confirmed for a long time (like balance, rpc endpoint and gas).
+
+### When the sequencer receives more than 2,000 transactions per second, do those transactions accumulate in a queue and get processed in the order they arrive? If the sequencer queue has a fixed size, what happens to transactions that exceed the queue limit, and how many can wait?
+
+Arbitrum's sequencer does **not use a traditional mempool**. Unlike Ethereum, there is no mechanism for reordering transactions by tip or fee priority.
+When a large number of transactions arrive simultaneously:
+• Transactions that fit into the **sequencer queue** (default size: **1,024**) are processed in **FIFO (first-in, first-out)** order.
+• Transactions arriving while the queue is full are handled in **non-deterministic (random)** order once space becomes available.
+• If a transaction is not added to the sequencer queue within the **queue timeout** (default: **12 seconds**), it will **fail** and return an error to the sender.
+
+The number of transactions that can wait outside the sequencer queue is limited by the **sequencer's available RAM**. A well-configured sequencer will begin **rejecting new transactions** once memory usage reaches safe operational limits to maintain stability.
+
+### Is the Sequencer Fee Pool Model currently applied to the Orbit chain? How can one find the address of the Sequencer Fee Pool?
+
+Yes, it applies to orbit chains.
+
+`infraFeeAccount` :`ArbOwnerPublic.getInfraFeeAccount()` 
+`networkFeeAccount` : `ArbOwnerPublic.getNetworkFeeAccount()` `FeeCollectors` : `ArbAggregator.getPreferredAggregator(batchPosterAddress)` 
+`L1RewardRecipient` :`ArbGasInfo.getL1RewardRecipient()`
+
+Those precompiles addresses can be found [here](https://docs.arbitrum.io/build-decentralized-apps/reference/contract-addresses#precompiles) .
+
+### Can I ignore the warning below? It won't keep coming up.
+
+WARN [06-24|21:31:39.004] error finding requested sequence number in backlog: sending the entire backlog instead err="error finding backlog segment containing message with SequenceNumber 40"
+
+Yes
+
+### How many batches must be submitted to generate an assertion? Even if only one batch is submitted, will an assertion be generated after a certain amount of time? (What is the relevant configuration?)
+
+The assertion creation doesn't have a strong relationship to batch amount, as your batchposter's message number higher than the latest one recorded on parent chain, then the batch poster can post the batch. Related setting is `--node.bold.assertion-posting-interval` (bold) or `--node.staker.make-assertion-interval` (legacy)
+
+### How many blocks can a batch poster contain at minimum and maximum, and how many transactions must be included to create a batch?
+
+It depends on the tx size, we don't usually say how many tx or blocks here, but how much sizes those tx are, the flag is `--node.batch-poster.max-size`
+
+### What are the current hardware specifications of the nodes that make up Arbitrum one, which is currently being operated by offchain labs?(sequencer, validator, full node, relay, etc.)
+
+Most of our instances run on a cloud provider and we use Kubernetes to orchestrate the deployment and management of services. As a reminder, Arbitrum One is unique: it was the first L2 blockchain to launch and has been in production for over 3 years. The types of applications and what users do on Arbitrum One is likely to be very different from any other chain and so I'd ask that you keep this in mind while comparing your chain's hardware configurations and performance.
+
+• Our sequencer runs a minimum of: 10 CPU cores, 90GB of RAM, and a fairly large local NVMe drive, specifically ~6.6TB in size. On AWS, we use `i7ie.3xlarge`.
+• The archive node runs on: 2 CPU cores, 40GB RAM, and a large 16TB `gp3` high iops volume
+• Validators run on a minimum of 3 CPU cores, 32GB RAM, and a 4TB `gp3` high iops volume
+• Regular RPC nodes we run are roughly 4 CPU cores and 32GB RAM.
+
+Note that most professional node operators for RPC nodes (e.g. Alchemy, Infura, Quicknode, etc) run way larger machines to serve RPC calls because those companies sell RPC-as-a-service for their business and so they have higher requirements for uptime and performance. We do not do that since we do not serve high volume, production calls on our RPC nodes - our RPC nodes are public and free and therefore have a lower requirement for all those things i mention above (latency, perf, uptime, etc)
+
+For setting up own chain, we do recommend HA set ups. [This repository of helm charts might be valuable to your team](https://github.com/OffchainLabs/community-helm-charts). Again, we want to emphasize that these specifications are for Arbitrum One and its demand/load profile. A new chain or a different chain will have a different demand/load profile and set of users and apps that may mean your chain will use more or less than what Arbitrum One uses. Generally, I believe that better hardware and better configurations/setups in your DevOps environment lead to better outcomes: being able to handle more throughput, transactions, and offering better latency.We're continuously and currently doing optimization work to both increase performance for the same hardware, as well as doing benchmarking to see what performance and throughput look like at higher hardware tiers.
+
+### Is there a way to prevent the base fee from increasing during congestion, and how long does it take to return to normal after congestion clears?
+
+C Currently there is no way to lock the base fee, however the chain owner is able to increase the speed limit of their chain along with some other configurations which will mitigate the increase during congestion
+
+Arbitrum is also **exploring mechanisms to smooth out fee volatility** and better isolate Orbit chains from **L1 gas price fluctuations**.
+
+### The default value below is 1024. Does this mean that 1024 transactions can be queued at once? If the remaining 1024 is exceeded, will the user receive a network busy error?How is the time for processing and sending a single transaction from the queue adjusted, and how long is it?--execution.sequencer.queue-size int
+
+No, the queue-size here means the tx number reach to sequencer but haven't been queued yet, if 1024 exceed and the tx can't be added in 12 s, user will get error like `context deadline exceeded`
+
+### INFO [06-24|21:31:59.632] validated execution                      messageCount=40 globalstate="BlockHash: 0x0a3e00344c3951143eb0f21020d3188ee175ae0de2401b81a799b05dc3a138a8, SendRoot: 0x0000000000000000000000000000000000000000000000000000000000000000, Batch: 12, PosInBatch: 0" WasmRoots=[0x184884e1eb9fefdc158f6c8ac912bb183bf3cf83f0090317e0bc4ac5860baa39]
+
+Does the messageCount mentioned above refer to the number of the last posted L2 blocks? Does the Batch 12 mentioned above mean that the 12th batch submitted by the batch poster is brought to the validator and verified? Does the PosInBatch: 0 mentioned above mean that there is only one batch? Or what does it mean?
+
+Although messages here can be used to produce block, but I don't suggest you understand it as block. Yes, batch 12 here means this validator verified to batch 12 and PosInBatch means the position in batch, (because batch can divided into different segments) not means batch number.
+
+### What determines when batches are generated and posted from a child chain to its parent chain? It appears that a batch is not created for every block. What are the specific criteria for batch generation?
+
+Batch generation and posting are governed by both **time-based** and **size-based** criteria. The **batch poster** submits a batch to the parent chain when **either** of the following conditions is met:
+
+1. **Time limit reached:**
+   ◦ Controlled by the parameter `--node.batch-poster.max-delay`, which defines the **maximum duration** allowed between batch postings (assuming there is activity and the poster is properly funded).
+2. **Size limit reached:**
+   ◦ For **calldata batches**, controlled by `--node.batch-poster.max-size`.
+   ◦ For **EIP-4844 (blob) batches** (applicable to L2s), controlled by `--node.batch-poster.max-4844-batch-size`.
+
+In practice, this means a batch is posted **either after a set time interval** or **once enough transaction data has accumulated** to reach the configured maximum batch size. As a result, batches do not correspond one-to-one with blocks on the child chain — multiple blocks may be included in a single batch.
+
+**Default values:
+**`--node.batch-poster.max-delay` : default 1h0m0s
+`--node.batch-poster.max-size` : default 100000
+
+### What is the config that adjusts the block creation cycle and the number or amount of transactions that can be contained in a single block? If there are no transactions, will an empty block be created after 72 hours like the config below? What is the related config?--node.batch-poster.max-empty-batch-delay duration (default: 72h0m0s)
+
+The flag which can adjust the block creation cycle is `--execution.sequencer.max-block-speed` , I would suggest you to go through this [code](https://github.com/OffchainLabs/nitro/blob/master/execution/gethexec/sequencer.go#L1451-L1458), the sequencer will try to create the block every `MaxBlockSpeed` , and if no tx, the return of `createBlock` will be false.
+As for **--node.batch-poster.max-empty-batch-delay**, yes, this will make batchposter sends an empty batch to l1, and this will results in a new delayed message `batchpostingReport` created, and this will cause a new block on l2.
+
+### Does Arbitrum One also manually bridging the ETH required for batchposter?
+
+This can be done by an automatic script and the logic is relatively easy.
+
+### When a log occurs because the batch poster has no balance, the batch poster's balance is increased, but the batch posting occurs after some time after the balance is charged. How long after the balance is charged is posting possible? And what are the related confirmation logic intervals and configs?
+
+The minimum check time period is 10 s. however, there is no logs [here](https://github.com/OffchainLabs/nitro/blob/master/arbnode/dataposter/data_poster.go#L1117), I will forward this to our team and maybe add a new log there.
+
+(Data entry note, as of right now it does not seem there is a log at this function)
+
+### Please check if the log interpretation below is correct.
+
+INFO [06-24|21:31:12.131] BatchPoster: batch sent sequenceNumber=11 from=38 to=40 prevDelayed=23 currentDelayed=24 totalSegments=4 numBlobs=0
+
+The batch sequence number is 11th and includes L2 Block 38 to 40. (Is this interpretation correct?) / But what does prevDelayed=23 currentDelayed=24 totalSegments=4 numBlobs=0 mean here ?
+
+Yes, you are right, `preDelayed` means before this batch, how many delayed tx from parent chain are accepted, and `currentDelayed` means after this batch, how many delayed tx are accepted. The totalSegments means how many seg messages are in this batch, it can be user tx batch or also time update message (tell the network to advance timestamp) and so on, all seg message types are [here](https://github.com/OffchainLabs/nitro/blob/master/arbstate/inbox.go#L187-L191). numBlobs=0 which means this batch doesn't post eip4844 blobs.
+
+### While testing an Orbit L3 node, an issue occurred when using the eth_getLogs query. The problem was traced to a block range exceeding 10,000 blocks. Chainstack, the node provider, mentioned that Arbitrum recommends keeping the block range per eth_getLogs query under 10,000 blocks to avoid errors and performance issues. How can the block range for eth_getLogs be adjusted on the Orbit L3 chain? For context and logs refer here - https://offchainlabs.slack.com/archives/C08373EP1QQ/p1761783628215019?thread_ts=1761726622.755719&cid=C08373EP1QQ
+
+This issue originates from the node responding to an `invalid block range` parameter in the client's `eth_getLogs` query, not from the parent chain or the node provider. The error indicates that the **client is requesting logs with a block range larger than what the node supports**. To resolve this, you'll need to adjust the query parameters on the **client side**, ensuring that each request spans **no more than 10,000 blocks**.
+
+Additionally, if you encounter the error `wrong msgIdx got 167230 expected 167228`, this points to **database inconsistency** between components of your node setup. Resetting only one database can create further synchronization issues.
+
+If the chain is running in **Rollup mode**, the recommended fix is to **delete the entire database** (typically located at `/home/user/.arbitrum/<your_chain_name>`) and **resync the node** from the parent chain. This ensures full consistency across databases and resolves the indexing mismatch.
+
+### Regarding the configuration below, the default value is 100000. If the compression rate is 11, how many transactions can be included on average?
+
+Sorry, different tx has different size, there is no correct way to estimate it, but you can check our mainnet as an example: [https://arbiscan.io/batches](https://arbiscan.io/batches).
+
+### what a customized relayer cache is and how transactions are processed by adding a customized relayer cache to the High-availability sequencer diagram to make it easier to understand?
+
+This is an example scenario to explain the solution when sening more transactions than the sequencer's pending transaction queue can handle.
+
+The general idea is to deploy a relayer that holds the transactions and sends them to the sequencer once the sequencer is able to process them.
+
+It can also be configured to increase your sequencer's pending transaction queue capacity:
+• `--execution.sequencer.queue-size` (default: 1024)
+• `--execution.sequencer.queue-timeout` (default: 12s) by setting
+
+These parameters to higher values, you can increase the sequencer's pending transaction queue size.
+
+### Batch posters seem to bridge the fees received from L2 to L1 fees at regular intervals. What is the frequency?
+
+Those funds (network revenue) will be paid to child chain `feeCollector` and will not bridge to L1 automatically.Those funds will be paid after each time batch posting.
+
+### How is the compression rate of 11 calculated?
+
+Brotli:11 is best ratio level of compression, you can find it at google's [paper](https://github.com/google/brotli/blob/master/docs/brotli-comparison-study-2015-09-22.pdf).
+
+### What is the posting interval for batch posters? (What is the related configuration?)
+
+When the batch poster has at least 1 useful tx, it will wait until whether `--node.batch-poster.max-delay` reaches or `--node.batch-poster.max-size` (calldate posting) / `--node.batch-poster.max-4844-batch-size` (blob posting) reaches, default values for those 2 is 1h0m0s and 100000 bytes(calldata posting) or 0 (blob posting based on parent chain config). Or if there is no tx recorded, batch poster will post an empty batch after `--node.batch-poster.max-empty-batch-delay` .
+
+### How does gas price fluctuation on Arbitrum compare to Ethereum, where it increases or decreases within a 12.5% range depending on network congestion?
+
+Arbitrum's gas pricing mechanism works differently from Ethereum's.
+
+On **Ethereum**, the base fee adjusts by up to **±12.5% per block** based on how full the previous block was.
+On **Arbitrum**, the gas price remains fixed at the **MinimumL2BaseFee** until **real-time gas usage exceeds the network's gas speed limit**. Once that threshold is crossed, the base fee increases dynamically according to network backlog using the following formula:
+**`F = exp(-a(B - b))`**
+Where:
+• **F** = current base fee
+• **B** = gas backlog
+• **a** = parameter controlling how fast the fee rises with congestion
+• **b** = threshold backlog before the escalation begins
+
+This model allows Arbitrum to respond smoothly to congestion, scaling gas prices based on actual network pressure rather than per-block fullness.
+
+More information can be found in [this documentation](https://docs.arbitrum.io/how-arbitrum-works/state-transition-function/arbos#child-chain-gas-fees).
+
+### The poster fee for an Orbit L3 test chain has increased by about tenfold since yesterday. Could this be caused by the network status of Arbitrum Sepolia, or is there another reason?
+
+On Orbit chains, the **batch poster fee** is directly influenced by the **L1 gas price** on the parent chain. If the chain is using **Arbitrum Sepolia** as its parent, any spike in **Sepolia's L1 gas price** will cause the batch posting cost to rise — sometimes by a factor of ten or more. This behavior is expected, as the posting fee scales with the parent chain's gas price.
+
+### If traffic continues to come in at over 100,000 bytes per Tx(s), how fast can batches be done?
+
+It will check if batch can be posted every 10s, so answer to this is around 10s. (And you also need to wait the tx confirm time on l1, which is not fixed, some time it will be very fast but some time it may need you to wait several mins or even more)
+
+### Can the withdrawal time from L3 to Arbitrum One (L2) be reduced compared to the withdrawal time from Arbitrum One (L2) to Ethereum (L1)?
+
+Yes, anytrust can enable fast withdrawal which can be reduced to **15 mins **for L2s**, **and** 15 seconds** for L3s**. **AnyTrust chains are already placing a trust assumption on their Data Availability Committee (DAC) to provide the data needed for fraud proofs and recreating the chain.It is possible for an Arbitrum chain Rollup to adopt fast withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee. related [docs](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals)
+
+### In this case, I am curious about why weth and multi call use the existing contracts together and what their roles are.
+
+weth and multi call are usually specific to the chain and be a constant contract, like on ethereum sepolia, because lof of users will use those 2 contracts, there is no need to deploy a new one when a new user uses it, so when deploy a new chain, the parent chain's weth and multi call contracts we will use the universal one.
+
+### What does "resolve any unconfirmed assertions" mean in resolve node explanation? (What does resolve mean here?) This is a question from another team member. Is "resolve any unconfirmed assertions" performed by the rollup contract rather than the validator?
+
+The assertion life cycle is: `assertion created` -> `assertion waiting for challenge` -> `assertion confirmed` in happy case. The resolve mean confirm an assertion, arbitrum is optimistic rollup, the l1 will not do any execution when there is no challenge, so needs to be resolved on rollup contract by validator after it created, I would highly recommend you go through those docs (**[Validation and Proving Mechanisms](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/validation-and-proving)**, [rollup protocol](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/rollup-protocol) and [challenge protocol](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/proving-and-challenges)) for a better understanding.
+
+### How can I call smart contract functions and listen to events emitted by said contracts (Original question asked specifically about changing transaction fee receiver and how to call/read smart contract functions/events)
+
+This is the [example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/setup-fee-distributor-contract/index.ts) has code to call arbOwner contract, it is about how to call `arbOwner.setInfraFeeAccount`The contract interface is [here](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/main/ArbOwner.sol#L111).
+you can use ethers.js to filter those events, here is the [docs](https://docs.ethers.org/v5/concepts/events/).Those events belongs to Rollup and challengeManager.
+
+### Is there a difference in network fees when executing the same kind of transaction on Orbit L2 and Orbit L3?
+
+There is no difference of network fee between L2 and L3 chains, but due to parent chain's gas prices changes, the child chain gas will be different in different time.
+
+### I want to estimate how much transaction fee a batch poster, sequencer, or validator submits to L1 per month, which config should I check and at what cycle should I multiply \* tx average?
+
+While using math is possible, the easiest and preferred way to do this is to just monitor the batch poster and validator directly to keep track of their funds and how much they used
+
+### Where is the RPC code located
+
+For rpc each specific methods implementation, you can check code here. http/ws processing here
+
+### what are the roles of the nativeToken contract and adminProxy here, and why is validatorWalletCreator needed?
+
+native token here is 0x0 means you use ethers as gas token, if it is other value, then means this chain will use that as gas token. About proxyAdmin, you can check oz docs. validatorWalletCreator can be used to create wallet for validator to ensure the funds safety.
+
+### if i use the same validator address as a Makenode address at first and then change it to defensive mode, does it re-stacking every time i change the mode?For example, as i can see below, the money is spent twice.https://sepolia.etherscan.io/address/0x65fF9E2256CBaE32f8Ae18776cF1e66A2BEa436d (Mode : MakeNode->defensive) (twice out)https://sepolia.etherscan.io/address/0x9699040F6e8A10F6831884966ceBfaa2E50fe59B (Mode change is not sure but twice out)In this case, how can I withdraw the stake I made in the previous mode? Could you please guide me on the specific method?
+
+No, it will just **need** stake once, the stake token of your chain is weth (wrapped ethers, which is an erc20 type of ethers). You can click [here](https://sepolia.etherscan.io/address/0x65ff9e2256cbae32f8ae18776cf1e66a2bea436d#tokentxns) to see your weth transfer history, then you will see there is only 1 time that your address transfer the weth token to your rollup contract, although you deposited twice (2 ethrs), only 1 weth is spent and your address still has 1 weth left, you can check it [here](https://sepolia.etherscan.io/address/0x7b79995e5f793a07bc00c21412e50ecae098e7f9#readContract)  by call `balanceOf` and input is your address, if you want to withdraw weth back to eth, then use your address to connect to etherscan and call withdraw [here](https://sepolia.etherscan.io/address/0x7b79995e5f793a07bc00c21412e50ecae098e7f9#writeContract).
+
+### is it possible to set up SSL or TLS in the application layer
+
+There is no application-level ssl setting for nitro, you need to use a Reverse Proxy or cloud hosting solutions.
+
+### The Arbitrum developer documentation states that fast withdrawal is only recommended on the Anytrust chain. What would the reason be?
+
+The reason fast withdrawals is only recommended for AnyTrust chains relates to the trust assumptions involved.For AnyTrust chains: The optimal setup is to have all Data Availability Committee (DAC) members also run validators as part of the fast withdrawals committee. This approach leverages the existing trust assumption placed on the DAC operators such that enabling fast withdrawals does not add any new trusted parties.For Rollup chains: While it is possible for an Arbitrum Rollup chain to adopt fast withdrawals, it would technically no longer be a Rollup as the minimum trust assumption will shift to additional trust assumptions. Because rollup mode is designed as trustless, whether to add additional trust assumptions or not needs further thinking.
+
+### How can I change the batchPoster
+
+[In development guide to how to change your batch poster](https://github.com/OffchainLabs/arbitrum-docs/pull/2382/files)
+
+### Would there be any suggestion to reduce the transaction network fee, which currently costs 31,749 gas, to $0.00001?
+
+1. Adjust gas price setting: Configure node parameters and contract settings to set a lower base fee ceiling.
+2. Batch Operations: Set a higher max batch size which can provide some very slightly support here.
+3. Configure Soft Gas Limit: Adjust the gas limit settings to maintain lower base fees during normal operation
+4. Note: If you are trying to lower down the gas price and increase the tps, you need to make sure your hardware can handle it or it may cause network nodes down.
+
+### Why is the L1 contract not responsible for checking the validity of an assertions instead of the validators
+
+You can check our docs [here](https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/validation-and-proving). Arbitrum is optimistic rollup, optimistic means l1 will optimistically think every assertion is correct rather than rollup will auto verify it. So during a time if no challenge happens, validator will call l1 contract to resolve it. So you are also right, L1 contract is the one that resolves it, but needs validator to call it.
+
+### Is it possible to make the block creation cycle 4 times a second with a certain configurations
+
+this config will set the fastest block time to 250 ms, which means the sequencer will try to create block every 250ms, but if last block creation time too long (too many tx) or there is no new tx, the block time gap won't exactly equal to 250ms, but longer than this, so there is no fixed block time on l2.
+
+### What is the mempool (L1)
+
+The mempool is a place where pending L1 transactions wait to be picked up and executed on by an eth node
+
+### How can I adjust batch and asseration cycles? Which flags should I set?
+
+You can adjust the timing and behavior of the **Batch Poster** and **Assertion** cycles using the following flags:
+\*\*
+
+1. Batch Poster Flags**
+   `--node.batch-poster.max-delay` **Maximum batch processing delay.
+   **`--node.batch-poster.poll-interval` **Polling interval** - The time to wait between checking if a batch is ready to be posted.
+   `--node.batch-poster.error-delay` **Error delay** - The time to wait after an error posting a batch.
+   `--node.batch-poster.wait-for-max-delay` Wait for the maximum delay even if the batch is full.
+   `--node.batch-poster.max-empty-batch-delay` Maximum delay before an empty batch can be posted.
+   **
+2. Assertion Flags (BOLD)\*\*
+
+These flags are specific to the **BOLD** assertion strategy.
+`--node.bold.assertion-posting-interval`**Assertion posting interval.
+**`--node.bold.assertion-scanning-interval`**Assertion scanning interval** - The time to wait between scanning for newly created on-chain assertions.
+`--node.bold.assertion-confirming-interval`**Assertion confirming interval** - The time to wait between attempts to confirm assertions.
+`--node.bold.minimum-gap-to-parent-assertion` minimum duration to wait since the parent assertion was created to post a new assertion
+** 3. Assertion Flags (Legacy)**
+
+`# Staker Interval - The frequency to check L1 rollup state and potentially take action.
+--node.staker.staker-interval
+
+# Make Assertion Interval - The frequency to create a new assertion when using the MakeNodes strategy.
+
+--node.staker.make-assertion-interval`
+
+### what are the min and max TX sizes that Batcher submits to L1 in the case where there is no user TX and only system TX, and when user TX is full during batching? And in this case, can it be converted to gas only rather than datasize?
+
+When tx total size (both user tx and system tx) equal or higher than `--node.batch-poster.max-size`, then it will post batch. The units of this is byte, default 100000 means 100000 bytes.
+
+### even if there is only a single small transaction in a batch, will it still be posted in an hour
+
+Small tx is also useful tx, any user's tx accepted by sequencer will be set as useful tx. So the batch will still be posted after 1 hour.
+
+### Among the MakeNode, Validator, and Resolve nodes, is MakeNode the only required element (mandatory)?
+
+Technically, yes, you only need MakeNode is enough, but to increase the safety, it would be better to have more validators.
+
+### Ethereum increases or decreases the Base Fee within a range of 12.5% depending on whether 50% of the block is filled. What is the basis for Arbitrum's Base Fee fluctuations?
+
+There is a soft gas limit on Arbitrum chains. The default setting is 7m/s. If the gas spent rate is higher than this limit, the network fee will be increased.
+Formula: See Arbitrum Gas Fees Documentation ([https://docs.arbitrum.io/how-arbitrum-works/gas-fees#child-chain-gas-fees](https://docs.arbitrum.io/how-arbitrum-works/gas-fees#child-chain-gas-fees))
+The soft limit is configurable in node configuration.
+
+### WARN [06-09|12:11:15.821] Getting file info dir=/home/ellena/nitro_build_2025_06/nitro/machines error="stat /home/ellena/nitro_build_2025_06/nitro/machines: no such file or directory"
+
+When you run the binary and get this error, this means you don't download the replay binary, you can download it by run `scripts/download-machine.sh` in nitro and copy it to the related machines dir.
+Or if you are doing some customization to STF, you need to build it your self by `make build-replay-env` and make sure you set the new wasm module root to your on chain contract too.
+
+### What is --node.batch-poster.poll-interval duration for
+
+This sets the interval for checking and sending batches
+
+### In this case, can you tell me why the weth address is called when staking and how it moves from there to the rollup contract?
+
+Your rollup contract uses weth as stake token, and the node needs to call weth contract to convert ethers to weth. Because weth is erc20 token, the erc20 token can be transfered by its method `transferFrom` on contract, [here](https://www.linkedin.com/pulse/erc20-decoded-understanding-approvals-allowances-frederick-van-staden) is an article talks about how erc20 token works.
+
+### So, does that mean that a validator in makenode mode can make assertions even if there is no new batch? I thought that makenode meant submitting a new assertion to a new batch that is different from the existing one.
+
+No, no relationships I mean is no need to have any specific amount of batch to post the assertion, if your batch number higher than last assertion's, then you are good to post the new one. related logic [here](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol#L471).
+
+### -> --node.bold.assertion-posting-interval (bold) or --node.staker.make-assertion-interval (legacy) What are the differences between these two?
+
+The first one is used for validators using the BoLD protocol, the second one is used for validators running the legacy protocol.
+
+### How much ETH should I fund when running a Sequencer that also participates as a Validator?
+
+**Sequencer and Validator typically should NOT run on the same node.** However, if asking about funding requirements for the address/wallet: the ETH needed equals the Validator's requirements, plus BatchPoster requirements if you're also running that component. The exact amount varies significantly based on chain activity.
+
+### Do all L1→L2 message go through the inbox contract?
+
+Yes, even for bridge contract, it will finally call inbox's `createRetryableTicket` , for more about l1->l2 message, please refer to [this](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging) docs.
+
+### When I try to build nitro binary, I get the following error: make: wat2wasm: No such file or directory
+
+You need to make sure you installed all **prerequisites **mentioned in this page: [https://docs.arbitrum.io/run-arbitrum-node/nitro/build-nitro-locally](https://docs.arbitrum.io/run-arbitrum-node/nitro/build-nitro-locally)
+
+### What are all configurations to improve TPS, and what hardware requirements are there to do so
+
+This is a frequently asked question, and we usually don't say TPS on arbitrum, but gas used per second, currently the gas used per second soft limit on arb1 is 7m, if the ratio higher than this number, then gas price will increase, but if you want to adjust the soft limit, you can call `ArbOwner.SetSpeedLimit`. So if you want to have a higher gas efficiency, I would recommend you to use stylus for contract deployment, for what is stylus, you can check the docs. So why increase the tps harder in decentralized netwrok? Because there will be a lot of fullnodes might join the network, it's easy to increase your own node's performance, but if only your node's performance increased, the other node can't catch up which might cause many users can't follow up the chain and might cause some potential issues.
+
+### And what exactly is the role of the rollup event box?
+
+You can take a look at rollupEventBox [here](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/AbsRollupEventInbox.sol), it has a function `rollupInitialized` which can be used to report init message.
+
+### What are the differences between fullnode, validator, archive node, and sequencer? How do these node types relate to each other in the Nitro stack?
+
+**Fullnode:** Syncs chain state and serves RPC requests
+**Validator:** Validates based on posted batches and posts assertions to parent chain, will also challenge current assertions if they deem it malicious or incorrect
+**Archive Node:** Fullnode that retains all historical state
+**Sequencer:** Orders transactions and produces blocks (not a fullnode)
+**Batchposter: **Posts queued tx by sequencer to partent chain.
+
+### What is the minimum network fee (in USD) we can set for our blockchain, and what technical limitations prevent setting it lower?
+
+The minimum `minL2BaseFee` is currently **0.0001**. Setting it lower than this threshold may cause overflow issues in the system.
+
+### The code below may not be perfect, but it is a temporary test result. As you can see from the results, only 91 were successful when 500 were sent per second. What configuration should I change to increase TPS?
+
+I don't know how your script looks like so I have no idea if that failed due to which reason, your tx also might failed because the nonce reason or others when send a batch of txes. But to increase your chain's soft gas limit per second, call ``ArbOwner.SetSpeedLimit``` and use stylus contract to increase the gas efficiency.
+
+### How can I get all my core contracts address of my orbit chain?
+
+There is a method named `getCoreContracts()` in chain-sdk, you can get it from your rollup deployment tx receipt.
+
+### When using a custom gas token in Orbit L3, Batchposter exchanges it for ETH and pays the transaction fee to the parent chain. Can a custom gas token be used even if it is not a listed token or there is no standard for measuring its value? If you could share details regarding using relayer option as you mentioned during the call, that would be appreciated as well.
+
+Yes, a custom gas token can be used even if it's not a listed token, but it must meet specific requirements:
+**Requirements:
+**Must be a standard ERC-20 tokenTransfers and approvals
+must occur directly via the token contract, not via proxies or hooks
+Must not be rebasing or include transfer fees
+Must not use transfer callbacks or any onchain behavior that reverts if the sender and recipient are the same
+**Fee Token Pricer Contract**: You need to deploy a fee token pricer. Here are 3 types of this pricer contract: Understanding the Fee Token Pricer ([https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup#understanding-the-fee-token-pricer](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup#understanding-the-fee-token-pricer))Fee token pricer is a contract to tell your network the exchange rate between your custom token and ethers.
+
+### WARN [07-01|18:57:19.915] Could not succeed function after retries retryCount=15 err="could not get assertion creation block for assertion hash 0x34de67082eeaddc3977bcc5a7d4a1e2b4649925b6e18300879c446717dba675c: execution reverted: ASSERTION_NOT_EXIST"
+
+Your staker tries to read an assertion but it is not exsited.
+The most possible reason is because your rpc node has some issues or it hasn't synced to the latest block. Try change to another parent chain endpoint and see if it gets resolved.
+
+### Regarding the Base Fee, L2 (Arbitrum Sepolia) is approximately 100 times more expensive than L1 (Ethereum Sepolia) on the Testnet. However, on the Mainnet side, L2 is approximately 20 times cheaper. Would there be certain reason for that?
+
+This is because many devs choose the Arbitrum Sepolia as the testnet and they sent a lot of testing tx on Arb Sepolia, which causes this gas price to continue to be high.
+
+### What is the difference between the batchPoster and the batchPosterManager
+
+batchPosterManager has the permission to add or remove batch poster by `setIsBatchPoster` , source code [here](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/SequencerInbox.sol#L814). While the batch poster posts batches
+
+### Up until now, in order to pay the L2 tx fee, I used the deposit function call from L1 to L2 to transfer money, but is it not possible to randomly create money in the network itself without transferring money from L1 to L2 to a specific account in and without transfering from other account in L2 itself?
+
+Do you mean if it's possible to "create" or "mint" ethers on Layer 2 directly? The answer to this question is no, because l2 can withdraw funds back to l1 and if you create new ethers on l2, which means you can create ethers on l1 too, that is not allowed
+
+### do eth_get functions (read only) charge a transaction fee?
+
+No
+
+### Is there a config that affects the RPS of the newly built node, not the TPS? Is it true that the RPS is only affected by the CPU performance, memory, and network performance of the node rather than the config?In the newly built Nitro node, where is the part of the code that handles the function (Get by Blocknumber or) (eth_raw_sendTransaction) and what are the factors that affect each RPS and TPS performance (how are they different)?
+
+There is no flag to set that.The code that handles those rpc requests is [here](https://github.com/OffchainLabs/go-ethereum/blob/711e36f828bf2e8d7e9f617b941c47948db0704b/eth/backend.go) ([https://github.com/OffchainLabs/go-ethereum/blob/711e36f828bf2e8d7e9f617b941c47948db0704b/internal/ethapi/api.go](https://github.com/OffchainLabs/go-ethereum/blob/711e36f828bf2e8d7e9f617b941c47948db0704b/internal/ethapi/api.go)). The serve time depends on your machines, and there is some flag to set the max-timeout:
+
+`--execution.rpc.evm-timeout duration                                                                     timeout used for eth_call (0=infinite) (default 5s)
+ --execution.rpc.filter-timeout duration                                                                  log filter system maximum time filters stay active (default 5m0s)
+ --execution.rpc.gas-cap uint                                                                             cap on computation gas that can be used in eth_call/estimateGas (0=infinite) (default 50000000)`
+
+### Is moving from a L3 to an L2 possible and if so is it easy
+
+technically it is possible, but it's not easy as you need to re-deploy all contracts and migrate some states also you need to continue to run the l3 node to provide historical state querying
+
+### What are the default cycle values for the resolve mode validator, make node validator, and defense mode validator
+
+The config values for the nodes are the same
+--node.bold.assertion-confirming-interval duration confirm assertion interval (default 1m0s)
+--node.bold.assertion-posting-interval duration assertion posting interval (default 15m0s)
+--node.bold.assertion-scanning-interval duration scan assertion interval (default 1m0s)
+
+### Is an L2 Ether Faucet possible
+
+There is no way to mint new ethers, so if you build a faucet, you can only top up it by yourself.
+
+### What is the role of WASM module root?
+
+**WASM Module Root** is a **cryptographic hash (commitment)** that uniquely identifies a specific version of the **Arbitrum State Transition Function (STF)** compiled to WebAssembly. 
+This is needed for fraud proof.
+
+### ERROR[...] Disabling batch posting due to batch being within reorg resistance margin from layer 1 minimum block or timestamp bounds
+
+reorgResistanceMargin=10m
+firstMsgTimeStamp=X
+l1BoundMinTimestamp=Y
+firstMsgBlockNumber=Z
+l1BoundMinBlockNumber=W
+
+The batch will not be posted on chain, this is because it breaks Reorg resistance margin. More details, please see: [https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control#sequencer-max-time-variation](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control#sequencer-max-time-variation__).
+You can set `--node.batch-poster.reorg-resistance-margin=0 `and `—-node.batch-poster.l1-block-bound=ignore` to bypass but **very import note** this might cause chain reorg.
+
+### How should I run the node using the JSON config? (nodeConfig.json)
+
+Apply `--conf.file` to your node when starting, and remember if you are running with docker, you should mount your config file to the container first and point this flag to that mount point
+
+### Does that mean that even if there is no tx after 72 hours, an empty batch posting will occur and a new assertion will be submitted in the new batch,right? Or does it mean that if there is no tx, the block is not generated, but empty batch posting is performed for assertion? Didn't you say above that at least one block must be generated before batch posting?
+
+Empty batch can be posted after 72 hours this is true, empty batch means there is no user tx within the batch, so no need to have user's tx for a batch posting, **but there will be system tx like** `batchPostingReport` **to create a new block,**  And this block won't contain any **user tx**.
+
+### WARN [06-11|09:12:22.830] error getting max time variation on L1 bound block; falling back on latest block err="429 Too Many Requests: {\"code\":-32007,\"message\":\"50/second request limit reached - reduce calls per second or upgrade your account at quicknode.com\"}"
+
+This 429 error returned from your parent chain rpc endpoint, you need to check the status of your parent chain rpc endpoint.
+
+### 1. What does validation\_\* mean here? /Why do I need to copy the jwt file when upgrading SW? Doesn't the validator, not just spli-validtor, also have jwt and perform certain functions?
+
+The `validation_` is part of auth api by default. If you want to access the auth api, you need to use this jwt secret. Usually we only set `validation_` to auth api endpoint. And `validation_` can be used to query the validation info, this is usually used by validator, normally there is no need to call this endpoint.
+
+### On the Testnet, withdrawal from L3 to L1 takes approximately 3 hours. Is the L1 block time set shorter because it's a Testnet? On the Mainnet, without any special configuration changes, would the withdrawal from L3 to L2 and L2 to L1 take 7 days each (45,818 L1 blocks)? If so, how can we shorten the withdrawal from L3 to L2 and L2 to L1 when using Roll-up, and by what would the shortest as possible time be?
+
+For testnet's shorter time, this is because we don't need to give testnet such a long time to ensure the security as the funds are all for testing use cases and it's not real funds.
+For mainnet implementation, to reduce the withdraw time, there are some potential options:
+
+1. Fast Withdrawals (Recommended for AnyTrust)
+2. Configure Shorter Challenge Period (Reduces security margin for fraud detection, must carefully evaluate before configuring this)
+3. Third-Party Bridge/Liquidity Solutions. (Powered by 3rd party oracles)
+
+### Where is the code that handles batch posting
+
+[https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go](https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go) is the repo, MaybePostSequencerBatch is the function
+
+### How do I deploy the Rollup Creator (factory) contract to a custom parent chain that isn't Ethereum Sepolia or Arbitrum Sepolia? What additional configuration is needed beyond .env and config.ts?
+
+**We do not recommend deploying your own Rollup Creator contract.** Instead, use the existing official Rollup Creator contracts that are already deployed. If you absolutely must deploy your own, refer to the deployment scripts in the nitro-contracts repository: [https://github.com/OffchainLabs/nitro-contracts](https://github.com/OffchainLabs/nitro-contracts)
+
+### How are assertions resolved
+
+To resolve an assertion, your validator will call `confirmAssertion` , just use the default cycle is fine.If you run more than 2 resolves node or makenodes node, they will compete to call this method.
+
+### WARN [07-01|18:13:26.929] Could not submit latest assertion err="could not create assertion: posting this transaction will exceed max mempool size: transaction nonce: 31, unconfirmed nonce: 30, max mempool size: 1" validatorName=default-validator
+
+This is **normal behavior** and will usually resolve automatically. Your validator has an unconfirmed transaction in the mempool of parent chain and is waiting for it to be confirmed before submitting the next assertion. This warning does not impact node operation.**
+Root Cause**
+• **Current situation:** Validator has already sent a transaction (nonce 30) that is still pending in the mempool
+• **Mempool limit:** Configured to allow only 1 unconfirmed transaction at a time (default setting)
+• **Blocked transaction:** Next transaction (nonce 31) cannot be sent until the previous one confirms**
+Resolution**
+**Option 1: Wait (Recommended)**
+• The pending transaction will confirm automatically
+• Once confirmed, the validator will submit the next assertion
+• **No action needed** - this is expected behavior
+**Option 2: Increase Mempool Size**
+If you want to allow multiple unconfirmed transactions simultaneously, increase the mempool limit:
+**For BOLD validators:**
+
+`--node.bold.data-poster.max-mempool-transactions <value>`
+**For legacy validators:**
+
+`--node.staker.data-poster.max-mempool-transactions <value>`
+
+**Log Level Logic:**
+• **< 10 minutes:** WARN - considered a temporary issue
+• **≥ 10 minutes:** ERROR - problem persisted too long, escalated to error level
+
+### But if TPS increases, for example, if 100 sequences are sent per second, will the response speed after each transmission be uniform, or will the overall response speed slow down?
+
+(didnt see an answer but seems like a useful question)
+
+### Is the Resolve node responsible for staking at existing assertions, right?
+
+Resolve node will not only create assertions, and yes it will only make actions on those existing assertions, also it can resolve the assertions.
+
+### How can we handle transaction overflow when the Sequencer's pending queue reaches capacity, especially when transactions must be processed in order and retries are not possible?
+
+The Sequencer has a configurable pending transaction queue with adjustable size and timeout parameters. You can tune these settings to handle higher transaction volumes, but there are architectural considerations for scenarios where retries are not possible.**
+Configuration Options**
+The Sequencer's pending transaction queue can be configured using these flags:
+**Queue Size:**
+
+`--execution.sequencer.queue-size int`
+• **Default:** 1024 transactions
+• **Purpose:** Sets the maximum number of transactions that can wait in the pending queue
+• **Recommendation:** Increase this value based on your expected transaction volume
+**Queue Timeout:**
+
+`--execution.sequencer.queue-timeout duration`
+• **Default:** 12 seconds
+• **Purpose:** Maximum time a transaction can remain in the queue before being dropped
+• **Recommendation:** Consider increasing if your transaction processing has predictable but longer latency requirements**
+Solutions for High-Volume Scenarios**
+**1. Increase Queue Capacity**
+• Scale `queue-size` to accommodate peak transaction loads
+• Monitor queue utilization metrics to determine appropriate sizing
+• Consider your RAM constraints when setting large queue sizes
+**2. Pre-Submission Rate Limiting**
+• Implement rate limiting on the client side
+• Match submission rate to your Sequencer's processing capacity
+• Prevents queue overflow before it happens**
+Caveats & Important Notes**
+⚠️ **No Built-in Overflow Protection:** Once the queue is full, new transactions are rejected. There's no automatic spillover mechanism.
+⚠️ **Memory Constraints:** Very large queue sizes consume significant RAM. Ensure your infrastructure can support the configured queue size.
+
+This might solve your problems here, but if you will accept a large number of tx at the same time, having a **customized relayer** cache will be better.
+
+### Is there a config to monitor transaction fees
+
+No there is no but it is possible to write a simple script to do it for you
+
+### ERROR[06-10|15:33:12.823] disabling L1 bound as batch posting message is close to the maximum delay
+
+blockNumber=8,479,298
+l1BoundMinBlockNumberWithBypass=8,490,627
+timestamp=1,749,090,792
+l1BoundMinTimestampWithBypass=1,749,227,592
+l1BlockBoundBypass=1h0m0s
+
+This ERROR indicates the batch contains very old messages approaching the maximum delay limit. The system automatically disables L1 bound checking as a protection mechanism to allow these old messages to be posted, preventing them from being stuck indefinitely.
+However, even if this batch gets posted successfully, you may encounter another related error: `Disabling batch posting due to batch being within reorg resistance margin
+from layer 1 minimum block or timestamp bounds` and the batch will not be posted on chain, this is because it breaks Reorg resistance margin. More details, please see: [https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control#sequencer-max-time-variation](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control#sequencer-max-time-variation)
+
+### Can I assume that chain sdk deploys not only the rollup creator contract(=factory contract) but also all related rollup contracts?
+
+chain-sdk is used to deploy the rollup based on current rollup creator, it doesn't deploy rollup creator.
+
+### ERROR[07-01|18:24:06.947] Could not submit latest assertion
+
+err="could not create assertion: posting this transaction will exceed max mempool size: transaction nonce: 31, unconfirmed nonce: 30, max mempool size: 1"
+validatorName=default-validator
+
+This ERROR indicates a transaction (nonce 30) has been pending for **over 10 minutes** without confirmation. This is a serious issue requiring immediate investigation - the transaction is likely stuck due to low gas price, L1 congestion, or RPC issues.**
+Why This Escalated from WARN to ERROR**
+**Log Level Logic:**
+• **< 10 minutes:** WARN - considered a temporary issue
+• **≥ 10 minutes:** ERROR - problem persisted too long, escalated to error level
+**Situation:**
+The escalation to ERROR means nonce 30 has been unconfirmed for over 10 minutes, blocking all subsequent assertions. This is **not normal** temporary waiting.**
+Immediate Diagnostic Steps**
+**1. Check L1 Pending Transaction**
+View the validator address on L1 to inspect the stuck transaction:bash
+
+_`# Using Etherscan or similar block explorer# Or query via RPC:`_`
+eth_getTransactionByHash <tx_hash_for_nonce_30>`
+**2. Identify Root Cause**
+**a. Gas Price Too Low (Most Common)**
+• Transaction gas price is too low for current L1 network conditions
+• L1 miners/validators won't prioritize it
+• **Solution:** Increase gas price configuration
+**b. Severe L1 Network Congestion**
+• L1 network is extremely congested
+• Even reasonable gas prices are stuck
+• **Solution:** Significantly increase gas price or wait for congestion to clear
+c**. RPC Node Problem**
+• L1 RPC node may not be properly broadcasting the transaction
+• Transaction might not actually be in mempool
+• **Solution:** Verify RPC endpoint health, consider switching providers**
+Solution Options
+Option 1: Increase Mempool Size (Allow System to Continue)**
+This lets the validator submit new assertions even while nonce 30 is stuck:
+**For legacy validators:**bash
+
+`--node.staker.data-poster.max-mempool-transactions=10`
+**For BOLD validators:**bash
+
+`--node.bold.data-poster.max-mempool-transactions=10`
+**Trade-off:** More capital locked in pending transactions, but assertions continue**
+Option 2: Increase Gas Price Configuration**
+Make transactions more competitive on L1:
+
+_`# Increase base gas price`_`
+--node.staker.data-poster.target-price-gwei
+
+`*`# Increase urgency multiplier`*`
+--node.staker.data-poster.urgency-gwei
+
+`*`# Increase max tip`*`
+--node.staker.data-poster.max-tip-cap-gwei`**
+Option 3: Manually Accelerate Stuck Transaction**
+If nonce 30 is genuinely stuck, use Replace-By-Fee (RBF):
+**Steps:**
+
+1.  Get transaction details for nonce 30
+2.  Send replacement transaction with:
+
+        ◦ **Same nonce:** 30
+        ◦ **Higher gas price:** At least 10% increase
+        ◦ **Same transaction data**
+
+    **Note:** DataPoster should handle this automatically, but if `replacement-times` is configured too conservatively, manual intervention may be needed.
+    **Check replacement configuration:**
+
+_`# Default: 5m, 10m, 20m, 30m, 1h, ...# For faster replacement:`_`
+--node.staker.data-poster.replacement-times="2m,5m,10m,20m"`**
+Option 4: Check DataPoster Status**
+Monitor DataPoster internal state:bash
+
+_`# If metrics are enabled:`_`
+curl http://localhost:6070/debug/metrics/prometheus | grep dataposter
+
+`*`# Key metrics to watch:# - arb_dataposter_latest_unconfirmed_nonce# - arb_dataposter_balance# - arb_dataposter_pending_transactions`**\*
+Recommended Complete Configuration**
+For validators experiencing persistent stuck transactions:
+
+_`# Allow multiple pending transactions`_`
+--node.staker.data-poster.max-mempool-transactions=10
+
+`*`# More aggressive gas pricing`*`
+--node.staker.data-poster.target-price-gwei
+--node.staker.data-poster.urgency-gwei
+--node.staker.data-poster.max-tip-cap-gwei
+
+`*`# Faster replacement cycle`*`
+--node.staker.data-poster.replacement-times="3m,6m,12m,20m,30m"
+
+`*`# Wait for L1 finality (recommended for security)`*`
+--node.staker.data-poster.wait-for-l1-finality=true`**For BOLD validators:** Usually replace`--node.staker`with`--node.bold` in all flags above.
+
+### What does --node.batch-poster.data-poster.max-mempool-transactions do
+
+It limits the amount of batch poster transactions in the mempool to the flags amount
+
+### WARN [07-01|16:52:07.009] Served eth_sendRawTransaction conn=13.125.242.225:51648 reqid=1688 duration=1.01158792s err="nonce too high: address 0xE8b9a6b2A9404E8AF1F7676916C19C7397c94498, tx: 261 state: 107"
+
+This is a **client-side error**, not a node issue. The user is submitting a transaction with higher, but the account's current nonce on-chain is not matching that one.
+
+### When deploying a chain with chain-sdk, how do I configure it as a Rollup vs AnyTrust chain?
+
+Use the `DataAvailabilityCommittee` parameter in `prepareChainConfig()`:
+• **`DataAvailabilityCommittee: true`** → AnyTrust chain
+• **`DataAvailabilityCommittee: false`** → Rollup chain
+**Implementation**
+When calling `createRollupPrepareDeploymentParamsConfig`, configure the `DataAvailabilityCommittee`
+
+### Could you please suggest a test node env that I want to test against lower user tx cost and higher tps?
+
+**Infrastructure & Node Configuration:**
+
+1. **Deploy nodes in a nearby location (Optional)**- This reduces latency for their testers. (Note: if you don't need low latency, this is not needed)
+2. **Deploy 2-3 full nodes alongside the sequencer** - Full nodes can serve read requests to reduce sequencer load. We can also implement a pre-checker mechanism on these nodes to further reduce sequencer pressure. Provide them with all node endpoints so they distribute transactions across multiple nodes rather than sending everything to one.
+3. **Deploy a High Availability sequencer setup** - If they're doing stress testing, this prevents downtime from sequencer failures.
+4. **Use only 1 validator** - Sufficient for this testing scenario.
+5. **Increase speed limit** (and adjust related speed limit parameters accordingly) - Allows for higher throughput at lower gas prices.
+6. **Set `minL2BaseFee` to 0.0001.**
+7. **Increase batch size - **This can slightly reduces the per-transaction cost by amortizing L1 posting costs across more transactions.
+8. **Deploy on a private chain with low gas - **If deploying the L3 on a private L2, we can set low gas prices to this private chain. However, there's a tradeoff: testing costs will be lower than production costs once migrated to mainnet, which could lead to inaccurate cost projections.
+9. Can deploy chain as Anytrust.
+   **Smart Contract Deployment Recommendations:**Beyond node configuration, we should recommend they deploy their core business contracts as:
+10. **Stylus contracts** - This can dramatically reduce gas costs & increase TPS and works well for business logic contracts.
+11. **Precompile contracts** - Precompiles allow custom gas cost settings, enabling further cost reduction. The tradeoff is that contract upgrades require ArbOS upgrades, so this should only be used for stateless, mission-critical contracts.
+
+### And if i look at the contents of the resolve mode validator, there is the following content:
+
+Gas used every time a new assertion is created and to resolve unconfirmed assertionsAnd
+does the above mean that only the further gas fee is used for each new assertion, and the existing staked money is used as is? Or is the additional staking money added again to the new assertion?
+
+Yes, your staker will only need to staker once, no more staked token needed.
+
+### as long as the parent chain's contract is functioning normally, can the data in the child chain's (all data) be restored at any time even if it is deleted ?
+
+yes, all data can be restored from parent chain if you are on rollup mode. But if your parent chain is ethereum and you enable blob posting, you need to connect to a client which supports historical blobs storage. That is because ethereum will prune the blob data after 2 weeks automatically.
+
+Note: only data that is posted on the parent chain can be easily restored, if data was never posted then restoration will be difficult or potentially not possible
+
+### I was wondering if it would be okay to run two networks on the same PC with different input config files for testing purposes from the same Nitro code folder?
+
+Yes, you can do that, but please to make sure the db stored in different path. (by set different `persistent.global-config`), also, the netwrok port needs to be set on different ports.
+
+### What is a split validator?
+
+Split validators separate the validation work to a stateless worker, which provides several key benefits:
+• **Resource management**: Easier to scale and manage compute resources independently
+• **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
+• **Flexibility**: Allows running multiple validation workers for horizontal scalability.
+So if you are running a split validator, which means you will run a regular nitro staker node, and a validation node, the staker will call validation node to do validation process.
+
+### What are contract calls and where are the nitro contracts
+
+You can find almost all our nitro contract in nitro-contracts [repo](https://github.com/OffchainLabs/nitro-contracts),
+
+### WARN [08-21|16:07:41.536] Served eth_getBalance                    conn=43.203.177.23:34134 reqid=0 duration="115.587µs" err="header not found"
+
+Might be some reasons;
+
+1. Your node haven't synced to the latest state. If it is this reason, you can wait some time.
+2. (Very low likelihood) You are running a block explorer which uses your another chain's db however connect to your current chain, this one you need to re-run the block explorer and delete its db.
+3. Might be your node db crashed. If it is this reason, might need to resync.
+
+### And what is the meaning of delayBlocks and futureBlocks in the site below and the meaning below, and what is the meaning and difference of delaySeconds and futureSeconds?
+
+The sequencer's max time variation is configurable via the `setMaxTimeVariation` method of the Sequencer Inbox Contract, which will also be set to prevent chain reorganization when there are no batches for an extended period.
+`MaxTimeVariation` struct:
+
+`struct MaxTimeVariation {    
+uint256 delayBlocks;    
+uint256 futureBlocks;    
+uint256 delaySeconds;    
+uint256 futureSeconds;
+}`
+The `MaxTimeVariation` struct defines time boundaries that determine whether your chain remains safe or triggers a reorganization (reorg) when posting batches. It uses both block-based and time-based limits to create acceptable windows for message processing between L1 and L2.
+
+### What is the difference between the chain SDK and the Orbit setup script (Orbit now Arbitrum chain)
+
+The orbit SDK is for preparing and deploying an orbit chain, while the orbit setup script should never be used for live production.
+
+### And what is the dispute window size config, and what is the compression ratio config of the batch?
+
+The dispute window is configured in the **rollup contract settings**, not in the node configuration. These are set when deploying the rollup:`confirmPeriodBlocks: 45818,      `_`// ~6.4 days (for Arbitrum One)`_`  `
+You can also call rollup contract `setConfirmPeriodBlocks` to reset this.
+CompressionLevel is default to be 11, but you can reset it by `--node.batch-poster.compression-level`
+
+### And currently, forwarding from the full node to the sequencer is happening on all of one, nove, and sepolia, right?
+
+This is the general architecture of all arbitrum chains where nodes pick up data and send them to the sequencer
+
+### ERROR[08-21|13:48:40.883] shut down due to fatal error             err="error starting node: error initializing block validator: cannot validate WasmModuleRoot 0xdb698a2576298f25448bc092e52cf13b1e24141c997135d70f217d674bbeb69a"
+
+Have you downloaded consensus 40 replay bin?
+
+`.`
+
+1. Check your Dockerfile in `Nitro` for a download to the current consensus version (V50 at time of writing `RUN ./download-machine.sh consensus-v50 0x2c54f6e9e378ba320ed9c713a1d9f067a572b1437e4f1c40b1a915d3066c04f2`)
+2. If yes, then can ask them cd to ./scripts dir and run ./download-machine.sh with the related arbos info.
+3. If not, they need to re-build the replay bin theirselves.
+
+### What's the difference between WARN and ERROR log levels? Do WARN logs affect node operation?
+
+**Usually WARN logs do NOT affect node operation.** The node continues to function normally. Only ERROR logs indicate issues that may disrupt node functionality or cause shutdown.
+
+### After creating the nitro-node image, how do I run the Docker image with the previously created nodeconfig.json as input? (Is there a command guide?)And how do I make the nitro instance accessible from outside? Do I need to set up ports and such to connect from outside? Port connections, etc…
+
+Let's assume you want to use `/data/arbitrum` dir as the main file to keep your chain data, then:
+
+1. copy nodeConfig.json to `/data/arbitrum` .
+2. run `docker run --rm -it -v /data/arbitrum:/home/user/.arbitrum --conf.file /home/user/.arbitrum/nodeConfig.json`
+
+Yes, you need to mount too, you can check the port settings in nodeConfig.json and export those ports too.
+
+### Can I change the gas token of my arbitrum chain after it has been deployed
+
+No the custom gas token must be set during deployment and cannot be changed afterwards
+
+### WARN [09-11|15:15:36.645] Served eth_sendRawTransaction            conn=27.122.242.98:11105 reqid=3174655275929179 duration=4.691427ms err="wrong msgIdx got 257 expected 256"
+
+This logs indicates your sequencer queued the tx 257, however, your node db just keeps 256. Which means your node db fall behind the sequencer.
+
+### What is the auth-rpc?
+
+AUTH-RPC is a **separate, JWT-authenticated RPC interface** in Arbitrum Nitro designed for **secure communication** between trusted components or entities. 
+By default, it will register `validation_` api, but you can also register some regular api like `eth_` , `net_`
+
+### If I update my nitro node version will that mean my ArbOS will be upgraded too
+
+If you upgrade your nitro version, it doesn't mean your ArbOS version will be upgraded too, so your ArbOS version will keep the same, those are 2 separate version system, ArbOS version can only be upgraded by calling  `arbOwner.scheduleArbOSUpgrade`
+
+### Does L2 submit batches when there are no user transactions?
+
+**Generally, empty batches are NOT sent.** However, there's a specific exception:
+**Normal Operation:**
+• BatchPoster only sends batches when there are "useful messages"
+• **Useful messages** include:
+
+    ◦ User transactions
+    ◦ Delayed messages from users
+
+**Batch Posting Report Message:**
+• Every batch will generate a `batch_posting_report` message
+• This message is NOT initially marked as "useful"
+• Remains non-useful for duration of `--node.batch-poster.max-empty-batch-delay`
+**Exception - Empty Batch Submission:**
+After `max-empty-batch-delay` expires:
+• The `batch_posting_report` message becomes marked as "useful"
+• BatchPoster will send a batch containing only this message
+• This is technically an "empty batch" (no user transactions, only the report)
+
+### ERROR[06-13|11:01:25.473] Could not submit latest assertion err="could not auto-deposit funds for assertion creation: test execution of tx errored before sending payable tx: insufficient funds for transfer" validatorName=default-validator
+
+Your staker address doesn't have enough funds to deposit, please transfer some funds to it.
+
+### What are the assertion submission frequency and finalization cycle, and what are the configurations?
+
+Default is 15 mins, to reset it: `--node.bold.assertion-posting-interval` .Finalized cycle, default in test env is 150 blocks, on mainnet is 7 days, you need call rollup contract `setConfirmPeriodBlocks` to reset this.
+
+### When I run the arbitrum tutorial, I got the following error: `ArbSdkError: Unrecognized network xxx.`
+
+This is because you are running the tutorial against a custom chain.
+Please follow this tutorial ([https://github.com/OffchainLabs/arbitrum-tutorials?tab=readme-ov-file#how-to-run-the-tutorials-against-a-custom-network](https://github.com/OffchainLabs/arbitrum-tutorials?tab=readme-ov-file#how-to-run-the-tutorials-against-a-custom-network)) to add your custom network first.
+
+### If I delete the db of the child chain and restart it, can I restore all the TXs of the child chain?
+
+You can restore all TXes that your batchposter already posted, like for now, your sequencer are at msg 257, and your batchposter already posted message 250 to parent chain, then your node can restore to 250.
+
+### And If i look at the page below, there is a resolve mode among the validators. Does the validator in resolve mode do both cases: staking for correct assertions and challenging for incorrect assertions? How should the resolve cycle be configured in nodeconfig.json?
+
+Yes, **Resolve Mode does BOTH** - it stakes for correct assertions AND challenges incorrect assertions.
+For how to configure it:
+--node.staker.strategy=resolveNodes (legacy)
+or
+--node.bold.strategy=resolvenodes (bold)
+
+### Does the "error getting latest agreed: no assertion creation logs found" mean the latest new assertion?
+
+It means your nodes try to find a specific assertion, however, it doesn't find it, this means you need wait some time for your node to sync up.
+
+### If i want to run the container in the background instead of running it once and then deleting it, i can do something like below, right?Is there anything missing here?
+
+You can reuse those commands we provide in our docs, which is:
+
+`docker run --rm -it -v /Your_mount_point:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v3.6.8-d6c96a5 --conf.file=xxxx`
+
+### How to run a DAS node
+
+You can walk through [this](https://docs.arbitrum.io/run-arbitrum-node/data-availability-committees/get-started) guide. It provides you the content how to run a das node.
+
+### error getting latest agreed: no assertion creation logs found
+
+For this logs, what I guess is because you just start your node, and it needs some time for makenodes to produce assertion and also other validator needs some time to wait the assertion tx is finalized. So it is expected.
+
+### In a high-availability sequencer setup, what data does the sequencer pass to Redis, and how does Redis determine the active sequencer and handle load balancing?
+
+For sequencer coordinator system (redis can also be used on other system), Redis is used for **sequencer coordination**, not load balancing. It stores leadership information, message synchronization data, and configuration to ensure only one active sequencer at a time.
+
+**Data in Redis**
+**1. Leadership Keys**
+• `coordinator.chosen` - URL of currently active sequencer (e.g., "[http://sequencer1:8547](http://sequencer1:8547/)")
+• `coordinator.liveliness.<url>` - Each sequencer's heartbeat signal
+**2. Message Synchronization**
+• `coordinator.msgCount` - Current message count (signed)
+• `coordinator.finalizedMsgCount` - Finalized message count (signed)
+• `coordinator.msg.<index>` - Individual messages (JSON encoded)
+• Other sync-related keys
+**3. Configuration**
+• `coordinator.priorities` - Comma-separated priority list of sequencer URLs
+
+**The election process:**
+
+1. The system reads coordinator.priorities to get the ordered list of sequencer URLs
+2. It checks each URL in priority order to see if that sequencer has set coordinator.liveliness.<url> = "OK"
+3. The first sequencer in the priority list that has its liveliness key set becomes the recommended leader
+4. That sequencer attempts to acquire the coordinator.chosen lock **Conditions for a sequencer to become active:**
+   • Must be synced with the network
+   • Must have processed all messages up to the current count
+   • Must successfully acquire the coordinator.chosen lock before it expires
+   • The lock uses Redis transactions (optimistic locking) to prevent race conditions
+
+Redis and sequencer coordinator doesn't do traditional load balancing here - it's more of a **failover mechanism, Only ONE sequencer is active at a time (holding the coordinator.chosen lock)**
+
+### what is the difference between validatior and validation_node
+
+Validator can be run on one node, but it can also be split to 2 nodes which are validator (staker) and validation node, [here](https://docs.arbitrum.io/run-arbitrum-node/more-types/run-split-validator-node#running-split-validators-for-arbitrum-chains) is the related docs.Here is the benefits:
+• Resource management: Easier to scale and manage compute resources independently
+• Fault isolation: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
+• Flexibility: Allows running multiple validation workers for horizontal security
+
+### And if i look at the Docker-compose.yaml file of the nitro testnode code,(https://github.com/OffchainLabs/nitro-testnode/blob/release/docker-compose.yamlThere are separate validators and validatotion_nodes. What is the difference between these two?
+
+Split validators separate the validation work to a stateless worker, which provides several key benefits:
+• **Resource management**: Easier to scale and manage compute resources independently
+• **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
+• **Flexibility**: Allows running multiple validation workers (validation node) for horizontal security.
+So if you are running a split validator, which means you will run a regular nitro staker node, and a validation node, the staker will call validation node to do validation process.
+
+### How do you call Arb precompiles and what is the address of such
+
+Precompile is live on your network, and the address is on top of the file [here](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/main/ArbSys.sol#L10), so for ArbSys, it is 0x0000000000000000000000000000000000000064.Then you can use your rpc or other tool like foundry cast to call this address' method `arbOSVersion`
+
+### Is it possible to set up custom gas tokens for any L2 or L3 configuration (rollup and anytrust)
+
+a custom gas token is possible in any of those configs though in rollup mode it's more complex. There's documentation on what's required here [https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup)
+
+### what role does the relay service play
+
+It will connect to sequencer feed, and relay those feed messages to other full nodes, here is [related docs](https://docs.arbitrum.io/run-arbitrum-node/run-feed-relay). Basically it is used to reduce the network pressure of sequencer.
+
+### can I omit running the download-machine.sh script (after make, make build, make build-replay-env)?
+
+(We recommend you to run the node with docker instead then you don't need to run so many steps.)You can just run `make build` then `download-machine.sh` , other 2 no need to run anymore.
+
+### -node.batch-poster.data-poster.dangerous.clear-dbstorage Is there a value for the above config? If I do the above config, will the entire network be initialized? (Will it be reset and create a new block from scratch?)
+
+No, this will only remove batchposter's `QueuedTx` db, will not clear other db. So the network won't be initialized. But it may caused some queued tx lost.
+
+### Large gap between last seen and current block number, skipping check for reverts last
+
+The Batch Poster runs a background monitoring process (pollForReverts) that continuously checks L1 blocks to see if any transactions it submitted have been reverted. However, it find last seen blocks has a large gap to the current block, might be a lot of reasons, network issues might be one of them, you can try change to other parent rpc to see if it can be resolved or not. Also, most warn logs won't affect your node's syncing and behavior as it is not error logs, so you can ignore them.
+
+### Where is Timeboost supporteed
+
+They are currently on arb one, nova, and sepolia
+
+### How do I migrate an existing local Nitro node database to a new Docker-based deployment? Which folders and files need to be transferred?
+
+Copy the **entire Nitro data folder** to a directory that you will mount to your Docker container.
+
+### if I create an L2 or L3 using the Nitro stack and a validator wants to recover the amount staked on the parent chain, how can I do so?
+
+To withdraw your staked token from rollup contract:
+
+- Wait for your old validator's latest bond assertion to be confirmed
+- Call `reduceDeposit()` on the `Rollup` Contract
+- Call `withdrawStakerFunds()` to get your bond back
+
+### What configurations should I set when deploying an L3 instead of an L2
+
+For L3s as of right now they must be ran in anytrust mode (I believe I saw this im not sure if its still true), other than that all of the configs can be set to your liking
+
+### Do I need to move files around to upgrade a node?
+
+Every time you upgrade the node, there is no need to move any files but just change the image tag unless there is some special changes (we will put note at the release docs if happens).
