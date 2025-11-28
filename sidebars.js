@@ -238,6 +238,11 @@ const sidebars = {
                   label: 'Timeboost for Arbitrum chains',
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations',
+                  label: 'Stake and validator config',
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
