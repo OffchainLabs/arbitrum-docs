@@ -32,7 +32,6 @@ import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/parti
 import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
 import ConfigForceInclusion from '@site/docs/launch-arbitrum-chain/partials/config-force-inclusion.mdx';
 import ConfigAccountAbstraction from '@site/docs/launch-arbitrum-chain/partials/config-account-abstraction.mdx';
-import ConfigChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-challenge-period-l1.mdx';
 import ConfigCustomizableGovernance from '@site/docs/launch-arbitrum-chain/partials/config-customizable-governance.mdx';
 import ConfigDataPostingCosts from '@site/docs/launch-arbitrum-chain/partials/config-data-posting-costs.mdx';
 import ConfigEVMCompatibility from '@site/docs/launch-arbitrum-chain/partials/config-evm-compatbility.mdx';
@@ -54,7 +53,6 @@ const contentMap = {
   'config-l1-challenge-period': ConfigL1ChallengePeriod,
   'config-force-inclusion': ConfigForceInclusion,
   'config-account-abstraction': ConfigAccountAbstraction,
-  'config-challenge-period-l1': ConfigChallengePeriod,
   'config-customizable-governance': ConfigCustomizableGovernance,
   'config-data-posting-costs': ConfigDataPostingCosts,
   'config-evm-compatibility': ConfigEVMCompatibility,
