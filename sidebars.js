@@ -238,6 +238,11 @@ const sidebars = {
                   label: 'Timeboost for Arbitrum chains',
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations',
+                  label: 'Stake and validator config',
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -615,8 +620,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos50',
-              label: 'Dia (ArbOS 50)',
+              id: 'run-arbitrum-node/arbos-releases/arbos51',
+              label: 'Dia (ArbOS 51)',
             },
             {
               type: 'doc',
@@ -1384,6 +1389,11 @@ const sidebars = {
       type: 'doc',
       id: 'notices/fusaka-upgrade-notice',
       label: 'Upgrade for the Fusaka transition',
+    },
+    {
+      type: 'doc',
+      id: 'notices/arbos51-arbsepolia-upgrade-notice',
+      label: 'Upgrade for ArbOS 51 on ArbSepolia',
     },
   ],
 };
