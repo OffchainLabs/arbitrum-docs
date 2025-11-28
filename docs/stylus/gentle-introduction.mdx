@@ -51,7 +51,7 @@ Stylus contracts need to be reactivated once per year (365 days) or after any St
 
 #### Execution
 
-When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a WebAssembly runtime. Because Wasmer compiles to native machine code, it executes faster than Geth's EVM bytecode interpreter. This performance difference is the source of reduced gas costs for compute-intensive operations.
+When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a WebAssembly runtime. Because Wasmer compiles to native machine code, it executes faster than Geth's EVM bytecode interpreter. This performance difference reduces gas costs for compute-intensive operations.
 
 EVM contracts continue to work exactly as before. When a contract is called, the system checks whether it's an EVM contract or a WASM program and routes it to the appropriate runtime. Solidity and WASM contracts can call each other, so the language a contract was written in doesn't affect interoperability.
 
