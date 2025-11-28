@@ -238,6 +238,11 @@ const sidebars = {
                   label: 'Timeboost for Arbitrum chains',
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations',
+                  label: 'Stake and validator config',
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -615,8 +620,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos50',
-              label: 'Dia (ArbOS 50)',
+              id: 'run-arbitrum-node/arbos-releases/arbos51',
+              label: 'Dia (ArbOS 51)',
             },
             {
               type: 'doc',
@@ -807,9 +812,9 @@ const sidebars = {
           label: 'Inside Arbitrum Nitro',
         },
         {
-          type: 'link',
-          href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
-          label: 'Nitro whitepaper',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/nitro-whitepaper.pdf">Nitro whitepaper<span class="other-section-icon">↑</span></a>',
         },
         {
           type: 'category',
@@ -1284,23 +1289,6 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Concepts',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/concepts/how-it-works',
-              label: 'Architecture overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/gas-metering',
-              label: 'Gas metering',
-            },
-          ],
-        },
-        {
-          type: 'category',
           label: 'Examples',
           collapsed: true,
           items: [
@@ -1346,6 +1334,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'stylus/concepts/gas-metering',
+          label: 'Gas metering',
+        },
+        {
+          type: 'doc',
           id: 'stylus/how-tos/adding-support-for-new-languages',
           label: 'Using other languages',
         },
@@ -1379,6 +1372,11 @@ const sidebars = {
       type: 'doc',
       id: 'notices/fusaka-upgrade-notice',
       label: 'Upgrade for the Fusaka transition',
+    },
+    {
+      type: 'doc',
+      id: 'notices/arbos51-arbsepolia-upgrade-notice',
+      label: 'Upgrade for ArbOS 51 on ArbSepolia',
     },
   ],
 };

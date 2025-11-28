@@ -150,7 +150,17 @@ If you are running more than on node, you should [run a feed relay](/run-arbitru
 ### Pruning
 
 - Pruning a full node refers to removing older, unnecessary data from the local copy of the blockchain that the node maintains, thereby saving disk space and slightly improving the node's efficiency. Pruning will remove all states from blocks older than the latest 128.
-- You can activate pruning by using the parameter `--init.prune` and using "full" or "validator" as the value (depending on the type of node you are running). Note that this process occurs when the node starts and will not serve RPC requests during pruning.
+- If you are using the default setting `--execution.caching.state-scheme=hash` then you can activate pruning by using the parameter:
+- `--init.prune <pruning mode>`
+  - `minimal`: Only genesis + latest head state is left, takes the least amount of time (several house for Arbitrum One-sized database)
+  - `full` : Genesis + head state + state for latest confirmed block (will take a long time ~50 hours or more)
+  - `validator`: All of above + state of latest validated block (will take a little less than twice what `full` will take)
+
+:::note
+
+This process occurs when the node starts and will not serve RPC requests during pruning.
+
+:::
 
 ### Transaction prechecker
 
