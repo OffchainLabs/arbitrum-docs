@@ -1,48 +1,160 @@
 ---
 title: 'Smart contract size limit'
-description: 'Learn how to configure smart contract size limits on your Arbitrum chain'
-author:
-sme:
+description: 'Learn about how to configure the smart contract size limits on your Arbitrum chain'
+author: pete-vielhaber
+sme: jason-w123
 content_type: how-to
-tags: ['hide-from-search']
-unlisted: true
 ---
 
-For standard public Arbitrum chains (such as Arbitrum One or Nova), the smart contract code size limit has been set at 24kB, as enforced by [EIP-170](https://eips.ethereum.org/EIPS/eip-170). This limit is not configurable for end-users or developers deploying contracts on these chains.
+Arbitrum chains generally enforce a 24KB limit on smart contract code size during deployment, as defined by [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility with the Ethereum Virtual Machine (EVM). This limit applies to both EVM bytecode and Stylus (WebAssembly-based) contracts to ensure interoperability across the ecosystem.
 
-However, if you're launching a custom Arbitrum chain (L2/L3), the limit can be increased up to 96 kB.
+The limit exists primarily to prevent denial-of-service (DoS) attacks and to bound the network's state size and verification logic. Without it, large contracts could be called cheaply in terms of gas but impose significant computational or storage burdens on nodes, potentially leading to network congestion or excessive resource usage.
 
-## Why the limit?
+It is possible to increase the smart contract size limit, but this only applies to custom Arbitrum chains (Layer 2 or Layer 3 Rollups built on the Arbitrum stack). For these, it is possible to raise the limit to 96KB during chain configuration. On public chains like Arbitrum One, the limit remains fixed at 24KB. The only way to modify the limit is a network upgrade (e.g., via proposals like [EIP-7907](https://eips.ethereum.org/EIPS/eip-7907), which is under exploration to replace the limit with a more flexible mechanism).
 
-The limit exists because larger contracts require more resources to process and verify, making them potential vectors for denial-of-service (DoS) attacks if not properly constrained. EIP-170, which addressed the issue of smart contract size, was designed with this in mind.
+## Recommendations for setting the limit include:
 
-## Benefits of increasing the smart contract size limit
+- Stick to the default of 24KB unless your use case requires larger contracts, as higher limits can increase state growth and strain node infrastructure.
+- If increasing, test the configuration thoroughly on a testnet to ensure stability and performance.
+- Avoid setting it to the maximum (96KB) unnecessarily, as this could exacerbate DoS risks or verification overhead.
+- Once deployed, the limit is immutable, so plan carefully.
 
-Increasing the smart contract code size limit (from the default 24 kB up to 96 kB) enables greater flexibility in development, particularly for complex applications. Key benefits include:
+## Pros of increasing the smart contract size limit
 
-<!-- these benefits seem to be targeted towards the developer team not the chain owner, who is the target audience -->
+- **Enables more complex and feature-rich contracts**: Developers can include additional logic, libraries, or functionalities in a single contract without needing to split them into multiple smaller ones, which simplifies development and reduces overhead from inter-contract calls.
+- **Reduces reliance on workarounds**: Avoids patterns like proxies (e.g., delegatecall) or the Diamond Standard, which add complexity, potential security risks (e.g., new attack vectors), and gas inefficiencies.
+- **Improves developer experience**: Allows for building advanced dApps or protocols that might otherwise hit the default 24KB limit, making it easier to deploy comprehensive systems, especially in custom chains like Arbitrum.
+- **Customizability in Rollups**: In Arbitrum chains, increasing up to 96KB provides flexibility for specific use cases, such as those requiring larger WebAssembly (Stylus) code, while maintaining compatibility within the ecosystem.
+- **Potential for innovation**: Supports larger codebases that could incorporate more on-chain computations or integrations, fostering more sophisticated decentralized applications.
 
-- **Support for more complex and feature-rich contracts**: Larger contracts can incorporate extensive logic, libraries, and functionality without the need to split code across multiple contracts. This consolidation is helpful for applications such as DeFi protocols, games, or enterprise solutions that require intricate computations or integrations, thereby reducing the need for workarounds like proxy patterns.
-- **Reduced gas costs for execution**: By consolidating code into a single contract, you avoid expensive inter-contract calls (e.g., via proxies or delegates), which can lower overall runtime gas consumption. Proxy patterns, often used to bypass size limits, add overhead and increase the cost of calls.
-- **Simplified development and maintenance**: Developers can write cleaner, more modular code without artificial splitting, making it easier to audit, debug, and upgrade contracts. Cleaner code streamlines the development process and reduces complexity in reasoning about the codebase.
-- **Enhanced customization for specific use cases**: On Arbitrum chains, this aligns with other customizations (e.g., gas tokens or block times), enabling tailored environments for high-throughput needs, such as gaming or AI-driven apps, where larger contracts can handle domain-specific logic efficiently.
+## Cons of increasing the smart contract size limit
 
-## Drawbacks of increasing the smart contract size limit
+- **Heightened risk of denial-of-service (DoS) attacks**: Larger contracts can be exploited by attackers to impose disproportionate computational or storage burdens on nodes, as calls might remain relatively cheap while requiring more resources to process (e.g., reading from disk, preprocessing, or Merkle proofs).
+- **Increased state bloat and storage demands**: Bigger contracts contribute to faster growth of the blockchain's state, raising storage costs and potentially straining node infrastructure, which could lead to higher operational expenses or reduced network performance.
+- **Performance degradation**: Nodes may experience slower transaction processing, execution, or verification times due to handling larger code sizes, impacting overall scalability and efficiency, especially in high-throughput environments like Arbitrum Rollups.
+- **Compatibility issues**: Exceeding Ethereum's standard 24KB limit (from EIP-170) could reduce interoperability with mainnet Ethereum or other EVM-compatible chains, limiting portability and requiring custom optimizations.
+- **Irreversibility and planning challenges**: In custom Arbitrum chains, the limit is set at deployment and cannot be changed later, so that poor configuration could lock in long-term risks; additionally, it may necessitate higher gas costs for larger contracts to mitigate abuses, increasing user expenses.
+- **Security and maintenance concerns**: Larger codebases are more complex to audit and maintain, potentially introducing more bugs or vulnerabilities, and they could exacerbate network congestion without proper management.
 
-While beneficial for complexity, raising the limit introduces trade-offs, particularly in costs, security, and performance. These are more pronounced in Rollup environments, such as Arbitrum, where transactions get posted to the Ethereum Layer 1.
+## To configure the smart contract size limit for a custom Arbitrum chain
 
-- **Performance and network efficiency concerns**: Although EVM execution charges gas per opcode (not code size), large contracts could lead to slower node processing or higher resource demands on validators/sequencers. This slower processing might exacerbate DoS risks on your chain, as the purpose of the EIP-170 limit was to mitigate such issues.
-- **Compatibility and portability issues**: Contracts exceeding the standard 24kB limit (enforced on public chains like Arbitrum One or Ethereum) cannot be deployed elsewhere without modifications. This restriction limits interoperability and could lock you into your Arbitrum chain, reducing flexibility if you need to migrate in the future.
-- **Irreversibility**: The limit must be set during initial chain configuration and cannot be changed post-deployment, so poor choices could lead to long-term inefficiencies.
-  Overall, increasing the limit is ideal for specialized Arbitrum chains where complexity outweighs costs, but we recommend sticking to defaults unless necessary.
-- **Higher contract deployment costs (users)**: Larger contracts require more bytecode in the initialization code, which increases the transaction size and, consequently, the calldata costs posted to Ethereum L1. In Rollups, this can significantly raise deployment fees, as costs scale with data size for users.
+The smart contract size limit must be set during the initial configuration and deployment of a custom chain (Layer 2 or Layer 3 Rollup). It is not possible to modify it post-deployment due to the lack of a versioning mechanism for such parameters. The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). Both are configurable up to 96KB (98,304 bytes), which is higher than the default 24KB (24,576 bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
 
-## How to configure
+### Key specifics
 
-1. Use the [Arbitrum chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) to prepare your chain's configuration.
-2. When calling the `prepareNodeConfig` function, modify the relevant parameters: [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L29) for deployed contract code size, and [`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9fd3d39504832f94a31d9c5773f4514bd7be6eee/src/prepareChainConfig.ts#L30) for initialization code size during deployment.
-3. These parameters are defined in the SDK's [`prepareChainConfig.ts`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) file. An example implementation is available in the SDK's [`examples/prepare-node-config/index.ts`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts).
-<!-- I'm not sure this example above in #3 is correct -->
-4. Note that once the chain deploys, the smart contract limits are unchangeable via upgrades—you must set them during initial configuration.
+- **Default values**: 24KB (24,576 bytes) for both `MaxCodeSize` and `MaxInitCodeSize` if not explicitly set.
+- **Maximum values**: 96KB (98,304 bytes) for each. Setting higher is not supported and may cause deployment failures or compatibility issues.
+- **Where applicable**: Only in custom Arbitrum chains. Public chains like Arbitrum One or Nova remain fixed at 24KB without a network-wide upgrade.
+- **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @offchainlabs/chain-sdk` or similar), a funded wallet on the parent chain (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
+- **Process overview**:
+  1. Prepare the chain configuration using the Chain SDK's `prepareChainConfig` function, where you specify the parameters.
+  2. Use this config in `prepareNodeConfig` to generate the full node configuration (e.g., for nitro-node.toml).
+  3. Deploy the chain contracts to the parent chain.
+  4. Run the node with the generated config.
+- **Warnings**:
+  - This change is immutable after deployment—plan carefully.
+  - Higher limits increase risks like state bloat, slower node performance, and potential DoS vulnerabilities.
+  - Test on a devnet or testnet first to ensure stability.
+  - Ensure values are in bytes (not KB) when setting them in code.
 
-This customization applies to both EVM-compatible contracts and Stylus (WebAssembly-based) contracts on Arbitrum chains. However, Stylus contracts must also adhere to compression limits (e.g., 24kB Brotli-compressed in some cases, with potentially higher uncompressed equivalents of ~128kB, depending on the setup). You can learn more about [Stylus in this section](/stylus/gentle-introduction.mdx).
+### Code examples
+
+The example below assumes you've set up a project with the SDK installed and have environment variables for your private key and RPC URLs.
+
+#### 1. Basic chain configuration (setting the parameters)
+
+This snippet shows how to prepare the chain config JSON, including the size limit parameters. Place this in a file like `prepareChainConfigExample.ts`.
+
+```typescript
+import { prepareChainConfig } from '@offchainlabs/chain-sdk'; // Import the function from the SDK
+
+// Define the parameters for your custom Arbitrum chain
+const orbitChainParams = {
+  chainId: 123456, // Your unique chain ID (must not conflict with existing chains)
+  homesteadBlock: 0, // Typically 0 for new chains
+  eip155Block: 0, // Typically 0
+  // ... other standard Ethereum chain config params as needed
+
+  arbitrum: {
+    // Arbitrum-specific extensions
+    MaxCodeSize: 98304, // Set to 96KB (98,304 bytes) for deployed contract code size limit
+    MaxInitCodeSize: 98304, // Set to 96KB for init code size during contract deployment
+    // Note: Init code can often be set higher (e.g., 2x MaxCodeSize) if needed for complex constructors,
+    // but stick to <= 96KB to avoid issues. Default is 24576 bytes (24KB) if omitted.
+    // Warning: Higher values may increase state size and node resource demands.
+    // Other Arbitrum params like DataAvailabilityCommittee: true/false can go here
+  },
+};
+
+// Prepare the chain config JSON using the SDK function
+const chainConfig = prepareChainConfig(orbitChainParams);
+
+// Output the config (e.g., for use in deployment or node setup)
+console.log(JSON.stringify(chainConfig, null, 2));
+
+// You can now use this chainConfig in deployment scripts or pass it to prepareNodeConfig.
+```
+
+Run this with `ts-node prepareChainConfigExample.ts` to generate the config JSON.
+
+#### 2. Full node configuration and deployment example
+
+This extends the above to prepare the full node config (e.g., for running a sequencer or validator node). Place this in a file like `deployOrbitChain.ts`. It assumes you're deploying to a parent chain like Sepolia (testnet).
+
+```typescript
+import { prepareChainConfig, prepareNodeConfig } from '@offchainlabs/chain-sdk'; // Import SDK functions
+import { ethers } from 'ethers'; // For wallet and provider (install via npm)
+import { writeFileSync } from 'fs'; // For saving config files
+
+// Load environment variables (e.g., from .env file)
+const parentChainRpcUrl = process.env.PARENT_RPC_URL; // e.g., https://sepolia.infura.io/v3/YOUR_KEY
+const privateKey = process.env.PRIVATE_KEY; // Your wallet private key (funded with ETH)
+
+// Step 1: Prepare chain config with increased size limits
+const orbitChainParams = {
+  chainId: 123456,
+  nativeToken: '0x0000000000000000000000000000000000000000', // ETH as native token (or custom ERC20 address)
+  arbitrum: {
+    MaxCodeSize: 98304, // Increase to max 96KB for larger contracts
+    MaxInitCodeSize: 98304, // Matching increase for init code
+    // Additional params: e.g., InitialChainOwner: '0xYourAddress' for governance
+  },
+};
+
+const chainConfig = prepareChainConfig(orbitChainParams);
+
+// Step 2: Set up provider and wallet for deployment
+const parentProvider = new ethers.JsonRpcProvider(parentChainRpcUrl);
+const wallet = new ethers.Wallet(privateKey, parentProvider);
+
+// Step 3: Prepare node config (generates nitro-node config like chain.toml)
+const nodeConfig = await prepareNodeConfig({
+  chainName: 'my-arbitrum-chain', // Name for your chain
+  chainConfig, // Pass the prepared chain config here
+  parentChainId: 11155111, // e.g., Sepolia chain ID
+  // Other options: batchPosterPrivateKey, validatorPrivateKey, etc.
+  // Note: This generates a config object or file with settings for the node,
+  // including the immutable chain params like size limits.
+});
+
+// Save the node config to a file (e.g., for running the node)
+writeFileSync('my-arbitrum-chain.toml', nodeConfig); // Adjust format as needed (TOML or JSON)
+
+// Step 4: Deploy the core contracts to the parent chain
+// Use the SDK's deployment functions (simplified; refer to full docs for complete script)
+const deploymentResult = await deployOrbitChain({
+  wallet,
+  chainConfig,
+  // ... other deployment params like data availability settings
+});
+
+console.log('Chain deployed! Contracts:', deploymentResult.contractAddresses);
+console.log('Use the generated my-arbitrum-chain.toml to run your node.');
+
+// Post-deployment: Run the nitro node with Docker or binary, pointing to the config file.
+// Example command: docker run --rm -v $(pwd)/my-arbitrum-chain.toml:/config.toml offchainlabs/nitro-node --conf.file /config.toml
+```
+
+Run this with `ts-node deployOrbitChain.ts`. This script deploys the chain and generates the node config with your custom limits embedded.
+
+For exact SDK function signatures and more options (e.g., data availability committees or custom gas tokens), refer to the official Arbitrum Chain SDK repository on GitHub. Always test in a development environment, as incorrect configs can lead to failed deployments or insecure chains. If your contracts still exceed the limit, consider optimizations such as code splitting or using Stylus to create more efficient WASM-based contracts.
