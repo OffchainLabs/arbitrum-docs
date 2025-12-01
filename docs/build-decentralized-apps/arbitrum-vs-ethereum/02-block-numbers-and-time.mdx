@@ -131,32 +131,11 @@ As mentioned, block timestamps are usually set based on the sequencer's clock. B
 
 A good rule of thumb when working with timestamps: if the scale of your time-dependent event can vary by 15 seconds and maintain integrity, it is safe to use `block.timestamp`.
 
-## Randomness and block hashes
+## Key takeaway
 
-When building smart contracts that require randomness, it's important to understand the limitations of using block-based values as a source of randomness.
+Block numbers should not be relied upon for accurate timekeeping on Arbitrum. The relationship between block numbers and time differs significantly from Ethereum due to Arbitrum's architecture:
 
-### `blockhash()` limitations
+- **Parent chain block numbers** (accessed via `block.number`): Updated approximately every 12 seconds but may not reflect the exact parent chain block at the time of your transaction.
+- **Child chain block numbers** (accessed via `ArbSys`): Produced based on transaction volume, not at fixed time intervals. On less active chains, block production may be sporadic.
 
-The `blockhash()` function has several important limitations:
-
-- **256-block lookback limit**: Block hashes are only accessible for the most recent 256 blocks. Queries for older blocks return `0x0`.
-- **Exploitable boundary**: If contract logic can be delayed for more than 256 blocks, `blockhash()` returns a known value (`0x0`), creating a security vulnerability.
-- **Not cryptographically secure**: Block hashes should not be relied upon as a secure source of randomness, especially for high-value applications.
-
-### Arbitrum-specific considerations
-
-On Arbitrum, child chain block hashes should not be relied upon as a secure source of randomness. The sequencer's control over block production means that block hashes can potentially be influenced.
-
-### Best practices for randomness
-
-For applications requiring secure randomness, use dedicated oracle solutions such as [Chainlink VRF](https://docs.chain.link/vrf/v2/introduction) or similar verifiable randomness functions. These provide cryptographically secure random values that cannot be manipulated by miners, validators, or sequencers.
-
-## Best practices summary
-
-When working with block numbers and timestamps on Arbitrum, keep these guidelines in mind:
-
-- **For timing**: Block numbers and timestamps are generally reliable for long-term timing assumptions (hours to days) but unreliable for short-term precision (seconds to minutes). For precise timing requirements, use oracle solutions.
-- **For randomness**: Never use `blockhash()` or block-based values for secure randomness. Use dedicated randomness oracles like Chainlink VRF.
-- **For child chain block tracking**: Use `ArbSys(100).arbBlockNumber()` to get the actual Arbitrum block number, not `block.number`.
-- **For indexers and off-chain tools**: Be aware that block production on Arbitrum depends on transaction volume. On less active chains, block production may be sporadic. Always use the appropriate block number type (`blockNumber` for child chain, `l1BlockNumber` for parent chain) from RPC responses.
-- **For finality**: When building applications that require strong finality guarantees, consider waiting for parent chain finalization of the batch containing your transaction.
+For timing-sensitive logic, consider using `block.timestamp` for events where a variance of approximately 15 seconds is acceptable. For applications requiring precise timing, use dedicated oracle solutions.
