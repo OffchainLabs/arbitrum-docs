@@ -18,7 +18,7 @@ The parent chain component is the product of the <a data-quicklook-from="transac
 
 The child chain component consists of the traditional fees <a data-quicklook-from="geth">Geth</a> would pay to bonders in a vanilla parent chain, such as the computation and storage charges applying the <a data-quicklook-from="state-transition-function">State Transition Function</a> entails. <a data-quicklook-from="arbos">ArbOS</a> charges additional fees for executing its child chain-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced according to the specific resources used while executing the call.
 
-The following sections will detail how to calculate parent and child chain fees. If you do not need precise calculations or a technical understanding, skip to the next section, [Parent chain to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+The following sections will detail how to calculate parent and child chain fees. If you do not need precise calculations or a technical understanding, refer, [Parent chain to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 
 ## Parent chain gas pricing
 
@@ -76,7 +76,7 @@ The algorithm compares gas usage against a parameter called the [speed limit](#t
 
 Intuitively, if the backlog grows, the algorithm should increase the gas price, to slow gas usage, because usage is above the sustainable level. If the backlog shrinks, the price should decrease again because usage has been below the below the sustainable limit so more gas usage can be welcomed.
 
-To make this more precise, the basefee is an exponential function of the backlog, _F = exp(-a(B-b))_, where a and b are suitably chosen constants: _a_ controls how rapidly the price escalates with backlog, and _b_ allows a small backlog before the basefee escalation begins.
+To make this more precise, the basefee is an exponential function of the backlog, $F = e^{-a (B - b)}$, where $a$ and $b$ are suitably chosen constants: $a$ controls how rapidly the price escalates with backlog, and $b$ allows a small backlog before the basefee escalation begins.
 
 ### Child chain Tips
 
