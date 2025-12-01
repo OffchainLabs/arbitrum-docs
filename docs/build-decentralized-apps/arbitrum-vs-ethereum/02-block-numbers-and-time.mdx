@@ -24,7 +24,7 @@ As with Ethereum, Arbitrum clients submit transactions, and the system executes 
 
 Once in the chain's core inbox contract, transaction processing occurs in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
-Additionally, since the calldata of Arbitrum transactions (or the DAC certificate on <a data-quicklook-from= "arbitrum-anytrust-chain">AnyTrust</a>chains) is posted to Ethereum, the gas paid when executing them includes a component for the parent chain to cover the costs of the batch poster.
+Additionally, since the calldata/blobs of Arbitrum transactions (or the DAC certificate on <a data-quicklook-from= "arbitrum-anytrust-chain">AnyTrust</a>chains) is posted to Ethereum, the gas paid when executing them includes a component for the parent chain to cover the costs of the batch poster.
 
 This page explains the implications of this mechanism for the block gas limit, block numbers, and the time assumptions associated with transactions submitted to Arbitrum.
 
