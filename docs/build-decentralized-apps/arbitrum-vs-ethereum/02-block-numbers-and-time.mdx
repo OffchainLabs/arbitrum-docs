@@ -75,7 +75,6 @@ A client that queries an Arbitrum node's RPC interface (e.g., transaction receip
 ```typescript
 const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 /** 
-    txnReceipt.blockNumber => Arbitrum block number
     txnReceipt.l1BlockNumber => Approximate block number of the first non-Arbitrum ancestor chain
 */
 ```
@@ -97,6 +96,8 @@ The following example illustrates timings on a chain that settles to Ethereum (s
 | Chain's block number (from RPCs) \*\* | 370000   | 370005      | 370006      | 370008      | 370012   | 370015      |
 
 <VanillaAdmonition type="info">
+
+    txnReceipt.blockNumber => Arbitrum block number
 
 \_\* **The chain's `block.number`:** updated to sync with Ethereum's `block.number` every 13 to 15 seconds on average (with some exceptions).
 
@@ -135,7 +136,7 @@ A good rule of thumb when working with timestamps: if the scale of your time-dep
 
 Block numbers should not be relied upon for accurate timekeeping on Arbitrum. The relationship between block numbers and time differs significantly from Ethereum due to Arbitrum's architecture:
 
-- **Parent chain block numbers** (accessed via `block.number`): Updated approximately every 12 seconds but may not reflect the exact parent chain block at the time of your transaction.
+- **Parent chain block numbers** (accessed via `block.number`): Updated approximately every 13 to 15 seconds (can take longer) but may not reflect the exact parent chain block at the time of your transaction.
 - **Child chain block numbers** (accessed via `ArbSys`): Produced based on transaction volume, not at fixed time intervals. On less active chains, block production may be sporadic.
 
 For timing-sensitive logic, consider using `block.timestamp` for events where a variance of approximately 15 seconds is acceptable. For applications requiring precise timing, use dedicated oracle solutions.
