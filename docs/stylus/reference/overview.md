@@ -4,6 +4,9 @@ description: 'An overview of the features provided by the Stylus Rust SDK'
 author: jose-franco
 sme: jose-franco
 sidebar_position: 1
+sidebar_label: 'Overview'
+user_story: 'As a developer, I want to understand the Stylus Rust SDK structure so I can navigate the documentation effectively.'
+content_type: 'reference'
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
 
@@ -13,6 +16,79 @@ The Stylus Rust SDK is built on top of [Alloy](https://www.paradigm.xyz/2023/06/
 
 The Stylus Rust SDK has been audited in August 2024 at [commit #62bd831](https://github.com/OffchainLabs/stylus-sdk-rs/tree/62bd8318c7f3ab5be954cbc264f85bf2ba3f4b06) by Open Zeppelin which can be viewed [on our audits page](audit-reports.mdx).
 
-This section contains a set of pages that describe a certain aspect of the Stylus Rust SDK, like how to work with [variables](https://stylus-by-example.org/basic_examples/variables), or what ways are there to [send ether](https://stylus-by-example.org/basic_examples/sending_ether). Additionally, there's also a page that compiles a set of [advanced features](/stylus/reference/rust-sdk-guide.md) that the Stylus Rust SDK provides.
+## Documentation index
 
-Finally, there's also a [Stylus by example](https://stylus-by-example.org) portal available that provides most of the information included in this section, as well as many different example contracts.
+Use this index to navigate the Stylus Rust SDK reference documentation.
+
+### Fundamentals
+
+Learn the core concepts of writing smart contracts with the Stylus Rust SDK.
+
+| Article                                                                            | Description                                                                                                            |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| [Structure of a contract](/stylus/reference/project-structure)                     | Understand how Rust contracts are organized, including project layout, the entrypoint macro, and public methods.       |
+| [Global variables and functions](/stylus/reference/global-variables-and-functions) | Access blockchain context through the VM interface, including message sender, block info, and cryptographic functions. |
+| [Contracts](/stylus/reference/contracts)                                           | Learn about contract basics, storage definition, method declarations, and the contract lifecycle.                      |
+| [Writing tests](/stylus/how-tos/testing-contracts)                                 | Write and run tests for your contracts using the built-in testing framework without deploying to a blockchain.         |
+
+### Data types
+
+Understand how to work with different data types in Stylus contracts.
+
+| Article                                                                             | Description                                                                                                  |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| [Primitives](/stylus/reference/data-types/primitives)                               | Use Rust primitive types (bool, integers, addresses) with automatic ABI encoding and Solidity type mappings. |
+| [Compound types](/stylus/reference/data-types/compound-types)                       | Work with complex data structures including arrays, vectors, tuples, and custom structs.                     |
+| [Storage](/stylus/reference/data-types/storage)                                     | Define and manage persistent contract state using storage types and the storage macro.                       |
+| [Conversions between types](/stylus/reference/data-types/conversions-between-types) | Convert between Rust types and Solidity-compatible types for cross-contract communication.                   |
+
+### Advanced topics
+
+Explore advanced features and optimization techniques for Stylus development.
+
+| Article                                                                       | Description                                                                                |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [Solidity differences](/stylus/advanced/solidity-differences)                 | Understand key differences between writing smart contracts in Solidity versus Stylus Rust. |
+| [Recommended packages](/stylus/advanced/recommended-libraries)                | Discover third-party Rust crates that work well with Stylus for extended functionality.    |
+| [Minimal entrypoint contracts](/stylus/advanced/minimal-entrypoint-contracts) | Build lightweight contracts with custom entrypoints for maximum gas efficiency.            |
+| [Hostio exports](/stylus/advanced/hostio-exports)                             | Access low-level host I/O functions for advanced contract behavior.                        |
+
+### Using the CLI
+
+Master the `cargo stylus` command-line tool for contract development and deployment.
+
+| Article                                                                                | Description                                                                            |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [Verify contracts](/stylus/how-tos/verifying-contracts)                                | Verify your deployed contracts on block explorers for transparency and trust.          |
+| [Exporting ABI](/stylus/how-tos/exporting-abi)                                         | Generate Solidity-compatible ABI files for integration with frontend apps and tooling. |
+| [Debugging with replay](/stylus/how-tos/debugging-tx)                                  | Debug failed transactions by replaying them locally with detailed execution traces.    |
+| [Optimizing WASM binary size](/stylus/how-tos/optimizing-binaries)                     | Reduce contract size for lower deployment costs and improved activation efficiency.    |
+| [Deploying non-Rust WASM contracts](/stylus/how-tos/deploying-non-rust-wasm-contracts) | Deploy contracts written in C, C++, or other languages that compile to WebAssembly.    |
+
+### WASM concepts
+
+Understand how WebAssembly works within Arbitrum Nitro and its implications for Stylus development.
+
+| Article                                               | Description                                                                                |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [WebAssembly](/stylus/concepts/webassembly)           | Learn how WASM compilation, deployment, and execution work in Arbitrum Nitro.              |
+| [EVM differences](/stylus/concepts/evm-differences)   | Understand behavioral differences between Stylus WASM execution and traditional EVM.       |
+| [Activation](/stylus/concepts/activation)             | Learn about the contract activation process required before a Stylus contract can execute. |
+| [Caching strategy](/stylus/how-tos/caching-contracts) | Optimize contract performance by understanding and leveraging the WASM caching system.     |
+
+### Troubleshooting
+
+| Article                                                    | Description                                                                               |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| [Troubleshooting](/stylus/troubleshooting-building-stylus) | Find solutions to common issues encountered when building and deploying Stylus contracts. |
+
+### External references
+
+Additional resources for Stylus development.
+
+| Resource                                                                                        | Description                                                                       |
+| ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [Stylus by Example](https://stylus-by-example.org/)                                             | Learn Stylus through practical, annotated code examples covering common patterns. |
+| [Cargo Stylus CLI GitHub](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) | Source code and documentation for the `cargo stylus` command-line tool.           |
+| [Rust SDK Crate](https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html)                       | Official API documentation for the Stylus SDK on docs.rs.                         |
+| [Source Code Repository](https://github.com/OffchainLabs/stylus-sdk-rs)                         | Browse the complete source code for the Stylus Rust SDK.                          |
