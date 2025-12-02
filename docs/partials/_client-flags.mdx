@@ -1,9 +1,9 @@
-| Client        | Compatible with Nitro | Required Nitro Flag | Required flag for subscribing to all subnets | Required flag to serve historical blobs               |
-| ------------- | --------------------- | ------------------- | -------------------------------------------- | ----------------------------------------------------- |
-| Prysm         | ✅                    | None                | `--subscribe-all-data-subnets`               | `--blob-retention-epochs`                             |
-| Lighthouse    | ✅                    | None                | `--supernode`                                | `--prune-blobs false` or `--blob-prune-margin-epochs` |
-| Teku          | ✅                    | None                | `--p2p-subscribe-all-custody-subnets-enabled`        | None exists                                           |
-| Lodestar      | ✅                    | None                | `--supernode`                                | `--chain.archiveDataEpochs`                           |
-| Erigon Caplin | ❌                    | N/A                 | N/A                                          | N/A                                                   |
+| Client        | Compatible with Nitro | Required Nitro Flag | Required flag for subscribing to all subnets  | Required flag to serve historical blobs               |
+| ------------- | --------------------- | ------------------- | --------------------------------------------- | ----------------------------------------------------- |
+| Prysm         | ✅                    | None                | `--subscribe-all-data-subnets`                | `--blob-retention-epochs`                             |
+| Lighthouse    | ✅                    | None                | `--supernode`                                 | `--prune-blobs false` or `--blob-prune-margin-epochs` |
+| Teku          | ✅                    | None                | `--p2p-subscribe-all-custody-subnets-enabled` | None exists                                           |
+| Lodestar      | ✅                    | None                | `--supernode`                                 | `--chain.archiveDataEpochs`                           |
+| Erigon Caplin | ❌                    | N/A                 | N/A                                           | N/A                                                   |
 
 For additional information regarding specific client flags visit their docs: [Prysm](https://prysm.offchainlabs.com/docs/learn/concepts/blobs), [Lighthouse](https://lighthouse-book.sigmaprime.io/advanced_blobs.html), [Teku](https://docs.teku.consensys.io/concepts/proto-danksharding#what-are-blobs), and [Lodestar](https://chainsafe.github.io/lodestar/run/beacon-management/beacon-cli/).
