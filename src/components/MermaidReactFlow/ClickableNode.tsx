@@ -25,7 +25,7 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
     padding: '12px 20px',
     fontFamily: 'var(--ifm-font-family-base)',
     fontSize: '14px',
-    color: 'var(--ifm-font-color-base)',
+    // Color is handled by CSS to support theme switching
     transition: 'all 0.2s ease',
     cursor: hasLink ? 'pointer' : 'default',
     backgroundColor: colors.backgroundColor,

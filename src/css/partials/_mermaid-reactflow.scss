@@ -24,6 +24,15 @@
       background-color: white;
       border: 1px solid var(--ifm-color-emphasis-300);
     }
+
+    // Light mode node text
+    .custom-node {
+      color: #000000;
+
+      .node-content {
+        color: #000000;
+      }
+    }
   }
 
   // Dark mode specific
@@ -43,7 +52,7 @@
       button {
         background-color: var(--ifm-background-surface-color);
         border-bottom: 1px solid var(--ifm-color-emphasis-600);
-        color: var(--ifm-font-color-base);
+        color: var(--ifm-font-color-base-inverse);
 
         &:hover {
           background-color: var(--ifm-color-emphasis-200);
@@ -53,17 +62,17 @@
 
     // Dark mode node text fix
     .custom-node {
-      color: var(--ifm-font-color-base);
+      color: #000000 !important;
 
       .node-content {
-        color: var(--ifm-font-color-base);
+        color: #000000 !important;
       }
     }
 
     // Dark mode back button fix
     .back-button {
       background-color: var(--ifm-color-emphasis-200);
-      color: var(--ifm-font-color-base);
+      color: var(--ifm-font-color-base-inverse);
       border-color: var(--ifm-color-emphasis-400);
       font-weight: 600;
 
@@ -79,7 +88,7 @@
   padding: 12px 20px;
   font-family: var(--ifm-font-family-base);
   font-size: 14px;
-  color: var(--ifm-font-color-base);
+  color: var(--ifm-font-color-base-inverse);
   transition: all 0.2s ease;
   border: 2px solid;
 
@@ -153,7 +162,7 @@
     gap: 6px;
     padding: 8px 16px;
     background-color: var(--ifm-button-background-color);
-    color: var(--ifm-font-color-base);
+    color: var(--ifm-font-color-base-inverse);
     border: 1px solid var(--ifm-button-border-color);
     border-radius: var(--ifm-button-border-radius);
     font-family: var(--ifm-font-family-base);
