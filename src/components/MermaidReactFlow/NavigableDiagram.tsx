@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import ReactFlow, { Controls } from 'reactflow';
+import ReactFlow from 'reactflow';
 import { useColorMode } from '@docusaurus/theme-common';
 import { motion, AnimatePresence } from 'motion/react';
 import 'reactflow/dist/style.css';
@@ -21,7 +21,6 @@ function useSafeColorMode() {
 export function NavigableDiagram({
   diagramFile,
   height = '500px',
-  showControls = true,
   className = '',
 }: MermaidReactFlowProps) {
   const colorMode = useSafeColorMode();
@@ -146,9 +145,7 @@ export function NavigableDiagram({
             nodeTypes={nodeTypes}
             fitView
             attributionPosition="bottom-right"
-          >
-            {showControls && <Controls />}
-          </ReactFlow>
+          />
         </motion.div>
       </AnimatePresence>
     </div>

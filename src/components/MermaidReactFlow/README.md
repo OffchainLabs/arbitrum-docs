@@ -44,19 +44,18 @@ import MermaidReactFlow from '@site/src/components/MermaidReactFlow';
 
 # System Architecture
 
-<MermaidReactFlow diagramFile="/diagrams/overview.mmd" height="500px" showControls={true} />
+<MermaidReactFlow diagramFile="/diagrams/overview.mmd" height="500px" />
 ```
 
 ## Component API
 
 ### MermaidReactFlow Props
 
-| Prop           | Type    | Default   | Description                             |
-| -------------- | ------- | --------- | --------------------------------------- |
-| `diagramFile`  | string  | required  | Path to .mmd file (relative to static/) |
-| `height`       | string  | `"500px"` | Container height                        |
-| `showControls` | boolean | `true`    | Show zoom/pan controls                  |
-| `className`    | string  | `""`      | Additional CSS classes                  |
+| Prop          | Type   | Default   | Description                             |
+| ------------- | ------ | --------- | --------------------------------------- |
+| `diagramFile` | string | required  | Path to .mmd file (relative to static/) |
+| `height`      | string | `"500px"` | Container height                        |
+| `className`   | string | `""`      | Additional CSS classes                  |
 
 ## Link Metadata Syntax
 

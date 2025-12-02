@@ -3,7 +3,6 @@ import { Node, Edge } from 'reactflow';
 export interface MermaidReactFlowProps {
   diagramFile: string;
   height?: string;
-  showControls?: boolean;
   className?: string;
 }
 
