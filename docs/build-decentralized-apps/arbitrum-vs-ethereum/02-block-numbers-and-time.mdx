@@ -53,7 +53,7 @@ The "first non-Arbitrum ancestor chain" is:
 
 ```solidity
 // some Arbitrum contract:
-block.number; // => returns the approximate block number of the first non-Arbitrum ancestor chain
+block.number // => returns the approximate block number of the first non-Arbitrum ancestor chain
 ```
 
 As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!)
@@ -82,7 +82,7 @@ const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 The Arbitrum block number can also be retrieved within an Arbitrum contract via [ArbSys](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile:
 
 ```solidity
-ArbSys(100).arbBlockNumber(); // returns Arbitrum block number
+ArbSys(100).arbBlockNumber() // returns Arbitrum block number
 ```
 
 ### Example
