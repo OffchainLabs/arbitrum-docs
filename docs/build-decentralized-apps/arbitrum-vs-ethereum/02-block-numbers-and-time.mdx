@@ -99,7 +99,7 @@ The following example illustrates timings on a chain that settles to Ethereum (s
 
     txnReceipt.blockNumber => Arbitrum block number
 
-\_\* **The chain's `block.number`:** updated to sync with Ethereum's `block.number` every 13 to 15 seconds on average (with some exceptions).
+\_\* **The chain's `block.number`:** updated to sync with Ethereum's `block.number` every 13 to 15 seconds (occasionally longer).
 
 </VanillaAdmonition>
 
@@ -130,13 +130,11 @@ Furthermore, for transactions that are force-included from the parent chain (byp
 
 As mentioned, block timestamps are usually set based on the sequencer's clock. Because there's a possibility that the Sequencer fails to post batches on the parent chain (i.e., Ethereum) for a period of time, it should have the ability to slightly adjust the timestamp of the block to account for those delays and prevent any potential reorganizations of the chain. To limit the degree to which the Sequencer can adjust timestamps, some boundaries are set, currently to 24 hours earlier than the current time, and one hour in the future.
 
-A good rule of thumb when working with timestamps: if the scale of your time-dependent event can vary by 15 seconds and maintain integrity, it is safe to use `block.timestamp`.
-
 ## Key takeaway
 
 Block numbers should not be relied upon for accurate timekeeping on Arbitrum. The relationship between block numbers and time differs significantly from Ethereum due to Arbitrum's architecture:
 
-- **Parent chain block numbers** (accessed via `block.number`): Updated approximately every 13 to 15 seconds (can take longer) but may not reflect the exact parent chain block at the time of your transaction.
+- **Parent chain block numbers** (accessed via `block.number`): Updated approximately every 13 to 15 seconds (can take longer) but will not reflect the exact parent chain block at the time of your transaction.
 - **Child chain block numbers** (accessed via `ArbSys`): Produced based on transaction volume, not at fixed time intervals. On less active chains, block production may be sporadic.
 
 For timing-sensitive logic, consider using `block.timestamp` for events where a variance of approximately 15 seconds is acceptable. For applications requiring precise timing, use dedicated oracle solutions.
