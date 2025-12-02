@@ -236,11 +236,6 @@ const sidebars = {
                   label: 'Timeboost for Arbitrum chains',
                 },
                 {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations',
-                  label: 'Stake and validator config',
-                },
-                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
@@ -618,8 +613,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos51',
-              label: 'Dia (ArbOS 51)',
+              id: 'run-arbitrum-node/arbos-releases/arbos50',
+              label: 'Dia (ArbOS 50)',
             },
             {
               type: 'doc',
@@ -1641,40 +1636,180 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/reference/opcode-hostio-pricing',
-              label: 'Gas & Ink Pricing',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
             },
             {
-              type: 'link',
-              label: 'Stylus by Example',
-              href: 'https://stylus-by-example.org/',
+              type: 'doc',
+              id: 'stylus/reference/project-structure',
+              label: 'Structure of a Contract',
             },
             {
-              type: 'link',
-              label: 'Cargo Stylus CLI GitHub',
-              href: 'https://github.com/OffchainLabs/cargo-stylus',
+              type: 'category',
+              label: 'Data types',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/primitives',
+                  label: 'Primitives',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/compound-types',
+                  label: 'Compound types',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/storage',
+                  label: 'Storage',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/reference/data-types/conversions-between-types',
+                  label: 'Conversions Between Types',
+                },
+              ],
             },
             {
-              type: 'link',
-              label: 'Rust SDK Crate',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+              type: 'doc',
+              id: 'stylus/reference/global-variables-and-functions',
+              label: 'Global variables and functions',
             },
             {
-              type: 'link',
-              label: 'Source Code Repository',
-              href: 'https://github.com/OffchainLabs/stylus',
+              type: 'doc',
+              id: 'stylus/reference/contracts',
+              label: 'Contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/testing-contracts',
+              label: 'Writing Tests',
+            },
+            {
+              type: 'category',
+              label: 'Advanced',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/solidity-differences',
+                  label: 'Solidity differences',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/recommended-libraries',
+                  label: 'Recommended packages',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/minimal-entrypoint-contracts',
+                  label: 'Minimal entrypoint contracts',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/advanced/hostio-exports',
+                  label: 'Hostio exports',
+                },
+              ],
+            },
+            {
+              type: 'doc',
+              id: 'stylus/troubleshooting-building-stylus',
+              label: 'Troubleshooting',
+            },
+            {
+              type: 'category',
+              label: 'Using the CLI',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/check-and-deploy',
+                  label: 'Check and deploy',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/verifying-contracts',
+                  label: 'Verify contracts',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/exporting-abi',
+                  label: 'Exporting ABI',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/debugging-tx',
+                  label: 'Debugging with replay',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/optimizing-binaries',
+                  label: 'Optimizing WASM binary size',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
+                  label: 'Deploying non-Rust WASM contracts',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'WM Concepts',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/concepts/webassembly',
+                  label: 'Webassembly',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/concepts/evm-differences',
+                  label: 'EVM differences',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/concepts/activation',
+                  label: 'Activation',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/how-tos/caching-contracts',
+                  label: 'Caching Strategy',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Reference',
+              collapsed: true,
+              items: [
+                {
+                  type: 'link',
+                  label: 'Stylus by Example',
+                  href: 'https://stylus-by-example.org/',
+                },
+                {
+                  type: 'link',
+                  label: 'Cargo Stylus CLI GitHub',
+                  href: 'https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus',
+                },
+                {
+                  type: 'link',
+                  label: 'Rust SDK Crate',
+                  href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+                },
+                {
+                  type: 'link',
+                  label: 'Source Code Repository',
+                  href: 'https://github.com/OffchainLabs/stylus-sdk-rs',
+                },
+              ],
             },
           ],
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-          label: 'Using other languages',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/troubleshooting-building-stylus',
-          label: 'Troubleshooting',
         },
       ],
     },
@@ -1701,11 +1836,6 @@ const sidebars = {
       type: 'doc',
       id: 'notices/fusaka-upgrade-notice',
       label: 'Upgrade for the Fusaka transition',
-    },
-    {
-      type: 'doc',
-      id: 'notices/arbos51-arbsepolia-upgrade-notice',
-      label: 'Upgrade for ArbOS 51 on ArbSepolia',
     },
   ],
 };

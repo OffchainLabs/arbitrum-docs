@@ -427,11 +427,6 @@
       "permanent": false
     },
     {
-      "source": "/(docs/run-arbitrum-node/arbos-releases/arbos50/?)",
-      "destination": "/(docs/run-arbitrum-node/arbos-releases/arbos51/?)",
-      "permanent": false
-    },
-    {
       "source": "/(docs/run-arbitrum-node/sequencer/run-feed-relay/?)",
       "destination": "/(docs/run-arbitrum-node/run-feed-relay/?)",
       "permanent": false
