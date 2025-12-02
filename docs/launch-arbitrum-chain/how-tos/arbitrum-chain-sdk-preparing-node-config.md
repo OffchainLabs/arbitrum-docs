@@ -90,7 +90,7 @@ Let's look at what methods to use for generating a configuration file for the Ni
 
 :::info Example script
 
-The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts) script.
+The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
 :::
 
@@ -122,7 +122,7 @@ import {
   createRollupPrepareTransactionReceipt,
   ChainConfig,
   prepareNodeConfig,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,

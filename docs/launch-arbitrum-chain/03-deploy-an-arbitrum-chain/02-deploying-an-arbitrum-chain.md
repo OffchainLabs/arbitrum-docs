@@ -166,8 +166,8 @@ Now, let's look at the methods to use when creating a new Arbitrum chain with th
 
 The Chain SDK includes an example script for creating an Arbitrum chain. We recommend that you first understand the process described in this section and then check the following example scripts:
 
-- [`create-rollup-eth`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) for creating an Arbitrum AnyTrust chain with `ETH` as the gas token.
-- [`create-rollup-custom-fee-token`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-custom-fee-token) for creating an Arbitrum AnyTrust chain with an `ERC-20` as the gas token.
+- [`create-rollup-eth`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-rollup-eth/index.ts) for creating an Arbitrum AnyTrust chain with `ETH` as the gas token.
+- [`create-rollup-custom-fee-token`](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/create-rollup-custom-fee-token) for creating an Arbitrum AnyTrust chain with an `ERC-20` as the gas token.
 
 :::
 
@@ -186,7 +186,7 @@ The `prepareChainConfig` function creates a `chainConfig` structure like the one
 Below is an example of how to use `prepareChainConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `InitialChainOwner`:
 
 ```typescript
-import { prepareChainConfig } from '@arbitrum/orbit-sdk';
+import { prepareChainConfig } from '@arbitrum/chain-sdk';
 
 const chainConfig = prepareChainConfig({
   chainId: 123_456,
@@ -204,7 +204,7 @@ Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to
 
 ```typescript
 import { createPublicClient, http } from 'viem';
-import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
+import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -237,7 +237,7 @@ Below is an example of how to use `createRollup` using the `createRollupConfig` 
 ```typescript
 import { createPublicClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import { createRollup } from '@arbitrum/orbit-sdk';
+import { createRollup } from '@arbitrum/chain-sdk';
 
 const deployer = privateKeyToAccount(deployerPrivateKey);
 const parentChainPublicClient = createPublicClient({
@@ -279,7 +279,7 @@ If you're creating an AnyTrust chain, the next step is to set up the keyset of y
 
 :::info
 
-The Arbitrum Chain SDK includes an example script for setting up the keyset in the `SequencerInbox`. We recommend that you first understand the process described in this section and then check the [`set-valid-keyset`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
+The Arbitrum Chain SDK includes an example script for setting up the keyset in the `SequencerInbox`. We recommend that you first understand the process described in this section and then check the [`set-valid-keyset`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
 
 :::
 
@@ -290,7 +290,7 @@ Below is an example of how to use `setValidKeyset` using the parameters describe
 ```typescript
 import { createPublicClient, createWalletClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import { setValidKeyset } from '@arbitrum/orbit-sdk';
+import { setValidKeyset } from '@arbitrum/chain-sdk';
 
 const deployer = privateKeyToAccount(deployerPrivateKey);
 const parentChainPublicClient = createPublicClient({

@@ -55,7 +55,7 @@ Let's look at the methods to create a token bridge using the Chain SDK.
 
 :::info Example script
 
-The Arbitrum Chain SDK includes an example script for deploying a token bridge. We recommend that you first understand the process described in this section and then check the [create-token-bridge-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-eth/index.ts) and [create-token-bridge-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-custom-fee-token/index.ts) scripts.
+The Arbitrum Chain SDK includes an example script for deploying a token bridge. We recommend that you first understand the process described in this section and then check the [create-token-bridge-eth](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-token-bridge-eth/index.ts) and [create-token-bridge-custom-fee-token](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-token-bridge-custom-fee-token/index.ts) scripts.
 
 :::
 
@@ -93,7 +93,7 @@ import { createPublicClient, http } from 'viem';
 import {
   createTokenBridgeEnoughCustomFeeTokenAllowance,
   createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -138,7 +138,7 @@ import { createPublicClient, http } from 'viem';
 import {
   createTokenBridgePrepareTransactionRequest,
   createTokenBridgePrepareTransactionReceipt,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -236,7 +236,7 @@ import { createPublicClient, http } from 'viem';
 import {
   createTokenBridgePrepareSetWethGatewayTransactionRequest,
   createTokenBridgePrepareSetWethGatewayTransactionReceipt,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,

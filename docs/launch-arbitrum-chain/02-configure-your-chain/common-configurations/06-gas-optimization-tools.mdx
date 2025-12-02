@@ -6,7 +6,7 @@ sme:
 content_type: how-to
 ---
 
-To configure gas behavior on an Arbitrum chain using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk), you primarily use the `ArbOwner` precompile (at address `0x0000000000000000000000000000000000000070`), which allows the chain owner to manage key parameters via function calls. These are called with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`. The defaults inherit from the parent chain or standard Nitro settings, but it is possible to customize your Arbitrum chain as they are permissioned by design.
+To configure gas behavior on an Arbitrum chain using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk), you primarily use the `ArbOwner` precompile (at address `0x0000000000000000000000000000000000000070`), which allows the chain owner to manage key parameters via function calls. These are called with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`. The defaults inherit from the parent chain or standard Nitro settings, but it is possible to customize your Arbitrum chain as they are permissioned by design.
 
 Below is a breakdown of each specified parameter, including its role, typical defaults (based on Arbitrum One), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security. For example, setting limits too high could lead to state bloat or slower block processing.
 
