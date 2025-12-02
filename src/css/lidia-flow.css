@@ -1,0 +1,152 @@
+/* Lidia Flow Container */
+.lidia-flow-container {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Header */
+.lidia-flow-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lidia-flow-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.lidia-flow-back-button {
+  padding: 8px 16px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lidia-flow-back-button:hover {
+  background-color: #2563eb;
+}
+
+.lidia-flow-back-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ReactFlow wrapper */
+.lidia-flow-wrapper {
+  height: calc(100% - 65px);
+  position: relative;
+  background-color: #fafafa;
+}
+
+/* Transition effects */
+.lidia-flow-fade-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.lidia-flow-fade-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+}
+
+.lidia-flow-fade-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.lidia-flow-fade-exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+}
+
+/* Custom Node Styles */
+.lidia-flow-node {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px 24px;
+  min-width: 150px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.lidia-flow-node-clickable {
+  cursor: pointer;
+}
+
+.lidia-flow-node-clickable:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.lidia-flow-node-selected {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.lidia-flow-node-content {
+  text-align: center;
+}
+
+.lidia-flow-node-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.lidia-flow-node-hint {
+  font-size: 12px;
+  color: #3b82f6;
+  margin-top: 8px;
+}
+
+/* Handle styles */
+.lidia-flow-handle {
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* ReactFlow overrides */
+.react-flow__node.selected .lidia-flow-node {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.react-flow__edge-path {
+  stroke: #9ca3af;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #3b82f6;
+}
+
+/* Error state */
+.lidia-flow-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #ef4444;
+  font-size: 16px;
+}
