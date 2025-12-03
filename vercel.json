@@ -612,6 +612,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/?)",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "permanent": false
+    },
+    {
       "source": "/(how-arbitrum-works/arbos/introduction/?)",
       "destination": "/how-arbitrum-works/deep-dives/arbos",
       "permanent": false
@@ -737,22 +742,17 @@
       "permanent": false
     },
     {
-      "source": "/(how-arbitrum-works/tx-lifecycle/?)",
+      "source": "/(how-arbitrum-works/tx-lifecycle)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
     },
     {
-      "source": "/(how-arbitrum-works/why-nitro?)",
+      "source": "/(how-arbitrum-works/why-nitro/?)",
       "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
       "permanent": false
     },
     {
-      "source": "/(how-arbitrum-works?)",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
-      "permanent": false
-    },
-    {
-      "source": "/(inside-anytrust?)",
+      "source": "/(inside-anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
     },
