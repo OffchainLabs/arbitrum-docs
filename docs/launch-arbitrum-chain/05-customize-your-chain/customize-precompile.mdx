@@ -111,13 +111,13 @@ var ArbosStateAddress = common.HexToAddress("0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFF
 var ArbSysAddress = common.HexToAddress("0x64")
 var ArbInfoAddress = common.HexToAddress("0x65")
 // Add your new precompile address here
-var ArbHiAddress = common.HexToAddress("0x11a")
+var ArbHiAddress = common.HexToAddress("0x11a") // 0x011a here is an example address
 ```
 
 Then, update [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go) to register the new precompile under the `Precompiles()` method:
 
 ```go
-insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress})) // 0x011a here is an example address
+insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress}))  // Set the ArbHiAddress here we just added to arbitrum_signer.go
 ```
 
 Navigate to the precompiles interface directory, `/contracts-local/src/precompiles`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
