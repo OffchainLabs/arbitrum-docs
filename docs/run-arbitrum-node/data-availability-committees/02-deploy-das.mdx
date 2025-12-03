@@ -374,19 +374,19 @@ And then restart it.
 Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
 
 ```shell
-datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
+datool client rpc store  --server-url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
 ```
 
 OR
 
 ```shell
-datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key "0x<contents of ecdsa>"
+datool client rpc store  --server-url http://localhost:9876 --message "Hello world" --signing-key "0x<contents of ecdsa>"
 ```
 
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.3-8bc5554@@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.3-8bc5554@@ client rpc store --server-url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
 The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
@@ -396,13 +396,13 @@ The above command will output the `Hex Encoded Data Hash` which can then be used
 Use again the `datool` to retrieve the stored data. Notice that to perform this step you must have the REST interface enabled in the DAS:
 
 ```shell
-datool client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+datool client rest getbyhash --server-url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.3-8bc5554@@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+docker run --rm -it --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.3-8bc5554@@ client rest getbyhash --server-url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 If we set `0xDataHash` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
