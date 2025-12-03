@@ -427,11 +427,6 @@
       "permanent": false
     },
     {
-      "source": "/(docs/run-arbitrum-node/arbos-releases/arbos50/?)",
-      "destination": "/(docs/run-arbitrum-node/arbos-releases/arbos51/?)",
-      "permanent": false
-    },
-    {
       "source": "/(docs/run-arbitrum-node/sequencer/run-feed-relay/?)",
       "destination": "/(docs/run-arbitrum-node/run-feed-relay/?)",
       "permanent": false
@@ -1711,6 +1706,11 @@
     {
       "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
       "destination": "/run-arbitrum-node/arbos-releases/arbos32",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/arbos-releases/arbos50/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos51/",
       "permanent": false
     },
     {
