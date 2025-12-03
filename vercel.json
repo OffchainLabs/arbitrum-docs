@@ -6,11 +6,6 @@
   "redirects": [
     { "source": "/", "destination": "/get-started/overview", "permanent": false },
     {
-      "source": "/(/docs/how-arbitrum-works/a-gentle-introduction/?)",
-      "destination": "/(docs/how-arbitrum-works/inside-arbitrum-nitro/?)",
-      "permanent": false
-    },
-    {
       "source": "/(/docs/how-arbitrum-works/state-transition-function/arbos/?)",
       "destination": "/(docs/how-arbitrum-works/deep-dives/arbos/?)",
       "permanent": false
@@ -2338,6 +2333,11 @@
     },
     {
       "source": "/how-arbitrum-works/",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "permanent": false
+    },
+    {
+      "source": "/how-arbitrum-works/a-gentle-introduction",
       "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
       "permanent": false
     },
