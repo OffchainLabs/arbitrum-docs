@@ -6,11 +6,6 @@
   "redirects": [
     { "source": "/", "destination": "/get-started/overview", "permanent": false },
     {
-      "source": "/(/docs/how-arbitrum-works/?)",
-      "destination": "/(docs/how-arbitrum-works/inside-arbitrum-nitro/?)",
-      "permanent": false
-    },
-    {
       "source": "/(/docs/how-arbitrum-works/a-gentle-introduction/?)",
       "destination": "/(docs/how-arbitrum-works/inside-arbitrum-nitro/?)",
       "permanent": false
@@ -2342,6 +2337,11 @@
       "permanent": false
     },
     {
+      "source": "/how-arbitrum-works/",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "permanent": false
+    },
+    {
       "source": "/migration/dapp-migration",
       "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
       "permanent": false
@@ -2467,7 +2467,7 @@
       "permanent": false
     },
     {
-      "source": "/why-nitro/",
+      "source": "/why-nitro",
       "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
       "permanent": false
     }
