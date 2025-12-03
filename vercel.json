@@ -1714,6 +1714,11 @@
       "permanent": false
     },
     {
+      "source": "/(run-arbitrum-node/arbos-releases/arbos50/?)",
+      "destination": "/(run-arbitrum-node/arbos-releases/arbos51/?)",
+      "permanent": false
+    },
+    {
       "source": "/(run-arbitrum-node/how-to-use-timeboost/?)",
       "destination": "/(how-arbitrum-works/timeboost/how-to-use-timeboost/?)",
       "permanent": false
