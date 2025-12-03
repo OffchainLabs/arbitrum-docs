@@ -747,6 +747,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works?)",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "permanent": false
+    },
+    {
       "source": "/(inside-anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
@@ -2329,11 +2334,6 @@
     {
       "source": "/getting-started-devs",
       "destination": "/for-devs/quickstart-solidity-remix",
-      "permanent": false
-    },
-    {
-      "source": "/how-arbitrum-works/",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
       "permanent": false
     },
     {
