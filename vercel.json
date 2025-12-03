@@ -432,11 +432,6 @@
       "permanent": false
     },
     {
-      "source": "/(docs/stylus/recommended-libraries/?)",
-      "destination": "/(docs/stylus/advanced/recommended-libraries/?)",
-      "permanent": false
-    },
-    {
       "source": "/(docs/tx_lifecycle/?)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
@@ -1711,6 +1706,11 @@
     {
       "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
       "destination": "/run-arbitrum-node/arbos-releases/arbos32",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/arbos-releases/arbos50/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos51/",
       "permanent": false
     },
     {
