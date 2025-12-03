@@ -2137,11 +2137,6 @@
       "permanent": false
     },
     {
-      "source": "/(why-nitro/?)",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
-      "permanent": false
-    },
-    {
       "source": "/arbitrum-ethereum-differences",
       "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
       "permanent": false
@@ -2469,6 +2464,11 @@
     {
       "source": "/useful-addresses",
       "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "permanent": false
+    },
+    {
+      "source": "/why-nitro/",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
       "permanent": false
     }
   ]
