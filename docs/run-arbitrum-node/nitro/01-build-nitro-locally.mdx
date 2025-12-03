@@ -64,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.8.0@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.9.3@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -177,8 +177,8 @@ brew install bison
 ```shell
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
-gvm install go1.24
-gvm use go1.24 --default
+gvm install go1.25
+gvm use go1.25 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
