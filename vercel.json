@@ -742,7 +742,7 @@
       "permanent": false
     },
     {
-      "source": "/(how-arbitrum-works/why-nitro/?)",
+      "source": "/(how-arbitrum-works/why-nitro?)",
       "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
       "permanent": false
     },
@@ -752,7 +752,7 @@
       "permanent": false
     },
     {
-      "source": "/(inside-anytrust/?)",
+      "source": "/(inside-anytrust?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
     },
