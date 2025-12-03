@@ -21,8 +21,8 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.8.0-62c0aa7',
-  latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.9.3-8bc5554',
+  latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
 
   // Node snapshots (taken around April 20th, 2013)
   arbOneNitroGenesisSnapshot: 'https://snapshot.arbitrum.foundation/arb1/nitro-genesis.tar',
@@ -38,19 +38,19 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.8.0',
+  nitroVersionTag: 'v3.9.3',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: '9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4',
+  nitroContractsCommit: '5f61a6b0e9799d7ccc0b3811f3893c68a14e43bf',
   nitroContractsPathToPrecompilesInterface: 'src/node-interface',
 
   // Precompile interfaces repository
   nitroPrecompilesRepositorySlug: 'nitro-precompile-interfaces',
-  nitroPrecompilesCommit: 'f9f65d7c77adf61ad16504a3738a9edcc31e2b2f',
+  nitroPrecompilesCommit: 'f49a4889b486fd804a7901203f5f663cfd1581c8',
   nitroPrecompilesPathToInterfaces: '',
 
-  goEthereumCommit: 'e845151eb649647a8d2d2b5c874377ffe5d2a8c9',
+  goEthereumCommit: 'ae34a6a9ef5af5079c8eef6571895d703023efef',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',
