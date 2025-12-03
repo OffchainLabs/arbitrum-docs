@@ -1442,43 +1442,6 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Using the CLI',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/check-and-deploy',
-              label: 'Check and deploy',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts',
-              label: 'Verify contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/exporting-abi',
-              label: 'Exporting ABI',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/debugging-tx',
-              label: 'Debugging with replay',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/optimizing-binaries',
-              label: 'Optimizing WASM binary size',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
-              label: 'Deploying non-Rust WASM contracts',
-            },
-          ],
-        },
-        {
-          type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
           items: [
@@ -1562,11 +1525,6 @@ const sidebars = {
               ],
             },
             {
-              type: 'doc',
-              id: 'stylus/troubleshooting-building-stylus',
-              label: 'Troubleshooting',
-            },
-            {
               type: 'category',
               label: 'VM Concepts',
               collapsed: true,
@@ -1621,6 +1579,48 @@ const sidebars = {
               ],
             },
           ],
+        },
+        {
+          type: 'category',
+          label: 'Using the CLI',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/check-and-deploy',
+              label: 'Check and deploy',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts',
+              label: 'Verify contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/exporting-abi',
+              label: 'Exporting ABI',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/debugging-tx',
+              label: 'Debugging with replay',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimizing WASM binary size',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
+              label: 'Deploying non-Rust WASM contracts',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          id: 'stylus/troubleshooting-building-stylus',
+          label: 'Troubleshooting',
         },
       ],
     },
