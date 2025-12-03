@@ -21,7 +21,7 @@ To support these additional use-cases, follow the instructions described in [How
 
 There are five primary ways to customize your chain's precompiles:
 
-1.  Add new methods to an existing [precompile](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToPrecompiles=precompiles@@/) (local: `/precompiles`)
+1.  Add new methods to an existing [precompile](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToPrecompiles=precompiles@@/) (local: `/precompiles`)
 2.  Create a new precompile.
 3.  Define a new event.
 4.  Customize gas usage for a specific method.
@@ -32,14 +32,14 @@ There are five primary ways to customize your chain's precompiles:
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.8.0@@ <https://github.com/OffchainLabs/nitro.git>
+git clone --branch @@nitroVersionTag=v3.9.3@@ <https://github.com/OffchainLabs/nitro.git>
 cd nitro
 git submodule update --init --recursive --force
 ```
 
 ## Option 1: Add new methods to an existing precompile
 
-Using your favorite code editor, open an existing precompile from the [precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToPrecompiles=precompiles@@/) directory (local `/precompiles`). We'll use `ArbSys.go` as an example. Open the corresponding Go implementation file (`ArbSys.go`) and add a simple `SayHi` method:
+Using your favorite code editor, open an existing precompile from the [precompiles implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToPrecompiles=precompiles@@/) directory (local `/precompiles`). We'll use `ArbSys.go` as an example. Open the corresponding Go implementation file (`ArbSys.go`) and add a simple `SayHi` method:
 
 ```go
 func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
@@ -103,7 +103,7 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Nect, navigate to (arbitrum_signer.go)[https://github.com/OffchainLabs/go-ethereum/blob/v1.12.2/core/types/arbitrum_signer.go] and add the new precompile address.
+Next, navigate to (arbitrum_signer.go)[https://github.com/OffchainLabs/go-ethereum/blob/v1.12.2/core/types/arbitrum_signer.go] and add the new precompile address.
 
 ```go
 var ArbosAddress = common.HexToAddress("0xa4b05")
@@ -229,7 +229,7 @@ Next, build Nitro by following the instructions in [How to build Nitro locally](
 Run Nitro with the following command:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.8.0-62c0aa7@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.3-8bc5554@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
 
 ### Send the transaction and get the transaction receipt
@@ -307,7 +307,7 @@ Next, build Nitro by following the instructions in [How to build Nitro locally](
 Run Nitro with the following command:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.8.0-62c0aa7@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.3-8bc5554@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
 
 ### Send the transaction and get the transaction receipt
@@ -393,9 +393,9 @@ To learn more about the gas cost model, see [how to estimate gas](/build-decentr
 
 In this example, we'll demonstrate how to _read from_ and _write to_ a precompile contract's [ArbOS state](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38).
 
-First, open the [arbosstate.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go) file and locate the [ArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38) structure. This is where ArbOS state is defined.
+First, open the [arbosstate.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go) file and locate the [ArbosState](https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38) structure. This is where ArbOS state is defined.
 
-Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in [storage.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToStorage=arbos/storage@@/storage.go):
+Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in [storage.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToStorage=arbos/storage@@/storage.go):
 
 ```
 type ArbosState struct {
@@ -462,7 +462,7 @@ func (state *ArbosState) GetMyNumber() (uint64, error) {
 }
 ```
 
-Next, head back to the [precompiles directory](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToPrecompiles=precompiles@@/) and create a new `ArbHi.go` (introduced in Option 2).
+Next, head back to the [precompiles directory](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToPrecompiles=precompiles@@/) and create a new `ArbHi.go` (introduced in Option 2).
 This time, we'll add two new methods to read and write the ArbOS state:
 
 ```
