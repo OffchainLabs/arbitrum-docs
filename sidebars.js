@@ -1491,8 +1491,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/contracts',
               label: 'Contracts',
-            },
-            {
               type: 'doc',
               id: 'stylus/how-tos/testing-contracts',
               label: 'Writing Tests',
@@ -1599,6 +1597,11 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/how-tos/exporting-abi',
               label: 'Exporting ABI',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/importing-interfaces',
+              label: 'Importing interfaces',
             },
             {
               type: 'doc',
