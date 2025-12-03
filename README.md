@@ -15,7 +15,7 @@ This repository is organized as follows:
   - `for-users/` - User-focused documentation
   - `how-arbitrum-works/` - Technical explanations of Arbitrum
   - `intro/` - Introduction and glossary
-  - `launch-arbitrum-chain/` - Arbitrum Orbit chain deployment guides
+  - `launch-arbitrum-chain/` - Arbitrum chain deployment guides
   - `learn-more/` - Additional learning resources
   - `node-running/` - Node operation guides
   - `partials/` - Reusable content components and troubleshooting guides
