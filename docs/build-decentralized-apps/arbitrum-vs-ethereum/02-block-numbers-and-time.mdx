@@ -9,6 +9,8 @@ content_type: concept
 displayed_sidebar: buildSoliditySidebar
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 :::info block number vs `block.number`
 
 Throughout this and other pages, we note that the block number of a chain does not match the value obtained from `block.number`. When using `block.number` in a smart contract, the value obtained will be the block of the first non-Arbitrum ancestor chain. That is:
@@ -22,7 +24,7 @@ As with Ethereum, Arbitrum clients submit transactions, and the system executes 
 
 Once in the chain's core inbox contract, transaction processing occurs in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
-Additionally, since the calldata of Arbitrum transactions (or the DAC certificate on <a data-quicklook-from= "arbitrum-anytrust-chain">AnyTrust</a>chains) is posted to Ethereum, the gas paid when executing them includes a component for the parent chain to cover the costs of the batch poster.
+Additionally, since the calldata/blobs of Arbitrum transactions (or the DAC certificate on <a data-quicklook-from= "arbitrum-anytrust-chain">AnyTrust</a>chains) is posted to Ethereum, the gas paid when executing them includes a component for the parent chain to cover the costs of the batch poster.
 
 This page explains the implications of this mechanism for the block gas limit, block numbers, and the time assumptions associated with transactions submitted to Arbitrum.
 
@@ -42,7 +44,7 @@ A single Ethereum block can include multiple Arbitrum blocks; however, an Arbitr
 
 ### Ethereum (or parent chain) block numbers within Arbitrum
 
-Accessing block numbers within an Arbitrum smart contract (i.e., `block.number` in Solidity) will return a value _close to_ (but not necessarily exactly) the block number of the first non-Arbitrum ancestor chain at which the sequencer received the transaction.
+Accessing block numbers within an Arbitrum smart contract (i.e., `block.number` in Solidity) will return a value _close to_ (but not necessarily exactly) the block number of the first non-Arbitrum ancestor chain where the sequencer received the transaction.
 
 The "first non-Arbitrum ancestor chain" is:
 
@@ -73,7 +75,6 @@ A client that queries an Arbitrum node's RPC interface (e.g., transaction receip
 ```typescript
 const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 /** 
-    txnReceipt.blockNumber => Arbitrum block number
     txnReceipt.l1BlockNumber => Approximate block number of the first non-Arbitrum ancestor chain
 */
 ```
@@ -81,7 +82,7 @@ const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 The Arbitrum block number can also be retrieved within an Arbitrum contract via [ArbSys](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile:
 
 ```solidity
- ArbSys(100).arbBlockNumber() // returns Arbitrum block number
+ArbSys(100).arbBlockNumber() // returns Arbitrum block number
 ```
 
 ### Example
@@ -94,7 +95,13 @@ The following example illustrates timings on a chain that settles to Ethereum (s
 | Chain's `block.number` \*             | 1000     | 1000        | 1000        | 1000        | 1004     | 1004        |
 | Chain's block number (from RPCs) \*\* | 370000   | 370005      | 370006      | 370008      | 370012   | 370015      |
 
-_\* **The chain's `block.number`:** updated to sync with Ethereum's `block.number` approximately every minute. Thus, over time, it will, like Ethereum's `block.number`, average to ~12 seconds per block._
+<VanillaAdmonition type="info">
+
+    txnReceipt.blockNumber => Arbitrum block number
+
+\_\* **The chain's `block.number`:** updated to sync with Ethereum's `block.number` every 13 to 15 seconds (occasionally longer).
+
+</VanillaAdmonition>
 
 _\*\* **Chain's block number from RPCs:** note that this can be updated multiple times per Ethereum block (this lets the sequencer give sub-Ethereum-block-time transaction receipts.)_
 
