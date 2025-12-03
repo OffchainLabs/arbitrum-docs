@@ -47,7 +47,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the precompiles interface (`/contracts/src/precompiles`) directory, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the precompiles interface (`/contracts-local/src/precompiles`) directory, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 function sayHi() external view returns(string memory);
@@ -103,13 +103,24 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, update [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go) to register the new precompile under the `Precompiles()` method:
+Next, navigate to (arbitrum_signer.go)[https://github.com/OffchainLabs/go-ethereum/blob/v1.12.2/core/types/arbitrum_signer.go] and add the new precompile address.
 
 ```go
-insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
+var ArbosAddress = common.HexToAddress("0xa4b05")
+var ArbosStateAddress = common.HexToAddress("0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+var ArbSysAddress = common.HexToAddress("0x64")
+var ArbInfoAddress = common.HexToAddress("0x65")
+// Add your new precompile address here
+var ArbHiAddress = common.HexToAddress("0x11a") // 0x011a here is an example address
 ```
 
-Navigate to the precompiles interface directory, `/contracts/src/precompiles`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Then, update [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.8.0@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go) to register the new precompile under the `Precompiles()` method:
+
+```go
+insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress}))  // Set the ArbHiAddress here we just added to arbitrum_signer.go
+```
+
+Navigate to the precompiles interface directory, `/contracts-local/src/precompiles`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 pragma solidity >=0.4.21 <0.9.0;
@@ -180,6 +191,12 @@ type ArbSys struct {
 }
 ```
 
+:::note
+
+Every precompile event should have a gas cost function. The name of the gas cost function should be the same as the event name, but with the word "GasCost" appended to it.
+
+:::
+
 Then add the event to the `SayHi` method:
 
 ```go
@@ -189,7 +206,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Now navigate to the precompiles interface directory (`/contracts/src/precompiles`), open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
+Now navigate to the precompiles interface directory (`/contracts-local/src/precompiles`), open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
 
 ```solidity
 event Hi(address caller);
