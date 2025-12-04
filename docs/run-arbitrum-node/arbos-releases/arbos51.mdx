@@ -1,0 +1,152 @@
+---
+title: 'ArbOS 51 Dia'
+sidebar_label: 'ArbOS 51 Dia'
+sidebar_position: 2
+description: 'Learn about ArbOS 51 Dia release, including Fusaka upgrade support, new EIPs, bug fixes, and upgrade requirements for Arbitrum chain owners and node operators.'
+user_story: As an Arbitrum chain owner or node operator, I want to know what ArbOS 51 implements.
+author: zk-Lumi
+sme: zk-Lumi
+content_type: release note
+---
+
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
+
+<VanillaAdmonition type="note">
+
+<a data-quicklook-from="arbos">ArbOS</a> 51 Dia is still pre-release. This document may change.
+
+</VanillaAdmonition>
+
+This page is intended for all Arbitrum node operators and Arbitrum chain owners chains. This page summarizes the changes brought by ArbOS 51 Dia, and what you should do to ensure a seamless upgrade.
+
+<VanillaAdmonition type="warning" title="Action Required">
+
+Before Ethereum <a data-quicklook-from="parent-chain">Parent chain</a> Sepolia and Mainnet upgrade to Fusaka: ensure that your Nitro node version is upgraded and consensus layer client is configured as per the [Fusaka upgrade notice](../../notices/fusaka-upgrade-notice.mdx).
+
+</VanillaAdmonition>
+The minimum Nitro version that supports ArbOS 51 "Dia" is [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3), which is available on Docker Hub with the image tag `Noffchainlabs/nitro-node:v3.9.3-8bc5554`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators if adopted. For Arbitrum One and Nova, the ArbOS 51 "Dia" upgrade will require a governance vote to activate.
+
+As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 51 Dia is an upgrade that builds upon [ArbOS 40 Callisto](./arbos40.mdx).
+
+### Requirements
+
+- Having read and understood the [ArbOS Software Releases Overview page](./01-overview.mdx).
+- Running [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher, which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.3-8bc5554`.
+  - Note that it's important to run Nitro v3.9.3 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
+- Running [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
+  - If your chain isn't ready to activate <a data-quicklook-from="bold">BoLD</a>, use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher can't be used without activating BoLD.
+  - If you want to enable [Native Token Mint/Burn capabilities](#native-token-mint-and-burn) for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
+- WASM module root: `0x8a7513bf7bb3e3db04b0d982d0e973bcf57bf8b88aef7c6d03dba3a81a56a499`
+- If the Arbitrum chain posts blobs to a Fusaka-enabled parent chain, ensure that the consensus layer client is configured correctly as per the [Fusaka upgrade notice](../../notices/fusaka-upgrade-notice.mdx).
+
+### High-level description of ArbOS 51 changes
+
+ArbOS 51 Dia is an upgrade to support the relevant EVM changes that are a part of Ethereum's [Fusaka upgrade](https://ethereum.org/en/roadmap/fusaka/). Ethereum's mainnet upgrade to Fusaka is tentatively scheduled for [December 3, 2025 at epoch `411392`](https://notes.ethereum.org/@bbusa/fusaka-bpo-timeline). As a result, the majority of the ArbOS-specific changes revolve around implementing the relevant [Fusaka EIPs](https://eips.ethereum.org/EIPS/eip-7607) on <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a>.
+
+Here's the list of all changes included in ArbOS 51 Dia:
+
+#### [EIP-7951: Precompile for secp256r1 curve support](https://eips.ethereum.org/EIPS/eip-7951)
+
+This EIP implements the same functionality and interface as [RIP-7212](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md), which was activated as part of [ArbOS 31 Bianca](https://forum.arbitrum.foundation/t/aip-arbos-31-bianca-activation-of-arbitrum-stylus-rip-7212-support-nova-fee-router-proposal/25904). The main difference here is to add a point-at-infinity check and to update the comparison step in the signature verification algorithm. Developers should expect the same behavior as the EIP being proposed on Ethereum after Fusaka is activated.
+
+#### [EIP-7825: Transaction gas limit cap](https://eips.ethereum.org/EIPS/eip-7825)
+
+This EIP introduces a gas cap for individual transactions. The goal is to ensure fairer access to block space and improve network stability. For Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> we're proposing a 32 million gas limit (<a data-quicklook-from="child-chain">Child chain</a> execution gas, not including parent chain gas) per transaction, which is the same as the current block gas limit. This 32 million gas limit diverges from the EIP's proposed limit of 16 million gas per transaction for Ethereum parent chain. Orbit chains can customize this value according to their chains' needs.
+
+#### [EIP-7642: eth/69 - history expiry and simpler receipts](https://eips.ethereum.org/EIPS/eip-7642)
+
+This networking upgrade removes deprecated fields used prior to Ethereum's Proof of Stake (PoS) transition. We're including this EIP as part of <a data-quicklook-from="geth">Geth</a> upstream. This is a networking change that impacts mainly parent chain nodes. As Arbitrum nodes don't have a P2P layer, we don't expect this to have any impact on Arbitrum node operators.
+
+#### [EIP-7939: Count leading zeros (CLZ) opcode](https://eips.ethereum.org/EIPS/eip-7939)
+
+This EIP adds a new CLZ (Count Leading Zeros) opcode to efficiently count the number of zero bits at the start of a 256-bit number. This is a fundamental mathematical operation used in many algorithms, especially for mathematical computations, data compression, and cryptographic operations. Currently, implementing this operation in Solidity requires complex and expensive code - this opcode makes it much cheaper and faster.
+
+#### [EIP-7823: Set upper bounds for ModExp](https://eips.ethereum.org/EIPS/eip-7823)
+
+This EIP introduces an 8192-bit (1024 byte) limit on each input to the ModExp cryptographic precompile. ModExp has been a source of consensus bugs due to unbounded inputs. By setting practical limits that cover real-world use cases (like RSA verification), this reduces the testing surface area and paves the way for future replacement with more efficient EVM code.
+
+#### [EIP-7883: ModExp gas cost increase](https://eips.ethereum.org/EIPS/eip-7883)
+
+This EIP increases the gas cost of the ModExp cryptographic precompile to address underpriced operations. It raises the minimum cost from 200 to 500 gas and doubles the costs for large inputs over 32 bytes.
+
+#### [EIP-7910: eth_config JSON-RPC method](https://eips.ethereum.org/EIPS/eip-7910)
+
+This EIP provides a new RPC method that allows the Arbitrum Nitro node to respond with key configuration variables, offering node operators the ability to gain greater confidence that their Nitro nodes are correctly configured and prepared for upcoming forks. In future Nitro releases, we expect to include additional fields specific to Arbitrum chains. This update is at the RPC level and may be enabled later than the ArbOS 51 Dia upgrade.
+
+#### [EIP-2537: Precompile for BLS12-381 curve operations](https://eips.ethereum.org/EIPS/eip-2537)
+
+As [disclosed previously](https://forum.arbitrum.foundation/t/disclosure-of-support-for-eip-2537-on-arbitrum-one-and-nova/29720), the precompiled contracts for performing various operations over the BLS12-381 elliptic curve, including <a data-quicklook-from="bls-signature">BLS Signature</a> verification, were added but not properly enabled in [ArbOS 40 Callisto](./arbos40.mdx) as originally expected. ArbOS 51 Dia will now enable `EIP-2537`.
+
+#### ArbOS block limit change: Effective block gas limit
+
+Since ArbOS 51 introduces a `MaxTxGasLimit`, the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) will be relaxed in ArbOS 51 to allow the final transaction in a block to use up to the `MaxTxGasLimit` even if it would cause the block to exceed `MaxBlockGasLimit`. This means that the "Effective Block Gas Limit" is really `MaxBlockGasLimit + MaxTxGasLimit`. In previous versions of ArbOS, the <a data-quicklook-from="sequencer">Sequencer</a> would skip transactions if the transaction request's `GasLimit` minus the parent chain data posting gas exceeded the gas remaining in the block.
+
+The new algorithm is more efficient because the sequencer doesn't need to keep searching through the queue of transactions to find one that fits in the remaining block gas, and can continue to add transactions until the unused block gas is 0.
+
+This change doesn't affect the `GasTarget`, and therefore doesn't affect how much overall gas per second the chain will use - only how transactions using that gas could be divided between different blocks.
+
+#### A few bug fixes
+
+- ArbOS didn't get updated for parent chain calldata price increase
+  - This change standardizes the calculation of gas units for compressed <a data-quicklook-from="batch">Batch</a> calldata across the codebase by replacing hard-coded values with a method call (tokenGasUnits).
+- `EIP-7702` precompile delegation behavior divergence
+  - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 51 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
+- ARM and x86 divergence
+  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
+  - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
+
+#### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
+
+As part of our strategy for scaling Arbitrum technology, the ArbOS 51 release includes a slight change to improve the pricing algorithm for Arbitrum One and Nova. This improvement is aimed at reducing the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the changes are to:
+
+- Replace the current single gas target and single adjustment window, with a new model that employs multiple (higher) gas targets, measured over multiple adjustment windows.
+- Increase the default minimum L2 base fee from 0.01 gwei per gas to 0.02 gwei per gas.
+
+To read more about this change, see the [AIP for raising the gas target & improvements to the pricing algorithm](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182).
+
+#### A constraint-based pricing change: STF instrumentation to track multi-gas
+
+We've instrumented Arbitrum's State Transition Function (STF) to track gas usage across multiple resource types including computation, storage access, storage growth, and history growth, rather than only a single total based on opcodes. This work lays the foundation for dynamic, constraint-based pricing where gas fees can adjust based on the most constrained resource at the network level. The goal is to create more stable prices, improve responsiveness to spikes, and allow the network to safely increase throughput without overloading node hardware. In this release, none of the constraints are enabled, so there won't be any impact on current gas prices. This update simply adds the ability to measure and record per-resource usage, with actual pricing changes coming in a later version once constraints are configured, benchmarked and tested.
+
+To read more about this feature, see the [dynamic pricing explainer](https://blog.arbitrum.io/dynamic-pricing-explainer/).
+
+#### Native token mint and burn
+
+Native token mint and burn is a feature that allows Arbitrum chains to use interoperability-enabled token standards (e.g., LayerZero OFTs, xERC20s, native USDC) as native gas tokens on their chains. Currently, Arbitrum chains are designed to "lock and mint" native gas tokens on the chain's canonical <a data-quicklook-from="bridge">Bridge</a>. However, doing so means that these "locked and minted" native gas tokens can't interact with third-party cross-chain adapter contracts. This new feature lets an Arbitrum chain delegate minting and burning of its native gas token to a trusted bridge provider (e.g., LayerZero OFT).
+
+Native token mint and burn is included in ArbOS 51 Dia for the benefit of Arbitrum Orbit chains (reducing the need for forks) and to streamline development and testing into a single codebase. There are no plans to enable this feature on Arbitrum One or Arbitrum Nova, consequently this feature will be explicitly left disabled for Arbitrum One and Arbitrum Nova.
+
+To read more about this feature, see the [Native Token Mint/Burn enablement guide](https://arbitrum.notion.site/Enable-Native-Mint-Burn-for-your-chain-s-gas-token-22601a3f59f880be9b99d3d55f982a17).
+
+<VanillaAdmonition type="warning">
+
+If you want to enable Native Token Mint/Burn capabilities for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
+
+</VanillaAdmonition>
+
+### Fusaka EIPs that aren't proposed to be in ArbOS 51 Dia
+
+Support and implementation for the following EIPs aren't planned to be part of ArbOS 51 Dia:
+
+- [EIP-7594](https://eips.ethereum.org/EIPS/eip-7594), [EIP-7918](https://eips.ethereum.org/EIPS/eip-7918), and [EIP-7892](https://eips.ethereum.org/EIPS/eip-7892), since Arbitrum chains don't have blob data markets (though they do support posting blob data to a non-Arbitrum parent chain)
+- [EIP-7917](https://eips.ethereum.org/EIPS/eip-7917), since Arbitrum chains don't have a beacon chain and therefore don't have a peer-to-peer layer like Ethereum does
+- [EIP-7934](https://eips.ethereum.org/EIPS/eip-7934), this EIP is to help propagating blocks between nodes. Arbitrum doesn't do that - it sends messages (which are limited) and each node builds every block by itself
+- [EIP-7907](https://eips.ethereum.org/EIPS/eip-7907), this EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by <a data-quicklook-from="client">Client</a> teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We're currently exploring alternative ways to increase the Smart Contract size limit that don't interfere with the ability for Arbitrum chains to support `EIP-7907` in the future. See this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this.
+- [EIP-7935](https://eips.ethereum.org/EIPS/eip-7935), since Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned in [Scaling Arbitrum everywhere](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).
+
+### Special note about ArbOS 51 Dia for chains that haven't yet upgraded to use Arbitrum BoLD
+
+While ArbOS 51 Dia will be compatible with both `nitro-contracts 3.1.X` and `nitro-contracts 2.1.3`, only chains that have Arbitrum BoLD enabled can use `nitro-contracts 3.x`. This requirement means that if your chain hasn't yet upgraded to use BoLD, only use `nitro-contracts 2.1.3` for your ArbOS 51 Dia upgrade.
+
+### Reference links for ArbOS 51 Dia
+
+- [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx)
+- [README for how to upgrade your rollup contracts to support ArbOS 51 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
+- [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3)
+- [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1)
+- [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) (only relevant for Arbitrum chains that don't have BoLD enabled yet)
+- [AIP: ArbOS Version 50 Dia Forum Post](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-version-50-dia/)
+- [Temperature check vote on Snapshot for ArbOS 50 Dia](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x33754da4006d0ef38666ec5d5e85fd0966a891a594ab9dc21f23beedea2d330b)
+- [AIP: ArbOS Version 51 Raising the gas target & improvements to pricing algorithm Forum Post](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-implement-improvements-to-the-pricing-algorithm/30182)
+- [Temperature check vote on Snapshot for ArbOS 51 Raising the gas target & improvements to pricing algorithm](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x4a96a91d162975de0d402b83ca8b8a24e808ca357150120fc0d44ae0bf1cc4a5)
+- Coming Soon - ArbOS 50 & ArbOS 51 Audit Report, from Trail of Bits

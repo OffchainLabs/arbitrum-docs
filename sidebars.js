@@ -1584,12 +1584,11 @@ const sidebars = {
           type: 'category',
           label: 'Using Stylus CLI',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'stylus/using-cli',
+          },
           items: [
-            {
-              type: 'doc',
-              id: 'stylus/using-cli',
-              label: 'Overview',
-            },
             {
               type: 'doc',
               id: 'stylus/how-tos/check-and-deploy',
