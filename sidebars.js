@@ -1453,7 +1453,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'stylus/reference/project-structure',
-              label: 'Structure of a Contract',
+              label: 'Structure of a project',
             },
             {
               type: 'category',
@@ -1491,6 +1491,8 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/contracts',
               label: 'Contracts',
+            },
+            {
               type: 'doc',
               id: 'stylus/how-tos/testing-contracts',
               label: 'Writing Tests',
@@ -1580,9 +1582,14 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Using the CLI',
+          label: 'Using Stylus CLI',
           collapsed: true,
           items: [
+            {
+              type: 'doc',
+              id: 'stylus/using-cli',
+              label: 'Overview',
+            },
             {
               type: 'doc',
               id: 'stylus/how-tos/check-and-deploy',
