@@ -1456,6 +1456,11 @@ const sidebars = {
               label: 'Structure of a project',
             },
             {
+              type: 'doc',
+              id: 'stylus/reference/contracts',
+              label: 'Structure of a contracts',
+            },
+            {
               type: 'category',
               label: 'Data types',
               collapsed: true,
@@ -1486,11 +1491,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/global-variables-and-functions',
               label: 'Global variables and functions',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/contracts',
-              label: 'Contracts',
             },
             {
               type: 'doc',
