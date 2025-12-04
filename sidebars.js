@@ -1623,7 +1623,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'stylus/troubleshooting-building-stylus',
-          label: 'Troubleshooting',
+          label: 'FAQ',
         },
       ],
     },
