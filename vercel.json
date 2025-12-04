@@ -1934,11 +1934,6 @@
     { "source": "/(stylus/?)", "destination": "/stylus/gentle-introduction", "permanent": false },
     {
       "source": "/(stylus/concepts/stylus-cache-manager/?)",
-      "destination": "/stylus/gentle-introduction",
-      "permanent": false
-    },
-    {
-      "source": "/(stylus/concepts/stylus-cache-manager/?)",
       "destination": "/stylus/how-tos/caching-contracts",
       "permanent": false
     },
@@ -1969,12 +1964,12 @@
     },
     {
       "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
-      "destination": "/stylus/overview",
+      "destination": "/run-arbitrum-node/run-nitro-dev-node",
       "permanent": false
     },
     {
       "source": "/(stylus/how-tos/using-stylus-cli/?)",
-      "destination": "/stylus/using-cli",
+      "destination": "/stylus/rust-cli/overview",
       "permanent": false
     },
     {
