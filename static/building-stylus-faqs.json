@@ -46,7 +46,32 @@
   },
   {
     "question": "How can I generate the ABI of my Stylus contract?",
-    "answer": "The [cargo-stylus tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus/tree/main#exporting-solidity-abis) has a command that allows you to export the ABI of your Stylus contract: `cargo stylus export-abi`.\n\nIf you're using the Stylus Rust SDK, you'll need to enable the `export-abi` feature in your `Cargo.toml` file like so:\n\n```rust\n[features]\nexport-abi = [\"stylus-sdk/export-abi\"]\n```\nYou'll also need to have a `main.rs` file that selects that feature.\n\nThis is an example of a `main.rs` file that allows you to export the ABI of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) example project:\n\n```rust\n#![cfg_attr(not(feature = \"export-abi\"), no_main)]\n\n#[cfg(feature = \"export-abi\")]\nfn main() {\n    stylus_hello_world::main();\n}\n```\n\n\n",
+    "answer": "The \n\n has a command that allows you to export the ABI of your Stylus contract: `cargo stylus export-abi`.\n\nIf you're using the Stylus Rust SDK, you'll need to enable the `export-abi` feature in your `Cargo.toml` file like so:\n\n```rust\n[features]\nexport-abi = [\"stylus-sdk/export-abi\"]\n```\nYou'll also need to have a `main.rs` file that selects that feature.\n\nThis is an example of a `main.rs` file that allows you to export the ABI of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) example project:\n\n```rust\n#![cfg_attr(not(feature = \"export-abi\"), no_main)]\n\n#[cfg(feature = \"export-abi\")]\nfn main() {\n    stylus_hello_world::main();\n}\n```\n\n\n\n\n",
     "key": "how-can-i-generate-the-abi-of-my-stylus-contract"
+  },
+  {
+    "question": "How can I find out if the smart contract bytecode is from a Stylus contract or Solidity contract?",
+    "answer": "You can check the first three bytes of the code at the contract address. If they read `0xEFF000`, it's a Stylus program. Otherwise, it will be from a Solidity contract.\n\n",
+    "key": "how-can-i-find-out-if-the-smart-contract-bytecode-is-from-a-stylus-contract-or-solidity-contract"
+  },
+  {
+    "question": "I'm trying to work with cargo stylus on Windows and got error: failed to resolve: could not find unix in os",
+    "answer": "Cargo Stylus is just compatible with Unix operating systems and not Windows. You should install `WSL` (Windows Subsystem for Linux) before using that and then use `WSL terminal` to install and use cargo stylus.\n\n\n\n",
+    "key": "im-trying-to-work-with-cargo-stylus-on-windows-and-got-error-failed-to-resolve-could-not-find-unix-in-os"
+  },
+  {
+    "question": "How can I return a struct from a function?",
+    "answer": "Currently, the SDK doesn't support external structs directly, but support is in progress. For now, you can use tuples as output instead of structs.\n\nKeep in mind that structs are mapped to tuples by the Solidity ABI. You can read more about this mapping here: [Solidity ABI Specification](https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#mapping-solidity-to-abi-types).\n\nSince the current SDK macro doesn't automatically handle struct-to-tuple conversions, you'll need to manually convert your struct into a tuple in the return type.\n\n",
+    "key": "how-can-i-return-a-struct-from-a-function"
+  },
+  {
+    "question": "How can I get the WASM opcodes of the compiled Stylus contracts?",
+    "answer": "To view the WASM opcodes, you can convert the WebAssembly binary (WASM) to WebAssembly Text (WAT). This conversion is possible using the WebAssembly Binary Toolkit (wabt). An easy way to do this is to use the online tool [Wasm-to-Wat converter](https://webassembly.github.io/wabt/demo/wasm2wat/), which is part of wabt.\n\nFor more information or if you'd like to use the toolkit locally, you can find wabt on [GitHub](https://github.com/WebAssembly/wabt).\n\n",
+    "key": "how-can-i-get-the-wasm-opcodes-of-the-compiled-stylus-contracts"
+  },
+  {
+    "question": "What is the difference between .set and .setter?",
+    "answer": "---\n\n- **`.set`****:** This method is used directly to set a value in storage. It's a straightforward way to assign a value if you only need to perform a one-time set operation.\n- **`.setter`****:** This method provides a handle to a storage slot. It allows you to both `set` and `get` the value of the storage slot, making it more versatile if you need to access the current value and also update it.\nIf you plan to both retrieve and modify a value frequently, it's more efficient to use `.setter`, assign it to a variable, and then use the `.get` and `.set` methods on that variable. However, if you only need to set a value, you can use `.set` directly.\n\n\n\n",
+    "key": "what-is-the-difference-between-set-and-setter"
   }
 ]
