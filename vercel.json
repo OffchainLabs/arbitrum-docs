@@ -1969,7 +1969,7 @@
     },
     {
       "source": "/(stylus/how-tos/using-stylus-cli/?)",
-      "destination": "/stylus/rust-cli/overview",
+      "destination": "/stylus/cli-tools-overview",
       "permanent": false
     },
     {
@@ -1984,7 +1984,7 @@
     },
     {
       "source": "/(stylus/reference/testnet-information/?)",
-      "destination": "/stylus/reference/node-providers/",
+      "destination": "/stylus/overview/",
       "permanent": false
     },
     {
@@ -2009,11 +2009,6 @@
     },
     {
       "source": "/(stylus/tools/using-stylus-cli/?)",
-      "destination": "/stylus/using-cli",
-      "permanent": false
-    },
-    {
-      "source": "/(stylus/using-stylus-cli/?)",
       "destination": "/stylus/using-cli",
       "permanent": false
     },
