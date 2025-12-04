@@ -15,26 +15,21 @@ Required action will be required from: RPC nodes, Arbitrum One / Nova node opera
 
 #### If you run a Nitro node and use an external L1 Ethereum beacon chain RPC URL
 
-- Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets **before the Ethereum Fusaka hard fork**. For chains that post data to Ethereum Sepolia, the Ethereum Sepolia Fusaka hard fork is expected on October 14th, 2025.
-- For chains that post data to Ethereum Mainnet, the Ethereum Mainnet Fusaka hard fork is expected around the first week of December 2025.
+- Confirm that your external L1 beacon chain RPC provider has configured their L1 beacon chain node to subscribe to all subnets.
 
 #### If your external L1 beacon chain RPC doesn't subscribe to all subnets:
 
-- Switch to a provider that does before the dates above.
+- Switch to a provider that does.
 
 #### If you run a Nitro node and operate your own L1 Ethereum beacon chain node:
 
-- Add the new flag (refer to [specific client flags](#specific-client-flags)) to your beacon node's configuration before the Ethereum Fusaka hard fork. For chains that post data to Ethereum Sepolia, the Ethereum Sepolia Fusaka hard fork is expected on October 14th, 2025.
-- For chains that post data to Ethereum Mainnet, the Ethereum Mainnet Fusaka hard fork is expected around the first week of December 2025.
-- If you haven't added the new flag before the above deadlines, temporarily switch to an external L1 beacon chain RPC URL while your local Ethereum beacon chain node syncs up.
+- Add the new flag (refer to [specific client flags](#specific-client-flags)) to your beacon node's configuration.
 
 :::info Note
 
 Ensure that the external L1 beacon chain RPC provider you're using subscribes to all subnets.
 
 :::
-
-- Once your beacon chain node is fully synchronized, you can switch back to your own L1 beacon chain RPC URL (from an external L1 beacon chain RPC URL).
 
 ## L1 beacon chain node flags
 
@@ -73,6 +68,5 @@ import ClientFlagsTable from '../partials/_client-flags.mdx';
 To maintain uninterrupted node operation and blob availability:
 
 - Add the appropriate flag for your consensus layer client.
-- Verify your Sepolia beacon endpoint’s configuration before October 14th.
-- Verify your Mainnet beacon endpoint’s configuration before the first week of December.
-- If you can't update your configuration in time, we recommend using temporary hosted beacon endpoints.
+- Verify your Sepolia beacon endpoint’s configuration.
+- Verify your Mainnet beacon endpoint’s configuration.
