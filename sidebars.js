@@ -1444,12 +1444,12 @@ const sidebars = {
           type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'stylus/reference/overview',
+          },
+
           items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/overview',
-              label: 'Overview',
-            },
             {
               type: 'doc',
               id: 'stylus/reference/project-structure',
