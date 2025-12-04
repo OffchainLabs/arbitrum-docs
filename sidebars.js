@@ -106,10 +106,6 @@ const sidebars = {
           type: 'category',
           label: 'Oracles',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'for-devs/oracles/oracles-content-map',
-          },
           items: [
             {
               type: 'doc',
@@ -669,10 +665,6 @@ const sidebars = {
           type: 'category',
           label: 'Sequencer',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'node-running/sequencer-content-map',
-          },
           items: [
             {
               type: 'doc',
