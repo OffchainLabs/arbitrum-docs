@@ -11,7 +11,7 @@ displayed_sidebar: buildStylusSidebar
 
 To be deployed onchain, the size of your **uncompressed WebAssembly (WASM) file** must not exceed 128Kb, while the **compressed binary** must not exceed 24KB. Stylus conforms with the same contract size limit as the EVM to remain fully interoperable with all smart contracts on Arbitrum chains.
 
-[cargo-stylus](https://github.com/OffchainLabs/cargo-stylus), the Stylus CLI tool, automatically compresses your WASM programs, but there are additional steps that you can take to further reduce the size of your binaries.
+[cargo-stylus](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus), the Stylus CLI tool, automatically compresses your WASM programs, but there are additional steps that you can take to further reduce the size of your binaries.
 
 Your options fall into two categories: Rust compiler flags, and third-party optimization tools.
 
