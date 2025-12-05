@@ -862,6 +862,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'STF',
+              id: 'how-arbitrum-works/deep-dives/stf-gentle-intro',
+            },
+            {
+              type: 'doc',
               label: 'STF inputs',
               id: 'how-arbitrum-works/deep-dives/stf-inputs',
             },
