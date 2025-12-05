@@ -173,6 +173,149 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Features',
+          collapsed: true,
+          items: [
+            {
+              type: 'category',
+              label: 'Common',
+              collapsed: true,
+              items: [
+                {
+                  type: 'category',
+                  label: 'Data availability',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-rollup',
+                      label: `Rollup`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-anytrust',
+                      label: `AnyTrust`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-alt-da',
+                      label: `Alt-DA`,
+                    },
+                  ],
+                },
+                {
+                  type: 'category',
+                  label: 'Gas and fees',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token',
+                      label: `Custom gas token`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-fee-rebates',
+                      label: `Fee rebates`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-native-eth',
+                      label: `Native ETH`,
+                    },
+                  ],
+                },
+                {
+                  type: 'category',
+                  label: 'Validation and security',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/validation-and-security/choose-bold',
+                      label: `BoLD`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/validation-and-security/choose-challenge-period',
+                      label: `Custom challenge period`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/validation-and-security/choose-permissioned-validators',
+                      label: `Permissioned validators`,
+                    },
+                  ],
+                },
+                {
+                  type: 'category',
+                  label: 'MEV',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/mev/choose-timeboost',
+                      label: `Timeboost`,
+                    },
+                  ],
+                },
+                {
+                  type: 'category',
+                  label: 'UX',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/ux/choose-fast-withdrawals',
+                      label: `Fast withdrawals`,
+                    },
+                  ],
+                },
+                {
+                  type: 'category',
+                  label: 'AEP fees',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/configure-aep/configure-aep-fees',
+                      label: `AEP fees`,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Advanced',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/features/advanced/choose-arbos-version',
+                  label: `ArbOS version`,
+                },
+                {
+                  type: 'doc',
+                  label: 'Precompiles',
+                  id: 'launch-arbitrum-chain/features/advanced/choose-chain-precompiles',
+                },
+                {
+                  type: 'doc',
+                  label: 'Chain behavior',
+                  id: 'launch-arbitrum-chain/features/advanced/choose-custom-behavior',
+                },
+                {
+                  type: 'doc',
+                  label: 'Delayed inbox finality',
+                  id: 'launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Configure your chain',
           collapsed: true,
           items: [
@@ -844,6 +987,11 @@ const sidebars = {
               type: 'doc',
               label: 'Sequencer',
               id: 'how-arbitrum-works/deep-dives/sequencer',
+            },
+            {
+              type: 'doc',
+              label: 'STF',
+              id: 'how-arbitrum-works/deep-dives/stf-gentle-intro',
             },
             {
               type: 'doc',
