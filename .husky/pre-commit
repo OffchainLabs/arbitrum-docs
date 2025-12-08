@@ -164,6 +164,13 @@ main() {
 
     # Re-stage formatted files
     echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" | xargs git add || true
+
+    # Validate formatting with format:check
+    log_info "🔍 Validating formatting..."
+    if ! time_command yarn format:check; then
+      exit_with_error "Formatting validation failed. Some files are not properly formatted. Run 'yarn format' to fix."
+    fi
+
     log_success "Code formatting completed and files re-staged"
   else
     log_info "⏭️  Skipping code formatting (no formattable files staged)"
