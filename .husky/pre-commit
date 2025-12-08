@@ -167,10 +167,14 @@ main() {
     # Re-stage formatted files
     echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" | xargs git add || true
 
-    # Validate formatting with format:check
-    log_info "🔍 Validating formatting..."
-    if ! time_command yarn format:check; then
-      exit_with_error "Formatting validation failed. Some files are not properly formatted. Run 'yarn format' to fix."
+    # Validate formatting of staged files only
+    log_info "🔍 Validating staged files formatting..."
+    local formatted_files
+    formatted_files=$(echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" || true)
+    if [ -n "$formatted_files" ]; then
+      if ! echo "$formatted_files" | xargs yarn prettier --check --config "./.prettierrc.js"; then
+        exit_with_error "Formatting validation failed. Some staged files are not properly formatted. This should not happen after auto-formatting."
+      fi
     fi
 
     log_success "Code formatting completed and files re-staged"
