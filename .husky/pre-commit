@@ -86,9 +86,11 @@ check_command() {
 time_command() {
   local start_time=$(date +%s)
   "$@"
+  local exit_code=$?
   local end_time=$(date +%s)
   local duration=$((end_time - start_time))
   log_info "⏱️  Completed in ${duration}s"
+  return $exit_code
 }
 
 # Get list of staged files for selective processing
