@@ -7,14 +7,14 @@ sme: mahsamoosavi
 target_audience: 'Developers deploying smart contracts using Stylus'
 content_type: how-to
 sidebar_position: 2
-displayed_sidebar: buildAppsSidebar
+displayed_sidebar: buildStylusSidebar
 ---
 
 Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by allowing developers to replay Stylus transactions. This tool leverages GDB to provide an interactive debugging experience, enabling developers to set breakpoints, inspect state changes, and trace the execution flow step-by-step. This capability is crucial for identifying and resolving issues, ensuring that smart contracts function correctly and efficiently.
 
 ### Overview
 
-Cargo Stylus is a tool designed to simplify the development and debugging process for smart contracts written in Rust for the Stylus execution environment. One of its powerful features is the `cargo stylus` subcommand, which provides essential functionalities for developers:
+Cargo Stylus simplifies the development and debugging of Rust smart contracts for the Stylus execution environment. One of its powerful features is the `cargo stylus` subcommand, which provides essential functionalities for developers:
 
 1. **Trace transactions**: Perform trace calls against Stylus transactions using Ethereum nodes' `debug_traceTransaction` RPC. This feature enables developers to analyze the execution flow and state changes of their transactions in a detailed manner.
 2. **Debugging with GDB or LLDB**: Replay and debug the execution of a Stylus transaction using a debugger. This allows developers to set breakpoints, inspect variables, and step through the transaction execution line by line, providing an in-depth understanding of the transaction's behavior.

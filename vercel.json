@@ -246,6 +246,11 @@
       "permanent": false
     },
     {
+      "source": "/(docs/stylus/recommended-libraries/?)",
+      "destination": "/(docs/stylus/advanced/recommended-libraries/?)",
+      "permanent": false
+    },
+    {
       "source": "/(faqs/anytrust-vs-rollup/?)",
       "destination": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
       "permanent": false
