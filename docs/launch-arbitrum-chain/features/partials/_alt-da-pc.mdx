@@ -1,0 +1,14 @@
+## Pros
+
+- **Significant cost savings**: Using an Alt-DA can reduce DA fees by 75-95% compared to posting data directly to Ethereum, making it an ideal solution for high-volume or cost-sensitive applications, such as gaming, social platforms, or AI agents. For instance, over 95% of rollup costs often stem from Ethereum DA, and alternatives like Celestia or NEAR DA offer transactions up to 100x cheaper.
+- **Improved throughput and scalability**: By separating DA from Ethereum's blockspace constraints, Alt-DA enables higher transaction volumes and better handles data-intensive use cases.
+- **Flexibility and modularity**: Using an Alt-DA provider allows portability across ecosystems and custom trust models (Rollup, DAC, Alt-DA).
+- **Reduced trust assumptions in some cases**: Compared to a DAC in AnyTrust mode, a decentralized Alt-DA like Avail can lower reliance on a small committee by using broader validator sets (e.g., up to 1,000 validators) and mathematical proofs for DA guarantees.
+- **Predictable performance**: Alt-DA often provides stable fees and fast finality, with fallbacks (e.g., Ethereum) to maintain uptime, benefitting consumer-facing apps.
+
+## Cons
+
+- **Trade-offs in security and trust**: Alt-DA may introduce mild trust assumptions or different security models (e.g., relying on the Alt-DA network's consensus mechanism), which are potentially less robust than Ethereum's onchain DA, which inherits Ethereum's anti-censorship and verifiability features. This trade-off makes it less suitable for high-total-value-locked (TVL) applications that require maximal decentralization.
+- **Operational complexity**: Implementing Alt-DA requires additional monitoring, alerting, data retention policies, and integration efforts (e.g., modifying batchers or bridgers), which increases overhead for development teams and demands operational maturity.
+- **Dependency risks**: The chain becomes reliant on the Alt-DA provider's reliability; if it faces congestion, failures, or compromises, it could impact data retrieval and overall chain availability, resulting in potential volatility in costs during periods of high demand.
+- **Limited transparency compared to onchain**: Offchain data storage (even with proofs) may reduce immediate verifiability for all users, as nodes must query external sources, which contrasts with Ethereum's direct on-chain access.
