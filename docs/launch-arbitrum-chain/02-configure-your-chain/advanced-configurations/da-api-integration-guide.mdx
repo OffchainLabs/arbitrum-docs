@@ -822,8 +822,10 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
 }
 ```
 
-**Example response (valid certificate)**:
+**Example responses**
 
+<Tabs>
+  <TabItem value="success" label="Valid certificate" default>
 ```json
 {
   "jsonrpc": "2.0",
@@ -832,10 +834,9 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
     "proof": "0x0101" // claimedValid=1, version=1
   }
 }
-```
-
-**Example response (invalid certificate - still success!)**:
-
+    ```
+  </TabItem>
+  <TabItem value="orange" label="invalid certificate - still success!">
 ```json
 {
   "jsonrpc": "2.0",
@@ -845,9 +846,8 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
   }
 }
 ```
-
-**Example response (network error - only now return Error)**:
-
+  </TabItem>
+  <TabItem value="banana" label="network error - only now return Error">
 ```json
 {
   "jsonrpc": "2.0",
@@ -858,6 +858,8 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
   }
 }
 ```
+  </TabItem>
+</Tabs>
 
 **`ReferenceDA` Proof format**:
 
