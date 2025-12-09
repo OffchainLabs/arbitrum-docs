@@ -440,11 +440,6 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
                 {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/da-api-integration-guide',
-                  label: `DA API integration guide`,
-                },
-                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
