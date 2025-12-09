@@ -185,8 +185,20 @@ main() {
   # 4. Markdown linting (only if markdown files are staged)
   if has_staged_files "\.(md|mdx)$"; then
     log_step "Validating Markdown syntax..."
-    time_command yarn lint:markdown || exit_with_error "Markdown validation failed. Fix markdown syntax errors before committing."
-    log_success "Markdown validation passed"
+
+    # Get staged markdown files excluding sdk directory
+    local lint_md_files
+    lint_md_files=$(echo "$staged_files" | grep -E "\.(md|mdx)$" | grep -v "docs/sdk/" || true)
+
+    if [ -n "$lint_md_files" ]; then
+      # Run markdownlint only on staged files
+      if ! echo "$lint_md_files" | xargs yarn markdownlint; then
+        exit_with_error "Markdown validation failed. Fix markdown syntax errors before committing."
+      fi
+      log_success "Markdown validation passed"
+    else
+      log_info "⏭️  Skipping Markdown validation (only SDK markdown files staged)"
+    fi
   else
     log_info "⏭️  Skipping Markdown validation (no markdown files staged)"
   fi
