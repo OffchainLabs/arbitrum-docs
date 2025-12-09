@@ -86,9 +86,11 @@ check_command() {
 time_command() {
   local start_time=$(date +%s)
   "$@"
+  local exit_code=$?
   local end_time=$(date +%s)
   local duration=$((end_time - start_time))
   log_info "⏱️  Completed in ${duration}s"
+  return $exit_code
 }
 
 # Get list of staged files for selective processing
@@ -164,6 +166,17 @@ main() {
 
     # Re-stage formatted files
     echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" | xargs git add || true
+
+    # Validate formatting of staged files only
+    log_info "🔍 Validating staged files formatting..."
+    local formatted_files
+    formatted_files=$(echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" || true)
+    if [ -n "$formatted_files" ]; then
+      if ! echo "$formatted_files" | xargs yarn prettier --check --config "./.prettierrc.js"; then
+        exit_with_error "Formatting validation failed. Some staged files are not properly formatted. This should not happen after auto-formatting."
+      fi
+    fi
+
     log_success "Code formatting completed and files re-staged"
   else
     log_info "⏭️  Skipping code formatting (no formattable files staged)"
@@ -172,8 +185,20 @@ main() {
   # 4. Markdown linting (only if markdown files are staged)
   if has_staged_files "\.(md|mdx)$"; then
     log_step "Validating Markdown syntax..."
-    time_command yarn lint:markdown || exit_with_error "Markdown validation failed. Fix markdown syntax errors before committing."
-    log_success "Markdown validation passed"
+
+    # Get staged markdown files excluding sdk directory
+    local lint_md_files
+    lint_md_files=$(echo "$staged_files" | grep -E "\.(md|mdx)$" | grep -v "docs/sdk/" || true)
+
+    if [ -n "$lint_md_files" ]; then
+      # Run markdownlint only on staged files
+      if ! echo "$lint_md_files" | xargs yarn markdownlint; then
+        exit_with_error "Markdown validation failed. Fix markdown syntax errors before committing."
+      fi
+      log_success "Markdown validation passed"
+    else
+      log_info "⏭️  Skipping Markdown validation (only SDK markdown files staged)"
+    fi
   else
     log_info "⏭️  Skipping Markdown validation (no markdown files staged)"
   fi
