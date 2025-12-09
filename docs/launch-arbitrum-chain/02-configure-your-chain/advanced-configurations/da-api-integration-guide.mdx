@@ -92,7 +92,7 @@ Your DA provider exposes JSON-RPC methods that Nitro nodes call to store and ret
 
 ### Development workflow
 
-1. **Design your certificate format** ([Section 6](#6-designing-your-certificate-format))
+1. [ ] **Design your certificate format** ([Section 6](#6-designing-your-certificate-format))
 2. **Implement reader RPC methods** to recover data from certificates ([Section 3](#3-implementing-reader-rpc-methods))
 3. **Implement writer RPC method** to generate certificates ([Section 4](#4-implementing-the-writer-rpc-method))
 4. **Implement validator RPC methods** to generate proofs ([Section 5](#5-implementing-validator-rpc-methods))
@@ -167,7 +167,7 @@ Recovers the full batch payload data from a certificate. Called during normal no
 
 1. **Extract the certificate** from `sequencerMsg`:
 
-   ```
+   ```shell
    sequencerMsg format: [SequencerHeader(40 bytes), DACertificateFlag(0x01), Certificate(...)]
    ```
 
@@ -493,7 +493,7 @@ See [Section 6](#6-designing-your-certificate-format) for detailed guidance on c
 
 The Batch Poster supports multiple DA writers in a sequential fallback chain. If your server wants to trigger fallback to the next writer (e.g., temporary unavailability, overload), return an error containing the string:
 
-```
+```shell
 "DA provider requests fallback to next writer"
 ```
 
@@ -668,7 +668,7 @@ If you're implementing the advanced approach with opening proofs, here are commo
 - Verification: onchain pairing check proves polynomial evaluates correctly at that position
 - Example: EIP-4844 uses `POINT_EVALUATION_PRECOMPILE` for this
 
-```
+```shell
 Proof format: [commitment (48 bytes), evaluation (32 bytes), proof (48 bytes)]
 ```
 
@@ -680,7 +680,7 @@ Proof format: [commitment (48 bytes), evaluation (32 bytes), proof (48 bytes)]
 - Verification: Hash authentication path to prove chunk inclusion
 - Common in Bitcoin, Ethereum state trees
 
-```
+```shell
 Proof format: [leaf_data, sibling_hash₁, sibling_hash₂, ..., sibling_hashₙ]
 ```
 
@@ -692,7 +692,7 @@ Proof format: [leaf_data, sibling_hash₁, sibling_hash₂, ..., sibling_hashₙ
 - Verification: Algebraic check proves correct opening
 - Used in some modern DA systems
 
-```
+```shell
 Proof format: [element_value, opening_proof, auxiliary_data]
 ```
 
@@ -860,7 +860,7 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
 
 **`ReferenceDA` Proof format**:
 
-```
+```shell
 [0] : `claimedValid` (`0x00` = invalid, `0x01` = valid)
 [1] : version (`0x01`)
 ```
@@ -875,7 +875,7 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
 
 **For `generateReadPreimageProof`**:
 
-```
+```shell
 Complete proof = [machineProof..., certSize(8), certificate, yourCustomProof]
                                                               ↑
                                               [version, size, preimageData]
@@ -883,7 +883,7 @@ Complete proof = [machineProof..., certSize(8), certificate, yourCustomProof]
 
 **For `generateCertificateValidityProof`**:
 
-```
+```shell
 Complete proof = [machineProof..., certSize(8), certificate, claimedValid(1), yourCustomProof]
                                                               ↑
                                                     [0 or 1, version, ...]
@@ -1084,13 +1084,13 @@ The `OneStepProverHostIo` contract passes proofs in this format:
 
 **For validateReadPreimage**:
 
-```
+```shell
 [certSize(8 bytes), certificate, yourCustomProofData]
 ```
 
 **For validateCertificate**:
 
-```
+```shell
 [certSize(8 bytes), certificate, claimedValid(1 byte), yourCustomProofData]
 ```
 
