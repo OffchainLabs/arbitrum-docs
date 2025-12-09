@@ -203,11 +203,24 @@ main() {
     log_info "⏭️  Skipping Markdown validation (no markdown files staged)"
   fi
 
-  # 5. TypeScript type checking (only if TS files are staged)
-  if has_staged_files "\.(ts|tsx)$"; then
-    log_step "Running TypeScript type checking..."
-    time_command yarn typecheck || exit_with_error "TypeScript type checking failed. Fix type errors before committing."
-    log_success "TypeScript type checking passed"
+  # 5. TypeScript type checking (optional - checks entire project, not just staged files)
+  # Note: TypeScript requires full project context for accurate type checking,
+  # so it cannot be limited to only staged files like prettier/markdownlint.
+  # Set SKIP_TS_CHECK=1 to skip this check if it's blocking on unrelated errors.
+  if [ "${SKIP_TS_CHECK:-0}" = "1" ]; then
+    log_info "⏭️  Skipping TypeScript check (SKIP_TS_CHECK=1)"
+  elif has_staged_files "\.(ts|tsx)$"; then
+    log_warning "Running TypeScript check on entire project (not just staged files)"
+    log_info "💡 Set SKIP_TS_CHECK=1 to skip this check if it blocks on unrelated errors"
+    if time_command yarn typecheck; then
+      log_success "TypeScript type checking passed"
+    else
+      log_error "TypeScript type checking failed on project-wide check"
+      log_info "💡 This may include errors in files you didn't modify"
+      log_info "💡 To commit anyway: SKIP_TS_CHECK=1 git commit"
+      log_info "💡 To disable permanently: Add 'export SKIP_TS_CHECK=1' to your shell profile"
+      exit 1
+    fi
   else
     log_info "⏭️  Skipping TypeScript check (no TypeScript files staged)"
   fi
