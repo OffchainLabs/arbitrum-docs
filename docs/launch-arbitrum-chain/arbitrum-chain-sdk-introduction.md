@@ -38,7 +38,7 @@ Additionally, Arbitrum chains can be configured to use `ETH` or any standard `ER
 
 ## 2. Deploy your chain
 
-After selecting a chain type, follow [this guide](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md) to deploy your chain using the Arbitrum chain (Orbit) SDK.
+After selecting a chain type, follow [this guide](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md) to deploy your chain using the Chain SDK.
 
 ## 3. Configure your Arbitrum chain's node
 
