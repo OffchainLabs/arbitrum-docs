@@ -103,7 +103,7 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Next, navigate to (arbitrum_signer.go)[https://github.com/OffchainLabs/go-ethereum/blob/v1.12.2/core/types/arbitrum_signer.go] and add the new precompile address.
+Next, navigate to [arbitrum_signer.go](https://github.com/OffchainLabs/go-ethereum/blob/v1.12.2/core/types/arbitrum_signer.go) and add the new precompile address.
 
 ```go
 var ArbosAddress = common.HexToAddress("0xa4b05")
