@@ -7,6 +7,8 @@ sidebar_position: 4
 content_type: how-to
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import CustomizeCautionBannerPartial from '../../partials/_arbitrum-chain-customize-caution-banner-partial.md';
 
 <CustomizeCautionBannerPartial />
@@ -225,32 +227,30 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
 
 **Detection mechanism**: Nitro detects CertificateValidationError by checking if the error message **contains the string** `"certificate validation failed"`. The error can include additional context after this string.
 
-**Example response (Success: returns data)**:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "Payload": "0x000123456789abcdef..."
-  }
-}
-```
-
-**Example response (Success with empty batch)**:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "Payload": "0x"
-  }
-}
-```
-
-**Example response (Invalid certificate - syncing continues)**:
-
+<Tabs>
+  <TabItem value="success" label="Success: returns data" default>
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+        "Payload": "0x000123456789abcdef..."
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="orange" label="Success with empty batch">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+        "Payload": "0x"
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="banana" label="Invalid certificate">
 ```json
 {
   "jsonrpc": "2.0",
@@ -261,9 +261,8 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
   }
 }
 ```
-
-**Example response (Storage error - Syncing stops)**:
-
+  </TabItem>
+  <TabItem value="pouet" label="Storage error: syncing stops">
 ```json
 {
   "jsonrpc": "2.0",
@@ -274,6 +273,8 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
   }
 }
 ```
+</TabItem>
+</Tabs>
 
 ### Method 3: `daprovider_collectPreimages`
 
