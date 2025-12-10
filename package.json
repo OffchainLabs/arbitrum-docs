@@ -7,7 +7,7 @@
     "install-sdk-dependencies": "cd ./submodules/arbitrum-sdk && yarn install",
     "generate-precompiles-ref-tables": "tsx scripts/precompile-reference-generator.ts",
     "update-variable-refs": "tsx scripts/update-variable-references.ts",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "start": "yarn clear && yarn sync-stylus-content && docusaurus start",
     "generate-sdk-docs": "npx docusaurus generate-typedoc",
     "sync-stylus-content": "node scripts/sync-stylus-content.js",
