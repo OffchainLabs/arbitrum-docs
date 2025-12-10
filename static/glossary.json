@@ -41,7 +41,7 @@
   },
   "arbitrum-chains": {
     "title": "Arbitrum Chains",
-    "text": "<p>Arbitrum chains (Orbit) refers to the ability for anyone to permissionlessly deploy <a href=\"/intro/glossary#layer-3-l3\">Layer 3 (L3)</a> chains on top of Arbitrum <a href=\"/intro/glossary#layer-2-l2\">Layer 2 (L2)</a> chains.</p>\n"
+    "text": "<p>Arbitrum chains refers to the ability for anyone to permissionlessly deploy <a href=\"/intro/glossary#layer-3-l3\">Layer 3 (L3)</a> chains on top of Arbitrum <a href=\"/intro/glossary#layer-2-l2\">Layer 2 (L2)</a> chains.</p>\n"
   },
   "arbitrum-classic": {
     "title": "Arbitrum Classic",
