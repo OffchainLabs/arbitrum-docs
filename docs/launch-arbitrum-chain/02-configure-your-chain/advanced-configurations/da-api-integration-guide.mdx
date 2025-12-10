@@ -78,6 +78,7 @@ Your DA provider exposes JSON-RPC methods that Nitro nodes call to store and ret
 
 **Writer methods** (for batch posting):
 
+- `daprovider_getMaxMessageSize` - Returns your provider's current maximum batch size
 - `daprovider_store` - Stores batch data and returns certificate
 - `daprovider_startChunkedStore`, `daprovider_sendChunk`, `daprovider_commitChunkedStore` - Optional streaming protocol for large batches (see [Appendix A](#appendix-a-streaming-protocol))
 
@@ -395,9 +396,41 @@ While `ReferenceDA` is written in Go, you can implement these methods in any lan
 - Store and retrieve data
 - Compute keccak256 hashes
 
-## 4. Implementing the writer RPC method
+## 4. Implementing the writer RPC methods
 
-Your JSON-RPC server implements a Writer method that the Batch Poster calls to store batch data and get a certificate.
+Your JSON-RPC server implements Writer methods that the Batch Poster calls to store batch data and get a certificate.
+
+### Method: `daprovider_getMaxMessageSize`
+
+Returns the maximum message size your DA provider will accept. The batch poster calls this before building each batch to determine the size limit.
+
+**Parameters**: None
+
+**Returns**:
+
+```json
+{
+  "maxSize": 1000000 // Maximum message size in bytes (integer)
+}
+```
+
+**Implementation requirements**:
+
+- MUST return a positive value (> 0)
+- Returning 0 or negative will cause an error in the batch poster
+- Value may change dynamically between calls (e.g., when your provider falls back to a backend with lower limits)
+
+**Example response**:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "maxSize": 1000000
+  }
+}
+```
 
 ### Method: `daprovider_store`
 
@@ -490,9 +523,38 @@ Your certificate should:
 
 See [Section 6](#6-designing-your-certificate-format) for detailed guidance on certificate design.
 
+### Dynamic batch resizing
+
+If a batch exceeds your current size limit, you can signal this by returning an error containing:
+
+```shell
+"message too large for current DA backend"
+```
+
+When the batch poster receives this error, it will:
+
+1. Call `daprovider_getMaxMessageSize` again (which may return a smaller value)
+2. Rebuild the batch with the new size constraints
+3. Retry the store with the same writer
+
+This is useful if your provider has internal fallback scenarios. For example, if your primary backend is temporarily constrained, you can signal a smaller size limit and the batch poster will automatically adapt without falling back to a different DA provider entirely.
+
+**Example resize response**:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32000,
+    "message": "message too large for current DA backend: max size is 500000 bytes"
+  }
+}
+```
+
 ### Fallback mechanism
 
-The Batch Poster supports multiple DA writers in a sequential fallback chain. If your server wants to trigger fallback to the next writer (e.g., temporary unavailability, overload), return an error containing the string:
+The Batch Poster supports multiple DA writers in a sequential fallback chain (External DA -> AnyTrust if enabled -> EthDA). If your server wants to trigger fallback to the next writer (e.g., temporary unavailability, overload), return an error containing the string:
 
 ```shell
 "DA provider requests fallback to next writer"
@@ -513,7 +575,7 @@ The Batch Poster supports multiple DA writers in a sequential fallback chain. If
 
 :::info Important
 
-This method is the **only** way to trigger automatic fallback. Any other error will **stop the batch posting entirely** without trying other writers. This design prevents expensive surprise costs from fixable infrastructure issues.
+The fallback error and the resize error are the **only** ways to trigger automatic recovery. Any other error will **stop the batch posting entirely** without trying other writers or resizing. This design prevents expensive surprise costs from fixable infrastructure issues.
 
 :::
 
@@ -1349,9 +1411,14 @@ Nitro nodes connect to DA providers via JSON-RPC. Configure your provider with t
 **Batch Poster Configuration**:
 
 ```shell
---node.batch-poster.max-altda-batch-size=1000000               # Max batch size (1MB default)
---node.batch-poster.disable-dap-fallback-store-data-onchain   # Disable L1 fallback
+--node.batch-poster.disable-dap-fallback-store-data-onchain   # Disable fallback to EthDA (calldata/blobs)
 ```
+
+:::note
+
+The maximum batch size is determined dynamically by querying your DA provider's `daprovider_getMaxMessageSize` method before each batch is built. There is no static configuration for maximum batch size.
+
+:::
 
 ### JWT authentication
 
@@ -1386,6 +1453,7 @@ Your DA provider server exposes JSON-RPC methods that Nitro nodes call. You can 
 
 **Writer Methods** (optional, for batch posting):
 
+- `daprovider_getMaxMessageSize` - Returns maximum batch size
 - `daprovider_store` - Stores batch and returns certificate
 
 **Validator Methods**:
