@@ -3,6 +3,7 @@
   "outputDirectory": "build",
   "installCommand": "bash scripts/init-submodules.sh && yarn install",
   "framework": "docusaurus-2",
+  "trailingSlash": false,
   "redirects": [
     { "source": "/", "destination": "/get-started/overview", "permanent": false },
     {
@@ -384,11 +385,6 @@
       "permanent": false
     },
     {
-      "source": "/for-devs/dev-tools-and-resources/overview",
-      "destination": "/build-decentralized-apps/reference/node-providers",
-      "permanent": false
-    },
-    {
       "source": "/for-devs/dev-tools-and-resources/precompiles",
       "destination": "/build-decentralized-apps/precompiles/reference",
       "permanent": false
@@ -535,27 +531,12 @@
       "permanent": false
     },
     {
-      "source": "/how-arbitrum-works/fraud-proofs/challenge-manager",
-      "destination": "/how-arbitrum-works/bold/gentle-introduction",
-      "permanent": false
-    },
-    {
-      "source": "/how-arbitrum-works/fraud-proofs/osp-assumptions",
-      "destination": "/how-arbitrum-works/bold/gentle-introduction",
-      "permanent": false
-    },
-    {
       "source": "/how-arbitrum-works/fraud-proofs/osp-assumptions",
       "destination": "/how-arbitrum-works/bold/gentle-introduction",
       "permanent": false
     },
     {
       "source": "/how-arbitrum-works/fraud-proofs/wasm-to-wavm",
-      "destination": "/how-arbitrum-works/bold/gentle-introduction",
-      "permanent": false
-    },
-    {
-      "source": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
       "destination": "/how-arbitrum-works/bold/gentle-introduction",
       "permanent": false
     },
@@ -597,16 +578,6 @@
     {
       "source": "/how-arbitrum-works/l1-to-l2-messaging",
       "destination": "/how-arbitrum-works/deep-dives/l1-to-l2-messaging",
-      "permanent": false
-    },
-    {
-      "source": "/how-arbitrum-works/l1-to-l2-messaging",
-      "destination": "/how-arbitrum-works/deep-dives/l1-to-l2-messaging",
-      "permanent": false
-    },
-    {
-      "source": "/how-arbitrum-works/l2-to-l1-messaging",
-      "destination": "/how-arbitrum-works/deep-dives/l2-to-l1-messaging",
       "permanent": false
     },
     {
@@ -1027,7 +998,7 @@
     },
     {
       "source": "/launch-orbit-chain/how-tos/customize-precompile",
-      "destination": "launch-arbitrum-chain/customize-your-chain/customize-precompile",
+      "destination": "/launch-arbitrum-chain/customize-your-chain/customize-precompile",
       "permanent": false
     },
     {
@@ -1807,11 +1778,6 @@
       "destination": "/sdk/message/ChildTransaction",
       "permanent": false
     },
-    {
-      "source": "/sdk/message_L2Transaction",
-      "destination": "/sdk/message/ChildTransaction",
-      "permanent": false
-    },
     { "source": "/sdk/utils/multicall", "destination": "/sdk/utils/multicall", "permanent": false },
     {
       "source": "/sdk/utils_arbProvider",
@@ -1943,11 +1909,6 @@
     },
     {
       "source": "/stylus/how-tos/local-stylus-dev-node",
-      "destination": "/run-arbitrum-node/run-local-full-chain-simulation",
-      "permanent": false
-    },
-    {
-      "source": "/stylus/how-tos/local-stylus-dev-node",
       "destination": "/run-arbitrum-node/run-nitro-dev-node",
       "permanent": false
     },
@@ -1986,7 +1947,11 @@
       "destination": "/stylus/quickstart",
       "permanent": false
     },
-    { "source": "/stylus/tools/stylus-cli", "destination": "stylus/using-cli", "permanent": false },
+    {
+      "source": "/stylus/tools/stylus-cli",
+      "destination": "/stylus/using-cli",
+      "permanent": false
+    },
     {
       "source": "/stylus/tools/using-stylus-cli",
       "destination": "/stylus/using-cli",
