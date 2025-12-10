@@ -124,7 +124,7 @@ Your JSON-RPC server must implement three Reader methods that Nitro nodes call t
 
 ### Method 1: `daprovider_getSupportedHeaderBytes`
 
-Returns the header byte strings that identify your DA provider in sequencer messages.
+Returns the header byte that identifies your DA provider in sequencer messages.
 
 **Parameters**: None
 
@@ -132,16 +132,16 @@ Returns the header byte strings that identify your DA provider in sequencer mess
 
 ```json
 {
-  "headerBytes": ["0x01ff"] // Array of hex-encoded byte strings
+  "headerBytes": "0x01" // Hex-encoded single byte
 }
 ```
 
 **Example**:
 
-- `ReferenceDA` returns `["0x01ff"]` (DA API header 0x01 + provider type 0xFF)
-- Your provider might use `["0x01aa", "0x01bbcc"]` or any other hex strings as long as they start with "0x01"
+- External DA providers return `"0x01"` (DA API header byte)
+- AnyTrust returns `"0x8088"` (two registrations: `0x80` and `0x88`)
 
-**Purpose**: Nitro uses this to register your provider in its internal routing table. When it sees a sequencer message starting with these bytes, it routes the request to your server. Your provider can return multiple strings to support different certificate formats, DA systems, etc., at once.
+**Purpose**: Nitro uses this to register your provider in its internal routing table. When it sees a sequencer message with this header byte, it routes the request to your server. Each byte in the returned hex string registers a separate header byte. The DA provider is responsible for any demultiplexing to different backends internally based on certificate contents.
 
 ### Method 2: `daprovider_recoverPayload`
 
@@ -1453,22 +1453,21 @@ func main() {
 
 ### Multi-provider registry
 
-Nitro supports multiple DA providers simultaneously using header byte matching:
+Nitro supports multiple DA providers simultaneously using single-byte header matching:
 
 **How it works**:
 
 1. Each provider returns supported header bytes via `getSupportedHeaderBytes()`
-2. Registry maps header prefixes to Reader/Validator pairs
-3. When processing a message, Nitro checks the header bytes and routes to the correct provider
-4. First-match semantics (prevents shadowing)
+2. Registry maps each header byte to a Reader/Validator pair
+3. When processing a message, Nitro checks the first byte after the sequencer header and routes to the correct provider
+4. Duplicate header bytes are rejected at registration
 
 **Example**:
 
-- AnyTrust: `0x80`
-- `ReferenceDA`: `0x01, 0xFF`
-- Your provider: `0x01, 0xAA`
+- AnyTrust: `0x80`, `0x88`
+- External DA (including `ReferenceDA`): `0x01`
 
-All three can coexist on the same chain.
+Multiple providers can coexist on the same chain. External DA providers handle any internal demultiplexing (e.g., routing to different backends) based on certificate contents after the header byte.
 
 ## 10. Testing your integration
 
