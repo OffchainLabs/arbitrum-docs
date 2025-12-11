@@ -44,6 +44,12 @@ A contract or user sends a message from the child chain by calling:
 ArbSys(100).sendTxToL1(destAddress, calldata);
 ```
 
+:::note
+
+`ArbSys(100)` references the ArbSys precompile at `0x0000000000000000000000000000000000000064`.
+
+:::
+
 ### Executing the message on the parent chain
 
 After the seven-day <a data-quicklook-from="challenge">Challenge</a> period, if the assertion is confirmed, anyone can execute the message on the parent chain.
