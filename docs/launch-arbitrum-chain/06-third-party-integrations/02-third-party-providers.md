@@ -17,9 +17,9 @@ This list is not exhaustive, and will be continuously updated as the Arbitrum ec
 
 ## Rollup-as-a-Service (RaaS) providers
 
-For most production use-cases, we encourage Arbitrum chain (Orbit) operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Arbitrum chain deployments:
+For most production use-cases, we encourage Arbitrum chain operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Arbitrum chain deployments:
 
-- [QuickNode](https://www.quicknode.com/rollup?utm_source=arb-docs)
+- [QuickNode](https://www.quicknode.com/)
 - [Caldera](https://www.caldera.xyz/)
 - [Conduit](https://conduit.xyz/)
 - [AltLayer](https://altlayer.io/)
@@ -30,7 +30,7 @@ For most production use-cases, we encourage Arbitrum chain (Orbit) operators to 
 
 ## Chain explorers
 
-Chain explorers let you view transactions, blocks, addresses, and network activity associated with your Arbitrum chain. The following explorers support Arbitrum chains (Orbit), and can be used to monitor and analyze your chain's activity:
+Chain explorers let you view transactions, blocks, addresses, and network activity associated with your Arbitrum chain. The following explorers support Arbitrum chains, and can be used to monitor and analyze your chain's activity:
 
 - [Blockscout](https://www.blockscout.com/)
 - [Socialscan](https://socialscan.io/)
@@ -41,7 +41,7 @@ Additionally, Arbitrum chains leveraging blobs for data availability may use too
 
 ## Bridges
 
-You can easily launch an Arbitrum chain (Orbit) with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain to which your Arbitrum chain settles transactions.
+You can easily launch an Arbitrum chain with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain to which your Arbitrum chain settles transactions.
 
 For applications that require the ability to transfer assets to chains outside of the Arbitrum ecosystem or in an expedited manner (without waiting for complete finality), the following third-party bridging providers can be used:
 
@@ -67,7 +67,7 @@ AnyTrust protocol offers native support data availability. If you are turning on
 
 ## Indexers
 
-Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Arbitrum chains (Orbit):
+Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Arbitrum chains:
 
 - [Alchemy](https://www.alchemy.com/)
 - [Chainstack](https://chainstack.com/)
@@ -75,12 +75,12 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 - [Ormi](https://www.ormilabs.xyz/)
 - [The Graph](https://thegraph.com/)
 - [Traceye](https://traceye.io/)
-- [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
+- [QuickNode](https://www.quicknode.com/)
 - [Sequence](https://sequence.xyz/indexer)
 
 ## Oracles
 
-The following Oracle providers can be used to integrate offchain data with your Arbitrum chain's (Orbit) smart contracts:
+The following Oracle providers can be used to integrate offchain data with your Arbitrum chain's smart contracts:
 
 - [Chainlink](https://chain.link/)
 - [Chronicle](https://chroniclelabs.org/)
@@ -92,20 +92,21 @@ The following Oracle providers can be used to integrate offchain data with your 
 
 ## RPC endpoints
 
-RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Arbitrum chains (Orbit:
+RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Arbitrum chains:
 
 - [Alchemy](https://www.alchemy.com/)
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
-- [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
+- [Grove](https://grove.city/)
+- [QuickNode](https://www.quicknode.com)
 - [Sequence](https://sequence.xyz/node-gateway)
 
 ## Alternative data availability
 
-One way to reduce transaction fees for Arbitrum chains (Orbit) is to configure a Data Availability (DA) solution that stores chain data offchain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Arbitrum AnyTrust chains), the following third-party providers give you another way to store data offchain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
+One way to reduce transaction fees for Arbitrum chains is to configure a Data Availability (DA) solution that stores chain data offchain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Arbitrum AnyTrust chains), the following third-party providers give you another way to store data offchain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
 - [AvailDA](https://www.availproject.org/)
-- [EspressoDA](https://docs.espressosys.com/network)
-- [Near](https://near.org/data-availability) (coming soon)
+- [EspressoDA](https://docs.espressosys.com/network#data-availability)
+- [Near](https://docs.near.org/chain-abstraction/data-availability)

@@ -1,10 +1,10 @@
 ---
-title: "How to configure your Arbitrum chain's node using the Arbitrum chain (Orbit) SDK"
-description: 'Learn how to configure a node using the Arbitrum chain (Orbit) SDK'
+title: "How to configure your Arbitrum chain's node using the Chain SDK"
+description: 'Learn how to configure a node using the Chain SDK'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
-user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Arbitrum chain (Orbit) SDK.
+user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Chain SDK.
 content_type: how-to
 ---
 
@@ -84,13 +84,13 @@ For <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</a
 
 You can find information about what these parameters configure in [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx).
 
-## How to generate a node's configuration file using the Arbitrum chain (Orbit) SDK
+## How to generate a node's configuration file using the Arbitrum Chain SDK
 
-Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Arbitrum chain (Orbit) SDK.
+Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Chain SDK.
 
 :::info Example script
 
-The Arbitrum chain (Orbit) SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts) script.
+The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
 :::
 
@@ -98,8 +98,8 @@ The Arbitrum chain (Orbit) SDK includes an example script for generating a node 
 
 To generate the configuration file for your node, you'll need the following information:
 
-- Core contracts: you'll have to configure your node with all the core contracts created on deployment.
-- Chain config: the same configuration used when deploying the chain must be passed to the node.
+- **Core contracts**: you'll have to configure your node with all the core contracts created on deployment.
+- **Chain config**: the same configuration used when deploying the chain must be passed to the node.
 - Private keys of the accounts that will operate the chain, like the batch poster and the validator
 - Any extra configuration desired for the sequencer, batch poster and validator, like batch posting frequency or maximum block speed.
 
@@ -107,7 +107,13 @@ To generate the configuration file for your node, you'll need the following info
 
 The `prepareNodeConfig` method generates a JSON object with the configuration for the node. It sets the appropriate defaults for most parameters, allowing you to override any of these defaults.
 
-Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash` (**Note**: _This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node_):
+Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash`
+
+:::note
+
+This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node.
+
+:::
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -116,7 +122,7 @@ import {
   createRollupPrepareTransactionReceipt,
   ChainConfig,
   prepareNodeConfig,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -150,7 +156,7 @@ const nodeConfig = prepareNodeConfig({
 });
 ```
 
-Note that `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
+`prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
 
 After generating the node configuration object, it can be saved to a file for later use by the Nitro node.
 

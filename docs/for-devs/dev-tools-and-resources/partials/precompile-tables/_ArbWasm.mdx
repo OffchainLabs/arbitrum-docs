@@ -7,8 +7,450 @@
       <th>Description</th>
     </tr>
   </thead>
-  <tbody></tbody>
+  <tbody>
+    <tr>
+      <td>
+        <code>activateProgram()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L17"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L36"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Compile a wasm program with the latest instrumentation</td>
+    </tr>
+    <tr>
+      <td>
+        <code>stylusVersion()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L23"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L95"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the latest stylus version</td>
+    </tr>
+    <tr>
+      <td>
+        <code>codehashVersion()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L27"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L172"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the stylus version that program with codehash was most recently compiled with</td>
+    </tr>
+    <tr>
+      <td>
+        <code>codehashKeepalive()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L33"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L59"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Extends a program's expiration date (reverts if too soon)</td>
+    </tr>
+    <tr>
+      <td>
+        <code>codehashAsmSize()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L40"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L181"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets a program's asm size in bytes</td>
+    </tr>
+    <tr>
+      <td>
+        <code>programVersion()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L46"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L190"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the stylus version that program at addr was most recently compiled with</td>
+    </tr>
+    <tr>
+      <td>
+        <code>programInitGas()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L53"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L199"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the cost to invoke the program</td>
+    </tr>
+    <tr>
+      <td>
+        <code>programMemoryFootprint()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L59"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L208"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the footprint of program at addr</td>
+    </tr>
+    <tr>
+      <td>
+        <code>programTimeLeft()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L65"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L217"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets returns the amount of time remaining until the program expires</td>
+    </tr>
+    <tr>
+      <td>
+        <code>inkPrice()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L71"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L101"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the amount of ink 1 gas buys</td>
+    </tr>
+    <tr>
+      <td>
+        <code>maxStackDepth()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L75"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L107"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the wasm stack size limit</td>
+    </tr>
+    <tr>
+      <td>
+        <code>freePages()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L79"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L113"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the number of free wasm pages a tx gets</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pageGas()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L83"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L119"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the base cost of each additional wasm page</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pageRamp()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L87"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L125"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the ramp that drives exponential memory costs</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pageLimit()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L91"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L131"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the maximum initial number of pages a wasm may allocate</td>
+    </tr>
+    <tr>
+      <td>
+        <code>minInitGas()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L96"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L137"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the minimum costs to invoke a program</td>
+    </tr>
+    <tr>
+      <td>
+        <code>initCostScalar()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L100"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L148"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the linear adjustment made to program init costs</td>
+    </tr>
+    <tr>
+      <td>
+        <code>expiryDays()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L104"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L154"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the number of days after which programs deactivate</td>
+    </tr>
+    <tr>
+      <td>
+        <code>keepaliveDays()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L108"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L160"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the age a program must be to perform a keepalive</td>
+    </tr>
+    <tr>
+      <td>
+        <code>blockCacheSize()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L112"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L166"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the number of extra programs ArbOS caches during a given block.</td>
+    </tr>
+  </tbody>
 </table>
+
 <table>
   <thead>
     <tr>
@@ -21,11 +463,11 @@
   <tbody>
     <tr>
       <td>
-        <code>undefined</code>
+        <code>ProgramActivated</code>
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/node-interface/ArbWasm.sol#Lundefined"
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L114"
           target="_blank"
         >
           Interface
@@ -33,7 +475,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbWasm.go#Lundefined"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L55"
           target="_blank"
         >
           Implementation
@@ -43,11 +485,11 @@
     </tr>
     <tr>
       <td>
-        <code>undefined</code>
+        <code>ProgramLifetimeExtended</code>
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/node-interface/ArbWasm.sol#Lundefined"
+          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbWasm.sol#L121"
           target="_blank"
         >
           Interface
@@ -55,7 +497,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.6.8/precompiles/ArbWasm.go#Lundefined"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.3/precompiles/ArbWasm.go#L71"
           target="_blank"
         >
           Implementation

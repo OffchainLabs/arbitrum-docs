@@ -13,7 +13,7 @@ Circle’s [Bridged `USDC` Standard](https://www.circle.com/blog/bridged-usdc-st
 
 When `USDC` is bridged into an Arbitrum chain, the default path is to use the chain’s [canonical gateway contracts for `ERC-20`'s](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx). By way of example, when a user bridges `USDC` from Arbitrum One to an Arbitrum chain, their Arbitrum One `USDC` tokens are locked into the Arbitrum chain’s parent side bridge, and a representative `USDC` token is minted to the user’s address on the Arbitrum chain, via the child side bridge.
 
-The challenge with this user flow is twofold.
+The challenge with this user flow is two-fold:
 
 1. **Native vs. non-Native `USDC`:** The `USDC` tokens issued by Circle (’native USDC’) are locked in the parent side bridge contract. Conversely, the `USDC` tokens on the Arbitrum chain aren’t native `USDC` but are collateralized by the locked tokens in the bridge. As such, Circle will not recognize these tokens across their product suite.
 2. **Fragmented UX:** If Circle were to provide native support for `USDC` by deploying a `USDC` contract on the Arbitrum chain, there would be two forms of `USDC` on the chain (native and non-native `USDC`). This leads to a fragmented user experience, and users with non-native USDC would have to withdraw to the parent chain to be able to turn their tokens into native `USDC`.
@@ -28,7 +28,7 @@ We provide a custom `USDC` gateway implementation (for parent and child chains) 
 - On a child chain, `L2USDCGateway` is used.
 - For the `USDC` token contracts, Circle's reference [implementation](https://github.com/circlefin/stablecoin-evm/blob/master/doc/bridged_USDC_standard.md) is used.
 
-This page describes how to deploy a `USDC` bridge compatible with both the Arbitrum chain (Orbit) token bridge and Circle’s Bridged `USDC` Standard.
+This page describes how to deploy a `USDC` bridge compatible with both the Arbitrum chain token bridge and Circle’s Bridged `USDC` Standard.
 
 Steps for a transition to native `USDC` issuance are also provided. Note that both Circle and the Arbitrum chain owner must agree to transition to native `USDC` issuance.
 
@@ -47,7 +47,7 @@ Other requirements:
 
 <aside>
 
-Throughout the docs and code, the terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, i.e., if an Arbitrum chain is deployed on top of ArbitrumOne, then ArbitrumOne is `L1`/`parent chain`, while Arbitrum chain is `L2`/`child chain`.
+Throughout the docs and code, the terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, i.e., if an Arbitrum chain is deployed on top of Arbitrum One, then Arbitrum One is `L1`/`parent chain`, while Arbitrum chain is `L2`/`child chain`.
 
 You can find more details by consulting the [usdc bridge deployment script and its README](https://github.com/OffchainLabs/token-bridge-contracts/tree/v1.2.3/scripts/usdc-bridge-deployment).
 
@@ -76,7 +76,7 @@ L1_USDC=
 ROLLUP_OWNER_KEY=
 ```
 
-Run the script
+Run the script:
 
 ```shell
 yarn deploy:usdc-token-bridge
@@ -84,17 +84,17 @@ yarn deploy:usdc-token-bridge
 
 The script will do the following:
 
-- load deployer wallets for L1 and L2
-- register L1 and L2 networks in SDK
-- deploy new L1 and L2 proxy admins
-- deploy bridged (L2) `USDC` using the Circle's implementation
-- init L2 `USDC`
-- deploy L1 `USDC` gateway
-- deploy L2 `USDC` gateway
-- init both gateways
-- if `ROLLUP_OWNER_KEY` is provided, register the gateway in the router through the UpgradeExecutor
-- if `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in the `registerUsdcGatewayTx.json` file
-- set minter role to L2 `USDC` gateway with max allowance
+- Load deployer wallets for L1 and L2
+- Register L1 and L2 networks in SDK
+- Deploy new L1 and L2 proxy admins
+- Deploy bridged (L2) `USDC` using the Circle's implementation
+- Init L2 `USDC`
+- Deploy L1 `USDC` gateway
+- Deploy L2 `USDC` gateway
+- Init both gateways
+- If `ROLLUP_OWNER_KEY` is provided, register the gateway in the router through the UpgradeExecutor
+- If `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in the `registerUsdcGatewayTx.json` file
+- Set minter role to L2 `USDC` gateway with max allowance
 
 Now, new `USDC` gateways can be used to deposit/withdraw `USDC`. Everything is now in place to support transition to native `USDC` issuance if Circle and the Arbitrum chain owner agree to it.
 

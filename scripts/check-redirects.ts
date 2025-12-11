@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
-import { resolve, dirname, basename } from 'path';
+import { resolve, dirname, basename, parse } from 'path';
 
 interface Redirect {
   source: string;
@@ -32,6 +32,11 @@ interface RedirectCheckerOptions {
   gitCommand?: string;
 }
 
+interface RedirectIndices {
+  bySource: Map<string, Redirect>;
+  byDestination: Map<string, Redirect[]>;
+}
+
 /**
  * RedirectChecker manages URL redirects in vercel.json when markdown files are moved or renamed.
  * It ensures that existing links to documentation pages remain accessible after restructuring.
@@ -41,7 +46,9 @@ interface RedirectCheckerOptions {
  * 2. Detects unstaged changes to vercel.json and prevents further processing
  * 3. Uses git to detect moved/renamed .md(x) files in staged changes
  * 4. Automatically adds non-permanent redirects for moved files
- * 5. Requires manual review and staging of any changes to vercel.json
+ * 5. Flattens redirect chains while preserving all entry points (SEO-friendly)
+ * 6. Detects and prevents circular redirects
+ * 7. Requires manual review and staging of any changes to vercel.json
  *
  * The workflow:
  * 1. Checks/creates vercel.json and validates its state
@@ -49,13 +56,21 @@ interface RedirectCheckerOptions {
  * 3. For each moved markdown file:
  *    - Converts file paths to URL paths (stripping extensions and prefixes)
  *    - Checks for existing matching redirects
+ *    - Checks for circular redirect patterns
+ *    - Flattens any existing chains (e.g., A→B becomes A→C when adding B→C)
  *    - Adds new redirects if needed (always non-permanent)
+ *    - Result: All old URLs redirect directly to final destination (no chains)
  * 4. If redirects are added:
  *    - Updates vercel.json
  *    - Requires manual review and staging before continuing
  *
+ * Redirect chain handling example:
+ * - Initial state: A → B (existing redirect)
+ * - File move detected: B → C
+ * - Result: A → C, B → C (flattened, both entry points preserved)
+ *
  * This ensures a controlled process for maintaining URL backwards compatibility
- * while requiring human oversight of redirect changes.
+ * while requiring human oversight of redirect changes and optimizing for SEO.
  */
 export class RedirectChecker {
   private vercelJsonPath: string;
@@ -70,16 +85,42 @@ export class RedirectChecker {
 
   /**
    * Find the git repository root by looking for .git directory
+   * Cross-platform compatible (works on Windows, Unix, macOS)
    */
   private findGitRoot(): string {
     let currentDir = dirname(this.vercelJsonPath);
-    while (currentDir !== '/') {
+    const { root } = parse(currentDir);
+
+    while (currentDir !== root) {
       if (existsSync(resolve(currentDir, '.git'))) {
         return currentDir;
       }
       currentDir = dirname(currentDir);
     }
     throw new Error('Not in a git repository');
+  }
+
+  /**
+   * Build index maps for O(1) redirect lookups
+   * This significantly improves performance from O(n²) to O(n) for redirect operations
+   */
+  private buildRedirectIndices(config: VercelConfig): RedirectIndices {
+    const bySource = new Map<string, Redirect>();
+    const byDestination = new Map<string, Redirect[]>();
+
+    for (const redirect of config.redirects) {
+      const normalizedSource = this.normalizeUrl(redirect.source);
+      const normalizedDest = this.normalizeUrl(redirect.destination);
+
+      bySource.set(normalizedSource, redirect);
+
+      if (!byDestination.has(normalizedDest)) {
+        byDestination.set(normalizedDest, []);
+      }
+      byDestination.get(normalizedDest)!.push(redirect);
+    }
+
+    return { bySource, byDestination };
   }
 
   /**
@@ -159,8 +200,8 @@ export class RedirectChecker {
   private async formatJsonContent(content: string): Promise<string> {
     try {
       const prettier = require('prettier');
-      const options = await prettier.resolveConfig(process.cwd()) || {};
-      
+      const options = (await prettier.resolveConfig(process.cwd())) || {};
+
       return prettier.format(content, {
         ...options,
         parser: 'json',
@@ -179,8 +220,8 @@ export class RedirectChecker {
   private normalizeFileContent(content: string): string {
     return content
       .replace(/\r\n/g, '\n') // Convert CRLF to LF
-      .replace(/\r/g, '\n')   // Convert CR to LF  
-      .trim();                // Remove leading/trailing whitespace
+      .replace(/\r/g, '\n') // Convert CR to LF
+      .trim(); // Remove leading/trailing whitespace
   }
 
   /**
@@ -293,24 +334,227 @@ export class RedirectChecker {
   }
 
   /**
-   * Add a new redirect to the config
+   * Find all redirects that point TO a given URL (normalized comparison)
+   * Uses index-based lookup for O(1) performance
+   */
+  private findRedirectsPointingTo(indices: RedirectIndices, url: string): Redirect[] {
+    const normalized = this.normalizeUrl(url);
+    return indices.byDestination.get(normalized) || [];
+  }
+
+  /**
+   * Follow a redirect chain to find the ultimate destination
+   * Returns the final destination URL, detects circular references, and enforces max depth
+   * Uses index-based lookup for O(1) performance
+   */
+  private resolveRedirectChain(
+    indices: RedirectIndices,
+    startUrl: string,
+    maxDepth: number = 10,
+  ): { destination: string; isCircular: boolean; depth: number } {
+    const visited = new Set<string>();
+    let current = this.normalizeUrl(startUrl);
+    let depth = 0;
+
+    while (depth < maxDepth) {
+      if (visited.has(current)) {
+        // Found a circular reference
+        return { destination: current, isCircular: true, depth };
+      }
+
+      visited.add(current);
+
+      // Find the next redirect in the chain using O(1) lookup
+      const nextRedirect = indices.bySource.get(current);
+
+      if (!nextRedirect) {
+        // End of chain - current is the final destination
+        return { destination: current, isCircular: false, depth };
+      }
+
+      current = this.normalizeUrl(nextRedirect.destination);
+      depth++;
+    }
+
+    // Max depth exceeded - likely indicates a problem
+    console.warn(`⚠️ Redirect chain exceeded max depth (${maxDepth}): ${startUrl}`);
+    return { destination: current, isCircular: true, depth };
+  }
+
+  /**
+   * Check if adding a redirect would create a circular reference
+   * Uses index-based lookup for O(1) performance
+   */
+  private wouldCreateCircularRedirect(
+    indices: RedirectIndices,
+    source: string,
+    destination: string,
+  ): boolean {
+    const visited = new Set<string>();
+    let current = this.normalizeUrl(destination);
+    const normalizedSource = this.normalizeUrl(source);
+
+    while (current) {
+      if (visited.has(current)) {
+        // Found a cycle in the existing redirects
+        return true;
+      }
+      if (current === normalizedSource) {
+        // Would create a loop back to source
+        return true;
+      }
+
+      visited.add(current);
+
+      // Find next redirect in chain using O(1) lookup
+      const next = indices.bySource.get(current);
+
+      if (!next) break;
+      current = this.normalizeUrl(next.destination);
+    }
+
+    return false;
+  }
+
+  /**
+   * Flatten redirect chains while preserving all entry points
+   * This is the key method that implements the correct SEO-friendly approach:
+   * - Updates all redirects pointing to oldUrl to point to newUrl (flattens chains)
+   * - Does NOT remove the intermediate redirect (preserves all entry points)
+   * - Prevents creation of redirect chains (A→B→C becomes A→C, B→C)
+   * Uses index-based lookup for O(1) performance
+   */
+  private flattenRedirectChains(
+    config: VercelConfig,
+    indices: RedirectIndices,
+    oldUrl: string,
+    newUrl: string,
+  ): void {
+    const normalizedOldUrl = this.normalizeUrl(oldUrl);
+    const normalizedNewUrl = this.normalizeUrl(newUrl);
+
+    // Find all redirects that currently point to oldUrl using O(1) lookup
+    const redirectsPointingToOld = this.findRedirectsPointingTo(indices, oldUrl);
+
+    // Update each redirect to point directly to newUrl (flatten the chain)
+    for (const redirect of redirectsPointingToOld) {
+      console.log(
+        `  🔄 Flattening chain: ${redirect.source} → ${redirect.destination} becomes ${redirect.source} → ${newUrl}`,
+      );
+      redirect.destination = newUrl;
+    }
+
+    // Remove any existing redirect from oldUrl (will be replaced with the new one)
+    // This prevents having both A→B and A→C for the same source
+    const existingRedirect = indices.bySource.get(normalizedOldUrl);
+
+    if (existingRedirect) {
+      const existingRedirectIndex = config.redirects.indexOf(existingRedirect);
+      if (existingRedirectIndex !== -1) {
+        console.log(
+          `  🗑️  Removing old redirect: ${config.redirects[existingRedirectIndex].source} → ${config.redirects[existingRedirectIndex].destination}`,
+        );
+        config.redirects.splice(existingRedirectIndex, 1);
+      }
+    }
+  }
+
+  /**
+   * Detect and report existing redirect chains in the configuration
+   * Returns an array of chains found (for logging/debugging purposes)
+   * Uses index-based lookup for O(1) performance
+   */
+  private detectExistingChains(indices: RedirectIndices): string[][] {
+    const chains: string[][] = [];
+    const processed = new Set<string>();
+
+    // Convert Map keys to array for iteration
+    const sources = Array.from(indices.bySource.keys());
+
+    for (const source of sources) {
+      if (processed.has(source)) continue;
+
+      const chain = [source];
+      let current = this.normalizeUrl(indices.bySource.get(source)!.destination);
+
+      // Follow the chain
+      while (true) {
+        chain.push(current);
+
+        const nextRedirect = indices.bySource.get(current);
+
+        if (!nextRedirect) break;
+
+        const next = this.normalizeUrl(nextRedirect.destination);
+        if (chain.includes(next)) {
+          // Circular reference detected
+          chain.push(next);
+          chains.push(chain);
+          break;
+        }
+
+        current = next;
+      }
+
+      // Mark all URLs in this chain as processed
+      for (const url of chain) {
+        processed.add(url);
+      }
+
+      // Only report if it's a chain (length > 2) or circular (last === first)
+      if (chain.length > 2) {
+        chains.push(chain);
+      }
+    }
+
+    return chains;
+  }
+
+  /**
+   * Add a new redirect to the config with chain flattening
+   * This method implements the SEO-friendly approach:
+   * 1. Checks for circular redirects
+   * 2. Flattens any existing chains (updates A→B to A→C when adding B→C)
+   * 3. Adds the new redirect (B→C)
+   * 4. Result: A→C, B→C (no chains, all entry points preserved)
+   * Uses index-based lookups for O(1) performance
    */
   private async addRedirect(oldUrl: string, newUrl: string, config: VercelConfig): Promise<void> {
     const normalizedOldUrl = this.normalizeUrl(oldUrl);
     const normalizedNewUrl = this.normalizeUrl(newUrl);
 
-    // Only add redirect if the source and destination are different after normalization
-    if (normalizedOldUrl !== normalizedNewUrl) {
-      config.redirects.push({
-        source: oldUrl, // Store the original, pre-normalized URL as vercel expects it
-        destination: newUrl, // Store the original, pre-normalized URL
-        permanent: false,
-      });
-      this.sortRedirects(config.redirects); // Sort after adding a new redirect
-      const rawContent = JSON.stringify(config);
-      const formattedContent = await this.formatJsonContent(rawContent);
-      writeFileSync(this.vercelJsonPath, formattedContent, 'utf8');
+    // Skip if source and destination are the same
+    if (normalizedOldUrl === normalizedNewUrl) {
+      console.log(`  ⏭️  Skipping self-redirect: ${oldUrl} → ${newUrl}`);
+      return;
     }
+
+    // Build indices for efficient lookups
+    const indices = this.buildRedirectIndices(config);
+
+    // Check for circular redirects
+    if (this.wouldCreateCircularRedirect(indices, oldUrl, newUrl)) {
+      console.warn(
+        `  ⚠️  Warning: Skipping redirect ${oldUrl} → ${newUrl} - would create circular chain`,
+      );
+      return;
+    }
+
+    // Flatten any existing chains pointing to oldUrl
+    console.log(`  ➕ Adding redirect: ${oldUrl} → ${newUrl}`);
+    this.flattenRedirectChains(config, indices, oldUrl, newUrl);
+
+    // Add the new redirect
+    config.redirects.push({
+      source: oldUrl,
+      destination: newUrl,
+      permanent: false,
+    });
+
+    this.sortRedirects(config.redirects);
+    const rawContent = JSON.stringify(config);
+    const formattedContent = await this.formatJsonContent(rawContent);
+    writeFileSync(this.vercelJsonPath, formattedContent, 'utf8');
   }
 
   /**

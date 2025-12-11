@@ -11,7 +11,7 @@ import RaaSNotice from './partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-Deploying new Arbitrum chains is done through a [RollupCreator](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain. To assist with these operations, the Arbitrum chain SDK contains a series of tools and scripts that help create and manage your chain(s). Its capabilities include:
+Deploying new Arbitrum chains is done through a [`RollupCreator`](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain. To assist with these operations, the Arbitrum chain SDK contains a series of tools and scripts that help create and manage your chain(s). Its capabilities include:
 
 - Configuration and deployment of your Arbitrum chain's core contracts
 - Configuration and deployment of the chain's TokenBridge contracts
@@ -38,7 +38,7 @@ Additionally, Arbitrum chains can be configured to use `ETH` or any standard `ER
 
 ## 2. Deploy your chain
 
-After selecting a chain type, follow [this guide](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md) to deploy your chain using the Arbitrum chain (Orbit) SDK.
+After selecting a chain type, follow [this guide](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md) to deploy your chain using the Chain SDK.
 
 ## 3. Configure your Arbitrum chain's node
 
