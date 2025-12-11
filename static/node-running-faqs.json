@@ -1,7 +1,7 @@
 [
   {
     "question": "How do I run a node?",
-    "answer": "See instructions [here](https://developer.arbitrum.io/node-running/how-tos/running-a-full-node)! \n\n\n\n",
+    "answer": "See instructions [in our guide about running a full node](https://developer.arbitrum.io/node-running/how-tos/running-a-full-node)!\n\n\n\n",
     "key": "how-do-i-run-a-node"
   },
   {
@@ -36,7 +36,7 @@
   },
   {
     "question": "Is there any way to retrieve pre-Nitro archive data from a Nitro node?",
-    "answer": "The pre-Nitro stack is also called the \"classic\" stack. Full Nitro nodes start with a database that contains the information from the \"classic\" era.\n\nHowever, a Nitro node can't query archive information contained in \"classic\" blocks right away. To do that, you also need to run a classic node ([instructions here](https://developer.arbitrum.io/node-running/how-tos/running-a-classic-node)) and set the parameter `—node.rpc.classic-redirect=your-classic-node-RPC`.\n\nPlease note that this information only applies to Arbitrum One nodes. Arbitrum Nova and Sepolia nodes started with a Nitro stack, so they don't have \"classic\" data.\n\n",
+    "answer": "The pre-Nitro stack is also called the \"classic\" stack. Full Nitro nodes start with a database that contains the information from the \"classic\" era.\n\nHowever, a Nitro node can't query archive information contained in \"classic\" blocks right away. To do that, you also need to run a classic node ([instructions in our guide about running a classic node](https://developer.arbitrum.io/node-running/how-tos/running-a-classic-node)) and set the parameter `—node.rpc.classic-redirect=your-classic-node-RPC`.\n\nPlease note that this information only applies to Arbitrum One nodes. Arbitrum Nova and Sepolia nodes started with a Nitro stack, so they don't have \"classic\" data.\n\n\n\n",
     "key": "is-there-any-way-to-retrieve-prenitro-archive-data-from-a-nitro-node"
   },
   {

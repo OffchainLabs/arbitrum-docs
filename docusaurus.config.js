@@ -94,7 +94,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          exclude: ['**/api/**'],
+          exclude: ['**/api/**', '**/*.pdf'],
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
@@ -216,7 +216,7 @@ const config = {
         backgroundColor: '#e3246e',
         textColor: 'white',
         content:
-          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/concepts/how-it-works#activation" target="_blank">here’s how to do it.</a>',
+          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/gentle-introduction#activation" target="_blank">here’s how to do it.</a>',
         isCloseable: false,
       },
       navbar: {
@@ -310,8 +310,7 @@ const config = {
                 to: 'https://arbitrum.foundation/',
               },
               {
-                label: 'Nitro whitepaper',
-                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+                html: '<a href="/nitro-whitepaper.pdf">Arbitrum whitepaper</a>',
               },
             ],
           },

@@ -1,10 +1,10 @@
 ---
-title: 'Deploy a token bridge using the Arbitrum chain (Orbit) SDK'
-description: 'How to deploy a token bridge using the Arbitrum chain (Orbit) SDK '
+title: 'Deploy a token bridge using the Chain SDK'
+description: 'How to deploy a token bridge using the Chain SDK '
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
-user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to deploy a token bridge using the Arbitrum chain (Orbit) SDK.
+user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to deploy a token bridge using the Chain SDK.
 content_type: how-to
 ---
 
@@ -25,7 +25,7 @@ Before reading this guide, we recommend:
 
 ## Parameters used when deploying a token bridge
 
-Before we describe the process of deploying a token bridge using the Arbitrum chain (Orbit) SDK, let's look at the parameters we need to pass to the token bridge creator contract.
+Before we describe the process of deploying a token bridge using the Chain SDK, let's look at the parameters we need to pass to the token bridge creator contract.
 
 Deploying a new token bridge for an Arbitrum chain is done through a [`TokenBridgeCreator`](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the appropriate `ParentToChild` messages from the parent chain to the child chain so the counterpart contracts of the token bridge are created in the Arbitrum chain.
 
@@ -47,15 +47,15 @@ The following table describes these parameters:
 | `maxGasForContracts` | uint256 | Gas limit used for executing the retryable ticket on the child chain.                                                     |
 | `gasPriceBid`        | uint256 | Max gas price used for executing the retryable ticket on the child chain.                                                 |
 
-When creating the token bridge through the Arbitrum chain (Orbit) SDK, the parameters `maxGasForContracts` and `gasPriceBid` don't need to be configured, since the SDK will calculate the right values.
+When creating the token bridge through the Chain SDK, the parameters `maxGasForContracts` and `gasPriceBid` don't need to be configured, since the SDK will calculate the right values.
 
-## How to deploy a token bridge using the Arbitrum chain (Orbit) SDK
+## How to deploy a token bridge using the Arbitrum Chain SDK
 
-Let's look at the methods to create a token bridge using the Arbitrum chain (Orbit) SDK.
+Let's look at the methods to create a token bridge using the Chain SDK.
 
 :::info Example script
 
-The Arbitrum chain (Orbit) SDK includes an example script for deploying a token bridge. We recommend that you first understand the process described in this section and then check the [create-token-bridge-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-eth/index.ts) and [create-token-bridge-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-custom-fee-token/index.ts) scripts.
+The Arbitrum Chain SDK includes an example script for deploying a token bridge. We recommend that you first understand the process described in this section and then check the [create-token-bridge-eth](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-token-bridge-eth/index.ts) and [create-token-bridge-custom-fee-token](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-token-bridge-custom-fee-token/index.ts) scripts.
 
 :::
 
@@ -75,7 +75,7 @@ This step is only a requirement for Arbitrum chains configured to use a custom g
 
 :::
 
-Because the token bridge creation involves sending a retryable ticket to the Arbitrum chain, the `TokenBridgeCreator` needs to be able to send the appropriate custom gas token amount for its execution on the child chain. That means that before calling the `TokenBridgeCreator`, we need to grant allowance to the contract to move our custom gas token. To facilitate this process, the Arbitrum chain (Orbit) SDK provides two functions:
+Because the token bridge creation involves sending a retryable ticket to the Arbitrum chain, the `TokenBridgeCreator` needs to be able to send the appropriate custom gas token amount for its execution on the child chain. That means that before calling the `TokenBridgeCreator`, we need to grant allowance to the contract to move our custom gas token. To facilitate this process, the Chain SDK provides two functions:
 
 1. `createTokenBridgeEnoughCustomFeeTokenAllowance`: This method verifies that the `TokenBridgeCreator` contract has enough allowance to pay for the fees associated with the token bridge deployment.
 2. `createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest`: This function assists in generating the raw transaction required to approve the custom gas token for the `TokenBridgeCreator` contract.
@@ -93,7 +93,7 @@ import { createPublicClient, http } from 'viem';
 import {
   createTokenBridgeEnoughCustomFeeTokenAllowance,
   createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -138,7 +138,7 @@ import { createPublicClient, http } from 'viem';
 import {
   createTokenBridgePrepareTransactionRequest,
   createTokenBridgePrepareTransactionReceipt,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -236,7 +236,7 @@ import { createPublicClient, http } from 'viem';
 import {
   createTokenBridgePrepareSetWethGatewayTransactionRequest,
   createTokenBridgePrepareSetWethGatewayTransactionReceipt,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -279,7 +279,7 @@ if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
 }
 ```
 
-:::warning You must verify Arbitrum (Orbit) chain contracts' source code
+:::warning You must verify Arbitrum chain contracts' source code
 
 We have provided a script that will perform the source code verification of all the contracts deployed by the `L1AtomicTokenBridgeCreator` to the specific Arbitrum chain. The script is available in the [Token Bridge Contracts repo](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/docs/deployment.md#verify-orbit-contracts-source-code-on-the-blockscout).
 

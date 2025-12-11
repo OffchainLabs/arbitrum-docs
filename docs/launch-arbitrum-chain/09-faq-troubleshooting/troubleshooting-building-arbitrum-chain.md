@@ -1,7 +1,7 @@
 ---
 title: 'Arbitrum chain FAQ'
 sidebar_position: 7
-description: List of questions and answers frequently asked by developers launching and working on Orbit chains
+description: List of questions and answers frequently asked by developers launching and working on Arbitrum chains
 user_story: As a developer, I want to understand how to troubleshoot common issues when building and launching Arbitrum chains.
 content_type: faq
 ---

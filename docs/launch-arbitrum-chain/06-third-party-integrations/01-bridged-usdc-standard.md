@@ -28,7 +28,7 @@ We provide a custom `USDC` gateway implementation (for parent and child chains) 
 - On a child chain, `L2USDCGateway` is used.
 - For the `USDC` token contracts, Circle's reference [implementation](https://github.com/circlefin/stablecoin-evm/blob/master/doc/bridged_USDC_standard.md) is used.
 
-This page describes how to deploy a `USDC` bridge compatible with both the Arbitrum chain (Orbit) token bridge and Circle’s Bridged `USDC` Standard.
+This page describes how to deploy a `USDC` bridge compatible with both the Arbitrum chain token bridge and Circle’s Bridged `USDC` Standard.
 
 Steps for a transition to native `USDC` issuance are also provided. Note that both Circle and the Arbitrum chain owner must agree to transition to native `USDC` issuance.
 
