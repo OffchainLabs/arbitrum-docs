@@ -10,4 +10,4 @@
 - **Potential delays under high load**: High network throughput can cause confirmation delays beyond the configured rate, with a practical minimum of 1-2 minutes in busy scenarios. Initial setup may also slow the chain temporarily due to backlog processing.
 - **Setup complexity and requirements**: Requires upgrading to specific versions, creating a multi-signature Safe wallet for the committee, and running at least three validators. This adds operational overhead and potential costs.
 - **Security trade-offs compared to standard withdrawals**: While standard withdrawals maintain full Ethereum-level security via the challenge period, fast withdrawals prioritize speed over decentralization, potentially exposing users to risks if the committee fails or is attacked.
-- **Layer 3 setups finality**: For chains settling to Arbitrum One or similar and using BoLD, finality cannot be lowered to 15 seconds.
+- **Layer 3 setups finality**: For chains settling to Arbitrum One or similar and using BoLD, fast confirmations cannot be lowered below 15 minutes.
