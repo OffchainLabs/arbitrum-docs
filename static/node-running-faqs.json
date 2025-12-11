@@ -31,7 +31,7 @@
   },
   {
     "question": "How do I run a node locally for development?",
-    "answer": "See instructions [here](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).\n\nWe recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally).\n\n\n\n\n\n\n\n",
+    "answer": "See instructions in our  [our guide about running a local devnet node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).\n\nWe recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally).\n\n\n\n\n\n\n\n",
     "key": "how-do-i-run-a-node-locally-for-development"
   },
   {
