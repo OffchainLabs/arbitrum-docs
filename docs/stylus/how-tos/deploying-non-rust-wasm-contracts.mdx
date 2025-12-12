@@ -25,7 +25,7 @@ Stylus accepts any valid WebAssembly module that meets its requirements. You can
 
 The key is using the `--wasm-file` flag with `cargo stylus` commands to bypass Rust compilation.
 
-## Why Use Non-Rust Languages?
+## Why use non-Rust languages?
 
 Different languages excel at different tasks:
 
@@ -50,7 +50,7 @@ Different languages excel at different tasks:
 - **Ecosystem**: Rich library support and examples
 - **Productivity**: Higher-level abstractions and macros
 
-## WASM Requirements
+## WASM requirements
 
 All WASM modules deployed to Stylus must meet these requirements:
 
@@ -195,7 +195,7 @@ Compressed WASM size: 142 B
 Contract succeeded Stylus onchain activation checks with Stylus version: 1
 ```
 
-## C/C++ Development
+## C/C++ development
 
 The [Stylus C SDK](https://github.com/OffchainLabs/stylus-sdk-c) enables C/C++ smart contract development.
 
@@ -384,7 +384,7 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-## AssemblyScript Contracts
+## AssemblyScript contracts
 
 AssemblyScript is TypeScript-like language that compiles to WebAssembly.
 
@@ -453,7 +453,7 @@ cargo stylus deploy \
     --private-key-path=./key.txt
 ```
 
-## Deployment Workflow
+## Deployment workflow
 
 ### 1. Prepare your WASM
 
@@ -511,7 +511,7 @@ Activating contract at address 0x...
 Confirmed tx 0x...
 ```
 
-## Best Practices
+## Best practices
 
 ### 1. Minimize binary size
 
@@ -738,7 +738,7 @@ LDFLAGS = -no-entry --export=user_entrypoint --export=memory
    cast call $CONTRACT "0x"
    ```
 
-## Examples Repository
+## Examples repository
 
 Official examples for different languages:
 
@@ -746,7 +746,7 @@ Official examples for different languages:
 - [**Stylus Bf SDK**](https://github.com/OffchainLabs/stylus-sdk-bf) - Brainfuck educational examples
 - [**Awesome Stylus**](https://github.com/OffchainLabs/awesome-stylus) - Community examples
 
-## Language Support Matrix
+## Language support matrix
 
 | Language           | Status          | SDK                                                            | Best Use Case               |
 | ------------------ | --------------- | -------------------------------------------------------------- | --------------------------- |
@@ -757,7 +757,7 @@ Official examples for different languages:
 | **Go**             | 🔶 Experimental | TinyGo                                                         | Custom applications         |
 | **Zig**            | 🔶 Experimental | Custom                                                         | Systems programming         |
 
-## Advanced: Custom Languages
+## Advanced: custom languages
 
 To support a new language:
 

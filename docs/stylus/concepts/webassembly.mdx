@@ -29,7 +29,7 @@ Nitro uses WebAssembly as its execution environment for several reasons:
 4. **Language flexibility**: Developers can use Rust, C, C++, or any language that compiles to WASM
 5. **Determinism**: Guaranteed identical execution across all validators
 
-## WASM Compilation Target
+## WASM compilation target
 
 Stylus contracts are compiled to the `wasm32-unknown-unknown` target, which means:
 
@@ -54,7 +54,7 @@ rustflags = [
 - **Bulk memory**: Enables efficient `memory.copy` and `memory.fill` operations
 - **No reference types**: Keeps the WASM simpler and more compatible
 
-## WASM Binary Structure
+## WASM binary structure
 
 A Stylus WASM module consists of several sections:
 
@@ -126,7 +126,7 @@ Custom sections can store:
 - Compiler metadata
 - ABI information
 
-## Compression and Deployment
+## Compression and deployment
 
 Before deployment, Stylus contracts undergo compression:
 
@@ -158,7 +158,7 @@ pub fn add_prefix(compressed_wasm: impl IntoIterator<Item = u8>, prefix: &str) -
 
 This prefix allows the Nitro VM to distinguish Stylus contracts from EVM bytecode.
 
-## Contract Activation
+## Contract activation
 
 After deployment, contracts must be **activated** before execution:
 
@@ -194,7 +194,7 @@ if !wasm::has_entrypoint(&wasm)? {
 }
 ```
 
-## Development Workflow
+## Development workflow
 
 ### 1. Write Rust code
 
@@ -253,7 +253,7 @@ cargo stylus deploy --private-key=$PRIVATE_KEY
 # Activation happens automatically
 ```
 
-## Size Limitations
+## Size limitations
 
 Nitro imposes limits on WASM contract size:
 
@@ -271,7 +271,7 @@ To stay within limits:
 - Minimize dependencies
 - Use compact data structures
 
-## Memory Model
+## Memory model
 
 ### Linear memory layout
 
@@ -301,7 +301,7 @@ unsafe {
 
 The `bulk-memory` feature flag enables efficient WASM instructions like `memory.copy` and `memory.fill`.
 
-## Advanced: WASM Instructions
+## Advanced: WASM instructions
 
 Stylus uses WASM MVP (Minimum Viable Product) instructions plus bulk-memory operations:
 
@@ -332,7 +332,7 @@ Stylus uses WASM MVP (Minimum Viable Product) instructions plus bulk-memory oper
 - ❌ Multiple memories
 - ❌ Threads
 
-## Best Practices
+## Best practices
 
 ### 1. Minimize binary size
 
