@@ -1,0 +1,788 @@
+---
+title: 'Activation'
+description: 'Understanding Stylus contract deployment and activation'
+author: chrisco
+sme: chrisco
+sidebar_position: 1
+target_audience: Developers deploying Stylus contracts to Arbitrum chains.
+displayed_sidebar: buildStylusSidebar
+---
+
+Stylus contracts undergo a two-step process to become executable on Arbitrum chains: **deployment** and **activation**. This guide explains both steps, the distinction between them, and how to manage the activation process.
+
+## Overview
+
+Unlike traditional EVM contracts that become immediately executable after deployment, Stylus contracts require an additional activation step:
+
+1. **Deployment**: Stores the compressed WASM bytecode on-chain at a contract address
+2. **Activation**: Converts the bytecode into an executable Stylus program by registering it with the ArbWasm precompile
+
+**Why two steps?**
+
+- **Gas optimization**: Activation involves one-time processing and caching that would be expensive to repeat on every call
+- **Code reuse**: Multiple contracts can share the same activated codehash, reducing activation costs
+- **Version management**: Allows the chain to track which Stylus protocol version a contract targets
+
+## Deployment vs Activation
+
+| Aspect                | Deployment                     | Activation                     |
+| --------------------- | ------------------------------ | ------------------------------ |
+| **Purpose**           | Store compressed WASM on-chain | Register program with ArbWasm  |
+| **Transaction count** | 1 transaction                  | 1 transaction (separate)       |
+| **Cost type**         | Standard EVM deployment gas    | Data fee (WASM-specific cost)  |
+| **When required**     | Always - stores the code       | Always - makes code executable |
+| **Reversible**        | No                             | No (but can expire)            |
+| **Who can call**      | Anyone with funds              | Anyone (after deployment)      |
+| **Can be skipped**    | No                             | No (unless already activated)  |
+
+### Contract States
+
+A Stylus contract can be in one of these states:
+
+```rust
+pub enum ContractStatus {
+    /// Contract already exists on-chain and is activated
+    Active { code: Vec<u8> },
+
+    /// Contract is deployed but not yet activated
+    /// Ready to activate with the given data fee
+    Ready { code: Vec<u8>, fee: U256 },
+}
+```
+
+## The Activation Process
+
+### Step 1: Build and Process WASM
+
+Before deployment, your Rust contract is compiled and processed:
+
+```bash
+cargo stylus check
+```
+
+This performs:
+
+1. **Compile Rust to WASM**: Using `wasm32-unknown-unknown` target
+2. **Process WASM binary**:
+   - Remove dangling references
+   - Add project hash metadata
+   - Strip unnecessary custom sections
+3. **Brotli compression**: Maximum compression (level 11)
+4. **Add EOF prefix**: `EFF00000` (identifies Stylus programs)
+5. **Size validation**: Compressed code must be ≤ 24KB
+
+**WASM Processing Pipeline**:
+
+```
+Raw WASM Binary
+    ↓
+Remove dangling references
+    ↓
+Add project_hash metadata
+    ↓
+Strip user custom sections
+    ↓
+Brotli compress (level 11)
+    ↓
+Add EOF prefix (EFF00000)
+    ↓
+Final compressed code (≤ 24KB)
+```
+
+### Step 2: Deploy the Contract
+
+Deployment creates a transaction that stores your processed WASM on-chain:
+
+```bash
+cargo stylus deploy \
+  --private-key-path=key.txt \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+**What happens during deployment:**
+
+1. **Generate deployment bytecode**: Create EVM initcode with embedded compressed WASM
+2. **Estimate gas**: Calculate deployment transaction gas cost
+3. **Send deployment transaction**: To Stylus deployer contract
+4. **Extract contract address**: From transaction receipt
+
+**Deployment Bytecode Structure**:
+
+```
+EVM Initcode Prelude (43 bytes):
+┌─────────────────────────────────────┐
+│ 0x7f PUSH32 <code_len>              │ Push code length
+│ 0x80 DUP1                            │ Duplicate length
+│ 0x60 PUSH1 <prelude_length>         │ Push prelude length
+│ 0x60 PUSH1 0x00                     │ Push 0
+│ 0x39 CODECOPY                        │ Copy code to memory
+│ 0x60 PUSH1 0x00                     │ Push 0
+│ 0xf3 RETURN                          │ Return code
+│ 0x00 <version_byte>                 │ Stylus version
+└─────────────────────────────────────┘
+        ↓
+<compressed_wasm_code>
+```
+
+### Step 3: Calculate Activation Fee
+
+Before activating, the data fee must be calculated:
+
+```rust
+// Simulated via state overrides (no transaction sent)
+let data_fee = calculate_activation_fee(contract_address);
+
+// Apply bump percentage for safety (default: 20%)
+let final_fee = data_fee * (1 + bump_percent / 100);
+```
+
+**Data fee calculation**:
+
+- Uses state override simulation to estimate fee
+- No actual transaction sent during estimation
+- Configurable bump percentage protects against variance (default: 20%)
+- Fee is paid in ETH when activating
+
+### Step 4: Activate the Contract
+
+Activation registers your contract with the ArbWasm precompile:
+
+```bash
+# Automatic activation (default)
+cargo stylus deploy --private-key-path=key.txt
+
+# Or manual activation
+cargo stylus activate \
+  --address=0x1234... \
+  --private-key-path=key.txt
+```
+
+**What happens during activation:**
+
+1. **Call ArbWasm precompile**: At address `0x0000000000000000000000000000000000000071`
+2. **Send activation transaction**:
+   ```solidity
+   ArbWasm.activateProgram{value: dataFee}(contractAddress)
+   ```
+3. **ArbWasm processes the code**:
+   - Validates WASM format
+   - Checks against protocol version
+   - Stores activation metadata
+   - Emits `ProgramActivated` event
+4. **Returns activation info**:
+   ```solidity
+   returns (uint16 version, uint256 actualDataFee)
+   ```
+
+## Using cargo-stylus
+
+The `cargo-stylus` CLI tool simplifies the deployment and activation workflow.
+
+### Basic Deployment (Automatic Activation)
+
+By default, `cargo stylus deploy` handles both steps:
+
+```bash
+cargo stylus deploy \
+  --private-key-path=wallet.txt \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+**Output**:
+
+```
+Building contract...
+Compressing WASM...
+Deploying contract to 0x1234567890abcdef...
+Deployment transaction: 0xabcd...
+Contract deployed at: 0x1234567890abcdef
+Activating contract...
+Activation transaction: 0xef12...
+Contract activated successfully!
+```
+
+### Deploy Without Activation
+
+To deploy but skip activation:
+
+```bash
+cargo stylus deploy \
+  --private-key-path=wallet.txt \
+  --no-activate
+```
+
+This is useful when:
+
+- You want to inspect the contract before activating
+- Someone else will handle activation
+- You're testing deployment workflows
+
+### Manual Activation
+
+Activate a previously deployed contract:
+
+```bash
+cargo stylus activate \
+  --address=0x1234567890abcdef \
+  --private-key-path=wallet.txt \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+### Check Contract Status
+
+Before deploying, check if a contract with the same code is already activated:
+
+```bash
+cargo stylus check \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+**Possible outcomes**:
+
+1. **Code already activated**: You can reuse the existing deployment
+2. **Ready to activate**: Shows estimated data fee
+3. **Validation errors**: Displays issues that must be fixed
+
+## Deployment with Constructors
+
+If your contract has a constructor, provide arguments during deployment:
+
+```rust
+#[public]
+impl MyContract {
+    #[constructor]
+    pub fn constructor(&mut self, initial_value: U256, owner: Address) {
+        self.value.set(initial_value);
+        self.owner.set(owner);
+    }
+}
+```
+
+**Deploy with constructor arguments**:
+
+```bash
+cargo stylus deploy \
+  --private-key-path=wallet.txt \
+  --constructor-args 42 0x1234567890abcdef1234567890abcdef12345678
+```
+
+**With payable constructor**:
+
+```rust
+#[constructor]
+#[payable]
+pub fn constructor(&mut self) {
+    let value = self.vm().msg_value();
+    self.initial_balance.set(value);
+}
+```
+
+```bash
+cargo stylus deploy \
+  --private-key-path=wallet.txt \
+  --constructor-value=1000000000000000000  # 1 ETH in wei
+```
+
+## The ArbWasm Precompile
+
+Activation is handled by the ArbWasm precompile at address `0x0000000000000000000000000000000000000071`.
+
+### Key Functions
+
+#### activateProgram
+
+Activates a deployed Stylus contract:
+
+```solidity
+function activateProgram(
+    address program
+) external payable returns (uint16 version, uint256 dataFee);
+```
+
+**Parameters**:
+
+- `program`: Contract address containing WASM bytecode
+
+**Payment**:
+
+- Must send `value` equal to the calculated data fee (in wei)
+
+**Returns**:
+
+- `version`: Stylus protocol version the program was activated against
+- `dataFee`: Actual fee paid for activation
+
+**Example (via cast)**:
+
+```bash
+cast send 0x0000000000000000000000000000000000000071 \
+  "activateProgram(address)" \
+  0x1234567890abcdef \
+  --value 100000000000000000 \
+  --private-key=$PRIVATE_KEY
+```
+
+#### codehashVersion
+
+Check if a codehash is activated and get its version:
+
+```solidity
+function codehashVersion(bytes32 codehash) external view returns (uint16 version);
+```
+
+**Reverts if**:
+
+- Code is not activated
+- Program needs upgrade
+- Program has expired
+
+#### programTimeLeft
+
+Get remaining time before a program expires:
+
+```solidity
+function programTimeLeft(address program) external view returns (uint64 timeLeft);
+```
+
+Returns seconds until expiration (default: ~1 year from activation).
+
+#### codehashKeepalive
+
+Extend a program's expiration time:
+
+```solidity
+function codehashKeepalive(bytes32 codehash) external payable returns (uint64 expirySeconds);
+```
+
+Resets the expiration timer, preventing program deactivation.
+
+### ArbWasm Errors
+
+Activation can fail with these errors:
+
+```solidity
+error ProgramNotWasm();
+// The deployed bytecode is not valid WASM
+
+error ProgramNotActivated();
+// Contract exists but hasn't been activated
+
+error ProgramNeedsUpgrade(uint16 version, uint16 stylusVersion);
+// Program version incompatible with current Stylus version
+
+error ProgramExpired(uint64 ageInSeconds);
+// Program has expired and must be reactivated
+
+error ProgramInsufficientValue(uint256 have, uint256 want);
+// Sent data fee is less than required
+```
+
+## Gas and Fee Optimization
+
+### Estimating Costs
+
+Get cost estimates before deploying:
+
+```bash
+# Estimate deployment gas
+cargo stylus deploy --estimate-gas
+
+# Check activation fee
+cargo stylus check  # Shows estimated data fee
+```
+
+### Fee Bump Configuration
+
+Protect against fee variance with configurable bump percentage:
+
+```bash
+# Default: 20% bump
+cargo stylus deploy --private-key-path=wallet.txt
+
+# Custom bump percentage
+# (Note: Use programmatically via stylus-tools library)
+```
+
+**In code** (using stylus-tools):
+
+```rust
+use stylus_tools::core::activation::ActivationConfig;
+
+let config = ActivationConfig {
+    data_fee_bump_percent: 25,  // 25% safety margin
+};
+```
+
+### Code Reuse Optimization
+
+If your contract's codehash matches an already-activated contract:
+
+```bash
+cargo stylus check
+```
+
+**Output if already activated**:
+
+```
+Checking contract...
+✓ Contract with this codehash is already activated!
+Version: 1
+No activation needed - you can deploy without activating.
+```
+
+You can deploy the contract normally, and it will automatically use the existing activation.
+
+### Contract Caching
+
+After activation, contracts can be cached for cheaper calls:
+
+```solidity
+// ArbWasmCache precompile (0x0000000000000000000000000000000000000072)
+function cacheProgram(address program) external payable returns (uint256);
+```
+
+**Benefits**:
+
+- Reduces gas costs for subsequent contract calls
+- One-time caching fee
+- Shared across all contracts with same codehash
+
+## Advanced Activation Patterns
+
+### Multi-Contract Deployment
+
+When deploying multiple instances of the same contract:
+
+```bash
+# First deployment: full deploy + activate
+cargo stylus deploy --private-key-path=wallet.txt
+# Contract 1: 0xaaaa... (activated)
+
+# Subsequent deployments: deploy only (reuses activation)
+cargo stylus deploy --private-key-path=wallet.txt --no-activate
+# Contract 2: 0xbbbb... (uses existing activation)
+
+cargo stylus deploy --private-key-path=wallet.txt --no-activate
+# Contract 3: 0xcccc... (uses existing activation)
+```
+
+All three contracts share the same codehash and activation, saving on data fees.
+
+### Programmatic Deployment
+
+Using the stylus-tools library directly:
+
+```rust
+use stylus_tools::core::{
+    deployment::{deploy, DeploymentConfig},
+    activation::{activate_contract, ActivationConfig, data_fee},
+    check::{check_contract, ContractStatus},
+};
+use alloy::providers::{Provider, WalletProvider};
+
+async fn deploy_and_activate(
+    provider: &impl Provider + WalletProvider,
+) -> Result<Address, Box<dyn std::error::Error>> {
+    let contract = /* build contract */;
+
+    // Step 1: Check if already activated
+    let config = CheckConfig::default();
+    match check_contract(&contract, None, &config, provider).await? {
+        ContractStatus::Active { .. } => {
+            println!("Already activated!");
+            // Deploy without activation
+        }
+        ContractStatus::Ready { code, fee } => {
+            println!("Ready to activate. Data fee: {}", fee);
+            // Continue with deployment + activation
+        }
+    }
+
+    // Step 2: Deploy
+    let deploy_config = DeploymentConfig {
+        no_activate: false,
+        ..Default::default()
+    };
+
+    deploy(&contract, &deploy_config, provider).await?;
+
+    // Contract address returned from deployment
+    Ok(contract_address)
+}
+```
+
+### Custom Deployer Contracts
+
+Use a custom deployer contract instead of the default:
+
+```bash
+cargo stylus deploy \
+  --private-key-path=wallet.txt \
+  --deployer-address=0x... \
+  --deployer-salt=0x0000000000000000000000000000000000000000000000000000000000000001
+```
+
+This is useful for:
+
+- CREATE2 deterministic addresses
+- Custom deployment logic
+- Factory patterns
+
+## Contract Lifecycle
+
+### Activation Lifecycle
+
+```
+Deployed → Activated → [Active] → [Keepalive] → [Expired]
+                           ↑          ↓
+                           └──────────┘
+                          (Periodic keepalive)
+```
+
+### Expiration and Keepalive
+
+Programs automatically expire after ~1 year (configurable by chain):
+
+```solidity
+// Check time remaining
+uint64 timeLeft = ArbWasm.programTimeLeft(contractAddress);
+
+// Extend expiration
+ArbWasm.codehashKeepalive{value: keepaliveFee}(codehash);
+```
+
+**Why expiration?**
+
+- Prevents abandoned contracts from consuming ArbOS resources
+- Encourages active maintenance
+- Allows protocol upgrades
+
+**Keepalive strategy**:
+
+- Monitor `programTimeLeft()` periodically
+- Call `codehashKeepalive()` before expiration
+- Automated scripts can handle this
+
+### Reactivation After Expiry
+
+If a program expires:
+
+```bash
+# Reactivate the existing deployment
+cargo stylus activate --address=0x...
+```
+
+The contract code remains on-chain; only the activation state was cleared.
+
+## Troubleshooting
+
+### Common Activation Errors
+
+#### "Program not activated"
+
+**Cause**: Trying to call a deployed but not activated contract
+
+**Solution**:
+
+```bash
+cargo stylus activate --address=0x...
+```
+
+#### "Insufficient value"
+
+**Cause**: Data fee sent is less than required
+
+**Solution**:
+
+- Check current data fee: `cargo stylus check`
+- Increase fee bump percentage
+- Ensure sufficient ETH balance
+
+#### "Program not WASM"
+
+**Cause**: Deployed bytecode is not valid Stylus WASM
+
+**Solution**:
+
+- Verify you deployed the correct contract
+- Rebuild and redeploy: `cargo stylus deploy`
+
+#### "Program needs upgrade"
+
+**Cause**: Contract was activated against an old Stylus version
+
+**Solution**:
+
+- Recompile with latest SDK
+- Redeploy and reactivate
+
+#### "Program expired"
+
+**Cause**: Contract hasn't been kept alive and expired
+
+**Solution**:
+
+```bash
+# Reactivate the contract
+cargo stylus activate --address=0x...
+```
+
+### Debugging Activation
+
+Enable verbose output:
+
+```bash
+# Check detailed status
+cargo stylus check --verbose
+
+# Deploy with verbose logging
+RUST_LOG=debug cargo stylus deploy --private-key-path=wallet.txt
+```
+
+### Verifying Activation Status
+
+Check if a contract is activated:
+
+```bash
+# Via cargo-stylus
+cargo stylus check --address=0x...
+
+# Via cast (calling ArbWasm)
+cast call 0x0000000000000000000000000000000000000071 \
+  "codehashVersion(bytes32)" \
+  $(cast keccak $(cast code 0x...))
+```
+
+## Best Practices
+
+### 1. Always Check Before Deploying
+
+```bash
+cargo stylus check
+```
+
+This prevents deploying duplicate code and wasting gas.
+
+### 2. Use Automatic Activation
+
+Unless you have specific reasons to split deployment and activation, use the default behavior:
+
+```bash
+cargo stylus deploy  # Deploys AND activates
+```
+
+### 3. Test on Testnet First
+
+Deploy to Arbitrum Sepolia before mainnet:
+
+```bash
+cargo stylus deploy \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc" \
+  --private-key-path=testnet-key.txt
+```
+
+### 4. Monitor Contract Expiration
+
+Set up monitoring for production contracts:
+
+```solidity
+uint64 timeLeft = ArbWasm.programTimeLeft(contractAddress);
+if (timeLeft < 30 days) {
+    // Send alert or trigger keepalive
+}
+```
+
+### 5. Document Activation Details
+
+Track activation information:
+
+- Contract address
+- Activation transaction hash
+- Stylus version
+- Data fee paid
+- Activation timestamp
+
+### 6. Keep SDK Updated
+
+Use the latest Stylus SDK version:
+
+```toml
+[dependencies]
+stylus-sdk = "0.10.0-beta.1"
+```
+
+Older versions may become incompatible with chain upgrades.
+
+### 7. Handle Constructor Arguments Carefully
+
+Type-check constructor arguments:
+
+```bash
+# Incorrect (will fail)
+cargo stylus deploy --constructor-args "hello" 123
+
+# Correct (matches constructor signature)
+cargo stylus deploy --constructor-args 0x1234... 42
+```
+
+## Complete Example
+
+Here's a full deployment workflow:
+
+```bash
+# 1. Create new Stylus project
+cargo stylus new my-token
+cd my-token
+
+# 2. Build and verify locally
+cargo build --release --target wasm32-unknown-unknown
+cargo stylus check
+
+# 3. Test on Arbitrum Sepolia
+export SEPOLIA_ENDPOINT="https://sepolia-rollup.arbitrum.io/rpc"
+export PRIVATE_KEY_PATH="./sepolia-key.txt"
+
+cargo stylus deploy \
+  --endpoint=$SEPOLIA_ENDPOINT \
+  --private-key-path=$PRIVATE_KEY_PATH \
+  --constructor-args "MyToken" "MTK" 18
+
+# 4. Verify deployment
+cargo stylus check \
+  --endpoint=$SEPOLIA_ENDPOINT \
+  --address=0x...  # Address from step 3
+
+# 5. Deploy to mainnet
+export MAINNET_ENDPOINT="https://arb1.arbitrum.io/rpc"
+export MAINNET_KEY_PATH="./mainnet-key.txt"
+
+cargo stylus deploy \
+  --endpoint=$MAINNET_ENDPOINT \
+  --private-key-path=$MAINNET_KEY_PATH \
+  --constructor-args "MyToken" "MTK" 18
+
+# 6. Cache the contract (optional, for gas optimization)
+cast send 0x0000000000000000000000000000000000000072 \
+  "cacheProgram(address)" \
+  0x...  # Your contract address \
+  --value 10000000000000000 \
+  --rpc-url=$MAINNET_ENDPOINT \
+  --private-key=$MAINNET_PRIVATE_KEY
+```
+
+## Summary
+
+- **Two-step process**: Deployment stores code, activation makes it executable
+- **cargo-stylus handles both**: Use `deploy` for automatic activation
+- **Data fee required**: Activation costs ETH (separate from deployment gas)
+- **Code reuse**: Identical contracts share activation, saving costs
+- **Expiration**: Programs expire after ~1 year without keepalive
+- **ArbWasm precompile**: All activation goes through address `0x71`
+- **Check first**: Use `cargo stylus check` to avoid duplicate activations
+
+## See Also
+
+- [Contracts](../reference/contracts.mdx) - Writing Stylus contracts
+- [Global Variables and Functions](../reference/global-variables-and-functions.mdx) - VM interface methods
+  <!-- - [cargo-stylus CLI Reference](../reference/cargo-stylus-reference.mdx) - Complete CLI documentation -->
+  <!-- - [ArbWasm Precompile](../reference/precompiles.mdx#arbwasm) - Detailed precompile reference -->

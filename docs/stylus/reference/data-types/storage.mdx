@@ -1,0 +1,1097 @@
+---
+title: 'Stylus Rust SDK storage'
+description: 'Stylus Rust SDK storage types'
+author: anegg0
+sme: anegg0
+sidebar_position: 3
+target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
+displayed_sidebar: buildStylusSidebar
+---
+
+Persistent storage in Stylus contracts provides access to the EVM State Trie, the same key-value storage used by Solidity contracts. The SDK provides type-safe storage access through dedicated storage types that prevent aliasing errors at compile time using Rust's borrow checker.
+
+## Overview
+
+Stylus contracts share the same persistent storage as Solidity contracts:
+
+- Both Stylus and Solidity access the same EVM State Trie
+- Storage is fully interoperable between Stylus and Solidity contracts
+- Stylus provides compile-time safety through Rust's type system
+- Storage operations are cached for gas efficiency
+
+### Storage declaration
+
+Use the `sol_storage!` macro to define contract storage with Solidity-compatible layout:
+
+```rust
+use stylus_sdk::prelude::*;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct MyContract {
+        uint256 count;
+        address owner;
+        bool initialized;
+    }
+}
+```
+
+Alternatively, use the `#[storage]` attribute for Rust-style declarations:
+
+```rust
+use stylus_sdk::prelude::*;
+use stylus_sdk::storage::*;
+
+#[storage]
+#[entrypoint]
+pub struct MyContract {
+    count: StorageU256,
+    owner: StorageAddress,
+    initialized: StorageBool,
+}
+```
+
+## Storage primitives
+
+Storage primitives are persistent versions of basic types.
+
+### Boolean storage (`StorageBool`)
+
+Store boolean values in persistent storage:
+
+```rust
+use stylus_sdk::prelude::*;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Contract {
+        bool is_initialized;
+        bool is_paused;
+    }
+}
+
+#[public]
+impl Contract {
+    pub fn initialize(&mut self) {
+        self.is_initialized.set(true);
+    }
+
+    pub fn is_initialized(&self) -> bool {
+        self.is_initialized.get()
+    }
+
+    pub fn toggle_pause(&mut self) {
+        let current = self.is_paused.get();
+        self.is_paused.set(!current);
+    }
+}
+```
+
+### Integer storage
+
+Store unsigned and signed integers with various bit sizes:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::U256;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Counter {
+        uint256 count;
+        uint64 timestamp;
+        int256 balance;
+    }
+}
+
+#[public]
+impl Counter {
+    // Unsigned integer operations
+    pub fn increment(&mut self) {
+        let current = self.count.get();
+        self.count.set(current + U256::from(1));
+    }
+
+    pub fn add(&mut self, value: U256) {
+        let current = self.count.get();
+        self.count.set(current + value);
+    }
+
+    pub fn get_count(&self) -> U256 {
+        self.count.get()
+    }
+
+    // Timestamp storage
+    pub fn set_timestamp(&mut self, ts: u64) {
+        self.timestamp.set(ts);
+    }
+}
+```
+
+#### Available storage integer types
+
+| Storage Type  | Primitive Type | Bit Size | Solidity Type |
+| ------------- | -------------- | -------- | ------------- |
+| `StorageU8`   | `U8`           | 8 bits   | `uint8`       |
+| `StorageU16`  | `U16`          | 16 bits  | `uint16`      |
+| `StorageU32`  | `U32`          | 32 bits  | `uint32`      |
+| `StorageU64`  | `U64`          | 64 bits  | `uint64`      |
+| `StorageU128` | `U128`         | 128 bits | `uint128`     |
+| `StorageU256` | `U256`         | 256 bits | `uint256`     |
+| `StorageI8`   | `I8`           | 8 bits   | `int8`        |
+| `StorageI16`  | `I16`          | 16 bits  | `int16`       |
+| `StorageI32`  | `I32`          | 32 bits  | `int32`       |
+| `StorageI64`  | `I64`          | 64 bits  | `int64`       |
+| `StorageI128` | `I128`         | 128 bits | `int128`      |
+| `StorageI256` | `I256`         | 256 bits | `int256`      |
+
+#### Integer update operations
+
+`StorageUint` types provide convenient update methods:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::U256;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Contract {
+        uint256 balance;
+    }
+}
+
+#[public]
+impl Contract {
+    // Wrapping operations (overflow wraps around)
+    pub fn add_wrapping(&mut self, value: U256) -> U256 {
+        self.balance.update_wrap_add(value)
+    }
+
+    pub fn sub_wrapping(&mut self, value: U256) -> U256 {
+        self.balance.update_wrap_sub(value)
+    }
+
+    pub fn mul_wrapping(&mut self, value: U256) -> U256 {
+        self.balance.update_wrap_mul(value)
+    }
+
+    // Checked operations (return None on overflow)
+    pub fn add_checked(&mut self, value: U256) -> Option<U256> {
+        self.balance.update_check_add(value)
+    }
+
+    pub fn sub_checked(&mut self, value: U256) -> Option<U256> {
+        self.balance.update_check_sub(value)
+    }
+}
+```
+
+### Address storage (`StorageAddress`)
+
+Store Ethereum addresses:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::Address;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Ownership {
+        address owner;
+        address pending_owner;
+    }
+}
+
+#[public]
+impl Ownership {
+    pub fn get_owner(&self) -> Address {
+        self.owner.get()
+    }
+
+    pub fn transfer_ownership(&mut self, new_owner: Address) {
+        // Validate address
+        if new_owner == Address::ZERO {
+            // Handle error
+            return;
+        }
+
+        let current_owner = self.owner.get();
+        if self.vm().msg_sender() != current_owner {
+            // Not authorized
+            return;
+        }
+
+        self.pending_owner.set(new_owner);
+    }
+
+    pub fn accept_ownership(&mut self) {
+        let caller = self.vm().msg_sender();
+        if caller != self.pending_owner.get() {
+            return;
+        }
+
+        self.owner.set(caller);
+        self.pending_owner.set(Address::ZERO);
+    }
+}
+```
+
+### Fixed bytes storage
+
+Store fixed-size byte arrays:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::FixedBytes;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Hashes {
+        bytes32 merkle_root;
+        bytes32 commitment;
+        bytes4 selector;
+    }
+}
+
+#[public]
+impl Hashes {
+    pub fn set_merkle_root(&mut self, root: FixedBytes<32>) {
+        self.merkle_root.set(root);
+    }
+
+    pub fn get_merkle_root(&self) -> FixedBytes<32> {
+        self.merkle_root.get()
+    }
+
+    pub fn verify_hash(&self, proof: FixedBytes<32>) -> bool {
+        self.merkle_root.get() == proof
+    }
+}
+```
+
+#### Available fixed bytes storage types
+
+| Storage Type  | Bytes | Bits     | Solidity Type |
+| ------------- | ----- | -------- | ------------- |
+| `StorageB8`   | 1     | 8 bits   | `bytes1`      |
+| `StorageB16`  | 2     | 16 bits  | `bytes2`      |
+| `StorageB32`  | 4     | 32 bits  | `bytes4`      |
+| `StorageB64`  | 8     | 64 bits  | `bytes8`      |
+| `StorageB128` | 16    | 128 bits | `bytes16`     |
+| `StorageB160` | 20    | 160 bits | `bytes20`     |
+| `StorageB224` | 28    | 224 bits | `bytes28`     |
+| `StorageB256` | 32    | 256 bits | `bytes32`     |
+
+## Storage collections
+
+Storage collections provide persistent arrays, vectors, and maps.
+
+### StorageVec (dynamic array)
+
+Dynamic arrays that can grow and shrink:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+sol_storage! {
+    #[entrypoint]
+    pub struct TokenList {
+        address[] holders;
+        uint256[] balances;
+    }
+}
+
+#[public]
+impl TokenList {
+    // Add element
+    pub fn add_holder(&mut self, holder: Address) {
+        self.holders.push(holder);
+    }
+
+    // Get element
+    pub fn get_holder(&self, index: U256) -> Address {
+        self.holders.get(index).unwrap()
+    }
+
+    // Get length
+    pub fn holder_count(&self) -> U256 {
+        U256::from(self.holders.len())
+    }
+
+    // Set element
+    pub fn set_balance(&mut self, index: U256, balance: U256) {
+        self.balances.setter(index).unwrap().set(balance);
+    }
+
+    // Iterate over elements
+    pub fn total_balance(&self) -> U256 {
+        let mut total = U256::ZERO;
+        for i in 0..self.balances.len() {
+            total += self.balances.get(U256::from(i)).unwrap();
+        }
+        total
+    }
+
+    // Remove element (erase to zero)
+    pub fn remove_holder(&mut self, index: U256) {
+        self.holders.setter(index).unwrap().erase();
+    }
+
+    // Clear all elements
+    pub fn clear_holders(&mut self) {
+        self.holders.erase();
+    }
+}
+```
+
+#### StorageVec methods
+
+```rust
+// Length operations
+fn len(&self) -> usize
+fn is_empty(&self) -> bool
+
+// Access operations
+fn get(&self, index: impl TryInto<usize>) -> Option<T>
+fn getter(&self, index: impl TryInto<usize>) -> Option<StorageGuard<'_, T>>
+fn setter(&mut self, index: impl TryInto<usize>) -> Option<StorageGuardMut<'_, T>>
+
+// Mutation operations
+fn push(&mut self, value: T)
+fn grow(&mut self) -> StorageGuardMut<'_, T>  // Add new element and return mutable reference
+fn erase(&mut self)  // Clear all elements
+```
+
+### StorageArray (fixed array)
+
+Fixed-size arrays with compile-time known length:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::U256;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct FixedData {
+        uint256[10] values;
+        address[5] admins;
+    }
+}
+
+#[public]
+impl FixedData {
+    // Get element
+    pub fn get_value(&self, index: U256) -> U256 {
+        self.values.get(index).unwrap()
+    }
+
+    // Set element
+    pub fn set_value(&mut self, index: U256, value: U256) {
+        self.values.setter(index).unwrap().set(value);
+    }
+
+    // Get array length (compile-time constant)
+    pub fn array_size(&self) -> U256 {
+        U256::from(self.values.len())
+    }
+
+    // Iterate over array
+    pub fn sum_values(&self) -> U256 {
+        let mut sum = U256::ZERO;
+        for i in 0..self.values.len() {
+            sum += self.values.get(U256::from(i)).unwrap();
+        }
+        sum
+    }
+}
+```
+
+### StorageMap (mapping)
+
+Key-value storage, equivalent to Solidity `mapping`:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Token {
+        mapping(address => uint256) balances;
+        mapping(address => mapping(address => uint256)) allowances;
+    }
+}
+
+#[public]
+impl Token {
+    // Get value (returns zero if not set)
+    pub fn balance_of(&self, account: Address) -> U256 {
+        self.balances.get(account)
+    }
+
+    // Set value
+    pub fn set_balance(&mut self, account: Address, amount: U256) {
+        self.balances.setter(account).set(amount);
+    }
+
+    // Insert value (same as set)
+    pub fn mint(&mut self, account: Address, amount: U256) {
+        let current = self.balances.get(account);
+        self.balances.insert(account, current + amount);
+    }
+
+    // Delete value (reset to zero)
+    pub fn burn(&mut self, account: Address, amount: U256) {
+        let current = self.balances.get(account);
+        if current >= amount {
+            self.balances.setter(account).set(current - amount);
+        }
+    }
+
+    // Nested mapping
+    pub fn allowance(&self, owner: Address, spender: Address) -> U256 {
+        self.allowances.get(owner).get(spender)
+    }
+
+    pub fn approve(&mut self, spender: Address, amount: U256) {
+        let owner = self.vm().msg_sender();
+        self.allowances
+            .setter(owner)
+            .setter(spender)
+            .set(amount);
+    }
+}
+```
+
+#### StorageMap methods
+
+```rust
+// Read operations
+fn get(&self, key: K) -> V  // Returns zero-value if not present
+fn getter(&self, key: K) -> StorageGuard<'_, V>
+
+// Write operations
+fn setter(&mut self, key: K) -> StorageGuardMut<'_, V>
+fn insert(&mut self, key: K, value: V)
+fn replace(&mut self, key: K, value: V) -> V  // Returns old value
+fn take(&mut self, key: K) -> V  // Returns value and deletes
+fn delete(&mut self, key: K)  // Erases entry
+```
+
+#### Supported map key types
+
+Any type implementing `StorageKey` can be used as a map key:
+
+- `Address`
+- `U256`, `U160`, and other `Uint<B, L>` types
+- `FixedBytes<N>`
+- `Signed<B, L>` types
+- `bool`
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256, FixedBytes};
+
+sol_storage! {
+    #[entrypoint]
+    pub struct MultiMap {
+        mapping(address => uint256) by_address;
+        mapping(uint256 => address) by_id;
+        mapping(bytes32 => bool) by_hash;
+        mapping(bool => uint256) by_flag;
+    }
+}
+```
+
+### StorageString and StorageBytes
+
+Dynamic string and bytes storage:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloc::string::String;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Metadata {
+        string name;
+        string symbol;
+        bytes data;
+    }
+}
+
+#[public]
+impl Metadata {
+    // String operations
+    pub fn get_name(&self) -> String {
+        self.name.get_string()
+    }
+
+    pub fn set_name(&mut self, name: String) {
+        self.name.set_str(name);
+    }
+
+    pub fn name_length(&self) -> usize {
+        self.name.len()
+    }
+
+    pub fn clear_name(&mut self) {
+        self.name.erase();
+    }
+
+    // Bytes operations
+    pub fn get_data(&self) -> Vec<u8> {
+        self.data.get_bytes()
+    }
+
+    pub fn set_data(&mut self, data: Vec<u8>) {
+        self.data.set_bytes(data);
+    }
+
+    pub fn data_length(&self) -> usize {
+        self.data.len()
+    }
+}
+```
+
+## Storage structs
+
+Define custom storage types with nested structures:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+// Storage struct definition
+#[storage]
+pub struct UserInfo {
+    balance: StorageU256,
+    is_active: StorageBool,
+    timestamp: StorageU64,
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct UserRegistry {
+        mapping(address => UserInfo) users;
+        uint256 total_users;
+    }
+}
+
+#[public]
+impl UserRegistry {
+    pub fn register_user(&mut self, user: Address) {
+        let mut user_info = self.users.setter(user);
+        user_info.balance.set(U256::ZERO);
+        user_info.is_active.set(true);
+        user_info.timestamp.set(self.vm().block_timestamp());
+
+        let count = self.total_users.get();
+        self.total_users.set(count + U256::from(1));
+    }
+
+    pub fn get_balance(&self, user: Address) -> U256 {
+        self.users.get(user).balance.get()
+    }
+
+    pub fn update_balance(&mut self, user: Address, amount: U256) {
+        self.users.setter(user).balance.set(amount);
+    }
+
+    pub fn is_active(&self, user: Address) -> bool {
+        self.users.get(user).is_active.get()
+    }
+}
+```
+
+### Nested storage structs
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::Address;
+
+#[storage]
+pub struct Dog {
+    name: StorageString,
+    breed: StorageString,
+}
+
+#[storage]
+pub struct User {
+    name: StorageString,
+    dogs: StorageVec<Dog>,
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Registry {
+        mapping(address => User) users;
+    }
+}
+
+#[public]
+impl Registry {
+    pub fn add_dog(&mut self, owner: Address, name: String, breed: String) {
+        let mut user = self.users.setter(owner);
+        let mut dog = user.dogs.grow();
+        dog.name.set_str(name);
+        dog.breed.set_str(breed);
+    }
+
+    pub fn get_dog_count(&self, owner: Address) -> usize {
+        self.users.get(owner).dogs.len()
+    }
+
+    pub fn get_dog_name(&self, owner: Address, index: usize) -> String {
+        self.users
+            .get(owner)
+            .dogs
+            .get(index)
+            .unwrap()
+            .name
+            .get_string()
+    }
+}
+```
+
+## Storage patterns
+
+### Initialization pattern
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Contract {
+        bool initialized;
+        address owner;
+        uint256 value;
+    }
+}
+
+#[public]
+impl Contract {
+    #[constructor]
+    pub fn constructor(&mut self, initial_value: U256) {
+        self.owner.set(self.vm().msg_sender());
+        self.value.set(initial_value);
+        self.initialized.set(true);
+    }
+
+    fn only_initialized(&self) {
+        if !self.initialized.get() {
+            // Revert: not initialized
+        }
+    }
+
+    pub fn get_value(&self) -> U256 {
+        self.only_initialized();
+        self.value.get()
+    }
+}
+```
+
+### Counter pattern
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::U256;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Counter {
+        uint256 count;
+        mapping(address => uint256) user_counts;
+    }
+}
+
+#[public]
+impl Counter {
+    pub fn increment(&mut self) {
+        let current = self.count.get();
+        self.count.set(current + U256::from(1));
+    }
+
+    pub fn increment_by(&mut self, amount: U256) {
+        let current = self.count.get();
+        self.count.set(current + amount);
+    }
+
+    pub fn increment_user(&mut self) {
+        let user = self.vm().msg_sender();
+        let current = self.user_counts.get(user);
+        self.user_counts.insert(user, current + U256::from(1));
+    }
+
+    pub fn get_count(&self) -> U256 {
+        self.count.get()
+    }
+
+    pub fn get_user_count(&self, user: Address) -> U256 {
+        self.user_counts.get(user)
+    }
+}
+```
+
+### Access control pattern
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::Address;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct AccessControl {
+        address owner;
+        mapping(address => bool) admins;
+        mapping(address => bool) users;
+    }
+}
+
+#[public]
+impl AccessControl {
+    #[constructor]
+    pub fn constructor(&mut self) {
+        let sender = self.vm().msg_sender();
+        self.owner.set(sender);
+        self.admins.insert(sender, true);
+    }
+
+    fn only_owner(&self) {
+        if self.vm().msg_sender() != self.owner.get() {
+            // Revert: not owner
+        }
+    }
+
+    fn only_admin(&self) {
+        let sender = self.vm().msg_sender();
+        if !self.admins.get(sender) {
+            // Revert: not admin
+        }
+    }
+
+    pub fn add_admin(&mut self, admin: Address) {
+        self.only_owner();
+        self.admins.insert(admin, true);
+    }
+
+    pub fn remove_admin(&mut self, admin: Address) {
+        self.only_owner();
+        self.admins.delete(admin);
+    }
+
+    pub fn add_user(&mut self, user: Address) {
+        self.only_admin();
+        self.users.insert(user, true);
+    }
+
+    pub fn is_admin(&self, account: Address) -> bool {
+        self.admins.get(account)
+    }
+
+    pub fn is_user(&self, account: Address) -> bool {
+        self.users.get(account)
+    }
+}
+```
+
+### Registry pattern
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+#[storage]
+pub struct Record {
+    owner: StorageAddress,
+    created_at: StorageU64,
+    updated_at: StorageU64,
+    active: StorageBool,
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Registry {
+        mapping(bytes32 => Record) records;
+        mapping(address => bytes32[]) user_records;
+        uint256 total_records;
+    }
+}
+
+#[public]
+impl Registry {
+    pub fn create_record(&mut self, id: FixedBytes<32>) {
+        let now = self.vm().block_timestamp();
+        let owner = self.vm().msg_sender();
+
+        let mut record = self.records.setter(id);
+        record.owner.set(owner);
+        record.created_at.set(now);
+        record.updated_at.set(now);
+        record.active.set(true);
+
+        // Add to user's record list
+        self.user_records.setter(owner).push(id);
+
+        // Increment total
+        let total = self.total_records.get();
+        self.total_records.set(total + U256::from(1));
+    }
+
+    pub fn get_record_owner(&self, id: FixedBytes<32>) -> Address {
+        self.records.get(id).owner.get()
+    }
+
+    pub fn is_active(&self, id: FixedBytes<32>) -> bool {
+        self.records.get(id).active.get()
+    }
+
+    pub fn deactivate(&mut self, id: FixedBytes<32>) {
+        let owner = self.records.get(id).owner.get();
+        if owner != self.vm().msg_sender() {
+            // Not authorized
+            return;
+        }
+
+        self.records.setter(id).active.set(false);
+    }
+}
+```
+
+## Best practices
+
+### 1. Use appropriate storage types
+
+```rust
+// Good: Use StorageU256 for counters
+sol_storage! {
+    pub struct Counter {
+        uint256 count;
+    }
+}
+
+// Good: Use StorageMap for lookups
+sol_storage! {
+    pub struct Balances {
+        mapping(address => uint256) balances;
+    }
+}
+
+// Good: Use StorageVec for dynamic lists
+sol_storage! {
+    pub struct Users {
+        address[] user_list;
+    }
+}
+```
+
+### 2. Minimize storage operations
+
+```rust
+// Bad: Multiple storage reads
+pub fn bad_example(&self) -> U256 {
+    let a = self.value.get();
+    let b = self.value.get(); // Unnecessary read
+    a + b
+}
+
+// Good: Single storage read
+pub fn good_example(&self) -> U256 {
+    let value = self.value.get();
+    value + value
+}
+```
+
+### 3. Use batch operations
+
+```rust
+// Good: Batch updates in a single transaction
+pub fn update_multiple(&mut self, values: Vec<U256>) {
+    for (i, value) in values.iter().enumerate() {
+        self.data.setter(U256::from(i)).unwrap().set(*value);
+    }
+}
+```
+
+### 4. Check before delete
+
+```rust
+// Good: Verify before deletion
+pub fn remove_user(&mut self, user: Address) {
+    if self.users.get(user) {
+        self.users.delete(user);
+        // Update related storage
+    }
+}
+```
+
+### 5. Use erase for gas refunds
+
+```rust
+// Good: Clear storage for gas refunds
+pub fn clear_data(&mut self) {
+    self.data.erase(); // Refunds gas
+}
+```
+
+## Storage slots and layout
+
+Stylus uses the same storage layout as Solidity:
+
+- Each storage slot is **32 bytes** (256 bits)
+- Variables are **packed** when possible to save space
+- Arrays and mappings use **computed slots** via hashing
+
+```rust
+sol_storage! {
+    pub struct Packed {
+        uint128 a;      // Slot 0 (first 16 bytes)
+        uint128 b;      // Slot 0 (last 16 bytes)
+        uint256 c;      // Slot 1 (full 32 bytes)
+        bool d;         // Slot 2 (1 byte)
+        address e;      // Slot 2 (20 bytes, packed with d)
+    }
+}
+```
+
+### Custom storage slots
+
+You can specify custom storage slots for specific use cases:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::U256;
+
+#[storage]
+#[entrypoint]
+pub struct CustomSlots {
+    // Default slot allocation
+    value: StorageU256,
+
+    // Custom slot (advanced usage)
+    // Note: Requires manual slot management
+}
+```
+
+## Complete example
+
+Here's a comprehensive example demonstrating various storage types:
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloc::string::String;
+use alloy_primitives::{Address, FixedBytes, U256};
+use stylus_sdk::prelude::*;
+
+#[storage]
+pub struct TokenMetadata {
+    name: StorageString,
+    symbol: StorageString,
+    decimals: StorageU8,
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Token {
+        // Primitives
+        uint256 total_supply;
+        bool paused;
+        address owner;
+
+        // Collections
+        mapping(address => uint256) balances;
+        mapping(address => mapping(address => uint256)) allowances;
+        address[] holders;
+
+        // Nested struct
+        TokenMetadata metadata;
+    }
+}
+
+#[public]
+impl Token {
+    #[constructor]
+    pub fn constructor(&mut self, name: String, symbol: String) {
+        self.owner.set(self.vm().msg_sender());
+        self.metadata.name.set_str(name);
+        self.metadata.symbol.set_str(symbol);
+        self.metadata.decimals.set(18);
+        self.paused.set(false);
+    }
+
+    pub fn total_supply(&self) -> U256 {
+        self.total_supply.get()
+    }
+
+    pub fn balance_of(&self, account: Address) -> U256 {
+        self.balances.get(account)
+    }
+
+    pub fn transfer(&mut self, to: Address, amount: U256) -> bool {
+        if self.paused.get() {
+            return false;
+        }
+
+        let from = self.vm().msg_sender();
+        let from_balance = self.balances.get(from);
+
+        if from_balance < amount {
+            return false;
+        }
+
+        self.balances.insert(from, from_balance - amount);
+
+        let to_balance = self.balances.get(to);
+        self.balances.insert(to, to_balance + amount);
+
+        true
+    }
+
+    pub fn approve(&mut self, spender: Address, amount: U256) -> bool {
+        let owner = self.vm().msg_sender();
+        self.allowances.setter(owner).insert(spender, amount);
+        true
+    }
+
+    pub fn allowance(&self, owner: Address, spender: Address) -> U256 {
+        self.allowances.get(owner).get(spender)
+    }
+
+    pub fn pause(&mut self) {
+        if self.vm().msg_sender() != self.owner.get() {
+            return;
+        }
+        self.paused.set(true);
+    }
+
+    pub fn unpause(&mut self) {
+        if self.vm().msg_sender() != self.owner.get() {
+            return;
+        }
+        self.paused.set(false);
+    }
+
+    pub fn name(&self) -> String {
+        self.metadata.name.get_string()
+    }
+
+    pub fn symbol(&self) -> String {
+        self.metadata.symbol.get_string()
+    }
+
+    pub fn decimals(&self) -> u8 {
+        self.metadata.decimals.get()
+    }
+}
+```
+
+## See also
+
+- [Primitives](./primitives.mdx) - Basic types used in storage
+- [Compound Types](./compound-types.mdx) - Complex types in storage
+- [Type Conversions](./conversions-between-types.mdx) - Converting between types

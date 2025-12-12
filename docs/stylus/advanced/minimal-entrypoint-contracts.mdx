@@ -1,0 +1,644 @@
+---
+title: 'Minimal entrypoint contracts'
+description: 'Understanding low-level Stylus contract entrypoints and the Router trait'
+author: chrisco
+sme: chrisco
+sidebar_position: 1
+target_audience: Developers who need to understand how to build a minimal entrypoint contract without high-level macros.
+displayed_sidebar: buildStylusSidebar
+---
+
+This guide explains the low-level mechanics of Stylus contract entrypoints, helping you understand what happens behind the `#[entrypoint]` and `#[public]` macros. This knowledge is useful for advanced use cases, debugging, and building custom contract frameworks.
+
+## Overview
+
+A Stylus contract at its core consists of:
+
+1. **`user_entrypoint` function**: The WASM export that Stylus calls
+2. **Router implementation**: Routes function selectors to method implementations
+3. **TopLevelStorage trait**: Marks the contract's root storage type
+4. **ArbResult type**: Represents success/failure with encoded return data
+
+## Understanding `ArbResult`
+
+`ArbResult` is the fundamental return type for Stylus contract methods:
+
+```rust
+pub type ArbResult = Result<Vec<u8>, Vec<u8>>;
+```
+
+- `Ok(Vec<u8>)` - Success with ABI-encoded return data
+- `Err(Vec<u8>)` - Revert with ABI-encoded error data
+
+**Example:**
+
+```rust
+use stylus_sdk::ArbResult;
+
+// Success with no return data
+fn no_return() -> ArbResult {
+    Ok(Vec::new())
+}
+
+// Success with encoded data
+fn return_value() -> ArbResult {
+    let value: u32 = 42;
+    Ok(value.to_le_bytes().to_vec())
+}
+
+// Revert with error data
+fn revert_with_error() -> ArbResult {
+    Err(b"InsufficientBalance".to_vec())
+}
+```
+
+## The `user_entrypoint` Function
+
+The `user_entrypoint` function is the WASM export that Stylus calls when a transaction invokes the contract. The `#[entrypoint]` macro generates this function automatically.
+
+### Generated Structure
+
+When you use `#[entrypoint]`, the macro generates:
+
+```rust
+#[no_mangle]
+pub extern "C" fn user_entrypoint(len: usize) -> usize {
+    let host = stylus_sdk::host::VM {
+        host: stylus_sdk::host::WasmVM{}
+    };
+
+    // Reentrancy check (unless reentrant feature enabled)
+    if host.msg_reentrant() {
+        return 1; // revert
+    }
+
+    // Ensure pay_for_memory_grow is referenced
+    // (costs 8700 ink, less than 1 gas)
+    host.pay_for_memory_grow(0);
+
+    // Read calldata
+    let input = host.read_args(len);
+
+    // Call the router
+    let (data, status) = match router_entrypoint::<MyContract, MyContract>(input, host.clone()) {
+        Ok(data) => (data, 0),   // Success
+        Err(data) => (data, 1),  // Revert
+    };
+
+    // Persist storage changes
+    host.flush_cache(false);
+
+    // Write return data
+    host.write_result(&data);
+
+    status
+}
+```
+
+### Key Points
+
+- **Signature**: `extern "C" fn user_entrypoint(len: usize) -> usize`
+- **Input**: `len` is the length of calldata to read
+- **Output**: `0` for success, `1` for revert
+- **Side effects**: Reads calldata, writes return data, flushes storage cache
+
+## The `Router` Trait
+
+The `Router` trait defines how function calls are dispatched to method implementations.
+
+### Trait Definition
+
+```rust
+pub trait Router<S, I = Self>
+where
+    S: TopLevelStorage + BorrowMut<Self::Storage> + ValueDenier,
+    I: ?Sized,
+{
+    type Storage;
+
+    /// Route a function call by selector
+    fn route(storage: &mut S, selector: u32, input: &[u8]) -> Option<ArbResult>;
+
+    /// Handle receive (plain ETH transfers, no calldata)
+    fn receive(storage: &mut S) -> Option<Result<(), Vec<u8>>>;
+
+    /// Handle fallback (unknown selectors or no receive)
+    fn fallback(storage: &mut S, calldata: &[u8]) -> Option<ArbResult>;
+
+    /// Handle constructor
+    fn constructor(storage: &mut S, calldata: &[u8]) -> Option<ArbResult>;
+}
+```
+
+### Routing Logic
+
+The `router_entrypoint` function implements the routing logic:
+
+```rust
+pub fn router_entrypoint<R, S>(input: Vec<u8>, host: VM) -> ArbResult
+where
+    R: Router<S>,
+    S: StorageType + TopLevelStorage + BorrowMut<R::Storage> + ValueDenier,
+{
+    let mut storage = unsafe { S::new(U256::ZERO, 0, host) };
+
+    // No calldata - try receive, then fallback
+    if input.is_empty() {
+        if let Some(res) = R::receive(&mut storage) {
+            return res.map(|_| Vec::new());
+        }
+        if let Some(res) = R::fallback(&mut storage, &[]) {
+            return res;
+        }
+        return Err(Vec::new()); // No receive or fallback
+    }
+
+    // Extract selector (first 4 bytes)
+    if input.len() >= 4 {
+        let selector = u32::from_be_bytes(input[..4].try_into().unwrap());
+
+        // Check for constructor
+        if selector == CONSTRUCTOR_SELECTOR {
+            if let Some(res) = R::constructor(&mut storage, &input[4..]) {
+                return res;
+            }
+        }
+        // Try to route to a method
+        else if let Some(res) = R::route(&mut storage, selector, &input[4..]) {
+            return res;
+        }
+    }
+
+    // Try fallback
+    if let Some(res) = R::fallback(&mut storage, &input) {
+        return res;
+    }
+
+    Err(Vec::new()) // Unknown selector and no fallback
+}
+```
+
+## The `TopLevelStorage` Trait
+
+The `TopLevelStorage` trait marks types that represent the contract's root storage.
+
+### Trait Definition
+
+```rust
+pub unsafe trait TopLevelStorage {}
+```
+
+### Purpose
+
+- Prevents storage aliasing during reentrancy
+- Lifetime tracks all EVM state changes during contract invocation
+- Must hold a reference when making external calls
+- Automatically implemented by `#[entrypoint]`
+
+### Safety
+
+The trait is `unsafe` because:
+
+- Type must truly be top-level to prevent storage aliasing
+- Incorrectly implementing this trait can lead to undefined behavior
+
+## Building a Minimal Contract
+
+Here's a minimal contract without using the high-level macros:
+
+### Step 1: Define Storage
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloc::vec::Vec;
+use stylus_sdk::{
+    abi::{Router, ArbResult},
+    storage::StorageType,
+    host::VM,
+    alloy_primitives::U256,
+};
+
+// Mark as top-level storage (normally done by #[entrypoint])
+pub struct MyContract;
+
+unsafe impl stylus_core::storage::TopLevelStorage for MyContract {}
+
+impl StorageType for MyContract {
+    type Wraps<'a> = &'a Self where Self: 'a;
+    type WrapsMut<'a> = &'a mut Self where Self: 'a;
+
+    unsafe fn new(_slot: U256, _offset: u8, _host: VM) -> Self {
+        MyContract
+    }
+
+    fn load<'s>(self) -> Self::Wraps<'s> {
+        &self
+    }
+
+    fn load_mut<'s>(self) -> Self::WrapsMut<'s> {
+        &mut self
+    }
+}
+```
+
+### Step 2: Implement Router
+
+```rust
+impl Router<MyContract> for MyContract {
+    type Storage = MyContract;
+
+    fn route(_storage: &mut MyContract, selector: u32, _input: &[u8]) -> Option<ArbResult> {
+        // Simple example: one method with selector 0x12345678
+        match selector {
+            0x12345678 => Some(Ok(Vec::new())),
+            _ => None, // Unknown selector
+        }
+    }
+
+    fn receive(_storage: &mut MyContract) -> Option<Result<(), Vec<u8>>> {
+        None // No receive function
+    }
+
+    fn fallback(_storage: &mut MyContract, _calldata: &[u8]) -> Option<ArbResult> {
+        None // No fallback function
+    }
+
+    fn constructor(_storage: &mut MyContract, _calldata: &[u8]) -> Option<ArbResult> {
+        None // No constructor
+    }
+}
+```
+
+### Step 3: Define Entrypoint
+
+```rust
+#[no_mangle]
+pub extern "C" fn user_entrypoint(len: usize) -> usize {
+    let host = VM { host: stylus_sdk::host::WasmVM{} };
+
+    // Reentrancy check
+    if host.msg_reentrant() {
+        return 1;
+    }
+
+    // Reference pay_for_memory_grow
+    host.pay_for_memory_grow(0);
+
+    // Read input
+    let input = host.read_args(len);
+
+    // Route the call
+    let (data, status) = match stylus_sdk::abi::router_entrypoint::<MyContract, MyContract>(input, host.clone()) {
+        Ok(data) => (data, 0),
+        Err(data) => (data, 1),
+    };
+
+    // Flush storage
+    host.flush_cache(false);
+
+    // Write result
+    host.write_result(&data);
+
+    status
+}
+```
+
+## Function Selectors
+
+Function selectors are 4-byte identifiers computed from the function signature.
+
+### Computing Selectors
+
+```rust
+use stylus_sdk::function_selector;
+
+// Manual computation
+const MY_FUNCTION: [u8; 4] = function_selector!("myFunction");
+
+// With parameters
+const TRANSFER: [u8; 4] = function_selector!("transfer", Address, U256);
+
+// Constructor selector
+const CONSTRUCTOR_SELECTOR: u32 =
+    u32::from_be_bytes(function_selector!("constructor"));
+```
+
+### Using in Router
+
+```rust
+impl Router<MyContract> for MyContract {
+    type Storage = MyContract;
+
+    fn route(_storage: &mut MyContract, selector: u32, input: &[u8]) -> Option<ArbResult> {
+        const GET_VALUE: u32 = u32::from_be_bytes(function_selector!("getValue"));
+        const SET_VALUE: u32 = u32::from_be_bytes(function_selector!("setValue", U256));
+
+        match selector {
+            GET_VALUE => {
+                // Return encoded U256 value
+                let value = U256::from(42);
+                Some(Ok(value.to_be_bytes::<32>().to_vec()))
+            }
+            SET_VALUE => {
+                // Decode input and set value
+                if input.len() >= 32 {
+                    // Process set_value logic
+                    Some(Ok(Vec::new()))
+                } else {
+                    Some(Err(Vec::new()))
+                }
+            }
+            _ => None,
+        }
+    }
+
+    fn receive(_storage: &mut MyContract) -> Option<Result<(), Vec<u8>>> {
+        None
+    }
+
+    fn fallback(_storage: &mut MyContract, _calldata: &[u8]) -> Option<ArbResult> {
+        None
+    }
+
+    fn constructor(_storage: &mut MyContract, _calldata: &[u8]) -> Option<ArbResult> {
+        None
+    }
+}
+```
+
+## Implementing Special Functions
+
+### Receive Function
+
+Handles plain ETH transfers (no calldata):
+
+```rust
+fn receive(storage: &mut MyContract) -> Option<Result<(), Vec<u8>>> {
+    // Access msg_value via storage.vm().msg_value()
+    // Must return Ok(()) for success
+    Some(Ok(()))
+}
+```
+
+### Fallback Function
+
+Handles unknown selectors or when no receive is defined:
+
+```rust
+fn fallback(storage: &mut MyContract, calldata: &[u8]) -> Option<ArbResult> {
+    // Can access full calldata
+    // Return Some to handle, None to revert
+    Some(Ok(Vec::new()))
+}
+```
+
+### Constructor
+
+Called once during deployment with `CONSTRUCTOR_SELECTOR`:
+
+```rust
+fn constructor(storage: &mut MyContract, calldata: &[u8]) -> Option<ArbResult> {
+    // Initialize contract state
+    // calldata contains constructor parameters
+    Some(Ok(Vec::new()))
+}
+```
+
+## Complete Minimal Example
+
+Here's a complete working minimal contract:
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloc::vec::Vec;
+use core::borrow::BorrowMut;
+use stylus_sdk::{
+    abi::Router,
+    alloy_primitives::U256,
+    host::VM,
+    storage::StorageType,
+    ArbResult,
+    function_selector,
+};
+use stylus_core::{storage::TopLevelStorage, ValueDenier};
+
+// Contract storage
+pub struct MinimalContract;
+
+// Mark as top-level storage
+unsafe impl TopLevelStorage for MinimalContract {}
+
+// Implement StorageType
+impl StorageType for MinimalContract {
+    type Wraps<'a> = &'a Self where Self: 'a;
+    type WrapsMut<'a> = &'a mut Self where Self: 'a;
+
+    unsafe fn new(_slot: U256, _offset: u8, _host: VM) -> Self {
+        MinimalContract
+    }
+
+    fn load<'s>(self) -> Self::Wraps<'s> {
+        &self
+    }
+
+    fn load_mut<'s>(self) -> Self::WrapsMut<'s> {
+        &mut self
+    }
+}
+
+// Implement ValueDenier (for non-payable check)
+impl ValueDenier for MinimalContract {
+    fn deny_value(&self, _method_name: &str) -> Result<(), Vec<u8>> {
+        Ok(()) // Allow all for simplicity
+    }
+}
+
+// Implement BorrowMut
+impl BorrowMut<MinimalContract> for MinimalContract {
+    fn borrow_mut(&mut self) -> &mut MinimalContract {
+        self
+    }
+}
+
+// Implement Router
+impl Router<MinimalContract> for MinimalContract {
+    type Storage = MinimalContract;
+
+    fn route(_storage: &mut MinimalContract, selector: u32, _input: &[u8]) -> Option<ArbResult> {
+        const HELLO: u32 = u32::from_be_bytes(function_selector!("hello"));
+
+        match selector {
+            HELLO => Some(Ok(Vec::new())),
+            _ => None,
+        }
+    }
+
+    fn receive(_storage: &mut MinimalContract) -> Option<Result<(), Vec<u8>>> {
+        None
+    }
+
+    fn fallback(_storage: &mut MinimalContract, _calldata: &[u8]) -> Option<ArbResult> {
+        Some(Ok(Vec::new())) // Accept all unknown calls
+    }
+
+    fn constructor(_storage: &mut MinimalContract, _calldata: &[u8]) -> Option<ArbResult> {
+        Some(Ok(Vec::new()))
+    }
+}
+
+// Define user_entrypoint
+#[no_mangle]
+pub extern "C" fn user_entrypoint(len: usize) -> usize {
+    let host = VM { host: stylus_sdk::host::WasmVM{} };
+
+    if host.msg_reentrant() {
+        return 1;
+    }
+
+    host.pay_for_memory_grow(0);
+
+    let input = host.read_args(len);
+    let (data, status) = match stylus_sdk::abi::router_entrypoint::<MinimalContract, MinimalContract>(input, host.clone()) {
+        Ok(data) => (data, 0),
+        Err(data) => (data, 1),
+    };
+
+    host.flush_cache(false);
+    host.write_result(&data);
+    status
+}
+```
+
+## Why Use High-Level Macros?
+
+While minimal contracts are educational, the `#[entrypoint]` and `#[public]` macros provide:
+
+1. **Automatic selector generation** from method names
+2. **Type-safe parameter encoding/decoding** using Alloy types
+3. **Solidity ABI export** for interoperability
+4. **Storage trait implementations** with caching
+5. **Error handling** with `Result` types
+6. **Payable checks** for ETH-receiving functions
+7. **Reentrancy protection** by default
+
+**Recommended approach:**
+
+```rust
+// Use macros for production contracts
+#[storage]
+#[entrypoint]
+pub struct MyContract {
+    value: StorageU256,
+}
+
+#[public]
+impl MyContract {
+    pub fn get_value(&self) -> U256 {
+        self.value.get()
+    }
+
+    pub fn set_value(&mut self, value: U256) {
+        self.value.set(value);
+    }
+}
+```
+
+This generates all the low-level code automatically while providing a clean, type-safe interface.
+
+## Advanced Use Cases
+
+### Custom Routing Logic
+
+Implement custom routing for multi-contract systems:
+
+```rust
+impl Router<MultiContract> for MultiContract {
+    type Storage = MultiContract;
+
+    fn route(storage: &mut MultiContract, selector: u32, input: &[u8]) -> Option<ArbResult> {
+        // Route to different modules based on selector range
+        match selector {
+            0x00000000..=0x0fffffff => ModuleA::route(storage, selector, input),
+            0x10000000..=0x1fffffff => ModuleB::route(storage, selector, input),
+            _ => None,
+        }
+    }
+
+    // ... other methods
+}
+```
+
+### Custom Entrypoint Logic
+
+Add custom logic before/after routing:
+
+```rust
+#[no_mangle]
+pub extern "C" fn user_entrypoint(len: usize) -> usize {
+    let host = VM { host: stylus_sdk::host::WasmVM{} };
+
+    // Custom pre-processing
+    let start_gas = host.evm_gas_left();
+
+    // Standard entrypoint logic
+    if host.msg_reentrant() {
+        return 1;
+    }
+
+    host.pay_for_memory_grow(0);
+    let input = host.read_args(len);
+
+    let (data, status) = match stylus_sdk::abi::router_entrypoint::<MyContract, MyContract>(input, host.clone()) {
+        Ok(data) => (data, 0),
+        Err(data) => (data, 1),
+    };
+
+    // Custom post-processing
+    let gas_used = start_gas - host.evm_gas_left();
+    // Log or handle gas usage
+
+    host.flush_cache(false);
+    host.write_result(&data);
+    status
+}
+```
+
+## Debugging Tips
+
+### Enable Debug Mode
+
+```rust
+#[cfg(feature = "debug")]
+use stylus_sdk::console;
+
+fn route(storage: &mut MyContract, selector: u32, input: &[u8]) -> Option<ArbResult> {
+    #[cfg(feature = "debug")]
+    console!("Selector: {:08x}", selector);
+
+    // Routing logic...
+}
+```
+
+### Check Selector Computation
+
+```rust
+#[test]
+fn test_selectors() {
+    use stylus_sdk::function_selector;
+
+    let hello = u32::from_be_bytes(function_selector!("hello"));
+    assert_eq!(hello, 0x19ff1d21);
+
+    // Compare with Solidity: bytes4(keccak256("hello()"))
+}
+```
+
+## See Also
+
+- [Contracts](../reference/contracts.mdx) - High-level contract development
+- [Global Variables](../reference/global-variables-and-functions.mdx) - VM context methods
+- [Storage Types](../reference/data-types/storage.mdx) - Persistent storage

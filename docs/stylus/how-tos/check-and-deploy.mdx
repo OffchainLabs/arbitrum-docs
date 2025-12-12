@@ -1,0 +1,779 @@
+---
+title: 'Check and deploy'
+description: 'Check and deploy Stylus contracts'
+author: chrisco
+sme: chrisco
+sidebar_position: 1
+target_audience: Developers who need to understand how to check and deploy Stylus contracts.
+displayed_sidebar: buildStylusSidebar
+---
+
+This guide explains how to validate and deploy Stylus smart contracts using the `cargo stylus` CLI tool. The process involves two main steps: checking that your contract is valid, and deploying it to an Arbitrum chain.
+
+## Prerequisites
+
+Before checking or deploying contracts, ensure you have:
+
+1. **Rust toolchain** installed (see [rustup.rs](https://rustup.rs))
+2. **WebAssembly target** added:
+   ```shell
+   rustup target add wasm32-unknown-unknown
+   ```
+3. **cargo-stylus CLI** installed:
+   ```shell
+   cargo install cargo-stylus
+   ```
+4. **RPC endpoint** for the target chain (see [testnet information](https://docs.arbitrum.io/stylus/reference/testnet-information))
+5. **Funded account** with ETH for gas and activation fees
+
+## Overview: The Two-Step Process
+
+Deploying a Stylus contract involves two distinct steps:
+
+1. **Deployment**: Upload the compressed WASM bytecode to the chain, assigning it an address
+2. **Activation**: Trigger onchain compilation to native code and cache it for fast execution
+
+The `cargo stylus check` command validates your contract before deployment, and `cargo stylus deploy` handles both steps automatically.
+
+## Checking Contracts
+
+The `cargo stylus check` command validates that your contract can be deployed and activated without actually sending a transaction.
+
+### What check does
+
+1. **Compiles** your Rust code to WASM with `wasm32-unknown-unknown` target
+2. **Compresses** the WASM using brotli compression
+3. **Validates** the WASM structure:
+   - Required exports (`user_entrypoint`)
+   - Allowed imports (only `vm_hooks`)
+   - Memory constraints
+   - Size limits (24KB compressed)
+4. **Simulates activation** using `eth_call` to verify onchain compatibility
+5. **Estimates data fee** required for activation
+
+### Basic usage
+
+```shell
+# Check the current project against Arbitrum Sepolia (default)
+cargo stylus check
+```
+
+### Common options
+
+```shell
+# Check against a specific network
+cargo stylus check \
+  --endpoint="https://arb1.arbitrum.io/rpc"
+
+# Check a specific WASM file
+cargo stylus check \
+  --wasm-file=./target/wasm32-unknown-unknown/release/my_contract.wasm
+
+# Check with a specific contract address
+cargo stylus check \
+  --contract-address=0x1234567890123456789012345678901234567890
+```
+
+### Success output
+
+When your contract passes validation:
+
+```shell
+Finished release [optimized] target(s) in 1.88s
+Reading WASM file at target/wasm32-unknown-unknown/release/my_contract.wasm
+Compressed WASM size: 3 KB
+Contract succeeded Stylus onchain activation checks with Stylus version: 1
+wasm data fee: 0.0001 ETH (originally 0.00008 ETH with 20% bump)
+```
+
+### Failure output
+
+If validation fails, you'll see detailed error information:
+
+```shell
+Reading WASM file at target/wasm32-unknown-unknown/release/bad_contract.wasm
+Compressed WASM size: 55 B
+Stylus checks failed: contract predeployment check failed
+
+Caused by:
+    binary exports reserved symbol stylus_ink_left
+
+Location:
+    prover/src/binary.rs:493:9
+```
+
+Common validation errors include:
+
+- **Missing entrypoint**: Contract lacks `#[entrypoint]` attribute
+- **Invalid exports**: Contract exports reserved symbols
+- **Size limit exceeded**: Compressed WASM exceeds 24KB
+- **Invalid imports**: Contract imports functions outside `vm_hooks`
+- **Memory violations**: Incorrect memory handling or growth
+
+## Deploying Contracts
+
+The `cargo stylus deploy` command compiles, deploys, and activates your contract in a single operation.
+
+### What deploy does
+
+1. **Compiles and checks** the contract (same as `cargo stylus check`)
+2. **Deploys bytecode**: Sends transaction to upload compressed WASM to the chain
+3. **Activates contract**: Calls `activateProgram` precompile to compile to native code
+4. **Verifies success**: Confirms both transactions completed successfully
+
+### Basic deployment
+
+```shell
+# Deploy to Arbitrum Sepolia (default testnet)
+cargo stylus deploy \
+  --private-key-path=./key.txt
+```
+
+### Deployment with gas estimation
+
+Before deploying, estimate the gas required:
+
+```shell
+cargo stylus deploy \
+  --private-key-path=./key.txt \
+  --estimate-gas
+```
+
+Output:
+
+```shell
+Compressed WASM size: 3 KB
+Deploying contract to address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
+Estimated gas: 12756792
+wasm data fee: 0.0001 ETH
+```
+
+### Full deployment
+
+Once estimation looks correct, deploy for real:
+
+```shell
+cargo stylus deploy \
+  --private-key-path=./key.txt
+```
+
+Output shows both transactions:
+
+```shell
+Compressed WASM size: 3 KB
+Deploying contract to address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
+Estimated gas: 12756792
+Submitting tx...
+Confirmed tx 0x42db...7311, gas used 11657164
+
+Activating contract at address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
+Estimated gas: 14251759
+Submitting tx...
+Confirmed tx 0x0bdb...3307, gas used 14204908
+```
+
+### Deployment options
+
+#### Network selection
+
+```shell
+# Deploy to Arbitrum One (mainnet)
+cargo stylus deploy \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --private-key-path=./key.txt
+
+# Deploy to Arbitrum Sepolia (testnet)
+cargo stylus deploy \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc" \
+  --private-key-path=./key.txt
+```
+
+#### Private key management
+
+```shell
+# From file (recommended)
+cargo stylus deploy \
+  --private-key-path=./key.txt
+
+# From environment (WARNING: exposes key to shell history)
+cargo stylus deploy \
+  --private-key=$PRIVATE_KEY
+
+# From keystore file
+cargo stylus deploy \
+  --keystore-path=./keystore.json \
+  --keystore-password-path=./password.txt
+```
+
+#### Gas price control
+
+```shell
+# Set custom gas price (in gwei)
+cargo stylus deploy \
+  --private-key-path=./key.txt \
+  --max-fee-per-gas-gwei=0.05
+```
+
+#### Deploy without activation
+
+For advanced use cases, deploy bytecode without immediate activation:
+
+```shell
+cargo stylus deploy \
+  --private-key-path=./key.txt \
+  --no-activate
+```
+
+Later, activate separately:
+
+```shell
+cargo stylus activate \
+  --address=0x457b1ba688e9854bdbed2f473f7510c476a3da09 \
+  --private-key-path=./key.txt
+```
+
+#### Constructor arguments
+
+Deploy contracts with constructor arguments:
+
+```shell
+cargo stylus deploy \
+  --private-key-path=./key.txt \
+  --constructor-args "Hello" "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb" 42
+```
+
+Send ETH to payable constructor:
+
+```shell
+cargo stylus deploy \
+  --private-key-path=./key.txt \
+  --constructor-value=0.1 \
+  --constructor-args "InitialValue"
+```
+
+#### Reproducible builds
+
+For contract verification, use Docker-based reproducible builds:
+
+```shell
+# Default: uses Docker for reproducibility
+cargo stylus deploy \
+  --private-key-path=./key.txt
+
+# Specify cargo-stylus version
+cargo stylus deploy \
+  --private-key-path=./key.txt \
+  --cargo-stylus-version=0.5.0
+```
+
+Skip Docker for local development (non-reproducible):
+
+```shell
+cargo stylus deploy \
+  --private-key-path=./key.txt \
+  --no-verify
+```
+
+## Understanding Activation
+
+Activation is the process of compiling WASM to native machine code onchain.
+
+### Why activation is required
+
+- **Performance**: Native code executes 10-100x faster than interpreted WASM
+- **Validation**: Ensures WASM is well-formed and follows all constraints
+- **Caching**: Compiled code is cached for all future contract calls
+
+### Activation process
+
+1. **Decompress**: Brotli-compressed WASM is decompressed
+2. **Validate**: WASM structure is checked for correctness
+3. **Compile**: WASM is compiled to native machine code
+4. **Cache**: Compiled code is stored in the activation cache
+5. **Charge fee**: Data fee based on WASM size is charged
+
+### Data fee calculation
+
+The data fee depends on the size of your WASM:
+
+```rust
+// From activation.rs
+pub async fn data_fee(
+    code: impl Into<Bytes>,
+    address: Address,
+    config: &ActivationConfig,
+    provider: &impl Provider,
+) -> Result<U256, ActivationError> {
+    let result = arbwasm
+        .activateProgram(address)
+        .call()
+        .await?;
+
+    let data_fee = result.dataFee;
+    let bump = config.data_fee_bump_percent; // Default 20%
+    let adjusted = bump_data_fee(data_fee, bump);
+
+    Ok(adjusted)
+}
+```
+
+By default, the fee is bumped by 20% to account for gas price fluctuations.
+
+### Activation errors
+
+Common activation failures:
+
+#### Missing entrypoint
+
+```
+Error: Contract could not be activated as it is missing an entrypoint.
+Please ensure that your contract has an #[entrypoint] defined on your main struct
+```
+
+**Solution**: Add `#[entrypoint]` to your main storage struct:
+
+```rust
+#[entrypoint]
+#[storage]
+pub struct MyContract {
+    // ...
+}
+```
+
+#### Insufficient funds
+
+```
+Error: not enough funds in account 0x... to pay for data fee
+balance 0.0001 ETH < 0.0005 ETH
+```
+
+**Solution**: Fund your account with more ETH. Get testnet ETH from faucets:
+
+- [Arbitrum Sepolia faucet](https://faucet.quicknode.com/arbitrum/sepolia)
+
+#### Invalid WASM
+
+```
+Error: contract activation failed: failed to parse contract
+Caused by: binary exports reserved symbol stylus_ink_left
+```
+
+**Solution**: Ensure you're using the latest `stylus-sdk` version and following SDK conventions.
+
+## Deployment Workflows
+
+### Development workflow
+
+For rapid iteration during development:
+
+```shell
+# 1. Check frequently during development
+cargo stylus check
+
+# 2. Deploy to testnet with no-verify for speed
+cargo stylus deploy \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc" \
+  --private-key-path=./key.txt \
+  --no-verify
+
+# 3. Test the deployed contract
+# (use your testing framework)
+
+# 4. Iterate and redeploy as needed
+```
+
+### Production workflow
+
+For production deployments:
+
+```shell
+# 1. Final check against mainnet
+cargo stylus check \
+  --endpoint="https://arb1.arbitrum.io/rpc"
+
+# 2. Estimate costs
+cargo stylus deploy \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --private-key-path=./key.txt \
+  --estimate-gas
+
+# 3. Deploy with reproducible build (for verification)
+cargo stylus deploy \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --private-key-path=./key.txt \
+  --cargo-stylus-version=0.5.0
+
+# 4. Verify the deployed contract
+cargo stylus verify \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --deployment-tx=0x...
+```
+
+### Multi-contract deployment
+
+Deploy multiple contracts from a workspace:
+
+```shell
+# Check all contracts in workspace
+cargo stylus check
+
+# Deploy specific contract
+cargo stylus deploy \
+  --contract=my-token \
+  --private-key-path=./key.txt
+
+# Deploy all contracts (must have no-arg constructors)
+cargo stylus deploy \
+  --private-key-path=./key.txt
+```
+
+## Checking Existing Deployments
+
+### Check if contract is activated
+
+```rust
+// From check.rs
+let codehash = processed.codehash();
+if Contract::exists(codehash, &provider).await? {
+    return Ok(ContractStatus::Active {
+        code: processed.code,
+    });
+}
+```
+
+Use `cargo stylus check` with `--contract-address` to verify an existing deployment:
+
+```shell
+cargo stylus check \
+  --contract-address=0x457b1ba688e9854bdbed2f473f7510c476a3da09
+```
+
+### Re-activation
+
+If a contract is already deployed but not activated, activate it:
+
+```shell
+cargo stylus activate \
+  --address=0x457b1ba688e9854bdbed2f473f7510c476a3da09 \
+  --private-key-path=./key.txt
+```
+
+## Best Practices
+
+### 1. Always check before deploying
+
+```shell
+# ✅ Good: Check first
+cargo stylus check
+cargo stylus deploy --private-key-path=./key.txt
+
+# ❌ Bad: Deploy without checking
+cargo stylus deploy --private-key-path=./key.txt
+```
+
+### 2. Use gas estimation
+
+```shell
+# ✅ Good: Estimate first
+cargo stylus deploy --private-key-path=./key.txt --estimate-gas
+# Review the output, then deploy for real
+cargo stylus deploy --private-key-path=./key.txt
+
+# ❌ Bad: Deploy without estimation
+cargo stylus deploy --private-key-path=./key.txt
+```
+
+### 3. Secure private key handling
+
+```shell
+# ✅ Good: Use key file
+echo $PRIVATE_KEY > /tmp/key.txt
+chmod 600 /tmp/key.txt
+cargo stylus deploy --private-key-path=/tmp/key.txt
+rm /tmp/key.txt
+
+# ⚠️ Risky: Expose key in command line
+cargo stylus deploy --private-key=$PRIVATE_KEY
+```
+
+### 4. Test on testnet first
+
+```shell
+# ✅ Good: Test on Sepolia first
+cargo stylus deploy \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc" \
+  --private-key-path=./key.txt
+
+# After testing succeeds, deploy to mainnet
+cargo stylus deploy \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --private-key-path=./key.txt
+
+# ❌ Bad: Deploy directly to mainnet
+cargo stylus deploy \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --private-key-path=./key.txt
+```
+
+### 5. Use reproducible builds for verification
+
+```shell
+# ✅ Good: Reproducible build for mainnet
+cargo stylus deploy \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --private-key-path=./key.txt \
+  --cargo-stylus-version=0.5.0
+
+# Then verify on Arbiscan
+cargo stylus verify \
+  --endpoint="https://arb1.arbitrum.io/rpc" \
+  --deployment-tx=0x...
+
+# ⚠️ OK for development: Skip Docker
+cargo stylus deploy \
+  --endpoint="https://sepolia-rollup.arbitrum.io/rpc" \
+  --private-key-path=./key.txt \
+  --no-verify
+```
+
+### 6. Monitor contract size
+
+```shell
+# Check compressed size
+cargo stylus check
+
+# If size is close to 24KB limit:
+# - Use #[no_std]
+# - Remove unused dependencies
+# - Enable aggressive optimizations
+# - Strip debug symbols
+```
+
+### 7. Verify data fee is reasonable
+
+```shell
+# Check data fee before deploying
+cargo stylus deploy --private-key-path=./key.txt --estimate-gas
+
+# Output shows:
+# wasm data fee: 0.0001 ETH (originally 0.00008 ETH with 20% bump)
+
+# If fee seems high:
+# - Optimize WASM size
+# - Check network congestion
+# - Verify contract correctness
+```
+
+## Troubleshooting
+
+### Size limit errors
+
+**Error**: Compressed WASM exceeds 24KB
+
+**Solutions**:
+
+1. Use `#[no_std]` to eliminate standard library:
+
+   ```rust
+   #![no_std]
+   extern crate alloc;
+   ```
+
+2. Remove unused dependencies from `Cargo.toml`:
+
+   ```toml
+   [dependencies]
+   stylus-sdk = "0.5"
+   # Remove unnecessary crates
+   ```
+
+3. Enable size optimizations in `Cargo.toml`:
+
+   ```toml
+   [profile.release]
+   opt-level = "z"
+   lto = true
+   strip = true
+   ```
+
+4. Use `wasm-opt` for additional optimization:
+   ```shell
+   wasm-opt -Oz -o optimized.wasm input.wasm
+   cargo stylus deploy --wasm-file=optimized.wasm --private-key-path=./key.txt
+   ```
+
+### Activation failures
+
+**Error**: Transaction reverted during activation
+
+**Solutions**:
+
+1. Verify entrypoint exists:
+
+   ```rust
+   #[entrypoint]
+   #[storage]
+   pub struct MyContract { /* ... */ }
+   ```
+
+2. Check WASM validity:
+
+   ```shell
+   cargo stylus check --wasm-file=./target/wasm32-unknown-unknown/release/my_contract.wasm
+   ```
+
+3. Ensure sufficient funds:
+
+   ```shell
+   # Check balance
+   cast balance $YOUR_ADDRESS --rpc-url $RPC_URL
+
+   # Get testnet ETH if needed
+   # Visit faucet.quicknode.com/arbitrum/sepolia
+   ```
+
+### RPC errors
+
+**Error**: Connection timeout or RPC error
+
+**Solutions**:
+
+1. Verify endpoint URL:
+
+   ```shell
+   curl -X POST $RPC_URL \
+     -H "Content-Type: application/json" \
+     -d '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1}'
+   ```
+
+2. Try alternative endpoints:
+
+   ```shell
+   # Arbitrum One
+   --endpoint="https://arb1.arbitrum.io/rpc"
+   --endpoint="https://arbitrum-one.publicnode.com"
+
+   # Arbitrum Sepolia
+   --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+   --endpoint="https://arbitrum-sepolia.blockpi.network/v1/rpc/public"
+   ```
+
+3. Check network status:
+   - [Arbitrum Status](https://arbiscan.io/)
+   - [Chainlist](https://chainlist.org/)
+
+### Build errors
+
+**Error**: Compilation fails
+
+**Solutions**:
+
+1. Update dependencies:
+
+   ```shell
+   cargo update
+   ```
+
+2. Clear build cache:
+
+   ```shell
+   cargo clean
+   ```
+
+3. Verify Rust toolchain:
+
+   ```shell
+   rustup update
+   rustup target add wasm32-unknown-unknown
+   ```
+
+4. Check SDK version compatibility:
+   ```toml
+   [dependencies]
+   stylus-sdk = "0.5"  # Use latest stable version
+   ```
+
+## Non-Rust WASM Deployment
+
+Deploy WASM from any language (C, C++, etc.):
+
+```shell
+# Deploy raw WASM file
+cargo stylus deploy \
+  --wasm-file=./my_contract.wasm \
+  --private-key-path=./key.txt
+
+# Deploy WebAssembly Text (WAT) file
+cargo stylus deploy \
+  --wasm-file=./my_contract.wat \
+  --private-key-path=./key.txt
+```
+
+Example WAT file structure:
+
+```wasm
+(module
+    (memory 0 0)
+    (export "memory" (memory 0))
+    (func (export "user_entrypoint") (param $args_len i32) (result i32)
+        (i32.const 0)
+    ))
+```
+
+## Command Reference
+
+### cargo stylus check
+
+**Syntax**:
+
+```shell
+cargo stylus check [OPTIONS]
+```
+
+**Common options**:
+
+- `--endpoint=<URL>`: RPC endpoint (default: Arbitrum Sepolia)
+- `--wasm-file=<PATH>`: Check specific WASM file
+- `--contract-address=<ADDRESS>`: Target contract address
+
+### cargo stylus deploy
+
+**Syntax**:
+
+```shell
+cargo stylus deploy [OPTIONS]
+```
+
+**Common options**:
+
+- `--endpoint=<URL>`: RPC endpoint
+- `--private-key-path=<PATH>`: Private key file
+- `--estimate-gas`: Only estimate gas
+- `--no-activate`: Deploy without activation
+- `--no-verify`: Skip Docker reproducible build
+- `--constructor-args <ARGS>`: Constructor arguments
+- `--constructor-value=<ETH>`: ETH sent to constructor
+- `--max-fee-per-gas-gwei=<GWEI>`: Custom gas price
+
+### cargo stylus activate
+
+**Syntax**:
+
+```shell
+cargo stylus activate --address=<ADDRESS> [OPTIONS]
+```
+
+**Options**:
+
+- `--address=<ADDRESS>`: Deployed contract address (required)
+- `--private-key-path=<PATH>`: Private key file
+- `--estimate-gas`: Only estimate gas
+
+## Resources
+
+- [Stylus quickstart guide](https://docs.arbitrum.io/stylus/stylus-quickstart)
+- [Cargo Stylus repository](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus)
+- [Testnet information](https://docs.arbitrum.io/stylus/reference/testnet-information)
+- [Contract verification guide](https://docs.arbitrum.io/stylus/how-tos/verifying-contracts)
+- [Optimizing WASM size](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus/blob/main/OPTIMIZING_BINARIES.md)
+- [Valid WASM requirements](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus/blob/main/VALID_WASM.md)

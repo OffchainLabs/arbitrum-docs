@@ -246,38 +246,8 @@
       "permanent": false
     },
     {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-alt-da/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_alt-da-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-anytrust/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_anytrust-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-custom-gas-token/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_custom-gas-token-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-fast-withdrawals/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_fast-withdrawals-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-native-eth/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_native-eth-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-permissioned-validators/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_permissioned-validators-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-rollup/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_rollup-pc/?)",
+      "source": "/(docs/stylus/recommended-libraries/?)",
+      "destination": "/(docs/stylus/advanced/recommended-libraries/?)",
       "permanent": false
     },
     {
