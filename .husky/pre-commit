@@ -150,16 +150,39 @@ main() {
     js_files=$(echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|scss)$" || true)
     md_files=$(echo "$staged_files" | grep -E "\.(md|mdx)$" || true)
 
+    # Filter out files that should be ignored by Prettier
+    # When passing files explicitly to Prettier, .prettierignore is bypassed
+    # So we need to manually filter them out
+    filter_prettier_ignored() {
+      local files="$1"
+      local filtered=""
+      while IFS= read -r file; do
+        if [ -n "$file" ]; then
+          # Check if file is ignored by Prettier
+          if npx prettier --file-info "$file" 2>/dev/null | grep -q '"ignored": false'; then
+            filtered="$filtered$file"$'\n'
+          fi
+        fi
+      done <<< "$files"
+      echo "$filtered"
+    }
+
     # Format JavaScript/TypeScript files if any
     if [ -n "$js_files" ]; then
       log_info "🎨 Formatting JS/TS files..."
-      echo "$js_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "JavaScript/TypeScript formatting failed"
+      js_files=$(filter_prettier_ignored "$js_files")
+      if [ -n "$js_files" ]; then
+        echo "$js_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "JavaScript/TypeScript formatting failed"
+      fi
     fi
 
     # Format Markdown files if any
     if [ -n "$md_files" ]; then
       log_info "📝 Formatting Markdown files..."
-      echo "$md_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "Markdown formatting failed"
+      md_files=$(filter_prettier_ignored "$md_files")
+      if [ -n "$md_files" ]; then
+        echo "$md_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "Markdown formatting failed"
+      fi
     fi
 
     # Re-stage formatted files
