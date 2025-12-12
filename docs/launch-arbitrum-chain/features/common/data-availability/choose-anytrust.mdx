@@ -1,0 +1,29 @@
+---
+title: 'Why choose to use AnyTrust for data availability on your Arbitrum chain'
+description: 'Learn about data availability using AnyTrust and the pros and cons of choosing to use it for DA on your chain.'
+author: pete-vielhaber
+sme: jason-w123
+content_type: configuration
+---
+
+import AnytrustPCPartial from '../../partials/_anytrust-pc.mdx';
+
+Choosing AnyTrust mode refers to selecting the AnyTrust protocol as the data availability (DA) mechanism for a chain, such as when deploying custom chains. AnyTrust is an alternative to the pure Rollup mode, prioritizing cost efficiency and performance over maximum decentralization.
+
+Opting for AnyTrust means configuring your Arbitrum-based chain to use this DA approach for reduced operational costs and better scalability, while accepting a slight trade-off in trust-minimization compared to posting all data directly to <a data-quicklook-from="l1">L1</a> (as in Rollup mode).
+
+It's ideal for use cases where ultra-low fees are a priority over Ethereum's full security guarantees, such as consumer apps or high-frequency trading platforms. Developers can set up and configure a DAC via Arbitrum's tools, including defining the committee size and keyset threshold. This flexibility allows tailoring to specific needs within the Arbitrum ecosystem, and it's compatible with other Arbitrum chain features like custom gas tokens or third-party DA integrations.
+
+## Key concepts
+
+- **Data Availability (DA) in Arbitrum**: DA ensures <a data-quicklook-from="transaction">transaction</a> data is accessible for verification, fraud proofs, and maintaining security in optimistic Rollups. Without reliable DA, users couldn't independently validate the chain's state.
+- **AnyTrust mode**:
+  - Transaction data is initially submitted off-chain to a permissioned group of nodes called the Data Availability Committee (DAC), typically consisting of around 20 members (though configurable).
+  - The DAC stores the data and signs a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert), which posts to the <a data-quicklook-from="parent-chain">parent chain</a>. Full data is not posted onchain unless requested (e.g., during a <a data-quicklook-from="challenge">challenge</a>).
+  - Security relies on a "keyset" where at least two honest members are assumed to prevent data withholding—far milder than centralized assumptions but not fully <a data-quicklook-from="trustless">trustless</a> like Rollup mode.
+
+<!-- Render AnyTrust Pros & Cons Partial -->
+
+<AnytrustPCPartial />
+
+This option reflects the growing trend toward modular <a data-quicklook-from="blockchain">blockchain</a> architectures, where DA handling is separate to scale ecosystems like Arbitrum without compromising core security. For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-<a data-quicklook-from="raas">RaaS</a>-providers).
