@@ -636,9 +636,17 @@ Message classes have been renamed and their methods updated:
 | ----------- | -------------------------------- |
 | \`waitForL2\` | \`waitForChildTransactionReceipt\` |`;
 
-  // Write the files
-  fs.writeFileSync(path.join(sdkOutputDir, 'index.mdx'), introductionContent, 'utf8');
-  fs.writeFileSync(path.join(sdkOutputDir, 'migrate.mdx'), migrationContent, 'utf8');
+  // Write the files only if they don't exist (preserve manual edits)
+  const indexPath = path.join(sdkOutputDir, 'index.mdx');
+  const migratePath = path.join(sdkOutputDir, 'migrate.mdx');
+
+  if (!fs.existsSync(indexPath)) {
+    fs.writeFileSync(indexPath, introductionContent, 'utf8');
+  }
+
+  if (!fs.existsSync(migratePath)) {
+    fs.writeFileSync(migratePath, migrationContent, 'utf8');
+  }
 
   // Remove the TypeDoc-generated index.md file if it exists
   const indexMdPath = path.join(sdkOutputDir, 'index.md');
