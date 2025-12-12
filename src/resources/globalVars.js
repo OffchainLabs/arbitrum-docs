@@ -50,7 +50,7 @@ const globalVars = {
   nitroPrecompilesCommit: 'f49a4889b486fd804a7901203f5f663cfd1581c8',
   nitroPrecompilesPathToInterfaces: '',
 
-  goEthereumCommit: 'ae34a6a9ef5af5079c8eef6571895d703023efef',
+  goEthereumCommit: '6b19938827e8d7684caf6a883765d51ee967f250',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',
