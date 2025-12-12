@@ -18,13 +18,20 @@ function load(app) {
   const sdkOutputDir = app.options.getValue('out'); // This is the SDK directory
   const sourceDir = path.join(sdkOutputDir, '../../submodules/arbitrum-sdk/docs');
 
-  app.renderer.on(RendererEvent.START, async () => {
-    cleanDirectory(sdkOutputDir, ['index.mdx', 'migrate.mdx']); // Preserve manual files
+  app.renderer.on(RendererEvent.START, () => {
+    // Clean generated docs but preserve manually maintained files
+    cleanDirectory(sdkOutputDir, ['index.mdx', 'migrate.mdx']);
   });
 
-  app.renderer.on(RendererEvent.END, async () => {
-    // Create the manual introduction and migration files
-    createManualFiles(sdkOutputDir);
+  app.renderer.on(RendererEvent.END, () => {
+    // Create manual SDK files only if they don't exist (bootstrap templates)
+    // index.mdx and migrate.mdx are manually maintained and should not be regenerated
+    const indexPath = path.join(sdkOutputDir, 'index.mdx');
+    const migratePath = path.join(sdkOutputDir, 'migrate.mdx');
+
+    if (!fs.existsSync(indexPath) || !fs.existsSync(migratePath)) {
+      createManualFiles(sdkOutputDir);
+    }
 
     // Generate sidebar only from the actual TypeDoc generated content
     const sidebarItems = generateSidebarFromSDKContent(sdkOutputDir);
@@ -636,17 +643,12 @@ Message classes have been renamed and their methods updated:
 | ----------- | -------------------------------- |
 | \`waitForL2\` | \`waitForChildTransactionReceipt\` |`;
 
-  // Write the files only if they don't exist (preserve manual edits)
+  // Bootstrap: Write template files (only called when files don't exist)
   const indexPath = path.join(sdkOutputDir, 'index.mdx');
   const migratePath = path.join(sdkOutputDir, 'migrate.mdx');
 
-  if (!fs.existsSync(indexPath)) {
-    fs.writeFileSync(indexPath, introductionContent, 'utf8');
-  }
-
-  if (!fs.existsSync(migratePath)) {
-    fs.writeFileSync(migratePath, migrationContent, 'utf8');
-  }
+  fs.writeFileSync(indexPath, introductionContent, 'utf8');
+  fs.writeFileSync(migratePath, migrationContent, 'utf8');
 
   // Remove the TypeDoc-generated index.md file if it exists
   const indexMdPath = path.join(sdkOutputDir, 'index.md');
