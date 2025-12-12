@@ -14,7 +14,7 @@ The Stylus SDK provides full support for Rust primitive types with automatic ABI
 
 Booleans in Rust map directly to Solidity's `bool` type.
 
-### Usage in Contract Methods
+### Usage in contract methods
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -34,7 +34,7 @@ impl MyContract {
 }
 ```
 
-### Solidity Mapping
+### Solidity mapping
 
 - **Rust type**: `bool`
 - **Solidity type**: `bool`
@@ -45,9 +45,9 @@ impl MyContract {
 
 The Stylus SDK supports both signed and unsigned integers with various bit sizes. All integer types from Rust's standard library and alloy-primitives are supported.
 
-### Unsigned Integers
+### Unsigned integers
 
-#### Standard Rust Unsigned Integers
+#### Standard Rust unsigned integers
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -81,7 +81,7 @@ impl MyContract {
 }
 ```
 
-#### Alloy Unsigned Integers
+#### Alloy unsigned integers
 
 For larger integers and full compatibility with Solidity's uint types, use `alloy_primitives::Uint`:
 
@@ -107,9 +107,9 @@ impl MyContract {
 }
 ```
 
-### Signed Integers
+### Signed integers
 
-#### Standard Rust Signed Integers
+#### Standard Rust signed integers
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -143,7 +143,7 @@ impl MyContract {
 }
 ```
 
-#### Alloy Signed Integers
+#### Alloy signed integers
 
 ```rust
 use alloy_primitives::{Signed, I256};
@@ -163,7 +163,7 @@ impl MyContract {
 }
 ```
 
-### Integer Type Mappings
+### Integer type mappings
 
 | Rust Type                 | Solidity Type | Bit Size | ABI Signature |
 | ------------------------- | ------------- | -------- | ------------- |
@@ -188,7 +188,7 @@ impl MyContract {
 
 Ethereum addresses are represented by the `Address` type from `alloy_primitives`.
 
-### Basic Usage
+### Basic usage
 
 ```rust
 use alloy_primitives::Address;
@@ -213,7 +213,7 @@ impl MyContract {
 }
 ```
 
-### Address Constants
+### Address constants
 
 ```rust
 use alloy_primitives::Address;
@@ -229,7 +229,7 @@ let bytes: [u8; 20] = [0; 20];
 let addr = Address::from(bytes);
 ```
 
-### Solidity Mapping
+### Solidity mapping
 
 - **Rust type**: `Address` (from `alloy_primitives`)
 - **Solidity type**: `address`
@@ -240,7 +240,7 @@ let addr = Address::from(bytes);
 
 Rust `String` types map to Solidity `string` type.
 
-### String Literals
+### String literals
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -258,7 +258,7 @@ impl MyContract {
 }
 ```
 
-### Solidity Mapping
+### Solidity mapping
 
 - **Rust type**: `String` (from `alloc::string`)
 - **Solidity type**: `string`
@@ -278,7 +278,7 @@ impl MyContract {
 
 The SDK provides two types for working with byte data:
 
-### 1. Dynamic Bytes (`Bytes`)
+### 1. Dynamic bytes (`Bytes`)
 
 For variable-length byte arrays (Solidity `bytes`):
 
@@ -298,7 +298,7 @@ impl MyContract {
 }
 ```
 
-### 2. Fixed Bytes (`FixedBytes`)
+### 2. Fixed bytes (`FixedBytes`)
 
 For fixed-length byte arrays (Solidity `bytesN`):
 
@@ -325,7 +325,7 @@ impl MyContract {
 }
 ```
 
-### Common FixedBytes Aliases
+### Common FixedBytes aliases
 
 ```rust
 use alloy_primitives::{B256, B160, B128};
@@ -340,7 +340,7 @@ let data: B160 = B160::ZERO;
 let value: B128 = B128::ZERO;
 ```
 
-### Bytes Type Mappings
+### Bytes type mappings
 
 | Rust Type                 | Solidity Type | Description                      |
 | ------------------------- | ------------- | -------------------------------- |
@@ -357,7 +357,7 @@ let value: B128 = B128::ZERO;
 - `Bytes` maps to Solidity `bytes` (dynamic byte array)
 - For Solidity `bytes`, always use `alloy_primitives::Bytes`
 
-### Bytes ABI Encoding
+### Bytes ABI encoding
 
 ```rust
 // Bytes type
@@ -370,7 +370,7 @@ let value: B128 = B128::ZERO;
 // Example: FixedBytes<32> -> "bytes32"
 ```
 
-## Hex String Literals
+## Hex string literals
 
 When working with hex data, you can use hex literals:
 
@@ -392,7 +392,7 @@ let hash = FixedBytes::<32>::from(hex!(
 let bytes = Bytes::from(hex!("aabbccdd"));
 ```
 
-## Complete Example
+## Complete example
 
 Here's a comprehensive example showing all primitive types:
 
@@ -472,7 +472,7 @@ impl PrimitiveExample {
 }
 ```
 
-## Best Practices
+## Best practices
 
 1. **Use U256 for token amounts**: Solidity commonly uses `uint256` for token balances and amounts.
 
@@ -527,9 +527,9 @@ impl PrimitiveExample {
    }
    ```
 
-## Type Conversion
+## Type conversion
 
-### Between Integer Types
+### Between integer types
 
 ```rust
 use alloy_primitives::U256;
@@ -543,7 +543,7 @@ let big_value = U256::from(1000);
 let small_value: u64 = big_value.to::<u64>();
 ```
 
-### Address Conversions
+### Address conversions
 
 ```rust
 use alloy_primitives::Address;
@@ -557,7 +557,7 @@ let addr = Address::ZERO;
 let bytes: [u8; 20] = addr.into();
 ```
 
-## See Also
+## See also
 
 - [Compound Types](./compound-types.mdx) - Arrays, tuples, structs
 - [Storage Types](./storage.mdx) - Persistent storage for primitives
