@@ -19,7 +19,7 @@ Stylus contracts share the same persistent storage as Solidity contracts:
 - Stylus provides compile-time safety through Rust's type system
 - Storage operations are cached for gas efficiency
 
-### Storage Declaration
+### Storage declaration
 
 Use the `sol_storage!` macro to define contract storage with Solidity-compatible layout:
 
@@ -51,11 +51,11 @@ pub struct MyContract {
 }
 ```
 
-## Storage Primitives
+## Storage primitives
 
 Storage primitives are persistent versions of basic types.
 
-### Boolean Storage (`StorageBool`)
+### Boolean storage (`StorageBool`)
 
 Store boolean values in persistent storage:
 
@@ -87,7 +87,7 @@ impl Contract {
 }
 ```
 
-### Integer Storage
+### Integer storage
 
 Store unsigned and signed integers with various bit sizes:
 
@@ -128,7 +128,7 @@ impl Counter {
 }
 ```
 
-#### Available Storage Integer Types
+#### Available storage integer types
 
 | Storage Type  | Primitive Type | Bit Size | Solidity Type |
 | ------------- | -------------- | -------- | ------------- |
@@ -145,7 +145,7 @@ impl Counter {
 | `StorageI128` | `I128`         | 128 bits | `int128`      |
 | `StorageI256` | `I256`         | 256 bits | `int256`      |
 
-#### Integer Update Operations
+#### Integer update operations
 
 `StorageUint` types provide convenient update methods:
 
@@ -186,7 +186,7 @@ impl Contract {
 }
 ```
 
-### Address Storage (`StorageAddress`)
+### Address storage (`StorageAddress`)
 
 Store Ethereum addresses:
 
@@ -236,7 +236,7 @@ impl Ownership {
 }
 ```
 
-### Fixed Bytes Storage
+### Fixed bytes storage
 
 Store fixed-size byte arrays:
 
@@ -269,7 +269,7 @@ impl Hashes {
 }
 ```
 
-#### Available Fixed Bytes Storage Types
+#### Available fixed bytes storage types
 
 | Storage Type  | Bytes | Bits     | Solidity Type |
 | ------------- | ----- | -------- | ------------- |
@@ -282,11 +282,11 @@ impl Hashes {
 | `StorageB224` | 28    | 224 bits | `bytes28`     |
 | `StorageB256` | 32    | 256 bits | `bytes32`     |
 
-## Storage Collections
+## Storage collections
 
 Storage collections provide persistent arrays, vectors, and maps.
 
-### StorageVec (Dynamic Array)
+### StorageVec (dynamic array)
 
 Dynamic arrays that can grow and shrink:
 
@@ -345,7 +345,7 @@ impl TokenList {
 }
 ```
 
-#### StorageVec Methods
+#### StorageVec methods
 
 ```rust
 // Length operations
@@ -363,7 +363,7 @@ fn grow(&mut self) -> StorageGuardMut<'_, T>  // Add new element and return muta
 fn erase(&mut self)  // Clear all elements
 ```
 
-### StorageArray (Fixed Array)
+### StorageArray (fixed array)
 
 Fixed-size arrays with compile-time known length:
 
@@ -407,7 +407,7 @@ impl FixedData {
 }
 ```
 
-### StorageMap (Mapping)
+### StorageMap (mapping)
 
 Key-value storage, equivalent to Solidity `mapping`:
 
@@ -464,7 +464,7 @@ impl Token {
 }
 ```
 
-#### StorageMap Methods
+#### StorageMap methods
 
 ```rust
 // Read operations
@@ -479,7 +479,7 @@ fn take(&mut self, key: K) -> V  // Returns value and deletes
 fn delete(&mut self, key: K)  // Erases entry
 ```
 
-#### Supported Map Key Types
+#### Supported map key types
 
 Any type implementing `StorageKey` can be used as a map key:
 
@@ -555,7 +555,7 @@ impl Metadata {
 }
 ```
 
-## Storage Structs
+## Storage structs
 
 Define custom storage types with nested structures:
 
@@ -605,7 +605,7 @@ impl UserRegistry {
 }
 ```
 
-### Nested Storage Structs
+### Nested storage structs
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -655,9 +655,9 @@ impl Registry {
 }
 ```
 
-## Storage Patterns
+## Storage patterns
 
-### Initialization Pattern
+### Initialization pattern
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -694,7 +694,7 @@ impl Contract {
 }
 ```
 
-### Counter Pattern
+### Counter pattern
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -736,7 +736,7 @@ impl Counter {
 }
 ```
 
-### Access Control Pattern
+### Access control pattern
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -798,7 +798,7 @@ impl AccessControl {
 }
 ```
 
-### Registry Pattern
+### Registry pattern
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -861,9 +861,9 @@ impl Registry {
 }
 ```
 
-## Best Practices
+## Best practices
 
-### 1. Use Appropriate Storage Types
+### 1. Use appropriate storage types
 
 ```rust
 // Good: Use StorageU256 for counters
@@ -888,7 +888,7 @@ sol_storage! {
 }
 ```
 
-### 2. Minimize Storage Operations
+### 2. Minimize storage operations
 
 ```rust
 // Bad: Multiple storage reads
@@ -905,7 +905,7 @@ pub fn good_example(&self) -> U256 {
 }
 ```
 
-### 3. Use Batch Operations
+### 3. Use batch operations
 
 ```rust
 // Good: Batch updates in a single transaction
@@ -916,7 +916,7 @@ pub fn update_multiple(&mut self, values: Vec<U256>) {
 }
 ```
 
-### 4. Check Before Delete
+### 4. Check before delete
 
 ```rust
 // Good: Verify before deletion
@@ -928,7 +928,7 @@ pub fn remove_user(&mut self, user: Address) {
 }
 ```
 
-### 5. Use Erase for Gas Refunds
+### 5. Use erase for gas refunds
 
 ```rust
 // Good: Clear storage for gas refunds
@@ -937,7 +937,7 @@ pub fn clear_data(&mut self) {
 }
 ```
 
-## Storage Slots and Layout
+## Storage slots and layout
 
 Stylus uses the same storage layout as Solidity:
 
@@ -957,7 +957,7 @@ sol_storage! {
 }
 ```
 
-### Custom Storage Slots
+### Custom storage slots
 
 You can specify custom storage slots for specific use cases:
 
@@ -976,7 +976,7 @@ pub struct CustomSlots {
 }
 ```
 
-## Complete Example
+## Complete example
 
 Here's a comprehensive example demonstrating various storage types:
 
@@ -1090,7 +1090,7 @@ impl Token {
 }
 ```
 
-## See Also
+## See also
 
 - [Primitives](./primitives.mdx) - Basic types used in storage
 - [Compound Types](./compound-types.mdx) - Complex types in storage
