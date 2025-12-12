@@ -21,6 +21,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "find-orphan-pages": "tsx scripts/find-orphan-pages.ts",
+    "find-orphaned-files": "node scripts/find-orphaned-files.js",
     "format": "yarn format:docs && yarn format:app && yarn format:check",
     "format:app": "prettier --write --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\"",
     "format:docs": "prettier --write --config \"./.prettierrc.js\" -- \"docs/**/*.{md,mdx}\"",
