@@ -246,6 +246,16 @@
       "permanent": false
     },
     {
+      "source": "/(docs/stylus/advanced/solidity-differences/?)",
+      "destination": "/(docs/stylus/advanced/rust-to-solidity-differences/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/concepts/evm-differences/?)",
+      "destination": "/(docs/stylus/concepts/vm-differences/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/stylus/how-tos/adding-support-for-new-languages/?)",
       "destination": "/(docs/stylus/guides/adding-support-for-new-languages/?)",
       "permanent": false
