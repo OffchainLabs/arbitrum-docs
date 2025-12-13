@@ -246,8 +246,108 @@
       "permanent": false
     },
     {
+      "source": "/(docs/stylus/how-tos/adding-support-for-new-languages/?)",
+      "destination": "/(docs/stylus/guides/adding-support-for-new-languages/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/caching-contracts/?)",
+      "destination": "/(docs/stylus/guides/caching-contracts/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/check-and-deploy/?)",
+      "destination": "/(docs/stylus/cli-tools/check-and-deploy/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/debugging-tx/?)",
+      "destination": "/(docs/stylus/cli-tools/debugging-tx/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/deploying-non-rust-wasm-contracts/?)",
+      "destination": "/(docs/stylus/guides/deploying-non-rust-wasm-contracts/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/exporting-abi/?)",
+      "destination": "/(docs/stylus/guides/exporting-abi/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/importing-interfaces/?)",
+      "destination": "/(docs/stylus/guides/importing-interfaces/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/optimizing-binaries/?)",
+      "destination": "/(docs/stylus/guides/optimizing-binaries/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/testing-contracts/?)",
+      "destination": "/(docs/stylus/fundamentals/testing-contracts/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/using-constructors/?)",
+      "destination": "/(docs/stylus/guides/using-constructors/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/using-inheritance/?)",
+      "destination": "/(docs/stylus/guides/using-inheritance/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/how-tos/verifying-contracts/?)",
+      "destination": "/(docs/stylus/cli-tools/verify-contracts/?)",
+      "permanent": false
+    },
+    {
       "source": "/(docs/stylus/recommended-libraries/?)",
       "destination": "/(docs/stylus/advanced/recommended-libraries/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/contracts/?)",
+      "destination": "/(docs/stylus/fundamentals/contracts/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/data-types/compound-types/?)",
+      "destination": "/(docs/stylus/fundamentals/data-types/compound-types/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/data-types/conversions-between-types/?)",
+      "destination": "/(docs/stylus/fundamentals/data-types/conversions-between-types/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/data-types/primitives/?)",
+      "destination": "/(docs/stylus/fundamentals/data-types/primitives/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/data-types/storage/?)",
+      "destination": "/(docs/stylus/fundamentals/data-types/storage/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/global-variables-and-functions/?)",
+      "destination": "/(docs/stylus/fundamentals/global-variables-and-functions/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/partials/_stylus-faucets/?)",
+      "destination": "/(docs/stylus/partials/_stylus-faucets/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/stylus/reference/project-structure/?)",
+      "destination": "/(docs/stylus/fundamentals/project-structure/?)",
       "permanent": false
     },
     {

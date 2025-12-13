@@ -48,7 +48,7 @@ To make your contract callable, it must undergo an activation process. During ac
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
 :::note
-Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/using-cli.mdx#cargo-stylus-commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
+Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
 :::
 
 #### Execution

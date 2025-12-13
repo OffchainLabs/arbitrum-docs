@@ -1,0 +1,260 @@
+---
+title: 'cargo-stylus command reference'
+sidebar_label: 'Commands reference'
+description: 'Complete reference for all cargo-stylus CLI commands'
+user_story: 'As a Stylus developer, I want a complete reference of all CLI commands'
+content_type: reference
+author: offchainlabs
+sme: offchainlabs
+sidebar_position: 5
+---
+
+# cargo-stylus command reference
+
+Complete reference for all `cargo-stylus` commands.
+
+## new
+
+Create a new Stylus project.
+
+**Usage:**
+
+```shell
+cargo stylus new <PROJECT_NAME>
+```
+
+**Options:**
+
+- `--minimal` - Create minimal project structure
+
+**Example:**
+
+```shell
+cargo stylus new my-stylus-contract
+```
+
+## init
+
+Initialize a Stylus project in the current directory.
+
+**Usage:**
+
+```shell
+cargo stylus init
+```
+
+**Options:**
+
+- `--minimal` - Create minimal project structure
+
+## check
+
+Verify a contract compiles to valid WASM and passes onchain activation checks.
+
+**Usage:**
+
+```shell
+cargo stylus check
+```
+
+**Options:**
+
+- `--endpoint <URL>` - RPC endpoint (default: http://localhost:8547)
+- `--wasm-file <PATH>` - WASM file to check (defaults to any found in current directory)
+- `--contract-address <ADDRESS>` - Optional deployment address
+
+**Example:**
+
+```shell
+cargo stylus check --endpoint https://sepolia-rollup.arbitrum.io/rpc
+```
+
+## deploy
+
+Deploy a Stylus contract.
+
+**Usage:**
+
+```shell
+cargo stylus deploy \
+  --endpoint <RPC_URL> \
+  --private-key <PRIVATE_KEY>
+```
+
+**Options:**
+
+- `--endpoint <URL>` - RPC endpoint (required)
+- `--private-key <KEY>` - Private key for deployment (required)
+- `--contract-address <ADDRESS>` - Specific deployment address (defaults to random)
+- `--estimate-gas` - Estimate gas only, don't deploy
+- `--no-verify` - Skip reproducible container verification
+- `--wasm-file <PATH>` - WASM file to deploy
+- `--max-fee-per-gas-gwei <GWEI>` - Optional max fee per gas
+
+**Example:**
+
+```shell
+cargo stylus deploy \
+  --endpoint https://sepolia-rollup.arbitrum.io/rpc \
+  --private-key $PRIVATE_KEY \
+  --estimate-gas
+```
+
+## activate
+
+Activate an already deployed contract.
+
+**Usage:**
+
+```shell
+cargo stylus activate \
+  --endpoint <RPC_URL> \
+  --private-key <PRIVATE_KEY> \
+  --address <CONTRACT_ADDRESS>
+```
+
+**Options:**
+
+- `--endpoint <URL>` - RPC endpoint (required)
+- `--private-key <KEY>` - Private key for activation (required)
+- `--address <ADDRESS>` - Contract address to activate (required)
+- `--data-fee-bump-percent <PERCENT>` - Percent to bump estimated fee (default: 20%)
+- `--estimate-gas` - Only estimate gas without sending transaction
+
+## verify
+
+Verify the deployment of a Stylus contract.
+
+**Usage:**
+
+```shell
+cargo stylus verify \
+  --deployment-tx <TX_HASH>
+```
+
+**Options:**
+
+- `--endpoint <URL>` - RPC endpoint
+- `--deployment-tx <HASH>` - Deployment transaction hash (required)
+- `--no-verify` - Skip reproducible container
+- `--cargo-stylus-version <VERSION>` - Version for Docker image
+
+**Example:**
+
+```shell
+cargo stylus verify --deployment-tx 0xd4...85
+```
+
+## cache
+
+Manage contract caching using the Stylus CacheManager.
+
+**Usage:**
+
+```shell
+# Place a bid on a contract
+cargo stylus cache bid --address <ADDRESS>
+
+# Check contract cache status
+cargo stylus cache status --address <ADDRESS>
+
+# Get suggested minimum bid
+cargo stylus cache suggest-bid --address <ADDRESS>
+```
+
+**Options:**
+
+- `--address <ADDRESS>` - Contract address (required)
+- `--endpoint <URL>` - RPC endpoint
+
+## export-abi
+
+Export a Solidity ABI interface.
+
+**Usage:**
+
+```shell
+cargo stylus export-abi
+```
+
+**Options:**
+
+- `--output <FILE>` - Output file (defaults to stdout)
+- `--json` - Write JSON ABI using solc format
+
+**Example:**
+
+```shell
+cargo stylus export-abi > IMyContract.sol
+cargo stylus export-abi --json > abi.json
+```
+
+## cgen
+
+Generate C code bindings for a Stylus contract.
+
+**Usage:**
+
+```shell
+cargo stylus cgen \
+  --input <INPUT_FILE> \
+  --out-dir <OUTPUT_DIR>
+```
+
+**Options:**
+
+- `--input <FILE>` - Input file path (required)
+- `--out-dir <DIR>` - Output directory path (required)
+
+## replay
+
+Replay a transaction in GDB for debugging.
+
+**Usage:**
+
+```shell
+cargo stylus replay --tx <TX_HASH>
+```
+
+**Options:**
+
+- `--tx <HASH>` - Transaction hash to replay (required)
+- `--endpoint <URL>` - RPC endpoint
+- `--project <PATH>` - Project path (default: current directory)
+- `--use-native-tracer` - Use native tracer instead of JavaScript
+- `--stable-rust` - Use stable Rust (note: nightly needed to expand macros)
+
+## trace
+
+Trace a transaction.
+
+**Usage:**
+
+```shell
+cargo stylus trace --tx <TX_HASH>
+```
+
+**Options:**
+
+- `--tx <HASH>` - Transaction hash (required)
+- `--endpoint <URL>` - RPC endpoint
+- `--project <PATH>` - Project path
+- `--use-native-tracer` - Use native tracer
+
+---
+
+## Common options
+
+These options are available across multiple commands:
+
+| Option                   | Description                                   |
+| ------------------------ | --------------------------------------------- |
+| `--endpoint <URL>`       | RPC endpoint URL                              |
+| `--private-key <KEY>`    | Private key for transactions                  |
+| `--estimate-gas`         | Estimate gas without sending transaction      |
+| `--no-verify`            | Skip reproducible container verification      |
+| `--cargo-stylus-version` | Specify cargo-stylus version for Docker image |
+
+---
+
+For detailed usage examples, see the [CLI tools guides](/stylus/cli-tools/overview).
