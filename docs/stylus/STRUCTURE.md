@@ -5,75 +5,75 @@ This document provides a visual overview of the Stylus documentation structure a
 ```
 docs/stylus/
 │
-├── 📘 gentle-introduction.mdx
-├── 🚀 quickstart.mdx
-├── 🔧 using-cli.mdx (legacy)
+├── gentle-introduction.mdx
+├── quickstart.mdx
+├── using-cli.mdx (legacy)
 │
-├── 📂 fundamentals/
+├── fundamentals/
 │   ├── _category_.yml
-│   ├── 🧭 choose-your-path.mdx ⭐ NEW (Phase 4)
-│   ├── ⚙️  prerequisites.mdx (Phase 3)
-│   ├── 📁 project-structure.mdx
-│   ├── 📜 contracts.mdx [📊 Lifecycle Diagram]
-│   ├── 🌐 global-variables-and-functions.mdx
-│   ├── 🧪 testing-contracts.mdx
-│   └── 📂 data-types/
-│       ├── 🔤 primitives.mdx
-│       ├── 🔠 compound-types.mdx
-│       ├── 💾 storage.mdx [📊 2 Diagrams: Hierarchy + Layout]
-│       └── 🔄 conversions-between-types.mdx
+│   ├── choose-your-path.mdx [NEW - Phase 4]
+│   ├── prerequisites.mdx [Phase 3]
+│   ├── project-structure.mdx
+│   ├── contracts.mdx [DIAGRAM: Lifecycle]
+│   ├── global-variables-and-functions.mdx
+│   ├── testing-contracts.mdx
+│   └── data-types/
+│       ├── primitives.mdx
+│       ├── compound-types.mdx
+│       ├── storage.mdx [DIAGRAMS: Hierarchy + Layout]
+│       └── conversions-between-types.mdx
 │
-├── 📂 guides/
+├── guides/
 │   ├── _category_.yml
-│   ├── 🏗️  using-constructors.mdx
-│   ├── 🔗 using-inheritance.mdx
-│   ├── 📤 importing-interfaces.mdx [📊 Call Diagram]
-│   ├── 📋 exporting-abi.mdx
-│   ├── ⚡ optimizing-binaries.mdx
-│   ├── 💨 caching-contracts.mdx
-│   ├── 🌍 deploying-non-rust-wasm-contracts.mdx
-│   └── 🆕 adding-support-for-new-languages.mdx
+│   ├── using-constructors.mdx
+│   ├── using-inheritance.mdx
+│   ├── importing-interfaces.mdx [DIAGRAM: Cross-Contract Calls]
+│   ├── exporting-abi.mdx
+│   ├── optimizing-binaries.mdx
+│   ├── caching-contracts.mdx
+│   ├── deploying-non-rust-wasm-contracts.mdx
+│   └── adding-support-for-new-languages.mdx
 │
-├── 📂 cli-tools/
+├── cli-tools/
 │   ├── _category_.yml
-│   ├── 📖 overview.mdx
-│   ├── ✅ check-and-deploy.mdx
-│   ├── ✔️  verify-contracts.mdx
-│   ├── 🐛 debugging-tx.mdx
-│   └── 📚 commands-reference.mdx
+│   ├── overview.mdx
+│   ├── check-and-deploy.mdx
+│   ├── verify-contracts.mdx
+│   ├── debugging-tx.mdx
+│   └── commands-reference.mdx
 │
-├── 📂 best-practices/ ⭐ NEW (Phase 4)
+├── best-practices/ [NEW - Phase 4]
 │   ├── _category_.yml
-│   ├── 🔒 security.mdx (501 lines)
-│   └── ⚡ gas-optimization.mdx [📊 Comparison Diagram] (548 lines)
+│   ├── security.mdx (501 lines)
+│   └── gas-optimization.mdx [DIAGRAM: Performance Comparison] (548 lines)
 │
-├── 📂 troubleshooting/ ⭐ NEW (Phase 4)
+├── troubleshooting/ [NEW - Phase 4]
 │   ├── _category_.yml
-│   ├── ❓ common-issues.mdx (591 lines)
-│   └── 🔧 troubleshooting-building-stylus.md (legacy)
+│   ├── common-issues.mdx (591 lines)
+│   └── troubleshooting-building-stylus.md (legacy)
 │
-├── 📂 concepts/
+├── concepts/
 │   ├── _category_.yml
-│   ├── 🌐 webassembly.mdx [📊 3 Diagrams: Pipeline + Binary + Memory]
-│   ├── 🚀 activation.mdx [📊 Deployment Diagram]
-│   ├── ⛽ gas-metering.mdx
-│   ├── 🔄 vm-differences.mdx (renamed in Phase 3)
-│   └── 👁️  public-preview-expectations.mdx
+│   ├── webassembly.mdx [DIAGRAMS: Pipeline + Binary + Memory]
+│   ├── activation.mdx [DIAGRAM: Deployment]
+│   ├── gas-metering.mdx
+│   ├── vm-differences.mdx (renamed in Phase 3)
+│   └── public-preview-expectations.mdx
 │
-├── 📂 advanced/
+├── advanced/
 │   ├── _category_.yml
-│   ├── 🔀 rust-to-solidity-differences.mdx (renamed in Phase 3)
-│   ├── 🎯 minimal-entrypoint-contracts.mdx
-│   ├── 🔌 hostio-exports.mdx
-│   └── 📦 recommended-libraries.mdx
+│   ├── rust-to-solidity-differences.mdx (renamed in Phase 3)
+│   ├── minimal-entrypoint-contracts.mdx
+│   ├── hostio-exports.mdx
+│   └── recommended-libraries.mdx
 │
-├── 📂 reference/
+├── reference/
 │   ├── _category_.yml
-│   ├── 📖 overview.mdx
-│   ├── 💰 opcode-hostio-pricing.mdx
-│   └── 📘 rust-sdk-guide.md
+│   ├── overview.mdx
+│   ├── opcode-hostio-pricing.mdx
+│   └── rust-sdk-guide.md
 │
-├── 📂 partials/ (Reusable Content)
+├── partials/ (Reusable Content)
 │   ├── _setup-rust-toolchain.mdx
 │   ├── _setup-cargo-stylus.mdx
 │   ├── _setup-docker-nitro.mdx
@@ -81,7 +81,7 @@ docs/stylus/
 │   ├── _stylus-no-multi-inheritance-banner-partial.mdx
 │   └── _stylus-public-preview-banner-partial.md
 │
-└── 📂 planning/ (Phase Guides)
+└── planning/ (Phase Guides)
     ├── RESTRUCTURE_README.md
     ├── IMPLEMENTATION_GUIDE.md
     ├── IMPLEMENTATION_GUIDE_PHASE3.md
@@ -91,7 +91,7 @@ docs/stylus/
 
 ## Statistics
 
-### 📊 Diagrams: 11 total
+### Diagrams: 11 total
 
 | File                                | Diagrams | Description                                          |
 | ----------------------------------- | -------- | ---------------------------------------------------- |
@@ -104,22 +104,22 @@ docs/stylus/
 | concepts/activation.mdx             | 1        | WASM deployment process                              |
 | quickstart.mdx                      | 1        | User journey through quickstart                      |
 
-### 📁 Directory Structure
+### Directory Structure
 
 **10 top-level directories:**
 
 - `fundamentals/` - Core concepts and data types
 - `guides/` - How-to guides for common tasks
 - `cli-tools/` - CLI commands and usage
-- `best-practices/` ⭐ NEW - Security and optimization
-- `troubleshooting/` ⭐ NEW - Common issues and solutions
+- `best-practices/` [NEW] - Security and optimization
+- `troubleshooting/` [NEW] - Common issues and solutions
 - `concepts/` - Deep-dive conceptual explanations
 - `advanced/` - Advanced topics and low-level details
 - `reference/` - API reference and SDK documentation
 - `partials/` - Reusable content snippets
 - `planning/` - Restructure implementation guides
 
-### 📄 File Inventory
+### File Inventory
 
 **Total:** ~58 documentation files
 
@@ -138,7 +138,7 @@ docs/stylus/
 - Troubleshooting FAQ: 591 lines
 - Learning path guide: 285 lines
 
-### 🏷️ Navigation Improvements
+### Navigation Improvements
 
 - **Before:** 4+ levels deep (confusing hierarchy)
 - **After:** Maximum 3 levels (clear, scannable structure)
@@ -162,7 +162,7 @@ docs/stylus/
 ### Phase 3: Content Consolidation
 
 - Created reusable setup partials (3 files)
-- Renamed confusing files (evm→vm, solidity→rust-to-solidity)
+- Renamed confusing files (evm->vm, solidity->rust-to-solidity)
 - Added prerequisites guide
 - Added journey diagram to quickstart
 - Eliminated duplicate content
@@ -182,46 +182,14 @@ docs/stylus/
 - Verified all builds pass
 - Tagged final milestone
 
-## Legend
+## Annotations Used
 
-| Icon   | Meaning                        |
-| ------ | ------------------------------ |
-| 📘     | Introduction/overview document |
-| 🚀     | Quickstart/getting started     |
-| 📂     | Directory/folder               |
-| 🧭     | Navigation/learning path       |
-| ⚙️     | Setup/configuration            |
-| 📁     | Project structure              |
-| 📜     | Contract documentation         |
-| 🌐     | Global/context information     |
-| 🧪     | Testing                        |
-| 🔤     | Primitive types                |
-| 🔠     | Compound types                 |
-| 💾     | Storage                        |
-| 🔄     | Conversions/transformations    |
-| 🏗️     | Constructors                   |
-| 🔗     | Inheritance/composition        |
-| 📤     | Imports/exports                |
-| 📋     | ABI/interface                  |
-| ⚡     | Optimization                   |
-| 💨     | Caching                        |
-| 🌍     | Multi-language support         |
-| 🆕     | New features                   |
-| 📖     | Overview/reference             |
-| ✅     | Validation/checking            |
-| ✔️     | Verification                   |
-| 🐛     | Debugging                      |
-| 📚     | Reference documentation        |
-| 🔒     | Security                       |
-| ❓     | FAQ/troubleshooting            |
-| 🔧     | Tools/utilities                |
-| 🔀     | Comparisons                    |
-| 🎯     | Minimal/focused content        |
-| 🔌     | Extensions/plugins             |
-| 📦     | Libraries/packages             |
-| 💰     | Pricing/costs                  |
-| [📊]   | Contains Mermaid diagram(s)    |
-| ⭐ NEW | Added in restructure           |
+| Marker    | Meaning                                 |
+| --------- | --------------------------------------- |
+| [NEW]     | Added during restructure                |
+| [DIAGRAM] | Contains Mermaid diagram(s)             |
+| (legacy)  | May be deprecated or consolidated       |
+| [Phase N] | Indicates which phase added/modified it |
 
 ## Quick Navigation
 
@@ -264,7 +232,7 @@ Git tags for rollback if needed:
 ---
 
 **Last Updated:** December 12, 2025
-**Restructure Status:** ✅ Complete (All 5 phases)
+**Restructure Status:** Complete (All 5 phases)
 **Total Diagrams:** 11
 **Total Files:** ~58
 **Navigation Depth:** Max 3 levels
