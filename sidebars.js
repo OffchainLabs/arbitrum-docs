@@ -1602,6 +1602,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'stylus/fundamentals/prerequisites',
+              label: 'Prerequisites',
+            },
+            {
+              type: 'doc',
               id: 'stylus/fundamentals/project-structure',
               label: 'Project structure',
             },
@@ -1746,8 +1751,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/evm-differences',
-              label: 'EVM differences',
+              id: 'stylus/concepts/vm-differences',
+              label: 'VM differences',
             },
             {
               type: 'doc',
@@ -1762,8 +1767,8 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/advanced/solidity-differences',
-              label: 'Solidity differences',
+              id: 'stylus/advanced/rust-to-solidity-differences',
+              label: 'Rust to Solidity',
             },
             {
               type: 'doc',
