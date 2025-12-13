@@ -1,6 +1,8 @@
 ---
 title: 'Activation'
 description: 'Understanding Stylus contract deployment and activation'
+user_story: 'As a developer, I want to understand the two-step deployment and activation process'
+content_type: concept
 author: chrisco
 sme: chrisco
 sidebar_position: 1
@@ -14,7 +16,7 @@ Stylus contracts undergo a two-step process to become executable on Arbitrum cha
 
 Unlike traditional EVM contracts that become immediately executable after deployment, Stylus contracts require an additional activation step:
 
-1. **Deployment**: Stores the compressed WASM bytecode on-chain at a contract address
+1. **Deployment**: Stores the compressed WASM bytecode onchain at a contract address
 2. **Activation**: Converts the bytecode into an executable Stylus program by registering it with the ArbWasm precompile
 
 **Why two steps?**
@@ -25,15 +27,15 @@ Unlike traditional EVM contracts that become immediately executable after deploy
 
 ## Deployment vs Activation
 
-| Aspect                | Deployment                     | Activation                     |
-| --------------------- | ------------------------------ | ------------------------------ |
-| **Purpose**           | Store compressed WASM on-chain | Register program with ArbWasm  |
-| **Transaction count** | 1 transaction                  | 1 transaction (separate)       |
-| **Cost type**         | Standard EVM deployment gas    | Data fee (WASM-specific cost)  |
-| **When required**     | Always - stores the code       | Always - makes code executable |
-| **Reversible**        | No                             | No (but can expire)            |
-| **Who can call**      | Anyone with funds              | Anyone (after deployment)      |
-| **Can be skipped**    | No                             | No (unless already activated)  |
+| Aspect                | Deployment                    | Activation                     |
+| --------------------- | ----------------------------- | ------------------------------ |
+| **Purpose**           | Store compressed WASM onchain | Register program with ArbWasm  |
+| **Transaction count** | 1 transaction                 | 1 transaction (separate)       |
+| **Cost type**         | Standard EVM deployment gas   | Data fee (WASM-specific cost)  |
+| **When required**     | Always - stores the code      | Always - makes code executable |
+| **Reversible**        | No                            | No (but can expire)            |
+| **Who can call**      | Anyone with funds             | Anyone (after deployment)      |
+| **Can be skipped**    | No                            | No (unless already activated)  |
 
 ### Contract States
 
@@ -41,7 +43,7 @@ A Stylus contract can be in one of these states:
 
 ```rust
 pub enum ContractStatus {
-    /// Contract already exists on-chain and is activated
+    /// Contract already exists onchain and is activated
     Active { code: Vec<u8> },
 
     /// Contract is deployed but not yet activated
@@ -73,25 +75,24 @@ This performs:
 
 **WASM Processing Pipeline**:
 
+```mermaid
+flowchart LR
+    A[Raw WASM Binary] --> B[Remove dangling<br/>references]
+    B --> C[Add project_hash<br/>metadata]
+    C --> D[Strip user<br/>custom sections]
+    D --> E[Brotli compress<br/>level 11]
+    E --> F[Add EOF prefix<br/>EFF00000]
+    F --> G[Final compressed code<br/>≤ 24KB]
+
+    style A fill:#FFE4B5
+    style G fill:#90EE90
 ```
-Raw WASM Binary
-    ↓
-Remove dangling references
-    ↓
-Add project_hash metadata
-    ↓
-Strip user custom sections
-    ↓
-Brotli compress (level 11)
-    ↓
-Add EOF prefix (EFF00000)
-    ↓
-Final compressed code (≤ 24KB)
-```
+
+_Figure 1: WASM binary processing pipeline showing transformation from raw binary to deployment-ready compressed code._
 
 ### Step 2: Deploy the Contract
 
-Deployment creates a transaction that stores your processed WASM on-chain:
+Deployment creates a transaction that stores your processed WASM onchain:
 
 ```bash
 cargo stylus deploy \
@@ -572,7 +573,7 @@ If a program expires:
 cargo stylus activate --address=0x...
 ```
 
-The contract code remains on-chain; only the activation state was cleared.
+The contract code remains onchain; only the activation state was cleared.
 
 ## Troubleshooting
 
