@@ -54,7 +54,7 @@ const sidebars = {
     },
     {
       type: 'link',
-      label: 'Run an Arbitrum (Orbit) chain',
+      label: 'Run an Arbitrum chain',
       href: '/launch-arbitrum-chain/a-gentle-introduction',
     },
     {
@@ -158,7 +158,7 @@ const sidebars = {
   runArbitrumChainSidebar: [
     {
       type: 'category',
-      label: 'Run an Arbitrum (Orbit) chain',
+      label: 'Run an Arbitrum chain',
       collapsed: false,
       items: [
         {

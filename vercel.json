@@ -1306,7 +1306,7 @@
     },
     {
       "source": "/(launch-orbit-chain/reference/command-line-options/?)",
-      "destination": "/node-running/how-tos/running-an-orbit-node",
+      "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
     },
     {
