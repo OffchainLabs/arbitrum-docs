@@ -1602,6 +1602,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'stylus/fundamentals/choose-your-path',
+              label: 'Choose your path',
+            },
+            {
+              type: 'doc',
               id: 'stylus/fundamentals/prerequisites',
               label: 'Prerequisites',
             },
@@ -1727,6 +1732,41 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/cli-tools/commands-reference',
               label: 'Commands reference',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Best Practices',
+          collapsed: true,
+          link: {
+            type: 'generated-index',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/best-practices/security',
+              label: 'Security',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/best-practices/gas-optimization',
+              label: 'Gas optimization',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Troubleshooting',
+          collapsed: true,
+          link: {
+            type: 'generated-index',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/troubleshooting/common-issues',
+              label: 'Common issues',
             },
           ],
         },
