@@ -36,6 +36,12 @@ Works with any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> (L2/L3
 
 ## How to configure
 
+:::warning Caution
+
+This is an abbreviated set of instructions on how to configure Timeboost. It is recommended to refer to the [Timeboost for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/timeboost-for-arbitrum-chains.mdx) page for complete details about potential impacts and a full set of instructions. The configuration instructions begin in the [Prerequisites](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/timeboost-for-arbitrum-chains.mdx#prerequisites) section on that page.
+
+:::
+
 1. **Deploy Auction contract**: Use Arbitrum chain scripts (e.g., from [`orbit-actions`](https://github.com/OffchainLabs/orbit-actions) repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
 2. **Run Auctioneer Services**: Set up Redis for coordination; run bid <a data-quicklook-from="validator">validator</a> (verifies bids) and auction server (resolves auctions) using the `autonomous-auctioneer` binary from Nitro (Docker or local build).
 3. **Configure the sequencer**: Update node config to enable `timeboost` and `auctioneer` APIs, pointing to the contract and Redis.
