@@ -21,31 +21,7 @@ Stylus contracts share the same persistent storage as Solidity contracts:
 
 The Stylus SDK provides a comprehensive hierarchy of storage types:
 
-```mermaid
-graph TB
-    Root[Storage Types] --> Primitives
-    Root --> Collections
-    Root --> Custom[Custom Structs]
-
-    Primitives --> Bool[StorageBool]
-    Primitives --> Uint[StorageU256, U128, U64, etc.]
-    Primitives --> Int[StorageI256, I128, I64, etc.]
-    Primitives --> Addr[StorageAddress]
-    Primitives --> Bytes[StorageB256, B32, etc.]
-
-    Collections --> Vec[StorageVec T]
-    Collections --> Array[StorageArray T, N]
-    Collections --> Map[StorageMap K, V]
-    Collections --> Str[StorageString]
-    Collections --> BytesCol[StorageBytes]
-
-    Custom --> Struct[#[storage] annotated structs]
-
-    style Root fill:#E1BEE7
-    style Primitives fill:#BBDEFB
-    style Collections fill:#C8E6C9
-    style Custom fill:#FFE0B2
-```
+![Storage Types Hierarchy](/img/stylus-storage-types-hierarchy.png)
 
 _Figure 3: Storage type hierarchy showing primitives, collections, and custom struct options._
 
@@ -975,22 +951,7 @@ Stylus uses the same storage layout as Solidity:
 - Variables are **packed** when possible to save space
 - Arrays and mappings use **computed slots** via hashing
 
-```mermaid
-flowchart TB
-    subgraph "Storage Slots (32 bytes each)"
-        Slot0["Slot 0<br/>uint256 value"]
-        Slot1["Slot 1<br/>address (20 bytes) + uint96 (12 bytes)"]
-        Slot2["Slot 2<br/>Mapping base slot"]
-        Slot3["Slot 3<br/>keccak256(key || slot)"]
-    end
-
-    Mapping["Mapping[key]"] -->|"hash(key + 2)"| Slot3
-
-    style Slot0 fill:#E3F2FD
-    style Slot1 fill:#FFF3E0
-    style Slot2 fill:#F3E5F5
-    style Slot3 fill:#E8F5E9
-```
+![Storage Slots Layout](/img/stylus-storage-slots.png)
 
 _Figure: Storage slot layout showing how variables are packed into 32-byte slots and how mapping values are computed using keccak256 hashing._
 
