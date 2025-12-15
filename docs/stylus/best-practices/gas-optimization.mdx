@@ -15,17 +15,7 @@ Stylus contracts offer significant gas savings compared to Solidity (10-100x for
 
 ## Why Stylus is cheaper
 
-```mermaid
-graph LR
-    A[Solidity Contract] -->|Compiled to| B[EVM Bytecode]
-    C[Rust Contract] -->|Compiled to| D[WASM]
-
-    B -->|Interpreted| E[Gas: Higher]
-    D -->|Native Execution| F[Gas: Lower]
-
-    style E fill:#ffcccc
-    style F fill:#ccffcc
-```
+![Gas Comparison](/img/stylus-gas-comparison.png)
 
 _Figure: Stylus WASM executes natively, avoiding EVM interpretation overhead._
 

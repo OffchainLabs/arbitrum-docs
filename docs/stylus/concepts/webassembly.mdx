@@ -29,30 +29,7 @@ Nitro uses WebAssembly as its execution environment for several reasons:
 4. **Language flexibility**: Developers can use Rust, C, C++, or any language that compiles to WASM
 5. **Determinism**: Guaranteed identical execution across all validators
 
-```mermaid
-graph TB
-    subgraph "Developer Side"
-        A[Rust/C/C++ Code] --> B[Compiler]
-        B --> C[WASM Binary]
-    end
-
-    subgraph "Arbitrum Nitro"
-        C --> D[Brotli Decompression]
-        D --> E[WASM Validation]
-        E --> F[JIT Compilation]
-        F --> G[Native Machine Code]
-
-        subgraph "Execution Environment"
-            G --> H[Contract Execution]
-            H <--> I[Hostio Functions]
-            I <--> J[EVM State]
-        end
-    end
-
-    style A fill:#FFE4B5
-    style G fill:#90EE90
-    style J fill:#87CEEB
-```
+![WASM Execution Pipeline](/img/stylus-wasm-compile.png)
 
 _Figure: WebAssembly execution pipeline in Arbitrum Nitro, from source code to native execution with access to blockchain state._
 
@@ -85,26 +62,7 @@ rustflags = [
 
 A Stylus WASM module consists of several sections:
 
-```mermaid
-graph TB
-    WASM["WASM Module"]
-
-    WASM --> Exports["Exports Section<br/>user_entrypoint"]
-    WASM --> Imports["Imports Section<br/>vm_hooks"]
-    WASM --> Memory["Memory Section<br/>Linear memory"]
-    WASM --> Custom["Custom Sections<br/>Metadata"]
-    WASM --> Code["Code Section<br/>Compiled bytecode"]
-
-    Imports --> storage_load["storage_load_bytes32"]
-    Imports --> msg_sender["msg_sender"]
-    Imports --> emit_log["emit_log"]
-
-    style WASM fill:#E1BEE7
-    style Exports fill:#C8E6C9
-    style Imports fill:#BBDEFB
-    style Memory fill:#FFE0B2
-    style Code fill:#F3E5F5
-```
+![WASM Module Structure](/img/stylus-wasm-deploy.png)
 
 _Figure: WASM module structure showing the main sections including exports, imports (hostio functions), memory, and code._
 
@@ -323,27 +281,7 @@ To stay within limits:
 
 ## Memory model
 
-```mermaid
-graph TB
-    subgraph "WASM Linear Memory"
-        Stack["Stack<br/>32 KB<br/>(fixed)"]
-        Heap["Heap/Data<br/>(grows upward)"]
-        Page1["Page 1<br/>64 KB"]
-        Page2["Page 2<br/>64 KB"]
-        PageN["Page N<br/>64 KB"]
-    end
-
-    Stack -.fixed allocation.-> Page1
-    Heap -->|grows into| Page1
-    Heap -->|expands to| Page2
-    Heap -.may grow to.-> PageN
-
-    style Stack fill:#FFEBEE
-    style Heap fill:#E8F5E9
-    style Page1 fill:#E3F2FD
-    style Page2 fill:#F3E5F5
-    style PageN fill:#FFF3E0
-```
+![WASM Memory Model](/img/stylus-wasm-execute.png)
 
 _Figure: WASM linear memory model showing the fixed 32KB stack and growable heap organized in 64KB pages._
 
