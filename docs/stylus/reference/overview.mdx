@@ -14,7 +14,7 @@ This section provides an in-depth overview of the features provided by the [Styl
 
 The Stylus Rust SDK is built on top of [Alloy](https://www.paradigm.xyz/2023/06/alloy), a collection of crates empowering the Rust Ethereum ecosystem. Because the SDK uses the same [Rust primitives for Ethereum types](https://docs.rs/alloy-primitives/latest/alloy_primitives/), Stylus is compatible with existing Rust libraries.
 
-The Stylus Rust SDK has been audited in August 2024 at [commit #62bd831](https://github.com/OffchainLabs/stylus-sdk-rs/tree/62bd8318c7f3ab5be954cbc264f85bf2ba3f4b06) by Open Zeppelin which can be viewed [on our audits page](audit-reports.mdx).
+The Stylus Rust SDK has been audited in August 2024 at [commit #62bd831](https://github.com/OffchainLabs/stylus-sdk-rs/tree/62bd8318c7f3ab5be954cbc264f85bf2ba3f4b06) by Open Zeppelin which can be viewed [on our audits page](../../audit-reports.mdx).
 
 ## Documentation index
 
@@ -59,9 +59,9 @@ Master the `cargo stylus` command-line tool for contract development and deploym
 
 | Article                                                                               | Description                                                                            |
 | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| [Verify contracts](/stylus/guides/verifying-contracts)                                | Verify your deployed contracts on block explorers for transparency and trust.          |
+| [Verify contracts](/stylus/cli-tools/verify-contracts)                                | Verify your deployed contracts on block explorers for transparency and trust.          |
 | [Exporting ABI](/stylus/guides/exporting-abi)                                         | Generate Solidity-compatible ABI files for integration with frontend apps and tooling. |
-| [Debugging with replay](/stylus/guides/debugging-tx)                                  | Debug failed transactions by replaying them locally with detailed execution traces.    |
+| [Debugging with replay](/stylus/cli-tools/debugging-tx)                               | Debug failed transactions by replaying them locally with detailed execution traces.    |
 | [Optimizing WASM binary size](/stylus/guides/optimizing-binaries)                     | Reduce contract size for lower deployment costs and improved activation efficiency.    |
 | [Deploying non-Rust WASM contracts](/stylus/guides/deploying-non-rust-wasm-contracts) | Deploy contracts written in C, C++, or other languages that compile to WebAssembly.    |
 
@@ -72,7 +72,7 @@ Understand how WebAssembly works within Arbitrum Nitro and its implications for 
 | Article                                              | Description                                                                                |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | [WebAssembly](/stylus/concepts/webassembly)          | Learn how WASM compilation, deployment, and execution work in Arbitrum Nitro.              |
-| [EVM differences](/stylus/concepts/evm-differences)  | Understand behavioral differences between Stylus WASM execution and traditional EVM.       |
+| [VM differences](/stylus/concepts/vm-differences)    | Understand behavioral differences between Stylus WASM execution and traditional EVM.       |
 | [Activation](/stylus/concepts/activation)            | Learn about the contract activation process required before a Stylus contract can execute. |
 | [Caching strategy](/stylus/guides/caching-contracts) | Optimize contract performance by understanding and leveraging the WASM caching system.     |
 
