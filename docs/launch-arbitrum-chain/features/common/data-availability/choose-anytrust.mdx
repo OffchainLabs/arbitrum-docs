@@ -27,3 +27,27 @@ It's ideal for use cases where ultra-low fees are a priority over Ethereum's ful
 <AnytrustPCPartial />
 
 This option reflects the growing trend toward modular <a data-quicklook-from="blockchain">blockchain</a> architectures, where DA handling is separate to scale ecosystems like Arbitrum without compromising core security. For implementation, refer to the docs or your RaaS; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-providers).
+
+## How to configure
+
+To configure AnyTrust this is a pre-deployment decision. You must choose whether or not you will be leveraging AnyTrust prior to deploying your chain.
+
+When calling the `prepareChainConfig` function, it will create a `chainConfig` structure. It sets the appropriate default values for most of the parameters, which allows you to override any of the defaults.
+
+Below is an example of how to use `prepareChainConfig` to set the chain configuration for an AnyTrust chain (`chainId` and `InitialChainOwner` are not set by default):
+
+```typescript
+import { prepareChainConfig } from '@arbitrum/chain-sdk';
+
+const chainConfig = prepareChainConfig({
+  chainId: 123_456,
+  arbitrum: {
+    InitialChainOwner: 0x123...890,
+    // The following parameter determines whether this is an AnyTrust chain
+    // AnyTrust = true, Rollup = false
+    DataAvailabilityCommittee: true,
+  },
+});
+```
+
+For complete deployment instructions refer to the [Deploy an Arbitrum chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.mdx) page.
