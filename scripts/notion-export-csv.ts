@@ -41,29 +41,50 @@ const getAllQuestions = async (): Promise<Question[]> => {
 
 // Render a single question to CSV row
 const renderQuestionRow = (q: Question): string => {
-  try {
-    // Render rich text to plain text for question, markdown for answer
-    const questionText = renderRichTexts(q.question, {}, RenderMode.Plain).trim();
-    const answerText = renderRichTexts(q.answer, {}, RenderMode.Markdown).trim();
-    const externalUrl = ''; // Default to empty
-    const isEnabled = q.publishable === 'Publishable' ? 'true' : 'false';
+  // Render rich text to plain text for question, markdown for answer
+  const questionText = renderRichTexts(q.question, {}, RenderMode.Plain).trim();
+  const answerText = renderRichTexts(q.answer, {}, RenderMode.Markdown).trim();
+  const externalUrl = ''; // Default to empty
+  const isEnabled = q.publishable === 'Publishable' ? 'true' : 'false';
 
-    return [escapeCSVField(questionText), escapeCSVField(answerText), externalUrl, isEnabled].join(
-      ',',
-    );
-  } catch (e: unknown) {
-    console.error(q.question);
-    console.error(q.answer);
-    throw e;
-  }
+  return [escapeCSVField(questionText), escapeCSVField(answerText), externalUrl, isEnabled].join(
+    ',',
+  );
 };
 
-// Render Questions to CSV format
+// Render Questions to CSV format, collecting all errors
 const renderCSV = (questions: Question[]): string => {
   const headers = ['Question', 'Answer', 'ExternalUrl', 'IsEnabled'];
   const headerLine = headers.join(',');
 
-  const rows = questions.map(renderQuestionRow);
+  const failedQuestions: { question: string; reason: string }[] = [];
+  const rows: string[] = [];
+
+  for (const q of questions) {
+    try {
+      rows.push(renderQuestionRow(q));
+    } catch (e: unknown) {
+      // Get question text directly from plain_text to avoid render errors
+      const questionPreview = q.question
+        .map((t) => t.plain_text)
+        .join('')
+        .substring(0, 100);
+      const reason = e instanceof Error ? e.message : String(e);
+      failedQuestions.push({ question: questionPreview, reason });
+    }
+  }
+
+  // If there were any failures, throw an error with all failed questions
+  if (failedQuestions.length > 0) {
+    console.error(`\nFailed to render ${failedQuestions.length} question(s):`);
+    failedQuestions.forEach((item, i) => {
+      console.error(`  ${i + 1}.Question: ${item.question}`);
+      console.error(`    Reason:   ${item.reason}`);
+    });
+    throw new Error(
+      `Failed to render ${failedQuestions.length} question(s). See above for details.`,
+    );
+  }
 
   return [headerLine, ...rows].join('\n');
 };
