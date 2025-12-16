@@ -42,12 +42,16 @@ From a UX perspective, enabling fast withdrawals transforms slow, multi-day proc
 
 ## How to configure
 
+:::warning Caution
+
+This is an abbreviated set of instructions on how to configure fast withdrawals. For a more in-depth set of instructions, including potential impacts, it is recommended to refer to the [Configure fast withdrawals](/launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/01-fast-withdrawals.mdx) page.
+
+:::
+
 1. **Upgrade contracts and nodes**: Ensure nitro-contracts v2.1.0+ (update `RollupAdminLogic` and `RollupUserLogic`) and node software to nitro v3.1.2+. Use the Arbitrum chain versioner script to check and upgrade.
 2. **Run configuration scripts**: Use the Arbitrum Chain SDK (e.g., setup-fast-withdrawal example) or Orbit actions repo (e.g., fast-confirm script with Foundry's cast CLI) to create a Safe multisig for the committee, add validators to the allowlist, set the Safe as the `anytrustFastConfirmer`, and optionally adjust `minimumAssertionPeriod` (defaults to 75 blocks ~15 minutes, measured in the first non-Arbitrum ancestor chain's blocks).
 3. **Configure nodes**:
-   - <a data-quicklook-from="batch">batch</a> Poster: Set `--node.batch-poster.max-delay` to match the <a data-quicklook-from="assertion">
-       assertion
-     </a> period (e.g., 15m).
+   - Batch Poster: Set `--node.batch-poster.max-delay` to match the assertion period (e.g., 15m).
    - Validators (BoLD mode): Enable `--node.bold.enable-fast-confirmation=true` and set `--node.bold.assertion-posting-interval` to the period.
    - Validators (pre-BoLD): Similar flags like `--node.staker.enable-fast-confirmation=true` and `--node.staker.make-assertion-interval`.
 

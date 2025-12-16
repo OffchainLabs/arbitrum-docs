@@ -41,7 +41,7 @@ Other requirements:
 
 - It is assumed there is already a `USDC` token deployed and used on the parent chain.
 - Also, it is assumed that the standard Arbitrum chain ownership system is used, i.e., `UpgradeExecutor` is the owner of the `ownable` contracts, and there is an EOA or multi-sig that has the executor role on the `UpgradeExecutor`.
-- Refer to the [token bridge overview page](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.md) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
+- Refer to the [token bridge overview page](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.mdx) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
 
 ## Deployment steps
 
