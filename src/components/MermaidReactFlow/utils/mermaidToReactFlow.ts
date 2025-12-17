@@ -424,14 +424,16 @@ function createReactFlowElements(
   };
 
   // Add subgraph containers
+  console.log(`Processing ${subgraphs.length} subgraphs:`, subgraphs);
   subgraphs.forEach((subgraph, index) => {
     const layout = subgraphLayouts.get(subgraph.id);
     const position = subgraphPositions.get(subgraph.id);
+    console.log(`Subgraph ${subgraph.id}: layout=${!!layout}, position=${!!position}`);
 
     if (layout && position) {
       const colors = getSubgraphColors(index);
 
-      reactFlowNodes.push({
+      const groupNode = {
         id: subgraph.id,
         type: 'group',
         position: position,
@@ -452,7 +454,9 @@ function createReactFlowElements(
         selectable: true,
         draggable: false,
         connectable: false,
-      });
+      };
+      console.log('Creating group node:', groupNode);
+      reactFlowNodes.push(groupNode);
     }
   });
 
@@ -594,6 +598,10 @@ function createReactFlowElements(
   });
 
   console.log(`Total edges created: ${reactFlowEdges.length}`);
+  console.log(
+    'All nodes created:',
+    reactFlowNodes.map((n) => ({ id: n.id, type: n.type, data: n.data })),
+  );
 
   return { nodes: reactFlowNodes, edges: reactFlowEdges };
 }
