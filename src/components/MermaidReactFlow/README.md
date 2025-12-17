@@ -8,9 +8,11 @@ This system allows contributors to create interactive diagrams where clicking on
 
 ## Features
 
-- **Click Navigation**: Click blue nodes to navigate to detailed diagrams
+- **Click Navigation**: Click nodes to navigate to detailed diagrams
+- **Subgraph Support**: Organize nodes into visual containers with colored borders
+- **Shape-Based Coloring**: 5 distinct node colors based on shape (rect, diamond, circle, stadium, round)
 - **Back Button**: Navigate through history stack to return to previous diagrams
-- **Theme Integration**: Automatically adapts to Docusaurus light/dark mode
+- **Theme Integration**: Automatically adapts to Docusaurus light/dark mode with transparent backgrounds in dark mode
 - **Keyboard Accessible**: Tab to focus nodes, Enter/Space to navigate
 - **Responsive**: Works on mobile, tablet, and desktop
 - **SSG Compatible**: Uses Docusaurus BrowserOnly for static site generation
@@ -21,6 +23,8 @@ This system allows contributors to create interactive diagrams where clicking on
 
 Create `.mmd` files in `static/diagrams/`:
 
+**Basic Diagram**:
+
 ```mermaid
 graph TB
   User[End User]
@@ -29,6 +33,25 @@ graph TB
 
   User --> L2
   L2 --> L1
+```
+
+**With Subgraphs**:
+
+```mermaid
+graph TB
+  subgraph Frontend[User Interface]
+    UI[UI Component]
+    API[API Client]
+  end
+
+  subgraph Backend[Server Layer]
+    Server[Application Server]
+    DB{Database}
+  end
+
+  UI --> API
+  API --> Server
+  Server --> DB
 ```
 
 **Link Syntax**: `NodeID[Label]:::link:/diagrams/target-diagram.mmd`
@@ -87,9 +110,10 @@ src/components/MermaidReactFlow/
 ├── index.tsx                    # Main export with BrowserOnly wrapper
 ├── NavigableDiagram.tsx         # Navigation state management
 ├── ClickableNode.tsx            # Custom node component
+├── SubgraphNode.tsx             # Subgraph container component
 ├── types.ts                     # TypeScript interfaces
 └── utils/
-    ├── mermaidToReactFlow.ts   # Mermaid → React Flow conversion
+    ├── mermaidToReactFlow.ts   # Mermaid → React Flow conversion (3-phase layout)
     └── linkParser.ts           # Parse :::link: syntax
 
 static/diagrams/                 # Mermaid diagram files
@@ -124,17 +148,41 @@ The component uses Docusaurus CSS variables for seamless theme integration:
 }
 ```
 
-### Node States
+### Node Colors by Shape
 
-- **Clickable Nodes** (blue): Have `:::link:` metadata
+All nodes use shape-based coloring for better visual differentiation:
+
+- **Rectangle** (blue): `#E3F2FD` background, `#1976D2` border
+- **Diamond** (orange): `#FFF3E0` background, `#F57C00` border
+- **Circle** (green): `#E8F5E8` background, `#388E3C` border
+- **Stadium** (purple): `#F3E5F5` background, `#7B1FA2` border
+- **Round** (pink): `#FCE4EC` background, `#C2185B` border
+
+**Dark Mode**: Background opacity reduced to 0.2 for better contrast
+
+### Node Interactions
+
+- **Clickable Nodes**: Have `:::link:` metadata
 
   - Cursor: pointer
   - Hover: translateY(-2px) + shadow
   - Focus: 2px outline
 
-- **Static Nodes** (gray): No link metadata
+- **Static Nodes**: No link metadata
   - Cursor: default
-  - No hover effects
+  - Clickable nodes still show colored backgrounds
+
+### Subgraph Containers
+
+Subgraphs use a rotating 5-color palette:
+
+1. Blue: `rgba(227, 242, 253, 0.4)` with `#1976D2` border
+2. Green: `rgba(232, 245, 233, 0.4)` with `#388E3C` border
+3. Purple: `rgba(243, 229, 245, 0.4)` with `#7B1FA2` border
+4. Orange: `rgba(255, 243, 224, 0.4)` with `#F57C00` border
+5. Pink: `rgba(252, 228, 236, 0.4)` with `#C2185B` border
+
+**Dark Mode**: Container opacity reduced to 0.15 for subtlety
 
 ### Accessibility
 
@@ -263,19 +311,44 @@ yarn install
 - **Static Files**: Diagrams loaded as static assets (fast)
 - **Bundle Impact**: ~200KB for React Flow + Dagre
 
+## Supported Mermaid Features
+
+### Node Shapes
+
+- ✅ Rectangle: `A[Label]`
+- ✅ Rounded: `A(Label)`
+- ✅ Stadium: `A([Label])`
+- ✅ Circle: `A((Label))`
+- ✅ Diamond: `A{Label}`
+
+### Edge Types
+
+- ✅ Solid arrow: `-->`
+- ✅ Dashed: `---`
+- ✅ Dotted: `-.-`
+- ✅ Thick/Heavy: `==>`
+- ✅ Edge labels: `A -->|Label| B`
+
+### Layout Features
+
+- ✅ Top-to-bottom graphs: `graph TB`
+- ✅ Subgraphs with titles: `subgraph ID[Title]`
+- ✅ Nested node positioning
+- ✅ Cross-subgraph edges
+- ✅ Auto-centering with 20% padding
+
 ## Future Enhancements
 
 Potential features for future development:
 
-- [ ] Subgraph support (nested groupings)
 - [ ] More node shapes (hexagon, trapezoid)
-- [ ] Edge labels
 - [ ] External link support (https://)
 - [ ] Diagram export (PNG, SVG)
 - [ ] Minimap option
 - [ ] Search/filter nodes
 - [ ] Zoom to node
 - [ ] URL-based navigation (deep linking)
+- [ ] Left-to-right layout support
 
 ## Contributing
 
