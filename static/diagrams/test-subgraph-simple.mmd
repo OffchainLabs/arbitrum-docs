@@ -1,0 +1,11 @@
+graph TB
+  A[Start] --> B[Process]
+
+  subgraph SG1[Processing Steps]
+    B1[Step 1]
+    B2[Step 2]
+    B1 --> B2
+  end
+
+  B --> B1
+  B2 --> C[End]
