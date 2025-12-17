@@ -446,6 +446,7 @@ function createReactFlowElements(
           width: layout.width,
           height: layout.height,
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          transform: 'none',
           zIndex: -1,
         },
         selectable: true,
@@ -562,7 +563,7 @@ function createReactFlowElements(
         break;
     }
 
-    return {
+    const edgeObj = {
       id: `edge-${edge.source}-${edge.target}-${index}`,
       source: edge.source,
       target: edge.target,
@@ -587,7 +588,12 @@ function createReactFlowElements(
       },
       zIndex: 0,
     };
+
+    console.log('Created edge:', edgeObj);
+    return edgeObj;
   });
+
+  console.log(`Total edges created: ${reactFlowEdges.length}`);
 
   return { nodes: reactFlowNodes, edges: reactFlowEdges };
 }
