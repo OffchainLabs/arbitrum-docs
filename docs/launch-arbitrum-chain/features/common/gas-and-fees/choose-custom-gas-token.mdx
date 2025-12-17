@@ -1,0 +1,44 @@
+---
+title: 'Why choose to use a custom gas token on your Arbitrum chain'
+description: 'Learn about the pros and cons of choosing to use a custom gas token for your chain.'
+author: pete-vielhaber
+sme: jason-w123
+content_type: configuration
+---
+
+import CustomGasTokenPCPartial from '../../partials/_custom-gas-token-pc.mdx';
+
+Choosing a custom gas token refers to configuring the chain to use a specific `ERC-20` token—rather than `ETH`—as the native currency for paying <a data-quicklook-from="transaction">transaction</a> fees (gas costs) on your chain. This allows developers to tailor the fee structure to their project's ecosystem, such as using a stablecoin like `USDC`, a yield-bearing asset, or the project's own native token. The choice is made during chain deployment and is generally immutable afterward, integrating directly into the chain's genesis parameters.
+
+## Key concepts
+
+- **Gas and Fees in <a data-quicklook-from="arbitrum">Arbitrum</a>**: Gas represents the computational resources required for transactions and <a data-quicklook-from="smart-contract">smart contract</a> executions. Fees are calculated as gas used multiplied by gas price, covering <a data-quicklook-from="sequencer">Sequencer</a> costs, data posting to the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum or another <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>), and network maintenance. In standard setups (like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>), these are paid in `ETH`.
+- **Custom Gas Token**: An `ERC-20` token deployed on the parent chain is "natively bridged" to the new Arbitrum chain and set as the gas token. Transactions on the <a data-quicklook-from="child-chain">child chain</a> are validated against users' balances of this token, with fees deducted accordingly. The token must meet strict requirements: standard `ERC-20` compliance (no proxies, hooks, rebasing, or transfer fees), typically 18 decimals, and transfers/approvals must not revert in edge cases.
+
+## How fees are handled
+
+- **On the child chain**: Gas costs are calculated and deducted in the custom token.
+- **For data posting to the parent chain**: The sequencer or <a data-quicklook-from="batch">batch</a> poster collects custom tokens as revenue but must convert them to the parent's native token (e.g., `ETH`) to cover posting costs. This is managed via an exchange rate mechanism, such as a pricer contract that uses manual updates, oracles, or trade tracking. Inaccurate rates can lead to over- or under-reimbursement, impacting profitability.
+
+- **Compatibility with chain types**:
+  - **Rollup mode**: Supported for <a data-quicklook-from="l2">L2</a> chains posting data to Ethereum, requiring <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) enabled and a fee token pricer for exchange rates. L3 support is planned but not yet available.
+  - **AnyTrust mode**: Directly supported with simpler configuration (no heavy pricer emphasis), ideal for cost-sensitive setups.
+  - **Alt-DA (Alternative Data Availability)**: Compatible, especially with cheaper DA providers like Celestia or EigenDA, which reduce conversion risks from token volatility.
+
+<!-- Render Custom Gas Token Pros & Cons partial -->
+
+<CustomGasTokenPCPartial />
+
+## Examples
+
+- **Bridged USDC**: Allows stable, predictable fees.
+- Project-native tokens in gaming or DeFi appchains, where users pay fees in the ecosystem's token for seamless integration.
+
+For implementation, refer to the docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
+
+## How to configure
+
+For detailed instructions on how to configure a custom gas token, there are several resources available depending on your data availability type:
+
+- **AnyTrust**: [How to configure a custom gas token for your AnyTrust Arbitrum chain](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx)
+- **Rollup**: [How to configure a custom gas token for your Rollup Arbitrum chain](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx)

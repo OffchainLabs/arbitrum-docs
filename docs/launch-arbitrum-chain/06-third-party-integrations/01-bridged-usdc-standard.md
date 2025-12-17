@@ -28,7 +28,7 @@ We provide a custom `USDC` gateway implementation (for parent and child chains) 
 - On a child chain, `L2USDCGateway` is used.
 - For the `USDC` token contracts, Circle's reference [implementation](https://github.com/circlefin/stablecoin-evm/blob/master/doc/bridged_USDC_standard.md) is used.
 
-This page describes how to deploy a `USDC` bridge compatible with both the Arbitrum chain (Orbit) token bridge and Circle’s Bridged `USDC` Standard.
+This page describes how to deploy a `USDC` bridge compatible with both the Arbitrum chain token bridge and Circle’s Bridged `USDC` Standard.
 
 Steps for a transition to native `USDC` issuance are also provided. Note that both Circle and the Arbitrum chain owner must agree to transition to native `USDC` issuance.
 
@@ -41,7 +41,7 @@ Other requirements:
 
 - It is assumed there is already a `USDC` token deployed and used on the parent chain.
 - Also, it is assumed that the standard Arbitrum chain ownership system is used, i.e., `UpgradeExecutor` is the owner of the `ownable` contracts, and there is an EOA or multi-sig that has the executor role on the `UpgradeExecutor`.
-- Refer to the [token bridge overview page](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.md) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
+- Refer to the [token bridge overview page](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.mdx) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
 
 ## Deployment steps
 

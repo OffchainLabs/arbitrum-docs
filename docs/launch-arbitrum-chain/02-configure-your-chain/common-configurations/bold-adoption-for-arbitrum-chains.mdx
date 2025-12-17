@@ -17,12 +17,12 @@ This document is currently in **public preview** and may change significantly as
 
 :::
 
-## Launch details and key dates
+## Launch status and key dates
 
 - **Status:** Generally available for L2s and launched on Arbitrum One and Arbitrum Nova. _BoLD for L3s are not yet supported at the time of writing._
 - **Arbitrum Sepolia** Dec 11, 2024
-- <a data-quicklook-from="arbitrum-one">**Arbitrum One**</a> 09:00 ET (GMT-5) on Feb 12, 2025{' '}
-- <a data-quicklook-from="arbitrum-nova">**Arbitrum Nova**</a> 09:00 ET (GMT-5) on Feb 12, 2025{' '}
+- **Arbitrum One** 09:00 ET (GMT-5) on Feb 12, 2025{' '}
+- **Arbitrum Nova** 09:00 ET (GMT-5) on Feb 12, 2025{' '}
 
 ### tldr;
 
@@ -151,7 +151,7 @@ Before updating the contracts, make sure your nodes are ready for the update. Ni
 
 Most of the parameters used in Nitro before v3.5.4 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters after the upgrade:
 
-- For validator nodes: add `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
+- For validator nodes: add `--node.staker.strategy=<MakeNodes | ResolveNodes | Defensive>` (--node.bold.strategy is deprecated and only available before Nitro v3.8.0) to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
 - For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode)
 - For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode) is automatically enabled
 
@@ -306,7 +306,7 @@ execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca
 
 As stated at the beginning, you need to add a few parameters to your node configuration for it to support BoLD:
 
-- For validator nodes: add `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
+- For validator nodes: add `--node.staker.strategy=<MakeNodes | ResolveNodes | Defensive>` (--node.bold.strategy is deprecated and only available before Nitro v3.8.0) to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
 - For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode)
 - For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode) is automatically enabled
 
