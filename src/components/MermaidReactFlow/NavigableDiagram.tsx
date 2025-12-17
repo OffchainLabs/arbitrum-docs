@@ -34,6 +34,15 @@ export function NavigableDiagram({
   // Custom node types
   const nodeTypes = useMemo(() => ({ custom: ClickableNode, group: SubgraphNode }), []);
 
+  // Default edge options to ensure visibility
+  const defaultEdgeOptions = useMemo(
+    () => ({
+      style: { strokeWidth: 2, stroke: '#1976D2' },
+      animated: false,
+    }),
+    [],
+  );
+
   // Handle navigation to a new diagram
   const handleNavigate = useCallback(
     (link: string) => {
@@ -144,6 +153,7 @@ export function NavigableDiagram({
             nodes={flowData.nodes}
             edges={flowData.edges}
             nodeTypes={nodeTypes}
+            defaultEdgeOptions={defaultEdgeOptions}
             fitView
             fitViewOptions={{
               padding: 0.2,
