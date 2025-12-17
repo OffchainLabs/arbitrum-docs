@@ -4,6 +4,7 @@ import { useColorMode } from '@docusaurus/theme-common';
 import { motion, AnimatePresence } from 'motion/react';
 import 'reactflow/dist/style.css';
 import { ClickableNode } from './ClickableNode';
+import { SubgraphNode } from './SubgraphNode';
 import { convertMermaidToReactFlow } from './utils/mermaidToReactFlow';
 import { ReactFlowData, MermaidReactFlowProps } from './types';
 
@@ -31,7 +32,7 @@ export function NavigableDiagram({
   const [error, setError] = useState<string | null>(null);
 
   // Custom node types
-  const nodeTypes = useMemo(() => ({ custom: ClickableNode }), []);
+  const nodeTypes = useMemo(() => ({ custom: ClickableNode, group: SubgraphNode }), []);
 
   // Handle navigation to a new diagram
   const handleNavigate = useCallback(
@@ -144,6 +145,12 @@ export function NavigableDiagram({
             edges={flowData.edges}
             nodeTypes={nodeTypes}
             fitView
+            fitViewOptions={{
+              padding: 0.2,
+              includeHiddenNodes: false,
+              minZoom: 0.5,
+              maxZoom: 1.5,
+            }}
             attributionPosition="bottom-right"
           />
         </motion.div>
