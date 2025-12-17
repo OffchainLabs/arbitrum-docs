@@ -3,6 +3,18 @@ import dagre from 'dagre';
 import { ReactFlowData, MermaidNode, MermaidEdge, SubgraphInfo } from '../types';
 import { parseLinkMetadata } from './linkParser';
 
+const SUBGRAPH_HEADER_HEIGHT = 50;
+const SUBGRAPH_PADDING = 30;
+
+interface SubgraphLayout {
+  id: string;
+  title: string;
+  nodes: Map<string, { x: number; y: number; width: number; height: number }>;
+  width: number;
+  height: number;
+  position?: { x: number; y: number };
+}
+
 function cleanLabel(label: string): string {
   // Remove HTML tags and clean up
   return label
@@ -196,51 +208,262 @@ function calculateNodeSize(label: string, shape: string) {
   return { width, height };
 }
 
-function layoutGraph(
+// Phase 1: Layout each subgraph independently
+function layoutSubgraphs(
   nodes: MermaidNode[],
   edges: MermaidEdge[],
-  onNavigate?: (link: string) => void,
-): ReactFlowData {
+  subgraphs: SubgraphInfo[],
+): Map<string, SubgraphLayout> {
+  const subgraphLayouts = new Map<string, SubgraphLayout>();
+
+  subgraphs.forEach((subgraph) => {
+    const subgraphNodes = nodes.filter((n) => n.subgraph === subgraph.id);
+    const subgraphEdges = edges.filter((e) => {
+      const sourceNode = nodes.find((n) => n.id === e.source);
+      const targetNode = nodes.find((n) => n.id === e.target);
+      return sourceNode?.subgraph === subgraph.id && targetNode?.subgraph === subgraph.id;
+    });
+
+    if (subgraphNodes.length === 0) return;
+
+    // Create a new graph for this subgraph
+    const g = new dagre.graphlib.Graph();
+    g.setGraph({
+      rankdir: 'TB',
+      nodesep: 40,
+      ranksep: 60,
+      marginx: SUBGRAPH_PADDING,
+      marginy: SUBGRAPH_PADDING + SUBGRAPH_HEADER_HEIGHT,
+    });
+    g.setDefaultEdgeLabel(() => ({}));
+
+    // Add nodes
+    subgraphNodes.forEach((node) => {
+      const size = calculateNodeSize(node.label, node.shape);
+      g.setNode(node.id, { width: size.width, height: size.height });
+    });
+
+    // Add edges
+    subgraphEdges.forEach((edge) => {
+      g.setEdge(edge.source, edge.target);
+    });
+
+    // Layout this subgraph
+    dagre.layout(g);
+
+    // Calculate bounding box
+    let minX = Infinity,
+      minY = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity;
+    const nodePositions = new Map<
+      string,
+      { x: number; y: number; width: number; height: number }
+    >();
+
+    subgraphNodes.forEach((node) => {
+      const nodeLayout = g.node(node.id);
+      const size = calculateNodeSize(node.label, node.shape);
+
+      nodePositions.set(node.id, {
+        x: nodeLayout.x,
+        y: nodeLayout.y,
+        width: size.width,
+        height: size.height,
+      });
+
+      minX = Math.min(minX, nodeLayout.x - size.width / 2);
+      maxX = Math.max(maxX, nodeLayout.x + size.width / 2);
+      minY = Math.min(minY, nodeLayout.y - size.height / 2);
+      maxY = Math.max(maxY, nodeLayout.y + size.height / 2);
+    });
+
+    // Normalize positions to start from (0, 0) with header space
+    const offsetX = -minX + SUBGRAPH_PADDING;
+    const offsetY = -minY + SUBGRAPH_PADDING + SUBGRAPH_HEADER_HEIGHT;
+
+    nodePositions.forEach((pos, nodeId) => {
+      nodePositions.set(nodeId, {
+        ...pos,
+        x: pos.x + offsetX,
+        y: pos.y + offsetY,
+      });
+    });
+
+    subgraphLayouts.set(subgraph.id, {
+      id: subgraph.id,
+      title: subgraph.title,
+      nodes: nodePositions,
+      width: maxX - minX + SUBGRAPH_PADDING * 2,
+      height: maxY - minY + SUBGRAPH_PADDING * 2 + SUBGRAPH_HEADER_HEIGHT,
+    });
+  });
+
+  return subgraphLayouts;
+}
+
+// Phase 2: Layout meta-graph (containers + standalone nodes)
+function layoutMetaGraph(
+  nodes: MermaidNode[],
+  edges: MermaidEdge[],
+  subgraphLayouts: Map<string, SubgraphLayout>,
+): {
+  subgraphPositions: Map<string, { x: number; y: number }>;
+  standalonePositions: Map<string, { x: number; y: number }>;
+} {
   const g = new dagre.graphlib.Graph();
   g.setGraph({
     rankdir: 'TB',
-    nodesep: 50,
-    ranksep: 80,
+    nodesep: 80,
+    ranksep: 100,
     marginx: 50,
     marginy: 50,
   });
   g.setDefaultEdgeLabel(() => ({}));
 
-  // Add nodes to graph
-  nodes.forEach((node) => {
+  // Add subgraph containers as nodes
+  subgraphLayouts.forEach((layout, id) => {
+    g.setNode(id, { width: layout.width, height: layout.height });
+  });
+
+  // Add standalone nodes
+  const standaloneNodes = nodes.filter((n) => !n.subgraph);
+  standaloneNodes.forEach((node) => {
     const size = calculateNodeSize(node.label, node.shape);
     g.setNode(node.id, { width: size.width, height: size.height });
   });
 
-  // Add edges
+  // Add edges between containers and standalone nodes
   edges.forEach((edge) => {
-    g.setEdge(edge.source, edge.target);
+    const sourceNode = nodes.find((n) => n.id === edge.source);
+    const targetNode = nodes.find((n) => n.id === edge.target);
+
+    // Determine the meta-nodes for this edge
+    const sourceMetaNode = sourceNode?.subgraph || sourceNode?.id;
+    const targetMetaNode = targetNode?.subgraph || targetNode?.id;
+
+    if (sourceMetaNode && targetMetaNode && sourceMetaNode !== targetMetaNode) {
+      // Don't add duplicate edges between same containers
+      if (!g.hasEdge(sourceMetaNode, targetMetaNode)) {
+        g.setEdge(sourceMetaNode, targetMetaNode);
+      }
+    }
   });
 
-  // Layout
+  // Layout the meta-graph
   dagre.layout(g);
 
-  // Create React Flow nodes
-  const reactFlowNodes: Node[] = nodes.map((node, index) => {
+  // Extract positions
+  const subgraphPositions = new Map<string, { x: number; y: number }>();
+  const standalonePositions = new Map<string, { x: number; y: number }>();
+
+  subgraphLayouts.forEach((layout, id) => {
+    const node = g.node(id);
+    subgraphPositions.set(id, {
+      x: node.x - layout.width / 2,
+      y: node.y - layout.height / 2,
+    });
+  });
+
+  standaloneNodes.forEach((node) => {
     const nodeLayout = g.node(node.id);
     const size = calculateNodeSize(node.label, node.shape);
+    standalonePositions.set(node.id, {
+      x: nodeLayout.x - size.width / 2,
+      y: nodeLayout.y - size.height / 2,
+    });
+  });
 
-    // Determine colors - clickable nodes get blue, others get gray
-    const hasLink = !!node.link;
-    const colors = hasLink
-      ? { backgroundColor: '#E3F2FD', borderColor: '#1976D2' }
-      : { backgroundColor: '#F5F5F5', borderColor: '#9E9E9E' };
+  return { subgraphPositions, standalonePositions };
+}
 
-    let nodeStyle: any = {
+// Phase 3: Combine layouts and create React Flow nodes/edges
+function createReactFlowElements(
+  nodes: MermaidNode[],
+  edges: MermaidEdge[],
+  subgraphs: SubgraphInfo[],
+  subgraphLayouts: Map<string, SubgraphLayout>,
+  subgraphPositions: Map<string, { x: number; y: number }>,
+  standalonePositions: Map<string, { x: number; y: number }>,
+  onNavigate?: (link: string) => void,
+): ReactFlowData {
+  const reactFlowNodes: Node[] = [];
+
+  // Color schemes using CSS variables
+  const getNodeColors = (shape: string) => {
+    const colorSchemes = {
+      rect: { backgroundColor: 'var(--node-rect-bg)', borderColor: 'var(--node-rect-border)' },
+      diamond: {
+        backgroundColor: 'var(--node-diamond-bg)',
+        borderColor: 'var(--node-diamond-border)',
+      },
+      circle: {
+        backgroundColor: 'var(--node-circle-bg)',
+        borderColor: 'var(--node-circle-border)',
+      },
+      stadium: {
+        backgroundColor: 'var(--node-stadium-bg)',
+        borderColor: 'var(--node-stadium-border)',
+      },
+      round: { backgroundColor: 'var(--node-round-bg)', borderColor: 'var(--node-round-border)' },
+    };
+
+    const defaultColors = { backgroundColor: '#F0F4F8', borderColor: '#2D3748' };
+    return colorSchemes[shape as keyof typeof colorSchemes] || defaultColors;
+  };
+
+  const getSubgraphColors = (index: number) => {
+    const subgraphColors = [
+      { bg: 'var(--subgraph-color-0-bg)', border: 'var(--subgraph-color-0-border)' },
+      { bg: 'var(--subgraph-color-1-bg)', border: 'var(--subgraph-color-1-border)' },
+      { bg: 'var(--subgraph-color-2-bg)', border: 'var(--subgraph-color-2-border)' },
+      { bg: 'var(--subgraph-color-3-bg)', border: 'var(--subgraph-color-3-border)' },
+      { bg: 'var(--subgraph-color-4-bg)', border: 'var(--subgraph-color-4-border)' },
+    ];
+    return subgraphColors[index % subgraphColors.length];
+  };
+
+  // Add subgraph containers
+  subgraphs.forEach((subgraph, index) => {
+    const layout = subgraphLayouts.get(subgraph.id);
+    const position = subgraphPositions.get(subgraph.id);
+
+    if (layout && position) {
+      const colors = getSubgraphColors(index);
+
+      reactFlowNodes.push({
+        id: subgraph.id,
+        type: 'group',
+        position: position,
+        data: {
+          label: subgraph.title,
+          isSubgraph: true,
+        },
+        style: {
+          backgroundColor: colors.bg,
+          border: `3px solid ${colors.border}`,
+          borderRadius: '12px',
+          width: layout.width,
+          height: layout.height,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          zIndex: -1,
+        },
+        selectable: true,
+        draggable: false,
+        connectable: false,
+      });
+    }
+  });
+
+  // Add nodes
+  nodes.forEach((node) => {
+    const colors = getNodeColors(node.shape);
+
+    let nodeStyle = {
       backgroundColor: colors.backgroundColor,
       borderColor: colors.borderColor,
       borderWidth: '2px',
-      borderStyle: 'solid',
+      borderStyle: 'solid' as const,
       borderRadius: '8px',
       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
     };
@@ -261,13 +484,35 @@ function layoutGraph(
         break;
     }
 
-    return {
+    let position: { x: number; y: number };
+    let parentNode: string | undefined;
+
+    if (node.subgraph) {
+      // Node is inside a subgraph
+      const subgraphLayout = subgraphLayouts.get(node.subgraph);
+      const subgraphPosition = subgraphPositions.get(node.subgraph);
+      const nodeLayout = subgraphLayout?.nodes.get(node.id);
+
+      if (nodeLayout && subgraphPosition) {
+        // Position relative to parent
+        position = {
+          x: nodeLayout.x - nodeLayout.width / 2,
+          y: nodeLayout.y - nodeLayout.height / 2,
+        };
+        parentNode = node.subgraph;
+      } else {
+        position = { x: 0, y: 0 };
+      }
+    } else {
+      // Standalone node
+      const standalonePos = standalonePositions.get(node.id);
+      position = standalonePos || { x: 0, y: 0 };
+    }
+
+    reactFlowNodes.push({
       id: node.id,
       type: 'custom',
-      position: {
-        x: nodeLayout.x - size.width / 2,
-        y: nodeLayout.y - size.height / 2,
-      },
+      position: position,
       data: {
         label: node.label,
         shape: node.shape,
@@ -278,11 +523,13 @@ function layoutGraph(
       style: nodeStyle,
       sourcePosition: Position.Bottom,
       targetPosition: Position.Top,
-      draggable: false, // Disable dragging for navigation-only interaction
-    };
+      parentNode: parentNode,
+      draggable: false,
+      zIndex: 1,
+    });
   });
 
-  // Create React Flow edges
+  // Create edges with styling
   const reactFlowEdges: Edge[] = edges.map((edge, index) => {
     let edgeStyle: any = {
       stroke: '#1976D2',
@@ -325,10 +572,35 @@ function layoutGraph(
         height: 20,
         color: '#1976D2',
       },
+      zIndex: 0,
     };
   });
 
   return { nodes: reactFlowNodes, edges: reactFlowEdges };
+}
+
+function layoutGraph(
+  nodes: MermaidNode[],
+  edges: MermaidEdge[],
+  subgraphs: SubgraphInfo[],
+  onNavigate?: (link: string) => void,
+): ReactFlowData {
+  // Phase 1: Layout each subgraph independently
+  const subgraphLayouts = layoutSubgraphs(nodes, edges, subgraphs);
+
+  // Phase 2: Layout meta-graph (containers + standalone nodes)
+  const { subgraphPositions, standalonePositions } = layoutMetaGraph(nodes, edges, subgraphLayouts);
+
+  // Phase 3: Combine layouts and create React Flow elements
+  return createReactFlowElements(
+    nodes,
+    edges,
+    subgraphs,
+    subgraphLayouts,
+    subgraphPositions,
+    standalonePositions,
+    onNavigate,
+  );
 }
 
 export async function convertMermaidToReactFlow(
@@ -347,8 +619,8 @@ export async function convertMermaidToReactFlow(
       return { nodes: [], edges: [] };
     }
 
-    // Layout and return (simplified - no subgraph support in POC)
-    return layoutGraph(nodes, edges, onNavigate);
+    // Layout using three-phase algorithm with subgraph support
+    return layoutGraph(nodes, edges, subgraphs, onNavigate);
   } catch (error) {
     console.error('Error converting Mermaid to React Flow:', error);
     return { nodes: [], edges: [] };
