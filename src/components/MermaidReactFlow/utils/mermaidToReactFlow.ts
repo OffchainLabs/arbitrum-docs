@@ -529,10 +529,14 @@ function createReactFlowElements(
     });
   });
 
-  // Create edges with styling
+  // Create edges with rotating color palette and enhanced styling
   const reactFlowEdges: Edge[] = edges.map((edge, index) => {
+    // Rotating edge color palette (5 colors matching node/subgraph theme)
+    const edgeColors = ['#1976D2', '#388E3C', '#F57C00', '#7B1FA2', '#C2185B'];
+    const edgeColor = edgeColors[index % edgeColors.length];
+
     let edgeStyle: any = {
-      stroke: '#1976D2',
+      stroke: edgeColor,
       strokeWidth: 2,
     };
 
@@ -566,11 +570,20 @@ function createReactFlowElements(
       type: 'smoothstep',
       animated,
       style: edgeStyle,
+      labelStyle: {
+        fontSize: '12px',
+        fontWeight: '500',
+        color: edgeColor,
+        backgroundColor: 'white',
+        padding: '2px 6px',
+        borderRadius: '4px',
+        border: `1px solid ${edgeColor}`,
+      },
       markerEnd: {
         type: MarkerType.ArrowClosed,
         width: 20,
         height: 20,
-        color: '#1976D2',
+        color: edgeColor,
       },
       zIndex: 0,
     };

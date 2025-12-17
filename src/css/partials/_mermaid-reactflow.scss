@@ -86,6 +86,12 @@
       stroke: var(--ifm-color-primary-light);
     }
 
+    // Dark mode edge labels
+    .react-flow__edge-text {
+      background-color: rgba(0, 0, 0, 0.8) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+
     .react-flow__controls {
       background-color: var(--ifm-background-surface-color);
       border: 1px solid var(--ifm-color-emphasis-600);
