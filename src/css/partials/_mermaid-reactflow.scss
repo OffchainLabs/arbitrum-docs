@@ -59,10 +59,6 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .react-flow__edge-path {
-      stroke: var(--ifm-color-primary);
-    }
-
     .react-flow__controls {
       background-color: white;
       border: 1px solid var(--ifm-color-emphasis-300);
@@ -80,10 +76,6 @@
   &[data-theme='dark'] {
     .react-flow__node {
       box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-    }
-
-    .react-flow__edge-path {
-      stroke: var(--ifm-color-primary-light);
     }
 
     // Dark mode edge labels
