@@ -11,16 +11,16 @@ unlisted: true
 - **Base Stake**: Minimum bond required for validators.
 - **Stake Token**: Token used for staking.
 - **Loser Stake Escrow**: Address for escrowed funds from losing validators.
-<a data-quicklook-from="arbitrum">Arbitrum</a> chains are customizable Layer 3 (L3) chains that settle
-to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">
-  validator
-</a> configurations to ensure chain security through bonding and <a data-quicklook-from="assertion">
-  assertion
-</a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
-  challenge
-</a> incorrect assertions. Arbitrum chains can be permissioned, meaning validators must be allowlisted.
-For chains that use that elect to use the BoLD protocol, permissionless validation is an option (BoLD
-also supports permissioned validation).
+  <a data-quicklook-from="arbitrum">Arbitrum</a> chains are customizable Layer 3 (L3) chains that settle
+  to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">
+    validator
+  </a> configurations to ensure chain security through bonding and <a data-quicklook-from="assertion">
+    assertion
+  </a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
+    challenge
+  </a> incorrect assertions. Arbitrum chains can be permissioned, meaning validators must be allowlisted.
+  For chains that use that elect to use the BoLD protocol, permissionless validation is an option (BoLD
+  also supports permissioned validation).
 
 Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
