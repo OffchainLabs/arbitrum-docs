@@ -14,20 +14,6 @@ Click on the blue nodes below to explore different components of the Arbitrum sy
 
 <MermaidReactFlow diagramFile="/diagrams/stylus-call-decision-tree.mmd" height="800px" />
 
-```mermaid
-graph TB
-  Sequencer[Sequencer]
-  ArbOS[ArbOS]
-  EVM[EVM Execution]
-  StateManager[State Manager]
-
-  Sequencer --> ArbOS
-  ArbOS --> EVM
-  ArbOS --> StateManager
-  StateManager --> EVM
-
-```
-
 ## How to Use
 
 1. **Click on blue nodes** - These are clickable and will load a new diagram
