@@ -12,7 +12,21 @@ This page demonstrates the click-through diagram navigation system. Click on any
 
 Click on the blue nodes below to explore different components of the Arbitrum system:
 
-<MermaidReactFlow diagramFile="/diagrams/multivm.drawio.mmd" height="800px" />
+<MermaidReactFlow diagramFile="/diagrams/stylus-call-decision-tree.mmd" height="800px" />
+
+```mermaid
+graph TB
+  Sequencer[Sequencer]
+  ArbOS[ArbOS]
+  EVM[EVM Execution]
+  StateManager[State Manager]
+
+  Sequencer --> ArbOS
+  ArbOS --> EVM
+  ArbOS --> StateManager
+  StateManager --> EVM
+
+```
 
 ## How to Use
 
