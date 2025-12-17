@@ -1,5 +1,5 @@
 import React from 'react';
-import { NodeProps } from 'reactflow';
+import { NodeProps, Handle, Position } from 'reactflow';
 import { NodeData } from './types';
 
 export function ClickableNode({ data }: NodeProps<NodeData>) {
@@ -61,6 +61,10 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
       tabIndex={hasLink ? 0 : -1}
       aria-label={hasLink ? `Navigate to ${link}` : label}
     >
+      {/* Connection handles for edges */}
+      <Handle type="target" position={Position.Top} />
+      <Handle type="source" position={Position.Bottom} />
+
       <div className="node-content" style={contentStyle}>
         {label}
       </div>
