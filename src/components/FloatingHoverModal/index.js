@@ -13,7 +13,6 @@ import {
   autoUpdate,
   useMergeRefs,
 } from '@floating-ui/react';
-import { MDXProvider } from '@mdx-js/react';
 // Remove Link import - we'll use a span instead to avoid Docusaurus broken link detection (Docusaurus's build will fail if a <Link> points to a non-existent page)
 import './styles.css';
 
@@ -59,29 +58,6 @@ const contentMap = {
   'config-data-posting-costs': ConfigDataPostingCosts,
   'config-evm-compatibility': ConfigEVMCompatibility,
   'config-other-language-support': ConfigOtherLanguageSupport,
-};
-
-// MDX components for proper rendering
-const mdxComponents = {
-  h1: ({ children }) => <h1 className="floating-modal__title">{children}</h1>,
-  h2: ({ children }) => <h2 className="floating-modal__subtitle">{children}</h2>,
-  p: ({ children }) => <p className="floating-modal__paragraph">{children}</p>,
-  ul: ({ children }) => <ul className="floating-modal__list">{children}</ul>,
-  ol: ({ children }) => <ol className="floating-modal__list">{children}</ol>,
-  li: ({ children }) => <li className="floating-modal__list-item">{children}</li>,
-  strong: ({ children }) => <strong className="floating-modal__strong">{children}</strong>,
-  code: ({ children }) => <code className="floating-modal__inline-code">{children}</code>,
-  table: ({ children }) => <table className="floating-modal__table">{children}</table>,
-  thead: ({ children }) => <thead>{children}</thead>,
-  tbody: ({ children }) => <tbody>{children}</tbody>,
-  tr: ({ children }) => <tr>{children}</tr>,
-  th: ({ children }) => <th className="floating-modal__th">{children}</th>,
-  td: ({ children }) => <td className="floating-modal__td">{children}</td>,
-  a: ({ children, href }) => (
-    <a href={href} className="floating-modal__link" target="_blank" rel="noopener noreferrer">
-      {children}
-    </a>
-  ),
 };
 
 export function FloatingHoverModal({ href, children }) {
@@ -151,9 +127,7 @@ export function FloatingHoverModal({ href, children }) {
             </div>
             <div className="floating-hover-modal__body">
               {ContentComponent ? (
-                <MDXProvider components={mdxComponents}>
-                  <ContentComponent />
-                </MDXProvider>
+                <ContentComponent />
               ) : (
                 <div className="floating-modal__error">
                   <h2 className="floating-modal__subtitle">Content Not Available</h2>
