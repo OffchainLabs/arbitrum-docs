@@ -227,6 +227,10 @@
     "title": "Gas Price Floor",
     "text": "<p>Protocol-enforced minimum gas price on an Arbitrum chain; currently 0.1 <code>gwei</code> on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and 0.01 <code>gwei</code> on <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>.</p>\n"
   },
+  "gas-target": {
+    "title": "Gas target",
+    "text": "<p>The target computation limit for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a> currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via <a href=\"https://notes.ethereum.org/@vbuterin/eip-1559-faq\">EIP-1559</a>.</p>\n"
+  },
   "gateway-router": {
     "title": "Gateway Router",
     "text": "<p>Contracts in the <a href=\"/intro/glossary#arb-token-bridge\">Arb Token Bridge</a> responsible for mapping tokens to their appropriate <a href=\"/intro/glossary#token-gateway\">Token Gateway</a>.</p>\n"
@@ -366,10 +370,6 @@
   "soft-confirmation": {
     "title": "Soft Confirmation",
     "text": "<p>A semi-trusted promise from the <a href=\"/intro/glossary#sequencer\">Sequencer</a> to post a user&#39;s transaction in the near future; soft-confirmations happen prior to posting on the <a href=\"/intro/glossary#parent-chain\">Parent chain</a>, and thus can be given near-instantaneously (i.e., faster than the parent chain&#39;s block times)</p>\n"
-  },
-  "speed-limit": {
-    "title": "Speed Limit",
-    "text": "<p>Target computation limit for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a> currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via <a href=\"https://notes.ethereum.org/@vbuterin/eip-1559-faq\">EIP-1559</a>.</p>\n"
   },
   "standard-arbtoken": {
     "title": "Standard Arb-Token",
