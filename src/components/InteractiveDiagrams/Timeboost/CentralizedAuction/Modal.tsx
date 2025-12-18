@@ -8,8 +8,6 @@ import step4Content from './modal-centralized-auction-step-4.mdx';
 import step5Content from './modal-centralized-auction-step-5.mdx';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
-import { MDXProvider } from '@mdx-js/react';
-import type { MDXComponents } from '@mdx-js/react/lib';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
@@ -24,41 +22,6 @@ interface CodeBlock {
 
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
-
-const components = {
-  h1: ({ children }) => <h1 className="modal__title">{children}</h1>,
-  p: ({ children }) => <p>{children}</p>,
-  ol: ({ children }) => <ul>{children}</ul>,
-  li: ({ children }) => <li>{children}</li>,
-  pre: ({ children }) => children,
-  code: ({ children, className }) => {
-    const language = className?.replace('language-', '') || 'text';
-
-    // Safe check for SSG - default to false when context is not available
-    let isDarkTheme = false;
-    try {
-      const colorMode = useColorMode();
-      isDarkTheme = colorMode.isDarkTheme;
-    } catch (e) {
-      // During SSG, useColorMode throws an error - use default
-    }
-
-    return (
-      <SyntaxHighlighter
-        language={language}
-        style={isDarkTheme ? oneDark : oneLight}
-        customStyle={{
-          margin: 0,
-          padding: '16px',
-          borderRadius: '4px',
-          backgroundColor: isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
-        }}
-      >
-        {children}
-      </SyntaxHighlighter>
-    );
-  },
-};
 
 export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -150,9 +113,7 @@ export function Modal({ number }: { number: number }) {
                             <CloseIcon />
                           </Dialog.Close>
                         </header>
-                        <MDXProvider components={components}>
-                          <StepContent />
-                        </MDXProvider>
+                        <StepContent />
                       </Dialog.Content>
                     </div>
                   ),
