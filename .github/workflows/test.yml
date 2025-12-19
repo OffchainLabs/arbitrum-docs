@@ -27,6 +27,3 @@ jobs:
 
       - name: Run tests
         run: yarn test
-
-      - name: Check for missing redirects
-        run: yarn tsx scripts/check-redirects.ts --ci

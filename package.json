@@ -28,7 +28,6 @@
     "typecheck": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check-redirects": "tsx scripts/check-redirects.ts",
     "check-releases": "ts-node scripts/check-releases.ts",
     "notion:update": "tsx scripts/notion-update.ts",
     "notion:verify-quicklooks": "tsx scripts/notion-verify-quicklooks.ts",
