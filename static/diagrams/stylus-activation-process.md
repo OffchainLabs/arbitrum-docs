@@ -1,0 +1,16 @@
+---
+title: 'stylus activation process'
+---
+
+```mermaid
+flowchart LR
+    A[Raw WASM Binary] --> B[Remove dangling<br/>references]
+    B --> C[Add project_hash<br/>metadata]
+    C --> D[Strip user<br/>custom sections]
+    D --> E[Brotli compress<br/>level 11]
+    E --> F[Add EOF prefix<br/>EFF00000]
+    F --> G[Final compressed code<br/>≤ 24KB]
+
+    style A fill:#FFE4B5
+    style G fill:#90EE90
+```

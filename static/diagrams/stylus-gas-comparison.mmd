@@ -1,0 +1,9 @@
+graph LR
+    A[Solidity Contract] -->|Compiled to| B[EVM Bytecode]
+    C[Rust Contract] -->|Compiled to| D[WASM]
+
+    B -->|Interpreted| E[Gas: Higher]
+    D -->|Native Execution| F[Gas: Lower]
+
+    style E fill:#ffcccc
+    style F fill:#ccffcc

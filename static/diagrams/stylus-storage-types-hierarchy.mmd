@@ -1,0 +1,23 @@
+graph TB
+    Root[Storage Types] --> Primitives
+    Root --> Collections
+    Root --> Custom[Custom Structs]
+
+    Primitives --> Bool[StorageBool]
+    Primitives --> Uint[StorageU256, U128, U64, etc.]
+    Primitives --> Int[StorageI256, I128, I64, etc.]
+    Primitives --> Addr[StorageAddress]
+    Primitives --> Bytes[StorageB256, B32, etc.]
+
+    Collections --> Vec[StorageVec T]
+    Collections --> Array[StorageArray T, N]
+    Collections --> Map[StorageMap K, V]
+    Collections --> Str[StorageString]
+    Collections --> BytesCol[StorageBytes]
+
+    Custom --> Struct[storage annotated structs]
+
+    style Root fill:#E1BEE7
+    style Primitives fill:#BBDEFB
+    style Collections fill:#C8E6C9
+    style Custom fill:#FFE0B2

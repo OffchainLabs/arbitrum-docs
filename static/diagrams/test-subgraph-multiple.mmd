@@ -1,0 +1,16 @@
+graph TB
+  subgraph Layer1[Frontend]
+    A[UI]
+    B[API Client]
+  end
+
+  subgraph Layer2[Backend]
+    C[Server]
+    D{Router}
+    E[Database]
+    C --> D
+    D --> E
+  end
+
+  A --> B
+  B --> C

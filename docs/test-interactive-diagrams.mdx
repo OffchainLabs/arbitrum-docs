@@ -1,0 +1,46 @@
+---
+id: test-interactive-diagrams
+title: 'Interactive Diagram Test'
+description: 'Test page for click-through interactive diagrams'
+---
+
+import MermaidReactFlow from '@site/src/components/MermaidReactFlow';
+
+This page demonstrates the click-through diagram navigation system. Click on any **blue node** to navigate to detailed views.
+
+## Arbitrum Architecture Overview
+
+Click on the blue nodes below to explore different components of the Arbitrum system:
+
+<MermaidReactFlow diagramFile="/diagrams/stylus-learning-paths.mmd" height="800px" />
+
+## How to Use
+
+1. **Click on blue nodes** - These are clickable and will load a new diagram
+2. **Gray nodes** - These are informational only and not clickable
+3. **Back button** - Appears in the top-left when you navigate to a new diagram
+
+## Navigation Flow Example
+
+Starting from the overview diagram above, try this navigation path:
+
+1. Click on **"Ethereum L1"** → Shows Layer 1 components
+2. Click on **"Inbox Contract"** → Shows inbox message flow details
+3. Click **"Back"** button → Returns to Ethereum L1 view
+4. Click **"Back"** again → Returns to overview
+
+## Features
+
+- **Theme-aware**: Diagrams adapt to light/dark mode
+- **Keyboard accessible**: Use Tab to focus nodes, Enter/Space to navigate
+- **Responsive**: Works on mobile, tablet, and desktop
+- **History-based navigation**: Back button follows your navigation path
+
+## Try Different Paths
+
+You can also try:
+
+- Overview → **Arbitrum L2** → explore Layer 2 components
+- Ethereum Details → **Rollup Contract** (if implemented)
+
+The navigation is non-linear - you can explore in any order and always return using the back button.

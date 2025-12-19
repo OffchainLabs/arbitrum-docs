@@ -1,0 +1,25 @@
+flowchart TD
+    Start([Start Quickstart]) --> CreateProject["Create Project"]
+
+    CreateProject --> CheckValidity["Check Validity"]
+
+    CheckValidity --> Deploy["Deploy Contract"]
+
+    Deploy --> ExportABI["Export ABI"]
+
+    ExportABI --> CallContract["Call Contract"]
+
+    CallContract --> SendTransaction["Send Transaction"]
+
+    SendTransaction --> VerifyResults["Verify Results"]
+
+    VerifyResults --> End([Quickstart Complete])
+
+    %% Styling for sections
+    classDef setup fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000
+    classDef deploy fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
+    classDef interact fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,color:#000
+
+    class CreateProject,CheckValidity setup
+    class Deploy,ExportABI deploy
+    class CallContract,SendTransaction,VerifyResults interact

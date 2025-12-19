@@ -1,0 +1,22 @@
+graph TB
+    subgraph "Developer Side"
+        A[Rust/C/C++ Code] --> B[Compiler]
+        B --> C[WASM Binary]
+    end
+
+    subgraph "Arbitrum Nitro"
+        C --> D[Brotli Decompression]
+        D --> E[WASM Validation]
+        E --> F[JIT Compilation]
+        F --> G[Native Machine Code]
+
+        subgraph "Execution Environment"
+            G --> H[Contract Execution]
+            H <--> I[Hostio Functions]
+            I <--> J[EVM State]
+        end
+    end
+
+    style A fill:#FFE4B5
+    style G fill:#90EE90
+    style J fill:#87CEEB

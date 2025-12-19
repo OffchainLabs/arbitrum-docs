@@ -1,0 +1,14 @@
+flowchart TB
+    subgraph "Storage Slots (32 bytes each)"
+        Slot0["Slot 0<br/>uint256 value"]
+        Slot1["Slot 1<br/>address (20 bytes) + uint96 (12 bytes)"]
+        Slot2["Slot 2<br/>Mapping base slot"]
+        Slot3["Slot 3<br/>keccak256(key || slot)"]
+    end
+
+    Mapping["Mapping[key]"] -->|"hash(key + 2)"| Slot3
+
+    style Slot0 fill:#E3F2FD
+    style Slot1 fill:#FFF3E0
+    style Slot2 fill:#F3E5F5
+    style Slot3 fill:#E8F5E9
