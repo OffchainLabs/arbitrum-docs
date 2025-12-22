@@ -95,6 +95,11 @@ const sidebars = {
       label: 'FAQ',
     },
     {
+      type: 'link',
+      label: 'Notices',
+      href: '/notices/arbos51-arbsepolia-upgrade-notice',
+    },
+    {
       type: 'doc',
       label: 'Audit reports',
       id: 'audit-reports',
