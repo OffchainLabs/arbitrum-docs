@@ -1374,7 +1374,31 @@ For `ReferenceDA`:
 
 ## 9. Configuration & deployment
 
-This section covers configuring Nitro nodes to connect to your DA provider and deploying your DA provider server.
+This section covers creating the Arbitrum chain with custom DA support, configuring Nitro nodes to connect to your DA provider and deploying your DA provider server.
+
+### Create the Arbitrum chain with custom DA support
+
+To use a custom DA validator contract for the on-chain proving process, the minimum nitro-contracts version required is v3.2, which is available in the `deploy-custom-da-val` branch on the nitro-contracts repository.
+
+:::info
+
+Nitro contracts v3.2 have not been publicly released yet and is not supported in the latest version of the Arbitrum Chain SDK. The following instructions specify how to deploy a RollupCreator factory contract and create a new chain with it. However, it's recommended to use the canonical RollupCreator factory contract and the Arbitrum Chain SDK once they are available.
+
+:::
+
+You can deploy a RollupCreator factory contract following the instructions in [How to deploy new factory contracts](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx#deploying-a-rollupcreator).
+
+Before creating the Arbitrum chain, you must have the on-chain custom validator contract and the OneStepProof (OSP) contracts deployed on the parent chain. Deploy the on-chain validator contract first, and then use the script available at `scripts/deployOsp.ts` to deploy the OSP contracts. Specify the address of the custom validator contract in a `CUSTOM_DA_VALIDATOR` env variable and use hardhat to run the script:
+
+```shell
+yarn run hardhat run scripts/deployOsp.ts --network parentChainNetwork
+```
+
+This will deploy all OSP contracts. Take note of the `OneStepProofEntry` contract address since we'll needed when creating the chain.
+
+Finally, create the chain with custom DA support following the instructions in the nitro-contracts [deployment doc](https://github.com/OffchainLabs/nitro-contracts/blob/deploy-custom-da-val/docs/deployment.md#3-create-new-rollup-chains). You'll have to specify the address of the OneStepProofEntry contract in the `config` used to create the chain, [here](https://github.com/OffchainLabs/nitro-contracts/blob/deploy-custom-da-val/scripts/config.example.ts#L72).
+
+Once the chain's contracts are deployed, you can configure your nitro node following the instructions in the next section.
 
 ### Nitro node configuration
 
