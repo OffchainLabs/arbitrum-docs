@@ -1,0 +1,589 @@
+---
+title: 'Common issues and solutions'
+sidebar_label: 'Common issues'
+description: 'Troubleshooting guide for frequently encountered Stylus development issues'
+user_story: 'As a developer, I want to quickly resolve common errors and issues when building with Stylus'
+content_type: troubleshooting
+author: offchainlabs
+sme: offchainlabs
+sidebar_position: 1
+---
+
+This guide covers frequently encountered issues in Stylus development with step-by-step solutions.
+
+## Installation and setup
+
+### cargo stylus not found
+
+**Problem**: Running `cargo stylus` returns "command not found."
+
+**Solution**:
+
+```shell
+# Install cargo-stylus
+cargo install --force cargo-stylus
+
+# Verify installation
+cargo stylus --version
+
+# If still not found, check your PATH includes ~/.cargo/bin
+echo $PATH | grep cargo
+```
+
+**Alternative**: Add cargo bin to your PATH:
+
+```shell
+# Add to ~/.bashrc or ~/.zshrc
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Reload shell configuration
+source ~/.bashrc  # or source ~/.zshrc
+```
+
+### WASM target not installed
+
+**Problem**: Build fails with "can't find crate for `std`" or "target 'wasm32-unknown-unknown' not found."
+
+**Solution**:
+
+```shell
+# Add WASM target for your Rust version
+rustup target add wasm32-unknown-unknown
+
+# If using specific toolchain
+rustup target add wasm32-unknown-unknown --toolchain 1.81
+```
+
+**Verify**:
+
+```shell
+rustup target list | grep wasm32
+# Should show: wasm32-unknown-unknown (installed)
+```
+
+### Docker not running
+
+**Problem**: `cargo stylus check` fails with "Cannot connect to Docker daemon."
+
+**Solution**:
+
+1. Start Docker Desktop
+2. Verify Docker is running:
+
+```shell
+docker ps
+```
+
+3. If still failing, restart Docker:
+
+```shell
+# macOS/Linux
+sudo systemctl restart docker
+
+# Or restart Docker Desktop application
+```
+
+## Build errors
+
+### Contract exceeds size limit
+
+**Problem**: "Program activation failed: program too large."
+
+**Solution**:
+
+1. **Optimize build settings** in `Cargo.toml`:
+
+```toml
+[profile.release]
+opt-level = "z"        # Optimize for size
+lto = true             # Link-time optimization
+codegen-units = 1      # Better optimization
+strip = true           # Remove debug symbols
+panic = "abort"        # Smaller panic handling
+```
+
+2. **Use wasm-opt**:
+
+```shell
+cargo stylus check --wasm-opt
+```
+
+3. **Remove unused dependencies**:
+
+```toml
+# Remove unnecessary features
+stylus-sdk = { version = "0.8", default-features = false }
+```
+
+4. **Check binary size**:
+
+```shell
+ls -lh target/wasm32-unknown-unknown/release/*.wasm
+```
+
+See [Optimizing binaries guide](/stylus/guides/optimizing-binaries) for more strategies.
+
+### Linker errors
+
+**Problem**: Build fails with linker errors or "undefined reference" messages.
+
+**Solution**:
+
+```shell
+# Clean build artifacts
+cargo clean
+
+# Rebuild
+cargo build --target wasm32-unknown-unknown --release
+
+# If still failing, update Rust
+rustup update
+```
+
+### Dependency compilation failures
+
+**Problem**: Dependencies fail to compile for WASM target.
+
+**Solution**:
+
+1. **Check dependency compatibility**: Not all crates support WASM. Look for:
+
+   - `no_std` support
+   - WASM-compatible versions
+   - Alternatives designed for blockchain
+
+2. **Disable incompatible features**:
+
+```toml
+[dependencies]
+# Disable std-only features
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+```
+
+3. **Use Stylus-compatible alternatives**: See [recommended libraries](/stylus/advanced/recommended-libraries).
+
+## Deployment errors
+
+### Insufficient funds
+
+**Problem**: "Insufficient funds for gas \* price + value."
+
+**Solution**:
+
+```shell
+# Check your balance
+cast balance <YOUR_ADDRESS> --rpc-url <RPC_URL>
+
+# Fund your account (testnet)
+# Visit faucet: https://faucet.quicknode.com/arbitrum/sepolia
+```
+
+### Activation failed
+
+**Problem**: "Program activation failed" after deployment.
+
+**Solution**:
+
+1. **Check contract size**:
+
+```shell
+cargo stylus check
+```
+
+2. **Verify WASM validity**:
+
+```shell
+# Ensure binary is valid WASM
+wasm-validate target/wasm32-unknown-unknown/release/*.wasm
+```
+
+3. **Check gas limits**:
+
+```shell
+# Increase gas limit for activation
+cargo stylus deploy \
+  --endpoint=<RPC_URL> \
+  --private-key=<KEY> \
+  --gas-limit=10000000
+```
+
+See [Activation concepts](/stylus/concepts/activation) for more details.
+
+### Transaction reverted
+
+**Problem**: Deployment transaction reverts without clear error.
+
+**Solution**:
+
+1. **Enable verbose logging**:
+
+```shell
+RUST_LOG=debug cargo stylus deploy \
+  --endpoint=<RPC_URL> \
+  --private-key=<KEY>
+```
+
+2. **Check network status**:
+
+```shell
+# Verify RPC is responding
+cast block-number --rpc-url <RPC_URL>
+```
+
+3. **Use replay for debugging**:
+
+```shell
+cargo stylus replay \
+  --endpoint=<RPC_URL> \
+  <TRANSACTION_HASH>
+```
+
+## Runtime errors
+
+### Panic in contract code
+
+**Problem**: Contract panics during execution.
+
+**Solution**:
+
+1. **Use `Result` instead of `panic!`**:
+
+```rust
+// ❌ Bad: Panics
+pub fn divide(&self, a: U256, b: U256) -> U256 {
+    if b.is_zero() {
+        panic!("Division by zero");
+    }
+    a / b
+}
+
+// ✅ Good: Returns error
+pub fn divide(&self, a: U256, b: U256) -> Result<U256, Vec<u8>> {
+    ensure!(!b.is_zero(), "Division by zero");
+    Ok(a / b)
+}
+```
+
+2. **Enable backtrace for debugging**:
+
+```shell
+RUST_BACKTRACE=1 cargo test
+```
+
+### Storage slot conflicts
+
+**Problem**: Storage values overwriting each other unexpectedly.
+
+**Solution**:
+
+1. **Use explicit storage layout**:
+
+```rust
+sol_storage! {
+    pub struct MyContract {
+        #[borrow]  // Use borrow for nested structs
+        StorageMap<Address, UserData> users;
+
+        StorageU256 total_supply;
+    }
+}
+```
+
+2. **Avoid manual slot manipulation** unless necessary.
+
+3. **Check for storage collisions** in upgradeable contracts.
+
+### Out of gas
+
+**Problem**: Transactions fail with "out of gas" error.
+
+**Solution**:
+
+1. **Optimize loops**:
+
+```rust
+// ❌ Bad: Unbounded loop
+pub fn process_all(&self, items: Vec<Address>) -> Result<(), Vec<u8>> {
+    for item in items {
+        self.process(item)?;  // Could exceed gas limit
+    }
+    Ok(())
+}
+
+// ✅ Good: Paginated
+pub fn process_batch(&self, items: Vec<Address>, max: usize) -> Result<(), Vec<u8>> {
+    for item in items.iter().take(max) {
+        self.process(*item)?;
+    }
+    Ok(())
+}
+```
+
+2. **Increase gas limit** when calling:
+
+```shell
+cast send <CONTRACT> "function()" \
+  --gas-limit 1000000 \
+  --rpc-url <RPC_URL> \
+  --private-key <KEY>
+```
+
+3. **Profile gas usage**:
+
+```shell
+cargo stylus trace <TX_HASH> --endpoint <RPC_URL>
+```
+
+See [Gas optimization guide](/stylus/best-practices/gas-optimization) for more strategies.
+
+## Testing issues
+
+### Tests failing with storage errors
+
+**Problem**: Tests fail with "storage not initialized" or similar errors.
+
+**Solution**:
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use stylus_sdk::testing::*;
+
+    #[test]
+    fn test_contract() {
+        // ✅ Always initialize TestVM
+        let vm = TestVM::default();
+        let mut contract = MyContract::from(&vm);
+
+        // Configure test environment
+        vm.set_caller(address!("0x0000000000000000000000000000000000000001"));
+
+        // Run tests
+        assert_eq!(contract.get_value().unwrap(), U256::ZERO);
+    }
+}
+```
+
+### Tests pass locally but fail on CI
+
+**Problem**: Tests work on your machine but fail in continuous integration.
+
+**Solution**:
+
+1. **Pin Rust version** in `rust-toolchain.toml`:
+
+```toml
+[toolchain]
+channel = "1.81"
+components = ["rustfmt", "clippy"]
+targets = ["wasm32-unknown-unknown"]
+```
+
+2. **Ensure WASM target in CI**:
+
+```yaml
+# .github/workflows/test.yml
+- name: Add WASM target
+  run: rustup target add wasm32-unknown-unknown
+```
+
+3. **Check for environment-specific dependencies**.
+
+## ABI and integration
+
+### ABI export fails
+
+**Problem**: `cargo stylus export-abi` returns empty or incorrect ABI.
+
+**Solution**:
+
+1. **Ensure methods use `#[external]` macro**:
+
+```rust
+#[external]
+impl MyContract {
+    // ✅ This will be exported
+    pub fn public_method(&self) -> U256 {
+        U256::from(42)
+    }
+
+    // ❌ This won't be exported (no #[external])
+    fn internal_method(&self) -> U256 {
+        U256::from(42)
+    }
+}
+```
+
+2. **Check for compilation errors**:
+
+```shell
+cargo build --target wasm32-unknown-unknown --release
+cargo stylus export-abi
+```
+
+### Type conversion errors
+
+**Problem**: "Type mismatch" when calling from Solidity or TypeScript.
+
+**Solution**:
+
+1. **Use explicit type conversions**:
+
+```rust
+use stylus_sdk::abi::AbiType;
+
+// ✅ Ensure types match Solidity ABI
+pub fn get_balance(&self, account: Address) -> U256 {
+    self.balances.get(account)
+}
+```
+
+2. **Check ABI matches expectations**:
+
+```shell
+cargo stylus export-abi > abi.json
+# Verify types in abi.json match your frontend
+```
+
+See [Type conversions guide](/stylus/fundamentals/data-types/conversions-between-types).
+
+## Network and RPC issues
+
+### RPC connection timeout
+
+**Problem**: "Connection timeout" or "Connection refused" errors.
+
+**Solution**:
+
+1. **Verify RPC URL**:
+
+```shell
+# Test RPC connection
+curl -X POST <RPC_URL> \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+```
+
+2. **Check rate limits**: Public RPCs may have rate limits. Consider:
+
+   - Using a dedicated RPC provider
+   - Adding retry logic
+   - Implementing backoff strategies
+
+3. **Network-specific endpoints**:
+   - Arbitrum Sepolia: https://sepolia-rollup.arbitrum.io/rpc
+   - Arbitrum One: https://arb1.arbitrum.io/rpc
+
+### Nonce errors
+
+**Problem**: "Nonce too low" or "nonce too high" errors.
+
+**Solution**:
+
+1. **Let tooling manage nonces** (default behavior):
+
+```shell
+# cargo stylus automatically manages nonces
+cargo stylus deploy --endpoint <RPC_URL> --private-key <KEY>
+```
+
+2. **Reset nonce manually if needed**:
+
+```shell
+# Check current nonce
+cast nonce <YOUR_ADDRESS> --rpc-url <RPC_URL>
+
+# Send transaction with specific nonce
+cast send <CONTRACT> "function()" \
+  --nonce <NONCE> \
+  --rpc-url <RPC_URL> \
+  --private-key <KEY>
+```
+
+## Debugging strategies
+
+### Enable verbose logging
+
+```shell
+# Set log level
+export RUST_LOG=debug
+
+# Run with logging
+cargo stylus check
+cargo stylus deploy --endpoint <RPC_URL> --private-key <KEY>
+```
+
+### Use replay debugging
+
+```shell
+# Replay failed transaction
+cargo stylus replay \
+  --endpoint <RPC_URL> \
+  <TX_HASH>
+
+# With GDB for advanced debugging
+cargo stylus replay \
+  --endpoint <RPC_URL> \
+  --use-gdb \
+  <TX_HASH>
+```
+
+See [Debugging guide](/stylus/cli-tools/debugging-tx) for detailed walkthrough.
+
+### Trace execution
+
+```shell
+# Trace transaction execution
+cargo stylus trace <TX_HASH> --endpoint <RPC_URL>
+```
+
+### Check contract state
+
+```shell
+# Read storage values
+cast storage <CONTRACT_ADDRESS> <SLOT> --rpc-url <RPC_URL>
+
+# Call view functions
+cast call <CONTRACT_ADDRESS> "getValue()(uint256)" --rpc-url <RPC_URL>
+```
+
+## Getting help
+
+If you're still stuck:
+
+1. **Check documentation**: Search [Stylus docs](https://docs.arbitrum.io/stylus)
+2. **Search GitHub issues**: [Stylus SDK Issues](https://github.com/OffchainLabs/stylus-sdk-rs/issues)
+3. **Ask in Discord**: [Arbitrum Discord](https://discord.gg/arbitrum) #stylus channel
+4. **Post in forums**: [Arbitrum Developer Forum](https://forum.arbitrum.foundation/)
+
+### Creating a good bug report
+
+Include:
+
+- Rust version: `rustc --version`
+- cargo-stylus version: `cargo stylus --version`
+- Minimal reproducible example
+- Full error message and stack trace
+- Steps to reproduce
+- Expected vs. actual behavior
+
+## Common error messages quick reference
+
+| Error Message                              | Common Cause              | Quick Fix                                  |
+| ------------------------------------------ | ------------------------- | ------------------------------------------ |
+| "target not found: wasm32-unknown-unknown" | WASM target not installed | `rustup target add wasm32-unknown-unknown` |
+| "Cannot connect to Docker daemon"          | Docker not running        | Start Docker Desktop                       |
+| "Program too large"                        | Binary exceeds size limit | Add optimization flags, use `--wasm-opt`   |
+| "Insufficient funds"                       | Not enough ETH for gas    | Fund account from faucet                   |
+| "Nonce too low"                            | Nonce mismatch            | Let tooling manage nonces                  |
+| "Out of gas"                               | Gas limit exceeded        | Increase gas limit or optimize code        |
+| "Storage not initialized"                  | Missing TestVM setup      | Initialize `TestVM::default()` in tests    |
+| "Division by zero"                         | Unchecked arithmetic      | Use `ensure!()` or `checked_div()`         |
+
+## Next steps
+
+- Review [security best practices](/stylus/best-practices/security)
+- Study [gas optimization](/stylus/best-practices/gas-optimization)
+- Learn [debugging techniques](/stylus/cli-tools/debugging-tx)
+- Explore [testing strategies](/stylus/fundamentals/testing-contracts)
