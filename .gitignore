@@ -17,6 +17,8 @@ build
 # Generated sdk
 sdk-sidebar.js
 docs/sdk/
+# Generated notion export CSVs
+scripts/out/*.csv
 # Generated stylus
 docs/stylus-by-example/
 # Generated api:mutes Typedoc quirk
