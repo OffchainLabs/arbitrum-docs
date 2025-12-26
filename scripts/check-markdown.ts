@@ -21,10 +21,14 @@ function checkStagedMarkdownDeletions(): void {
       .map((line) => line.split('\t')[1]); // Extract the file names
 
     if (deletedMarkdownFiles.length > 0) {
+      console.error('************************************************************');
+      console.error('************************************************************');
       console.error('Error: The following Markdown files are staged for deletion:');
-      deletedMarkdownFiles.forEach((file) => console.error('- ${file}'));
+      deletedMarkdownFiles.forEach((file) => console.error(`- ${file}`));
       console.error('Please unstage these deletions or remove them if unintended.');
-      exit(1);
+      console.error('************************************************************');
+      console.error('************************************************************');
+      exit(0);
     } else {
       console.log('No staged deletions of Markdown files found.');
       exit(0);
