@@ -27,3 +27,6 @@ jobs:
 
       - name: Run tests
         run: yarn test
+
+      - name: Check for deleted markdown files
+        run: yarn tsx scripts/check-markdown.ts --ci

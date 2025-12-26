@@ -29,6 +29,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check-releases": "ts-node scripts/check-releases.ts",
+    "check-markdown": "tsx scripts/check-markdown.ts",
     "notion:update": "tsx scripts/notion-update.ts",
     "notion:verify-quicklooks": "tsx scripts/notion-verify-quicklooks.ts",
     "lint:markdown": "markdownlint \"docs/**/*.{md,mdx}\" --ignore \"docs/sdk/**\"",
