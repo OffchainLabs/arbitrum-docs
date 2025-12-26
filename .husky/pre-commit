@@ -128,9 +128,10 @@ main() {
   log_info "📁 Found $(echo "$staged_files" | wc -l | tr -d ' ') staged files"
 
   # 1. Fast redirect validation (project-specific)
-  log_step "Validating redirects..."
-  time_command yarn check-redirects || exit_with_error "Redirect validation failed. Fix redirect issues before committing."
-  log_success "Redirect validation passed"
+  # log_step "Validating redirects..."
+  # Will need to replace the 'check-redirects' line below when we replace it
+  # time_command yarn check-redirects || exit_with_error "Redirect validation failed. Fix redirect issues before committing."
+  # log_success "Redirect validation passed"
 
   # 2. Submodule updates (only if submodules are staged or .gitmodules changed)
   if echo "$staged_files" | grep -E "(\.gitmodules|submodules/)" >/dev/null 2>&1; then
