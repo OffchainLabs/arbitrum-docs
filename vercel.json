@@ -1487,12 +1487,12 @@
       "permanent": false
     },
     {
-      "source": "/(notices/arbos-51/?)",
+      "source": "/(notices/arbos-50/?)",
       "destination": "/notices/arbos51-arbmainnet-upgrade-notice",
       "permanent": false
     },
     {
-      "source": "/(notices/arbos-50/?)",
+      "source": "/(notices/arbos-51/?)",
       "destination": "/notices/arbos51-arbmainnet-upgrade-notice",
       "permanent": false
     },
