@@ -97,7 +97,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'Notices',
-      href: '/notices/arbos51-arbsepolia-upgrade-notice',
+      href: '/notices/arbos51-arbmainnet-upgrade-notice',
     },
     {
       type: 'doc',
@@ -1528,13 +1528,18 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
-      id: 'notices/fusaka-upgrade-notice',
-      label: 'Upgrade for the Fusaka transition',
+      id: 'notices/arbos51-arbmainnet-upgrade-notice',
+      label: 'Upgrade for ArbOS 51 on Arbitrum One & Nova',
     },
     {
       type: 'doc',
       id: 'notices/arbos51-arbsepolia-upgrade-notice',
       label: 'Upgrade for ArbOS 51 on ArbSepolia',
+    },
+    {
+      type: 'doc',
+      id: 'notices/fusaka-upgrade-notice',
+      label: 'Upgrade for the Fusaka transition',
     },
   ],
 };

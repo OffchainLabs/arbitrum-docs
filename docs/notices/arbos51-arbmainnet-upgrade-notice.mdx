@@ -1,0 +1,21 @@
+---
+title: 'ArbOS 51 activation on Arbitrum One & Arbitrum Nova'
+description: Upgrade notices for ArbOS 51 activation on Arbitrum One & Arbitrum Nova
+user_story: As an Arbitrum chain owner or node operator, I want to configure my chain/nodes to run on Arbitrum One & Arbitrum Nova.
+content_type: notice
+---
+
+On Thursday, January 8, 2025 at 17:00 UTC, [ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-releases/arbos51.mdx) will activate on the Arbitrum One & Arbitrum Nova chains.
+
+:::warning Action required
+
+Arbitrum One & Arbitrum Nova node operators **must upgrade** to Nitro **`v3.9.3`** or newer ahead of this activation to continue syncing the chain.
+
+- **Docker image:** `offchainlabs/nitro-node:v3.9.3-8bc5554`
+- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3
+
+:::
+
+### **Context**
+
+[ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-releases/arbos51.mdx) builds upon [ArbOS 40 "Callisto"](docs/run-arbitrum-node/arbos-releases/arbos40.mdx) with support for the relevant EVM changes that are a part of Ethereum's [Fusaka upgrade](https://ethereum.org/en/roadmap/fusaka/), as well as additional improvements to the gas pricing algorithm, a change to the min L2 base fee, MaxTxGasLimit allowing full block utilization, changes to instrument Nitro’s State Transition Function (STF) to price gas based on specific resource usage, native token mint/burn capabilities, and a few bug fixes.
