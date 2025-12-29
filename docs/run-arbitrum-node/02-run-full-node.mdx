@@ -21,12 +21,12 @@ In addition to the hardware requirements, the following prerequisites will be ne
 
 The following are the minimum hardware requirements to set up a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
 
-| Resource     | Recommended                                   |
-| :----------- | :-------------------------------------------- |
-| RAM          | 16 GB                                         |
-| CPU          | 4 core CPU (for AWS, a `t3 xLarge` instance)  |
-| Storage type | NVMe SSD drives are recommended               |
-| Storage size | Depends on the chain and its traffic overtime |
+| Resource     | Recommended                                                       |
+| :----------- | :---------------------------------------------------------------- |
+| RAM          | 64 GB                                                             |
+| CPU          | 8 core CPU (for AWS, a `i4i.2xlarge` instance)                    |
+| Storage type | NVMe SSD drives with locally attached drives strongly recommended |
+| Storage size | Depends on the chain and its traffic overtime                     |
 
 Please note that:
 
@@ -42,7 +42,7 @@ Although there are beta and release candidate versions of the Arbitrum Nitro sof
 
 :::
 
-Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.3-8bc5554@@</code>
+Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.4-7f582c3@@</code>
 
 ### Database snapshots
 

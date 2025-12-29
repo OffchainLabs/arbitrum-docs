@@ -100,8 +100,8 @@
     "key": "what-is-the-difference-between-an-child-chain-block-and-an-assertion"
   },
   {
-    "question": "Why do Arbitrum chains enforce a speed limit? Isn't it better that the speed grows without limits?",
-    "answer": "The transaction lifecycle sets a limit that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the speed of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.\n\n\n\n",
-    "key": "why-do-arbitrum-chains-enforce-a-speed-limit-isnt-it-better-that-the-speed-grows-without-limits"
+    "question": "Why do Arbitrum chains enforce a gas target? Isn't it better that the target grows without limits?",
+    "answer": "The transaction lifecycle sets a target that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the target of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.\n\n\n\n",
+    "key": "why-do-arbitrum-chains-enforce-a-gas-target-isnt-it-better-that-the-target-grows-without-limits"
   }
 ]
