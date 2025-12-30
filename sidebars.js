@@ -97,7 +97,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'Notices',
-      href: '/notices/arbos51-arbsepolia-upgrade-notice',
+      href: '/notices/arbos51-upgrade-notice',
     },
     {
       type: 'doc',
