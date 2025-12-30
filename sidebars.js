@@ -1528,7 +1528,7 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
-      id: 'notices/arbos51-arbsepolia-upgrade-notice',
+      id: 'notices/arbos51-upgrade-notice',
       label: 'Upgrade notice for ArbOS 51',
     },
     {
