@@ -1497,13 +1497,13 @@
       "permanent": false
     },
     {
-      "source": "/notices/arbos51-arbsepolia-upgrade-notice",
-      "destination": "/notices/arbos51-upgrade-notice",
+      "source": "/(notices/arbos-fusaka/?)",
+      "destination": "/notices/fusaka-upgrade-notice",
       "permanent": false
     },
     {
-      "source": "/(notices/arbos-fusaka/?)",
-      "destination": "/notices/fusaka-upgrade-notice",
+      "source": "/(notices/arbos51-arbsepolia-upgrade-notice/?)",
+      "destination": "/notices/arbos51-upgrade-notice",
       "permanent": false
     },
     {
