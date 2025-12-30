@@ -1,0 +1,5 @@
+label: 'CLI tools'
+position: 4
+link:
+  type: generated-index
+  description: cargo-stylus command-line tools for building, deploying, and verifying contracts.

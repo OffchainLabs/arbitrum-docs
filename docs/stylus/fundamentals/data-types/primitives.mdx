@@ -1,0 +1,564 @@
+---
+title: 'Stylus primitives'
+description: 'Stylus Rust SDK primitives'
+author: chrisco
+sme: chrisco
+sidebar_position: 1
+target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
+displayed_sidebar: buildStylusSidebar
+---
+
+The Stylus SDK provides full support for Rust primitive types with automatic ABI encoding/decoding and Solidity type mappings. These primitives can be used in contract method signatures, storage, and as function parameters.
+
+## Boolean (`bool`)
+
+Booleans in Rust map directly to Solidity's `bool` type.
+
+### Usage in contract methods
+
+```rust
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    pub fn is_valid(&self) -> bool {
+        true
+    }
+
+    pub fn toggle(&mut self, flag: bool) {
+        // Use the boolean value
+        if flag {
+            // Do something
+        }
+    }
+}
+```
+
+### Solidity mapping
+
+- **Rust type**: `bool`
+- **Solidity type**: `bool`
+- **Storage size**: 1 byte
+- **ABI signature**: `"bool"`
+
+## Integers
+
+The Stylus SDK supports both signed and unsigned integers with various bit sizes. All integer types from Rust's standard library and alloy-primitives are supported.
+
+### Unsigned integers
+
+#### Standard Rust unsigned integers
+
+```rust
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // u8: 8-bit unsigned integer
+    pub fn get_byte(&self) -> u8 {
+        255
+    }
+
+    // u16: 16-bit unsigned integer
+    pub fn get_short(&self) -> u16 {
+        65535
+    }
+
+    // u32: 32-bit unsigned integer
+    pub fn get_int(&self) -> u32 {
+        4294967295
+    }
+
+    // u64: 64-bit unsigned integer
+    pub fn get_long(&self) -> u64 {
+        18446744073709551615
+    }
+
+    // u128: 128-bit unsigned integer
+    pub fn get_u128(&self) -> u128 {
+        340282366920938463463374607431768211455
+    }
+}
+```
+
+#### Alloy unsigned integers
+
+For larger integers and full compatibility with Solidity's uint types, use `alloy_primitives::Uint`:
+
+```rust
+use alloy_primitives::{U256, Uint};
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // U256: 256-bit unsigned integer (most common in Solidity)
+    pub fn get_balance(&self) -> U256 {
+        U256::from(1000000)
+    }
+
+    // Any bit size from 8 to 256 (in multiples of 8)
+    pub fn get_u160(&self) -> Uint<160, 3> {
+        Uint::<160, 3>::from(999)
+    }
+
+    pub fn get_u96(&self) -> Uint<96, 2> {
+        Uint::<96, 2>::from(123456)
+    }
+}
+```
+
+### Signed integers
+
+#### Standard Rust signed integers
+
+```rust
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // i8: 8-bit signed integer
+    pub fn get_signed_byte(&self) -> i8 {
+        -128
+    }
+
+    // i16: 16-bit signed integer
+    pub fn get_signed_short(&self) -> i16 {
+        -32768
+    }
+
+    // i32: 32-bit signed integer
+    pub fn get_signed_int(&self) -> i32 {
+        -2147483648
+    }
+
+    // i64: 64-bit signed integer
+    pub fn get_signed_long(&self) -> i64 {
+        -9223372036854775808
+    }
+
+    // i128: 128-bit signed integer
+    pub fn get_signed_i128(&self) -> i128 {
+        -170141183460469231731687303715884105728
+    }
+}
+```
+
+#### Alloy signed integers
+
+```rust
+use alloy_primitives::{Signed, I256};
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // I256: 256-bit signed integer
+    pub fn get_signed_balance(&self) -> I256 {
+        I256::try_from(-1000).unwrap()
+    }
+
+    // Any bit size from 8 to 256 (in multiples of 8)
+    pub fn get_i160(&self) -> Signed<160, 3> {
+        Signed::<160, 3>::try_from(-999).unwrap()
+    }
+}
+```
+
+### Integer type mappings
+
+| Rust Type                 | Solidity Type | Bit Size | ABI Signature |
+| ------------------------- | ------------- | -------- | ------------- |
+| `u8`                      | `uint8`       | 8 bits   | `"uint8"`     |
+| `u16`                     | `uint16`      | 16 bits  | `"uint16"`    |
+| `u32`                     | `uint32`      | 32 bits  | `"uint32"`    |
+| `u64`                     | `uint64`      | 64 bits  | `"uint64"`    |
+| `u128`                    | `uint128`     | 128 bits | `"uint128"`   |
+| `Uint<160, 3>`            | `uint160`     | 160 bits | `"uint160"`   |
+| `U256` / `Uint<256, 4>`   | `uint256`     | 256 bits | `"uint256"`   |
+| `i8`                      | `int8`        | 8 bits   | `"int8"`      |
+| `i16`                     | `int16`       | 16 bits  | `"int16"`     |
+| `i32`                     | `int32`       | 32 bits  | `"int32"`     |
+| `i64`                     | `int64`       | 64 bits  | `"int64"`     |
+| `i128`                    | `int128`      | 128 bits | `"int128"`    |
+| `Signed<160, 3>`          | `int160`      | 160 bits | `"int160"`    |
+| `I256` / `Signed<256, 4>` | `int256`      | 256 bits | `"int256"`    |
+
+**Note**: All Solidity uint/int types from `uint8`/`int8` to `uint256`/`int256` (in 8-bit increments) are supported through `Uint<BITS, LIMBS>` and `Signed<BITS, LIMBS>`.
+
+## Address
+
+Ethereum addresses are represented by the `Address` type from `alloy_primitives`.
+
+### Basic usage
+
+```rust
+use alloy_primitives::Address;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    pub fn get_owner(&self) -> Address {
+        Address::ZERO
+    }
+
+    pub fn is_owner(&self, account: Address) -> bool {
+        account == self.vm().msg_sender()
+    }
+
+    pub fn transfer_ownership(&mut self, new_owner: Address) {
+        // Address validation and logic
+        if new_owner == Address::ZERO {
+            // Handle error
+        }
+    }
+}
+```
+
+### Address constants
+
+```rust
+use alloy_primitives::Address;
+
+// Zero address (0x0000000000000000000000000000000000000000)
+let zero = Address::ZERO;
+
+// Parse from string
+let addr = Address::parse_checksummed("0x1234567890123456789012345678901234567890", None).unwrap();
+
+// Create from bytes
+let bytes: [u8; 20] = [0; 20];
+let addr = Address::from(bytes);
+```
+
+### Solidity mapping
+
+- **Rust type**: `Address` (from `alloy_primitives`)
+- **Solidity type**: `address`
+- **Storage size**: 20 bytes (160 bits)
+- **ABI signature**: `"address"`
+
+## String
+
+Rust `String` types map to Solidity `string` type.
+
+### String literals
+
+```rust
+use stylus_sdk::prelude::*;
+use alloc::string::String;
+
+#[public]
+impl MyContract {
+    pub fn get_name(&self) -> String {
+        String::from("MyToken")
+    }
+
+    pub fn greet(&self, name: String) -> String {
+        format!("Hello, {}!", name)
+    }
+}
+```
+
+### Solidity mapping
+
+- **Rust type**: `String` (from `alloc::string`)
+- **Solidity type**: `string`
+- **Storage**: Dynamic (heap-allocated)
+- **ABI signature**: `"string"`
+- **ABI export**:
+  - As argument: `"string calldata"`
+  - As return: `"string memory"`
+
+**Note**: Strings in Solidity are UTF-8 encoded byte arrays. When using strings in Stylus:
+
+- Use `alloc::string::String` for owned strings
+- Strings are dynamically sized and stored in memory/calldata
+- For storage, use `StorageString` (see [Storage Types](./storage.mdx))
+
+## Bytes
+
+The SDK provides two types for working with byte data:
+
+### 1. Dynamic bytes (`Bytes`)
+
+For variable-length byte arrays (Solidity `bytes`):
+
+```rust
+use alloy_primitives::Bytes;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    pub fn get_data(&self) -> Bytes {
+        Bytes::from(vec![1, 2, 3, 4])
+    }
+
+    pub fn process_data(&mut self, data: Bytes) -> usize {
+        data.len()
+    }
+}
+```
+
+### 2. Fixed bytes (`FixedBytes`)
+
+For fixed-length byte arrays (Solidity `bytesN`):
+
+```rust
+use alloy_primitives::FixedBytes;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // bytes32 (common for hashes)
+    pub fn get_hash(&self) -> FixedBytes<32> {
+        FixedBytes::<32>::ZERO
+    }
+
+    // bytes2
+    pub fn get_signature(&self) -> FixedBytes<2> {
+        FixedBytes::new([0x12, 0x34])
+    }
+
+    // Any size from 1 to 32
+    pub fn get_bytes8(&self) -> FixedBytes<8> {
+        FixedBytes::<8>::from([1, 2, 3, 4, 5, 6, 7, 8])
+    }
+}
+```
+
+### Common FixedBytes aliases
+
+```rust
+use alloy_primitives::{B256, B160, B128};
+
+// B256 is FixedBytes<32> (bytes32)
+let hash: B256 = B256::ZERO;
+
+// B160 is FixedBytes<20> (bytes20)
+let data: B160 = B160::ZERO;
+
+// B128 is FixedBytes<16> (bytes16)
+let value: B128 = B128::ZERO;
+```
+
+### Bytes type mappings
+
+| Rust Type                 | Solidity Type | Description                      |
+| ------------------------- | ------------- | -------------------------------- |
+| `Bytes`                   | `bytes`       | Dynamic byte array               |
+| `Vec<u8>`                 | `uint8[]`     | Array of bytes (NOT `bytes`!)    |
+| `FixedBytes<N>`           | `bytesN`      | Fixed-size byte array (N = 1-32) |
+| `B256` / `FixedBytes<32>` | `bytes32`     | 32-byte array (hashes)           |
+| `B160` / `FixedBytes<20>` | `bytes20`     | 20-byte array                    |
+| `B128` / `FixedBytes<16>` | `bytes16`     | 16-byte array                    |
+
+**Important Distinction**:
+
+- `Vec<u8>` maps to Solidity `uint8[]` (array of unsigned integers)
+- `Bytes` maps to Solidity `bytes` (dynamic byte array)
+- For Solidity `bytes`, always use `alloy_primitives::Bytes`
+
+### Bytes ABI encoding
+
+```rust
+// Bytes type
+// ABI signature: "bytes"
+// As argument: "bytes calldata"
+// As return: "bytes memory"
+
+// FixedBytes<N> type
+// ABI signature: "bytesN" where N is 1-32
+// Example: FixedBytes<32> -> "bytes32"
+```
+
+## Hex string literals
+
+When working with hex data, you can use hex literals:
+
+```rust
+use alloy_primitives::{hex, Address, FixedBytes, Bytes};
+
+// Hex bytes
+let data = hex!("deadbeef");
+
+// Address from hex
+let addr = Address::from(hex!("1234567890123456789012345678901234567890"));
+
+// FixedBytes from hex
+let hash = FixedBytes::<32>::from(hex!(
+    "0000000000000000000000000000000000000000000000000000000000000000"
+));
+
+// Dynamic Bytes from hex
+let bytes = Bytes::from(hex!("aabbccdd"));
+```
+
+## Complete example
+
+Here's a comprehensive example showing all primitive types:
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloc::string::String;
+use alloy_primitives::{Address, Bytes, FixedBytes, U256};
+use stylus_sdk::prelude::*;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct PrimitiveExample {
+        bool initialized;
+        uint256 count;
+        address owner;
+    }
+}
+
+#[public]
+impl PrimitiveExample {
+    // Boolean
+    pub fn is_initialized(&self) -> bool {
+        self.initialized.get()
+    }
+
+    // Unsigned integers (native Rust)
+    pub fn get_u8(&self) -> u8 {
+        255
+    }
+
+    pub fn get_u256(&self) -> U256 {
+        self.count.get()
+    }
+
+    // Signed integers
+    pub fn get_signed(&self) -> i32 {
+        -42
+    }
+
+    // Address
+    pub fn get_owner(&self) -> Address {
+        self.owner.get()
+    }
+
+    pub fn set_owner(&mut self, new_owner: Address) {
+        self.owner.set(new_owner);
+    }
+
+    // String
+    pub fn get_name(&self) -> String {
+        String::from("PrimitiveExample")
+    }
+
+    // Dynamic bytes
+    pub fn get_data(&self) -> Bytes {
+        Bytes::from(vec![1, 2, 3, 4])
+    }
+
+    // Fixed bytes
+    pub fn get_hash(&self) -> FixedBytes<32> {
+        FixedBytes::<32>::ZERO
+    }
+
+    // Multiple parameters
+    pub fn complex_function(
+        &mut self,
+        flag: bool,
+        amount: U256,
+        recipient: Address,
+        data: Bytes
+    ) -> bool {
+        // Function logic
+        true
+    }
+}
+```
+
+## Best practices
+
+1. **Use U256 for token amounts**: Solidity commonly uses `uint256` for token balances and amounts.
+
+   ```rust
+   use alloy_primitives::U256;
+
+   pub fn transfer(&mut self, amount: U256) {
+       // amount is uint256 in Solidity
+   }
+   ```
+
+2. **Use Address for account addresses**: Always use `alloy_primitives::Address` for Ethereum addresses.
+
+   ```rust
+   use alloy_primitives::Address;
+
+   pub fn get_balance(&self, account: Address) -> U256 {
+       // Query balance
+   }
+   ```
+
+3. **Use Bytes for dynamic byte data**: For Solidity `bytes`, use `alloy_primitives::Bytes`, not `Vec<u8>`.
+
+   ```rust
+   use alloy_primitives::Bytes;
+
+   pub fn process(&self, data: Bytes) {
+       // data maps to Solidity bytes
+   }
+   ```
+
+4. **Use FixedBytes for hashes and signatures**: For fixed-size byte data like hashes.
+
+   ```rust
+   use alloy_primitives::FixedBytes;
+
+   pub fn verify(&self, hash: FixedBytes<32>) -> bool {
+       // hash maps to Solidity bytes32
+       true
+   }
+   ```
+
+5. **Check for zero addresses**: Always validate addresses before use.
+
+   ```rust
+   use alloy_primitives::Address;
+
+   pub fn set_admin(&mut self, admin: Address) {
+       if admin == Address::ZERO {
+           // Handle error
+       }
+   }
+   ```
+
+## Type conversion
+
+### Between integer types
+
+```rust
+use alloy_primitives::U256;
+
+// Native to U256
+let amount: u64 = 1000;
+let big_amount = U256::from(amount);
+
+// U256 to native (with bounds checking)
+let big_value = U256::from(1000);
+let small_value: u64 = big_value.to::<u64>();
+```
+
+### Address conversions
+
+```rust
+use alloy_primitives::Address;
+
+// From bytes
+let bytes: [u8; 20] = [0; 20];
+let addr = Address::from(bytes);
+
+// To bytes
+let addr = Address::ZERO;
+let bytes: [u8; 20] = addr.into();
+```
+
+## See also
+
+- [Compound Types](./compound-types.mdx) - Arrays, tuples, structs
+- [Storage Types](./storage.mdx) - Persistent storage for primitives
+- [Type Conversions](./conversions-between-types.mdx) - Converting between types
