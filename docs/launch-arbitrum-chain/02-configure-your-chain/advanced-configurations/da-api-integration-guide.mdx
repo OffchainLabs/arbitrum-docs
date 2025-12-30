@@ -75,6 +75,7 @@ Your DA provider exposes JSON-RPC methods that Nitro nodes call to store and ret
 - `daprovider_getSupportedHeaderBytes` - Returns header bytes identifying your provider
 - `daprovider_recoverPayload` - Recovers batch data from certificate (normal execution)
 - `daprovider_collectPreimages` - Collects preimages for validation and fraud-proof replay (validation)
+- `daprovider_recoverPayloadAndPreimages` - Recovers batch data from certificate and also collects preimages for validation
 
 **Writer methods** (for batch posting):
 
@@ -348,6 +349,40 @@ See the [Error Handling section in `recoverPayload`](#method-2-daprovider_recove
 - `collectPreimages`: Validation path (needs data + keccak256 mapping for fraud proofs)
 
 This separation avoids unnecessary work in each context.
+
+### Method 4: `daprovider_recoverPayloadAndPreimages`
+
+Recovers payload and also collects preimage mappings needed for fraud-proof replay (called during validation).
+
+**Parameters**: Same as `daprovider_recoverPayload`
+
+```json
+{
+  "batchNum": "0x1a2b",
+  "batchBlockHash": "0x1234...",
+  "sequencerMsg": "0xabcd..."
+}
+```
+
+**Returns**:
+
+```json
+{
+  "Payload": "0x5678..." // Hex-encoded batch data,
+
+  "Preimages": {
+    "0xabcd1234...": {
+      "Data": "0x5678...",
+      "Type": 3
+    }
+  }
+}
+```
+
+**Why this method?**
+
+- It is required to enable collection of preimages during normal execution
+- This avoids duplicating of code in nitro to be able to collect preimages for validation
 
 ### Parameter encoding
 
@@ -1472,6 +1507,7 @@ Your DA provider server exposes JSON-RPC methods that Nitro nodes call. You can 
 - `daprovider_getSupportedHeaderBytes` - Returns header byte strings
 - `daprovider_recoverPayload` - Recovers batch payload
 - `daprovider_collectPreimages` - Collects preimages for validation
+- `daprovider_recoverPayloadAndPreimages` - Recovers batch data and also collects preimages for validation
 
 **Writer Methods** (optional, for batch posting):
 
