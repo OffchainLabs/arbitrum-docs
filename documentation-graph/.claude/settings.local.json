@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__documentation-analysis__find_duplicate_content",
+      "mcp__documentation-analysis__find_scattered_topics",
+      "mcp__documentation-analysis__suggest_consolidation",
+      "mcp__documentation-analysis__find_content_overlaps",
+      "mcp__documentation-analysis__find_similar_documents",
+      "mcp__documentation-analysis__analyze_topic_distribution",
+      "mcp__documentation-analysis__find_orphaned_content",
+      "mcp__documentation-analysis__suggest_canonical_reference"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": ["documentation-analysis"]
+}
