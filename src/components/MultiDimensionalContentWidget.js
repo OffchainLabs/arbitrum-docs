@@ -1,5 +1,4 @@
 import React from 'react';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 
 export const MultiDimensionalContentWidget = () => {
   let getAllTabElements = function () {
@@ -99,11 +98,9 @@ export const MultiDimensionalContentWidget = () => {
     }, 100);
   };
 
-  return (
-    <BrowserOnly>
-      {() => {
-        bindTabs();
-      }}
-    </BrowserOnly>
-  );
+  React.useEffect(() => {
+    bindTabs();
+  }, []);
+
+  return null;
 };

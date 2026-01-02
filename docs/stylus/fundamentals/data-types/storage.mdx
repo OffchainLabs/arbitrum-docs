@@ -19,6 +19,12 @@ Stylus contracts share the same persistent storage as Solidity contracts:
 - Stylus provides compile-time safety through Rust's type system
 - Storage operations are cached for gas efficiency
 
+The Stylus SDK provides a comprehensive hierarchy of storage types:
+
+![Storage Types Hierarchy](/img/stylus-storage-types-hierarchy.png)
+
+_Figure 3: Storage type hierarchy showing primitives, collections, and custom struct options._
+
 ### Storage declaration
 
 Use the `sol_storage!` macro to define contract storage with Solidity-compatible layout:
@@ -944,6 +950,10 @@ Stylus uses the same storage layout as Solidity:
 - Each storage slot is **32 bytes** (256 bits)
 - Variables are **packed** when possible to save space
 - Arrays and mappings use **computed slots** via hashing
+
+![Storage Slots Layout](/img/stylus-storage-slots.png)
+
+_Figure: Storage slot layout showing how variables are packed into 32-byte slots and how mapping values are computed using keccak256 hashing._
 
 ```rust
 sol_storage! {

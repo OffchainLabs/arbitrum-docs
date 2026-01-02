@@ -29,6 +29,10 @@ Nitro uses WebAssembly as its execution environment for several reasons:
 4. **Language flexibility**: Developers can use Rust, C, C++, or any language that compiles to WASM
 5. **Determinism**: Guaranteed identical execution across all validators
 
+![WASM Execution Pipeline](/img/stylus-wasm-compile.png)
+
+_Figure: WebAssembly execution pipeline in Arbitrum Nitro, from source code to native execution with access to blockchain state._
+
 ## WASM compilation target
 
 Stylus contracts are compiled to the `wasm32-unknown-unknown` target, which means:
@@ -57,6 +61,10 @@ rustflags = [
 ## WASM binary structure
 
 A Stylus WASM module consists of several sections:
+
+![WASM Module Structure](/img/stylus-wasm-deploy.png)
+
+_Figure: WASM module structure showing the main sections including exports, imports (hostio functions), memory, and code._
 
 ### Exports
 
@@ -164,7 +172,7 @@ After deployment, contracts must be **activated** before execution:
 
 ### Activation process
 
-1. **Initial deployment**: Contract code is stored on-chain (compressed)
+1. **Initial deployment**: Contract code is stored onchain (compressed)
 2. **Activation call**: Special transaction invokes `activateProgram`
 3. **Decompression**: Brotli-compressed WASM is decompressed
 4. **Validation**: WASM is checked for:
@@ -272,6 +280,10 @@ To stay within limits:
 - Use compact data structures
 
 ## Memory model
+
+![WASM Memory Model](/img/stylus-wasm-execute.png)
+
+_Figure: WASM linear memory model showing the fixed 32KB stack and growable heap organized in 64KB pages._
 
 ### Linear memory layout
 

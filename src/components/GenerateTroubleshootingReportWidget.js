@@ -1,5 +1,4 @@
 import React from 'react';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 
 export const GenerateTroubleshootingReportWidget = () => {
   let appendConfigDetailsToOutput = function (output) {
@@ -87,11 +86,9 @@ export const GenerateTroubleshootingReportWidget = () => {
     }, 100);
   };
 
-  return (
-    <BrowserOnly>
-      {() => {
-        bindButton();
-      }}
-    </BrowserOnly>
-  );
+  React.useEffect(() => {
+    bindButton();
+  }, []);
+
+  return null;
 };
