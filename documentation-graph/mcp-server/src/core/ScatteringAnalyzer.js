@@ -30,6 +30,7 @@
  */
 
 import { logger } from '../utils/logger.js';
+import { toDocumentReference } from '../utils/responseSizer.js';
 
 export class ScatteringAnalyzer {
   constructor(graph, documents, concepts, cacheManager) {
@@ -54,9 +55,11 @@ export class ScatteringAnalyzer {
 
   /**
    * Analyze scattering for a specific concept
+   * @param {string} conceptName - The concept to analyze
+   * @param {string} depth - Analysis depth: 'basic', 'semantic', or 'full' (default: 'semantic')
    */
-  analyzeConceptScattering(conceptName) {
-    const cacheKey = `scattering:${conceptName.toLowerCase()}`;
+  analyzeConceptScattering(conceptName, depth = 'semantic') {
+    const cacheKey = `scattering:${conceptName.toLowerCase()}:${depth}`;
     const cached = this.cacheManager.get(cacheKey);
     if (cached !== null) return cached;
 
@@ -117,6 +120,7 @@ export class ScatteringAnalyzer {
     // Detect navigation/discoverability issues
     const navigationIssues = this.detectNavigationIssues(weightDistribution);
 
+    // Build result with depth-based filtering
     const result = {
       found: true,
       conceptName: concept.concept,
@@ -129,18 +133,75 @@ export class ScatteringAnalyzer {
         giniCoefficient: giniCoefficient.toFixed(3),
         averageWeight: totalWeight / docCount,
       },
-      documentMentions: weightDistribution,
+    };
+
+    // Apply depth-based filtering to documentMentions
+    const docLimit = depth === 'basic' ? 0 : depth === 'semantic' ? 5 : 10;
+    if (docLimit > 0) {
+      result.documentMentions = weightDistribution.slice(0, docLimit).map((item) => ({
+        path: item.path,
+        weight: item.weight,
+        percentage: item.percentage.toFixed(1) + '%',
+        title: item.document?.frontmatter?.title,
+        directory: item.document?.directory,
+        contentType: item.document?.frontmatter?.content_type,
+      }));
+    } else if (depth === 'basic') {
+      // Don't include document list for basic mode
+      delete result.documentMentions;
+    }
+
+    // Apply depth-based filtering to other arrays
+    if (depth === 'basic') {
+      // Basic mode: minimal data
+      delete result.directoryDistribution;
+      delete result.navigationIssues;
+    } else if (depth === 'semantic') {
+      // Semantic mode: limited arrays
+      if (directoryDistribution && directoryDistribution.length > 0) {
+        result.directoryDistribution = directoryDistribution.slice(0, 5).map((dir) => ({
+          directory: dir.directory,
+          documentCount: dir.documents?.length || 0,
+          totalWeight: dir.totalWeight,
+          percentage: dir.percentage.toFixed(1) + '%',
+        }));
+      }
+      if (navigationIssues && navigationIssues.length > 0) {
+        result.navigationIssues = navigationIssues.slice(0, 3);
+      }
+    } else {
+      // Full mode: all data but still use references for documents
+      result.documentMentions = weightDistribution.map((item) => ({
+        path: item.path,
+        weight: item.weight,
+        percentage: item.percentage.toFixed(1) + '%',
+        title: item.document?.frontmatter?.title,
+        directory: item.document?.directory,
+        contentType: item.document?.frontmatter?.content_type,
+        wordCount: item.document?.stats?.wordCount,
+      }));
+      if (directoryDistribution && directoryDistribution.length > 0) {
+        result.directoryDistribution = directoryDistribution.map((dir) => ({
+          directory: dir.directory,
+          documentCount: dir.documents?.length || 0,
+          totalWeight: dir.totalWeight,
+          percentage: dir.percentage.toFixed(1) + '%',
+        }));
+      }
+      if (navigationIssues && navigationIssues.length > 0) {
+        result.navigationIssues = navigationIssues;
+      }
+    }
+
+    // Add recommendation
+    result.recommendation = this.generateScatteringRecommendation(
+      isScattered,
+      fragmentationScore,
+      docCount,
+      maxConcentration,
       directoryDistribution,
       navigationIssues,
-      recommendation: this.generateScatteringRecommendation(
-        isScattered,
-        fragmentationScore,
-        docCount,
-        maxConcentration,
-        directoryDistribution,
-        navigationIssues,
-      ),
-    };
+    );
 
     this.cacheManager.set(cacheKey, result);
     return result;
@@ -148,12 +209,14 @@ export class ScatteringAnalyzer {
 
   /**
    * Find all scattered topics across the documentation
+   * @param {number} minFragmentationScore - Minimum fragmentation score threshold
+   * @param {string} depth - Analysis depth: 'basic', 'semantic', or 'full'
    */
-  findScatteredTopics(minFragmentationScore = 0.6) {
+  findScatteredTopics(minFragmentationScore = 0.6, depth = 'basic') {
     const scatteredTopics = [];
 
     for (const concept of this.concepts.topConcepts) {
-      const analysis = this.analyzeConceptScattering(concept.concept);
+      const analysis = this.analyzeConceptScattering(concept.concept, depth);
 
       if (analysis.isScattered && analysis.fragmentationScore >= minFragmentationScore) {
         scatteredTopics.push(analysis);
@@ -168,8 +231,10 @@ export class ScatteringAnalyzer {
 
   /**
    * Analyze topic distribution for a specific document
+   * @param {string} docPath - Document path to analyze
+   * @param {string} depth - Analysis depth for scattering analysis
    */
-  analyzeDocumentTopicDistribution(docPath) {
+  analyzeDocumentTopicDistribution(docPath, depth = 'basic') {
     const doc = this.documents.find((d) => d.path === docPath || d.relativePath === docPath);
 
     if (!doc) {
@@ -191,7 +256,7 @@ export class ScatteringAnalyzer {
           concept: concept.concept,
           weight,
           category: concept.data?.category,
-          scattering: this.analyzeConceptScattering(concept.concept),
+          scattering: this.analyzeConceptScattering(concept.concept, depth),
         });
       }
     }
