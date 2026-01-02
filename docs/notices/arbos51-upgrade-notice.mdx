@@ -1,0 +1,34 @@
+---
+title: 'Upgrade notice for ArbOS 51'
+description: Upgrade notices for ArbOS 51 activation on Arbitrum One, Arbitrum Nova, and Arbitrum Spolia
+user_story: As an Arbitrum node operator, I want to keep my nodes in sync with Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia after the ArbOS 51 activation.
+content_type: notice
+---
+
+[ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-releases/arbos51.mdx) will be activated on the Arbitrum Sepolia, Arbitrum One, and Arbitrum Nova chains.
+
+## Actions required for node operators
+
+:::warning Action required
+
+Arbitrum node operators **must upgrade** to Nitro **`v3.9.3`** ahead of ArbOS 51 activation to continue syncing the chain.
+
+- **Docker image:** `offchainlabs/nitro-node:v3.9.3-8bc5554`
+- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3
+
+:::
+
+## Important dates
+
+The following dates are relevant for Arbitrum chain operators.
+
+| Date                          | Network upgrade                       | Affected audience                    |
+| ----------------------------- | ------------------------------------- | ------------------------------------ |
+| `Dec 1st 2025, 17:00:00 UTC`  | Arbitrum Sepolia upgrade to ArbOS 51  | Node operators for Arbitrum Sepolia  |
+| `Jan 8th, 2026, 17:00:00 UTC` | Arbitrum One/Nova upgrade to ArbOS 51 | Node operators for Arbitrum One/Nova |
+
+## Context
+
+[ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-releases/arbos51.mdx) builds upon [ArbOS 40 "Callisto"](docs/run-arbitrum-node/arbos-releases/arbos40.mdx) with support for the relevant EVM changes that are a part of Ethereum's [Fusaka upgrade](https://ethereum.org/en/roadmap/fusaka/), as well as additional improvements to the gas pricing algorithm, a change to the min L2 base fee, `MaxTxGasLimit` allowing full block utilization, changes to instrument Nitro’s State Transition Function (STF) to price gas based on specific resource usage, native token mint/burn capabilities, and a few bug fixes.
+
+Upstream governance items ([ArbOS 50](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x33754da4006d0ef38666ec5d5e85fd0966a891a594ab9dc21f23beedea2d330b) + [Gas Target & Pricing Framework](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0x4a96a91d162975de0d402b83ca8b8a24e808ca357150120fc0d44ae0bf1cc4a5)) were bundled into a single [ArbOS 51 on-chain vote](https://www.tally.xyz/gov/arbitrum/proposal/53154361738756237993090798888616593723057470462495169047773178676976253908001?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9). Both components have passed Snapshot temperature checks, and the bundled Tally vote was passed **December 18, 2025**.

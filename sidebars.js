@@ -93,6 +93,11 @@ const sidebars = {
       label: 'FAQ',
     },
     {
+      type: 'link',
+      label: 'Notices',
+      href: '/notices/arbos51-upgrade-notice',
+    },
+    {
       type: 'doc',
       label: 'Audit reports',
       id: 'audit-reports',
@@ -429,6 +434,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap',
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/da-api-integration-guide',
+                  label: `DA API integration guide`,
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
@@ -540,7 +550,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
-                  label: `Manage gas speed limit`,
+                  label: `Manage gas target`,
                 },
                 {
                   type: 'doc',
@@ -1792,6 +1802,11 @@ const sidebars = {
 
   // Notices sidebar
   noticeSidebar: [
+    {
+      type: 'doc',
+      id: 'notices/arbos51-upgrade-notice',
+      label: 'Upgrade notice for ArbOS 51',
+    },
     {
       type: 'doc',
       id: 'notices/fusaka-upgrade-notice',

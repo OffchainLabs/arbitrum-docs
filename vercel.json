@@ -251,6 +251,41 @@
       "permanent": false
     },
     {
+      "source": "/(documentation-graph/documentation-graph/GATE_CHECKPOINT_STATUS/?)",
+      "destination": "/(documentation-graph/GATE_CHECKPOINT_STATUS/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/ARCHITECTURE/?)",
+      "destination": "/(documentation-graph/mcp-server/ARCHITECTURE/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/EXAMPLES/?)",
+      "destination": "/(documentation-graph/mcp-server/EXAMPLES/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/IMPLEMENTATION_SUMMARY/?)",
+      "destination": "/(documentation-graph/mcp-server/IMPLEMENTATION_SUMMARY/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/QUICKSTART/?)",
+      "destination": "/(documentation-graph/mcp-server/QUICKSTART/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/README/?)",
+      "destination": "/(documentation-graph/mcp-server/README/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(documentation-graph/documentation-graph/mcp-server/SETUP_COMPLETE/?)",
+      "destination": "/(documentation-graph/mcp-server/SETUP_COMPLETE/?)",
+      "permanent": false
+    },
+    {
       "source": "/(faqs/anytrust-vs-rollup/?)",
       "destination": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
       "permanent": false
@@ -286,41 +321,6 @@
     {
       "source": "/(finality/?)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
-      "permanent": false
-    },
-    {
-      "source": "/(documentation-graph/documentation-graph/GATE_CHECKPOINT_STATUS/?)",
-      "destination": "/(documentation-graph/GATE_CHECKPOINT_STATUS/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(documentation-graph/documentation-graph/mcp-server/ARCHITECTURE/?)",
-      "destination": "/(documentation-graph/mcp-server/ARCHITECTURE/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(documentation-graph/documentation-graph/mcp-server/EXAMPLES/?)",
-      "destination": "/(documentation-graph/mcp-server/EXAMPLES/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(documentation-graph/documentation-graph/mcp-server/IMPLEMENTATION_SUMMARY/?)",
-      "destination": "/(documentation-graph/mcp-server/IMPLEMENTATION_SUMMARY/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(documentation-graph/documentation-graph/mcp-server/QUICKSTART/?)",
-      "destination": "/(documentation-graph/mcp-server/QUICKSTART/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(documentation-graph/documentation-graph/mcp-server/README/?)",
-      "destination": "/(documentation-graph/mcp-server/README/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(documentation-graph/documentation-graph/mcp-server/SETUP_COMPLETE/?)",
-      "destination": "/(documentation-graph/mcp-server/SETUP_COMPLETE/?)",
       "permanent": false
     },
     {
@@ -1493,12 +1493,17 @@
     },
     {
       "source": "/(notices/arbos-50/?)",
-      "destination": "/notices/arbos51-arbsepolia-upgrade-notice",
+      "destination": "/notices/arbos51-upgrade-notice",
       "permanent": false
     },
     {
       "source": "/(notices/arbos-fusaka/?)",
       "destination": "/notices/fusaka-upgrade-notice",
+      "permanent": false
+    },
+    {
+      "source": "/(notices/arbos51-arbsepolia-upgrade-notice/?)",
+      "destination": "/notices/arbos51-upgrade-notice",
       "permanent": false
     },
     {

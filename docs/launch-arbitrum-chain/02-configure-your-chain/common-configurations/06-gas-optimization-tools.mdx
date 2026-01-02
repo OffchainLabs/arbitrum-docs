@@ -10,7 +10,7 @@ To configure gas behavior on an Arbitrum chain using the [Chain SDK](https://git
 
 Below is a breakdown of each specified parameter, including its role, typical defaults (based on Arbitrum One), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security. For example, setting limits too high could lead to state bloat or slower block processing.
 
-## Gas speed limit
+## Gas target
 
 - **Description**: This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
 - **Default**: 7,000,000 gas/second.
@@ -28,7 +28,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 
 ## Block gas limit
 
-- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the speed limit and gas pools, but this sets a hard cap.
+- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
 - **Default**: 32,000,000 gas per block.
 - **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 
