@@ -31,6 +31,11 @@
 
 import { z } from 'zod';
 import { logger } from '../utils/logger.js';
+import {
+  ResponseSizer,
+  toDocumentReference,
+  toDocumentReferences,
+} from '../utils/responseSizer.js';
 
 export class ToolRegistry {
   constructor({
@@ -45,6 +50,7 @@ export class ToolRegistry {
     this.consolidationEngine = consolidationEngine;
     this.queryParser = queryParser;
     this.dataLoader = dataLoader;
+    this.responseSizer = new ResponseSizer(100 * 1024); // 100KB limit
 
     this.tools = this.defineTools();
   }
@@ -76,6 +82,13 @@ export class ToolRegistry {
             .default(true)
             .optional()
             .describe('Include conceptual overlap analysis'),
+          max_results: z
+            .number()
+            .min(1)
+            .max(50)
+            .default(10)
+            .optional()
+            .describe('Maximum number of duplicate pairs to return (default 10)'),
         }),
         handler: this.findDuplicateContent.bind(this),
       },
@@ -103,6 +116,19 @@ export class ToolRegistry {
             .default(0.6)
             .optional()
             .describe('Minimum fragmentation score (0-1, default 0.6)'),
+          max_results: z
+            .number()
+            .min(1)
+            .max(50)
+            .default(20)
+            .optional()
+            .describe('Maximum number of results to return (default 20, max 50)'),
+          offset: z
+            .number()
+            .min(0)
+            .default(0)
+            .optional()
+            .describe('Number of results to skip for pagination (default 0)'),
         }),
         handler: this.findScatteredTopics.bind(this),
       },
@@ -194,6 +220,13 @@ export class ToolRegistry {
             .describe('Include documents with weak connections'),
           filter_directory: z.string().optional().describe('Filter to specific directory'),
           filter_content_type: z.string().optional().describe('Filter to specific content type'),
+          max_results: z
+            .number()
+            .min(1)
+            .max(100)
+            .default(50)
+            .optional()
+            .describe('Maximum number of results to return (default 50)'),
         }),
         handler: this.findOrphanedContent.bind(this),
       },
@@ -211,6 +244,25 @@ export class ToolRegistry {
             .describe('Include alternative candidates'),
         }),
         handler: this.suggestCanonicalReference.bind(this),
+      },
+
+      {
+        name: 'get_document_details',
+        description: 'Fetch detailed information for a specific document by path.',
+        inputSchema: z.object({
+          doc_path: z.string().describe('Document path (relative or absolute)'),
+          include_content: z
+            .boolean()
+            .default(false)
+            .optional()
+            .describe('Include full document content (default: false)'),
+          include_concepts: z
+            .boolean()
+            .default(true)
+            .optional()
+            .describe('Include concepts mentioned in the document (default: true)'),
+        }),
+        handler: this.getDocumentDetails.bind(this),
       },
     ];
   }
@@ -349,7 +401,7 @@ export class ToolRegistry {
   // TIER 1 TOOL HANDLERS
 
   async findDuplicateContent(args) {
-    const { topic, min_similarity, include_exact, include_conceptual } = args;
+    const { topic, min_similarity, include_exact, include_conceptual, max_results } = args;
 
     // Find all documents mentioning this topic
     const docsWithConcept = this.dataLoader.getDocumentsForConcept(topic);
@@ -420,12 +472,12 @@ export class ToolRegistry {
       })),
       topDuplicatePairs: duplicatePairs
         .sort((a, b) => b.overallSimilarity - a.overallSimilarity)
-        .slice(0, 10),
+        .slice(0, max_results),
     };
   }
 
   async findScatteredTopics(args) {
-    const { concept, depth, min_fragmentation } = args;
+    const { concept, depth, min_fragmentation, max_results, offset } = args;
 
     if (concept) {
       // Analyze specific concept
@@ -435,18 +487,41 @@ export class ToolRegistry {
         return analysis;
       }
 
-      // Enhance based on depth
-      if (depth === 'full') {
-        // Add consolidation suggestions
+      // Apply depth-based filtering to documentMentions
+      const docLimit = depth === 'basic' ? 0 : depth === 'semantic' ? 5 : 10;
+      if (docLimit > 0 && analysis.documentMentions) {
+        analysis.documentMentions = analysis.documentMentions
+          .slice(0, docLimit)
+          .map(toDocumentReference);
+      } else if (docLimit === 0) {
+        // Don't include document list for basic mode
+        delete analysis.documentMentions;
+      }
+
+      // Simplify other arrays based on depth
+      if (depth === 'basic') {
+        delete analysis.directoryDistribution;
+        delete analysis.navigationIssues;
+      } else if (depth === 'semantic') {
+        if (analysis.directoryDistribution) {
+          analysis.directoryDistribution = analysis.directoryDistribution.slice(0, 5);
+        }
+        if (analysis.navigationIssues) {
+          analysis.navigationIssues = analysis.navigationIssues.slice(0, 3);
+        }
+      }
+
+      // Add consolidation suggestions only for full depth
+      if (depth === 'full' && analysis.documentMentions && analysis.documentMentions.length >= 2) {
         const docPaths = analysis.documentMentions
           .slice(0, 5)
-          .map((m) => m.document?.relativePath)
+          .map((m) => m.path)
           .filter((p) => p);
 
         if (docPaths.length >= 2) {
           analysis.consolidationSuggestion = await this.suggestConsolidation({
             doc_paths: docPaths,
-            include_alternatives: true,
+            include_alternatives: false, // Reduce size
           });
         }
       }
@@ -454,20 +529,47 @@ export class ToolRegistry {
       return analysis;
     } else {
       // Find all scattered topics
-      const scatteredTopics = this.scatteringAnalyzer.findScatteredTopics(min_fragmentation);
+      const allScatteredTopics = this.scatteringAnalyzer.findScatteredTopics(min_fragmentation);
+
+      // Apply pagination
+      const start = offset || 0;
+      const end = start + (max_results || 20);
+      const paginatedTopics = allScatteredTopics.slice(start, end);
 
       return {
         found: true,
-        totalScatteredTopics: scatteredTopics.length,
-        topics: scatteredTopics.slice(0, 20).map((topic) => ({
-          concept: topic.conceptName,
-          fragmentationScore: topic.fragmentationScore,
-          documentCount: topic.metrics.totalDocuments,
-          maxConcentration: topic.metrics.maxConcentration,
-          recommendation: depth !== 'basic' ? topic.recommendation : undefined,
-          directorySpread: depth === 'full' ? topic.directoryDistribution.length : undefined,
-          navigationIssues: depth === 'full' ? topic.navigationIssues.length : undefined,
-        })),
+        totalScatteredTopics: allScatteredTopics.length,
+        offset: start,
+        limit: max_results || 20,
+        hasMore: end < allScatteredTopics.length,
+        topics: paginatedTopics.map((topic) => {
+          const result = {
+            concept: topic.conceptName,
+            fragmentationScore: topic.fragmentationScore,
+            documentCount: topic.metrics.totalDocuments,
+            maxConcentration: topic.metrics.maxConcentration,
+          };
+
+          // Add fields based on depth
+          if (depth !== 'basic') {
+            result.recommendation = topic.recommendation;
+          }
+
+          if (depth === 'full') {
+            result.directorySpread = topic.directoryDistribution?.length;
+            result.navigationIssuesCount = topic.navigationIssues?.length;
+            // Include top 3 documents
+            if (topic.documentMentions) {
+              result.topDocuments = topic.documentMentions.slice(0, 3).map((m) => ({
+                path: m.path,
+                weight: m.weight,
+                percentage: m.percentage?.toFixed(1) + '%',
+              }));
+            }
+          }
+
+          return result;
+        }),
       };
     }
   }
@@ -611,7 +713,7 @@ export class ToolRegistry {
   }
 
   async findOrphanedContent(args) {
-    const { include_partial_orphans, filter_directory, filter_content_type } = args;
+    const { include_partial_orphans, filter_directory, filter_content_type, max_results } = args;
 
     let documents = this.dataLoader.getAllDocuments();
 
@@ -649,18 +751,24 @@ export class ToolRegistry {
       }
     }
 
+    // Apply max_results limit
+    const limit = max_results || 50;
+    const limitedOrphaned = orphaned.slice(0, limit);
+    const limitedPartiallyOrphaned = partiallyOrphaned.slice(0, limit);
+
     return {
       found: true,
       totalOrphaned: orphaned.length,
       totalPartiallyOrphaned: partiallyOrphaned.length,
-      orphanedDocuments: orphaned.map((d) => ({
+      showing: limitedOrphaned.length,
+      orphanedDocuments: limitedOrphaned.map((d) => ({
         path: d.relativePath,
         title: d.frontmatter?.title,
         contentType: d.frontmatter?.content_type,
         directory: d.directory,
       })),
       partiallyOrphanedDocuments: include_partial_orphans
-        ? partiallyOrphaned.map((p) => ({
+        ? limitedPartiallyOrphaned.map((p) => ({
             path: p.document.relativePath,
             title: p.document.frontmatter?.title,
             linkCount: p.linkCount,
@@ -680,6 +788,86 @@ export class ToolRegistry {
 
     if (!include_alternatives && result.alternatives) {
       delete result.alternatives;
+    }
+
+    // Use document references instead of full objects
+    if (result.recommendation?.document) {
+      result.recommendation.document = toDocumentReference(result.recommendation.document);
+    }
+
+    if (result.alternatives && Array.isArray(result.alternatives)) {
+      result.alternatives = result.alternatives.map((alt) => ({
+        ...alt,
+        document: toDocumentReference(alt.document),
+      }));
+    }
+
+    return result;
+  }
+
+  async getDocumentDetails(args) {
+    const { doc_path, include_content, include_concepts } = args;
+
+    const doc = this.dataLoader.getDocument(doc_path);
+
+    if (!doc) {
+      return {
+        found: false,
+        error: `Document not found: ${doc_path}`,
+        suggestion: 'Check the document path and try again',
+      };
+    }
+
+    const result = {
+      found: true,
+      document: {
+        path: doc.relativePath,
+        absolutePath: doc.path,
+        title: doc.frontmatter?.title,
+        description: doc.frontmatter?.description,
+        contentType: doc.frontmatter?.content_type,
+        author: doc.frontmatter?.author,
+        userStory: doc.frontmatter?.user_story,
+        directory: doc.directory,
+        wordCount: doc.stats?.wordCount,
+        headingCount: doc.stats?.headingCount,
+      },
+      navigation: {
+        isOrphaned: doc.navigation?.isOrphaned,
+        sidebarLabel: doc.frontmatter?.sidebar_label,
+        sidebarPosition: doc.frontmatter?.sidebar_position,
+      },
+      links: {
+        internal: doc.links?.internal?.length || 0,
+        external: doc.links?.external?.length || 0,
+      },
+    };
+
+    if (include_content) {
+      result.document.content = doc.content;
+      result.document.excerpt = doc.content?.substring(0, 500) + '...';
+    }
+
+    if (include_concepts) {
+      // Find concepts mentioned in this document
+      const concepts = [];
+
+      for (const concept of this.dataLoader.concepts.topConcepts || []) {
+        const files = concept.data?.files || {};
+        const weight = files[doc.path] || files[doc.relativePath];
+
+        if (weight) {
+          concepts.push({
+            concept: concept.concept,
+            weight,
+            category: concept.data?.category,
+          });
+        }
+      }
+
+      // Sort by weight and limit to top 20
+      concepts.sort((a, b) => b.weight - a.weight);
+      result.concepts = concepts.slice(0, 20);
     }
 
     return result;
