@@ -52,11 +52,7 @@ program
   .version('1.0.0');
 
 program
-  .option(
-    '-i, --input <path>',
-    'Input directory containing documentation',
-    '/Users/allup/OCL/arbitrum-docs/docs',
-  )
+  .option('-i, --input <path>', 'Input directory containing documentation', '../docs')
   .option('-o, --output <path>', 'Output directory for generated files', './dist')
   .option('-c, --config <path>', 'Path to JSON configuration file for analysis customization')
   .option('-v, --verbose', 'Enable verbose logging', false)

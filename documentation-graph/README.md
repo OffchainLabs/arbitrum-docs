@@ -18,6 +18,41 @@ Creates comprehensive knowledge graphs that reveal content connections, identify
 - **Before running**: Close memory-heavy applications (Chrome, Docker, etc.)
 - **Large repositories** (500+ files): Use `npm start` for memory optimizations
 
+## Quick Start: Using the MCP Server
+
+**Want to use the 8 AI-powered documentation analysis tools in Claude Code?**
+
+Follow the [ONBOARDING.md](./ONBOARDING.md) guide for a zero-configuration setup:
+
+```bash
+# Clone the repo (if you haven't already)
+git clone https://github.com/OffchainLabs/arbitrum-docs.git
+cd arbitrum-docs
+git checkout documentation-graph
+
+# Run the automated setup script
+cd documentation-graph
+./scripts/setup-docs-graph.sh
+
+# Wait ~10-12 minutes, then restart Claude Code
+# You'll have 8 MCP tools available instantly!
+```
+
+The setup script handles everything automatically: dependency installation, analysis generation, and MCP server configuration.
+
+**Tools you'll get:**
+
+- Find duplicate content across docs
+- Detect scattered topics and fragmentation
+- Get consolidation recommendations
+- Compare documents for overlaps
+- Find similar documents
+- Analyze topic distribution
+- Find orphaned content
+- Suggest canonical references
+
+See [mcp-server/README.md](./mcp-server/README.md) for detailed tool documentation.
+
 ## Purpose
 
 This toolset addresses challenges in OCL's documentation project:

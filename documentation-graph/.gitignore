@@ -3,6 +3,9 @@ dist/
 documentation/
 docs/
 
+# Local MCP configuration (machine-specific absolute paths)
+.mcp.json
+
 # Testing
 coverage/
 test/output/
