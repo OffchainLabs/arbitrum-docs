@@ -480,35 +480,11 @@ export class ToolRegistry {
     const { concept, depth, min_fragmentation, max_results, offset } = args;
 
     if (concept) {
-      // Analyze specific concept
-      const analysis = this.scatteringAnalyzer.analyzeConceptScattering(concept);
+      // Analyze specific concept with depth parameter
+      const analysis = this.scatteringAnalyzer.analyzeConceptScattering(concept, depth);
 
       if (!analysis.found) {
         return analysis;
-      }
-
-      // Apply depth-based filtering to documentMentions
-      const docLimit = depth === 'basic' ? 0 : depth === 'semantic' ? 5 : 10;
-      if (docLimit > 0 && analysis.documentMentions) {
-        analysis.documentMentions = analysis.documentMentions
-          .slice(0, docLimit)
-          .map(toDocumentReference);
-      } else if (docLimit === 0) {
-        // Don't include document list for basic mode
-        delete analysis.documentMentions;
-      }
-
-      // Simplify other arrays based on depth
-      if (depth === 'basic') {
-        delete analysis.directoryDistribution;
-        delete analysis.navigationIssues;
-      } else if (depth === 'semantic') {
-        if (analysis.directoryDistribution) {
-          analysis.directoryDistribution = analysis.directoryDistribution.slice(0, 5);
-        }
-        if (analysis.navigationIssues) {
-          analysis.navigationIssues = analysis.navigationIssues.slice(0, 3);
-        }
       }
 
       // Add consolidation suggestions only for full depth
@@ -528,8 +504,11 @@ export class ToolRegistry {
 
       return analysis;
     } else {
-      // Find all scattered topics
-      const allScatteredTopics = this.scatteringAnalyzer.findScatteredTopics(min_fragmentation);
+      // Find all scattered topics with depth parameter
+      const allScatteredTopics = this.scatteringAnalyzer.findScatteredTopics(
+        min_fragmentation,
+        depth,
+      );
 
       // Apply pagination
       const start = offset || 0;
@@ -672,7 +651,8 @@ export class ToolRegistry {
   async analyzeTopicDistribution(args) {
     const { concept, include_recommendations } = args;
 
-    const analysis = this.scatteringAnalyzer.analyzeConceptScattering(concept);
+    // Use 'semantic' depth for balanced output
+    const analysis = this.scatteringAnalyzer.analyzeConceptScattering(concept, 'semantic');
 
     if (!analysis.found) {
       return analysis;
@@ -691,19 +671,22 @@ export class ToolRegistry {
         fragmentationScore: analysis.fragmentationScore,
         giniCoefficient: analysis.metrics.giniCoefficient,
       },
-      byDirectory: analysis.directoryDistribution.map((dir) => ({
-        directory: dir.directory,
-        documentCount: dir.documents.length,
-        percentage: dir.percentage.toFixed(1) + '%',
-      })),
-      topDocuments: analysis.documentMentions.slice(0, 10).map((m) => ({
-        path: m.document?.relativePath,
-        title: m.document?.frontmatter?.title,
-        weight: m.weight,
-        percentage: m.percentage.toFixed(1) + '%',
-      })),
-      navigationIssues: analysis.navigationIssues,
     };
+
+    // Add directory distribution if available
+    if (analysis.directoryDistribution) {
+      result.byDirectory = analysis.directoryDistribution;
+    }
+
+    // Add document mentions if available (already formatted in semantic mode)
+    if (analysis.documentMentions) {
+      result.topDocuments = analysis.documentMentions;
+    }
+
+    // Add navigation issues if available
+    if (analysis.navigationIssues) {
+      result.navigationIssues = analysis.navigationIssues;
+    }
 
     if (include_recommendations) {
       result.recommendations = analysis.recommendation;
