@@ -70,7 +70,8 @@ export class IssueReporter {
    */
   getIssueTitle(issueType) {
     const titles = {
-      orphaned_documents: 'Isolated Documents',
+      orphaned_documents: 'Documents Not in Navigation',
+      isolated_documents: 'Documents with No Internal Links',
       broken_links: 'Broken Internal Links',
       missing_frontmatter: 'Missing Metadata',
       low_connectivity: 'Weak Content Relationships',
@@ -138,7 +139,7 @@ export class IssueReporter {
   generateStructuralAnalysis(analysis, documents, exclusionRules = null) {
     const issues = [];
 
-    // Check for orphaned documents
+    // Check for documents not in navigation (true orphans)
     if (
       analysis.quality &&
       analysis.quality.orphanedDocuments &&
@@ -146,13 +147,31 @@ export class IssueReporter {
     ) {
       const orphanCount = analysis.quality.orphanedDocuments.length;
       issues.push(
-        `**Orphaned Documents**: ${orphanCount} documents with no incoming or outgoing links`,
+        `**Documents Not in Navigation**: ${orphanCount} documents are not included in sidebars.js`,
       );
       analysis.quality.orphanedDocuments.slice(0, 3).forEach((doc) => {
-        issues.push(`  - \`${doc}\``);
+        issues.push(`  - \`${doc}\` - Add to sidebars.js`);
       });
       if (orphanCount > 3) {
         issues.push(`  - ... and ${orphanCount - 3} more`);
+      }
+    }
+
+    // Check for isolated documents (in navigation but no links)
+    if (
+      analysis.documents &&
+      analysis.documents.weaklyConnected &&
+      analysis.documents.weaklyConnected.length > 0
+    ) {
+      const isolatedCount = analysis.documents.weaklyConnected.length;
+      issues.push(
+        `**Isolated Documents**: ${isolatedCount} documents are in navigation but have no internal links`,
+      );
+      analysis.documents.weaklyConnected.slice(0, 3).forEach((doc) => {
+        issues.push(`  - \`${doc.label}\` - Consider adding contextual links`);
+      });
+      if (isolatedCount > 3) {
+        issues.push(`  - ... and ${isolatedCount - 3} more`);
       }
     }
 
