@@ -92,7 +92,6 @@ const globalVars = {
   sepoliaForceIncludePeriodHours: secondsToHours(86400),
 
   // speed limit
-  novaGasSpeedLimitGasPerSec: '7,000,000',
   goerliGasSpeedLimitGasPerSec: '3,000,000',
   sepoliaGasSpeedLimitGasPerSec: '7,000,000',
 
