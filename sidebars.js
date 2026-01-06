@@ -391,6 +391,11 @@ const sidebars = {
                   label: 'Stake and validator config',
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/constraint-based-pricing-for-arbitrum-chains',
+                  label: 'Constraint based Pricing for Arbitrum Chains',
+                },
+                {
                   type: 'category',
                   label: 'Data Availability Committees',
                   collapsed: true,
