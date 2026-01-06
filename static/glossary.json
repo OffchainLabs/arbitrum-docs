@@ -225,7 +225,7 @@
   },
   "gas-price-floor": {
     "title": "Gas Price Floor",
-    "text": "<p>Protocol-enforced minimum gas price on an Arbitrum chain; currently 0.1 <code>gwei</code> on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and 0.01 <code>gwei</code> on <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>.</p>\n"
+    "text": "<p>Protocol-enforced minimum gas price on an Arbitrum chain. These values can be found on the <a href=\"for-devs/dev-tools-and-resources/chain-info.mdx#chain-parameters\">chain info page</a>.</p>\n"
   },
   "gas-target": {
     "title": "Gas target",
