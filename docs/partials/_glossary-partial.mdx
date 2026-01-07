@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-01-06
+last_reviewed: 2026-01-07
 ---
 
 ### Active Validator {#active-validator}
@@ -13,6 +13,10 @@ A bonded [Validator](/intro/glossary#validator) that makes disputable assertions
 ### Address Alias {#address-alias}
 
 An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.
+
+### Adjustment window {#adjustment-window}
+
+The _adjustment window_ controls how quickly the base fee responds to demand changes. Longer windows produce gradual, smoother fee adjustments; shorter windows enable rapid response to sudden load spikes.
 
 ### Decentralized application {#dapp}
 
@@ -253,6 +257,8 @@ Protocol-enforced minimum gas price on an Arbitrum chain. These values can be fo
 ### Gas target {#gas-target}
 
 The target computation limit for an Arbitrum chain. [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova) currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via [EIP-1559](https://notes.ethereum.org/@vbuterin/eip-1559-faq).
+
+A gas target defines the sustainable throughput threshold, measured in million gas per second (Mgas/s). When cumulative network usage exceeds this threshold, the L2 base fee rises exponentially—following an EIP-1559-inspired mechanism—until demand falls back toward equilibrium.
 
 ### Gateway Router {#gateway-router}
 
