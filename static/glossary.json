@@ -7,6 +7,10 @@
     "title": "Address Alias",
     "text": "<p>An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.</p>\n"
   },
+  "adjustment-window": {
+    "title": "Adjustment window",
+    "text": "<p>The <em>adjustment window</em> controls how quickly the base fee responds to demand changes. Longer windows produce gradual, smoother fee adjustments; shorter windows enable rapid response to sudden load spikes.</p>\n"
+  },
   "dapp": {
     "title": "Decentralized application",
     "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nNote: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
@@ -229,7 +233,7 @@
   },
   "gas-target": {
     "title": "Gas target",
-    "text": "<p>The target computation limit for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a> currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via <a href=\"https://notes.ethereum.org/@vbuterin/eip-1559-faq\">EIP-1559</a>.</p>\n"
+    "text": "<p>The target computation limit for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a> currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via <a href=\"https://notes.ethereum.org/@vbuterin/eip-1559-faq\">EIP-1559</a>.</p>\n<p>A gas target defines the sustainable throughput threshold, measured in million gas per second (Mgas/s). When cumulative network usage exceeds this threshold, the L2 base fee rises exponentially—following an EIP-1559-inspired mechanism—until demand falls back toward equilibrium.</p>\n"
   },
   "gateway-router": {
     "title": "Gateway Router",
