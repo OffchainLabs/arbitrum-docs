@@ -72,6 +72,8 @@ Child chain gas fees work similarly to Ethereum: a transaction consumes gas, whi
 
 The basefee is set by a pricing algorithm that regulates fees across multiple time horizons. This algorithm uses several <a data-quicklook-from="gas-target">gas targets</a>, each paired with its own <a data-quicklook-from="adjustment-window">adjustment window</a>. Higher targets with shorter windows (for example, 60 Mgas/s over 9 seconds) absorb transient demand spikes without triggering aggressive fee increases. Lower targets with longer windows address slower traffic, with the lowest target measured over 86,400 seconds (one day) establishing the chain's long-term capacity.
 
+From the users' perspective, this means that the network will charge an increasing amount for each additional amount of gas consumed above the target: 10% fee for going 1% over the target, and then a 15% fee if you go to 2% over the target, and so on.
+
 The algorithm tracks a gas backlog for each target. Whenever a transaction consumes gas, that gas is added to the backlog. Each second, the corresponding gas target is subtracted from its backlog (the backlog cannot go below zero). If backlog grows, the basefee increases exponentially to discourage usage; if the backlog shrinks, the basefee decreases incentivize more demand. This behavior is intended to bring usage of the chain to an equilibrium defined by the long term gas target.
 
 This layered structure creates a dampening effect: overlapping windows smooth volatility at their respective timescales, reducing peak gas prices during congestion while preserving responsiveness to genuine capacity constraints.
