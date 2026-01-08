@@ -4,4 +4,4 @@ key: adjustment-window
 titleforSort: Adjustment window
 ---
 
-The _adjustment window_ controls how quickly the base fee responds to demand changes. Longer windows produce gradual, smoother fee adjustments; shorter windows enable rapid response to sudden load spikes.
+Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a gas target of 10Mgas/s over 10minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.
