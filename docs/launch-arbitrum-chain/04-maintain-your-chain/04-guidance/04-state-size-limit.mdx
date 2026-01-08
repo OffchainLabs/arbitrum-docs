@@ -16,7 +16,9 @@ The parameter that governs an Arbitrum chain's throughput limit is known as the 
 
 The gas target is measured in _gas per second_ and is used as a threshold for increasing gas prices.
 
-For example, Arbitrum One and Arbitrum Nova have a gas target of seven million gas per second. This means that when cumulative usage onchain exceeds seven million gas per second, the `L2 base fee` rises to increase the amount of `gwei` charged per unit of gas. This happens using a similar approach to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md).
+For example, when cumulative usage on Arbitrum One and Arbitrum Nova exceed a certain amount of gas per second, the `L2 base fee` rises to increase the amount of `gwei` charged per unit of gas. This happens using a similar approach to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md).
+
+[You can read more about how gas fees are calculated on Arbitrum in this explainer](/how-arbitrum-works/deep-dives/gas-and-fees.mdx)
 
 ## Why do we have throughput limits on blockchains?
 
@@ -27,6 +29,8 @@ This is because blockchain nodes have computation constraints that should not be
 The gas target, therefore, is fundamentally a protective mechanism. If the chain load exceeds what a Nitro validator node can process, then a chain risks halting due to validator downtime. It's important to note here that the security and liveness of an Arbitrum chain are always maintained through its parent chain contracts, but undoubtedly, the best user experience requires the validators and sequencer to be online.
 
 ## What is the recommended gas target for Arbitrum chains?
+
+**Derek: is that still true?**
 
 **Please note**: We recommend against teams raising their chain's default speed target beyond seven million gas per second.
 
