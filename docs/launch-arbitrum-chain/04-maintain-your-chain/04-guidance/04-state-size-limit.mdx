@@ -28,12 +28,6 @@ This is because blockchain nodes have computation constraints that should not be
 
 The gas target, therefore, is fundamentally a protective mechanism. If the chain load exceeds what a Nitro validator node can process, then a chain risks halting due to validator downtime. It's important to note here that the security and liveness of an Arbitrum chain are always maintained through its parent chain contracts, but undoubtedly, the best user experience requires the validators and sequencer to be online.
 
-## What is the recommended gas target for Arbitrum chains?
-
-**Derek: is that still true?**
-
-**Please note**: We recommend against teams raising their chain's default speed target beyond seven million gas per second.
-
 ## What are the risks of increasing my gas target?
 
 An increase in the speed target allows users and apps to perform more onchain actions without incurring additional costs. This makes it possible for a chain's nodes to experience higher and unexpected loads. When faced with high, sustained demand, the additional load could eventually lead to undesirable increases in infrastructure costs, cause nodes to lag behind the chain, and risk halting if the demand exceeds the resources of validator nodes.
