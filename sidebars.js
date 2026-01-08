@@ -392,8 +392,8 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/constraint-based-pricing-for-arbitrum-chains',
-                  label: 'Constraint based Pricing for Arbitrum Chains',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/dynamic-pricing-for-arbitrum-chains',
+                  label: 'Dynamic Pricing for Arbitrum Chains',
                 },
                 {
                   type: 'category',
