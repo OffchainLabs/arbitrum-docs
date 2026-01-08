@@ -76,17 +76,6 @@ The algorithm tracks a gas backlog for each target. Whenever a transaction consu
 
 This layered structure creates a dampening effect: overlapping windows smooth volatility at their respective timescales, reducing peak gas prices during congestion while preserving responsiveness to genuine capacity constraints.
 
-The pricing algorithm uses multiple gas targets, each paired with its own adjustment window:
-
-| Gas Target (Mgas/s) | Adjustment Window (s) |
-| ------------------: | --------------------: |
-|                  60 |                     9 |
-|                  41 |                    52 |
-|                  29 |                   329 |
-|                  20 |                 2,105 |
-|                  14 |                13,485 |
-|                  10 |                86,400 |
-
 For more details on how gas targets affect chain security and validator assumptions, see [the gas target](#the-gas-target) section below.
 
 ### Child chain Tips
