@@ -94,3 +94,9 @@ You can refer to the source files for more details on:
 - [`createERC20Rollup.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
 
 You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
+
+:::info Native Mint/Burn for Custom Gas Tokens
+Starting with **ArbOS 51 (Dia)**, Arbitrum chains have the option to enable **Native Token Mint/Burn** for their custom gas tokens via third-party interoperability providers (such LayerZero OFTs, xERC20s, or native USDC) instead of using the canonical "lock and mint" bridge.
+
+To enable this feature for your chain, see our guide on [enabling Native Mint/Burn for gas tokens](../../../configure-your-chain/common-configurations/enable-mint-burn-for-gas-token).
+:::

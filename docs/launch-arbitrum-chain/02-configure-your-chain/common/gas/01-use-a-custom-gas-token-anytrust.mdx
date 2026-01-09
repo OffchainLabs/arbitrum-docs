@@ -45,3 +45,9 @@ These methods use L1 to refer to the parent chain of the Arbitrum chain.
 These parameter changes are strongly recommended to avoid charging users for a non-existent parent chain's base fee. The impact of not doing this is that Nitro will apply a parent chain's fee to all transactions. As Nitro assumes the native asset is `ETH`, all fees are expected to be denominated in `ETH`. This has the consequence of overcharging users for parent chain fees in native tokens that are more expensive than `ETH` (for example, if you use wrapped `BTC` as the custom gas token). In the case for tokens with prices much lower than `ETH`, the impact is far less pronounced.
 
 In either case we strongly recommend taking these steps to avoid any issues with chain economics. You can read more about how Nitro manages fees in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+
+:::info Native Mint/Burn for Custom Gas Tokens
+Starting with **ArbOS 51 (Dia)**, Arbitrum chains have the option to enable **Native Token Mint/Burn** for their custom gas tokens via third-party interoperability providers (such LayerZero OFTs, xERC20s, or native USDC) instead of using the canonical "lock and mint" bridge.
+
+To enable this feature for your chain, see our guide on [enabling Native Mint/Burn for gas tokens](../../../configure-your-chain/common-configurations/enable-mint-burn-for-gas-token).
+:::

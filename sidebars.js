@@ -494,6 +494,11 @@ const sidebars = {
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
                       label: `Adopt BoLD`,
                     },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/enable-mint-burn-for-gas-token',
+                      label: 'Enable mint/burn for gas token',
+                    },
                   ],
                 },
                 {
