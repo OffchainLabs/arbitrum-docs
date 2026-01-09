@@ -9,7 +9,7 @@
   },
   "adjustment-window": {
     "title": "Adjustment window",
-    "text": "<p>Window during which the gas pricing algorithm measures the network's gas backlog. For example, there can be a gas target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.</p>\n"
+    "text": "<p>Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a gas target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.</p>\n"
   },
   "dapp": {
     "title": "Decentralized application",
