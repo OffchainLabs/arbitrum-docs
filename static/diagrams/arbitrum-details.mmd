@@ -1,0 +1,10 @@
+graph TB
+  Sequencer[Sequencer]
+  ArbOS[ArbOS]
+  EVM[EVM Execution]
+  StateManager[State Manager]
+
+  Sequencer --> ArbOS
+  ArbOS --> EVM
+  ArbOS --> StateManager
+  StateManager --> EVM
