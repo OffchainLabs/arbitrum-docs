@@ -91,12 +91,6 @@ const globalVars = {
   goerliForceIncludePeriodHours: secondsToHours(86400),
   sepoliaForceIncludePeriodHours: secondsToHours(86400),
 
-  // speed limit
-  arbOneGasSpeedLimitGasPerSec: '7,000,000',
-  novaGasSpeedLimitGasPerSec: '7,000,000',
-  goerliGasSpeedLimitGasPerSec: '3,000,000',
-  sepoliaGasSpeedLimitGasPerSec: '7,000,000',
-
   // block gas limit
   arbOneBlockGasLimit: '32,000,000',
   novaBlockGasLimit: '32,000,000',
