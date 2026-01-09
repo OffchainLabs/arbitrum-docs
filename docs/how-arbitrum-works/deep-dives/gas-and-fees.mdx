@@ -74,7 +74,7 @@ The basefee is set by a pricing algorithm that regulates fees across multiple ti
 
 From the users' perspective, this means that the network will charge an increasing amount for each additional amount of gas consumed above the target. As an example: a 10% increase in the fee is levied for going 1% over the target. The fee rises to 15% if you go to 2% over the target, and so on.
 
-The algorithm tracks a gas backlog for each target. Whenever a transaction consumes gas, that gas is added to the backlog. Each second, the corresponding gas target is subtracted from its backlog (the backlog cannot go below zero). If backlog grows, the basefee increases exponentially to discourage usage; if the backlog shrinks, the basefee decreases incentivize more demand. This behavior is intended to bring usage of the chain to an equilibrium defined by the long term gas target.
+The algorithm tracks a gas backlog for each target. Whenever a transaction consumes gas, that gas is added to the backlog. Each second, the corresponding gas target is subtracted from its backlog (the backlog cannot go below zero). If the backlog grows, the basefee increases exponentially to discourage usage; if the backlog shrinks, the basefee decreases incentivize more demand. This behavior is intended to bring usage of the chain to an equilibrium defined by the long term gas target.
 
 This layered structure creates a dampening effect: overlapping windows smooth volatility at their respective timescales, reducing peak gas prices during congestion while preserving responsiveness to genuine capacity constraints.
 
