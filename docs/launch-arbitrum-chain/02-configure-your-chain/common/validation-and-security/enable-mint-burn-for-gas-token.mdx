@@ -14,7 +14,7 @@ Arbitrum chains are designed to “lock and mint” the native gas token in the 
 
 This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a "burn and mint" approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s USDC (possible with Circle-supplied adapter).
 
-[ArbOS 51 Dia](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos51) introduces the ability for native-interop tokens to work seamlessly as the gas token of an Arbitrum chain. This feature allows a chain owner (`ArbOwner`) to manage:
+[ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) introduces the ability for native-interop tokens to work seamlessly as the gas token of an Arbitrum chain. This feature allows a chain owner (`ArbOwner`) to manage:
 
 1. Permissioning of onchain addresses (typically, a token adapter contract) that have mint and burn access to the chain's native gas token on the child chain.
 2. A security switch to timelock changes to Native Mint and Burn permissioned addresses (mitigating the risk of misuse or attack).
@@ -72,9 +72,9 @@ Details for the time lock switch are:
 - A chain can disable Native Mint/Burn instantly
 - If a chain wants to have a lower delay (e.g., one day, one hour), they will need to maintain a small fork of Nitro that changes the hard-coded value:
   - Hard-Coded value here: https://github.com/OffchainLabs/go-ethereum/blob/c289e79453d4fdd8644a88337885c8bf27155604/params/config_arbitrum.go#L49
-  - This change will cause your WASM module root to change. Please refer to [customize stf](<[https://docs.arbitrum.io/launch-arbitrum-chain/customize-your-chain/customize-stf#building-the-modified-node](https://docs.arbitrum.io/launch-arbitrum-chain/customize-your-chain/customize-stf#building-the-modified-node)>) steps to calculate the new WASM module root and set it on the chain before starting your new node..
+  - This change will cause your WASM module root to change. Please refer to [customize stf](/launch-arbitrum-chain/customize-your-chain/customize-stf#building-the-modified-node) steps to calculate the new WASM module root and set it on the chain before starting your new node.
     :::warning
-    Please note, if you want to change this constant value, make sure this value hasn't been used before and you have never called `setNativeTokenManagementFrom` before. If not, your chain may experience some reorg issues. If you want to change this value after you have already used it (**not recommended**), you need to consider proper version control, one example is ArbOS version control: [https://docs.arbitrum.io/launch-arbitrum-chain/customize-your-chain/customize-arbos](https://docs.arbitrum.io/launch-arbitrum-chain/customize-your-chain/customize-arbos).
+    Please note, if you want to change this constant value, make sure this value hasn't been used before and you have never called `setNativeTokenManagementFrom` before. If not, your chain may experience some reorg issues. If you want to change this value after you have already used it (**not recommended**), you need to consider proper version control, one example is [ArbOS version control](/launch-arbitrum-chain/customize-your-chain/customize-arbos).
     :::
 
 A seven-day timelock gates the feature. Call [`ArbOwner.setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with a UNIX timestamp ≥ _now + 7 days_ to enable the feature; disabling is instantaneous.
