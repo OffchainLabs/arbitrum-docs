@@ -247,61 +247,6 @@
       "permanent": false
     },
     {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-alt-da/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_alt-da-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-anytrust/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_anytrust-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-custom-gas-token/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_custom-gas-token-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-fast-withdrawals/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_fast-withdrawals-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-native-eth/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_native-eth-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-permissioned-validators/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_permissioned-validators-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/launch-arbitrum-chain/partials/config-rollup/?)",
-      "destination": "/(docs/launch-arbitrum-chain/features/partials/_rollup-pc/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/run-arbitrum-node/data-availability-committees/configure-dac/?)",
-      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/run-arbitrum-node/data-availability-committees/deploy-das/?)",
-      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/run-arbitrum-node/data-availability-committees/deploy-mirror-das/?)",
-      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das/?)",
-      "permanent": false
-    },
-    {
-      "source": "/(docs/run-arbitrum-node/data-availability-committees/get-started/?)",
-      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started/?)",
-      "permanent": false
-    },
-    {
       "source": "/(faqs/anytrust-vs-rollup/?)",
       "destination": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
       "permanent": false
