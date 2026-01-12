@@ -857,6 +857,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/how-tos/customize-deployment-configuration/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/customize-deployment-configuration/",
+      "permanent": false
+    },
+    {
       "source": "/(launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold/?)",
       "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
       "permanent": false
