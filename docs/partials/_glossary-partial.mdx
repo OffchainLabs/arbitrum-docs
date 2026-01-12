@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2025-11-18
+last_reviewed: 2026-01-09
 ---
 
 ### Active Validator {#active-validator}
@@ -13,6 +13,10 @@ A bonded [Validator](/intro/glossary#validator) that makes disputable assertions
 ### Address Alias {#address-alias}
 
 An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.
+
+### Adjustment window {#adjustment-window}
+
+Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a gas target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.
 
 ### Decentralized application {#dapp}
 
@@ -248,7 +252,11 @@ The means by which an [Active Validator](/intro/glossary#active-validator) prove
 
 ### Gas Price Floor {#gas-price-floor}
 
-Protocol-enforced minimum gas price on an Arbitrum chain; currently 0.1 `gwei` on [Arbitrum One](/intro/glossary#arbitrum-one) and 0.01 `gwei` on [Arbitrum Nova](/intro/glossary#arbitrum-nova).
+Protocol-enforced minimum gas price on an Arbitrum chain. These values can be found on the [chain info page](for-devs/dev-tools-and-resources/chain-info.mdx#chain-parameters).
+
+### Gas target {#gas-target}
+
+The target consumption rate for an Arbitrum chain. [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). When gas usage exceeds this limit, fees rise. Read more in the [gas and fees article](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 ### Gateway Router {#gateway-router}
 
@@ -389,10 +397,6 @@ A computer program whose operations are defined and executed within a blockchain
 ### Soft Confirmation {#soft-confirmation}
 
 A semi-trusted promise from the [Sequencer](/intro/glossary#sequencer) to post a user's transaction in the near future; soft-confirmations happen prior to posting on the [Parent chain](/intro/glossary#parent-chain), and thus can be given near-instantaneously (i.e., faster than the parent chain's block times)
-
-### Speed Limit {#speed-limit}
-
-Target computation limit for an Arbitrum chain. [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova) currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via [EIP-1559](https://notes.ethereum.org/@vbuterin/eip-1559-faq).
 
 ### Standard Arb-Token {#standard-arbtoken}
 
