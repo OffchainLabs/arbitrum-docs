@@ -332,7 +332,7 @@ const sidebars = {
           items: [
             {
               type: 'category',
-              label: 'Common features',
+              label: 'Common',
               collapsed: true,
               items: [
                 {
@@ -505,7 +505,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'Advanced features',
+              label: 'Advanced',
               collapsed: true,
               items: [
                 {
