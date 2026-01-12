@@ -13,7 +13,6 @@ Below is a breakdown of each specified parameter, including its role, typical de
 ## Gas target
 
 - **Description**: This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
-- **Default**: 7,000,000 gas/second.
 - **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newSpeedLimit` is the desired gas per second.
 
 Example using `cast`:
