@@ -738,12 +738,12 @@
     },
     {
       "source": "/launch-arbitrum-chain/arbitrum-node-runners/enale-post-4blobs",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs",
       "permanent": false
     },
     {
       "source": "/launch-arbitrum-chain/bold-adoption-for-arbitrum-chains",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
       "permanent": false
     },
     {
@@ -752,8 +752,93 @@
       "permanent": false
     },
     {
-      "source": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains",
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold-adoption-for-arbitrum-chains/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/aep-fee-router-introduction/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/calculate-aep-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/reporting-on-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/set-up-aep-fee-router/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-upgrade/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/customizable-challenge-period/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust/",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup/",
       "permanent": false
     },
     {
@@ -767,13 +852,13 @@
       "permanent": false
     },
     {
-      "source": "/launch-arbitrum-chain/how-tos/arbitrum-chain-finality",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality",
+      "source": "/(launch-arbitrum-chain/how-tos/arbitrum-chain-finality/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality",
       "permanent": false
     },
     {
-      "source": "/launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains",
+      "source": "/(launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
       "permanent": false
     },
     {
@@ -782,8 +867,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-arbitrum-chain/timeboost-for-arbitrum-chains",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains",
+      "source": "/(launch-arbitrum-chain/timeboost-for-arbitrum-chains/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains",
       "permanent": false
     },
     {
@@ -802,8 +887,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/aep-fee-router-introduction",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction",
+      "source": "/(launch-orbit-chain/aep-fee-router-introduction/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction",
       "permanent": false
     },
     {
@@ -817,8 +902,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/bold-adoption-for-orbit-chains",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains",
+      "source": "/(launch-orbit-chain/bold-adoption-for-orbit-chains/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
       "permanent": false
     },
     {
@@ -827,8 +912,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/concepts/custom-gas-token-sdk",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
+      "source": "/(launch-orbit-chain/concepts/custom-gas-token-sdk/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup",
       "permanent": false
     },
     {
@@ -837,28 +922,28 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction",
+      "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees",
+      "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
+      "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/advanced-configurations/bold",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains",
+      "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/bold/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals",
       "permanent": false
     },
     {
@@ -867,73 +952,73 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/arbos-configuration",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-upgrade",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/arbos-configuration/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-upgrade",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/batch-posting-assertion-control",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/batch-posting-assertion-control)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/calculate-aep-fees",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/customizable-challenge-period",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/customizing-anytrust",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/customizing-anytrust/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/fee-management",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/fee-management/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/gas-optimization-tools",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/gas-optimization-tools/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/per-batch-gas-cost",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/per-batch-gas-cost/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/set-up-aep-fee-router",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/set-up-aep-fee-router/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/stake-and-validator-configurations",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/stake-and-validator-configurations/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup",
       "permanent": false
     },
     {
@@ -1012,13 +1097,13 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/how-tos/arbos-upgrade",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-upgrade",
+      "source": "/(launch-orbit-chain/how-tos/arbos-upgrade/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/how-tos/calculate-aep-fees",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees",
+      "source": "/(launch-orbit-chain/how-tos/calculate-aep-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1042,8 +1127,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/how-tos/fast-withdrawals",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals",
       "permanent": false
     },
     {
@@ -1052,13 +1137,13 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/how-tos/manage-fee-collectors",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management",
+      "source": "/(launch-orbit-chain/how-tos/manage-fee-collectors/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management",
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/how-tos/orbit-chain-finality",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/arbitrum-chain-finality",
+      "source": "/(launch-orbit-chain/how-tos/orbit-chain-finality/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality",
       "permanent": false
     },
     {
@@ -1102,8 +1187,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/how-tos/set-up-aep-fee-router",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
+      "source": "/(launch-orbit-chain/how-tos/set-up-aep-fee-router/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
       "permanent": false
     },
     {
@@ -1112,8 +1197,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/how-tos/use-a-custom-gas-token",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
+      "source": "/(launch-orbit-chain/how-tos/use-a-custom-gas-token/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup",
       "permanent": false
     },
     {
@@ -1152,8 +1237,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/maintain-your-chain/upgrade-to-bold",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains",
+      "source": "/(launch-orbit-chain/maintain-your-chain/upgrade-to-bold/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
       "permanent": false
     },
     {
@@ -1207,8 +1292,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/reference/orbit-batch-poster-configuration",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control",
+      "source": "/(launch-orbit-chain/reference/orbit-batch-poster-configuration/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control",
       "permanent": false
     },
     {
@@ -1560,8 +1645,13 @@
       "permanent": false
     },
     {
-      "source": "/run-arbitrum-node/more-types/split-validator-node",
-      "destination": "/run-arbitrum-node/more-types/run-split-validator-node",
+      "source": "/(run-arbitrum-node/more-types/run-split-validator-node/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node/",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/more-types/split-validator-node/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node",
       "permanent": false
     },
     {
@@ -1580,7 +1670,12 @@
       "permanent": false
     },
     {
-      "source": "/run-arbitrum-node/sequencer/run-feed-relay",
+      "source": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs/",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/sequencer/run-feed-relay/?)",
       "destination": "/run-arbitrum-node/run-feed-relay",
       "permanent": false
     },
