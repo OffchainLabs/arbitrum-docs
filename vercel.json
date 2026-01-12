@@ -282,6 +282,26 @@
       "permanent": false
     },
     {
+      "source": "/(docs/run-arbitrum-node/data-availability-committees/configure-dac/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/run-arbitrum-node/data-availability-committees/deploy-das/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/run-arbitrum-node/data-availability-committees/deploy-mirror-das/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/run-arbitrum-node/data-availability-committees/get-started/?)",
+      "destination": "/(docs/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started/?)",
+      "permanent": false
+    },
+    {
       "source": "/(faqs/anytrust-vs-rollup/?)",
       "destination": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
       "permanent": false
@@ -1395,22 +1415,42 @@
     },
     {
       "source": "/node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain",
-      "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-the-dac-in-your-chain",
       "permanent": false
     },
     {
       "source": "/node-running/how-tos/data-availability-committee/deploy-a-das",
-      "destination": "/run-arbitrum-node/data-availability-committees/deploy-das",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-a-das",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/deploy-a-das/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das",
       "permanent": false
     },
     {
       "source": "/node-running/how-tos/data-availability-committee/deploy-a-mirror-das",
-      "destination": "/run-arbitrum-node/data-availability-committees/deploy-mirror-das",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-a-mirror-das",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/deploy-a-mirror-das/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/get-started/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started",
       "permanent": false
     },
     {
       "source": "/node-running/how-tos/data-availability-committee/introduction",
-      "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started",
       "permanent": false
     },
     {
@@ -1435,7 +1475,7 @@
     },
     {
       "source": "/node-running/how-tos/running-a-daserver",
-      "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started",
       "permanent": false
     },
     {
