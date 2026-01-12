@@ -80,13 +80,8 @@
     "key": "will-transactions-with-a-higher-gas-price-bid-be-confirmed-first"
   },
   {
-    "question": "Where can I find a list of the current validators of the Arbitrum chains?",
-    "answer": "Validation on both Arbitrum One and Arbitrum Nova is currently allow-listed to a committee of public entities. You can see the list of validators **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators)**. Governance currently has the power to change this status.\n\n\n\n",
-    "key": "where-can-i-find-a-list-of-the-current-validators-of-the-arbitrum-chains"
-  },
-  {
     "question": "Where can I find the current Data Availability Committee members?",
-    "answer": "The Arbitrum Nova chain has a 7-party DAC, whose members can be seen **[here](https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members)**. Governance has the ability to remove or add members to the committee.\n\n\n\n",
+    "answer": "The Arbitrum Nova chain has a 7-party DAC, whose members can be seen in the [Arbitrum Foundation's state of progressive decentralization status document](https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members). Governance has the ability to remove or add members to the committee.\n\n\n\n",
     "key": "where-can-i-find-the-current-data-availability-committee-members"
   },
   {
@@ -105,8 +100,8 @@
     "key": "what-is-the-difference-between-an-child-chain-block-and-an-assertion"
   },
   {
-    "question": "Why do Arbitrum chains enforce a speed limit? Isn't it better that the speed grows without limits?",
-    "answer": "The transaction lifecycle sets a limit that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the speed of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.\n\n\n\n",
-    "key": "why-do-arbitrum-chains-enforce-a-speed-limit-isnt-it-better-that-the-speed-grows-without-limits"
+    "question": "Why do Arbitrum chains enforce a gas target? Isn't it better that the target grows without limits?",
+    "answer": "The transaction lifecycle sets a target that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the target of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.\n\n\n\n",
+    "key": "why-do-arbitrum-chains-enforce-a-gas-target-isnt-it-better-that-the-target-grows-without-limits"
   }
 ]

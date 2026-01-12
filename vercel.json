@@ -247,7 +247,42 @@
       "permanent": false
     },
     {
-      "source": "/faqs/anytrust-vs-rollup",
+      "source": "/(docs/launch-arbitrum-chain/partials/config-alt-da/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_alt-da-pc/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-anytrust/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_anytrust-pc/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-custom-gas-token/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_custom-gas-token-pc/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-fast-withdrawals/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_fast-withdrawals-pc/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-native-eth/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_native-eth-pc/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-permissioned-validators/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_permissioned-validators-pc/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/launch-arbitrum-chain/partials/config-rollup/?)",
+      "destination": "/(docs/launch-arbitrum-chain/features/partials/_rollup-pc/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(faqs/anytrust-vs-rollup/?)",
       "destination": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
       "permanent": false
     },
@@ -1157,8 +1192,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/reference/command-line-options",
-      "destination": "/node-running/how-tos/running-an-orbit-node",
+      "source": "/(launch-orbit-chain/reference/command-line-options/?)",
+      "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
     },
     {
@@ -1419,8 +1454,8 @@
       "permanent": false
     },
     {
-      "source": "/notices/arbos-50",
-      "destination": "/notices/arbos51-arbsepolia-upgrade-notice",
+      "source": "/(notices/arbos-50/?)",
+      "destination": "/notices/arbos51-upgrade-notice",
       "permanent": false
     },
     {
@@ -1429,7 +1464,12 @@
       "permanent": false
     },
     {
-      "source": "/precompiles",
+      "source": "/(notices/arbos51-arbsepolia-upgrade-notice/?)",
+      "destination": "/notices/arbos51-upgrade-notice",
+      "permanent": false
+    },
+    {
+      "source": "/(precompiles/?)",
       "destination": "/build-decentralized-apps/precompiles/reference",
       "permanent": false
     },

@@ -6,14 +6,13 @@ sme:
 content_type: how-to
 ---
 
-To configure gas behavior on an Arbitrum (Orbit) chain using the [Arbitrum Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk), you primarily use the `ArbOwner` precompile (at address `0x0000000000000000000000000000000000000070`), which allows the chain owner to manage key parameters via function calls. These are called with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`. The defaults inherit from the parent chain or standard Nitro settings, but it is possible to customize your Arbitrum chain as they are permissioned by design.
+To configure gas behavior on an Arbitrum chain using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk), you primarily use the `ArbOwner` precompile (at address `0x0000000000000000000000000000000000000070`), which allows the chain owner to manage key parameters via function calls. These are called with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`. The defaults inherit from the parent chain or standard Nitro settings, but it is possible to customize your Arbitrum chain as they are permissioned by design.
 
 Below is a breakdown of each specified parameter, including its role, typical defaults (based on Arbitrum One), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security. For example, setting limits too high could lead to state bloat or slower block processing.
 
-## Gas speed limit
+## Gas target
 
 - **Description**: This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
-- **Default**: 7,000,000 gas/second.
 - **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newSpeedLimit` is the desired gas per second.
 
 Example using `cast`:
@@ -28,7 +27,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 
 ## Block gas limit
 
-- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the speed limit and gas pools, but this sets a hard cap.
+- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
 - **Default**: 32,000,000 gas per block.
 - **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 
@@ -47,7 +46,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 - **Description**: This is the minimum L2 base fee (in `wei` per gas unit), preventing fees from dropping too low during periods of low activity. The actual base fee fluctuates based on demand, but it will not fall below this set floor. It will affect user transaction costs.
 - **Default**: 0.1 `gwei` (100,000,000 `wei`).
 - **Configuration**:
-  - **During deployment**: Set the `minL2BaseFee` field in the Orbit setup script's config JSON.
+  - **During deployment**: Set the `minL2BaseFee` field in the Arbitrum chain setup script's config JSON.
   - **Post-deployment**: Call the `setMinimumL2BaseFee(uint256 newMinBaseFee)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newMinBaseFee` is the value in `wei`.
 
 Example using `cast`:
@@ -78,6 +77,6 @@ Refer to the [How to manage the fee parameters](/launch-arbitrum-chain/02-config
 
 :::warning Caution
 
-Always test changes on a devnet or testnet Arbitrum (Orbit) chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
+Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
 
 :::

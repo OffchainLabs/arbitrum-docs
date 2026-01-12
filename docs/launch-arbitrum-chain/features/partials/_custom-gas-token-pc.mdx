@@ -5,7 +5,7 @@
 - **Improved user experience and onboarding**: Users can pay fees with a single native token, eliminating the need to manage multiple assets (e.g., acquiring `ETH` separately). Using a single token can reduce friction, simplifying fee estimation, and enabling features like gas subsidies where projects pay fees on behalf of users, which is ideal for mainstream adoption in gaming or social platforms.
 - **Unified brand and ecosystem identity**: Interactions stay within the project's token economy, reinforcing branding and immersion (e.g., in-game currencies handling all fees).
 - **Stability and predictability (with stablecoins)**: Using a stable token like USDC mitigates volatility in transaction costs compared to `ETH`, providing consistent and affordable fees.
-- **Integration with existing tools**: Native implementation in Arbitrum Orbit ensures compatibility with EVM tooling, deterministic gas accounting, and seamless deployment.
+- **Integration with existing tools**: Native implementation in Arbitrum ensures compatibility with EVM tooling, deterministic gas accounting, and seamless deployment.
 
 ## Cons
 
@@ -14,4 +14,4 @@
 - **Compatibility issues**: May not work well with applications or tools expecting `ETH`, potentially impacting integration with broader Ethereum ecosystems.
 - **Increased complexity (account abstraction implementation)**: This adds infrastructure, such as paymasters and bundlers, which complicates gas estimation, transaction flows, and tooling configuration (e.g., for explorers or indexers), with the risk of inconsistent adoption.
 - **Migration challenges**: Changing or migrating the gas token post-deployment involves high technical risks, including contract updates, chain pauses, and potential loss of funds.
-- **Requirements and limitations**: The token must meet specific criteria (e.g., standard `ERC-20`). While supported in Orbit, it relies on chain-wide adoption, which may not be suitable for all cases.
+- **Requirements and limitations**: The token must meet specific criteria (e.g., standard `ERC-20`). While supported in, it relies on chain-wide adoption, which may not be suitable for all cases.
