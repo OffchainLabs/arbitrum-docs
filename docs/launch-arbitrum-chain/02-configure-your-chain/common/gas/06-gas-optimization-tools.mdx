@@ -23,7 +23,7 @@ cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000
 
 This setting is adjustable post-deployment. Any modifications should align with your node's capabilities to prevent issues with the congestion mechanism activating.
 
-Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx) page, or the [Additional configuration parameters](/launch-arbitrum-chain/reference/additional-configuration-parameters.md) for additional information.
+Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx) page, or the [Additional configuration parameters](/launch-arbitrum-chain/02-configure-your-chain/common/additional-configuration-parameters.mdx) for additional information.
 
 ## Block gas limit
 
@@ -39,7 +39,7 @@ cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000
 
 This setting is adjustable post-deployment. Setting it too high can harm user experience due to longer block times.
 
-Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx) page, or the [Additional configuration parameters](/launch-arbitrum-chain/reference/additional-configuration-parameters.md) for additional information.
+Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx) page, or the [Additional configuration parameters](/launch-arbitrum-chain/02-configure-your-chain/common/additional-configuration-parameters.mdx) for additional information.
 
 ## Gas price floor
 
@@ -57,7 +57,7 @@ cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000
 
 You can query the current floor via the `ArbGasInfo` precompile's `getMinimumGasPrice()`.
 
-Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx), [Additional configuration parameters](/launch-arbitrum-chain/reference/additional-configuration-parameters.md), or the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/07-fee-management.mdx) pages for additional information.
+Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx), [Additional configuration parameters](/launch-arbitrum-chain/02-configure-your-chain/common/additional-configuration-parameters.mdx), or the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common/fees/07-fee-management.mdx) pages for additional information.
 
 ## Per batch gas cost
 
@@ -73,7 +73,7 @@ cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000
 
 This configuration is adjustable post-deployment. When working with layers or parent chains, you may need to further configure the data availability setup.
 
-Refer to the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/07-fee-management.mdx) page for more information.
+Refer to the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common/fees/07-fee-management.mdx) page for more information.
 
 :::warning Caution
 
