@@ -867,6 +867,16 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/reference/additional-configuration-parameters/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters/",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/reference/additional-configuration-parameters/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters/",
+      "permanent": false
+    },
+    {
       "source": "/launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters",
       "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
@@ -1277,8 +1287,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/reference/additional-configuration-parameters",
-      "destination": "/launch-arbitrum-chain/reference/additional-configuration-parameters",
+      "source": "/(launch-orbit-chain/reference/additional-configuration-parameters/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters",
       "permanent": false
     },
     {
@@ -1302,7 +1312,7 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/reference/orbit-configuration-parameters",
+      "source": "/(launch-orbit-chain/reference/orbit-configuration-parameters/?)",
       "destination": "/launch-arbitrum-chain/reference/additional-configuration-parameters",
       "permanent": false
     },
