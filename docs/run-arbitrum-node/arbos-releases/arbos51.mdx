@@ -32,7 +32,7 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 ### Requirements
 
 - Having read and understood the [ArbOS Software Releases Overview page](./01-overview.mdx).
-- Following the [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx).
+- Following the [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/13-arbos-upgrade.mdx).
 - Running [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher, which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.3-8bc5554`.
   - Note that it's important to run Nitro v3.9.3 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
 - Running [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
@@ -142,7 +142,7 @@ While ArbOS 51 Dia will be compatible with both `nitro-contracts 3.1.X` and `nit
 
 ### Reference links for ArbOS 51 Dia
 
-- [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx)
+- [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/13-arbos-upgrade.mdx)
 - [README for how to upgrade your rollup contracts to support ArbOS 51 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
 - [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3)
 - [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1)
