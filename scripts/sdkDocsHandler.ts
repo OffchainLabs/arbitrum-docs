@@ -2,6 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const { Application, RendererEvent } = require('typedoc');
 const { parseMarkdownContentTitle } = require('@docusaurus/utils');
+
+// Manual SDK file constants
+const INDEX_FILENAME = 'index.mdx';
+const MIGRATE_FILENAME = 'migrate.mdx';
+const MANUAL_FILES = [INDEX_FILENAME, MIGRATE_FILENAME];
+
 /**
  * Plugin to move docs files from a target folder to the same folder as used by Docusaurus site.
  *
@@ -18,19 +24,20 @@ function load(app) {
   const sdkOutputDir = app.options.getValue('out'); // This is the SDK directory
   const sourceDir = path.join(sdkOutputDir, '../../submodules/arbitrum-sdk/docs');
 
+  // Compute paths once
+  const indexPath = path.join(sdkOutputDir, INDEX_FILENAME);
+  const migratePath = path.join(sdkOutputDir, MIGRATE_FILENAME);
+
   app.renderer.on(RendererEvent.START, () => {
     // Clean generated docs but preserve manually maintained files
-    cleanDirectory(sdkOutputDir, ['index.mdx', 'migrate.mdx']);
+    cleanDirectory(sdkOutputDir, MANUAL_FILES);
   });
 
   app.renderer.on(RendererEvent.END, () => {
     // Create manual SDK files only if they don't exist (bootstrap templates)
     // index.mdx and migrate.mdx are manually maintained and should not be regenerated
-    const indexPath = path.join(sdkOutputDir, 'index.mdx');
-    const migratePath = path.join(sdkOutputDir, 'migrate.mdx');
-
     if (!fs.existsSync(indexPath) || !fs.existsSync(migratePath)) {
-      createManualFiles(sdkOutputDir);
+      createManualFiles(sdkOutputDir, indexPath, migratePath);
     }
 
     // Generate sidebar only from the actual TypeDoc generated content
@@ -242,7 +249,7 @@ function generateSidebarFromSDKContent(sdkDir) {
 }
 
 // Create manual files (introduction and migration guide) after TypeDoc generation
-function createManualFiles(sdkOutputDir) {
+function createManualFiles(sdkOutputDir, indexPath, migratePath) {
   // Create introduction file
   const introductionContent = `# Introduction
 
@@ -644,9 +651,6 @@ Message classes have been renamed and their methods updated:
 | \`waitForL2\` | \`waitForChildTransactionReceipt\` |`;
 
   // Bootstrap: Write template files (only called when files don't exist)
-  const indexPath = path.join(sdkOutputDir, 'index.mdx');
-  const migratePath = path.join(sdkOutputDir, 'migrate.mdx');
-
   fs.writeFileSync(indexPath, introductionContent, 'utf8');
   fs.writeFileSync(migratePath, migrationContent, 'utf8');
 
