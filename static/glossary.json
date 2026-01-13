@@ -7,6 +7,10 @@
     "title": "Address Alias",
     "text": "<p>An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.</p>\n"
   },
+  "adjustment-window": {
+    "title": "Adjustment window",
+    "text": "<p>Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a gas target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.</p>\n"
+  },
   "dapp": {
     "title": "Decentralized application",
     "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nNote: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
@@ -225,7 +229,11 @@
   },
   "gas-price-floor": {
     "title": "Gas Price Floor",
-    "text": "<p>Protocol-enforced minimum gas price on an Arbitrum chain; currently 0.1 <code>gwei</code> on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and 0.01 <code>gwei</code> on <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>.</p>\n"
+    "text": "<p>Protocol-enforced minimum gas price on an Arbitrum chain. These values can be found on the <a href=\"for-devs/dev-tools-and-resources/chain-info.mdx#chain-parameters\">chain info page</a>.</p>\n"
+  },
+  "gas-target": {
+    "title": "Gas target",
+    "text": "<p>The target consumption rate for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>. When gas usage exceeds this limit, fees rise. Read more in the <a href=\"/how-arbitrum-works/deep-dives/gas-and-fees.mdx\">gas and fees article</a>.</p>\n"
   },
   "gateway-router": {
     "title": "Gateway Router",
@@ -366,10 +374,6 @@
   "soft-confirmation": {
     "title": "Soft Confirmation",
     "text": "<p>A semi-trusted promise from the <a href=\"/intro/glossary#sequencer\">Sequencer</a> to post a user&#39;s transaction in the near future; soft-confirmations happen prior to posting on the <a href=\"/intro/glossary#parent-chain\">Parent chain</a>, and thus can be given near-instantaneously (i.e., faster than the parent chain&#39;s block times)</p>\n"
-  },
-  "speed-limit": {
-    "title": "Speed Limit",
-    "text": "<p>Target computation limit for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a> currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via <a href=\"https://notes.ethereum.org/@vbuterin/eip-1559-faq\">EIP-1559</a>.</p>\n"
   },
   "standard-arbtoken": {
     "title": "Standard Arb-Token",

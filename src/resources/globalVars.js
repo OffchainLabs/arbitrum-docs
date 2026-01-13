@@ -21,7 +21,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.9.3-8bc5554',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.9.4-7f582c3',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -38,11 +38,11 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.9.3',
+  nitroVersionTag: 'v3.9.4',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: '5f61a6b0e9799d7ccc0b3811f3893c68a14e43bf',
+  nitroContractsCommit: 'bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd',
   nitroContractsPathToPrecompilesInterface: 'src/node-interface',
 
   // Precompile interfaces repository
@@ -50,17 +50,17 @@ const globalVars = {
   nitroPrecompilesCommit: 'f49a4889b486fd804a7901203f5f663cfd1581c8',
   nitroPrecompilesPathToInterfaces: '',
 
-  goEthereumCommit: 'ae34a6a9ef5af5079c8eef6571895d703023efef',
+  goEthereumCommit: '6b19938827e8d7684caf6a883765d51ee967f250',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',
   nitroPathToStorage: 'arbos/storage',
 
   // gas floor
-  arbOneGasFloorGwei: '0.01',
-  novaGasFloorGwei: '0.01',
+  arbOneGasFloorGwei: '0.02',
+  novaGasFloorGwei: '0.02',
   goerliGasFloorGwei: '0.1',
-  sepoliaGasFloorGwei: '0.1',
+  sepoliaGasFloorGwei: '0.2',
 
   // dispute window
   arbOneDisputeWindowBlocks,
@@ -90,12 +90,6 @@ const globalVars = {
   novaForceIncludePeriodHours: secondsToHours(86400),
   goerliForceIncludePeriodHours: secondsToHours(86400),
   sepoliaForceIncludePeriodHours: secondsToHours(86400),
-
-  // speed limit
-  arbOneGasSpeedLimitGasPerSec: '7,000,000',
-  novaGasSpeedLimitGasPerSec: '7,000,000',
-  goerliGasSpeedLimitGasPerSec: '3,000,000',
-  sepoliaGasSpeedLimitGasPerSec: '7,000,000',
 
   // block gas limit
   arbOneBlockGasLimit: '32,000,000',
