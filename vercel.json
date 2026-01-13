@@ -717,6 +717,26 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction/",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees/",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/reporting-on-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees/",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router/",
+      "permanent": false
+    },
+    {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold-adoption-for-arbitrum-chains/?)",
       "destination": "/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals",
       "permanent": false
@@ -744,6 +764,21 @@
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/set-up-aep-fee-router/?)",
       "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/da-api-integration-guide/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide/",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals/",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
       "permanent": false
     },
     {
@@ -927,8 +962,8 @@
       "permanent": false
     },
     {
-      "source": "/launch-orbit-chain/configure-your-chain/advanced-configurations/layer-leap",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap",
+      "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
       "permanent": false
     },
     {
@@ -1640,7 +1675,22 @@
       "permanent": false
     },
     {
-      "source": "/run-arbitrum-node/how-to-use-timeboost",
+      "source": "/(run-arbitrum-node/data-availability-committees/configure-dac/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac/",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/data-availability-committees/deploy-das/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das/",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/data-availability-committees/deploy-mirror-das/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das/",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/how-to-use-timeboost/?)",
       "destination": "/how-arbitrum-works/timeboost/how-to-use-timeboost",
       "permanent": false
     },
