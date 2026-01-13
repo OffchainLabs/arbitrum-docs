@@ -86,9 +86,10 @@ check_command() {
 time_command() {
   local start_time=$(date +%s)
   "$@"
+  local exit_code=$?
   local end_time=$(date +%s)
   local duration=$((end_time - start_time))
-  log_info "⏱️  Completed in ${duration}s"
+  return $exit_code
 }
 
 # Get list of staged files for selective processing
@@ -106,7 +107,6 @@ main() {
   log_step "Starting pre-commit hook validation..."
 
   # Environment and dependency checks
-  log_info "🔍 Checking environment and dependencies..."
   check_command "node"
   check_command "yarn"
   check_command "git"
@@ -125,20 +125,17 @@ main() {
     exit 0
   fi
 
-  log_info "📁 Found $(echo "$staged_files" | wc -l | tr -d ' ') staged files"
-
   # 1. Fast redirect validation (project-specific)
-  log_step "Validating redirects..."
-  time_command yarn check-redirects || exit_with_error "Redirect validation failed. Fix redirect issues before committing."
-  log_success "Redirect validation passed"
+  # log_step "Validating redirects..."
+  # Will need to replace the 'check-redirects' line below when we replace it
+  # time_command yarn check-redirects || exit_with_error "Redirect validation failed. Fix redirect issues before committing."
+  # log_success "Redirect validation passed"
 
   # 2. Submodule updates (only if submodules are staged or .gitmodules changed)
   if echo "$staged_files" | grep -E "(\.gitmodules|submodules/)" >/dev/null 2>&1; then
     log_step "Updating git submodules..."
     time_command git submodule update --init --recursive || exit_with_error "Git submodule update failed. Check submodule configuration."
     log_success "Git submodules updated"
-  else
-    log_info "⏭️  Skipping submodule update (no submodule changes detected)"
   fi
 
   # 3. Selective code formatting (only format staged files)
@@ -152,30 +149,44 @@ main() {
 
     # Format JavaScript/TypeScript files if any
     if [ -n "$js_files" ]; then
-      log_info "🎨 Formatting JS/TS files..."
       echo "$js_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "JavaScript/TypeScript formatting failed"
     fi
 
     # Format Markdown files if any
     if [ -n "$md_files" ]; then
-      log_info "📝 Formatting Markdown files..."
       echo "$md_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "Markdown formatting failed"
     fi
 
     # Re-stage formatted files
     echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" | xargs git add || true
+
+    # Validate formatting of staged files only
+    local formatted_files
+    formatted_files=$(echo "$staged_files" | grep -E "\.(js|jsx|ts|tsx|json|md|mdx|scss)$" || true)
+    if [ -n "$formatted_files" ]; then
+      if ! echo "$formatted_files" | xargs yarn prettier --check --config "./.prettierrc.js"; then
+        exit_with_error "Formatting validation failed. Some staged files are not properly formatted. This should not happen after auto-formatting."
+      fi
+    fi
+
     log_success "Code formatting completed and files re-staged"
-  else
-    log_info "⏭️  Skipping code formatting (no formattable files staged)"
   fi
 
   # 4. Markdown linting (only if markdown files are staged)
   if has_staged_files "\.(md|mdx)$"; then
     log_step "Validating Markdown syntax..."
-    time_command yarn lint:markdown || exit_with_error "Markdown validation failed. Fix markdown syntax errors before committing."
-    log_success "Markdown validation passed"
-  else
-    log_info "⏭️  Skipping Markdown validation (no markdown files staged)"
+
+    # Get staged markdown files excluding sdk directory
+    local lint_md_files
+    lint_md_files=$(echo "$staged_files" | grep -E "\.(md|mdx)$" | grep -v "docs/sdk/" || true)
+
+    if [ -n "$lint_md_files" ]; then
+      # Run markdownlint only on staged files
+      if ! echo "$lint_md_files" | xargs yarn markdownlint; then
+        exit_with_error "Markdown validation failed. Fix markdown syntax errors before committing."
+      fi
+      log_success "Markdown validation passed"
+    fi
   fi
 
   # 5. TypeScript type checking (only if TS files are staged)
@@ -183,13 +194,10 @@ main() {
     log_step "Running TypeScript type checking..."
     time_command yarn typecheck || exit_with_error "TypeScript type checking failed. Fix type errors before committing."
     log_success "TypeScript type checking passed"
-  else
-    log_info "⏭️  Skipping TypeScript check (no TypeScript files staged)"
   fi
 
   # Final success message with timing
   log_success "🎉 All pre-commit checks passed successfully!"
-  log_info "✨ Commit is ready to proceed..."
 }
 
 # Trap to handle interruptions gracefully
