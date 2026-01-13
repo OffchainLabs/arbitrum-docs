@@ -164,6 +164,9 @@ main() {
       echo "$filtered"
     }
 
+    # Apply Prettier ignore filtering to staged files
+    js_files=$(filter_prettier_ignored "$js_files")
+    md_files=$(filter_prettier_ignored "$md_files")
     # Format JavaScript/TypeScript files if any
     if [ -n "$js_files" ]; then
       echo "$js_files" | xargs yarn prettier --write --config "./.prettierrc.js" || exit_with_error "JavaScript/TypeScript formatting failed"
