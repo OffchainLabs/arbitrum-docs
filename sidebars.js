@@ -805,13 +805,6 @@ const sidebars = {
           label: 'Historical blobs',
         },
         {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
-        },
-        {
           type: 'category',
           label: 'ArbOS software releases',
           collapsed: true,
