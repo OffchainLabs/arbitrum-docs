@@ -76,7 +76,7 @@ function isPartialFile(filePath) {
   const dirName = path.basename(path.dirname(filePath));
 
   // Check if file is in a "partials" directory
-  if (relativePath.includes('/partials/') || relativePath.startsWith('partials/')) {
+  if (relativePath.includes('/partials/')) {
     return true;
   }
 
