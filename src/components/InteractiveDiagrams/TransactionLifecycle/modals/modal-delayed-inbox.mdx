@@ -1,0 +1,10 @@
+# Delayed Inbox
+
+The Delayed Inbox is a censorship-resistant mechanism that ensures transactions can always be included, even if the Sequencer attempts to exclude them.
+
+- Transactions enter a dedicated queue on Ethereum L1
+- A functioning Sequencer typically includes them within ~10 minutes
+- If delayed beyond 24 hours, anyone can force inclusion
+- Provides strong guarantees against censorship
+
+This path doubles processing time but ensures the Sequencer can only delay, never permanently block, transactions.

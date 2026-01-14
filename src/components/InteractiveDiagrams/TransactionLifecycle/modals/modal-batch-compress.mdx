@@ -1,0 +1,10 @@
+# Batch and Compress
+
+The batching and compression stage optimizes data before L1 submission.
+
+- Groups multiple transactions into batches
+- Applies Brotli compression for ~10x size reduction
+- Minimizes L1 calldata costs
+- Maintains transaction integrity
+
+This process is key to Arbitrum's cost efficiency, reducing fees by an order of magnitude compared to direct L1 execution.

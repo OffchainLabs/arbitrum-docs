@@ -8,6 +8,7 @@ content_type: get-started
 ---
 
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
+import InteractiveDiagrams from '@site/src/components/InteractiveDiagrams';
 
 ### Transaction processing journey on Arbitrum
 
@@ -15,13 +16,7 @@ As a developer initiating a transaction on Arbitrum, gaining a clear understandi
 
 This overview methodically traces the transaction lifecycle, emphasizing how Arbitrum's architecture ensures precise, efficient, and secure handling at every stage. This article encompasses the complete Arbitrum Nitro stack, beginning with the Sequencer responsible for transaction ordering, advancing to the State Transition Function for execution, and culminating in validation mechanisms that uphold integrity.
 
-<ImageZoom
-  src="/img/haw-transaction-lifecycle.png"
-  className="img-600px"
-  alt="Transaction lifecycle"
->
-  Transaction lifecycle
-</ImageZoom>
+<InteractiveDiagrams type="transaction-lifecycle" />
 
 Along the way, we will highlight Arbitrum's ability to deliver security on par with Ethereum, while achieving fee reductions by a factor of ten and transaction speeds accelerated by a factor of 100 through optimized scaling techniques.
 

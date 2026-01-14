@@ -1,0 +1,203 @@
+.transaction-lifecycle {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 100%;
+  margin: 24px 0;
+
+  &__diagram {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &__svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  // Node styles
+  &__node {
+    transition: transform 0.3s ease, filter 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    &--active {
+      filter: url(#tl-glow);
+      animation: tl-pulse 1.5s ease-in-out infinite;
+    }
+  }
+
+  &__node-rect {
+    transition: fill 0.3s ease, stroke 0.3s ease;
+  }
+
+  &__node-text {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // Path styles
+  &__path {
+    transition: opacity 0.3s ease, stroke-width 0.3s ease;
+
+    &--active {
+      opacity: 1 !important;
+      stroke-width: 3;
+      animation: tl-flow 1s ease-in-out;
+    }
+  }
+
+  // Playback controls
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--ifm-background-surface-color);
+    border-radius: 8px;
+    border: 1px solid var(--ifm-color-emphasis-200);
+  }
+
+  &__controls-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--ifm-color-emphasis-100);
+    color: var(--ifm-font-color-base);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: var(--ifm-color-emphasis-200);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &--primary {
+      width: 48px;
+      height: 48px;
+      background: #12aaff;
+      color: white;
+
+      &:hover:not(:disabled) {
+        background: #0d8fcc;
+      }
+    }
+  }
+
+  &__step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+  }
+
+  &__step-number {
+    font-size: 12px;
+    color: var(--ifm-color-emphasis-600);
+    font-weight: 500;
+  }
+
+  &__step-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ifm-font-color-base);
+    min-height: 20px;
+  }
+
+  &__progress-bar {
+    width: 100%;
+    max-width: 300px;
+    height: 4px;
+    background: var(--ifm-color-emphasis-200);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: #12aaff;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  // Modal deep dive link
+  &-modal__deep-dive {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ifm-color-emphasis-200);
+
+    a {
+      color: #12aaff;
+      font-weight: 500;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes tl-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes tl-flow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .transaction-lifecycle {
+    &__controls {
+      padding: 12px;
+    }
+
+    &__control-btn {
+      width: 36px;
+      height: 36px;
+
+      &--primary {
+        width: 44px;
+        height: 44px;
+      }
+    }
+
+    &__step-label {
+      font-size: 13px;
+    }
+  }
+}
