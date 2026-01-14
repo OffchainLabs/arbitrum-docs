@@ -61,13 +61,13 @@ The following are the only exceptions:
 git clone git@github.com:OffchainLabs/arbitrum-docs.git
 ```
 
-2.Install node dependencies
+2. Install node dependencies
 
 ```shell
 yarn
 ```
 
-3.Update the submodules
+3. Update the submodules
 
 ```shell
 git submodule update --init --recursive
