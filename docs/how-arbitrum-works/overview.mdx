@@ -13,7 +13,7 @@ Below, we outline both paths so you can choose your own adventure.
 
 ## Submitting a transaction
 
-The first phase of transaction processing on the Arbitrum blockchain, emphasizing flexible submission strategies that prioritize user needs for speed, privacy, and resilience against censorship. It covers primary routing via the Sequencer for rapid ordering and soft confirmations—using options like public or third-party RPCs, direct endpoints, or self-hosted nodes—alongside an alternative direct submission to Ethereum's Delayed Inbox, which ensures inclusion even if delayed, fostering a balanced, robust system for diverse applications.
+The first phase of transaction processing on the Arbitrum blockchain, emphasizing flexible submission strategies that prioritize user needs for speed, privacy, and censorship resistance. It covers primary routing via the Sequencer for rapid ordering and soft confirmations—using options like public or third-party RPCs, direct endpoints, or self-hosted nodes—alongside an alternative direct submission to the Delayed Inbox, which ensures inclusion even if delayed, fostering a balanced, robust system for diverse applications.
 
 Refer to [Inside Arbitrum Nitro: Submitting a transaction](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#step-1-submitting-a-transaction) for the high-level explanation.
 
@@ -23,7 +23,7 @@ Refer to [Inside Arbitrum Nitro: Submitting a transaction](/how-arbitrum-works/0
 
 ## Ordering and broadcasting: The Sequencer
 
-Details the Sequencer's pivotal role in the second phase of Arbitrum transaction processing, focusing on efficient ordering and broadcasting for enhanced performance and security. It explains how the Sequencer provides immediate network visibility and soft finality through a real-time feed, batches transactions for cost optimization, applies dynamic Brotli compression based on network congestion, and posts data to Ethereum via the Sequencer Inbox—primarily using blob transactions under EIP-4844 for scalability, with calldata as a fallback—achieving significant savings while adapting to varying conditions.
+Details the Sequencer's pivotal role in the second phase of Arbitrum transaction processing, focusing on efficient ordering and broadcasting for enhanced performance and security. It explains how the Sequencer provides immediate network visibility and soft finality through a real-time feed, batches transactions for cost optimization, applies dynamic Brotli compression based on network congestion, and posts data to Ethereum via the Sequencer Inbox—primarily using blob transactions (EIP-4844) for scalability, with calldata as a fallback—achieving significant savings while adapting to varying conditions.
 
 Refer to [Inside Arbitrum Nitro: Ordering and broadcasting: The Sequencer](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#step-2-ordering-and-broadcasting-the-sequencer) for more information.
 
@@ -52,7 +52,7 @@ Refer to [Inside Arbitrum Nitro: Finality](/how-arbitrum-works/01-inside-arbitru
 
 ## Ensuring correctness: Validation and dispute resolution
 
-Describes the validation and dispute resolution phase in Arbitrum's transaction processing, centered on the BoLD (Bounded Liquidity Delay) protocol for permissionless validation and timely dispute resolution. It highlights BoLD's challenge-based mechanism, in which participants defend the chain's state by narrowing disputes to a single verifiable step on Ethereum, promoting decentralization, resilience against malice, and bounded timelines, with references to assertions, multi-round challenges, and economic incentives.
+Describes the validation and dispute resolution phase in Arbitrum's transaction processing, centered on the BoLD (Bounded Liquidity Delay) protocol for permissionless validation and timely dispute resolution. It highlights BoLD's challenge-based mechanism, in which participants defend the chain's state by narrowing disputes to a single verifiable step on Ethereum, promoting decentralization, resilience against dishonest assertions, and bounded timelines, with references to assertions, multi-round challenges, and economic incentives.
 
 Refer to [Inside Arbitrum Nitro: Ensuring correctness: Validation and dispute resolution](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#step-5-ensuring-correctness-validation-and-dispute-resolution) for a high-level explanation.
 
@@ -62,7 +62,7 @@ Refer to [Inside Arbitrum Nitro: Ensuring correctness: Validation and dispute re
 
 ## Bridging: Cross-chain communication
 
-Describes the bridging protocols for cross-chain communication in Arbitrum, facilitating secure asset and data transfers between Ethereum and Arbitrum. It covers Parent-to-Child messaging (Ethereum to Arbitrum) with options like native ETH deposits, ERC-20 bridges, retryable tickets for atomic operations, and direct signed or unsigned messages; Child-to-Parent transfers (Arbitrum to Ethereum) involving message creation, rollup assertions, a 6.4-day challenge period, and manual execution with Merkle proofs; and the canonical bridge's architecture, including asset contracts, gateways, routers, and security measures like token locking/minting with a seven-day withdrawal challenge for integrity and seamless interactions.
+Describes the bridging protocols for cross-chain communication in Arbitrum, facilitating secure asset and data transfers between Ethereum and Arbitrum. It covers parent-to-child messaging with options like native `ETH` deposits, `ERC-20` bridges, retryable tickets for atomic operations, and direct signed or unsigned messages; Child-to-parent transfers involving message creation, rollup assertions, a 6.4-day challenge period, and manual execution with Merkle proofs; and the canonical bridge's architecture, including asset contracts, gateways, routers, and security measures like token locking/minting with a seven-day withdrawal challenge for integrity and seamless interactions.
 
 Refer to [Inside Arbitrum Nitro: Bridging: Cross-chain communcation](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#step-6-bridging-cross-chain-communication) for more information.
 
@@ -73,7 +73,7 @@ Refer to [Inside Arbitrum Nitro: Bridging: Cross-chain communcation](/how-arbitr
 
 ## The Economics of execution: Gas and fees
 
-The economics of execution in Arbitrum's transaction lifecycle, focusing on a dual-fee model that separates child chain gas fees—for EVM computation and storage with EIP-1559 dynamic pricing to manage congestion—from parent chain data fees for Ethereum postings (via blobs or calldata) applied to Sequencer submissions. It explains gas targets to optimize consumption rates and escalate fees during peaks to prevent overload, deter spam, and prioritize high-value transactions, alongside fee calculation processes that assess impacts, apply pricing, and collect ETH to fund processing and security effectively.
+The economics of execution in Arbitrum's transaction lifecycle, focusing on a dual-fee model that separates child chain gas fees—for EVM computation and storage (EIP-1559) dynamic pricing to manage congestion—from parent chain data fees for Ethereum postings (via blobs or calldata) applied to Sequencer submissions. It explains gas targets to optimize consumption rates and escalate fees during peaks to prevent overload, deter spam, and prioritize high-value transactions, alongside fee calculation processes that assess impacts, apply pricing, and collect `ETH` to fund processing and security effectively.
 
 Refer to [Inside Arbitrum Nitro: The exconomics of execution: Gas and fees](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx#step-7-the-economics-of-execution-gas-and-fees) for a high-level description.
 
