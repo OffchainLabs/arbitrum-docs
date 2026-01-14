@@ -40,7 +40,7 @@ The Native Mint/Burn feature permits mint & burn capability of the rollup’s na
 
 - We **do not** recommend enabling Native Mint/Burn if your chain relies on the canonical bridge for liquidity or if you cannot comfortably implement the operational safeguards listed below.
 - This feature is **bridge-agnostic**, so it’s possible to migrate from a bridge adapter implementation (e.g., LayerZero-OFT adapter) to another adapter without forking the chain or changing the gas token.
-- **Infra-level** benefit: unifies liquidity so Orbit users see only one native gas token and avoid the previous “two bridge pools” condition (LayerZero integration still uses a lockbox/representation model, thus it does not remove wrapping globally).
+- **Infra-level** benefit: unifies liquidity so Arbitrum Stack chain users see only one native gas token and avoid the previous “two bridge pools” condition (LayerZero integration still uses a lockbox/representation model, thus it does not remove wrapping globally).
 
 ## Feature architecture
 
@@ -102,14 +102,14 @@ A seven-day timelock gates the feature. Call [`ArbOwner.setNativeTokenManagement
 The main risk of having two contracts responsible for native token issuance (the 3rd-party contract and the chain’s bridge) is collateralization imbalances. For example, you could end up with:
 
 - 90% of tokens in the 3rd-party contract
-- 10% of tokens in the Orbit chain bridge
+- 10% of tokens in the Arbitrum Stack chain bridge
 
 In which case, either could be under-collateralized for a withdrawal at any given time.
 
 To resolve this problem, we can implement:
 
 1. **Collateral Sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated 3rd-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain Adapter contract).
-2. **Disable Orbit Bridge Withdrawals:** Disabling withdrawals on the Orbit chain, which ensures the 3rd-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
+2. **Disable Arbitrum Chain Bridge Withdrawals:** Disabling withdrawals on the Arbitrum Stack chain, which ensures the 3rd-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
 
 The **Collateral Sweep** is implemented by adding an Outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a 3rd-party contract. This keeps all collateral in one place when mint/burn is enabled.
 
@@ -130,9 +130,9 @@ Before starting, ensure that the chain has:
 
 | Item             | Minimum version                                                                                                                         |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| nitro-contracts  | [v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) (include the ERC20MigrationOutbox)                        |
-| nitro-node       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) (includes the fix for `ArbNativeTokenManager` precompile inclusion) |
-| go-ethereum fork | Included in ArbOS 51 Dia (please use the latest WASM module root, see below)                                                            |
+| nitro-contracts  | [v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher (includes the ERC20MigrationOutbox)                        |
+| nitro-node       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher (includes the fix for `ArbNativeTokenManager` precompile inclusion) |
+| go-ethereum fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root, see below) or later                                                            |
 
 We suggest the following baseline or values for production chains:
 
@@ -174,7 +174,7 @@ Below steps show the flow a RaaS / chain team can use to whitelist a bridge adap
 
 ### Temporarily disabling the Mint/Burn feature
 
-There may be situations where you want to disable the feature temporarily, i.e., to investigate a bridge bug or supply imbalance. All calls below are made from an [**ArbOwner**](https://github.com/OffchainLabs/nitro-precompile-interfaces/) wallet. These commands are for RaaS / chain teams, bridge teams have their own operating procedures.
+There may be situations where you want to disable the feature temporarily, e.g., to investigate a bridge bug or supply imbalance. All calls below are made from an [**ArbOwner**](https://github.com/OffchainLabs/nitro-precompile-interfaces/) wallet. These commands are for RaaS / chain teams, bridge teams have their own operating procedures.
 
 1. Inspect the current list of owners.
 
@@ -253,11 +253,11 @@ There may be situations where you want to disable the feature temporarily, i.e.,
 ### Who should read this page?
 
 - Bridge/infra engineers building an adapter that mints native gas.
-- RaaS operators who need to whitelist such an adapter and run the sweeper bot.
+- RaaS/chain operators who need to whitelist such an adapter and run the sweeper bot.
 
 ### Can I run the feature on an older ArbOS version?
 
-While Native Mint/Burn was technically introduced in ArbOS 41, we strongly recommend upgrading to ArbOS 51 Dia for those enabling this feature.
+While Native Mint/Burn was technically introduced in ArbOS 41, we strongly recommend upgrading to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) for those enabling this feature.
 
 ### What happens to value-bearing withdrawals once I disable the feature?
 
