@@ -21,14 +21,17 @@ The upgrade to ArbOS 51 is independent of setting of these new gas targets. The 
 
 :::
 
-- **The Change:** The new algorithm uses multiple time windows and multiple gas targets to balance traffic spikes with overall fee stability.
+- **The Change:** The new algorithm uses multiple gas targets and multiple adjustment time windows to balance traffic spikes with overall fee stability.
 - **Additional Details:** For those interested in how these values are derived, this document provides the underlying parameters used to calculate the new gas targets and adjustment windows.
 
 ## Purpose
 
-The improvement aims to reduce the severity, frequency, and duration of high L2 gas prices during periods when demand exceeds the gas target. Detailed information on the upgrade can be found [here](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-min-l2-base-fee-implement-improvements-to-the-pricing-algorithm/30182).
+This improvement aims to reduce the severity, frequency, and duration of high L2 gas prices during periods when demand exceeds the gas target. 
 
-What does this NOT fix/help?
+Detailed information on the purpose of this upgrade can be found in the [AIP for implementing improvements to the pricing algorithm](https://forum.arbitrum.foundation/t/aip-raise-the-gas-target-min-l2-base-fee-implement-improvements-to-the-pricing-algorithm/30182).
+
+
+**What does this improvement NOT help with?**
 
 - L1 gas fee spikes on Ethereum
 - Data availability pricing
@@ -46,7 +49,7 @@ const longTerm = [15_000_000, 600, 1_600_000]; // Ensures price stability [cite:
 await arbOwner.setGasPricingConstraints([shortTerm, longTerm]);
 ```
 
-Refer to the definitions below to understand what each parameter means \-
+Refer to the definitions below to understand what each parameter means:
 
 - gasTargetPerSecond \- the target gas processing rate for your Arbitrum chain \- it's the amount of gas the system aims to process each second under normal conditions. Any demand above this target will induce a gas price increase as a way to economically disincentivize usage until it gets reduced to the target.
 - adjustmentWindowSeconds \- time period with which the system will measure average gas demand/usage over to determine whether or not the gas price needs to be adjusted, relative to the gas target. A larger window results in more stable, predictable pricing, while a smaller window reacts aggressively to traffic spikes.
@@ -58,7 +61,7 @@ Refer to the definitions below to understand what each parameter means \-
 
 ## How to calculate the values for your chain
 
-We have developed a [script](https://colab.research.google.com/drive/1D28YghOmCjvvrLWS5FsTp5xNKz9JHAA3?usp=sharing) which takes in certain parameters to find the most optimized gas targets to use for your chain. The script takes in below params \-
+Offchain Labs has developed a [script to help setting pricing constraints](https://colab.research.google.com/drive/1D28YghOmCjvvrLWS5FsTp5xNKz9JHAA3?usp=sharing) which takes in certain parameters to find the most optimized gas targets to use for your chain. The script takes in below params:
 
 - long_term_gas_target \- Desired long term average gas throughput for the chain. A higher gas target means that your chain can handle more TPS before the gas begins to spike. However, a higher gas target also leads to faster state growth and requires more powerful hardware.
 
@@ -68,7 +71,7 @@ We have developed a [script](https://colab.research.google.com/drive/1D28YghOmCj
 
 - node_throughput \- Sustainable maximum throughput that the nodes can maintain without any issues. This is highly dependent on your specific hardware and chain workload. Offchain Labs will soon publish testing frameworks and tools that can be used to benchmark what throughput your nodes can handle for various workloads.
 - gas_limit \- Theoretical max block size limit. With the introduction of the `MaxTxGasLimit`, the effective block gas limit is twice the `MaxBlockGasLimit`. We recommend using an in-between value of `MaxBlockGasLimit` and Effective Block gas limit `(MaxTxGasLimit + MaxBlockGasLimit)` for this parameter.
-- max_rate_of_increase_percent_per_second \- maximum allowed rate of increase in the fee per sec when chain is working at the max capacity
+- max_rate_of_increase_percent_per_second \- maximum allowed rate of increase in the fee per sec when the chain is working at the max capacity.
 - long_term_adjustment_window_seconds \- the longest window for rate change
 
 Below values were used for calculating the gas targets for Arbitrum One. These values have been calculated based on various UX and research considerations.
