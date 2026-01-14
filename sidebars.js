@@ -72,7 +72,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'How Arbitrum works',
-      href: '/how-arbitrum-works/overview.mdx',
+      href: '/how-arbitrum-works/overview',
     },
     {
       type: 'doc',
@@ -999,6 +999,11 @@ const sidebars = {
       label: 'How Arbitrum works',
       collapsed: false,
       items: [
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/overview',
+          label: 'Overview',
+        },
         {
           type: 'doc',
           id: 'how-arbitrum-works/inside-arbitrum-nitro',
