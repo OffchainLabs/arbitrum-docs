@@ -112,11 +112,11 @@ Should Arbitrum chain teams strongly desire to adopt Arbitrum BoLD in permission
 
 As mentioned earlier, the upgrade to the dispute protocol involves both a Nitro node software upgrade and the deployment/upgrade of new smart contracts on your Arbitrum chain's parent chain.
 
-To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for BoLD](../../../how-arbitrum-works/bold/gentle-introduction.mdx).
+To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx).
 
 :::caution
 
-As mentioned in our guide on [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx), the recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](../../../how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout) feature disabled.
+As mentioned in our guide on [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains.mdx), the recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout) feature disabled.
 
 :::
 
@@ -337,6 +337,6 @@ Once the upgrade executes, monitor assertions to ensure they are created and con
 
 The following configuration parameters can be applied when deploying or managing your Arbitrum chain. For an example of a configuration, feel free to reference this [sample configuration](#how-to-adopt-arbitrum-bold) in our guide on how to upgrade your chain to use BoLD.
 
-import OptionalOrbitCompatibleCLIFlagsPartial from '../../../partials/_bold-config-params.mdx';
+import OptionalOrbitCompatibleCLIFlagsPartial from '../../../../partials/_bold-config-params.mdx';
 
 <OptionalOrbitCompatibleCLIFlagsPartial />
