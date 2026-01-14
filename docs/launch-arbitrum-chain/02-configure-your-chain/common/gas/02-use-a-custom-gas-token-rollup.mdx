@@ -8,7 +8,7 @@ content_type: how-to
 
 When deploying an Arbitrum chain in [Rollup mode](/run-arbitrum-node/data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for <a data-quicklook-from="transaction">Transaction</a> fees on that specific Arbitrum chain and reimbursing the <a data-quicklook-from="batch">Batch</a> poster for data posted to Ethereum. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
 
-Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
+Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-arbitrum-chain/02-configure-your-chain/common/gas/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
 ## Requirements of the custom gas token
 
@@ -85,7 +85,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
    - `FEE_TOKEN_ADDRESS` = your `ERC-20` gas token
    - `FEE_TOKEN_PRICER_ADDRESS` = your deployed pricer
    - `ROLLUP_CREATOR_ADDRESS` = the Rollup creator contract on L1
-   - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/bold-adoption-for-arbitrum-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
+   - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
    - The script will deploy and initialize the Rollup accordingly.
 
 You can refer to the source files for more details on:

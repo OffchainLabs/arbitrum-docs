@@ -130,6 +130,7 @@ const config = {
 
         // Output options
         out: './docs/sdk',
+        cleanOutputDir: false, // Don't clean output dir to preserve manual files
         hideGenerator: true,
         validation: {
           notExported: false,

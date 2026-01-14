@@ -82,7 +82,7 @@ For <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</a
 };
 ```
 
-You can find information about what these parameters configure in [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx).
+You can find information about what these parameters configure in [How to configure a DAC](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/04-configure-dac.mdx).
 
 ## How to generate a node's configuration file using the Arbitrum Chain SDK
 
