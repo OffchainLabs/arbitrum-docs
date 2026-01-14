@@ -1,13 +1,13 @@
 ---
 title: 'Enable native mint/burn for Arbitrum chain gas token'
-sidebar_label: 'Enable native mint/burn for Arbitrum chain gas token'
-description: 'Learn how to enable native mint/burn for your Arbitrum chain gas token'
-user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about native mint/burn feature for bridging of gas tokens'
+sidebar_label: 'Use native interop token with mint/burn as your Arbitrum chain gas token'
+description: 'Learn how use a native interop token with mint/burn (such as LayerZero OFT, xERC-20, or native USDC) as your Arbitrum chain gas token'
+user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about using a native interop token with mint/burn for bridging of gas tokens'
 content_type: release announcement
 ---
 
 :::info
-While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that teams upgrade to ArbOS 51 Dia to enable this feature.
+While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) to enable this feature.
 :::
 
 Arbitrum chains are designed to “lock and mint” the native gas token in the canonical bridge. This process ensures the child representation of the gas token is always backed by the parent chain's gas token, locked in the canonical bridge.
@@ -28,15 +28,15 @@ The Native Mint/Burn feature permits mint & burn capability of the rollup’s na
 | :-------------------------------------------------- | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **ArbOS/Nitro (consensus-v51)**                     | Offchain Labs                                      | • Precompile `ArbNativeTokenManager`<br/>• Owner allowlist and 7-day timelock<br/>• Node rule that blocks value-bearing withdrawals while an owner is present                                        |
 | **Adapter contract**                                | Bridge infra provider (LayerZero, Hyperlane, etc.) | • Verifies cross-chain messages<br/>• Calls `mintNativeToken` / `burnNativeToken` on L2<br/>• Manages collateral vault on L1                                                                         |
-| **Chain Configuration and Adjacent Infrastructure** | RaaSes                                             | • Permission the adapter address with mint & burn<br/>• Run the outbox-sweep bot (this could also be run by LayerZero)<br/>• Monitor timelock and supply events (could also be responsibility of LZ) |
+| **Chain Configuration and Adjacent Infrastructure** | RaaSes                                             | • Permission the adapter address with mint & burn<br/>• Run the outbox-sweep bot (this could also be run by e.g., LayerZero)<br/>• Monitor timelock and supply events (could also be responsibility of e.g., LayerZero) |
 
 ## Use cases
 
-- LayerZero OFTs as gas tokens.
+- LayerZero OFT as a gas token.
 - xERC-20 token as a gas token.
 - Stablecoins (e.g. USDC) use mint/burn functionality for cross-chain interop.
 
-_Notes:_
+**_Notes:_**
 
 - We **do not** recommend enabling Native Mint/Burn if your chain relies on the canonical bridge for liquidity or if you cannot comfortably implement the operational safeguards listed below.
 - This feature is **bridge-agnostic**, so it’s possible to migrate from a bridge adapter implementation (e.g., LayerZero-OFT adapter) to another adapter without forking the chain or changing the gas token.
@@ -72,7 +72,7 @@ Details for the time lock switch are:
 - A chain can disable Native Mint/Burn instantly
 - If a chain wants to have a lower delay (e.g., one day, one hour), they will need to maintain a small fork of Nitro that changes the hard-coded value:
   - Hard-Coded value here: https://github.com/OffchainLabs/go-ethereum/blob/c289e79453d4fdd8644a88337885c8bf27155604/params/config_arbitrum.go#L49
-  - This change will cause your WASM module root to change. Please refer to [customize stf](/launch-arbitrum-chain/customize-your-chain/customize-stf#building-the-modified-node) steps to calculate the new WASM module root and set it on the chain before starting your new node.
+  - This change will cause your WASM module root to change. Please refer to [customize STF](/launch-arbitrum-chain/customize-your-chain/customize-stf#building-the-modified-node) steps to calculate the new WASM module root and set it on the chain before starting your new node.
     :::warning
     Please note, if you want to change this constant value, make sure this value hasn't been used before and you have never called `setNativeTokenManagementFrom` before. If not, your chain may experience some reorg issues. If you want to change this value after you have already used it (**not recommended**), you need to consider proper version control, one example is [ArbOS version control](/launch-arbitrum-chain/customize-your-chain/customize-arbos).
     :::
@@ -136,7 +136,7 @@ Before starting, ensure that the chain has:
 
 We suggest the following baseline or values for production chains:
 
-- ArbOS version: 51 or later. The latest WASM module root for ArbOS 51 Dia is 0x8a7513bf7bb3e3db04b0d982d0e973bcf57bf8b88aef7c6d03dba3a81a56a499
+- ArbOS version 51 or later. The latest WASM module root for ArbOS 51 Dia is `0x8a7513bf7bb3e3db04b0d982d0e973bcf57bf8b88aef7c6d03dba3a81a56a499`
 - Call [`ArbOwner.setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) to activate with a future timestamp ≥ 7 days ahead. This is recommended for chains which are already live.
 - Native-token owners list: only the bridge adapter contract(s) to minimize the attack surface.
 - Outbox sweep bot: run once per hour to prevent stray collateral build-up.
