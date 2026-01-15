@@ -15,7 +15,7 @@ Configuration requires <a data-quicklook-from="chain-owner">chain owner</a> priv
 ## Key concepts
 
 - **Gas and fees in Arbitrum chains**: Fees are charged for transaction execution and data posting, denominated in the chain's gas token (`ETH` by default or a custom `ERC-20`). They cover operational costs like sequencing, data availability, and <a data-quicklook-from="parent-chain">parent chain</a> interactions. Surplus fees (beyond minimum costs) can accumulate during congestion, providing a pool for potential rebates.
-- **Fee rebates**: Rebates involve returning part of the paid fees, often as incentives. In Orbit chains, this isn't an explicit "rebate toggle" but is facilitated by routing fees to smart contracts that automate distributions (e.g., proportional payouts). This can mimic rebate programs seen in dApps on Arbitrum (e.g., trading fee rebates funded by incentives), but applied at the chain level.
+- **Fee rebates**: Rebates involve returning part of the paid fees, often as incentives. In Arbitrum chains, this isn't an explicit "rebate toggle" but is facilitated by routing fees to smart contracts that automate distributions (e.g., proportional payouts). This can mimic rebate programs seen in dApps on Arbitrum (e.g., trading fee rebates funded by incentives), but applied at the chain level.
 
 ## Types of fees available for rebates
 
@@ -43,7 +43,7 @@ Configuration requires <a data-quicklook-from="chain-owner">chain owner</a> priv
 
 ## Examples
 
-- **dApp-level rebates**: Protocols like GMX or Synthetix on Arbitrum rebate 75%+ of trading fees using `ARB` incentives, which Orbit chains can emulate at the chain level.
+- **dApp-level rebates**: Protocols like GMX or Synthetix on Arbitrum rebate 75%+ of trading fees using `ARB` incentives, which Arbitrum chains can emulate at the chain level.
 - **Chain-level**: Set surplus fees to a distributor that rebates to top users or integrates with programs like ArbiFuel for sponsored (rebated) gas in early stages.
 
 ## How to configure
