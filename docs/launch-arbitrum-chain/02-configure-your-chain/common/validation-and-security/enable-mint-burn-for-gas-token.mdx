@@ -272,7 +272,9 @@ Filter event `OwnerActs(bytes4 indexed method, address indexed owner, bytes dat
 Yes. [Ethereal](https://docs.ethereal.trade/), a high-performance perp DEX appchain, is a notable live implementation. They utilize the native mint/burn functionality in partnership with LayerZero to provide seamless bridging for their native gas token.
 
 <br />
-:::caution[Testing Responsibility] While Offchain Labs has conducted comprehensive [system tests](https://github.com/OffchainLabs/nitro/blob/master/system_tests/arbos_upgrade_test.go#L292)
+:::caution Testing Responsibility
+
+While Offchain Labs has conducted comprehensive [system tests](https://github.com/OffchainLabs/nitro/blob/master/system_tests/arbos_upgrade_test.go#L292)
 to verify the core ArbOS logic for native mint/burn functionality, this does not cover your specific
 implementation.
 
@@ -281,4 +283,5 @@ implementation.
 - Thoroughly test their own adapter contracts and app-layer solutions.
 - Verify the security and collateralization of their specific third-party token providers (e.g., LayerZero, xERC20).
 - Ensure their custom configurations are compatible with their chain's unique environment.
-  :::
+
+:::
