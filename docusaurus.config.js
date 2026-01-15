@@ -354,8 +354,8 @@ const config = {
                 to: 'https://arbitrum.io/anytrust',
               },
               {
-                label: 'Arbitrum Orbit',
-                to: 'https://arbitrum.io/orbit',
+                label: 'Arbitrum chains',
+                to: 'https://arbitrum.io/launch-chain',
               },
               {
                 label: 'Arbitrum Stylus',
