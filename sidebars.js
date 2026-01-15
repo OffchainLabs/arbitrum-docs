@@ -496,8 +496,8 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/enable-mint-burn-for-gas-token',
-                      label: 'Enable mint/burn for gas token',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-mint-burn-for-gas-token',
+                      label: 'Configure a native mint/burn gas token',
                     },
                   ],
                 },

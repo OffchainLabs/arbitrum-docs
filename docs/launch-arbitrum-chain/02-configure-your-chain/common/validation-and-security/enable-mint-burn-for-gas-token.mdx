@@ -12,7 +12,7 @@ While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that te
 
 Arbitrum chains are designed to “lock and mint” the native gas token in the canonical bridge. This process ensures the child representation of the gas token is always backed by the parent chain's gas token, locked in the canonical bridge.
 
-This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a "burn and mint" approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s USDC (possible with Circle-supplied adapter).
+This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a "burn and mint" approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s Native USDC (possible with Circle-supplied adapter).
 
 [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) introduces the ability for native-interop tokens to work seamlessly as the gas token of an Arbitrum chain. This feature allows a chain owner (`ArbOwner`) to manage:
 
@@ -24,10 +24,10 @@ This "lock and mint" pattern is not compatible with an emerging category of "nat
 The Native Mint/Burn feature permits mint & burn capability of the rollup’s native gas token by a permissioned address on the rollup. It does not provide a solution for cross-chain interoperability and is not a replacement for 3rd-party omni-chain gas token products provided by partners such as LayerZero or Hyperlane. The table below helps to clarify the components needed to enable the use cases below.
 :::
 
-| Component                                           | Maintainer                                         | Role/purpose                                                                                                                                                                                         |
-| :-------------------------------------------------- | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **ArbOS/Nitro (consensus-v51 or higher)**                     | Offchain Labs                                      | • Precompile `ArbNativeTokenManager`<br/>• Owner allowlist and 7-day timelock<br/>• Node rule that blocks value-bearing withdrawals while an owner is present                                        |
-| **Adapter contract**                                | Bridge infra provider (LayerZero, Hyperlane, etc.) | • Verifies cross-chain messages<br/>• Calls `mintNativeToken` / `burnNativeToken` on L2<br/>• Manages collateral vault on L1                                                                         |
+| Component                                           | Maintainer                                         | Role/purpose                                                                                                                                                                                                            |
+| :-------------------------------------------------- | :------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ArbOS/Nitro (consensus-v51 or higher)**           | Offchain Labs                                      | • Precompile `ArbNativeTokenManager`<br/>• Owner allowlist and 7-day timelock<br/>• Node rule that blocks value-bearing withdrawals while an owner is present                                                           |
+| **Adapter contract**                                | Bridge infra provider (LayerZero, Hyperlane, etc.) | • Verifies cross-chain messages<br/>• Calls `mintNativeToken` / `burnNativeToken` on L2<br/>• Manages collateral vault on L1                                                                                            |
 | **Chain Configuration and Adjacent Infrastructure** | RaaSes                                             | • Permission the adapter address with mint & burn<br/>• Run the outbox-sweep bot (this could also be run by e.g., LayerZero)<br/>• Monitor timelock and supply events (could also be responsibility of e.g., LayerZero) |
 
 ## Use cases
@@ -128,11 +128,11 @@ The **Collateral Sweep** is implemented by adding an Outbox contract to the brid
 
 Before starting, ensure that the chain has:
 
-| Item             | Minimum version                                                                                                                         |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| nitro-contracts  | [v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher (includes the ERC20MigrationOutbox)                        |
+| Item             | Minimum version                                                                                                                                   |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| nitro-contracts  | [v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher (includes the ERC20MigrationOutbox)                       |
 | nitro-node       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher (includes the fix for `ArbNativeTokenManager` precompile inclusion) |
-| go-ethereum fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root, see below) or later                                                            |
+| go-ethereum fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root, see below) or later                |
 
 We suggest the following baseline or values for production chains:
 
@@ -269,7 +269,7 @@ Filter event `OwnerActs(bytes4 indexed method, address indexed owner, bytes dat
 
 ### Are there any live chains currently using this feature?
 
-Yes. Ethereal, a high-performance perp DEX appchain, is a notable live implementation. They utilize the native mint/burn functionality in partnership with LayerZero to provide seamless bridging for their native gas token.
+Yes. [Ethereal](https://docs.ethereal.trade/), a high-performance perp DEX appchain, is a notable live implementation. They utilize the native mint/burn functionality in partnership with LayerZero to provide seamless bridging for their native gas token.
 
 <br />
 :::caution[Testing Responsibility] While Offchain Labs has conducted comprehensive [system tests](https://github.com/OffchainLabs/nitro/blob/master/system_tests/arbos_upgrade_test.go#L292)
