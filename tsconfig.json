@@ -9,7 +9,7 @@
     "jsx": "react",
     "lib": ["ESNext", "DOM"],
     "noEmit": true,
-    "types": ["node", "vitest/globals"],
+    "types": ["node"],
     "paths": {
       "@/*": ["./*"]
     }
