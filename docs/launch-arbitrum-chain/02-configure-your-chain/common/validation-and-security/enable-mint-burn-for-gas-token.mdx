@@ -1,5 +1,5 @@
 ---
-title: 'Enable native mint/burn for Arbitrum chain gas token'
+title: 'Use native interop token with mint/burn as your Arbitrum chain gas token'
 sidebar_label: 'Use native interop token with mint/burn as your Arbitrum chain gas token'
 description: 'Learn how use a native interop token with mint/burn (such as LayerZero OFT, xERC-20, or native USDC) as your Arbitrum chain gas token'
 user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about using a native interop token with mint/burn for bridging of gas tokens'
@@ -26,7 +26,7 @@ The Native Mint/Burn feature permits mint & burn capability of the rollup’s na
 
 | Component                                           | Maintainer                                         | Role/purpose                                                                                                                                                                                         |
 | :-------------------------------------------------- | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **ArbOS/Nitro (consensus-v51)**                     | Offchain Labs                                      | • Precompile `ArbNativeTokenManager`<br/>• Owner allowlist and 7-day timelock<br/>• Node rule that blocks value-bearing withdrawals while an owner is present                                        |
+| **ArbOS/Nitro (consensus-v51 or higher)**                     | Offchain Labs                                      | • Precompile `ArbNativeTokenManager`<br/>• Owner allowlist and 7-day timelock<br/>• Node rule that blocks value-bearing withdrawals while an owner is present                                        |
 | **Adapter contract**                                | Bridge infra provider (LayerZero, Hyperlane, etc.) | • Verifies cross-chain messages<br/>• Calls `mintNativeToken` / `burnNativeToken` on L2<br/>• Manages collateral vault on L1                                                                         |
 | **Chain Configuration and Adjacent Infrastructure** | RaaSes                                             | • Permission the adapter address with mint & burn<br/>• Run the outbox-sweep bot (this could also be run by e.g., LayerZero)<br/>• Monitor timelock and supply events (could also be responsibility of e.g., LayerZero) |
 
