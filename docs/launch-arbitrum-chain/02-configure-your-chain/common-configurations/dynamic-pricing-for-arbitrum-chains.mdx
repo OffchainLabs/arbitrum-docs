@@ -48,10 +48,8 @@ Refer to the definitions below to understand what each parameter means:
 
 - `gasTargetPerSecond` \- the target gas processing rate for your Arbitrum chain \- it's the amount of gas the system aims to process each second under normal conditions. Any demand above this target will induce a gas price increase as a way to economically disincentivize usage until it gets reduced to the target.
 - `adjustmentWindowSeconds` \- time period with which the system will measure average gas demand/usage over to determine whether or not the gas price needs to be adjusted, relative to the gas target. A larger window results in more stable, predictable pricing, while a smaller window reacts aggressively to traffic spikes.
-- `startingBacklogValue` \- the initial amount of gas the system uses to set prices the **exact moment** the gasTargetPerSecond and adjustmentWindowSeconds get changed.
-
-  Ideally, the backlog value should be set to the existing backlog of the chain when the function call to `setGasPricingConstraints` is made. Given this is not always easy, using 0 is a common practice (same will be done on Arbitrum One).
-
+- `startingBacklogValue` \- the initial amount of gas the system uses to set prices the **exact moment** the gasTargetPerSecond and adjustmentWindowSeconds get changed. \
+  Ideally, the backlog value should be set to the existing backlog of the chain when the function call to `setGasPricingConstraints` is made. Given this is not always easy, using 0 is a common practice (same will be done on Arbitrum One). \
   However, using 0 means that the system assumes that the demand is 0, causing the gas price to adjust to the min. L2 base fee (0.02 gwei/gas). After which the system will begin tracking the backlog once again based on demand to price gas.
 
 ## How to calculate the values for your chain
