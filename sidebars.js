@@ -425,6 +425,11 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
+                      label: 'Configure a native mint/burn gas token',
+                    },
+                    {
+                      type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
                       label: `Gas optimization tools`,
                     },
@@ -493,11 +498,6 @@ const sidebars = {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
                       label: `Adopt BoLD`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-mint-burn-for-gas-token',
-                      label: 'Configure a native mint/burn gas token',
                     },
                   ],
                 },

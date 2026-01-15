@@ -6,6 +6,11 @@ user_story: 'As a developer or researcher of the Arbitrum product suite, I want 
 content_type: release announcement
 ---
 
+:::caution Bridge Counterparty Risk
+While this feature allows an Arbitrum chain to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the parent chain. \
+However, by using a third-party bridge for the chain's gas token, your chain's gas token—and thus its liveness—becomes directly dependent on the security and integrity of the third-party bridge provider.
+:::
+
 :::info
 While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) to enable this feature.
 :::
@@ -35,6 +40,16 @@ The Native Mint/Burn feature permits mint & burn capability of the rollup’s na
 - LayerZero OFT as a gas token.
 - xERC-20 token as a gas token.
 - Stablecoins (e.g. USDC) use mint/burn functionality for cross-chain interop.
+
+### What this feature helps with:
+
+- Launch a new Arbitrum chain with a native mint/burn gas token using a third-party birdge provider.
+- Transition an existing native gas token from the canonical bridge (lock-and-mint) to a third-party bridge (e.g., LayerZero OFT) to enable "burn-and-mint" interoperability.
+
+### What this feature does NOT help with:
+
+- **Changing Gas Tokens:** This feature cannot be used to swap your chain's current gas token for a completely different token.
+- **Multiple Gas Tokens:** You cannot add additional native mint/burn gas tokens to your Arbitrum chain; an Arbitrum chain only supports a single native gas token.
 
 **_Notes:_**
 
@@ -106,7 +121,7 @@ The main risk of having two contracts responsible for native token issuance (the
 
 In which case, either could be under-collateralized for a withdrawal at any given time.
 
-To resolve this problem, we can implement:
+To resolve this problem, below can be implemented:
 
 1. **Collateral Sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated 3rd-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain Adapter contract).
 2. **Disable Arbitrum Chain Bridge Withdrawals:** Disabling withdrawals on the Arbitrum Stack chain, which ensures the 3rd-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
@@ -115,7 +130,7 @@ The **Collateral Sweep** is implemented by adding an Outbox contract to the brid
 
 - [Outbox contracts](https://github.com/OffchainLabs/nitro-contracts/pull/339) are authorized to spend funds from the bridge. They can be registered using the admin function `setOutbox`.
 
-  Typically, an Outbox contract requires verification of a proof for an authorized withdrawal to occur. We can design one that permissionlessly sends native gas to a destination on the parent chain.
+  Typically, an Outbox contract requires verification of a proof for an authorized withdrawal to occur. A custom contract can be designed that permissionlessly sends native gas to a destination on the parent chain.
 
 **Disabling Withdrawals** is achievable by adapting the Nitro node to prevent non-zero value withdrawals. This approach still maintains our censorship-resistant properties, allowing the user to initiate a withdrawal from L1.
 
