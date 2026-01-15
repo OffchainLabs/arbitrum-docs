@@ -1,0 +1,44 @@
+name: Validate Sidebar Links
+run-name: Validating sidebar links
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'sidebars.js'
+      - 'sdk-sidebar.js'
+      - 'docs/**/*.md'
+      - 'docs/**/*.mdx'
+      - 'scripts/check-sidebar-links.ts'
+      - '.github/workflows/validate-sidebar-links.yml'
+  push:
+    branches:
+      - master
+    paths:
+      - 'sidebars.js'
+      - 'sdk-sidebar.js'
+
+jobs:
+  validate-sidebar-links:
+    name: 'Validate Sidebar Links'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v4
+        with:
+          # Shallow clone is fine, we only need current state
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install node_modules
+        uses: OffchainLabs/actions/node-modules/install@main
+        with:
+          install-command: yarn install --frozen-lockfile
+
+      - name: Validate sidebar links
+        run: yarn tsx scripts/check-sidebar-links.ts
