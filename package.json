@@ -26,8 +26,6 @@
     "format:docs": "prettier --write --config \"./.prettierrc.js\" -- \"docs/**/*.{md,mdx}\"",
     "format:check": "prettier --check --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\" \"docs/**/*.{md,mdx}\"",
     "typecheck": "tsc",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "check-releases": "ts-node scripts/check-releases.ts",
     "check-markdown": "tsx scripts/check-markdown.ts",
     "notion:update": "tsx scripts/notion-update.ts",
@@ -96,8 +94,7 @@
     "typedoc": "^0.25.13",
     "typedoc-plugin-frontmatter": "^1.0.0",
     "typedoc-plugin-markdown": "4.0.1",
-    "typescript": "^5.1",
-    "vitest": "^3.0.7"
+    "typescript": "^5.1"
   },
   "resolutions": {
     "image-size": "latest"
