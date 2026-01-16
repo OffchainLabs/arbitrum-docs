@@ -142,7 +142,3 @@ This part will update the glossary.
 ### Formatting
 
 1. Run `yarn format` from the root directory.
-
-### Redirects
-
-1. From the root directory, run `yarn check-redirects`.
