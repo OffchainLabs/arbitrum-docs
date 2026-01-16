@@ -11,8 +11,18 @@ node_modules
 build
 
 # Generated files
+# Generated docusaurus
 .docusaurus
 .cache-loader
+# Generated sdk
+sdk-sidebar.js
+docs/sdk/
+# Generated notion export CSVs
+scripts/out/*.csv
+# Generated stylus
+docs/stylus-by-example/
+# Generated api:mutes Typedoc quirk
+docs/api/
 
 # Misc
 .env

@@ -1,0 +1,58 @@
+---
+title: 'Why choose to enable fast withdrawals for your Arbitrum chain'
+description: 'Learn about fast withdrawals and the pros and cons of choosing to enable it.'
+author: pete-vielhaber
+sme: jason-w123
+content_type: configuration
+---
+
+import FastwithdrawalsPCPartial from '../../partials/_fast-withdrawals-pc.mdx';
+
+Enabling fast withdrawals refers to configuring the chain to use a fast <a data-quicklook-from="confirmation">confirmation</a> mechanism that allows transactions and state assertions to achieve finality much quicker than the standard multi-day <a data-quicklook-from="challenge">challenge</a> period in optimistic rollups. This is achieved by routing assertions through a permissioned committee of validators (often overlapping with the Data Availability Committee or DAC in AnyTrust mode) that unanimously confirms them via a multisig <a data-quicklook-from="wallet">wallet</a>, bypassing the full fraud-proof window. As a result, users can withdraw assets or access finalized states in as little as 15 minutes for <a data-quicklook-from="l2">L2</a> chains or 15 seconds for L3 chains, significantly enhancing user experience by reducing wait times and enabling faster cross-chain interactions.
+
+Enabling this feature shifts the chain from relying solely on time-based fraud proofs to a committee-driven confirmation process, where validators (recommended to be at least three for reduced trust risks) must agree unanimously. It's primarily recommended for AnyTrust chains, as it leverages the existing DAC trust model without adding new assumptions—ideally, DAC members run the validators.
+
+For pure Rollup chains, enabling it effectively introduces a committee trust layer, making it less "trust-minimized" than standard mode. Once enabled, the chain processes a potential backlog of unconfirmed assertions before operating at full speed, and confirmations may slightly delay under high load (e.g., >1 Mgas/s throughput), but security remains intact.
+
+## Key concepts
+
+- **Standard withdrawal process**: In optimistic Rollups like <a data-quicklook-from="arbitrum">Arbitrum</a>, assertions about the chain's state (e.g., <a data-quicklook-from="transaction">transaction</a> batches) are posted to the <a data-quicklook-from="parent-chain">Parent chain</a> (e.g., Ethereum or <a data-quicklook-from="arbitrum-one">Arbitrum One</a>) and remain challengeable for a configurable period (default ~6.4-7 days) to allow fraud proofs. Unchallenged assertions confirm, enabling secure withdrawals, but this delays user access to funds.
+- **Fast withdrawals mechanism**: When enabled, a committee (e.g., an `n/n` multisig Safe wallet) of validators processes and unanimously signs assertions at a set interval. This provides immediate confirmation, with finality tied to the parent chain's block times rather than the full <a data-quicklook-from="challenge-period">challenge period</a>. For example, L2 chains on Ethereum can confirm in ~15 minutes (above Ethereum's ~12.8-minute finality), while L3 chains on Arbitrum One can leverage "soft finality" (~250ms <a data-quicklook-from="sequencer">Sequencer</a> confirmations) for near-instant speeds.
+- **Related parameters**: Often paired with adjusting the `minimumAssertionPeriod` (e.g., to 1 block for frequent assertions) and node flags to control posting intervals.
+
+## Compatibility
+
+- **DA modes**: Optimized for AnyTrust (leverages DAC); possible but not recommended for Rollup or Alt-DA, as it adds trust assumptions.
+- **Validation**: Works with <a data-quicklook-from="bold">BoLD</a> (permissionless) or pre-BoLD (permissioned), but the committee must be allowlisted.
+- **Gas tokens**: No restrictions; compatible with native `ETH` or custom `ERC-20`s.
+- **Parent chain**: Interval must exceed the parent's finality time (e.g., >12.8 minutes for Ethereum L2s). (Refer to [Key Concepts above](#key-concepts) for more information about the Fast Withdrawal Mechanism.)
+
+<!-- Render Fast Withdrawals Pros & Cons partial -->
+
+<FastwithdrawalsPCPartial />
+
+## Impact on user experience
+
+From a UX perspective, enabling fast withdrawals transforms slow, multi-day processes into near-real-time ones, making the chain feel more responsive. Users get quicker access to withdrawn funds (e.g., 15 minutes vs. 6.4 days), reducing frustration and capital lockup. Apps benefit from faster cross-<a data-quicklook-from="chain-state">chain state</a> reads, enabling seamless interactions such as <a data-quicklook-from="oracle">oracle</a> updates and multi-chain DeFi. However, it assumes users trust the committee (e.g., for high-value transfers), and any load-based delays could still impact predictability. Overall, it's ideal for consumer-facing apps like gaming or social, where speed is key.
+
+## Examples
+
+- **AnyTrust L2 chain**: Configured for 15-minute withdrawals on Ethereum, using DAC members as validators for trust alignment.
+- **L3 on Arbitrum One**: Set to 15 seconds using soft finality, suitable for high-throughput gaming appchains.
+
+## How to configure
+
+:::warning Caution
+
+This is an abbreviated set of instructions on how to configure fast withdrawals. For a more in-depth set of instructions, including potential impacts, it is recommended to refer to the [Configure fast withdrawals](/launch-arbitrum-chain/02-configure-your-chain/common/ux/01-fast-withdrawals.mdx) page.
+
+:::
+
+1. **Upgrade contracts and nodes**: Ensure nitro-contracts v2.1.0+ (update `RollupAdminLogic` and `RollupUserLogic`) and node software to nitro v3.1.2+. Use the Arbitrum chain versioner script to check and upgrade.
+2. **Run configuration scripts**: Use the Arbitrum Chain SDK (e.g., setup-fast-withdrawal example) or `orbit-actions` repo (e.g., fast-confirm script with Foundry's cast CLI) to create a Safe multisig for the committee, add validators to the allowlist, set the Safe as the `anytrustFastConfirmer`, and optionally adjust `minimumAssertionPeriod` (defaults to 75 blocks ~15 minutes, measured in the first non-Arbitrum ancestor chain's blocks).
+3. **Configure nodes**:
+   - Batch Poster: Set `--node.batch-poster.max-delay` to match the assertion period (e.g., 15m).
+   - Validators (BoLD mode): Enable `--node.bold.enable-fast-confirmation=true` and set `--node.bold.assertion-posting-interval` to the period.
+   - Validators (pre-BoLD): Similar flags like `--node.staker.enable-fast-confirmation=true` and `--node.staker.make-assertion-interval`.
+
+This feature aligns with Arbitrum's focus on scalable, user-friendly chains while maintaining core security. For setup, consult the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

@@ -19,20 +19,20 @@ This document is provided for informational purposes only and does not constitut
 
 </VanillaAdmonition>
 
-### Why migrate to Arbitrum (Orbit) chain?
+### Why migrate to an Arbitrum chain?
 
 Teams typically migrate when they need one or more of the following:
 
-- **Lower fees**: Arbitrum (Orbit) chain rollup or AnyTrust for low transaction fees.
-- **Various customization options**: custom gas token, flexible DA, Timeboost, BoLD, etc.
-- **Mature tooling and ecosystem**: bridges, indexers, wallets, monitoring, and partners with Arbitrum (Orbit) chain-ready integrations.
+- **Lower fees**: Arbitrum chain Rollup or AnyTrust for low transaction fees.
+- **Various customization options**: Custom gas token, flexible DA, Timeboost, BoLD, etc.
+- **Mature tooling and ecosystem**: Bridges, indexers, wallets, monitoring, and partners with Arbitrum chain-ready integrations.
 
 ### Two migration paths
 
 Teams coming from other stacks have two viable paths:
 
-- **Ecosystem migration (simpler, faster)**: launch a fresh Arbitrum (Orbit) chain. Users/app bridge funds and redeploy contracts. This approach is quicker and less risky, but it puts a burden on apps and users.
-- **Chain-state migration (harder, slower)**: transplant state/history so apps keep addresses and positions. This method requires more engineering, testing, and downtime planning.
+- **Ecosystem migration (simpler, faster)**: Launch a fresh Arbitrum chain. Users/app bridge funds and redeploy contracts. This approach is quicker and less risky, but it puts a burden on apps and users.
+- **Chain-state migration (harder, slower)**: Transplant state/history so apps keep addresses and positions. This method requires more engineering, testing, and downtime planning.
 
 The right choice depends on your user requirements, partner dependencies, and tolerance for downtime/engineering effort. Your RaaS owns and executes the migration plan.
 
@@ -40,9 +40,9 @@ The right choice depends on your user requirements, partner dependencies, and to
 
 Teams need to decide whether to use the old chain ID or a new one.
 
-**Why this is relevant**: wallets, explorers, and dApps assume that a given chain ID maps to a single, consistent history.
+**Why this is relevant**: Wallets, explorers, and dApps assume that a given chain ID maps to a single, consistent history.
 
-- If you keep the same chain ID, you should also preserve historical details: every historical block/hash and RPC response for the pre-migration range must remain consistent after migration. If not, apps and analytics will break.
+- If you keep the same chain ID, you should also preserve historical details: Every historical block/hash and RPC response for the pre-migration range must remain consistent after migration. If not, apps and analytics will break.
 - If you’re going with a new chain ID, then you don’t need to preserve historical details. But you need to redirect users via UI, domains, and documentation.
 
 ### How should canonical bridges and token addresses be handled during migration?
@@ -52,20 +52,20 @@ Teams should determine the canonical bridge for each asset and the authoritative
 **Recommended actions**:
 
 - Publish an official asset list (symbols, decimals, canonical token address, and canonical bridge) before migration.
-- Enforce a one-way migration from the legacy chain to the new Arbitrum (Orbit) chain (freeze legacy deposits while allowing Arbitrum (Orbit) chain deposits).
+- Enforce a one-way migration from the legacy chain to the new Arbitrum chain (freeze legacy deposits while allowing Arbitrum chain deposits).
 - Coordinate with third-party bridges/routers to repoint routes.
 - Deprecate legacy wrappers where needed and communicate exact swap/burn/mint paths.
 
 ### How do we preserve data & historical queries?
 
-**Problem**: After migration, historical data remains on the old stack, while new data resides on the Arbitrum (Orbit) chain.
+**Problem**: After migration, historical data remains on the old stack, while new data resides on the Arbitrum chain.
 
 **Why it matters**: Apps, analytics, and explorers often read historical events. If they must re-integrate two endpoints, things will break.
 
-**Recommended action**: run a dual-RPC gateway that:
+**Recommended action**: Run a dual-RPC gateway that:
 
 - Route pre-migration block range to an archive node on the old stack, and
-- Route post-migration requests to the new Arbitrum (Orbit) chain. Apps can continue to use a single RPC URL and don’t need to be aware of the boundary.
+- Route post-migration requests to the new Arbitrum chain. Apps can continue to use a single RPC URL and don’t need to be aware of the boundary.
 
 ### How can we migrate without downtime on my chain?
 
@@ -85,14 +85,14 @@ Pause withdrawals earlier than the main freeze window to ensure no funds get tra
 
 You can use the chain-state migration process. The two common approaches are:
 
-- State replay: re-execute legacy blocks into the Arbitrum (Orbit) chain. This process can be heavy, but it can preserve more historical information. **Caution**: If the legacy stack has different opcode semantics, precompiles, or system contracts, replay can diverge, resulting in a different end state even with identical transactions. Validate equivalence early on a private testnet before committing.
-- Genesis import: export balances/storage and pre-seed them in the chain’s genesis. This process is lighter and can preserve the state at a chosen block.
+- State replay: Re-execute legacy blocks into the Arbitrum chain. This process can be heavy, but it can preserve more historical information. **Caution**: If the legacy stack has different opcode semantics, precompiles, or system contracts, replay can diverge, resulting in a different end state even with identical transactions. Validate equivalence early on a private testnet before committing.
+- Genesis import: Export balances/storage and pre-seed them in the chain’s genesis. This process is lighter and can preserve the state at a chosen block.
 
 ### How can I migrate without affecting my Apps/ecosystem on my chain?
 
 Minimize surface changes and abstract the rest. Keep external interfaces stable:
 
-- Chain ID: only if you can preserve historical details, otherwise choose a new chain ID
+- Chain ID: Only if you can preserve historical details, otherwise choose a new chain ID
 - A consistent RPC URL via a dual-RPC gateway
 - Contract addresses via replay/genesis pre-allocation
 - Canonical assets/bridges.
@@ -103,18 +103,18 @@ Coordinate early with wallets, indexers, bridges, and oracles to repoint routes 
 
 Zero knowledge (zk) pre-compiles don’t carry over. Port logic to Solidity or Stylus or remove/replace functionality. Please check with your RaaS regarding this matter.
 
-#### What is the process for migrating an existing chain on a different stack to Arbitrum (Orbit) chain?
+#### What is the process for migrating an existing chain on a different stack to Arbitrum chain?
 
 On a high level, there are two paths for migration:
 
 - **Ecosystem migration:** Simplifies the chain operator experience by placing the burden on users and apps to self-migrate their assets and contracts to a new chain deployment.
-- **Chain state migration:** A more complex migration where the chain state gets transplanted into the new rollup stack/contract system, but the ecosystem and user experience may stay relatively the same.
+- **Chain state migration:** A more complex migration where the chain state gets transplanted into the new Rollup stack/contract system, but the ecosystem and user experience may stay relatively the same.
 
 The rest of this answer assumes that the team wants to perform the latter. For chain-state migration, the overall process for chain-state migration from another optimistic stack chain is:
 
 #### Contracts Migration:
 
-1. Moving escrowed funds from the previous rollup bridge into an Arbitrum (Orbit) chain bridge
+1. Moving escrowed funds from the previous Rollup bridge into an Arbitrum chain bridge
 
 #### Node Migration & Set Up:
 
@@ -136,26 +136,26 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 #### 2 months before → 4 weeks before migration: planning and thinking
 
 - [ ] Choose migration path
-- [ ] Select Arbitrum (Orbit) chain mode: Rollup (Ethereum DA) vs. AnyTrust (DA committee)
+- [ ] Select Arbitrum chain mode: Rollup (Ethereum DA) vs. AnyTrust (DA committee)
 - [ ] Chain ID strategy: keep or change.
 
 #### 4 weeks before → 3 weeks before migration: alignment
 
-- [ ] Open partner threads: bridges, oracles, indexers, wallets, explorers, etc.
+- [ ] Open partner threads: Bridges, oracles, indexers, wallets, explorers, etc.
 - [ ] Publish migration documents (internal/external), asking for input/comments with rationale, rough dates, and contact points.
 
 #### 3 weeks before → 2 weeks before migration: build and test
 
-- [ ] RaaS: set up private Arbitrum (Orbit) chain
-- [ ] Testnet deployment: sequencer, batch poster, staker, DA config.
-- [ ] Inventory contracts & state: addresses, precompiles, proxies, admin keys, governance
-- [ ] Stand up Dual-RPC gateway prototype: route pre-migration range to old stack archive; post-migration to Arbitrum (Orbit) chain.
-- [ ] Prepare official asset list: canonical bridge(s), authoritative token addresses, symbols, decimals.
-- [ ] Set up monitoring & alerts: retryables, batches, assertions, DAC liveness.
+- [ ] RaaS: set up private Arbitrum chain
+- [ ] Testnet deployment: Sequencer, batch poster, staker, DA config.
+- [ ] Inventory contracts & state: Addresses, precompiles, proxies, admin keys, governance
+- [ ] Stand up Dual-RPC gateway prototype: Route pre-migration range to old stack archive; post-migration to Arbitrum chain.
+- [ ] Prepare official asset list: Canonical bridge(s), authoritative token addresses, symbols, decimals.
+- [ ] Set up monitoring & alerts: Retryables, batches, assertions, DAC liveness.
 
 #### 2 weeks before → 1 week before: cutover preparation
 
-- [ ] Announce freeze windows: date/time, what pauses, expected downtime.
+- [ ] Announce freeze windows: Date/time, what pauses, expected downtime.
 - [ ] Lower DNS TTLs for RPC/explorer, provision new SSL certificates.
 - [ ] Partners confirm readiness.
 - [ ] Conduct a final dry run with canary transactions/batches in staging and document the process.
@@ -168,7 +168,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 
 - [ ] Stop old chain block/transaction production: disable proposer/sequencer, set legacy RPC to read-only, block `eth_sendRawTransaction` method, thus no new blocks or transactions.
 - [ ] Take a snapshot or confirm the last block for state replay
-- [ ] Bring up the new Arbitrum (Orbit) chain mainnet: import state or launch genesis.
+- [ ] Bring up the new Arbitrum chain mainnet: import state or launch genesis.
 - [ ] Start batch poster/staker and verify assertions on L1.
 - [ ] Flip DNS for RPC/explorer; enable dual-RPC gateway for historical queries
 - [ ] Open canonical bridges and publish asset list
