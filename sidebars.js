@@ -455,6 +455,11 @@ const sidebars = {
                   ],
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/dynamic-pricing-for-arbitrum-chains',
+                  label: 'Dynamic Pricing for Arbitrum Chains',
+                },
+                {
                   type: 'category',
                   label: 'Validation and security',
                   collapsed: true,
