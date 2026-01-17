@@ -1,6 +1,6 @@
 ---
 title: 'Use native interop token with mint/burn as your Arbitrum chain gas token'
-sidebar_label: 'Use native interop token with mint/burn as your Arbitrum chain gas token'
+sidebar_label: 'Configure a native mint/burn gas token'
 description: 'Learn how use a native interop token with mint/burn (such as LayerZero OFT, xERC-20, or native USDC) as your Arbitrum chain gas token'
 user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about using a native interop token with mint/burn for bridging of gas tokens'
 content_type: release announcement
@@ -281,10 +281,6 @@ When the last native-token owner is removed, Nitro automatically re-opens canoni
 ### How can developers get the timestamp value of `NativeTokenManagementFromTime`?
 
 Filter event `OwnerActs(bytes4 indexed method, address indexed owner, bytes data)` with first index `0xbdb8f707` to get all results, and decode the latest result's data field to get the last valid timestamp. That timestamp would be the point after which `ArbOwner`'s can take action to `nativeTokenOwner` list.
-
-### Are there any live chains currently using this feature?
-
-Yes. [Ethereal](https://docs.ethereal.trade/), a high-performance perp DEX appchain, is a notable live implementation. They utilize the native mint/burn functionality in partnership with LayerZero to provide seamless bridging for their native gas token.
 
 <br />
 :::caution Testing Responsibility
