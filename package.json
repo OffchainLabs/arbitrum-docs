@@ -30,6 +30,7 @@
     "check-markdown": "tsx scripts/check-markdown.ts",
     "check-sidebar-links": "tsx scripts/check-sidebar-links.ts",
     "notion:update": "tsx scripts/notion-update.ts",
+    "notion:export-csv": "tsx scripts/notion-export-csv.ts",
     "notion:verify-quicklooks": "tsx scripts/notion-verify-quicklooks.ts",
     "lint:markdown": "markdownlint \"docs/**/*.{md,mdx}\" --ignore \"docs/sdk/**\"",
     "lint:markdown:fix": "markdownlint \"docs/**/*.{md,mdx}\" --fix --ignore \"docs/sdk/**\""
