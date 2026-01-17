@@ -6,7 +6,7 @@ user_story: 'As a developer or researcher of the Arbitrum product suite, I want 
 content_type: release announcement
 ---
 
-:::caution Bridge Counterparty Risk
+:::caution Bridge counterparty risk
 While this feature allows an Arbitrum chain to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the parent chain. \
 However, by using a third-party bridge for the chain's gas token, your chain's gas token—and thus its liveness—becomes directly dependent on the security and integrity of the third-party bridge provider.
 :::
@@ -26,7 +26,7 @@ This "lock and mint" pattern is not compatible with an emerging category of "nat
 3. A collateral-sweeping method to ensure the 3rd-party native interop token’s cross-chain adapter contract always remains properly collateralized.
 
 :::important
-The Native Mint/Burn feature permits mint & burn capability of the rollup’s native gas token by a permissioned address on the rollup. It does not provide a solution for cross-chain interoperability and is not a replacement for 3rd-party omni-chain gas token products provided by partners such as LayerZero or Hyperlane. The table below helps to clarify the components needed to enable the use cases below.
+The native mint/burn feature permits mint & burn capability of the Rollup’s native gas token by a permissioned address on the Rollup. It does not provide a solution for cross-chain interoperability and is not a replacement for 3rd-party omni-chain gas token products provided by partners such as LayerZero or Hyperlane. The table below helps to clarify the components needed to enable the use cases below.
 :::
 
 | Component                                           | Maintainer                                         | Role/purpose                                                                                                                                                                                                            |
@@ -55,11 +55,11 @@ The Native Mint/Burn feature permits mint & burn capability of the rollup’s na
 
 - We **do not** recommend enabling Native Mint/Burn if your chain relies on the canonical bridge for liquidity or if you cannot comfortably implement the operational safeguards listed below.
 - This feature is **bridge-agnostic**, so it’s possible to migrate from a bridge adapter implementation (e.g., LayerZero-OFT adapter) to another adapter without forking the chain or changing the gas token.
-- **Infra-level** benefit: unifies liquidity so Arbitrum Stack chain users see only one native gas token and avoid the previous “two bridge pools” condition (LayerZero integration still uses a lockbox/representation model, thus it does not remove wrapping globally).
+- **Infra-level** benefit: unifies liquidity so Arbitrum stack chain users see only one native gas token and avoid the previous “two bridge pools” condition (LayerZero integration still uses a lockbox/representation model, thus it does not remove wrapping globally).
 
 ## Feature architecture
 
-There are three components make up the Native Mint/Burn feature:
+There are three components make up the Native mint/burn feature:
 
 - **Timelock gate (safety switch):** a safety feature that tells the chain owners when the feature is live. The default value is seven days to give chain owners sufficient time to identify and prevent a malicious owner addition.
 - **Mint and burn precompile:** the main component that gives access control and admin interface.
@@ -75,26 +75,26 @@ Below is a high-level data-flow diagram:
   className="img-600px"
 />
 
-### Security TimeLock
+### Security timeLock
 
-As Native Mint/Burn introduces a security risk (an ArbOwner-level attacker can mint unlimited native gas), we have introduced a **speed bump/delay** feature that introduces a **hard-coded delay** for enabling Native Mint/Burn capabilities (for an already live chain).
+As native mint/burn introduces a security risk (an ArbOwner-level attacker can mint unlimited native gas), we have introduced a **speed bump/delay** feature that introduces a **hard-coded delay** for enabling native mint/burn capabilities (for an already live chain).
 
 Our hard-coded default for this period is **seven days**, commensurate with [existing L2BEAT advisories on time locks](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe). This period should give the chain owner time to respond to an attacker’s attempt to mint/burn the native gas token.
 
 Details for the time lock switch are:
 
-- A chain that has already initialized with Native Mint/Burn disabled must wait seven days for the precompiles to activate
-- A chain can disable Native Mint/Burn instantly
+- A chain that has already initialized with native mint/burn disabled must wait seven days for the precompiles to activate
+- A chain can disable native mint/burn instantly
 - If a chain wants to have a lower delay (e.g., one day, one hour), they will need to maintain a small fork of Nitro that changes the hard-coded value:
   - Hard-Coded value here: https://github.com/OffchainLabs/go-ethereum/blob/c289e79453d4fdd8644a88337885c8bf27155604/params/config_arbitrum.go#L49
   - This change will cause your WASM module root to change. Please refer to [customize STF](/launch-arbitrum-chain/customize-your-chain/customize-stf#building-the-modified-node) steps to calculate the new WASM module root and set it on the chain before starting your new node.
     :::warning
-    Please note, if you want to change this constant value, make sure this value hasn't been used before and you have never called `setNativeTokenManagementFrom` before. If not, your chain may experience some reorg issues. If you want to change this value after you have already used it (**not recommended**), you need to consider proper version control, one example is [ArbOS version control](/launch-arbitrum-chain/customize-your-chain/customize-arbos).
+    Please note, if you want to change this constant value, make sure it hasn't been used before and you have never called `setNativeTokenManagementFrom` before. If not, your chain may experience some reorg issues. If you want to change this value after you have already used it (**not recommended**), you need to consider proper version control, one example is [ArbOS version control](/launch-arbitrum-chain/customize-your-chain/customize-arbos).
     :::
 
 A seven-day timelock gates the feature. Call [`ArbOwner.setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with a UNIX timestamp ≥ _now + 7 days_ to enable the feature; disabling is instantaneous.
 
-### Native Mint and Burn Pre-Compiles
+### Native mint and burn precompiles
 
 1. The chain exposes the [`ArbNativeTokenManager`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/main/ArbNativeTokenManager.sol) precompile with these methods:
    - [`mintNativeToken(uint256 amount)`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbNativeTokenManager.sol#L28-L30): when the adapter receives a valid cross-chain message, it forwards a freshly minted gas token to the user in the same transaction.
@@ -110,9 +110,9 @@ A seven-day timelock gates the feature. Call [`ArbOwner.setNativeTokenManagement
   className="img-600px"
 />
 
-### Collateralization Technique
+### Collateralization technique
 
-**Guarantee Collateralization of the Native Mint/Burn Contract**
+**Guarantee collateralization of the native mint/burn contract**
 
 The main risk of having two contracts responsible for native token issuance (the 3rd-party contract and the chain’s bridge) is collateralization imbalances. For example, you could end up with:
 
@@ -121,18 +121,18 @@ The main risk of having two contracts responsible for native token issuance (the
 
 In which case, either could be under-collateralized for a withdrawal at any given time.
 
-To resolve this problem, below can be implemented:
+To resolve this problem, you may implement the options below:
 
-1. **Collateral Sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated 3rd-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain Adapter contract).
-2. **Disable Arbitrum Chain Bridge Withdrawals:** Disabling withdrawals on the Arbitrum Stack chain, which ensures the 3rd-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
+1. **Collateral sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated 3rd-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain's Adapter contract).
+2. **Disable Arbitrum chain bridge withdrawals:** Disabling withdrawals on the Arbitrum stack chain, which ensures the 3rd-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
 
-The **Collateral Sweep** is implemented by adding an Outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a 3rd-party contract. This keeps all collateral in one place when mint/burn is enabled.
+The **collateral sweep** is implemented by adding an outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a 3rd-party contract. This keeps all collateral in one place when mint/burn is enabled.
 
 - [Outbox contracts](https://github.com/OffchainLabs/nitro-contracts/pull/339) are authorized to spend funds from the bridge. They can be registered using the admin function `setOutbox`.
 
   Typically, an Outbox contract requires verification of a proof for an authorized withdrawal to occur. A custom contract can be designed that permissionlessly sends native gas to a destination on the parent chain.
 
-**Disabling Withdrawals** is achievable by adapting the Nitro node to prevent non-zero value withdrawals. This approach still maintains our censorship-resistant properties, allowing the user to initiate a withdrawal from L1.
+**Disabling withdrawals** is achievable by adapting the Nitro node to prevent non-zero value withdrawals. This approach still maintains our censorship-resistant properties, allowing the user to initiate a withdrawal from L1.
 
 1. Value-bearing withdrawals via the canonical bridge are automatically rejected as long as at least one native-token owner exists, ensuring that all exits occur through the external adapter.
 2. A helper contract, [**`ERC20MigrationOutbox`**](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/extra/ERC20MigrationOutbox.sol), can sweep any “dust” that lands in the bridge and transfer it to the external adapter on L1.
@@ -160,7 +160,7 @@ We suggest the following baseline or values for production chains:
 ## How to configure the feature for your chain
 
 :::info
-The Native Token Mint/Burn feature is currently not available for implementation at chain genesis. The ability to activate it during chain initialization will be part of a future release.
+The native token mint/burn feature is currently not available for implementation at chain genesis. The ability to activate it during chain initialization will be part of a future release.
 :::
 
 ### Enable the feature post-genesis
@@ -174,7 +174,7 @@ Below steps show the flow a RaaS / chain team can use to whitelist a bridge adap
    :::
 3. Deploy your bridge adapter (e.g., LayerZero OFT) and note the contract address.
 4. Add the deployed bridge adapter as a native-token owner:
-   ```bash
+   ```shell
    cast send 0x0000000000000000000000000000000000000070 \
      "addNativeTokenOwner(address)" \
      {0xTheNewOwnerToBeAdded} \
@@ -187,13 +187,13 @@ Below steps show the flow a RaaS / chain team can use to whitelist a bridge adap
    - `OwnerActs(0x96a3751d, address indexed owner, bytes data)` to see removing native owner
    - `NativeTokenMinted` and `NativeTokenBurned` to see token mint and burn events
 
-### Temporarily disabling the Mint/Burn feature
+### Temporarily disabling the mint/burn feature
 
 There may be situations where you want to disable the feature temporarily, e.g., to investigate a bridge bug or supply imbalance. All calls below are made from an [**ArbOwner**](https://github.com/OffchainLabs/nitro-precompile-interfaces/) wallet. These commands are for RaaS / chain teams, bridge teams have their own operating procedures.
 
 1. Inspect the current list of owners.
 
-   ```bash
+   ```shell
    cast call 0x000000000000000000000000000000000000006b \
      "getAllNativeTokenOwners()(address[])" \
      --rpc-url $RPC_URL
@@ -201,7 +201,7 @@ There may be situations where you want to disable the feature temporarily, e.g.,
 
 2. Remove each owner.
 
-   ```bash
+   ```shell
    cast send 0x0000000000000000000000000000000000000070 \
      "removeNativeTokenOwner(address)" \
      {0xTheOwnerToBeRemoved} \
@@ -211,11 +211,11 @@ There may be situations where you want to disable the feature temporarily, e.g.,
 
    `mintNativeToken` and `burnNativeToken` now revert because no authorized senders remain.
 
-   Canonical bridge exits are now open, warm liquidity partners.
+   Canonical bridge exits are now open, warn liquidity partners.
 
 3. Verify the pause.
 
-   ```bash
+   ```shell
    cast call 0x000000000000000000000000000000000000006b \
      "getAllNativeTokenOwners()(address[])" \
      --rpc-url $RPC_URL
@@ -248,7 +248,7 @@ There may be situations where you want to disable the feature temporarily, e.g.,
     --rpc-url $RPC_URL
   ```
 
-### Disabling the Native Mint/Burn feature permanently
+### Disabling the native mint/burn feature permanently
 
 1. Remove all native-token owners via `removeNativeTokenOwner`.
 2. The `ArbOwner` calls the function `SetNativeTokenManagementFrom(0)` to freeze the action to add or remove the list of trusted adapters (owners). Setting this parameter to 0 disables future modifications to `NativeTokenOwners` ; do this after the list is empty. In other words, it will lock the token-owner list forever: no new owners can be added, and nobody can re-enable Native Mint/Burn.
@@ -268,11 +268,11 @@ There may be situations where you want to disable the feature temporarily, e.g.,
 ### Who should read this page?
 
 - Bridge/infra engineers building an adapter that mints native gas.
-- RaaS/chain operators who need to whitelist such an adapter and run the sweeper bot.
+- RaaS/chain operators who need to allowlist such an adapter and run the sweeper bot.
 
 ### Can I run the feature on an older ArbOS version?
 
-While Native Mint/Burn was technically introduced in ArbOS 41, we strongly recommend upgrading to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) for those enabling this feature.
+While native mint/burn was technically introduced in ArbOS 41, we strongly recommend upgrading to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) for those enabling this feature.
 
 ### What happens to value-bearing withdrawals once I disable the feature?
 
@@ -289,7 +289,7 @@ While Offchain Labs has conducted comprehensive [system tests](https://github.co
 to verify the core ArbOS logic for native mint/burn functionality, this does not cover your specific
 implementation.
 
-**The onus remains on individual teams to:**
+**Individual teams are responsible to:**
 
 - Thoroughly test their own adapter contracts and app-layer solutions.
 - Verify the security and collateralization of their specific third-party token providers (e.g., LayerZero, xERC20).
