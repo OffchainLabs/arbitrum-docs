@@ -9,15 +9,15 @@ content_type: get-started
 ---
 
 ## What is this feature? 
-Orbit chain operators are increasingly looking to deploy chains with pre-existing state, by loading an initial state in a file such as `genesis.json`. 
-Specifically, Raases want to predeploy smart contracts (like Gnosis Safe) to an Orbit chain so they exist at genesis, before any user interaction or post-launch governance. 
+Arbitrum chain operators are increasingly looking to deploy chains with pre-existing state, by loading an initial state in a file such as `genesis.json`. 
+Specifically, Raases want to predeploy smart contracts (like Gnosis Safe) to an Arbitrum chain so they exist at genesis, before any user interaction or post-launch governance. 
 
 Initializing from a genesis state would be helpful in the following scenarios:
 
 1. Redeploying a new testnet with pre-existing state if current testnet is broken
 2. Deploying additional sibling chains with pre-existing contracts
-3. Simplifies RaaSes backend for self-serve, where there can be 100s of testnets being deployed with similar contracts
-4. Reduce lift on 3rd-party infrastructure teams to redeploy contracts for new chains
+3. Simplifying self-serve backends for RaaSes, such that 100s of testnets can be deployed with similar contracts
+4. Reducing lift on 3rd-party infrastructure teams to redeploy contracts for new chains
 
 
 ### **What Does This Feature Do?**
