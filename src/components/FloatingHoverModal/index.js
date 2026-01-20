@@ -36,6 +36,7 @@ import ConfigCustomizableGovernance from '@site/docs/launch-arbitrum-chain/parti
 import ConfigDataPostingCosts from '@site/docs/launch-arbitrum-chain/partials/config-data-posting-costs.mdx';
 import ConfigEVMCompatibility from '@site/docs/launch-arbitrum-chain/partials/config-evm-compatbility.mdx';
 import ConfigOtherLanguageSupport from '@site/docs/launch-arbitrum-chain/partials/config-other-language-support.mdx';
+import ConfigSequencerTimingAdjustments from '@site/docs/launch-arbitrum-chain/features/sequencer-timing-adjustments.mdx';
 
 // Static content mapping
 const contentMap = {
@@ -57,6 +58,7 @@ const contentMap = {
   'config-data-posting-costs': ConfigDataPostingCosts,
   'config-evm-compatibility': ConfigEVMCompatibility,
   'config-other-language-support': ConfigOtherLanguageSupport,
+  'config-sequencer-timing-adjustments': ConfigSequencerTimingAdjustments,
 };
 
 // MDX components for proper rendering
