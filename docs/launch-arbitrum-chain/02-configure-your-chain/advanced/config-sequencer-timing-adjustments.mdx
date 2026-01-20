@@ -5,3 +5,65 @@ author: pete-vielhaber
 sme: jason-w123
 target_audience: 'Developers who want to configure the Sequencer timing on their Arbitrum chain'
 ---
+
+To configure sequencer timing parameters when launching an Arbitrum, you'll primarily adjust settings in two places:
+
+1. **Chain-level parameters**: Set during deployment via the Chain SDK, affect seqeuencer behavior boundaries.
+2. **Node-level parameters**: Set when running your Nitro sequencer node—these control runtime behavior, such as block production speed and batch posting.
+
+Most timing tweaks happen at the node level for the sequencer. Use the official Arbitrum Chain SDK to generate a base node config JSON, then override specific fields, or pass flags directly when running the `nitro-node` Docker image.
+
+## Key Sequencer Timing parameters to adjust
+
+| Parameter                           | Location                                            | Default                                                                              | How to configure                                                                                                                               | Why adjust                                                                                                                                                                                                                        |
+| ----------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Block time/maximum block speed      | Node (`execution.sequencer`)                        | 250ms                                                                                | In node config JSON: `"execution": { "sequencer": { "max-block-speed": "250ms" } }` or CLI flag: `--execution.sequencer.max-block-speed=250ms` | Faster blocks for higher TPS. Slower for less state bloat, easier on indexers/nodes to keep up.                                                                                                                                   |
+| Batch poster max delay              | Node (`node.batch-poster`)                          | Varies (often ~seconds)                                                              | In node config JSON: `"node": { "batch-poster": { "max-delay": "5s" } }` or CLI: `--node.batch-poster.max-delay=5s`                            | Controls max time to wait before posting a batch (even if not full). Lower value for more frequent posts, lower finality latency on parent chain. Higher for fewer posts, lower parent chain costs (good for low-traffic chains). |
+| Batch poster max size               | Node (`node.batch-poster`)                          | ~90,000-100,000 bytes                                                                | CLI example: `--node.batch-poster.max-size=120000`                                                                                             | Larger batches for more efficient posting. Combine with `max-delay` for balance.                                                                                                                                                  |
+| Delayed sequencer finalize distance | Node (`node.delayed-sequencer`)                     | Higher (e.g., waits for full parent chain finality)                                  | CLI: `--node.delayed-sequencer.finalize-distance=1` and enable: `--node.delayed-sequencer.enable=true`                                         | Lower value for near instance deposits (~seconds instead of minutes). Trade-off: minor re-org risk on parent chain.                                                                                                               |
+| `Sequencer inbox max time variation | Chain deployment (`sequencerInboxMaxTimeVariation`) | `delayBlocks`: 5760, `futureBlocks`: 12, `delaySeconds`: 86400, `futureSeconds`:3600 | In Chain SDK config struct or `chainConfig` JSON during deployment.                                                                            | Allows sequencer minor timestamp adjustments to avoid re-orgs if batch posting lags. Rarely needs change from defaults.                                                                                                           |
+| Timeboost non-express delay         | Node (`execution.sequencer.timeboost`)              | 200ms                                                                                | In node config: `"execution": { "sequencer": { "timeboost": { "non-express-delay-msec": 300 } } }`                                             | Larger delay for more advantage/revenue for express lane winner. Increases latency for regular transactions.                                                                                                                      |
+
+## Step-by-step configuration process:
+
+1. **Deploy your chain first**: using the Chain SDK, this sets immutable params like `sequencerInboxMaxTimeVariation`.
+2. **Generate base node config**: Use the Chain SDK:
+
+```typescript
+import { prepareNodeConfig } from '@arbitrum/orbit-sdk';
+
+const nodeConfig = await prepareNodeConfig({
+  // Your deployment tx receipt or params
+  // Override defaults here, e.g.:
+  execution: {
+    sequencer: {
+      maxBlockSpeed: '100ms', // Faster blocks
+    },
+  },
+  node: {
+    batchPoster: {
+      maxDelay: '2s', // More frequent posting
+    },
+  },
+});
+// Write nodeConfig to file: nodeConfig.json
+```
+
+2. Run the sequencer node:
+
+- Use Docker (recommended):
+
+```typescript
+docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
+  offchainlabs/nitro-node:latest \
+  --conf.file=/config/nodeConfig.json \
+  --node.sequencer=true \
+  --execution.sequencer.enable=true \
+  # Add other required flags (parent-chain URL, chain info-json, keys, etc.)
+```
+
+- or override via CLI falgs for testing
+
+3. **Test changes** on a devnet or testnet first—monitor TPS, state growth, posting costs, and deposit latency.
+
+For a full list of flags, run `nitro-node --help`. Refer to Arbitrum Docs sections on [Running a Sequencer Node](/run-arbitrum-node/sequencer/run-sequencer-node.mdx) and [How to configure your Arbitrum chain's node using the Chain SDK](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.mdx) for your exact version. If using Timeboost or advanced features, additional setup (e.g., auction contract) is needed.
