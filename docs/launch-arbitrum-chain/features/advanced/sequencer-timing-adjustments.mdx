@@ -21,19 +21,21 @@ When launching an Arbitrum chain, the Sequencer plays a central role in ordering
   - Lower max-delay ensures batches post more frequently, reducing latency for transaction finality on the parent chain (e.g., useful for low-activity chains to avoid long waits).
   - Higher delays or larger batches improve efficiency by reducing parent chain posting costs (fewer transactions on L1/L2), especially during low traffic. Defaults may post too frequently on quiet chains, wasting gas.
 
-  ## 3. Faster deposits/bridging (for L3 chains)
+## 3. Faster deposits/bridging (for L3 chains)
 
-  - Parameters like `--node.delayed-sequencer.finalize-distance` (number of parent chain confirmations to wait before releasing delayed inbox messages, e.g., deposits) and related finality flags.
-  - **Why adjust?** Defaults wait for substantial parent chain finality (tens of minutes) for safety. Reducing this (e.g., to 1) enables near-instant deposits (~1 minute), improving UX for cross-chain interactions. Trade-off: Slight re-org risk if the parent chain reorganizes.
+- Parameters like `--node.delayed-sequencer.finalize-distance` (number of parent chain confirmations to wait before releasing delayed inbox messages, e.g., deposits) and related finality flags.
+- **Why adjust?** Defaults wait for substantial parent chain finality (tens of minutes) for safety. Reducing this (e.g., to 1) enables near-instant deposits (~1 minute), improving UX for cross-chain interactions. Trade-off: Slight re-org risk if the parent chain reorganizes.
 
-  ## 4. Enable/configure advanced features such as Timeboost
+## 4. Enable/configure advanced features such as Timeboost
 
-  - If enabling Timeboost, adjust the non-express lane delay (default 200ms).
-  - **Why adjust?** A larger delay gives auction winners a greater advantage (and revenue potential) in MEV opportunities (e.g., arbitrage), but increases latency for regular users.
+- If enabling Timeboost, adjust the non-express lane delay (default 200ms).
+- **Why adjust?** A larger delay gives auction winners a greater advantage (and revenue potential) in MEV opportunities (e.g., arbitrage), but increases latency for regular users.
 
-  ## 5. Balance latency, censorship resistance, and reliability
+## 5. Balance latency, censorship resistance, and reliability
 
-  - Timestamp adjustmnet boundaries and other sequencer behaviors allow minor tweaks to prevent re-orgs if batch posting lags.
-  - Overall, adjustments prevent undue delays in low-traffic scenarios, enhance responsiveness for latency-sensitive apps, or prioritize cost savings/security based on your chain's expected activity.
+- Timestamp adjustmnet boundaries and other sequencer behaviors allow minor tweaks to prevent re-orgs if batch posting lags.
+- Overall, adjustments prevent undue delays in low-traffic scenarios, enhance responsiveness for latency-sensitive apps, or prioritize cost savings/security based on your chain's expected activity.
 
-  These configs are set when running your sequencer node (e.g., via the Arbitrum Chain SDK's `prepareNodeConfig` or direct Nitro flags). Always test changes on a devnet, as they impact economics, UX, and infrastructure load.
+These configs are set when running your sequencer node (e.g., via the Arbitrum Chain SDK's `prepareNodeConfig` or direct Nitro flags). Always test changes on a devnet, as they impact economics, UX, and infrastructure load.
+
+For information on how to configure the Sequencer timing, refer to the [Sequencer Timing Adjustments configuration](/launch-arbitrum-chain/02-configure-your-chain/advanced/config-sequencer-timing-adjustments.mdx) page.
