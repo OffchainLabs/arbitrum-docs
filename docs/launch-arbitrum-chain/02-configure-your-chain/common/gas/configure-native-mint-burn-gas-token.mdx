@@ -17,7 +17,7 @@ While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that te
 
 Arbitrum chains are designed to “lock and mint” the native gas token in the canonical bridge. This process ensures the child representation of the gas token is always backed by the parent chain's gas token, locked in the canonical bridge.
 
-This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a "burn and mint" approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s Native USDC (possible with Circle-supplied adapter).
+This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a "burn and mint" approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s Native USDC (possible with Circle-supplied adapter) and Tether's USDT0.
 
 [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) introduces the ability for native-interop tokens to work seamlessly as the gas token of an Arbitrum chain. This feature allows a chain owner (`ArbOwner`) to manage:
 
