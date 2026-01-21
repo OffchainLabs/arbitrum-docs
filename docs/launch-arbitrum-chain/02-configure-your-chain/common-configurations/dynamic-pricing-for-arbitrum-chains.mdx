@@ -60,7 +60,7 @@ Offchain Labs has developed a [script to help calculate pricing constraints](htt
   [State Growth Guidance](/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth): Impact of high gas targets on state growth and its consequences
 
 - `node_throughput` is the sustainable maximum throughput that the nodes can maintain without any issues. It is highly dependent on your specific hardware and chain workload. Offchain Labs will soon publish testing frameworks and tools that can be used to benchmark what throughput your nodes can handle for various workloads.
-- `gas_limit` is the theoretical max block size limit. With the introduction of the `MaxTxGasLimit`, the effective block gas limit is twice the `MaxBlockGasLimit`. We recommend using an in-between value of `MaxBlockGasLimit` and Effective Block Gas Limit `(MaxTxGasLimit + MaxBlockGasLimit)` for this parameter.
+- `gas_limit` is the theoretical max block size limit. With the introduction of the `MaxTxGasLimit` in ArbOS 51, the effective block gas limit is twice the `MaxBlockGasLimit`. We recommend using an in-between value of `MaxBlockGasLimit` and Effective Block Gas Limit `(MaxTxGasLimit + MaxBlockGasLimit)` for this parameter.
 - `max_rate_of_increase_percent_per_second` is the maximum allowed rate of increase in the fee per sec when the chain is working at the max capacity.
 - `long_term_adjustment_window_seconds` is the maximum timeframe over which gas prices adjust. This window specifically applies to the **lowest gas target** to ensure price stability during low-demand periods.
 
