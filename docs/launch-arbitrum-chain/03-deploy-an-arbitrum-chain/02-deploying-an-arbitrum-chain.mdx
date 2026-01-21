@@ -205,10 +205,13 @@ Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to
 ```typescript
 import { createPublicClient, http } from 'viem';
 import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
+import { arbitrumSepolia } from 'viem/chains';
+
+const parentChain = arbitrumSepolia;
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
-  transport: http(),
+  transport: http(parentChainRPC),
 });
 
 const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
@@ -217,6 +220,12 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
   chainConfig: chainConfig,
 });
 ```
+
+:::info
+
+The above defaults to Arbitrum Sepolia. We've added the import `viem/chains` and the chain info to demonstrate from a popular library (`viem`) how to import the chain information already available in the Arbitrum Chain SDK.
+
+:::
 
 ### 2. Deploy the Arbitrum chain
 
