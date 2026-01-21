@@ -12,7 +12,7 @@ sme: asomani
 Arbitrum chains support a new gas pricing algorithm that uses multiple-gas targets, as part of the [ArbOS 51 upgrade](/run-arbitrum-node/arbos-releases/arbos51) to reduce the frequency and severity of child chain gas price spikes. This is the first optimization of many towards Dynamic Pricing.
 
 - **Key Action:** We recommend waiting for this new pricing algorithm to be used in production for at least 30 days on Arbitrum One before enabling the new gas targets for your own chain. _[Updated: 8th Jan 2025]_ \
-  This change is **backward compatible**. Setting new gas targets is **not mandatory**; if no new configuration is set, the legacy gas pricing algorithm remains active.
+  This change is **backward compatible**. Setting new gas targets is **not mandatory**; if no new configuration is set, the legacy gas pricing algorithm with a single gas target remains active.
 - **Additional Details:** For those interested in how these values are derived, [this document](/how-arbitrum-works/deep-dives/gas-and-fees#the-gas-target) provides the underlying parameters used to calculate the new gas targets and adjustment windows.
 
 :::note
