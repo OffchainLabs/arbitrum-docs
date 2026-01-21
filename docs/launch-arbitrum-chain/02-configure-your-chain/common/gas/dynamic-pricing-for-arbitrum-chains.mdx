@@ -71,7 +71,7 @@ Below values were used for calculating the gas targets for Arbitrum One. These v
 | `long_term_gas_target`                    | 10 Mgas/s           |
 | `node_throughput`                         | 80 Mgas/s           |
 | `gas_limit`                               | 128 Mgas/s          |
-| `max_rate_of_increase_percent_per_second` | 20%                  |
+| `max_rate_of_increase_percent_per_second` | 20%                 |
 | `long_term_adjustment_window_seconds`     | 86400 sec           |
 
 ## Recommendation for Arbitrum chains
@@ -80,10 +80,10 @@ The launch of this new pricing algorithm (the first optimization towards Dynamic
 
 Arbitrum chain teams can use the below recommended values for the script parameters. The script will generate the optimized gas targets and adjustment windows for your chain, which you can then use to enable the new pricing system.
 
-| Param                                     | Arbitrum One Config | Recommendation                                                                                                       |
-| :---------------------------------------- | :------------------ | :------------------------------------------------------------------------------------------------------------------- |
-| `long_term_gas_target`                    | 10 Mgas/s           | Configure based on resource management considerations or the same as Arbitrum One.  |
-| `node_throughput`                         | 80 Mgas/s           | Same as Arbitrum One                                                                                                 |
-| `gas_limit`                               | 128 Mgas/s          | Based on the block limit for the chain, which by default is 32 million gas and assumes a 250ms block time. Can be set to (MaxBlockGasLimit \+ MaxEffectiveGasLimit) / 2                  |
-| `max_rate_of_increase_percent_per_second` | 20                  | Same as Arbitrum One                                                                                                 |
-| `long_term_adjustment_window_seconds`     | 86400 sec           | Same as Arbitrum One                                                                                                 |
+| Param                                     | Arbitrum One Config | Recommendation                                                                                                                                                          |
+| :---------------------------------------- | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `long_term_gas_target`                    | 10 Mgas/s           | Configure based on resource management considerations or the same as Arbitrum One.                                                                                      |
+| `node_throughput`                         | 80 Mgas/s           | Same as Arbitrum One                                                                                                                                                    |
+| `gas_limit`                               | 128 Mgas/s          | Based on the block limit for the chain, which by default is 32 million gas and assumes a 250ms block time. Can be set to (MaxBlockGasLimit \+ MaxEffectiveGasLimit) / 2 |
+| `max_rate_of_increase_percent_per_second` | 20                  | Same as Arbitrum One                                                                                                                                                    |
+| `long_term_adjustment_window_seconds`     | 86400 sec           | Same as Arbitrum One                                                                                                                                                    |
