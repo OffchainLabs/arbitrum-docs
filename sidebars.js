@@ -52,6 +52,16 @@ const sidebars = {
           id: 'stylus/quickstart',
           label: 'Build apps with Stylus',
         },
+        {
+          type: 'doc',
+          label: 'Lidia Interactive Diagrams',
+          id: 'for-devs/lidia-interactive-diagrams',
+        },
+        {
+          type: 'doc',
+          label: 'LidiaFlow Interactive Diagrams',
+          id: 'for-devs/lidia-flow-interactive-diagrams',
+        },
       ],
     },
     {
