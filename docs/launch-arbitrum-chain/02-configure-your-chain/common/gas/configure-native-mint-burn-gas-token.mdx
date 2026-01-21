@@ -52,7 +52,7 @@ The native token mint/burn feature is currently not available for implementation
 
 Below steps show the flow a RaaS / chain team can use to allowlist a bridge adapter. The example below uses a Foundry call, but you can also use other tools to interact with the precompiles directly.
 
-1. Update your chain to ArbOS 51 Dia binaries and deploy the consensus-v51 WASM root.
+1. Update your chain to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) binaries and deploy the consensus-v51 WASM root.
 2. Call [`setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with the chain owner and a UNIX timestamp that is 7+ days in the future to enable the feature, otherwise the call will fail.
 
    :::important
