@@ -30,7 +30,7 @@ Before starting, ensure that the chain has:
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `nitro-contracts`  | [v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher (includes the ERC20MigrationOutbox)                       |
 | `nitro-node`       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher (includes the fix for `ArbNativeTokenManager` precompile inclusion) |
-| `go-ethereum` fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root) or later                |
+| `go-ethereum` fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root) or later                           |
 
 We suggest the following baseline or values for production chains:
 
@@ -50,7 +50,7 @@ The native token mint/burn feature is currently not available for implementation
 
 ### Enable the feature post-genesis
 
-Below steps show the flow a RaaS / chain team can use to allowlist a bridge adapter. The example below uses a Foundry call, but you can also use other tools to interact with the precompiles directly.
+Below steps show the flow a chain owners can use to allowlist a bridge adapter. The example below uses a Foundry call, but you can also use other tools to interact with the precompiles directly.
 
 1. Update your chain to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) binaries and deploy the consensus-v51 WASM root.
 2. Call [`setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with the chain owner and a UNIX timestamp that is 7+ days in the future to enable the feature, otherwise the call will fail.
@@ -78,7 +78,7 @@ Below steps show the flow a RaaS / chain team can use to allowlist a bridge adap
 
 ### Temporarily disabling the mint/burn feature
 
-There may be situations where you want to disable the feature temporarily, e.g., to investigate a bridge bug or supply imbalance. All calls below are made from an [**ArbOwner**](https://github.com/OffchainLabs/nitro-precompile-interfaces/) wallet. These commands are for RaaS / chain teams, bridge teams have their own operating procedures.
+There may be situations where you want to disable the feature temporarily, e.g., to investigate a bridge bug or supply imbalance. All calls below are made from an [**ArbOwner**](https://github.com/OffchainLabs/nitro-precompile-interfaces/) wallet. These commands are for chain owners, bridge teams have their own operating procedures.
 
 1. Inspect the current list of owners.
 
@@ -157,7 +157,7 @@ There may be situations where you want to disable the feature temporarily, e.g.,
 ### Who should read this page?
 
 - Bridge/infra engineers building an adapter that mints native gas.
-- RaaS/chain operators who need to allowlist such an adapter and run the sweeper bot.
+- Chain owners who need to allowlist such an adapter and run the sweeper bot.
 
 ### Can I run the feature on an older ArbOS version?
 
