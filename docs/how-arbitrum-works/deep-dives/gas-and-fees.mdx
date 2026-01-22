@@ -129,3 +129,21 @@ After allocating funds and paying what is owed, the parent chain Pricer adjusts 
 The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the parent chain Gas Basefee is reduced, so that the amount collected over a fixed future interval will be reduced by exactly the surplus. If the surplus is negative, the Basefee is increased so that the shortfall will be eliminated over the same fixed future interval.
 
 A second term is added to the parent chain Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee if the surplus is increasing, and increase the Basefee if the surplus is shrinking.
+
+## Effective block gas limit
+
+Post Fusaka, changes have been made to the Block Gas Limit and how transactions are filtered. Instead of using a hard limit of 32M, we are using a new “Effective Block Gas Limit.”
+
+### Gas Limit
+
+During a chain upgrade to ArbOS 50, the `MaxBlockGasLimit` will be increased by a factor of four. For Arbitrum One and Nova, that means the limit will increase from 32M gas/block to 128 gas/block.
+
+For Arbitrum chains, if a chain has a `MaxBlockGasLimit` of 75M, during the upgrade to ArbOS 50, its `MaxBlockGasLimit` will be increased to 300M.
+
+### Filtering
+
+Since ArbOS 50 also introduces a `MaxTxGasLimit`, the State Transition Function (STF) will be relaxed to allow the final transaction in a block to use up to the `MaxTxGasLimit` even if it would cause the block to exceed the `MaxBlockGasLimit`.
+
+This means that the “Effective Block Gas Limit” is really `MaxBlockGasLimit` + `MaxTxGasLimit`. In previous versions of ArbOS, the STF would skip transactions from the sequencer feed if the transaction’s `GasLimit` (set by the user) minus the L1 data posting gas exceeded the gas remaining in the block (without executing the transaction to see how much L2 gas it actually used).
+
+The new algorithm is more efficient (because the STF doesn’t need to continually search the transaction queue for one that fits in the remaining block gas, and can just keep adding transactions until the unused block gas is 0).
