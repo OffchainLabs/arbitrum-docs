@@ -12,14 +12,27 @@ Below is a breakdown of each specified parameter, including its role, typical de
 
 ## Gas target
 
-- **Description**: This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
-- **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newSpeedLimit` is the desired gas per second.
+This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
 
-Example using `cast`:
+Arbitrum chains support 2 configuration modes -
 
-```shell
-cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setSpeedLimit(uint256)" $NEW_SPEED_LIMIT
-```
+- **[RECOMMENDED] Multiple Gas Targets (supported starting [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51))**
+
+  - **Description**: Provides smoother price transitions. It uses multiple gas targets to reduce the frequency and severity of child chain gas price spikes.
+  - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata newConstraints)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newConstraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` tuples. \
+    Detailed information on how to set these parameters can be found in [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains). \
+    Example using cast:
+    ```shell
+    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setGasPricingConstraints((uint64,uint64,uint64)[])" $NEW_CONSTRAINTS
+    ```
+
+- **Single Gas Target**
+  - **Description**: Uses a single gas target as the reference for price adjustments. If gas usage exceeds this limit, the base fee rises to throttle demand; if usage is below, the price moves towards the floor.
+  - **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newSpeedLimit` is the desired gas per second. \
+    Example using cast:
+    ```shell
+    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setSpeedLimit(uint256)" $NEW_SPEED_LIMIT
+    ```
 
 This setting is adjustable post-deployment. Any modifications should align with your node's capabilities to prevent issues with the congestion mechanism activating.
 
