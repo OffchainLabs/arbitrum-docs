@@ -130,20 +130,15 @@ The main risk of having two contracts responsible for native token issuance (the
 
 In which case, either could be under-collateralized for a withdrawal at any given time.
 
-To resolve this problem, you may implement the options below:
+This problem can be resolved through a combination of automatic safeguard implemented by the protocol and a liquidity migration setup:
 
-1. **Collateral sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated third-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain's Adapter contract).
-2. **Disable Arbitrum chain bridge withdrawals:** Disabling withdrawals on the Arbitrum stack chain, which ensures the third-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge).
+1. **Automatic canonical bridge withdrawalal disabling:** Value-bearing withdrawals via the canonical bridge are automatically rejected as long as at least one native-token owner exists. This ensures the third-party token contract is the primary way to exit the chain (prevents an under-collateralized withdrawal on the bridge). This approach still maintains the censorship-resistant properties, allowing the user to initiate a withdrawal from L1.
+2. **Collateral sweep:** Allow the parent-chain bridge contract to ‘sweep’ native gas tokens to a designated third-party contract. Presumably, this is the contract that holds collateral for the chain (e.g., in LayerZero’s case, the parent chain's Adapter contract).
 
 The **collateral sweep** is implemented by adding an outbox contract to the bridge that can permissionlessly send **only** native gas tokens locked on the parent chain bridge to a third-party contract. This keeps all collateral in one place when mint/burn is enabled.
 
-- [Outbox contracts](https://github.com/OffchainLabs/nitro-contracts/pull/339) are authorized to spend funds from the bridge. They can be registered using the admin function `setOutbox`.
-
+- [Outbox contracts](https://github.com/OffchainLabs/nitro-contracts/pull/339) are authorized to spend funds from the bridge. They can be registered using the admin function `setOutbox`. \
   Typically, an Outbox contract requires verification of a proof for an authorized withdrawal to occur. A custom contract can be designed that permissionlessly sends native gas to a destination on the parent chain.
-
-**Disabling withdrawals** is achievable by adapting the Nitro node to prevent non-zero value withdrawals. This approach still maintains our censorship-resistant properties, allowing the user to initiate a withdrawal from L1.
-
-1. Value-bearing withdrawals via the canonical bridge are automatically rejected as long as at least one native-token owner exists, ensuring that all exits occur through the external adapter.
-2. A helper contract, [**`ERC20MigrationOutbox`**](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/extra/ERC20MigrationOutbox.sol), can sweep any “dust” that lands in the bridge and transfer it to the external adapter on L1.
+- A helper contract, [**`ERC20MigrationOutbox`**](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/extra/ERC20MigrationOutbox.sol), can sweep any “dust” that lands in the bridge and transfer it to the external adapter on L1.
 
 To learn how to configure this feature for your chain refer to the [Configure a native mint/burn gas token](/launch-arbitrum-chain/02-configure-your-chain/common/gas/configure-native-mint-burn-gas-token.mdx) page.

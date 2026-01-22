@@ -44,7 +44,9 @@ For detailed instructions on how to configure a custom gas token, there are seve
 - **Rollup**: [How to configure a custom gas token for your Rollup Arbitrum chain](/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup)
 
 :::info Native mint/burn for custom gas tokens
-Starting with **ArbOS 51 Dia**, Arbitrum chains have the option to use a **native interop token with mint/burn** as their custom gas tokens via third-party interoperability providers (such LayerZero OFTs, xERC20s, or native USDC) instead of using the canonical "lock and mint" bridge.
+Starting with **ArbOS 51 Dia**, Arbitrum chains have the option to use a **native interop token with mint/burn** as their custom gas tokens via third-party interoperability providers (such as LayerZero OFTs, xERC20s, or native USDC) instead of using the canonical "lock and mint" bridge.
+
+Note: Arbitrum provides the infrastructure for this feature, but does not provide the bridge adapter itself. To use this feature, chain teams must directly coordinate with their chosen bridge provider to build, audit, and deploy a custom adapter contract.
 
 To enable this feature for your chain, see our guide on [enabling native mint/burn for gas tokens](/launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token).
 :::
