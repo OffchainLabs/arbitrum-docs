@@ -9,14 +9,16 @@ sme: asomani
 
 ## Dynamic pricing: a new pricing algorithm introduced in ArbOS 51 Dia
 
-Arbitrum chains support a new gas pricing algorithm that uses multiple-gas targets, as part of the [ArbOS 51 upgrade](/run-arbitrum-node/arbos-releases/arbos51) to reduce the frequency and severity of child chain gas price spikes. This is the first optimization of many towards Dynamic Pricing.
+Arbitrum chains support a new gas pricing algorithm that uses multiple-gas targets, as part of the [ArbOS 51 upgrade](/run-arbitrum-node/arbos-releases/arbos51), to reduce the frequency and severity of child-chain gas price spikes. This is the first optimization of many towards Dynamic Pricing.
 
-- **Key Action:** We recommend waiting for this new pricing algorithm to be used in production for at least 30 days on Arbitrum One before enabling the new gas targets for your own chain. _[Updated: 8th Jan 2025]_ \
-  This change is **backward compatible**. Setting new gas targets is **not mandatory**; if no new configuration is set, the legacy gas pricing algorithm with a single gas target remains active.
-- **Additional Details:** For those interested in how these values are derived, [this document](/how-arbitrum-works/deep-dives/gas-and-fees#the-gas-target) provides the underlying parameters used to calculate the new gas targets and adjustment windows.
+- **Key action:** We recommend waiting for this new pricing algorithm to be used in production for at least 30 days on Arbitrum One before enabling the new gas targets for your own chain. _[Updated: 8th Jan 2025]_
+  - This change is **backward compatible**. Setting new gas targets is **not mandatory**; if no new configuration is set, the legacy gas pricing algorithm with a single gas target remains active.
+- **Additional details:** For those interested in how these values are derived, refer to the [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees#the-gas-target) page as it provides the underlying parameters used to calculate the new gas targets and adjustment windows.
 
 :::note
+
 The upgrade to ArbOS 51 doesn't require activation of these new gas targets. The new targets are completely opt-in, so you can choose when to enable them.
+
 :::
 
 ## Purpose
@@ -45,29 +47,28 @@ await arbOwner.setGasPricingConstraints([shortTerm, longTerm]);
 
 Refer to the definitions below to understand what each parameter means:
 
-- `gasTargetPerSecond` is the target gas processing rate for your Arbitrum chain. It's the amount of gas the system aims to process each second under normal conditions. Any demand above this target will induce a gas price increase as a way to economically disincentivize usage until it gets reduced to the target.
-- `adjustmentWindowSeconds` is the time period within which the system will measure average gas demand/usage over to determine whether or not the gas price needs to be adjusted, relative to the gas target. A larger window results in more stable, predictable pricing, while a smaller window reacts aggressively to traffic spikes.
-- `startingBacklogValue` is the initial amount of gas the system uses to set prices the **exact moment** the gasTargetPerSecond and adjustmentWindowSeconds get changed.
-  Ideally, the backlog value should be set to the existing backlog of the chain when the function call to `setGasPricingConstraints` is made. Given this is not always easy, using 0 is a common practice (same will be done on Arbitrum One). \
-  However, using 0 means that the system assumes that the demand is 0, causing the gas price to adjust to the min. L2 base fee (0.02 gwei/gas). After which the system will begin tracking the backlog once again based on demand to price gas.
+- `gasTargetPerSecond` is the target gas processing rate for your Arbitrum chain. It's the amount of gas the system aims to process each second under normal conditions. Any demand above this target will trigger a gas price increase to economically disincentivize usage until it falls back to the target.
+- `adjustmentWindowSeconds` is the time period within which the system will measure average gas demand/usage to determine whether or not the gas price needs to be adjusted, relative to the gas target. A larger window results in more stable, predictable pricing, while a smaller window reacts aggressively to traffic spikes.
+- `startingBacklogValue` is the initial amount of gas the system uses to set prices the **exact moment** the `gasTargetPerSecond` and `adjustmentWindowSeconds` get changed.
+  - Ideally, the backlog value should be set to the existing backlog of the chain when the function call to `setGasPricingConstraints` is made. Given this is not always easy, using `0` is a common practice (the same will be done on Arbitrum One).
+  - However, using `0` means that the system assumes that the demand is `0`, causing the gas price to adjust to the minimum. L2 base fee (0.02 gwei/gas). After which, the system will resume tracking the backlog based on demand to price gas.
 
 ## How to calculate the values for your chain
 
-Offchain Labs has developed a [script to help calculate pricing constraints](https://colab.research.google.com/drive/1D28YghOmCjvvrLWS5FsTp5xNKz9JHAA3?usp=sharing) which takes in certain parameters to find the most optimized gas targets to use for your chain. The script takes in below params:
+Offchain Labs has developed a [script to help calculate pricing constraints](https://colab.research.google.com/drive/1D28YghOmCjvvrLWS5FsTp5xNKz9JHAA3?usp=sharing), which takes in certain parameters to find the most optimized gas targets to use for your chain. The script takes in the following params:
 
-- `long_term_gas_target` is the desired long term average gas throughput for the chain. A higher gas target means that your chain can handle more TPS before the gas begins to spike. However, a higher gas target also leads to faster state growth and requires more powerful hardware. \
-  [State Size Limits](/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit): Guidance for setting your chains gas target \
-  [State Growth Guidance](/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth): Impact of high gas targets on state growth and its consequences
-
-- `node_throughput` is the sustainable maximum throughput that the nodes can maintain without any issues. It is highly dependent on your specific hardware and chain workload. Offchain Labs will soon publish testing frameworks and tools that can be used to benchmark what throughput your nodes can handle for various workloads.
+- `long_term_gas_target` is the desired long-term average gas throughput for the chain. A higher gas target means that your chain can handle more TPS before the gas begins to spike. However, a higher gas target also leads to faster state growth and requires more powerful hardware.
+  - [State size limits](/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit): Guidance for setting your chains gas target
+  - [State growth guidance](/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth): Impact of high gas targets on state growth and its consequences
+- `node_throughput` is the sustainable maximum throughput that the nodes can maintain without any issues. It is highly dependent on your specific hardware and the workload of your chain. Offchain Labs will soon publish testing frameworks and tools to benchmark the throughput your nodes can handle across various workloads.
 - `gas_limit` is the theoretical max block size limit. With the introduction of the `MaxTxGasLimit` in ArbOS 51, the effective block gas limit is twice the `MaxBlockGasLimit`. We recommend using an in-between value of `MaxBlockGasLimit` and Effective Block Gas Limit `(MaxTxGasLimit + MaxBlockGasLimit)` for this parameter.
-- `max_rate_of_increase_percent_per_second` is the maximum allowed rate of increase in the fee per sec when the chain is working at the max capacity.
+- `max_rate_of_increase_percent_per_second` is the maximum allowed rate of increase in the fee per second when the chain is working at the maximum capacity.
 - `long_term_adjustment_window_seconds` is the maximum timeframe over which gas prices adjust. This window specifically applies to the **lowest gas target** to ensure price stability during low-demand periods.
 
-Below values were used for calculating the gas targets for Arbitrum One. These values have been calculated based on various UX and research considerations.
+The values listed below are used for calculating the gas targets for Arbitrum One. These values have been calculated based on various UX and research considerations.
 
 | Param                                     | Arbitrum One Config |
-| :---------------------------------------- | :------------------ |
+| ----------------------------------------- | ------------------- |
 | `long_term_gas_target`                    | 10 Mgas/s           |
 | `node_throughput`                         | 80 Mgas/s           |
 | `gas_limit`                               | 128 Mgas/s          |
@@ -76,9 +77,7 @@ Below values were used for calculating the gas targets for Arbitrum One. These v
 
 ## Recommendation for Arbitrum chains
 
-The launch of this new pricing algorithm (the first optimization towards Dynamic Pricing) has already been completed for Arbitrum One as of Jan 8, 2026. We recommend waiting for at least 30 days after ArbOS 51 upgrade on Arbitrum One before upgrading your chain. After upgrading to ArbOS 51, you can set the parameters to enable the new pricing algorithm. We recommend this waiting period to ensure the changes are stable and work effectively before having other chains adopt it.
-
-Arbitrum chain teams can use the below recommended values for the script parameters. The script will generate the optimized gas targets and adjustment windows for your chain, which you can then use to enable the new pricing system.
+Arbitrum chain teams can use the following recommended values for the script parameters. The script will generate the optimized gas targets and adjustment windows for your chain, which you can then use to enable the new pricing system.
 
 | Param                                     | Arbitrum One Config | Recommendation                                                                                                                                                          |
 | :---------------------------------------- | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
