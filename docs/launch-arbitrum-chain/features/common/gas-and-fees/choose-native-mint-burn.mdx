@@ -141,4 +141,6 @@ The **collateral sweep** is implemented by adding an outbox contract to the brid
   Typically, an Outbox contract requires verification of a proof for an authorized withdrawal to occur. A custom contract can be designed that permissionlessly sends native gas to a destination on the parent chain.
 - A helper contract, [**`ERC20MigrationOutbox`**](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/extra/ERC20MigrationOutbox.sol), can sweep any “dust” that lands in the bridge and transfer it to the external adapter on L1.
 
+## How to configure
+
 To learn how to configure this feature for your chain refer to the [Configure a native mint/burn gas token](/launch-arbitrum-chain/02-configure-your-chain/common/gas/configure-native-mint-burn-gas-token.mdx) page.
