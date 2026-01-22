@@ -38,7 +38,7 @@ The native mint/burn feature permits mint & burn capability of the Rollup’s na
 | :-------------------------------------------------- | :------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **ArbOS/Nitro (consensus-v51 or higher)**           | Offchain Labs                                      | • Precompile `ArbNativeTokenManager`<br/>• Owner allowlist and 7-day timelock<br/>• Node rule that blocks value-bearing withdrawals while an owner is present                                                           |
 | **Adapter contract**                                | Bridge infra provider (LayerZero, Hyperlane, etc.) | • Verifies cross-chain messages<br/>• Calls `mintNativeToken` / `burnNativeToken` on L2<br/>• Manages collateral vault on L1                                                                                            |
-| **Chain Configuration and Adjacent Infrastructure** | RaaSes                                             | • Permission the adapter address with mint & burn<br/>• Run the outbox-sweep bot (this could also be run by e.g., LayerZero)<br/>• Monitor timelock and supply events (could also be responsibility of e.g., LayerZero) |
+| **Chain Configuration and Adjacent Infrastructure** | Chain operator                                             | • Permission the adapter address with mint & burn<br/>• Run the outbox-sweep bot (this could also be run by e.g., LayerZero)<br/>• Monitor timelock and supply events (could also be responsibility of e.g., LayerZero) |
 
 ## Use cases
 
