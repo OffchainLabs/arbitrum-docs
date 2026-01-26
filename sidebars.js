@@ -539,11 +539,6 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/customize-deployment-configuration',
-                  label: `Customize deployment configuration`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
                   label: `Deploy an Arbitrum chain`,
                 },
