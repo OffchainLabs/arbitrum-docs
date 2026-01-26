@@ -60,7 +60,7 @@ To modify the State Transition Function, you'll need to build a modified Arbitru
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.9.3@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.9.4@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -101,7 +101,7 @@ With that, you have now two ways of running your node.
 
 #### 1. Using the docker-compose file
 
-This is the recommended way if you're running your Arbitrum chain (Orbit) locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container:
+This is the recommended way if you're running your Arbitrum chain locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container:
 
 ```
 ...
@@ -123,7 +123,7 @@ docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:84
 
 :::info
 
-The instructions provided in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx) **will not** work with your Arbitrum chain node. See [Optional parameters (Arbitrum chain)](/run-arbitrum-node/02-run-full-node.mdx#optional-parameters) for Arbitrum chain (Orbit)-specific CLI flags.
+The instructions provided in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx) **will not** work with your Arbitrum chain node. See [Optional parameters (Arbitrum chain)](/run-arbitrum-node/02-run-full-node.mdx#optional-parameters) for Arbitrum chain-specific CLI flags.
 
 :::
 
@@ -171,7 +171,7 @@ After that, you'll have, again, two ways of running your node.
 
 #### 1. Using the docker-compose file
 
-As mentioned before, this is the recommended way if you're running your Arbitrum chain (Orbit) locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container. Notice that we'll now use the `custom-nitro-node-dev` you just created:
+As mentioned before, this is the recommended way if you're running your Arbitrum chain locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container. Notice that we'll now use the `custom-nitro-node-dev` you just created:
 
 ```
 ...

@@ -1,0 +1,55 @@
+---
+title: 'Why choose to enable BoLD for your Arbitrum chain'
+description: 'Learn about BoLD and the pros and cons of choosing to enable it.'
+author: pete-vielhaber
+sme: jason-w123
+content_type: configuration
+---
+
+import BoldPCPartial from '../../partials/_bold-pc.mdx';
+
+Upgrading or configuring the chain to use the Bounded Liquidity Delay (<a data-quicklook-from="bold">BoLD</a>) protocol as its dispute resolution mechanism means replacing the legacy 1-vs-1 <a data-quicklook-from="challenge">challenge</a> system with a permissionless, all-vs-all dispute framework that enhances validation and security by allowing anyone to participate in challenging invalid state assertions through bonding, while ensuring disputes resolve within a fixed time bound (up to two challenge periods, typically ~12.8 days on Ethereum). It's enabled via an administrative upgrade on the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum). It is mandatory for certain <a data-quicklook-from="arbitrum">Arbitrum</a> chain configurations, such as using custom gas tokens in Rollup mode when posting directly to Ethereum.
+
+For the chain, it resets the challenge clock for in-flight withdrawals (adding up to 6.4 days delay, with a max of 12.8 days total), handles overflow assertions for accumulated blocks during upgrade, and requires at least one active proposer (<a data-quicklook-from="validator">validator</a> in MakeNodes mode) to advance the chain. Chain owners configure bond sizes (e.g., 3600 `ETH` for assertions on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> equivalents) and can add incentives like service fees or bounties. This choice prioritizes enhanced security and decentralization over the legacy system's potential for centralized control, making the chain more resilient to attacks but introducing economic considerations for participation.
+
+## Key concepts
+
+- **Validation in Arbitrum**: In optimistic Rollups like Arbitrum, validators (sequencers or stakers) post assertions about the chain's state (e.g., block hashes, history commitments as Merkle roots, <a data-quicklook-from="batch">batch</a> numbers, and inbox message counts) to the parent chain. These assertions can be challenged during a fixed window (typically 6.4 days on Ethereum) if they are suspected to be invalid, leading to interactive fraud proofs verified onchain via a <a data-quicklook-from="wasm">WASM</a> VM.
+- **Security through disputes**: Disputes narrow disagreements via bisections (binary search over computation steps, up to `2^69` in total space) across levels (block, BigStep for WASM ranges, SmallStep for single steps). Honest validators use offchain software (e.g., Nitro in Defensive mode) to automatically challenge invalid assertions, generating deterministic fraud proofs. Security relies on economic incentives: bonds are posted and forfeited by losers, deterring malice.
+- **BoLD Protocol**: BoLD introduces an "all-vs-all" (battle royale) model where multiple parties can challenge and defend simultaneously via "edges" (claims about history segments). It uses timers based on parent chain blocks, <a data-quicklook-from="trustless">trustless</a> bonding pools for crowdsourced stakes, and recursive sub-challenges to ensure a single honest party can always win against any number of adversaries. This bounds liquidity delays (hence the name) and mitigates "delay attacks" where malicious parties could previously prolong disputes indefinitely.
+
+## Compatibility with chain types
+
+BoLD is required for Rollup mode with custom gas tokens posting to Ethereum (to handle conversions securely). It's compatible with AnyTrust and Alt-DA modes but focuses on L2/L3 chains settling on Ethereum for maximum security. Post-upgrade, the chain uses BoLD for all new assertions.
+
+## How it differs from legacy protocols
+
+- **Legacy (Pre-BoLD)**: Used 1-vs-1 tournament-style challenges, vulnerable to delay attacks (malicious parties forcing sequential games to stall confirmations) and reliant on permissioned validators, limiting decentralization.
+- **BoLD**: Shifts to permissionless, all-vs-all disputes with bounded delays (constant upper limit), trustless pooling for bonds, and exponential cost ratios (~6.46:1 malicious-to-honest for Arbitrum One) to deter spam. It guarantees honest wins and resolves in a fixed time, even against coordinated attacks.
+
+<!-- Render BoLD Pros & Cons partial -->
+
+<BoldPCPartial />
+
+## Examples
+
+- **Arbitrum One and Nova**: Upgraded to BoLD for <a data-quicklook-from="permissionless-validation">permissionless validation</a>, allowing public testnets and community validators to secure the chains.
+- **Custom Arbitrum chains**: Projects like gaming or DeFi appchains choose BoLD to enable decentralized validation, especially when using Rollup mode with Ethereum settlement for high-security needs.
+
+:::info Still unsure?
+
+The [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains.mdx) page has a lot more detailed specifics about the inner workings of BoLD if you are unsure about whether to adopt it for your chain.
+
+Additional resources are:
+
+- [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx)
+- [BoLD technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx)
+- [BoLD economics of disputes](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx)
+
+:::
+
+## How to configure
+
+For specfics on configuration refer to the [How to adopt Arbitrum BoLD](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains.mdx#how-to-adopt-arbitrum-bold) section on that page.
+
+This upgrade aligns with Arbitrum's modular ethos, bolstering trust-minimization while inheriting Ethereum's security. For implementation, refer to the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

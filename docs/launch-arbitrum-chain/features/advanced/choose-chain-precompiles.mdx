@@ -1,0 +1,71 @@
+---
+title: 'Why choose to customize the precompiles on your Arbitrum chain'
+description: 'Learn about precompiles and the pros and cons of choosing to customize them on your chain.'
+author: pete-vielhaber
+sme: jason-w123
+content_type: configuration
+---
+
+Customizing your chain's precompiles refers to modifying or extending the built-in, system-level <a data-quicklook-from="smart-contract">smart contract</a>-like functions (precompiles) that provide efficient access to chain-specific operations, such as interacting with the <a data-quicklook-from="parent-chain">parent chain</a> (L1/L2), querying state, or performing computations. Precompiles are hardcoded at specific addresses (e.g., 0x64 for `ArbSys`) and executed outside the EVM bytecode level for performance. They inherit Ethereum's standard precompiles (e.g., for hashing or elliptic curves) while adding <a data-quicklook-from="arbitrum">Arbitrum</a>-specific ones (e.g., `ArbAddressTable` for address compression).
+
+Customization allows developers to add new methods, events, gas logic, or state interactions tailored to the chain's needs, such as app-specific utilities or optimizations. This flexibility is an advanced feature requiring modifications to the Nitro software stack, enabling deeper chain personalization beyond defaults like custom gas tokens or DA modes.
+
+## Key concepts
+
+- **Precompiles in Arbitrum**: These are predefined contracts at fixed addresses that handle operations more efficiently than regular EVM code. Standard ones include ArbSys (for L1 interactions), ArbInfo (for balances and codes), and others for aggregation, retryables, or gas estimation. Customization builds on this by altering their behavior or adding new ones in the Nitro Go implementation.
+- **Customization scope**: Focuses on extending functionality without full EVM changes, such as adding utility methods (e.g., a local zk-proof function) or integrating chain-specific state (e.g., a stored bytes). It doesn't alter core EVM opcodes but enhances system access.
+
+## Options for customization
+
+There are several approaches, each building on the Nitro codebase:
+
+- **Add new methods to an existing <a data-quicklook-from="precompile">precompile</a>**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
+- **Create a new precompile**: Define a completely new precompile at a custom address (e.g., 0x011a for ArbHi) with its own methods.
+- **Define a new event**: Add events to methods for logging, making the method state-modifying and indexable for off-chain querying.
+- **Customize gas usage**: Adjust or implement gas costs for methods (e.g., cost 300 gas instead of 700 for a balance query) to optimize efficiency or prevent DoS attacks.
+- **Call and modify state**: Integrate with <a data-quicklook-from="arbos">ArbOS</a> state by adding storage variables and methods to read/write them, allowing persistent chain-specific data.
+
+## Compatibility with chain types
+
+- Works with all Arbitrum chain DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native ETH or custom), as it's a Nitro-level change.
+- Compatible with <a data-quicklook-from="bold">BoLD</a> or permissioned validation.
+
+## Pros
+
+- Enables highly tailored functionality (e.g., custom events for better logging, state for app-specific data).
+- Optimizes performance and gas (e.g., cheaper queries).
+- Enhances chain utility for specialized use cases like DeFi or gaming.
+
+## Cons
+
+- Requires deep expertise in Go, Solidity, and Nitro; complex setup and maintenance.
+- Customizing the precompiles will cause <a data-quicklook-from="wasm">WASM</a> module root changes, introducing additional modifications.
+- Risks include DoS vulnerabilities without proper gas implementation, security issues without audits, and potential validation breaks.
+- No official review from <a data-quicklook-from="offchain-labs">Offchain Labs</a>; changes may complicate upgrades or fraud proofs.
+
+## Examples
+
+- Adding a "sayHi" method to ArbSys that returns "hi" and emits a "Hi" event.
+- Creating a new ArbHi precompile with a gas-optimized balance query.
+- Storing and modifying a custom state variable like "myNumber" via a new method.
+- Add a zk proof function so chains can process zk-related work more efficiently than EVM based options.
+
+:::info
+
+It is important to understand that this is part of customizing ArbOS on your chain. You can read more about this on the [Choose ArbOS Version](/launch-arbitrum-chain/features/advanced/choose-arbos-version.mdx) page.
+
+**All** modifications to precompiles should consider ArbOS version control or it may cause a chain fork. More information can be found on the [Customize ArbOS page](/launch-arbitrum-chain/customize-your-chain/customize-arbos#where-should-i-insert-arbos-upgrade-related-code).
+
+:::
+
+## How to configure
+
+Customizing requires building a modified Nitro node, as precompiles are part of the core software:
+
+1. **Clone and setup Nitro**: Use branch v3.7.2 or later (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`), then initialize submodules.
+2. **Edit Go files**: Modify `/precompiles` directory (e.g., add methods to ArbSys.go), register new precompiles in precompile.go, and for state changes, update arbosstate.go with variables, offsets, and initialization.
+3. **Update Solidity interfaces**: Add corresponding methods/events to .sol files in the precompiles interface directory for dApp compatibility. Also, follow the steps in [Choose ArbOS version](/launch-arbitrum-chain/features/advanced/choose-arbos-version.mdx), as it will also modify the STF.
+4. **Build and run node**: Compile a custom Docker image and run the node with your configurations (e.g., specifying parent chain URL and chain ID). Test with tools like curl for eth_call or Foundry's cast for calls/sends.
+5. **Post-launch changes**: Use ArbOS version upgrades to apply without reorganizing the chain; follow related guides for fraud proofs.
+
+This advanced customization aligns with Arbitrum's modular design but demands careful planning and testing. For implementation, refer to the docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

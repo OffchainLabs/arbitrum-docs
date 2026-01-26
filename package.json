@@ -26,11 +26,10 @@
     "format:docs": "prettier --write --config \"./.prettierrc.js\" -- \"docs/**/*.{md,mdx}\"",
     "format:check": "prettier --check --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\" \"docs/**/*.{md,mdx}\"",
     "typecheck": "tsc",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "check-redirects": "tsx scripts/check-redirects.ts",
     "check-releases": "ts-node scripts/check-releases.ts",
+    "check-markdown": "tsx scripts/check-markdown.ts",
     "notion:update": "tsx scripts/notion-update.ts",
+    "notion:export-csv": "tsx scripts/notion-export-csv.ts",
     "notion:verify-quicklooks": "tsx scripts/notion-verify-quicklooks.ts",
     "lint:markdown": "markdownlint \"docs/**/*.{md,mdx}\" --ignore \"docs/sdk/**\"",
     "lint:markdown:fix": "markdownlint \"docs/**/*.{md,mdx}\" --fix --ignore \"docs/sdk/**\""
@@ -96,8 +95,7 @@
     "typedoc": "^0.25.13",
     "typedoc-plugin-frontmatter": "^1.0.0",
     "typedoc-plugin-markdown": "4.0.1",
-    "typescript": "^5.1",
-    "vitest": "^3.0.7"
+    "typescript": "^5.1"
   },
   "resolutions": {
     "image-size": "latest"

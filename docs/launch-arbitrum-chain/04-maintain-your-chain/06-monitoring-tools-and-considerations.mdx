@@ -9,23 +9,23 @@ sidebar_position: 0
 
 When deploying and maintaining an Arbitrum chain, there are several key elements that need to be monitored. This page lists tools that are available for chain maintainers, as well as other considerations to keep in mind when monitoring an Arbitrum chain.
 
-## Arbitrum chain (Orbit) verification script
+## Arbitrum chain verification script
 
-The [Arbitrum chain (Orbit) verification script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/feat-add-verification-scripts/examples/verify-rollup) retrieves information from an Arbitrum chain and its parent chain to verify that all parameters are configured correctly. After gathering the data, it generates a comprehensive report and issues warnings for any discrepancies detected. This tool is particularly useful after deploying and configuring an Arbitrum chain, to make sure that the onchain information has been correctly set.
+The [Arbitrum chain verification script](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/feat-add-verification-scripts/examples/verify-rollup) retrieves information from an Arbitrum chain and its parent chain to verify that all parameters are configured correctly. After gathering the data, it generates a comprehensive report and issues warnings for any discrepancies detected. This tool is particularly useful after deploying and configuring an Arbitrum chain, to make sure that the onchain information has been correctly set.
 
 :::info
 
-The Arbitrum chain (Orbit) Verification Script is currently under active development and is considered a work-in-progress (WIP). Consequently, its findings should be approached with caution, as there is a potential for false positives.
+The Arbitrum chain Verification Script is currently under active development and is considered a work-in-progress (WIP). Consequently, its findings should be approached with caution, as there is a potential for false positives.
 
 :::
 
-## Arbitrum chain (Orbit) retryables tracker
+## Arbitrum chain retryables tracker
 
-[Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) are messages sent from a parent chain and executed on the Arbitrum chain. Due to their asynchronous nature (they are executed several minutes after being created), if insufficient funds are provided at the time of creation, they might not automatically redeem (execute) upon arrival at the Arbitrum chain. When this occurs, a manual redemption of the ticket is required. The [Arbitrum chain (Orbit) retryables tracker](https://github.com/OffchainLabs/Orbit-retryable-tracker) is designed to assist in identifying and displaying the status of retryable tickets sent from a parent chain to the Arbitrum chain, and it reports any tickets that have not been automatically redeemed.
+[Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) are messages sent from a parent chain and executed on the Arbitrum chain. Due to their asynchronous nature (they are executed several minutes after being created), if insufficient funds are provided at the time of creation, they might not automatically redeem (execute) upon arrival at the Arbitrum chain. When this occurs, a manual redemption of the ticket is required. The [Arbitrum chain retryables tracker](https://github.com/OffchainLabs/Orbit-retryable-tracker) is designed to assist in identifying and displaying the status of retryable tickets sent from a parent chain to the Arbitrum chain, and it reports any tickets that have not been automatically redeemed.
 
 ## Data Availability Server (DAS) health checks
 
-If you've deployed an AnyTrust chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#testing-the-das) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `datool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
+If you've deployed an AnyTrust chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/02-deploy-das.mdx) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `datool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
 
 ## Further monitoring considerations
 

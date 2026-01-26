@@ -1,10 +1,10 @@
 ---
-title: "How to configure your Arbitrum chain's node using the Arbitrum chain (Orbit) SDK"
-description: 'Learn how to configure a node using the Arbitrum chain (Orbit) SDK'
+title: "How to configure your Arbitrum chain's node using the Chain SDK"
+description: 'Learn how to configure a node using the Chain SDK'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
-user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Arbitrum chain (Orbit) SDK.
+user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Chain SDK.
 content_type: how-to
 ---
 
@@ -12,9 +12,9 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is to configure and run an Arbitrum <a data-quicklook-from="arbitrum-nitro">Nitro</a> node for your chain. You configure a Nitro node using a `JSON` file describing all the parameters for the node, including settings for the batch poster, validator, and the chain itself. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to creating and configuring an Arbitrum chain.
+Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is to configure and run an Arbitrum <a data-quicklook-from="arbitrum-nitro">Nitro</a> node for your chain. You configure a Nitro node using a `JSON` file describing all the parameters for the node, including settings for the batch poster, validator, and the chain itself. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.mdx) for an introduction to creating and configuring an Arbitrum chain.
 
-Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy an Arbitrum chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md).
+Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy an Arbitrum chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.mdx).
 
 ## Structure of a Nitro node configuration JSON object
 
@@ -82,15 +82,15 @@ For <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</a
 };
 ```
 
-You can find information about what these parameters configure in [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx).
+You can find information about what these parameters configure in [How to configure a DAC](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/04-configure-dac.mdx).
 
-## How to generate a node's configuration file using the Arbitrum chain (Orbit) SDK
+## How to generate a node's configuration file using the Arbitrum Chain SDK
 
-Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Arbitrum chain (Orbit) SDK.
+Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Chain SDK.
 
 :::info Example script
 
-The Arbitrum chain (Orbit) SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts) script.
+The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
 :::
 
@@ -122,7 +122,7 @@ import {
   createRollupPrepareTransactionReceipt,
   ChainConfig,
   prepareNodeConfig,
-} from '@arbitrum/orbit-sdk';
+} from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
