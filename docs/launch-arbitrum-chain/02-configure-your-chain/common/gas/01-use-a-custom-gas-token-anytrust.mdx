@@ -7,6 +7,8 @@ sidebar_position: 3
 content_type: how-to
 ---
 
+import CustomGasTokenNote from '../../../partials/_custom-gas-token-note.mdx';
+
 When deploying your AnyTrust Arbitrum chain you have the option of using a custom gas token, different than `ETH`, that is natively used for gas payments on the network. When choosing this option, there are certain requirements that the token needs to comply with, as well as certain chain configuration that needs to be adjusted. This guide covers this information.
 
 ## Requirements of the custom gas token
@@ -46,14 +48,4 @@ These parameter changes are strongly recommended to avoid charging users for a n
 
 In either case we strongly recommend taking these steps to avoid any issues with chain economics. You can read more about how Nitro manages fees in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
-:::info Native Mint/Burn for Custom Gas Tokens
-Starting with **ArbOS 51 Dia**, Arbitrum chains have the option to use a **native interop token with mint/burn** as their custom gas tokens via third-party interoperability providers (such as LayerZero OFTs, xERC20s, or native USDC) instead of using the canonical "lock and mint" bridge.
-
-:::note
-
-Arbitrum provides the infrastructure for this feature, but does not provide the bridge adapter itself. To use this feature, you must directly coordinate with your chosen bridge provider to build, audit, and deploy a custom adapter contract.
-
-:::
-
-To enable this feature for your chain, see our guide on [enabling native mint/burn for gas tokens](/launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token).
-:::
+<CustomGasTokenNote />
