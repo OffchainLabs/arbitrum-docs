@@ -146,7 +146,7 @@ The `MaxTxGasLimit` comes from implementing [EIP-7825](https://eips.ethereum.org
 
 This means that the “Effective Block Gas Limit” is really `MaxBlockGasLimit` + `MaxTxGasLimit` (64M for Arbitrum One). In previous versions of ArbOS, the STF would skip transactions from the sequencer feed if the transaction’s `GasLimit` (set by the user) minus the L1 data posting gas exceeded the gas remaining in the block (without executing the transaction to see how much L2 gas it actually used).
 
-The new algorithm is more efficient (because the STF doesn’t need to continually search the transaction queue for one that fits in the remaining block gas, and can just keep adding transactions until the unused block gas is 0).
+The new algorithm is more efficient because the STF doesn’t need to continually search the transaction queue for one that fits in the remaining block gas, and can just keep adding transactions until the unused block gas is 0.
 
 :::note
 
