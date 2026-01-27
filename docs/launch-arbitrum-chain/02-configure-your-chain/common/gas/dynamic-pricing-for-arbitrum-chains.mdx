@@ -31,6 +31,12 @@ Detailed information on the purpose of this upgrade can be found in the [AIP for
 - L1 gas fee spikes on Ethereum
 - Data availability pricing
 
+:::info
+
+For more information about Effective block gas limit, refer to the [Gas and fees page](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#effective-block-gas-limit).
+
+:::
+
 ## How to set multiple gas targets
 
 You can call `SetGasPricingConstraints` on the [ArbOwner precompile](/for-devs/dev-tools-and-resources/partials/precompile-tables/_ArbOwner) with an array of gas targets (the code refers to these targets as "constraints"), where each constraint contains `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]`.
