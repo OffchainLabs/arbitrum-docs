@@ -134,14 +134,7 @@ const sidebars = {
               type: 'doc',
               id: 'for-devs/oracles/ora/ora',
             },
-            {
-              type: 'doc',
-              id: 'for-devs/oracles/supra/supras-price-feed',
-            },
-            {
-              type: 'doc',
-              id: 'for-devs/oracles/supra/supras-vrf',
-            },
+            ,
             {
               type: 'doc',
               id: 'for-devs/oracles/trellor/trellor',
@@ -1231,11 +1224,6 @@ const sidebars = {
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
             },
           ],
-        },
-        {
-          type: 'doc',
-          label: 'Oracles',
-          id: 'build-decentralized-apps/oracles/overview-oracles',
         },
         {
           type: 'category',
