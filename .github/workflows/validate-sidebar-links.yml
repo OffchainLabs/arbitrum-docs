@@ -41,15 +41,6 @@ jobs:
         with:
           install-command: yarn install --frozen-lockfile
 
-<<<<<<< HEAD
-      - name: Install SDK dependencies
-        run: yarn install-sdk-dependencies
-
-      - name: Generate SDK docs
-        run: yarn generate-sdk-docs
-
-||||||| parent of 4003ad2a6 (fix: generate SDK and Stylus sidebars before validating links in CI)
-=======
       - name: Install SDK dependencies
         run: yarn install-sdk-dependencies
 
@@ -59,6 +50,5 @@ jobs:
       - name: Generate SDK docs
         run: yarn generate-sdk-docs
 
->>>>>>> 4003ad2a6 (fix: generate SDK and Stylus sidebars before validating links in CI)
       - name: Validate sidebar links
         run: yarn tsx scripts/check-sidebar-links.ts
