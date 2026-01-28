@@ -428,6 +428,11 @@ const sidebars = {
                       id: 'launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
                       label: `Gas optimization tools`,
                     },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
+                      label: 'Dynamic Pricing for Arbitrum Chains',
+                    },
                   ],
                 },
                 {
@@ -536,11 +541,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
                   label: `Overview`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/customize-deployment-configuration',
-                  label: `Customize deployment configuration`,
                 },
                 {
                   type: 'doc',
