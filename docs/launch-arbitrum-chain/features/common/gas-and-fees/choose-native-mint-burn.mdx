@@ -90,18 +90,12 @@ Details for the time lock switch are:
 
 - A chain that has already initialized with native mint/burn disabled must wait seven days for the precompiles to activate
 - A chain can disable native mint/burn instantly
-- If a chain wants to have a lower delay (e.g., one day, one hour), they will need to maintain a small fork of Nitro that changes the hard-coded value:
-
-  - Hard-Coded value here: https://github.com/OffchainLabs/go-ethereum/blob/c289e79453d4fdd8644a88337885c8bf27155604/params/config_arbitrum.go#L49
-  - This change will cause your WASM module root to change. Please refer to [customize STF](/launch-arbitrum-chain/customize-your-chain/customize-stf#building-the-modified-node) steps to calculate the new WASM module root and set it on the chain before starting your new node.
-
-    :::warning
-
-    Please note, if you want to change this constant value, make sure it hasn't been used before and you have never called `setNativeTokenManagementFrom` before. If not, your chain may experience some reorg issues. If you want to change this value after you have already used it (**not recommended**), you need to consider proper version control, one example is [ArbOS version control](/launch-arbitrum-chain/customize-your-chain/customize-arbos).
-
-    :::
 
 A seven-day timelock gates the feature. Call [`ArbOwner.setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with a UNIX timestamp ≥ _now + 7 days_ to enable the feature; disabling is instantaneous.
+
+:::info Important
+The native token mint/burn feature is currently not available for implementation at chain genesis. The ability to activate it during chain initialization will be part of a future release.
+:::
 
 ### Native mint and burn precompiles
 
