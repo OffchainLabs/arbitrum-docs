@@ -220,7 +220,7 @@ const sidebars = {
                     {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-fee-rebates',
-                      label: `Fee rebates`,
+                      label: `Fee distribution`,
                     },
                     {
                       type: 'doc',
