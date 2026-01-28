@@ -27,7 +27,8 @@ jobs:
       - name: Checkout files
         uses: actions/checkout@v4
         with:
-          # Shallow clone is fine, we only need current state
+          # Need submodules for SDK documentation generation
+          submodules: recursive
           fetch-depth: 1
 
       - name: Setup Node.js
@@ -39,6 +40,12 @@ jobs:
         uses: OffchainLabs/actions/node-modules/install@main
         with:
           install-command: yarn install --frozen-lockfile
+
+      - name: Install SDK dependencies
+        run: yarn install-sdk-dependencies
+
+      - name: Generate SDK docs
+        run: yarn generate-sdk-docs
 
       - name: Validate sidebar links
         run: yarn tsx scripts/check-sidebar-links.ts
