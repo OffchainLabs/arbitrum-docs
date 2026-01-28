@@ -30,7 +30,7 @@ Before starting, ensure that the chain has:
 
 | Item               | Minimum version                                                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `nitro-contracts`  | [v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher (includes the ERC20MigrationOutbox)                       |
+| `nitro-contracts`  | [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher                                                           |
 | `nitro-node`       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher (includes the fix for `ArbNativeTokenManager` precompile inclusion) |
 | `go-ethereum` fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root) or later                           |
 
@@ -72,7 +72,7 @@ Below steps show the flow a chain owners can use to allowlist a bridge adapter. 
      --private-key $PRIVATE_KEY \
      --rpc-url $RPC_URL
    ```
-5. _(Optional)_ Deploy `ERC20MigrationOutbox` on L1 and run a bot to call `sweep()` on a desired cadence.
+5. _(Optional)_ Deploy [`ERC20MigrationOutbox`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/extra/ERC20MigrationOutbox.sol) on L1 and run a bot to call `sweep()` on a desired cadence.
 6. Chain owners should monitor the following events:
    - `OwnerActs(0xaeb3a464, address indexed owner, bytes data)` to see adding native owner
    - `OwnerActs(0x96a3751d, address indexed owner, bytes data)` to see removing native owner
