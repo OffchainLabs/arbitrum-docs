@@ -2291,6 +2291,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/customize-deployment-configuration/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "permanent": false
+    },
+    {
       "source": "/(withdrawals/?)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
