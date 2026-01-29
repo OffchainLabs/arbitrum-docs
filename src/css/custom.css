@@ -101,9 +101,11 @@
 
 /* Details/Summary collapsible elements - border radius override */
 details {
-  border-radius: 0.3rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 details[open] {
-  border-radius: 0.3rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
