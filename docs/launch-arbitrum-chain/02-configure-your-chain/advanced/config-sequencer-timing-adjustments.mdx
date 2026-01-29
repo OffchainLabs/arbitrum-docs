@@ -21,7 +21,7 @@ Most timing tweaks happen at the node level for the sequencer. Use the official 
 | Batch poster max delay              | Node (`node.batch-poster`)                          | Varies (often ~seconds)                                                              | In node config JSON: `"node": { "batch-poster": { "max-delay": "5s" } }` or CLI: `--node.batch-poster.max-delay=5s`                            | Controls max time to wait before posting a batch (even if not full). Lower value for more frequent posts, lower finality latency on parent chain. Higher for fewer posts, lower parent chain costs (good for low-traffic chains). |
 | Batch poster max size               | Node (`node.batch-poster`)                          | ~90,000-100,000 bytes                                                                | CLI example: `--node.batch-poster.max-size=120000`                                                                                             | Larger batches for more efficient posting. Combine with `max-delay` for balance.                                                                                                                                                  |
 | Delayed sequencer finalize distance | Node (`node.delayed-sequencer`)                     | Higher (e.g., waits for full parent chain finality)                                  | CLI: `--node.delayed-sequencer.finalize-distance=1` and enable: `--node.delayed-sequencer.enable=true`                                         | Lower value for near instance deposits (~seconds instead of minutes). Trade-off: minor re-org risk on parent chain.                                                                                                               |
-| Sequencer inbox max time variation | Chain deployment (`sequencerInboxMaxTimeVariation`) | `delayBlocks`: 5760, `futureBlocks`: 12, `delaySeconds`: 86400, `futureSeconds`:3600 | In Chain SDK config struct or `chainConfig` JSON during deployment.                                                                            | Allows sequencer minor timestamp adjustments to avoid re-orgs if batch posting lags. Rarely needs change from defaults.                                                                                                           |
+| Sequencer inbox max time variation  | Chain deployment (`sequencerInboxMaxTimeVariation`) | `delayBlocks`: 5760, `futureBlocks`: 12, `delaySeconds`: 86400, `futureSeconds`:3600 | In Chain SDK config struct or `chainConfig` JSON during deployment.                                                                            | Allows sequencer minor timestamp adjustments to avoid re-orgs if batch posting lags. Rarely needs change from defaults.                                                                                                           |
 | Timeboost non-express delay         | Node (`execution.sequencer.timeboost`)              | 200ms                                                                                | In node config: `"execution": { "sequencer": { "timeboost": { "non-express-delay-msec": 300 } } }`                                             | Larger delay for more advantage/revenue for express lane winner. Increases latency for regular transactions.                                                                                                                      |
 
 ## Step-by-step configuration process:
@@ -55,12 +55,18 @@ const nodeConfig = await prepareNodeConfig({
 
 ```typescript
 docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
-  offchainlabs/nitro-node:latest \
+  offchainlabs/nitro-node:<latest Nitro version> \
   --conf.file=/config/nodeConfig.json \
   --node.sequencer=true \
   --execution.sequencer.enable=true \
   # Add other required flags (parent-chain URL, chain info-json, keys, etc.)
 ```
+
+:::info Latest version of Nitro
+
+You can find the latest recommended version of Nitro on the [Run a Node](/run-arbitrum-node/02-run-full-node.mdx#recommended-nitro-version) page.
+
+:::
 
 - or override via CLI flags for testing
 
