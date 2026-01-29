@@ -104,12 +104,14 @@ details,
 details.alert {
   border-radius: 0.5rem !important;
   overflow: hidden;
+  border: none !important;
 }
 
 details[open],
 details.alert[open] {
   border-radius: 0.5rem !important;
   overflow: hidden;
+  border: none !important;
 }
 
 /* Ensure summary element also respects border radius at top */
