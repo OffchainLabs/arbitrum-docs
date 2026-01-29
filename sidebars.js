@@ -136,10 +136,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'for-devs/oracles/broken-link-test',
-            },
-            {
-              type: 'doc',
               id: 'for-devs/oracles/supra/supras-price-feed',
             },
             {

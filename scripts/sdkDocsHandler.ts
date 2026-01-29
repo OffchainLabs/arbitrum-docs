@@ -28,7 +28,7 @@ function load(app) {
   const indexPath = path.join(sdkOutputDir, INDEX_FILENAME);
   const migratePath = path.join(sdkOutputDir, MIGRATE_FILENAME);
 
-  app.renderer.on(RendererEvent.START, () => {
+  app.renderer.on(RendererEvent.BEGIN, () => {
     // Clean generated docs but preserve manually maintained files
     cleanDirectory(sdkOutputDir, MANUAL_FILES);
   });
