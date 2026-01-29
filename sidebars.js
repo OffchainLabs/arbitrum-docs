@@ -227,7 +227,7 @@ const sidebars = {
                     {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-fee-rebates',
-                      label: `Fee rebates`,
+                      label: `Fee distribution`,
                     },
                     {
                       type: 'doc',
@@ -551,11 +551,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
                   label: `Overview`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/customize-deployment-configuration',
-                  label: `Customize deployment configuration`,
                 },
                 {
                   type: 'doc',
