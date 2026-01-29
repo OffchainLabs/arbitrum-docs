@@ -1,0 +1,108 @@
+---
+title: 'Use a custom genesis to deploy your Arbitrum chain'
+sidebar_label: 'Use custom genesis'
+description: 'Start your chain with a custom genesis file'
+author: Mehta
+sme: Mehta
+user_story: As a current Arbitrum chain owner, I need to start my chain with a set of predeployed contracts and account balances using genesis.json file.
+content_type: get-started
+---
+
+:::caution Minimum Requirement
+You must use Nitro contracts v3.2 or higher. This version is the first to include full support for custom `genesis.json` initialization.
+:::
+
+## What is this feature?
+
+Arbitrum chain operators are increasingly looking to deploy chains with pre-existing state, by loading an initial state in a file such as `genesis.json`.
+Specifically, chain operators want to predeploy smart contracts (like Gnosis Safe) to an Arbitrum chain so they exist at genesis, before any user interaction or post-launch governance.
+
+Initializing from a genesis state would be helpful in the following scenarios:
+
+1. Redeploying a new testnet with pre-existing state if current testnet is broken
+2. Deploying additional sibling chains with pre-existing contracts
+3. Simplifying self-serve backends for RaaSes, such that 100s of testnets can be deployed with similar contracts
+4. Reducing lift on 3rd-party infrastructure teams to redeploy contracts for new chains
+
+## **What Does This Feature Do?**
+
+This feature allows you to initialize a new blockchain with a customized starting state and network configuration through the following options:
+
+- **Predeployed contracts** - standard chains start without any smart contracts. This feature allows you to preload contract bytecode in the very first block so infrastructure is available at the launch.
+- **Initial account state (allocations)** - you can pre-configure the ledger—including account balances and contract storage—before the network opens for transactions.
+- **Custom chain configuration** – chain operators can provide a custom chain-config during startup to define unique network parameters like Chain ID, gas pricing behavior etc.
+
+## **How to use this feature?**
+
+You can use the feature via the SDK or by using the `genesis-file-generator` tool.
+
+### Use via chain SDK
+
+:::caution
+The feature is supported in chain SDK versions xx.xx and above. Chain SDK only allows the standard `genesis.json` creation which contains the predeploy contracts. In case you want to customize the `genesis.json` file or pass accounts / custom chain config, you should use the `genesis-generator-tool` for using the feature.
+:::
+The chain SDK provides an automated script that handles the entire lifecycle: building the genesis state, calculating `blockhash` and `sendRoot` hash, and creating the rollup.
+
+- **Configure the environment:** the script uses a .env file to manage your chain's identity and gas parameters.
+- **Run the custom genesis script:** execute the script to start the automated workflow:
+  ```bash
+  npx ts-node scripts/deploy-custom-genesis.ts
+  ```
+- **SDK workflow:** the script completes the below automated steps:
+  - Generates a standard `genesis.json` file with the pre-deploys contracts.
+  - Calculates the `blockhash` and `sendRoot` hash and gives the same as output for you to use.
+  - An option to deploy the rollup. You can choose to either deploy the chain with the above `genesis.json` or just take the output of the previous step and setup the chain separately.
+
+### Use via `genesis-file-generator` tool
+
+- **Prepare the genesis state:** Use the [genesis-file-generator tool](https://github.com/OffchainLabs/genesis-file-generator), to generate a standard `genesis.json` file with a set of pre-deploy contracts. During this process, you can use the following flags to customize your state:
+  - `--custom-alloc-account-file` – path to a JSON file containing your own account balances, contract bytecodes, and storage slots.
+  - `--not-load-default-predeploys` – use this flag if you want to skip the standard set of Orbit predeployed contracts and start with a clean slate.
+  - `--custom-serializedChainConfig` – use this flag to provide your own minified/serialized chain configuration string.
+  - You can also generate your own genesis.json file, but carefully read [this notice](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
+- **Generate required hashes:** After the genesis.json file is created, use [nitro’s genesis-generator tool](https://github.com/OffchainLabs/nitro/blob/v3.9.2/cmd/genesis-generator/genesis-generator.go) to obtain the genesis blockhash and sendRoot hash.
+- **Deploy the rollup:** use the `blockhash` and `sendRoot` in the chain SDK. The SDK will use these to generate the `assertion_hash` needed to register your rollup's core smart contracts on the parent chain.
+- **Configure and launch your node:** set up your node as usual, but include the following properties to point to your custom state:
+  - `--init.genesis-json-file=/path/to/genesis.json` - path to your custom `genesis.json` file
+  - `--chain.initial-l1base-fee=[Price]` – input the gas price from the L1 block where your rollup creation transaction was accepted.
+
+**Start your chain** with the correct preloaded state.
+
+## Pre-deployed Contracts Registry
+
+The following contracts are included by default in the standard `genesis.json` file.
+| Category | Contract Name | Address | Note |
+| :--- | :--- | :--- | :--- |
+| **Factories** | Safe Singleton Factory v1.0.43 | `0x914d7Fec6aaC8cd542e72Bca78B30650d45643d7` | Deterministic Proxy (Safe Key) |
+| | Create2Deployer | `0x13b0D85CcB8bf860b6b79AF3029fCA081AE9beF2` | CREATE (Deployer: `0x5542...`, Nonce 0) |
+| | CreateX v1.0.0 | `0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed` | Pre-signed Transaction |
+| | Arachnid Proxy | `0x4e59b44847b379578588920cA78FbF26c0B4956C` | Deterministic Proxy (Arachnid) |
+| **Safe v1.3.0** | GnosisSafe (Canonical) | `0xd9Db270c1B5E3Bd161E8c8503c55cEABeE709552` | Via Arachnid CREATE2 Proxy |
+| | GnosisSafe (EIP-155) | `0x69f4D1788e39c87893C980c06EdF4b7f686e2938` | Via Safe Singleton Factory |
+| | GnosisSafeL2 (Canonical) | `0x3e5c63644e683549055b9be8653de26e0b4cd36e` | Via Arachnid CREATE2 Proxy |
+| | GnosisSafeL2 (EIP-155) | `0xfb1bffC9d739B8D520DaF37dF666da4C687191EA` | Via Safe Singleton Factory |
+| | SafeProxyFactory (Canonical) | `0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2` | Via Arachnid CREATE2 Proxy |
+| | SafeProxyFactory (EIP-155) | `0xC22834581EbC8527d974F8a1c97E1bEA4EF910BC` | Via Safe Singleton Factory |
+| | MultiSend v1.3.0 | `0x998739BFdAAdde7C933B942a68053933098f9EDa` | Via Safe Singleton Factory |
+| | MultiSendCallOnly v1.3.0 | `0xA1dabEF33b3B82c7814B6D82A79e50F4AC44102B` | Via Safe Singleton Factory |
+| **Safe v1.4.1** | Safe | `0x41675C099F32341bf84BFc5382aF534df5C7461a` | Via Safe Singleton Factory |
+| | SafeL2 | `0x29fcB43b46531BcA003ddC8FCB67FFE91900C762` | Via Safe Singleton Factory |
+| | SafeProxyFactory | `0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67` | Via Safe Singleton Factory |
+| | MultiSend v1.4.1 | `0x38869bf66a61cF6bDB996A6aE40D5853Fd43B526` | Via Safe Singleton Factory |
+| | MultiSendCallOnly v1.4.1 | `0x9641d764fc13c8B624c04430C7356C1C7C8102e2` | Via Safe Singleton Factory |
+| **ERC-4337 Core** | EntryPoint v0.6.0 | `0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789` | Standard v0.6 |
+| | SenderCreator v0.6.0 | `0x7fc98430eAEdbb6070B35B39D798725049088348` | Created during EP v0.6.0 deploy |
+| | EntryPoint v0.7.0 | `0x0000000071727De22E5E9d8BAf0edAc6f37da032` | Standard v0.7 |
+| | SenderCreator v0.7.0 | `0xEFC2c1444eBCC4Db75e7613d20C6a62fF67A167C` | Created during EP v0.7.0 deploy |
+| | EntryPoint v0.8.0 | `0x4337084d9e255ff0702461cf8895ce9e3b5ff108` | Standard v0.8 |
+| | SenderCreator v0.8.0 | `0x449ED7C3e6Fee6a97311d4b55475DF59C44AdD33` | Created during EP v0.8.0 deploy |
+| **Account Modules** | Safe Module Setup v0.3.0 | `0x2dd68b007B46fBe91B9A7c3EDa5A7a1063cB5b47` | ERC-4337 Initializer |
+| | Safe 4337 Module v0.3.0 | `0x75cf11467937ce3F2f357CE24ffc3DBF8fD5c226` | Associated with Entrypoint v0.7.0 |
+| | Kernel v3.3 | `0xd6CEDDe84be40893d153Be9d467CD6aD37875b28` | Associated with Entrypoint v0.7.0 |
+| | KernelFactory v3.3 | `0x2577507b78c2008Ff367261CB6285d44ba5eF2E9` | Associated with Entrypoint v0.7.0 |
+| | MetaFactory v3.0 | `0xd703aaE79538628d27099B8c4f621bE4CCd142d5` | ZeroDev FactoryStaker |
+| | ECDSAValidator v3.1 | `0x845ADb2C711129d4f3966735eD98a9F09fC4cE57` | Compiled from commit 8f7fd99 |
+| **Infrastructure** | Multicall3 | `0xcA11bde05977b3631167028862bE2a173976CA11` | Pre-signed Transaction |
+| | Permit2 | `0x000000000022D473030F116dDEE9F6B43aC78BA3` | Uniswap Permit2 |
+| | EAS v1.4.0 | `0xF4C9CCaf46A866e2c12C5Bd95A39694718044444` | Ethereum Attestation Service |
+| | EAS SchemaRegistry | `0x822B0B93BE3f3B8Da35a2E90e877C01215be8506` | EAS Registry |
