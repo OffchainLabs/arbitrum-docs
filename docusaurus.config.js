@@ -280,7 +280,7 @@ const config = {
         logo: {
           alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
-          href: '/get-started/overview',
+          href: '/',
         },
         items: [
           {
