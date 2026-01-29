@@ -100,12 +100,20 @@
 }
 
 /* Details/Summary collapsible elements - border radius override */
-details {
-  border-radius: 0.5rem;
+details,
+details.alert {
+  border-radius: 0.5rem !important;
   overflow: hidden;
 }
 
-details[open] {
-  border-radius: 0.5rem;
+details[open],
+details.alert[open] {
+  border-radius: 0.5rem !important;
   overflow: hidden;
+}
+
+/* Ensure summary element also respects border radius at top */
+details > summary {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
