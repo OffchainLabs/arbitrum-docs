@@ -1,0 +1,81 @@
+/**
+ * ImageZoom Component Styles
+ * Styles for the click-to-zoom image component with modal overlay
+ */
+
+/* Thumbnail/figure container */
+.image-zoom {
+  &__figure {
+    margin: 1rem 0;
+    text-align: center;
+  }
+
+  &__thumbnail {
+    cursor: zoom-in;
+  }
+
+  &__caption {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--ifm-color-emphasis-600);
+    text-align: center;
+  }
+}
+
+/* Modal overlay */
+.image-zoom__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+/* Container for zoomed image */
+.image-zoom__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  height: 90vh;
+}
+
+/* Zoomed image */
+.image-zoom__image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+/* Loading state */
+.image-zoom__loading {
+  color: white;
+  font-size: 18px;
+  padding: 20px;
+}
+
+/* Close button */
+.image-zoom__close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 100000;
+  font-size: 24px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
