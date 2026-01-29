@@ -7,6 +7,8 @@ sidebar_position: 3
 content_type: how-to
 ---
 
+import CustomGasTokenNote from '../../../partials/_custom-gas-token-note.mdx';
+
 When deploying your AnyTrust Arbitrum chain you have the option of using a custom gas token, different than `ETH`, that is natively used for gas payments on the network. When choosing this option, there are certain requirements that the token needs to comply with, as well as certain chain configuration that needs to be adjusted. This guide covers this information.
 
 ## Requirements of the custom gas token
@@ -45,3 +47,5 @@ These methods use L1 to refer to the parent chain of the Arbitrum chain.
 These parameter changes are strongly recommended to avoid charging users for a non-existent parent chain's base fee. The impact of not doing this is that Nitro will apply a parent chain's fee to all transactions. As Nitro assumes the native asset is `ETH`, all fees are expected to be denominated in `ETH`. This has the consequence of overcharging users for parent chain fees in native tokens that are more expensive than `ETH` (for example, if you use wrapped `BTC` as the custom gas token). In the case for tokens with prices much lower than `ETH`, the impact is far less pronounced.
 
 In either case we strongly recommend taking these steps to avoid any issues with chain economics. You can read more about how Nitro manages fees in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+
+<CustomGasTokenNote />
