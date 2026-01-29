@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import markdownLinkExtractor from 'markdown-link-extractor';
 import sidebars from '../sidebars';
-import { SidebarItemConfig } from '@docusaurus/plugin-content-docs/src/sidebars/types';
+import type { SidebarItemConfig } from '@docusaurus/plugin-content-docs/src/sidebars/types';
 
 // Constants and arrays needed
 const docsRoot = '../docs';
@@ -76,12 +76,13 @@ const extractResourcesLinkedInSidebar = () => {
 
   // Sidebar types can be SidebarCategoriesShorthand | SidebarItemConfig[]
   // We only need the second
-  Object.values(sidebars).forEach((sidebar) => {
-    if (!sidebar || !sidebar.length) {
+  Object.values(sidebars).forEach((sidebar: unknown) => {
+    const sidebarArray = sidebar as SidebarItemConfig[];
+    if (!sidebarArray || !sidebarArray.length) {
       return;
     }
 
-    getResourcesFromSidebarObj(sidebar as SidebarItemConfig[]);
+    getResourcesFromSidebarObj(sidebarArray);
   });
 };
 
@@ -185,10 +186,7 @@ const extractLinksFromMdFile = (filePath: string) => {
     const resourcePath = importMatch.groups!.path;
 
     // Getting full path to resource (starting from the docs folder)
-    const resourceFullPath = getFullPathToResource(
-      resourcePath,
-      filePath.replace('../docs', ''),
-    );
+    const resourceFullPath = getFullPathToResource(resourcePath, filePath.replace('../docs', ''));
 
     // Avoid duplicates
     if (!resourcesImportedInDocs.includes(resourceFullPath)) {
@@ -204,10 +202,7 @@ const extractLinksFromMdFile = (filePath: string) => {
     const resourcePath = imageMatch[1];
 
     // Getting full path to resource (starting from the docs folder)
-    const resourceFullPath = getFullPathToResource(
-      resourcePath,
-      filePath.replace('../docs', ''),
-    );
+    const resourceFullPath = getFullPathToResource(resourcePath, filePath.replace('../docs', ''));
 
     // Avoid duplicates
     if (!resourcesImportedInDocs.includes(resourceFullPath)) {
@@ -226,9 +221,7 @@ const getResourcePathsAndLinks = (dir: string) => {
     if (fs.lstatSync(elementPath).isDirectory()) {
       getResourcePathsAndLinks(elementPath);
     } else {
-      resources.push(
-        elementPath.replace('../docs', '').replace('.mdx', '').replace('.md', ''),
-      );
+      resources.push(elementPath.replace('../docs', '').replace('.mdx', '').replace('.md', ''));
       extractLinksFromMdFile(elementPath);
     }
   });

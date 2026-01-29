@@ -227,6 +227,11 @@ const sidebars = {
                       id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-native-eth',
                       label: `Native ETH`,
                     },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn',
+                      label: `Choose a native mint/burn gas token`,
+                    },
                   ],
                 },
                 {
@@ -415,6 +420,11 @@ const sidebars = {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup',
                       label: `Rollup custom gas token`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
+                      label: 'Native mint/burn gas token',
                     },
                     {
                       type: 'doc',
