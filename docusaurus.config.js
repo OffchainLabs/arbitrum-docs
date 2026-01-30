@@ -101,6 +101,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
+  onBrokenAnchors: 'warn', // Allow build to succeed despite false positive anchor warnings from TypeDoc
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
@@ -217,6 +218,7 @@ const config = {
         propertiesFormat: 'table',
         enumMembersFormat: 'table',
         typeDeclarationFormat: 'table',
+        useHTMLAnchors: true, // Fix anchor mismatches in tables
         sanitizeComments: true,
         frontmatterGlobals: {
           layout: 'docs',
