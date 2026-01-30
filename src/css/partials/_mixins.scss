@@ -75,51 +75,51 @@
 [data-theme='dark'] {
   table,
   .small-table {
-    // Transparent background - no dark rectangle on the sides
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    // Subtle base background to separate table from page content
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 
     thead {
       tr {
-        // Darker header background for contrast
-        background-color: #18181c;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+        // Much lighter header background for better visibility
+        background-color: #3a4b5c;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
       }
 
       th {
-        // Consistent dark header background
-        background-color: #18181c;
-        // Light text for readability
-        color: #e3e3e3;
+        // Consistent lighter header background
+        background-color: #3a4b5c;
+        // High contrast text for readability
+        color: rgba(255, 255, 255, 0.95);
         font-weight: 700;
       }
     }
 
     tbody {
       tr {
-        // Transparent base - inherits page background
-        background-color: transparent;
+        // Light base background for odd rows
+        background-color: rgba(255, 255, 255, 0.05);
         transition: background-color 0.15s ease;
 
         &:hover {
-          // Subtle hover effect
-          background-color: rgba(255, 255, 255, 0.05);
+          // Noticeable hover effect
+          background-color: rgba(255, 255, 255, 0.12);
         }
 
         &:nth-child(even) {
-          // Subtle zebra striping with dark shade
-          background-color: rgba(0, 0, 0, 0.2);
+          // Significantly lighter zebra striping with white overlay
+          background-color: rgba(255, 255, 255, 0.18);
 
           &:hover {
-            background-color: rgba(255, 255, 255, 0.08);
+            background-color: rgba(255, 255, 255, 0.22);
           }
         }
       }
 
       td {
-        // Light text for optimal readability
-        color: #e3e3e3;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        // High contrast text for optimal readability
+        color: rgba(255, 255, 255, 0.9);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
     }
   }
