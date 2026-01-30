@@ -66,7 +66,7 @@
       background-color: transparent;
 
       &:nth-child(even) {
-        background-color: rgba(0, 0, 0, 0.02);
+        background-color: rgba(0, 0, 0, 0.04);
       }
 
       &:last-child {
@@ -129,21 +129,21 @@
 
     tbody {
       tr {
-        // Light base background for odd rows
-        background-color: rgba(255, 255, 255, 0.05);
+        // Darker base background for odd rows - creates stronger contrast
+        background-color: rgba(255, 255, 255, 0.03);
         transition: background-color 0.15s ease;
 
         &:hover {
-          // Noticeable hover effect
-          background-color: rgba(255, 255, 255, 0.12);
+          // Noticeable hover effect with increased contrast
+          background-color: rgba(255, 255, 255, 0.15);
         }
 
         &:nth-child(even) {
-          // Significantly lighter zebra striping with white overlay
-          background-color: rgba(255, 255, 255, 0.18);
+          // Much lighter zebra striping for strong visual separation (27% difference)
+          background-color: rgba(255, 255, 255, 0.3);
 
           &:hover {
-            background-color: rgba(255, 255, 255, 0.22);
+            background-color: rgba(255, 255, 255, 0.35);
           }
         }
 
