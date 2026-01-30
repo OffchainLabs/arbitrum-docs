@@ -43,60 +43,14 @@ export default function ImageZoom({ src, alt, className, caption, children }: Im
   };
 
   const renderModal = () => (
-    <div
-      onClick={handleClose}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'rgba(0, 0, 0, 0.8)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 99999,
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '90vw',
-          height: '90vh',
-        }}
-      >
+    <div onClick={handleClose} className="image-zoom__modal">
+      <div onClick={(e) => e.stopPropagation()} className="image-zoom__container">
         {imageLoaded ? (
-          <img
-            src={src}
-            alt={alt || ''}
-            style={{
-              maxWidth: '100%',
-              maxHeight: '100%',
-              objectFit: 'contain',
-            }}
-          />
+          <img src={src} alt={alt || ''} className="image-zoom__image" />
         ) : (
-          <div style={{ color: 'white' }}>Loading...</div>
+          <div className="image-zoom__loading">Loading...</div>
         )}
-        <button
-          onClick={handleClose}
-          style={{
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            background: 'none',
-            border: 'none',
-            color: 'white',
-            cursor: 'pointer',
-            padding: '8px',
-            zIndex: 100000,
-            fontSize: '24px',
-          }}
-        >
+        <button onClick={handleClose} className="image-zoom__close">
           ✕
         </button>
       </div>
@@ -105,27 +59,14 @@ export default function ImageZoom({ src, alt, className, caption, children }: Im
 
   return (
     <>
-      <figure style={{ margin: '1rem 0', textAlign: 'center' }}>
+      <figure className="image-zoom__figure">
         <img
           src={src}
           alt={alt || ''}
-          className={className}
+          className={`image-zoom__thumbnail ${className || ''}`}
           onClick={handleImageClick}
-          style={{ cursor: 'zoom-in' }}
         />
-        {captionText && (
-          <figcaption
-            style={{
-              marginTop: '0.5rem',
-              fontSize: '0.9rem',
-              fontStyle: 'italic',
-              color: 'var(--ifm-color-emphasis-600)',
-              textAlign: 'center',
-            }}
-          >
-            {captionText}
-          </figcaption>
-        )}
+        {captionText && <figcaption className="image-zoom__caption">{captionText}</figcaption>}
       </figure>
       {isOpen && typeof document !== 'undefined' && createPortal(renderModal(), document.body)}
     </>
