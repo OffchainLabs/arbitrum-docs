@@ -129,3 +129,27 @@ After allocating funds and paying what is owed, the parent chain Pricer adjusts 
 The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the parent chain Gas Basefee is reduced, so that the amount collected over a fixed future interval will be reduced by exactly the surplus. If the surplus is negative, the Basefee is increased so that the shortfall will be eliminated over the same fixed future interval.
 
 A second term is added to the parent chain Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee if the surplus is increasing, and increase the Basefee if the surplus is shrinking.
+
+## Effective block gas limit
+
+Post Fusaka, changes have been made to the Block Gas Limit and how transactions are filtered. Instead of using a hard limit of 32M (Arbitrum One), a new “Effective Block Gas Limit” has been introduced.
+
+### Filtering
+
+ArbOS 51 also introduces a `MaxTxGasLimit`, the State Transition Function (STF) will be relaxed to allow the final transaction in a block to use up to the `MaxTxGasLimit` even if it would cause the block to exceed the `MaxBlockGasLimit`.
+
+:::note
+
+The `MaxTxGasLimit` comes from implementing [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) from the Fusaka hard fork.
+
+:::
+
+This means that the “Effective Block Gas Limit” is really `MaxBlockGasLimit` + `MaxTxGasLimit` (64M for Arbitrum One). In previous versions of ArbOS, the STF would skip transactions from the sequencer feed if the transaction’s `GasLimit` (set by the user) minus the L1 data posting gas exceeded the gas remaining in the block (without executing the transaction to see how much L2 gas it actually used).
+
+The new algorithm is more efficient because the STF doesn’t need to continually search the transaction queue for one that fits in the remaining block gas, and can just keep adding transactions until the unused block gas is 0.
+
+:::note
+
+This change does not affect the `GasTarget`, and therefore does not affect how much overall gas per second the chain will use—only how transactions using that gas could be divided between different blocks.
+
+:::

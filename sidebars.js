@@ -227,12 +227,17 @@ const sidebars = {
                     {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-fee-rebates',
-                      label: `Fee rebates`,
+                      label: `Fee distribution`,
                     },
                     {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-native-eth',
                       label: `Native ETH`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn',
+                      label: `Choose a native mint/burn gas token`,
                     },
                   ],
                 },
@@ -430,8 +435,18 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
+                      label: 'Native mint/burn gas token',
+                    },
+                    {
+                      type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
                       label: `Gas optimization tools`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
+                      label: 'Dynamic Pricing for Arbitrum Chains',
                     },
                   ],
                 },
@@ -546,11 +561,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
                   label: `Overview`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/customize-deployment-configuration',
-                  label: `Customize deployment configuration`,
                 },
                 {
                   type: 'doc',
