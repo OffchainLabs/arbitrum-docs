@@ -75,35 +75,49 @@
 [data-theme='dark'] {
   table,
   .small-table {
-    // Lighter base background for better visibility
-    background-color: #1b1b1d;
+    // Much darker base background
+    background-color: #0f0f12;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 
     thead {
       tr {
-        // Lighter header with better contrast
-        background-color: #2d3748;
+        // Much darker header background
+        background-color: #18181c;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.15);
       }
 
       th {
-        // Ensure text is visible
-        color: rgba(255, 255, 255, 0.9);
+        // Much darker text for strong contrast with lighter header background
+        color: #4a4a55;
+        font-weight: 700;
       }
     }
 
     tbody {
       tr {
-        // Lighter background for odd rows
-        background-color: #1b1b1d;
+        // Much darker base row background
+        background-color: #141418;
+        transition: background-color 0.15s ease;
+
+        &:hover {
+          // Darker hover effect
+          background-color: #1a1a1e;
+        }
 
         &:nth-child(even) {
-          // Increased opacity for better zebra striping visibility
-          background-color: rgba(255, 255, 255, 0.08);
+          // Much darker zebra striping
+          background-color: #16161a;
+
+          &:hover {
+            background-color: #1c1c20;
+          }
         }
       }
 
       td {
-        // Ensure text is readable
-        color: rgba(255, 255, 255, 0.85);
+        // Full white text for optimal readability
+        color: hsl(0, 0%, 42%);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
       }
     }
   }
