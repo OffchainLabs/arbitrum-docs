@@ -41,6 +41,16 @@
       background-color: #e8ecf1;
       border: none;
 
+      &:first-child {
+        th:first-child {
+          border-top-left-radius: 0.4rem;
+        }
+
+        th:last-child {
+          border-top-right-radius: 0.4rem;
+        }
+      }
+
       th {
         font-weight: 700;
         padding: 12px 10px;
@@ -59,6 +69,16 @@
         background-color: rgba(0, 0, 0, 0.02);
       }
 
+      &:last-child {
+        td:first-child {
+          border-bottom-left-radius: 0.4rem;
+        }
+
+        td:last-child {
+          border-bottom-right-radius: 0.4rem;
+        }
+      }
+
       td {
         padding: 10px;
         border: none;
@@ -75,15 +95,27 @@
 [data-theme='dark'] {
   table,
   .small-table {
-    // Subtle base background to separate table from page content
-    background-color: rgba(255, 255, 255, 0.05);
+    // Table has no background - only rows have backgrounds for zebra striping
+    background-color: transparent;
     border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.4rem;
+    overflow: hidden;
 
     thead {
       tr {
         // Much lighter header background for better visibility
         background-color: #3a4b5c;
         border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+
+        &:first-child {
+          th:first-child {
+            border-top-left-radius: 0.4rem;
+          }
+
+          th:last-child {
+            border-top-right-radius: 0.4rem;
+          }
+        }
       }
 
       th {
@@ -112,6 +144,16 @@
 
           &:hover {
             background-color: rgba(255, 255, 255, 0.22);
+          }
+        }
+
+        &:last-child {
+          td:first-child {
+            border-bottom-left-radius: 0.4rem;
+          }
+
+          td:last-child {
+            border-bottom-right-radius: 0.4rem;
           }
         }
       }
