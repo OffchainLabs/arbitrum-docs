@@ -97,7 +97,7 @@
 [data-theme='dark'] .small-table {
   // Table has no background - only rows have backgrounds for zebra striping
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: none;
   border-radius: 0.4rem;
   overflow: hidden;
 
@@ -105,7 +105,7 @@
     tr {
       // Much lighter header background for better visibility
       background-color: #3a4b5c;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      border: none;
 
       &:first-child {
         th:first-child {
@@ -151,7 +151,7 @@
     td {
       // High contrast text for optimal readability
       color: rgba(255, 255, 255, 0.9);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border: none;
     }
   }
 }
