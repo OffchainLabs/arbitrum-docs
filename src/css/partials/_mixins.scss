@@ -133,8 +133,8 @@
       background-color: rgba(255, 255, 255, 0.01);
 
       &:nth-child(even) {
-        // Reduced zebra striping for improved readability (35% difference, 20% less contrast)
-        background-color: rgba(255, 255, 255, 0.36);
+        // Reduced zebra striping for improved readability (28% difference, 40% less contrast)
+        background-color: rgba(255, 255, 255, 0.29);
       }
 
       &:last-child {
