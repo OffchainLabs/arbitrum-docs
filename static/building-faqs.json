@@ -1,7 +1,7 @@
 [
   {
     "question": "How does gas work on Arbitrum?",
-    "answer": "Fees on Arbitrum chains are collected on L2 in the chains' native currency (ETH on both Arbitrum One and Nova).\n\nA transaction fee is comprised of both an L1 and an L2 component:\n\nThe L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See [L1 Pricing](https://developer.arbitrum.io/arbos/l1-pricing).)\n\nThe L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 gwei on Arbitrum One and 0.01 gwei on Nova (See [Gas](https://docs.arbitrum.io/arbos/gas)).\n\nL2 Gas price adjusts responsively to chain congestion, ala EIP 1559.\n\n\n\n",
+    "answer": "Fees on Arbitrum chains are collected on L2 in the chains' native currency (`ETH` on both Arbitrum One and Nova).\n\nA transaction fee is comprised of both an L1 and an L2 component:\n\nThe L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See [L1 Pricing](https://developer.arbitrum.io/arbos/l1-pricing).)\n\nThe L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that, unlike on Ethereum, Arbitrum chains enforce a gas price floor. See the [chain info page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#chain-parameters) for current values.\n\nL2 Gas price adjusts responsively to chain congestion, ala EIP 1559.\n\n\n\n",
     "key": "how-does-gas-work-on-arbitrum"
   },
   {

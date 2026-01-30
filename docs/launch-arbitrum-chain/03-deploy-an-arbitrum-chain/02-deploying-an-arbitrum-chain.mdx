@@ -26,7 +26,7 @@ This page explains how to deploy an <a data-quicklook-from="arbitrum-chain">Arbi
 
 :::info About custom gas token Arbitrum chains
 
-Custom gas token Arbitrum chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard `ERC-20` tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the `ERC-20` token to be used must be deployed on your chain's parent chain.
+Custom gas token Arbitrum chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard `ERC-20` tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-arbitrum-chain/02-configure-your-chain/common/gas/02-use-a-custom-gas-token-rollup.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the `ERC-20` token to be used must be deployed on your chain's parent chain.
 
 :::
 
@@ -94,16 +94,17 @@ struct Config {
 
 Most of these parameters don't need to be configured, since the Chain SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
 
-| Parameter             | Type    | Description                                                                                                                                                                                                                                                                                         |
-| :-------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `confirmPeriodBlocks` | uint64  | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. Learn more about it in [Customizable challenge period](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/03-customizable-challenge-period.mdx). |
-| `stakeToken`          | address | Address of the token that validators must stake to participate in the chain's validation process.                                                                                                                                                                                                   |
-| `baseStake`           | uint256 | Arbitrum chain validator nodes must stake a certain amount to incentivize honest participation. This parameter specifies this amount.                                                                                                                                                               |
-| `wasmModuleRoot`      | address | Hash of the WASM module root to be used when validating.                                                                                                                                                                                                                                            |
-| `owner`               | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain.                                                                                                                                                                           |
-| `loserStakeEscrow`    | address | Address that will receive any extra stakes deposited in the same assertion (when creating disputes).                                                                                                                                                                                                |
-| `chainId`             | uint256 | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                                                                                                                                                                          |
-| `chainConfig`         | string  | Additional chain configuration, explained below.                                                                                                                                                                                                                                                    |
+| Parameter             | Type    | Description                                                                                                                                                                                                                                                                                                                    |
+| :-------------------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `confirmPeriodBlocks` | uint64  | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. Learn more about it in [Customizable challenge period](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/03-customizable-challenge-period.mdx).                   |
+| `stakeToken`          | address | Address of the token that validators must stake to participate in the chain's validation process.                                                                                                                                                                                                                              |
+| `baseStake`           | uint256 | Arbitrum chain validator nodes must stake a certain amount to incentivize honest participation. This parameter specifies this amount.                                                                                                                                                                                          |
+| `wasmModuleRoot`      | address | Hash of the WASM module root to be used when validating.                                                                                                                                                                                                                                                                       |
+| `owner`               | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain. You **will** have to fund this address with enough `ETH` to cover the gas costs of deploying your core contracts to L2.                                                                              |
+| `loserStakeEscrow`    | address | Address that will receive any extra stakes deposited in the same assertion (when creating disputes).                                                                                                                                                                                                                           |
+| `chainId`             | uint256 | Your chain's unique identifier. It differentiates your chain from others in the ecosystem. Don't worry about this; it's inconsequential for devnets. In production scenarios, you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org). |
+| `chainConfig`         | string  | Additional chain configuration, explained below.                                                                                                                                                                                                                                                                               |
+| `chainName`           | string  | This name provides a way for people to distinguish your Arbitrum chain from other Arbitrum chains. You’ll want to make this a name that you can easily remember, and that your users and developers will recognize.                                                                                                            |
 
 The `chainConfig` parameter within the `Config` struct is a stringified `JSON` object that looks like this:
 
@@ -205,10 +206,13 @@ Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to
 ```typescript
 import { createPublicClient, http } from 'viem';
 import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
+import { arbitrumSepolia } from 'viem/chains';
+
+const parentChain = arbitrumSepolia;
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
-  transport: http(),
+  transport: http(parentChainRPC),
 });
 
 const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
@@ -217,6 +221,12 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
   chainConfig: chainConfig,
 });
 ```
+
+:::info
+
+The above defaults to Arbitrum Sepolia. We've added the import `viem/chains` and the chain info to demonstrate from a popular library (`viem`) how to import the chain information already available in the Arbitrum Chain SDK.
+
+:::
 
 ### 2. Deploy the Arbitrum chain
 
@@ -275,7 +285,7 @@ type CreateRollupResults = {
 
 ### 4. Set the DAC keyset in the `SequencerInbox` (for AnyTrust chains)
 
-If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/01-get-started.mdx) to learn more about setting up a DAC.
+If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/01-get-started.mdx) to learn more about setting up a DAC.
 
 :::info
 

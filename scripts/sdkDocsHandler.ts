@@ -1,7 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const { Application, RendererEvent } = require('typedoc');
-const { parseMarkdownContentTitle } = require('@docusaurus/utils');
+import fs from 'fs';
+import path from 'path';
+import { Application, RendererEvent } from 'typedoc';
+import { parseMarkdownContentTitle } from '@docusaurus/utils';
+
+// Manual SDK file constants
+const INDEX_FILENAME = 'index.mdx';
+const MIGRATE_FILENAME = 'migrate.mdx';
+const MANUAL_FILES = [INDEX_FILENAME, MIGRATE_FILENAME];
+
 /**
  * Plugin to move docs files from a target folder to the same folder as used by Docusaurus site.
  *
@@ -18,13 +24,21 @@ function load(app) {
   const sdkOutputDir = app.options.getValue('out'); // This is the SDK directory
   const sourceDir = path.join(sdkOutputDir, '../../submodules/arbitrum-sdk/docs');
 
-  app.renderer.on(RendererEvent.START, async () => {
-    cleanDirectory(sdkOutputDir, ['index.mdx', 'migrate.mdx']); // Preserve manual files
+  // Compute paths once
+  const indexPath = path.join(sdkOutputDir, INDEX_FILENAME);
+  const migratePath = path.join(sdkOutputDir, MIGRATE_FILENAME);
+
+  app.renderer.on(RendererEvent.BEGIN, () => {
+    // Clean generated docs but preserve manually maintained files
+    cleanDirectory(sdkOutputDir, MANUAL_FILES);
   });
 
-  app.renderer.on(RendererEvent.END, async () => {
-    // Create the manual introduction and migration files
-    createManualFiles(sdkOutputDir);
+  app.renderer.on(RendererEvent.END, () => {
+    // Create manual SDK files only if they don't exist (bootstrap templates)
+    // index.mdx and migrate.mdx are manually maintained and should not be regenerated
+    if (!fs.existsSync(indexPath) || !fs.existsSync(migratePath)) {
+      createManualFiles(sdkOutputDir, indexPath, migratePath);
+    }
 
     // Generate sidebar only from the actual TypeDoc generated content
     const sidebarItems = generateSidebarFromSDKContent(sdkOutputDir);
@@ -235,7 +249,7 @@ function generateSidebarFromSDKContent(sdkDir) {
 }
 
 // Create manual files (introduction and migration guide) after TypeDoc generation
-function createManualFiles(sdkOutputDir) {
+function createManualFiles(sdkOutputDir, indexPath, migratePath) {
   // Create introduction file
   const introductionContent = `# Introduction
 
@@ -636,9 +650,9 @@ Message classes have been renamed and their methods updated:
 | ----------- | -------------------------------- |
 | \`waitForL2\` | \`waitForChildTransactionReceipt\` |`;
 
-  // Write the files
-  fs.writeFileSync(path.join(sdkOutputDir, 'index.mdx'), introductionContent, 'utf8');
-  fs.writeFileSync(path.join(sdkOutputDir, 'migrate.mdx'), migrationContent, 'utf8');
+  // Bootstrap: Write template files (only called when files don't exist)
+  fs.writeFileSync(indexPath, introductionContent, 'utf8');
+  fs.writeFileSync(migratePath, migrationContent, 'utf8');
 
   // Remove the TypeDoc-generated index.md file if it exists
   const indexMdPath = path.join(sdkOutputDir, 'index.md');
@@ -647,4 +661,4 @@ Message classes have been renamed and their methods updated:
   }
 }
 
-exports.load = load;
+export { load };
