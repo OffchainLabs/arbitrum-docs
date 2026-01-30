@@ -92,67 +92,66 @@
   }
 }
 
-[data-theme='dark'] {
-  table,
-  .small-table {
-    // Table has no background - only rows have backgrounds for zebra striping
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 0.4rem;
-    overflow: hidden;
+[data-theme='dark'] .markdown table,
+[data-theme='dark'] table.small-table,
+[data-theme='dark'] .small-table {
+  // Table has no background - only rows have backgrounds for zebra striping
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.4rem;
+  overflow: hidden;
 
-    thead {
-      tr {
-        // Much lighter header background for better visibility
-        background-color: #3a4b5c;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  thead {
+    tr {
+      // Much lighter header background for better visibility
+      background-color: #3a4b5c;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 
-        &:first-child {
-          th:first-child {
-            border-top-left-radius: 0.4rem;
-          }
-
-          th:last-child {
-            border-top-right-radius: 0.4rem;
-          }
+      &:first-child {
+        th:first-child {
+          border-top-left-radius: 0.4rem;
         }
-      }
 
-      th {
-        // Consistent lighter header background
-        background-color: #3a4b5c;
-        // High contrast text for readability
-        color: rgba(255, 255, 255, 0.95);
-        font-weight: 700;
+        th:last-child {
+          border-top-right-radius: 0.4rem;
+        }
       }
     }
 
-    tbody {
-      tr {
-        // Nearly transparent base for odd rows - creates dramatic contrast
-        background-color: rgba(255, 255, 255, 0.01);
+    th {
+      // Consistent lighter header background
+      background-color: #3a4b5c;
+      // High contrast text for readability
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 700;
+    }
+  }
 
-        &:nth-child(even) {
-          // Much brighter zebra striping for very strong visual separation (44% difference)
-          background-color: rgba(255, 255, 255, 0.45);
-        }
+  tbody {
+    tr {
+      // Nearly transparent base for odd rows - creates dramatic contrast
+      background-color: rgba(255, 255, 255, 0.01);
 
-        &:last-child {
-          td:first-child {
-            border-bottom-left-radius: 0.4rem;
-          }
-
-          td:last-child {
-            border-bottom-right-radius: 0.4rem;
-          }
-        }
+      &:nth-child(even) {
+        // Much brighter zebra striping for very strong visual separation (44% difference)
+        background-color: rgba(255, 255, 255, 0.45);
       }
 
-      td {
-        // High contrast text for optimal readability
-        color: rgba(255, 255, 255, 0.9);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      &:last-child {
+        td:first-child {
+          border-bottom-left-radius: 0.4rem;
+        }
+
+        td:last-child {
+          border-bottom-right-radius: 0.4rem;
+        }
       }
+    }
+
+    td {
+      // High contrast text for optimal readability
+      color: rgba(255, 255, 255, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
   }
 }
