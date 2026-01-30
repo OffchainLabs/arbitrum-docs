@@ -75,17 +75,35 @@
 [data-theme='dark'] {
   table,
   .small-table {
+    // Lighter base background for better visibility
+    background-color: #1b1b1d;
+
     thead {
       tr {
-        background-color: #2a3a4a;
+        // Lighter header with better contrast
+        background-color: #2d3748;
+      }
+
+      th {
+        // Ensure text is visible
+        color: rgba(255, 255, 255, 0.9);
       }
     }
 
     tbody {
       tr {
+        // Lighter background for odd rows
+        background-color: #1b1b1d;
+
         &:nth-child(even) {
-          background-color: rgba(255, 255, 255, 0.03);
+          // Increased opacity for better zebra striping visibility
+          background-color: rgba(255, 255, 255, 0.08);
         }
+      }
+
+      td {
+        // Ensure text is readable
+        color: rgba(255, 255, 255, 0.85);
       }
     }
   }
