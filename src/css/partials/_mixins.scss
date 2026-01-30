@@ -30,9 +30,64 @@
   font-size: 12.5px;
   margin-top: 20px;
   margin-bottom: 30px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: none;
+  border-radius: 0.4rem;
+  overflow: hidden;
 
+  thead {
+    tr {
+      background-color: #e8ecf1;
+      border: none;
+
+      th {
+        font-weight: 700;
+        padding: 12px 10px;
+        border: none;
+        text-align: left;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border: none;
+      background-color: transparent;
+
+      &:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+
+      td {
+        padding: 10px;
+        border: none;
+      }
+    }
+  }
+
+  th,
   td {
-    padding: 10px;
+    border: none;
+  }
+}
+
+[data-theme='dark'] {
+  table,
+  .small-table {
+    thead {
+      tr {
+        background-color: #2a3a4a;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: rgba(255, 255, 255, 0.03);
+        }
+      }
+    }
   }
 }
 
