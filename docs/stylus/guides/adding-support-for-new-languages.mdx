@@ -6,7 +6,7 @@ sme: rauljordan
 target_audience: 'Developers deploying smart contracts using Stylus'
 content_type: how-to
 sidebar_position: 1
-displayed_sidebar: buildAppsSidebar
+displayed_sidebar: buildStylusSidebar
 ---
 
 [Arbitrum Stylus](../gentle-introduction.mdx) is a new technology developed for Arbitrum chains which gives smart contract developers superpowers. With Stylus, developers can write EVM-compatible smart contracts in many different programming languages, and reap massive performance gains. Stylus slashes fees, with performance gains ranging from 10-70x, and memory efficiency gains as high as 100-500x.
@@ -30,7 +30,7 @@ Programs written in Zig and deployed to Stylus have a tiny footprint and will ha
 ## Requirements
 
 - Download and install [Zig 0.11.0](https://ziglang.org/downloads)
-- Install [Rust](https://www.rust-lang.org/tools/install), which we'll need for the [Stylus CLI tool](https://github.com/OffchainLabs/cargo-stylus) to deploy our program to the Stylus testnet
+- Install [Rust](https://www.rust-lang.org/tools/install), which we'll need for the [Stylus CLI tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) to deploy our program to the Stylus testnet
 
 We'll also be using Rust to run an example script that can call our Zig contract on the Stylus testnet using the popular [ethers-rs](https://github.com/gakonst/ethers-rs) library.
 
@@ -79,7 +79,7 @@ Next, we can build our Zig library to a freestanding WASM file for our onchain d
 zig build-lib ./src/main.zig -target wasm32-freestanding -dynamic --export=user_entrypoint -OReleaseSmall --export=mark_unused
 ```
 
-This is enough for us to deploy on the Stylus testnet! We'll use the [Stylus CLI tool](https://github.com/OffchainLabs/cargo-stylus), which you installed earlier using `cargo install`:
+This is enough for us to deploy on the Stylus testnet! We'll use the [Stylus CLI tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus), which you installed earlier using `cargo install`:
 
 ```
 cargo stylus deploy --private-key=<YOUR_TESTNET_PRIVKEY> --wasm-file=main.wasm

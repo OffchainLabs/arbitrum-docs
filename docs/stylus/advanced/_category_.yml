@@ -1,0 +1,5 @@
+label: 'Advanced'
+position: 8
+link:
+  type: generated-index
+  description: Deep dives into Stylus internals, advanced patterns, and optimization techniques.
