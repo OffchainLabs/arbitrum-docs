@@ -2,18 +2,21 @@
 id: quickstart
 title: 'Quickstart: write a smart contract in Rust using Stylus'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
+user_story: 'As a developer, I want to quickly build and deploy my first Stylus contract'
+content_type: quickstart
 author: chrisco512, anegg0
 sme: chrisco512, anegg0
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
-displayed_sidebar: buildAppsSidebar
+displayed_sidebar: buildStylusSidebar
 ---
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-<ImageZoom src="/img/stylus-primary.svg" alt="" className="img-100px" />
+# <img src="/img/stylus-primary.svg" alt="Stylus" className="img-100px" style={{ display: 'inline', marginRight: '10px', verticalAlign: 'middle' }} /> Quickstart: write a smart contract in Rust using Stylus
 
-This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
+This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll
+cover the following steps:
 
 1. [Setting up your development environment](./quickstart#setting-up-your-development-environment)
 2. [Creating a Stylus project with cargo stylus](./quickstart#creating-a-stylus-project-with-cargo-stylus)
@@ -82,7 +85,7 @@ cd nitro-devnode
 
 ## Creating a Stylus project with cargo stylus
 
-[cargo stylus](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) is a CLI toolkit built to facilitate the development of Stylus contracts.
+[cargo stylus](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) is a CLI toolkit built to facilitate the development of Stylus contracts.
 
 It is available as a plugin to the standard cargo tool used for developing Rust programs.
 
@@ -186,7 +189,7 @@ Location:
     prover/src/binary.rs:493:9, data: None
 ```
 
-The contract can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
+The contract can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/cargo-stylus/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
 
 If your contract succeeds, you'll see something like this:
 
@@ -401,7 +404,7 @@ The testing framework allows you to:
 - Mock contract-to-contract interactions
 - Test various scenarios without deployment costs
 
-For more advanced testing techniques and best practices, see the [Testing contracts with Stylus guide](./how-tos/testing-contracts).
+For more advanced testing techniques and best practices, see the [Testing contracts with Stylus guide](./fundamentals/testing-contracts).
 
 ## Conclusion
 

@@ -1,25 +1,27 @@
 ---
 id: gentle-introduction
 title: 'A gentle introduction to Stylus'
-description: 'An introduction to Stylus, which enables writing EVM-compatible smart contracts in programming languages that compile to WASM, such as Rust, C, and C++.'
+description: 'An introduction to Stylus, which enables writing EVM-compatible smart contracts in programming languages that compile to WASM, such as Rust, C, and C++'
+user_story: 'As a developer, I want to understand what Stylus is and why I should use it'
+content_type: concept
 author: amarrazza
 sme: amarrazza
 target_audience: 'Developers who want to build on Arbitrum using popular programming languages, like Rust'
 sidebar_position: 1
-displayed_sidebar: buildAppsSidebar
+displayed_sidebar: buildStylusSidebar
 ---
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
 ### In a nutshell:
 
-- Stylus lets you write smart contracts in programming languages that compile to WASM, such as Rust, C, C++, and others, allowing you to use their ecosystem of libraries and tools. Language and tooling support exists for Rust. You can try the SDK and CLI with the [quickstart](/stylus/quickstart.mdx).
+- Stylus lets you write smart contracts in programming languages that compile to WASM, such as Rust, C, C++, and others, allowing you to use their ecosystem of libraries and tools. Language and tooling support exists for Rust. You can try the SDK and CLI with the [quickstart](/stylus/quickstart).
 - Solidity contracts and Stylus contracts are interoperable. In Solidity, you can call a Rust program and vice versa, thanks to a second, coequal WASM virtual machine.
 - Stylus contracts offer reduced gas costs for memory and compute-intensive operations because <a data-quicklook-from="wasm">WASM</a> programs execute more efficiently than EVM bytecode for these workloads.
 
 ### What's Stylus?
 
-Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](/run-arbitrum-node/arbos-releases/arbos32.mdx), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. This paradigm is called MultiVM because it is additive to existing functionality.
+Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](/run-arbitrum-node/arbos-releases/arbos32), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. This paradigm is called MultiVM because it is additive to existing functionality.
 
 <ImageZoom src="/img/stylus-multivm.jpg" alt="Stylus gives you MultiVM" className="img-800px" />
 
@@ -35,7 +37,7 @@ Bringing a Stylus program to life involves four stages: coding, activation, exec
 
 You write your smart contract in any programming language that compiles to WASM. Rust has the most developed support with an open-source SDK for smart contract development. C and C++ are also supported, so that you can deploy existing contracts in those languages onchain with minimal modifications.
 
-The [Stylus SDK for Rust](/stylus/reference/rust-sdk-guide.md) provides the development framework and language features for smart contract development. It also provides access to EVM-specific functionality used by smart contract developers.
+The [Stylus SDK for Rust](/stylus/reference/rust-sdk-guide) provides the development framework and language features for smart contract development. It also provides access to EVM-specific functionality used by smart contract developers.
 
 #### Activation
 
@@ -46,7 +48,7 @@ To make your contract callable, it must undergo an activation process. During ac
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
 :::note
-Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/using-cli.mdx#cargo-stylus-commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
+Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
 :::
 
 #### Execution
@@ -72,7 +74,7 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 
 ### Getting started
 
-1. Follow the [quickstart](/stylus/quickstart.mdx) to deploy your first Stylus contract, and explore the [Rust SDK](/stylus/reference/overview.md) documentation.
+1. Follow the [quickstart](/stylus/quickstart) to deploy your first Stylus contract, and explore the [Rust SDK](/stylus/reference/overview) documentation.
 2. Join the Stylus Developer [Telegram](https://t.me/arbitrum_stylus) group and [Arbitrum Discord](https://discord.gg/arbitrum) for community support.
 3. Browse the [Awesome Stylus](https://github.com/OffchainLabs/awesome-stylus) repository for community-contributed projects, examples, and tools.
 4. Subscribe to the [Stylus Saturdays](https://stylus-saturdays.com/) newsletter for tutorials and technical content.
