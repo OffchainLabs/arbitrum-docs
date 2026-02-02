@@ -1,0 +1,86 @@
+---
+title: 'How to configure Fast block times'
+description: 'Learn how to configure fast block times on your Arbitrum chain.'
+author: pete-vielhaber
+sme: Jason-W123
+user_story: As an Arbitrum chain owner, I want to understand how to configure fast block times on my Arbitrum chain.
+content_type: how-to
+---
+
+When launching an Arbitrum chain, one key configurable parameter is the block time. Arbitrum chains support fast block times—the default is 250 milliseconds (like Arbitrum One), but configurations can go as low as 100 milliseconds.
+
+## Improved user experience
+
+Faster block times mean transactions are confirmed and included in blocks much more quickly, often in sub-second latency. This creates a highly responsive user experience, similar to centralized apps or high-performance chains. For applications such as gaming, social dApps, or high-frequency trading, this reduces wait times dramatically, boosting user retention and satisfaction.
+
+## Higher efficiency in financial markets
+
+In decentralized exchanges (DEXes) and automated market makers (AMMs), fast block times minimize the window for price staleness. Arbitrageurs exploit outdated prices, extracting value from liquidity providers (LPs) through mechanisms such as lost-value realization (LVR). Faster price updates reduce this extraction.
+
+Theoretical models (e.g., “LVR with fees”) show that arbitrage losses scale with the square root of block time. For example:
+
+- A 250ms block time (Arbitrum default) results in ~65% less arbitrage loss compared to a 2-second block time.
+- Dropping to 100ms amplifies this further.
+
+This leads to higher returns for LPs, attracting more liquidity, deeper pools, tighter spreads, and better trading opportunities overall.
+
+## Competitive edge for application-specific chains
+
+Arbitrum chains are often built for specific use cases (e.g., gaming chains or DeFi-focused). Fast block times allow the chain to offer superior performance tailored to the app:
+
+- Real-time interactions (e.g., in-game actions or live betting).
+- On-demand scaling, when paired with features like elastic block times (which produce blocks only when needed, avoiding empty blocks while maintaining speed during activity).
+- Differentiation from general-purpose L2s with slower blocks
+
+## Trade-offs to consider
+
+While beneficial, fast block times (e.g., <200ms) can increase strain on node operators, indexers, and infrastructure due to higher block production rates. They may also interact with features like Timeboost (Arbitrum’s MEV management system), which preserves fast sequencing while capturing value. Chain owners balance this based on expected traffic and use case.
+
+In summary, fast block times are a standout feature when launching an Arbitrum chain, enabling near-instant confirmations, more efficient markets, and a snappier user experience that can drive adoption and liquidity—especially for performance-sensitive applications.
+
+## How to configure
+
+To configure fast block times on an Arbitrum chain, you customize parameters during chain setup using the Arbitrum Chain SDK or related tools. Block time on Arbitrum Nitro-based chains is not a fixed Ethereum-style interval; it is controlled primarily by the `SequencerInbox MaxTimeVariation` struct. This defines how much the sequencer can vary block timestamps and delays, enabling sub-second block production when transactions arrive.
+
+### 1. Using the Arbitrum Chain SDK:
+
+- The primary way to launch and customize an Arbitrum chain is via the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk)
+- When preparing deployment parameters (e.g., via `createRollupPrepareDeploymentParamsConfig` or `prepareChainConfig`), you provide a JSON string for `chainConfig`.
+- Within this, customize the `sequencerInboxMaxTimeVariation` field (part of the overall `Config` struct).
+
+```json
+{
+  "sequencerInboxMaxTimeVariation": {
+    "delayBlocks": 0, // Typically 0 for fast sequencing
+    "futureBlocks": 0, // Allows blocks slightly in the future if needed
+    "delaySeconds": 0, // Minimal delay for instant inclusion
+    "futureSeconds": 3600 // Upper bound (e.g., 1 hour) to prevent excessive drift
+  }
+}
+```
+
+- Lower values here enable faster block production (e.g., 100–250ms targets). The effective block time is influenced by how quickly the sequencer processes incoming transactions and by elastic block production (blocks only form when there are transactions).
+
+### 2. Node configuration for running the chain:
+
+- After deploying the core contracts, generate a `nodeConfig.json` file using SDK helpers such as `prepareNodeConfig`.
+- This includes execution parameters that indirectly support fast blocks, such as block gas limits and posting intervals.
+- Run your sequencer node with flags like:
+  - `--execution.sequencer.enable=true`
+  - Tune `--execution.sequencer.max-block-speed` or related params if exposed (defaults support ~100ms).
+- Fast times (below 200ms) increase block rate, stressing nodes/indexers—be sure to test thoroughly.
+
+### 3. Deployment scripts
+
+- Advanced configs require the SDK for fine-tuning.
+- Post-deployment, block time is sequencer-controlled and cannot be upgraded without a chain upgrade.
+
+## Recommendations and trade-offs
+
+- **Default**: 250ms—balances speed and infrastructure load.
+- **Fastest practical**: 100ms (documented minimum; lower is possible but strains ecosystem tools like indexers).
+- Pair with **elastic block times** (built-in): No empty blocks during inactivity, preserving speed during traffic.
+- **Always** test thoroughly on testnet such as Arbitrum Sepolia first.
+- For exotic configurations, check the [Discord](https://discord.com/invite/ZpZuw7p).
+
+For more examples, check the Chain SDK repo (e.g., `prepareChainConfig.ts` and deployment examples).
