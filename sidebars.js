@@ -509,6 +509,11 @@ const sidebars = {
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
                       label: `Adopt BoLD`,
                     },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/fast-block-times',
+                      label: `Fast block times`,
+                    },
                   ],
                 },
                 {
