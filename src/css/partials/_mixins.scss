@@ -32,7 +32,7 @@
   margin-bottom: 30px;
   border-collapse: separate;
   border-spacing: 0;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.4rem;
   overflow: hidden;
 
@@ -97,7 +97,7 @@
 [data-theme='dark'] .small-table {
   // Table has no background - only rows have backgrounds for zebra striping
   background-color: transparent;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.4rem;
   overflow: hidden;
 
