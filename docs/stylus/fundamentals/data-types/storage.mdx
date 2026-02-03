@@ -955,14 +955,33 @@ Stylus uses the same storage layout as Solidity:
 - Variables are **packed** when possible to save space
 - Arrays and mappings use **computed slots** via hashing
 
-<ImageZoom
-  src="/img/stylus-storage-slots.png"
-  alt="Storage slot layout diagram showing how variables are packed into 32-byte slots and how mapping values are computed using keccak256 hashing"
-  className="img-600px"
->
-  Storage slot layout showing how variables are packed into 32-byte slots and how mapping values are
-  computed using keccak256 hashing.
-</ImageZoom>
+```mermaid
+flowchart TB
+    subgraph storage["Storage Slots (32 bytes each)"]
+        slot0["Slot 0<br/>uint256 value"]
+        slot1["Slot 1<br/>address (20 bytes) + uint96 (12 bytes)"]
+        slot2["Slot 2<br/>Mapping base slot"]
+        slot3["Slot 3<br/>keccak256(key || slot)"]
+    end
+
+    mapping["Mapping[key]"]
+    hash["hash(key + 2)"]
+    result["keccak256(key || slot)"]
+
+    mapping --> hash
+    hash --> slot2
+    slot2 --> result
+    result --> slot3
+
+    style storage fill:#ffffcc
+    style slot0 fill:#cce5ff
+    style slot1 fill:#ffcccc
+    style slot2 fill:#e6ccff
+    style slot3 fill:#ccffcc
+    style mapping fill:#e6f2ff
+```
+
+_Storage slot layout showing how variables are packed into 32-byte slots and how mapping values are computed using keccak256 hashing._
 
 ```rust
 sol_storage! {
