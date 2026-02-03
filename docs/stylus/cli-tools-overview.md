@@ -12,7 +12,7 @@ The CLI tools provided for Stylus, specifically the `cargo-stylus` tool, are des
 
 The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.
 
-- **[Optimize WASM binaries](/stylus/how-tos/optimizing-binaries.mdx):** Learn how to optimize your WASM binaries for performance and size.
+- **[Optimize WASM binaries](/stylus/guides/optimizing-binaries.mdx):** Learn how to optimize your WASM binaries for performance and size.
 
 ### 2. Debug Stylus transactions
 
@@ -36,7 +36,7 @@ The source code for `cargo-stylus` is available on GitHub. Explore the code, con
 
 For more advanced usage and detailed guides, refer to the following resources:
 
-- **[Optimize WASM binaries](/stylus/how-tos/optimizing-binaries.mdx)**
+- **[Optimize WASM binaries](/stylus/guides/optimizing-binaries.mdx)**
 - **[Troubleshooting](/stylus/troubleshooting-building-stylus.md)**
 - **[Run a Stylus dev node](/run-arbitrum-node/03-run-local-full-chain-simulation.mdx)**
 
