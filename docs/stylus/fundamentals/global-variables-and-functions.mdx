@@ -836,56 +836,74 @@ impl ContextExample {
 }
 ```
 
-## Summary of Available Methods
+## Summary of available methods
 
-### Message Context
+The following tables provide a quick reference for all VM methods and utility functions available in Stylus contracts.
 
-- `msg_sender()` → `Address` - Caller's address
-- `msg_value()` → `U256` - ETH sent with call
-- `msg_reentrant()` → `bool` - Is reentrant call
+### Message context
 
-### Transaction Context
+| Method            | Parameters | Return type | Description                           | Solidity equivalent |
+| ----------------- | ---------- | ----------- | ------------------------------------- | ------------------- |
+| `msg_sender()`    | None       | `Address`   | Caller's address                      | `msg.sender`        |
+| `msg_value()`     | None       | `U256`      | ETH sent with call (in wei)           | `msg.value`         |
+| `msg_reentrant()` | None       | `bool`      | Whether the current call is reentrant | N/A                 |
 
-- `tx_origin()` → `Address` - Original transaction sender
-- `tx_gas_price()` → `U256` - Gas price
-- `tx_ink_price()` → `u32` - Ink price
+### Transaction context
 
-### Block Context
+| Method           | Parameters | Return type | Description                       | Solidity equivalent |
+| ---------------- | ---------- | ----------- | --------------------------------- | ------------------- |
+| `tx_origin()`    | None       | `Address`   | Original transaction sender (EOA) | `tx.origin`         |
+| `tx_gas_price()` | None       | `U256`      | Gas price in wei per gas          | `tx.gasprice`       |
+| `tx_ink_price()` | None       | `u32`       | Ink price in EVM gas basis points | N/A                 |
 
-- `block_number()` → `u64` - Block number
-- `block_timestamp()` → `u64` - Block timestamp
-- `block_basefee()` → `U256` - Base fee
-- `block_coinbase()` → `Address` - Batch poster
-- `block_gas_limit()` → `u64` - Gas limit
+### Block context
 
-### Chain Context
+| Method              | Parameters | Return type | Description                 | Solidity equivalent |
+| ------------------- | ---------- | ----------- | --------------------------- | ------------------- |
+| `block_number()`    | None       | `u64`       | Current block number        | `block.number`      |
+| `block_timestamp()` | None       | `u64`       | Block timestamp (Unix time) | `block.timestamp`   |
+| `block_basefee()`   | None       | `U256`      | Base fee of current block   | `block.basefee`     |
+| `block_coinbase()`  | None       | `Address`   | Batch poster address        | `block.coinbase`    |
+| `block_gas_limit()` | None       | `u64`       | Gas limit of current block  | `block.gaslimit`    |
 
-- `chain_id()` → `u64` - Chain identifier
+### Chain context
 
-### Account Information
+| Method       | Parameters | Return type | Description             | Solidity equivalent |
+| ------------ | ---------- | ----------- | ----------------------- | ------------------- |
+| `chain_id()` | None       | `u64`       | Unique chain identifier | `block.chainid`     |
 
-- `contract_address()` → `Address` - This contract's address
-- `balance(Address)` → `U256` - Account balance
-- `code(Address)` → `Vec<u8>` - Account code
-- `code_size(Address)` → `usize` - Code size
-- `code_hash(Address)` → `B256` - Code hash
+### Account information
 
-### Gas and Metering
+| Method               | Parameters         | Return type | Description                    | Solidity equivalent |
+| -------------------- | ------------------ | ----------- | ------------------------------ | ------------------- |
+| `contract_address()` | None               | `Address`   | This contract's address        | `address(this)`     |
+| `balance()`          | `account: Address` | `U256`      | ETH balance in wei             | `address.balance`   |
+| `code()`             | `account: Address` | `Vec<u8>`   | Account bytecode               | `address.code`      |
+| `code_size()`        | `account: Address` | `usize`     | Size of account code in bytes  | `EXTCODESIZE`       |
+| `code_hash()`        | `account: Address` | `B256`      | Keccak256 hash of account code | `EXTCODEHASH`       |
 
-- `evm_gas_left()` → `u64` - Remaining gas
-- `evm_ink_left()` → `u64` - Remaining ink
-- `ink_to_gas(u64)` → `u64` - Convert ink to gas
-- `gas_to_ink(u64)` → `u64` - Convert gas to ink
+### Gas and metering
 
-### Cryptographic Functions
+| Method           | Parameters | Return type | Description                   | Solidity equivalent |
+| ---------------- | ---------- | ----------- | ----------------------------- | ------------------- |
+| `evm_gas_left()` | None       | `u64`       | Remaining gas after this call | `gasleft()`         |
+| `evm_ink_left()` | None       | `u64`       | Remaining ink after this call | N/A                 |
+| `ink_to_gas()`   | `ink: u64` | `u64`       | Convert ink units to gas      | N/A                 |
+| `gas_to_ink()`   | `gas: u64` | `u64`       | Convert gas units to ink      | N/A                 |
 
-- `crypto::keccak(bytes)` → `B256` - Keccak256 hash
-- `native_keccak256(&[u8])` → `B256` - Keccak256 via VM
+### Cryptographic functions
 
-### Event Logging
+| Method               | Parameters                | Return type | Description                   | Solidity equivalent |
+| -------------------- | ------------------------- | ----------- | ----------------------------- | ------------------- |
+| `crypto::keccak()`   | `bytes: impl AsRef<[u8]>` | `B256`      | Compute keccak256 hash        | `keccak256()`       |
+| `native_keccak256()` | `input: &[u8]`            | `B256`      | Compute keccak256 hash via VM | `keccak256()`       |
 
-- `log<T: SolEvent>(event)` - Emit typed event
-- `raw_log(&[B256], &[u8])` - Emit raw log
+### Event logging
+
+| Method      | Parameters                       | Return type                | Description                       | Solidity equivalent   |
+| ----------- | -------------------------------- | -------------------------- | --------------------------------- | --------------------- |
+| `log()`     | `event: T` where `T: SolEvent`   | None                       | Emit a typed Solidity event       | `emit Event()`        |
+| `raw_log()` | `topics: &[B256]`, `data: &[u8]` | `Result<(), &'static str>` | Emit a raw log with custom topics | `log0`-`log4` opcodes |
 
 ## See Also
 
