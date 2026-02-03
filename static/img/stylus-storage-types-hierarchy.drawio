@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net" modified="2026-02-03T00:00:00.000Z" agent="Claude Code" etag="storage-types-original-v1" version="22.1.16">
+  <diagram name="Storage Types Hierarchy" id="storage-types-hierarchy">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Root: Storage Types -->
+        <mxCell id="storage" value="Storage Types" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#8b5cf6;strokeWidth=2;fontSize=14;fontStyle=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="600" y="40" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Category: Primitives -->
+        <mxCell id="primitives" value="Primitives" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bfdbfe;strokeColor=#3b82f6;strokeWidth=2;fontSize=13;fontStyle=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="180" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Category: Collections -->
+        <mxCell id="collections" value="Collections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbf7d0;strokeColor=#22c55e;strokeWidth=2;fontSize=13;fontStyle=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="615" y="180" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Category: Custom Struct -->
+        <mxCell id="custom" value="Custom Struct" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fed7aa;strokeColor=#f97316;strokeWidth=2;fontSize=13;fontStyle=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="180" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Primitives Children -->
+        <mxCell id="bool" value="StorageBool" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="20" y="320" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uint" value="StorageUint8, u16, u32, u64..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="180" y="320" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bytes" value="StorageBytes, B1, B2, B3..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="20" y="390" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="addr" value="StorageAddress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="210" y="390" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="str" value="StorageString, B1...BN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="20" y="460" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="signed" value="StorageSigned, I8..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="200" y="460" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fixed" value="StorageFixedBytes, B1...B32" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="85" y="530" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Collections Children -->
+        <mxCell id="map" value="StorageMap&lt;T&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#22c55e;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="540" y="320" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vec" value="StorageVec&lt;T&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#22c55e;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="700" y="320" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr" value="StorageArray&lt;T, N&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#22c55e;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="620" y="390" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Custom Struct Children -->
+        <mxCell id="sol" value="sol_storage!()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#f97316;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="320" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="attr" value="#[storage] struct" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#f97316;strokeWidth=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="320" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Connections: Storage to Categories -->
+        <mxCell id="edge1" edge="1" parent="1" source="storage" target="primitives">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge2" edge="1" parent="1" source="storage" target="collections">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge3" edge="1" parent="1" source="storage" target="custom">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Connections: Primitives to Children -->
+        <mxCell id="edge4" edge="1" parent="1" source="primitives" target="bool">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge5" edge="1" parent="1" source="primitives" target="uint">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge6" edge="1" parent="1" source="primitives" target="bytes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge7" edge="1" parent="1" source="primitives" target="addr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge8" edge="1" parent="1" source="primitives" target="str">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge9" edge="1" parent="1" source="primitives" target="signed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge10" edge="1" parent="1" source="primitives" target="fixed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Connections: Collections to Children -->
+        <mxCell id="edge11" edge="1" parent="1" source="collections" target="map">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge12" edge="1" parent="1" source="collections" target="vec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge13" edge="1" parent="1" source="collections" target="arr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Connections: Custom to Children -->
+        <mxCell id="edge14" edge="1" parent="1" source="custom" target="sol">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge15" edge="1" parent="1" source="custom" target="attr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
