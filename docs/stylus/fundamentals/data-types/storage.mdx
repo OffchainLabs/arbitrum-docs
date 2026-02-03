@@ -8,6 +8,8 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 displayed_sidebar: buildStylusSidebar
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 Persistent storage in Stylus contracts provides access to the EVM State Trie, the same key-value storage used by Solidity contracts. The SDK provides type-safe storage access through dedicated storage types that prevent aliasing errors at compile time using Rust's borrow checker.
 
 ## Overview
@@ -21,38 +23,11 @@ Stylus contracts share the same persistent storage as Solidity contracts:
 
 The Stylus SDK provides a comprehensive hierarchy of storage types:
 
-```mermaid
-flowchart TB
-    storage["Storage Types"]
-
-    primitives["Primitives"]
-    collections["Collections"]
-    custom["Custom Struct"]
-
-    storage --> primitives
-    storage --> collections
-    storage --> custom
-
-    primitives --> bool["StorageBool"]
-    primitives --> uint["StorageUint8, u16, u32, u64..."]
-    primitives --> bytes["StorageBytes, B1, B2, B3..."]
-    primitives --> addr["StorageAddress"]
-    primitives --> str["StorageString, B1...BN"]
-    primitives --> signed["StorageSigned, I8..."]
-    primitives --> fixed["StorageFixedBytes, B1...B32"]
-
-    collections --> map["StorageMap&lt;T&gt;"]
-    collections --> vec["StorageVec&lt;T&gt;"]
-    collections --> arr["StorageArray&lt;T, N&gt;"]
-
-    custom --> sol["sol_storage!()"]
-    custom --> attr["#[storage] struct"]
-
-    style storage fill:#e6ccff,stroke:#8b5cf6,stroke-width:2px
-    style primitives fill:#bfdbfe,stroke:#3b82f6,stroke-width:2px
-    style collections fill:#bbf7d0,stroke:#22c55e,stroke-width:2px
-    style custom fill:#fed7aa,stroke:#f97316,stroke-width:2px
-```
+<ImageZoom
+  src="/img/stylus-storage-types-hierarchy.png"
+  alt="Stylus storage types"
+  className="img-800px"
+/>
 
 _Storage type hierarchy showing primitives, collections, and custom struct options._
 
@@ -982,31 +957,11 @@ Stylus uses the same storage layout as Solidity:
 - Variables are **packed** when possible to save space
 - Arrays and mappings use **computed slots** via hashing
 
-```mermaid
-flowchart TB
-    subgraph storage["Storage Slots (32 bytes each)"]
-        slot0["Slot 0<br/>uint256 value"]
-        slot1["Slot 1<br/>address (20 bytes) + uint96 (12 bytes)"]
-        slot2["Slot 2<br/>Mapping base slot"]
-        slot3["Slot 3<br/>keccak256(key || slot)"]
-    end
-
-    mapping["Mapping[key]"]
-    hash["hash(key + 2)"]
-    result["keccak256(key || slot)"]
-
-    mapping --> hash
-    hash --> slot2
-    slot2 --> result
-    result --> slot3
-
-    style storage fill:#ffffcc
-    style slot0 fill:#cce5ff
-    style slot1 fill:#ffcccc
-    style slot2 fill:#e6ccff
-    style slot3 fill:#ccffcc
-    style mapping fill:#e6f2ff
-```
+<ImageZoom
+  src="/img/stylus-storage-slots-layout.png"
+  alt="Stylus storage slots"
+  className="img-400px"
+/>
 
 _Storage slot layout showing how variables are packed into 32-byte slots and how mapping values are computed using keccak256 hashing._
 
