@@ -21,13 +21,40 @@ Stylus contracts share the same persistent storage as Solidity contracts:
 
 The Stylus SDK provides a comprehensive hierarchy of storage types:
 
-<ImageZoom
-  src="/img/stylus-storage-types-hierarchy.png"
-  alt="Storage type hierarchy diagram showing primitives, collections, and custom struct options"
-  className="img-600px"
->
-  Storage type hierarchy showing primitives, collections, and custom struct options.
-</ImageZoom>
+```mermaid
+flowchart TB
+    storage["Storage Types"]
+
+    primitives["Primitives"]
+    collections["Collections"]
+    custom["Custom Struct"]
+
+    storage --> primitives
+    storage --> collections
+    storage --> custom
+
+    primitives --> bool["StorageBool"]
+    primitives --> uint["StorageUint8, u16, u32, u64..."]
+    primitives --> bytes["StorageBytes, B1, B2, B3..."]
+    primitives --> addr["StorageAddress"]
+    primitives --> str["StorageString, B1...BN"]
+    primitives --> signed["StorageSigned, I8..."]
+    primitives --> fixed["StorageFixedBytes, B1...B32"]
+
+    collections --> map["StorageMap&lt;T&gt;"]
+    collections --> vec["StorageVec&lt;T&gt;"]
+    collections --> arr["StorageArray&lt;T, N&gt;"]
+
+    custom --> sol["sol_storage!()"]
+    custom --> attr["#[storage] struct"]
+
+    style storage fill:#e6ccff,stroke:#8b5cf6,stroke-width:2px
+    style primitives fill:#bfdbfe,stroke:#3b82f6,stroke-width:2px
+    style collections fill:#bbf7d0,stroke:#22c55e,stroke-width:2px
+    style custom fill:#fed7aa,stroke:#f97316,stroke-width:2px
+```
+
+_Storage type hierarchy showing primitives, collections, and custom struct options._
 
 ### Storage declaration
 
