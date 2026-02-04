@@ -228,11 +228,19 @@ article {
       @include small-table; // target tables
     }
 
-    table {
-      @include small-table; // target section wrappers around tables
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch; // smooth scrolling on iOS
+    // Create scrollable wrapper for tables on small screens
+    > table,
+    .table-wrapper > table {
+      @include small-table;
+      display: table; // Proper table display
+      table-layout: auto; // Allow columns to distribute available space
+    }
+
+    // Docusaurus wraps tables in divs for scrolling - ensure proper behavior
+    > div > table {
+      @include small-table;
+      display: table;
+      table-layout: auto;
     }
 
     p > code {
