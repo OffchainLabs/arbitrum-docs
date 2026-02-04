@@ -877,10 +877,6 @@ const sidebars = {
           type: 'category',
           label: 'Sequencer',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'node-running/sequencer-content-map',
-          },
           items: [
             {
               type: 'doc',
@@ -1436,7 +1432,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/recommended-libraries',
+              id: 'stylus/advanced/recommended-libraries',
               label: 'Recommended Rust Crates',
             },
           ],
