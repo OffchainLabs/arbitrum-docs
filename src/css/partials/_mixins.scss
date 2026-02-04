@@ -35,7 +35,8 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.4rem;
   overflow: hidden;
-  width: fit-content;
+  max-width: 100%;
+  width: auto;
 
   thead {
     tr {
@@ -111,7 +112,8 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.4rem;
   overflow: hidden;
-  width: fit-content;
+  max-width: 100%;
+  width: auto;
 
   thead {
     tr {
