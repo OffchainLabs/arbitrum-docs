@@ -10,20 +10,34 @@
     margin-bottom: 10px;
   }
 
-  // Make tables scrollable on mobile
-  .markdown table {
+  // Make tables scrollable on mobile by wrapping in scrollable container
+  .markdown > div:has(> table),
+  .markdown > table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  .markdown table {
+    display: table;
     white-space: nowrap;
+    min-width: 100%; // Ensure table fills container width
   }
 }
 
 // Tablet breakpoint for medium-sized screens
 @media (max-width: 996px) {
-  .markdown table {
+  .markdown > div:has(> table),
+  .markdown > table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  .markdown table {
+    display: table;
+    min-width: 100%;
   }
 }
