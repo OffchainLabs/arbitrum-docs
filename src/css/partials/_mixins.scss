@@ -34,8 +34,9 @@
   border-spacing: 0;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.4rem;
-  overflow: hidden;
-  width: fit-content;
+  overflow: visible; // Changed from hidden to allow parent to handle scrolling
+  // Remove width constraints to allow table to size naturally
+  min-width: 100%; // Still ensure minimum width for narrow tables
 
   thead {
     tr {
@@ -110,8 +111,9 @@
   background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.4rem;
-  overflow: hidden;
-  width: fit-content;
+  overflow: visible; // Changed from hidden to allow parent to handle scrolling
+  // Remove width constraints to allow table to size naturally
+  min-width: 100%; // Still ensure minimum width for narrow tables
 
   thead {
     tr {
