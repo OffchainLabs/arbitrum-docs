@@ -23,7 +23,7 @@ It's ideal for DeFi-heavy chains with substantial MEV (e.g., arbitrage opportuni
 
 ## Compatibility
 
-Works with any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> (<a data-quicklook-from="l2">L2</a>/L3), all DA modes (Rollup, AnyTrust, Alt-DA), gas tokens (native `ETH` or custom), and validation (<a data-quicklook-from="bold">BoLD</a> or permissioned). Compatible with centralized or future decentralized sequencers; no prerequisites beyond a bid token and infrastructure. Not formally supported yet.
+Works with any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> (L2/L3), all DA modes (Rollup, AnyTrust, Alt-DA), gas tokens (native `ETH` or custom), and validation (<a data-quicklook-from="bold">BoLD</a> or permissioned). Compatible with centralized or future decentralized sequencers; no prerequisites beyond a bid token and infrastructure. Not formally supported yet.
 
 <!-- Render Timeboost Pros & Cons partial -->
 
@@ -36,11 +36,17 @@ Works with any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> (<a da
 
 ## How to configure
 
-1. **Deploy Auction contract**: Use Arbitrum chain scripts (e.g., from `[orbit-actions](https://github.com/OffchainLabs/orbit-actions)` repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
+:::warning Caution
+
+This is an abbreviated set of instructions on how to configure Timeboost. It is recommended to refer to the [Timeboost for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common/mev/timeboost-for-arbitrum-chains.mdx) page for complete details about potential impacts and a full set of instructions. The configuration instructions begin in the [Prerequisites](/launch-arbitrum-chain/02-configure-your-chain/common/mev/timeboost-for-arbitrum-chains.mdx#prerequisites) section on that page.
+
+:::
+
+1. **Deploy Auction contract**: Use Arbitrum chain scripts (e.g., from [`orbit-actions`](https://github.com/OffchainLabs/orbit-actions) repo) with a `.env` file specifying addresses (e.g., proxy admin, bid token like `WETH`, beneficiary). Run `forge script` to deploy and verify.
 2. **Run Auctioneer Services**: Set up Redis for coordination; run bid <a data-quicklook-from="validator">validator</a> (verifies bids) and auction server (resolves auctions) using the `autonomous-auctioneer` binary from Nitro (Docker or local build).
 3. **Configure the sequencer**: Update node config to enable `timeboost` and `auctioneer` APIs, pointing to the contract and Redis.
 
-- Verify via logs (e.g., "New express lane auction round") and test bids/submissions.
+- Verify via logs (e.g., `New express lane auction round`) and test bids/submissions.
 - Post-enable, adjust parameters like round duration (60s default) or delay (200ms) via owner privileges.
 
 This feature enhances Arbitrum's modularity for MEV-aware chains but requires careful evaluation. For details, consult the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

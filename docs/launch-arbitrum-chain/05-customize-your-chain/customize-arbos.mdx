@@ -28,7 +28,7 @@ Below, you will find four examples of ArbOS-related code changes and, generally,
 ### 1. Add a new method to existing precompile on a specific ArbOS version:
 
 After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile Option 1](./customize-precompile.mdx#option-1-add-new-methods-to-an-existing-precompile),
-you need continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go).
+you need continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.4@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go).
 
 For example, the original code is:
 
@@ -54,7 +54,7 @@ In this way, this method will be executed normally and return results only after
 
 ### 2. Create a new precompile contract on a specific ArbOS version
 
-After you add a new precompile named `ArbHi` according to the guide in [customize precompile Option 2](./customize-precompile.mdx#option-2-create-a-new-precompile) and make changes to [`precompile.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go),
+After you add a new precompile named `ArbHi` according to the guide in [customize precompile Option 2](./customize-precompile.mdx#option-2-create-a-new-precompile) and make changes to [`precompile.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.4@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go),
 you also need to make the following changes:
 
 ```go
@@ -109,7 +109,7 @@ It should be noted that when you initialize the state (initial code is in [custo
 Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions may change the value of `myNumber` before ArbOS v21.
 To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](./customize-arbos.mdx#1-add-a-new-method-to-existing-precompile-on-a-specific-arbos-version) or
 [point 2](./customize-arbos.mdx#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
-If your nitro code needs to call this method to change the state, you can continue reading [point 4](./customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result).
+If your nitro code needs to call this method to change the state, you can continue reading [Step 4](./customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result-arbos-version-control).
 
 ### 4. Any changes in the STF logic that will affect the final execution result (ArbOS version control)
 
@@ -132,7 +132,7 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-In the above code, we use precompiles as an example. Some logic might also affect the STF, such as the methods in [`block_process.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToArbos=arbos@@/block_processor.go), [`internal_tx.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToArbos=arbos@@/internal_tx.go), [`tx_processor.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.3@@/@@nitroPathToArbos=arbos@@/tx_processor.go) and so on.
+In the above code, we use precompiles as an example. Some logic might also affect the STF, such as the methods in [`block_process.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.4@@/@@nitroPathToArbos=arbos@@/block_processor.go), [`internal_tx.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.4@@/@@nitroPathToArbos=arbos@@/internal_tx.go), [`tx_processor.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.4@@/@@nitroPathToArbos=arbos@@/tx_processor.go) and so on.
 The aforementioned ArbOS control methods will be needed for interacting with different versions of the STF logic.
 
 :::tip Backward compatibility
@@ -148,6 +148,6 @@ Please continue reading [Customize STF](./customize-stf.mdx#step-3-run-the-node-
 
 ## Schedule ArbOS upgrade
 
-After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the [ArbOS upgrade](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/13-arbos-upgrade.mdx) document to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
+After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the [ArbOS upgrade](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/13-arbos-upgrade.mdx) document to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
 It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current and target versions will be activated.
 For example, if your current version is ArbOS v18 and you set the target version to v25, all the features between v18 and v25 will be loaded.

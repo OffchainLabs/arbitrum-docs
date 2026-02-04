@@ -43,6 +43,18 @@ The configuration ensures compliance with the AEP terms, streamlines reporting, 
 
 ## How to configure
 
+:::warning Caution
+
+This is an abbreviated set of instructions on how to configure AEP fees. For a complete set of instructions refer to the [AEP fee router introduction](/launch-arbitrum-chain/02-configure-your-chain/common/aep-fees/01-aep-fee-router-introduction.mdx).
+
+Additional resources:
+
+- [Setup AEP fee router](/launch-arbitrum-chain/02-configure-your-chain/common/aep-fees/02-set-up-aep-fee-router.mdx)
+- [Calculate AEP fees](/launch-arbitrum-chain/02-configure-your-chain/common/aep-fees/03-calculate-aep-fees.mdx)
+- [Reporting on AEP fees](/launch-arbitrum-chain/02-configure-your-chain/common/aep-fees/04-reporting-on-fees.mdx)
+
+:::
+
 1. **Calculate net revenue**: Use tools or scripts to track total fees minus settlement costs (e.g., via on-chain queries or off-chain monitoring). For custom tokens, deploy a pricer contract to value fees in `ETH` equivalents.
 2. **Deploy fee router**: Use the Arbitrum Chain SDK script (e.g., [`aep-fee-router`](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-aep-fee-router)) to deploy contracts like RewardDistributor on your chain. Set it as a fee collector (e.g., for surplus fees via `ArbOwner` precompile).
 3. **Route and <a data-quicklook-from="bridge">bridge</a> fees**: Configure the router to send the 10% share to Ethereum (e.g., via native bridges), then deposit to the DAO address on Arbitrum One. Use functions like `RewardDistributor.distributeRewards` for periodic transfers.

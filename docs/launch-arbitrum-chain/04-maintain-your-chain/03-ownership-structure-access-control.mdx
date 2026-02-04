@@ -29,6 +29,12 @@ Calls to an Upgrade Executor can only be made by chain owners; e.g., entities gr
 
 With this architecture, the Upgrade Executor represents a single source of truth for affordances over critical upgradability of the chain.
 
+:::info Precompile Reference
+
+The [`ArbOwner` precompile reference](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) can be found on the [Precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx).
+
+:::
+
 ### Upgrades
 
 Upgrades occur via a chain owner initiating a call to an Upgrade Executor, which in turns calls some chain-owned contract.
@@ -37,7 +43,7 @@ Chain owners can either call [`UpgradeExecutor.executeCall`](https://github.com/
 
 ### Ownership flexibility
 
-A chain owner is simply an address; it is set by the Arbitrum chain's deployer and can represent any sort of governance scheme (i.e., it could be an EOA (as is set via the [Orbit SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth)), a Multisig, a governance token system, etc.)
+A chain owner is simply an address; it is set by the Arbitrum chain's deployer and can represent any sort of governance scheme (i.e., it could be an EOA (as is set via the [Chain SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/create-rollup-eth)), a Multisig, a governance token system, etc.)
 
 The Arbitrum DAO governed chains, while not Arbitrum chains themselves, use a similar architecture and upgrade pattern as Arbitrum chains, with both a governance token and a Multisig (aka, the "Security Council") as chain owners. For more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
 

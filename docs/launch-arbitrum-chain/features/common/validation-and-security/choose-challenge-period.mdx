@@ -26,7 +26,7 @@ It's set by the chain owner and can be chosen based on the application's risk to
 
 - **With DA modes**: Fully compatible across Rollup (full on-chain DA), AnyTrust (DAC-based), and Alt-DA (e.g., Celestia). In AnyTrust, fast withdrawals can reduce the effective period to 15 minutes by leveraging the DAC for rapid verification, bypassing traditional delays.
 - **With gas tokens**: No direct impact; works with native `ETH` or custom `ERC-20`s, as the period governs validation timing rather than fee mechanics.
-- **With validation (e.g., <a data-quicklook-from="bold">BoLD</a>)**: Integrates with BoLD's permissionless disputes, where the period sets the initial challenge window, but BoLD bounds total delays to at most two periods (~12.8 days max on Ethereum) during active disputes, mitigating delay attacks.
+- **With validation** (e.g., **<a data-quicklook-from="bold">BoLD</a>)**: Integrates with BoLD's permissionless disputes, where the period sets the initial challenge window, but BoLD bounds total delays to at most two periods (~12.8 days max on Ethereum) during active disputes, mitigating delay attacks.
 
 ## Pros
 
@@ -50,5 +50,9 @@ It's set by the chain owner and can be chosen based on the application's risk to
 
 - **During deployment**: Specified in the `RollupCreator` configuration (e.g., via the Arbitrum Chain SDK deployment <a data-quicklook-from="portal">portal</a> or scripts like `createRollup.ts`). For example, set `confirmPeriodBlocks` to 30,000 for ~4.5 days.
 - **Post-deployment**: Dynamically updated via owner-privileged contract calls, such as `Rollup.setConfirmPeriodBlocks(newValue)` for the primary period or `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` for the extra buffer (e.g., using tools like cast for onchain transactions).
+
+## How to configure
+
+For instructions on how to configure the challenge period, refer to the [Customize the challenge period](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/03-customizable-challenge-period.mdx) page.
 
 This parameter underscores Arbitrum's modular design, allowing chains to fine-tune validation without compromising core fraud-proof security. For implementation, refer to the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

@@ -60,7 +60,7 @@ The parent chain pricer also records the total number of "data units" (the sum o
 
 ## Child chain gas pricing
 
-The child chain gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently @@arbOneGasFloorGwei=0.01@@ gwei on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and @@novaGasFloorGwei=0.01@@ gwei on Nova).
+The child chain gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method.
 
 ### Estimating child chain gas
 
@@ -68,15 +68,17 @@ Calling an Arbitrum Node's `eth_estimateGas` RPC gives a value sufficient to cov
 
 ### Child chain gas fees
 
-Child chain gas fees work very similarly to gas on Ethereum. A transaction uses some amount of gas, and this is multiplied by the current basefee to get the child chain gas fee charged to the transaction.
+Child chain gas fees work similarly to Ethereum: a transaction consumes gas, which is multiplied by the current basefee per gas (e.g. gwei/gas) to determine the child chain transaction fee (denominated in gwei).
 
-The child chain basefee is set by a version of the "exponential mechanism" which has been widely discussed in the Ethereum community, and which has been shown equivalent to Ethereum's EIP-1559 gas pricing mechanism.
+The basefee is set by a pricing algorithm that regulates fees across multiple adjustment windows. This algorithm uses several <a data-quicklook-from="gas-target">gas targets</a>, each paired with its own <a data-quicklook-from="adjustment-window">adjustment window</a>. Higher targets with shorter windows (for example, 60 Mgas/s over 9 seconds) absorb transient demand spikes without triggering aggressive fee increases. Lower targets with longer windows address slower traffic, with the lowest target measured over 86,400 seconds (one day) establishing the chain's long-term capacity.
 
-The algorithm compares gas usage against a parameter called the [speed limit](#the-speed-limit) which is the target amount of gas per second that the chain can handle sustainably over time. (Currently the <a data-quicklook-from="speed-limit">Speed Limit</a> on Arbitrum One is @@arbOneGasSpeedLimitGasPerSec=7,000,000@@ gas per second.) The algorithm tracks a gas backlog. Whenever a transaction consumes gas, that gas is added to the backlog. Whenever the clock ticks one second, the speed limit is subtracted from the backlog; but the backlog can never go below zero.
+From the users' perspective, this means that the network will charge an increasing amount for each additional amount of gas consumed above the target. As an example: a 10% increase in the fee is levied for going 1% over the target. The fee rises to 15% if you go to 2% over the target, and so on.
 
-Intuitively, if the backlog grows, the algorithm should increase the gas price, to slow gas usage, because usage is above the sustainable level. If the backlog shrinks, the price should decrease again because usage has been below the below the sustainable limit so more gas usage can be welcomed.
+The algorithm tracks a gas backlog for each target. Whenever a transaction consumes gas, that gas is added to the backlog. Each second, the corresponding gas target is subtracted from its backlog (the backlog cannot go below zero). If the backlog grows, the basefee increases exponentially to discourage usage; if the backlog shrinks, the basefee decreases incentivize more demand. This behavior is intended to bring usage of the chain to an equilibrium defined by the long term gas target.
 
-To make this more precise, the basefee is an exponential function of the backlog, $F = e^{-a (B - b)}$, where $a$ and $b$ are suitably chosen constants: $a$ controls how rapidly the price escalates with backlog, and $b$ allows a small backlog before the basefee escalation begins.
+This layered structure creates a dampening effect: overlapping windows smooth volatility at their respective timescales, reducing peak gas prices during congestion while preserving responsiveness to genuine capacity constraints.
+
+For more details on how gas targets affect chain security and validator assumptions, see [the gas target](#the-gas-target) section below.
 
 ### Child chain Tips
 
@@ -90,13 +92,13 @@ Because a call to [`redeem`](/build-decentralized-apps/precompiles/02-reference.
 
 Gas estimation for Retryable submissions is possible via the [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.mdx) and similarly requires the auto-redeem attempt to succeed.
 
-### The Speed Limit
+### The gas target
 
 The security of Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">validator</a> creates an assertion, other validators will check it, and respond with a correct assertion and a <a data-quicklook-from="challenge">challenge</a> if it is wrong. This requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for assertions.
 
-This sets an effective speed limit on execution of a Nitro chain: in the long run the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit, enforced by the Rollup protocol contracts, on how far in the future a deadline can be, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
+This sets an effective gas target on execution of a Nitro chain: in the long run the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the gas target, their deadlines will get farther and farther in the future. Due to the limit, enforced by the Rollup protocol contracts, on how far in the future a deadline can be, this will eventually cause new assertions to be slowed down, thereby enforcing the effective gas target.
 
-Being able to set the speed limit accurately depends on being able to estimate the time required to validate an assertion, with some accuracy. Any uncertainty in estimating validation time will force us to set the speed limit lower, to be safe. And we do not want to set the speed limit lower, so we try to enable accurate estimation.
+Being able to set the gas target accurately depends on being able to estimate the time required to validate an assertion, with some accuracy. Any uncertainty in estimating validation time will force us to set the gas target lower, to be safe. And we do not want to set the gas target lower, so we try to enable accurate estimation.
 
 ## Total fee and gas estimation
 
@@ -127,3 +129,27 @@ After allocating funds and paying what is owed, the parent chain Pricer adjusts 
 The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the parent chain Gas Basefee is reduced, so that the amount collected over a fixed future interval will be reduced by exactly the surplus. If the surplus is negative, the Basefee is increased so that the shortfall will be eliminated over the same fixed future interval.
 
 A second term is added to the parent chain Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee if the surplus is increasing, and increase the Basefee if the surplus is shrinking.
+
+## Effective block gas limit
+
+Post Fusaka, changes have been made to the Block Gas Limit and how transactions are filtered. Instead of using a hard limit of 32M (Arbitrum One), a new “Effective Block Gas Limit” has been introduced.
+
+### Filtering
+
+ArbOS 51 also introduces a `MaxTxGasLimit`, the State Transition Function (STF) will be relaxed to allow the final transaction in a block to use up to the `MaxTxGasLimit` even if it would cause the block to exceed the `MaxBlockGasLimit`.
+
+:::note
+
+The `MaxTxGasLimit` comes from implementing [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) from the Fusaka hard fork.
+
+:::
+
+This means that the “Effective Block Gas Limit” is really `MaxBlockGasLimit` + `MaxTxGasLimit` (64M for Arbitrum One). In previous versions of ArbOS, the STF would skip transactions from the sequencer feed if the transaction’s `GasLimit` (set by the user) minus the L1 data posting gas exceeded the gas remaining in the block (without executing the transaction to see how much L2 gas it actually used).
+
+The new algorithm is more efficient because the STF doesn’t need to continually search the transaction queue for one that fits in the remaining block gas, and can just keep adding transactions until the unused block gas is 0.
+
+:::note
+
+This change does not affect the `GasTarget`, and therefore does not affect how much overall gas per second the chain will use—only how transactions using that gas could be divided between different blocks.
+
+:::

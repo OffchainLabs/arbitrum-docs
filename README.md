@@ -15,7 +15,7 @@ This repository is organized as follows:
   - `for-users/` - User-focused documentation
   - `how-arbitrum-works/` - Technical explanations of Arbitrum
   - `intro/` - Introduction and glossary
-  - `launch-arbitrum-chain/` - Arbitrum Orbit chain deployment guides
+  - `launch-arbitrum-chain/` - Arbitrum chain deployment guides
   - `learn-more/` - Additional learning resources
   - `node-running/` - Node operation guides
   - `partials/` - Reusable content components and troubleshooting guides
@@ -61,13 +61,13 @@ The following are the only exceptions:
 git clone git@github.com:OffchainLabs/arbitrum-docs.git
 ```
 
-2.Install node dependencies
+2. Install node dependencies
 
 ```shell
 yarn
 ```
 
-3.Update the submodules
+3. Update the submodules
 
 ```shell
 git submodule update --init --recursive
@@ -142,7 +142,3 @@ This part will update the glossary.
 ### Formatting
 
 1. Run `yarn format` from the root directory.
-
-### Redirects
-
-1. From the root directory, run `yarn check-redirects`.
