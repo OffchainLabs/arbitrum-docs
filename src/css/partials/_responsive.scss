@@ -9,4 +9,21 @@
     margin-top: 35px;
     margin-bottom: 10px;
   }
+
+  // Make tables scrollable on mobile
+  .markdown table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+}
+
+// Tablet breakpoint for medium-sized screens
+@media (max-width: 996px) {
+  .markdown table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
