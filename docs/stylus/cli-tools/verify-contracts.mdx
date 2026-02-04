@@ -54,17 +54,11 @@ Anyone with the same codebase can rebuild your contract and verify the output ma
 
 ### Verification flow
 
-```
-cargo stylus deploy
-   ↓
-Compressed WASM bytecode sent to chain
-   ↓
-cargo stylus verify
-   ↓
-Rebuilds WASM and compares with onchain code
-   ↓
-Reports: ✓ Verified or ✗ Mismatch
-```
+<ImageZoom
+  src="/img/stylus-contract-verification-flow.svg"
+  alt="Contract verification flow"
+  className="img-600px"
+/>
 
 ### Prerequisites for local verification
 
