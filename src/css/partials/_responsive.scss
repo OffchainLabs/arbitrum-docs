@@ -1,3 +1,31 @@
+// Apply table overflow handling to all screen sizes to prevent page overflow
+.markdown {
+  // Wrapper divs around tables (created by Docusaurus or MDX partials)
+  > div:has(> table),
+  div:has(> table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  // Direct table children
+  > table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  // Ensure tables inside wrappers render properly
+  table {
+    display: table;
+    min-width: 100%;
+  }
+}
+
 @media (max-width: 736px) {
   .markdown h1:first-child {
     font-size: 24px;
@@ -10,34 +38,8 @@
     margin-bottom: 10px;
   }
 
-  // Make tables scrollable on mobile by wrapping in scrollable container
-  .markdown > div:has(> table),
-  .markdown > table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-  }
-
+  // Additional mobile-specific table styling
   .markdown table {
-    display: table;
     white-space: nowrap;
-    min-width: 100%; // Ensure table fills container width
-  }
-}
-
-// Tablet breakpoint for medium-sized screens
-@media (max-width: 996px) {
-  .markdown > div:has(> table),
-  .markdown > table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-  }
-
-  .markdown table {
-    display: table;
-    min-width: 100%;
   }
 }
