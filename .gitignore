@@ -41,4 +41,4 @@ yarn-error.log*
 
 /i18n/*/docusaurus-plugin-content-docs/current/*
 
-sdk-sidebar.js
+sdk-sidebar.js*.nexus.backup
