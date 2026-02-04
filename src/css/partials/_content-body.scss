@@ -5,7 +5,15 @@ main > .container {
 }
 
 article {
+  // Allow article to scroll within bounds
+  overflow-x: auto;
+  max-width: 100%;
+
   .markdown {
+    // Allow markdown content to scroll within bounds
+    overflow-x: auto;
+    max-width: 100%;
+
     h1:first-child {
       font-size: 30px;
     }
@@ -228,19 +236,22 @@ article {
       @include small-table; // target tables
     }
 
-    // Create scrollable wrapper for tables on small screens
-    > table,
-    .table-wrapper > table {
-      @include small-table;
-      display: table; // Proper table display
-      table-layout: auto; // Allow columns to distribute available space
-    }
-
-    // Docusaurus wraps tables in divs for scrolling - ensure proper behavior
-    > div > table {
+    // All tables get small-table styling and proper scrolling
+    table {
       @include small-table;
       display: table;
-      table-layout: auto;
+      table-layout: auto; // Allow columns to distribute available space
+      width: max-content; // Allow table to be wider than container
+      max-width: none; // Override max-width constraints
+    }
+
+    // Ensure table wrappers are scrollable and constrained
+    > div:has(> table),
+    div:has(> table) {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      max-width: 100%;
     }
 
     p > code {
