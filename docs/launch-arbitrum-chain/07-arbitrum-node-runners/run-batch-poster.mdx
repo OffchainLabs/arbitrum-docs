@@ -1,0 +1,297 @@
+---
+title: 'Run a batch poster'
+sidebar_label: 'Run a batch poster'
+description: 'Learn how to run and configure a batch poster.'
+author: pete-vielhaber
+sme: jason-w123
+user_story: As a current Arbitrum chain owner, I need to understand how to configure and run a batch poster.
+content_type: get-started
+---
+
+The regular setup of the batch poster has the default configuration flags and values:
+
+| Flag                                                | Default value | Description                                                                                       |
+| --------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.enable`                        | false         | Enables posting batchecs to L1                                                                    |
+| `--node.batch-poster.max-size`                      | 100000        | Default value is overwritten if its an L3 (90000, for AnyTrust: 1,000,000)                        |
+| --node.batch-poster.poll-interval                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                      |
+| --node.batch-poster.error-delay                     | 10 seconds    | Delay time after error posting batch                                                              |
+| --node.batch-poster.compression-level               | 11            | Batch compression level (Arbitrum uses Brotli compression which has compression levels from 1-11) |
+| --node.batch-poster.parent-chain-wallet.private-key | none          | Sets the private key of the parent chains wallet                                                  |
+
+If you created an L3 Arbitrum chain and generated your node config file for a full node, the only values for the batch poster that will be set are:
+
+- `--node.batch-poster.enable = true`
+- `--node.batch-poster.max-size = 90000`
+- `--node.batch-poster.parent-chain-wallet.private-key = YOUR_PRIVATE_KEY`
+
+Overall, if you are the chain owner, using the Arbitrum Chain SDK to generate your config file is the best option.
+
+To add a new batch poster, call the `setIsBatchPoster(address,bool)` method of the `SequencerInbox` contract on the parent chain:
+
+```Typescript
+cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCER_INBOX_ADDRESS "setIsBatchPoster(address,bool)()" $NEW_BATCH_POSTER_ADDRESS true
+```
+
+<!-- Coming: Be part of the high availability sequencer -->
+
+## Queued transaction database selection
+
+`queuedTxs` are transactions that the sequencer has ordered and are ready to be posted:
+
+- **Noop**: `--node.batch-poster.data-poster.use-noop-storage`
+- **Redis**: `--node.batch-poster.redis-url`
+- **DB**: `--node.batch-poster.data-poster.use-db-storage`
+
+You can use only one database at a time, so you cannot have both a Redis server and a DB in use simulataneously.
+
+:::note
+
+If your parent chain is an Arbitrum chain or doesn't have a mempool, then this section can be ignored as Noop storage will be automatically chosen. This is because batches are posted sequentially, and will only post a new batch if the previous transaction went through, therefore no database tracking queued transactions is required.
+
+:::
+
+### Noop
+
+Noop storage does not store any `queuedTxs`. This is beneficial when the parent chain is an Arbitrum chain or one without a mempool, since the sequencer processes every transaction immediately and is never stuck in mempool limbo due to low gas.
+
+When Noop is enabled, the batch poster will wait for a confirmation that the transaction has gone through. If the transaction reverts, the batch poster will try again without halting the operation.
+
+There is no Replace By Fee (RBF) logic, since that applies only to chains that use a mempool.
+
+### DB
+
+DB will store data locally on the node and support persistent `queuedTxs`. Only a single batch poster can use the DB. The DB supports RBF, so transactions will not get stuck in the parent chain's mempool. If a transaction is reverted, then the batch poster must halt.
+
+### Redis
+
+Redis is a fast local database that runs separately from the Nitro software so that node restarts preserve `queuedTxs`.
+
+Using Redis allows multiple batch posters to run in parallel and read from it via `redisLock`, which provides redundancy and high availability.
+
+Storing transactions also enables RBF, which can prevent transactions from being stuck in the mempool due to insufficient gas. However, using Redis means the batch poster will half if a transaction reverts.
+
+To set up Redis, you can also set up a `redis-signer` value with the flag `--node.batch-poster.data_poster.redis-signer.signing-key`.
+
+#### Key differences
+
+:::info
+
+The default values are DB on by default, and Noop on by default if and only if the parent chain does not have a mempool (any L3 whose parent is an Arbitrum chain).
+
+:::
+
+| Feature            | Noop | DB         | Redis          |
+| ------------------ | ---- | ---------- | -------------- |
+| Persistence        | None | Local disk | External Redis |
+| Survives restarts  | No   | Yes        | Yes            |
+| Replace-by-fee     | No   | Yes        | Yes            |
+| Multiple posters   | No   | No         | Yes            |
+| Tolerates reverts  | Yes  | No         | No             |
+| Waits for receipts | Yes  | No         | No             |
+
+## Enable blob posting
+
+This section how explains to configure an Arbitrum node to post [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blob transactions to the parent chain, which can significantly reduce data availability costs.
+
+### Prerequisites
+
+Before enabling blob transactions, verify that your setup meets these requirements:
+
+1. Chain configuration
+   Your Arbitrum chain must be running in **Rollup mode**.
+2. Parent chain compatibility
+   Your parent chain (typically Ethereum mainnet or a testnet) must support [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844). You can verify this by checking that recent block headers contain:
+
+- `ExcessBlobGas` field
+- `BlobGasUsed` field
+
+3. ArbOS version
+
+- If your version is below 20, upgrade by following the [ArbOS upgrade guide](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/arbos-upgrade.mdx).
+
+#### Method 1: Smart contract call
+
+Call the `arbOSVersion()` function on the `ArbSys` precompile contract:
+
+- **Contract address**: `0x0000000000000000000000000000000000000064`
+- **Function**: `arbOSVersion()` returns `uint256`
+- You can call this using any Ethereum client or block explorer on your Arbitrum chain
+
+#### Method 2: Using `cast` (if you have Foundry installed)
+
+```Solidity
+cast call 0x0000000000000000000000000000000000000064 "arbOSVersion()" --rpc-url YOUR_ARBITRUM_RPC_URL
+```
+
+If your version is below 20, upgrade by following the [ArbOS upgrade guide](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/arbos-upgrade.mdx).
+
+##### Configuration
+
+1. To enable blob transaction posting, add the following configuration to your node:
+
+```JSON
+{
+"node": {
+  "batch-poster": {
+    "post-4844-blobs": true
+  }
+},
+"parent-chain": {
+  "blob-client": {
+    "beacon-url": "YOUR_BEACON_URL"
+   }
+}
+}
+```
+
+2. After updating your configuration:
+
+   - Save the configuration file.
+   - Restart your Arbitrum node.
+   - Monitor the logs to confirm blob posting is active.
+
+##### Verification
+
+1. Once restarted, you can verify that blob transaction are being posted successfully by monitoring your node logs.
+
+##### Log message to look for
+
+1. When a blob transaction is successfully posted, you'll see a log entry similar to:
+
+```shell
+INFO [05-23|00:49:16.160] BatchPoster: batch sent  sequenceNumber=6 from=24
+to=28 prevDelayed=13 currentDelayed=14 totalSegments=9
+numBlobs=1
+```
+
+2. **Key indicator**: The `numBlobs` field shows the number of blobs included in the transaction.
+
+   - `numBlobs=0`: Traditional calldata transaction was posted
+   - `numbBlobs>0`: Blob transaction was successfully posted (in the example above, a single blob was sent)
+
+## Troubleshooting
+
+#### Why is my node still posting calldata instead of blobs?
+
+1. Your node may continue using calldata in these scenarios:
+   a. **Cost optimization**: When blob gas prices are high, calldata posting may be more economical; you can set `--node.batch-poster.ignore-blob-price` flag to `true` to force the batch poster to use blobs.
+   b. **Batch type switching protection**: After a non-blob transaction is posted, the following 16 transactions will also use calldata to prevent frequent switching.
+2. Check your node logs for blob-related error messages and verify that your parent chain is accessible and fully synced.
+
+## Optional parameters
+
+1.  You can also set the following optional parameters to control blob posting behavior:
+
+| Flag                                                        | Description                                                                                                                                                                                                                |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.ignore-blob-price`                     | Boolean. Default: `false`. If the parent chain supports `EIP-4844` blobs and `ignore-blob-price` is set to `true`, the batch poster will use `EIP-4844` blobs even if using calldata is cheaper. Can be `true` or `false`. |
+| `--parent-chain.blob-client.authorization`                  | String. Default: `""`. Value to send with the HTTP Authorization: header for Beacon REST requests, must include both scheme and scheme parameters.                                                                         |
+| `--parent-chain.blob-client.secondary-beacon-url`           | String. Default: `""`. Value to send with the HTTP Authorization: header for Beacon REST requests, must include both scheme and scheme parameter.                                                                          |
+| `--node.batch-poster.data-poster.blob-tx-replacement-times` | durationSlice. Default: `[5m0s, 10m0s, 30m0s,1h0m0s,4h0m0s,8h0m0s,16h0m0s,22h0m0s]`. Comma-separated list of durations since first posting a blob transaction to attempt a replace-by-fee.                                 |
+| `--node.batch-poster.data-poster.max-blob-tx-tip-cap-gwei`  | Float. Default: `1`. The maximum tip cap to post `EIP-4844` blob-carrying transactions at.                                                                                                                                 |
+| `--node.batch-poster.data-poster.min-blob-tx-tip-cap-gwei`  | Float. Default: `1`. The minimum tip cap to post `EIP-4844` blob-carrying transactions at.                                                                                                                                 |
+
+## Batch poster revenue config
+
+To change revenue configurations for a batch poster, the first thing that to do is check the list of current registered batch posters through the `ArbAggregator` precompile by calling `getBatchPosters()(address[]):
+
+```shell
+cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
+```
+
+While there are other ways to get the list of batch posters for an Arbitrum chain, this method only lists batch posters registered via `ArbAggregator.addBatchPoster()` or those who have posted at least one batch, which is better for revenue reasons.
+
+Once you have teh batch poster address you can obtain the fee collector address for that batch poster using the `getFeeCollector(address)(address)` from the `ArbAggregator` precompile.
+
+```shell
+cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
+```
+
+Which is alos possible using the Arbitrum Chain SDK:
+
+```Typescript
+const orbitChainClient = createPublicClient({
+   chain: <OrbitChainDefinition>,
+   transport: http(),
+}).extend(arbAggregatorActions);
+
+const networkFeeAccount = await orbitChainClient.arbAggregatorReadContract({
+   functionName: 'getFeeCollector',
+   args: [<BatchPosterAddress>],
+});
+```
+
+:::note
+
+Before setting a fee collector for a batch poster, ensure the batch poster is registered in the `BatchPostersTable`. This can be achieved by:
+
+- Manually calling `ArbAggregator.addBatchPoster()` for the address, or
+- The address has been successfully posted for at least one batch
+
+To set a new fee collector for a specific batch poster, use the method `setFeeCollector(address, address)` of the `ArbAggregator` precompile:
+
+```shell
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "setFeeCollector(address,address) ()" $BATCH_POSTER_ADDRESS $NEW_FEECOLLECTOR_ADDRESS
+```
+
+Also possible in the Arbitrum Chain SDK:
+
+```Typescript
+const owner = privateKeyToAccount(<OwnerPrivateKey>);
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbAggregatorActions);
+
+const transactionRequest = await orbitChainClient.arbAggregatorPrepareTransactionRequest({
+    functionName: 'setFeeCollector',
+    args: [<BatchPosterAddress>, <NewFeeCollectorAddress>],
+    upgradeExecutor: false,
+    account: owner.address,
+});
+
+await orbitChainClient.sendRawTransaction({
+    serializedTransaction: await owner.signTransaction(transactionRequest),
+});
+```
+
+:::
+
+To add a new batch poster, call the `setIsBatchPoster(address,bool)` method of the `SequencerInbox` contract on the parent chain:
+
+```shell
+cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCER_INBOX_ADDRESS "setIsBatchPoster(address,bool) ()" $NEW_BATCH_POSTER_ADDRESS true
+```
+
+### Setting revenue values
+
+:::note
+
+These values are only editable by the chain owner(s).
+
+:::
+
+There are onchain values in ArbOS that set how much ArbOS changes per L1 gas spent on transaction data. This can be set by communicating with the `ArbOwner` precompile.
+
+```shell
+cast send --rpc-url $ARB_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRate(uint64) ()" NEW_L1_PRICING_REWARD
+```
+
+Along with `setPerBatchGasCharge()`, which sets the base charge (in L1 gas) attributed to each data batch in the calldata pricer. This can be called with:
+
+```shell
+cast send --rpc-url ARB_CHAIN_RPC --private-key OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setPerBatchGasCharge(int64) ()" NEW_BATCH_GAS_CHARGE
+```
+
+### Batch poster interval config
+
+The batch poster has a max delay, primarily set by `--node.batch-poster.max-delay` parameter in the [Nitro node configuration](https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go) (set via the JSON config file or command-line flags when deploying an Arbitrum chain). It defines the maximum amount of time the batch poster will wait after receiving a transaction before posting a batch that includes it. The default value is one hour (3600 seconds):
+
+- \*\*Configuration options: In the `node.batch-poster` section of the config, e.g., `"max-delay": "30m"` for a 30-minute maximum wait. Lower values increase batch posting frequency, but at the cost of potentially smaller, less efficient batches during periods of low activity, which increases gas costs on the parent chain. If there are no transactions in a batch, then this setting does not apply.
+- **Prevention of issues**: A shorter max delay reduces the opportunity for transaction reordering in the sequencer by requiring shorter waits. It also liimts exposure to chain reorgs, since batches post sooner, which anchors them to the L1 before potential fluctuations can invalidate sequencing. Extremely low posting times are not recommended, as spamming the L1 with batches increases costs while providing no benefits.
+- **Recommended settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, keep the value of one hour.
+
+The batch poster also has `--node.batch-poster.max-size` parameter represented in bytes. It is the maximum size a batch can be. If the total queued transactions compression estimate exceeds the max size, the batch poster will post the max size of transactions to the L1. The default value is 100000 bytes.
+
+Lower values will result in increased frequency of batch posting during high activity. And because Brotli compression is lossy, smaller batch files almost always result in suboptimal compression compared to larger files. which means the gas price will be higher overall for two smaller batches than for one larger batch, assuming the two smaller batches contain the same transactions as the one larger batch. Calldata and blob posting have an upper limit, so raising this value too high can cause issues, while lowering it can lead to inefficient compression and batch spamming on high-activity chains. The recommended value is 100,000 bytes.
