@@ -974,7 +974,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'arbitrum-bridge/bridge-transaction-traceability',
-          label: 'tracing-bridge-transactions',
+          label: 'Tracing bridge transactions',
         },
         {
           type: 'doc',
