@@ -1,3 +1,31 @@
+// Apply table overflow handling to all screen sizes to prevent page overflow
+.markdown {
+  // Wrapper divs around tables (created by Docusaurus or MDX partials)
+  > div:has(> table),
+  div:has(> table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  // Direct table children
+  > table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  // Ensure tables inside wrappers render properly
+  table {
+    display: table;
+    min-width: 100%;
+  }
+}
+
 @media (max-width: 736px) {
   .markdown h1:first-child {
     font-size: 24px;
@@ -8,5 +36,10 @@
     font-size: 18px;
     margin-top: 35px;
     margin-bottom: 10px;
+  }
+
+  // Additional mobile-specific table styling
+  .markdown table {
+    white-space: nowrap;
   }
 }
