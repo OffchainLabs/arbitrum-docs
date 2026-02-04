@@ -1653,10 +1653,6 @@ const sidebars = {
         {
           type: 'category',
           label: 'Fundamentals',
-          collapsed: false,
-          link: {
-            type: 'generated-index',
-          },
           items: [
             {
               type: 'doc',
