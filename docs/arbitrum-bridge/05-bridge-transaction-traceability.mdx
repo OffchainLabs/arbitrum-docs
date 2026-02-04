@@ -350,14 +350,14 @@ main();
 
 ## Tracing withdrawals from parent chain to child chain
 
-```tsx
 Tracing a withdrawal from parent to child chain is not that difficult. It's basically the inverse of the above, but since the parent chain transaction has been executed, you don't need to perform any checks. Since the position is indexed on the child chain, the process is much easier.
 
 First, parse the logs. The correct one is emitted by the outbox contract and contains the value `transactionIndex`, which is a unique value given to each withdrawal. Even though this value is indexed, you can easily narrow down the log query even more by parsing the transaction and getting the child chain block. Then you can query the `L2ToL1Tx` log on the `ArbSys` contract, which will give you the transaction.
 
-import { Contract, providers, BigNumber } from "ethers";
-import { constants } from "@arbitrum/sdk";
-import { Interface } from "ethers/lib/utils";
+```tsx
+import { Contract, providers, BigNumber } from 'ethers';
+import { constants } from '@arbitrum/sdk';
+import { Interface } from 'ethers/lib/utils';
 
 const ParentWithdrawHash = PARENT_WITHDRAW_HASH;
 const outboxAddress = OUTBOX_ADDRESS;
@@ -365,39 +365,43 @@ const outboxAddress = OUTBOX_ADDRESS;
 const sepoliaRPC = SEPOLIA_RPC_URL;
 const arbSepoliaRPC = ARB_SEPOLIA_RPC_URL;
 
-var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC)
-var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC)
+var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC);
+var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC);
 
 async function main() {
-    if (ParentWithdrawHash == null) { throw new Error("Parent hash cannot be null") }
+  if (ParentWithdrawHash == null) {
+    throw new Error('Parent hash cannot be null');
+  }
 
-    const transactionReceipt = await sepoliaProvider.getTransactionReceipt(ParentWithdrawHash)
-    const outboxInterface = new Interface(outboxABI)
-    let withdrawPosition: BigNumber | undefined
-    for (let i = 0; i < transactionReceipt.logs.length; i++) {
-        if (transactionReceipt.logs[i].address == outboxAddress) {
-            const parsedTransaction = outboxInterface.parseLog(transactionReceipt.logs[i])
-            withdrawPosition = parsedTransaction.args.transactionIndex
-            break
-        }
+  const transactionReceipt = await sepoliaProvider.getTransactionReceipt(ParentWithdrawHash);
+  const outboxInterface = new Interface(outboxABI);
+  let withdrawPosition: BigNumber | undefined;
+  for (let i = 0; i < transactionReceipt.logs.length; i++) {
+    if (transactionReceipt.logs[i].address == outboxAddress) {
+      const parsedTransaction = outboxInterface.parseLog(transactionReceipt.logs[i]);
+      withdrawPosition = parsedTransaction.args.transactionIndex;
+      break;
     }
+  }
 
-    if (withdrawPosition == undefined) {
-        throw new Error("Could not find correct log")
-    }
+  if (withdrawPosition == undefined) {
+    throw new Error('Could not find correct log');
+  }
 
-    const transactionInfo = await sepoliaProvider.getTransaction(ParentWithdrawHash)
-    const parsedTransaction = outboxInterface.parseTransaction(transactionInfo)
-    const l2WithdrawBlock = parsedTransaction.args.l2Block.toHexString()
+  const transactionInfo = await sepoliaProvider.getTransaction(ParentWithdrawHash);
+  const parsedTransaction = outboxInterface.parseTransaction(transactionInfo);
+  const l2WithdrawBlock = parsedTransaction.args.l2Block.toHexString();
 
-    const arbSysContract = new Contract(constants.ARB_SYS_ADDRESS, arbSysABI, arbSepoliaProvider)
-    const eventFilter = arbSysContract.filters.L2ToL1Tx(null, null, null, withdrawPosition)
-    const event = (await arbSysContract.queryFilter(eventFilter, l2WithdrawBlock, l2WithdrawBlock))[0]
-    if (event == null) {
-        throw new Error("log not found, may be unavailable")
-    }
+  const arbSysContract = new Contract(constants.ARB_SYS_ADDRESS, arbSysABI, arbSepoliaProvider);
+  const eventFilter = arbSysContract.filters.L2ToL1Tx(null, null, null, withdrawPosition);
+  const event = (
+    await arbSysContract.queryFilter(eventFilter, l2WithdrawBlock, l2WithdrawBlock)
+  )[0];
+  if (event == null) {
+    throw new Error('log not found, may be unavailable');
+  }
 
-    console.log("Transaction Hash found: ", event.transactionHash)
+  console.log('Transaction Hash found: ', event.transactionHash);
 }
-main()
+main();
 ```
