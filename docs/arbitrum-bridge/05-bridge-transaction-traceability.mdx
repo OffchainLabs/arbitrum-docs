@@ -12,7 +12,7 @@ content_type: how-to
 
 If you want to trace the parent chain transaction to the child chain retryable ticket, the simplest way is to first create a provider using ethers via `providers.JsonRpcProvider(RPC)`. You should have one for both the parent and child chain. Then, using the parent chain provider, get the transaction via `parentProvider.getTransactionReceipt(Hash)`. Wrap the receipt in the `ParentTransactionReceipt` class, which allows you to call the class function `getParentToChildMessages(childProvider)`. This returns a parent-to-child message, in which one of the values is the `retryableCreationId` which is equivalent to the hash. You can then check if it has been submitted to the child chain by searching for that transaction either with the SDK (shown below) or a block explorer.
 
-Once the retryable transaction is gathered, you need to check if the transaction has been redeemed or not since it will trigger a separate transaction hash. This can be done by wrapping the `childReceipt` in a `ChildTransactionReceipt` and then creating a new `ParentToChildMessageReader` (parameters below in the code) object which has the class function `getSuccessfulRedeem`. This returns the status and info of the redeemed message if it has been redeemed.
+Once the retryable transaction is gathered, you need to check if the transaction has been redeemed or not since it will trigger a separate transaction hash. This can be done by wrapping the `childReceipt` in a `childTransactionReceipt` and then creating a new `ParentToChildMessageReader` (parameters below in the code) object which has the class function `getSuccessfulRedeem`. This returns the status and info of the redeemed message if it has been redeemed.
 
 If it has been redeemed, then the `manualRedeemMessage` will have the transaction hash included.
 
@@ -85,7 +85,7 @@ main();
 
 It's also possible to use `ParentToChildMessage.calculateSubmitRetryableId()`, however that function takes many parameters, making this process simpler in most cases.
 
-## Tracing ETH deposits from parent chain to child chain
+## Tracing `DepositEth` from parent chain to child chain
 
 When it comes to a simple ETH deposit, the process is very similar to finding a retryable ticket's hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)` which returns an ETH deposit message containing the `childTxHash`.
 
@@ -178,11 +178,11 @@ async function main() {
 main();
 ```
 
-## Tracing ETH deposits from child chain to parent chain
+## Tracing `DepositEth` from child chain to parent chain
 
-If you want to trace an ETH deposit message from child to parent chain, it requires a bit more work and is not as efficient. Even though ETH deposit messages are given a `requestId`, the child chain transaction is not given that information, meaning you have no means of using it to query the parent chain bridge logs efficiently. Instead, you must rely on the `SequencerInbox` contract.
+If you want to trace an `DepositEth` message from child to parent chain, it requires a bit more work and is not as efficient. Even though ETH deposit messages are given a `requestId`, the child chain transaction is not given that information, meaning you have no means of using it to query the parent chain bridge logs efficiently. Instead, you must rely on the `SequencerInbox` contract.
 
-The first thing to do is find which batch your child chain transaction is in. With that info, you can query the `SequencerInbox` contract to find the block number that the batch was posted in. With that info, you now know with certainty that the original parent chain message was sent before the block with the posted batch. From there, search through the `Bridge` or `DelayedInbox` contract for their `MessageDelivered` and `InboxMessageDelivered` logs (respectively). You can then wrap the transaction that was responsible for emitting those logs with either the `ParentToChildMessage` or `ParentEthDepositTransactionReceipt` depending on what you're looking for. When wrapped, you can check for their respective messages as shown above, and if the hash calculated matches the hash you have, then that is the original parent chain message.
+The first thing to do is find which batch your child chain transaction is in. With that info, you can query the `SequencerInbox` contract to find the block number that the batch was posted in, giving you certainty that the original parent chain message was sent before the block with the posted batch. From there, search through the `Bridge` or `DelayedInbox` contract for their `MessageDelivered` and `InboxMessageDelivered` logs (respectively). You can then wrap the transaction that was responsible for emitting those logs with either the `ParentToChildMessage` or `ParentEthDepositTransactionReceipt` depending on what you're looking for. When wrapped, you can check for their respective messages as shown above, and if the hash calculated matches the hash you have, then that is the original parent chain message.
 
 ```tsx
 import { providers, Contract } from 'ethers';
