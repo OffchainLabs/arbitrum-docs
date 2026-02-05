@@ -9,16 +9,15 @@ main > .container {
 }
 
 article {
-  // No overflow restrictions - content flows naturally
-  overflow: visible !important;
+  // Constrain content to prevent wide tables from expanding layout
+  overflow-x: hidden;
   max-width: 100%;
   width: 100%;
   box-sizing: border-box;
-  padding-left: 4px; // Prevent content clipping on left edge
 
   .markdown {
-    // No overflow restrictions - content flows naturally
-    overflow: visible !important;
+    // Constrain content width
+    overflow-x: hidden;
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
