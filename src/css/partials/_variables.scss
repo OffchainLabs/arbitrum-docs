@@ -1,4 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+// Aeonik font (from arbitrum.io)
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Aeonik Fono';
+  src: url('/fonts/AeonikFono-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   // ========================================
@@ -41,8 +64,8 @@
   --arbitrum-font-size: 16px;
   --arbitrum-border-radius-sm: 0;
   --arbitrum-border-radius: 0;
-  --arbitrum-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --arbitrum-mono-font: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', Menlo, Monaco, Consolas, monospace;
+  --arbitrum-font-family: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --arbitrum-mono-font: 'Aeonik Fono', ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
 
   // ========================================
   // Infima/Docusaurus Overrides
@@ -65,10 +88,10 @@
   --ifm-code-font-size: 90%;
   --ifm-global-radius: 0;
   --ifm-navbar-item-padding-horizontal: 0.875rem;
-  --ifm-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --ifm-heading-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --ifm-font-family-monospace: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', Menlo, Monaco, Consolas, monospace;
-  --ifm-alert-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --ifm-font-family-base: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --ifm-heading-font-family: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --ifm-font-family-monospace: 'Aeonik Fono', ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
+  --ifm-alert-font-family: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --ifm-font-weight-semibold: 600;
   --ifm-font-weight-bold: 700;
   --ifm-line-height-base: 1.65;

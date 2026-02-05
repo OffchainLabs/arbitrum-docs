@@ -345,39 +345,10 @@
   }
 
   // ========================================
-  // Code blocks
-  // ========================================
-  pre {
-    background: var(--code-bg) !important;
-    border-color: var(--code-border-color);
-    box-shadow: var(--code-shadow);
-  }
-
-  :not(pre) > code {
-    background: var(--code-bg);
-    border-color: var(--code-border-color);
-  }
-
-  .codeBlockTitle_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
-    background: var(--code-header-bg);
-    border-color: var(--code-border-color);
-  }
-
-  .prism-code .token-line::before {
-    color: var(--code-line-number-color);
-    border-color: var(--code-border-color);
-  }
-
-  // ========================================
   // Tables
   // ========================================
   table {
     background: var(--arbitrum-card);
-    border-color: var(--arbitrum-border);
-  }
-
-  thead {
-    background: var(--arbitrum-muted);
   }
 
   // ========================================

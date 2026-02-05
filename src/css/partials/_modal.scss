@@ -113,16 +113,15 @@
     td {
       padding: 8px 12px;
       text-align: left;
-      border: 1px solid var(--ifm-table-border-color);
     }
 
     th {
-      background-color: var(--ifm-table-head-background);
       font-weight: 600;
+      border-bottom: 1px solid var(--arbitrum-border);
     }
 
-    tr:nth-child(even) {
-      background-color: var(--ifm-table-stripe-background);
+    tr:not(:last-child) td {
+      border-bottom: 1px solid color-mix(in oklab, var(--arbitrum-border) 50%, transparent);
     }
   }
 

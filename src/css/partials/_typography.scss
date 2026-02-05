@@ -20,8 +20,6 @@
   --prose-quote-borders: var(--arbitrum-color-primary);
   --prose-captions: var(--arbitrum-secondary-text);
   --prose-code: var(--arbitrum-text);
-  --prose-th-borders: var(--arbitrum-border);
-  --prose-td-borders: var(--arbitrum-border);
   --prose-kbd: var(--arbitrum-text);
   --prose-kbd-shadows: color-mix(in oklab, var(--arbitrum-color-primary) 50%, transparent);
 }
@@ -86,7 +84,7 @@ article .markdown {
     margin-top: 0;
     margin-bottom: 1rem;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: normal;
 
     &:first-child {
       font-size: 2.25rem;
@@ -110,7 +108,7 @@ article .markdown {
     margin-top: 2.5em;
     margin-bottom: 1em;
     line-height: 1.25;
-    letter-spacing: -0.02em;
+    letter-spacing: normal;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--arbitrum-border);
 
@@ -140,7 +138,7 @@ article .markdown {
     margin-top: 2em;
     margin-bottom: 0.75em;
     line-height: 1.4;
-    letter-spacing: -0.01em;
+    letter-spacing: normal;
 
     strong {
       font-weight: 700;
@@ -447,7 +445,7 @@ article .markdown {
     font-weight: 500;
     background: var(--arbitrum-muted);
     color: var(--prose-code);
-    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', Menlo, Monaco, Consolas, monospace;
+    font-family: var(--ifm-font-family-monospace);
     word-break: break-word;
   }
 
@@ -539,7 +537,7 @@ article .markdown {
   }
 
   // ========================================
-  // Tables - Modern rounded card style
+  // Tables - Clean minimal style
   // ========================================
 
   table {
@@ -549,31 +547,20 @@ article .markdown {
     table-layout: auto;
     margin-top: 2em;
     margin-bottom: 2em;
-    border-collapse: separate;
-    border-spacing: 0;
+    border-collapse: collapse;
     background: var(--arbitrum-card);
-    border-radius: var(--arbitrum-border-radius, 12px);
-    border: 1px solid color-mix(in oklab, var(--arbitrum-border) 60%, transparent);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
   }
 
   thead {
-    background: var(--arbitrum-muted);
+    border-bottom: 1px solid var(--arbitrum-border);
   }
 
   thead th {
     color: var(--prose-headings);
     font-weight: 600;
     text-align: start;
-    padding: 0.875rem 1rem;
-    border-inline-start: 1px solid var(--arbitrum-border);
+    padding: 0.75rem 1rem;
     font-size: 0.8125rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-
-    &:first-child {
-      border-inline-start: none;
-    }
 
     code {
       color: inherit;
@@ -583,28 +570,17 @@ article .markdown {
   tbody td,
   tfoot td {
     text-align: start;
-    border-inline-start: 1px solid var(--arbitrum-border);
-    padding: 0.875rem 1rem;
+    padding: 0.75rem 1rem;
     vertical-align: top;
-
-    &:first-child {
-      border-inline-start: none;
-    }
   }
 
-  // Border between rows (except last)
-  tbody tr:not(:last-child) td {
-    border-bottom: 1px solid var(--arbitrum-border);
-  }
-
-  // Alternate row coloring (subtle)
-  tbody tr:nth-child(even) {
-    background: color-mix(in oklab, var(--arbitrum-muted) 50%, transparent);
+  tbody tr {
+    border-bottom: 1px solid color-mix(in oklab, var(--arbitrum-border) 50%, transparent);
   }
 
   tfoot th,
   tfoot td {
-    border-top: 2px solid var(--arbitrum-border);
+    border-top: 1px solid var(--arbitrum-border);
     font-weight: 600;
   }
 
@@ -707,13 +683,13 @@ article .markdown {
 // ========================================
 
 pre {
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', Menlo, Monaco, Consolas, monospace;
+  font-family: var(--ifm-font-family-monospace);
   font-size: 0.875rem;
   line-height: 1.6;
   border-radius: var(--arbitrum-border-radius, 12px);
   background: var(--arbitrum-muted) !important;
   border: 1px solid color-mix(in oklab, var(--arbitrum-border) 60%, transparent);
-  padding: 1.5rem;
+  padding: 2rem;
   margin: 1rem 0;
   overflow-x: auto;
 
@@ -726,8 +702,9 @@ pre {
   }
 }
 
-// Code block title
-.codeBlockTitle_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
+// Code block title (attribute selector for Docusaurus version resilience)
+[class^='codeBlockTitle'],
+[class*=' codeBlockTitle'] {
   font-family: var(--arbitrum-font-family);
   font-size: 0.75rem;
   font-weight: 600;
@@ -749,10 +726,10 @@ pre {
 // Prism code styling
 .prism-code {
   .token-line {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-left: -1rem;
-    margin-right: -1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
   }
 }
 
@@ -760,8 +737,8 @@ pre {
 .docusaurus-highlight-code-line {
   background: var(--docusaurus-highlighted-code-line-bg);
   display: block;
-  margin: 0 -1rem;
-  padding: 0 1rem;
+  margin: 0 -2rem;
+  padding: 0 2rem;
 }
 
 // ========================================

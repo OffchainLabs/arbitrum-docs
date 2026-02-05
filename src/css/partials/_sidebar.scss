@@ -32,7 +32,7 @@ $child-sidebar-item-font-size: 14px;
       > a.menu__link {
         font-size: $root-sidebar-item-font-size;
         font-weight: 600;
-        letter-spacing: -0.01em;
+        letter-spacing: normal;
         color: var(--arbitrum-text);
       }
     }

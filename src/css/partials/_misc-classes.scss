@@ -22,9 +22,20 @@ pre[class*='language-'] {
   border-radius: var(--arbitrum-border-radius, 12px);
 }
 
+// Copy button styling (attribute selectors for Docusaurus version resilience)
+[class^='copyButton'],
+[class*=' copyButton'] {
+  border-radius: 6px;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: var(--arbitrum-muted);
+  }
+}
+
 // Copy button success state
-.copyButtonCopied_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-CopyButton-styles-module,
-.copyButtonSuccess_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-CopyButton-styles-module {
+[class*='copyButtonCopied'],
+[class*='copyButtonSuccess'] {
   --ifm-color-success: var(--arbitrum-color-primary);
   background: var(--arbitrum-color-primary) !important;
   color: white !important;
