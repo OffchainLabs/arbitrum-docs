@@ -5,23 +5,23 @@
   // ========================================
 
   // Core semantic tokens - navy tinted
-  --fd-background: hsl(222, 47%, 6%);
-  --fd-foreground: hsl(210, 40%, 98%);
-  --fd-muted: hsl(217, 33%, 12%);
-  --fd-muted-foreground: hsl(215, 20%, 65%);
-  --fd-popover: hsl(222, 47%, 8%);
-  --fd-popover-foreground: hsl(210, 40%, 98%);
-  --fd-card: hsl(222, 47%, 8%);
-  --fd-card-foreground: hsl(210, 40%, 98%);
-  --fd-border: hsl(217, 33%, 17%);
-  --fd-primary: hsl(188, 100%, 53%);
-  --fd-primary-foreground: hsl(222, 47%, 6%);
-  --fd-secondary: hsl(217, 33%, 17%);
-  --fd-secondary-foreground: hsl(210, 40%, 98%);
-  --fd-accent: hsl(217, 33%, 17%);
-  --fd-accent-foreground: hsl(210, 40%, 98%);
-  --fd-ring: hsl(188, 100%, 53%);
-  --fd-overlay: hsla(222, 47%, 4%, 0.8);
+  --arbitrum-background: hsl(222, 47%, 6%);
+  --arbitrum-text: hsl(210, 40%, 98%);
+  --arbitrum-muted: hsl(217, 33%, 12%);
+  --arbitrum-secondary-text: hsl(215, 20%, 65%);
+  --arbitrum-popover: hsl(222, 47%, 8%);
+  --arbitrum-popover-foreground: hsl(210, 40%, 98%);
+  --arbitrum-card: hsl(222, 47%, 8%);
+  --arbitrum-card-foreground: hsl(210, 40%, 98%);
+  --arbitrum-border: hsl(217, 33%, 17%);
+  --arbitrum-color-primary: hsl(188, 100%, 53%);
+  --arbitrum-color-primary-foreground: hsl(222, 47%, 6%);
+  --arbitrum-secondary: hsl(217, 33%, 17%);
+  --arbitrum-secondary-foreground: hsl(210, 40%, 98%);
+  --arbitrum-accent: hsl(217, 33%, 17%);
+  --arbitrum-accent-foreground: hsl(210, 40%, 98%);
+  --arbitrum-ring: hsl(188, 100%, 53%);
+  --arbitrum-overlay: hsla(222, 47%, 4%, 0.8);
 
   // ========================================
   // Core Backgrounds - Apply directly
@@ -48,9 +48,9 @@
   --ifm-color-primary-lightest: hsl(188, 100%, 75%);
 
   // Text and links
-  --ifm-color-content: var(--fd-foreground);
-  --ifm-color-content-secondary: var(--fd-muted-foreground);
-  --ifm-link-color: var(--fd-primary);
+  --ifm-color-content: var(--arbitrum-text);
+  --ifm-color-content-secondary: var(--arbitrum-secondary-text);
+  --ifm-link-color: var(--arbitrum-color-primary);
   --ifm-link-hover-color: hsl(188, 100%, 75%);
   --ifm-footer-link-color: hsla(210, 40%, 98%, 0.85);
 
@@ -66,29 +66,29 @@
   // Code styling
   // ========================================
   --docusaurus-highlighted-code-line-bg: hsla(188, 100%, 53%, 0.15);
-  --prism-background-color: var(--fd-muted);
+  --prism-background-color: var(--arbitrum-muted);
 
   // Diff colors (dark)
-  --fd-diff-remove: hsla(0, 62%, 50%, 0.2);
-  --fd-diff-remove-symbol: hsl(0, 62%, 65%);
-  --fd-diff-add: hsla(142, 71%, 45%, 0.15);
-  --fd-diff-add-symbol: hsl(142, 71%, 55%);
+  --arbitrum-diff-remove: hsla(0, 62%, 50%, 0.2);
+  --arbitrum-diff-remove-symbol: hsl(0, 62%, 65%);
+  --arbitrum-diff-add: hsla(142, 71%, 45%, 0.15);
+  --arbitrum-diff-add-symbol: hsl(142, 71%, 55%);
 
   // ========================================
   // Tabs
   // ========================================
-  --tab-gray: var(--fd-border);
-  --tab-active-color: var(--fd-primary);
+  --tab-gray: var(--arbitrum-border);
+  --tab-active-color: var(--arbitrum-color-primary);
   --tab-active-color-hover: hsl(188, 100%, 48%);
 
   // ========================================
   // Borders and dividers
   // ========================================
-  --ifm-toc-border-color: var(--fd-border);
+  --ifm-toc-border-color: var(--arbitrum-border);
   --ifm-color-emphasis-300: hsla(210, 40%, 98%, 0.12);
 
   // Scrollbar
-  --fd-scrollbar-thumb: hsl(217, 33%, 25%);
+  --arbitrum-scrollbar-thumb: hsl(217, 33%, 25%);
 
   // ========================================
   // Alert/Admonition Colors (Dark Mode)
@@ -121,12 +121,12 @@
   // ========================================
   ::selection {
     background: hsla(188, 100%, 53%, 0.3);
-    color: var(--fd-foreground);
+    color: var(--arbitrum-text);
   }
 
   ::-moz-selection {
     background: hsla(188, 100%, 53%, 0.3);
-    color: var(--fd-foreground);
+    color: var(--arbitrum-text);
   }
 
   // ========================================
@@ -193,7 +193,7 @@
   // ========================================
   .card {
     border-color: hsla(188, 100%, 53%, 0.1);
-    background: var(--fd-card);
+    background: var(--arbitrum-card);
 
     &:hover {
       border-color: hsla(188, 100%, 53%, 0.25);
@@ -223,15 +223,15 @@
 
   .theme-doc-sidebar-menu {
     .menu__link {
-      color: var(--fd-muted-foreground);
+      color: var(--arbitrum-secondary-text);
 
       &:hover {
-        color: var(--fd-foreground);
+        color: var(--arbitrum-text);
         background: hsla(188, 100%, 53%, 0.05);
       }
 
       &.menu__link--active {
-        color: var(--fd-primary);
+        color: var(--arbitrum-color-primary);
         background: hsla(188, 100%, 53%, 0.1);
       }
     }
@@ -242,14 +242,14 @@
   // ========================================
   .table-of-contents {
     .table-of-contents__link {
-      color: var(--fd-muted-foreground);
+      color: var(--arbitrum-secondary-text);
 
       &:hover {
-        color: var(--fd-foreground);
+        color: var(--arbitrum-text);
       }
 
       &--active {
-        color: var(--fd-primary);
+        color: var(--arbitrum-color-primary);
       }
     }
   }
@@ -372,12 +372,12 @@
   // Tables
   // ========================================
   table {
-    background: var(--fd-card);
-    border-color: var(--fd-border);
+    background: var(--arbitrum-card);
+    border-color: var(--arbitrum-border);
   }
 
   thead {
-    background: var(--fd-muted);
+    background: var(--arbitrum-muted);
   }
 
   // ========================================
@@ -385,15 +385,15 @@
   // ========================================
   blockquote {
     background: hsla(188, 100%, 53%, 0.05);
-    border-color: var(--fd-primary);
+    border-color: var(--arbitrum-color-primary);
   }
 
   // ========================================
   // Details/Summary
   // ========================================
   details {
-    background: var(--fd-muted);
-    border-color: var(--fd-border);
+    background: var(--arbitrum-muted);
+    border-color: var(--arbitrum-border);
   }
 }
 
@@ -410,7 +410,7 @@
       }
 
       &.menu__link--active {
-        color: var(--fd-primary);
+        color: var(--arbitrum-color-primary);
         background: hsla(211, 99%, 45%, 0.1);
       }
     }
@@ -421,6 +421,6 @@
     background-color: hsla(0, 0%, 100%, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--fd-border);
+    border-bottom: 1px solid var(--arbitrum-border);
   }
 }

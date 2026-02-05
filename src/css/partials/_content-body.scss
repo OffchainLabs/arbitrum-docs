@@ -64,7 +64,7 @@ article {
         left: 0;
         right: 0;
         bottom: 0;
-        background: var(--fd-overlay, rgba(0, 0, 0, 0.9));
+        background: var(--arbitrum-overlay, rgba(0, 0, 0, 0.9));
         display: flex;
         align-items: center;
         justify-content: center;
@@ -315,7 +315,7 @@ article {
     .footnotes {
       margin-top: 3rem;
       padding-top: 1.5rem;
-      border-top: 1px solid var(--fd-border);
+      border-top: 1px solid var(--arbitrum-border);
 
       &:before {
         font-weight: 600;

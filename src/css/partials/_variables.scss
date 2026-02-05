@@ -15,25 +15,25 @@
   --arbitrum-gradient-subtle: linear-gradient(135deg, hsl(210, 40%, 98%) 0%, hsl(210, 50%, 96%) 100%);
 
   // ========================================
-  // Fumadocs-style Semantic Tokens (Light)
+  // Arbitrum Design Tokens (Light)
   // ========================================
-  --fd-background: hsl(0, 0%, 100%);
-  --fd-foreground: hsl(222, 47%, 11%);
-  --fd-muted: hsl(210, 40%, 96%);
-  --fd-muted-foreground: hsl(215, 16%, 47%);
-  --fd-popover: hsl(0, 0%, 100%);
-  --fd-popover-foreground: hsl(222, 47%, 11%);
-  --fd-card: hsl(0, 0%, 100%);
-  --fd-card-foreground: hsl(222, 47%, 11%);
-  --fd-border: hsl(214, 32%, 91%);
-  --fd-primary: hsl(211, 99%, 45%);
-  --fd-primary-foreground: hsl(0, 0%, 100%);
-  --fd-secondary: hsl(210, 40%, 96%);
-  --fd-secondary-foreground: hsl(222, 47%, 11%);
-  --fd-accent: hsl(210, 40%, 96%);
-  --fd-accent-foreground: hsl(222, 47%, 11%);
-  --fd-ring: hsl(211, 99%, 45%);
-  --fd-overlay: hsla(222, 47%, 11%, 0.5);
+  --arbitrum-background: hsl(0, 0%, 100%);
+  --arbitrum-text: hsl(222, 47%, 11%);
+  --arbitrum-muted: hsl(210, 40%, 96%);
+  --arbitrum-secondary-text: hsl(215, 16%, 47%);
+  --arbitrum-popover: hsl(0, 0%, 100%);
+  --arbitrum-popover-foreground: hsl(222, 47%, 11%);
+  --arbitrum-card: hsl(0, 0%, 100%);
+  --arbitrum-card-foreground: hsl(222, 47%, 11%);
+  --arbitrum-border: hsl(214, 32%, 91%);
+  --arbitrum-color-primary: hsl(211, 99%, 45%);
+  --arbitrum-primary-foreground: hsl(0, 0%, 100%);
+  --arbitrum-secondary: hsl(210, 40%, 96%);
+  --arbitrum-secondary-foreground: hsl(222, 47%, 11%);
+  --arbitrum-accent: hsl(210, 40%, 96%);
+  --arbitrum-accent-foreground: hsl(222, 47%, 11%);
+  --arbitrum-ring: hsl(211, 99%, 45%);
+  --arbitrum-overlay: hsla(222, 47%, 11%, 0.5);
 
   // ========================================
   // Core Design Tokens
@@ -54,13 +54,13 @@
   --ifm-color-primary-light: hsl(211, 99%, 50%);
   --ifm-color-primary-lighter: hsl(211, 99%, 55%);
   --ifm-color-primary-lightest: hsl(211, 99%, 65%);
-  --ifm-background-color: var(--fd-background);
-  --ifm-background-surface-color: var(--fd-card);
-  --ifm-color-content: var(--fd-foreground);
-  --ifm-color-content-secondary: var(--fd-muted-foreground);
-  --ifm-footer-background-color: var(--fd-muted);
-  --ifm-footer-link-color: var(--fd-foreground);
-  --ifm-link-color: var(--fd-primary);
+  --ifm-background-color: var(--arbitrum-background);
+  --ifm-background-surface-color: var(--arbitrum-card);
+  --ifm-color-content: var(--arbitrum-text);
+  --ifm-color-content-secondary: var(--arbitrum-secondary-text);
+  --ifm-footer-background-color: var(--arbitrum-muted);
+  --ifm-footer-link-color: var(--arbitrum-text);
+  --ifm-link-color: var(--arbitrum-color-primary);
   --ifm-link-hover-color: hsl(211, 99%, 35%);
   --ifm-code-font-size: 90%;
   --ifm-global-radius: 0;
@@ -106,9 +106,9 @@
   // ========================================
   // Tabs
   // ========================================
-  --tab-active-color: var(--fd-primary);
+  --tab-active-color: var(--arbitrum-color-primary);
   --tab-active-color-hover: hsl(211, 99%, 40%);
-  --tab-gray: var(--fd-border);
+  --tab-gray: var(--arbitrum-border);
 
   // ========================================
   // Cards and Surfaces
@@ -120,23 +120,23 @@
   // Code Blocks
   // ========================================
   --ifm-code-border-radius: 0;
-  --prism-background-color: var(--fd-muted);
-  --fd-diff-remove: hsla(0, 84%, 60%, 0.12);
-  --fd-diff-remove-symbol: hsl(0, 84%, 60%);
-  --fd-diff-add: hsla(142, 71%, 45%, 0.12);
-  --fd-diff-add-symbol: hsl(142, 71%, 45%);
+  --prism-background-color: var(--arbitrum-muted);
+  --arbitrum-diff-remove: hsla(0, 84%, 60%, 0.12);
+  --arbitrum-diff-remove-symbol: hsl(0, 84%, 60%);
+  --arbitrum-diff-add: hsla(142, 71%, 45%, 0.12);
+  --arbitrum-diff-add-symbol: hsl(142, 71%, 45%);
 
   // ========================================
   // Table of Contents
   // ========================================
-  --ifm-toc-border-color: var(--fd-border);
-  --ifm-toc-link-color: var(--fd-muted-foreground);
+  --ifm-toc-border-color: var(--arbitrum-border);
+  --ifm-toc-link-color: var(--arbitrum-secondary-text);
 
   // ========================================
   // Scrollbar
   // ========================================
-  --fd-scrollbar-thumb: hsl(214, 32%, 85%);
-  --fd-scrollbar-track: transparent;
+  --arbitrum-scrollbar-thumb: hsl(214, 32%, 85%);
+  --arbitrum-scrollbar-track: transparent;
 
   // ========================================
   // Shadows
@@ -152,6 +152,6 @@
   --arbitrum-transition-fast: 0.15s ease;
   --arbitrum-transition-normal: 0.2s ease;
   --arbitrum-transition-slow: 0.3s ease;
-  --fd-animation-duration: 200ms;
-  --fd-animation-timing: cubic-bezier(0.16, 1, 0.3, 1);
+  --arbitrum-animation-duration: 200ms;
+  --arbitrum-animation-timing: cubic-bezier(0.16, 1, 0.3, 1);
 }

@@ -32,11 +32,11 @@
 
   &::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background: var(--fd-scrollbar-thumb, var(--fd-border));
+    background: var(--arbitrum-scrollbar-thumb, var(--arbitrum-border));
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--fd-scrollbar-track, transparent);
+    background: var(--arbitrum-scrollbar-track, transparent);
   }
 
   &::-webkit-scrollbar-corner {
