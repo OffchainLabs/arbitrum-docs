@@ -26,7 +26,7 @@ The following are the minimum hardware requirements to set up a <a data-quickloo
 | RAM          | 64 GB                                                             |
 | CPU          | 8 core CPU (for AWS, a `i4i.2xlarge` instance)                    |
 | Storage type | NVMe SSD drives with locally attached drives strongly recommended |
-| Storage size | Depends on the chain and its traffic overtime                     |
+| Storage size | Depends on the chain and its traffic over time                    |
 
 Please note that:
 
@@ -98,6 +98,17 @@ If you are running more than on node, you should [run a feed relay](/run-arbitru
 :::
 
 - To ensure the database persists across restarts, mount an external volume when running the Docker image. Use the mount point `/home/user/.arbitrum` within the Docker image.
+
+:::note Node config file
+
+If using a `node-config.json` file with Docker to mount, use the following command:
+
+```
+docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450  offchainlabs/nitro-node:v3.9.0-cca645a --conf.file /home/user/.arbitrum/node-config.json
+```
+
+:::
+
 - Here is an example of how to run `nitro-node`:
 
 <div className="dynamic-content-tabs">

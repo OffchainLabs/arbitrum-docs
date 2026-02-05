@@ -8,11 +8,66 @@ const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
+// Inkeep analytics event handler - forwards events to PostHog
+const handleInkeepEvent = (event) => {
+  // Only run on client side where PostHog is available
+  if (typeof window === 'undefined' || !window.posthog) {
+    return;
+  }
+
+  const { eventName, properties } = event;
+
+  // Events we want to track in PostHog
+  const trackedEvents = [
+    // Chat events
+    'assistant_message_received',
+    'user_message_submitted',
+    'assistant_positive_feedback_submitted',
+    'assistant_negative_feedback_submitted',
+    'assistant_source_item_clicked',
+    'chat_share_button_clicked',
+    // Search events
+    'search_query_submitted',
+    'search_result_clicked',
+    'search_query_response_received',
+  ];
+
+  if (trackedEvents.includes(eventName)) {
+    // Extract relevant properties to avoid sending excessive data
+    const eventProperties = {
+      component_type: properties?.componentType,
+      widget_version: properties?.widgetLibraryVersion,
+    };
+
+    // Add event-specific properties
+    if (eventName.includes('search')) {
+      eventProperties.search_query = properties?.searchQuery;
+      if (properties?.totalResults !== undefined) {
+        eventProperties.total_results = properties.totalResults;
+      }
+      if (properties?.title) {
+        eventProperties.result_title = properties.title;
+      }
+    }
+
+    if (eventName.includes('feedback')) {
+      eventProperties.feedback_reasons = properties?.reasons;
+    }
+
+    if (eventName === 'assistant_source_item_clicked') {
+      eventProperties.source_link = properties?.link;
+    }
+
+    window.posthog.capture(`inkeep_${eventName}`, eventProperties);
+  }
+};
+
 // Shared Inkeep configuration
 const inkeepBaseSettings = {
   apiKey: process.env.INKEEP_API_KEY,
   primaryBrandColor: '#213147',
   organizationDisplayName: 'Arbitrum',
+  onEvent: handleInkeepEvent,
   theme: {
     syntaxHighlighter: {
       lightTheme: require('prism-react-renderer/themes/github'),
@@ -299,8 +354,8 @@ const config = {
                 to: 'https://arbitrum.io/anytrust',
               },
               {
-                label: 'Arbitrum Orbit',
-                to: 'https://arbitrum.io/orbit',
+                label: 'Arbitrum chains',
+                to: 'https://arbitrum.io/launch-chain',
               },
               {
                 label: 'Arbitrum Stylus',

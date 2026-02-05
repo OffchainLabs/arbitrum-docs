@@ -25,7 +25,7 @@ For operators of Arbitrum chains that settle on a Fusaka-enabled <a data-quicklo
 
 </VanillaAdmonition>
 
-The minimum Nitro version that supports ArbOS 51 "Dia" is [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.3-8bc5554`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators. For Arbitrum One and Nova, an ArbOS upgrade requires a governance vote to activate; the vote for ArbOS 51 was [passed on December 18, 2025](https://www.tally.xyz/gov/arbitrum/proposal/53154361738756237993090798888616593723057470462495169047773178676976253908001?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9) and will be [activated on January 8, 2026](../../notices/arbos51-upgrade-notice.mdx).
+The minimum Nitro version that supports ArbOS 51 "Dia" is [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.3-8bc5554`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators. For Arbitrum One and Nova, an ArbOS upgrade requires a governance vote to activate; the vote for ArbOS 51 was [passed on December 18, 2025](https://www.tally.xyz/gov/arbitrum/proposal/53154361738756237993090798888616593723057470462495169047773178676976253908001?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9) and was [activated on January 8, 2026](../../notices/arbos51-upgrade-notice.mdx).
 
 As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 51 Dia is an upgrade that builds upon [ArbOS 40 Callisto](./arbos40.mdx).
 
@@ -53,7 +53,7 @@ This EIP implements the same functionality and interface as [RIP-7212](https://g
 
 #### [EIP-7825: Transaction gas limit cap](https://eips.ethereum.org/EIPS/eip-7825)
 
-This EIP introduces a gas cap for individual transactions. The goal is to ensure fairer access to block space and improve network stability. For Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> we're proposing a 32 million gas limit (<a data-quicklook-from="child-chain">Child chain</a> execution gas, not including parent chain gas) per transaction, which is the same as the current block gas limit. This 32 million gas limit diverges from the EIP's proposed limit of 16 million gas per transaction for Ethereum parent chain. Orbit chains can customize this value according to their chains' needs.
+This EIP introduces a gas cap for individual transactions. The goal is to ensure fairer access to block space and improve network stability. For Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> we're proposing a 32 million gas limit (<a data-quicklook-from="child-chain">Child chain</a> execution gas, not including parent chain gas) per transaction, which is the same as the current block gas limit. This 32 million gas limit diverges from the EIP's proposed limit of 16 million gas per transaction for Ethereum parent chain. Arbitrum chains can customize this value according to their chains' needs.
 
 #### [EIP-7642: eth/69 - history expiry and simpler receipts](https://eips.ethereum.org/EIPS/eip-7642)
 
@@ -116,13 +116,13 @@ To read more about this feature, see the [dynamic pricing explainer](https://blo
 
 Native token mint and burn is a feature that allows Arbitrum chains to use interoperability-enabled token standards (e.g., LayerZero OFTs, xERC20s, native USDC) as native gas tokens on their chains. Currently, Arbitrum chains are designed to "lock and mint" native gas tokens on the chain's canonical <a data-quicklook-from="bridge">Bridge</a>. However, doing so means that these "locked and minted" native gas tokens can't interact with third-party cross-chain adapter contracts. This new feature lets an Arbitrum chain delegate minting and burning of its native gas token to a trusted bridge provider (e.g., LayerZero OFT).
 
-Native token mint and burn is included in ArbOS 51 Dia for the benefit of Arbitrum Orbit chains (reducing the need for forks) and to streamline development and testing into a single codebase. There are no plans to enable this feature on Arbitrum One or Arbitrum Nova, consequently this feature will be explicitly left disabled for Arbitrum One and Arbitrum Nova.
+Native token mint and burn is included in ArbOS 51 Dia for the benefit of Arbitrum chains (reducing the need for forks) and to streamline development and testing into a single codebase. There are no plans to enable this feature on Arbitrum One or Arbitrum Nova, consequently this feature will be explicitly left disabled for Arbitrum One and Arbitrum Nova.
 
-To read more about this feature, see the [Native Token Mint/Burn enablement guide](https://arbitrum.notion.site/Enable-Native-Mint-Burn-for-your-chain-s-gas-token-22601a3f59f880be9b99d3d55f982a17).
+To read more about this feature, see the [Native Token Mint/Burn enablement guide](/launch-arbitrum-chain/02-configure-your-chain/common/gas/configure-native-mint-burn-gas-token.mdx).
 
 <VanillaAdmonition type="warning">
 
-If you want to enable Native Token Mint/Burn capabilities for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
+If you want to enable Native Token Mint/Burn capabilities for your chain, you must use [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher.
 
 </VanillaAdmonition>
 
