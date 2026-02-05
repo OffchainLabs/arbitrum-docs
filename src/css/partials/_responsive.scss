@@ -3,7 +3,7 @@
 // Typography responsive is in _typography.scss
 // ========================================
 
-// Table overflow handling for all screen sizes
+// Table overflow handling - constrain tables to content area
 .markdown {
   // Wrapper divs around tables
   > div:has(> table),
@@ -11,23 +11,19 @@
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    width: 100%;
     max-width: 100%;
   }
 
-  // Direct table children
+  // Direct tables (no wrapper)
   > table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    width: 100%;
-    max-width: 100%;
   }
 
-  // Ensure tables inside wrappers render properly
+  // All tables
   table {
     display: table;
-    min-width: 100%;
   }
 }
 
