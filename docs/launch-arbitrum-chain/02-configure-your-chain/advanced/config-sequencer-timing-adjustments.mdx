@@ -35,13 +35,6 @@ import { prepareNodeConfig } from '@arbitrum/orbit-sdk';
 const nodeConfig = await prepareNodeConfig({
   // Your deployment tx receipt or params
   // Override defaults here, e.g.:
-if (nodeConfig.execution?.sequencer?.['max-block-speed']) {
-    nodeConfig.execution.sequencer['max-block-speed'] = '100ms';
-  }
-
-  if (nodeConfig.node?.['batch-poster']?.['max-delay']) {
-    nodeConfig.node['batch-poster']['max-delay'] = '2s';
-  }
 });
 // Write nodeConfig to file: nodeConfig.json
 ```
