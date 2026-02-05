@@ -575,6 +575,8 @@ article .markdown {
     text-align: start;
     padding: 0.75rem 1rem;
     font-size: 0.8125rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 
     code {
       color: inherit;
@@ -586,6 +588,8 @@ article .markdown {
     text-align: start;
     padding: 0.75rem 1rem;
     vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   tbody tr {
