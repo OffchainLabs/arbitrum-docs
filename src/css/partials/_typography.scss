@@ -566,6 +566,7 @@ article .markdown {
   }
 
   thead {
+    background: color-mix(in oklab, var(--arbitrum-color-primary) 8%, var(--arbitrum-muted));
     border-bottom: 1px solid var(--arbitrum-border);
   }
 
