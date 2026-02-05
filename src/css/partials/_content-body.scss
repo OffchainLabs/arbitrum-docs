@@ -1,113 +1,49 @@
-@use './_mixins.scss' as *;
+// ========================================
+// Content Body
+// Non-typography styles only
+// Typography & tables handled by _typography.scss
+// ========================================
 
 main > .container {
   padding-top: 70px !important;
 }
 
 article {
-  // Allow article to scroll within bounds
-  overflow-x: auto;
+  // No overflow restrictions - content flows naturally
+  overflow: visible !important;
   max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 4px; // Prevent content clipping on left edge
 
   .markdown {
-    // Allow markdown content to scroll within bounds
-    overflow-x: auto;
+    // No overflow restrictions - content flows naturally
+    overflow: visible !important;
     max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
 
-    h1:first-child {
-      font-size: 30px;
-    }
+    // ========================================
+    // Image Size Classes (alt-text based)
+    // ========================================
 
-    h2.anchor {
-      font-size: 24px;
-    }
+    img[alt='20px-img'] { width: 20px; }
+    img[alt='50px-img'] { width: 50px; }
+    img[alt='100px-img'] { width: 100px; }
+    img[alt='200px-img'] { width: 200px; }
+    img[alt='400px-img'] { width: 400px; }
+    img[alt='500px-img'] { width: 500px; }
+    img[alt='600px-img'] { width: 600px; }
+    img[alt='700px-img'] { width: 600px; }
+    img[alt='800px-img'] { width: 600px; }
+    img[alt='900px-img'] { width: 900px; }
 
-    > h3,
-    > .faq-question > h3 {
-      font-size: 21px;
-      margin-top: 50px;
-      margin-bottom: 15px;
-    }
-
-    li li {
-      margin-top: 4px;
-    }
-
-    .definition-list {
-      dt {
-        font-weight: 700;
-        margin-top: 20px;
-      }
-
-      dd {
-        margin-left: 0;
-      }
-    }
-
-    a {
-      &:link {
-        color: #5b7bb6; /* Change the link color */
-        text-decoration: none !important;
-        font-weight: 600;
-      }
-
-      &:hover {
-        color: #86b8da; /* Change the link color */
-        cursor: pointer;
-        opacity: 0.9;
-      }
-      &:visited {
-        color: #7c93cf; /* Change the link color */
-        cursor: pointer;
-        opacity: 0.9;
-      }
-      &:active {
-        color: #86b8da; /* Change the link color */
-        cursor: pointer;
-        opacity: 0.9;
-      }
-    }
-
-    strong {
-      font-weight: 600;
-    }
-
-    img[alt='20px-img'] {
-      width: 10px;
-    }
-    img[alt='20px-img'] {
-      width: 20px;
-    }
-    img[alt='50px-img'] {
-      width: 50px;
-    }
-    img[alt='100px-img'] {
-      width: 100px;
-    }
-    img[alt='200px-img'] {
-      width: 200px;
-    }
-    img[alt='400px-img'] {
-      width: 400px;
-    }
-    img[alt='500px-img'] {
-      width: 500px;
-    }
-    img[alt='600px-img'] {
-      width: 600px;
-    }
-    img[alt='700px-img'] {
-      width: 600px;
-    }
-    img[alt='800px-img'] {
-      width: 600px;
-    }
-    img[alt='900px-img'] {
-      width: 900px;
-    }
+    // ========================================
+    // Image Interactions
+    // ========================================
 
     img {
-      transition: transform 0.3s ease-in-out;
+      transition: transform var(--arbitrum-transition-slow);
 
       &[role='button'] {
         cursor: zoom-in;
@@ -117,6 +53,10 @@ article {
       }
     }
 
+    // ========================================
+    // Image Zoom Modal
+    // ========================================
+
     .image-zoom {
       &__modal {
         position: fixed;
@@ -124,12 +64,12 @@ article {
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.9);
+        background: var(--fd-overlay, rgba(0, 0, 0, 0.9));
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 99999;
-        animation: fadeIn 0.2s ease-in-out;
+        animation: fd-fade-in 0.2s ease-in-out;
       }
 
       &__container {
@@ -147,7 +87,7 @@ article {
         max-height: 90vh;
         object-fit: contain;
         cursor: zoom-out;
-        animation: zoomIn 0.3s ease-in-out forwards;
+        animation: fd-dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         will-change: transform;
       }
 
@@ -163,7 +103,7 @@ article {
         padding: 8px;
         z-index: 100000;
         opacity: 0.8;
-        transition: opacity 0.2s ease;
+        transition: opacity var(--arbitrum-transition-normal);
 
         &:hover {
           opacity: 1;
@@ -176,38 +116,193 @@ article {
       }
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes zoomIn {
-      from {
-        opacity: 0;
-        transform: scale(0.5);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1.2);
-      }
-    }
+    // ========================================
+    // Admonitions - Distinct colors for each type
+    // ========================================
 
     .theme-admonition {
-      margin-bottom: 2em;
+      margin: 1.5em 0;
+      padding: 1rem 1.25rem;
+      border-radius: var(--arbitrum-border-radius);
+      border-left: 4px solid;
+      font-family: var(--ifm-font-family-base);
+      font-size: 0.9375rem;
+
+      .admonitionHeading_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+      [class*='admonitionHeading'] {
+        font-weight: 600;
+        font-size: 0.9375rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
 
       svg {
-        height: 1.3rem;
-        width: 1.3rem;
+        height: 1.25rem;
+        width: 1.25rem;
+        flex-shrink: 0;
+      }
+
+      .admonitionContent_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+      [class*='admonitionContent'] {
+        font-size: 0.9375rem;
+
+        > :last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      // NOTE - Blue (informational)
+      &.alert--info,
+      &[class*='alert--info'] {
+        --admonition-color: hsl(211, 99%, 45%);
+        --admonition-bg: hsla(211, 99%, 45%, 0.08);
+        --admonition-text: hsl(211, 99%, 30%);
+        background: var(--admonition-bg);
+        border-color: var(--admonition-color);
+
+        .admonitionHeading_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+        [class*='admonitionHeading'] {
+          color: var(--admonition-text);
+        }
+
+        svg {
+          color: var(--admonition-color);
+        }
+      }
+
+      // TIP - Green (helpful tips)
+      &.alert--success,
+      &[class*='alert--success'] {
+        --admonition-color: hsl(152, 69%, 40%);
+        --admonition-bg: hsla(152, 69%, 40%, 0.08);
+        --admonition-text: hsl(152, 69%, 28%);
+        background: var(--admonition-bg);
+        border-color: var(--admonition-color);
+
+        .admonitionHeading_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+        [class*='admonitionHeading'] {
+          color: var(--admonition-text);
+        }
+
+        svg {
+          color: var(--admonition-color);
+        }
+      }
+
+      // WARNING - Amber/Orange
+      &.alert--warning,
+      &[class*='alert--warning'] {
+        --admonition-color: hsl(38, 92%, 50%);
+        --admonition-bg: hsla(38, 92%, 50%, 0.1);
+        --admonition-text: hsl(32, 81%, 29%);
+        background: var(--admonition-bg);
+        border-color: var(--admonition-color);
+
+        .admonitionHeading_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+        [class*='admonitionHeading'] {
+          color: var(--admonition-text);
+        }
+
+        svg {
+          color: var(--admonition-color);
+        }
+      }
+
+      // DANGER/CAUTION - Red
+      &.alert--danger,
+      &[class*='alert--danger'] {
+        --admonition-color: hsl(0, 72%, 51%);
+        --admonition-bg: hsla(0, 72%, 51%, 0.08);
+        --admonition-text: hsl(0, 72%, 35%);
+        background: var(--admonition-bg);
+        border-color: var(--admonition-color);
+
+        .admonitionHeading_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+        [class*='admonitionHeading'] {
+          color: var(--admonition-text);
+        }
+
+        svg {
+          color: var(--admonition-color);
+        }
+      }
+
+      // SECONDARY - Gray (neutral)
+      &.alert--secondary,
+      &[class*='alert--secondary'] {
+        --admonition-color: hsl(215, 16%, 47%);
+        --admonition-bg: hsla(215, 16%, 47%, 0.08);
+        --admonition-text: hsl(215, 25%, 27%);
+        background: var(--admonition-bg);
+        border-color: var(--admonition-color);
+
+        .admonitionHeading_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+        [class*='admonitionHeading'] {
+          color: var(--admonition-text);
+        }
+
+        svg {
+          color: var(--admonition-color);
+        }
       }
     }
+
+    // Dark mode admonition overrides
+    [data-theme='dark'] & .theme-admonition {
+      // NOTE - Blue (brighter in dark mode)
+      &.alert--info,
+      &[class*='alert--info'] {
+        --admonition-color: hsl(188, 100%, 53%);
+        --admonition-bg: hsla(188, 100%, 53%, 0.1);
+        --admonition-text: hsl(188, 100%, 75%);
+      }
+
+      // TIP - Green
+      &.alert--success,
+      &[class*='alert--success'] {
+        --admonition-color: hsl(142, 71%, 45%);
+        --admonition-bg: hsla(142, 71%, 45%, 0.1);
+        --admonition-text: hsl(142, 71%, 65%);
+      }
+
+      // WARNING - Amber
+      &.alert--warning,
+      &[class*='alert--warning'] {
+        --admonition-color: hsl(45, 93%, 47%);
+        --admonition-bg: hsla(45, 93%, 47%, 0.12);
+        --admonition-text: hsl(48, 96%, 70%);
+      }
+
+      // DANGER - Red
+      &.alert--danger,
+      &[class*='alert--danger'] {
+        --admonition-color: hsl(0, 62%, 55%);
+        --admonition-bg: hsla(0, 62%, 55%, 0.12);
+        --admonition-text: hsl(0, 62%, 75%);
+      }
+
+      // SECONDARY - Gray
+      &.alert--secondary,
+      &[class*='alert--secondary'] {
+        --admonition-color: hsl(215, 20%, 65%);
+        --admonition-bg: hsla(215, 20%, 65%, 0.1);
+        --admonition-text: hsl(215, 20%, 80%);
+      }
+    }
+
+    // ========================================
+    // Special List Types
+    // ========================================
 
     .a-b-list {
       list-style-type: lower-alpha;
     }
+
+    // ========================================
+    // Footnotes
+    // ========================================
 
     sup {
       padding-left: 2px;
@@ -218,13 +313,14 @@ article {
     }
 
     .footnotes {
-      margin-top: 50px;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--fd-border);
 
       &:before {
         font-weight: 600;
-        margin-top: 30px;
         display: inline-block;
-        margin-bottom: 20px;
+        margin-bottom: 1rem;
       }
 
       hr {
@@ -232,20 +328,10 @@ article {
       }
     }
 
-    .small-table {
-      @include small-table; // target tables
-    }
+    // ========================================
+    // Table Scroll Wrappers
+    // ========================================
 
-    // All tables get small-table styling and proper scrolling
-    table {
-      @include small-table;
-      display: table;
-      table-layout: auto; // Allow columns to distribute available space
-      width: max-content; // Allow table to be wider than container
-      max-width: none; // Override max-width constraints
-    }
-
-    // Ensure table wrappers are scrollable and constrained
     > div:has(> table),
     div:has(> table) {
       overflow-x: auto;
@@ -253,20 +339,13 @@ article {
       width: 100%;
       max-width: 100%;
     }
-
-    p > code {
-      font-size: 13px;
-      padding: 3px 6px;
-      border-radius: 3px;
-      background-color: rgba(150, 150, 150, 0.2);
-    }
   }
 }
 
+// ========================================
+// Link Overrides
+// ========================================
+
 a:has(code) {
   text-decoration: none !important;
-}
-
-article a:not([data-quicklook-from]):not(.footnote-ref) {
-  text-decoration: underline;
 }

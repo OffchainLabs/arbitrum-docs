@@ -1,8 +1,44 @@
+// ========================================
+// Announcement Banner
+// ========================================
+
 [class*='announcementBar_node_modules-@docusaurus-theme-classic-lib-theme-AnnouncementBar-styles-module'],
-.announcementBar_mb4j {
+.announcementBar_mb4j,
+[class*='announcementBar'] {
   font-size: 14px !important;
+  font-weight: 500;
+  background: var(--arbitrum-gradient-primary) !important;
+  color: white !important;
+
+  a {
+    color: white !important;
+    text-decoration: underline;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  // Close button
+  button {
+    color: white !important;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
 }
+
+// ========================================
+// Navbar
+// ========================================
 
 .navbar {
   box-shadow: none;
+  border-bottom: 1px solid rgba(1, 107, 229, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+[data-theme='dark'] .navbar {
+  border-bottom-color: rgba(16, 225, 255, 0.08);
 }

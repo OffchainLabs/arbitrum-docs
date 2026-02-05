@@ -1,0 +1,842 @@
+// ========================================
+// Modern Typography System
+// Inspired by Fumadocs, Stripe, Vercel
+// ========================================
+
+// ========================================
+// Typography Tokens
+// ========================================
+:root {
+  // Prose colors (mapped to fd-* tokens)
+  --prose-body: color-mix(in oklab, var(--fd-foreground) 90%, transparent);
+  --prose-headings: var(--fd-foreground);
+  --prose-lead: var(--fd-foreground);
+  --prose-links: var(--fd-foreground);
+  --prose-bold: var(--fd-foreground);
+  --prose-counters: var(--fd-muted-foreground);
+  --prose-bullets: var(--fd-muted-foreground);
+  --prose-hr: var(--fd-border);
+  --prose-quotes: var(--fd-foreground);
+  --prose-quote-borders: var(--fd-primary);
+  --prose-captions: var(--fd-muted-foreground);
+  --prose-code: var(--fd-foreground);
+  --prose-th-borders: var(--fd-border);
+  --prose-td-borders: var(--fd-border);
+  --prose-kbd: var(--fd-foreground);
+  --prose-kbd-shadows: color-mix(in oklab, var(--fd-primary) 50%, transparent);
+}
+
+// ========================================
+// Global Font Rendering
+// ========================================
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+}
+
+// ========================================
+// Selection Highlight (brand color)
+// ========================================
+::selection {
+  background: color-mix(in oklab, var(--fd-primary) 25%, transparent);
+  color: var(--fd-foreground);
+}
+
+::-moz-selection {
+  background: color-mix(in oklab, var(--fd-primary) 25%, transparent);
+  color: var(--fd-foreground);
+}
+
+// ========================================
+// Focus Ring (modern outline)
+// ========================================
+:focus-visible {
+  outline: 2px solid var(--fd-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+// ========================================
+// Base Typography (applied to .markdown)
+// ========================================
+
+article .markdown {
+  color: var(--prose-body);
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: none;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+
+  // ========================================
+  // Headings - Modern with subtle gradient option
+  // ========================================
+
+  h1, h2, h3, h4, h5, h6 {
+    font-feature-settings: 'kern' 1, 'liga' 1, 'ss01' 1;
+    text-wrap: balance;
+    scroll-margin-top: 80px;
+  }
+
+  h1 {
+    color: var(--prose-headings);
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+
+    &:first-child {
+      font-size: 2.25rem;
+    }
+
+    strong {
+      font-weight: 900;
+      color: inherit;
+    }
+
+    code {
+      font-size: 0.75em;
+      color: inherit;
+    }
+  }
+
+  h2 {
+    color: var(--prose-headings);
+    font-weight: 700;
+    font-size: 1.625rem;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--fd-border);
+
+    &.anchor {
+      font-size: 1.625rem;
+    }
+
+    strong {
+      font-weight: 800;
+      color: inherit;
+    }
+
+    code {
+      font-size: 0.8em;
+      color: inherit;
+    }
+
+    + * {
+      margin-top: 0;
+    }
+  }
+
+  h3 {
+    color: var(--prose-headings);
+    font-weight: 600;
+    font-size: 1.375rem;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+
+    strong {
+      font-weight: 700;
+      color: inherit;
+    }
+
+    code {
+      font-size: 0.85em;
+      color: inherit;
+    }
+
+    + * {
+      margin-top: 0;
+    }
+  }
+
+  > h3,
+  > .faq-question > h3 {
+    font-size: 1.375rem;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+  }
+
+  h4 {
+    color: var(--prose-headings);
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-top: 1.75em;
+    margin-bottom: 0.5em;
+    line-height: 1.5;
+
+    strong {
+      font-weight: 700;
+      color: inherit;
+    }
+
+    + * {
+      margin-top: 0;
+    }
+  }
+
+  h5 {
+    color: var(--prose-headings);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+  }
+
+  h6 {
+    color: var(--fd-muted-foreground);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  // ========================================
+  // Paragraphs & Lead
+  // ========================================
+
+  p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  [class~='lead'] {
+    font-size: 1.25em;
+    line-height: 1.6;
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
+    color: var(--prose-lead);
+    font-weight: 400;
+  }
+
+  // ========================================
+  // Links - Modern underline style
+  // ========================================
+
+  a:not([data-card]):not([data-quicklook-from]):not(.hash-link) {
+    color: var(--prose-links);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--fd-primary);
+    text-decoration-thickness: 2px;
+    transition: text-decoration-color var(--arbitrum-transition-normal), color var(--arbitrum-transition-normal);
+
+    &:hover {
+      text-decoration-color: currentColor;
+      color: var(--fd-primary);
+    }
+
+    code {
+      color: inherit;
+    }
+  }
+
+  // Hash links (anchor links)
+  .hash-link {
+    opacity: 0;
+    color: var(--fd-muted-foreground);
+    transition: opacity var(--arbitrum-transition-normal);
+    margin-left: 0.5rem;
+    text-decoration: none !important;
+
+    &:hover {
+      color: var(--fd-primary);
+    }
+  }
+
+  h1:hover .hash-link,
+  h2:hover .hash-link,
+  h3:hover .hash-link,
+  h4:hover .hash-link,
+  h5:hover .hash-link,
+  h6:hover .hash-link {
+    opacity: 1;
+  }
+
+  // ========================================
+  // Strong & Emphasis
+  // ========================================
+
+  strong {
+    color: var(--prose-bold);
+    font-weight: 600;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  a strong,
+  blockquote strong,
+  thead th strong {
+    color: inherit;
+  }
+
+  // ========================================
+  // Lists - Modern styling
+  // ========================================
+
+  ul {
+    list-style-type: disc;
+    padding-inline-start: 1.25rem;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+
+    > li {
+      padding-inline-start: 0.375rem;
+
+      &::marker {
+        color: var(--fd-primary);
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  ol {
+    list-style-type: decimal;
+    padding-inline-start: 1.625em;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+
+    > li {
+      padding-inline-start: 0.5em;
+
+      &::marker {
+        font-weight: 500;
+        color: var(--fd-primary);
+        font-feature-settings: 'tnum' 1;
+      }
+    }
+
+    &[type='A'] { list-style-type: upper-alpha; }
+    &[type='a'] { list-style-type: lower-alpha; }
+    &[type='I'] { list-style-type: upper-roman; }
+    &[type='i'] { list-style-type: lower-roman; }
+  }
+
+  li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  > ul > li > p:first-child,
+  > ol > li > p:first-child {
+    margin-top: 1.25em;
+  }
+
+  > ul > li > p:last-child,
+  > ol > li > p:last-child {
+    margin-bottom: 1.25em;
+  }
+
+  ul ul, ul ol, ol ul, ol ol {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  // Checklist styling
+  ul:has(> li > input[type="checkbox"]) {
+    list-style: none;
+    padding-inline-start: 0;
+
+    > li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding-inline-start: 0;
+
+      input[type="checkbox"] {
+        margin-top: 0.375rem;
+        accent-color: var(--fd-primary);
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  // ========================================
+  // Definition Lists
+  // ========================================
+
+  dl {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  dt {
+    color: var(--prose-headings);
+    font-weight: 600;
+    margin-top: 1.25em;
+  }
+
+  dd {
+    margin-top: 0.5em;
+    padding-inline-start: 1.625em;
+  }
+
+  // ========================================
+  // Blockquotes - Modern callout style
+  // ========================================
+
+  blockquote {
+    font-weight: 400;
+    font-style: normal;
+    color: var(--prose-quotes);
+    border-inline-start-width: 3px;
+    border-inline-start-color: var(--fd-primary);
+    background: color-mix(in oklab, var(--fd-primary) 5%, transparent);
+    margin-top: 1.6em;
+    margin-bottom: 1.6em;
+    padding: 1rem 1.25rem;
+    border-radius: 0 var(--arbitrum-border-radius-sm) var(--arbitrum-border-radius-sm) 0;
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+
+      &:not(:first-child) {
+        margin-top: 1em;
+      }
+    }
+
+    code {
+      color: inherit;
+    }
+  }
+
+  // ========================================
+  // Horizontal Rules
+  // ========================================
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--prose-hr);
+    margin-top: 3em;
+    margin-bottom: 3em;
+
+    + * {
+      margin-top: 0;
+    }
+  }
+
+  // ========================================
+  // Inline Code - Modern pill style
+  // ========================================
+
+  :not(pre) > code {
+    padding: 0.2em 0.4em;
+    border: 1px solid var(--fd-border);
+    font-size: 0.875em;
+    border-radius: 6px;
+    font-weight: 500;
+    background: var(--fd-muted);
+    color: var(--prose-code);
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', Menlo, Monaco, Consolas, monospace;
+    word-break: break-word;
+  }
+
+  a code,
+  h1 code,
+  h2 code,
+  h3 code,
+  h4 code,
+  blockquote code,
+  thead th code {
+    color: inherit;
+  }
+
+  // ========================================
+  // Keyboard
+  // ========================================
+
+  kbd {
+    font-size: 0.8em;
+    border-radius: 6px;
+    padding: 0.2em 0.5em;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--prose-kbd);
+    background: var(--fd-muted);
+    border: 1px solid var(--fd-border);
+    box-shadow: 0 2px 0 var(--fd-border);
+  }
+
+  // ========================================
+  // Mark / Highlight
+  // ========================================
+
+  mark {
+    background: color-mix(in oklab, var(--fd-primary) 20%, transparent);
+    color: inherit;
+    padding: 0.1em 0.3em;
+    border-radius: 4px;
+  }
+
+  // ========================================
+  // Images & Media
+  // ========================================
+
+  img {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-radius: var(--arbitrum-border-radius-sm);
+  }
+
+  picture {
+    display: block;
+    margin-top: 2em;
+    margin-bottom: 2em;
+
+    > img {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  video {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-radius: var(--arbitrum-border-radius-sm);
+  }
+
+  // ========================================
+  // Figures & Captions
+  // ========================================
+
+  figure {
+    margin-top: 2em;
+    margin-bottom: 2em;
+
+    > * {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  figcaption {
+    color: var(--prose-captions);
+    font-size: 0.875em;
+    line-height: 1.4;
+    margin-top: 0.875em;
+    text-align: center;
+    font-style: italic;
+  }
+
+  // ========================================
+  // Tables - Modern rounded card style
+  // ========================================
+
+  table {
+    font-size: 0.875em;
+    line-height: 1.6;
+    width: 100%;
+    table-layout: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--fd-card);
+    border-radius: var(--arbitrum-border-radius, 12px);
+    border: 1px solid color-mix(in oklab, var(--fd-border) 60%, transparent);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  thead {
+    background: var(--fd-muted);
+  }
+
+  thead th {
+    color: var(--prose-headings);
+    font-weight: 600;
+    text-align: start;
+    padding: 0.875rem 1rem;
+    border-inline-start: 1px solid var(--fd-border);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &:first-child {
+      border-inline-start: none;
+    }
+
+    code {
+      color: inherit;
+    }
+  }
+
+  tbody td,
+  tfoot td {
+    text-align: start;
+    border-inline-start: 1px solid var(--fd-border);
+    padding: 0.875rem 1rem;
+    vertical-align: top;
+
+    &:first-child {
+      border-inline-start: none;
+    }
+  }
+
+  // Border between rows (except last)
+  tbody tr:not(:last-child) td {
+    border-bottom: 1px solid var(--fd-border);
+  }
+
+  // Alternate row coloring (subtle)
+  tbody tr:nth-child(even) {
+    background: color-mix(in oklab, var(--fd-muted) 50%, transparent);
+  }
+
+  tfoot th,
+  tfoot td {
+    border-top: 2px solid var(--fd-border);
+    font-weight: 600;
+  }
+
+  // ========================================
+  // Details/Summary (collapsible)
+  // ========================================
+
+  details {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding: 1rem;
+    background: var(--fd-muted);
+    border: 1px solid var(--fd-border);
+    border-radius: var(--arbitrum-border-radius-sm);
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--prose-headings);
+      margin: -1rem;
+      padding: 1rem;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 6px solid currentColor;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        transition: transform var(--arbitrum-transition-normal);
+      }
+    }
+
+    &[open] summary {
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--fd-border);
+
+      &::before {
+        transform: rotate(90deg);
+      }
+    }
+
+    > *:not(summary) {
+      margin-top: 1rem;
+    }
+  }
+
+  // ========================================
+  // Abbreviations
+  // ========================================
+
+  abbr[title] {
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    cursor: help;
+  }
+
+  // ========================================
+  // Subscript & Superscript
+  // ========================================
+
+  sub, sup {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
+  // ========================================
+  // First/Last Child Margins
+  // ========================================
+
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// ========================================
+// Code Blocks - Clean styling
+// ========================================
+
+pre {
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  border-radius: var(--arbitrum-border-radius, 12px);
+  background: var(--fd-muted) !important;
+  border: 1px solid color-mix(in oklab, var(--fd-border) 60%, transparent);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+
+  code {
+    font-family: inherit;
+    font-size: inherit;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+}
+
+// Code block title
+.codeBlockTitle_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
+  font-family: var(--arbitrum-font-family);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--fd-muted);
+  border: 1px solid var(--fd-border);
+  border-bottom: none;
+  border-radius: var(--arbitrum-border-radius, 12px) var(--arbitrum-border-radius, 12px) 0 0;
+  padding: 0.5rem 1rem;
+
+  + pre {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-top: 0;
+  }
+}
+
+// Prism code styling
+.prism-code {
+  .token-line {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+}
+
+// Highlighted lines
+.docusaurus-highlight-code-line {
+  background: var(--docusaurus-highlighted-code-line-bg);
+  display: block;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+// ========================================
+// Responsive Typography
+// ========================================
+
+@media (max-width: 736px) {
+  article .markdown {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+
+    h1 {
+      font-size: 1.875rem;
+
+      &:first-child {
+        font-size: 1.75rem;
+      }
+    }
+
+    h2 {
+      font-size: 1.375rem;
+      margin-top: 2em;
+    }
+
+    h3,
+    > h3,
+    > .faq-question > h3 {
+      font-size: 1.25rem;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    h4 {
+      font-size: 1.0625rem;
+    }
+
+    table {
+      font-size: 0.8125rem;
+    }
+
+    thead th {
+      padding: 0.625rem 0.75rem;
+    }
+
+    tbody td {
+      padding: 0.625rem 0.75rem;
+    }
+
+    pre {
+      font-size: 0.8125rem;
+      border-radius: var(--arbitrum-border-radius-sm);
+    }
+  }
+}
+
+// ========================================
+// Print Styles
+// ========================================
+
+@media print {
+  article .markdown {
+    font-size: 12pt;
+    line-height: 1.5;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      page-break-after: avoid;
+    }
+
+    table, figure, pre {
+      page-break-inside: avoid;
+    }
+  }
+}
