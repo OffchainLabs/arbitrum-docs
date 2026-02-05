@@ -75,16 +75,6 @@ The new algorithm is more efficient because the sequencer doesn't need to keep s
 
 This change doesn't affect the `GasTarget`, and therefore doesn't affect how much overall gas per second the chain will use - only how transactions using that gas could be divided between different blocks.
 
-#### A few bug fixes
-
-- ArbOS didn't get updated for parent chain calldata price increase
-  - This change standardizes the calculation of gas units for compressed <a data-quicklook-from="batch">Batch</a> calldata across the codebase by replacing hard-coded values with a method call (tokenGasUnits).
-- `EIP-7702` precompile delegation behavior divergence
-  - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 51 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
-- ARM and x86 divergence
-  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
-  - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
-
 #### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
 
 As part of our strategy for scaling Arbitrum technology, the ArbOS 51 release includes a slight change to improve the pricing algorithm for Arbitrum One and Nova. This improvement is aimed at reducing the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the changes are to:
@@ -113,6 +103,16 @@ To read more about this feature, see the [Native Token Mint/Burn enablement guid
 If you want to enable Native Token Mint/Burn capabilities for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
 
 </VanillaAdmonition>
+
+#### A few bug fixes
+
+- ArbOS didn't get updated for parent chain calldata price increase
+  - This change standardizes the calculation of gas units for compressed <a data-quicklook-from="batch">Batch</a> calldata across the codebase by replacing hard-coded values with a method call (tokenGasUnits).
+- `EIP-7702` precompile delegation behavior divergence
+  - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 51 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
+- ARM and x86 divergence
+  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
+  - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
 
 ### Fusaka EIPs that aren't proposed to be in ArbOS 51 Dia
 
