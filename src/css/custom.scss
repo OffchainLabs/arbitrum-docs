@@ -49,7 +49,12 @@ html body [class*='admonition'],
 html body [class*='alert'] {
   font-family: var(--arbitrum-font-family);
 
-  p, li, strong, em, span, div {
+  p,
+  li,
+  strong,
+  em,
+  span,
+  div {
     font-family: inherit;
   }
 }
@@ -123,17 +128,25 @@ html body [class*='docMainContainer'] {
 }
 
 // ========================================
-// Fumadocs-style Animations
+// Animations
 // ========================================
 
 @keyframes fd-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fd-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes fd-dialog-in {
@@ -192,12 +205,18 @@ html body [class*='docMainContainer'] {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -208,8 +227,12 @@ html body [class*='docMainContainer'] {
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 // Animation classes
@@ -226,7 +249,7 @@ html body [class*='docMainContainer'] {
 }
 
 // ========================================
-// Fumadocs-style Scrollbar
+// Scrollbar
 // ========================================
 
 .fd-scrollbar,
@@ -592,7 +615,8 @@ pre code {
     text-decoration: underline;
   }
 
-  pre, code {
+  pre,
+  code {
     border: 1px solid #ccc;
     background: #f5f5f5;
   }

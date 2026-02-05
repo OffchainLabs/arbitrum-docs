@@ -199,7 +199,7 @@ pre[class*='language-'] {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
     opacity: 0;
     transition: opacity var(--arbitrum-transition-fast);
   }
@@ -237,7 +237,7 @@ pre[class*='language-'] {
   }
 }
 
-// Card with subtle gradient background
+// Card styles
 .card--gradient {
   background: var(--arbitrum-gradient-subtle);
 
