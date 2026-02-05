@@ -11,17 +11,17 @@ sidebar_position: 2
 displayed_sidebar: buildStylusSidebar
 ---
 
-Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by providing multiple tools for replaying, tracing, and interactively debugging Stylus transactions. These tools enable you to set breakpoints, inspect state changes, and trace execution flow step-by-step.
+Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by providing multiple tools for replaying, tracing, and interactively debugging <a data-quicklook-from="stylus">Stylus</a> transactions. These tools enable you to set breakpoints, inspect state changes, and trace execution flow step-by-step.
 
 ## Overview
 
 Cargo Stylus provides several debugging capabilities:
 
-1. **Trace transactions** (`cargo stylus trace`): Perform trace calls against Stylus transactions using `debug_traceTransaction` RPC. This provides low-level function call data with ink consumption metrics.
+1. **Trace transactions** (`cargo stylus trace`): Perform trace calls against Stylus transactions using `debug_traceTransaction` RPC. This provides low-level function call data with <a data-quicklook-from="ink">Ink</a> consumption metrics.
 
 2. **User function tracing** (`cargo stylus usertrace`): Generate human-readable function call trees showing your contract's execution flow without needing a full debugger session.
 
-3. **Interactive debugging** (`cargo stylus replay`): Replay and debug transaction execution using GDB, LLDB, or StylusDB. Set breakpoints, inspect variables, and step through code line by line.
+3. **Interactive debugging** (`cargo stylus replay`): Replay and debug <a data-quicklook-from="transaction">Transaction</a> execution using GDB, LLDB, or StylusDB. Set breakpoints, inspect variables, and step through code line by line.
 
 4. **Multi-contract debugging**: Debug transactions that span multiple Stylus contracts simultaneously using StylusDB.
 
