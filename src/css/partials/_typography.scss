@@ -703,6 +703,14 @@ article .markdown {
 // Code Blocks - Clean styling
 // ========================================
 
+// Global monospace for all code elements
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--ifm-font-family-monospace) !important;
+}
+
 pre {
   font-family: var(--ifm-font-family-monospace);
   font-size: 0.875rem;
@@ -710,7 +718,7 @@ pre {
   border-radius: var(--arbitrum-border-radius, 12px);
   background: var(--arbitrum-muted) !important;
   border: 1px solid color-mix(in oklab, var(--arbitrum-border) 60%, transparent);
-  padding: 2rem;
+  padding: 1rem !important;
   margin: 1rem 0;
   overflow-x: auto;
 
@@ -747,10 +755,10 @@ pre {
 // Prism code styling
 .prism-code {
   .token-line {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    margin-left: -2rem;
-    margin-right: -2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
   }
 }
 
@@ -758,8 +766,8 @@ pre {
 .docusaurus-highlight-code-line {
   background: var(--docusaurus-highlighted-code-line-bg);
   display: block;
-  margin: 0 -2rem;
-  padding: 0 2rem;
+  margin: 0 -1rem;
+  padding: 0 1rem;
 }
 
 // ========================================
