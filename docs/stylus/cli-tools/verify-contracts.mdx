@@ -1,0 +1,264 @@
+---
+title: 'How to verify Stylus contracts'
+sidebar_label: 'Verify contracts'
+description: 'Learn how to verify Stylus contracts locally and on Arbiscan'
+user_story: 'As a Stylus developer, I want to verify my contracts to ensure reproducibility and transparency'
+content_type: how-to
+author: rauljordan, mahsamoosavi
+sme: rauljordan, mahsamoosavi
+target_audience: 'Developers deploying smart contracts using Stylus'
+sidebar_position: 2
+displayed_sidebar: buildStylusSidebar
+---
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
+Stylus contracts can be verified in two ways: locally using `cargo stylus`, or on [Arbiscan](https://arbiscan.io/), Arbitrum's block explorer. This guide covers both methods.
+
+:::info
+Stylus contract verification on Arbiscan is only supported for contracts deployed using `cargo-stylus` 0.5.0 or higher.
+:::
+
+## Overview: Why verify contracts?
+
+Contract verification ensures that:
+
+- Your deployment is reproducible by anyone running the same environment
+- Users can independently verify that deployed bytecode matches published source code
+- The contract source code is publicly available on block explorers
+- Trust and transparency are established with your users
+
+## Local verification
+
+Local verification uses the `cargo stylus` tool to verify contracts against your local codebase.
+
+### Goals
+
+- Ensure Stylus contract deployments are reproducible by anyone on the same architecture
+- Sandbox the reproducible environment and standardize it
+- Guarantee that programs reproducibly deployed with cargo stylus version ≥ 0.4.2 are verifiable
+
+### Opting out
+
+By default, `cargo stylus deploy` is reproducible as it runs in a Docker container. You can opt out by specifying `--no-verify`:
+
+```shell
+cargo stylus deploy --no-verify
+```
+
+### How it works
+
+When you deploy a contract, the deployment transaction's `data` field contains your compressed contract code. The `cargo stylus` tool compresses and encodes your contract's WASM in a standardized, reproducible way.
+
+Anyone with the same codebase can rebuild your contract and verify the output matches the onchain data. This is similar to [Solidity contract verification](https://docs.sourcify.dev/docs/how-to-verify/#how-does-verification-work) but for WASM-based contracts.
+
+### Verification flow
+
+<ImageZoom
+  src="/img/stylus-contract-verification-flow.svg"
+  alt="Contract verification flow"
+  className="img-600px"
+/>
+
+### Prerequisites for local verification
+
+1. Docker installed and running
+2. The exact same codebase used for deployment
+3. `cargo-stylus` CLI installed (version ≥ 0.4.2)
+
+### Running local verification
+
+Use the `cargo stylus verify` command with your deployment transaction hash:
+
+```shell
+cargo stylus verify --deployment-tx 0xd4...85
+```
+
+**Example output (successful verification):**
+
+```
+Reading deployment tx from chain...
+Wasm data hash: 0xf80a...
+Program succeeded Stylus onchain activation checks.
+Connecting to Docker...
+Reproducing wasm binary from local code... (This may take a while)
+Finished release build in X.XXs
+
+INFO: contract code matches the onchain code ✓
+```
+
+**Example output (mismatch):**
+
+```
+Reading deployment tx from chain...
+ERROR: contract code does not match the onchain code ✗
+```
+
+### Troubleshooting local verification
+
+**Error: Docker not running**
+
+```
+Error: Cannot connect to Docker daemon
+```
+
+Solution: Start Docker Desktop or Docker daemon
+
+**Error: Mismatch**
+
+If verification fails, common causes:
+
+- Different Rust toolchain version
+- Different dependency versions
+- Modified source code
+- Different build flags
+
+Ensure you're using the exact same codebase and Rust version as the deployment.
+
+---
+
+## Arbiscan verification
+
+Arbiscan provides a web-based interface for contract verification, making your source code publicly visible on the block explorer.
+
+### View verified contracts
+
+You can browse verified Stylus contracts on:
+
+- [Verified Stylus Contracts on Arbitrum One](https://arbiscan.io/contractsVerified?filter=stylus)
+- [Verified Stylus Contracts on Arbitrum Sepolia](https://sepolia.arbiscan.io/contractsVerified?filter=stylus)
+
+Example: [English Auction Stylus contract](https://sepolia.arbiscan.io/address/0xe85a046fd3ea22ceeb3caef3a0d38123eecbe3ca) (verified on Arbitrum Sepolia)
+
+### Step 1: Navigate to the verification page
+
+You have two options:
+
+**Option A: Direct link**
+Visit [Arbiscan Verify Contract](https://arbiscan.io/verifyContract) directly if you have the contract address ready.
+
+**Option B: From the contract page**
+
+1. Go to your contract's page on Arbiscan
+2. Click the "Contract" tab
+3. Click the "Verify and Publish" link
+
+<ImageZoom src="/img/stylus/verify-and-publish.webp" alt="Verify and Publish link on Arbiscan" />
+
+### Step 2: Enter contract details
+
+On the verification page, provide:
+
+1. **Contract address**: The deployed contract address (e.g., `0xe85a...3ca`)
+2. **Compiler type**: Select **"Stylus (Rust)"** from the dropdown
+
+<ImageZoom
+  src="/img/stylus/compiler-type-stylus-rust.webp"
+  alt="Select Stylus Rust compiler type"
+/>
+
+3. **cargo-stylus version**: Select the version you used for deployment (must be ≥ 0.5.0)
+
+<ImageZoom src="/img/stylus/cargo-stylus-version.webp" alt="Select cargo-stylus version" />
+
+Then click **Continue**.
+
+### Step 3: Submit source code
+
+You can submit your source code in two ways:
+
+#### Option A: Single Rust file
+
+If your contract is a single `.rs` file:
+
+1. Click **"Rust File Upload"**
+2. Upload your `.rs` file
+
+#### Option B: Standard JSON input
+
+For multi-file projects:
+
+1. Click **"Standard JSON Input"**
+2. Generate the JSON using:
+
+```shell
+cargo stylus verify --json
+```
+
+This generates a `project.json` file containing all sources and metadata.
+
+3. Upload the `project.json` file
+
+<ImageZoom src="/img/stylus/standard-json-input.webp" alt="Standard JSON input option" />
+
+Click **Verify and Publish** to complete verification.
+
+### Step 4: Verification result
+
+If successful, you'll see:
+
+- ✅ Verification successful message
+- Your source code is now publicly visible on Arbiscan
+- The "Contract" tab shows your Rust source code
+
+<ImageZoom src="/img/stylus/verification-success.webp" alt="Verification success message" />
+
+### Handling previously verified contracts
+
+If your contract was already verified:
+
+1. Arbiscan will detect this automatically
+2. It will display: "Contract Source Code Already Verified"
+3. You can view the existing verification in the Contract tab
+
+<ImageZoom src="/img/stylus/already-verified.webp" alt="Already verified contract message" />
+
+### Troubleshooting Arbiscan verification
+
+**Error: cargo-stylus version too old**
+
+Arbiscan requires cargo-stylus ≥ 0.5.0. Update your toolchain:
+
+```shell
+cargo install cargo-stylus --force
+```
+
+**Error: Verification failed**
+
+Common causes:
+
+- Wrong cargo-stylus version selected
+- Source code doesn't match deployed bytecode
+- Missing dependencies in JSON file
+
+Solution: Ensure you're using the exact source code from deployment and the correct cargo-stylus version.
+
+**Error: Contract not found**
+
+Ensure:
+
+- The contract address is correct
+- The contract is deployed on the selected network (Arbitrum One vs Sepolia)
+- The deployment transaction is confirmed
+
+---
+
+## Which verification method should I use?
+
+| Method                    | When to use                             | Benefits                                                              |
+| ------------------------- | --------------------------------------- | --------------------------------------------------------------------- |
+| **Local verification**    | Quick verification during development   | Fast, no external dependencies, proves reproducibility                |
+| **Arbiscan verification** | Publishing verified contracts for users | Public source code visibility, block explorer integration, user trust |
+
+**Best practice**: Use both methods:
+
+1. Verify locally after deployment to ensure reproducibility
+2. Verify on Arbiscan to publish source code for your users
+
+---
+
+## Next steps
+
+- [Learn about deployment](./check-and-deploy.mdx)
+- [Explore CLI tools](./overview.mdx)
+- [View verified examples](https://github.com/OffchainLabs/stylus-by-example)

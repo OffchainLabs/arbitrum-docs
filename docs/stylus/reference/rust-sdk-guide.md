@@ -9,7 +9,7 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 
 import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx';
 
-This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../quickstart.mdx).
+This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../quickstart.mdx).
 
 :::info
 
@@ -364,7 +364,7 @@ Both methods can be annotated with `#[payable]` to accept ETH along with the tra
 
 ## Calls
 
-Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis).
+Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus#exporting-solidity-abis).
 
 :::tip
 

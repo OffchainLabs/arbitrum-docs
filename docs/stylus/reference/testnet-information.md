@@ -7,8 +7,6 @@ target_audience: Developers building on the Stylus testnet
 sidebar_position: 9
 ---
 
-import StylusFaucets from './partials/_stylus-faucets.mdx';
-
 import ArbitrumContractAddresses from '../../partials/_reference-arbitrum-contract-addresses-partial.mdx';
 
 ## Arbitrum public RPC endpoints
@@ -27,7 +25,5 @@ This section provides an overview of the available public RPC endpoints for diff
 | Name                       | RPC Url(s)                             | Chain ID | Block explorer              | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
 | -------------------------- | -------------------------------------- | -------- | --------------------------- | ---------------- | -------------- | ------------------------------------- | ------------------------------------------------ |
 | Arbitrum Sepolia (Testnet) | https://sepolia-rollup.arbitrum.io/rpc | 421614   | https://sepolia.arbiscan.io | Sepolia          | Nitro (Rollup) | wss://sepolia-rollup.arbitrum.io/feed | https://sepolia-rollup-sequencer.arbitrum.io/rpc |
-
-<StylusFaucets />
 
 <ArbitrumContractAddresses />
