@@ -33,6 +33,10 @@
   --arbitrum-teal: hsl(188, 100%, 53%);
   --arbitrum-teal-muted: hsl(170, 74%, 55%);
 
+  // Stylus Brand Colors
+  --stylus-brand-color: #e3066e;
+  --stylus-brand-color-dark: #b70458;
+
   // Gradients
   --arbitrum-gradient-primary: linear-gradient(
     135deg,
@@ -43,6 +47,11 @@
     135deg,
     hsl(210, 40%, 98%) 0%,
     hsl(210, 50%, 96%) 100%
+  );
+  --stylus-gradient: linear-gradient(
+    135deg,
+    var(--stylus-brand-color) 0%,
+    var(--stylus-brand-color-dark) 100%
   );
 
   // ========================================
