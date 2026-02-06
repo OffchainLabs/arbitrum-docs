@@ -93,6 +93,10 @@ pre[class*='language-'] {
   }
 }
 
+.tippy-content p:first-child {
+  margin-top: 0;
+}
+
 .tippy-content p:last-child {
   margin-bottom: 0;
 }

@@ -215,12 +215,12 @@
   }
 
   // ========================================
-  // Tooltips
+  // Tooltips (light-border theme override)
   // ========================================
-  .tippy-box {
-    background-color: var(--arbitrum-popover);
-    color: var(--arbitrum-popover-foreground);
-    border: 1px solid var(--arbitrum-border);
+  .tippy-box[data-theme~='light-border'] {
+    background-color: var(--arbitrum-muted) !important;
+    color: var(--arbitrum-text) !important;
+    border-color: var(--arbitrum-border) !important;
 
     .tippy-content {
       a {
@@ -228,25 +228,17 @@
       }
     }
 
-    // Arrow styling
-    .tippy-arrow {
-      color: var(--arbitrum-popover);
+    > .tippy-arrow::after {
+      border-top-color: var(--arbitrum-muted) !important;
+      border-bottom-color: var(--arbitrum-muted) !important;
     }
 
-    &[data-placement^='top'] > .tippy-arrow::before {
-      border-top-color: var(--arbitrum-popover);
+    &[data-placement^='top'] > .tippy-arrow::after {
+      border-top-color: var(--arbitrum-muted) !important;
     }
 
-    &[data-placement^='bottom'] > .tippy-arrow::before {
-      border-bottom-color: var(--arbitrum-popover);
-    }
-
-    &[data-placement^='left'] > .tippy-arrow::before {
-      border-left-color: var(--arbitrum-popover);
-    }
-
-    &[data-placement^='right'] > .tippy-arrow::before {
-      border-right-color: var(--arbitrum-popover);
+    &[data-placement^='bottom'] > .tippy-arrow::after {
+      border-bottom-color: var(--arbitrum-muted) !important;
     }
   }
 
