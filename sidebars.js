@@ -1753,6 +1753,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'stylus/guides/verifying-contracts-arbiscan',
+              label: 'Verify contracts with Arbiscan',
+            },
+            {
+              type: 'doc',
               id: 'stylus/guides/deploying-non-rust-wasm-contracts',
               label: 'Deploy non-Rust contracts',
             },
