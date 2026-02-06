@@ -1719,51 +1719,51 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Guides',
+          label: 'How tos',
           items: [
             {
               type: 'doc',
-              id: 'stylus/guides/using-constructors',
+              id: 'stylus/how-tos/using-constructors',
               label: 'Using constructors',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/using-inheritance',
+              id: 'stylus/how-tos/using-inheritance',
               label: 'Using inheritance',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/importing-interfaces',
+              id: 'stylus/how-tos/importing-interfaces',
               label: 'Importing interfaces',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/exporting-abi',
+              id: 'stylus/how-tos/exporting-abi',
               label: 'Exporting ABI',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/optimizing-binaries',
+              id: 'stylus/how-tos/optimizing-binaries',
               label: 'Optimizing binaries',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/caching-contracts',
+              id: 'stylus/how-tos/caching-contracts',
               label: 'Caching contracts',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/verifying-contracts-arbiscan',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
               label: 'Verify contracts with Arbiscan',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/deploying-non-rust-wasm-contracts',
+              id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
               label: 'Deploy non-Rust contracts',
             },
             {
               type: 'doc',
-              id: 'stylus/guides/adding-support-for-new-languages',
+              id: 'stylus/how-tos/adding-support-for-new-languages',
               label: 'Add language support',
             },
           ],
