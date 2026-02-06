@@ -1,22 +1,147 @@
 [data-theme='dark'] {
-  --arbitrum-color-primary: #152c4e;
-  --arbitrum-background-opacity: rgba(255, 255, 255, 0.05);
-  --arbitrum-text: white;
-  --arbitrum-secondary-text: rgba(255, 255, 255, 0.5);
-  --arbitrum-primary-button-bg: white;
-  --arbitrum-primary-button-text: black;
-  --ifm-color-primary: #28a0f0;
-  --ifm-color-primary-dark: #2182af;
-  --ifm-color-primary-darker: #1f7fa5;
-  --ifm-color-primary-darkest: #1a6c88;
-  --ifm-color-primary-light: #29b0d5;
-  --ifm-color-primary-lighter: #32b4d8;
-  --ifm-color-primary-lightest: #4fbcdd;
-  --ifm-color-content: white;
-  --ifm-link-color: #51b2ff;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  // ========================================
+  // Dark Mode
+  // Dark Mode Overrides
+  // ========================================
+
+  // Core semantic tokens - navy tinted
+  --arbitrum-background: hsl(222, 47%, 6%);
+  --arbitrum-text: hsl(210, 40%, 98%);
+  --arbitrum-muted: hsl(217, 33%, 12%);
+  --arbitrum-secondary-text: hsl(215, 20%, 65%);
+  --arbitrum-popover: hsl(222, 47%, 8%);
+  --arbitrum-popover-foreground: hsl(210, 40%, 98%);
+  --arbitrum-card: hsl(222, 47%, 8%);
+  --arbitrum-card-foreground: hsl(210, 40%, 98%);
+  --arbitrum-border: hsl(217, 33%, 17%);
+  --arbitrum-color-primary: hsl(188, 100%, 53%);
+  --arbitrum-color-primary-foreground: hsl(222, 47%, 6%);
+  --arbitrum-secondary: hsl(217, 33%, 17%);
+  --arbitrum-secondary-foreground: hsl(210, 40%, 98%);
+  --arbitrum-accent: hsl(217, 33%, 17%);
+  --arbitrum-accent-foreground: hsl(210, 40%, 98%);
+  --arbitrum-ring: hsl(188, 100%, 53%);
+  --arbitrum-overlay: hsla(222, 47%, 4%, 0.8);
+
+  // ========================================
+  // Core Backgrounds - Apply directly
+  // ========================================
+  --ifm-background-color: hsl(222, 47%, 6%);
+  --ifm-background-surface-color: hsl(217, 33%, 12%);
+  --ifm-navbar-background-color: hsl(222, 47%, 4%);
+  --ifm-footer-background-color: hsl(222, 47%, 4%);
+  --ifm-card-background-color: hsl(222, 47%, 8%);
+  --ifm-dropdown-background-color: hsl(222, 47%, 8%);
+
+  // Body background directly
+  background-color: hsl(222, 47%, 6%);
+
+  // ========================================
+  // Primary Colors (teal for dark mode)
+  // ========================================
+  --ifm-color-primary: hsl(188, 100%, 53%);
+  --ifm-color-primary-dark: hsl(188, 100%, 48%);
+  --ifm-color-primary-darker: hsl(188, 100%, 45%);
+  --ifm-color-primary-darkest: hsl(188, 100%, 38%);
+  --ifm-color-primary-light: hsl(188, 100%, 60%);
+  --ifm-color-primary-lighter: hsl(188, 100%, 67%);
+  --ifm-color-primary-lightest: hsl(188, 100%, 75%);
+
+  // Text and links
+  --ifm-color-content: var(--arbitrum-text);
+  --ifm-color-content-secondary: var(--arbitrum-secondary-text);
+  --ifm-link-color: var(--arbitrum-color-primary);
+  --ifm-link-hover-color: hsl(188, 100%, 75%);
+  --ifm-footer-link-color: hsla(210, 40%, 98%, 0.85);
+
+  // ========================================
+  // Shadows for dark mode
+  // ========================================
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 0 3px hsla(188, 100%, 53%, 0.2);
+
+  // ========================================
+  // Code styling
+  // ========================================
+  --docusaurus-highlighted-code-line-bg: hsla(188, 100%, 53%, 0.15);
+  --prism-background-color: var(--arbitrum-muted);
+
+  // Diff colors (dark)
+  --arbitrum-diff-remove: hsla(0, 62%, 50%, 0.2);
+  --arbitrum-diff-remove-symbol: hsl(0, 62%, 65%);
+  --arbitrum-diff-add: hsla(142, 71%, 45%, 0.15);
+  --arbitrum-diff-add-symbol: hsl(142, 71%, 55%);
+
+  // ========================================
+  // Tabs
+  // ========================================
+  --tab-gray: var(--arbitrum-border);
+  --tab-active-color: var(--arbitrum-color-primary);
+  --tab-active-color-hover: hsl(188, 100%, 48%);
+
+  // ========================================
+  // Borders and dividers
+  // ========================================
+  --ifm-toc-border-color: var(--arbitrum-border);
+  --ifm-color-emphasis-300: hsla(210, 40%, 98%, 0.12);
+
+  // Scrollbar
+  --arbitrum-scrollbar-thumb: hsl(217, 33%, 25%);
+
+  // ========================================
+  // Alert/Admonition Colors (Dark Mode)
+  // ========================================
+  --ifm-color-info: hsl(188, 100%, 53%);
+  --ifm-color-info-dark: hsl(188, 100%, 48%);
+  --ifm-color-info-contrast-background: hsla(188, 100%, 53%, 0.1);
+  --ifm-color-info-contrast-foreground: hsl(188, 100%, 75%);
+
+  --ifm-color-success: hsl(142, 71%, 45%);
+  --ifm-color-success-dark: hsl(142, 71%, 40%);
+  --ifm-color-success-contrast-background: hsla(142, 71%, 45%, 0.1);
+  --ifm-color-success-contrast-foreground: hsl(142, 71%, 65%);
+
+  --ifm-color-warning: hsl(45, 93%, 47%);
+  --ifm-color-warning-dark: hsl(45, 93%, 42%);
+  --ifm-color-warning-contrast-background: hsla(45, 93%, 47%, 0.12);
+  --ifm-color-warning-contrast-foreground: hsl(48, 96%, 70%);
+
+  --ifm-color-danger: hsl(0, 62%, 55%);
+  --ifm-color-danger-dark: hsl(0, 62%, 48%);
+  --ifm-color-danger-contrast-background: hsla(0, 62%, 55%, 0.12);
+  --ifm-color-danger-contrast-foreground: hsl(0, 62%, 75%);
+
+  // Prysm (kept for compatibility)
   --prysm-pink: var(--prysm-pink-light);
-  --tab-gray: #aaa;
+
+  // ========================================
+  // Selection highlight
+  // ========================================
+  ::selection {
+    background: hsla(188, 100%, 53%, 0.3);
+    color: var(--arbitrum-text);
+  }
+
+  ::-moz-selection {
+    background: hsla(188, 100%, 53%, 0.3);
+    color: var(--arbitrum-text);
+  }
+
+  // ========================================
+  // Navbar - darker, glass effect
+  // ========================================
+  .navbar {
+    background-color: hsla(222, 47%, 4%, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid hsla(188, 100%, 53%, 0.1);
+  }
+
+  // ========================================
+  // Component-specific overrides
+  // ========================================
 
   .dynamic-content-tabs {
     .tabgroup-with-label {
@@ -58,23 +183,215 @@
     }
   }
 
-  footer.footer {
-    color: white;
-    .footer__link-item {
-      color: white;
-    }
-  }
-
-  // Invert images wrapped in divs with invert-on-dark class when in dark mode
+  // Invert images with class
   .invert-on-dark img {
     filter: invert(1);
   }
+
+  // ========================================
+  // Cards - subtle glow on hover
+  // ========================================
+  .card {
+    border-color: hsla(188, 100%, 53%, 0.1);
+    background: var(--arbitrum-card);
+
+    &:hover {
+      border-color: hsla(188, 100%, 53%, 0.25);
+      box-shadow: 0 4px 20px hsla(188, 100%, 53%, 0.1);
+    }
+  }
+
+  // ========================================
+  // Buttons - gradient style
+  // ========================================
+  .button--primary {
+    background: var(--arbitrum-gradient-primary);
+    border-color: transparent;
+
+    &:hover {
+      background: var(--arbitrum-gradient-primary);
+      opacity: 0.9;
+    }
+  }
+
+  // ========================================
+  // Sidebar
+  // ========================================
+  .theme-doc-sidebar-container {
+    background: hsla(222, 47%, 5%, 0.5);
+  }
+
+  .theme-doc-sidebar-menu {
+    .menu__link {
+      color: var(--arbitrum-secondary-text);
+
+      &:hover {
+        color: var(--arbitrum-text);
+        background: hsla(188, 100%, 53%, 0.05);
+      }
+
+      &.menu__link--active {
+        color: var(--arbitrum-color-primary);
+        background: hsla(188, 100%, 53%, 0.1);
+      }
+    }
+  }
+
+  // ========================================
+  // Table of Contents
+  // ========================================
+  .table-of-contents {
+    .table-of-contents__link {
+      color: var(--arbitrum-secondary-text);
+
+      &:hover {
+        color: var(--arbitrum-text);
+      }
+
+      &--active {
+        color: var(--arbitrum-color-primary);
+      }
+    }
+  }
+
+  // ========================================
+  // Admonitions - Dark mode colors
+  // ========================================
+  .theme-admonition {
+    // NOTE - Teal/Cyan
+    &.alert--info,
+    &[class*='alert--info'] {
+      --admonition-color: hsl(188, 100%, 53%);
+      --admonition-bg: hsla(188, 100%, 53%, 0.1);
+      --admonition-text: hsl(188, 100%, 75%);
+      background: var(--admonition-bg);
+      border-color: var(--admonition-color);
+
+      [class*='admonitionHeading'] {
+        color: var(--admonition-text);
+      }
+      svg {
+        color: var(--admonition-color);
+      }
+    }
+
+    // TIP - Green
+    &.alert--success,
+    &[class*='alert--success'] {
+      --admonition-color: hsl(142, 71%, 45%);
+      --admonition-bg: hsla(142, 71%, 45%, 0.1);
+      --admonition-text: hsl(142, 71%, 65%);
+      background: var(--admonition-bg);
+      border-color: var(--admonition-color);
+
+      [class*='admonitionHeading'] {
+        color: var(--admonition-text);
+      }
+      svg {
+        color: var(--admonition-color);
+      }
+    }
+
+    // WARNING - Amber/Yellow
+    &.alert--warning,
+    &[class*='alert--warning'] {
+      --admonition-color: hsl(45, 93%, 47%);
+      --admonition-bg: hsla(45, 93%, 47%, 0.12);
+      --admonition-text: hsl(48, 96%, 70%);
+      background: var(--admonition-bg);
+      border-color: var(--admonition-color);
+
+      [class*='admonitionHeading'] {
+        color: var(--admonition-text);
+      }
+      svg {
+        color: var(--admonition-color);
+      }
+    }
+
+    // DANGER - Red
+    &.alert--danger,
+    &[class*='alert--danger'] {
+      --admonition-color: hsl(0, 62%, 55%);
+      --admonition-bg: hsla(0, 62%, 55%, 0.12);
+      --admonition-text: hsl(0, 62%, 75%);
+      background: var(--admonition-bg);
+      border-color: var(--admonition-color);
+
+      [class*='admonitionHeading'] {
+        color: var(--admonition-text);
+      }
+      svg {
+        color: var(--admonition-color);
+      }
+    }
+
+    // SECONDARY - Gray
+    &.alert--secondary,
+    &[class*='alert--secondary'] {
+      --admonition-color: hsl(215, 20%, 65%);
+      --admonition-bg: hsla(215, 20%, 65%, 0.1);
+      --admonition-text: hsl(215, 20%, 80%);
+      background: var(--admonition-bg);
+      border-color: var(--admonition-color);
+
+      [class*='admonitionHeading'] {
+        color: var(--admonition-text);
+      }
+      svg {
+        color: var(--admonition-color);
+      }
+    }
+  }
+
+  // ========================================
+  // Tables
+  // ========================================
+  table {
+    background: var(--arbitrum-card);
+  }
+
+  // ========================================
+  // Blockquotes
+  // ========================================
+  blockquote {
+    background: hsla(188, 100%, 53%, 0.05);
+    border-color: var(--arbitrum-color-primary);
+  }
+
+  // ========================================
+  // Details/Summary
+  // ========================================
+  details {
+    background: var(--arbitrum-muted);
+    border-color: var(--arbitrum-border);
+  }
 }
 
+// ========================================
+// Light mode specific
+// ========================================
 [data-theme='light'] {
   .theme-doc-sidebar-menu {
     .menu__link {
-      color: #111;
+      color: hsl(222, 47%, 11%);
+
+      &:hover {
+        background: hsla(211, 99%, 45%, 0.05);
+      }
+
+      &.menu__link--active {
+        color: var(--arbitrum-color-primary);
+        background: hsla(211, 99%, 45%, 0.1);
+      }
     }
+  }
+
+  // Navbar glass effect in light mode too
+  .navbar {
+    background-color: hsla(0, 0%, 100%, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--arbitrum-border);
   }
 }

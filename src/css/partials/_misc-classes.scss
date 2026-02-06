@@ -1,35 +1,496 @@
+// ========================================
+// Utility Classes
+// ========================================
+
 .dark-blue-background {
-  background-color: #062455 !important;
+  background-color: var(--arbitrum-navy, #05163d) !important;
 }
 
 .gently-animated {
-  transition: all 0.1s ease-in-out;
+  transition: all var(--arbitrum-transition-normal);
 }
+
+// ========================================
+// Code Blocks - Additional utilities
+// ========================================
 
 .prism-code {
-  font-size: 12px;
+  font-family: var(--arbitrum-mono-font);
 }
+
+pre[class*='language-'] {
+  border-radius: var(--arbitrum-border-radius, 12px);
+}
+
+// Copy button styling (attribute selectors for Docusaurus version resilience)
+[class^='copyButton'],
+[class*=' copyButton'] {
+  border-radius: 6px;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: var(--arbitrum-muted);
+  }
+}
+
+// Copy button success state
+[class*='copyButtonCopied'],
+[class*='copyButtonSuccess'] {
+  --ifm-color-success: var(--arbitrum-color-primary);
+  background: var(--arbitrum-color-primary) !important;
+  color: white !important;
+  border-color: var(--arbitrum-color-primary) !important;
+}
+
+// Diff styling for code blocks
+.token.deleted {
+  background: var(--arbitrum-diff-remove);
+
+  &::before {
+    content: '-';
+    color: var(--arbitrum-diff-remove-symbol);
+    position: absolute;
+    left: calc(var(--code-line-number-width, 3.5rem) + 0.5rem);
+  }
+}
+
+.token.inserted {
+  background: var(--arbitrum-diff-add);
+
+  &::before {
+    content: '+';
+    color: var(--arbitrum-diff-add-symbol);
+    position: absolute;
+    left: calc(var(--code-line-number-width, 3.5rem) + 0.5rem);
+  }
+}
+
+// ========================================
+// Sidebar
+// ========================================
 
 .theme-doc-sidebar-menu {
-  font-size: 13.5px;
+  font-size: 14px;
+  font-family: var(--arbitrum-font-family);
 }
 
+// ========================================
+// Tooltips
+// ========================================
+
 .tippy-box {
-  padding: 8px;
+  padding: 10px 12px;
+  border-radius: var(--arbitrum-border-radius-sm, 8px);
+  font-size: 13px;
+  font-family: var(--arbitrum-font-family);
+  box-shadow: var(--shadow-lg);
 }
 
 .tippy-content p:last-child {
   margin-bottom: 0;
 }
 
+// ========================================
+// Mermaid Diagrams
+// ========================================
+
 .docusaurus-mermaid-container {
   display: flex;
   justify-content: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--arbitrum-card);
+  border-radius: var(--arbitrum-border-radius);
+  border: 1px solid var(--arbitrum-border);
 }
 
+// ========================================
+// Navbar
+// ========================================
+
 .navbar__item {
-  font-size: clamp(0.8rem, 1.25vw, 1rem);
+  font-size: clamp(0.8rem, 1.25vw, 0.9375rem);
+  font-weight: 500;
   line-height: 1.5;
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.navbar__link {
+  transition: color var(--arbitrum-transition-fast);
+
+  &:hover {
+    color: var(--arbitrum-color-primary);
+  }
+}
+
+// ========================================
+// Buttons (global)
+// ========================================
+
+.button {
+  border-radius: var(--arbitrum-border-radius-sm, 8px);
+  font-weight: 500;
+  font-family: var(--arbitrum-font-family);
+  transition: all var(--arbitrum-transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &:focus-visible {
+    outline: 2px solid var(--arbitrum-ring);
+    outline-offset: 2px;
+  }
+}
+
+.button--primary {
+  background: var(--arbitrum-color-primary);
+  border-color: var(--arbitrum-color-primary);
+  color: var(--arbitrum-color-primary-foreground);
+
+  &:hover {
+    background: var(--ifm-color-primary-dark);
+    border-color: var(--ifm-color-primary-dark);
+    color: var(--arbitrum-color-primary-foreground);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.button--secondary {
+  background: var(--arbitrum-secondary);
+  border-color: var(--arbitrum-border);
+  color: var(--arbitrum-secondary-foreground);
+
+  &:hover {
+    background: var(--arbitrum-muted);
+    border-color: var(--arbitrum-border);
+    color: var(--arbitrum-secondary-foreground);
+  }
+}
+
+.button--outline {
+  background: transparent;
+  border: 1px solid var(--arbitrum-border);
+  color: var(--arbitrum-text);
+
+  &:hover {
+    background: var(--arbitrum-muted);
+    border-color: var(--arbitrum-color-primary);
+    color: var(--arbitrum-color-primary);
+  }
+}
+
+// Gradient button variant
+.button--gradient {
+  background: var(--arbitrum-gradient-primary);
+  border: none;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity var(--arbitrum-transition-fast);
+  }
+
+  &:hover {
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg), 0 0 20px hsla(188, 100%, 53%, 0.3);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// ========================================
+// Cards (global)
+// ========================================
+
+.card {
+  border-radius: var(--arbitrum-border-radius, 12px);
+  border: 1px solid var(--arbitrum-border);
+  background: var(--arbitrum-card);
+  transition: all var(--arbitrum-transition-normal);
+  overflow: hidden;
+
+  &:hover {
+    border-color: var(--arbitrum-color-primary);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+}
+
+// Card styles
+.card--gradient {
+  background: var(--arbitrum-gradient-subtle);
+
+  &:hover {
+    background: var(--arbitrum-card);
+  }
+}
+
+// ========================================
+// Badges
+// ========================================
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge--primary {
+  background: hsla(211, 99%, 45%, 0.1);
+  color: var(--arbitrum-color-primary);
+}
+
+.badge--success {
+  background: var(--ifm-color-success-contrast-background);
+  color: var(--ifm-color-success-contrast-foreground);
+}
+
+.badge--warning {
+  background: var(--ifm-color-warning-contrast-background);
+  color: var(--ifm-color-warning-contrast-foreground);
+}
+
+.badge--danger {
+  background: var(--ifm-color-danger-contrast-background);
+  color: var(--ifm-color-danger-contrast-foreground);
+}
+
+// ========================================
+// Search
+// ========================================
+
+.DocSearch-Button {
+  border-radius: var(--arbitrum-border-radius-sm) !important;
+  border: 1px solid var(--arbitrum-border) !important;
+  background: var(--arbitrum-muted) !important;
+  transition: all var(--arbitrum-transition-fast) !important;
+
+  &:hover {
+    border-color: var(--arbitrum-color-primary) !important;
+    box-shadow: var(--shadow-glow) !important;
+  }
+}
+
+// ========================================
+// Pagination
+// ========================================
+
+.pagination-nav__link {
+  border-radius: var(--arbitrum-border-radius);
+  border: 1px solid var(--arbitrum-border);
+  background: var(--arbitrum-card);
+  transition: all var(--arbitrum-transition-normal);
+  padding: 1rem 1.25rem;
+
+  &:hover {
+    border-color: var(--arbitrum-color-primary);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.pagination-nav__sublabel {
+  color: var(--arbitrum-secondary-text);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.pagination-nav__label {
+  font-weight: 600;
+  color: var(--arbitrum-text);
+}
+
+// ========================================
+// Table of Contents
+// ========================================
+
+.table-of-contents {
+  font-size: 0.8125rem;
+
+  .table-of-contents__link {
+    display: block;
+    padding: 0.25rem 0;
+    color: var(--arbitrum-secondary-text);
+    transition: color var(--arbitrum-transition-fast);
+    border-left: 2px solid transparent;
+    padding-left: 0.75rem;
+    margin-left: -2px;
+
+    &:hover {
+      color: var(--arbitrum-text);
+    }
+
+    &--active {
+      color: var(--arbitrum-color-primary);
+      border-left-color: var(--arbitrum-color-primary);
+      font-weight: 500;
+    }
+  }
+}
+
+// ========================================
+// Breadcrumbs
+// ========================================
+
+.breadcrumbs__item {
+  font-size: 0.8125rem;
+
+  &:not(:last-child)::after {
+    background-color: var(--arbitrum-border);
+  }
+}
+
+.breadcrumbs__link {
+  color: var(--arbitrum-secondary-text);
+  transition: color var(--arbitrum-transition-fast);
+
+  &:hover {
+    color: var(--arbitrum-color-primary);
+    background: transparent;
+  }
+}
+
+// ========================================
+// Dropdowns
+// ========================================
+
+.dropdown__menu {
+  border-radius: var(--arbitrum-border-radius);
+  border: 1px solid var(--arbitrum-border);
+  background: var(--arbitrum-popover);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem;
+  min-width: 180px;
+}
+
+.dropdown__link {
+  border-radius: var(--arbitrum-border-radius-sm);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--arbitrum-popover-foreground);
+  transition: all var(--arbitrum-transition-fast);
+
+  &:hover {
+    background: var(--arbitrum-accent);
+    color: var(--arbitrum-accent-foreground);
+  }
+
+  &--active {
+    background: hsla(211, 99%, 45%, 0.1);
+    color: var(--arbitrum-color-primary);
+  }
+}
+
+// ========================================
+// Tabs
+// ========================================
+
+.tabs {
+  font-weight: 500;
+
+  .tabs__item {
+    border-radius: var(--arbitrum-border-radius-sm) var(--arbitrum-border-radius-sm) 0 0;
+    padding: 0.75rem 1.25rem;
+    transition: all var(--arbitrum-transition-fast);
+
+    &:hover {
+      background: var(--arbitrum-muted);
+    }
+
+    &--active {
+      border-bottom-color: var(--arbitrum-color-primary);
+      color: var(--arbitrum-color-primary);
+    }
+  }
+}
+
+// ========================================
+// Version Dropdown
+// ========================================
+
+.navbar__item.dropdown.dropdown--hoverable.dropdown--right {
+  .dropdown__menu {
+    right: 0;
+    left: auto;
+  }
+}
+
+// ========================================
+// Edit Page Link
+// ========================================
+
+.theme-edit-this-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--arbitrum-secondary-text);
+  transition: color var(--arbitrum-transition-fast);
+
+  &:hover {
+    color: var(--arbitrum-color-primary);
+    text-decoration: none;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+// ========================================
+// Smooth scrolling
+// ========================================
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+// ========================================
+// Skip to content link
+// ========================================
+
+.skipToContent_node_modules-\@docusaurus-theme-classic-lib-theme-SkipToContent-styles-module {
+  background: var(--arbitrum-color-primary);
+  color: var(--arbitrum-color-primary-foreground);
+  border-radius: var(--arbitrum-border-radius-sm);
+
+  &:focus {
+    box-shadow: var(--shadow-lg);
+  }
 }
