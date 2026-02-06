@@ -140,6 +140,11 @@ Support and implementation for the following EIPs aren't planned to be part of A
 
 While ArbOS 51 Dia will be compatible with both `nitro-contracts 3.1.X` and `nitro-contracts 2.1.3`, only chains that have Arbitrum BoLD enabled can use `nitro-contracts 3.x`. This requirement means that if your chain hasn't yet upgraded to use BoLD, only use `nitro-contracts 2.1.3` for your ArbOS 51 Dia upgrade.
 
+### Special note for chains posting data to [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623) enabled parent chains
+
+ArbOS 51 introduces the `gasFloorPerToken` parameter for chains posting to [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623) enabled parent chains. This setting enforces a minimum price for data-heavy transactions to ensure that the cost of posting calldata to the parent chain is fully recovered, even when execution gas is low. \
+Refer to [gas floor per token guide](/launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools#gas-floor-per-token) for detailed instructions on how to configure this value via the `ArbOwner` precompile.
+
 ### Reference links for ArbOS 51 Dia
 
 - [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/13-arbos-upgrade.mdx)
