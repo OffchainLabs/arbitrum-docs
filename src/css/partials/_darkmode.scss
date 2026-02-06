@@ -215,6 +215,34 @@
   }
 
   // ========================================
+  // Tooltips (light-border theme override)
+  // ========================================
+  .tippy-box[data-theme~='light-border'] {
+    background-color: var(--arbitrum-muted) !important;
+    color: var(--arbitrum-text) !important;
+    border-color: var(--arbitrum-border) !important;
+
+    .tippy-content {
+      a {
+        color: var(--arbitrum-color-primary);
+      }
+    }
+
+    > .tippy-arrow::after {
+      border-top-color: var(--arbitrum-muted) !important;
+      border-bottom-color: var(--arbitrum-muted) !important;
+    }
+
+    &[data-placement^='top'] > .tippy-arrow::after {
+      border-top-color: var(--arbitrum-muted) !important;
+    }
+
+    &[data-placement^='bottom'] > .tippy-arrow::after {
+      border-bottom-color: var(--arbitrum-muted) !important;
+    }
+  }
+
+  // ========================================
   // Sidebar
   // ========================================
   .theme-doc-sidebar-container {

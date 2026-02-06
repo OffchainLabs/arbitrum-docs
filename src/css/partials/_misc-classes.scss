@@ -84,6 +84,17 @@ pre[class*='language-'] {
   font-size: 13px;
   font-family: var(--arbitrum-font-family);
   box-shadow: var(--shadow-lg);
+  background-color: var(--arbitrum-popover);
+  color: var(--arbitrum-popover-foreground);
+  border: 1px solid var(--arbitrum-border);
+
+  .tippy-arrow {
+    color: var(--arbitrum-popover);
+  }
+}
+
+.tippy-content p:first-child {
+  margin-top: 0;
 }
 
 .tippy-content p:last-child {
@@ -117,6 +128,7 @@ pre[class*='language-'] {
 }
 
 .navbar__link {
+  font-weight: 500;
   transition: color var(--arbitrum-transition-fast);
 
   &:hover {
