@@ -1,0 +1,305 @@
+---
+id: debugging-tx
+title: 'How to debug Stylus transactions'
+sidebar_label: 'Debug transactions'
+description: 'Learn how to debug Stylus transactions using cargo-stylus replay, trace, and usertrace commands, as well as the StylusDB debugger for advanced multi-contract debugging.'
+user_story: 'As a Stylus developer, I want to debug my smart contract transactions so that I can identify and fix issues in my contract logic.'
+content_type: how-to
+author: mahsamoosavi
+sme: mahsamoosavi
+sidebar_position: 2
+displayed_sidebar: buildStylusSidebar
+---
+
+Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by providing multiple tools for replaying, tracing, and interactively debugging <a data-quicklook-from="stylus">Stylus</a> transactions. These tools enable you to set breakpoints, inspect state changes, and trace execution flow step-by-step.
+
+## Overview
+
+Cargo Stylus provides several debugging capabilities:
+
+1. **Trace transactions** (`cargo stylus trace`): Perform trace calls against Stylus transactions using `debug_traceTransaction` RPC. This provides low-level function call data with <a data-quicklook-from="ink">Ink</a> consumption metrics.
+
+2. **User function tracing** (`cargo stylus usertrace`): Generate human-readable function call trees showing your contract's execution flow without needing a full debugger session.
+
+3. **Interactive debugging** (`cargo stylus replay`): Replay and debug <a data-quicklook-from="transaction">Transaction</a> execution using GDB, LLDB, or StylusDB. Set breakpoints, inspect variables, and step through code line by line.
+
+4. **Multi-contract debugging**: Debug transactions that span multiple Stylus contracts simultaneously using StylusDB.
+
+## Requirements
+
+- **Rust** (version 1.77 or higher)
+- **cargo-stylus** crate
+- **Debugger**: One of the following:
+  - **GDB** (Linux)
+  - **LLDB** (macOS)
+  - **StylusDB** (macOS/Linux) - recommended for advanced debugging
+- **[Cast](https://book.getfoundry.sh/cast/)** (an Ethereum CLI tool)
+- **[Arbitrum RPC provider](#rpc-endpoint-compatibility)** with tracing endpoints enabled or a [local Stylus dev node](/run-arbitrum-node/run-nitro-dev-node)
+
+## Installation and setup
+
+### Install cargo-stylus
+
+```shell
+cargo install cargo-stylus
+```
+
+### Install a debugger
+
+**Linux (GDB):**
+
+```shell
+sudo apt-get install gdb
+```
+
+**macOS (LLDB):**
+
+```shell
+xcode-select --install
+```
+
+### Install StylusDB (optional, recommended)
+
+StylusDB is a modern LLDB-based debugger built specifically for Stylus contracts. It provides enhanced features like multi-contract debugging, contract-specific breakpoints, and pretty-print formatting for Stylus types.
+
+**Option 1: Pre-built binaries (easiest)**
+
+Download platform-specific installers from the [StylusDB releases page](https://github.com/walnuthq/stylusdb/releases).
+
+**Option 2: Build from source**
+
+```shell
+git clone https://github.com/walnuthq/stylusdb.git
+cd stylusdb && ./build.sh
+```
+
+StylusDB also requires Python 3 with the colorama package for trace visualization:
+
+```shell
+python3 -m venv myvenv
+source ./myvenv/bin/activate
+pip3 install colorama
+```
+
+## Deploy and send a transaction
+
+For this guide, we demonstrate debugging using the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) smart contract. The `increment()` method in `src/lib.rs` looks like this:
+
+```rust
+#[external]
+impl Counter {
+    // ...
+    /// Increments number and updates its value in storage.
+    pub fn increment(&mut self) {
+        let number = self.number.get();
+        self.set_number(number + U256::from(1));
+    }
+    // ...
+}
+```
+
+### Set environment variables
+
+Configure your RPC endpoint (must have **tracing enabled**) and private key:
+
+```shell
+export RPC_URL=...
+export PRIV_KEY=...
+```
+
+### Deploy your contract
+
+```shell
+cargo stylus deploy --private-key=$PRIV_KEY --endpoint=$RPC_URL
+```
+
+You should see output similar to:
+
+```shell
+contract size: 4.0 KB
+wasm size: 12.1 KB
+contract size: 4.0 KB
+deployed code at address: 0x2c8d8a1229252b07e73b35774ad91c0b973ecf71
+wasm already activated!
+```
+
+### Send a transaction
+
+Set the deployed contract address and send a transaction:
+
+```shell
+export ADDR=0x2c8d8a1229252b07e73b35774ad91c0b973ecf71
+cast send --rpc-url=$RPC_URL --private-key=$PRIV_KEY $ADDR "increment()"
+```
+
+Save the transaction hash for debugging:
+
+```shell
+export TX_HASH=0x18b241841fa0a59e02d3c6d693750ff0080ad792204aac7e5d4ce9e20c466835
+```
+
+## Trace a transaction
+
+### Basic trace (`cargo stylus trace`)
+
+The `trace` command calls `debug_traceTransaction` to get low-level execution data with ink consumption metrics:
+
+```shell
+cargo stylus trace --tx=$TX_HASH --endpoint=$RPC_URL --use-native-tracer
+```
+
+**Options:**
+
+| Flag                        | Description                                                         |
+| --------------------------- | ------------------------------------------------------------------- |
+| `-e, --endpoint <ENDPOINT>` | RPC endpoint (default: `http://localhost:8547`)                     |
+| `-t, --tx <TX>`             | Transaction hash to trace                                           |
+| `-p, --project <PROJECT>`   | Project path (default: `.`)                                         |
+| `--use-native-tracer`       | Use native Stylus tracer instead of JavaScript tracer (recommended) |
+
+This produces a JSON trace showing functions called and [ink](/stylus/concepts/gas-metering#ink-and-gas) consumption:
+
+```json
+[{"args":[0,0,0,4],"endInk":846200000,"name":"user_entrypoint","outs":[],"startInk":846200000},{"args":[],"endInk":846167558,"name":"msg_reentrant","outs":[0,0,0,0],"startInk":846175958},...]
+```
+
+### User function tracing (`cargo stylus usertrace`)
+
+The `usertrace` command generates human-readable function call trees that show your contract's execution flow:
+
+```shell
+cargo stylus usertrace --tx=$TX_HASH --endpoint=$RPC_URL
+```
+
+**Options for usertrace:**
+
+| Flag                                    | Description                           |
+| --------------------------------------- | ------------------------------------- |
+| `--verbose-usertrace`                   | Include SDK calls in the trace output |
+| `--trace-external-usertrace="std,core"` | Include calls from external crates    |
+
+**Example with SDK calls:**
+
+```shell
+cargo stylus usertrace --tx=$TX_HASH --endpoint=$RPC_URL --verbose-usertrace
+```
+
+The trace output is saved to `/tmp/lldb_function_trace.json`.
+
+## Interactive debugging
+
+### Replay with GDB or LLDB
+
+The `replay` command allows you to debug transaction execution interactively:
+
+```shell
+cargo stylus replay --tx=$TX_HASH --endpoint=$RPC_URL --use-native-tracer
+```
+
+:::note
+The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See [RPC endpoint compatibility](#rpc-endpoint-compatibility) for details.
+:::
+
+The debugger loads and sets a breakpoint at the `user_entrypoint` function:
+
+```shell
+Thread 1 "cargo-stylus" hit Breakpoint 1, stylus_hello_world::user_entrypoint (len=4) at src/lib.rs:38
+38      #[entrypoint]
+(gdb)
+```
+
+**Set a breakpoint at the increment method:**
+
+```shell
+(gdb) b stylus_hello_world::Counter::increment
+Breakpoint 2 at 0x7ffff7e4ee33: file src/lib.rs, line 69.
+```
+
+**Continue execution:**
+
+```shell
+(gdb) c
+```
+
+**Inspect variables when the breakpoint is hit:**
+
+```shell
+Thread 1 "cargo-stylus" hit Breakpoint 2, stylus_hello_world::Counter::increment (self=0x7fffffff9ae8) at src/lib.rs:69
+69          let number = self.number.get();
+(gdb) p number
+```
+
+For LLDB command equivalents, see the [LLDB to GDB command map](https://lldb.llvm.org/use/map.html).
+
+### Replay with StylusDB
+
+StylusDB provides enhanced debugging capabilities including multi-contract support and contract-specific breakpoints:
+
+```shell
+cargo stylus replay --debugger stylusdb --tx=$TX_HASH --endpoint=$RPC_URL
+```
+
+#### StylusDB contract management commands
+
+| Command                                           | Description                                        |
+| ------------------------------------------------- | -------------------------------------------------- |
+| `stylus-contract add <ADDRESS> <LIBRARY_PATH>`    | Register a contract for debugging                  |
+| `stylus-contract list`                            | View registered contracts                          |
+| `stylus-contract context <ADDRESS>`               | Switch debugging context to a specific contract    |
+| `stylus-contract breakpoint <ADDRESS> <FUNCTION>` | Set a breakpoint on a specific contract's function |
+| `stylus-contract stack`                           | Display the current call stack                     |
+
+#### Standard LLDB commands in StylusDB
+
+| Command        | Description           |
+| -------------- | --------------------- |
+| `c`            | Continue execution    |
+| `n`            | Step over (next line) |
+| `s`            | Step into function    |
+| `p <variable>` | Print variable value  |
+| `bt`           | Show backtrace        |
+| `b <function>` | Set breakpoint        |
+
+## Multi-contract debugging
+
+For transactions that involve multiple Stylus contracts, use StylusDB with the `--contracts` flag:
+
+```shell
+cargo stylus replay --debugger stylusdb --tx=$TX_HASH \
+  --contracts 0xADDRESS1:/path/to/contract1,0xADDRESS2:/path/to/contract2 \
+  --endpoint=$RPC_URL
+```
+
+The format is `ADDRESS:PATH` pairs separated by commas, where:
+
+- `ADDRESS` is the deployed contract address
+- `PATH` is the path to the contract's source directory
+
+### Handling Solidity contracts
+
+If your transaction interacts with both Stylus and Solidity contracts, mark the Solidity addresses with the `--addr-solidity` flag. The debugger displays contract addresses and function selectors for Solidity calls but cannot provide source-level debugging for Solidity code:
+
+```shell
+cargo stylus replay --debugger stylusdb --tx=$TX_HASH \
+  --contracts 0xSTYLUS_ADDR:/path/to/stylus/contract \
+  --addr-solidity 0xSOLIDITY_ADDR \
+  --endpoint=$RPC_URL
+```
+
+## RPC endpoint compatibility
+
+Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that supports `debug_traceTransaction`.
+
+| Tracer type    | Flag                  | Provider support                            |
+| -------------- | --------------------- | ------------------------------------------- |
+| `jsTracer`     | (default)             | Limited - most providers don't support this |
+| `stylusTracer` | `--use-native-tracer` | Broader support from RPC providers          |
+
+Both tracers are available on local nodes, but `stylusTracer` is more efficient. See the [list of RPC providers](/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support information.
+
+## Additional resources
+
+- [StylusDB GitHub repository](https://github.com/walnuthq/stylusdb)
+- [Stylus SDK debugger documentation](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/cargo-stylus/docs/StylusDebugger.md)
+- [GDB documentation](https://sourceware.org/gdb/)
+- [LLDB documentation](https://lldb.llvm.org/)
