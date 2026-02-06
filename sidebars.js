@@ -726,6 +726,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
               label: 'Run a high availability sequencer',
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
+              label: 'Run a batch poster',
+            },
           ],
         },
         {
