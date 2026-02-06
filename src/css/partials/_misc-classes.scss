@@ -128,6 +128,7 @@ pre[class*='language-'] {
 }
 
 .navbar__link {
+  font-weight: 500;
   transition: color var(--arbitrum-transition-fast);
 
   &:hover {
