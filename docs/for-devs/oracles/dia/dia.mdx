@@ -1,16 +1,16 @@
 ---
 id: 'dia'
 title: 'DIA'
-description: 'DIA oracle integration for Arbitrum'
+description: 'Learn how to integrate DIA oracles into your Arbitrum app'
 user_story: As an Arbitrum developer, I want to learn how to use DIA oracles in my app.
 content_type: how-to
 ---
 
-[DIA](https://www.diadata.org/) is a trustless oracle network delivering verifiable, customizable data feeds for any asset. DIA sources raw data directly from primary markets and computes it onchain via its proprietary rollup, ensuring full transparency and data integrity.
+[DIA](https://www.diadata.org/) is a cross-chain, trustless oracle network delivering verifiable price feeds for Arbitrum. DIA sources raw trade data directly from primary markets and computes it onchain, ensuring complete transparency and data integrity.
 
 ### Querying the price of `ARB` through DIA
 
-Call the getValue(string memory key) function on the oracle contract with the Query Symbol (e.g., "ARB/USD"). The function returns the asset price with 8 decimal precision and the timestamp of the last update.
+Call the getValue(string memory key) function on the oracle contract with the Query Symbol (e.g., "ARB/USD"). The function returns the asset price with 8 decimal precision and the timestamp of the last update. We'll use this oracle contract on the Arbitrum Sepolia testnet: `0x927ccBd9107bD63F8279Af83b96E7DAF924b9a7E`.
 
 Solidity Example:
 
@@ -29,16 +29,16 @@ contract DIAOracleSample {
     * Oracle Address: "0x..."
     * Network: Arbitrum Sepolia
     */
-    address constant diaOracle = "0x...";
+    address constant diaOracle = "0x927ccBd9107bD63F8279Af83b96E7DAF924b9a7E";
 
     function getPrice(string memory key)
     external
     view
     returns (
         uint128 latestPrice,
-        uint128 timestampOflatestPrice
+        uint128 timestampOfLatestPrice
     ) {
-        (latestPrice, timestampOflatestPrice) =
+        (latestPrice, timestampOfLatestPrice) =
                  IDIAOracleV2(diaOracle).getValue(key);
     }
 }
