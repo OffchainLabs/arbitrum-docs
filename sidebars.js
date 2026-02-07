@@ -1728,7 +1728,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/using-inheritance',
+              id: 'stylus/how-tos/trait-based-composition',
               label: 'Composition, trait-based routing',
             },
             {
