@@ -1,3 +1,8 @@
+---
+id: sdk-intro
+title: Introduction
+---
+
 # Introduction
 
 The Arbitrum SDK is a powerful TypeScript library that streamlines interactions with Arbitrum networks. It offers robust tools for bridging tokens and passing messages between networks through an intuitive interface to the underlying smart contracts.
@@ -58,19 +63,19 @@ All asset bridgers have the following methods which accept different parameters 
 #### Example ETH Deposit to Arbitrum One
 
 ```ts
-import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
+import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk'
 
 // get the `@arbitrum/sdk` ArbitrumNetwork object using the chain id of the Arbitrum One chain
-const childNetwork = await getArbitrumNetwork(42161);
-const ethBridger = new EthBridger(childNetwork);
+const childNetwork = await getArbitrumNetwork(42161)
+const ethBridger = new EthBridger(childNetwork)
 
 const ethDepositTxResponse = await ethBridger.deposit({
   amount: utils.parseEther('23'),
   parentSigner, // an ethers v5 signer connected to mainnet ethereum
   childProvider, // an ethers v5 provider connected to Arbitrum One
-});
+})
 
-const ethDepositTxReceipt = await ethDepositTxResponse.wait();
+const ethDepositTxReceipt = await ethDepositTxResponse.wait()
 ```
 
 [Learn more in the Eth Deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
@@ -78,18 +83,18 @@ const ethDepositTxReceipt = await ethDepositTxResponse.wait();
 #### Example ETH Withdrawal from Arbitrum One
 
 ```ts
-import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
+import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk'
 
 // get the `@arbitrum/sdk` ArbitrumNetwork object using the chain id of the Arbitrum One chain
-const childNetwork = await getArbitrumNetwork(42161);
-const ethBridger = new EthBridger(childNetwork);
+const childNetwork = await getArbitrumNetwork(42161)
+const ethBridger = new EthBridger(childNetwork)
 
 const withdrawTx = await ethBridger.withdraw({
   amount: utils.parseEther('23'),
   childSigner, // an ethers v5 signer connected to Arbitrum One
   destinationAddress: childWallet.address,
-});
-const withdrawRec = await withdrawTx.wait();
+})
+const withdrawRec = await withdrawTx.wait()
 ```
 
 [Learn more in the Eth Withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
@@ -103,12 +108,12 @@ Arbitrum SDK comes pre-configured for Mainnet and Sepolia, and their Arbitrum co
 To interact with a custom [`ArbitrumNetwork`](./dataEntities/networks), you can register it using the [`registerCustomArbitrumNetwork`](./dataEntities/networks.md#registercustomarbitrumnetwork) function.
 
 ```ts
-import { registerCustomArbitrumNetwork } from '@arbitrum/sdk';
+import { registerCustomArbitrumNetwork } from '@arbitrum/sdk'
 
 registerCustomArbitrumNetwork({
   chainID: 123456,
   name: 'Custom Arbitrum Network',
-});
+})
 ```
 
 ### Cross chain messages
@@ -118,24 +123,27 @@ When assets are moved by the Parent and Child cross chain messages are sent. The
 #### Redeem a Parent-to-Child Message
 
 ```ts
-import { ParentTransactionReceipt, ParentToChildMessageStatus } from '@arbitrum/sdk';
+import {
+  ParentTransactionReceipt,
+  ParentToChildMessageStatus,
+} from '@arbitrum/sdk'
 
 const parentTxnReceipt = new ParentTransactionReceipt(
-  txnReceipt, // ethers-js TransactionReceipt of an ethereum tx that triggered a Parent-to-Child message (say depositing a token via a bridge)
-);
+  txnReceipt // ethers-js TransactionReceipt of an ethereum tx that triggered a Parent-to-Child message (say depositing a token via a bridge)
+)
 
 const parentToChildMessage = (
   await parentTxnReceipt.getParentToChildMessages(
-    childSigner, // connected ethers-js Wallet
+    childSigner // connected ethers-js Wallet
   )
-)[0];
+)[0]
 
-const res = await parentToChildMessage.waitForStatus();
+const res = await parentToChildMessage.waitForStatus()
 
 if (res.status === ParentToChildMessageStatus.Child) {
   // Message wasn't auto-redeemed; redeem it now:
-  const response = await parentToChildMessage.redeem();
-  const receipt = await response.wait();
+  const response = await parentToChildMessage.redeem()
+  const receipt = await response.wait()
 } else if (res.status === ParentToChildMessageStatus.REDEEMED) {
   // Message successfully redeemed
 }
@@ -150,24 +158,26 @@ As part of normal operation, the Arbitrum sequencer will send messages into the 
 Here's how you can use the inbox tools to withdraw ether from Arbitrum One without waiting for the sequencer:
 
 ```ts
-const childNetwork = await getArbitrumNetwork(await childWallet.getChainId());
+const childNetwork = await getArbitrumNetwork(await childWallet.getChainId())
 
-const inboxSdk = new InboxTools(parentWallet, childNetwork);
-const arbSys = ArbSys__factory.connect(ARB_SYS_ADDRESS, childProvider);
-const arbSysIface = arbSys.interface;
-const childCalldata = arbSysIface.encodeFunctionData('withdrawEth', [parentWallet.address]);
+const inboxSdk = new InboxTools(parentWallet, childNetwork)
+const arbSys = ArbSys__factory.connect(ARB_SYS_ADDRESS, childProvider)
+const arbSysIface = arbSys.interface
+const childCalldata = arbSysIface.encodeFunctionData('withdrawEth', [
+  parentWallet.address,
+])
 
 const txChildRequest = {
   data: childCalldata,
   to: ARB_SYS_ADDRESS,
   value: 1,
-};
+}
 
-const childSignedTx = await inboxSdk.signChildTx(txChildRequest, childWallet);
-const childTxhash = ethers.utils.parseTransaction(childSignedTx).hash;
-const resultsParent = await inboxSdk.sendChildSignedTx(childSignedTx);
+const childSignedTx = await inboxSdk.signChildTx(txChildRequest, childWallet)
+const childTxhash = ethers.utils.parseTransaction(childSignedTx).hash
+const resultsParent = await inboxSdk.sendChildSignedTx(childSignedTx)
 
-const inboxRec = await resultsParent.wait();
+const inboxRec = await resultsParent.wait()
 ```
 
 [Learn more in the Delayed Inbox tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/delayedInbox-l2msg).
