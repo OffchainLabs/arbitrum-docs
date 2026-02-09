@@ -1,45 +1,47 @@
-// Apply table overflow handling to all screen sizes to prevent page overflow
+// ========================================
+// Responsive Styles
+// Typography responsive is in _typography.scss
+// ========================================
+
+// Table overflow handling - constrain tables to content area
 .markdown {
-  // Wrapper divs around tables (created by Docusaurus or MDX partials)
+  // Wrapper divs around tables
   > div:has(> table),
   div:has(> table) {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    width: 100%;
     max-width: 100%;
   }
 
-  // Direct table children
+  // Direct tables (no wrapper)
   > table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    width: 100%;
-    max-width: 100%;
   }
 
-  // Ensure tables inside wrappers render properly
+  // All tables
   table {
     display: table;
-    min-width: 100%;
   }
 }
 
 @media (max-width: 736px) {
-  .markdown h1:first-child {
-    font-size: 24px;
+  // Sidebar adjustments
+  .theme-doc-sidebar-container {
+    font-size: 13px;
   }
 
-  .markdown > h3,
-  .markdown > .faq-question > h3 {
-    font-size: 18px;
-    margin-top: 35px;
-    margin-bottom: 10px;
+  // Navbar adjustments
+  .navbar__item {
+    font-size: 0.875rem;
   }
+}
 
-  // Additional mobile-specific table styling
-  .markdown table {
-    white-space: nowrap;
+@media (max-width: 996px) {
+  // Tablet breakpoint adjustments
+  main > .container {
+    padding-top: 50px !important;
   }
 }
