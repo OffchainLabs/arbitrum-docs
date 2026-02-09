@@ -331,6 +331,16 @@ const sidebars = {
           ],
         },
         {
+          type: 'doc',
+          id: 'launch-arbitrum-chain/run-l3-rollup-from-scratch',
+          label: 'Run an L3 rollup from scratch',
+        },
+        {
+          type: 'doc',
+          id: 'launch-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
+          label: 'Run L3 rollup infrastructure (product-level testnet)',
+        },
+        {
           type: 'category',
           label: 'Configure your chain',
           collapsed: true,
