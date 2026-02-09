@@ -35,6 +35,6 @@ For a complete, detailed set of instructions on setting up DAC, DAS, and generat
 
 ### 3. Alternative data availability (Alt-DA)
 
-In this mode, data is posted to an external modular DA network, such as Celestia, using blobs and Data Availability Sampling. Integration happens through a sidecar server and onchain commmitments, such as [Blobstream](https://docs.celestia.org/learn/blobstream/) for verification.
+In this mode, data is posted to an external modular DA network, such as Celestia, using blobs and data availability sampling. Integration happens through a sidecar server and onchain commitments, such as [Blobstream](https://docs.celestia.org/learn/blobstream/) for verification.
 
 - **Config**: use a modified Nitro build that includes [Celestia integration](https://docs.celestia.org/build/stacks/nitro-das-server/), such as the celestia-server sidecar. Set the DA provider in your node flags and adjust your preferences, for example, using Celestia as the main provider with a fallback to AnyTrust or Ethereum. Other DA options, such as [EigenDA](https://github.com/Layr-Labs/nitro) or [Avail](https://docs.availproject.org/da/build-with-avail/deploy-rollup-on-avail/Optimium/arbitrum-nitro/overview), can be added in a similar way.
