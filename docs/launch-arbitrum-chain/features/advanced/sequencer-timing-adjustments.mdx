@@ -23,7 +23,7 @@ When launching an Arbitrum chain, the Sequencer plays a central role in ordering
 
 ## 3. Faster deposits/bridging (for L3 chains)
 
-- Parameters like `--node.delayed-sequencer.finalize-distance` (number of parent chain confirmations to wait before releasing delayed inbox messages, e.g., deposits) and related finality flags.
+- Parameters like `--node.delayed-sequencer.finalize-distance` (number of parent chain confirmations to wait before releasing delayed inbox messages, e.g., deposits).
 - **Why adjust?** Defaults wait for substantial parent chain finality (tens of minutes) for safety. Reducing this (e.g., to 1) enables near-instant deposits (~1 minute), improving UX for cross-chain interactions. Trade-off: Slight re-org risk if the parent chain reorganizes.
 
 ## 4. Enable/configure advanced features such as Timeboost
