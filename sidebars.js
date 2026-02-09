@@ -978,6 +978,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'arbitrum-bridge/bridge-transaction-traceability',
+          label: 'Tracing bridge transactions',
+        },
+        {
+          type: 'doc',
           id: 'arbitrum-bridge/troubleshooting',
           label: 'Troubleshooting',
         },
