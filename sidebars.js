@@ -1188,7 +1188,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'build-decentralized-apps/quickstart-create-a--token',
+          id: 'build-decentralized-apps/quickstart-create-a-token',
           label: 'Create a token',
         },
         {
