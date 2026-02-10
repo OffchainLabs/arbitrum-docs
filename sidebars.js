@@ -1188,8 +1188,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'build-decentralized-apps/quickstart-launch-token',
-          label: 'Launch a token',
+          id: 'build-decentralized-apps/quickstart-create-a--token',
+          label: 'Create a token',
         },
         {
           type: 'doc',
