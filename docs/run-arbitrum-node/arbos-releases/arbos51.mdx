@@ -11,19 +11,7 @@ content_type: release note
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
-<VanillaAdmonition type="note">
-
-<a data-quicklook-from="arbos">ArbOS</a> 51 Dia is still pre-release. This document may change.
-
-</VanillaAdmonition>
-
-This page is intended for all Arbitrum node operators and Arbitrum chain owners chains. This page summarizes the changes brought by ArbOS 51 "Dia", and what you should do to ensure a seamless upgrade.
-
-<VanillaAdmonition type="warning" title="Action Required">
-
-For operators of Arbitrum chains that settle on a Fusaka-enabled <a data-quicklook-from="parent-chain">Parent chain</a>: ensure that your Nitro node version is upgraded and consensus layer client is configured as per the [Fusaka upgrade notice](../../notices/fusaka-upgrade-notice.mdx).
-
-</VanillaAdmonition>
+This page is intended for all Arbitrum node operators and Arbitrum chain owners, it summarizes the changes brought by <a data-quicklook-from="arbos">ArbOS</a> 51 "Dia", and what you should do to ensure a seamless upgrade.
 
 The minimum Nitro version that supports ArbOS 51 "Dia" is [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.3-8bc5554`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators. For Arbitrum One and Nova, an ArbOS upgrade requires a governance vote to activate; the vote for ArbOS 51 was [passed on December 18, 2025](https://www.tally.xyz/gov/arbitrum/proposal/53154361738756237993090798888616593723057470462495169047773178676976253908001?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9) and was [activated on January 8, 2026](../../notices/arbos51-upgrade-notice.mdx).
 
@@ -39,7 +27,7 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
   - If your chain isn't ready to activate <a data-quicklook-from="bold">BoLD</a>, use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher can't be used without activating BoLD.
   - If you want to enable [Native Token Mint/Burn capabilities](#native-token-mint-and-burn) for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
 - WASM module root: `0x8a7513bf7bb3e3db04b0d982d0e973bcf57bf8b88aef7c6d03dba3a81a56a499`
-- If the Arbitrum chain posts blobs to a Fusaka-enabled parent chain, ensure that the consensus layer client is configured correctly as per the [Fusaka upgrade notice](../../notices/fusaka-upgrade-notice.mdx).
+- If the Arbitrum chain posts blobs to a Fusaka-enabled <a data-quicklook-from="parent-chain">Parent chain</a>, ensure that the consensus layer client is configured correctly as per the [Fusaka upgrade notice](../../notices/fusaka-upgrade-notice.mdx).
 
 ### High-level description of ArbOS 51 changes
 
@@ -87,16 +75,6 @@ The new algorithm is more efficient because the sequencer doesn't need to keep s
 
 This change doesn't affect the `GasTarget`, and therefore doesn't affect how much overall gas per second the chain will use - only how transactions using that gas could be divided between different blocks.
 
-#### A few bug fixes
-
-- ArbOS didn't get updated for parent chain calldata price increase
-  - This change standardizes the calculation of gas units for compressed <a data-quicklook-from="batch">Batch</a> calldata across the codebase by replacing hard-coded values with a method call (tokenGasUnits).
-- `EIP-7702` precompile delegation behavior divergence
-  - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 51 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
-- ARM and x86 divergence
-  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
-  - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
-
 #### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
 
 As part of our strategy for scaling Arbitrum technology, the ArbOS 51 release includes a slight change to improve the pricing algorithm for Arbitrum One and Nova. This improvement is aimed at reducing the severity, frequency, and duration of high L2 gas prices during periods of elevated demand on the network. Concretely, the changes are to:
@@ -125,6 +103,16 @@ To read more about this feature, see the [Native Token Mint/Burn enablement guid
 If you want to enable Native Token Mint/Burn capabilities for your chain, you must use [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher.
 
 </VanillaAdmonition>
+
+#### A few bug fixes
+
+- ArbOS didn't get updated for parent chain calldata price increase
+  - This change standardizes the calculation of gas units for compressed <a data-quicklook-from="batch">Batch</a> calldata across the codebase by replacing hard-coded values with a method call (tokenGasUnits).
+- `EIP-7702` precompile delegation behavior divergence
+  - Previously, calls to precompiles could execute an INVALID opcode instead of succeeding with no execution. ArbOS 51 Dia will update code to align with `EIP-7702` spec to treat precompile code as empty during delegation.
+- ARM and x86 divergence
+  - This change adds a map to store transaction hash along with its gas used to bypass transaction execution for a problematic transaction execution which diverged between ARM and x86 architectures. This was added in to hardcode one transaction that caused the divergence on Arbitrum Sepolia, as disclosed in the [security council emergency Action report](https://forum.arbitrum.foundation/t/security-council-emergency-action-10-13-2025/30093).
+  - The default WASM Stack Depth value in ArbOS is now set to 22,000, preventing new chains from encountering the same divergence issue.
 
 ### Fusaka EIPs that aren't proposed to be in ArbOS 51 Dia
 
