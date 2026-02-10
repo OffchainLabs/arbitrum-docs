@@ -95,6 +95,10 @@
     "title": "Batch",
     "text": "<p>A group of Arbitrum transactions posted in a single transaction on the <a href=\"/intro/glossary#underlying-chain\">Underlying Chain</a> into the <a href=\"/intro/glossary#sequencer-inbox\">Sequencer Inbox</a> by the <a href=\"/intro/glossary#sequencer\">Sequencer</a>.</p>\n"
   },
+  "batch-poster": {
+    "title": "Batch Poster",
+    "text": "<p>The batch poster is an Externally Owned Account (EOA) controlled by the Sequencer. It is responsible for submitting the compressed transaction batches to the Sequencer Inbox contract on the parent chain.</p>\n"
+  },
   "blockchain": {
     "title": "Blockchain",
     "text": "<p>A distributed digital ledger that is used to record transactions and store data in a secure, transparent, and tamper-resistant way, notably in cryptocurrency protocols.</p>\n"
