@@ -378,6 +378,11 @@ const sidebars = {
                   collapsed: true,
                   items: [
                     {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability',
+                      label: `Config data availability`,
+                    },
+                    {
                       type: 'category',
                       label: 'Data availability committee',
                       collapsed: true,
@@ -980,6 +985,11 @@ const sidebars = {
           type: 'doc',
           id: 'arbitrum-bridge/embedded-bridge-widget',
           label: 'Embedded bridge widget',
+        },
+        {
+          type: 'doc',
+          id: 'arbitrum-bridge/bridge-transaction-traceability',
+          label: 'Tracing bridge transactions',
         },
         {
           type: 'doc',
