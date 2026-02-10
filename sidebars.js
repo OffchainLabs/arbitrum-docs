@@ -373,6 +373,11 @@ const sidebars = {
                   collapsed: true,
                   items: [
                     {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability',
+                      label: `Config data availability`,
+                    },
+                    {
                       type: 'category',
                       label: 'Data availability committee',
                       collapsed: true,
