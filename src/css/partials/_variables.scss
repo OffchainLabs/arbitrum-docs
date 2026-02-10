@@ -1,38 +1,204 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&&display=swap');
+// Aeonik font (from arbitrum.io)
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Aeonik Fono';
+  src: url('/fonts/AeonikFono-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
-  --arbitrum-font-size: 14px;
-  --arbitrum-border-radius-sm: 5px;
-  --arbitrum-border-radius: 10px;
-  --arbitrum-font-family: 'Roboto', sans-serif;
-  --arbitrum-color-primary: #8594b4;
-  --arbitrum-background-opacity: rgba(0, 0, 0, 0.05);
-  --arbitrum-text: black;
-  --arbitrum-secondary-text: rgba(0, 0, 0, 0.5);
-  --arbitrum-primary-button-bg: black;
-  --arbitrum-primary-button-text: white;
-  --stylus-brand-color-dark: #b70458;
+  // ========================================
+  // Arbitrum Brand Colors
+  // ========================================
+  --arbitrum-navy: hsl(220, 80%, 13%);
+  --arbitrum-blue: hsl(211, 99%, 45%);
+  --arbitrum-blue-light: hsl(222, 100%, 59%);
+  --arbitrum-teal: hsl(188, 100%, 53%);
+  --arbitrum-teal-muted: hsl(170, 74%, 55%);
+
+  // Stylus Brand Colors
   --stylus-brand-color: #e3066e;
-  --ifm-color-primary: #007bdd;
-  --ifm-color-primary-dark: #295f78;
-  --ifm-color-primary-darker: #275771;
-  --ifm-color-primary-darkest: #20465d;
-  --ifm-color-primary-light: #337292;
-  --ifm-color-primary-lighter: #357899;
-  --ifm-color-primary-lightest: #3c85ad;
-  --ifm-color-content: #000;
-  --ifm-footer-link-color: black;
-  --ifm-link-color: #007bdd;
-  --ifm-code-font-size: 95%;
-  --ifm-global-radius: 2px;
-  --ifm-navbar-item-padding-horizontal: 0.6rem;
-  --ifm-heading-font-family: 'Roboto', sans-serif;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  --ifm-color-info-dark: #359aec;
-  --ifm-color-info-contrast-background: #f0f8ff;
-  --ifm-alert-padding-vertical: 1.5rem;
-  --ifm-alert-padding-horizontal: 1.5rem;
-  --tab-active-color: #3578e5;
-  --tab-active-color-hover: hsl(217, 58%, 36%);
-  --tab-gray: #ddd;
+  --stylus-brand-color-dark: #b70458;
+
+  // Gradients
+  --arbitrum-gradient-primary: linear-gradient(
+    135deg,
+    hsl(211, 99%, 45%) 0%,
+    hsl(188, 100%, 53%) 100%
+  );
+  --arbitrum-gradient-subtle: linear-gradient(
+    135deg,
+    hsl(210, 40%, 98%) 0%,
+    hsl(210, 50%, 96%) 100%
+  );
+  --stylus-gradient: linear-gradient(
+    135deg,
+    var(--stylus-brand-color) 0%,
+    var(--stylus-brand-color-dark) 100%
+  );
+
+  // ========================================
+  // Arbitrum Design Tokens (Light)
+  // ========================================
+  --arbitrum-background: hsl(0, 0%, 100%);
+  --arbitrum-text: hsl(222, 47%, 11%);
+  --arbitrum-muted: hsl(210, 40%, 96%);
+  --arbitrum-secondary-text: hsl(215, 16%, 47%);
+  --arbitrum-popover: hsl(0, 0%, 100%);
+  --arbitrum-popover-foreground: hsl(222, 47%, 11%);
+  --arbitrum-card: hsl(0, 0%, 100%);
+  --arbitrum-card-foreground: hsl(222, 47%, 11%);
+  --arbitrum-border: hsl(214, 32%, 91%);
+  --arbitrum-color-primary: hsl(211, 99%, 45%);
+  --arbitrum-primary-foreground: hsl(0, 0%, 100%);
+  --arbitrum-secondary: hsl(210, 40%, 96%);
+  --arbitrum-secondary-foreground: hsl(222, 47%, 11%);
+  --arbitrum-accent: hsl(210, 40%, 96%);
+  --arbitrum-accent-foreground: hsl(222, 47%, 11%);
+  --arbitrum-ring: hsl(211, 99%, 45%);
+  --arbitrum-overlay: hsla(222, 47%, 11%, 0.5);
+
+  // ========================================
+  // Core Design Tokens
+  // ========================================
+  --arbitrum-font-size: 16px;
+  --arbitrum-border-radius-sm: 0;
+  --arbitrum-border-radius: 0;
+  --arbitrum-font-family: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+    sans-serif;
+  --arbitrum-mono-font: 'Aeonik Fono', ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono',
+    Menlo, Monaco, Consolas, monospace;
+
+  // ========================================
+  // Infima/Docusaurus Overrides
+  // ========================================
+  --ifm-color-primary: hsl(211, 99%, 45%);
+  --ifm-color-primary-dark: hsl(211, 99%, 40%);
+  --ifm-color-primary-darker: hsl(211, 99%, 38%);
+  --ifm-color-primary-darkest: hsl(211, 99%, 31%);
+  --ifm-color-primary-light: hsl(211, 99%, 50%);
+  --ifm-color-primary-lighter: hsl(211, 99%, 55%);
+  --ifm-color-primary-lightest: hsl(211, 99%, 65%);
+  --ifm-background-color: var(--arbitrum-background);
+  --ifm-background-surface-color: var(--arbitrum-card);
+  --ifm-color-content: var(--arbitrum-text);
+  --ifm-color-content-secondary: var(--arbitrum-secondary-text);
+  --ifm-footer-background-color: var(--arbitrum-muted);
+  --ifm-footer-link-color: var(--arbitrum-text);
+  --ifm-link-color: var(--arbitrum-color-primary);
+  --ifm-link-hover-color: hsl(211, 99%, 35%);
+  --ifm-code-font-size: 90%;
+  --ifm-pre-padding: 1rem;
+  --ifm-global-radius: 0;
+  --ifm-navbar-item-padding-horizontal: 0.875rem;
+  --ifm-font-family-base: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+    sans-serif;
+  --ifm-heading-font-family: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+    sans-serif;
+  --ifm-font-family-monospace: 'Aeonik Fono', ui-monospace, 'SF Mono', 'Cascadia Code',
+    'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
+  --ifm-alert-font-family: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+    sans-serif;
+  --ifm-font-weight-semibold: 600;
+  --ifm-font-weight-bold: 700;
+  --ifm-line-height-base: 1.65;
+  --ifm-heading-line-height: 1.25;
+  --docusaurus-highlighted-code-line-bg: hsla(211, 99%, 45%, 0.1);
+
+  // ========================================
+  // Alert/Admonition Colors
+  // ========================================
+  --ifm-color-info: hsl(211, 99%, 45%);
+  --ifm-color-info-dark: hsl(211, 99%, 40%);
+  --ifm-color-info-contrast-background: hsla(211, 99%, 45%, 0.08);
+  --ifm-color-info-contrast-foreground: hsl(211, 99%, 30%);
+
+  --ifm-color-success: hsl(147, 72%, 35%);
+  --ifm-color-success-dark: hsl(147, 72%, 30%);
+  --ifm-color-success-contrast-background: hsla(147, 72%, 35%, 0.08);
+  --ifm-color-success-contrast-foreground: hsl(147, 72%, 25%);
+
+  --ifm-color-warning: hsl(38, 92%, 50%);
+  --ifm-color-warning-dark: hsl(38, 92%, 45%);
+  --ifm-color-warning-contrast-background: hsla(38, 92%, 50%, 0.1);
+  --ifm-color-warning-contrast-foreground: hsl(32, 81%, 29%);
+
+  --ifm-color-danger: hsl(0, 72%, 51%);
+  --ifm-color-danger-dark: hsl(0, 72%, 46%);
+  --ifm-color-danger-contrast-background: hsla(0, 72%, 51%, 0.08);
+  --ifm-color-danger-contrast-foreground: hsl(0, 72%, 35%);
+
+  --ifm-alert-padding-vertical: 1rem;
+  --ifm-alert-padding-horizontal: 1.25rem;
+  --ifm-alert-border-radius: 0;
+  --ifm-alert-border-left-width: 4px;
+
+  // ========================================
+  // Tabs
+  // ========================================
+  --tab-active-color: var(--arbitrum-color-primary);
+  --tab-active-color-hover: hsl(211, 99%, 40%);
+  --tab-gray: var(--arbitrum-border);
+
+  // ========================================
+  // Cards and Surfaces
+  // ========================================
+  --ifm-card-border-radius: 0;
+  --ifm-button-border-radius: 0;
+
+  // ========================================
+  // Code Blocks
+  // ========================================
+  --ifm-code-border-radius: 0;
+  --prism-background-color: var(--arbitrum-muted);
+  --arbitrum-diff-remove: hsla(0, 84%, 60%, 0.12);
+  --arbitrum-diff-remove-symbol: hsl(0, 84%, 60%);
+  --arbitrum-diff-add: hsla(142, 71%, 45%, 0.12);
+  --arbitrum-diff-add-symbol: hsl(142, 71%, 45%);
+
+  // ========================================
+  // Table of Contents
+  // ========================================
+  --ifm-toc-border-color: var(--arbitrum-border);
+  --ifm-toc-link-color: var(--arbitrum-secondary-text);
+
+  // ========================================
+  // Scrollbar
+  // ========================================
+  --arbitrum-scrollbar-thumb: hsl(214, 32%, 85%);
+  --arbitrum-scrollbar-track: transparent;
+
+  // ========================================
+  // Shadows
+  // ========================================
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 0 3px hsla(211, 99%, 45%, 0.15);
+
+  // ========================================
+  // Transitions & Animations
+  // ========================================
+  --arbitrum-transition-fast: 0.15s ease;
+  --arbitrum-transition-normal: 0.2s ease;
+  --arbitrum-transition-slow: 0.3s ease;
+  --arbitrum-animation-duration: 200ms;
+  --arbitrum-animation-timing: cubic-bezier(0.16, 1, 0.3, 1);
 }
