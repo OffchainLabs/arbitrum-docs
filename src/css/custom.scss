@@ -59,29 +59,26 @@ html body [class*='alert'] {
   }
 }
 
-// Remove all scrollbars from article content
+// Article content - let content-body handle overflow
 html body article,
 html body article .markdown,
 html body [class*='docItemCol'],
 html body [class*='docItemContainer'] {
-  overflow: visible;
   height: auto;
   max-height: none;
 }
 
-// Main containers - no overflow restrictions
+// Main containers
 html body .main-wrapper,
 html body [class*='docPage'],
 html body .container {
-  overflow: visible;
   max-width: 100%;
 }
 
-// Center main content with generous padding
+// Main content area
 html body [class*='docMainContainer'] {
   padding: 2rem 3rem;
   max-width: 100%;
-  overflow: visible;
 }
 
 // Content wrapper centering

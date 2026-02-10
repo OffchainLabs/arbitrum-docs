@@ -213,15 +213,33 @@ $child-sidebar-item-font-size: 14px;
     border-bottom: 1px solid var(--arbitrum-border);
   }
 
+  .navbar-sidebar__backdrop {
+    background: var(--arbitrum-overlay);
+  }
+
   .navbar-sidebar {
     background: var(--arbitrum-background);
+    border-right: 1px solid var(--arbitrum-border);
+    height: 100vh;
+    height: 100dvh;
 
     .navbar-sidebar__brand {
+      background: var(--arbitrum-background);
       border-bottom: 1px solid var(--arbitrum-border);
     }
 
     .navbar-sidebar__items {
+      padding: 0;
+    }
+
+    .navbar-sidebar__item.menu {
       padding: 1rem;
+      background: var(--arbitrum-background);
+    }
+
+    .theme-doc-sidebar-menu {
+      margin: 0;
+      padding-top: 0;
     }
   }
 }
