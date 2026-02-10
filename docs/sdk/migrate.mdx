@@ -28,16 +28,16 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 - If you need a full list of Arbitrum networks, you can use the new [`getArbitrumNetworks`](./dataEntities/networks#getarbitrumnetworks) function.
 - To list all of the children of a network, use the new [`getChildrenForNetwork`](./dataEntities/networks#getchildrenfornetwork) function.
 
-| v3 Name               | v4 Name                                                                                  |
-| --------------------- | ---------------------------------------------------------------------------------------- |
+| v3 Name               | v4 Name                                                                                            |
+| --------------------- | -------------------------------------------------------------------------------------------------- |
 | `L2Network`           | [`ArbitrumNetwork`](./dataEntities/networks#arbitrumnetwork)                             |
 | `getL2Network`        | [`getArbitrumNetwork`](./dataEntities/networks#getarbitrumnetwork)                       |
 | `l2Networks`          | [`getArbitrumNetworks`](./dataEntities/networks#getarbitrumnetworks)                     |
 | `addCustomNetwork`    | [`registerCustomArbitrumNetwork`](./dataEntities/networks#registercustomarbitrumnetwork) |
-| `Network`             | _removed_                                                                                |
-| `L1Network`           | _removed_                                                                                |
-| `getL1Network`        | _removed_                                                                                |
-| `getParentForNetwork` | _removed_                                                                                |
+| `Network`             | *removed*                                                                                          |
+| `L1Network`           | *removed*                                                                                          |
+| `getL1Network`        | *removed*                                                                                          |
+| `getParentForNetwork` | *removed*                                                                                          |
 
 #### `ArbitrumNetwork` type
 
@@ -47,13 +47,13 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 | --------------------- | --------------- |
 | `chainID`             | `chainId`       |
 | `partnerChainID`      | `parentChainId` |
-| `explorerUrl`         | _removed_       |
-| `isArbitrum`          | _removed_       |
-| `partnerChainIDs`     | _removed_       |
-| `nitroGenesisBlock`   | _removed_       |
-| `nitroGenesisL1Block` | _removed_       |
-| `depositTimeout`      | _removed_       |
-| `blockTime`           | _removed_       |
+| `explorerUrl`         | *removed*       |
+| `isArbitrum`          | *removed*       |
+| `partnerChainIDs`     | *removed*       |
+| `nitroGenesisBlock`   | *removed*       |
+| `nitroGenesisL1Block` | *removed*       |
+| `depositTimeout`      | *removed*       |
+| `blockTime`           | *removed*       |
 
 #### `TokenBridge` type
 
@@ -78,7 +78,7 @@ The `TokenBridge` type within the[`ArbitrumNetwork`](./dataEntities/networks#arb
 
 ### 3. Updates to `AssetBridger` and `Erc20Bridger` classes
 
-#### [`AssetBridger`](./assetBridger/assetBridger.md) Class Methods
+#### [`AssetBridger`](./assetBridger/assetBridger.md)  Class Methods
 
 The [`AssetBridger`](./assetBridger/assetBridger.md) class methods and properties have been renamed to reflect the new parent-child terminology.
 
@@ -88,7 +88,7 @@ The [`AssetBridger`](./assetBridger/assetBridger.md) class methods and propertie
 | `checkL1Network` | `checkParentNetwork` |
 | `checkL2Network` | `checkChildNetwork`  |
 
-#### [`AssetBridger`](./assetBridger/assetBridger.md) Class Method Parameters
+#### [`AssetBridger`](./assetBridger/assetBridger.md)  Class Method Parameters
 
 The objects passed to the class methods of classes that inherit from [`AssetBridger`](./assetBridger/assetBridger.md) ([`EthBridger`](./assetBridger/ethBridger.md) and [`Erc20Bridger`](./assetBridger/erc20Bridger.md)) have been renamed.
 

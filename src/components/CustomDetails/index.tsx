@@ -15,8 +15,8 @@ export default function CustomDetails({
   ...props
 }: Props): JSX.Element {
   return (
-    <Details {...props} summary={summary} className={`${styles.details} ${className || ''}`}>
-      {children}
+    <Details {...props} summary={summary as any} className={`${styles.details} ${className || ''}`}>
+      {children as any}
     </Details>
   );
 }
