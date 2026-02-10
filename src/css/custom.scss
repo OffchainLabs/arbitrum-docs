@@ -1,5 +1,6 @@
 @use './partials/_variables.scss';
 @use './partials/_darkmode.scss';
+@use './partials/_typography.scss';
 @use './partials/_misc-classes.scss';
 @use './partials/_header-badges.scss';
 @use './partials/_content-body.scss';
@@ -14,27 +15,310 @@
 @use './partials/_modal.scss';
 @use './partials/_image-zoom.scss';
 
+// ========================================
+// Global Styles
+// ========================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--arbitrum-font-family);
+  background-color: var(--fd-background);
+  color: var(--fd-foreground);
+}
+
+// Hide "Request an update" button
+.header-badges {
+  display: none;
+}
+
+// Force consistent font on all admonitions/alerts (high specificity)
+html body .theme-admonition,
+html body .alert,
+html body [class*='admonition'],
+html body [class*='alert'] {
+  font-family: var(--arbitrum-font-family);
+
+  p,
+  li,
+  strong,
+  em,
+  span,
+  div {
+    font-family: inherit;
+  }
+}
+
+// Article content - let content-body handle overflow
+html body article,
+html body article .markdown,
+html body [class*='docItemCol'],
+html body [class*='docItemContainer'] {
+  height: auto;
+  max-height: none;
+}
+
+// Main containers
+html body .main-wrapper,
+html body [class*='docPage'],
+html body .container {
+  max-width: 100%;
+}
+
+// Main content area
+html body [class*='docMainContainer'] {
+  padding: 2rem 3rem;
+  max-width: 100%;
+}
+
+// Content wrapper centering
+.col[class*='docItemCol'],
+.docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module,
+[class*='docItemContainer'] {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+// Mobile responsive
+@media (max-width: 996px) {
+  .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocPage-Layout-Main-styles-module,
+  [class*='docMainContainer'] {
+    padding: 1.5rem;
+  }
+
+  .col[class*='docItemCol'],
+  .docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module,
+  [class*='docItemContainer'] {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocPage-Layout-Main-styles-module,
+  [class*='docMainContainer'] {
+    padding: 1rem 0.75rem;
+  }
+
+  .col[class*='docItemCol'],
+  .docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module,
+  [class*='docItemContainer'] {
+    padding: 0;
+  }
+
+  article .markdown {
+    padding: 0 0.5rem;
+  }
+}
+
+// ========================================
+// Animations
+// ========================================
+
+@keyframes fd-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fd-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fd-dialog-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fd-dialog-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes fd-slide-in-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fd-slide-in-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fd-slide-in-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes blink {
-  0% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
     opacity: 0.4;
   }
+}
+
+@keyframes pulse {
+  0%,
   100% {
+    transform: scale(1);
     opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
   }
 }
 
-/* Number component styles */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Animation classes
+.animate-fade-in {
+  animation: fd-fade-in var(--fd-animation-duration) var(--fd-animation-timing);
+}
+
+.animate-slide-up {
+  animation: fd-slide-in-from-bottom var(--fd-animation-duration) var(--fd-animation-timing);
+}
+
+.pulse {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+// ========================================
+// Scrollbar
+// ========================================
+
+.fd-scrollbar,
+.theme-doc-sidebar-container,
+.table-of-contents,
+pre,
+pre code {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background: var(--fd-scrollbar-thumb);
+
+    &:hover {
+      background: var(--fd-muted-foreground);
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--fd-scrollbar-track);
+    border-radius: 6px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+
+  // Firefox
+  scrollbar-width: thin;
+  scrollbar-color: var(--fd-scrollbar-thumb) var(--fd-scrollbar-track);
+}
+
+// ========================================
+// Base Border Color
+// ========================================
+
+*,
+::after,
+::before {
+  border-color: var(--fd-border);
+}
+
+// ========================================
+// Main Content Layout
+// ========================================
+
+.main-wrapper {
+  background-color: var(--fd-background);
+  min-height: 100vh;
+}
+
+// Content area entrance animation
+.docMainContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocPage-Layout-Main-styles-module,
+[class*='docMainContainer'] {
+  animation: fd-fade-in 0.3s ease-out;
+}
+
+// ========================================
+// Number Component (interactive diagrams)
+// ========================================
+
 .number-component {
   cursor: pointer;
 
   &__circle {
-    transition: fill 0.3s ease;
+    transition: fill var(--arbitrum-transition-normal);
 
     &:hover {
-      fill: #ff9f5a;
+      fill: var(--fd-primary);
     }
   }
 
@@ -43,29 +327,294 @@
   }
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+// ========================================
+// Interactive Diagrams
+// ========================================
 
-.pulse {
-  animation: pulse 2s infinite ease-in-out;
-}
-
-/* Interactive diagram specific styles */
 .interactive-diagram {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
+}
+
+// ========================================
+// Loading States
+// ========================================
+
+.loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--fd-muted) 25%,
+    color-mix(in oklab, var(--fd-muted) 50%, var(--fd-background)) 50%,
+    var(--fd-muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--arbitrum-border-radius-sm);
+}
+
+// ========================================
+// Utility Classes
+// ========================================
+
+// Visually hidden (for accessibility)
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Text truncate
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Line clamp
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ========================================
+// Hero Sections (landing pages)
+// ========================================
+
+.hero {
+  padding: 4rem 0;
+  background: var(--fd-background);
+
+  &--gradient {
+    background: var(--arbitrum-gradient-subtle);
+  }
+
+  &__title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: normal;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  &__subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--fd-muted-foreground);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+}
+
+// ========================================
+// Feature Cards
+// ========================================
+
+.feature-card {
+  padding: 1.5rem;
+  background: var(--fd-card);
+  border: 1px solid var(--fd-border);
+  border-radius: var(--arbitrum-border-radius);
+  transition: all var(--arbitrum-transition-normal);
+
+  &:hover {
+    border-color: var(--fd-primary);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  &__icon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+    color: var(--fd-primary);
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--fd-foreground);
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    color: var(--fd-muted-foreground);
+    line-height: 1.6;
+  }
+}
+
+// ========================================
+// Code Diff Highlighting
+// ========================================
+
+.diff-remove {
+  background: var(--fd-diff-remove);
+
+  &::before {
+    content: '-';
+    color: var(--fd-diff-remove-symbol);
+    font-weight: bold;
+    margin-right: 0.5em;
+  }
+}
+
+.diff-add {
+  background: var(--fd-diff-add);
+
+  &::before {
+    content: '+';
+    color: var(--fd-diff-add-symbol);
+    font-weight: bold;
+    margin-right: 0.5em;
+  }
+}
+
+// ========================================
+// Callout Components
+// ========================================
+
+.callout {
+  padding: 1rem 1.25rem;
+  border-radius: var(--arbitrum-border-radius);
+  border-left: 4px solid;
+  margin: 1.5rem 0;
+
+  &--info {
+    background: var(--ifm-color-info-contrast-background);
+    border-color: var(--ifm-color-info);
+  }
+
+  &--success {
+    background: var(--ifm-color-success-contrast-background);
+    border-color: var(--ifm-color-success);
+  }
+
+  &--warning {
+    background: var(--ifm-color-warning-contrast-background);
+    border-color: var(--ifm-color-warning);
+  }
+
+  &--danger {
+    background: var(--ifm-color-danger-contrast-background);
+    border-color: var(--ifm-color-danger);
+  }
+}
+
+// ========================================
+// Steps Component
+// ========================================
+
+.steps {
+  position: relative;
+  padding-left: 2rem;
+  margin: 1.5rem 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--fd-border);
+    border-radius: 1px;
+  }
+
+  .step {
+    position: relative;
+    padding-bottom: 1.5rem;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    &::before {
+      content: counter(step);
+      counter-increment: step;
+      position: absolute;
+      left: -2rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      background: var(--fd-primary);
+      color: var(--fd-primary-foreground);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    &__content {
+      color: var(--fd-muted-foreground);
+      font-size: 0.9375rem;
+    }
+  }
+
+  counter-reset: step;
+}
+
+// ========================================
+// Reduced Motion
+// ========================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ========================================
+// Print Styles
+// ========================================
+
+@media print {
+  .navbar,
+  .footer,
+  .theme-doc-sidebar-container,
+  .table-of-contents,
+  .pagination-nav {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  pre,
+  code {
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+  }
 }
