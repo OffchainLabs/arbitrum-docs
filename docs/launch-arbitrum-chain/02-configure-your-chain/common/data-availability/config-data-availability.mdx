@@ -23,7 +23,7 @@ This is the default option for chains that demand security. Transaction data is 
 
 ### 2. AnyTrust mode
 
-This mode uses an external Data Availability Committee (DAC), which is a group of permissioned nodes that you choose and run, or outsource (<a data-quicklook-from="raas">RaaS</a>). Instead of posting all the data to the parent chain, the <a data-quicklook-from="sequencer">sequencer</a> sends a lightweight <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert) signed by a sufficient number of DAC members. The data is stored offchain and provided when needed.
+This mode uses an external Data Availability Committee (DAC), which is a group of permissioned nodes that you choose and run, or outsource (<a data-quicklook-from="raas">RaaS</a>). Instead of posting all the data to the parent chain, the batch poster sends a lightweight <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert) signed by a sufficient number of DAC members. The data is stored offchain and provided when needed.
 
 - **Config**: Set `arbitrumDataAvailabilityCommittee` to `true` in the chain config.
 - Deploy Data Availability Servers (DAS) for each DAC member (using Nitro's DAS software).
