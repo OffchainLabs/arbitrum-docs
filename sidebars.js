@@ -326,6 +326,11 @@ const sidebars = {
                   label: 'Delayed inbox finality',
                   id: 'launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality',
                 },
+                {
+                  type: 'doc',
+                  label: 'Sequencer timing adjustments',
+                  id: 'launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments',
+                },
               ],
             },
           ],
@@ -537,6 +542,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
                   label: `DA API integration guide`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
+                  label: `Sequencer timing adjustments`,
                 },
               ],
             },
