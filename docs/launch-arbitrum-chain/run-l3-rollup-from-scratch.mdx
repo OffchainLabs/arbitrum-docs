@@ -1,0 +1,379 @@
+---
+title: 'Run an L3 rollup from scratch'
+description: 'A simple A-Z guide to deploy and run a default-configured L3 rollup chain on Arbitrum Sepolia.'
+author: GreatSoshiant
+sme: GreatSoshiant
+target_audience: 'Developers new to Arbitrum chains who want the simplest path to run a chain.'
+user_story: As a developer, I want to run the simplest possible Arbitrum chain to see how easy it is.
+content_type: how-to
+sidebar_position: 0
+---
+
+import RaaSNotice from './partials/_raas-providers-notice.mdx';
+
+<RaaSNotice />
+
+This is the **simplest way** to run a complete Arbitrum L3 chain that settles to <a data-quicklook-from="arbitrum-sepolia">Arbitrum Sepolia</a>. You'll run five steps in order. No configuration choices—everything uses defaults. One node runs as sequencer, batch poster, and validator.
+
+### What you'll do
+
+1. **Set up** — Create a folder, add your wallet key, and install the tools
+2. **Deploy** — Put your chain's contracts on Arbitrum Sepolia (costs a small amount of ETH)
+3. **Generate config** — Create the file your node needs to run
+4. **Fund wallets** — Send ETH to the batch poster and validator (they need it for gas)
+5. **Run the node** — Start your chain (one Docker command)
+6. **Deploy token bridge** — Enable bridging tokens between your chain and Arbitrum Sepolia
+
+### Before you start
+
+| Requirement                 | What you need                                                                                                                              |
+| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Node.js**                 | v18 or later. [Install Node.js](https://nodejs.org/)                                                                                       |
+| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                      |
+| **ETH on Arbitrum Sepolia** | Your deployer wallet needs ETH for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
+| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                               |
+
+## Step 1: Set up the project
+
+Create a folder and install the packages:
+
+```bash
+mkdir my-l3-rollup && cd my-l3-rollup
+npm init -y
+npm install @arbitrum/chain-sdk viem dotenv
+```
+
+Create a file named `.env` in that folder. Start with this line (replace with your real private key):
+
+```
+DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
+```
+
+After Step 2, add the three lines the deploy script prints (`CHAIN_DEPLOYMENT_TRANSACTION_HASH`, `BATCH_POSTER_PRIVATE_KEY`, `VALIDATOR_PRIVATE_KEY`). Your `.env` will grow as you progress through the steps.
+
+### Environment variables reference
+
+| Variable                            | Required?              | When         | Description                                                                                                                                                                                    |
+| :---------------------------------- | :--------------------- | :----------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DEPLOYER_PRIVATE_KEY`              | **Yes**                | Step 1       | Your wallet's private key (starts with `0x`, 66 chars). Used to deploy the chain and token bridge. Never share or commit it.                                                                   |
+| `PARENT_CHAIN_RPC`                  | Optional               | Step 2, 3, 6 | Arbitrum Sepolia RPC URL. If omitted, uses the default public RPC (can be slow or time out). Use a [node provider](/build-decentralized-apps/reference/01-node-providers.mdx) for reliability. |
+| `BATCH_POSTER_PRIVATE_KEY`          | Optional               | Step 2       | Private key for the batch poster. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                            |
+| `VALIDATOR_PRIVATE_KEY`             | Optional               | Step 2       | Private key for the validator. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                               |
+| `CHAIN_DEPLOYMENT_TRANSACTION_HASH` | **Yes** (after Step 2) | Step 3, 6    | Transaction hash from the deploy script. Copy it from Step 2's output into `.env`.                                                                                                             |
+| `CHAIN_RPC`                         | Optional               | Step 6       | Your chain's RPC URL. Defaults to `http://localhost:8547` when running locally. Override if your node is elsewhere.                                                                            |
+
+:::tip Private key format
+
+Your key must start with `0x` and be 64 hex characters long (66 characters total). Never share it or commit it to git.
+
+:::
+
+## Step 2: Deploy the chain
+
+This step deploys your chain's contracts to Arbitrum Sepolia. It will cost a small amount of ETH for gas.
+
+Create a new file named `deploy.mjs` in your project folder. Copy and paste this entire script:
+
+```javascript
+import { createPublicClient, http } from 'viem';
+import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
+import { arbitrumSepolia } from 'viem/chains';
+import {
+  prepareChainConfig,
+  createRollupPrepareDeploymentParamsConfig,
+  createRollup,
+} from '@arbitrum/chain-sdk';
+import { sanitizePrivateKey, generateChainId } from '@arbitrum/chain-sdk/utils';
+import { config } from 'dotenv';
+config();
+
+const batchPosterPrivateKey = process.env.BATCH_POSTER_PRIVATE_KEY || generatePrivateKey();
+const validatorPrivateKey = process.env.VALIDATOR_PRIVATE_KEY || generatePrivateKey();
+const batchPoster = privateKeyToAccount(batchPosterPrivateKey).address;
+const validator = privateKeyToAccount(validatorPrivateKey).address;
+
+const parentChain = arbitrumSepolia;
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(process.env.PARENT_CHAIN_RPC),
+});
+
+const deployer = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
+
+async function main() {
+  const chainId = generateChainId();
+  const chainConfig = prepareChainConfig({
+    chainId,
+    arbitrum: {
+      InitialChainOwner: deployer.address,
+      DataAvailabilityCommittee: false, // Rollup (not AnyTrust)
+    },
+  });
+
+  const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+    chainId: BigInt(chainId),
+    owner: deployer.address,
+    chainConfig,
+  });
+
+  const result = await createRollup({
+    params: {
+      config: createRollupConfig,
+      batchPosters: [batchPoster],
+      validators: [validator],
+    },
+    account: deployer,
+    parentChainPublicClient,
+  });
+
+  console.log('Deployment successful!');
+  console.log('Transaction hash:', result.transactionReceipt.transactionHash);
+  console.log(
+    'Save this for the next step: CHAIN_DEPLOYMENT_TRANSACTION_HASH=' +
+      result.transactionReceipt.transactionHash,
+  );
+  console.log('Save these keys (they were used for batch poster and validator):');
+  console.log('BATCH_POSTER_PRIVATE_KEY=' + batchPosterPrivateKey);
+  console.log('VALIDATOR_PRIVATE_KEY=' + validatorPrivateKey);
+  console.log('Fund these addresses with ETH on Arbitrum Sepolia (for Step 4):');
+  console.log('BATCH_POSTER_ADDRESS=' + batchPoster);
+  console.log('VALIDATOR_ADDRESS=' + validator);
+}
+
+main().catch(console.error);
+```
+
+Run the deployment:
+
+```bash
+node deploy.mjs
+```
+
+When it succeeds, the script prints lines starting with `CHAIN_DEPLOYMENT_TRANSACTION_HASH=`, `BATCH_POSTER_PRIVATE_KEY=`, and `VALIDATOR_PRIVATE_KEY=`. **Copy those three lines into your `.env` file** (add them below `DEPLOYER_PRIVATE_KEY`). Your `.env` should then have four lines. The script also prints `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`—you will fund these in Step 4. Save the file before continuing.
+
+## Step 3: Generate the node config
+
+This step creates `node-config.json`—the file your node needs to know how to connect to your chain and Arbitrum Sepolia.
+
+Create a new file named `prepare-node-config.mjs`. Copy and paste this entire script:
+
+```javascript
+import { writeFile } from 'fs/promises';
+import { createPublicClient, http } from 'viem';
+import { arbitrumSepolia } from 'viem/chains';
+import {
+  createRollupPrepareTransaction,
+  createRollupPrepareTransactionReceipt,
+  prepareNodeConfig,
+} from '@arbitrum/chain-sdk';
+import { config } from 'dotenv';
+config();
+
+const parentChain = arbitrumSepolia;
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(process.env.PARENT_CHAIN_RPC),
+});
+
+async function main() {
+  const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
+  if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
+
+  const tx = createRollupPrepareTransaction(
+    await parentChainPublicClient.getTransaction({ hash: txHash }),
+  );
+  const txReceipt = createRollupPrepareTransactionReceipt(
+    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
+  );
+
+  const config = tx.getInputs()[0].config;
+  const chainConfig = JSON.parse(config.chainConfig);
+  const coreContracts = txReceipt.getCoreContracts();
+
+  const nodeConfig = prepareNodeConfig({
+    chainName: 'My L3 Rollup',
+    chainConfig,
+    coreContracts,
+    batchPosterPrivateKey: process.env.BATCH_POSTER_PRIVATE_KEY,
+    validatorPrivateKey: process.env.VALIDATOR_PRIVATE_KEY,
+    stakeToken: config.stakeToken,
+    parentChainId: parentChain.id,
+    parentChainRpcUrl: process.env.PARENT_CHAIN_RPC || parentChain.rpcUrls.default.http[0],
+  });
+
+  await writeFile('node-config.json', JSON.stringify(nodeConfig, null, 2));
+  console.log('Node config written to node-config.json');
+}
+
+main().catch(console.error);
+```
+
+Run it:
+
+```bash
+node prepare-node-config.mjs
+```
+
+You should see `Node config written to node-config.json`. That file is ready for the next step.
+
+## Step 4: Fund the batch poster and validator
+
+The batch poster and validator need ETH on Arbitrum Sepolia to pay for gas when posting batches and assertions. Send ETH to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+
+Get the addresses from your Step 2 output (the lines starting with `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`). Send at least 0.01 ETH to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/). Without this, the node will not produce blocks or finalize.
+
+## Step 5: Run the node
+
+This starts your chain. One node runs everything: it sequences blocks, posts them to Arbitrum Sepolia, and validates. Keep this terminal open—the node runs in the foreground.
+
+Run these two commands:
+
+```bash
+mkdir -p ./arbitrum-data
+```
+
+```bash
+docker run --rm -it \
+  -v $(pwd)/arbitrum-data:/home/user/.arbitrum \
+  -v $(pwd)/node-config.json:/home/user/.arbitrum/node-config.json \
+  -p 8547:8547 -p 8548:8548 \
+  offchainlabs/nitro-node:v3.9.4-7f582c3 \
+  --conf.file /home/user/.arbitrum/node-config.json
+```
+
+The node will start and begin syncing. Wait until you see it producing blocks (logs will show block numbers). Your chain's RPC is then available at `http://localhost:8547`.
+
+## Step 6: Deploy the token bridge
+
+This step enables bridging tokens between your chain and Arbitrum Sepolia. **Your node must be running** (Step 5). Open a **new terminal** in the same project folder—leave the node running in the first one.
+
+Create a new file named `deploy-token-bridge.mjs`. Copy and paste this entire script:
+
+```javascript
+import { createPublicClient, http, defineChain } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { arbitrumSepolia } from 'viem/chains';
+import {
+  createRollupPrepareTransaction,
+  createRollupPrepareTransactionReceipt,
+  createTokenBridgePrepareTransactionRequest,
+  createTokenBridgePrepareTransactionReceipt,
+  createTokenBridgePrepareSetWethGatewayTransactionRequest,
+  createTokenBridgePrepareSetWethGatewayTransactionReceipt,
+} from '@arbitrum/chain-sdk';
+import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
+import { config } from 'dotenv';
+config();
+
+const parentChain = arbitrumSepolia;
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(process.env.PARENT_CHAIN_RPC),
+});
+
+const rollupOwner = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
+
+async function main() {
+  const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
+  if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
+
+  const tx = createRollupPrepareTransaction(
+    await parentChainPublicClient.getTransaction({ hash: txHash }),
+  );
+  const txReceipt = createRollupPrepareTransactionReceipt(
+    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
+  );
+  const coreContracts = txReceipt.getCoreContracts();
+  const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
+  const chainId = chainConfig.chainId;
+  const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
+
+  const chain = defineChain({
+    id: chainId,
+    network: 'Arbitrum chain',
+    name: 'arbitrum-chain',
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    rpcUrls: { default: { http: [chainRpc] } },
+    testnet: true,
+  });
+  const chainPublicClient = createPublicClient({ chain, transport: http() });
+
+  const txRequest = await createTokenBridgePrepareTransactionRequest({
+    params: {
+      rollup: coreContracts.rollup,
+      rollupOwner: rollupOwner.address,
+    },
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
+  });
+
+  console.log('Deploying token bridge...');
+  const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
+    serializedTransaction: await rollupOwner.signTransaction(txRequest),
+  });
+  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
+  );
+  console.log('Token bridge deployed on parent chain');
+
+  console.log('Waiting for retryables on your chain...');
+  const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
+    orbitPublicClient: chainPublicClient,
+  });
+  if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
+    throw new Error('Retryables failed');
+  }
+  console.log('Token bridge contracts created on your chain');
+
+  const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+    rollup: coreContracts.rollup,
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
+  });
+  const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
+    serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
+  });
+  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
+  );
+  const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
+    orbitPublicClient: chainPublicClient,
+  });
+  if (wethRetryableReceipts[0].status !== 'success') {
+    throw new Error('WETH gateway retryable failed');
+  }
+  console.log('WETH gateway configured. Token bridge ready.');
+}
+
+main().catch(console.error);
+```
+
+Run the script (it reads from your `.env` file):
+
+```bash
+node deploy-token-bridge.mjs
+```
+
+It will take a minute or two. When you see `Token bridge ready.`, you're done.
+
+## You're done
+
+You now have a fully running L3 chain that settles to Arbitrum Sepolia, with sequencer, validator, and token bridge. Your chain's RPC is at `http://localhost:8547`.
+
+### If something failed
+
+| Problem                                               | What to check                                                                                     |
+| :---------------------------------------------------- | :------------------------------------------------------------------------------------------------ |
+| Step 2 fails with "insufficient funds"                | Your deployer wallet needs ETH on Arbitrum Sepolia. Use a [faucet](https://arbitrum.faucet.dev/). |
+| Step 2 fails with "invalid private key"               | Your `DEPLOYER_PRIVATE_KEY` must start with `0x` and be 66 characters.                            |
+| Step 3 fails with "CHAIN_DEPLOYMENT_TRANSACTION_HASH" | You didn't add the three lines from Step 2's output to `.env`. Copy them exactly.                 |
+| Step 5: node runs but no blocks                       | Fund the batch poster and validator (Step 4). They need ETH on Arbitrum Sepolia.                  |
+| Step 6 fails or hangs                                 | Make sure the node from Step 5 is still running and has finished syncing.                         |
+| Step 5: "docker: command not found"                   | Install [Docker](https://docs.docker.com/get-docker/) and ensure it's running.                    |
+
+### Next steps
+
+- **Product-level testnet:** To run your chain with production infrastructure (HA sequencers, separate nodes, public RPC) instead of locally, complete Steps 1–4 above, then follow [Run L3 rollup infrastructure (product-level testnet)](/launch-arbitrum-chain/run-l3-rollup-testnet-infrastructure.mdx).
+- For production chains, customization, and more details, see the [full deployment guide](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.mdx), [node config guide](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md), and [token bridge guide](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.mdx).
