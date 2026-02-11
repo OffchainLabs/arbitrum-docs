@@ -1,0 +1,407 @@
+---
+title: 'Arbitrum bridge transaction traceability'
+sidebar_label: 'Tracing bridge transactions'
+description: 'Learn how to trace transactions happening through the Arbitrum bridge'
+author: emredincoglu
+sme: emredincoglu
+user_story: As a developer, I want to trace transactions happening on the Arbitrum bridge so I can debug and monitor cross-chain operations.
+content_type: how-to
+---
+
+## Tracing retryables from parent chain to child chain
+
+If you want to trace the parent chain transaction to the child chain retryable ticket, the simplest way is to first create a provider using ethers via `providers.JsonRpcProvider(RPC)`. You should have one for both the parent and child chain. Then, using the parent chain provider, get the transaction via `parentProvider.getTransactionReceipt(Hash)`. Wrap the receipt in the `ParentTransactionReceipt` class, which allows you to call the class function `getParentToChildMessages(childProvider)`. This returns a parent-to-child message, in which one of the values is the `retryableCreationId` which is equivalent to the hash. You can then check if it has been submitted to the child chain by searching for that transaction either with the SDK (shown below) or a block explorer.
+
+Once the retryable transaction is gathered, you need to check if the transaction has been redeemed or not since it will trigger a separate transaction hash. This can be done by wrapping the `childReceipt` in a `childTransactionReceipt` and then creating a new `ParentToChildMessageReader` (parameters below in the code) object which has the class function `getSuccessfulRedeem`. This returns the status and info of the redeemed message if it has been redeemed.
+
+If it has been redeemed, then the `manualRedeemMessage` will have the transaction hash included.
+
+The following code demonstrates how to trace a parent-to-child message:
+
+```tsx
+import { config } from 'dotenv';
+import { providers } from 'ethers';
+import {
+  ChildTransactionReceipt,
+  ParentToChildMessageStatus,
+  ParentToChildMessageReader,
+  ParentTransactionReceipt,
+} from '@arbitrum/sdk';
+
+const ParentTransactionHash = PARENT_TRANSACTION_HASH;
+
+const sepoliaRPC = SEPOLIA_RPC_URL;
+const arbSepoliaRPC = ARB_SEPOLIA_RPC_URL;
+
+var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC);
+var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC);
+
+async function main() {
+  if (ParentTransactionHash == null) {
+    throw new Error('Parent transaction hash cannot be null');
+  }
+
+  const ParentReceipt = await sepoliaProvider.getTransactionReceipt(ParentTransactionHash);
+  const wrappedParentReceipt = new ParentTransactionReceipt(ParentReceipt);
+  const parentToChildMsg = (
+    await wrappedParentReceipt.getParentToChildMessages(arbSepoliaProvider)
+  )[0];
+
+  if (parentToChildMsg.retryableCreationId == null) {
+    throw new Error('Child Transaction Hash is null');
+  }
+
+  console.log('Child RetryableHash is:', parentToChildMsg.retryableCreationId);
+
+  //this is the start of searching for the child ticket and its retryable transaction
+  const childReceipt = await arbSepoliaProvider.getTransactionReceipt(
+    parentToChildMsg.retryableCreationId,
+  );
+
+  if (childReceipt == null) {
+    throw new Error('Retryable submission has not been sent to the child chain');
+  }
+
+  const retryableReceipt = new ChildTransactionReceipt(childReceipt);
+  const parentToChildMessageReader = new ParentToChildMessageReader(
+    arbSepoliaProvider,
+    arbSepoliaProvider.network.chainId,
+    retryableReceipt.from,
+    parentToChildMsg.messageNumber,
+    parentToChildMsg.parentBaseFee,
+    parentToChildMsg.messageData,
+  );
+
+  const manualRedeemMessage = await parentToChildMessageReader.getSuccessfulRedeem();
+
+  if (manualRedeemMessage.status === ParentToChildMessageStatus.REDEEMED) {
+    console.log('Message hash is: ', manualRedeemMessage.childTxReceipt.transactionHash);
+  } else {
+    console.log('Ticket has not been redeemed');
+  }
+}
+main();
+```
+
+It's also possible to use `ParentToChildMessage.calculateSubmitRetryableId()`, however that function takes many parameters, making this process simpler in most cases.
+
+## Tracing `DepositEth` from parent chain to child chain
+
+When it comes to a simple ETH deposit, the process is very similar to finding a retryable ticket's hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)` which returns an ETH deposit message containing the `childTxHash`.
+
+```tsx
+import { providers } from 'ethers';
+import { ParentEthDepositTransactionReceipt } from '@arbitrum/sdk';
+
+var depositEthHash = DEPOSIT_ETH_HASH;
+
+const sepoliaRPC = SEPOLIA_RPC_URL;
+const arbSepoliaRPC = ARB_SEPOLIA_RPC_URL;
+
+var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC);
+var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC);
+
+async function TraceDepositEth() {
+  if (depositEthHash == null) {
+    depositEthHash = '0';
+  }
+  const depositEthReceipt = await sepoliaProvider.getTransactionReceipt(depositEthHash);
+  const ParentEthDTR = new ParentEthDepositTransactionReceipt(depositEthReceipt);
+  const ParToChildEthDepMsg = (await ParentEthDTR.getEthDeposits(arbSepoliaProvider))[0];
+  console.log(ParToChildEthDepMsg.childTxHash);
+}
+TraceDepositEth();
+```
+
+You can also calculate the transaction hash using `EthDepositMessage.calculateDepositTxId`.
+
+The transaction may not be sent to the child chain yet, but the transaction hash will be the one returned via `getEthDeposits()`.
+
+## Tracing retryables from child chain to parent chain
+
+Tracing a retryable ticket from child chain to parent chain has multiple steps but is not too complicated. First, you need to create a contract for the `ArbRetryableTx` and take the hash of the retryable message and use it as a log query for the `RedeemScheduled` event. This is a unique value so there will only be one log. Once that log is found, get the transaction hash of the log - this is the retryable ticket hash. Grab the transaction info of the retryable ticket and parse its information; it contains a value called `requestId`. This is a unique value given to each retryable ticket and is also an indexed value for the `MessageDelivered` log on the parent chain bridge contract. Query the logs using the `requestId` and you'll get a single log, which will contain the transaction hash information.
+
+If you have the hash of the actual ticket and not the message that is executed from the ticket, you can skip finding the `RedeemScheduled` event and go straight to getting the `requestId`.
+
+```tsx
+import { providers, Contract } from 'ethers';
+import { constants } from '@arbitrum/sdk';
+
+const childMessageHash = CHILD_TRANSACTION_HASH;
+
+const sepoliaRPC = SEPOLIA_RPC_URL;
+const arbSepoliaRPC = ARB_SEPOLIA_RPC_URL;
+
+const bridgeContractAddress = BRIDGE_ADDRESS;
+
+var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC);
+var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC);
+
+async function main() {
+  if (childMessageHash == null) {
+    throw new Error('Transaction hash cannot be empty');
+  }
+  if (bridgeContractAddress == null) {
+    throw new Error('Bridge address cannot be empty');
+  }
+
+  const retryableContract = new Contract(
+    constants.ARB_RETRYABLE_TX_ADDRESS,
+    arbRetryableABI,
+    arbSepoliaProvider,
+  );
+
+  const redeemFilter = retryableContract.filters.RedeemScheduled(null, childMessageHash);
+  const redeemLog = (await retryableContract.queryFilter(redeemFilter))[0];
+
+  if (redeemLog == null) {
+    throw new Error('Could not find RedeemScheduled event in given range');
+  }
+
+  const retryableTicketID = redeemLog.transactionHash;
+  const retryableTransaction = await arbSepoliaProvider.getTransaction(retryableTicketID);
+
+  const parsedRetryableTransaction =
+    retryableContract.interface.parseTransaction(retryableTransaction);
+  const retryableID = parsedRetryableTransaction.args.requestId;
+
+  const bridgeContract = new Contract(bridgeContractAddress, bridgeABI, sepoliaProvider);
+  const bridgeFilter = bridgeContract.filters.MessageDelivered(retryableID);
+
+  const log = (await bridgeContract.queryFilter(bridgeFilter))[0];
+
+  if (log == undefined) {
+    throw new Error('Original Transaction hash not found, logs may not be available anymore');
+  }
+  console.log('Original Transaction hash found: ', log.transactionHash);
+}
+main();
+```
+
+## Tracing `DepositEth` from child chain to parent chain
+
+If you want to trace an `DepositEth` message from child to parent chain, it requires a bit more work and is not as efficient. Even though ETH deposit messages are given a `requestId`, the child chain transaction is not given that information, meaning you have no means of using it to query the parent chain bridge logs efficiently. Instead, you must rely on the `SequencerInbox` contract.
+
+The first thing to do is find which batch your child chain transaction is in. With that info, you can query the `SequencerInbox` contract to find the block number that the batch was posted in, giving you certainty that the original parent chain message was sent before the block with the posted batch. From there, search through the `Bridge` contract for their `MessageDelivered` logs. You can then wrap the transaction that was responsible for emitting those logs with `ParentEthDepositTransactionReceipt`. When wrapped, you can call `getEthDeposits`, and if the hash calculated matches the hash you have, then that is the original parent chain message.
+
+```tsx
+import { providers, Contract } from 'ethers';
+import { ChildTransactionReceipt, ParentEthDepositTransactionReceipt } from '@arbitrum/sdk';
+
+const depositEthHashChild = DEPOSIT_ETH_HASH_CHILD;
+
+const sepoliaRPC = SEPOLIA_RPC_URL;
+const arbSepoliaRPC = ARB_SEPOLIA_RPC_URL;
+
+const sequencerInboxAddress = SEQUENCER_INBOX_ADDRESS;
+const bridgeContractAddress = BRIDGE_ADDRESS;
+
+var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC);
+var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC);
+
+async function main() {
+  if (depositEthHashChild == null) {
+    throw new Error('Transaction hash cannot be empty');
+  }
+  if (sequencerInboxAddress == null) {
+    throw new Error('Sequencer Inbox address cannot be empty');
+  }
+  if (bridgeContractAddress == null) {
+    throw new Error('Bridge address cannot be empty');
+  }
+
+  const childEthDepositTransaction = await arbSepoliaProvider.getTransactionReceipt(
+    depositEthHashChild,
+  );
+  const ethDepositChildTransactionReceipt = new ChildTransactionReceipt(childEthDepositTransaction);
+  var ethDepositBatchNumber = await ethDepositChildTransactionReceipt.getBatchNumber(
+    arbSepoliaProvider,
+  );
+
+  const sepoliaSequencerInboxContract = new Contract(
+    sequencerInboxAddress,
+    sepoliaSequencerInboxABI,
+    sepoliaProvider,
+  );
+
+  const seqInboxFilter =
+    sepoliaSequencerInboxContract.filters.SequencerBatchDelivered(ethDepositBatchNumber);
+  const batchDeliveredEvent = (await sepoliaSequencerInboxContract.queryFilter(seqInboxFilter))[0];
+
+  if (batchDeliveredEvent == null) {
+    throw new Error('Seq batch delivered event not found, log may be unavailable');
+  }
+
+  const bridgeContract = new Contract(bridgeContractAddress, bridgeABI, sepoliaProvider);
+
+  const bridgeFilter = bridgeContract.filters.MessageDelivered();
+
+  const bridgeLogs = await bridgeContract.queryFilter(
+    bridgeFilter,
+    batchDeliveredEvent.blockNumber - 100,
+    batchDeliveredEvent.blockNumber,
+  );
+
+  for (let i = 0; i < bridgeLogs.length; i++) {
+    const transactionReceipt = await sepoliaProvider.getTransactionReceipt(
+      bridgeLogs[i].transactionHash,
+    );
+    const transactionReceiptWrapped = new ParentEthDepositTransactionReceipt(transactionReceipt);
+    const ethDeposit = await transactionReceiptWrapped.getEthDeposits(arbSepoliaProvider);
+
+    if (ethDeposit.length == 0) continue;
+    if (depositEthHashChild == ethDeposit[0].childTxHash) {
+      console.log('Original Transaction hash found: ', transactionReceipt.transactionHash);
+      return;
+    }
+  }
+  throw new Error(
+    'Original Transaction hash not found, logs may not be available anymore or search window is too small',
+  );
+}
+main();
+```
+
+## Tracing withdrawals from child chain to parent chain
+
+To trace a withdrawal, you first need to wrap the transaction receipt in a `ChildTransactionReceipt` class. You then need to get the emitted log [`L2ToL1Tx`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbSys.sol#L114) as it contains the parameter `position` which is a unique value for each withdrawal and can be used for a search on the parent chain. To do this, you need to parse the log via the `arbSysABI` to check for the name of the log being `L2ToL1Tx`.
+
+Then call `getChildToParentMessages` on the wrapped receipt to check the status of the withdrawal on the parent chain. If the status is not `EXECUTED`, then the withdrawal transaction has not been executed on the parent chain.
+
+Since this is a withdrawal, the assertion containing the withdrawal needs to be confirmed, so there is no point in searching before that assertion has been confirmed. You can estimate this value by parsing the log for `ethBlockNum` and adding it to the `confirmPeriodBlocks` which can be retrieved from the parent chain Rollup contract by calling `confirmPeriodBlocks`.
+
+Then start the search on the parent chain for the transaction that executed the withdrawal. To do so, search the outbox contract using two values from `ChildToParentEvent` (retrieved by calling `getChildToParentEvents` on a wrapped receipt) and use its `destination` and `caller` values as two search parameters. Then query the contract starting the search at the previous `ethBlockNum + confirmPeriodBlocks`. If the `transactionIndex` of the emitted log is equal to the position you grabbed before, then this is the transaction that was responsible for executing the withdrawal transaction.
+
+```tsx
+import { Contract, providers, BigNumber } from 'ethers';
+import { ChildTransactionReceipt, ChildToParentMessageStatus } from '@arbitrum/sdk';
+import { Interface, LogDescription } from 'ethers/lib/utils';
+
+const childWithdrawHash = WITHDRAW_ETH_HASH;
+const outboxAddress = OUTBOX_ADDRESS;
+const rollupAddress = ROLLUP_ADDRESS;
+const sepoliaRPC = SEPOLIA_RPC_URL;
+const arbSepoliaRPC = ARB_SEPOLIA_RPC_URL;
+
+var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC);
+var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC);
+
+async function main() {
+  if (childWithdrawHash == null) {
+    throw new Error('Withdraw hash cannot be null');
+  }
+  if (outboxAddress == null) {
+    throw new Error('Outbox Address cannot be null');
+  }
+  if (rollupAddress == null) {
+    throw new Error('Rollup Address cannot be null');
+  }
+
+  const withdrawalReceipt = await arbSepoliaProvider.getTransactionReceipt(childWithdrawHash);
+  const withdrawalReceiptWrapped = new ChildTransactionReceipt(withdrawalReceipt);
+
+  const childToParentMessages = await withdrawalReceiptWrapped.getChildToParentMessages(
+    sepoliaProvider,
+  );
+  const status = await childToParentMessages[0].status(arbSepoliaProvider);
+  if (status != ChildToParentMessageStatus.EXECUTED) {
+    throw new Error('Message has not been executed on the parent chain');
+  }
+
+  const arbSysInterface = new Interface(arbSysABI);
+  let withdrawalPosition: BigNumber | undefined;
+  let parsedLog!: LogDescription;
+  for (let i = 0; i < withdrawalReceipt.logs.length; i++) {
+    parsedLog = arbSysInterface.parseLog(withdrawalReceipt.logs[i]);
+    if (parsedLog.name == 'L2ToL1Tx') {
+      withdrawalPosition = parsedLog.args.position;
+      break;
+    }
+  }
+
+  if (withdrawalPosition == undefined) {
+    throw new Error('Correct log not found');
+  }
+
+  const rollupContract = new Contract(rollupAddress, rollupABI, sepoliaProvider);
+  const confirmationLength: BigNumber = await rollupContract.confirmPeriodBlocks();
+
+  const startingBlock = confirmationLength.add(parsedLog.args.ethBlockNum);
+
+  const outboxContract = new Contract(outboxAddress, outboxABI, sepoliaProvider);
+  const eventFilter = outboxContract.filters.OutBoxTransactionExecuted(
+    parsedLog.args.destination,
+    parsedLog.args.caller,
+  );
+
+  const events = await outboxContract.queryFilter(eventFilter, startingBlock.toNumber());
+  console.log(events);
+  for (let i = 0; i < events.length; i++) {
+    const log = outboxContract.interface.parseLog(events[i]);
+    if (withdrawalPosition.eq(log.args.transactionIndex)) {
+      console.log('Parent chain transaction found: ', events[i].transactionHash);
+      return;
+    }
+  }
+  throw new Error('Parent chain transaction not found, log may be unavailable');
+}
+main();
+```
+
+## Tracing withdrawals from parent chain to child chain
+
+Tracing a withdrawal from parent to child chain is not that difficult. It's basically the inverse of the above, but since the parent chain transaction has been executed, you don't need to perform any checks. Since the position is indexed on the child chain, the process is much easier.
+
+First, parse the logs. The correct one is emitted by the outbox contract and contains the value `transactionIndex`, which is a unique value given to each withdrawal. Even though this value is indexed, you can easily narrow down the log query even more by parsing the transaction and getting the child chain block. Then you can query the `L2ToL1Tx` log on the `ArbSys` contract, which will give you the transaction.
+
+```tsx
+import { Contract, providers, BigNumber } from 'ethers';
+import { constants } from '@arbitrum/sdk';
+import { Interface } from 'ethers/lib/utils';
+
+const ParentWithdrawHash = PARENT_WITHDRAW_HASH;
+const outboxAddress = OUTBOX_ADDRESS;
+
+const sepoliaRPC = SEPOLIA_RPC_URL;
+const arbSepoliaRPC = ARB_SEPOLIA_RPC_URL;
+
+var sepoliaProvider = new providers.JsonRpcProvider(sepoliaRPC);
+var arbSepoliaProvider = new providers.JsonRpcProvider(arbSepoliaRPC);
+
+async function main() {
+  if (ParentWithdrawHash == null) {
+    throw new Error('Parent hash cannot be null');
+  }
+
+  const transactionReceipt = await sepoliaProvider.getTransactionReceipt(ParentWithdrawHash);
+  const outboxInterface = new Interface(outboxABI);
+  let withdrawPosition: BigNumber | undefined;
+  for (let i = 0; i < transactionReceipt.logs.length; i++) {
+    if (transactionReceipt.logs[i].address == outboxAddress) {
+      const parsedTransaction = outboxInterface.parseLog(transactionReceipt.logs[i]);
+      withdrawPosition = parsedTransaction.args.transactionIndex;
+      break;
+    }
+  }
+
+  if (withdrawPosition == undefined) {
+    throw new Error('Could not find correct log');
+  }
+
+  const transactionInfo = await sepoliaProvider.getTransaction(ParentWithdrawHash);
+  const parsedTransaction = outboxInterface.parseTransaction(transactionInfo);
+  const l2WithdrawBlock = parsedTransaction.args.l2Block.toHexString();
+
+  const arbSysContract = new Contract(constants.ARB_SYS_ADDRESS, arbSysABI, arbSepoliaProvider);
+  const eventFilter = arbSysContract.filters.L2ToL1Tx(null, null, null, withdrawPosition);
+  const event = (
+    await arbSysContract.queryFilter(eventFilter, l2WithdrawBlock, l2WithdrawBlock)
+  )[0];
+  if (event == null) {
+    throw new Error('log not found, may be unavailable');
+  }
+
+  console.log('Transaction Hash found: ', event.transactionHash);
+}
+main();
+```
