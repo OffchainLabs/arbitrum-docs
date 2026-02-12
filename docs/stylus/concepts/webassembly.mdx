@@ -29,7 +29,7 @@ Nitro uses WebAssembly as its execution environment for several reasons:
 4. **Language flexibility**: Developers can use Rust, C, C++, or any language that compiles to WASM
 5. **Determinism**: Guaranteed identical execution across all validators
 
-![WASM Execution Pipeline](/img/stylus-wasm-compile.png)
+![WASM Execution Pipeline](/img/stylus-wasm-compile.svg)
 
 _Figure: WebAssembly execution pipeline in Arbitrum Nitro, from source code to native execution with access to blockchain state._
 
@@ -62,7 +62,7 @@ rustflags = [
 
 A Stylus WASM module consists of several sections:
 
-![WASM Module Structure](/img/stylus-wasm-deploy.png)
+![WASM Module Structure](/img/stylus-wasm-deploy.svg)
 
 _Figure: WASM module structure showing the main sections including exports, imports (hostio functions), memory, and code._
 
@@ -281,7 +281,7 @@ To stay within limits:
 
 ## Memory model
 
-![WASM Memory Model](/img/stylus-wasm-execute.png)
+![WASM Memory Model](/img/stylus-wasm-execute.svg)
 
 _Figure: WASM linear memory model showing the fixed 32KB stack and growable heap organized in 64KB pages._
 
