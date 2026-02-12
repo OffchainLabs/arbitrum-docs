@@ -22,7 +22,6 @@ This repository is organized as follows:
   - `run-arbitrum-node/` - Node setup and configuration
   - `sdk/` - Auto-generated SDK documentation - Do not edit
   - `stylus/` - Stylus smart contract development
-  - `stylus-by-example/` - Generated Stylus examples - Do not edit
   - `welcome/` - Getting started content
 
 ### Application Code
