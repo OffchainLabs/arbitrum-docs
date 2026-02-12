@@ -48,13 +48,18 @@ If your version is below 20, upgrade by following the [ArbOS upgrade guide](13-a
 
 ## Configuration
 
-To enable blob transaction posting, add the following configuration to your node:
+To enable blob transaction posting, add the following configuration to your batch poster node:
 
 ```json
 {
   "node": {
     "batch-poster": {
       "post-4844-blobs": true
+    }
+  },
+  "parent-chain": {
+    "blob-client": {
+      "beacon-url": "YOUR_BEACON_URL"
     }
   }
 }

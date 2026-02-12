@@ -1,0 +1,41 @@
+---
+title: 'Why choose to customize the Sequencer timing on your Arbitrum chain'
+description: 'Learn about Sequencer timing adjustments and the pros and cons of choosing to customize it on your chain.'
+author: pete-vielhaber
+sme: jason-w123
+content_type: configuration
+---
+
+When launching an Arbitrum chain, the Sequencer plays a central role in ordering transactions, producing blocks. Several timing-related parameters can be adjusted in the node configuration (via the Nitro node's JSON config or command-line flags) to optimize performance, user experience, security, and cost for your specific use case. Defaults work well for many chains, but adjusting them is often recommended for the following key reasons:
+
+## 1. Optimize block production speed and throughput
+
+- The default block time is 250ms, but you can reduce it to 100ms (or potentially lower, though not recommended).
+- **Why adjust?** Faster block times increase transaction throughput (e.g., higher TPS for high-activity apps like gaming or Defi). For example, dropping to 100ms while increasing the block gas limit can significantly boost max gas per second. However, this comes at the cost of faster state growth (bloat), increased strain on indexers/node runners, and potential compatability issues with third-party tools.
+
+## 2. Control batch posting frequency and costs
+
+- Key parameters include `--node.batch-poster.max-delay` (maximum time to wait before posting a batch, even if it's not full) and batch-size limits.
+- **Why adjust?**
+
+  - Lower max-delay ensures batches post more frequently, reducing latency for transaction finality on the parent chain (e.g., useful for low-activity chains to avoid long waits).
+  - Higher delays or larger batches improve efficiency by reducing parent chain posting costs (fewer transactions on L1/L2), especially during low traffic. Defaults may post too frequently on quiet chains, wasting gas.
+
+## 3. Faster deposits/bridging (for L3 chains)
+
+- Parameters like `--node.delayed-sequencer.finalize-distance` (number of parent chain confirmations to wait before releasing delayed inbox messages, e.g., deposits).
+- **Why adjust?** Defaults wait for substantial parent chain finality (tens of minutes) for safety. Reducing this (e.g., to 1) enables near-instant deposits (~1 minute), improving UX for cross-chain interactions. Trade-off: Slight re-org risk if the parent chain reorganizes.
+
+## 4. Enable/configure advanced features such as Timeboost
+
+- If enabling Timeboost, adjust the non-express lane delay (default 200ms).
+- **Why adjust?** A larger delay gives auction winners a greater advantage (and revenue potential) in MEV opportunities (e.g., arbitrage), but increases latency for regular users.
+
+## 5. Balance latency, censorship resistance, and reliability
+
+- Timestamp adjustmnet boundaries and other sequencer behaviors allow minor tweaks to prevent re-orgs if batch posting lags.
+- Overall, adjustments prevent undue delays in low-traffic scenarios, enhance responsiveness for latency-sensitive apps, or prioritize cost savings/security based on your chain's expected activity.
+
+These configs are set when running your sequencer node (e.g., via the Arbitrum Chain SDK's `prepareNodeConfig` or direct Nitro flags). Always test changes on a devnet, as they impact economics, UX, and infrastructure load.
+
+For information on how to configure the Sequencer timing, refer to the [Sequencer Timing Adjustments configuration](/launch-arbitrum-chain/02-configure-your-chain/advanced/config-sequencer-timing-adjustments.mdx) page.
