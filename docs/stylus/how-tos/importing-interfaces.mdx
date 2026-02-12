@@ -1,0 +1,636 @@
+---
+id: 'importing-interfaces'
+title: 'Import and call external contract interfaces'
+sidebar_label: 'Importing interfaces'
+description: 'Learn how to import Solidity interfaces and call external contracts from your Stylus smart contracts'
+author: 'anegg0'
+sme: 'anegg0'
+user_story: 'As a Rust developer building Stylus smart contracts, I want to interact with other contracts on the blockchain'
+content_type: 'how-to'
+target_audience: 'Developers building Stylus smart contracts that need to interact with other contracts'
+sidebar_position: 8
+displayed_sidebar: buildStylusSidebar
+---
+
+import CustomDetails from '@site/src/components/CustomDetails';
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+Interfaces enable your Stylus contract to interact with other contracts on the blockchain, regardless of whether they're written in Solidity, Rust, or another language. This guide shows you how to import and use external contract interfaces in your Stylus smart contracts.
+
+## Why use interfaces
+
+Contract interfaces provide a type-safe way to communicate with other contracts on the blockchain. Common use cases include:
+
+- **Interacting with existing protocols**: Call methods on deployed Solidity contracts like ERC-20 tokens, oracles, or DeFi protocols
+- **Composing functionality**: Build contracts that leverage other contracts' capabilities
+- **Cross-language interoperability**: Stylus contracts can call Solidity contracts and vice versa
+- **Upgradeability patterns**: Use interfaces to interact with proxy contracts
+
+<VanillaAdmonition type="info" title="Language agnostic">
+  Since interfaces operate at the ABI level, they work identically whether the target contract is
+  written in Solidity, Rust, or any other language that compiles to EVM bytecode.
+</VanillaAdmonition>
+
+## Prerequisites
+
+Before implementing interfaces, ensure you have:
+
+<CustomDetails summary="Rust toolchain">
+
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
+</CustomDetails>
+
+<CustomDetails summary="cargo stylus">
+
+In your terminal, run:
+
+```shell
+cargo install --force cargo-stylus
+```
+
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.88 as well as adding the WASM build target:
+
+```shell
+rustup default 1.88
+rustup target add wasm32-unknown-unknown --toolchain 1.88
+```
+
+You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
+
+</CustomDetails>
+
+## Declaring interfaces with `sol_interface!`
+
+The [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html) macro allows you to declare interfaces using Solidity syntax. It generates Rust structs that represent external contracts and provides type-safe methods for calling them.
+
+### Basic interface declaration
+
+```rust
+use stylus_sdk::prelude::*;
+
+sol_interface! {
+    interface IToken {
+        function balanceOf(address account) external view returns (uint256);
+        function transfer(address to, uint256 amount) external returns (bool);
+        function approve(address spender, uint256 amount) external returns (bool);
+    }
+}
+```
+
+This macro generates an `IToken` struct that you can use to call methods on any deployed contract that implements this interface.
+
+### Declaring multiple interfaces
+
+You can declare multiple interfaces in a single `sol_interface!` block:
+
+```rust
+sol_interface! {
+    interface IPaymentService {
+        function makePayment(address user) payable returns (string);
+        function getBalance(address user) view returns (uint256);
+    }
+
+    interface IOracle {
+        function getPrice(bytes32 feedId) external view returns (uint256);
+        function getLastUpdate() external view returns (uint256);
+    }
+
+    interface IVault {
+        function deposit() external payable;
+        function withdraw(uint256 amount) external;
+    }
+}
+```
+
+<VanillaAdmonition type="info" title="Solidity syntax">
+  Interface declarations use standard Solidity syntax. The SDK computes the correct 4-byte function
+  selectors based on the exact names and parameter types you provide.
+</VanillaAdmonition>
+
+## Calling external contract methods
+
+Once you've declared an interface, you can call methods on external contracts using instances of the generated struct.
+
+### Creating interface instances
+
+Use the `::new(address)` constructor to create an interface instance pointing to a deployed contract:
+
+```rust
+use alloy_primitives::Address;
+
+// Create an instance pointing to a deployed token contract
+let token_address = Address::from([0x12; 20]); // Replace with actual address
+let token = IToken::new(token_address);
+```
+
+### CamelCase to snake_case conversion
+
+The `sol_interface!` macro converts Solidity's CamelCase method names to Rust's snake_case convention:
+
+| Solidity method | Rust method     |
+| --------------- | --------------- |
+| `balanceOf`     | `balance_of`    |
+| `makePayment`   | `make_payment`  |
+| `getPrice`      | `get_price`     |
+| `transferFrom`  | `transfer_from` |
+
+The macro preserves the original CamelCase name for computing the correct function selector, so your calls reach the right method on the target contract.
+
+### Basic method calls
+
+Here's how to call methods on an external contract:
+
+```rust
+use stylus_sdk::{call::Call, prelude::*};
+use alloy_primitives::{Address, U256};
+
+sol_interface! {
+    interface IToken {
+        function balanceOf(address account) external view returns (uint256);
+        function transfer(address to, uint256 amount) external returns (bool);
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn check_balance(&self, token_address: Address, account: Address) -> U256 {
+        let token = IToken::new(token_address);
+        let config = Call::new();
+
+        token.balance_of(self.vm(), config, account).unwrap()
+    }
+}
+```
+
+## Configuring your calls
+
+The Stylus SDK provides three `Call` constructors for different types of external calls. Choosing the correct one is essential for your contract to work properly.
+
+Use this decision tree to choose the correct Call constructor:
+
+![Call Decision Tree](/img/stylus-call-decision-tree.png)
+
+_Figure 2: Decision tree for selecting the appropriate Call constructor based on state modification and payment requirements._
+
+### View calls with `Call::new()`
+
+Use `Call::new()` for read-only calls that don't modify state:
+
+```rust
+use stylus_sdk::call::Call;
+
+#[public]
+impl MyContract {
+    pub fn get_token_balance(&self, token: Address, account: Address) -> U256 {
+        let token_contract = IToken::new(token);
+        let config = Call::new();
+
+        token_contract.balance_of(self.vm(), config, account).unwrap()
+    }
+
+    pub fn get_oracle_price(&self, oracle: Address, feed_id: [u8; 32]) -> U256 {
+        let oracle_contract = IOracle::new(oracle);
+        let config = Call::new();
+
+        oracle_contract.get_price(self.vm(), config, feed_id.into()).unwrap()
+    }
+}
+```
+
+### State-changing calls with `Call::new_mutating(self)`
+
+Use `Call::new_mutating(self)` for calls that modify state on the target contract:
+
+```rust
+#[public]
+impl MyContract {
+    pub fn transfer_tokens(
+        &mut self,
+        token: Address,
+        to: Address,
+        amount: U256,
+    ) -> bool {
+        let token_contract = IToken::new(token);
+        let config = Call::new_mutating(self);
+
+        token_contract.transfer(self.vm(), config, to, amount).unwrap()
+    }
+
+    pub fn approve_spender(
+        &mut self,
+        token: Address,
+        spender: Address,
+        amount: U256,
+    ) -> bool {
+        let token_contract = IToken::new(token);
+        let config = Call::new_mutating(self);
+
+        token_contract.approve(self.vm(), config, spender, amount).unwrap()
+    }
+}
+```
+
+<VanillaAdmonition type="caution" title="Mutating calls require &mut self">
+  When using `Call::new_mutating(self)`, your method must take `&mut self` as its first parameter.
+  This ensures the Stylus runtime properly handles state changes and reentrancy protection.
+</VanillaAdmonition>
+
+### Payable calls with `Call::new_payable(self, value)`
+
+Use `Call::new_payable(self, value)` to send ETH along with your call:
+
+```rust
+use alloy_primitives::U256;
+
+sol_interface! {
+    interface IVault {
+        function deposit() external payable;
+    }
+}
+
+#[public]
+impl MyContract {
+    #[payable]
+    pub fn deposit_to_vault(&mut self, vault: Address) -> Result<(), Vec<u8>> {
+        let vault_contract = IVault::new(vault);
+        let value = self.vm().msg_value();
+        let config = Call::new_payable(self, value);
+
+        vault_contract.deposit(self.vm(), config)?;
+        Ok(())
+    }
+
+    pub fn deposit_specific_amount(
+        &mut self,
+        vault: Address,
+        amount: U256,
+    ) -> Result<(), Vec<u8>> {
+        let vault_contract = IVault::new(vault);
+        let config = Call::new_payable(self, amount);
+
+        vault_contract.deposit(self.vm(), config)?;
+        Ok(())
+    }
+}
+```
+
+### Configuring gas limits
+
+You can limit the gas forwarded to external calls using the `.gas()` method:
+
+```rust
+#[public]
+impl MyContract {
+    pub fn safe_transfer(
+        &mut self,
+        token: Address,
+        to: Address,
+        amount: U256,
+    ) -> bool {
+        let token_contract = IToken::new(token);
+
+        // Use half of remaining gas
+        let gas_limit = self.vm().evm_gas_left() / 2;
+        let config = Call::new_mutating(self).gas(gas_limit);
+
+        token_contract.transfer(self.vm(), config, to, amount).unwrap()
+    }
+}
+```
+
+### Call configuration summary
+
+| Constructor                      | Use case        | State access | ETH transfer |
+| -------------------------------- | --------------- | ------------ | ------------ |
+| `Call::new()`                    | View/pure calls | Read-only    | No           |
+| `Call::new_mutating(self)`       | Write calls     | Read/write   | No           |
+| `Call::new_payable(self, value)` | Payable calls   | Read/write   | Yes          |
+
+## Complete example
+
+Here's a complete contract that demonstrates all aspects of interface usage:
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::{call::Call, prelude::*};
+
+// Declare interfaces for external contracts
+sol_interface! {
+    interface IToken {
+        function balanceOf(address account) external view returns (uint256);
+        function transfer(address to, uint256 amount) external returns (bool);
+        function approve(address spender, uint256 amount) external returns (bool);
+        function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    }
+
+    interface IOracle {
+        function getPrice(bytes32 feedId) external view returns (uint256);
+    }
+
+    interface IVault {
+        function deposit() external payable;
+        function withdraw(uint256 amount) external;
+    }
+}
+
+// Define events
+sol! {
+    event TokensTransferred(address indexed token, address indexed to, uint256 amount);
+    event DepositMade(address indexed vault, uint256 amount);
+}
+
+// Define errors
+sol! {
+    error TransferFailed(address token, address to, uint256 amount);
+    error InsufficientBalance(uint256 have, uint256 want);
+}
+
+#[derive(SolidityError)]
+pub enum InterfaceError {
+    TransferFailed(TransferFailed),
+    InsufficientBalance(InsufficientBalance),
+}
+
+// Contract storage
+sol_storage! {
+    #[entrypoint]
+    pub struct InterfaceExample {
+        address owner;
+        address default_token;
+        address default_vault;
+    }
+}
+
+#[public]
+impl InterfaceExample {
+    #[constructor]
+    pub fn constructor(&mut self, token: Address, vault: Address) {
+        self.owner.set(self.vm().tx_origin());
+        self.default_token.set(token);
+        self.default_vault.set(vault);
+    }
+
+    // View call example
+    pub fn get_token_balance(&self, token: Address, account: Address) -> U256 {
+        let token_contract = IToken::new(token);
+        let config = Call::new();
+
+        token_contract.balance_of(self.vm(), config, account).unwrap()
+    }
+
+    // View call with oracle
+    pub fn get_price(&self, oracle: Address, feed_id: [u8; 32]) -> U256 {
+        let oracle_contract = IOracle::new(oracle);
+        let config = Call::new();
+
+        oracle_contract.get_price(self.vm(), config, feed_id.into()).unwrap()
+    }
+
+    // Mutating call example
+    pub fn transfer_tokens(
+        &mut self,
+        token: Address,
+        to: Address,
+        amount: U256,
+    ) -> Result<bool, InterfaceError> {
+        let token_contract = IToken::new(token);
+        let config = Call::new_mutating(self);
+
+        let success = token_contract
+            .transfer(self.vm(), config, to, amount)
+            .map_err(|_| InterfaceError::TransferFailed(TransferFailed {
+                token,
+                to,
+                amount,
+            }))?;
+
+        if success {
+            self.vm().log(TokensTransferred { token, to, amount });
+        }
+
+        Ok(success)
+    }
+
+    // Payable call example
+    #[payable]
+    pub fn deposit_to_vault(&mut self, vault: Address) -> Result<(), Vec<u8>> {
+        let vault_contract = IVault::new(vault);
+        let value = self.vm().msg_value();
+        let config = Call::new_payable(self, value);
+
+        vault_contract.deposit(self.vm(), config)?;
+
+        self.vm().log(DepositMade { vault, amount: value });
+        Ok(())
+    }
+
+    // Using gas limits
+    pub fn safe_withdraw(&mut self, vault: Address, amount: U256) -> Result<(), Vec<u8>> {
+        let vault_contract = IVault::new(vault);
+
+        // Limit gas to prevent reentrancy issues
+        let gas_limit = self.vm().evm_gas_left() / 2;
+        let config = Call::new_mutating(self).gas(gas_limit);
+
+        vault_contract.withdraw(self.vm(), config, amount)?;
+        Ok(())
+    }
+
+    // Complex multi-call example
+    pub fn swap_and_deposit(
+        &mut self,
+        token: Address,
+        vault: Address,
+        amount: U256,
+    ) -> Result<(), InterfaceError> {
+        let token_contract = IToken::new(token);
+
+        // First, check balance
+        let balance = token_contract
+            .balance_of(self.vm(), Call::new(), self.vm().contract_address())
+            .unwrap();
+
+        if balance < amount {
+            return Err(InterfaceError::InsufficientBalance(InsufficientBalance {
+                have: balance,
+                want: amount,
+            }));
+        }
+
+        // Approve vault to spend tokens
+        let config = Call::new_mutating(self);
+        token_contract
+            .approve(self.vm(), config, vault, amount)
+            .map_err(|_| InterfaceError::TransferFailed(TransferFailed {
+                token,
+                to: vault,
+                amount,
+            }))?;
+
+        Ok(())
+    }
+}
+```
+
+## Best practices
+
+### Validate addresses before calls
+
+Always verify that contract addresses are valid before making external calls:
+
+```rust
+pub fn safe_transfer(
+    &mut self,
+    token: Address,
+    to: Address,
+    amount: U256,
+) -> Result<bool, InterfaceError> {
+    // Validate addresses
+    if token == Address::ZERO || to == Address::ZERO {
+        return Err(InterfaceError::InvalidAddress);
+    }
+
+    let token_contract = IToken::new(token);
+    let config = Call::new_mutating(self);
+
+    Ok(token_contract.transfer(self.vm(), config, to, amount).unwrap())
+}
+```
+
+### Handle call failures gracefully
+
+External calls can fail for various reasons. Always handle errors appropriately:
+
+```rust
+pub fn try_transfer(
+    &mut self,
+    token: Address,
+    to: Address,
+    amount: U256,
+) -> Result<bool, InterfaceError> {
+    let token_contract = IToken::new(token);
+    let config = Call::new_mutating(self);
+
+    match token_contract.transfer(self.vm(), config, to, amount) {
+        Ok(success) => Ok(success),
+        Err(_) => Err(InterfaceError::TransferFailed(TransferFailed {
+            token,
+            to,
+            amount,
+        })),
+    }
+}
+```
+
+### Follow the checks-effects-interactions pattern
+
+When making external calls, update your contract's state before calling external contracts to prevent reentrancy attacks:
+
+```rust
+pub fn withdraw_tokens(
+    &mut self,
+    token: Address,
+    amount: U256,
+) -> Result<(), InterfaceError> {
+    let caller = self.vm().msg_sender();
+
+    // Checks
+    let balance = self.balances.get(caller);
+    if balance < amount {
+        return Err(InterfaceError::InsufficientBalance(InsufficientBalance {
+            have: balance,
+            want: amount,
+        }));
+    }
+
+    // Effects - update state BEFORE external call
+    self.balances.setter(caller).set(balance - amount);
+
+    // Interactions - external call last
+    let token_contract = IToken::new(token);
+    let config = Call::new_mutating(self);
+    token_contract.transfer(self.vm(), config, caller, amount)
+        .map_err(|_| InterfaceError::TransferFailed(TransferFailed {
+            token,
+            to: caller,
+            amount,
+        }))?;
+
+    Ok(())
+}
+```
+
+### Use gas limits for untrusted contracts
+
+When calling untrusted contracts, limit the gas to prevent malicious behavior:
+
+```rust
+pub fn call_untrusted(
+    &mut self,
+    target: Address,
+) -> Result<U256, Vec<u8>> {
+    let contract = IToken::new(target);
+
+    // Limit gas to prevent griefing attacks
+    let config = Call::new().gas(100_000);
+
+    Ok(contract.balance_of(self.vm(), config, self.vm().msg_sender()).unwrap())
+}
+```
+
+## Common pitfalls
+
+### Using the wrong call constructor
+
+Using `Call::new()` for state-changing calls will cause the transaction to fail:
+
+```rust
+//Correct - using Call::new_mutating(self)
+pub fn good_transfer(&mut self, token: Address, to: Address, amount: U256) -> bool {
+    let token_contract = IToken::new(token);
+    let config = Call::new_mutating(self);
+    token_contract.transfer(self.vm(), config, to, amount).unwrap()
+}
+
+// Wrong - using Call::new() for a write operation
+pub fn bad_transfer(&mut self, token: Address, to: Address, amount: U256) -> bool {
+    let token_contract = IToken::new(token);
+    let config = Call::new(); // This will fail!
+    token_contract.transfer(self.vm(), config, to, amount).unwrap()
+}
+```
+
+### Forgetting to pass the VM context
+
+All interface method calls require `self.vm()` as the first argument:
+
+```rust
+// Correct
+let balance = token_contract.balance_of(self.vm(), config, account).unwrap();
+
+// Wrong - missing self.vm()
+let balance = token_contract.balance_of(config, account).unwrap();
+```
+
+### Incorrect method naming
+
+Remember that Solidity method names are converted to snake_case in Rust:
+
+```rust
+// Correct - using Rust snake_case
+let balance = token.balance_of(self.vm(), config, account);
+
+// Wrong - using Solidity naming
+let balance = token.balanceOf(self.vm(), config, account);
+```
+
+## See also
+
+- [Stylus contracts reference](../fundamentals/contracts.mdx#external-contract-calls): Detailed reference for external contract calls
+- [Stylus by Example: Import interfaces](https://stylus-by-example.org/basic_examples/import_interfaces): Interactive examples
+- [Stylus SDK documentation](https://docs.rs/stylus-sdk/latest/stylus_sdk/): Complete API reference
