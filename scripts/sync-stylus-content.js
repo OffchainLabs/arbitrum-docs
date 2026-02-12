@@ -26,7 +26,9 @@ const glob = require('glob');
 /** @type {SyncConfig} */
 const CONFIG = {
   paths: {
-    sourceDir: path.join(__dirname, '../submodules/stylus-by-example/src/app'),
+    sourceDir:
+      process.env.STYLUS_SOURCE_DIR ||
+      path.join(__dirname, '../submodules/stylus-by-example/src/app'),
     targetDir: path.join(__dirname, '../docs/stylus-by-example'),
     dontEditMarker: 'DONT-EDIT-THIS-FOLDER',
     sourcePattern: '**/page.mdx',
