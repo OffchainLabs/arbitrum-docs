@@ -1,0 +1,115 @@
+name: Update External Content
+
+on:
+  workflow_dispatch:
+    inputs:
+      content:
+        description: 'Which content to update'
+        required: true
+        type: choice
+        options:
+          - all
+          - sdk-docs
+          - stylus-content
+
+jobs:
+  sdk-docs:
+    name: Update SDK Documentation
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.content == 'all' || github.event.inputs.content == 'sdk-docs' }}
+    steps:
+      - name: Checkout docs repo
+        uses: actions/checkout@v4
+
+      - name: Shallow clone arbitrum-sdk
+        run: git clone --depth 1 https://github.com/OffchainLabs/arbitrum-sdk.git /tmp/arbitrum-sdk
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install docs dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install SDK dependencies
+        run: cd /tmp/arbitrum-sdk && yarn install
+
+      - name: Generate SDK docs
+        run: |
+          npx typedoc \
+            --tsconfig /tmp/arbitrum-sdk/tsconfig.json \
+            --entryPoints /tmp/arbitrum-sdk/src/lib \
+            --entryPointStrategy expand \
+            --exclude "abi,node_modules,tests,scripts" \
+            --excludeNotDocumented \
+            --excludeInternal \
+            --excludeExternals \
+            --readme none \
+            --out ./docs/sdk \
+            --cleanOutputDir false \
+            --hideGenerator \
+            --skipErrorChecking \
+            --logLevel Verbose \
+            --plugin typedoc-plugin-markdown \
+            --plugin typedoc-plugin-frontmatter \
+            --plugin ./scripts/sdkDocsHandler.ts \
+            --outputFileStrategy modules \
+            --hidePageHeader \
+            --hidePageTitle \
+            --hideBreadcrumbs \
+            --useCodeBlocks \
+            --expandParameters \
+            --parametersFormat table \
+            --propertiesFormat table \
+            --enumMembersFormat table \
+            --typeDeclarationFormat table \
+            --sanitizeComments
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore: update SDK documentation from upstream'
+          title: 'chore: update SDK documentation from upstream'
+          body: |
+            Automated update of SDK documentation generated from [arbitrum-sdk](https://github.com/OffchainLabs/arbitrum-sdk).
+
+            This PR was created by the `update-external-content` workflow.
+          branch: automated/update-sdk-docs
+          delete-branch: true
+
+  stylus-content:
+    name: Update Stylus by Example Content
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.content == 'all' || github.event.inputs.content == 'stylus-content' }}
+    steps:
+      - name: Checkout docs repo
+        uses: actions/checkout@v4
+
+      - name: Shallow clone stylus-by-example
+        run: git clone --depth 1 https://github.com/offchainlabs/stylus-by-example.git /tmp/stylus-by-example
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Sync Stylus content
+        run: node scripts/sync-stylus-content.js
+        env:
+          STYLUS_SOURCE_DIR: /tmp/stylus-by-example/src/app
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore: update Stylus by Example content from upstream'
+          title: 'chore: update Stylus by Example content from upstream'
+          body: |
+            Automated update of Stylus by Example content from [stylus-by-example](https://github.com/offchainlabs/stylus-by-example).
+
+            This PR was created by the `update-external-content` workflow.
+          branch: automated/update-stylus-content
+          delete-branch: true
