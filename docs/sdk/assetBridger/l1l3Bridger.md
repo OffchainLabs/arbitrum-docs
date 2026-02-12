@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### Erc20L1L3Bridger
 
-Defined in: [assetBridger/l1l3Bridger.ts:370](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L370)
+Defined in: assetBridger/l1l3Bridger.ts:370
 
 Bridger for moving ERC20 tokens from L1 to L3
 
@@ -18,12 +12,12 @@ Bridger for moving ERC20 tokens from L1 to L3
 
 #### Properties
 
-| Property                                                                           | Modifier    | Type                    | Description                                                                                                                                                         | Defined in                                                                                                                                                             |
-| ---------------------------------------------------------------------------------- | ----------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="_l1feetokenaddress"></a> `_l1FeeTokenAddress`                               | `protected` | `string` \| `undefined` | If the L3 network uses a custom fee token, this is the address of that token on L1                                                                                  | [assetBridger/l1l3Bridger.ts:406](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L406) |
-| <a id="l2forwarderfactorydefaultgaslimit"></a> `l2ForwarderFactoryDefaultGasLimit` | `readonly`  | `BigNumber`             | Default gas limit for L2ForwarderFactory.callForwarder of 1,000,000 Measured Standard: 361746 Measured OnlyGasToken: 220416 Measured NonGasTokenToCustomGas: 373449 | [assetBridger/l1l3Bridger.ts:385](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L385) |
-| <a id="l2gastokenaddress"></a> `l2GasTokenAddress`                                 | `readonly`  | `string` \| `undefined` | If the L3 network uses a custom (non-eth) fee token, this is the address of that token on L2                                                                        | [assetBridger/l1l3Bridger.ts:398](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L398) |
-| <a id="teleporter"></a> `teleporter`                                               | `readonly`  | `Teleporter`            | Addresses of teleporter contracts on L2                                                                                                                             | [assetBridger/l1l3Bridger.ts:374](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L374) |
+| Property                                                                           | Modifier    | Type                    | Description                                                                                                                                                         | Defined in                      |
+| ---------------------------------------------------------------------------------- | ----------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| <a id="_l1feetokenaddress"></a> `_l1FeeTokenAddress`                               | `protected` | `string` \| `undefined` | If the L3 network uses a custom fee token, this is the address of that token on L1                                                                                  | assetBridger/l1l3Bridger.ts:406 |
+| <a id="l2forwarderfactorydefaultgaslimit"></a> `l2ForwarderFactoryDefaultGasLimit` | `readonly`  | `BigNumber`             | Default gas limit for L2ForwarderFactory.callForwarder of 1,000,000 Measured Standard: 361746 Measured OnlyGasToken: 220416 Measured NonGasTokenToCustomGas: 373449 | assetBridger/l1l3Bridger.ts:385 |
+| <a id="l2gastokenaddress"></a> `l2GasTokenAddress`                                 | `readonly`  | `string` \| `undefined` | If the L3 network uses a custom (non-eth) fee token, this is the address of that token on L2                                                                        | assetBridger/l1l3Bridger.ts:398 |
+| <a id="teleporter"></a> `teleporter`                                               | `readonly`  | `Teleporter`            | Addresses of teleporter contracts on L2                                                                                                                             | assetBridger/l1l3Bridger.ts:374 |
 
 #### Methods
 
@@ -33,7 +27,7 @@ Bridger for moving ERC20 tokens from L1 to L3
 protected _checkL1Network(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:306](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L306)
+Defined in: assetBridger/l1l3Bridger.ts:306
 
 Check the signer/provider matches the l1Network, throws if not
 
@@ -59,7 +53,7 @@ BaseL1L3Bridger._checkL1Network;
 protected _checkL2Network(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:314](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L314)
+Defined in: assetBridger/l1l3Bridger.ts:314
 
 Check the signer/provider matches the l2Network, throws if not
 
@@ -85,7 +79,7 @@ BaseL1L3Bridger._checkL2Network;
 protected _checkL3Network(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:322](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L322)
+Defined in: assetBridger/l1l3Bridger.ts:322
 
 Check the signer/provider matches the l3Network, throws if not
 
@@ -111,7 +105,7 @@ BaseL1L3Bridger._checkL3Network;
 protected _decodeCallForwarderCalldata(data: string): L2ForwarderParamsStruct;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1402](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1402)
+Defined in: assetBridger/l1l3Bridger.ts:1402
 
 Given raw calldata for a callForwarder call, decode the parameters
 
@@ -131,7 +125,7 @@ Given raw calldata for a callForwarder call, decode the parameters
 protected _decodeTeleportCalldata(data: string): TeleportParamsStruct;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1388](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1388)
+Defined in: assetBridger/l1l3Bridger.ts:1388
 
 Given raw calldata for a teleport tx, decode the teleport parameters
 
@@ -154,20 +148,14 @@ protected _fillPartialTeleportParams(
    l1Provider: Provider,
    l2Provider: Provider,
    l3Provider: Provider): Promise<{
-  costs: [BigNumber, BigNumber, number, RetryableGasCostsStructOutput] & object;
+  costs: any;
   teleportParams: {
-     amount: BigNumberish;
      gasParams: RetryableGasParamsStruct;
-     l1l2Router: string;
-     l1Token: string;
-     l2l3RouterOrInbox: string;
-     l3FeeTokenL1Addr: string;
-     to: string;
   };
 }>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1194](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1194)
+Defined in: assetBridger/l1l3Bridger.ts:1194
 
 Given TeleportParams without the gas parameters, return TeleportParams with gas parameters populated.
 Does not modify the input parameters.
@@ -185,15 +173,9 @@ Does not modify the input parameters.
 ###### Returns
 
 `Promise`\<\{
-`costs`: \[`BigNumber`, `BigNumber`, `number`, `RetryableGasCostsStructOutput`\] & `object`;
+`costs`: `any`;
 `teleportParams`: \{
-`amount`: `BigNumberish`;
 `gasParams`: `RetryableGasParamsStruct`;
-`l1l2Router`: `string`;
-`l1Token`: `string`;
-`l2l3RouterOrInbox`: `string`;
-`l3FeeTokenL1Addr`: `string`;
-`to`: `string`;
 \};
 \}\>
 
@@ -203,7 +185,7 @@ Does not modify the input parameters.
 protected _getL1L2FeeTokenBridgeGasEstimates(params: object): Promise<RetryableGasValues>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1056](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1056)
+Defined in: assetBridger/l1l3Bridger.ts:1056
 
 Estimate the gasLimit and maxSubmissionFee for the L1 to L2 fee token bridge leg of a teleportation
 
@@ -229,7 +211,7 @@ Estimate the gasLimit and maxSubmissionFee for the L1 to L2 fee token bridge leg
 protected _getL1L2TokenBridgeGasEstimates(params: object): Promise<RetryableGasValues>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1024](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1024)
+Defined in: assetBridger/l1l3Bridger.ts:1024
 
 Estimate the gasLimit and maxSubmissionFee for the L1 to L2 token bridge leg of a teleportation
 
@@ -255,7 +237,7 @@ Estimate the gasLimit and maxSubmissionFee for the L1 to L2 token bridge leg of 
 protected _getL2ForwarderFactoryGasEstimates(l1GasPrice: BigNumber, l1Provider: Provider): Promise<RetryableGasValues>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1095](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1095)
+Defined in: assetBridger/l1l3Bridger.ts:1095
 
 Estimate the gasLimit and maxSubmissionFee for L2ForwarderFactory.callForwarder leg of a teleportation.
 Gas limit is hardcoded to 1,000,000
@@ -277,7 +259,7 @@ Gas limit is hardcoded to 1,000,000
 protected _getL2L3BridgeGasEstimates(params: object): Promise<RetryableGasValues>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1117](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1117)
+Defined in: assetBridger/l1l3Bridger.ts:1117
 
 Estimate the gasLimit and maxSubmissionFee for the L2 -\> L3 leg of a teleportation.
 
@@ -303,7 +285,7 @@ Estimate the gasLimit and maxSubmissionFee for the L2 -\> L3 leg of a teleportat
 protected _getTokenBridgeGasEstimates(params: object): Promise<RetryableGasValues>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:976](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L976)
+Defined in: assetBridger/l1l3Bridger.ts:976
 
 Estimate the gasLimit and maxSubmissionFee for a token bridge retryable
 
@@ -332,7 +314,7 @@ Estimate the gasLimit and maxSubmissionFee for a token bridge retryable
 protected _l2ForwarderFactoryCalldataSize(): number;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1366](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1366)
+Defined in: assetBridger/l1l3Bridger.ts:1366
 
 ###### Returns
 
@@ -353,7 +335,7 @@ approveGasToken(params:
 }): Promise<ContractTransaction>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:701](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L701)
+Defined in: assetBridger/l1l3Bridger.ts:701
 
 Approve the L3's fee token for teleportation.
 The tokens will be approved for L1Teleporter.
@@ -375,7 +357,7 @@ Will throw if the L3 network uses ETH for fees or the fee token doesn't exist on
 approveToken(params: TxRequestParams | TokenApproveParams & object): Promise<ContractTransaction>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:659](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L659)
+Defined in: assetBridger/l1l3Bridger.ts:659
 
 Approve tokens for teleportation.
 The tokens will be approved for L1Teleporter.
@@ -396,7 +378,7 @@ The tokens will be approved for L1Teleporter.
 deposit(params: TxRequestParams | Erc20L1L3DepositRequestParams & object): Promise<ParentContractCallTransaction>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:811](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L811)
+Defined in: assetBridger/l1l3Bridger.ts:811
 
 Execute a teleportation of some tokens from L1 to L3.
 
@@ -413,10 +395,10 @@ Execute a teleportation of some tokens from L1 to L3.
 ##### getApproveGasTokenRequest()
 
 ```ts
-getApproveGasTokenRequest(params: object): Promise<Required<Pick<TransactionRequest, "to" | "value" | "data">>>;
+getApproveGasTokenRequest(params: object): Promise<Required<Pick<TransactionRequest, "to" | "data" | "value">>>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:682](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L682)
+Defined in: assetBridger/l1l3Bridger.ts:682
 
 Get a tx request to approve the L3's fee token for teleportation.
 The tokens will be approved for L1Teleporter.
@@ -433,15 +415,15 @@ Will throw if the L3 network uses ETH for fees or the fee token doesn't exist on
 
 ###### Returns
 
-`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"value"` \| `"data"`\>\>\>
+`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"data"` \| `"value"`\>\>\>
 
 ##### getApproveTokenRequest()
 
 ```ts
-getApproveTokenRequest(params: TokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "value" | "data">>>;
+getApproveTokenRequest(params: TokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "data" | "value">>>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:640](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L640)
+Defined in: assetBridger/l1l3Bridger.ts:640
 
 Get a tx request to approve tokens for teleportation.
 The tokens will be approved for L1Teleporter.
@@ -454,7 +436,7 @@ The tokens will be approved for L1Teleporter.
 
 ###### Returns
 
-`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"value"` \| `"data"`\>\>\>
+`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"data"` \| `"value"`\>\>\>
 
 ##### getDepositParameters()
 
@@ -466,7 +448,7 @@ getDepositParameters(params: object & TxReference): Promise<{
 }>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:837](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L837)
+Defined in: assetBridger/l1l3Bridger.ts:837
 
 Given a teleportation tx, get the L1Teleporter parameters, L2Forwarder parameters, and L2Forwarder address
 
@@ -497,7 +479,7 @@ getDepositRequest(params: Erc20L1L3DepositRequestParams &
 }): Promise<DepositRequestResult>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:732](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L732)
+Defined in: assetBridger/l1l3Bridger.ts:732
 
 Get a tx request for teleporting some tokens from L1 to L3.
 Also returns the amount of fee tokens required for teleportation.
@@ -518,7 +500,7 @@ Also returns the amount of fee tokens required for teleportation.
 getDepositStatus(params: GetL1L3DepositStatusParams): Promise<Erc20L1L3DepositStatus>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:878](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L878)
+Defined in: assetBridger/l1l3Bridger.ts:878
 
 Fetch the cross chain messages and their status
 
@@ -540,7 +522,7 @@ Can provide either the txHash, the tx, or the txReceipt
 getGasTokenOnL1(l1Provider: Provider, l2Provider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:431](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L431)
+Defined in: assetBridger/l1l3Bridger.ts:431
 
 If the L3 network uses a custom gas token, return the address of that token on L1.
 If the fee token is not available on L1, does not use 18 decimals on L1 and L2, or the L3 network uses ETH for fees, throw.
@@ -562,7 +544,7 @@ If the fee token is not available on L1, does not use 18 decimals on L1 and L2, 
 getL1L2GatewayAddress(erc20L1Address: string, l1Provider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:532](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L532)
+Defined in: assetBridger/l1l3Bridger.ts:532
 
 Given an L1 token's address, get the address of the token's L1 \<-\> L2 gateway on L1
 
@@ -583,7 +565,7 @@ Given an L1 token's address, get the address of the token's L1 \<-\> L2 gateway 
 getL1TokenContract(l1TokenAddr: string, l1Provider: Provider): IERC20;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:560](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L560)
+Defined in: assetBridger/l1l3Bridger.ts:560
 
 Get the L1 token contract at the provided address
 Note: This function just returns a typed ethers object for the provided address, it doesn't
@@ -607,7 +589,7 @@ of any of the underlying functions on that contract.
 getL2Erc20Address(erc20L1Address: string, l1Provider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:508](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L508)
+Defined in: assetBridger/l1l3Bridger.ts:508
 
 Get the corresponding L2 token address for the provided L1 token
 
@@ -631,7 +613,7 @@ getL2L3GatewayAddress(
 l2Provider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:545](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L545)
+Defined in: assetBridger/l1l3Bridger.ts:545
 
 Get the address of the L2 \<-\> L3 gateway on L2 given an L1 token address
 
@@ -653,7 +635,7 @@ Get the address of the L2 \<-\> L3 gateway on L2 given an L1 token address
 getL2TokenContract(l2TokenAddr: string, l2Provider: Provider): L2GatewayToken;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:570](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L570)
+Defined in: assetBridger/l1l3Bridger.ts:570
 
 Get the L2 token contract at the provided address
 Note: This function just returns a typed ethers object for the provided address, it doesn't
@@ -680,7 +662,7 @@ getL3Erc20Address(
 l2Provider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:518](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L518)
+Defined in: assetBridger/l1l3Bridger.ts:518
 
 Get the corresponding L3 token address for the provided L1 token
 
@@ -702,7 +684,7 @@ Get the corresponding L3 token address for the provided L1 token
 getL3TokenContract(l3TokenAddr: string, l3Provider: Provider): L2GatewayToken;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:583](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L583)
+Defined in: assetBridger/l1l3Bridger.ts:583
 
 Get the L3 token contract at the provided address
 Note: This function just returns a typed ethers object for the provided address, it doesn't
@@ -726,7 +708,7 @@ of any of the underlying functions on that contract.
 l1TokenIsDisabled(l1TokenAddress: string, l1Provider: Provider): Promise<boolean>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:593](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L593)
+Defined in: assetBridger/l1l3Bridger.ts:593
 
 Whether the L1 token has been disabled on the L1 \<-\> L2 router given an L1 token address
 
@@ -751,7 +733,7 @@ l2ForwarderAddress(
 l1OrL2Provider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:613](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L613)
+Defined in: assetBridger/l1l3Bridger.ts:613
 
 Given some L2Forwarder parameters, get the address of the L2Forwarder contract
 
@@ -774,7 +756,7 @@ Given some L2Forwarder parameters, get the address of the L2Forwarder contract
 l2TokenIsDisabled(l2TokenAddress: string, l2Provider: Provider): Promise<boolean>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:603](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L603)
+Defined in: assetBridger/l1l3Bridger.ts:603
 
 Whether the L2 token has been disabled on the L2 \<-\> L3 router given an L2 token address
 
@@ -795,7 +777,7 @@ Whether the L2 token has been disabled on the L2 \<-\> L3 router given an L2 tok
 teleportationType(partialTeleportParams: Pick<IL1Teleporter.TeleportParamsStruct, "l3FeeTokenL1Addr" | "l1Token">): TeleportationType;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:953](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L953)
+Defined in: assetBridger/l1l3Bridger.ts:953
 
 Get the type of teleportation from the l1Token and l3FeeTokenL1Addr teleport parameters
 
@@ -813,7 +795,7 @@ Get the type of teleportation from the l1Token and l3FeeTokenL1Addr teleport par
 
 ### EthL1L3Bridger
 
-Defined in: [assetBridger/l1l3Bridger.ts:1446](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1446)
+Defined in: assetBridger/l1l3Bridger.ts:1446
 
 Bridge ETH from L1 to L3 using a double retryable ticket
 
@@ -829,7 +811,7 @@ Bridge ETH from L1 to L3 using a double retryable ticket
 protected _checkL1Network(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:306](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L306)
+Defined in: assetBridger/l1l3Bridger.ts:306
 
 Check the signer/provider matches the l1Network, throws if not
 
@@ -855,7 +837,7 @@ BaseL1L3Bridger._checkL1Network;
 protected _checkL2Network(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:314](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L314)
+Defined in: assetBridger/l1l3Bridger.ts:314
 
 Check the signer/provider matches the l2Network, throws if not
 
@@ -881,7 +863,7 @@ BaseL1L3Bridger._checkL2Network;
 protected _checkL3Network(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:322](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L322)
+Defined in: assetBridger/l1l3Bridger.ts:322
 
 Check the signer/provider matches the l3Network, throws if not
 
@@ -907,7 +889,7 @@ BaseL1L3Bridger._checkL3Network;
 deposit(params: TxRequestParams | EthL1L3DepositRequestParams & object): Promise<ParentContractCallTransaction>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1521](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1521)
+Defined in: assetBridger/l1l3Bridger.ts:1521
 
 Deposit ETH to L3 via a double retryable ticket
 
@@ -930,7 +912,7 @@ getDepositParameters(params: object & TxReference): Promise<{
 }>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1547](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1547)
+Defined in: assetBridger/l1l3Bridger.ts:1547
 
 Given an L1 transaction, get the retryable parameters for both l2 and l3 tickets
 
@@ -960,7 +942,7 @@ getDepositRequest(params: EthL1L3DepositRequestParams &
 }): Promise<ParentToChildTransactionRequest>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1463](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1463)
+Defined in: assetBridger/l1l3Bridger.ts:1463
 
 Get a tx request to deposit ETH to L3 via a double retryable ticket
 
@@ -980,7 +962,7 @@ Get a tx request to deposit ETH to L3 via a double retryable ticket
 getDepositStatus(params: GetL1L3DepositStatusParams): Promise<EthL1L3DepositStatus>;
 ```
 
-Defined in: [assetBridger/l1l3Bridger.ts:1577](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/l1l3Bridger.ts#L1577)
+Defined in: assetBridger/l1l3Bridger.ts:1577
 
 Get the status of a deposit given an L1 tx receipt. Does not check if the tx is actually a deposit tx.
 

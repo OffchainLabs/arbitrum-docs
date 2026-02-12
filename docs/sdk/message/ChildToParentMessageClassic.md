@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### ChildToParentMessageReaderClassic
 
-Defined in: [message/ChildToParentMessageClassic.ts:190](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L190)
+Defined in: message/ChildToParentMessageClassic.ts:190
 
 Provides read-only access for classic Child-to-Parent-messages
 
@@ -18,11 +12,11 @@ Provides read-only access for classic Child-to-Parent-messages
 
 #### Properties
 
-| Property                                   | Modifier    | Type               | Default value | Description                                                                                                        | Inherited from                             | Defined in                                                                                                                                                                                   |
-| ------------------------------------------ | ----------- | ------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="batchnumber"></a> `batchNumber`     | `readonly`  | `BigNumber`        | `undefined`   | The number of the batch this message is part of                                                                    | `ChildToParentMessageClassic.batchNumber`  | [message/ChildToParentMessageClassic.ts:108](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L108) |
-| <a id="indexinbatch"></a> `indexInBatch`   | `readonly`  | `BigNumber`        | `undefined`   | The index of this message in the batch                                                                             | `ChildToParentMessageClassic.indexInBatch` | [message/ChildToParentMessageClassic.ts:113](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L113) |
-| <a id="outboxaddress"></a> `outboxAddress` | `protected` | `string` \| `null` | `null`        | Contains the classic outbox address, or set to zero address if this network did not have a classic outbox deployed | -                                          | [message/ChildToParentMessageClassic.ts:203](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L203) |
+| Property                                   | Modifier    | Type               | Default value | Description                                                                                                        | Inherited from                             | Defined in                                 |
+| ------------------------------------------ | ----------- | ------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
+| <a id="batchnumber"></a> `batchNumber`     | `readonly`  | `BigNumber`        | `undefined`   | The number of the batch this message is part of                                                                    | `ChildToParentMessageClassic.batchNumber`  | message/ChildToParentMessageClassic.ts:108 |
+| <a id="indexinbatch"></a> `indexInBatch`   | `readonly`  | `BigNumber`        | `undefined`   | The index of this message in the batch                                                                             | `ChildToParentMessageClassic.indexInBatch` | message/ChildToParentMessageClassic.ts:113 |
+| <a id="outboxaddress"></a> `outboxAddress` | `protected` | `string` \| `null` | `null`        | Contains the classic outbox address, or set to zero address if this network did not have a classic outbox deployed | -                                          | message/ChildToParentMessageClassic.ts:203 |
 
 #### Methods
 
@@ -32,7 +26,7 @@ Provides read-only access for classic Child-to-Parent-messages
 getFirstExecutableBlock(childProvider: Provider): Promise<BigNumber | null>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:386](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L386)
+Defined in: message/ChildToParentMessageClassic.ts:386
 
 Estimates the Parent Chain block number in which this Child-to-Parent tx will be available for execution
 
@@ -54,7 +48,7 @@ Always returns null for classic chainToParentChain messages since they can be ex
 protected getOutboxAddress(childProvider: Provider, batchNumber: number): Promise<string>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:211](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L211)
+Defined in: message/ChildToParentMessageClassic.ts:211
 
 Classic had 2 outboxes, we need to find the correct one for the provided batch number
 
@@ -75,7 +69,7 @@ Classic had 2 outboxes, we need to find the correct one for the provided batch n
 hasExecuted(childProvider: Provider): Promise<boolean>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:301](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L301)
+Defined in: message/ChildToParentMessageClassic.ts:301
 
 Check if given outbox message has already been executed
 
@@ -95,7 +89,7 @@ Check if given outbox message has already been executed
 status(childProvider: Provider): Promise<ChildToParentMessageStatus>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:339](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L339)
+Defined in: message/ChildToParentMessageClassic.ts:339
 
 Get the status of this message
 In order to check if the message has been executed proof info must be provided.
@@ -116,7 +110,7 @@ In order to check if the message has been executed proof info must be provided.
 tryGetProof(childProvider: Provider): Promise<MessageBatchProofInfo | null>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:285](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L285)
+Defined in: message/ChildToParentMessageClassic.ts:285
 
 Get the execution proof for this message. Returns null if the batch does not exist yet.
 
@@ -136,7 +130,7 @@ Get the execution proof for this message. Returns null if the batch does not exi
 waitUntilOutboxEntryCreated(childProvider: Provider, retryDelay: number): Promise<CONFIRMED | EXECUTED>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:364](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L364)
+Defined in: message/ChildToParentMessageClassic.ts:364
 
 Waits until the outbox entry has been created, and will not return until it has been.
 WARNING: Outbox entries are only created when the corresponding node is confirmed. Which
@@ -165,7 +159,7 @@ static fromBatchNumber<T>(
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterClassic<T>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:128](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L128)
+Defined in: message/ChildToParentMessageClassic.ts:128
 
 Instantiates a new `ChildToParentMessageWriterClassic` or `ChildToParentMessageReaderClassic` object.
 
@@ -198,7 +192,7 @@ ChildToParentMessageClassic.fromBatchNumber;
 
 ### ChildToParentMessageWriterClassic
 
-Defined in: [message/ChildToParentMessageClassic.ts:397](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L397)
+Defined in: message/ChildToParentMessageClassic.ts:397
 
 Provides read and write access for classic Child-to-Parent-messages
 
@@ -218,7 +212,7 @@ new ChildToParentMessageWriterClassic(
    parentProvider?: Provider): ChildToParentMessageWriterClassic;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:406](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L406)
+Defined in: message/ChildToParentMessageClassic.ts:406
 
 Instantiates a new `ChildToParentMessageWriterClassic` object.
 
@@ -243,11 +237,11 @@ ChildToParentMessageReaderClassic.constructor;
 
 #### Properties
 
-| Property                                     | Modifier    | Type               | Default value | Description                                                                                                        | Inherited from                                                                                              | Defined in                                                                                                                                                                                   |
-| -------------------------------------------- | ----------- | ------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="batchnumber-1"></a> `batchNumber`     | `readonly`  | `BigNumber`        | `undefined`   | The number of the batch this message is part of                                                                    | [`ChildToParentMessageReaderClassic`](#childtoparentmessagereaderclassic).[`batchNumber`](#batchnumber)     | [message/ChildToParentMessageClassic.ts:108](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L108) |
-| <a id="indexinbatch-1"></a> `indexInBatch`   | `readonly`  | `BigNumber`        | `undefined`   | The index of this message in the batch                                                                             | [`ChildToParentMessageReaderClassic`](#childtoparentmessagereaderclassic).[`indexInBatch`](#indexinbatch)   | [message/ChildToParentMessageClassic.ts:113](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L113) |
-| <a id="outboxaddress-1"></a> `outboxAddress` | `protected` | `string` \| `null` | `null`        | Contains the classic outbox address, or set to zero address if this network did not have a classic outbox deployed | [`ChildToParentMessageReaderClassic`](#childtoparentmessagereaderclassic).[`outboxAddress`](#outboxaddress) | [message/ChildToParentMessageClassic.ts:203](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L203) |
+| Property                                     | Modifier    | Type               | Default value | Description                                                                                                        | Inherited from                                                                                              | Defined in                                 |
+| -------------------------------------------- | ----------- | ------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| <a id="batchnumber-1"></a> `batchNumber`     | `readonly`  | `BigNumber`        | `undefined`   | The number of the batch this message is part of                                                                    | [`ChildToParentMessageReaderClassic`](#childtoparentmessagereaderclassic).[`batchNumber`](#batchnumber)     | message/ChildToParentMessageClassic.ts:108 |
+| <a id="indexinbatch-1"></a> `indexInBatch`   | `readonly`  | `BigNumber`        | `undefined`   | The index of this message in the batch                                                                             | [`ChildToParentMessageReaderClassic`](#childtoparentmessagereaderclassic).[`indexInBatch`](#indexinbatch)   | message/ChildToParentMessageClassic.ts:113 |
+| <a id="outboxaddress-1"></a> `outboxAddress` | `protected` | `string` \| `null` | `null`        | Contains the classic outbox address, or set to zero address if this network did not have a classic outbox deployed | [`ChildToParentMessageReaderClassic`](#childtoparentmessagereaderclassic).[`outboxAddress`](#outboxaddress) | message/ChildToParentMessageClassic.ts:203 |
 
 #### Methods
 
@@ -257,7 +251,7 @@ ChildToParentMessageReaderClassic.constructor;
 execute(childProvider: Provider, overrides?: Overrides): Promise<ContractTransaction>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:421](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L421)
+Defined in: message/ChildToParentMessageClassic.ts:421
 
 Executes the ChildToParentMessage on Parent Chain.
 Will throw an error if the outbox entry has not been created, which happens when the
@@ -280,7 +274,7 @@ corresponding assertion is confirmed.
 getFirstExecutableBlock(childProvider: Provider): Promise<BigNumber | null>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:386](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L386)
+Defined in: message/ChildToParentMessageClassic.ts:386
 
 Estimates the Parent Chain block number in which this Child-to-Parent tx will be available for execution
 
@@ -306,7 +300,7 @@ Always returns null for classic chainToParentChain messages since they can be ex
 protected getOutboxAddress(childProvider: Provider, batchNumber: number): Promise<string>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:211](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L211)
+Defined in: message/ChildToParentMessageClassic.ts:211
 
 Classic had 2 outboxes, we need to find the correct one for the provided batch number
 
@@ -331,7 +325,7 @@ Classic had 2 outboxes, we need to find the correct one for the provided batch n
 hasExecuted(childProvider: Provider): Promise<boolean>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:301](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L301)
+Defined in: message/ChildToParentMessageClassic.ts:301
 
 Check if given outbox message has already been executed
 
@@ -355,7 +349,7 @@ Check if given outbox message has already been executed
 status(childProvider: Provider): Promise<ChildToParentMessageStatus>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:339](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L339)
+Defined in: message/ChildToParentMessageClassic.ts:339
 
 Get the status of this message
 In order to check if the message has been executed proof info must be provided.
@@ -380,7 +374,7 @@ In order to check if the message has been executed proof info must be provided.
 tryGetProof(childProvider: Provider): Promise<MessageBatchProofInfo | null>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:285](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L285)
+Defined in: message/ChildToParentMessageClassic.ts:285
 
 Get the execution proof for this message. Returns null if the batch does not exist yet.
 
@@ -404,7 +398,7 @@ Get the execution proof for this message. Returns null if the batch does not exi
 waitUntilOutboxEntryCreated(childProvider: Provider, retryDelay: number): Promise<CONFIRMED | EXECUTED>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:364](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L364)
+Defined in: message/ChildToParentMessageClassic.ts:364
 
 Waits until the outbox entry has been created, and will not return until it has been.
 WARNING: Outbox entries are only created when the corresponding node is confirmed. Which
@@ -437,7 +431,7 @@ static fromBatchNumber<T>(
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterClassic<T>;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:128](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L128)
+Defined in: message/ChildToParentMessageClassic.ts:128
 
 Instantiates a new `ChildToParentMessageWriterClassic` or `ChildToParentMessageReaderClassic` object.
 
@@ -474,7 +468,7 @@ type ChildToParentMessageReaderOrWriterClassic<T> = T extends Provider
   : ChildToParentMessageWriterClassic;
 ```
 
-Defined in: [message/ChildToParentMessageClassic.ts:98](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageClassic.ts#L98)
+Defined in: message/ChildToParentMessageClassic.ts:98
 
 Conditional type for Signer or Provider. If T is of type Provider
 then ChildToParentMessageReaderOrWriter\<T\> will be of type ChildToParentMessageReader.

@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### EventFetcher
 
-Defined in: [utils/eventFetcher.ts:47](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/eventFetcher.ts#L47)
+Defined in: utils/eventFetcher.ts:47
 
 Fetches and parses blockchain logs
 
@@ -23,16 +17,16 @@ getEvents<TContract, TEventFilter>(
 filter: object): Promise<FetchedEvent<TEventOf<TEventFilter>>[]>;
 ```
 
-Defined in: [utils/eventFetcher.ts:57](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/eventFetcher.ts#L57)
+Defined in: utils/eventFetcher.ts:57
 
 Fetch logs and parse logs
 
 ###### Type Parameters
 
-| Type Parameter                                                              |
-| --------------------------------------------------------------------------- |
-| `TContract` _extends_ `Contract`                                            |
-| `TEventFilter` _extends_ `TypedEventFilter`\<`TypedEvent`\<`any`, `any`\>\> |
+| Type Parameter                                              |
+| ----------------------------------------------------------- |
+| `TContract` _extends_ `Contract`                            |
+| `TEventFilter` _extends_ `TypedEventFilter`\<`TypedEvent`\> |
 
 ###### Parameters
 

@@ -1,39 +1,33 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Interfaces
 
 ### ArbitrumNetwork
 
-Defined in: [dataEntities/networks.ts:32](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L32)
+Defined in: dataEntities/networks.ts:32
 
 Represents an Arbitrum chain, e.g. Arbitrum One, Arbitrum Sepolia, or an L3 chain.
 
 #### Properties
 
-| Property                                                          | Type          | Description                                                                                                                                                                                                                                                | Defined in                                                                                                                                                     |
-| ----------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="chainid"></a> `chainId`                                    | `number`      | Id of the chain.                                                                                                                                                                                                                                           | [dataEntities/networks.ts:40](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L40) |
-| <a id="confirmperiodblocks"></a> `confirmPeriodBlocks`            | `number`      | The time allowed for validators to dispute or challenge state assertions. Measured in L1 blocks.                                                                                                                                                           | [dataEntities/networks.ts:60](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L60) |
-| <a id="ethbridge"></a> `ethBridge`                                | `EthBridge`   | The core contracts                                                                                                                                                                                                                                         | [dataEntities/networks.ts:48](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L48) |
-| <a id="isbold"></a> `isBold?`                                     | `boolean`     | Has the network been upgraded to bold. True if yes, otherwise undefined This is a temporary property and will be removed in future if Bold is widely adopted and the legacy challenge protocol is deprecated                                               | [dataEntities/networks.ts:84](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L84) |
-| <a id="iscustom"></a> `isCustom`                                  | `boolean`     | Whether or not the chain was registered by the user.                                                                                                                                                                                                       | [dataEntities/networks.ts:78](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L78) |
-| <a id="istestnet"></a> `isTestnet`                                | `boolean`     | Whether or not it is a testnet chain.                                                                                                                                                                                                                      | [dataEntities/networks.ts:74](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L74) |
-| <a id="name"></a> `name`                                          | `string`      | Name of the chain.                                                                                                                                                                                                                                         | [dataEntities/networks.ts:36](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L36) |
-| <a id="nativetoken"></a> `nativeToken?`                           | `string`      | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent chain as its native/gas token, this is the address of said token on the parent chain | [dataEntities/networks.ts:70](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L70) |
-| <a id="parentchainid"></a> `parentChainId`                        | `number`      | Chain id of the parent chain, i.e. the chain on which this chain settles to.                                                                                                                                                                               | [dataEntities/networks.ts:44](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L44) |
-| <a id="retryablelifetimeseconds"></a> `retryableLifetimeSeconds?` | `number`      | Represents how long a retryable ticket lasts for before it expires (in seconds). Defaults to 7 days.                                                                                                                                                       | [dataEntities/networks.ts:64](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L64) |
-| <a id="teleporter"></a> `teleporter?`                             | `Teleporter`  | The teleporter contracts.                                                                                                                                                                                                                                  | [dataEntities/networks.ts:56](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L56) |
-| <a id="tokenbridge"></a> `tokenBridge?`                           | `TokenBridge` | The token bridge contracts.                                                                                                                                                                                                                                | [dataEntities/networks.ts:52](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L52) |
+| Property                                                          | Type          | Description                                                                                                                                                                                                                                                | Defined in                  |
+| ----------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| <a id="chainid"></a> `chainId`                                    | `number`      | Id of the chain.                                                                                                                                                                                                                                           | dataEntities/networks.ts:40 |
+| <a id="confirmperiodblocks"></a> `confirmPeriodBlocks`            | `number`      | The time allowed for validators to dispute or challenge state assertions. Measured in L1 blocks.                                                                                                                                                           | dataEntities/networks.ts:60 |
+| <a id="ethbridge"></a> `ethBridge`                                | `EthBridge`   | The core contracts                                                                                                                                                                                                                                         | dataEntities/networks.ts:48 |
+| <a id="isbold"></a> `isBold?`                                     | `boolean`     | Has the network been upgraded to bold. True if yes, otherwise undefined This is a temporary property and will be removed in future if Bold is widely adopted and the legacy challenge protocol is deprecated                                               | dataEntities/networks.ts:84 |
+| <a id="iscustom"></a> `isCustom`                                  | `boolean`     | Whether or not the chain was registered by the user.                                                                                                                                                                                                       | dataEntities/networks.ts:78 |
+| <a id="istestnet"></a> `isTestnet`                                | `boolean`     | Whether or not it is a testnet chain.                                                                                                                                                                                                                      | dataEntities/networks.ts:74 |
+| <a id="name"></a> `name`                                          | `string`      | Name of the chain.                                                                                                                                                                                                                                         | dataEntities/networks.ts:36 |
+| <a id="nativetoken"></a> `nativeToken?`                           | `string`      | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent chain as its native/gas token, this is the address of said token on the parent chain | dataEntities/networks.ts:70 |
+| <a id="parentchainid"></a> `parentChainId`                        | `number`      | Chain id of the parent chain, i.e. the chain on which this chain settles to.                                                                                                                                                                               | dataEntities/networks.ts:44 |
+| <a id="retryablelifetimeseconds"></a> `retryableLifetimeSeconds?` | `number`      | Represents how long a retryable ticket lasts for before it expires (in seconds). Defaults to 7 days.                                                                                                                                                       | dataEntities/networks.ts:64 |
+| <a id="teleporter"></a> `teleporter?`                             | `Teleporter`  | The teleporter contracts.                                                                                                                                                                                                                                  | dataEntities/networks.ts:56 |
+| <a id="tokenbridge"></a> `tokenBridge?`                           | `TokenBridge` | The token bridge contracts.                                                                                                                                                                                                                                | dataEntities/networks.ts:52 |
 
 ---
 
 ### ~~L2NetworkTokenBridge~~
 
-Defined in: [dataEntities/networks.ts:131](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L131)
+Defined in: dataEntities/networks.ts:131
 
 This type is only here for when you want to achieve backwards compatibility between SDK v3 and v4.
 
@@ -53,7 +47,7 @@ type L2Network = Prettify<
 >;
 ```
 
-Defined in: [dataEntities/networks.ts:94](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L94)
+Defined in: dataEntities/networks.ts:94
 
 This type is only here for when you want to achieve backwards compatibility between SDK v3 and v4.
 
@@ -73,7 +67,7 @@ function assertArbitrumNetworkHasTokenBridge<T>(
 ): asserts network is T & { tokenBridge: TokenBridge };
 ```
 
-Defined in: [dataEntities/networks.ts:554](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L554)
+Defined in: dataEntities/networks.ts:556
 
 Asserts that the given object has a token bridge. This is useful because not all Arbitrum network
 operations require a token bridge.
@@ -108,7 +102,7 @@ ArbSdkError if the object does not have a token bridge
 function getArbitrumNetwork(chainId: number): ArbitrumNetwork;
 ```
 
-Defined in: [dataEntities/networks.ts:316](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L316)
+Defined in: dataEntities/networks.ts:318
 
 Returns the Arbitrum chain associated with the given signer, provider or chain id.
 
@@ -132,7 +126,7 @@ Throws if the chain is not an Arbitrum chain.
 function getArbitrumNetwork(signerOrProvider: SignerOrProvider): Promise<ArbitrumNetwork>;
 ```
 
-Defined in: [dataEntities/networks.ts:317](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L317)
+Defined in: dataEntities/networks.ts:319
 
 Returns the Arbitrum chain associated with the given signer, provider or chain id.
 
@@ -161,7 +155,7 @@ function getArbitrumNetworkInformationFromRollup(
 ): Promise<ArbitrumNetworkInformationFromRollup>;
 ```
 
-Defined in: [dataEntities/networks.ts:376](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L376)
+Defined in: dataEntities/networks.ts:378
 
 Returns all the information about an Arbitrum network that can be fetched from its Rollup contract.
 
@@ -186,7 +180,7 @@ An ArbitrumNetworkInformationFromRollup object
 function getArbitrumNetworks(): ArbitrumNetwork[];
 ```
 
-Defined in: [dataEntities/networks.ts:359](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L359)
+Defined in: dataEntities/networks.ts:361
 
 Returns all Arbitrum networks registered in the SDK, both default and custom.
 
@@ -202,7 +196,7 @@ Returns all Arbitrum networks registered in the SDK, both default and custom.
 function getChildrenForNetwork(parentChainOrChainId: number | ArbitrumNetwork): ArbitrumNetwork[];
 ```
 
-Defined in: [dataEntities/networks.ts:298](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L298)
+Defined in: dataEntities/networks.ts:300
 
 Returns a list of children chains for the given chain or chain id.
 
@@ -224,7 +218,7 @@ Returns a list of children chains for the given chain or chain id.
 function isParentNetwork(parentChainOrChainId: number | ArbitrumNetwork): boolean;
 ```
 
-Defined in: [dataEntities/networks.ts:283](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L283)
+Defined in: dataEntities/networks.ts:285
 
 Determines if a chain is a parent of _any_ other chain. Could be an L1 or an L2 chain.
 
@@ -246,7 +240,7 @@ Determines if a chain is a parent of _any_ other chain. Could be an L1 or an L2 
 function mapL2NetworkToArbitrumNetwork(l2Network: object): ArbitrumNetwork;
 ```
 
-Defined in: [dataEntities/networks.ts:534](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L534)
+Defined in: dataEntities/networks.ts:536
 
 Maps the old [L2Network](#l2network) (from SDK v3) to [ArbitrumNetwork](#arbitrumnetwork) (from SDK v4).
 
@@ -280,7 +274,7 @@ Maps the old [L2Network](#l2network) (from SDK v3) to [ArbitrumNetwork](#arbitru
 function mapL2NetworkTokenBridgeToTokenBridge(input: L2NetworkTokenBridge): TokenBridge;
 ```
 
-Defined in: [dataEntities/networks.ts:510](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L510)
+Defined in: dataEntities/networks.ts:512
 
 Maps the old [L2Network.tokenBridge](#mapl2networktoarbitrumnetwork-2) (from SDK v3) to [ArbitrumNetwork.tokenBridge](#tokenbridge) (from SDK v4).
 
@@ -302,7 +296,7 @@ Maps the old [L2Network.tokenBridge](#mapl2networktoarbitrumnetwork-2) (from SDK
 function registerCustomArbitrumNetwork(network: ArbitrumNetwork, options?: object): ArbitrumNetwork;
 ```
 
-Defined in: [dataEntities/networks.ts:415](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/networks.ts#L415)
+Defined in: dataEntities/networks.ts:417
 
 Registers a custom Arbitrum network.
 

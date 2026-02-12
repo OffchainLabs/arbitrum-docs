@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### ChildToParentMessage
 
-Defined in: [message/ChildToParentMessage.ts:60](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L60)
+Defined in: message/ChildToParentMessage.ts:60
 
 Base functionality for Child-to-Parent messages
 
@@ -23,11 +17,11 @@ Base functionality for Child-to-Parent messages
 ```ts
 static fromEvent<T>(
    parentSignerOrProvider: T,
-   event: ChildToParentTransactionEvent,
+   event: unknown,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriter<T>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:76](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L76)
+Defined in: message/ChildToParentMessage.ts:76
 
 Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` object.
 
@@ -39,11 +33,11 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ###### Parameters
 
-| Parameter                | Type                            | Description                                                                                                                                                                              |
-| ------------------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `parentSignerOrProvider` | `T`                             | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
-| `event`                  | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                            |
-| `parentProvider?`        | `Provider`                      | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type       | Description                                                                                                                                                                              |
+| ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`        | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider?`        | `Provider` | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -58,10 +52,10 @@ static getChildToParentEvents(
    position?: BigNumber,
    destination?: string,
    hash?: BigNumber,
-indexInBatch?: BigNumber): Promise<ChildToParentTransactionEvent & object[]>;
+indexInBatch?: BigNumber): Promise<object[]>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:109](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L109)
+Defined in: message/ChildToParentMessage.ts:109
 
 Get event logs for ChildToParent transactions.
 
@@ -80,7 +74,7 @@ Get event logs for ChildToParent transactions.
 
 ###### Returns
 
-`Promise`\<`ChildToParentTransactionEvent` & `object`[]\>
+`Promise`\<`object`[]\>
 
 Any classic and nitro events that match the provided filters.
 
@@ -88,7 +82,7 @@ Any classic and nitro events that match the provided filters.
 
 ### ChildToParentMessageReader
 
-Defined in: [message/ChildToParentMessage.ts:201](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L201)
+Defined in: message/ChildToParentMessage.ts:201
 
 Provides read-only access for Child-to-Parent messages
 
@@ -108,7 +102,7 @@ Provides read-only access for Child-to-Parent messages
 getFirstExecutableBlock(childProvider: Provider): Promise<BigNumber | null>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:273](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L273)
+Defined in: message/ChildToParentMessage.ts:273
 
 Estimates the Parent block number in which this Child-to-Parent tx will be available for execution.
 If the message can or already has been executed, this returns null
@@ -131,7 +125,7 @@ expected Parent block number where the Child-to-Parent message will be executabl
 status(childProvider: Provider): Promise<ChildToParentMessageStatus>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:237](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L237)
+Defined in: message/ChildToParentMessage.ts:237
 
 Get the status of this message
 In order to check if the message has been executed proof info must be provided.
@@ -152,7 +146,7 @@ In order to check if the message has been executed proof info must be provided.
 waitUntilReadyToExecute(childProvider: Provider, retryDelay: number): Promise<CONFIRMED | EXECUTED>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:252](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L252)
+Defined in: message/ChildToParentMessage.ts:252
 
 Waits until the outbox entry has been created, and will not return until it has been.
 WARNING: Outbox entries are only created when the corresponding node is confirmed. Which
@@ -176,11 +170,11 @@ outbox entry status (either executed or confirmed but not pending)
 ```ts
 static fromEvent<T>(
    parentSignerOrProvider: T,
-   event: ChildToParentTransactionEvent,
+   event: unknown,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriter<T>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:76](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L76)
+Defined in: message/ChildToParentMessage.ts:76
 
 Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` object.
 
@@ -192,11 +186,11 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ###### Parameters
 
-| Parameter                | Type                            | Description                                                                                                                                                                              |
-| ------------------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `parentSignerOrProvider` | `T`                             | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
-| `event`                  | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                            |
-| `parentProvider?`        | `Provider`                      | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type       | Description                                                                                                                                                                              |
+| ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`        | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider?`        | `Provider` | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -215,10 +209,10 @@ static getChildToParentEvents(
    position?: BigNumber,
    destination?: string,
    hash?: BigNumber,
-indexInBatch?: BigNumber): Promise<ChildToParentTransactionEvent & object[]>;
+indexInBatch?: BigNumber): Promise<object[]>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:109](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L109)
+Defined in: message/ChildToParentMessage.ts:109
 
 Get event logs for ChildToParent transactions.
 
@@ -237,7 +231,7 @@ Get event logs for ChildToParent transactions.
 
 ###### Returns
 
-`Promise`\<`ChildToParentTransactionEvent` & `object`[]\>
+`Promise`\<`object`[]\>
 
 Any classic and nitro events that match the provided filters.
 
@@ -249,7 +243,7 @@ Any classic and nitro events that match the provided filters.
 
 ### ChildToParentMessageWriter
 
-Defined in: [message/ChildToParentMessage.ts:285](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L285)
+Defined in: message/ChildToParentMessage.ts:285
 
 Provides read and write access for Child-to-Parent messages
 
@@ -264,21 +258,21 @@ Provides read and write access for Child-to-Parent messages
 ```ts
 new ChildToParentMessageWriter(
    parentSigner: Signer,
-   event: ChildToParentTransactionEvent,
+   event: unknown,
    parentProvider?: Provider): ChildToParentMessageWriter;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:296](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L296)
+Defined in: message/ChildToParentMessage.ts:296
 
 Instantiates a new `ChildToParentMessageWriter` object.
 
 ###### Parameters
 
-| Parameter         | Type                            | Description                                                                                                                                                                    |
-| ----------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `parentSigner`    | `Signer`                        | The signer to be used for executing the Child-to-Parent message.                                                                                                               |
-| `event`           | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                  |
-| `parentProvider?` | `Provider`                      | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter         | Type       | Description                                                                                                                                                                    |
+| ----------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `parentSigner`    | `Signer`   | The signer to be used for executing the Child-to-Parent message.                                                                                                               |
+| `event`           | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                  |
+| `parentProvider?` | `Provider` | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -298,7 +292,7 @@ ChildToParentMessageReader.constructor;
 execute(childProvider: Provider, overrides?: Overrides): Promise<ContractTransaction>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:325](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L325)
+Defined in: message/ChildToParentMessage.ts:325
 
 Executes the ChildToParentMessage on Parent chain.
 Will throw an error if the outbox entry has not been created, which happens when the
@@ -321,7 +315,7 @@ corresponding assertion is confirmed.
 getFirstExecutableBlock(childProvider: Provider): Promise<BigNumber | null>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:273](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L273)
+Defined in: message/ChildToParentMessage.ts:273
 
 Estimates the Parent block number in which this Child-to-Parent tx will be available for execution.
 If the message can or already has been executed, this returns null
@@ -348,7 +342,7 @@ expected Parent block number where the Child-to-Parent message will be executabl
 status(childProvider: Provider): Promise<ChildToParentMessageStatus>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:237](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L237)
+Defined in: message/ChildToParentMessage.ts:237
 
 Get the status of this message
 In order to check if the message has been executed proof info must be provided.
@@ -373,7 +367,7 @@ In order to check if the message has been executed proof info must be provided.
 waitUntilReadyToExecute(childProvider: Provider, retryDelay: number): Promise<CONFIRMED | EXECUTED>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:252](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L252)
+Defined in: message/ChildToParentMessage.ts:252
 
 Waits until the outbox entry has been created, and will not return until it has been.
 WARNING: Outbox entries are only created when the corresponding node is confirmed. Which
@@ -401,11 +395,11 @@ outbox entry status (either executed or confirmed but not pending)
 ```ts
 static fromEvent<T>(
    parentSignerOrProvider: T,
-   event: ChildToParentTransactionEvent,
+   event: unknown,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriter<T>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:76](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L76)
+Defined in: message/ChildToParentMessage.ts:76
 
 Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` object.
 
@@ -417,11 +411,11 @@ Instantiates a new `ChildToParentMessageWriter` or `ChildToParentMessageReader` 
 
 ###### Parameters
 
-| Parameter                | Type                            | Description                                                                                                                                                                              |
-| ------------------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `parentSignerOrProvider` | `T`                             | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
-| `event`                  | `ChildToParentTransactionEvent` | The event containing the data of the Child-to-Parent message.                                                                                                                            |
-| `parentProvider?`        | `Provider`                      | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type       | Description                                                                                                                                                                              |
+| ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`        | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider?`        | `Provider` | Optional. Used to override the Provider which is attached to `ParentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -440,10 +434,10 @@ static getChildToParentEvents(
    position?: BigNumber,
    destination?: string,
    hash?: BigNumber,
-indexInBatch?: BigNumber): Promise<ChildToParentTransactionEvent & object[]>;
+indexInBatch?: BigNumber): Promise<object[]>;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:109](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L109)
+Defined in: message/ChildToParentMessage.ts:109
 
 Get event logs for ChildToParent transactions.
 
@@ -462,7 +456,7 @@ Get event logs for ChildToParent transactions.
 
 ###### Returns
 
-`Promise`\<`ChildToParentTransactionEvent` & `object`[]\>
+`Promise`\<`object`[]\>
 
 Any classic and nitro events that match the provided filters.
 
@@ -480,7 +474,7 @@ type ChildToParentMessageReaderOrWriter<T> = T extends Provider
   : ChildToParentMessageWriter;
 ```
 
-Defined in: [message/ChildToParentMessage.ts:54](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessage.ts#L54)
+Defined in: message/ChildToParentMessage.ts:54
 
 Conditional type for Signer or Provider. If T is of type Provider
 then ChildToParentMessageReaderOrWriter\<T\> will be of type ChildToParentMessageReader.

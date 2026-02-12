@@ -11,7 +11,7 @@ const sdkSidebar = {
   sdkSidebar: [
     {
       type: 'doc',
-      id: 'sdk/index',
+      id: 'sdk/sdk-intro',
       label: 'Introduction',
     },
     {

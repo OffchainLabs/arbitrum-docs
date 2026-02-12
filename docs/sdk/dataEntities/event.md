@@ -1,9 +1,3 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Type Aliases
 
 ### EventArgs
@@ -12,7 +6,7 @@ toc_max_heading_level: 5
 type EventArgs<T> = T extends TypedEvent<infer _, infer TObj> ? TObj : never;
 ```
 
-Defined in: [dataEntities/event.ts:10](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/event.ts#L10)
+Defined in: dataEntities/event.ts:10
 
 The type of the event arguments.
 Gets the second generic arg
@@ -31,7 +25,7 @@ Gets the second generic arg
 type EventFromFilter<TFilter> = TFilter extends TypedEventFilter<infer TEvent> ? TEvent : never;
 ```
 
-Defined in: [dataEntities/event.ts:18](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/event.ts#L18)
+Defined in: dataEntities/event.ts:18
 
 The event type of a filter
 Gets the first generic arg
@@ -50,7 +44,7 @@ Gets the first generic arg
 type TypeChainContractFactory<TContract> = object;
 ```
 
-Defined in: [dataEntities/event.ts:41](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/event.ts#L41)
+Defined in: dataEntities/event.ts:41
 
 Typechain contract factories have additional properties
 
@@ -72,7 +66,7 @@ function parseTypedLog<TContract, TFilterName>(
 ): EventArgs<EventFromFilter<ReturnType<TContract['filters'][TFilterName]>>> | null;
 ```
 
-Defined in: [dataEntities/event.ts:53](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/event.ts#L53)
+Defined in: dataEntities/event.ts:53
 
 Parse a log that matches a given filter name.
 
@@ -110,7 +104,7 @@ function parseTypedLogs<TContract, TFilterName>(
 ): EventArgs<EventFromFilter<ReturnType<TContract['filters'][TFilterName]>>>[];
 ```
 
-Defined in: [dataEntities/event.ts:78](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/event.ts#L78)
+Defined in: dataEntities/event.ts:78
 
 Parses an array of logs.
 Filters out any logs whose topic does not match provided the filter name topic.

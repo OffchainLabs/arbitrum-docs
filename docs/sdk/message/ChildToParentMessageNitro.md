@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### ChildToParentMessageNitro
 
-Defined in: [message/ChildToParentMessageNitro.ts:136](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L136)
+Defined in: message/ChildToParentMessageNitro.ts:136
 
 Base functionality for nitro Child-\>Parent messages
 
@@ -23,11 +17,11 @@ Base functionality for nitro Child-\>Parent messages
 ```ts
 static fromEvent<T>(
    parentSignerOrProvider: T,
-   event: object,
+   event: unknown,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterNitro<T>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:148](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L148)
+Defined in: message/ChildToParentMessageNitro.ts:148
 
 Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageReaderNitro` object.
 
@@ -39,20 +33,11 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ###### Parameters
 
-| Parameter                | Type                                                                                                                                                                                                                           | Description                                                                                                                                                                              |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `parentSignerOrProvider` | `T`                                                                                                                                                                                                                            | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
-| `event`                  | \{ `arbBlockNum`: `BigNumber`; `caller`: `string`; `callvalue`: `BigNumber`; `data`: `string`; `destination`: `string`; `ethBlockNum`: `BigNumber`; `hash`: `BigNumber`; `position`: `BigNumber`; `timestamp`: `BigNumber`; \} | The event containing the data of the Child-to-Parent message.                                                                                                                            |
-| `event.arbBlockNum`      | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.caller?`          | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.callvalue?`       | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.data?`            | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.destination?`     | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.ethBlockNum?`     | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.hash?`            | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.position?`        | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.timestamp?`       | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `parentProvider?`        | `Provider`                                                                                                                                                                                                                     | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type       | Description                                                                                                                                                                              |
+| ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`        | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider?`        | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -62,7 +47,7 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ### ChildToParentMessageReaderNitro
 
-Defined in: [message/ChildToParentMessageNitro.ts:190](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L190)
+Defined in: message/ChildToParentMessageNitro.ts:190
 
 Provides read-only access nitro for child-to-parent-messages
 
@@ -82,7 +67,7 @@ Provides read-only access nitro for child-to-parent-messages
 getFirstExecutableBlock(childProvider: Provider): Promise<BigNumber | null>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:596](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L596)
+Defined in: message/ChildToParentMessageNitro.ts:608
 
 Estimates the L1 block number in which this L2 to L1 tx will be available for execution.
 If the message can or already has been executed, this returns null
@@ -105,7 +90,7 @@ expected parent chain block number where the child chain to parent chain message
 protected hasExecuted(childProvider: Provider): Promise<boolean>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:225](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L225)
+Defined in: message/ChildToParentMessageNitro.ts:225
 
 Check if this message has already been executed in the Outbox
 
@@ -125,7 +110,7 @@ Check if this message has already been executed in the Outbox
 status(childProvider: Provider): Promise<ChildToParentMessageStatus>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:240](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L240)
+Defined in: message/ChildToParentMessageNitro.ts:240
 
 Get the status of this message
 In order to check if the message has been executed proof info must be provided.
@@ -146,7 +131,7 @@ In order to check if the message has been executed proof info must be provided.
 waitUntilReadyToExecute(childProvider: Provider, retryDelay: number): Promise<CONFIRMED | EXECUTED>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:507](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L507)
+Defined in: message/ChildToParentMessageNitro.ts:519
 
 Waits until the outbox entry has been created, and will not return until it has been.
 WARNING: Outbox entries are only created when the corresponding node is confirmed. Which
@@ -170,11 +155,11 @@ outbox entry status (either executed or confirmed but not pending)
 ```ts
 static fromEvent<T>(
    parentSignerOrProvider: T,
-   event: object,
+   event: unknown,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterNitro<T>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:148](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L148)
+Defined in: message/ChildToParentMessageNitro.ts:148
 
 Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageReaderNitro` object.
 
@@ -186,20 +171,11 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ###### Parameters
 
-| Parameter                | Type                                                                                                                                                                                                                           | Description                                                                                                                                                                              |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `parentSignerOrProvider` | `T`                                                                                                                                                                                                                            | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
-| `event`                  | \{ `arbBlockNum`: `BigNumber`; `caller`: `string`; `callvalue`: `BigNumber`; `data`: `string`; `destination`: `string`; `ethBlockNum`: `BigNumber`; `hash`: `BigNumber`; `position`: `BigNumber`; `timestamp`: `BigNumber`; \} | The event containing the data of the Child-to-Parent message.                                                                                                                            |
-| `event.arbBlockNum`      | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.caller?`          | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.callvalue?`       | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.data?`            | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.destination?`     | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.ethBlockNum?`     | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.hash?`            | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.position?`        | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.timestamp?`       | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `parentProvider?`        | `Provider`                                                                                                                                                                                                                     | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type       | Description                                                                                                                                                                              |
+| ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`        | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider?`        | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -213,7 +189,7 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ### ChildToParentMessageWriterNitro
 
-Defined in: [message/ChildToParentMessageNitro.ts:716](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L716)
+Defined in: message/ChildToParentMessageNitro.ts:728
 
 Provides read and write access for nitro child-to-Parent-messages
 
@@ -228,30 +204,21 @@ Provides read and write access for nitro child-to-Parent-messages
 ```ts
 new ChildToParentMessageWriterNitro(
    parentSigner: Signer,
-   event: object,
+   event: unknown,
    parentProvider?: Provider): ChildToParentMessageWriterNitro;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:724](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L724)
+Defined in: message/ChildToParentMessageNitro.ts:736
 
 Instantiates a new `ChildToParentMessageWriterNitro` object.
 
 ###### Parameters
 
-| Parameter            | Type                                                                                                                                                                                                                           | Description                                                                                                                                                                    |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `parentSigner`       | `Signer`                                                                                                                                                                                                                       | The signer to be used for executing the Child-to-Parent message.                                                                                                               |
-| `event`              | \{ `arbBlockNum`: `BigNumber`; `caller`: `string`; `callvalue`: `BigNumber`; `data`: `string`; `destination`: `string`; `ethBlockNum`: `BigNumber`; `hash`: `BigNumber`; `position`: `BigNumber`; `timestamp`: `BigNumber`; \} | The event containing the data of the Child-to-Parent message.                                                                                                                  |
-| `event.arbBlockNum`  | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                              |
-| `event.caller?`      | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                              |
-| `event.callvalue?`   | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                              |
-| `event.data?`        | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                              |
-| `event.destination?` | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                              |
-| `event.ethBlockNum?` | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                              |
-| `event.hash?`        | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                              |
-| `event.position?`    | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                              |
-| `event.timestamp?`   | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                              |
-| `parentProvider?`    | `Provider`                                                                                                                                                                                                                     | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter         | Type       | Description                                                                                                                                                                    |
+| ----------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `parentSigner`    | `Signer`   | The signer to be used for executing the Child-to-Parent message.                                                                                                               |
+| `event`           | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                  |
+| `parentProvider?` | `Provider` | Optional. Used to override the Provider which is attached to `parentSigner` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -271,7 +238,7 @@ ChildToParentMessageReaderNitro.constructor;
 execute(childProvider: Provider, overrides?: Overrides): Promise<ContractTransaction>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:738](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L738)
+Defined in: message/ChildToParentMessageNitro.ts:750
 
 Executes the ChildToParentMessage on Parent Chain.
 Will throw an error if the outbox entry has not been created, which happens when the
@@ -294,7 +261,7 @@ corresponding assertion is confirmed.
 getFirstExecutableBlock(childProvider: Provider): Promise<BigNumber | null>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:596](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L596)
+Defined in: message/ChildToParentMessageNitro.ts:608
 
 Estimates the L1 block number in which this L2 to L1 tx will be available for execution.
 If the message can or already has been executed, this returns null
@@ -321,7 +288,7 @@ expected parent chain block number where the child chain to parent chain message
 protected hasExecuted(childProvider: Provider): Promise<boolean>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:225](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L225)
+Defined in: message/ChildToParentMessageNitro.ts:225
 
 Check if this message has already been executed in the Outbox
 
@@ -345,7 +312,7 @@ Check if this message has already been executed in the Outbox
 status(childProvider: Provider): Promise<ChildToParentMessageStatus>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:240](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L240)
+Defined in: message/ChildToParentMessageNitro.ts:240
 
 Get the status of this message
 In order to check if the message has been executed proof info must be provided.
@@ -370,7 +337,7 @@ In order to check if the message has been executed proof info must be provided.
 waitUntilReadyToExecute(childProvider: Provider, retryDelay: number): Promise<CONFIRMED | EXECUTED>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:507](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L507)
+Defined in: message/ChildToParentMessageNitro.ts:519
 
 Waits until the outbox entry has been created, and will not return until it has been.
 WARNING: Outbox entries are only created when the corresponding node is confirmed. Which
@@ -398,11 +365,11 @@ outbox entry status (either executed or confirmed but not pending)
 ```ts
 static fromEvent<T>(
    parentSignerOrProvider: T,
-   event: object,
+   event: unknown,
 parentProvider?: Provider): ChildToParentMessageReaderOrWriterNitro<T>;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:148](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L148)
+Defined in: message/ChildToParentMessageNitro.ts:148
 
 Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageReaderNitro` object.
 
@@ -414,20 +381,11 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 
 ###### Parameters
 
-| Parameter                | Type                                                                                                                                                                                                                           | Description                                                                                                                                                                              |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `parentSignerOrProvider` | `T`                                                                                                                                                                                                                            | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
-| `event`                  | \{ `arbBlockNum`: `BigNumber`; `caller`: `string`; `callvalue`: `BigNumber`; `data`: `string`; `destination`: `string`; `ethBlockNum`: `BigNumber`; `hash`: `BigNumber`; `position`: `BigNumber`; `timestamp`: `BigNumber`; \} | The event containing the data of the Child-to-Parent message.                                                                                                                            |
-| `event.arbBlockNum`      | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.caller?`          | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.callvalue?`       | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.data?`            | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.destination?`     | `string`                                                                                                                                                                                                                       | -                                                                                                                                                                                        |
-| `event.ethBlockNum?`     | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.hash?`            | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.position?`        | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `event.timestamp?`       | `BigNumber`                                                                                                                                                                                                                    | -                                                                                                                                                                                        |
-| `parentProvider?`        | `Provider`                                                                                                                                                                                                                     | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
+| Parameter                | Type       | Description                                                                                                                                                                              |
+| ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parentSignerOrProvider` | `T`        | Signer or provider to be used for executing or reading the Child-to-Parent message.                                                                                                      |
+| `event`                  | `unknown`  | The event containing the data of the Child-to-Parent message.                                                                                                                            |
+| `parentProvider?`        | `Provider` | Optional. Used to override the Provider which is attached to `parentSignerOrProvider` in case you need more control. This will be a required parameter in a future major version update. |
 
 ###### Returns
 
@@ -447,7 +405,7 @@ type ChildToParentMessageReaderOrWriterNitro<T> = T extends Provider
   : ChildToParentMessageWriterNitro;
 ```
 
-Defined in: [message/ChildToParentMessageNitro.ts:64](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildToParentMessageNitro.ts#L64)
+Defined in: message/ChildToParentMessageNitro.ts:64
 
 Conditional type for Signer or Provider. If T is of type Provider
 then ChildToParentMessageReaderOrWriter\<T\> will be of type ChildToParentMessageReader.

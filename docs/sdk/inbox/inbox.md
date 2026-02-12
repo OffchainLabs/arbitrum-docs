@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### InboxTools
 
-Defined in: [inbox/inbox.ts:64](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/inbox/inbox.ts#L64)
+Defined in: inbox/inbox.ts:64
 
 Tools for interacting with the inbox and bridge contracts
 
@@ -20,7 +14,7 @@ Tools for interacting with the inbox and bridge contracts
 forceInclude<T>(messageDeliveredEvent?: T, overrides?: Overrides): Promise<T extends ForceInclusionParams ? ContractTransaction : ContractTransaction | null>;
 ```
 
-Defined in: [inbox/inbox.ts:356](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/inbox/inbox.ts#L356)
+Defined in: inbox/inbox.ts:356
 
 Force includes all eligible messages in the delayed inbox.
 The inbox contract doesn't allow a message to be force-included
@@ -54,7 +48,7 @@ getForceIncludableEvent(
 rangeMultiplier: number): Promise<ForceInclusionParams | null>;
 ```
 
-Defined in: [inbox/inbox.ts:307](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/inbox/inbox.ts#L307)
+Defined in: inbox/inbox.ts:307
 
 Find the event of the latest message that can be force include
 
@@ -78,7 +72,7 @@ Null if non can be found.
 sendChildSignedTx(signedTx: string): Promise<ContractTransaction | null>;
 ```
 
-Defined in: [inbox/inbox.ts:401](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/inbox/inbox.ts#L401)
+Defined in: inbox/inbox.ts:401
 
 Send Child Chain signed tx using delayed inbox, which won't alias the sender's address
 It will be automatically included by the sequencer on Chain, if it isn't included
@@ -102,7 +96,7 @@ The parent delayed inbox's transaction itself.
 signChildTx(txRequest: RequiredTransactionRequestType, childSigner: Signer): Promise<string>;
 ```
 
-Defined in: [inbox/inbox.ts:429](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/inbox/inbox.ts#L429)
+Defined in: inbox/inbox.ts:429
 
 Sign a transaction with msg.to, msg.value and msg.data.
 You can use this as a helper to call inboxTools.sendChainSignedMessage

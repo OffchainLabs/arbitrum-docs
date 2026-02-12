@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### AdminErc20Bridger
 
-Defined in: [assetBridger/erc20Bridger.ts:977](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L977)
+Defined in: assetBridger/erc20Bridger.ts:977
 
 Admin functionality for the token bridge
 
@@ -24,7 +18,7 @@ Admin functionality for the token bridge
 new AdminErc20Bridger(childNetwork: ArbitrumNetwork): AdminErc20Bridger;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:205](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L205)
+Defined in: assetBridger/erc20Bridger.ts:205
 
 Bridger for moving ERC20 tokens back and forth between parent-to-child
 
@@ -44,9 +38,9 @@ Bridger for moving ERC20 tokens back and forth between parent-to-child
 
 #### Properties
 
-| Property                                | Modifier   | Type     | Description                                                                                                                                                                                                                                                    | Inherited from                                                  | Defined in                                                                                                                                                             |
-| --------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="nativetoken"></a> `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`Erc20Bridger`](#erc20bridger).[`nativeToken`](#nativetoken-1) | [assetBridger/assetBridger.ts:40](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L40) |
+| Property                                | Modifier   | Type     | Description                                                                                                                                                                                                                                                    | Inherited from                                                  | Defined in                      |
+| --------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------- |
+| <a id="nativetoken"></a> `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`Erc20Bridger`](#erc20bridger).[`nativeToken`](#nativetoken-1) | assetBridger/assetBridger.ts:40 |
 
 #### Accessors
 
@@ -58,7 +52,7 @@ Bridger for moving ERC20 tokens back and forth between parent-to-child
 get protected nativeTokenIsEth(): boolean;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:72](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L72)
+Defined in: assetBridger/assetBridger.ts:72
 
 Whether the chain uses ETH as its native/gas token
 
@@ -78,7 +72,7 @@ Whether the chain uses ETH as its native/gas token
 approveGasToken(params: ApproveParamsOrTxRequest): Promise<ContractTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:276](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L276)
+Defined in: assetBridger/erc20Bridger.ts:276
 
 Approves the custom gas token to be spent by the relevant gateway on the parent network
 
@@ -102,7 +96,7 @@ Approves the custom gas token to be spent by the relevant gateway on the parent 
 approveToken(params: ApproveParamsOrTxRequest): Promise<ContractTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:339](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L339)
+Defined in: assetBridger/erc20Bridger.ts:339
 
 Approve tokens for deposit to the bridge. The tokens will be approved for the relevant gateway.
 
@@ -126,7 +120,7 @@ Approve tokens for deposit to the bridge. The tokens will be approved for the re
 protected checkChildNetwork(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:61](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L61)
+Defined in: assetBridger/assetBridger.ts:61
 
 Check the signer/provider matches the child network, throws if not
 
@@ -150,7 +144,7 @@ Check the signer/provider matches the child network, throws if not
 protected checkParentNetwork(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:50](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L50)
+Defined in: assetBridger/assetBridger.ts:50
 
 Check the signer/provider matches the parent network, throws if not
 
@@ -174,7 +168,7 @@ Check the signer/provider matches the parent network, throws if not
 deposit(params: Erc20DepositParams | ParentToChildTxReqAndSignerProvider): Promise<ParentContractCallTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:769](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L769)
+Defined in: assetBridger/erc20Bridger.ts:769
 
 Execute a token deposit from parent to child network
 
@@ -195,10 +189,10 @@ Execute a token deposit from parent to child network
 ##### getApproveGasTokenRequest()
 
 ```ts
-getApproveGasTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "value" | "data">>>;
+getApproveGasTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "data" | "value">>>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:260](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L260)
+Defined in: assetBridger/erc20Bridger.ts:260
 
 Creates a transaction request for approving the custom gas token to be spent by the relevant gateway on the parent network
 
@@ -210,7 +204,7 @@ Creates a transaction request for approving the custom gas token to be spent by 
 
 ###### Returns
 
-`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"value"` \| `"data"`\>\>\>
+`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"data"` \| `"value"`\>\>\>
 
 ###### Inherited from
 
@@ -219,10 +213,10 @@ Creates a transaction request for approving the custom gas token to be spent by 
 ##### getApproveTokenRequest()
 
 ```ts
-getApproveTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "value" | "data">>>;
+getApproveTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "data" | "value">>>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:306](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L306)
+Defined in: assetBridger/erc20Bridger.ts:306
 
 Get a tx request to approve tokens for deposit to the bridge.
 The tokens will be approved for the relevant gateway.
@@ -235,7 +229,7 @@ The tokens will be approved for the relevant gateway.
 
 ###### Returns
 
-`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"value"` \| `"data"`\>\>\>
+`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"data"` \| `"value"`\>\>\>
 
 ###### Inherited from
 
@@ -247,7 +241,7 @@ The tokens will be approved for the relevant gateway.
 getChildErc20Address(erc20ParentAddress: string, parentProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:491](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L491)
+Defined in: assetBridger/erc20Bridger.ts:491
 
 Get the corresponding child network token address for the provided parent network token
 
@@ -272,7 +266,7 @@ Get the corresponding child network token address for the provided parent networ
 getChildGatewayAddress(erc20ParentAddress: string, childProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:244](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L244)
+Defined in: assetBridger/erc20Bridger.ts:244
 
 Get the address of the child gateway for this token
 
@@ -297,10 +291,10 @@ Get the address of the child gateway for this token
 getChildGatewaySetEvents(
    childProvider: Provider,
    filter: object,
-customNetworkChildGatewayRouter?: string): Promise<object[]>;
+customNetworkChildGatewayRouter?: string): Promise<unknown[]>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:1233](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L1233)
+Defined in: assetBridger/erc20Bridger.ts:1233
 
 Get all the gateway set events on the child gateway router
 
@@ -316,7 +310,7 @@ Get all the gateway set events on the child gateway router
 
 ###### Returns
 
-`Promise`\<`object`[]\>
+`Promise`\<`unknown`[]\>
 
 An array of GatewaySetEvent event arguments
 
@@ -330,7 +324,7 @@ If the network is custom and customNetworkChildGatewayRouter is not provided
 getChildTokenContract(childProvider: Provider, childTokenAddr: string): L2GatewayToken;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:462](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L462)
+Defined in: assetBridger/erc20Bridger.ts:462
 
 Get the child network token contract at the provided address
 Note: This function just returns a typed ethers object for the provided address, it doesn't
@@ -358,7 +352,7 @@ of any of the underlying functions on that contract.
 getDepositRequest(params: DepositRequest): Promise<ParentToChildTransactionRequest>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:655](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L655)
+Defined in: assetBridger/erc20Bridger.ts:655
 
 Get the arguments for calling the deposit function
 
@@ -382,7 +376,7 @@ Get the arguments for calling the deposit function
 getParentErc20Address(erc20ChildChainAddress: string, childProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:514](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L514)
+Defined in: assetBridger/erc20Bridger.ts:514
 
 Get the corresponding parent network address for the provided child network token
 Validates the returned address against the child network router to ensure it is correctly mapped to the provided erc20ChildChainAddress
@@ -408,7 +402,7 @@ Validates the returned address against the child network router to ensure it is 
 getParentGatewayAddress(erc20ParentAddress: string, parentProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:226](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L226)
+Defined in: assetBridger/erc20Bridger.ts:226
 
 Get the address of the parent gateway for this token
 
@@ -430,10 +424,10 @@ Get the address of the parent gateway for this token
 ##### getParentGatewaySetEvents()
 
 ```ts
-getParentGatewaySetEvents(parentProvider: Provider, filter: object): Promise<object[]>;
+getParentGatewaySetEvents(parentProvider: Provider, filter: object): Promise<unknown[]>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:1207](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L1207)
+Defined in: assetBridger/erc20Bridger.ts:1207
 
 Get all the gateway set events on the Parent gateway router
 
@@ -448,7 +442,7 @@ Get all the gateway set events on the Parent gateway router
 
 ###### Returns
 
-`Promise`\<`object`[]\>
+`Promise`\<`unknown`[]\>
 
 An array of GatewaySetEvent event arguments
 
@@ -458,7 +452,7 @@ An array of GatewaySetEvent event arguments
 getParentTokenContract(parentProvider: Provider, parentTokenAddr: string): ERC20;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:478](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L478)
+Defined in: assetBridger/erc20Bridger.ts:478
 
 Get the parent token contract at the provided address
 Note: This function just returns a typed ethers object for the provided address, it doesnt
@@ -489,10 +483,10 @@ getWithdrawalEvents(
    filter: object,
    parentTokenAddress?: string,
    fromAddress?: string,
-toAddress?: string): Promise<object & object[]>;
+toAddress?: string): Promise<object[]>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:367](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L367)
+Defined in: assetBridger/erc20Bridger.ts:367
 
 Get the child network events created by a withdrawal
 
@@ -511,7 +505,7 @@ Get the child network events created by a withdrawal
 
 ###### Returns
 
-`Promise`\<`object` & `object`[]\>
+`Promise`\<`object`[]\>
 
 ###### Inherited from
 
@@ -523,7 +517,7 @@ Get the child network events created by a withdrawal
 getWithdrawalRequest(params: Erc20WithdrawParams): Promise<ChildToParentTransactionRequest>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:826](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L826)
+Defined in: assetBridger/erc20Bridger.ts:826
 
 Get the arguments for calling the token withdrawal function
 
@@ -547,7 +541,7 @@ Get the arguments for calling the token withdrawal function
 isDepositDisabled(parentTokenAddress: string, parentProvider: Provider): Promise<boolean>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:560](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L560)
+Defined in: assetBridger/erc20Bridger.ts:560
 
 Whether the token has been disabled on the router
 
@@ -572,7 +566,7 @@ Whether the token has been disabled on the router
 isRegistered(params: object): Promise<boolean>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:924](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L924)
+Defined in: assetBridger/erc20Bridger.ts:924
 
 Checks if the token has been properly registered on both gateways. Mostly useful for tokens that use a custom gateway.
 
@@ -603,7 +597,7 @@ registerCustomToken(
 childProvider: Provider): Promise<ParentContractTransaction<ParentTransactionReceipt>>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:1035](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L1035)
+Defined in: assetBridger/erc20Bridger.ts:1035
 
 Register a custom token on the Arbitrum bridge
 See https://developer.offchainlabs.com/docs/bridging_assets#the-arbitrum-generic-custom-gateway for more details
@@ -631,7 +625,7 @@ setGateways(
 options?: GasOverrides): Promise<ParentContractCallTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:1266](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L1266)
+Defined in: assetBridger/erc20Bridger.ts:1266
 
 Register the provided token addresses against the provided gateways
 
@@ -656,7 +650,7 @@ withdraw(params:
 | ChildToParentTxReqAndSigner): Promise<ChildContractTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:889](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L889)
+Defined in: assetBridger/erc20Bridger.ts:889
 
 Withdraw tokens from child to parent network
 
@@ -680,7 +674,7 @@ Withdraw tokens from child to parent network
 static fromProvider(childProvider: Provider): Promise<Erc20Bridger>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:216](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L216)
+Defined in: assetBridger/erc20Bridger.ts:216
 
 Instantiates a new Erc20Bridger from a child provider
 
@@ -702,7 +696,7 @@ Instantiates a new Erc20Bridger from a child provider
 
 ### Erc20Bridger
 
-Defined in: [assetBridger/erc20Bridger.ts:191](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L191)
+Defined in: assetBridger/erc20Bridger.ts:191
 
 Bridger for moving ERC20 tokens back and forth between parent-to-child
 
@@ -724,7 +718,7 @@ Bridger for moving ERC20 tokens back and forth between parent-to-child
 new Erc20Bridger(childNetwork: ArbitrumNetwork): Erc20Bridger;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:205](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L205)
+Defined in: assetBridger/erc20Bridger.ts:205
 
 Bridger for moving ERC20 tokens back and forth between parent-to-child
 
@@ -749,9 +743,9 @@ AssetBridger<
 
 #### Properties
 
-| Property                                  | Modifier   | Type     | Description                                                                                                                                                                                                                                                    | Inherited from                                                                              | Defined in                                                                                                                                                             |
-| ----------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="nativetoken-1"></a> `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`AssetBridger`](assetBridger.md#assetbridger).[`nativeToken`](assetBridger.md#nativetoken) | [assetBridger/assetBridger.ts:40](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L40) |
+| Property                                  | Modifier   | Type     | Description                                                                                                                                                                                                                                                    | Inherited from                                                                              | Defined in                      |
+| ----------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
+| <a id="nativetoken-1"></a> `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`AssetBridger`](assetBridger.md#assetbridger).[`nativeToken`](assetBridger.md#nativetoken) | assetBridger/assetBridger.ts:40 |
 
 #### Accessors
 
@@ -763,7 +757,7 @@ AssetBridger<
 get protected nativeTokenIsEth(): boolean;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:72](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L72)
+Defined in: assetBridger/assetBridger.ts:72
 
 Whether the chain uses ETH as its native/gas token
 
@@ -783,7 +777,7 @@ Whether the chain uses ETH as its native/gas token
 approveGasToken(params: ApproveParamsOrTxRequest): Promise<ContractTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:276](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L276)
+Defined in: assetBridger/erc20Bridger.ts:276
 
 Approves the custom gas token to be spent by the relevant gateway on the parent network
 
@@ -803,7 +797,7 @@ Approves the custom gas token to be spent by the relevant gateway on the parent 
 approveToken(params: ApproveParamsOrTxRequest): Promise<ContractTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:339](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L339)
+Defined in: assetBridger/erc20Bridger.ts:339
 
 Approve tokens for deposit to the bridge. The tokens will be approved for the relevant gateway.
 
@@ -823,7 +817,7 @@ Approve tokens for deposit to the bridge. The tokens will be approved for the re
 protected checkChildNetwork(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:61](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L61)
+Defined in: assetBridger/assetBridger.ts:61
 
 Check the signer/provider matches the child network, throws if not
 
@@ -847,7 +841,7 @@ Check the signer/provider matches the child network, throws if not
 protected checkParentNetwork(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:50](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L50)
+Defined in: assetBridger/assetBridger.ts:50
 
 Check the signer/provider matches the parent network, throws if not
 
@@ -871,7 +865,7 @@ Check the signer/provider matches the parent network, throws if not
 deposit(params: Erc20DepositParams | ParentToChildTxReqAndSignerProvider): Promise<ParentContractCallTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:769](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L769)
+Defined in: assetBridger/erc20Bridger.ts:769
 
 Execute a token deposit from parent to child network
 
@@ -892,10 +886,10 @@ Execute a token deposit from parent to child network
 ##### getApproveGasTokenRequest()
 
 ```ts
-getApproveGasTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "value" | "data">>>;
+getApproveGasTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "data" | "value">>>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:260](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L260)
+Defined in: assetBridger/erc20Bridger.ts:260
 
 Creates a transaction request for approving the custom gas token to be spent by the relevant gateway on the parent network
 
@@ -907,15 +901,15 @@ Creates a transaction request for approving the custom gas token to be spent by 
 
 ###### Returns
 
-`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"value"` \| `"data"`\>\>\>
+`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"data"` \| `"value"`\>\>\>
 
 ##### getApproveTokenRequest()
 
 ```ts
-getApproveTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "value" | "data">>>;
+getApproveTokenRequest(params: ProviderTokenApproveParams): Promise<Required<Pick<TransactionRequest, "to" | "data" | "value">>>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:306](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L306)
+Defined in: assetBridger/erc20Bridger.ts:306
 
 Get a tx request to approve tokens for deposit to the bridge.
 The tokens will be approved for the relevant gateway.
@@ -928,7 +922,7 @@ The tokens will be approved for the relevant gateway.
 
 ###### Returns
 
-`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"value"` \| `"data"`\>\>\>
+`Promise`\<`Required`\<`Pick`\<`TransactionRequest`, `"to"` \| `"data"` \| `"value"`\>\>\>
 
 ##### getChildErc20Address()
 
@@ -936,7 +930,7 @@ The tokens will be approved for the relevant gateway.
 getChildErc20Address(erc20ParentAddress: string, parentProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:491](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L491)
+Defined in: assetBridger/erc20Bridger.ts:491
 
 Get the corresponding child network token address for the provided parent network token
 
@@ -957,7 +951,7 @@ Get the corresponding child network token address for the provided parent networ
 getChildGatewayAddress(erc20ParentAddress: string, childProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:244](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L244)
+Defined in: assetBridger/erc20Bridger.ts:244
 
 Get the address of the child gateway for this token
 
@@ -978,7 +972,7 @@ Get the address of the child gateway for this token
 getChildTokenContract(childProvider: Provider, childTokenAddr: string): L2GatewayToken;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:462](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L462)
+Defined in: assetBridger/erc20Bridger.ts:462
 
 Get the child network token contract at the provided address
 Note: This function just returns a typed ethers object for the provided address, it doesn't
@@ -1002,7 +996,7 @@ of any of the underlying functions on that contract.
 getDepositRequest(params: DepositRequest): Promise<ParentToChildTransactionRequest>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:655](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L655)
+Defined in: assetBridger/erc20Bridger.ts:655
 
 Get the arguments for calling the deposit function
 
@@ -1022,7 +1016,7 @@ Get the arguments for calling the deposit function
 getParentErc20Address(erc20ChildChainAddress: string, childProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:514](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L514)
+Defined in: assetBridger/erc20Bridger.ts:514
 
 Get the corresponding parent network address for the provided child network token
 Validates the returned address against the child network router to ensure it is correctly mapped to the provided erc20ChildChainAddress
@@ -1044,7 +1038,7 @@ Validates the returned address against the child network router to ensure it is 
 getParentGatewayAddress(erc20ParentAddress: string, parentProvider: Provider): Promise<string>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:226](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L226)
+Defined in: assetBridger/erc20Bridger.ts:226
 
 Get the address of the parent gateway for this token
 
@@ -1065,7 +1059,7 @@ Get the address of the parent gateway for this token
 getParentTokenContract(parentProvider: Provider, parentTokenAddr: string): ERC20;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:478](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L478)
+Defined in: assetBridger/erc20Bridger.ts:478
 
 Get the parent token contract at the provided address
 Note: This function just returns a typed ethers object for the provided address, it doesnt
@@ -1092,10 +1086,10 @@ getWithdrawalEvents(
    filter: object,
    parentTokenAddress?: string,
    fromAddress?: string,
-toAddress?: string): Promise<object & object[]>;
+toAddress?: string): Promise<object[]>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:367](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L367)
+Defined in: assetBridger/erc20Bridger.ts:367
 
 Get the child network events created by a withdrawal
 
@@ -1114,7 +1108,7 @@ Get the child network events created by a withdrawal
 
 ###### Returns
 
-`Promise`\<`object` & `object`[]\>
+`Promise`\<`object`[]\>
 
 ##### getWithdrawalRequest()
 
@@ -1122,7 +1116,7 @@ Get the child network events created by a withdrawal
 getWithdrawalRequest(params: Erc20WithdrawParams): Promise<ChildToParentTransactionRequest>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:826](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L826)
+Defined in: assetBridger/erc20Bridger.ts:826
 
 Get the arguments for calling the token withdrawal function
 
@@ -1142,7 +1136,7 @@ Get the arguments for calling the token withdrawal function
 isDepositDisabled(parentTokenAddress: string, parentProvider: Provider): Promise<boolean>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:560](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L560)
+Defined in: assetBridger/erc20Bridger.ts:560
 
 Whether the token has been disabled on the router
 
@@ -1163,7 +1157,7 @@ Whether the token has been disabled on the router
 isRegistered(params: object): Promise<boolean>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:924](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L924)
+Defined in: assetBridger/erc20Bridger.ts:924
 
 Checks if the token has been properly registered on both gateways. Mostly useful for tokens that use a custom gateway.
 
@@ -1188,7 +1182,7 @@ withdraw(params:
 | ChildToParentTxReqAndSigner): Promise<ChildContractTransaction>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:889](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L889)
+Defined in: assetBridger/erc20Bridger.ts:889
 
 Withdraw tokens from child to parent network
 
@@ -1212,7 +1206,7 @@ Withdraw tokens from child to parent network
 static fromProvider(childProvider: Provider): Promise<Erc20Bridger>;
 ```
 
-Defined in: [assetBridger/erc20Bridger.ts:216](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/erc20Bridger.ts#L216)
+Defined in: assetBridger/erc20Bridger.ts:216
 
 Instantiates a new Erc20Bridger from a child provider
 

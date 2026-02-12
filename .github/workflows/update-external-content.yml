@@ -38,10 +38,10 @@ jobs:
       - name: Generate SDK docs
         run: |
           npx typedoc \
-            --tsconfig /tmp/arbitrum-sdk/tsconfig.json \
-            --entryPoints /tmp/arbitrum-sdk/src/lib \
+            --tsconfig /tmp/arbitrum-sdk/packages/sdk/tsconfig.json \
+            --entryPoints /tmp/arbitrum-sdk/packages/sdk/src/lib \
             --entryPointStrategy expand \
-            --exclude "abi,node_modules,tests,scripts" \
+            --exclude "abi,abi-bold,node_modules,tests,scripts" \
             --excludeNotDocumented \
             --excludeInternal \
             --excludeExternals \

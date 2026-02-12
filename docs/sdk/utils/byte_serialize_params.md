@@ -1,9 +1,3 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Functions
 
 ### argSerializerConstructor()
@@ -14,7 +8,7 @@ function argSerializerConstructor(
 ): (params: PrimativeOrPrimativeArray[]) => Promise<Uint8Array<ArrayBufferLike>>;
 ```
 
-Defined in: [utils/byte_serialize_params.ts:102](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/byte_serialize_params.ts#L102)
+Defined in: utils/byte_serialize_params.ts:102
 
 to use:
 
@@ -56,7 +50,7 @@ function serializeParams(
 ): Promise<Uint8Array<ArrayBufferLike>>;
 ```
 
-Defined in: [utils/byte_serialize_params.ts:138](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/byte_serialize_params.ts#L138)
+Defined in: utils/byte_serialize_params.ts:138
 
 #### Parameters
 

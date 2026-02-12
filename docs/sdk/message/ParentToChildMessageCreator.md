@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### ParentToChildMessageCreator
 
-Defined in: [message/ParentToChildMessageCreator.ts:51](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentToChildMessageCreator.ts#L51)
+Defined in: message/ParentToChildMessageCreator.ts:51
 
 Creates retryable tickets by directly calling the Inbox contract on Parent chain
 
@@ -25,7 +19,7 @@ createRetryableTicket(
 options?: GasOverrides): Promise<ParentContractTransaction<ParentTransactionReceipt>>;
 ```
 
-Defined in: [message/ParentToChildMessageCreator.ts:206](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentToChildMessageCreator.ts#L206)
+Defined in: message/ParentToChildMessageCreator.ts:206
 
 Creates a retryable ticket by directly calling the Inbox contract on Parent chain
 
@@ -51,7 +45,7 @@ static getTicketCreationRequest(
 options?: GasOverrides): Promise<ParentToChildTransactionRequest>;
 ```
 
-Defined in: [message/ParentToChildMessageCreator.ts:139](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentToChildMessageCreator.ts#L139)
+Defined in: message/ParentToChildMessageCreator.ts:139
 
 Generate a transaction request for creating a retryable ticket
 
@@ -76,10 +70,10 @@ protected static getTicketCreationRequestCallData(
    estimates: Pick<RetryableData, ParentToChildGasKeys>,
    excessFeeRefundAddress: string,
    callValueRefundAddress: string,
-   nativeTokenIsEth: boolean): string;
+   nativeTokenIsEth: boolean): any;
 ```
 
-Defined in: [message/ParentToChildMessageCreator.ts:92](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentToChildMessageCreator.ts#L92)
+Defined in: message/ParentToChildMessageCreator.ts:92
 
 Prepare calldata for a call to create a retryable ticket
 
@@ -95,7 +89,7 @@ Prepare calldata for a call to create a retryable ticket
 
 ###### Returns
 
-`string`
+`any`
 
 ##### getTicketEstimate()
 
@@ -107,7 +101,7 @@ protected static getTicketEstimate(
 retryableGasOverrides?: GasOverrides): Promise<Pick<RetryableData, ParentToChildGasKeys>>;
 ```
 
-Defined in: [message/ParentToChildMessageCreator.ts:66](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentToChildMessageCreator.ts#L66)
+Defined in: message/ParentToChildMessageCreator.ts:66
 
 Gets a current estimate for the supplied params
 

@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### ParentContractCallTransactionReceipt
 
-Defined in: [message/ParentTransaction.ts:397](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L397)
+Defined in: message/ParentTransaction.ts:397
 
 A ParentTransactionReceipt with additional functionality that only exists
 if the transaction created a single call to a child chain contract - this includes
@@ -22,7 +16,7 @@ token deposits.
 getEthDeposits(childProvider: Provider): Promise<EthDepositMessage[]>;
 ```
 
-Defined in: [message/ParentTransaction.ts:191](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L191)
+Defined in: message/ParentTransaction.ts:191
 
 Get any eth deposit messages created by this transaction
 
@@ -45,16 +39,16 @@ ParentTransactionReceipt.getEthDeposits;
 ##### getInboxMessageDeliveredEvents()
 
 ```ts
-getInboxMessageDeliveredEvents(): object[];
+getInboxMessageDeliveredEvents(): unknown[];
 ```
 
-Defined in: [message/ParentTransaction.ts:134](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L134)
+Defined in: message/ParentTransaction.ts:134
 
 Get any InboxMessageDelivered events that were emitted during this transaction
 
 ###### Returns
 
-`object`[]
+`unknown`[]
 
 ###### Inherited from
 
@@ -65,16 +59,16 @@ ParentTransactionReceipt.getInboxMessageDeliveredEvents;
 ##### getMessageDeliveredEvents()
 
 ```ts
-getMessageDeliveredEvents(): object[];
+getMessageDeliveredEvents(): unknown[];
 ```
 
-Defined in: [message/ParentTransaction.ts:126](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L126)
+Defined in: message/ParentTransaction.ts:126
 
 Get any MessageDelivered events that were emitted during this transaction
 
 ###### Returns
 
-`object`[]
+`unknown`[]
 
 ###### Inherited from
 
@@ -88,7 +82,7 @@ ParentTransactionReceipt.getMessageDeliveredEvents;
 getMessageEvents(): object[];
 ```
 
-Defined in: [message/ParentTransaction.ts:147](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L147)
+Defined in: message/ParentTransaction.ts:147
 
 Get combined data for any InboxMessageDelivered and MessageDelivered events
 emitted during this transaction
@@ -109,7 +103,7 @@ ParentTransactionReceipt.getMessageEvents;
 getParentToChildMessages<T>(childSignerOrProvider: T): Promise<ParentToChildMessageReaderOrWriter<T>[]>;
 ```
 
-Defined in: [message/ParentTransaction.ts:248](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L248)
+Defined in: message/ParentTransaction.ts:248
 
 Get any parent-to-child messages created by this transaction
 
@@ -141,7 +135,7 @@ ParentTransactionReceipt.getParentToChildMessages;
 getParentToChildMessagesClassic(childProvider: Provider): Promise<ParentToChildMessageReaderClassic[]>;
 ```
 
-Defined in: [message/ParentTransaction.ts:216](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L216)
+Defined in: message/ParentTransaction.ts:216
 
 Get classic parent-to-child messages created by this transaction
 
@@ -164,16 +158,16 @@ ParentTransactionReceipt.getParentToChildMessagesClassic;
 ##### getTokenDepositEvents()
 
 ```ts
-getTokenDepositEvents(): object[];
+getTokenDepositEvents(): unknown[];
 ```
 
-Defined in: [message/ParentTransaction.ts:298](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L298)
+Defined in: message/ParentTransaction.ts:298
 
 Get any token deposit events created by this transaction
 
 ###### Returns
 
-`object`[]
+`unknown`[]
 
 ###### Inherited from
 
@@ -187,7 +181,7 @@ ParentTransactionReceipt.getTokenDepositEvents;
 isClassic<T>(childSignerOrProvider: T): Promise<boolean>;
 ```
 
-Defined in: [message/ParentTransaction.ts:106](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L106)
+Defined in: message/ParentTransaction.ts:106
 
 Check if is a classic transaction
 
@@ -222,7 +216,7 @@ waitForChildTransactionReceipt<T>(
 timeout?: number): Promise<object & ParentToChildMessageWaitForStatusResult>;
 ```
 
-Defined in: [message/ParentTransaction.ts:407](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L407)
+Defined in: message/ParentTransaction.ts:407
 
 Wait for the transaction to arrive and be executed on the child chain
 
@@ -254,7 +248,7 @@ For contract calls this is true only if the status is REDEEMED.
 static monkeyPatchContractCallWait(contractTransaction: ContractTransaction): ParentContractCallTransaction;
 ```
 
-Defined in: [message/ParentTransaction.ts:343](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L343)
+Defined in: message/ParentTransaction.ts:343
 
 Replaces the wait function with one that returns a [ParentContractCallTransactionReceipt](#parentcontractcalltransactionreceipt)
 
@@ -280,7 +274,7 @@ ParentTransactionReceipt.monkeyPatchContractCallWait;
 static monkeyPatchEthDepositWait(contractTransaction: ContractTransaction): ParentEthDepositTransaction;
 ```
 
-Defined in: [message/ParentTransaction.ts:327](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L327)
+Defined in: message/ParentTransaction.ts:327
 
 Replaces the wait function with one that returns a [ParentEthDepositTransactionReceipt](#parentethdeposittransactionreceipt)
 
@@ -306,7 +300,7 @@ ParentTransactionReceipt.monkeyPatchEthDepositWait;
 static monkeyPatchWait(contractTransaction: ContractTransaction): ParentContractTransaction;
 ```
 
-Defined in: [message/ParentTransaction.ts:311](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L311)
+Defined in: message/ParentTransaction.ts:311
 
 Replaces the wait function with one that returns a ParentTransactionReceipt
 
@@ -330,7 +324,7 @@ ParentTransactionReceipt.monkeyPatchWait;
 
 ### ParentEthDepositTransactionReceipt
 
-Defined in: [message/ParentTransaction.ts:359](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L359)
+Defined in: message/ParentTransaction.ts:359
 
 A ParentTransactionReceipt with additional functionality that only exists
 if the transaction created a single eth deposit.
@@ -343,7 +337,7 @@ if the transaction created a single eth deposit.
 getEthDeposits(childProvider: Provider): Promise<EthDepositMessage[]>;
 ```
 
-Defined in: [message/ParentTransaction.ts:191](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L191)
+Defined in: message/ParentTransaction.ts:191
 
 Get any eth deposit messages created by this transaction
 
@@ -366,16 +360,16 @@ ParentTransactionReceipt.getEthDeposits;
 ##### getInboxMessageDeliveredEvents()
 
 ```ts
-getInboxMessageDeliveredEvents(): object[];
+getInboxMessageDeliveredEvents(): unknown[];
 ```
 
-Defined in: [message/ParentTransaction.ts:134](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L134)
+Defined in: message/ParentTransaction.ts:134
 
 Get any InboxMessageDelivered events that were emitted during this transaction
 
 ###### Returns
 
-`object`[]
+`unknown`[]
 
 ###### Inherited from
 
@@ -386,16 +380,16 @@ ParentTransactionReceipt.getInboxMessageDeliveredEvents;
 ##### getMessageDeliveredEvents()
 
 ```ts
-getMessageDeliveredEvents(): object[];
+getMessageDeliveredEvents(): unknown[];
 ```
 
-Defined in: [message/ParentTransaction.ts:126](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L126)
+Defined in: message/ParentTransaction.ts:126
 
 Get any MessageDelivered events that were emitted during this transaction
 
 ###### Returns
 
-`object`[]
+`unknown`[]
 
 ###### Inherited from
 
@@ -409,7 +403,7 @@ ParentTransactionReceipt.getMessageDeliveredEvents;
 getMessageEvents(): object[];
 ```
 
-Defined in: [message/ParentTransaction.ts:147](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L147)
+Defined in: message/ParentTransaction.ts:147
 
 Get combined data for any InboxMessageDelivered and MessageDelivered events
 emitted during this transaction
@@ -430,7 +424,7 @@ ParentTransactionReceipt.getMessageEvents;
 getParentToChildMessages<T>(childSignerOrProvider: T): Promise<ParentToChildMessageReaderOrWriter<T>[]>;
 ```
 
-Defined in: [message/ParentTransaction.ts:248](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L248)
+Defined in: message/ParentTransaction.ts:248
 
 Get any parent-to-child messages created by this transaction
 
@@ -462,7 +456,7 @@ ParentTransactionReceipt.getParentToChildMessages;
 getParentToChildMessagesClassic(childProvider: Provider): Promise<ParentToChildMessageReaderClassic[]>;
 ```
 
-Defined in: [message/ParentTransaction.ts:216](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L216)
+Defined in: message/ParentTransaction.ts:216
 
 Get classic parent-to-child messages created by this transaction
 
@@ -485,16 +479,16 @@ ParentTransactionReceipt.getParentToChildMessagesClassic;
 ##### getTokenDepositEvents()
 
 ```ts
-getTokenDepositEvents(): object[];
+getTokenDepositEvents(): unknown[];
 ```
 
-Defined in: [message/ParentTransaction.ts:298](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L298)
+Defined in: message/ParentTransaction.ts:298
 
 Get any token deposit events created by this transaction
 
 ###### Returns
 
-`object`[]
+`unknown`[]
 
 ###### Inherited from
 
@@ -508,7 +502,7 @@ ParentTransactionReceipt.getTokenDepositEvents;
 isClassic<T>(childSignerOrProvider: T): Promise<boolean>;
 ```
 
-Defined in: [message/ParentTransaction.ts:106](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L106)
+Defined in: message/ParentTransaction.ts:106
 
 Check if is a classic transaction
 
@@ -543,7 +537,7 @@ waitForChildTransactionReceipt(
 timeout?: number): Promise<object & EthDepositMessageWaitForStatusResult>;
 ```
 
-Defined in: [message/ParentTransaction.ts:369](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L369)
+Defined in: message/ParentTransaction.ts:369
 
 Wait for the funds to arrive on the child chain
 
@@ -569,7 +563,7 @@ For eth deposits complete this is when the status is FUNDS_DEPOSITED, EXPIRED or
 static monkeyPatchContractCallWait(contractTransaction: ContractTransaction): ParentContractCallTransaction;
 ```
 
-Defined in: [message/ParentTransaction.ts:343](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L343)
+Defined in: message/ParentTransaction.ts:343
 
 Replaces the wait function with one that returns a [ParentContractCallTransactionReceipt](#parentcontractcalltransactionreceipt)
 
@@ -595,7 +589,7 @@ ParentTransactionReceipt.monkeyPatchContractCallWait;
 static monkeyPatchEthDepositWait(contractTransaction: ContractTransaction): ParentEthDepositTransaction;
 ```
 
-Defined in: [message/ParentTransaction.ts:327](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L327)
+Defined in: message/ParentTransaction.ts:327
 
 Replaces the wait function with one that returns a [ParentEthDepositTransactionReceipt](#parentethdeposittransactionreceipt)
 
@@ -621,7 +615,7 @@ ParentTransactionReceipt.monkeyPatchEthDepositWait;
 static monkeyPatchWait(contractTransaction: ContractTransaction): ParentContractTransaction;
 ```
 
-Defined in: [message/ParentTransaction.ts:311](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ParentTransaction.ts#L311)
+Defined in: message/ParentTransaction.ts:311
 
 Replaces the wait function with one that returns a ParentTransactionReceipt
 

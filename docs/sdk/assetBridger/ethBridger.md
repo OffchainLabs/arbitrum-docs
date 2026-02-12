@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### EthBridger
 
-Defined in: [assetBridger/ethBridger.ts:168](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L168)
+Defined in: assetBridger/ethBridger.ts:168
 
 Bridger for moving either ETH or custom gas tokens back and forth between parent and child networks
 
@@ -18,9 +12,9 @@ Bridger for moving either ETH or custom gas tokens back and forth between parent
 
 #### Properties
 
-| Property                                | Modifier   | Type     | Description                                                                                                                                                                                                                                                    | Inherited from                                                                              | Defined in                                                                                                                                                             |
-| --------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="nativetoken"></a> `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`AssetBridger`](assetBridger.md#assetbridger).[`nativeToken`](assetBridger.md#nativetoken) | [assetBridger/assetBridger.ts:40](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L40) |
+| Property                                | Modifier   | Type     | Description                                                                                                                                                                                                                                                    | Inherited from                                                                              | Defined in                      |
+| --------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
+| <a id="nativetoken"></a> `nativeToken?` | `readonly` | `string` | In case of a chain that uses ETH as its native/gas token, this is either `undefined` or the zero address In case of a chain that uses an ERC-20 token from the parent network as its native/gas token, this is the address of said token on the parent network | [`AssetBridger`](assetBridger.md#assetbridger).[`nativeToken`](assetBridger.md#nativetoken) | assetBridger/assetBridger.ts:40 |
 
 #### Accessors
 
@@ -32,7 +26,7 @@ Bridger for moving either ETH or custom gas tokens back and forth between parent
 get protected nativeTokenIsEth(): boolean;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:72](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L72)
+Defined in: assetBridger/assetBridger.ts:72
 
 Whether the chain uses ETH as its native/gas token
 
@@ -52,7 +46,7 @@ Whether the chain uses ETH as its native/gas token
 approveGasToken(params: WithParentSigner<ApproveGasTokenParamsOrTxRequest>): Promise<TransactionResponse>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:223](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L223)
+Defined in: assetBridger/ethBridger.ts:223
 
 Approves the custom gas token to be spent by the Inbox on the parent network.
 
@@ -72,7 +66,7 @@ Approves the custom gas token to be spent by the Inbox on the parent network.
 protected checkChildNetwork(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:61](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L61)
+Defined in: assetBridger/assetBridger.ts:61
 
 Check the signer/provider matches the child network, throws if not
 
@@ -96,7 +90,7 @@ Check the signer/provider matches the child network, throws if not
 protected checkParentNetwork(sop: SignerOrProvider): Promise<void>;
 ```
 
-Defined in: [assetBridger/assetBridger.ts:50](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/assetBridger.ts#L50)
+Defined in: assetBridger/assetBridger.ts:50
 
 Check the signer/provider matches the parent network, throws if not
 
@@ -120,7 +114,7 @@ Check the signer/provider matches the parent network, throws if not
 deposit(params: EthDepositParams | ParentToChildTxReqAndSigner): Promise<ParentEthDepositTransaction>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:291](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L291)
+Defined in: assetBridger/ethBridger.ts:291
 
 Deposit ETH from Parent onto Child network
 
@@ -146,7 +140,7 @@ depositTo(params:
 | ParentToChildTransactionRequest & object & object): Promise<ParentContractCallTransaction>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:354](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L354)
+Defined in: assetBridger/ethBridger.ts:354
 
 Deposit ETH from parent network onto a different child network address
 
@@ -166,7 +160,7 @@ Deposit ETH from parent network onto a different child network address
 getApproveGasTokenRequest(params?: ApproveGasTokenParams): Required<Pick<TransactionRequest, "to" | "data" | "value">>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:195](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L195)
+Defined in: assetBridger/ethBridger.ts:195
 
 Creates a transaction request for approving the custom gas token to be spent by the inbox on the parent network
 
@@ -186,7 +180,7 @@ Creates a transaction request for approving the custom gas token to be spent by 
 getDepositRequest(params: EthDepositRequestParams): Promise<OmitTyped<ParentToChildTransactionRequest, "retryableData">>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:272](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L272)
+Defined in: assetBridger/ethBridger.ts:272
 
 Gets tx request for depositing ETH or custom gas token
 
@@ -206,7 +200,7 @@ Gets tx request for depositing ETH or custom gas token
 getDepositToRequest(params: EthDepositToRequestParams): Promise<ParentToChildTransactionRequest>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:316](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L316)
+Defined in: assetBridger/ethBridger.ts:316
 
 Get a transaction request for an ETH deposit to a different child network address using Retryables
 
@@ -226,7 +220,7 @@ Get a transaction request for an ETH deposit to a different child network addres
 getWithdrawalRequest(params: EthWithdrawParams): Promise<ChildToParentTransactionRequest>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:387](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L387)
+Defined in: assetBridger/ethBridger.ts:387
 
 Get a transaction request for an eth withdrawal
 
@@ -246,7 +240,7 @@ Get a transaction request for an eth withdrawal
 withdraw(params: ChildToParentTxReqAndSigner | EthWithdrawParams & object): Promise<ChildContractTransaction>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:423](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L423)
+Defined in: assetBridger/ethBridger.ts:423
 
 Withdraw ETH from child network onto parent network
 
@@ -270,7 +264,7 @@ Withdraw ETH from child network onto parent network
 static fromProvider(childProvider: Provider): Promise<EthBridger>;
 ```
 
-Defined in: [assetBridger/ethBridger.ts:177](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/assetBridger/ethBridger.ts#L177)
+Defined in: assetBridger/ethBridger.ts:177
 
 Instantiates a new EthBridger from a child network Provider
 

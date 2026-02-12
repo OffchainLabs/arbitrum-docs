@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### ChildTransactionReceipt
 
-Defined in: [message/ChildTransaction.ts:54](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L54)
+Defined in: message/ChildTransaction.ts:54
 
 Extension of ethers-js TransactionReceipt, adding Arbitrum-specific functionality
 
@@ -21,10 +15,10 @@ Extension of ethers-js TransactionReceipt, adding Arbitrum-specific functionalit
 ##### getBatchConfirmations()
 
 ```ts
-getBatchConfirmations(childProvider: JsonRpcProvider): Promise<BigNumber>;
+getBatchConfirmations(childProvider: JsonRpcProvider): any;
 ```
 
-Defined in: [message/ChildTransaction.ts:138](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L138)
+Defined in: message/ChildTransaction.ts:138
 
 Get number of parent chain confirmations that the batch including this tx has
 
@@ -36,17 +30,17 @@ Get number of parent chain confirmations that the batch including this tx has
 
 ###### Returns
 
-`Promise`\<`BigNumber`\>
+`any`
 
 number of confirmations of batch including tx, or 0 if no batch included this tx
 
 ##### getBatchNumber()
 
 ```ts
-getBatchNumber(childProvider: JsonRpcProvider): Promise<BigNumber>;
+getBatchNumber(childProvider: JsonRpcProvider): Promise<any>;
 ```
 
-Defined in: [message/ChildTransaction.ts:151](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L151)
+Defined in: message/ChildTransaction.ts:151
 
 Get the number of the batch that included this tx (will throw if no such batch exists)
 
@@ -58,23 +52,23 @@ Get the number of the batch that included this tx (will throw if no such batch e
 
 ###### Returns
 
-`Promise`\<`BigNumber`\>
+`Promise`\<`any`\>
 
 number of batch in which tx was included, or errors if no batch includes the current tx
 
 ##### getChildToParentEvents()
 
 ```ts
-getChildToParentEvents(): ChildToParentTransactionEvent[];
+getChildToParentEvents(): unknown[];
 ```
 
-Defined in: [message/ChildTransaction.ts:97](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L97)
+Defined in: message/ChildTransaction.ts:97
 
 Get ChildToParentTransactionEvent events created by this transaction
 
 ###### Returns
 
-`ChildToParentTransactionEvent`[]
+`unknown`[]
 
 ##### getChildToParentMessages()
 
@@ -82,7 +76,7 @@ Get ChildToParentTransactionEvent events created by this transaction
 getChildToParentMessages<T>(parentSignerOrProvider: T): Promise<ChildToParentMessageReaderOrWriter<T>[]>;
 ```
 
-Defined in: [message/ChildTransaction.ts:119](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L119)
+Defined in: message/ChildTransaction.ts:119
 
 Get any child-to-parent-messages created by this transaction
 
@@ -105,16 +99,16 @@ Get any child-to-parent-messages created by this transaction
 ##### getRedeemScheduledEvents()
 
 ```ts
-getRedeemScheduledEvents(): object[];
+getRedeemScheduledEvents(): unknown[];
 ```
 
-Defined in: [message/ChildTransaction.ts:111](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L111)
+Defined in: message/ChildTransaction.ts:111
 
 Get event data for any redeems that were scheduled in this transaction
 
 ###### Returns
 
-`object`[]
+`unknown`[]
 
 ##### isDataAvailable()
 
@@ -122,7 +116,7 @@ Get event data for any redeems that were scheduled in this transaction
 isDataAvailable(childProvider: JsonRpcProvider, confirmations: number): Promise<boolean>;
 ```
 
-Defined in: [message/ChildTransaction.ts:173](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L173)
+Defined in: message/ChildTransaction.ts:173
 
 Whether the data associated with this transaction has been
 made available on parent chain
@@ -144,7 +138,7 @@ made available on parent chain
 static monkeyPatchWait(contractTransaction: ContractTransaction): ChildContractTransaction;
 ```
 
-Defined in: [message/ChildTransaction.ts:187](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L187)
+Defined in: message/ChildTransaction.ts:187
 
 Replaces the wait function with one that returns an L2TransactionReceipt
 
@@ -164,7 +158,7 @@ Replaces the wait function with one that returns an L2TransactionReceipt
 static toRedeemTransaction(redeemTx: ChildContractTransaction, childProvider: Provider): RedeemTransaction;
 ```
 
-Defined in: [message/ChildTransaction.ts:208](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/message/ChildTransaction.ts#L208)
+Defined in: message/ChildTransaction.ts:208
 
 Adds a waitForRedeem function to a redeem transaction
 

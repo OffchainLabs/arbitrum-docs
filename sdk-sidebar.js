@@ -96,11 +96,6 @@ const typedocSidebar = {
       ],
     },
     {
-      type: 'doc',
-      id: 'sdk/index',
-      label: 'Index',
-    },
-    {
       type: 'category',
       label: 'Message',
       items: [

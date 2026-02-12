@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### ArbitrumProvider
 
-Defined in: [utils/arbProvider.ts:69](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/arbProvider.ts#L69)
+Defined in: utils/arbProvider.ts:69
 
 Arbitrum specific formats
 
@@ -24,7 +18,7 @@ Arbitrum specific formats
 new ArbitrumProvider(provider: JsonRpcProvider, network?: Networkish): ArbitrumProvider;
 ```
 
-Defined in: [utils/arbProvider.ts:77](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/arbProvider.ts#L77)
+Defined in: utils/arbProvider.ts:77
 
 Arbitrum specific formats
 

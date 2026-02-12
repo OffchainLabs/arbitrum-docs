@@ -1,14 +1,8 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### Address
 
-Defined in: [dataEntities/address.ts:9](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/address.ts#L9)
+Defined in: dataEntities/address.ts:9
 
 Ethereum/Arbitrum address class
 
@@ -20,7 +14,7 @@ Ethereum/Arbitrum address class
 new Address(value: string): Address;
 ```
 
-Defined in: [dataEntities/address.ts:18](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/address.ts#L18)
+Defined in: dataEntities/address.ts:18
 
 Ethereum/Arbitrum address class
 
@@ -36,9 +30,9 @@ Ethereum/Arbitrum address class
 
 #### Properties
 
-| Property                   | Modifier   | Type     | Description                                                  | Defined in                                                                                                                                                   |
-| -------------------------- | ---------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <a id="value"></a> `value` | `readonly` | `string` | A valid Ethereum address. Doesn't need to be checksum cased. | [dataEntities/address.ts:18](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/address.ts#L18) |
+| Property                   | Modifier   | Type     | Description                                                  | Defined in                 |
+| -------------------------- | ---------- | -------- | ------------------------------------------------------------ | -------------------------- |
+| <a id="value"></a> `value` | `readonly` | `string` | A valid Ethereum address. Doesn't need to be checksum cased. | dataEntities/address.ts:18 |
 
 #### Methods
 
@@ -48,7 +42,7 @@ Ethereum/Arbitrum address class
 applyAlias(): Address;
 ```
 
-Defined in: [dataEntities/address.ts:43](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/address.ts#L43)
+Defined in: dataEntities/address.ts:43
 
 Find the L2 alias of an L1 address
 
@@ -62,7 +56,7 @@ Find the L2 alias of an L1 address
 undoAlias(): Address;
 ```
 
-Defined in: [dataEntities/address.ts:51](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/dataEntities/address.ts#L51)
+Defined in: dataEntities/address.ts:51
 
 Find the L1 alias of an L2 address
 

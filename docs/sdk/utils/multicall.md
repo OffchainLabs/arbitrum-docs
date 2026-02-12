@@ -1,52 +1,46 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Classes
 
 ### MultiCaller
 
-Defined in: [utils/multicall.ts:111](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L111)
+Defined in: utils/multicall.ts:111
 
 Util for executing multi calls against the MultiCallV2 contract
 
 #### Properties
 
-| Property                       | Modifier   | Type     | Description                   | Defined in                                                                                                                                           |
-| ------------------------------ | ---------- | -------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="address"></a> `address` | `readonly` | `string` | Address of multicall contract | [utils/multicall.ts:117](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L117) |
+| Property                       | Modifier   | Type     | Description                   | Defined in             |
+| ------------------------------ | ---------- | -------- | ----------------------------- | ---------------------- |
+| <a id="address"></a> `address` | `readonly` | `string` | Address of multicall contract | utils/multicall.ts:117 |
 
 #### Methods
 
 ##### getBlockNumberInput()
 
 ```ts
-getBlockNumberInput(): CallInput<BigNumber>;
+getBlockNumberInput(): CallInput<any>;
 ```
 
-Defined in: [utils/multicall.ts:133](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L133)
+Defined in: utils/multicall.ts:133
 
 Get the call input for the current block number
 
 ###### Returns
 
-[`CallInput`](#callinput)\<`BigNumber`\>
+[`CallInput`](#callinput)\<`any`\>
 
 ##### getCurrentBlockTimestampInput()
 
 ```ts
-getCurrentBlockTimestampInput(): CallInput<BigNumber>;
+getCurrentBlockTimestampInput(): CallInput<any>;
 ```
 
-Defined in: [utils/multicall.ts:149](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L149)
+Defined in: utils/multicall.ts:149
 
 Get the call input for the current block timestamp
 
 ###### Returns
 
-[`CallInput`](#callinput)\<`BigNumber`\>
+[`CallInput`](#callinput)\<`any`\>
 
 ##### getTokenData()
 
@@ -54,7 +48,7 @@ Get the call input for the current block timestamp
 getTokenData<T>(erc20Addresses: string[], options?: T): Promise<TokenInputOutput<T>[]>;
 ```
 
-Defined in: [utils/multicall.ts:231](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L231)
+Defined in: utils/multicall.ts:231
 
 Multicall for token properties. Will collect all the requested properies for each of the
 supplied token addresses.
@@ -82,7 +76,7 @@ supplied token addresses.
 multiCall<T, TRequireSuccess>(params: T, requireSuccess?: TRequireSuccess): Promise<DecoderReturnType<T, TRequireSuccess>>;
 ```
 
-Defined in: [utils/multicall.ts:197](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L197)
+Defined in: utils/multicall.ts:197
 
 Executes a multicall for the given parameters
 Return values are order the same as the inputs.
@@ -137,7 +131,7 @@ const res = await multiCaller.call(inputs);
 static fromProvider(provider: Provider): Promise<MultiCaller>;
 ```
 
-Defined in: [utils/multicall.ts:125](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L125)
+Defined in: utils/multicall.ts:125
 
 Finds the correct multicall address for the given provider and instantiates a multicaller
 
@@ -159,7 +153,7 @@ Finds the correct multicall address for the given provider and instantiates a mu
 type CallInput<T> = object;
 ```
 
-Defined in: [utils/multicall.ts:30](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L30)
+Defined in: utils/multicall.ts:30
 
 Input to multicall aggregator
 
@@ -171,8 +165,8 @@ Input to multicall aggregator
 
 #### Properties
 
-| Property                             | Type                            | Description                                 | Defined in                                                                                                                                         |
-| ------------------------------------ | ------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="decoder"></a> `decoder`       | (`returnData`: `string`) => `T` | Function to decode the result of the call   | [utils/multicall.ts:42](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L42) |
-| <a id="encoder"></a> `encoder`       | () => `string`                  | Function to produce encoded call data       | [utils/multicall.ts:38](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L38) |
-| <a id="targetaddr"></a> `targetAddr` | `string`                        | Address of the target contract to be called | [utils/multicall.ts:34](https://github.com/OffchainLabs/arbitrum-sdk/blob/b8d7b712331a78aa8e789c06496a2586170ad5d3/src/lib/utils/multicall.ts#L34) |
+| Property                             | Type                            | Description                                 | Defined in            |
+| ------------------------------------ | ------------------------------- | ------------------------------------------- | --------------------- |
+| <a id="decoder"></a> `decoder`       | (`returnData`: `string`) => `T` | Function to decode the result of the call   | utils/multicall.ts:42 |
+| <a id="encoder"></a> `encoder`       | () => `string`                  | Function to produce encoded call data       | utils/multicall.ts:38 |
+| <a id="targetaddr"></a> `targetAddr` | `string`                        | Address of the target contract to be called | utils/multicall.ts:34 |
