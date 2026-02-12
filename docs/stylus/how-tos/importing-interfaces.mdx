@@ -590,17 +590,17 @@ pub fn call_untrusted(
 Using `Call::new()` for state-changing calls will cause the transaction to fail:
 
 ```rust
+//Correct - using Call::new_mutating(self)
+pub fn good_transfer(&mut self, token: Address, to: Address, amount: U256) -> bool {
+    let token_contract = IToken::new(token);
+    let config = Call::new_mutating(self);
+    token_contract.transfer(self.vm(), config, to, amount).unwrap()
+}
+
 // Wrong - using Call::new() for a write operation
 pub fn bad_transfer(&mut self, token: Address, to: Address, amount: U256) -> bool {
     let token_contract = IToken::new(token);
     let config = Call::new(); // This will fail!
-    token_contract.transfer(self.vm(), config, to, amount).unwrap()
-}
-
-// Correct - using Call::new_mutating(self)
-pub fn good_transfer(&mut self, token: Address, to: Address, amount: U256) -> bool {
-    let token_contract = IToken::new(token);
-    let config = Call::new_mutating(self);
     token_contract.transfer(self.vm(), config, to, amount).unwrap()
 }
 ```
@@ -610,11 +610,11 @@ pub fn good_transfer(&mut self, token: Address, to: Address, amount: U256) -> bo
 All interface method calls require `self.vm()` as the first argument:
 
 ```rust
-// Wrong - missing self.vm()
-let balance = token_contract.balance_of(config, account).unwrap();
-
 // Correct
 let balance = token_contract.balance_of(self.vm(), config, account).unwrap();
+
+// Wrong - missing self.vm()
+let balance = token_contract.balance_of(config, account).unwrap();
 ```
 
 ### Incorrect method naming
@@ -622,11 +622,11 @@ let balance = token_contract.balance_of(self.vm(), config, account).unwrap();
 Remember that Solidity method names are converted to snake_case in Rust:
 
 ```rust
-// Wrong - using Solidity naming
-let balance = token.balanceOf(self.vm(), config, account);
-
 // Correct - using Rust snake_case
 let balance = token.balance_of(self.vm(), config, account);
+
+// Wrong - using Solidity naming
+let balance = token.balanceOf(self.vm(), config, account);
 ```
 
 ## See also
