@@ -71,7 +71,7 @@ Using Redis allows multiple batch posters to run in parallel and read from it vi
 
 Storing transactions also enables RBF, which can prevent transactions from being stuck in the mempool due to insufficient gas. However, using Redis means the batch poster will half if a transaction reverts.
 
-To set up Redis, you can also set up a `redis-signer` value with the flag `--node.batch-poster.data_poster.redis-signer.signing-key`.
+To set up Redis, you can also set up a `redis-signer` value with the flag `--node.batch-poster.data-poster.redis-signer.signing-key`.
 
 #### Key differences
 
