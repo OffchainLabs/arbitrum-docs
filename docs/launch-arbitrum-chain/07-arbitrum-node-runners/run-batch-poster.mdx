@@ -194,7 +194,7 @@ numBlobs=1
 To change revenue configurations for a batch poster, first check the list of current registered batch posters through the [`ArbAggregator` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) by calling `getBatchPosters()(address[])`:
 
 ```shell
-cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
+cast call --rpc-url $ARB_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
 ```
 
 While there are other ways to get the list of batch posters for an arbitrum chain, this method only lists batch posters who are registered by `ArbAggregator.addBatchPoster()` or have posted at least a single batch, which is better for revenue reasons.
