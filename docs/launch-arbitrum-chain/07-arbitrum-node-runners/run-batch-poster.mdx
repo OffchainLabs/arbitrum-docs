@@ -65,7 +65,7 @@ DB will store data locally on the node and support persistent `queuedTxs`. Only 
 
 ### Redis
 
-Redis is a fast local database that runs separately from the Nitro software so that node restarts preserve `queuedTxs`.
+Redis is a fast local/external database that runs separately from the Nitro software so that node restarts preserve `queuedTxs`.
 
 Using Redis allows multiple batch posters to run in parallel and read from it via `redisLock`, which provides redundancy and high availability.
 
