@@ -14,7 +14,7 @@ The batch poster uses the following default configuration flags and values:
 | --------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
 | `--node.batch-poster.enable`                        | false         | Enables posting batchecs to L1                                                                    |
 | `--node.batch-poster.max-size`                      | 100000        | Default value is overwritten if it's an L3 (90000, for AnyTrust: 1,000,000)                       |
-| --node.batch-poster.poll-interval                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                      |
+| `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                      |
 | --node.batch-poster.error-delay                     | 10 seconds    | Delay time after error posting batch                                                              |
 | --node.batch-poster.compression-level               | 11            | Batch compression level (Arbitrum uses Brotli compression which has compression levels from 1-11) |
 | --node.batch-poster.parent-chain-wallet.private-key | none          | Sets the private key of the parent chains wallet                                                  |
