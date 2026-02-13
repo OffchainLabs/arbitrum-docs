@@ -1,0 +1,1654 @@
+---
+title: 'Stylus contracts'
+description: 'Stylus Rust SDK contracts, methods, and lifecycle'
+author: chrisco
+sme: chrisco
+sidebar_position: 2
+target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
+displayed_sidebar: buildStylusSidebar
+---
+
+Stylus smart contracts are fully compatible with Solidity contracts on Arbitrum chains. They compile to WebAssembly and share the same EVM state trie as Solidity contracts, enabling seamless interoperability.
+
+## Contract basics
+
+A Stylus contract consists of three main components:
+
+1. **Storage Definition**: Defines the contract's persistent state
+2. **Entrypoint**: Marks the main contract struct that handles incoming calls
+3. **Public Methods**: Functions exposed to external callers via the `#[public]` macro
+
+### Minimal Contract
+
+Here's the simplest possible Stylus contract:
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use stylus_sdk::prelude::*;
+
+#[storage]
+#[entrypoint]
+pub struct HelloWorld;
+
+#[public]
+impl HelloWorld {
+    fn user_main(_input: Vec<u8>) -> ArbResult {
+        Ok(Vec::new())
+    }
+}
+```
+
+This contract:
+
+- Uses `#[storage]` to define the contract struct (empty in this case)
+- Uses `#[entrypoint]` to mark it as the contract's entry point
+- Uses `#[public]` to expose the `user_main` function
+- Returns `ArbResult`, which is `Result<Vec<u8>, Vec<u8>>`
+
+## Storage Definition
+
+Stylus contracts use the `sol_storage!` macro or `#[storage]` attribute to define persistent storage that maps directly to Solidity storage slots.
+
+### Using `sol_storage!` (Solidity-style)
+
+The `sol_storage!` macro lets you define storage using Solidity syntax:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Counter {
+        uint256 count;
+        address owner;
+        mapping(address => uint256) balances;
+    }
+}
+```
+
+This creates a contract with:
+
+- A `count` field of type `StorageU256`
+- An `owner` field of type `StorageAddress`
+- A `balances` mapping from `Address` to `StorageU256`
+
+### Using `#[storage]` (Rust-style)
+
+Alternatively, use the `#[storage]` attribute with explicit storage types:
+
+```rust
+use stylus_sdk::prelude::*;
+use stylus_sdk::storage::{StorageU256, StorageAddress, StorageMap};
+use alloy_primitives::{Address, U256};
+
+#[storage]
+#[entrypoint]
+pub struct Counter {
+    count: StorageU256,
+    owner: StorageAddress,
+    balances: StorageMap<Address, StorageU256>,
+}
+```
+
+Both approaches produce identical storage layouts and are fully interoperable with Solidity contracts using the same storage structure.
+
+## The `#[entrypoint]` Macro
+
+The `#[entrypoint]` macro marks a struct as the contract's main entry point. It automatically implements the `TopLevelStorage` trait, which enables:
+
+- Routing incoming calls to public methods
+- Managing contract storage
+- Handling reentrancy protection (unless the `reentrant` feature is enabled)
+
+**Key requirements:**
+
+- Exactly one struct per contract must have `#[entrypoint]`
+- The struct must also have `#[storage]` or be defined in `sol_storage!`
+- The entrypoint struct represents the contract's root storage
+
+**Example:**
+
+```rust
+sol_storage! {
+    #[entrypoint]
+    pub struct MyContract {
+        uint256 value;
+    }
+}
+```
+
+The `#[entrypoint]` macro generates:
+
+1. An implementation of `TopLevelStorage` for the struct
+2. A `user_entrypoint` function that Stylus calls when the contract receives a transaction
+3. Method routing logic to dispatch calls to `#[public]` methods
+
+## Public Methods with `#[public]`
+
+The `#[public]` macro exposes Rust methods as external contract functions callable from Solidity, other Stylus contracts, or external callers.
+
+### Basic Public Methods
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::U256;
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Calculator {
+        uint256 result;
+    }
+}
+
+#[public]
+impl Calculator {
+    // View function (read-only)
+    pub fn get_result(&self) -> U256 {
+        self.result.get()
+    }
+
+    // Write function (mutates state)
+    pub fn set_result(&mut self, value: U256) {
+        self.result.set(value);
+    }
+
+    // Pure function (no state access)
+    pub fn add(a: U256, b: U256) -> U256 {
+        a + b
+    }
+}
+```
+
+### State Mutability
+
+The SDK automatically infers state mutability from the method signature:
+
+| Signature   | Mutability | Solidity Equivalent | Description           |
+| ----------- | ---------- | ------------------- | --------------------- |
+| `&self`     | `view`     | `view`              | Read contract state   |
+| `&mut self` | Write      | (default)           | Modify contract state |
+| Neither     | `pure`     | `pure`              | No state access       |
+
+**Examples:**
+
+```rust
+#[public]
+impl MyContract {
+    // View: can read state, cannot modify
+    pub fn balance_of(&self, account: Address) -> U256 {
+        self.balances.get(account)
+    }
+
+    // Write: can read and modify state
+    pub fn transfer(&mut self, to: Address, amount: U256) {
+        let sender = self.vm().msg_sender();
+        let balance = self.balances.get(sender);
+        self.balances.setter(sender).set(balance - amount);
+        self.balances.setter(to).set(self.balances.get(to) + amount);
+    }
+
+    // Pure: no state access at all
+    pub fn calculate_fee(amount: U256) -> U256 {
+        amount * U256::from(3) / U256::from(100)
+    }
+}
+```
+
+## Constructor
+
+The `#[constructor]` attribute marks a function that runs once during contract deployment.
+
+### Basic Constructor
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Token {
+        address owner;
+        uint256 total_supply;
+    }
+}
+
+#[public]
+impl Token {
+    #[constructor]
+    pub fn constructor(&mut self, initial_supply: U256) {
+        let deployer = self.vm().msg_sender();
+        self.owner.set(deployer);
+        self.total_supply.set(initial_supply);
+    }
+
+    pub fn owner(&self) -> Address {
+        self.owner.get()
+    }
+}
+```
+
+### Constructor Features
+
+**Payable Constructor:**
+
+```rust
+#[public]
+impl Token {
+    #[constructor]
+    #[payable]
+    pub fn constructor(&mut self, initial_supply: U256) {
+        // Contract can receive ETH during deployment
+        let received = self.vm().msg_value();
+        self.owner.set(self.vm().msg_sender());
+        self.total_supply.set(initial_supply);
+    }
+}
+```
+
+**Important Notes:**
+
+- The constructor name can be anything (doesn't have to be `constructor`)
+- Only one constructor per contract
+- Constructor runs exactly once when the contract is deployed
+- Use `tx_origin()` instead of `msg_sender()` when deploying via a factory contract
+
+## Method Attributes
+
+### `#[payable]`
+
+Marks a function as able to receive ETH:
+
+```rust
+#[public]
+impl PaymentProcessor {
+    #[payable]
+    pub fn deposit(&mut self) -> U256 {
+        let sender = self.vm().msg_sender();
+        let amount = self.vm().msg_value();
+
+        let current = self.balances.get(sender);
+        self.balances.setter(sender).set(current + amount);
+
+        amount
+    }
+
+    // Non-payable function will revert if ETH is sent
+    pub fn withdraw(&mut self, amount: U256) {
+        // Will revert if msg.value > 0
+        let sender = self.vm().msg_sender();
+        let balance = self.balances.get(sender);
+        self.balances.setter(sender).set(balance - amount);
+    }
+}
+```
+
+**Important:** Without `#[payable]`, sending ETH to a function causes a revert.
+
+### `#[receive]`
+
+Handles plain ETH transfers without calldata (equivalent to Solidity's `receive()` function):
+
+```rust
+use alloy_sol_types::sol;
+
+sol! {
+    event EtherReceived(address indexed sender, uint256 amount);
+}
+
+#[public]
+impl Wallet {
+    #[receive]
+    #[payable]
+    pub fn receive(&mut self) -> Result<(), Vec<u8>> {
+        let sender = self.vm().msg_sender();
+        let amount = self.vm().msg_value();
+
+        let balance = self.balances.get(sender);
+        self.balances.setter(sender).set(balance + amount);
+
+        self.vm().log(EtherReceived { sender, amount });
+        Ok(())
+    }
+}
+```
+
+**Notes:**
+
+- Must be combined with `#[payable]`
+- Called when the contract receives ETH without calldata
+- Only one `#[receive]` function per contract
+- Must have signature: `fn name(&mut self) -> Result<(), Vec<u8>>`
+
+### `#[fallback]`
+
+Handles calls to non-existent functions or as a fallback for ETH transfers:
+
+```rust
+use alloy_sol_types::sol;
+
+sol! {
+    event FallbackCalled(address indexed sender, bytes4 selector, uint256 value);
+}
+
+#[public]
+impl Contract {
+    #[fallback]
+    #[payable]
+    pub fn fallback(&mut self, calldata: &[u8]) -> ArbResult {
+        let sender = self.vm().msg_sender();
+        let value = self.vm().msg_value();
+
+        // Extract function selector if present
+        let selector = if calldata.len() >= 4 {
+            [calldata[0], calldata[1], calldata[2], calldata[3]]
+        } else {
+            [0; 4]
+        };
+
+        self.vm().log(FallbackCalled {
+            sender,
+            selector: selector.into(),
+            value,
+        });
+
+        Ok(vec![])
+    }
+}
+```
+
+**Fallback is called when:**
+
+1. A function call doesn't match any existing function signature
+2. Plain ETH transfer when no `#[receive]` function exists
+3. The contract receives calldata but no function matches
+
+**Notes:**
+
+- Must have signature: `fn name(&mut self, calldata: &[u8]) -> ArbResult`
+- Can optionally include `#[payable]` to accept ETH
+- Only one `#[fallback]` function per contract
+
+### `#[selector]`
+
+Customizes the Solidity function selector:
+
+```rust
+#[public]
+impl Token {
+    // Use a custom name in the ABI
+    #[selector(name = "balanceOf")]
+    pub fn get_balance(&self, account: Address) -> U256 {
+        self.balances.get(account)
+    }
+
+    // Explicitly set the 4-byte selector
+    #[selector(bytes = "0x70a08231")]
+    pub fn balance_of_custom(&self, account: Address) -> U256 {
+        self.balances.get(account)
+    }
+}
+```
+
+This is useful for:
+
+- Matching existing Solidity interfaces exactly
+- Avoiding naming conflicts
+- Implementing multiple methods with the same name but different selectors
+
+## Contract trait-based composition
+
+Stylus supports code reuse via trait-based composition.
+
+Define reusable functionality as traits and implement them on your contract:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+// Define interface traits
+#[public]
+trait IOwnable {
+    fn owner(&self) -> Address;
+    fn transfer_ownership(&mut self, new_owner: Address) -> bool;
+}
+
+#[public]
+trait IErc20 {
+    fn name(&self) -> String;
+    fn symbol(&self) -> String;
+    fn balance_of(&self, account: Address) -> U256;
+    fn transfer(&mut self, to: Address, value: U256) -> bool;
+}
+
+// Define storage components
+#[storage]
+struct Ownable {
+    owner: StorageAddress,
+}
+
+#[storage]
+struct Erc20 {
+    balances: StorageMap<Address, StorageU256>,
+}
+
+// Compose into main contract
+#[storage]
+#[entrypoint]
+struct MyToken {
+    ownable: Ownable,
+    erc20: Erc20,
+}
+
+// Declare which interfaces this contract implements
+#[public]
+#[implements(IOwnable, IErc20)]
+impl MyToken {}
+
+// Implement each trait
+#[public]
+impl IOwnable for MyToken {
+    fn owner(&self) -> Address {
+        self.ownable.owner.get()
+    }
+
+    fn transfer_ownership(&mut self, new_owner: Address) -> bool {
+        let caller = self.vm().msg_sender();
+        if caller != self.ownable.owner.get() {
+            return false;
+        }
+        self.ownable.owner.set(new_owner);
+        true
+    }
+}
+
+#[public]
+impl IErc20 for MyToken {
+    fn name(&self) -> String {
+        "MyToken".into()
+    }
+
+    fn symbol(&self) -> String {
+        "MTK".into()
+    }
+
+    fn balance_of(&self, account: Address) -> U256 {
+        self.erc20.balances.get(account)
+    }
+
+    fn transfer(&mut self, to: Address, value: U256) -> bool {
+        let from = self.vm().msg_sender();
+        let from_balance = self.erc20.balances.get(from);
+        if from_balance < value {
+            return false;
+        }
+        self.erc20.balances.setter(from).set(from_balance - value);
+        let to_balance = self.erc20.balances.get(to);
+        self.erc20.balances.setter(to).set(to_balance + value);
+        true
+    }
+}
+```
+
+**Benefits:**
+
+- Clear separation of concerns
+- Explicit interface declarations
+- Type-safe composition
+- Easy to test components independently
+- Compatible with Solidity interface standards
+
+### Accessing VM Context
+
+All public methods can access blockchain context via `self.vm()`:
+
+```rust
+#[public]
+impl MyContract {
+    pub fn get_caller_info(&self) -> (Address, U256, U256) {
+        let vm = self.vm();
+        (
+            vm.msg_sender(),      // Caller's address
+            vm.msg_value(),       // ETH sent with call
+            vm.block_number(),    // Current block number
+        )
+    }
+}
+```
+
+See the [Global Variables and Functions](./global-variables-and-functions.mdx) documentation for a complete list of available VM methods.
+
+## Events
+
+Events allow contracts to log data to the blockchain, enabling off-chain monitoring and indexing.
+
+### Defining Events
+
+Use the `sol!` macro to define events with Solidity-compatible signatures:
+
+```rust
+use alloy_sol_types::sol;
+use alloy_primitives::{Address, U256};
+
+sol! {
+    // Up to 3 parameters can be indexed
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event DataUpdated(string indexed key, bytes data);
+}
+```
+
+**Indexed parameters:**
+
+- Allow filtering events by that parameter
+- Limited to 3 indexed parameters per event
+- Indexed parameters are stored in log topics, not data
+
+### Emitting Events
+
+Use `self.vm().log()` to emit events:
+
+```rust
+#[public]
+impl Token {
+    pub fn transfer(&mut self, to: Address, value: U256) -> bool {
+        let from = self.vm().msg_sender();
+
+        // Transfer logic...
+        let from_balance = self.balances.get(from);
+        if from_balance < value {
+            return false;
+        }
+        self.balances.setter(from).set(from_balance - value);
+        self.balances.setter(to).set(self.balances.get(to) + value);
+
+        // Emit event
+        self.vm().log(Transfer { from, to, value });
+
+        true
+    }
+}
+```
+
+### Raw Log Emission
+
+For advanced use cases, emit raw logs directly:
+
+```rust
+use alloy_primitives::FixedBytes;
+
+#[public]
+impl Contract {
+    pub fn emit_raw_log(&self) {
+        let user = Address::from([0x22; 20]);
+        let balance = U256::from(1000);
+
+        // Topics (up to 4, must be FixedBytes<32>)
+        let topics = &[user.into_word()];
+
+        // Data (arbitrary bytes)
+        let mut data: Vec<u8> = vec![];
+        data.extend_from_slice(&balance.to_be_bytes::<32>());
+
+        self.vm().raw_log(topics, &data).unwrap();
+    }
+}
+```
+
+## External Contract Calls
+
+Stylus contracts can call other contracts (Solidity or Stylus) using typed interfaces or raw calls.
+
+### Defining Contract Interfaces
+
+Use `sol_interface!` to define interfaces for external contracts:
+
+```rust
+use stylus_sdk::prelude::*;
+
+sol_interface! {
+    interface IToken {
+        function balanceOf(address account) external view returns (uint256);
+        function transfer(address to, uint256 amount) external returns (bool);
+    }
+
+    interface IOracle {
+        function getPrice() external view returns (uint256);
+    }
+}
+```
+
+### Calling External Contracts
+
+#### View Calls (Read-Only)
+
+```rust
+use stylus_sdk::call::Call;
+
+#[public]
+impl MyContract {
+    pub fn get_token_balance(&self, token: IToken, account: Address) -> U256 {
+        // Call::new() for view calls (no state mutation)
+        let config = Call::new();
+        token.balance_of(self.vm(), config, account).unwrap()
+    }
+}
+```
+
+#### Mutating Calls
+
+```rust
+#[public]
+impl MyContract {
+    pub fn transfer_tokens(&mut self, token: IToken, to: Address, amount: U256) -> bool {
+        // Call::new_mutating(self) for state-changing calls
+        let config = Call::new_mutating(self);
+        token.transfer(self.vm(), config, to, amount).unwrap()
+    }
+}
+```
+
+#### Payable Calls
+
+```rust
+#[public]
+impl MyContract {
+    #[payable]
+    pub fn forward_payment(&mut self, recipient: IPaymentProcessor) -> Result<(), Vec<u8>> {
+        // Forward received ETH to another contract
+        let value = self.vm().msg_value();
+        let config = Call::new_payable(self, value);
+
+        recipient.process_payment(self.vm(), config)?;
+        Ok(())
+    }
+}
+```
+
+#### Configuring Gas
+
+```rust
+#[public]
+impl MyContract {
+    pub fn call_with_limited_gas(&mut self, token: IToken, to: Address) -> bool {
+        let config = Call::new_mutating(self)
+            .gas(self.vm().evm_gas_left() / 2);  // Use half remaining gas
+
+        token.transfer(self.vm(), config, to, U256::from(100)).unwrap()
+    }
+}
+```
+
+### Low-Level Calls
+
+For maximum flexibility, use raw calls:
+
+```rust
+use stylus_sdk::call::{call, static_call, RawCall};
+
+#[public]
+impl MyContract {
+    // Low-level call (state-changing)
+    pub fn execute_call(&mut self, target: Address, calldata: Vec<u8>) -> Result<Vec<u8>, Vec<u8>> {
+        let config = Call::new_mutating(self)
+            .gas(self.vm().evm_gas_left());
+
+        call(self.vm(), config, target, &calldata)
+    }
+
+    // Static call (read-only)
+    pub fn execute_static_call(&self, target: Address, calldata: Vec<u8>) -> Result<Vec<u8>, Vec<u8>> {
+        static_call(self.vm(), Call::new(), target, &calldata)
+    }
+
+    // Unsafe raw call with advanced options
+    pub fn execute_raw_call(&mut self, target: Address, calldata: Vec<u8>) -> Result<Vec<u8>, Vec<u8>> {
+        unsafe {
+            RawCall::new_delegate(self.vm())
+                .gas(2100)
+                .limit_return_data(0, 32)
+                .flush_storage_cache()
+                .call(target, &calldata)
+        }
+    }
+}
+```
+
+**Call Types:**
+
+- `call()`: State-changing call to another contract
+- `static_call()`: Read-only call (equivalent to Solidity `staticcall`)
+- `RawCall`: Low-level unsafe calls with fine-grained control
+
+## Error Handling
+
+Stylus contracts can define and return custom errors using Solidity-compatible error types.
+
+### Defining Errors
+
+```rust
+use alloy_sol_types::sol;
+
+sol! {
+    error Unauthorized();
+    error InsufficientBalance(address from, uint256 have, uint256 want);
+    error InvalidAddress(address addr);
+}
+
+#[derive(SolidityError)]
+pub enum TokenError {
+    Unauthorized(Unauthorized),
+    InsufficientBalance(InsufficientBalance),
+    InvalidAddress(InvalidAddress),
+}
+```
+
+### Using Errors in Methods
+
+```rust
+#[public]
+impl Token {
+    pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, TokenError> {
+        let from = self.vm().msg_sender();
+
+        if to == Address::ZERO {
+            return Err(TokenError::InvalidAddress(InvalidAddress { addr: to }));
+        }
+
+        let balance = self.balances.get(from);
+        if balance < amount {
+            return Err(TokenError::InsufficientBalance(InsufficientBalance {
+                from,
+                have: balance,
+                want: amount,
+            }));
+        }
+
+        self.balances.setter(from).set(balance - amount);
+        self.balances.setter(to).set(self.balances.get(to) + amount);
+
+        Ok(true)
+    }
+}
+```
+
+**Error handling notes:**
+
+- Errors automatically encode as Solidity-compatible error data
+- Use `Result<T, E>` where `E` implements `SolidityError`
+- Error data includes the error signature and parameters
+- Compatible with Solidity `try/catch` blocks
+
+## Complete Example
+
+Here's a complete ERC-20-style token contract demonstrating all major features:
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+// Define events
+sol! {
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
+
+// Define errors
+sol! {
+    error InsufficientBalance(address from, uint256 have, uint256 want);
+    error InsufficientAllowance(address owner, address spender, uint256 have, uint256 want);
+    error Unauthorized();
+}
+
+#[derive(SolidityError)]
+pub enum TokenError {
+    InsufficientBalance(InsufficientBalance),
+    InsufficientAllowance(InsufficientAllowance),
+    Unauthorized(Unauthorized),
+}
+
+// Define storage
+sol_storage! {
+    #[entrypoint]
+    pub struct SimpleToken {
+        mapping(address => uint256) balances;
+        mapping(address => mapping(address => uint256)) allowances;
+        uint256 total_supply;
+        address owner;
+    }
+}
+
+#[public]
+impl SimpleToken {
+    // Constructor
+    #[constructor]
+    pub fn constructor(&mut self, initial_supply: U256) {
+        let deployer = self.vm().msg_sender();
+        self.owner.set(deployer);
+        self.balances.setter(deployer).set(initial_supply);
+        self.total_supply.set(initial_supply);
+
+        self.vm().log(Transfer {
+            from: Address::ZERO,
+            to: deployer,
+            value: initial_supply,
+        });
+    }
+
+    // View functions
+    pub fn balance_of(&self, account: Address) -> U256 {
+        self.balances.get(account)
+    }
+
+    pub fn allowance(&self, owner: Address, spender: Address) -> U256 {
+        self.allowances.getter(owner).get(spender)
+    }
+
+    pub fn total_supply(&self) -> U256 {
+        self.total_supply.get()
+    }
+
+    pub fn owner(&self) -> Address {
+        self.owner.get()
+    }
+
+    // Write functions
+    pub fn transfer(&mut self, to: Address, value: U256) -> Result<bool, TokenError> {
+        let from = self.vm().msg_sender();
+        self._transfer(from, to, value)?;
+        Ok(true)
+    }
+
+    pub fn approve(&mut self, spender: Address, value: U256) -> bool {
+        let owner = self.vm().msg_sender();
+        self.allowances.setter(owner).setter(spender).set(value);
+
+        self.vm().log(Approval { owner, spender, value });
+        true
+    }
+
+    pub fn transfer_from(
+        &mut self,
+        from: Address,
+        to: Address,
+        value: U256
+    ) -> Result<bool, TokenError> {
+        let spender = self.vm().msg_sender();
+
+        // Check allowance
+        let current_allowance = self.allowances.getter(from).get(spender);
+        if current_allowance < value {
+            return Err(TokenError::InsufficientAllowance(InsufficientAllowance {
+                owner: from,
+                spender,
+                have: current_allowance,
+                want: value,
+            }));
+        }
+
+        // Update allowance
+        self.allowances.setter(from).setter(spender).set(current_allowance - value);
+
+        // Transfer
+        self._transfer(from, to, value)?;
+        Ok(true)
+    }
+
+    // Owner-only functions
+    pub fn mint(&mut self, to: Address, value: U256) -> Result<(), TokenError> {
+        if self.vm().msg_sender() != self.owner.get() {
+            return Err(TokenError::Unauthorized(Unauthorized {}));
+        }
+
+        self.balances.setter(to).set(self.balances.get(to) + value);
+        self.total_supply.set(self.total_supply.get() + value);
+
+        self.vm().log(Transfer {
+            from: Address::ZERO,
+            to,
+            value,
+        });
+
+        Ok(())
+    }
+
+    // Internal helper function
+    fn _transfer(&mut self, from: Address, to: Address, value: U256) -> Result<(), TokenError> {
+        let from_balance = self.balances.get(from);
+        if from_balance < value {
+            return Err(TokenError::InsufficientBalance(InsufficientBalance {
+                from,
+                have: from_balance,
+                want: value,
+            }));
+        }
+
+        self.balances.setter(from).set(from_balance - value);
+        self.balances.setter(to).set(self.balances.get(to) + value);
+
+        self.vm().log(Transfer { from, to, value });
+        Ok(())
+    }
+}
+```
+
+## Best Practices
+
+### 1. Use Appropriate State Mutability
+
+```rust
+// Good: Read-only functions use &self
+pub fn get_balance(&self, account: Address) -> U256 {
+    self.balances.get(account)
+}
+
+// Good: State-changing functions use &mut self
+pub fn set_balance(&mut self, account: Address, balance: U256) {
+    self.balances.setter(account).set(balance);
+}
+```
+
+### 2. Validate Inputs Early
+
+```rust
+pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, TokenError> {
+    // Validate inputs first
+    if to == Address::ZERO {
+        return Err(TokenError::InvalidAddress(InvalidAddress { addr: to }));
+    }
+
+    if amount == U256::ZERO {
+        return Ok(true); // Nothing to transfer
+    }
+
+    // Then proceed with logic
+    let from = self.vm().msg_sender();
+    // ...
+}
+```
+
+### 3. Use Custom Errors
+
+```rust
+// Good: Descriptive custom errors
+pub fn withdraw(&mut self, amount: U256) -> Result<(), VaultError> {
+    let balance = self.balances.get(self.vm().msg_sender());
+    if balance < amount {
+        return Err(VaultError::InsufficientBalance(InsufficientBalance {
+            have: balance,
+            want: amount,
+        }));
+    }
+    // ...
+}
+
+// Avoid: Generic Vec<u8> errors
+pub fn withdraw(&mut self, amount: U256) -> Result<(), Vec<u8>> {
+    // Less informative
+}
+```
+
+### 4. Emit Events for State Changes
+
+```rust
+pub fn update_value(&mut self, new_value: U256) {
+    let old_value = self.value.get();
+    self.value.set(new_value);
+
+    // Always emit events for important state changes
+    self.vm().log(ValueUpdated {
+        old_value,
+        new_value,
+    });
+}
+```
+
+### 5. Access Control Patterns
+
+```rust
+// Good: Clear access control checks
+pub fn admin_function(&mut self) -> Result<(), TokenError> {
+    if self.vm().msg_sender() != self.owner.get() {
+        return Err(TokenError::Unauthorized(Unauthorized {}));
+    }
+    // Admin logic...
+    Ok(())
+}
+
+// Consider: Reusable modifier-like helper
+impl Token {
+    fn only_owner(&self) -> Result<(), TokenError> {
+        if self.vm().msg_sender() != self.owner.get() {
+            return Err(TokenError::Unauthorized(Unauthorized {}));
+        }
+        Ok(())
+    }
+
+    pub fn admin_function(&mut self) -> Result<(), TokenError> {
+        self.only_owner()?;
+        // Admin logic...
+        Ok(())
+    }
+}
+```
+
+### 6. Gas-Efficient Storage Access
+
+```rust
+// Good: Read once, use multiple times
+pub fn complex_calculation(&self, account: Address) -> U256 {
+    let balance = self.balances.get(account); // Read once
+    let result = balance * U256::from(2) + balance / U256::from(10);
+    result
+}
+
+// Avoid: Multiple reads of same storage slot
+pub fn inefficient_calculation(&self, account: Address) -> U256 {
+    self.balances.get(account) * U256::from(2) + self.balances.get(account) / U256::from(10)
+}
+```
+
+### 7. Check Effects Interactions Pattern
+
+```rust
+// Good: Check-Effects-Interactions pattern
+pub fn withdraw(&mut self, amount: U256) -> Result<(), VaultError> {
+    let caller = self.vm().msg_sender();
+
+    // Checks
+    let balance = self.balances.get(caller);
+    if balance < amount {
+        return Err(VaultError::InsufficientBalance(InsufficientBalance {
+            have: balance,
+            want: amount,
+        }));
+    }
+
+    // Effects (update state BEFORE external calls)
+    self.balances.setter(caller).set(balance - amount);
+
+    // Interactions (external calls last)
+    // self.transfer_eth(caller, amount)?;
+
+    Ok(())
+}
+```
+
+### 8. Use Type-Safe Interfaces for External Calls
+
+```rust
+// Good: Use sol_interface! for type safety
+sol_interface! {
+    interface IToken {
+        function transfer(address to, uint256 amount) external returns (bool);
+    }
+}
+
+pub fn call_token(&mut self, token: IToken, to: Address, amount: U256) -> bool {
+    let config = Call::new_mutating(self);
+    token.transfer(self.vm(), config, to, amount).unwrap()
+}
+
+// Avoid: Raw calls unless necessary
+pub fn raw_call(&mut self, token: Address, to: Address, amount: U256) -> Vec<u8> {
+    // Less type-safe, more error-prone
+    let config = Call::new_mutating(self);
+    let calldata = /* manually construct */;
+    call(self.vm(), config, token, &calldata).unwrap()
+}
+```
+
+## Delegate calls
+
+Delegate calls allow a contract to execute code from another contract while maintaining its own context. When Contract A executes a delegate call to Contract B, B's code runs using Contract A's storage, `msg.sender`, and `msg.value`. This means any state changes affect Contract A, and the original sender and value of the transaction are preserved.
+
+This pattern is essential for building upgradeable contracts, proxy patterns, and modular smart contract systems.
+
+### Using the low-level `delegate_call` function
+
+The `delegate_call` function is a low-level operation similar to `call` and `static_call`. It is considered unsafe because it requires trusting the external contract to maintain safety.
+
+```rust
+pub unsafe fn delegate_call(
+    context: impl MutatingCallContext,
+    to: Address,
+    data: &[u8],
+) -> Result<Vec<u8>, Error>
+```
+
+**Example usage:**
+
+```rust
+use stylus_sdk::call::delegate_call;
+
+pub fn low_level_delegate_call(
+    &mut self,
+    calldata: Vec<u8>,
+    target: Address,
+) -> Result<Vec<u8>, DelegateCallErrors> {
+    unsafe {
+        let result = delegate_call(self, target, &calldata)
+            .map_err(|_| DelegateCallErrors::DelegateCallFailed(DelegateCallFailed {}))?;
+        Ok(result)
+    }
+}
+```
+
+### Using `RawCall` with `new_delegate()`
+
+For scenarios requiring untyped calls with more configuration options, `RawCall` offers a fluent interface. You can set up a delegate call by chaining optional configuration methods.
+
+```rust
+use stylus_sdk::call::RawCall;
+
+pub fn raw_delegate_call(
+    &mut self,
+    calldata: Vec<u8>,
+    target: Address,
+) -> Result<Vec<u8>, Vec<u8>> {
+    let data = RawCall::new_delegate()   // Configure a delegate call
+        .gas(2100)                       // Supply 2100 gas
+        .limit_return_data(0, 32)        // Only read the first 32 bytes back
+        .call(target, &calldata)?;
+
+    Ok(data)
+}
+```
+
+### Safety considerations
+
+:::caution
+Delegate calls are inherently unsafe and require careful consideration before use.
+:::
+
+- **Trust requirement**: The calling contract must trust the external contract to uphold safety requirements
+- **Storage modification**: The external contract can arbitrarily change the calling contract's storage
+- **Ether spending**: The external contract may spend ether or perform other critical operations on behalf of the caller
+- **Cache clearing**: While the `delegate_call` function clears any cached values, it cannot prevent unsafe actions by the external contract
+
+### Complete delegate call example
+
+```rust
+#![cfg_attr(not(feature = "export-abi"), no_main)]
+extern crate alloc;
+
+use alloy_sol_types::sol;
+use stylus_sdk::{
+    alloy_primitives::Address,
+    call::{delegate_call, RawCall},
+    prelude::*,
+};
+
+#[storage]
+#[entrypoint]
+pub struct DelegateExample;
+
+sol! {
+    error DelegateCallFailed();
+}
+
+#[derive(SolidityError)]
+pub enum DelegateCallErrors {
+    DelegateCallFailed(DelegateCallFailed),
+}
+
+#[public]
+impl DelegateExample {
+    // Low-level delegate call
+    pub fn low_level_delegate_call(
+        &mut self,
+        calldata: Vec<u8>,
+        target: Address,
+    ) -> Result<Vec<u8>, DelegateCallErrors> {
+        unsafe {
+            let result = delegate_call(self, target, &calldata)
+                .map_err(|_| DelegateCallErrors::DelegateCallFailed(DelegateCallFailed {}))?;
+
+            Ok(result)
+        }
+    }
+
+    // RawCall delegate call with configuration
+    pub fn raw_delegate_call(
+        &mut self,
+        calldata: Vec<u8>,
+        target: Address,
+    ) -> Result<Vec<u8>, Vec<u8>> {
+        let data = RawCall::new_delegate()
+            .gas(2100)
+            .limit_return_data(0, 32)
+            .call(target, &calldata)?;
+
+        Ok(data)
+    }
+}
+```
+
+## Sending ether
+
+Stylus provides multiple ways to send ether from a contract. Unlike Solidity's `transfer` method which is capped at 2300 gas, Stylus's `transfer_eth` forwards all gas to the recipient. You can cap gas using the low-level `call` method if needed.
+
+### Methods for sending ether
+
+| Method                   | Description                             | Gas behavior                    |
+| ------------------------ | --------------------------------------- | ------------------------------- |
+| `transfer_eth()`         | Simple ether transfer                   | Forwards all gas                |
+| `call()` with `.value()` | Low-level call with value               | Forwards all gas (configurable) |
+| Payable external calls   | Call payable methods on other contracts | Forwards all gas (configurable) |
+
+### Using `transfer_eth()`
+
+The simplest way to send ether:
+
+```rust
+use stylus_sdk::call::transfer_eth;
+
+#[public]
+impl SendEther {
+    #[payable]
+    pub fn send_via_transfer(to: Address) -> Result<(), Vec<u8>> {
+        transfer_eth(to, msg::value())?;
+        Ok(())
+    }
+}
+```
+
+### Using low-level `call()` with value
+
+For more control over the transfer:
+
+```rust
+use stylus_sdk::call::{call, Call};
+
+#[public]
+impl SendEther {
+    #[payable]
+    pub fn send_via_call(&mut self, to: Address) -> Result<(), Vec<u8>> {
+        call(Call::new_in(self).value(msg::value()), to, &[])?;
+        Ok(())
+    }
+}
+```
+
+These two approaches are equivalent under the hood:
+
+```rust
+// These are equivalent:
+transfer_eth(recipient, value)?;
+call(Call::new_in(self).value(value), recipient, &[])?;
+```
+
+### Sending with a gas limit
+
+To cap the gas forwarded to the recipient (similar to Solidity's `transfer`):
+
+```rust
+#[payable]
+pub fn send_via_call_gas_limit(&mut self, to: Address, gas_amount: u64) -> Result<(), Vec<u8>> {
+    call(
+        Call::new_in(self).value(msg::value()).gas(gas_amount),
+        to,
+        &[],
+    )?;
+    Ok(())
+}
+```
+
+### Sending with calldata
+
+To trigger a fallback function on the receiving contract:
+
+```rust
+use stylus_sdk::abi::Bytes;
+
+#[payable]
+pub fn send_via_call_with_calldata(
+    &mut self,
+    to: Address,
+    data: Bytes,
+) -> Result<(), Vec<u8>> {
+    call(Call::new_in(self).value(msg::value()), to, data.as_slice())?;
+    Ok(())
+}
+```
+
+### Sending to payable contract methods
+
+Use typed interfaces to call payable methods on other contracts:
+
+```rust
+sol_interface! {
+    interface ITarget {
+        function receiveEther() external payable;
+    }
+}
+
+#[public]
+impl SendEther {
+    #[payable]
+    pub fn send_to_contract(&mut self, to: Address) -> Result<(), Vec<u8>> {
+        let target = ITarget::new(to);
+        let config = Call::new_in(self).value(msg::value());
+        target.receive_ether(config)?;
+        Ok(())
+    }
+}
+```
+
+### Where you can send ether
+
+1. **Externally owned account (EOA) addresses**: Directly send ether to any EOA address
+2. **Solidity contracts with `receive()` function**: Send ether without calldata to contracts implementing `receive()`
+3. **Solidity contracts with `fallback()` function**: Send ether with calldata to contracts implementing `fallback()`
+4. **Contracts with payable methods**: Call any payable method on Solidity or Stylus contracts
+
+### Complete sending ether example
+
+```rust
+#![cfg_attr(not(any(feature = "export-abi", test)), no_main)]
+extern crate alloc;
+
+use alloy_primitives::Address;
+use stylus_sdk::{
+    abi::Bytes,
+    call::{call, transfer_eth, Call},
+    msg,
+    prelude::*,
+};
+
+sol_interface! {
+    interface ITarget {
+        function receiveEther() external payable;
+    }
+}
+
+#[storage]
+#[entrypoint]
+pub struct SendEther;
+
+#[public]
+impl SendEther {
+    // Simple transfer
+    #[payable]
+    pub fn send_via_transfer(to: Address) -> Result<(), Vec<u8>> {
+        transfer_eth(to, msg::value())?;
+        Ok(())
+    }
+
+    // Low-level call
+    #[payable]
+    pub fn send_via_call(&mut self, to: Address) -> Result<(), Vec<u8>> {
+        call(Call::new_in(self).value(msg::value()), to, &[])?;
+        Ok(())
+    }
+
+    // With gas limit
+    #[payable]
+    pub fn send_via_call_gas_limit(&mut self, to: Address, gas_amount: u64) -> Result<(), Vec<u8>> {
+        call(
+            Call::new_in(self).value(msg::value()).gas(gas_amount),
+            to,
+            &[],
+        )?;
+        Ok(())
+    }
+
+    // With calldata (triggers fallback)
+    #[payable]
+    pub fn send_via_call_with_calldata(
+        &mut self,
+        to: Address,
+        data: Bytes,
+    ) -> Result<(), Vec<u8>> {
+        call(Call::new_in(self).value(msg::value()), to, data.as_slice())?;
+        Ok(())
+    }
+
+    // To payable contract method
+    #[payable]
+    pub fn send_to_contract(&mut self, to: Address) -> Result<(), Vec<u8>> {
+        let target = ITarget::new(to);
+        let config = Call::new_in(self).value(msg::value());
+        target.receive_ether(config)?;
+        Ok(())
+    }
+}
+```
+
+## Factory contract deployment (coming soon)
+
+The factory pattern allows a contract to deploy other contracts programmatically. This is useful for creating contract instances on-demand, such as deploying new token contracts or creating user-specific vaults.
+
+:::note
+Advanced deployment patterns documentation is in development. This section will cover:
+
+- Deploying contracts from within a contract
+- Passing constructor arguments
+- Deterministic deployment with CREATE2
+- Handling deployment failures
+  :::
+
+**Constructor considerations for factory-deployed contracts:**
+
+When a contract is deployed via a factory contract (rather than directly by an EOA), the `msg_sender()` in the constructor will be the factory contract's address, not the original deployer. If you need the original deployer's address, use `tx_origin()` instead:
+
+```rust
+#[public]
+impl FactoryDeployedContract {
+    #[constructor]
+    pub fn constructor(&mut self) {
+        // msg_sender() = factory contract address
+        // tx_origin() = original transaction sender (EOA)
+        let original_deployer = self.vm().tx_origin();
+        self.owner.set(original_deployer);
+    }
+}
+```
+
+## Function modifiers and access control patterns
+
+Unlike Solidity, Rust does not have built-in modifier syntax. However, you can achieve similar functionality using helper functions that return `Result<(), Error>` combined with the `?` operator.
+
+### Basic modifier pattern
+
+Create helper functions that perform checks and return early on failure:
+
+```rust
+sol! {
+    error Unauthorized();
+    error Paused();
+}
+
+#[derive(SolidityError)]
+pub enum ContractError {
+    Unauthorized(Unauthorized),
+    Paused(Paused),
+}
+
+#[public]
+impl MyContract {
+    // Modifier-like helper function
+    fn only_owner(&self) -> Result<(), ContractError> {
+        if self.vm().msg_sender() != self.owner.get() {
+            return Err(ContractError::Unauthorized(Unauthorized {}));
+        }
+        Ok(())
+    }
+
+    // Using the "modifier" with the ? operator
+    pub fn admin_function(&mut self) -> Result<(), ContractError> {
+        self.only_owner()?;  // Returns early if check fails
+
+        // Admin logic here...
+        Ok(())
+    }
+}
+```
+
+### Multiple guard functions
+
+You can combine multiple checks by chaining helper functions:
+
+```rust
+#[public]
+impl MyContract {
+    fn only_owner(&self) -> Result<(), ContractError> {
+        if self.vm().msg_sender() != self.owner.get() {
+            return Err(ContractError::Unauthorized(Unauthorized {}));
+        }
+        Ok(())
+    }
+
+    fn when_not_paused(&self) -> Result<(), ContractError> {
+        if self.paused.get() {
+            return Err(ContractError::Paused(Paused {}));
+        }
+        Ok(())
+    }
+
+    fn only_after(&self, timestamp: u64) -> Result<(), ContractError> {
+        if self.vm().block_timestamp() < timestamp {
+            return Err(ContractError::TooEarly(TooEarly {}));
+        }
+        Ok(())
+    }
+
+    // Combining multiple "modifiers"
+    pub fn protected_action(&mut self) -> Result<(), ContractError> {
+        self.only_owner()?;
+        self.when_not_paused()?;
+        self.only_after(self.unlock_time.get())?;
+
+        // Protected logic here...
+        Ok(())
+    }
+}
+```
+
+### Reusable access control module
+
+For larger projects, encapsulate access control in a reusable module:
+
+```rust
+// Access control helpers
+impl MyContract {
+    fn require_role(&self, role: FixedBytes<32>, account: Address) -> Result<(), ContractError> {
+        if !self.has_role(role, account) {
+            return Err(ContractError::MissingRole(MissingRole { role, account }));
+        }
+        Ok(())
+    }
+
+    fn has_role(&self, role: FixedBytes<32>, account: Address) -> bool {
+        self.roles.getter(role).get(account)
+    }
+
+    // Grant role (admin only)
+    pub fn grant_role(
+        &mut self,
+        role: FixedBytes<32>,
+        account: Address,
+    ) -> Result<(), ContractError> {
+        self.require_role(self.admin_role(), self.vm().msg_sender())?;
+        self.roles.setter(role).setter(account).set(true);
+        Ok(())
+    }
+}
+```
+
+### Complete access control example
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+sol! {
+    error Unauthorized();
+    error Paused();
+    error InvalidAmount();
+}
+
+#[derive(SolidityError)]
+pub enum VaultError {
+    Unauthorized(Unauthorized),
+    Paused(Paused),
+    InvalidAmount(InvalidAmount),
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct Vault {
+        address owner;
+        bool paused;
+        mapping(address => uint256) balances;
+    }
+}
+
+#[public]
+impl Vault {
+    // Modifier-like helpers
+    fn only_owner(&self) -> Result<(), VaultError> {
+        if self.vm().msg_sender() != self.owner.get() {
+            return Err(VaultError::Unauthorized(Unauthorized {}));
+        }
+        Ok(())
+    }
+
+    fn when_not_paused(&self) -> Result<(), VaultError> {
+        if self.paused.get() {
+            return Err(VaultError::Paused(Paused {}));
+        }
+        Ok(())
+    }
+
+    fn valid_amount(&self, amount: U256) -> Result<(), VaultError> {
+        if amount == U256::ZERO {
+            return Err(VaultError::InvalidAmount(InvalidAmount {}));
+        }
+        Ok(())
+    }
+
+    // Public functions using modifiers
+    #[payable]
+    pub fn deposit(&mut self) -> Result<(), VaultError> {
+        self.when_not_paused()?;
+
+        let sender = self.vm().msg_sender();
+        let amount = self.vm().msg_value();
+        self.valid_amount(amount)?;
+
+        let current = self.balances.get(sender);
+        self.balances.setter(sender).set(current + amount);
+        Ok(())
+    }
+
+    pub fn pause(&mut self) -> Result<(), VaultError> {
+        self.only_owner()?;
+        self.paused.set(true);
+        Ok(())
+    }
+
+    pub fn unpause(&mut self) -> Result<(), VaultError> {
+        self.only_owner()?;
+        self.paused.set(false);
+        Ok(())
+    }
+}
+```
+
+## See Also
+
+- [Primitives](./data-types/primitives.mdx) - Basic data types
+- [Compound Types](./data-types/compound-types.mdx) - Arrays, structs, tuples
+- [Storage Types](./data-types/storage.mdx) - Persistent storage
+- [Global Variables and Functions](./global-variables-and-functions.mdx) - VM context methods
