@@ -392,9 +392,9 @@ For complex types:
 - **Arrays**: Use JSON array syntax
 
 ```bash
-# Example with multiple argument types
+# Example with multiple argument types including an array
 cargo stylus deploy \
-  --constructor-args "TokenName" "TKN" 1000000 "0x742d35Cc6635C0532925a3b8D95B5C1b0ea3C28F"
+  --constructor-args "TokenName" "TKN" 1000000 "0x742d35Cc6635C0532925a3b8D95B5C1b0ea3C28F" '[1, 2, 3, 4, 5]'
 ```
 
 ## Best practices
