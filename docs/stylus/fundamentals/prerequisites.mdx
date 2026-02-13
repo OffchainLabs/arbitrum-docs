@@ -1,0 +1,72 @@
+---
+title: 'Prerequisites and setup'
+sidebar_label: 'Prerequisites'
+description: 'Set up your development environment for Stylus'
+user_story: 'As a new Stylus developer, I want to set up my development environment'
+content_type: how-to
+author: anegg0
+sme: anegg0
+sidebar_position: 1
+---
+
+import RustSetup from '../partials/_setup-rust-toolchain.mdx';
+import CargoStylusSetup from '../partials/_setup-cargo-stylus.mdx';
+import DockerSetup from '../partials/_setup-docker-nitro.mdx';
+import FoundrySetup from '../partials/_setup-foundry.mdx';
+
+# Prerequisites and setup
+
+This guide will help you set up everything you need to develop Stylus contracts.
+
+## System requirements
+
+- **Operating System**: macOS, Linux, or Windows (WSL2)
+- **RAM**: Minimum 8GB, 16GB recommended
+- **Disk Space**: At least 20GB free
+
+## Install Rust
+
+<RustSetup />
+
+## Install cargo-stylus CLI
+
+<CargoStylusSetup />
+
+## Install Docker (for local testnet)
+
+<DockerSetup />
+
+## Install Foundry
+
+<FoundrySetup />
+
+## Verify installation
+
+```shell
+# Check Rust version
+rustc --version
+
+# Check cargo-stylus
+cargo stylus --version
+
+# Check Docker
+docker --version
+
+# Check Foundry's cast
+cast --version
+```
+
+Expected output:
+
+```
+rustc 1.75.0 (or higher)
+cargo-stylus 0.x.x
+Docker version 24.0.0 (or higher)
+cast 0.x.x
+```
+
+## Next steps
+
+- [Create your first project](/stylus/quickstart)
+- [Understand project structure](/stylus/fundamentals/project-structure)
+- [Learn about contracts](/stylus/fundamentals/contracts)
