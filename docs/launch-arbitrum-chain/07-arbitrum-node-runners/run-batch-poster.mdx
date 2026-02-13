@@ -69,7 +69,7 @@ Redis is a fast local/external database that runs separately from the Nitro soft
 
 Storing transactions also enables RBF, which can prevent transactions from being stuck in the mempool due to insufficient gas. However, using Redis means the batch poster will halt if a transaction reverts.
 
-To set up Redis, you can also set up a `redis-signer` value with the flag `--node.batch-poster.data-poster.redis-signer.signing-key`.
+To configure Redis, you can also specify a `redis-signer` value with the flag `--node.batch-poster.data-poster.redis-signer.signing-key`.
 
 #### Key differences
 
