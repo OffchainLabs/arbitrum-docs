@@ -232,7 +232,7 @@ To set a new fee collector for a specific batch poster, use the method `setFeeCo
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "setFeeCollector(address,address) ()" $BATCH_POSTER_ADDRESS $NEW_FEECOLLECTOR_ADDRESS
 ```
 
-Also possible in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk):
+You can also do this with the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk):
 
 ```Typescript
 const owner = privateKeyToAccount(<OwnerPrivateKey>);
