@@ -47,7 +47,7 @@ You can use only one database at a time, so you can't have both a Redis server a
 
 :::note
 
-If your parent chain is an Arbitrum chain or doesn't have a mempool, then this section can be ignored as Noop storage will be automatically chosen. This is because batches are posted sequentially, and will only post a new batch if the previous transaction went through, therefore no database tracking queued transactions is required.
+If your parent chain is an Arbitrum chain or doesn't have a mempool, you can ignore this section. Noop storage is automatically chosen because batches post sequentially -- a new batch only posts after the previous transaction goes through. No database tracking for queued transactions is required.
 
 :::
 
