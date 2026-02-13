@@ -201,7 +201,7 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D 
 
 While there are other ways to get the list of batch posters for an arbitrum chain, this method only lists batch posters who are registered by `ArbAggregator.addBatchPoster()` or have posted at least a single batch, which is better for revenue reasons.
 
-Once you have teh batch poster address you can obtain the fee collector address for that batch poster using the `getFeeCollector(address)(address)` from the [`ArbAggregator` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator).
+Once you have the batch poster address you can obtain the fee collector address for that batch poster using the `getFeeCollector(address)(address)` from the [`ArbAggregator` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator).
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
