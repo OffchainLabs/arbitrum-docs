@@ -191,7 +191,7 @@ numBlobs=1
 
 ## Batch poster revenue config
 
-To change revenue configurations for a batch poster, the first thing that to do is check the list of current registered batch posters through the [`ArbAggregator` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) by calling `getBatchPosters()(address[])`:
+To change revenue configurations for a batch poster, first check the list of current registered batch posters through the [`ArbAggregator` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) by calling `getBatchPosters()(address[])`:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
