@@ -29,7 +29,7 @@ If you're the chain owner, using the Arbitrum Chain SDK to generate your config 
 
 To add a new batch poster, call the `setIsBatchPoster(address,bool)` method of the `SequencerInbox` contract on the parent chain:
 
-```Typescript
+```shell
 cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCER_INBOX_ADDRESS "setIsBatchPoster(address,bool)()" $NEW_BATCH_POSTER_ADDRESS true
 ```
 
