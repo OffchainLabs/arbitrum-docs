@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Pre-commit hook for arbitrum-docs repository
 # Enforces: redirect validation, submodule updates, code formatting, and type checking
@@ -151,17 +151,14 @@ main() {
     # When passing files explicitly to Prettier, .prettierignore is bypassed
     # So we need to manually filter them out
     filter_prettier_ignored() {
-      local files="$1"
-      local filtered=""
-      while IFS= read -r file; do
+      printf '%s\n' "$1" | while IFS= read -r file; do
         if [ -n "$file" ]; then
           # Check if file is ignored by Prettier
           if npx prettier --file-info "$file" 2>/dev/null | grep -q '"ignored": false'; then
-            filtered="$filtered$file"$'\n'
+            printf '%s\n' "$file"
           fi
         fi
-      done <<< "$files"
-      echo "$filtered"
+      done
     }
 
     # Apply Prettier ignore filtering to staged files
