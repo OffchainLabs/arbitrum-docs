@@ -5,7 +5,7 @@ description: 'Learn how to configure the Batch Poster and Assertion Control.'
 author: pete-vielhaber
 sme: Jason-W123
 user_story:
-content_type: get-started
+content_type: quickstart
 ---
 
 Batch posting configurations allow the sequencer to group, compress, and post transaction batches from the Arbitrum chain (L3) to its parent chain (typically an L2 such as Arbitrum One or Nova). Key parameters include the maximum delay before posting a batch and the maximum size of a batch to be posted, both of which control the frequency and timeliness of postings. These help prevent transaction reordering by ensuring that the sequencer commits batches in the order transactions are received, posting them atomically to the parent chain's inbox contract. This batch posting creates an immutable record on L1 (via the L2), reducing the risk of malicious reordering. For chain reorganizations, timely batch posting minimizes the window for L1 reorgs to affect unposted data, as posted batches become part of the canonical chain history.

@@ -3,7 +3,7 @@ title: 'Why choose to customize the precompiles on your Arbitrum chain'
 description: 'Learn about precompiles and the pros and cons of choosing to customize them on your chain.'
 author: pete-vielhaber
 sme: jason-w123
-content_type: configuration
+content_type: concept
 ---
 
 Customizing your chain's precompiles refers to modifying or extending the built-in, system-level <a data-quicklook-from="smart-contract">smart contract</a>-like functions (precompiles) that provide efficient access to chain-specific operations, such as interacting with the <a data-quicklook-from="parent-chain">parent chain</a> (L1/L2), querying state, or performing computations. Precompiles are hardcoded at specific addresses (e.g., 0x64 for `ArbSys`) and executed outside the EVM bytecode level for performance. They inherit Ethereum's standard precompiles (e.g., for hashing or elliptic curves) while adding <a data-quicklook-from="arbitrum">Arbitrum</a>-specific ones (e.g., `ArbAddressTable` for address compression).
