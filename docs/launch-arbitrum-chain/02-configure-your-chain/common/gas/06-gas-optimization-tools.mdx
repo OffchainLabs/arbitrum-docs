@@ -10,6 +10,12 @@ To configure gas behavior on an Arbitrum chain using the [Chain SDK](https://git
 
 Below is a breakdown of each specified parameter, including its role, typical defaults (based on Arbitrum One), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security. For example, setting limits too high could lead to state bloat or slower block processing.
 
+:::warning Caution
+
+Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
+
+:::
+
 ## Gas target
 
 This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
@@ -88,8 +94,28 @@ This configuration is adjustable post-deployment. When working with layers or pa
 
 Refer to the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common/fees/07-fee-management.mdx) page for more information.
 
-:::warning Caution
+## Gas floor per token
 
-Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
-
+:::info
+This setting is only available starting from [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51).
 :::
+
+- **Description**: Gas floor per token refers to the minimum gas price floor applied for batch posting to [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623)- enabled parent chains. It ensures that transactions with large calldata pay enough fees to cover data posting costs.
+- **Default**: Default value of this setting is based on the parent chain -
+  - If your L2 chain posts calldata to Ethereum, the value should be set to **10**, as specified in the [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623). \
+    **Note:** While this value does not affect posting EIP-4844 blobs, we recommend keeping the default value of 10 as a safeguard. If your chain falls back to calldata posting - due to higher fees for blob posting or configuration changes - this setting ensures you continue to collect sufficient fees to cover L1 data posting costs.
+  - If your L3 chain posts data to Arbitrum One / Nova, this parameter doesn't need to be set as these chains do not support EIP-7623.
+  - If your L2 or L3 chain posts data to another parent chain, the parameter will have to be set based on the parent chain.
+- **Configuration**: Call the `setParentGasFloorPerToken(uint64 newFloor)` on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) to set the value for `gasFloorPerToken`. This value should be adjusted based on the parent chain's EIP-7623 settings to ensure the data-posting costs are fully covered.
+
+:::warning
+Changing this value from the recommended default is not advised and should be left untouched in most circumstances, unless required by your parent chain.
+:::
+
+Example using `cast` (for per batch charge):
+
+```shell
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x000000000000000000000000000000000000000070 "setParentGasFloorPerToken(uint64)" $NEW_FLOOR_VALUE
+```
+
+This setting is adjustable post-deployment. You can query the current floor via the `ArbOwnerPublic` precompile's `getParentGasFloorPerToken()`.
