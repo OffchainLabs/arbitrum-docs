@@ -11,13 +11,13 @@ displayed_sidebar: buildAppsSidebar
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-### In a nutshell:
+## In a nutshell:
 
 - Stylus lets you write smart contracts in programming languages that compile to WASM, such as Rust, C, C++, and others, allowing you to use their ecosystem of libraries and tools. Language and tooling support exists for Rust. You can try the SDK and CLI with the [quickstart](/stylus/quickstart.mdx).
 - Solidity contracts and Stylus contracts are interoperable. In Solidity, you can call a Rust program and vice versa, thanks to a second, coequal WASM virtual machine.
 - Stylus contracts offer reduced gas costs for memory and compute-intensive operations because <a data-quicklook-from="wasm">WASM</a> programs execute more efficiently than EVM bytecode for these workloads.
 
-### What's Stylus?
+## What's Stylus?
 
 Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](/run-arbitrum-node/arbos-releases/arbos32.mdx), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. This paradigm is called MultiVM because it is additive to existing functionality.
 
@@ -27,17 +27,17 @@ This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode
 
 With a WASM VM, any programming language compilable to WASM is within Stylus's scope. While many popular programming languages can compile to WASM, some compilers are better suited to smart contract development than others, such as Rust, C, and C++. Other languages like Go, Sway, Move, and Cairo are also supported. Languages that include their own runtimes, like Python and JavaScript, are more complex for Stylus to support, although not impossible. WASM programs tend to be more efficient than EVM bytecode for memory-intensive applications. This efficiency comes from mature compiler toolchains for languages like Rust and C, which have benefited from decades of optimization work. The WASM runtime also executes faster than the EVM interpreter. Third-party contributions in the form of libraries for new and existing languages are welcome.
 
-### How Stylus works
+## How Stylus works
 
 Bringing a Stylus program to life involves four stages: coding, activation, execution, and proving. The following sections describe each step.
 
-#### Coding
+### Coding
 
 You write your smart contract in any programming language that compiles to WASM. Rust has the most developed support with an open-source SDK for smart contract development. C and C++ are also supported, so that you can deploy existing contracts in those languages onchain with minimal modifications.
 
 The [Stylus SDK for Rust](/stylus/reference/rust-sdk-guide.md) provides the development framework and language features for smart contract development. It also provides access to EVM-specific functionality used by smart contract developers.
 
-#### Activation
+### Activation
 
 Once you've written your contract, compile it to WASM using the Stylus CLI (or another compiler, like Clang for C/C++). Then you post the compiled WASM onchain.
 
@@ -49,19 +49,19 @@ Stylus measures computational costs using ink instead of gas. Ink works like gas
 Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/using-cli.mdx#cargo-stylus-commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
 :::
 
-#### Execution
+### Execution
 
 When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a WebAssembly runtime. Because Wasmer compiles to native machine code, it executes faster than Geth's EVM bytecode interpreter. This performance difference reduces gas costs for compute-intensive operations.
 
 EVM contracts continue to work exactly as before. When a contract is called, the system checks whether it's an EVM contract or a WASM program and routes it to the appropriate runtime. Solidity and WASM contracts can call each other, so the language a contract was written in doesn't affect interoperability.
 
-#### Proving
+### Proving
 
 Stylus builds on Nitro's fraud-proving technology. In normal operation, execution compiles to native code for speed. But if there's a dispute, the execution history compiles to WASM so validators can run interactive fraud proofs on Ethereum.
 
 What makes Stylus possible: Nitro can already replay and verify disputes using WASM. Stylus extends this capability to verify not just execution history, but also the WASM programs you deploy. The result is a system where any program compiled to WASM can be deterministically fraud-proven. For more details, see the [Nitro architecture documentation](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
 
-### Use cases
+## Use cases
 
 Stylus can integrate into existing Solidity projects by calling a Stylus contract to optimize specific parts of your app, or you can build an entire app with Stylus. Developers can also port existing applications written in Rust, C, or C++ to run onchain with minimal modifications. Here are some use cases where Stylus may be a good fit:
 
@@ -70,7 +70,7 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 - Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
 - Cryptographic applications: Implement applications that require advanced cryptography or other compute-heavy operations that would be cost-prohibitive in Solidity.
 
-### Getting started
+## Getting started
 
 1. Follow the [quickstart](/stylus/quickstart.mdx) to deploy your first Stylus contract, and explore the [Rust SDK](/stylus/reference/overview.md) documentation.
 2. Join the Stylus Developer [Telegram](https://t.me/arbitrum_stylus) group and [Arbitrum Discord](https://discord.gg/arbitrum) for community support.
