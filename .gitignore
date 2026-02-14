@@ -1,4 +1,5 @@
 .vscode
+.devcontainer/
 
 .vercel
 .DS_Store
@@ -42,3 +43,6 @@ yarn-error.log*
 /i18n/*/docusaurus-plugin-content-docs/current/*
 
 sdk-sidebar.js
+
+# Audit output
+.audit/
