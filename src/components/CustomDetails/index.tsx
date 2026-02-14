@@ -13,7 +13,7 @@ export default function CustomDetails({
   summary,
   className,
   ...props
-}: Props): JSX.Element {
+}: Props): React.ReactElement {
   return (
     <Details {...props} summary={summary as any} className={`${styles.details} ${className || ''}`}>
       {children as any}

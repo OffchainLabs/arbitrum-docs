@@ -5,7 +5,7 @@ import type { Props } from '@theme/NotFound/Content';
 import Heading from '@theme/Heading';
 import { usePostHog } from 'posthog-js/react';
 
-export default function NotFoundContent({ className }: Props): JSX.Element {
+export default function NotFoundContent({ className }: Props): React.ReactElement {
   const posthog = usePostHog();
 
   useEffect(() => {

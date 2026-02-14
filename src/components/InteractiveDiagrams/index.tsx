@@ -5,7 +5,9 @@ interface InteractiveDiagramsProps {
   type: string;
 }
 
-export default function InteractiveDiagrams({ type }: InteractiveDiagramsProps): JSX.Element {
+export default function InteractiveDiagrams({
+  type,
+}: InteractiveDiagramsProps): React.ReactElement {
   switch (type) {
     case 'timeboost-auction':
       return <CentralizedAuction />;
