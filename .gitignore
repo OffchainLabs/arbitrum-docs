@@ -46,3 +46,5 @@ sdk-sidebar.js
 
 # Audit output
 .audit/
+
+.claude/plans
