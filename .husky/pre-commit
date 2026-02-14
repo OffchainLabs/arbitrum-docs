@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Pre-commit hook for arbitrum-docs repository
 # Enforces: redirect validation, submodule updates, code formatting, and type checking
