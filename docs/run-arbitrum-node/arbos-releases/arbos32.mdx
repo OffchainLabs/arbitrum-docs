@@ -21,13 +21,13 @@ Please note that it is important that you only run the Nitro v3.3.1 against trus
 
 The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.mdx).
 
-### Requirements:
+## Requirements:
 
 - [Nitro v3.3.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.3.1) or higher
 - [nitro-contracts v2.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.0) or higher
 - WASM module root: `0x184884e1eb9fefdc158f6c8ac912bb183bf3cf83f0090317e0bc4ac5860baa39`
 
-### High-level description of ArbOS 32 changes
+## High-level description of ArbOS 32 changes
 
 ArbOS 32 Bianca is a major upgrade for Arbitrum chains. As a refresher, ArbOS upgrades can be treated as Arbitrum’s equivalent of a hard fork - more can be read about this subject over in [Arbitrum ArbOS upgrades](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Please note that ArbOS 21 Bianca is an upgrade that builds upon [ArbOS 20 Atlas](./arbos20.mdx).
 
@@ -38,7 +38,7 @@ ArbOS 32 Bianca brings many features, improvements, and bug fixes to Arbitrum ch
 - [Only relevant to Arbitrum Nova] Updated the transaction fee router contracts on Arbitrum Nova to allow for fees collected to be automatically sent to the ArbitrumDAO Treasury on Arbitrum One. Currently, the ArbitrumDAO receives Arbitrum Nova transaction fees that are sent to an ArbitrumDAO-controlled address that requires a constitutional proposal to move, which is less efficient. This change is specific to Arbitrum Nova and is not expected to impact Arbitrum chains.
 - Introduction of a new Fast Withdrawals feature for Arbitrum chains to achieve fast finality. This feature allows for transactions processed by a committee of validators to be unanimously confirmed as quickly as 15 minutes, as opposed to the default 6.4-day challenge period. While any Arbitrum chain can adopt Fast Withdrawals, we only recommend Fast Withdrawals for AnyTrust chains. Note that to enable this feature, separate steps must be followed (below).
 
-### Additional requirement for Arbitrum chains who wish to take advantage of the Stylus Cache Manager
+## Additional requirement for Arbitrum chains who wish to take advantage of the Stylus Cache Manager
 
 :::tip Stylus Cache Manager
 It is strongly recommended that teams upgrading to ArbOS 32 also spend the time following the instructions described below to deploy and enable the Stylus Cache Manager. Even if your team does not intend to build with Stylus in the immediate term, enabling the Cache Manager ensures that future usage of Arbitrum Stylus on your chain is smooth and provides a consistent UX with the developer experience of building with Arbitrum Stylus on Arbitrum One.
@@ -48,11 +48,11 @@ Specific to Stylus and ArbOS 32 "Bianca", we have developed a caching strategy t
 
 In order to take advantage of this caching strategy, an additional step is required to deploy and enable it's use on your Arbitrum chain.
 
-### Additional requirement for Arbitrum chains who wish to enable Fast Withdrawals
+## Additional requirement for Arbitrum chains who wish to enable Fast Withdrawals
 
 After you have upgraded your Arbitrum chain to ArbOS 32 "Bianca" (i.e., you have fully completed [Step 3 in the "How to upgrade ArbOS on your Arbitrum chain" guide](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/13-arbos-upgrade.mdx#step-3-schedule-the-arbos-version-upgrade) for your Arbitrum chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/fast-confirm) in the `orbit-actions` repository to deploy the Safe contract for the fast confirmation committee and set the Safe contract to be both the validator and fast confirmer on your rollup, note that Fast Withdrawals is disabled by default unless explicitly set up and enabled by the Arbitrum chain owner/maintainer.
 
-### Reference links for ArbOS 32 Bianca
+## Reference links for ArbOS 32 Bianca
 
 - [Nitro v3.3.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.3.1)
 - [ArbOS 32 "Bianca" onchain Tally vote](https://www.tally.xyz/gov/arbitrum/proposal/108288822474129076868455956066667369439381709547570289793612729242368710728616)

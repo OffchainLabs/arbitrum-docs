@@ -6,8 +6,6 @@ content_type: reference
 sidebar_label: Use Rust Crates
 ---
 
-# Recommended libraries
-
 ## Using public Rust crates
 
 Rust provides a package registry at [crates.io](https://crates.io/), which lets developers conveniently access a plethora of open source libraries to utilize as dependencies in their code. Stylus Rust contracts can take advantage of these crates to simplify their development workflow.
