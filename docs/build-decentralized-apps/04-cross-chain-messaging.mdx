@@ -10,16 +10,16 @@ The Arbitrum protocol and related tooling makes it easy for developers to build 
 
 ## Ethereum-to-Arbitrum messaging
 
-Arbitrary parent to child chain contract calls can be created via the Inbox's `createRetryableTicket` method; upon publishing the parent chain transaction, the child chain side will typically get included within minutes. Commonly, the child chain execution will automatically succeed, but if reverts, and it can be rexecuted via a call to the `redeem` method of the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile.
+Arbitrary parent to child chain contract calls can be created via the Inbox's `createRetryableTicket` method; upon publishing the parent chain transaction, the child chain side will typically get included within minutes. Commonly, the child chain execution will automatically succeed, but if it reverts, it can be rexecuted via a call to the `redeem` method of the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile.
 
-For details and protocol specification, see [Parent to child chain messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
-
-For an example of retryable tickets in action, see the [`Greeter`](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter) tutorial, which uses the [Arbitrum SDK](../../sdk).
+- **How-to guide**: [How to bridge from parent chain to child chain](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx)
+- **Protocol details**: [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
+- **Example**: [`Greeter` tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter) using the [Arbitrum SDK](../../sdk)
 
 ## Arbitrum-to-Ethereum messaging
 
-Similarly, child chain contracts can send Arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Upon confirmation (about one week later), they can execute by retrieving the relevant data via a call to `NodeInterface` contract's `constructOutboxProof` method, and then executing them via the `Outbox`'s `executeTransaction` method.
+Similarly, child chain contracts can send arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Upon confirmation (about one week later), they can be executed by retrieving the relevant data via a call to the `NodeInterface` contract's `constructOutboxProof` method, and then executing them via the `Outbox`'s `executeTransaction` method.
 
-For details and protocol specification, see [Child to parent chain messages](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx).
-
-For a demo, see the [Outbox Tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute).
+- **How-to guide**: [How to bridge to parent chain from child chain](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx)
+- **Protocol details**: [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
+- **Example**: [Outbox Tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute)

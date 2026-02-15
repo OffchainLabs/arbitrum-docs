@@ -1,0 +1,207 @@
+---
+title: Configure standard gateway bridging
+description: Learn how to set up token bridging using Arbitrum's standard ERC-20 gateway
+content_type: how-to
+---
+
+This guide explains how to configure your ERC-20 token to work with Arbitrum's standard gateway. The standard gateway is the simplest option - it automatically creates a standard ERC-20 token on the child chain with no configuration required.
+
+## When to use the standard gateway
+
+Use the standard gateway when:
+
+- You have a standard ERC-20 token on the parent chain
+- You don't need custom functionality on the child chain token
+- You want automatic setup with no pre-configuration
+- Your token doesn't have special behaviors (rebasing, fee-on-transfer, etc.)
+
+For custom token behavior, see:
+
+- [Generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) - for custom child chain token logic
+- [Custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway.mdx) - for advanced use cases
+
+## Prerequisites
+
+- A standard ERC-20 token deployed on the parent chain (or deploy one following this guide)
+- Familiarity with [Arbitrum's token bridge system](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- Basic understanding of smart contracts and blockchain development
+
+## How the standard gateway works
+
+When using the standard gateway:
+
+1. **No pre-configuration needed**: Your token is automatically bridgeable
+2. **Automatic child chain deployment**: On the first deposit, a standard [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol) contract is deployed on the child chain
+3. **Escrow model**: Parent chain tokens are escrowed in the gateway; child chain tokens are minted/burned
+4. **Router handles routing**: The router automatically directs your token to the standard gateway
+
+For architectural details, see [Standard ERC-20 bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging).
+
+## Step 1: Deploy your token (or use existing)
+
+If you already have a token on the parent chain, skip to Step 2. Otherwise, create a standard ERC-20 token:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract DappToken is ERC20 {
+    constructor(uint256 _initialSupply) ERC20("Dapp Token", "DAPP") {
+        _mint(msg.sender, _initialSupply * 10 ** decimals());
+    }
+}
+```
+
+Deploy it to the parent chain:
+
+```javascript
+const { ethers } = require('hardhat');
+const { providers, Wallet } = require('ethers');
+
+const parentProvider = new providers.JsonRpcProvider(process.env.PARENT_RPC);
+const wallet = new Wallet(process.env.PRIVATE_KEY, parentProvider);
+
+async function deployToken() {
+  const TokenFactory = await ethers.getContractFactory('DappToken');
+  const token = await TokenFactory.connect(wallet).deploy(1000000);
+  await token.deployed();
+
+  console.log(`Token deployed at: ${token.address}`);
+  return token.address;
+}
+```
+
+## Step 2: Understand the bridge contracts
+
+Two contracts handle token bridging:
+
+### Router contracts
+
+- **L1GatewayRouter**: Entry point on parent chain
+- **L2GatewayRouter**: Entry point on child chain
+
+The router maintains a mapping of which gateway handles which token, falling back to the standard gateway for unmapped tokens.
+
+### Gateway contracts
+
+- **L1ERC20Gateway**: Escrows parent chain tokens
+- **L2ERC20Gateway**: Mints/burns child chain tokens
+
+You can find contract addresses on the [contract addresses page](/build-decentralized-apps/reference/02-contract-addresses.mdx#token-bridge-smart-contracts).
+
+## Step 3: Trigger child chain token deployment
+
+The child chain token is created automatically on the first deposit. You can trigger deployment by making a small deposit, or wait until users make their first deposits.
+
+### Using the Arbitrum SDK
+
+```javascript
+import { getArbitrumNetwork, Erc20Bridger } from '@arbitrum/sdk';
+import { providers, Wallet } from 'ethers';
+
+const parentProvider = new providers.JsonRpcProvider(process.env.PARENT_RPC);
+const childProvider = new providers.JsonRpcProvider(process.env.CHILD_RPC);
+const wallet = new Wallet(process.env.PRIVATE_KEY, parentProvider);
+
+const childNetwork = await getArbitrumNetwork(childProvider);
+const erc20Bridge = new Erc20Bridger(childNetwork);
+
+// Approve the gateway
+await erc20Bridge.approveToken({
+  parentSigner: wallet,
+  erc20ParentAddress: tokenAddress,
+});
+
+// Make initial deposit to trigger L2 token creation
+const depositTx = await erc20Bridge.deposit({
+  amount: ethers.utils.parseUnits('1', 18),
+  erc20ParentAddress: tokenAddress,
+  parentSigner: wallet,
+  childProvider: childProvider,
+});
+
+const receipt = await depositTx.wait();
+console.log(`Deposit complete: ${receipt.transactionHash}`);
+```
+
+For complete deposit instructions, see [Deposit tokens](/build-decentralized-apps/token-bridging/deposit-tokens.mdx).
+
+## Step 4: Find your child chain token address
+
+After the first deposit, find your token's child chain address:
+
+### Using the SDK
+
+```javascript
+const childTokenAddress = await erc20Bridge.getChildErc20Address(
+  parentTokenAddress,
+  parentProvider,
+);
+
+console.log(`L2 token address: ${childTokenAddress}`);
+```
+
+### Manually
+
+Call `calculateL2TokenAddress` on the L1GatewayRouter contract:
+
+```solidity
+address l2TokenAddress = l1GatewayRouter.calculateL2TokenAddress(l1TokenAddress);
+```
+
+Or look up the token on [Arbiscan](https://arbiscan.io/) by searching for the deployment transaction.
+
+## Step 5: Verify the child chain token
+
+The automatically deployed token is an instance of [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol) with:
+
+- Same name and symbol as parent chain token
+- Same decimals as parent chain token
+- `l1Address()` function returning the parent chain token address
+- Minting/burning controlled by the L2ERC20Gateway
+
+You can verify this on [Arbiscan](https://arbiscan.io/) by viewing the token contract.
+
+## Configuration complete
+
+Your token is now bridgeable! Users can:
+
+- [Deposit tokens to the child chain](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
+- [Withdraw tokens back to parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+
+## Important considerations
+
+### Token compatibility
+
+Standard gateway works for most ERC-20 tokens, but **not** for:
+
+- Rebasing tokens (supply changes)
+- Fee-on-transfer tokens
+- Tokens with transfer hooks
+- Tokens with unique minting/burning logic
+
+For these cases, use [generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) or [custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway.mdx).
+
+### Gateway assignment
+
+Once the first deposit occurs, the token is permanently assigned to the standard gateway. You cannot change gateway types after this point.
+
+### Child chain token ownership
+
+The automatically deployed child chain token is controlled by the gateway - you cannot modify or upgrade it. For control over the child chain token, use the generic-custom gateway.
+
+## Next steps
+
+- [Deposit tokens](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
+- [Withdraw tokens](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+- [Understand token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- [View example code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
+
+## Resources
+
+- [Token bridge conceptual overview](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- [Standard ERC-20 bridging details](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging)
+- [Arbitrum SDK documentation](/sdk)
+- [Contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
