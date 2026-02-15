@@ -48,23 +48,11 @@ Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee curr
 
 Whether a chain uses `ETH` or a custom gas token, users can deposit the token from a parent chain (for Arbitrum One, it is Ethereum) to a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain's Delayed Inbox contract.
 
-### Depositing ETH
+### Depositing native tokens
 
-A special message type exists for simple `ETH` deposits from parent-to-child chains. You can deposit `ETH` by calling the `Inbox` contract's `depositEth` method, for example:
+A special message type exists for simple native token deposits from parent-to-child chains. The `Inbox` contract's `depositEth` method provides this functionality for chains using `ETH`, while custom gas token chains use similar mechanisms through their Delayed Inbox contract.
 
-```javascript
-function depositEth(address destAddr) external payable override returns (uint256)
-```
-
-:::warning
-
-Depositing `ETH` directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function.
-
-:::
-
-#### Using retryable tickets instead
-
-While `depositEth` is often the simplest path, you can also use _retryable tickets_ to deposit `ETH`. This method may be preferable if you need additional flexibility–for example, specifying an alternative destination address or triggering a fallback function on a child chain.
+For step-by-step instructions on depositing native tokens, see [How to bridge from parent chain](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#bridging-eth-to-a-child-chain).
 
 #### How deposits work
 
@@ -134,104 +122,15 @@ Signed messages let a parent chain EOA prove ownership of an address, ensuring t
 - You want to force-include a transaction on a child chain in case of Sequencer downtime or censorship.
 - You need an operation on a child chain that explicitly requires EOA authorization (e.g., a withdrawal).
 
-#### How signed messages work
-
 When submitting through the Delayed Inbox, a child chain transaction signature gets included in the message's calldata. Because it matches the EOA's signature, the child chain can safely treat the signer's address as the sender.
 
-Example use case:
-[Withdraw Ether tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)
-
-#### Delayed Inbox methods for signed messages
-
-There are two primary methods for sending signed messages:
-
-1. `sendL2Message`
-
-- It can be called by either an EOA or a contract
-- The complete signed transaction data is emitted in an event log so that nodes can reconstruct the transaction without replaying it
-- More flexible
-
-```solidity
-function sendL2Message(
-    bytes calldata messageData
-) external whenNotPaused onlyAllowed returns (uint256)
-```
-
-2. `sendL2MessageFromOrigin`
-
-- Only an EOA with no deployed code can call this ("codeless origin")
-- The signed transaction is retrieved directly from calldata, so emitting a large event log is unnecessary
-- Offers lower gas costs (cheaper)
-
-```solidity
-function sendL2MessageFromOrigin(
-    bytes calldata messageData
-) external whenNotPaused onlyAllowed returns (uint256);
-```
+The Delayed Inbox provides two methods for signed messages: `sendL2Message` (more flexible, can be called by EOAs or contracts) and `sendL2MessageFromOrigin` (cheaper gas costs, EOA-only). For implementation details, see [Sending signed messages](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#sending-signed-messages).
 
 ### Unsigned messages
 
-Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale). The Delayed Inbox provides four main methods for unsigned messages, divided based on whether the sender is an EOA or a contract and whether it includes parent chain funds:
+Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale).
 
-1. **Unsigned from EOA's**: These methods incorporate a nonce for replay protection, similar to standard EOA-based transactions on Ethereum.
-
-- `sendL1FundedUnsignedTransaction`
-  - Transfers value from a parent chain to a child chain along with the transaction
-  - Parameters: gas limit, fee, nonce, destination address, and calldata
-
-```solidity
-function sendL1FundedUnsignedTransaction(
-    uint256 gasLimit,
-    uint256 maxFeePerGas,
-    uint256 nonce,
-    address to,
-    bytes calldata data
-) external payable returns (uint256);
-```
-
-- `sendUnsignedTransaction`
-  - No value transfers from the parent chain
-  - Transaction fees and value on a child chain come from the child chain balance
-
-```solidity
-function sendUnsignedTransaction(
-    uint256 gasLimit,
-    uint256 maxFeePerGas,
-    uint256 nonce,
-    address to,
-    uint256 value,
-    bytes calldata data
-) external whenNotPaused onlyAllowed returns (uint256);
-```
-
-2. **Unsigned from contracts**: Contracts typically rely on standard Ethereum replay protection using their contract address.
-
-- `sendContractTransaction`
-  - Sends a transaction from a parent chain with no new funds; uses the contract's existing child chain balance.
-
-```solidity
-function sendContractTransaction(
-    uint256 gasLimit,
-    uint256 maxFeePerGas,
-    address to,
-    uint256 value,
-    bytes calldata data
-) external whenNotPaused onlyAllowed returns (uint256);
-```
-
-- `sendL1FundedContractTransaction`
-  - Sends the transaction _and_ transfers additional funds from a parent to child chain
-
-```solidity
-function sendL1FundedContractTransaction(
-    uint256 gasLimit,
-    uint256 maxFeePerGas,
-    address to,
-    bytes calldata data
-) external payable returns (uint256);
-```
-
-In these methods, a "delayed message" is created and passed to the parent chain bridge contract, which then arranges its inclusion on a child chain.
+The Delayed Inbox provides methods for unsigned messages from both EOAs and contracts, with variants for whether funds are transferred from the parent chain or drawn from the child chain balance. For implementation details and method signatures, see [Sending unsigned messages](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#sending-unsigned-messages).
 
 ### Messages types
 
@@ -249,129 +148,40 @@ Please refer to the [Address aliasing](#address-aliasing) discussion for more ba
 
 ## Retryable tickets
 
-Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages, i.e., parent-chain transactions that initiate a message to get executed on a child chain. A retryable is submittable for a fixed-cost (dependent only on its calldata size) paid at the parent chain; its _submission_ on the parent chain is separable/asynchronous with its _execution_ on the child chain. Retryables provide atomicity between the cross-chain operations; if the parent chain transaction to request submission succeeds (i.e., does not revert), then the execution of the retryable on the child chain has a strong guarantee to succeed.
+Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages—parent-chain transactions that initiate a message to be executed on a child chain. A retryable is submittable for a fixed cost (dependent only on its calldata size) paid at the parent chain. Critically, the ticket's _submission_ on the parent chain is separable and asynchronous from its _execution_ on the child chain. This design provides atomicity between the cross-chain operations: if the parent chain transaction to request submission succeeds (does not revert), then the execution of the retryable on the child chain has a strong guarantee to eventually succeed.
+
+For step-by-step instructions on creating retryable tickets, including parameter estimation and SDK usage, see [Creating retryable tickets](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#creating-retryable-tickets).
 
 ### Retryable ticket lifecycle
 
-Here, we walk through the different stages of the lifecycle of a <a data-quicklook-from="retryable-ticket">retryable ticket</a>: (1) submission, (2) auto-redemption, and (3) manual redemption.
+The lifecycle of a <a data-quicklook-from="retryable-ticket">retryable ticket</a> involves three stages: submission, automatic redemption, and manual redemption.
 
 #### Submission
 
-1. Creating a retryable ticket is initiated with a call (direct or internal) to the `createRetryableTicket` function of the [`inbox` contract](https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol). A ticket is guaranteed to get created if this call succeeds. Here, we describe parameters that need adjusting with care. Note that this function forces the sender to provide _a reasonable_ amount of funds (at least enough for submitting and _attempting_ to execute the ticket), but that doesn't guarantee a successful auto-redemption.
-
-| Parameter                                   | Description                                                                                                                                                                                                                                                                                                                      |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1CallValue` (also referred to as deposit) | Not a real function parameter; it is rather the `callValue` that gets sent along with the transaction                                                                                                                                                                                                                            |
-| `address to`                                | The destination child chain address                                                                                                                                                                                                                                                                                              |
-| `uint256 l2CallValue`                       | The `callvalue` for the retryable child chain message that is supplied within the deposit (`l1CallValue`)                                                                                                                                                                                                                        |
-| `uint256 maxSubmissionCost`                 | The maximum amount of `ETH` payable for submitting the ticket. This amount is (1) supplied within the deposit (`l1CallValue`) to be later deducted from the sender's child chain balance and is (2) directly proportional to the size of the retryable's data and parent chain basefee.                                          |
-| `address excessFeeRefundAddress`            | The unused gas cost and submission cost will deposit to this address, formula is: `(gasLimit x maxFeePerGas - execution cost) + (maxSubmission - (autoredeem ? 0 : submission cost))`. (**Note**: The excess deposit will transfer to the alias address of the parent chain transaction's `msg.sender` rather than this address) |
-| `address callValueRefundAddress`            | The child chain address to which the `l2CallValue` is credited if the ticket times out or gets canceled (also called the `beneficiary`, who's got a critical permission to cancel the ticket).                                                                                                                                   |
-| uint256 gasLimit                            | Maximum amount of gas used to cover the child chain execution of the ticket                                                                                                                                                                                                                                                      |
-| uint256 maxFeePerGas                        | The gas price bid for child chain execution of the ticket supplied within the deposit (`l1CallValue`)                                                                                                                                                                                                                            |
-| bytes calldata data                         | The calldata to the destination child chain address                                                                                                                                                                                                                                                                              |
-
-2. The sender's deposit must be enough to make the parent chain submission succeed and for child chain execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to the retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into escrow for later use in redeeming the ticket.
-
-3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on the child chain.
-
-**Ticket Submission**
-
-1. User initiates a parent-to-child message
-2. Initiating a parent-child message
-
-- A call to `inbox.createRetryableTicket` function that puts the message in the child chain inbox that can be re-executed for some fixed amount of time if it reverts.
-
-3. Check the user's deposit
-
-- Logic that checks if the user has enough funds to create a ticket. A process that checks if the `msg.value` provided by the user is greater than or equal to `maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas`.
-
-4. Ticket creation fails, and no funds get deducted from the user
-5. Ticket creation
-
-- A ticket is created and added to the retryable buffer on the child chain. Funds (`l2CallValue + submissionCost`) get deducted to cover the `callValue` from the user and are placed into escrow (on the child chain) for later use in redeeming the ticket.
+Creating a retryable ticket is initiated with a call to the `createRetryableTicket` function of the inbox contract. Key parameters include the destination address, call value, gas limits, refund addresses, and calldata. The ticket requires sufficient funds to cover both submission costs and gas for child chain execution. Upon successful submission, a unique `TicketID` is created and the `ArbRetryableTx` precompile emits a `TicketCreated` event.
 
 #### Automatic redemption
 
-1. It is very important to note that submitting a ticket on the parent chain is separable/asynchronous from its execution on the child chain, i.e., a successful parent chain ticket creation does not guarantee successful redemption. Upon successful ticket creation, checks validate the two following conditions:
+Upon successful ticket creation, the system checks if conditions are met for automatic redemption: the user's child chain balance must cover the gas costs, and the provided `maxFeePerGas` must meet or exceed the child chain base fee. If these conditions are met, the system automatically attempts to execute the ticket (auto-redeem).
 
-- if the user's child chain balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and**
-- if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2BaseFee`. If these conditions are both met, an attempt to execute the ticket on the child chain triggers (i.e., **auto-redeem** using the supplied gas, as if the `redeem` method of the `[ArbyRetryableTx]` precompile had been called). Depending on how much gas the sender has provided in Step 1, the ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations below:
-
-**Immediate success**
-
-If the ticket is successfully auto-redeemed, it will execute with the original submission's sender, destination, callvalue, and calldata. The submission fee is refunded to the user on the child chain (`excessFeeRefundAddress`). Note that to ensure successful auto-`redeem` of the ticket, one could use the Arbitrum SDK, which provides a [convenience function](https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) that returns the desired gas parameters when sending parent-to-child messages.
-
-**Fail**
-
-If a `redeem` is not done at submission or the submission's initial `redeem` fails (for example, because the child chain's gas price has increased unexpectedly), the submission fee is collected on the child chain to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see the next section).
-
-**Automatic redemption of the `TicketManual` redemption of the ticket**
-
-1. Does the auto-`redeem` succeed?
-
-- Logic that determines if the user's child chain balance is greater than (or equal to) `maxFeePerGas * gasLimit && maxFeePerGas` is greater than (or equal to) the `l2BaseFee`.
-
-2. Ticket is executed
-
-- The actual `submissionFee` is refunded to the `excessFeeRefundAddress` because the ticket cleared from the buffer of the child chain.
-
-3. The ticket is deleted from the child chain retryable buffer.
-4. Refund `callValueRefundAddress`
-
-- Refunded with (`maxGas - gasUsed) * gasPrice`. Note that the cap amount is the `l2CallValue` in the auto-`redeem`.
+If auto-redemption succeeds, the ticket executes immediately with the original parameters, and excess fees are refunded. If auto-redemption fails (for example, due to insufficient gas or an increase in gas prices), the ticket remains in the retryable buffer for up to one week, allowing for manual redemption.
 
 #### Manual redemption
 
-1. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is **not** limited by the original `gasLimit` set during the ticket creation. <a data-quicklook-from="arbos">ArbOS</a> will [enqueue the `redeem`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245) before moving on to the next non-`redeem` transaction in the block it's forming. In this manner, `redeem`'s are scheduled to happen as soon as possible and will always be in the same block as the transaction that scheduled it. Note that the `redeem` attempt's gas comes from the call to `redeem`, so there's no chance to reach the block's gas limit before execution.
+If automatic redemption fails, anyone can manually redeem the ticket by calling the `ArbRetryableTx` precompile's `redeem` method. The manual redemption attempt donates its call gas to the execution, and the gas limit is not constrained by the original ticket parameters. This allows tickets to be retried with different gas conditions.
 
-2. If the fixed period (one week) elapses without a successful `redeem`, the ticket **expires** and will be [automatically discarded](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262), unless some party has paid a fee to [keep the ticket alive](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbRetryableTx.sol#L45) for another full period. A ticket can live indefinitely as long as it continues to renew each time before it expires.
+Tickets remain in the retryable buffer for one week. If not successfully redeemed within this period, the ticket expires and is automatically discarded. However, tickets can be kept alive indefinitely by paying a fee to extend the lifetime for another full period before expiration.
 
-**Process flow**
+If a ticket expires without successful redemption, the escrowed `callValue` is refunded to the `callValueRefundAddress` specified during submission. This protects user funds even if execution never succeeds.
 
-1. Is the ticket manually created or not redeemed within seven days?
+#### Receipt types
 
-- Logic that determines if the ticket is manually canceled or not redeemed within seven days (i.e., it is expired).
+Retryable tickets produce two types of receipts:
 
-2. Refunding `callValueRefundAddress`
+- **Ticket creation receipt**: Confirms successful ticket creation and includes a `TicketCreated` event with the `ticketId`
+- **Redeem attempt receipt**: Records each redemption attempt and includes a `RedeemScheduled` event
 
-- The `l2CallValue` is refunded to the `callValueRefundAddress`
-
-3. The ticket is deleted from the child chain retryable buffer.
-4. Is the ticket manually redeemed?
-
-- Logic that determines if the ticket is manually redeemed.
-
-#### Avoid losing funds!
-
-Any associated messages and values, excluding the escrowed `callValue`, may be permanently lost if a ticket is not redeemed or rescheduled within seven days.
-
-On success, the `To` address receives the escrowed `callValue`, and any unused gas returns to ArbOS's gas pools. On failure, the `callValue` is returned to the escrow for the future `redeem` attempt. In either case, the network fee gets paid during the scheduling transaction, so no fee charges or refunds get made.
-
-During ticket redemption, attempts to cancel the same ticket or schedule another `redeem` of the same ticket will revert. In this manner, retryable tickets are not self-modifying.
-
-If a ticket with a `callValue` is eventually discarded (canceled or expired) having never successfully run, the escrowed `callValue` will be paid out to a `callValueRefundAddress` account that was specified in the initial submission (Step 1).
-
-:::info Important notes
-
-If a `redeem` is not done at submission or the submission's initial `redeem` fails, anyone can attempt to redeem the retryable again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt.
-
-- One can `redeem` live tickets using the [Arbitrum Retryables Transaction Panel](https://retryable-dashboard.arbitrum.io/tx)
-- The calldata of a ticket is saved on the child chain until it is redeemed or expired
-- Redeeming the cost of a ticket will not increase over time; it only depends on the current gas price and gas required for execution.
-
-:::
-
-#### Receipts
-
-In the lifecycle of a retryable ticket, two types of child chain transaction receipts will emit:
-
-- **Ticket creation receipt**: This receipt indicates successful ticket creation; any successful parent chain call to the `Inbox`'s `createRetryableTicket` method is guaranteed to create a ticket. The ticket creation receipt includes a `TicketCreated` event (from `ArbRetryableTx`), which includes a `ticketId` field. This `ticketId` is computable via RLP encoding and hashing the transaction; see `[calculateSubmitRetryableId]`(https://github.com/OffchainLabs/arbitrum-sdk/blob/6cc143a3bb019dc4c39c8bcc4aeac9f1a48acb01/src/lib/message/L1ToL2Message.ts#L109).
-- **`redeem` attempt**: A `redeem` attempt receipt represents the results of an attempted child chain execution of a ticket, i.e., success/failure of that specified `redeem` attempt. It includes a `RedeemScheduled` event from `ArbRetryableTx`, with a `ticketId` field. At most, one successful `redeem` attempt can ever exist for a given ticket; if, e.g., the auto-`redeem` upon initial creation succeeds, only the receipt from the auto-`redeem` will ever get emitted for that ticket. If the auto-`redeem` fails (or was never attempted–i.e., the provided `child chain gas limit * child chain gas price = 0`), each initial attempt will emit a `redeem` attempt receipt until one succeeds.
-
-#### Alternative "unsafe" retryable ticket creation
-
-The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure enough funds are provided directly from a parent chain to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to their [address alias](#address-aliasing) if either is a contract (determined by if the address has code during the call), providing a path for the parent chain contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, only a user who knows what they are doing should access it.
+Only one successful redemption can occur per ticket. Multiple failed redemption attempts will each produce a receipt until one succeeds.
 
 ## Token bridging
 

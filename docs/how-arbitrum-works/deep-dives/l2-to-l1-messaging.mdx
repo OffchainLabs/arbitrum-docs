@@ -40,37 +40,11 @@ Messages from child to parent are included in Arbitrum's Rollup state and finali
    - Once the assertion is confirmed, anyone can execute the message on the parent chain by proving its inclusion.
    - Execution is possible using `Outbox.executeTransaction`, which takes a Merkle proof proving the message exists in the finalized assertion.
 
-## Client flow (How to send and execute messages)
+## Sending and executing messages
 
-### Sending a message from a child to parent chain
+Child-to-parent messages are sent via the `ArbSys` precompile's `sendTxToL1` method. After the ~7 day challenge period, messages can be executed on the parent chain using the `Outbox.executeTransaction` method with a Merkle proof obtained from the `NodeInterface` contract.
 
-A contract or user sends a message from the child chain by calling:
-
-```solidity
-ArbSys(100).sendTxToL1(destAddress, calldata);
-```
-
-:::note
-
-`ArbSys(100)` references the ArbSys precompile at `0x0000000000000000000000000000000000000064`.
-
-:::
-
-### Executing the message on the parent chain
-
-After the seven-day <a data-quicklook-from="challenge">Challenge</a> period, if the assertion is confirmed, anyone can execute the message on the parent chain.
-
-1. **Retrieve proof data**:
-   - Call the `constructOutboxProof` method from the `NodeInterface` contract to get proof data.
-
-:::note
-
-We refer to `NodeInterface` as a "virtual" contract; its methods are accessible via calls `0x00000000000000000000000000000000000000C8`, but it doesn't live onchain. It isn't a precompile but behaves like a precompile that can't receive calls from other contracts. This approach is a cute trick that lets us provide Arbitrum-specific data without implementing a custom RPC.
-
-:::
-
-2. **Execute on the parent chain**;
-   - Call `Outbox.executeTransaction` with the proof data to execute the message on the parent chain.
+For step-by-step implementation instructions, see [How to bridge to parent chain](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx).
 
 ## Protocol design details
 
@@ -98,44 +72,16 @@ Each message progresses through three primary states:
 | Waiting for finalization | The assertion containing the message is in the <a data-quicklook-from="challenge-period">challenge period</a> (~6.4 days) |
 | Confirmed and executable on the parent chain | If no <a data-quicklook-from="fraud-proof">fraud proof</a> is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
 
-## Withdrawing Ether
+## Asset withdrawals
 
-Withdrawing Ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)'s `withdrawEth` method:
+### ETH withdrawals
 
-```solidity
-ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
-```
+The `ArbSys` precompile provides a `withdrawEth` convenience method for withdrawing ETH from the child chain. This method burns the ETH on the child chain and creates a child-to-parent message. Like all child-to-parent messages, it requires execution on the parent chain after the challenge period via `Outbox.executeTransaction`.
 
-Upon withdrawing, the Ether balance is burnt on the child chain side and will later be made available on the parent chain side.
+For implementation details, see [Withdrawing ETH](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx#withdrawing-eth).
 
-`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain. Once the withdraw executes (removed from the outbox), the user's Ether balance will receive credit on the parent chain.
+### ERC-20 token withdrawals
 
-The following diagram depicts the process that funds follow during a withdrawal operation.
+Token withdrawals use Arbitrum's canonical bridge architecture, detailed in the [Token bridging overview](/how-arbitrum-works/token-bridging/overview.mdx). The process flows through the `L2GatewayRouter` to the appropriate gateway contract (`L2ArbitrumGateway`), which burns the child chain tokens and creates a message to the parent chain gateway. After the challenge period, the message can be executed on the parent chain to release tokens from escrow.
 
-<ImageZoom
-  src="/img/apps-withdrawing-ether.svg"
-  alt="Process funds follow during withdrawal operation"
-  className="img-800px"
-/>
-
-## `ERC-20` token withdrawal
-
-Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#token-bridging) section of Bridging from a parent chain to a child chain article. This section will explain how the Arbitrum canonical bridge works on the child-to-parent chain token bridging.
-
-1. Initiation of a child-to-parent chain transfer occurs via the `L2GatewayRouter` contract on the child chain.
-2. The token's gateway contract (`L2ArbitrumGateway`) on the child chain gets called.
-3. `L2ArbitrumGateway` finally communicates to its corresponding gateway contract on the parent chain using the `L1ArbitrumGateway` contract.
-
-<ImageZoom
-  src="/img/apps-bridge_withdrawals.png"
-  alt="Withdrawal process using the gateway"
-  className="img-800px"
-/>
-
-For any given gateway pairing, calls have to be initiated through the corresponding router (`L2GatewayRouter`), and the gateways must conform to the `TokenGateway` interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
-
-Token withdrawals are the most common usage of child-to-parent chain messaging. The standard withdrawal happens as follows (for standard gateway):
-
-1. On the child chain, a user calls `L2GatewayRouter.outBoundTransfer`, which calls `outBoundTransfer` on `arbSomeERC20Token`'s gateway (i.e., `L2ERC20Gateway`).
-2. This call burns `arbSomeERC20Token` tokens and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will eventually execute on the parent chain.
-3. After the dispute window expires and the assertion with the user's <a data-quicklook-from="transaction">transaction</a> receives confirmation, a user can call `Outbox.executeTransaction`, which calls the encoded `L1ERC20Gateway.finalizeInboundTransfer` message, releasing the user's tokens from the `L1ERC20Gateway` contract's escrow.
+For implementation details, see [Withdrawing ERC-20 tokens](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx#withdrawing-erc-20-tokens).
