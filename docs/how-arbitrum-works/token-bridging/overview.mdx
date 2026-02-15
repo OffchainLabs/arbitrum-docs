@@ -1,0 +1,17 @@
+---
+title: 'Token bridging overview'
+description: An overview of token bridging resources
+author: dzgoldman
+user_story: As a developer, I want to understand how the token bridge works and what options exist to bridge assets between layers.
+content_type: concept
+sidebar_position: 1
+---
+
+Token bridging is a fundamental aspect of any Layer 2 (child chain) protocol. Arbitrum uses its ability to pass messages between parent and child chains (see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) and [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)) to enable trustless asset transfers between Ethereum and Arbitrum chains. Any asset and asset type can in principle be bridged, including `ETH`, `ERC-20` tokens, and `ERC-721` tokens, among others.
+
+This section explains the architecture and protocol-level design of Arbitrum's canonical token bridge:
+
+- [`ETH` bridging](/how-arbitrum-works/token-bridging/eth-bridging.mdx): How `ETH`, the native token of Ethereum and Arbitrum chains, is bridged between parent and child chains.
+- [`ERC-20` token bridging](/how-arbitrum-works/token-bridging/erc20-bridging.mdx): The architecture of the token bridge for `ERC-20` tokens, including the gateway system and different bridging patterns.
+
+For practical guides on implementing token bridging in your application, see [Bridge tokens programmatically](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx) in the Build apps section.

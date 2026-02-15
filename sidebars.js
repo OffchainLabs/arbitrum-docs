@@ -1105,6 +1105,53 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Reference',
+          items: [
+            {
+              type: 'doc',
+              label: 'ArbOS technical reference',
+              id: 'how-arbitrum-works/reference/arbos-reference',
+            },
+            {
+              type: 'doc',
+              label: 'Geth',
+              id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/reference/parent-chain-pricing',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Token bridging',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'how-arbitrum-works/token-bridging/overview',
+            },
+            {
+              type: 'doc',
+              label: 'ETH bridging',
+              id: 'how-arbitrum-works/token-bridging/eth-bridging',
+            },
+            {
+              type: 'doc',
+              label: 'ERC-20 bridging',
+              id: 'how-arbitrum-works/token-bridging/erc20-bridging',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'The BoLD dispute protocol',
           items: [
             {
@@ -1308,49 +1355,28 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Token bridging',
+          label: 'Bridge tokens programmatically',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/token-bridging/overview',
+              label: 'Get started',
+              id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
             },
             {
               type: 'doc',
-              label: 'ETH bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
+              label: 'Use the standard gateway',
+              id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
             },
             {
               type: 'doc',
-              label: 'ERC-20 token bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
+              label: 'Use the generic-custom gateway',
+              id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
             },
             {
-              type: 'category',
-              label: 'Bridge tokens programmatically',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Get started',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the generic-custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
-                },
-              ],
+              type: 'doc',
+              label: 'Use the custom gateway',
+              id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
             },
           ],
         },
