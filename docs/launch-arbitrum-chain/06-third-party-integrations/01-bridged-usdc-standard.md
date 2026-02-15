@@ -11,7 +11,7 @@ Circle’s [Bridged `USDC` Standard](https://www.circle.com/blog/bridged-usdc-st
 
 ## Why adopt the bridged `USDC` standard?
 
-When `USDC` is bridged into an Arbitrum chain, the default path is to use the chain’s [canonical gateway contracts for `ERC-20`'s](/how-arbitrum-works/token-bridging/erc20-bridging.mdx). By way of example, when a user bridges `USDC` from Arbitrum One to an Arbitrum chain, their Arbitrum One `USDC` tokens are locked into the Arbitrum chain’s parent side bridge, and a representative `USDC` token is minted to the user’s address on the Arbitrum chain, via the child side bridge.
+When `USDC` is bridged into an Arbitrum chain, the default path is to use the chain’s [canonical gateway contracts for `ERC-20`'s](/how-arbitrum-works/deep-dives/token-bridging.mdx). By way of example, when a user bridges `USDC` from Arbitrum One to an Arbitrum chain, their Arbitrum One `USDC` tokens are locked into the Arbitrum chain’s parent side bridge, and a representative `USDC` token is minted to the user’s address on the Arbitrum chain, via the child side bridge.
 
 The challenge with this user flow is two-fold:
 
@@ -41,7 +41,7 @@ Other requirements:
 
 - It is assumed there is already a `USDC` token deployed and used on the parent chain.
 - Also, it is assumed that the standard Arbitrum chain ownership system is used, i.e., `UpgradeExecutor` is the owner of the `ownable` contracts, and there is an EOA or multi-sig that has the executor role on the `UpgradeExecutor`.
-- Refer to the [token bridge overview page](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.mdx) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/how-arbitrum-works/token-bridging/erc20-bridging.mdx#other-flavors-of-gateways).
+- Refer to the [token bridge overview page](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.mdx) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/how-arbitrum-works/deep-dives/token-bridging.mdx#other-flavors-of-gateways).
 
 ## Deployment steps
 

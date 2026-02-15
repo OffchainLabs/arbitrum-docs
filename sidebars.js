@@ -1101,6 +1101,11 @@ const sidebars = {
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
             },
+            {
+              type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
+            },
           ],
         },
         {
@@ -1126,22 +1131,6 @@ const sidebars = {
               type: 'doc',
               label: 'STF inputs',
               id: 'how-arbitrum-works/reference/stf-inputs',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Token bridging',
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'how-arbitrum-works/token-bridging/overview',
-            },
-            {
-              type: 'doc',
-              label: 'ERC-20 bridging',
-              id: 'how-arbitrum-works/token-bridging/erc20-bridging',
             },
           ],
         },

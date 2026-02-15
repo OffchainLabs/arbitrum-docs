@@ -11,7 +11,7 @@ This guide shows you how to deposit ERC-20 tokens from a parent chain (like Ethe
 - Your token must already be bridgeable (registered with a gateway)
 - A wallet with the tokens you want to deposit on the parent chain
 - ETH on the parent chain to pay for gas fees
-- Familiarity with [Arbitrum's token bridge architecture](/how-arbitrum-works/token-bridging/overview.mdx)
+- Familiarity with [Arbitrum's token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
 
 ## Depositing tokens using the Arbitrum SDK
 
@@ -155,7 +155,7 @@ When you deposit tokens:
 2. **Message sent**: A retryable ticket is created to mint/release tokens on the child chain
 3. **Child chain**: After a few minutes, tokens are minted/released to your address
 
-For more details on the underlying protocol, see [Token bridging overview](/how-arbitrum-works/token-bridging/overview.mdx).
+For more details on the underlying protocol, see [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx).
 
 ## Troubleshooting
 
@@ -174,7 +174,7 @@ Make sure you approved the correct gateway contract (not the router). Use `getGa
 ## Next steps
 
 - [Withdraw tokens back to parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
-- [Understand token bridge architecture](/how-arbitrum-works/token-bridging/overview.mdx)
+- [Understand token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
 - [Configure bridging for a new token](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx)
 
 ## Resources

@@ -6,13 +6,13 @@ content_type: how-to
 
 This guide explains how to configure your token to work with Arbitrum's generic-custom gateway. Use this when you need custom functionality in your child chain token. For alternative bridging options, see the [overview](/build-decentralized-apps/token-bridging/get-started.mdx).
 
-Familiarity with [Arbitrum’s token bridge system](/how-arbitrum-works/token-bridging/overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
+Familiarity with [Arbitrum’s token bridge system](/how-arbitrum-works/deep-dives/token-bridging.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
 We will go through all the steps involved in the process. However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-token-bridging) that encapsulates the entire process.
 
 ## Step 1: Review the prerequisites
 
-As stated in the [token bridge conceptual page](/how-arbitrum-works/token-bridging/erc20-bridging.mdx#the-arbitrum-generic-custom-gateway), there are a few prerequisites to keep in mind while using this method to make a token bridgeable.
+As stated in the [token bridge conceptual page](/how-arbitrum-works/deep-dives/token-bridging.mdx#the-arbitrum-generic-custom-gateway), there are a few prerequisites to keep in mind while using this method to make a token bridgeable.
 
 First of all, the **parent chain counterpart of the token**, must conform to the [`ICustomToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface, meaning that:
 
@@ -381,6 +381,6 @@ Your token is now configured for bridging! Users can:
 
 ## Resources
 
-1. [Concept page: Token Bridge](/how-arbitrum-works/token-bridging/overview.mdx)
+1. [Concept page: Token Bridge](/how-arbitrum-works/deep-dives/token-bridging.mdx)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)

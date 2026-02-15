@@ -82,6 +82,6 @@ For implementation details, see [Withdrawing ETH](/build-decentralized-apps/how-
 
 ### ERC-20 token withdrawals
 
-Token withdrawals use Arbitrum's canonical bridge architecture, detailed in the [Token bridging overview](/how-arbitrum-works/token-bridging/overview.mdx). The process flows through the `L2GatewayRouter` to the appropriate gateway contract (`L2ArbitrumGateway`), which burns the child chain tokens and creates a message to the parent chain gateway. After the challenge period, the message can be executed on the parent chain to release tokens from escrow.
+Token withdrawals use Arbitrum's canonical bridge architecture, detailed in the [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx). The process flows through the `L2GatewayRouter` to the appropriate gateway contract (`L2ArbitrumGateway`), which burns the child chain tokens and creates a message to the parent chain gateway. After the challenge period, the message can be executed on the parent chain to release tokens from escrow.
 
 For implementation details, see [Withdrawing ERC-20 tokens](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx#withdrawing-erc-20-tokens).
