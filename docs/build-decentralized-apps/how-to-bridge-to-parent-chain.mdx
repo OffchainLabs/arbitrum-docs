@@ -202,47 +202,7 @@ The withdrawal process:
 
 ## Withdrawing ERC-20 tokens
 
-To withdraw ERC-20 tokens, use Arbitrum's canonical token bridge through the `L2GatewayRouter`:
-
-### Step 1: Initiate withdrawal on child chain
-
-```javascript
-const l2GatewayRouter = new ethers.Contract(
-  l2GatewayRouterAddress,
-  gatewayRouterABI,
-  childChainSigner,
-);
-
-// Approve the gateway to transfer your tokens
-const token = new ethers.Contract(tokenAddress, erc20ABI, childChainSigner);
-await token.approve(l2GatewayRouterAddress, amountToWithdraw);
-
-// Initiate the withdrawal
-const tx = await l2GatewayRouter.outboundTransfer(
-  l1TokenAddress, // Parent chain token address
-  parentChainDestination, // Where to send tokens on parent chain
-  amountToWithdraw,
-  '0x', // Extra data (usually empty)
-);
-await tx.wait();
-```
-
-### Step 2: Execute on parent chain
-
-After the ~7 day challenge period:
-
-1. The tokens are burned on the child chain
-2. An encoded message to `L1ERC20Gateway.finalizeInboundTransfer` is created
-3. Execute via `Outbox.executeTransaction` (similar to ETH withdrawal)
-4. Your tokens are released from the parent chain gateway's escrow
-
-The token withdrawal process:
-
-<ImageZoom
-  src="/img/apps-bridge_withdrawals.png"
-  alt="Withdrawal process using the gateway"
-  className="img-800px"
-/>
+For ERC-20 token withdrawals, see the dedicated [Withdraw tokens guide](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx), which provides detailed instructions for using Arbitrum's canonical token bridge.
 
 ## Using the Arbitrum SDK
 

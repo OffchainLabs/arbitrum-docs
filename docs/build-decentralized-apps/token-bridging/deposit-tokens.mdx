@@ -1,0 +1,184 @@
+---
+title: Deposit tokens to Arbitrum
+description: Learn how to deposit ERC-20 tokens from parent chain to child chain using Arbitrum's token bridge
+content_type: how-to
+---
+
+This guide shows you how to deposit ERC-20 tokens from a parent chain (like Ethereum) to an Arbitrum child chain. This assumes your token is already configured for bridging. If you need to set up bridging for a new token, see [Configure token bridging](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx).
+
+## Prerequisites
+
+- Your token must already be bridgeable (registered with a gateway)
+- A wallet with the tokens you want to deposit on the parent chain
+- ETH on the parent chain to pay for gas fees
+- Familiarity with [Arbitrum's token bridge architecture](/how-arbitrum-works/token-bridging/overview.mdx)
+
+## Depositing tokens using the Arbitrum SDK
+
+The simplest way to deposit tokens is using the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk):
+
+### Step 1: Set up the SDK
+
+```javascript
+import { getArbitrumNetwork, Erc20Bridger } from '@arbitrum/sdk';
+import { providers, Wallet } from 'ethers';
+
+// Set up providers and wallet
+const parentProvider = new providers.JsonRpcProvider(process.env.PARENT_RPC);
+const childProvider = new providers.JsonRpcProvider(process.env.CHILD_RPC);
+const wallet = new Wallet(process.env.PRIVATE_KEY, parentProvider);
+
+// Initialize the bridge
+const childNetwork = await getArbitrumNetwork(childProvider);
+const erc20Bridge = new Erc20Bridger(childNetwork);
+```
+
+### Step 2: Approve the gateway
+
+The gateway contract needs permission to transfer your tokens:
+
+```javascript
+const approveTx = await erc20Bridge.approveToken({
+  parentSigner: wallet,
+  erc20ParentAddress: tokenAddress,
+});
+
+const approveReceipt = await approveTx.wait();
+console.log(`Approved gateway: ${approveReceipt.transactionHash}`);
+```
+
+### Step 3: Deposit tokens
+
+```javascript
+const depositTx = await erc20Bridge.deposit({
+  amount: ethers.utils.parseUnits('100', 18), // Amount to deposit
+  erc20ParentAddress: tokenAddress,
+  parentSigner: wallet,
+  childProvider: childProvider,
+});
+
+const depositReceipt = await depositTx.wait();
+console.log(`Deposit initiated: ${depositReceipt.transactionHash}`);
+```
+
+### Step 4: Wait for child chain execution
+
+```javascript
+// Wait for the deposit to be processed on the child chain
+const childResult = await depositReceipt.waitForChildTransactionReceipt(childProvider);
+
+if (childResult.complete) {
+  console.log('Deposit successful!');
+  console.log(`Child chain transaction: ${childResult.message.childTxReceipt.transactionHash}`);
+} else {
+  console.log('Deposit failed or pending');
+}
+```
+
+## Depositing tokens manually
+
+If you prefer to interact with the contracts directly:
+
+### Step 1: Get contract addresses
+
+Find the router and gateway addresses for your network on the [contract addresses page](/build-decentralized-apps/reference/02-contract-addresses.mdx#token-bridge-smart-contracts).
+
+### Step 2: Approve the gateway
+
+First, find which gateway will handle your token:
+
+```solidity
+// Call on L1GatewayRouter
+address gateway = l1GatewayRouter.getGateway(tokenAddress);
+```
+
+Then approve it:
+
+```solidity
+// Call on your ERC-20 token contract
+token.approve(gateway, amountToDeposit);
+```
+
+### Step 3: Initiate deposit
+
+Call the router contract's `outboundTransferCustomRefund` method:
+
+```solidity
+function outboundTransferCustomRefund(
+    address _token,
+    address _refundTo,
+    address _to,
+    uint256 _amount,
+    uint256 _maxGas,
+    uint256 _gasPriceBid,
+    bytes calldata _data
+) external payable returns (bytes memory)
+```
+
+**Parameters:**
+
+- **`_token`**: Parent chain address of the token to deposit
+- **`_refundTo`**: Address to receive excess gas refund on the child chain
+- **`_to`**: Address to receive tokens on the child chain
+- **`_amount`**: Amount of tokens to deposit
+- **`_maxGas`**: Max gas for child chain execution
+- **`_gasPriceBid`**: Gas price for child chain execution
+- **`_data`**: Encoded data containing `maxSubmissionCost` and extra data
+
+**Example:**
+
+```javascript
+const router = new ethers.Contract(routerAddress, routerABI, wallet);
+
+// Encode the data parameter
+const data = ethers.utils.defaultAbiCoder.encode(['uint256', 'bytes'], [maxSubmissionCost, '0x']);
+
+const tx = await router.outboundTransferCustomRefund(
+  tokenAddress,
+  refundAddress,
+  destinationAddress,
+  amount,
+  maxGas,
+  gasPriceBid,
+  data,
+  { value: maxSubmissionCost + maxGas * gasPriceBid },
+);
+
+await tx.wait();
+```
+
+## How deposits work
+
+When you deposit tokens:
+
+1. **Parent chain**: Your tokens are escrowed in the gateway contract (for standard tokens) or burned (for custom tokens)
+2. **Message sent**: A retryable ticket is created to mint/release tokens on the child chain
+3. **Child chain**: After a few minutes, tokens are minted/released to your address
+
+For more details on the underlying protocol, see [Token bridging overview](/how-arbitrum-works/token-bridging/overview.mdx).
+
+## Troubleshooting
+
+### Deposit not appearing on child chain
+
+If your deposit doesn't appear after 10-15 minutes:
+
+1. Check the transaction status on the [Retryables Dashboard](https://retryable-dashboard.arbitrum.io/)
+2. If the retryable ticket failed, you may need to manually redeem it
+3. Check that you provided sufficient gas fees for child chain execution
+
+### "Insufficient allowance" error
+
+Make sure you approved the correct gateway contract (not the router). Use `getGateway()` to find the right gateway address.
+
+## Next steps
+
+- [Withdraw tokens back to parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+- [Understand token bridge architecture](/how-arbitrum-works/token-bridging/overview.mdx)
+- [Configure bridging for a new token](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx)
+
+## Resources
+
+- [Arbitrum SDK documentation](/sdk)
+- [Token deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
+- [Contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)

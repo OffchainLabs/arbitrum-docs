@@ -271,6 +271,41 @@
       "permanent": false
     },
     {
+      "source": "/(build-decentralized-apps/token-bridging/01-get-started/?)",
+      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/02-how-to-bridge-tokens-standard/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/03-how-to-bridge-tokens-generic-custom/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/04-how-to-bridge-tokens-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway",
+      "permanent": false
+    },
+    {
       "source": "/(build-decentralized-apps/token-bridging/01-overview/?)",
       "destination": "/how-arbitrum-works/token-bridging/overview",
       "permanent": false

@@ -1370,7 +1370,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Bridge tokens programmatically',
+          label: 'Token bridging',
           collapsed: true,
           items: [
             {
@@ -1380,18 +1380,35 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Use the standard gateway',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard',
+              label: 'Deposit tokens',
+              id: 'build-decentralized-apps/token-bridging/deposit-tokens',
             },
             {
               type: 'doc',
-              label: 'Use the generic-custom gateway',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom',
+              label: 'Withdraw tokens',
+              id: 'build-decentralized-apps/token-bridging/withdraw-tokens',
             },
             {
-              type: 'doc',
-              label: 'Use the custom gateway',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway',
+              type: 'category',
+              label: 'Configure token bridging',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Standard gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
+                },
+                {
+                  type: 'doc',
+                  label: 'Generic-custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway',
+                },
+                {
+                  type: 'doc',
+                  label: 'Custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway',
+                },
+              ],
             },
           ],
         },

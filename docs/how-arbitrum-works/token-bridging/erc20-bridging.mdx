@@ -60,7 +60,7 @@ For any given gateway pairing, we require that calls initiate through the corres
 
 By default, any `ERC-20` token on a parent chain that isn't registered to a gateway can be bridged permissionlessly through the `StandardERC20Gateway`.
 
-You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
+You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx) to bridge a token to a child chain via this gateway.
 
 ### Example: Standard `Arb-ERC-20` deposit and withdraw
 
@@ -102,7 +102,7 @@ Some examples of token features suitable for the generic-custom gateway:
 
 ### Setting up your token with the generic-custom gateway
 
-Follow the steps below to set up your token for use with the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/03-how-to-bridge-tokens-generic-custom.mdx).
+Follow the steps below to set up your token for use with the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx).
 
 **0. Have a parent chain token**
 
@@ -138,11 +138,11 @@ Take our wrapped Ether implementation for example: here, a single `WETH` contrac
 
 Regardless of a token's complexity in bridging needs, it is possible to create a gateway to accommodate it within our canonical bridging system.
 
-You can find an example of implementation of a custom gateway in the page [How to bridge tokens via a custom gateway](/build-decentralized-apps/token-bridging/04-how-to-bridge-tokens-custom-gateway.mdx).
+You can find an example of implementation of a custom gateway in the page [How to bridge tokens via a custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway.mdx).
 
 ## Demos
 
-Our [How to bridge tokens](/build-decentralized-apps/token-bridging/01-get-started.mdx) section provides an example of interacting with Arbitrum's token bridge via the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk).
+Our [How to bridge tokens](/build-decentralized-apps/token-bridging/get-started.mdx) section provides an example of interacting with Arbitrum's token bridge via the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk).
 
 ## A word of caution on bridges (aka, "I've got a bridge to sell you")
 
