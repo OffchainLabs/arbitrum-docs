@@ -9,6 +9,12 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
+:::tip Looking for implementation guides?
+
+This document explains the protocol-level concepts of parent-to-child messaging. For practical, step-by-step instructions on implementing bridging and messaging, see [How to bridge from parent chain to child chain](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx).
+
+:::
+
 In the [Bypassing the Sequencer](/build-decentralized-apps/transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">Sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
 - Submit child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain

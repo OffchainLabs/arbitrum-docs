@@ -1290,6 +1290,16 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'Bridge from parent chain',
+          id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
+        },
+        {
+          type: 'doc',
+          label: 'Bridge to parent chain',
+          id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
+        },
+        {
+          type: 'doc',
           id: 'build-decentralized-apps/custom-gas-token-sdk',
           label: 'Custom gas token SDK',
         },

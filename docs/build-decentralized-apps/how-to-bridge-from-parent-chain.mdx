@@ -1,0 +1,192 @@
+---
+title: How to bridge from parent chain to child chain
+description: Learn how to programmatically bridge ETH and send messages from a parent chain to an Arbitrum child chain
+content_type: how-to
+---
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
+This guide explains how to programmatically send messages and bridge assets from a parent chain (like Ethereum) to an Arbitrum child chain. For conceptual information about the messaging protocol, see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+
+## Prerequisites
+
+- A parent chain wallet with funds (ETH or the chain's native token)
+- Access to the parent chain's Inbox contract address
+- Familiarity with smart contract interactions
+
+## Bridging ETH to a child chain
+
+To bridge ETH from a parent chain to a child chain, use the `depositEth` method on the Inbox contract:
+
+```javascript
+function depositEth(address destAddr) external payable override returns (uint256)
+```
+
+### Example: Depositing ETH
+
+```javascript
+const inbox = new ethers.Contract(inboxAddress, inboxABI, parentSigner);
+const tx = await inbox.depositEth(destinationAddress, {
+  value: ethers.utils.parseEther('0.1'), // Amount to deposit
+});
+await tx.wait();
+```
+
+:::warning
+
+Depositing `ETH` directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function. If you need to trigger a fallback function, use retryable tickets instead.
+
+:::
+
+### Address aliasing for contract depositors
+
+When you deposit ETH from the parent chain, the destination address on the child chain depends on the caller type:
+
+- **EOA caller**: The deposited `ETH` appears at the same address on the child chain
+- **Contract caller**: The `ETH` goes to the contract's aliased address on the child chain
+- **7702-enabled account**: Similar to contracts, uses the aliased address
+
+The alias is calculated as:
+
+```solidity
+Child_Alias = Parent_Contract_Address + 0x1111000000000000000000000000000000001111
+```
+
+To recover the original parent chain address in your child chain contract, use the `AddressAliasHelper` library:
+
+```solidity
+modifier onlyFromMyL1Contract() {
+    require(
+        AddressAliasHelper.undoL1ToL2Alias(msg.sender) == myL1ContractAddress,
+        "ONLY_COUNTERPART_CONTRACT"
+    );
+    _;
+}
+```
+
+## Sending transactions via the Delayed Inbox
+
+The Delayed Inbox allows you to send arbitrary messages from the parent chain to the child chain, bypassing the Sequencer if needed.
+
+### Sending signed messages
+
+Signed messages prove EOA ownership and execute with the signer's address on the child chain (no aliasing).
+
+#### Method 1: sendL2Message
+
+More flexible, can be called by EOAs or contracts:
+
+```solidity
+function sendL2Message(
+    bytes calldata messageData
+) external returns (uint256)
+```
+
+#### Method 2: sendL2MessageFromOrigin
+
+Cheaper gas costs, only callable by EOAs:
+
+```solidity
+function sendL2MessageFromOrigin(
+    bytes calldata messageData
+) external returns (uint256)
+```
+
+**Example use case**: [Withdraw Ether tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)
+
+### Sending unsigned messages
+
+Unsigned messages are automatically aliased for security. Use this when you don't need to prove EOA ownership:
+
+```solidity
+function sendUnsignedTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    uint256 nonce,
+    address to,
+    uint256 value,
+    bytes calldata data
+) external returns (uint256)
+```
+
+## Creating retryable tickets
+
+Retryable tickets are Arbitrum's canonical mechanism for reliable cross-chain message delivery. They automatically retry failed executions.
+
+### Key retryable ticket parameters
+
+- **`to`**: Destination address on the child chain
+- **`l2CallValue`**: Amount of ETH to send with the child chain call
+- **`maxSubmissionCost`**: Fee for creating the ticket
+- **`excessFeeRefundAddress`**: Where to refund excess submission fees
+- **`callValueRefundAddress`**: Where to refund unused `l2CallValue`
+- **`gasLimit`**: Gas limit for the child chain execution
+- **`maxFeePerGas`**: Max gas price for the child chain execution
+- **`data`**: Calldata for the child chain function call
+
+### Creating a retryable ticket
+
+```solidity
+function createRetryableTicket(
+    address to,
+    uint256 l2CallValue,
+    uint256 maxSubmissionCost,
+    address excessFeeRefundAddress,
+    address callValueRefundAddress,
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    bytes calldata data
+) external payable returns (uint256)
+```
+
+### Example using the Arbitrum SDK
+
+```javascript
+import { L1ToL2MessageGasEstimator } from '@arbitrum/sdk';
+
+// Estimate gas for the retryable ticket
+const l1ToL2MessageGasEstimator = new L1ToL2MessageGasEstimator(l2Provider);
+const retryableGasParams = await l1ToL2MessageGasEstimator.estimateAll(
+  {
+    from: senderAddress,
+    to: destinationAddress,
+    l2CallValue: ethers.utils.parseEther('0.01'),
+    excessFeeRefundAddress: refundAddress,
+    callValueRefundAddress: refundAddress,
+    data: calldata,
+  },
+  await l1Provider.getBaseFeePerGas(),
+  l1Provider,
+);
+
+// Create the retryable ticket
+const inbox = new ethers.Contract(inboxAddress, inboxABI, l1Signer);
+const tx = await inbox.createRetryableTicket(
+  destinationAddress,
+  ethers.utils.parseEther('0.01'), // l2CallValue
+  retryableGasParams.maxSubmissionCost,
+  refundAddress,
+  refundAddress,
+  retryableGasParams.gasLimit,
+  retryableGasParams.maxFeePerGas,
+  calldata,
+  {
+    value: retryableGasParams.deposit,
+  },
+);
+await tx.wait();
+```
+
+### Redeeming retryable tickets
+
+Retryable tickets can auto-redeem if sufficient gas is provided. If the initial redemption fails, you can manually redeem using the `ArbRetryableTx` precompile:
+
+```solidity
+ArbRetryableTx(address(110)).redeem(ticketId);
+```
+
+## Next steps
+
+- For protocol-level details, see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
+- For token bridging, see [Token bridging overview](/how-arbitrum-works/token-bridging/overview.mdx)
+- For bridging tokens programmatically, see [Bridge tokens programmatically](/build-decentralized-apps/token-bridging/01-get-started.mdx)
