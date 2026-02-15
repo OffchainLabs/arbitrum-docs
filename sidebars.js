@@ -1140,11 +1140,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'ETH bridging',
-              id: 'how-arbitrum-works/token-bridging/eth-bridging',
-            },
-            {
-              type: 'doc',
               label: 'ERC-20 bridging',
               id: 'how-arbitrum-works/token-bridging/erc20-bridging',
             },

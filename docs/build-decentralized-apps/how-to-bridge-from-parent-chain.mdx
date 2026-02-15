@@ -38,6 +38,12 @@ Depositing `ETH` directly via `depositEth` to a contract on a child chain **will
 
 :::
 
+### How ETH deposits work
+
+When you deposit ETH, the funds are held in the Arbitrum Bridge contract on the parent chain. The bridge then credits the deposited amount to your address on the child chain:
+
+<ImageZoom src="/img/apps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
+
 ### Address aliasing for contract depositors
 
 When you deposit ETH from the parent chain, the destination address on the child chain depends on the caller type:

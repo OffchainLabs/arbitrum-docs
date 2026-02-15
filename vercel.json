@@ -317,12 +317,17 @@
     },
     {
       "source": "/(build-decentralized-apps/token-bridging/02-token-bridge-ether/?)",
-      "destination": "/how-arbitrum-works/token-bridging/eth-bridging",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
       "permanent": false
     },
     {
       "source": "/(build-decentralized-apps/token-bridging/token-bridge-ether/?)",
-      "destination": "/how-arbitrum-works/token-bridging/eth-bridging",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/token-bridging/eth-bridging/?)",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
       "permanent": false
     },
     {
@@ -487,7 +492,7 @@
     },
     {
       "source": "/(for-devs/concepts/token-bridge/token-bridge-ether/?)",
-      "destination": "/how-arbitrum-works/token-bridging/eth-bridging",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
       "permanent": false
     },
     {
