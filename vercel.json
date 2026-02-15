@@ -11,6 +11,21 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/deep-dives/geth/?)",
+      "destination": "/how-arbitrum-works/reference/geth",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/deep-dives/parent-chain-pricing/?)",
+      "destination": "/how-arbitrum-works/reference/parent-chain-pricing",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/deep-dives/stf-inputs/?)",
+      "destination": "/how-arbitrum-works/reference/stf-inputs",
+      "permanent": false
+    },
+    {
       "source": "/(anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
@@ -37,7 +52,7 @@
     },
     {
       "source": "/(arbos/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -57,12 +72,12 @@
     },
     {
       "source": "/(arbos/geth/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
       "source": "/(arbos/introduction/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -97,7 +112,7 @@
     },
     {
       "source": "/(arbos_formats/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -642,7 +657,7 @@
     },
     {
       "source": "/(how-arbitrum-works/arbos/geth/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -772,7 +787,7 @@
     },
     {
       "source": "/(how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -782,7 +797,7 @@
     },
     {
       "source": "/(how-arbitrum-works/state-transition-function/stf-inputs/?)",
-      "destination": "/how-arbitrum-works/deep-dives/stf-inputs",
+      "destination": "/how-arbitrum-works/reference/stf-inputs",
       "permanent": false
     },
     {

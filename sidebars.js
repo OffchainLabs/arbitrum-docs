@@ -1068,16 +1068,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Geth',
-              id: 'how-arbitrum-works/deep-dives/geth',
-            },
-            {
-              type: 'doc',
-              label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/deep-dives/parent-chain-pricing',
-            },
-            {
-              type: 'doc',
               label: 'Sequencer',
               id: 'how-arbitrum-works/deep-dives/sequencer',
             },
@@ -1088,16 +1078,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/deep-dives/stf-inputs',
-            },
-            {
-              type: 'doc',
-              label: 'Transaction lifecycle',
-              id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
-            },
-            {
-              type: 'doc',
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
             },
@@ -1105,6 +1085,32 @@ const sidebars = {
               type: 'doc',
               label: 'Token bridging',
               id: 'how-arbitrum-works/deep-dives/token-bridging',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          items: [
+            {
+              type: 'doc',
+              label: 'ArbOS technical reference',
+              id: 'how-arbitrum-works/reference/arbos-reference',
+            },
+            {
+              type: 'doc',
+              label: 'Geth',
+              id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/reference/parent-chain-pricing',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
             },
           ],
         },

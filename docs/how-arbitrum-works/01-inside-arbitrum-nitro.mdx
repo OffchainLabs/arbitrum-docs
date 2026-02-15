@@ -55,11 +55,11 @@ After batching and compression, the data posts to Ethereum through the Sequencer
 
 1. The default, blob transactions under [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844), provide cost-effective and scalable data inclusion when supported by Ethereum.
 
-2. As a fallback, calldata transactions embed data directly, ensuring compatibility even if blob fees rise or [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) is unavailable. This process yields 10-100x cost savings over individual postings and adapts to network conditions for consistent efficiency. For details on how parent chain costs are calculated and priced, including the adaptive pricing algorithm, see the [Parent chain pricing deep dive](/how-arbitrum-works/deep-dives/parent-chain-pricing.mdx).
+2. As a fallback, calldata transactions embed data directly, ensuring compatibility even if blob fees rise or [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) is unavailable. This process yields 10-100x cost savings over individual postings and adapts to network conditions for consistent efficiency. For details on how parent chain costs are calculated and priced, including the adaptive pricing algorithm, see the [Parent chain pricing deep dive](/how-arbitrum-works/reference/parent-chain-pricing.mdx).
 
 ### Step 3: Execution phase: State Transition Function
 
-With ordering and batching complete, execution shifts to the State Transition Function (STF), the core of Arbitrum's processing engine. For foundational concepts about how the STF works, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx). Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-layer architecture. At the base, the Geth core handles EVM execution, aligning behaviors with Ethereum and drawing on its extensively tested code for security. For more technical details about Geth, refer to the [Geth deep dive documentation](/how-arbitrum-works/deep-dives/geth.mdx).
+With ordering and batching complete, execution shifts to the State Transition Function (STF), the core of Arbitrum's processing engine. For foundational concepts about how the STF works, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx). Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-layer architecture. At the base, the Geth core handles EVM execution, aligning behaviors with Ethereum and drawing on its extensively tested code for security. For more technical details about Geth, refer to the [Geth deep dive documentation](/how-arbitrum-works/reference/geth.mdx).
 
 Above this, ArbOS—the Arbitrum Operating System—adds Layer 2 features like cross-chain messaging, fee management, gas pricing, handling of deposits and withdrawals, and advanced tools such as Stylus. The top layer, the node interface, manages RPC connections and APIs, providing Ethereum-like functionality for clients.
 
@@ -67,7 +67,7 @@ In the STF, transactions follow a structured workflow: ArbOS first validates for
 
 <ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
-For Stylus contracts using WebAssembly (WASM), execution diverts to a WASM runtime, where contracts access state via specialized host I/O calls. This diversion yields 10-70x faster performance than EVM equivalents and full interoperability for mixed calls. The Geth base lets Ethereum apps run unchanged, while ArbOS and Stylus enable Layer 2 optimizations and high-performance innovations. Consult the [State Transition Function deep dive](/how-arbitrum-works/deep-dives/stf-inputs.mdx) for further mechanics.
+For Stylus contracts using WebAssembly (WASM), execution diverts to a WASM runtime, where contracts access state via specialized host I/O calls. This diversion yields 10-70x faster performance than EVM equivalents and full interoperability for mixed calls. The Geth base lets Ethereum apps run unchanged, while ArbOS and Stylus enable Layer 2 optimizations and high-performance innovations. Consult the [State Transition Function deep dive](/how-arbitrum-works/reference/stf-inputs.mdx) for further mechanics.
 
 ### Step 4: Finality
 
@@ -95,7 +95,7 @@ The canonical bridge architecture comprises asset contracts on both chains, gate
 
 ### Step 7: The Economics of execution: Gas and fees
 
-Fees accumulate across the transaction lifecycle to fund processing and security. Arbitrum's dual-fee model separates child chain gas fees, which cover EVM computation and storage with [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)-style dynamic pricing, adjusting for congestion, from Parent chain data fees (blobs or calldata). Parent chain data fees account for Ethereum data posting based on compressed batch contributions and apply only to Sequencer submissions. For comprehensive details on how parent chain pricing works, including the adaptive pricing algorithm and cost apportionment, see the [Parent chain pricing deep dive](/how-arbitrum-works/deep-dives/parent-chain-pricing.mdx). For a complete breakdown of how fees are calculated and collected, including both parent and child chain components, refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+Fees accumulate across the transaction lifecycle to fund processing and security. Arbitrum's dual-fee model separates child chain gas fees, which cover EVM computation and storage with [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)-style dynamic pricing, adjusting for congestion, from Parent chain data fees (blobs or calldata). Parent chain data fees account for Ethereum data posting based on compressed batch contributions and apply only to Sequencer submissions. For comprehensive details on how parent chain pricing works, including the adaptive pricing algorithm and cost apportionment, see the [Parent chain pricing deep dive](/how-arbitrum-works/reference/parent-chain-pricing.mdx). For a complete breakdown of how fees are calculated and collected, including both parent and child chain components, refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 A gas target is an optimal gas consumption rate/second. Exceeding this rate triggers [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) fee escalations to prevent node overloads and maintain liveness. This rate prioritizes high-value transactions during peaks while deterring spam, ensuring that validators and the Sequencer stay operational, even though parent contracts handle ultimate security. [You can read more about how the child chain gas fees are calculated in this explainer ](/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees)
 
@@ -117,11 +117,11 @@ This overview covers the complete transaction journey through Arbitrum Nitro. Fo
 
 - [Transaction Lifecycle](/build-decentralized-apps/transaction-lifecycle.mdx) - Detailed transaction lifecycle from submission to finality
 - [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) - How the Sequencer orders, batches, and posts transactions
-- [Parent Chain Pricing](/how-arbitrum-works/deep-dives/parent-chain-pricing.mdx) - Adaptive pricing algorithm for parent chain costs
+- [Parent Chain Pricing](/how-arbitrum-works/reference/parent-chain-pricing.mdx) - Adaptive pricing algorithm for parent chain costs
 - [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx) - Foundational concepts of the STF
-- [Geth](/how-arbitrum-works/deep-dives/geth.mdx) - Geth core and EVM compatibility
+- [Geth](/how-arbitrum-works/reference/geth.mdx) - Geth core and EVM compatibility
 - [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) - Arbitrum Operating System features and capabilities
-- [State Transition Function Inputs](/how-arbitrum-works/deep-dives/stf-inputs.mdx) - Message types and STF processing mechanics
+- [State Transition Function Inputs](/how-arbitrum-works/reference/stf-inputs.mdx) - Message types and STF processing mechanics
 - [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx) - Rollup assertions and validation structure
 - [Parent-to-Child Messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) - L1 to L2 messaging and bridging
 - [Child-to-Parent Messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) - L2 to L1 messaging and withdrawals
