@@ -96,7 +96,23 @@ function sendL2MessageFromOrigin(
 
 ### Sending unsigned messages
 
-Unsigned messages are automatically aliased for security. Use this when you don't need to prove EOA ownership:
+Unsigned messages are automatically aliased for security. The Delayed Inbox provides four methods for unsigned messages, divided by sender type (EOA vs contract) and funding source (parent chain vs child chain balance):
+
+#### From EOAs (with nonce for replay protection)
+
+**sendL1FundedUnsignedTransaction** - Transfers value from parent to child chain:
+
+```solidity
+function sendL1FundedUnsignedTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    uint256 nonce,
+    address to,
+    bytes calldata data
+) external payable returns (uint256)
+```
+
+**sendUnsignedTransaction** - Uses child chain balance (no L1 funds transferred):
 
 ```solidity
 function sendUnsignedTransaction(
@@ -109,20 +125,63 @@ function sendUnsignedTransaction(
 ) external returns (uint256)
 ```
 
+#### From Contracts (standard Ethereum replay protection)
+
+**sendContractTransaction** - Uses contract's existing child chain balance:
+
+```solidity
+function sendContractTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    address to,
+    uint256 value,
+    bytes calldata data
+) external returns (uint256)
+```
+
+**sendL1FundedContractTransaction** - Transfers additional funds from parent to child:
+
+```solidity
+function sendL1FundedContractTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    address to,
+    bytes calldata data
+) external payable returns (uint256)
+```
+
 ## Creating retryable tickets
 
 Retryable tickets are Arbitrum's canonical mechanism for reliable cross-chain message delivery. They automatically retry failed executions.
 
 ### Key retryable ticket parameters
 
-- **`to`**: Destination address on the child chain
-- **`l2CallValue`**: Amount of ETH to send with the child chain call
-- **`maxSubmissionCost`**: Fee for creating the ticket
-- **`excessFeeRefundAddress`**: Where to refund excess submission fees
-- **`callValueRefundAddress`**: Where to refund unused `l2CallValue`
-- **`gasLimit`**: Gas limit for the child chain execution
-- **`maxFeePerGas`**: Max gas price for the child chain execution
-- **`data`**: Calldata for the child chain function call
+Understanding these parameters is crucial for successful retryable ticket creation:
+
+- **`l1CallValue`** (msg.value): Total ETH sent with the transaction from parent chain. This funds the ticket submission, gas, and call value.
+
+- **`to`**: The destination child chain address that will receive the retryable ticket execution.
+
+- **`l2CallValue`**: The amount of ETH to be sent as `callvalue` when executing the retryable on the child chain. This is supplied within the `l1CallValue` deposit.
+
+- **`maxSubmissionCost`**: Maximum ETH to pay for submitting the ticket. This amount is:
+
+  - Supplied within the deposit (`l1CallValue`)
+  - Later deducted from sender's child chain balance
+  - Directly proportional to retryable data size and parent chain basefee
+
+- **`excessFeeRefundAddress`**: Where to refund unused gas and submission costs:
+
+  - Formula: `(gasLimit × maxFeePerGas - execution cost) + (maxSubmissionCost - submission cost)`
+  - **Important**: If auto-redeem fails, excess deposit goes to the alias of the L1 sender, not this address
+
+- **`callValueRefundAddress`**: The child chain address to credit the `l2CallValue` if the ticket times out or gets canceled. This address is also the "beneficiary" with permission to cancel the ticket.
+
+- **`gasLimit`**: Maximum gas for child chain execution of the ticket. Used for the automatic redemption attempt.
+
+- **`maxFeePerGas`**: Gas price bid for child chain execution, supplied within the deposit (`l1CallValue`).
+
+- **`data`**: Calldata to send to the destination address on the child chain.
 
 ### Creating a retryable ticket
 

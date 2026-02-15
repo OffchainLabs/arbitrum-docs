@@ -24,11 +24,23 @@ Child-to-parent chain messaging follows these steps:
 
 ## Sending a message from child to parent chain
 
-To send a message from the child chain to the parent chain, use the `ArbSys` precompile:
+To send a message from the child chain to the parent chain, use the `ArbSys` precompile's `sendTxToL1` method:
 
 ```solidity
-ArbSys(100).sendTxToL1(destAddress, calldata);
+function sendTxToL1(
+    address destination,
+    bytes calldata data
+) external payable returns (uint256)
 ```
+
+### Parameters
+
+- **`destination`**: The parent chain address that will receive the message
+- **`data`**: Calldata to send to the destination address on the parent chain
+
+### Return value
+
+Returns a unique identifier for the message, which can be used to track the message status and construct the outbox proof for execution.
 
 The `ArbSys` precompile is located at address `0x0000000000000000000000000000000000000064`.
 
@@ -56,6 +68,30 @@ After the ~7 day challenge period, you can execute the message on the parent cha
 
 Use the `NodeInterface` contract to get the Merkle proof:
 
+```solidity
+function constructOutboxProof(
+    uint64 size,
+    uint64 leaf
+) external view returns (
+    bytes32[] memory proof,
+    uint256 path,
+    address l2Sender,
+    address l1Dest,
+    uint256 l2Block,
+    uint256 l1Block,
+    uint256 timestamp,
+    uint256 amount,
+    bytes memory calldataForL1
+)
+```
+
+**Parameters:**
+
+- **`size`**: The batch number containing your message
+- **`leaf`**: The index of your message within the batch (0-indexed)
+
+**Example usage:**
+
 ```javascript
 const nodeInterface = new ethers.Contract(
   '0x00000000000000000000000000000000000000C8',
@@ -74,7 +110,25 @@ const proofData = await nodeInterface.constructOutboxProof(batchNumber, indexInB
 
 ### Step 2: Execute on the parent chain
 
-Call `Outbox.executeTransaction` with the proof data:
+Call `Outbox.executeTransaction` with the proof data from step 1:
+
+```solidity
+function executeTransaction(
+    bytes32[] calldata proof,
+    uint256 path,
+    address l2Sender,
+    address l1Dest,
+    uint256 l2Block,
+    uint256 l1Block,
+    uint256 timestamp,
+    uint256 amount,
+    bytes calldata calldataForL1
+) external
+```
+
+All parameters come from the `constructOutboxProof` call. The method will execute the message at the `l1Dest` address with the provided calldata and amount.
+
+**Example usage:**
 
 ```javascript
 const outbox = new ethers.Contract(outboxAddress, outboxABI, parentChainSigner);
@@ -98,12 +152,23 @@ await tx.wait();
 To withdraw ETH from the child chain, use the `ArbSys` precompile's `withdrawEth` method:
 
 ```solidity
-ArbSys(100).withdrawEth{ value: amountToWithdraw }(destAddress)
+function withdrawEth(
+    address destination
+) external payable returns (uint256)
 ```
+
+### Parameters
+
+- **`destination`**: The parent chain address that will receive the ETH
+- **Value** (msg.value): The amount of ETH to withdraw from the child chain
+
+### Return value
+
+Returns a unique identifier for the withdrawal message.
 
 ### How ETH withdrawal works
 
-1. **On the child chain**: The ETH balance is burned
+1. **On the child chain**: The ETH balance is burned and a message is created
 2. **Challenge period**: Wait ~7 days for the assertion to finalize
 3. **On the parent chain**: Execute via `Outbox.executeTransaction` to claim your ETH
 
