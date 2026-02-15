@@ -1275,6 +1275,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'Transaction lifecycle',
+          id: 'build-decentralized-apps/transaction-lifecycle',
+        },
+        {
+          type: 'doc',
           label: 'Chains and testnets',
           id: 'build-decentralized-apps/public-chains',
         },

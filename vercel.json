@@ -261,6 +261,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/deep-dives/transaction-lifecycle/?)",
+      "destination": "/build-decentralized-apps/transaction-lifecycle",
+      "permanent": false
+    },
+    {
       "source": "/(devs-how-tos/how-to-estimate-gas/?)",
       "destination": "/build-decentralized-apps/how-to-estimate-gas",
       "permanent": false
