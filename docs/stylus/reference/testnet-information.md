@@ -1,6 +1,7 @@
 ---
 title: 'Stylus testnet information'
 description: A reference providing details about the Stylus testnet and faucets for obtaining testnet ETH
+content_type: reference
 author: amarrazza
 sme: amarrazza
 target_audience: Developers building on the Stylus testnet
