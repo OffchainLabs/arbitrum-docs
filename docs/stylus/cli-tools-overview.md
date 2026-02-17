@@ -2,6 +2,7 @@
 id: cli-tools-overview
 title: CLI Tools (cargo-stylus)
 description: 'Overview of the cargo-stylus CLI tool for managing, compiling, and optimizing Stylus smart contracts.'
+content_type: reference
 sidebar_label: CLI tools overview
 ---
 

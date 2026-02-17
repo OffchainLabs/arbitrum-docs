@@ -2,6 +2,7 @@
 id: recommended-libraries
 title: Recommended Libraries
 description: 'Recommended Rust crates and libraries for building Stylus smart contracts, including no_std-compatible options.'
+content_type: reference
 sidebar_label: Use Rust Crates
 ---
 
