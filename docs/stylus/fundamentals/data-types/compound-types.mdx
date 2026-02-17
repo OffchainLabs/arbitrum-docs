@@ -1,0 +1,845 @@
+---
+title: 'Stylus compound types'
+description: 'Stylus Rust SDK compound types'
+author: chrisco
+sme: chrisco
+sidebar_position: 2
+target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
+displayed_sidebar: buildStylusSidebar
+---
+
+Compound types allow you to group multiple values together in Stylus contracts. The SDK provides full support for tuples, structs, arrays, and vectors with automatic ABI encoding/decoding and Solidity type mappings.
+
+## Tuples
+
+Tuples group multiple values of different types together. They map directly to Solidity tuples.
+
+### Basic tuples
+
+```rust
+use alloy_primitives::{Address, U256, Bytes};
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // Return multiple values as a tuple
+    pub fn get_data(&self) -> (U256, Address, bool) {
+        (U256::from(100), Address::ZERO, true)
+    }
+
+    // Accept tuple as parameter
+    pub fn process_tuple(&mut self, data: (U256, U256, U256)) -> U256 {
+        let (a, b, c) = data;
+        a + b + c
+    }
+
+    // Nested tuples
+    pub fn nested(&self) -> ((U256, U256), bool) {
+        ((U256::from(1), U256::from(2)), true)
+    }
+}
+```
+
+### Tuple destructuring
+
+```rust
+use alloy_primitives::U256;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    pub fn calculate(&self) -> (U256, U256) {
+        let values = (U256::from(100), U256::from(200));
+
+        // Destructure the tuple
+        let (first, second) = values;
+
+        // Return new tuple
+        (first * U256::from(2), second * U256::from(2))
+    }
+
+    // Pattern matching with tuples
+    pub fn match_tuple(&self, data: (bool, U256)) -> U256 {
+        match data {
+            (true, value) => value * U256::from(2),
+            (false, value) => value,
+        }
+    }
+}
+```
+
+### Tuple type mappings
+
+| Rust Type              | Solidity Type                | ABI Signature                |
+| ---------------------- | ---------------------------- | ---------------------------- |
+| `(U256,)`              | `(uint256)`                  | `"(uint256)"`                |
+| `(U256, Address)`      | `(uint256, address)`         | `"(uint256,address)"`        |
+| `(bool, U256, Bytes)`  | `(bool, uint256, bytes)`     | `"(bool,uint256,bytes)"`     |
+| `((U256, U256), bool)` | `((uint256, uint256), bool)` | `"((uint256,uint256),bool)"` |
+
+**Tuple Limitations**:
+
+- Tuples support up to 24 elements
+- Tuples are always returned as `memory` in Solidity
+- Empty tuple `()` represents no return value
+
+## Structs
+
+Structs define custom data types with named fields. Use the `sol!` macro to define Solidity-compatible structs.
+
+### Defining structs with `sol!`
+
+```rust
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+sol! {
+    #[derive(Debug, AbiType)]
+    struct User {
+        address account;
+        uint256 balance;
+        string name;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct Token {
+        string name;
+        string symbol;
+        uint8 decimals;
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn get_user(&self) -> User {
+        User {
+            account: Address::ZERO,
+            balance: U256::from(1000),
+            name: "Alice".to_string(),
+        }
+    }
+
+    pub fn process_user(&mut self, user: User) -> U256 {
+        // Access struct fields
+        user.balance
+    }
+
+    pub fn get_token_info(&self) -> Token {
+        Token {
+            name: "MyToken".to_string(),
+            symbol: "MTK".to_string(),
+            decimals: 18,
+        }
+    }
+}
+```
+
+### Nested structs
+
+Structs can contain other structs, enabling complex data structures:
+
+```rust
+use alloy_primitives::Address;
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+sol! {
+    #[derive(Debug, AbiType)]
+    struct Dog {
+        string name;
+        string breed;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct User {
+        address account;
+        string name;
+        Dog[] dogs;
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn create_user(&self) -> User {
+        let dogs = vec![
+            Dog {
+                name: "Rex".to_string(),
+                breed: "Labrador".to_string(),
+            },
+            Dog {
+                name: "Max".to_string(),
+                breed: "Beagle".to_string(),
+            },
+        ];
+
+        User {
+            account: Address::ZERO,
+            name: "Alice".to_string(),
+            dogs,
+        }
+    }
+
+    pub fn get_dog_count(&self, user: User) -> u256 {
+        user.dogs.len() as u256
+    }
+}
+```
+
+### Struct best practices
+
+1. **Always use `#[derive(AbiType)]`** for structs that will be used in contract interfaces:
+
+   ```rust
+   sol! {
+       #[derive(Debug, AbiType)]
+       struct MyData {
+           uint256 value;
+           address owner;
+       }
+   }
+   ```
+
+2. **Add `Debug` derive** for easier debugging:
+
+   ```rust
+   sol! {
+       #[derive(Debug, AbiType)]
+       struct Config {
+           bool enabled;
+           uint256 timeout;
+       }
+   }
+   ```
+
+3. **Use descriptive field names** that match Solidity conventions:
+   ```rust
+   sol! {
+       #[derive(Debug, AbiType)]
+       struct VestingSchedule {
+           address beneficiary;
+           uint256 startTime;
+           uint256 cliffDuration;
+           uint256 totalAmount;
+       }
+   }
+   ```
+
+## Arrays
+
+Arrays are fixed-size collections of elements. Stylus supports both Rust arrays and Solidity-style arrays.
+
+### Fixed-size arrays
+
+```rust
+use alloy_primitives::U256;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // Return a fixed-size array
+    pub fn get_numbers(&self) -> [U256; 5] {
+        [
+            U256::from(1),
+            U256::from(2),
+            U256::from(3),
+            U256::from(4),
+            U256::from(5),
+        ]
+    }
+
+    // Accept fixed-size array as parameter
+    pub fn sum_array(&self, numbers: [U256; 5]) -> U256 {
+        numbers.iter().fold(U256::ZERO, |acc, &x| acc + x)
+    }
+
+    // Nested arrays
+    pub fn matrix(&self) -> [[u32; 2]; 3] {
+        [[1, 2], [3, 4], [5, 6]]
+    }
+}
+```
+
+### Array operations
+
+```rust
+use alloy_primitives::{Address, U256};
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // Iterate over array
+    pub fn process_addresses(&self, addresses: [Address; 10]) -> U256 {
+        let mut count = U256::ZERO;
+        for addr in addresses.iter() {
+            if *addr != Address::ZERO {
+                count += U256::from(1);
+            }
+        }
+        count
+    }
+
+    // Array of booleans
+    pub fn check_flags(&self, flags: [bool; 8]) -> bool {
+        flags.iter().all(|&f| f)
+    }
+}
+```
+
+### Array type mappings
+
+| Rust Type             | Solidity Type  | Description               |
+| --------------------- | -------------- | ------------------------- |
+| `[U256; 5]`           | `uint256[5]`   | 5-element uint256 array   |
+| `[bool; 10]`          | `bool[10]`     | 10-element bool array     |
+| `[Address; 3]`        | `address[3]`   | 3-element address array   |
+| `[[u32; 2]; 4]`       | `uint32[2][4]` | Nested array (4x2 matrix) |
+| `[FixedBytes<32>; 2]` | `bytes32[2]`   | 2-element bytes32 array   |
+
+## Vectors
+
+Vectors are dynamic arrays that can grow or shrink at runtime. They map to Solidity dynamic arrays.
+
+### Basic vector usage
+
+```rust
+use alloy_primitives::{Address, U256, Bytes};
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // Return a vector
+    pub fn get_numbers(&self) -> Vec<U256> {
+        vec![U256::from(1), U256::from(2), U256::from(3)]
+    }
+
+    // Accept vector as parameter
+    pub fn sum_vec(&self, numbers: Vec<U256>) -> U256 {
+        numbers.iter().fold(U256::ZERO, |acc, x| acc + *x)
+    }
+
+    // Vector of addresses
+    pub fn get_addresses(&self) -> Vec<Address> {
+        vec![Address::ZERO, Address::ZERO]
+    }
+
+    // Vector of bytes
+    pub fn get_data_list(&self) -> Vec<Bytes> {
+        vec![
+            Bytes::from(vec![1, 2, 3]),
+            Bytes::from(vec![4, 5, 6]),
+        ]
+    }
+}
+```
+
+### Vector operations
+
+```rust
+use alloy_primitives::U256;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // Filter vector
+    pub fn filter_even(&self, numbers: Vec<U256>) -> Vec<U256> {
+        numbers
+            .into_iter()
+            .filter(|n| n.byte(0) % 2 == 0)
+            .collect()
+    }
+
+    // Map over vector
+    pub fn double_values(&self, numbers: Vec<U256>) -> Vec<U256> {
+        numbers
+            .into_iter()
+            .map(|n| n * U256::from(2))
+            .collect()
+    }
+
+    // Find in vector
+    pub fn contains_value(&self, numbers: Vec<U256>, target: U256) -> bool {
+        numbers.contains(&target)
+    }
+
+    // Get vector length
+    pub fn get_length(&self, items: Vec<U256>) -> U256 {
+        U256::from(items.len())
+    }
+}
+```
+
+### Vectors of structs
+
+```rust
+use alloy_primitives::Address;
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+sol! {
+    #[derive(Debug, AbiType)]
+    struct Transaction {
+        address from;
+        address to;
+        uint256 amount;
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn get_transactions(&self) -> Vec<Transaction> {
+        vec![
+            Transaction {
+                from: Address::ZERO,
+                to: Address::ZERO,
+                amount: U256::from(100),
+            },
+            Transaction {
+                from: Address::ZERO,
+                to: Address::ZERO,
+                amount: U256::from(200),
+            },
+        ]
+    }
+
+    pub fn total_amount(&self, txs: Vec<Transaction>) -> U256 {
+        txs.iter()
+            .fold(U256::ZERO, |acc, tx| acc + tx.amount)
+    }
+}
+```
+
+### Vector type mappings
+
+| Rust Type       | Solidity Type | ABI Signature         | Storage |
+| --------------- | ------------- | --------------------- | ------- |
+| `Vec<U256>`     | `uint256[]`   | `"uint256[] memory"`  | Dynamic |
+| `Vec<Address>`  | `address[]`   | `"address[] memory"`  | Dynamic |
+| `Vec<bool>`     | `bool[]`      | `"bool[] memory"`     | Dynamic |
+| `Vec<Bytes>`    | `bytes[]`     | `"bytes[] memory"`    | Dynamic |
+| `Vec<MyStruct>` | `MyStruct[]`  | `"MyStruct[] memory"` | Dynamic |
+
+**Important Notes**:
+
+- Vectors are **always returned as `memory`** in Solidity, never as `calldata`
+- `Vec<u8>` maps to `uint8[]`, not `bytes` (use `Bytes` for Solidity `bytes`)
+- Vectors have dynamic size and consume more gas than fixed arrays
+
+## Bytes Types
+
+The SDK provides `Bytes` for dynamic byte arrays and `FixedBytes<N>` for fixed-size byte arrays.
+
+### Dynamic bytes (`Bytes`)
+
+```rust
+use alloy_primitives::Bytes;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // Return dynamic bytes
+    pub fn get_data(&self) -> Bytes {
+        Bytes::from(vec![1, 2, 3, 4, 5])
+    }
+
+    // Process bytes
+    pub fn get_length(&self, data: Bytes) -> usize {
+        data.len()
+    }
+
+    // Concatenate bytes
+    pub fn concat(&self, a: Bytes, b: Bytes) -> Bytes {
+        let mut result = a.to_vec();
+        result.extend_from_slice(&b);
+        Bytes::from(result)
+    }
+}
+```
+
+### Fixed bytes (`FixedBytes<N>`)
+
+```rust
+use alloy_primitives::FixedBytes;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    // bytes32 (common for hashes)
+    pub fn get_hash(&self) -> FixedBytes<32> {
+        FixedBytes::<32>::ZERO
+    }
+
+    // bytes4 (common for selectors)
+    pub fn get_selector(&self) -> FixedBytes<4> {
+        FixedBytes::from([0x12, 0x34, 0x56, 0x78])
+    }
+
+    // bytes16
+    pub fn get_uuid(&self) -> FixedBytes<16> {
+        FixedBytes::<16>::from([
+            0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0,
+            0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0,
+        ])
+    }
+}
+```
+
+## Complete examples
+
+### Example 1: Complex data structures
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloc::string::String;
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+sol! {
+    #[derive(Debug, AbiType)]
+    struct Token {
+        string name;
+        string symbol;
+        uint8 decimals;
+        uint256 totalSupply;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct Balance {
+        address owner;
+        uint256 amount;
+    }
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct CompoundExample {
+        uint256 counter;
+    }
+}
+
+#[public]
+impl CompoundExample {
+    // Return tuple
+    pub fn get_info(&self) -> (String, U256, bool) {
+        ("Example".to_string(), U256::from(42), true)
+    }
+
+    // Return struct
+    pub fn get_token(&self) -> Token {
+        Token {
+            name: "MyToken".to_string(),
+            symbol: "MTK".to_string(),
+            decimals: 18,
+            totalSupply: U256::from(1000000),
+        }
+    }
+
+    // Return vector of structs
+    pub fn get_balances(&self) -> Vec<Balance> {
+        vec![
+            Balance {
+                owner: Address::ZERO,
+                amount: U256::from(100),
+            },
+            Balance {
+                owner: Address::ZERO,
+                amount: U256::from(200),
+            },
+        ]
+    }
+
+    // Accept array
+    pub fn process_array(&self, data: [U256; 5]) -> U256 {
+        data.iter().sum()
+    }
+
+    // Accept vector and struct
+    pub fn batch_transfer(&mut self, recipients: Vec<Balance>) -> U256 {
+        recipients.iter().map(|b| b.amount).sum()
+    }
+}
+```
+
+### Example 2: Nested data structures
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloc::string::String;
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+sol! {
+    #[derive(Debug, AbiType)]
+    struct Dog {
+        string name;
+        string breed;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct User {
+        address account;
+        string name;
+        Dog[] dogs;
+    }
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct NestedExample {}
+}
+
+#[public]
+impl NestedExample {
+    pub fn create_user(&self) -> User {
+        User {
+            account: Address::ZERO,
+            name: "Alice".to_string(),
+            dogs: vec![
+                Dog {
+                    name: "Rex".to_string(),
+                    breed: "Labrador".to_string(),
+                },
+                Dog {
+                    name: "Max".to_string(),
+                    breed: "Beagle".to_string(),
+                },
+            ],
+        }
+    }
+
+    pub fn get_dog_names(&self, user: User) -> Vec<String> {
+        user.dogs.into_iter().map(|dog| dog.name).collect()
+    }
+
+    pub fn count_dogs(&self, users: Vec<User>) -> U256 {
+        let total: usize = users.iter().map(|u| u.dogs.len()).sum();
+        U256::from(total)
+    }
+}
+```
+
+## Best practices
+
+### 1. Choose the right type
+
+```rust
+// Use tuples for simple groupings
+pub fn get_basics(&self) -> (U256, Address, bool) { /* ... */ }
+
+// Use structs for complex data with named fields
+sol! {
+    #[derive(Debug, AbiType)]
+    struct UserProfile {
+        address account;
+        string name;
+        uint256 balance;
+        bool active;
+    }
+}
+
+// Use arrays for fixed-size collections
+pub fn get_top_five(&self) -> [U256; 5] { /* ... */ }
+
+// Use vectors for dynamic collections
+pub fn get_all_users(&self) -> Vec<Address> { /* ... */ }
+```
+
+### 2. Memory efficiency
+
+```rust
+use alloy_primitives::U256;
+
+// Prefer fixed arrays when size is known
+pub fn fixed_data(&self) -> [U256; 10] {
+    // More gas-efficient
+    [U256::ZERO; 10]
+}
+
+// Use vectors only when size varies
+pub fn dynamic_data(&self, count: usize) -> Vec<U256> {
+    vec![U256::ZERO; count]
+}
+```
+
+### 3. Struct naming
+
+```rust
+use alloy_sol_types::sol;
+
+sol! {
+    // Good: Clear, descriptive names
+    #[derive(Debug, AbiType)]
+    struct TokenMetadata {
+        string name;
+        string symbol;
+        uint8 decimals;
+    }
+
+    // Avoid: Ambiguous names
+    #[derive(Debug, AbiType)]
+    struct Data {
+        uint256 x;
+        uint256 y;
+    }
+}
+```
+
+### 4. Vector vs array
+
+```rust
+use alloy_primitives::{Address, U256};
+
+// Use fixed arrays for known sizes
+pub fn get_admins(&self) -> [Address; 3] {
+    // Three admin addresses
+    [Address::ZERO; 3]
+}
+
+// Use vectors for variable sizes
+pub fn get_users(&self) -> Vec<Address> {
+    // Unknown number of users
+    vec![]
+}
+```
+
+### 5. Nested structures
+
+```rust
+use alloy_sol_types::sol;
+
+sol! {
+    // Good: Reasonable nesting depth
+    #[derive(Debug, AbiType)]
+    struct User {
+        address account;
+        Profile profile;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct Profile {
+        string name;
+        uint256 age;
+    }
+
+    // Avoid: Excessive nesting (gas inefficient)
+    #[derive(Debug, AbiType)]
+    struct DeepNesting {
+        Level1 l1;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct Level1 {
+        Level2 l2;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct Level2 {
+        Level3 l3;
+    }
+
+    #[derive(Debug, AbiType)]
+    struct Level3 {
+        uint256 value;
+    }
+}
+```
+
+## Type conversion and helpers
+
+### Converting between types
+
+```rust
+use alloy_primitives::{U256, Bytes};
+
+// Vec<u8> to Bytes
+let vec: Vec<u8> = vec![1, 2, 3];
+let bytes = Bytes::from(vec);
+
+// Bytes to Vec<u8>
+let bytes = Bytes::from(vec![1, 2, 3]);
+let vec: Vec<u8> = bytes.to_vec();
+
+// Array to Vec
+let arr: [U256; 3] = [U256::from(1), U256::from(2), U256::from(3)];
+let vec: Vec<U256> = arr.to_vec();
+
+// Vec to array (if size matches)
+let vec = vec![U256::from(1), U256::from(2), U256::from(3)];
+let arr: [U256; 3] = vec.try_into().unwrap();
+```
+
+### Working with iterators
+
+```rust
+use alloy_primitives::U256;
+
+// Map over vector
+let numbers = vec![U256::from(1), U256::from(2), U256::from(3)];
+let doubled: Vec<U256> = numbers.iter().map(|n| n * U256::from(2)).collect();
+
+// Filter vector
+let evens: Vec<U256> = numbers.into_iter().filter(|n| n.byte(0) % 2 == 0).collect();
+
+// Fold/reduce
+let sum = numbers.iter().fold(U256::ZERO, |acc, n| acc + n);
+```
+
+## Common patterns
+
+### Batch operations
+
+```rust
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+
+sol! {
+    #[derive(Debug, AbiType)]
+    struct Transfer {
+        address to;
+        uint256 amount;
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn batch_transfer(&mut self, transfers: Vec<Transfer>) -> U256 {
+        let mut total = U256::ZERO;
+        for transfer in transfers {
+            // Process each transfer
+            total += transfer.amount;
+        }
+        total
+    }
+}
+```
+
+### Pagination
+
+```rust
+use alloy_primitives::U256;
+use stylus_sdk::prelude::*;
+
+#[public]
+impl MyContract {
+    pub fn get_page(&self, items: Vec<U256>, page: usize, size: usize) -> Vec<U256> {
+        let start = page * size;
+        let end = start + size;
+        items.get(start..end.min(items.len()))
+             .unwrap_or(&[])
+             .to_vec()
+    }
+}
+```
+
+## See also
+
+- [Primitives](./primitives.mdx) - Basic types (bool, integers, address, strings)
+- [Storage Types](./storage.mdx) - Persistent storage for compound types
+- [Type Conversions](./conversions-between-types.mdx) - Converting between types
