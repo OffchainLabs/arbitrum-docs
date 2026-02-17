@@ -43,13 +43,13 @@ This EIP implements the same functionality and interface as [RIP-7212](https://g
 
 This EIP introduces a gas cap for individual transactions. The goal is to ensure fairer access to block space and improve network stability. For Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> we're proposing a 32 million gas limit (<a data-quicklook-from="child-chain">Child chain</a> execution gas, not including parent chain gas) per transaction, which is the same as the current block gas limit. This 32 million gas limit diverges from the EIP's proposed limit of 16 million gas per transaction for Ethereum parent chain. Arbitrum chains can customize this value according to their chains' needs.
 
-#### [EIP-7642: eth/69 - history expiry and simpler receipts](https://eips.ethereum.org/EIPS/eip-7642)
+#### [EIP-7642: eth/69 history expiry and simpler receipts](https://eips.ethereum.org/EIPS/eip-7642)
 
 This networking upgrade removes deprecated fields used prior to Ethereum's Proof of Stake (PoS) transition. We're including this EIP as part of <a data-quicklook-from="geth">Geth</a> upstream. This is a networking change that impacts mainly parent chain nodes. As Arbitrum nodes don't have a P2P layer, we don't expect this to have any impact on Arbitrum node operators.
 
 #### [EIP-7939: Count leading zeros (CLZ) opcode](https://eips.ethereum.org/EIPS/eip-7939)
 
-This EIP adds a new CLZ (Count Leading Zeros) opcode to efficiently count the number of zero bits at the start of a 256-bit number. This is a fundamental mathematical operation used in many algorithms, especially for mathematical computations, data compression, and cryptographic operations. Currently, implementing this operation in Solidity requires complex and expensive code - this opcode makes it much cheaper and faster.
+This EIP adds a new CLZ (Count Leading Zeros) opcode to efficiently count the number of zero bits at the start of a 256-bit number. This is a fundamental mathematical operation used in many algorithms, especially for mathematical computations, data compression, and cryptographic operations. Currently, implementing this operation in Solidity requires complex and expensive code—this opcode makes it much cheaper and faster.
 
 #### [EIP-7823: Set upper bounds for ModExp](https://eips.ethereum.org/EIPS/eip-7823)
 
@@ -73,7 +73,7 @@ Since ArbOS 51 introduces a `MaxTxGasLimit`, the <a data-quicklook-from="state-t
 
 The new algorithm is more efficient because the sequencer doesn't need to keep searching through the queue of transactions to find one that fits in the remaining block gas, and can continue to add transactions until the unused block gas is 0.
 
-This change doesn't affect the `GasTarget`, and therefore doesn't affect how much overall gas per second the chain will use - only how transactions using that gas could be divided between different blocks.
+This change doesn't affect the `GasTarget`, and therefore doesn't affect how much overall gas per second the chain will use—only how transactions using that gas could be divided between different blocks.
 
 #### Raising the gas target, increasing the min L2 base fee, & improving the pricing algorithm
 
@@ -120,7 +120,7 @@ Support and implementation for the following EIPs aren't planned to be part of A
 
 - [EIP-7594](https://eips.ethereum.org/EIPS/eip-7594), [EIP-7918](https://eips.ethereum.org/EIPS/eip-7918), and [EIP-7892](https://eips.ethereum.org/EIPS/eip-7892), since Arbitrum chains don't have blob data markets (though they do support posting blob data to a non-Arbitrum parent chain)
 - [EIP-7917](https://eips.ethereum.org/EIPS/eip-7917), since Arbitrum chains don't have a beacon chain and therefore don't have a peer-to-peer layer like Ethereum does
-- [EIP-7934](https://eips.ethereum.org/EIPS/eip-7934), this EIP is to help propagating blocks between nodes. Arbitrum doesn't do that - it sends messages (which are limited) and each node builds every block by itself
+- [EIP-7934](https://eips.ethereum.org/EIPS/eip-7934), this EIP is to help propagating blocks between nodes. Arbitrum doesn't do that—it sends messages (which are limited) and each node builds every block by itself
 - [EIP-7907](https://eips.ethereum.org/EIPS/eip-7907), this EIP is no longer Scheduled For Inclusion (SFI) for Fusaka, as agreed upon by <a data-quicklook-from="client">Client</a> teams during [ACDE 216](https://ethereum-magicians.org/t/allcoredevs-execution-acde-216-july-17-2025/24770/2) on July 17, 2025. We're currently exploring alternative ways to increase the Smart Contract size limit that don't interfere with the ability for Arbitrum chains to support `EIP-7907` in the future. See this [forum post reply](https://forum.arbitrum.foundation/t/non-constitutional-proposal-to-direct-the-arbitrum-foundation-to-implement-an-extended-version-of-eip-7907-and-for-the-dao-to-ratify-its-deployment-on-arbitrum-one/29375/3) for more details about this.
 - [EIP-7935](https://eips.ethereum.org/EIPS/eip-7935), since Arbitrum chains already have a default gas target of 28Mgas/s and we have separate, alternative plans for increasing the gas limit through other means, as mentioned in [Scaling Arbitrum everywhere](https://blog.arbitrum.io/scaling-arbitrum-everywhere/).
 
