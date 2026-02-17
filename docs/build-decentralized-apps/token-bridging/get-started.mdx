@@ -1,0 +1,65 @@
+---
+title: 'Get started with token bridging'
+description: Learn the different options available to bridge tokens programmatically
+user_story: As a developer, I want to understand how to bridge tokens between Ethereum and Arbitrum.
+content_type: quickstart
+displayed_sidebar: buildAppsSidebar
+---
+
+Token bridging is a fundamental aspect of any child chain protocol. It allows projects to quickly integrate with the Arbitrum ecosystem by leveraging their existing parent chain tokens.
+
+## I want to deposit or withdraw tokens
+
+If your token is already configured for bridging, use these guides:
+
+- **[Deposit tokens](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)**: Move tokens from parent chain to child chain
+- **[Withdraw tokens](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)**: Move tokens from child chain back to parent chain
+
+These guides work for any token that's already bridgeable, regardless of which gateway type was configured.
+
+## I want to make my token bridgeable
+
+If you're setting up bridging for a new token, you have three gateway options to choose from:
+
+### 1. Standard gateway (recommended for most tokens)
+
+Use the [standard gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx) if you want:
+
+- Automatic deployment of a standard ERC-20 token on Arbitrum
+- No pre-configuration required
+- The simplest setup process
+
+For additional information, see [standard ERC-20 gateway](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging) in the conceptual docs.
+
+### 2. Generic-custom gateway (for custom token logic)
+
+Use the [generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) if you need:
+
+- Custom functionality in your child chain token
+- Control over the child chain token implementation
+- Additional features beyond standard ERC-20
+
+For additional information, see [Arbitrum generic custom gateway](/how-arbitrum-works/deep-dives/token-bridging.mdx#the-arbitrum-generic-custom-gateway) in the conceptual docs.
+
+### 3. Custom gateway (for advanced use cases)
+
+Use a [custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway.mdx) if you need:
+
+- Specialized gateway logic beyond what standard gateways provide
+- Custom handling of deposits and withdrawals
+- Advanced features like child chain-minted tokens being withdrawable to parent chain
+
+For additional information, see [other types of gateways](/how-arbitrum-works/deep-dives/token-bridging.mdx#other-flavors-of-gateways) in the conceptual docs.
+
+## Example code
+
+You can find complete examples demonstrating:
+
+- [Token deposits (parent → child)](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
+- [Token withdrawals (child → parent)](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw)
+- [Custom token bridging setup](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-token-bridging)
+
+## Learn more
+
+- [Token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- [Arbitrum SDK documentation](/sdk)

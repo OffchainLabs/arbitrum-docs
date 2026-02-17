@@ -11,6 +11,21 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/deep-dives/geth/?)",
+      "destination": "/how-arbitrum-works/reference/geth",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/deep-dives/parent-chain-pricing/?)",
+      "destination": "/how-arbitrum-works/reference/parent-chain-pricing",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/deep-dives/stf-inputs/?)",
+      "destination": "/how-arbitrum-works/reference/stf-inputs",
+      "permanent": false
+    },
+    {
       "source": "/(anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
@@ -37,7 +52,7 @@
     },
     {
       "source": "/(arbos/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -57,12 +72,12 @@
     },
     {
       "source": "/(arbos/geth/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
       "source": "/(arbos/introduction/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -97,7 +112,7 @@
     },
     {
       "source": "/(arbos_formats/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -112,7 +127,7 @@
     },
     {
       "source": "/(asset-bridging/?)",
-      "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
+      "destination": "/how-arbitrum-works/token-bridging/erc20-bridging",
       "permanent": false
     },
     {
@@ -147,7 +162,7 @@
     },
     {
       "source": "/(bridging_assets/?)",
-      "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
+      "destination": "/how-arbitrum-works/token-bridging/erc20-bridging",
       "permanent": false
     },
     {
@@ -202,32 +217,147 @@
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/gentle-introduction-bridge/?)",
-      "destination": "/build-decentralized-apps/token-bridging/overview",
+      "destination": "/how-arbitrum-works/token-bridging/overview",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway/?)",
-      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic/?)",
-      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom/?)",
-      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview/?)",
-      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started",
+      "destination": "/build-decentralized-apps/token-bridging/get-started",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard/?)",
-      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started/?)",
+      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started/?)",
+      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/04-how-to-bridge-tokens-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/01-get-started/?)",
+      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/02-how-to-bridge-tokens-standard/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/03-how-to-bridge-tokens-generic-custom/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/04-how-to-bridge-tokens-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/01-overview/?)",
+      "destination": "/how-arbitrum-works/token-bridging/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/overview/?)",
+      "destination": "/how-arbitrum-works/token-bridging/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/02-token-bridge-ether/?)",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/token-bridge-ether/?)",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/token-bridging/eth-bridging/?)",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/03-token-bridge-erc20/?)",
+      "destination": "/how-arbitrum-works/token-bridging/erc20-bridging",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/token-bridge-erc20/?)",
+      "destination": "/how-arbitrum-works/token-bridging/erc20-bridging",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/deep-dives/transaction-lifecycle/?)",
+      "destination": "/build-decentralized-apps/transaction-lifecycle",
       "permanent": false
     },
     {
@@ -372,17 +502,17 @@
     },
     {
       "source": "/(for-devs/concepts/token-bridge/token-bridge-erc20/?)",
-      "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
+      "destination": "/how-arbitrum-works/token-bridging/erc20-bridging",
       "permanent": false
     },
     {
       "source": "/(for-devs/concepts/token-bridge/token-bridge-ether/?)",
-      "destination": "/build-decentralized-apps/token-bridging/token-bridge-ether",
+      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
       "permanent": false
     },
     {
       "source": "/(for-devs/concepts/token-bridge/token-bridge-overview/?)",
-      "destination": "/build-decentralized-apps/token-bridging/overview",
+      "destination": "/how-arbitrum-works/token-bridging/overview",
       "permanent": false
     },
     {
@@ -527,7 +657,7 @@
     },
     {
       "source": "/(how-arbitrum-works/arbos/geth/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -657,7 +787,7 @@
     },
     {
       "source": "/(how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum/?)",
-      "destination": "/how-arbitrum-works/deep-dives/geth",
+      "destination": "/how-arbitrum-works/reference/geth",
       "permanent": false
     },
     {
@@ -667,7 +797,7 @@
     },
     {
       "source": "/(how-arbitrum-works/state-transition-function/stf-inputs/?)",
-      "destination": "/how-arbitrum-works/deep-dives/stf-inputs",
+      "destination": "/how-arbitrum-works/reference/stf-inputs",
       "permanent": false
     },
     {
