@@ -10,10 +10,10 @@ content_type: how-to
 
 The batch poster uses the following default configuration flags and values:
 
-| Flag                                                | Default value | Description                                                                                       |
-| --------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| `--node.batch-poster.enable`                        | false         | Enables posting batches to L1                                                                 |
-| `--node.batch-poster.max-size`                      | 100000        | Default value is overwritten if it's an L3 (90000, for AnyTrust: 1,000,000)                       |
+| Flag                                                  | Default value | Description                                                                                       |
+| ----------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.enable`                          | false         | Enables posting batches to L1                                                                     |
+| `--node.batch-poster.max-size`                        | 100000        | Default value is overwritten if it's an L3 (90000, for AnyTrust: 1,000,000)                       |
 | `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                      |
 | `--node.batch-poster.error-delay`                     | 10 seconds    | Delay time after error posting batch                                                              |
 | `--node.batch-poster.compression-level`               | 11            | Batch compression level (Arbitrum uses Brotli compression which has compression levels from 1-11) |
@@ -98,7 +98,7 @@ Before enabling blob transactions, verify that your setup meets these requiremen
 1. Chain configuration
    Your Arbitrum chain must be running in **Rollup mode**.
 2. Parent chain compatibility
-Your parent chain (typically Ethereum mainnet or a testnet) must support [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844). You can verify this by checking that recent block headers contain:
+   Your parent chain (typically Ethereum mainnet or a testnet) must support [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844). You can verify this by checking that recent block headers contain:
 
 - `ExcessBlobGas` field
 - `BlobGasUsed` field
@@ -137,7 +137,7 @@ If your version is below ArbOS 20, upgrade by following the [ArbOS upgrade guide
   "parent-chain": {
     "blob-client": {
       "beacon-url": "YOUR_BEACON_URL"
-     }
+    }
   }
 }
 ```
