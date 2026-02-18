@@ -15,7 +15,7 @@ This document is for developers and decision-makers who want to learn more about
 
 If you'd prefer to learn by doing, see the [Chain SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/create-rollup-eth) for step-by-step instructions that walk you through the process of how to use `chain-sdk` to configure and launch your own Arbitrum chain.
 
-### In a nutshell:
+## In a nutshell:
 
 - Arbitrum chains is the **permissionless path** for launching customizable dedicated chains using Arbitrum technology.
 - Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more, **the possibilities are endless**.
@@ -29,20 +29,20 @@ If you'd prefer to learn by doing, see the [Chain SDK Rollup creation example](h
   className="img-800px"
 />
 
-### What's an Arbitrum chain?
+## What's an Arbitrum chain?
 
 - You can think of Arbitrum chains as **deployable, configurable instances of the Arbitrum Nitro tech stack**.
-- You can also think of them as **tailored chains** - chains tailored precisely to **your exact use-case and business needs**.
+- You can also think of them as **tailored chains**: chains tailored precisely to **your exact use-case and business needs**.
 - This gives you another way to **progressively decentralize** your applications and **incrementally adopt** the properties and security assumptions of Ethereum's base layer.
 - Arbitrum One and Arbitrum Nova are owned and governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao). With Arbitrum chains, _you_ determine the way that your chain is governed.
 
-### What problem do Arbitrum chains solve?
+## What problem do Arbitrum chains solve?
 
 The Ethereum ecosystem is supported by a **decentralized network of nodes** that each run Ethereum's Layer 1 (L1) client software. Ethereum's block space is in high demand, so users are often stuck waiting for the network to become less congested (and thus, less expensive).
 
 Arbitrum's protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the Arbitrum stack (Arbitrum chains).
 
-### What key features should I consider?
+## What key features should I consider?
 
 | Feature               | Description                                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -50,7 +50,7 @@ Arbitrum's protocols address this challenge by offloading some of the Ethereum n
 | EVM+ compatibility    | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-evm-compatibility.mdx">EVM compatibility</FloatingHoverModal> + <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-other-language-support.mdx">more languages like Rust programs supported</FloatingHoverModal>                                                                                                   |
 | Account abstraction   | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-account-abstraction.mdx">Account abstraction</FloatingHoverModal>                                                                                                                                                                                                                                                               |
 | Gas & Tokens          | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-custom-gas-token.mdx">Custom gas token</FloatingHoverModal> or <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-native-eth.mdx">Native ETH</FloatingHoverModal>                                                                                                                                                 |
-| Data availability     | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-rollup.mdx">Rollup (ETH DA)</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-anytrust.mdx">AnyTrust</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-alt-da.mdx">Alt-DA</FloatingHoverModal>                                                        |
+| Data availability     | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-rollup.mdx">Rollup (Ethereum DA)</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-anytrust.mdx">AnyTrust</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-alt-da.mdx">Alt-DA</FloatingHoverModal>                                                   |
 | Fast confirmations    | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx">Fast withdrawals</FloatingHoverModal>                                                                                                                                                                                                                                                                     |
 | Security & validation | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-bold.mdx">BoLD</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-permissioned-validators.mdx">Permissioned validators</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx">Challenge period enforced on L1</FloatingHoverModal> |
 | Safety Features       | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-force-inclusion.mdx">Force-inclusion</FloatingHoverModal> & <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-customizable-governance.mdx">customizable governance</FloatingHoverModal>                                                                                                                          |
@@ -59,7 +59,7 @@ Arbitrum's protocols address this challenge by offloading some of the Ethereum n
 | Infrastructure        | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-hardware.mdx">Hardware requirements</FloatingHoverModal>                                                                                                                                                                                                                                                                        |
 | Interop               | TBD                                                                                                                                                                                                                                                                                                                                                                                              |
 
-### How do Arbitrum chains help the Ethereum ecosystem?
+## How do Arbitrum chains help the Ethereum ecosystem?
 
 Arbitrum helps Ethereum move towards a **multi-chain future**. This is valuable for the following reasons:
 
@@ -70,7 +70,7 @@ Arbitrum helps Ethereum move towards a **multi-chain future**. This is valuable 
 | **Flexible execution environments** | Different chains can experiment with more-or-less restrictive execution environments. For example, although Arbitrum chains are fully EVM compatible, Arbitrum chains can restrict smart contract functionality to optimize for your project's needs.                                                                      |
 | **Flexible governance**             | Arbitrum chains let you define your own governance protocols.                                                                                                                                                                                                                                                              |
 
-### Are Arbitrum chains the same thing as "app chains"?
+## Are Arbitrum chains the same thing as "app chains"?
 
 It depends on your definition of "app chain". Arbitrum chains can be used as application-specific chains (often referred to as "app chains" or "appchains"). But **they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute resources away from Arbitrum's public L2 chains** based on your unique needs.
 

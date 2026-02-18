@@ -24,7 +24,7 @@ AEP fees will apply here in the future.
 
 ## Launch status and key dates
 
-- **Status:** Alpha - not formally supported yet for deployments on Arbitrum chains
+- **Status:** Alpha—not formally supported yet for deployments on Arbitrum chains
 - **Arbitrum Sepolia**: Feb 12, 2025
 - <a data-quicklook-from="arbitrum-one">**Arbitrum One**</a>: April 17, 2025{' '}
 - <a data-quicklook-from="arbitrum-nova">**Arbitrum Nova**</a>: April 17, 2025{' '}
@@ -52,17 +52,17 @@ Again, Arbitrum chains can adopt Timeboost at their discretion and on their time
 
 Timeboost enables a chain owner to capture a portion of the available MEV on their blockchain, reducing latency-related spam while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy. A more in-depth overview of the benefits of Timeboost is explored in the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), and also a paper on how Timeboost is more profitable for arbitrageurs compared to other forms of MEV capture, like Priority Gas Auctions (PGA) [here](https://arxiv.org/abs/2410.10797).
 
-#### Fair(er) MEV capture
+### Fair(er) MEV capture
 
 Timeboost provides sophisticated actors (e.g., searchers) with the ability to purchase a fixed time advantage over a specified number of blocks to perform various MEV activities, such as backrunning, liquidations, or arbitrage. This design preserves the use of a private mempool that all Arbitrum chains have by default, and it does not impact block times. This approach protects users from harmful types of MEV (e.g., frontrunning) while maintaining the same block times.
 
-#### Potential revenue capture for chain owners
+### Potential revenue capture for chain owners
 
 The auction, run at a fixed cadence, is held offchain. Bids can be made in any asset the chain owner designates, including custom `ERC-20` tokens. Furthermore, the chain owner has full discretion over how to use the bid proceeds. For example, chain owners may decide to burn the bid proceeds or use the bid proceeds to support the chain in other ways.
 
 It stands to reason that sophisticated actors (e.g., searchers) will bid up to the amount they believe they can profit or realize from the time advantage. Therefore, at equilibrium, one could reasonably expect that the bid proceeds will approach or equal the amount of available MEV on a Timeboost-enabled chain.
 
-#### Potential reduction in latency-based spam
+### Potential reduction in latency-based spam
 
 As explained earlier, searchers will be incentivized to bid onchain for the time advantage, rather than spending money on offchain hardware to win latency races. Therefore, at equilibrium, one could reasonably expect that the amount of latency-based spam should reduce on a Timeboost-enabled chain. To learn more about this phenomenon, please check out this analysis on how the Timeboost ordering policy impacts backrunning strategies: [TimeBoost and Backrunning: Probabilistic Strategies](https://research.arbitrum.io/t/timeboost-and-backrunning-probabilistic-strategies/9727).
 
@@ -70,7 +70,7 @@ As explained earlier, searchers will be incentivized to bid onchain for the time
 
 As mentioned earlier, chain owners should consider several trade-offs when deciding whether to adopt Timeboost. We will cover two of them below.
 
-#### Cost
+### Cost
 
 As explained in the guide on [how to deploy and configure Timeboost](#enabling-timeboost-for-your-arbitrum-chain), there are are three core components to Timeboost:
 
@@ -80,7 +80,7 @@ As explained in the guide on [how to deploy and configure Timeboost](#enabling-t
 
 Often times, the cost required to set up, configure, and maintain the infrastructure above (especially the auctioneer) will exceed that of the potential revenue that Timeboost brings in. Most importantly, the revenue that Timeboost can generate for the chain is _not guaranteed_ either.
 
-#### User experience
+### User experience
 
 As explained in the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost express lane time advantage is implemented by imposing an artificial delay (default: `200ms`) on all non-express lane transactions whenever there is an express lane controller for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `250ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artificial delay and the block time of the chain. Note that this artificial delay is only applied when there is an express lane controller for a round, meaning there is no change in user experience if nobody is using Timeboost, even though it is enabled (for the duration of that round).
 

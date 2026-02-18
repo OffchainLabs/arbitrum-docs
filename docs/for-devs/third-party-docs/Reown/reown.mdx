@@ -9,8 +9,6 @@ sidebar_label: 'Reown'
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-# Reown (prev. known as WalletConnect)
-
 :::info Community member contribution
 
 Shoutout to [@rohit-710](https://github.com/rohit-710) for contributing the following [third-party document](/for-devs/third-party-docs/contribute)!
@@ -136,8 +134,8 @@ export const config = wagmiAdapter.wagmiConfig;
 So what's happening in the above code? Let's understand it step-by-step:
 
 1. First, we need to import the necessary functions from their respective packages.
-   1. `WagmiAdapter` - this is used to create a WAGMI configuration which is then initialized to the `wagmiAdapter`
-   2. `cookieStorage`**,** `createStorage` **-** this provides a storage mechanism using cookies and a function to create custom storage solutions (in this case, using cookies).
+   1. `WagmiAdapter`: this is used to create a WAGMI configuration which is then initialized to the `wagmiAdapter`
+   2. `cookieStorage`**,** `createStorage` **:** this provides a storage mechanism using cookies and a function to create custom storage solutions (in this case, using cookies).
 
 #### Create the Modal for your app
 
@@ -200,9 +198,9 @@ export default ContextProvider;
 Let’s understand what is happening in the above code:
 
 1. First, we import the necessary functions from their respective packages. After this, we need to create the modal component for our app.
-2. `metadata` - (_optional_)This object contains information about our application that will be used by AppKit. This includes the name of the app, the description, the url and the icons representing our app.
-3. `createAppKit` - this is called to initialize the AppKit component, which handles the user interface for connecting to blockchain wallets. The function is configured with various options, such as the app's metadata, theming, and enabling features like analytics and onramp services.
-   1. `networks` - these are the networks that we want our app to support. So import the chains you want your app to support from `@reown/appkit/network` and assign it to this network parameter. Since we want to enable wallet interactions on the Arbitrum network, we import the Arbitrum mainnet and testnet. You can view the complete list of supported chains [here](https://wagmi.sh/core/api/chains).
+2. `metadata`: (_optional_)This object contains information about our application that will be used by AppKit. This includes the name of the app, the description, the url and the icons representing our app.
+3. `createAppKit`: this is called to initialize the AppKit component, which handles the user interface for connecting to blockchain wallets. The function is configured with various options, such as the app's metadata, theming, and enabling features like analytics and onramp services.
+   1. `networks`: these are the networks that we want our app to support. So import the chains you want your app to support from `@reown/appkit/network` and assign it to this network parameter. Since we want to enable wallet interactions on the Arbitrum network, we import the Arbitrum mainnet and testnet. You can view the complete list of supported chains [here](https://wagmi.sh/core/api/chains).
 4. `WagmiProvider`: Provides blockchain and wallet connection context to the app.
    1. `QueryClientProvider`: Provides the React Query context for managing server-state data.
 
@@ -294,7 +292,7 @@ You can now run the app and test it out. In order to do so, run the command give
 npm run dev
 ```
 
-> If you are using alternative package managers, you can try either of these commands - `yarn dev`, or `pnpm dev`, or `bun dev`.
+> If you are using alternative package managers, you can try either of these commands: `yarn dev`, or `pnpm dev`, or `bun dev`.
 
 ### Conclusion
 
