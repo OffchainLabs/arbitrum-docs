@@ -1,6 +1,7 @@
 ---
 title: 'Gas and ink costs'
 description: 'A reference of how much opcodes and host I/Os cost in Stylus, with measurements in ink and gas.'
+content_type: reference
 author: rachel-bousfield
 sme: rachel-bousfield
 target_audience: 'Developers deploying smart contracts using Stylus.'

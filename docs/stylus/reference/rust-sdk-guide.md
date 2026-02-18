@@ -1,6 +1,7 @@
 ---
 title: 'Stylus Rust SDK advanced features'
 description: 'Advanced features of the Stylus Rust SDK'
+content_type: reference
 author: rachel-bousfield, jose-franco, mehdi-salehi
 sme: rachel-bousfield, jose-franco, mehdi-salehi
 sidebar_position: 1
