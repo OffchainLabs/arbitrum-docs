@@ -213,15 +213,45 @@ $child-sidebar-item-font-size: 14px;
     border-bottom: 1px solid var(--arbitrum-border);
   }
 
+  .navbar-sidebar__backdrop {
+    position: fixed !important;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: calc(var(--ifm-z-index-fixed) - 1);
+    background: var(--arbitrum-overlay);
+  }
+
+  // Prevent transformed-navbar edge cases from clipping the fixed backdrop.
+  .navbar-sidebar--show.navbar {
+    transform: none !important;
+  }
+
   .navbar-sidebar {
     background: var(--arbitrum-background);
+    border-right: 1px solid var(--arbitrum-border);
+    height: 100vh;
+    height: 100dvh;
+    z-index: var(--ifm-z-index-fixed);
 
     .navbar-sidebar__brand {
+      background: var(--arbitrum-background);
       border-bottom: 1px solid var(--arbitrum-border);
     }
 
     .navbar-sidebar__items {
+      padding: 0;
+    }
+
+    .navbar-sidebar__item.menu {
       padding: 1rem;
+      background: var(--arbitrum-background);
+    }
+
+    .theme-doc-sidebar-menu {
+      margin: 0;
+      padding-top: 0;
     }
   }
 }

@@ -326,6 +326,11 @@ const sidebars = {
                   label: 'Delayed inbox finality',
                   id: 'launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality',
                 },
+                {
+                  type: 'doc',
+                  label: 'Sequencer timing adjustments',
+                  id: 'launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments',
+                },
               ],
             },
           ],
@@ -372,6 +377,11 @@ const sidebars = {
                   label: 'Data availability',
                   collapsed: true,
                   items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability',
+                      label: `Config data availability`,
+                    },
                     {
                       type: 'category',
                       label: 'Data availability committee',
@@ -532,6 +542,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
                   label: `DA API integration guide`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
+                  label: `Sequencer timing adjustments`,
                 },
               ],
             },
@@ -725,6 +740,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
               label: 'Run a high availability sequencer',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
+              label: 'Run a batch poster',
             },
           ],
         },

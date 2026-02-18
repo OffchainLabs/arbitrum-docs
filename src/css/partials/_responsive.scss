@@ -40,6 +40,10 @@
 }
 
 @media (max-width: 996px) {
+  html {
+    overflow-x: hidden;
+  }
+
   // Tablet breakpoint adjustments
   main > .container {
     padding-top: 50px !important;
