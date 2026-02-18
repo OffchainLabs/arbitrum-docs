@@ -13,29 +13,29 @@ import RaaSNotice from './partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-This is the **simplest way** to run a complete Arbitrum L3 chain that settles to <a data-quicklook-from="arbitrum-sepolia">Arbitrum Sepolia</a>. You'll run five steps in order. No configuration choices—everything uses defaults. One node runs as sequencer, batch poster, and validator.
+This is the **simplest way** to run a complete Arbitrum L3 chain that settles to the <a data-quicklook-from="arbitrum-sepolia">Arbitrum Sepolia</a>Sepolia chain. You'll run five steps in order. No configuration choices—everything uses default values. One node runs a sequencer, batch poster, and validator.
 
 ### What you'll do
 
-1. **Set up** — Create a folder, add your wallet key, and install the tools
-2. **Deploy** — Put your chain's contracts on Arbitrum Sepolia (costs a small amount of ETH)
-3. **Generate config** — Create the file your node needs to run
-4. **Fund wallets** — Send ETH to the batch poster and validator (they need it for gas)
-5. **Run the node** — Start your chain (one Docker command)
-6. **Deploy token bridge** — Enable bridging tokens between your chain and Arbitrum Sepolia
+1. **Set up**: Create a folder, add your wallet key, and install the tools
+2. **Deploy**: Put your chain's contracts on Arbitrum Sepolia (costs a small amount of `ETH`)
+3. **Generate config**: Create the file your node needs to run
+4. **Fund wallets**: Send `ETH` to the batch poster and validator (they need it for gas)
+5. **Run the node**: Start your chain (one Docker command)
+6. **Deploy token bridge**: Enable bridging tokens between your chain and Arbitrum Sepolia
 
 ### Before you start
 
-| Requirement                 | What you need                                                                                                                              |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
-| **Node.js**                 | v18 or later. [Install Node.js](https://nodejs.org/)                                                                                       |
-| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                      |
-| **ETH on Arbitrum Sepolia** | Your deployer wallet needs ETH for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
-| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                               |
+| Requirement                 | What you need                                                                                                                                |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Node.js**                 | v18 or later. [Install Node.js](https://nodejs.org/)                                                                                         |
+| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                        |
+| **ETH on Arbitrum Sepolia** | Your deployer wallet needs `ETH` for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
+| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                                 |
 
 ## Step 1: Set up the project
 
-Create a folder and install the packages:
+- Create a folder and install the packages:
 
 ```bash
 mkdir my-l3-rollup && cd my-l3-rollup
@@ -43,13 +43,13 @@ npm init -y
 npm install @arbitrum/chain-sdk viem dotenv
 ```
 
-Create a file named `.env` in that folder. Start with this line (replace with your real private key):
+- Create a file named `.env` in that folder. Start with this line (replace with your real private key):
 
 ```
 DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
 ```
 
-After Step 2, add the three lines the deploy script prints (`CHAIN_DEPLOYMENT_TRANSACTION_HASH`, `BATCH_POSTER_PRIVATE_KEY`, `VALIDATOR_PRIVATE_KEY`). Your `.env` will grow as you progress through the steps.
+- You will need this file in future steps.
 
 ### Environment variables reference
 
@@ -62,17 +62,17 @@ After Step 2, add the three lines the deploy script prints (`CHAIN_DEPLOYMENT_TR
 | `CHAIN_DEPLOYMENT_TRANSACTION_HASH` | **Yes** (after Step 2) | Step 3, 6    | Transaction hash from the deploy script. Copy it from Step 2's output into `.env`.                                                                                                             |
 | `CHAIN_RPC`                         | Optional               | Step 6       | Your chain's RPC URL. Defaults to `http://localhost:8547` when running locally. Override if your node is elsewhere.                                                                            |
 
-:::tip Private key format
+:::caution Private key format
 
-Your key must start with `0x` and be 64 hex characters long (66 characters total). Never share it or commit it to git.
+Your key must start with `0x` and be 64 hex characters long (66 characters total). **Never** share it or commit it to Git.
 
 :::
 
 ## Step 2: Deploy the chain
 
-This step deploys your chain's contracts to Arbitrum Sepolia. It will cost a small amount of ETH for gas.
+In this step you will deploy your chain's contracts to Arbitrum Sepolia. It will cost a small amount of `ETH` in gas fees.
 
-Create a new file named `deploy.mjs` in your project folder. Copy and paste this entire script:
+- Create a new file named `deploy.mjs` in your propject folder. Then copy and paste this entire script:
 
 ```javascript
 import { createPublicClient, http } from 'viem';
@@ -143,19 +143,21 @@ async function main() {
 main().catch(console.error);
 ```
 
-Run the deployment:
+- Run the deployment script:
 
 ```bash
 node deploy.mjs
 ```
 
-When it succeeds, the script prints lines starting with `CHAIN_DEPLOYMENT_TRANSACTION_HASH=`, `BATCH_POSTER_PRIVATE_KEY=`, and `VALIDATOR_PRIVATE_KEY=`. **Copy those three lines into your `.env` file** (add them below `DEPLOYER_PRIVATE_KEY`). Your `.env` should then have four lines. The script also prints `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`—you will fund these in Step 4. Save the file before continuing.
+- When it is completed, the script prints lines starting with `CHAIN_DEPLOYMENT_TRANSACTION_HASH=`, `BATCH_POSTER_PRIVATE_KEY=`, and `VALIDATOR_PRIVATE_KEY=`.
+- **Copy those three lines into your `.env` file** (created in Step 2). Add them below `DEPLOYER_PRIVATE_KEY`.
+- Your `.env` should then have four lines. The script also prints `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`—you will fund these in Step 4. Save the file before continuing.
 
 ## Step 3: Generate the node config
 
-This step creates `node-config.json`—the file your node needs to know how to connect to your chain and Arbitrum Sepolia.
+In this step you will create the `node-config.json`—the file your node needs to know how to connect to your chain and Arbitrum Sepolia.
 
-Create a new file named `prepare-node-config.mjs`. Copy and paste this entire script:
+- Create a new file named `prepare-node-config.mjs`. Copy and paste this entire script:
 
 ```javascript
 import { writeFile } from 'fs/promises';
@@ -208,25 +210,28 @@ async function main() {
 main().catch(console.error);
 ```
 
-Run it:
+- Now run the script:
 
 ```bash
 node prepare-node-config.mjs
 ```
 
-You should see `Node config written to node-config.json`. That file is ready for the next step.
+- You should see a confirmation in the console `Node config written to node-config.json`. That file is ready for the next step.
 
 ## Step 4: Fund the batch poster and validator
 
-The batch poster and validator need ETH on Arbitrum Sepolia to pay for gas when posting batches and assertions. Send ETH to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+The batch poster and validator need `ETH` on Arbitrum Sepolia to pay for gas when posting batches and assertions. Send `ETH` to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
 
-Get the addresses from your Step 2 output (the lines starting with `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`). Send at least 0.01 ETH to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/). Without this, the node will not produce blocks or finalize.
+- Get the addresses from your Step 2 output (the lines starting with `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`).
+- Send at least 0.01 `ETH` to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+
+Without this, the node will not produce blocks or finalize.
 
 ## Step 5: Run the node
 
-This starts your chain. One node runs everything: it sequences blocks, posts them to Arbitrum Sepolia, and validates. Keep this terminal open—the node runs in the foreground.
+In this step you will start your chain. One node runs everything: it sequences blocks, posts them to Arbitrum Sepolia, and validates. Keep this terminal open—the node runs in the foreground.
 
-Run these two commands:
+- Run these two commands:
 
 ```bash
 mkdir -p ./arbitrum-data
@@ -245,9 +250,10 @@ The node will start and begin syncing. Wait until you see it producing blocks (l
 
 ## Step 6: Deploy the token bridge
 
-This step enables bridging tokens between your chain and Arbitrum Sepolia. **Your node must be running** (Step 5). Open a **new terminal** in the same project folder—leave the node running in the first one.
+In this step you'll enable the bridging tokens between your chain and Arbitrum Sepolia. **Your node must be running** (Step 5).
 
-Create a new file named `deploy-token-bridge.mjs`. Copy and paste this entire script:
+- Open a **new terminal** in the same project folder—leave the node running in the first one.
+- Create a new file named `deploy-token-bridge.mjs`. Copy and paste this entire script:
 
 ```javascript
 import { createPublicClient, http, defineChain } from 'viem';
@@ -350,28 +356,28 @@ async function main() {
 main().catch(console.error);
 ```
 
-Run the script (it reads from your `.env` file):
+- Run the script (it reads from your `.env` file):
 
 ```bash
 node deploy-token-bridge.mjs
 ```
 
-It will take a minute or two. When you see `Token bridge ready.`, you're done.
+- It will take a minute or two. When you see `Token bridge ready.`, the process is complete.
 
-## You're done
+## A running chain
 
-You now have a fully running L3 chain that settles to Arbitrum Sepolia, with sequencer, validator, and token bridge. Your chain's RPC is at `http://localhost:8547`.
+Congratulations! You now have a fully running L3 chain that settles to Arbitrum Sepolia, with a sequencer, validator, and token bridge. Your chain's RPC is at `http://localhost:8547`.
 
 ### If something failed
 
-| Problem                                               | What to check                                                                                     |
-| :---------------------------------------------------- | :------------------------------------------------------------------------------------------------ |
-| Step 2 fails with "insufficient funds"                | Your deployer wallet needs ETH on Arbitrum Sepolia. Use a [faucet](https://arbitrum.faucet.dev/). |
-| Step 2 fails with "invalid private key"               | Your `DEPLOYER_PRIVATE_KEY` must start with `0x` and be 66 characters.                            |
-| Step 3 fails with "CHAIN_DEPLOYMENT_TRANSACTION_HASH" | You didn't add the three lines from Step 2's output to `.env`. Copy them exactly.                 |
-| Step 5: node runs but no blocks                       | Fund the batch poster and validator (Step 4). They need ETH on Arbitrum Sepolia.                  |
-| Step 6 fails or hangs                                 | Make sure the node from Step 5 is still running and has finished syncing.                         |
-| Step 5: "docker: command not found"                   | Install [Docker](https://docs.docker.com/get-docker/) and ensure it's running.                    |
+| Problem                                               | What to check                                                                                       |
+| :---------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
+| Step 2 fails with "insufficient funds"                | Your deployer wallet needs `ETH` on Arbitrum Sepolia. Use a [faucet](https://arbitrum.faucet.dev/). |
+| Step 2 fails with "invalid private key"               | Your `DEPLOYER_PRIVATE_KEY` must start with `0x` and be 66 characters.                              |
+| Step 3 fails with "CHAIN_DEPLOYMENT_TRANSACTION_HASH" | You didn't add the three lines from Step 2's output to `.env`. Copy them exactly.                   |
+| Step 5: node runs but no blocks                       | Fund the batch poster and validator (Step 4). They need `ETH` on Arbitrum Sepolia.                  |
+| Step 6 fails or hangs                                 | Make sure the node from Step 5 is still running and has finished syncing.                           |
+| Step 5: "docker: command not found"                   | Install [Docker](https://docs.docker.com/get-docker/) and ensure it's running.                      |
 
 ### Next steps
 
