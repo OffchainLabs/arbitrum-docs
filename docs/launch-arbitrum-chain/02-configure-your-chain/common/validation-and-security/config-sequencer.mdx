@@ -30,7 +30,7 @@ This is a straightforward way to spin up a Sequencer node. Use the following Doc
 | Core Sequencer                    | `--node.sequencer=true`                                                                                                                                                                                                                                                                                                                                                                                                                              | Enables sequencer mode.                                                                                                 |
 | Execution                         | `--execution.sequencer.enable=true--execution.sequencer.max-tx-data-size=85000`                                                                                                                                                                                                                                                                                                                                                                      | Enables transaction sequencing and sets max data size per transaction; default is 85 KB).                               |
 | Delayed Sequencer                 | `--node.delayed-sequencer.enable=true--node.delayed-sequencer.use-merge-finality=false--node.delayed-sequencer.finalize-distance=1`                                                                                                                                                                                                                                                                                                                  | Handles delayed inbox transactions from the parent chain; reduces finality time.                                        |
-| Batch poster                      | --node.batch-poster.enable=true--node.batch-poster.max-size=90000--node.batch-poster.parent-chain-wallet.private-key=<PRIVATE_KEY>                                                                                                                                                                                                                                                                                                                   | Enables batching and posting to parent chain; set max batch size (e.g., 90 KB). Use the same key for staking if needed. |
+| Batch poster                      | `--node.batch-poster.enable=true--node.batch-poster.max-size=90000--node.batch-poster.parent-chain-wallet.private-key=<PRIVATE_KEY>`                                                                                                                                                                                                                                                                                                                 | Enables batching and posting to parent chain; set max batch size (e.g., 90 KB). Use the same key for staking if needed. |
 | Transaction forwarding            | `--execution.forwarding-target=""`                                                                                                                                                                                                                                                                                                                                                                                                                   | Disables forwarding, queues transactions directly in the Sequencer.                                                     |
 | Feed output                       | `--node.feed.output.enable=true--node.feed.output.addr=0.0.0.0--node.feed.output.port=<PORT>`                                                                                                                                                                                                                                                                                                                                                        | Allows other nodes to receive queued transactions (e.g., port 9642).                                                    |
 | Data Availability (AnyTrust Only) | `--node.data-availability.enable=true--node.data-availability.sequencer-inbox-address=<INBOX_ADDR>--node.data-availability.parent-chain-node-url=<PARENT_RPC>--node.data-availability.rest-aggregator.enable=true--node.data-availability.rest-aggregator.urls=<DAS_URLS>--node.data-availability.rpc-aggregator.enable=true--node.data-availability.rpc-aggregator.assumed-honest=1--node.data-availability.rpc-aggregator.backends=<RPC_BACKENDS>` | Configures DA for AnyTrust; replace with your DAS endpoints.                                                            |
@@ -76,6 +76,7 @@ docker run --rm -it \
   --node.staker.enable=true \  # Optional
   --node.staker.strategy=MakeNodes \
   --node.staker.parent-chain-wallet.private-key=<YOUR_STAKER_PRIVATE_KEY>
+
 ```
 
 - **Ports**: 8547 (RPC), 8548 (WebSocket). Expose more if needed (e.g., feed port).
@@ -99,25 +100,24 @@ For more structured setups, especially when customizing the Arbitrum chain confi
 
 - Use the `prepareNodeConfig` function with inputs such as the chain name, config, contracts, and keys.
   - Example script snippet:
-  ```typescript
+
+```typescript
   import { prepareNodeConfig } from '@arbitrum/chain-sdk';
-  ```
+  const config = prepareNodeConfig({
+  chainName: 'MyOrbitChain',
+  chainConfig: { chainId: 12345, ... }, // From your deployment
+  coreContracts: { sequencerInbox: '0xYourInboxAddress', ... },
+  batchPosterPrivateKey: '<BATCH_POSTER_KEY>',
+  validatorPrivateKey: '<VALIDATOR_KEY>',
+  parentChainId: 421614, // e.g., Arbitrum Sepolia
+  parentChainRpcUrl: 'https://sepolia-rollup.arbitrum.io/rpc',
+  // Additional for AnyTrust: DAS details
+  });
 
-const config = prepareNodeConfig({
-chainName: 'MyOrbitChain',
-chainConfig: { chainId: 12345, ... }, // From your deployment
-coreContracts: { sequencerInbox: '0xYourInboxAddress', ... },
-batchPosterPrivateKey: '<BATCH_POSTER_KEY>',
-validatorPrivateKey: '<VALIDATOR_KEY>',
-parentChainId: 421614, // e.g., Arbitrum Sepolia
-parentChainRpcUrl: 'https://sepolia-rollup.arbitrum.io/rpc',
-// Additional for AnyTrust: DAS details
-});
+  // Write to file
+  fs.writeFileSync('node-config.json', JSON.stringify(config, null, 2));
 
-// Write to file
-fs.writeFileSync('node-config.json', JSON.stringify(config, null, 2));
-
-````
+```
 
 #### 3. Key sequencer settings in JSON
 
@@ -127,29 +127,30 @@ fs.writeFileSync('node-config.json', JSON.stringify(config, null, 2));
 - `"rest-aggregator"`: `{ "enable": true, "urls": "http://das-server:9876" }` (for DA)
 - `"rpc-aggregator"`: `{ "enable": true, "assumed-honest": 1, "backends": "[...]" }`
 - Full example:
+
 ```json
 {
-"node": {
-  "sequencer-inbox-address": "0xYourSequencerInbox",
-  "parent-chain-node-url": "https://parent-rpc.example.com",
-  "rest-aggregator": {
-    "enable": true,
-    "urls": "http://das-server:9876"
+  "node": {
+    "sequencer-inbox-address": "0xYourSequencerInbox",
+    "parent-chain-node-url": "https://parent-rpc.example.com",
+    "rest-aggregator": {
+      "enable": true,
+      "urls": "http://das-server:9876"
+    },
+    "rpc-aggregator": {
+      "enable": true,
+      "assumed-honest": 1,
+      "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"...\",\"signermask\":1}]"
+    }
   },
-  "rpc-aggregator": {
-    "enable": true,
-    "assumed-honest": 1,
-    "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"...\",\"signermask\":1}]"
-  }
-},
-"execution": {
-  "sequencer": {
-    "enable": true,
-    "max-tx-data-size": 85000
+  "execution": {
+    "sequencer": {
+      "enable": true,
+      "max-tx-data-size": 85000
+    }
   }
 }
-}
-````
+```
 
 #### 4. Run the Node with the config:
 
