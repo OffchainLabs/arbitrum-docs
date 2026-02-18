@@ -1,0 +1,136 @@
+---
+title: 'Configure smart contract size limit'
+description: 'Learn about how to configure the smart contract size limits on your Arbitrum chain'
+author: pete-vielhaber
+sme: jason-w123
+content_type: how-to
+---
+
+The smart contract size limit must be set during the initial configuration and deployment of a custom chain (Layer 2 or Layer 3 Rollup). It is not possible to modify it post-deployment due to the lack of a versioning mechanism for such parameters.
+
+The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). Both are configurable up to 96KB (98,304 bytes), which is higher than the default 24KB (24,576 bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
+
+## Key specifics
+
+- **Default values**: 24KB (24,576 bytes) for both `MaxCodeSize` and `MaxInitCodeSize` if not explicitly set.
+- **Maximum values**: 96KB (98,304 bytes) for each. Setting higher is not supported and may cause deployment failures or compatibility issues.
+- **Where applicable**: Only in custom Arbitrum chains. Public chains like Arbitrum One or Nova remain fixed at 24KB without a network-wide upgrade.
+- **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @offchainlabs/chain-sdk` or similar), a funded wallet on the parent chain (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
+
+#### Process overview
+
+1. Prepare the chain configuration using the Chain SDK's `prepareChainConfig` function, where you specify the parameters.
+2. Use this config in `prepareNodeConfig` to generate the full node configuration (e.g., for nitro-node.toml).
+3. Deploy the chain contracts to the parent chain.
+4. Run the node with the generated config.
+
+:::caution
+
+- This change is immutable after deployment—plan carefully.
+- Higher limits increase risks like state bloat, slower node performance, and potential DoS vulnerabilities.
+- Test on a devnet or testnet first to ensure stability.
+- Ensure values are in bytes (not KB) when setting them in code.
+
+:::
+
+## Code examples
+
+The example below assumes you've set up a project with the SDK installed and have environment variables for your private key and RPC URLs.
+
+#### 1. Basic chain configuration (setting the parameters)
+
+- The snippet below demonstrates how to prepare the chain config JSON, including the size limit parameters. Place this in a file like `prepareChainConfigExample.ts`.
+
+```typescript
+import { prepareChainConfig } from '@offchainlabs/chain-sdk'; // Import the function from the SDK
+
+// Define the parameters for your custom Arbitrum chain
+const orbitChainParams = {
+  chainId: 123456, // Your unique chain ID (must not conflict with existing chains)
+  homesteadBlock: 0, // Typically 0 for new chains
+  eip155Block: 0, // Typically 0
+  // ... other standard Ethereum chain config params as needed
+
+  arbitrum: {
+    // Arbitrum-specific extensions
+    MaxCodeSize: 98304, // Set to 96KB (98,304 bytes) for deployed contract code size limit
+    MaxInitCodeSize: 98304, // Set to 96KB for init code size during contract deployment
+    // Note: Init code can often be set higher (e.g., 2x MaxCodeSize) if needed for complex constructors,
+    // but stick to <= 96KB to avoid issues. Default is 24576 bytes (24KB) if omitted.
+    // Warning: Higher values may increase state size and node resource demands.
+    // Other Arbitrum params like DataAvailabilityCommittee: true/false can go here
+  },
+};
+
+// Prepare the chain config JSON using the SDK function
+const chainConfig = prepareChainConfig(orbitChainParams);
+
+// Output the config (e.g., for use in deployment or node setup)
+console.log(JSON.stringify(chainConfig, null, 2));
+
+// You can now use this chainConfig in deployment scripts or pass it to prepareNodeConfig.
+```
+
+- Run this with `ts-node prepareChainConfigExample.ts` to generate the config JSON.
+
+#### 2. Full node configuration and deployment example
+
+- This extends Step 1 in preparation of the full node config (e.g., for running a sequencer or validator node). Place this in a file like `deployOrbitChain.ts`. It assumes you’re deploying to a parent chain, such as Sepolia (testnet).
+
+```typescript
+import { prepareChainConfig, prepareNodeConfig } from '@offchainlabs/chain-sdk'; // Import SDK functions
+import { ethers } from 'ethers'; // For wallet and provider (install via npm)
+import { writeFileSync } from 'fs'; // For saving config files
+
+// Load environment variables (e.g., from .env file)
+const parentChainRpcUrl = process.env.PARENT_RPC_URL; // e.g., https://sepolia.infura.io/v3/YOUR_KEY
+const privateKey = process.env.PRIVATE_KEY; // Your wallet private key (funded with ETH)
+
+// Step 1: Prepare chain config with increased size limits
+const orbitChainParams = {
+  chainId: 123456,
+  nativeToken: '0x0000000000000000000000000000000000000000', // ETH as native token (or custom ERC20 address)
+  arbitrum: {
+    MaxCodeSize: 98304, // Increase to max 96KB for larger contracts
+    MaxInitCodeSize: 98304, // Matching increase for init code
+    // Additional params: e.g., InitialChainOwner: '0xYourAddress' for governance
+  },
+};
+
+const chainConfig = prepareChainConfig(orbitChainParams);
+
+// Step 2: Set up provider and wallet for deployment
+const parentProvider = new ethers.JsonRpcProvider(parentChainRpcUrl);
+const wallet = new ethers.Wallet(privateKey, parentProvider);
+
+// Step 3: Prepare node config (generates nitro-node config like chain.toml)
+const nodeConfig = await prepareNodeConfig({
+  chainName: 'my-arbitrum-chain', // Name for your chain
+  chainConfig, // Pass the prepared chain config here
+  parentChainId: 11155111, // e.g., Sepolia chain ID
+  // Other options: batchPosterPrivateKey, validatorPrivateKey, etc.
+  // Note: This generates a config object or file with settings for the node,
+  // including the immutable chain params like size limits.
+});
+
+// Save the node config to a file (e.g., for running the node)
+writeFileSync('my-arbitrum-chain.toml', nodeConfig); // Adjust format as needed (TOML or JSON)
+
+// Step 4: Deploy the core contracts to the parent chain
+// Use the SDK's deployment functions (simplified; refer to full docs for complete script)
+const deploymentResult = await deployOrbitChain({
+  wallet,
+  chainConfig,
+  // ... other deployment params like data availability settings
+});
+
+console.log('Chain deployed! Contracts:', deploymentResult.contractAddresses);
+console.log('Use the generated my-arbitrum-chain.toml to run your node.');
+
+// Post-deployment: Run the nitro node with Docker or binary, pointing to the config file.
+// Example command: docker run --rm -v $(pwd)/my-arbitrum-chain.toml:/config.toml offchainlabs/nitro-node --conf.file /config.toml
+```
+
+- Run this with `ts-node deployOrbitChain.ts`. This script deploys the chain and generates the node config with your custom limits embedded.
+
+For exact SDK function signatures and more options, refer to the official [Arbitrum Chain SDK repository on GitHub](https://github.com/OffchainLabs/arbitrum-chain-sdk). Always test in a development environment, as incorrect configs can lead to failed deployments or insecure chains. If your contracts still exceed the limit, consider optimizations such as code splitting or using Stylus to create more efficient WASM-based contracts.
