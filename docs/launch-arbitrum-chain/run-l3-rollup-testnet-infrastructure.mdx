@@ -12,16 +12,14 @@ import RaaSNotice from './partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-This page gives **step-by-step instructions** to run your chain's full infrastructure as a production-level testnet with high availability (HA).
-
-**Before you start:** Complete [Run an L3 rollup from scratch](/launch-arbitrum-chain/run-l3-rollup-from-scratch.mdx) Steps 1–4 (deploy, generate config, **fund batch poster and validator**). You need `node-config.json` in your project folder. Do **not** run Step 5 (local node)—this page replaces it with production infrastructure.
+This page provides step-by-step instructions for running your chain's full infrastructure as a production-level testnet with high availability (HA).
 
 The setup uses multiple sequencers with automatic failover, Redis for coordination, relays for feed distribution, and separate full nodes, batch poster, and validator—the same architecture used in production.
 
-### Steps at a glance
+## Steps at a glance
 
 1. Extract chain info from `node-config.json`
-2. Add Helm repo and create namespace
+2. Add Helm repo and create a namespace
 3. Set up Redis
 4. Deploy sequencers (3 replicas)
 5. Deploy sequencer relays
@@ -32,7 +30,7 @@ The setup uses multiple sequencers with automatic failover, Redis for coordinati
 10. Set up Sequencer Coordinator Manager (optional)
 11. Expose RPC
 12. Verify
-13. Deploy token bridge
+13. Deploy the token bridge
 
 :::tip Run all steps in the same terminal
 
@@ -40,23 +38,21 @@ The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`
 
 :::
 
-### Prerequisites
+## Prerequisites
 
-| Requirement            | What you need                                                                                                                                                         |
-| :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Deployed chain**     | Completed [Run an L3 rollup from scratch](/launch-arbitrum-chain/run-l3-rollup-from-scratch.mdx) Steps 1–4 (deploy, generate config, fund batch poster and validator) |
-| **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g. EKS, GKE, AKS)                                                                                             |
-| **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                   |
-| **kubectl**            | Configured to access your cluster                                                                                                                                     |
-| **jq**                 | [Install jq](https://jqlang.github.io/jq/download/) for parsing `node-config.json`                                                                                    |
-| **Go**                 | [Install Go](https://go.dev/dl/) (for Step 10, building SQM)                                                                                                          |
-| **Redis**              | In-cluster (Step 3) or managed (e.g. AWS ElastiCache)                                                                                                                 |
+| Requirement            | What you need                                                                                                                                                                                     |
+| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Deployed chain**     | Complete [Run an L3 rollup from scratch](/launch-arbitrum-chain/run-l3-rollup-from-scratch.mdx), Steps 1–4 (deploy, generate config, fund batch poster and validator), **do not complete Step 5** |
+| **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g., EKS, GKE, AKS)                                                                                                                        |
+| **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                                               |
+| **kubectl**            | Configured to access your cluster                                                                                                                                                                 |
+| **jq**                 | [Install jq](https://jqlang.github.io/jq/download/) for parsing `node-config.json`                                                                                                                |
+| **Go**                 | [Install Go](https://go.dev/dl/) (for Step 10, building SQM)                                                                                                                                      |
+| **Redis**              | In-cluster (Step 3) or managed (e.g., AWS ElastiCache)                                                                                                                                            |
 
----
+## Step 1: Extract chain info from `node-config.json`
 
-## Step 1: Extract chain info from node-config.json
-
-On your local machine, in the folder that contains `node-config.json`, run:
+- On your local machine, in the folder that contains `node-config.json`, run:
 
 ```bash
 # Export so variables persist for all steps below
@@ -73,11 +69,11 @@ echo "PARENT_RPC=$PARENT_RPC"
 echo "chain-info.json saved"
 ```
 
-In Step 8 you will extract the batch poster private key—never commit it to git or expose it in logs.
-
----
+- In Step 8, you will extract the batch poster private key—never commit it to Git or expose it in logs.
 
 ## Step 2: Add Helm repo and create namespace
+
+- Run the following commands:
 
 ```bash
 helm repo add offchainlabs https://charts.arbitrum.io
@@ -87,15 +83,15 @@ kubectl create namespace my-l3-chain
 kubectl config set-context --current --namespace=my-l3-chain
 ```
 
-Replace `my-l3-chain` with your preferred namespace in all commands below.
-
----
+- Replace `my-l3-chain` with your preferred namespace in all commands below.
 
 ## Step 3: Set up Redis
 
 Redis coordinates which sequencer is active and shares state between components.
 
-**Option A: In-cluster Redis (simplest for testnet)**
+#### Option A: In-cluster Redis (simplest for testnet)
+
+- Run the following commands:
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -107,21 +103,19 @@ helm install redis bitnami/redis \
 export REDIS_URL="redis://redis-master.my-l3-chain.svc.cluster.local:6379"
 ```
 
-**Option B: Managed Redis (e.g. AWS ElastiCache)**
+#### Option B: Managed Redis (e.g., AWS ElastiCache)
 
-Create a Redis cluster on your cloud provider. Note the endpoint, then:
+- Create a Redis cluster on your cloud provider. Note the endpoint, then:
 
 ```bash
 export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
 ```
 
-Ensure Redis is reachable from your Kubernetes cluster (same VPC or network).
-
----
+- Ensure Redis is reachable from your Kubernetes cluster (in the same VPC or network).
 
 ## Step 4: Deploy sequencers
 
-Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
+- Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
 
 ```bash
 helm install sequencer offchainlabs/nitro \
@@ -142,7 +136,7 @@ helm install sequencer offchainlabs/nitro \
   --set perReplicaHeadlessService.enabled=true
 ```
 
-If sequencers fail to coordinate, each needs a unique URL. Create `sequencer-extra-env.yaml`:
+- If sequencers fail to coordinate, each needs a unique URL. Create `sequencer-extra-env.yaml`:
 
 ```yaml
 extraEnv:
@@ -154,19 +148,19 @@ extraEnv:
     value: 'http://$(POD_NAME).sequencer-nitro.my-l3-chain.svc.cluster.local:8547/rpc'
 ```
 
-Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
+- Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
 
-Wait for the sequencer pods to be ready:
+- Wait for the sequencer pods to be ready:
 
 ```bash
 kubectl get pods -l app.kubernetes.io/name=nitro -w
 ```
 
----
-
 ## Step 5: Deploy sequencer relays
 
-Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays instead of directly to sequencers.
+Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
+
+- Run the following commands:
 
 ```bash
 helm install sequencer-relay offchainlabs/relay \
@@ -176,13 +170,13 @@ helm install sequencer-relay offchainlabs/relay \
   --set configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro:9642,ws://sequencer-nitro-1.sequencer-nitro:9642,ws://sequencer-nitro-2.sequencer-nitro:9642
 ```
 
-The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro`).
-
----
+- The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro`).
 
 ## Step 6: Deploy external relays
 
 External relays connect to sequencer relays and serve the public feed. They add a layer of isolation between the sequencers and public traffic.
+
+- Run the following command:
 
 ```bash
 helm install external-relay offchainlabs/relay \
@@ -192,11 +186,11 @@ helm install external-relay offchainlabs/relay \
   --set configmap.data.node.feed.input.url=ws://sequencer-relay:9642
 ```
 
----
-
 ## Step 7: Deploy full nodes
 
-Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically:
+Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically.
+
+- Run the following commands:
 
 ```bash
 helm install fullnode offchainlabs/nitro \
@@ -211,19 +205,19 @@ helm install fullnode offchainlabs/nitro \
   --set configmap.data.init.empty=true
 ```
 
-If your chain already has blocks, use `--set configmap.data.init.latest=pruned` instead of `init.empty=true`.
-
----
+- If your chain already has blocks, use `--set configmap.data.init.latest=pruned` instead of `init.empty=true`.
 
 ## Step 8: Deploy batch poster
 
-The batch poster posts transaction batches to the parent chain. Save the private key to a file (do not commit this file to git):
+The batch poster posts transaction batches to the parent chain.
+
+- Save the private key to a file (do not commit this file to Git):
 
 ```bash
 jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json > batch-poster-key.txt
 ```
 
-Deploy the batch poster:
+- Deploy the batch poster:
 
 ```bash
 helm install batchposter offchainlabs/nitro \
@@ -240,7 +234,7 @@ helm install batchposter offchainlabs/nitro \
   --set-file configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-key.txt
 ```
 
-Remove the key file after deployment:
+- Remove the key file after deployment:
 
 ```bash
 rm batch-poster-key.txt
@@ -248,21 +242,21 @@ rm batch-poster-key.txt
 
 :::warning Do not add batch poster to sequencer priority
 
-Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer priority list. Otherwise it could become the active sequencer unintentionally.
+Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer priority list. Otherwise, it could become the active sequencer unintentionally.
 
 :::
 
----
-
 ## Step 9: Deploy validator
 
-The validator validates blocks and posts assertions to the parent chain. It is required for chain security. The validator wallet needs ETH on the parent chain (Arbitrum Sepolia) for gas. Save the validator private key to a file (do not commit to git):
+The validator validates blocks and posts assertions to the parent chain. It is required for chain security. The validator wallet needs `ETH` on the parent chain (Arbitrum Sepolia) for gas.
+
+- Save the validator private key to a file (do not commit to Git):
 
 ```bash
 jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' node-config.json > validator-key.txt
 ```
 
-Deploy the validator:
+- Deploy the validator:
 
 ```bash
 helm install validator offchainlabs/nitro \
@@ -281,29 +275,31 @@ helm install validator offchainlabs/nitro \
   --set configmap.data.init.empty=true
 ```
 
-Remove the key file after deployment:
+- Remove the key file after deployment:
 
 ```bash
 rm validator-key.txt
 ```
 
----
-
 ## Step 10: Set up Sequencer Coordinator Manager (optional)
 
-The chain works without this step—sequencers coordinate via Redis automatically. The SQM lets you view which sequencer is active and manually switch if needed. Run it on your local machine.
+The chain works without this step—sequencers automatically coordinate via Redis. The SQM lets you view which sequencer is active and manually switch if needed. Run it on your local machine.
 
-**1. Port-forward Redis** (if using in-cluster Redis from Step 2):
+#### 1. Port-forward Redis (if using in-cluster Redis from Step 2):
+
+- Run the following:
 
 ```bash
 kubectl port-forward svc/redis-master 6379:6379 -n my-l3-chain
 ```
 
-Keep this running. In a **new terminal**:
+- Keep this running. In a **new terminal**:
 
-**2. Build and run SQM**
+#### 2. Build and run SQM
 
 Requires [Go](https://go.dev/dl/) and build tools. If the build fails, the Nitro repo may need additional dependencies—the chain runs fine without SQM.
+
+- Run the following:
 
 ```bash
 git clone --branch v3.9.4 https://github.com/OffchainLabs/nitro.git
@@ -312,31 +308,31 @@ make target/bin/seq-coordinator-manager
 ./target/bin/seq-coordinator-manager redis://127.0.0.1:6379
 ```
 
-If Redis is external (e.g. ElastiCache), use its URL instead of `redis://127.0.0.1:6379`.
+- If Redis is external (e.g., ElastiCache), use its URL instead of `redis://127.0.0.1:6379`.
 
-**3. Use the SQM**
+#### 3. Use the SQM
 
 - Press `c` to switch between lists
 - Press `s` to save changes to Redis
 - Press `q` to quit
 - Do **not** add the batch poster to the priority list
 
----
-
 ## Step 11: Expose RPC
 
 Expose the full node RPC so users can connect.
 
-**Kubernetes LoadBalancer**
+#### Kubernetes LoadBalancer
+
+- Start the LoadBalancer:
 
 ```bash
 kubectl patch svc fullnode-nitro -n my-l3-chain -p '{"spec": {"type": "LoadBalancer"}}'
 kubectl get svc fullnode-nitro -n my-l3-chain
 ```
 
-Use the external IP as your chain RPC URL (e.g. `http://EXTERNAL_IP:8547`).
+- Use the external IP as your chain RPC URL (e.g., `http://EXTERNAL_IP:8547`).
 
-**Optional: CDN (Cloudflare)**
+#### Optional: CDN (Cloudflare)
 
 For production, put a CDN in front:
 
@@ -344,17 +340,17 @@ For production, put a CDN in front:
 2. Enable Cloudflare proxy (orange cloud) for DDoS protection
 3. Use the Cloudflare hostname as your RPC URL
 
----
-
 ## Step 12: Verify
 
-**Option A: Port-forward (quick test before exposing)**
+#### Option A: Port-forward (quick test before exposing)
+
+- Run the following:
 
 ```bash
 kubectl port-forward svc/fullnode-nitro 8547:8547 -n my-l3-chain
 ```
 
-In another terminal:
+- Then in another terminal:
 
 ```bash
 curl -X POST -H "Content-Type: application/json" \
@@ -362,7 +358,9 @@ curl -X POST -H "Content-Type: application/json" \
   http://localhost:8547
 ```
 
-**Option B: After exposing via LoadBalancer**
+#### Option B: After exposing via LoadBalancer
+
+- Run the following:
 
 ```bash
 # Replace with your LoadBalancer IP or hostname
@@ -372,15 +370,13 @@ curl -X POST -H "Content-Type: application/json" \
   $RPC_URL
 ```
 
-You should get a JSON response with a block number (e.g. `{"jsonrpc":"2.0","id":1,"result":"0x..."}`). Wait until blocks are producing before Step 13.
-
----
+- You should get a JSON response with a block number (e.g., `{"jsonrpc":"2.0","id":1,"result":"0x..."}`). Wait until blocks are producing before proceeding to Step 13.
 
 ## Step 13: Deploy token bridge
 
 This enables bridging tokens between your chain and Arbitrum Sepolia. Run this from your project folder (the one with `node-config.json` and `.env` from the from-scratch page). The chain must be producing blocks (Step 12).
 
-Create `deploy-token-bridge.mjs` in your project folder:
+- Create `deploy-token-bridge.mjs` in your project folder:
 
 ```javascript
 import { createPublicClient, http, defineChain } from 'viem';
@@ -480,23 +476,21 @@ async function main() {
 main().catch(console.error);
 ```
 
-Run it with your chain's RPC URL (the LoadBalancer IP from Step 11):
+- Run it with your chain's RPC URL (the LoadBalancer IP from Step 11):
 
 ```bash
 CHAIN_RPC=http://YOUR_LOADBALANCER_IP:8547 node deploy-token-bridge.mjs
 ```
 
-Replace `YOUR_LOADBALANCER_IP` with your external IP. The script reads from your `.env` file. When you see `Token bridge ready.`, you're done.
+- Replace `YOUR_LOADBALANCER_IP` with your external IP. The script reads from your `.env` file. When you see `Token bridge ready.`, you now have the testnet infrastructure running.
 
 ### Troubleshooting
 
 - Run `kubectl get pods -n my-l3-chain` to check pod status
 - Run `kubectl logs <pod-name> -n my-l3-chain` to inspect logs
 - Run `kubectl get svc -n my-l3-chain` to verify service names (if relay connection fails, the service name may differ)
-- No blocks producing: Ensure batch poster and validator were funded (from-scratch Step 4)
-- Token bridge retryables fail: Wait for blocks to be producing (Step 12) before running Step 13
-
----
+- **No blocks producing**: Ensure batch poster and validator were funded (from-scratch Step 4)
+- **Token bridge retryables fail**: Wait for blocks to be producing (Step 12) before running Step 13
 
 ## Summary
 
@@ -516,4 +510,4 @@ Your chain RPC is at your full node URL (load balancer or CDN). Users and apps c
 
 ### Next steps
 
-For production mainnet, consider a RaaS provider.
+For running production mainnet, consider a RaaS provider. For a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
