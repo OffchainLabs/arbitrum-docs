@@ -11,8 +11,8 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 You can submit transactions to the <a data-quicklook-from="arbitrum">Arbitrum</a> chain through two main pathways:
 
-1. **Through the <a data-quicklook-from="sequencer">Sequencer</a>** - The standard method for most transactions
-2. **Bypassing the Sequencer** - Using the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the Parent chain
+1. **Through the <a data-quicklook-from="sequencer">Sequencer</a>**: The standard method for most transactions
+2. **Bypassing the Sequencer**: Using the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the Parent chain
 
 This guide explains both methods, when to use each one, and how they work within Arbitrum's <a data-quicklook-from="transaction">transaction</a> lifecycle.
 
@@ -97,16 +97,16 @@ The following diagram shows the four methods for submitting transactions to the 
 
 You can submit transactions directly to the Delayed Inbox contract on the Parent chain without using the Sequencer. This method provides:
 
-- **Censorship resistance** - Transaction inclusion even if the Sequencer refuses to process it
-- **Availability guarantee** - Transactions work even when the Sequencer is offline
-- **Decentralization** - Reduces dependency on the Sequencer
+- **Censorship resistance**: Transaction inclusion even if the Sequencer refuses to process it
+- **Availability guarantee**: Transactions work even when the Sequencer is offline
+- **Decentralization**: Reduces dependency on the Sequencer
 
 There are two paths your transaction can take through the Delayed Inbox.
 
 When you submit a transaction to the Delayed Inbox, two things can happen:
 
-1. **Automatic processing** - The Sequencer picks up your transaction and includes it in the normal transaction flow
-2. **Force inclusion** - If 24 hours pass without processing, you can call the `forceInclude` function on the `SequencerInbox` contract to guarantee inclusion
+1. **Automatic processing**: The Sequencer picks up your transaction and includes it in the normal transaction flow
+2. **Force inclusion**: If 24 hours pass without processing, you can call the `forceInclude` function on the `SequencerInbox` contract to guarantee inclusion
 
 This two-path system ensures your transaction will always be processed, even if the Sequencer is unresponsive or censoring transactions.
 

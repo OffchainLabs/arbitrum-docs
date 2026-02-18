@@ -51,7 +51,7 @@ This EIP introduces precompiles for performing cryptographic operations on the B
 
 ### [EIP-2935: Serve historical block hashes from state](https://eips.ethereum.org/EIPS/eip-2935)
 
-This EIP proposes storing a wider window of block hashes in the storage of a dedicated system contract. Bundling historical block hashes within the state enables efficient data retrieval for applications that require extended access to historical block hashes, like stateless clients. If approved, ArbOS 40 will adapt this EIP to the L2 and store the same number of L2 block hashes that are generated in the time it takes for 8192 L1 blocks to build - this is approximately 27 hours' worth of L2 block hashes.
+This EIP proposes storing a wider window of block hashes in the storage of a dedicated system contract. Bundling historical block hashes within the state enables efficient data retrieval for applications that require extended access to historical block hashes, like stateless clients. If approved, ArbOS 40 will adapt this EIP to the L2 and store the same number of L2 block hashes that are generated in the time it takes for 8192 L1 blocks to build—this is approximately 27 hours' worth of L2 block hashes.
 
 ### Minor Stylus fix to correct caching behavior for contracts that do not exist ([#2998](https://github.com/OffchainLabs/nitro/pull/2998))
 
