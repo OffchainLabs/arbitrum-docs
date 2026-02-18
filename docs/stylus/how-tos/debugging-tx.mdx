@@ -1,7 +1,7 @@
 ---
 id: debugging-tx
-title: 'How to debug Stylus transactions using Cargo Stylus Replay'
-description: 'This how-to explains how to perform trace calls and use GDB to replay and debug Stylus transactions, providing detailed analysis and troubleshooting.'
+title: 'How to debug Stylus transactions'
+description: 'This how-to explains how to debug Stylus transactions using cargo stylus replay, usertrace, and cross-environment tools.'
 author: mahsamoosavi
 sme: mahsamoosavi
 target_audience: 'Developers deploying smart contracts using Stylus'
@@ -194,3 +194,42 @@ Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that
 By default, the `jsTracer` type is used, which is not supported by most RPC providers. If the `--use-native-tracer` flag is used, the `stylusTracer` type is used, which is supported by many RPC providers.
 Both `jsTracer` and `stylusTracer` are available on local nodes, but `stylusTracer` is more efficient.
 See this [list of RPC providers](/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support.
+
+### Cross-environment debugging (Stylus ↔ Solidity)
+
+When debugging transactions that involve both Stylus and Solidity contracts, you can use these tools together:
+
+- [StylusDB](https://github.com/walnuthq/stylusdb): It provides visual function call trees and step-through debugging for Rust-based smart contracts.
+- [SolDB](https://github.com/walnuthq/soldb): It enables developers to step through Solidity execution, inspect variables, and debug failing transactions.
+
+Start the cross-environment bridge:
+
+```sh
+soldb bridge
+# Bridge runs at http://127.0.0.1:8765
+```
+
+Debug Stylus transactions that call Solidity:
+
+```sh
+cargo stylus usertrace \
+  --tx=$TX_HASH \
+  --endpoint=$RPC_URL \
+  --cross-env-bridge http://127.0.0.1:8765 \
+  --solidity-contracts ./solidity-contracts.json
+```
+
+Debug Solidity transactions that call Stylus:
+
+```sh
+soldb trace <tx_hash> \
+  --ethdebug-dir <address>:<name>:./out \
+  --cross-env-bridge http://127.0.0.1:8765 \
+  --stylus-contracts ./stylus-contracts.json \
+  --rpc http://localhost:8547
+```
+
+For detailed cross-environment debugging documentation, see:
+
+- [StylusDB Guide](https://github.com/aspect-build/stylus-sdk-rs/blob/main/cargo-stylus/docs/StylusDebugger.md)
+- [SolDB Guide](https://github.com/walnuthq/soldb)
