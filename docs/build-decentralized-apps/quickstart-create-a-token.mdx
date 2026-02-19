@@ -2,25 +2,28 @@
 title: 'Create a token using Foundry (Quickstart)'
 description: This quickstart walks you through the process of how to setup the Foundry environment, and create a token on Arbitrum.
 author: pete-vielhaber
-user_story: As a developer, I want to understand how to launch a token, and what considerations to take along the way.
+user_story: As a developer, I want to understand how to create a token, and what considerations to take along the way.
 content_type: quickstart
 displayed_sidebar: buildAppsSidebar
 ---
 
 Deploying an `ERC-20` token on Arbitrum One is fully permissionless and uses the same tooling and workflows as Ethereum.
 
-Projects can deploy directly to Arbitrum One using Foundry, and optionally configure bridging, liquidity, and supporting smart-contract infrastructure as part of their launch.
+You can deploy directly to Arbitrum One using Foundry, and optionally configure bridging, liquidity, and supporting smart contract infrastructure as part of your launch.
 
 This guide walks you through deploying a standard `ERC-20` token on Arbitrum One, from local setup to testnet and mainnet deployment.
 
 ## Prerequisites
 
 1. **Install Foundry**:
+   ```shell
+   curl -L https://foundry.paradigm.xyz | bash
+   foundryup
    ```bash
    curl -L https://foundry.paradigm.xyz | bash
    foundryup
    ```
-2. **Get Test `ETH`**: Obtain Arbitrum Sepolia `ETH` from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (e.g., MetaMask) configured for Arbitrum Sepolia and request testnet funds.
+2. **Get test `ETH`**: Obtain Arbitrum Sepolia `ETH` from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (for example, MetaMask) configured for Arbitrum Sepolia and request testnet funds.
 
 :::info Resources
 
@@ -32,7 +35,7 @@ All references to `ETH` on this document refers to test `ETH` on Sepolia.
 
 :::
 
-3. **Set Up Development Environment**: Configure your wallet and tools for Arbitrum testnet deployment. Sign up for an Arbiscan account to get an API key for contract verification.
+3. **Set up development environment**: Configure your wallet and tools for Arbitrum testnet deployment. Sign up for an Arbiscan account to get an API key for contract verification.
 
 ## Project setup
 
@@ -242,7 +245,10 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
    }
    ```
 
-2. **Run Tests**:
+2. **Run tests**:
+   ```shell
+   # Runs all tests with verbose output
+   forge test -vv
    ```bash
    # Runs all tests with verbose output
    forge test -vv
@@ -303,7 +309,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
 
 Two deployment paths are possible:
 
-1. **Native Deployment** (recommended)
+1. **Native deployment** (recommended)
 
 - Token is deployed directly on Arbitrum One
 - Ideal for a Token Generation Event (TGE), liquidity bootstrapping, airdrops, and L2-native user flows.
@@ -314,7 +320,7 @@ Two deployment paths are possible:
 
 ## Post-deployment considerations
 
-After deploying a token contract on Arbitrum, you may choose to complete additional setup steps depending on the needs of your project. These may include:
+After deploying a token contract on Arbitrum, you can complete additional setup steps depending on your project's needs. These may include:
 
 - Verifying the contract on Arbiscan to improve transparency and readability
 - Creating liquidity pools on Arbitrum-based DEXs
