@@ -1,6 +1,7 @@
 ---
 title: 'SDK support for custom gas token Arbitrum chains'
 description: 'SDK support for custom gas token Arbitrum chains'
+content_type: how-to
 author: Mehdi Salehi
 sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
@@ -10,7 +11,7 @@ displayed_sidebar: buildAppsSidebar
 
 Arbitrum SDK is a TypeScript library for client-side interactions with Arbitrum. It provides common helper functionality as well as access to the underlying smart contract interfaces.
 
-### Custom gas token APIs
+## Custom gas token APIs
 
 Custom gas token support in the Arbitrum SDK introduces a suite of APIs designed for the specific purpose of facilitating **bridging** operations. These APIs are tailored for use cases where there is a need to transfer a native token or an `ERC-20` token from the parent chain to an Arbitrum chain utilizing a `custom gas token`. The process involves an initial step of authorizing the native token on the parent chain. To streamline this, our APIs provide functionalities for token approval and offer a mechanism to verify the current status of this approval. Detailed below is a guide to how each of these APIs can be effectively utilized for distinct purposes:
 
@@ -38,7 +39,7 @@ You should use `EthBridger` when bridging the native token between the parent ch
 
 :::
 
-### Registering a custom token in the Token Bridge
+## Registering a custom token in the Token Bridge
 
 When [registering a custom token in the Token Bridge](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#setting-up-your-token-with-the-generic-custom-gateway) of a custom-gas-token Arbitrum chain, there's an additional step to perform before calling `registerTokenToL2`.
 

@@ -5,7 +5,7 @@ sidebar_position: 2
 content_type: how-to
 ---
 
-### Do you need to run a Classic node?
+## Do you need to run a Classic node?
 
 Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack. "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. You need an Arbitrum Classic archive node to execute data on pre-Nitro blocks.
 
@@ -20,24 +20,24 @@ When querying archive blocks, the following commands can only be handled by Arbi
 
 🔉 Note that Arbitrum Nova and Arbitrum Sepolia started as a Nitro chain, so they don't have classic blocks.
 
-### Required artifacts
+## Required artifacts
 
 - Latest Docker Image: <code>@@latestClassicNodeImage=offchainlabs/arb-node:v1.4.6-551a39b3@@</code>
 - Latest classic snapshot for Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
 
-### Required parameters
+## Required parameters
 
 - `--l1.url=<Layer 1 Ethereum RPC URL>`
   - Must provide standard Ethereum node RPC endpoint.
 - `--node.chain-id=<L2 Chain ID>`
   - Must use `42161` for Arbitrum One
 
-### Important ports
+## Important ports
 
 - RPC: `8547`
 - WebSocket: `8548`
 
-### Putting it all together
+## Putting it all together
 
 - When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
 - Here is an example of how to run a classic archive node for Arbitrum One (only needed for archive requests on pre-Nitro blocks, so you'll probably want to enable the archive mode in your nitro node as well):
@@ -46,7 +46,7 @@ When querying archive blocks, the following commands can only be handled by Arbi
 docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestClassicNodeImage=offchainlabs/arb-node:v1.4.6-551a39b3@@ --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
 ```
 
-### Note on permissions
+## Note on permissions
 
 - The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders.
 
@@ -55,7 +55,7 @@ mkdir /some/local/dir/arbitrum-mainnet
 chmod -fR 777 /some/local/dir/arbitrum-mainnet
 ```
 
-### Optional parameters
+## Optional parameters
 
 We show here a list of the parameters that are most commonly used when running a Classic node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
 
@@ -76,16 +76,16 @@ We show here a list of the parameters that are most commonly used when running a
   - Only `trace` type is supported. `vmTrace` and `stateDiff` types are not supported
   - The self-destruct opcode is not included in the trace. To get the list of self-destructed contracts, you can provide the `deletedContracts` parameter to the method
 
-### Feed relay
+## Feed relay
 
 - Arbitrum classic does not communicate with Nitro sequencer, so the classic relay is no longer used.
 
-### Why classic nodes serve RPC methods so slowly?
+## Why classic nodes serve RPC methods so slowly?
 
-When you call RPC methods on Arbitrum Classic nodes, the request time may take a long time, because classic nodes must perform multiple sequential reads from the database to reconstruct blockchain state for state-accessing operations. Nodes need to load execution cursors from disk, rebuild the machine state from checkpoints, and execute transactions to reach the target state—all of which involve expensive disk I/O operations.
+When you call RPC methods on Arbitrum Classic nodes, the request time may take a long time, because classic nodes must perform multiple sequential reads from the database to reconstruct blockchain state for state-accessing operations. Nodes need to load execution cursors from disk, rebuild the machine state from checkpoints, and execute transactions to reach the target state—all of which involve expensive disk I/O operations.
 
 **Solutions:**
 
-- Use sequential block access: Query consecutive blocks (N, N+1, N+2) instead of random blocks to benefit from caching
+- Use sequential block access: Query consecutive blocks (`N`, `N+1`, `N+2`) instead of random blocks to benefit from caching
 
-- Hardware optimization: Use NVMe SSDs with low latency (NVMe PCIe 4.0 or higher)
+- Hardware optimization: Use NVMe SSDs with low latency (NVMe PCIe 4.0 or higher)
