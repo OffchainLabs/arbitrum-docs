@@ -90,6 +90,12 @@ hi
 
 First, navigate to the precompiles implementation directory, `/precompiles`, and create a new precompile implementation file called `ArbHi.go`. We'll define a new method, and we'll give it an address:
 
+:::important
+
+When selecting an address for your custom precompile, precompile addresses must not conflicts with existing Ethereum and ArbOS precompiles and avoid using addresses in reserved ranges as defined by [EIP-7587](https://eips.ethereum.org/EIPS/eip-7587). These ranges are reserved for future Rollup Improvement Proposal (RIP) upgrades and using them may cause conflicts.
+
+:::
+
 ```go
 package precompiles
 
