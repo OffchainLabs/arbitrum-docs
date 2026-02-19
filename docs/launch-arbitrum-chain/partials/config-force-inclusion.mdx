@@ -1,0 +1,13 @@
+Force inclusion in Arbitrum refers to a mechanism that allows users to bypass the Sequencer by submitting transactions directly to the Delayed Inbox contract on Ethereum, or if the Sequencer doesn't accept the transactions within 24 hours. After a waiting period (~24 hours), it is possible to force the transaction for inclusion on the Arbitrum chain. This mechanism is designed primarily as a safeguard for rare scenarios, such as sequencer downtime or potential censorship.
+
+## Pros
+
+- **Guarantees transaction inclusion and liveness**: Even if the Sequencer is unresponsive, malicious, or censoring transactions, force inclusion ensures your transaction is eventually processed, maintaining the chain's operational continuity.
+- **Enhances censorship resistance**: It mitigates risks of transaction censorship by allowing direct submission to Layer 1, aligning with Ethereum's decentralized principles and providing a trustless way to interact with the chain.
+- **Permissionless and protective**: Anyone can use it to enforce inclusion, protecting against sequencer failures without needing to rely on centralized components.
+
+## Cons
+
+- **Significant delay**: There's a mandatory waiting period of approximately 24 hours before force inclusion is triggerable, making it much slower than the near-instant processing via the Sequencer.
+- **Higher costs and inefficiency**: Submitting directly to Layer 1 incurs full Ethereum gas fees, which are typically more expensive than Layer 2 transactions. Force inclusion **is not optimal** for regular use—it's intended only for rare, emergency scenarios.
+- **Security vulnerabilities**: It can be exploited in certain attacks, such as the QueueCut attack, potentially leading to double-spending or fund losses in cross-chain scenarios.

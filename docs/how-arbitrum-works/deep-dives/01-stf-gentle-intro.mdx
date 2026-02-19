@@ -1,0 +1,39 @@
+---
+title: 'A gentle introduction'
+description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
+author: petevielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
+content_type: gentle-introduction
+---
+
+A <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) determines how <a data-quicklook-from="blockchain">blockchain</a> systems change state when processing transactions. The STF takes the current blockchain state (account balances, <a data-quicklook-from="smart-contract">smart contract</a> data, and ledger information) and an input (<a data-quicklook-from="transaction">transaction</a> or block) to compute the new state deterministically. This deterministic property ensures all network nodes reach the same result, maintaining consensus.
+
+With <a data-quicklook-from="arbitrum">Arbitrum</a>, the STF plays an even more pivotal role. <a data-quicklook-from="arbitrum">Arbitrum</a> executes transactions offchain in batches, periodically submitting summaries to the <a data-quicklook-from="parent-chain">parent chain</a>. This approach leverages offchain computation to achieve higher throughput and lower gas costs while maintaining Ethereum's security. To safeguard against incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism called fraud proofs. If a dispute arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of offchain computations and ensure that errors or fraudulent behavior are detected and rectified.
+
+The <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> Stack STF mirrors Ethereum's STF with key modifications for <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> requirements. The function processes ordered transactions and outputs the updated state from the transaction <a data-quicklook-from="batch">batch</a>.
+
+<a data-quicklook-from="stylus">Stylus</a> expands Arbitrum's execution model beyond the Ethereum Virtual
+Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)–based execution, allowing
+high-performance contracts in Rust, C, and C++ to run alongside traditional EVM contracts. The integration
+The Stylus introduces several modifications to the STF, including:
+
+## Stylus-specific transaction processing
+
+A modified version of <a data-quicklook-from="geth">Geth</a> that recognizes and processes Stylus transactions, ensuring proper inclusion in state transitions.
+
+## Execution in a WASM runtime
+
+Stylus transactions execute in <a data-quicklook-from="arbos">ArbOS</a>'s WASM runtime instead of the EVM, enabling faster execution and more efficient computation.
+
+## Stylus gas accounting and pricing
+
+Unlike standard EVM transactions, Stylus transactions introduce new gas pricing models that account for factors such as opcode pricing, host I/O operations, and <a data-quicklook-from="ink">Ink</a> usage costs.
+
+## Interoperability with the EVM
+
+Stylus contracts can interact seamlessly with Solidity contracts, enabling hybrid applications that leverage EVM and WASM execution environments.
+
+These Stylus-related changes aim to maintain compatibility with Ethereum's execution model while introducing a more efficient, flexible, and scalable alternative for smart contract development.
+
+The following sections cover STF inputs, node processing, and implementation rules, highlighting differences between Ethereum, Arbitrum, and Stylus execution environments. Stylus-specific execution tasks handled within ArbOS will be covered separately, focusing on host I/O operations, caching, and WASM memory management.

@@ -1,0 +1,47 @@
+---
+title: 'Why choose to use native Ethereum for gas on your Arbitrum chain'
+description: 'Learn about the pros and cons of choosing to use native Ethereum as the gas token for your chain.'
+author: pete-vielhaber
+sme: jason-w123
+content_type: concept
+---
+
+import NativeETHPCPartial from '../../partials/_native-eth-pc.mdx';
+
+Choosing native Ethereum refers to configuring the chain to use `ETH`—the native currency of Ethereum—as the gas token for paying <a data-quicklook-from="transaction">transaction</a> fees. This is the default option in Arbitrum chain deployments, in contrast to selecting a custom `ERC-20` token for gas. The choice is set during chain deployment via genesis parameters and is immutable afterward, directly impacting how users pay for gas and how operators handle revenue and costs.
+
+Selecting native `ETH` means users must hold and spend `ETH` for all onchain activities, simplifying the fee mechanism without additional layers like token swaps or pricers. For operators, revenue is collected directly in `ETH`, which can be used seamlessly for data availability (DA) costs on the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., posting to Ethereum).
+
+This option prioritizes straightforward integration with Ethereum's ecosystem, avoiding complexities associated with custom tokens. It's ideal for chains where `ETH` is naturally used or where minimal operational overhead is desired, such as general-purpose Rollups or those focused on DeFi interoperability with Ethereum.
+
+## Key concepts
+
+- **Gas and fees in <a data-quicklook-from="arbitrum">Arbitrum</a>**: Gas measures computational work for transactions and executions, with fees equaling gas used times gas price. These cover <a data-quicklook-from="sequencer">Sequencer</a> operations, data posting to the parent chain (e.g., Ethereum), and network upkeep. In native `ETH` setups, all fees are denominated, paid, and settled in `ETH`.
+- **Native `ETH` as gas token**: The chain executes transactions against users' `ETH` balances, deducting fees directly in `ETH`. No token conversions are needed, aligning the chain's economics with Ethereum's standard model.
+
+## How fees are handled
+
+- Gas calculations and deductions occur directly in `ETH` during transaction processing.
+- No conversions or hedging are required for DA payments, as `ETH` is the native asset on the parent chain.
+- Fees remain subject to `ETH`'s price volatility, which can affect user predictability.
+
+## Compatibility with chain types
+
+- Works with all Arbitrum chain DA modes, including Rollup (posting to Ethereum), AnyTrust (DAC-based), and Alt-DA (e.g., Celestia), without restrictions.
+- No special setup beyond standard deployment tools like the Arbitrum <a data-quicklook-from="portal">portal</a> or scripts.
+
+## How it differs from custom gas tokens
+
+- **Custom tokens**: Fees are paid in an `ERC-20` (e.g., `USDC` or a project token), requiring users to hold that token instead of `ETH`. Operators must convert collected tokens to `ETH` for DA costs, which introduces volatility risks and necessitates mechanisms like pricer contracts for exchange rates.
+- **Native `ETH`**: Eliminates conversions, swaps, and associated risks, but requires users to manage `ETH` specifically for gas, which may not align with app-specific ecosystems.
+
+<!-- Render Native ETH Pros & Cons partial -->
+
+<NativeETHPCPartial />
+
+## Examples
+
+- Standard <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> like <a data-quicklook-from="arbitrum-one">Arbitrum One</a> use native `ETH` for broad Ethereum compatibility and simplicity.
+- In contrast, some Arbitrum chains opt for custom tokens like bridged `USDC` for stable fees, but native `ETH` suits projects prioritizing Ethereum alignment over custom economics.
+
+This default choice emphasizes reliability and Ethereum-native operations within Arbitrum's modular framework. For deployment details, consult the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).

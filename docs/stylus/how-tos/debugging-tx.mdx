@@ -7,20 +7,21 @@ sme: mahsamoosavi
 target_audience: 'Developers deploying smart contracts using Stylus'
 content_type: how-to
 sidebar_position: 2
+displayed_sidebar: buildAppsSidebar
 ---
 
 Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by allowing developers to replay Stylus transactions. This tool leverages GDB to provide an interactive debugging experience, enabling developers to set breakpoints, inspect state changes, and trace the execution flow step-by-step. This capability is crucial for identifying and resolving issues, ensuring that smart contracts function correctly and efficiently.
 
-### Overview
+## Overview
 
 Cargo Stylus is a tool designed to simplify the development and debugging process for smart contracts written in Rust for the Stylus execution environment. One of its powerful features is the `cargo stylus` subcommand, which provides essential functionalities for developers:
 
 1. **Trace transactions**: Perform trace calls against Stylus transactions using Ethereum nodes' `debug_traceTransaction` RPC. This feature enables developers to analyze the execution flow and state changes of their transactions in a detailed manner.
 2. **Debugging with GDB or LLDB**: Replay and debug the execution of a Stylus transaction using a debugger. This allows developers to set breakpoints, inspect variables, and step through the transaction execution line by line, providing an in-depth understanding of the transaction's behavior.
 
-### Replaying transactions
+## Replaying transactions
 
-#### Requirements
+### Requirements
 
 - **Rust** (version 1.77 or higher)
 - **Crate**: `cargo-stylus`
@@ -30,7 +31,7 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 
 `cargo stylus replay` allows users to debug the execution of a Stylus transaction using [GDB](https://sourceware.org/gdb/) or [LLDB](https://lldb.llvm.org/) against the Rust source code.
 
-### Installation and setup
+## Installation and setup
 
 1. **Install the required crates and debugger**: First, let's ensure that the following crates are installed:
 
@@ -156,7 +157,7 @@ Thread 1 "cargo-stylus" hit Breakpoint 2, stylus_hello_world::Counter::increment
 (gdb) p number
 ```
 
-### Trace a transaction
+## Trace a transaction
 
 For traditional tracing, `cargo stylus` supports calls to `debug_traceTransaction`. To trace a transaction, you can use the following command:
 
@@ -187,7 +188,7 @@ This will produce a trace of the functions called and [ink](/stylus/concepts/gas
 [{"args":[0,0,0,4],"endInk":846200000,"name":"user_entrypoint","outs":[],"startInk":846200000},{"args":[],"endInk":846167558,"name":"msg_reentrant","outs":[0,0,0,0],"startInk":846175958},{"args":[],"endInk":846047922,"name":"read_args","outs":[208,157,224,138],"startInk":846061362},{"args":[],"endInk":845914924,"name":"msg_value","outs":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"startInk":845928364},{"args":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"endInk":227196069,"name":"storage_load_bytes32","outs":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"startInk":844944549},{"args":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],"endInk":226716083,"name":"storage_cache_bytes32","outs":[],"startInk":226734563},{"args":[0],"endInk":226418732,"name":"storage_flush_cache","outs":[],"startInk":226486805},{"args":[],"endInk":226362319,"name":"write_result","outs":[],"startInk":226403481},{"args":[],"endInk":846200000,"name":"user_returned","outs":[0,0,0,0],"startInk":846200000}]
 ```
 
-### RPC endpoint compatibility
+## RPC endpoint compatibility
 
 Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that supports `debug_traceTransaction`.
 By default, the `jsTracer` type is used, which is not supported by most RPC providers. If the `--use-native-tracer` flag is used, the `stylusTracer` type is used, which is supported by many RPC providers.

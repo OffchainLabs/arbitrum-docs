@@ -1,6 +1,7 @@
 ---
 title: "How to add your Arbitrum chain to Arbitrum's bridge"
 description: "Learn how to add your Arbitrum chain to Arbitrum's bridge."
+content_type: how-to
 author: ojurkowitz
 sme: jose-franco
 sidebar_position: 2
@@ -17,7 +18,7 @@ Mainnet Arbitrum chains can be added to the Arbitrum Bridge by filling out [this
 Once receiving your request, our team will review and apply internal criteria to include your chain in the bridge. Here are some of the criteria that a chain must follow to be added to the bridge:
 
 - The use case must fall within existing legal and marketing guidelines
-- The core rollup / token bridge contracts must not have been modified, except the cases where modifications have been done with a certified partnership and communicated to Offchain Labs
+- The core Rollup / token bridge contracts must not have been modified, except the cases where modifications have been done with a certified partnership and communicated to Offchain Labs
 - The infrastructure and core contracts are hosted by one of our partnered RaaS teams
 
 ## Add a local testnet Arbitrum chain to the Arbitrum bridge

@@ -5,6 +5,7 @@ author: dzgoldman
 user_story: As a developer, I want to understand how bridging ether works on Arbitrum
 content_type: concept
 sidebar_position: 2
+displayed_sidebar: buildAppsSidebar
 ---
 
 import ImageZoom from '@site/src/components/ImageZoom';
@@ -27,7 +28,7 @@ If the transaction comes from a `7702-enabled account`, the destination address 
 
 The following diagram depicts the process that funds follow during a deposit operation.
 
-<ImageZoom src="/img/dapps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
+<ImageZoom src="/img/apps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
 
 Regarding the parent chain, all deposited funds are held in the Arbitrum Bridge contract. Once finalized, the `ETH` becomes available on the L2 at the aliased or specified address, depending on the sender type.
 
@@ -41,8 +42,8 @@ ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
 
 Upon withdrawal, the Ether balance is burned on the Arbitrum side and will later be made available on the Ethereum side.
 
-`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain (see [Child to parent chain messaging](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's `ETH` balance will be credited on the parent chain.
+`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain (see [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's `ETH` balance will be credited on the parent chain.
 
 The following diagram depicts the process that funds follow during a withdrawal operation.
 
-<ImageZoom src="/img/dapps-withdrawing-ether.svg" alt="Withdrawing Ether" className="img-600px" />
+<ImageZoom src="/img/apps-withdrawing-ether.svg" alt="Withdrawing Ether" className="img-600px" />

@@ -1,20 +1,12 @@
----
-partial_type: troubleshooting
-title: 'Building Troubleshooting Guide'
-description: 'Common issues and solutions for building on Arbitrum'
-author: anegg0
-last_reviewed: 2025-01-15
----
-
 ### How does gas work on Arbitrum?
 
-Fees on Arbitrum chains are collected on L2 in the chains' native currency (ETH on both Arbitrum One and Nova).
+Fees on Arbitrum chains are collected on L2 in the chains' native currency (`ETH` on both Arbitrum One and Nova).
 
 A transaction fee is comprised of both an L1 and an L2 component:
 
 The L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See [L1 Pricing](https://developer.arbitrum.io/arbos/l1-pricing).)
 
-The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 gwei on Arbitrum One and 0.01 gwei on Nova (See [Gas](https://docs.arbitrum.io/arbos/gas)).
+The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that, unlike on Ethereum, Arbitrum chains enforce a gas price floor. See the [chain info page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#chain-parameters) for current values.
 
 L2 Gas price adjusts responsively to chain congestion, ala EIP 1559.
 
@@ -62,9 +54,9 @@ There are two differences between `createRetryableTicket` and `unsafeCreateRe
 
 ### Why do I get "custom tx type" errors when I use hardhat?
 
-In Arbitrum, we use a number of non-standard [EIP-2718](https://eips.ethereum.org/EIPS/eip-2718) typed transactions. See [here](https://developer.arbitrum.io/arbos/geth#transaction-types) for the full list and the rationale.
+In Arbitrum, we use a number of non-standard [EIP-2718](https://eips.ethereum.org/EIPS/eip-2718) typed transactions. Feel free to consult the [full list of transaction types](https://developer.arbitrum.io/arbos/geth#transaction-types) and the rationale.
 
-Note that if you're using Hardhat, [v2.12.2](https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2) added support for forking networks like Arbitrum with custom transaction types (find more information [here](https://github.com/NomicFoundation/hardhat/issues/2995)).
+Note that if you're using Hardhat, [v2.12.2](https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2) added support for forking networks like Arbitrum with custom transaction types (find more information [in this HardHat GitHub issue](https://github.com/NomicFoundation/hardhat/issues/2995)).
 
 ### Why does it look like two identical transactions consume a different amount of gas?
 
@@ -156,7 +148,7 @@ The WASM module root is a 32-byte hash, which is a Merkelization of the Go repla
 
 The replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.
 
-You can find more information in [How to Customize your Orbit chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).
+You can find more information in [How to Customize your Arbitrum chain's behavior](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs).
 
 ### Why do I get a "gas required exceeds allowance" when trying to estimate the gas costs of a request?
 

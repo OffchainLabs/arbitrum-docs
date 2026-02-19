@@ -1,4 +1,5 @@
 .vscode
+.devcontainer/
 
 .vercel
 .DS_Store
@@ -11,14 +12,17 @@ node_modules
 build
 
 # Generated files
+# Generated docusaurus
 .docusaurus
 .cache-loader
+# Generated sdk
 sdk-sidebar.js
 docs/sdk/
-!docs/sdk/index.mdx
-!docs/sdk/migrate.mdx
-docs/partials/_glossary-partial.mdx
+# Generated notion export CSVs
+scripts/out/*.csv
+# Generated stylus
 docs/stylus-by-example/
+# Generated api:mutes Typedoc quirk
 docs/api/
 
 # Misc
@@ -39,3 +43,8 @@ yarn-error.log*
 /i18n/*/docusaurus-plugin-content-docs/current/*
 
 sdk-sidebar.js
+
+# Audit output
+.audit/
+
+.claude/plans

@@ -1,6 +1,7 @@
 ---
 title: 'Stylus Rust SDK advanced features'
 description: 'Advanced features of the Stylus Rust SDK'
+content_type: reference
 author: rachel-bousfield, jose-franco, mehdi-salehi
 sme: rachel-bousfield, jose-franco, mehdi-salehi
 sidebar_position: 1
@@ -330,6 +331,37 @@ sol_storage! {
     }
 }
 ```
+
+### Fallback and receive functions
+
+Starting with SDK version 0.7.0, the [`Router`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html) trait supports the `fallback` and `receive` methods, which work similar to their Solidity counterparts:
+
+- [`fallback`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.fallback): This method is called when a transaction is sent to the contract with calldata that doesn't match any function signature. It serves as a catch-all function for contract interactions that don't match any defined interface.
+
+- [`receive`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.receive): This method is called when a transaction is sent to the contract with no calldata (empty calldata). It allows the contract to receive `ETH`.
+
+Here's an example implementation:
+
+```rust
+#[public]
+impl Contract {
+    // Automatically called when transaction has calldata that doesn't match any function
+    #[fallback]
+    pub fn fallback(&mut self, calldata: Vec<u8>) -> Result<Vec<u8>, Vec<u8>> {
+        // Handle arbitrary calldata
+        Ok(Vec::new()) // Return empty response or custom response data
+    }
+
+    // Automatically called when transaction has empty calldata
+    #[receive]
+    pub fn receive(&mut self) -> Result<(), Vec<u8>> {
+        // Handle ETH receiving logic
+        Ok(())
+    }
+}
+```
+
+Both methods can be annotated with `#[payable]` to accept `ETH` along with the transaction. Without this annotation, transactions that send `ETH` will be rejected.
 
 ## Calls
 

@@ -73,7 +73,7 @@ navbar: {
     logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
-        href: '/welcome/arbitrum-gentle-introduction',
+        href: '/get-started/arbitrum-introduction',
     },
     items: [
         // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
@@ -119,10 +119,9 @@ Every document should be a specific _type_ of document. Each type of document ha
 
 This isn't an exhaustive list, but it includes most of the document types that we use.
 
-
 :::info About Promotional Content
 
-While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept promotional content in our core docs. 
+While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept promotional content in our core docs.
 
 Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as third-party docs, either.
 
@@ -137,7 +136,7 @@ The following style guidelines provide recommendations that help us deliver **a 
 2.  **Linking**
     - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, link to the document's title verbatim.
 3.  **Titling**
-    - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This format helps with SEO and reader UX.
+    - Titles should balance brevity with precision— _Node running overview_ is preferred to _Overview_. This format helps with SEO and reader UX.
 4.  **Separate procedural from conceptual (most of the time)**
     - Avoid including too much conceptual content within procedural docs like how-tos and quickstarts. Provide only the conceptual information that the target reader _needs_ to complete the task. Otherwise, organize conceptual information within conceptual docs and link to them "just in case" from other docs.
 5.  **Voice**
@@ -157,7 +156,7 @@ The following style guidelines provide recommendations that help us deliver **a 
 9.  **Cross-linking**
     - We want to maintain both **high discoverability** and **high relevance**. Generally, links to other docs should be "very likely useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
 10. **Things to avoid**
-    - **Symbols where words will do**: Minimize usage of `&` and `/` - spell out words like "_and_" and "_or_".
+    - **Symbols where words will do**: Minimize usage of `&` and `/`—spell out words like "_and_" and "_or_".
     - **Jargon**: precise technical terminology is ok if your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
 
 Don't stress too much about checking off all these boxes; we periodically review and edit our most heavily trafficked docs, bringing them up to spec with the latest style guidelines.
@@ -215,7 +214,7 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 
 ### Frequently asked questions
 
-#### Can I point to my product from core docs? For example - if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) section?
+#### Can I point to my product from core docs? For example—if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) section?
 
 These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
 
@@ -227,4 +226,4 @@ Our small-but-mighty team continuously balances competing priorities, so we can'
 
 #### Is there any way to expedite third-party content contribution reviews?
 
-The most effective way to expedite processing is to ensure that your PR incorporates the conventions outlined in this document. Please don't ask for status updates - if you've submitted a PR, it's on our radar!
+The most effective way to expedite processing is to ensure that your PR incorporates the conventions outlined in this document. Please don't ask for status updates—if you've submitted a PR, it's on our radar!

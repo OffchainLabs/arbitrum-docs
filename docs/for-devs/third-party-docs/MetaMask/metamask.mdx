@@ -1,27 +1,168 @@
 ---
 title: 'MetaMask Smart Accounts'
 description: 'Learn about MetaMask Smart Accounts and how to use them with Arbitrum'
+content_type: how-to
 sidebar_label: 'MetaMask'
 third_party_content_owner: 'alexandratran'
 ---
 
-The [MetaMask Delegation Toolkit](https://docs.metamask.io/delegation-toolkit/) is a collection of tools for embedding
-MetaMask Smart Accounts into dapps.
-These [smart accounts](https://docs.metamask.io/delegation-toolkit/concepts/smart-accounts/) support programmable
-account behavior and advanced features like delegated permissions, multi-signature approvals, and gas abstraction.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-[Delegations](https://docs.metamask.io/delegation-toolkit/concepts/delegation/) are a core feature of MetaMask Smart
-Accounts, enabling secure, rule-based permission sharing.
-These delegations are powered by the toolkit's Delegation Framework, which defines how permissions are created, shared,
-and enforced.
+The [MetaMask Smart Accounts Kit](https://docs.metamask.io/smart-accounts-kit/) enables embedding MetaMask Smart Accounts into dapps.
+Smart accounts support programmable account behavior and advanced features like delegated permissions, multi-signature approvals, and gas abstraction.
+Delegation is a core feature of smart accounts, enabling secure, rule-based permission sharing.
 
-## Using MetaMask Smart Accounts with Arbitrum
+## Use MetaMask smart accounts with Arbitrum
 
-The latest version of the MetaMask Delegation Toolkit
-[supports multiple networks](https://docs.metamask.io/delegation-toolkit/get-started/supported-networks/), including
-Arbitrum and Arbitrum Sepolia.
+The MetaMask Smart Accounts Kit
+[supports multiple networks](https://docs.metamask.io/smart-accounts-kit/get-started/supported-networks/), including
+Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia.
 
-You can follow the
-[MetaMask Smart Accounts quickstart](https://docs.metamask.io/delegation-toolkit/development/get-started/quickstart/) to
-set up the toolkit, create a smart account, and send a user operation.
-Make sure you import `arbitrum` or `arbitrumSepolia` from `viem/chains` when setting up the Public Client.
+Follow these steps to create your first smart account and send a user operation.
+
+:::note Prerequisites
+Before starting, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/en/download) v18 or later.
+- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), [Yarn](https://yarnpkg.com/), or another package manager.
+  :::
+
+### 1. Install the Smart Accounts Kit
+
+Install the [Smart Accounts Kit](https://www.npmjs.com/package/@metamask/smart-accounts-kit) in your project:
+
+<Tabs>
+<TabItem value='npm'>
+
+```bash
+npm install @metamask/smart-accounts-kit
+```
+
+</TabItem>
+<TabItem value='Yarn'>
+
+```bash
+yarn add @metamask/smart-accounts-kit
+```
+
+</TabItem>
+</Tabs>
+
+### 2. Set up a public client
+
+Set up a [Viem Public Client](https://viem.sh/docs/clients/public) using Viem's `createPublicClient` function.
+This client will let the smart account query the signer's account state and interact with the blockchain network.
+Make sure to import your desired Arbitrum network from `viem/chains`.
+
+<Tabs>
+<TabItem value="Arbitrum One">
+
+```typescript
+import { createPublicClient, http } from 'viem';
+import { arbitrum as chain } from 'viem/chains';
+
+const publicClient = createPublicClient({
+  chain,
+  transport: http(),
+});
+```
+
+</TabItem>
+<TabItem value="Arbitrum Nova">
+
+```typescript
+import { createPublicClient, http } from 'viem';
+import { arbitrumNova as chain } from 'viem/chains';
+
+const publicClient = createPublicClient({
+  chain,
+  transport: http(),
+});
+```
+
+</TabItem>
+<TabItem value="Arbitrum Sepolia">
+
+```typescript
+import { createPublicClient, http } from 'viem';
+import { arbitrumSepolia as chain } from 'viem/chains';
+
+const publicClient = createPublicClient({
+  chain,
+  transport: http(),
+});
+```
+
+</TabItem>
+</Tabs>
+
+### 3. Set up a bundler client
+
+Set up a [Viem Bundler Client](https://viem.sh/account-abstraction/clients/bundler) using Viem's `createBundlerClient` function.
+This lets you use the bundler service to estimate gas for user operations and submit transactions to the network.
+
+```typescript
+import { createBundlerClient } from 'viem/account-abstraction';
+
+const bundlerClient = createBundlerClient({
+  client: publicClient,
+  transport: http('https://your-bundler-rpc.com'),
+});
+```
+
+### 4. Create a MetaMask smart account
+
+Create a MetaMask smart account to send the first user operation.
+This example configures a Hybrid smart account,
+which is a flexible smart account implementation that supports both an externally owned account (EOA) owner and any number of passkey (WebAuthn) signers:
+
+```typescript
+import { Implementation, toMetaMaskSmartAccount } from '@metamask/smart-accounts-kit';
+import { privateKeyToAccount } from 'viem/accounts';
+
+const account = privateKeyToAccount('0x...');
+
+const smartAccount = await toMetaMaskSmartAccount({
+  client: publicClient,
+  implementation: Implementation.Hybrid,
+  deployParams: [account.address, [], [], []],
+  deploySalt: '0x',
+  signer: { account },
+});
+```
+
+Learn more about [creating MetaMask Smart Accounts](https://docs.metamask.io/smart-accounts-kit/guides/smart-accounts/create-smart-account/).
+
+### 5. Send a user operation
+
+Send a user operation using Viem's [`sendUserOperation`](https://viem.sh/account-abstraction/actions/bundler/sendUserOperation) method.
+The smart account will remain counterfactual until the first user operation.
+If the smart account is not deployed, it will be automatically deployed upon the sending first user operation.
+
+```ts
+import { parseEther } from 'viem';
+
+// Appropriate fee per gas must be determined for the specific bundler being used.
+const maxFeePerGas = 1n;
+const maxPriorityFeePerGas = 1n;
+
+const userOperationHash = await bundlerClient.sendUserOperation({
+  account: smartAccount,
+  calls: [
+    {
+      to: '0x1234567890123456789012345678901234567890',
+      value: parseEther('1'),
+    },
+  ],
+  maxFeePerGas,
+  maxPriorityFeePerGas,
+});
+```
+
+Learn more about [sending user operations](https://docs.metamask.io/smart-accounts-kit/guides/smart-accounts/send-user-operation/).
+
+### Next steps
+
+Now that you have created and deployed a MetaMask smart account on Arbitrum, you can grant specific permissions to other accounts from your smart account.
+See MetaMask's documentation on how to [create a delegation](https://docs.metamask.io/smart-accounts-kit/guides/delegation/execute-on-smart-accounts-behalf/).

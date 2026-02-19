@@ -1,18 +1,16 @@
----
-partial_type: troubleshooting
-title: 'Stylus Troubleshooting Guide'
-description: 'Common issues and solutions for Stylus smart contract development'
-author: anegg0
-last_reviewed: 2025-01-15
----
-
 ### How does Stylus manage security issues in smart contracts when interacting with so many different languages?
 
 All languages are compiled to WASM for them to be able to work with Stylus. So it just needs to verify that the produced WASM programs behave as they should inside the new virtual machine.
 
 ### Is there any analogue of the fallback function from Solidity in the Rust Stylus SDK?
 
-Currently, there isn't any analogue. However, you can use a minimal entrypoint and perform raw delegate calls, forwarding your calldata. You can find more information in [the Bytes-in, Bytes-out programming](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) and [call, static_call, and delegate_call](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call) sections.
+Yes, starting with SDK version 0.7.0, the Router trait supports both `fallback` and `receive` methods, similar to their Solidity counterparts. The `fallback` method is called when a transaction has calldata
+that doesn't match any defined function, while the `receive` method is called when a transaction has empty calldata. You can find more information in [Fallback and receive
+functions](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#fallback-and-receive-functions).
+
+For older SDK versions (pre-0.7.0), you can use a minimal entrypoint and perform raw delegate calls, forwarding your calldata. You can find more information in [Bytes-in, bytes-out
+programming](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) and [call, static_call and
+delegate_call](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call).
 
 ### Is it possible to verify Stylus contracts on the block explorer?
 
@@ -56,7 +54,9 @@ To solve this, it's usually enough to rename the `main.rs` file to a `lib.rs` fi
 
 ### How can I generate the ABI of my Stylus contract?
 
-The [cargo-stylus tool](https://github.com/OffchainLabs/cargo-stylus/tree/main#exporting-solidity-abis) has a command that allows you to export the ABI of your Stylus contract: `cargo stylus export-abi`.
+The
+
+has a command that allows you to export the ABI of your Stylus contract: `cargo stylus export-abi`.
 
 If you're using the Stylus Rust SDK, you'll need to enable the `export-abi` feature in your `Cargo.toml` file like so:
 
@@ -77,3 +77,33 @@ fn main() {
     stylus_hello_world::main();
 }
 ```
+
+### How can I find out if the smart contract bytecode is from a Stylus contract or Solidity contract?
+
+You can check the first three bytes of the code at the contract address. If they read `0xEFF000`, it's a Stylus program. Otherwise, it will be from a Solidity contract.
+
+### I'm trying to work with cargo stylus on Windows and got error: failed to resolve: could not find unix in os
+
+Cargo Stylus is just compatible with Unix operating systems and not Windows. You should install `WSL` (Windows Subsystem for Linux) before using that and then use `WSL terminal` to install and use cargo stylus.
+
+### How can I return a struct from a function?
+
+Currently, the SDK doesn't support external structs directly, but support is in progress. For now, you can use tuples as output instead of structs.
+
+Keep in mind that structs are mapped to tuples by the Solidity ABI. You can read more about this mapping here: [Solidity ABI Specification](https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#mapping-solidity-to-abi-types).
+
+Since the current SDK macro doesn't automatically handle struct-to-tuple conversions, you'll need to manually convert your struct into a tuple in the return type.
+
+### How can I get the WASM opcodes of the compiled Stylus contracts?
+
+To view the WASM opcodes, you can convert the WebAssembly binary (WASM) to WebAssembly Text (WAT). This conversion is possible using the WebAssembly Binary Toolkit (wabt). An easy way to do this is to use the online tool [Wasm-to-Wat converter](https://webassembly.github.io/wabt/demo/wasm2wat/), which is part of wabt.
+
+For more information or if you'd like to use the toolkit locally, you can find wabt on [GitHub](https://github.com/WebAssembly/wabt).
+
+### What is the difference between .set and .setter?
+
+---
+
+- **`.set`\*\***:\*\* This method is used directly to set a value in storage. It's a straightforward way to assign a value if you only need to perform a one-time set operation.
+- **`.setter`\*\***:\*\* This method provides a handle to a storage slot. It allows you to both `set` and `get` the value of the storage slot, making it more versatile if you need to access the current value and also update it.
+  If you plan to both retrieve and modify a value frequently, it's more efficient to use `.setter`, assign it to a variable, and then use the `.get` and `.set` methods on that variable. However, if you only need to set a value, you can use `.set` directly.

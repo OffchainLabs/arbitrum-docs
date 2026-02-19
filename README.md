@@ -8,40 +8,40 @@ This repository is organized as follows:
 
 ### Documentation Content
 
-- **`docs/`** - Main documentation content directory
-  - `arbitrum-bridge/` - Bridge-related documentation
-  - `build-decentralized-apps/` - Developer guides and references
-  - `for-devs/` - Developer tools and third-party integrations
-  - `for-users/` - User-focused documentation
-  - `how-arbitrum-works/` - Technical explanations of Arbitrum
-  - `intro/` - Introduction and glossary
-  - `launch-arbitrum-chain/` - Arbitrum Orbit chain deployment guides
-  - `learn-more/` - Additional learning resources
-  - `node-running/` - Node operation guides
-  - `partials/` - Reusable content components and troubleshooting guides
-  - `run-arbitrum-node/` - Node setup and configuration
-  - `sdk/` - Auto-generated SDK documentation - Do not edit
-  - `stylus/` - Stylus smart contract development
-  - `stylus-by-example/` - Generated Stylus examples - Do not edit
-  - `welcome/` - Getting started content
+- **`docs/`**: Main documentation content directory
+  - `arbitrum-bridge/`: Bridge-related documentation
+  - `build-decentralized-apps/`: Developer guides and references
+  - `for-devs/`: Developer tools and third-party integrations
+  - `for-users/`: User-focused documentation
+  - `how-arbitrum-works/`: Technical explanations of Arbitrum
+  - `intro/`: Introduction and glossary
+  - `launch-arbitrum-chain/`: Arbitrum chain deployment guides
+  - `learn-more/`: Additional learning resources
+  - `node-running/`: Node operation guides
+  - `partials/`: Reusable content components and troubleshooting guides
+  - `run-arbitrum-node/`: Node setup and configuration
+  - `sdk/`: Auto-generated SDK documentation—Do not edit
+  - `stylus/`: Stylus smart contract development
+  - `stylus-by-example/`: Generated Stylus examples—Do not edit
+  - `welcome/`: Getting started content
 
 ### Application Code
 
-- **`src/`** - Docusaurus application source code
-  - `components/` - React components for the documentation site
-  - `css/` - Styling and themes
-  - `pages/` - Custom pages and landing pages
-  - `resources/` - Global variables and configuration
-  - `scripts/` - Build scripts
-  - `theme/` - Docusaurus theme customizations
+- **`src/`**: Docusaurus application source code
+  - `components/`: React components for the documentation site
+  - `css/`: Styling and themes
+  - `pages/`: Custom pages and landing pages
+  - `resources/`: Global variables and configuration
+  - `scripts/`: Build scripts
+  - `theme/`: Docusaurus theme customizations
 
 ### Configuration & Dependencies
 
-- **`submodules/`** - Git submodule containing SDK source code
-  - **`arbitrum-sdk/`** - Git submodule containing SDK source code
-  - **`stylus-by-example/`** - Git submodule containing Stylus examples
-- **`scripts/`** - Repository maintenance, build scripts, and content generators
-- **`static/`** - Static assets (images, files, JSON data)
+- **`submodules/`**: Git submodule containing SDK source code
+  - **`arbitrum-sdk/`**: Git submodule containing SDK source code
+  - **`stylus-by-example/`**: Git submodule containing Stylus examples
+- **`scripts/`**: Repository maintenance, build scripts, and content generators
+- **`static/`**: Static assets (images, files, JSON data)
 
 ## Contribution
 
@@ -61,13 +61,13 @@ The following are the only exceptions:
 git clone git@github.com:OffchainLabs/arbitrum-docs.git
 ```
 
-2.Install node dependencies
+2. Install node dependencies
 
 ```shell
 yarn
 ```
 
-3.Update the submodules
+3. Update the submodules
 
 ```shell
 git submodule update --init --recursive
@@ -142,7 +142,3 @@ This part will update the glossary.
 ### Formatting
 
 1. Run `yarn format` from the root directory.
-
-### Redirects
-
-1. From the root directory, run `yarn check-redirects`.

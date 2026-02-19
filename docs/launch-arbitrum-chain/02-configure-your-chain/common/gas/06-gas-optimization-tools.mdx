@@ -1,0 +1,121 @@
+---
+title: 'Configure and optimize gas'
+description: 'Learn how to configure and optimize gas for your Arbitrum chain'
+author: petevielhaber
+sme:
+content_type: how-to
+---
+
+To configure gas behavior on an Arbitrum chain using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk), you primarily use the `ArbOwner` precompile (at address `0x0000000000000000000000000000000000000070`), which allows the chain owner to manage key parameters via function calls. These are called with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`. The defaults inherit from the parent chain or standard Nitro settings, but it is possible to customize your Arbitrum chain as they are permissioned by design.
+
+Below is a breakdown of each specified parameter, including its role, typical defaults (based on Arbitrum One), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security. For example, setting limits too high could lead to state bloat or slower block processing.
+
+:::warning Caution
+
+Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
+
+:::
+
+## Gas target
+
+This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
+
+Arbitrum chains support 2 configuration modes -
+
+- **[RECOMMENDED] Multiple Gas Targets (supported starting [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51))**
+
+  - **Description**: Provides smoother price transitions. It uses multiple gas targets to reduce the frequency and severity of child chain gas price spikes.
+  - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata newConstraints)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newConstraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` tuples. \
+    Detailed information on how to set these parameters can be found in [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains). \
+    Example using cast:
+    ```shell
+    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setGasPricingConstraints((uint64,uint64,uint64)[])" $NEW_CONSTRAINTS
+    ```
+
+- **Single Gas Target**
+  - **Description**: Uses a single gas target as the reference for price adjustments. If gas usage exceeds this limit, the base fee rises to throttle demand; if usage is below, the price moves towards the floor.
+  - **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newSpeedLimit` is the desired gas per second. \
+    Example using cast:
+    ```shell
+    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setSpeedLimit(uint256)" $NEW_SPEED_LIMIT
+    ```
+
+This setting is adjustable post-deployment. Any modifications should align with your node's capabilities to prevent issues with the congestion mechanism activating.
+
+Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx) page, or the [Additional configuration parameters](/launch-arbitrum-chain/02-configure-your-chain/common/additional-configuration-parameters.mdx) for additional information.
+
+## Block gas limit
+
+- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
+- **Default**: 32,000,000 gas per block.
+- **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
+
+Example using `cast`:
+
+```shell
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setMaxTxGasLimit(uint256)" $NEW_LIMIT
+```
+
+This setting is adjustable post-deployment. Setting it too high can harm user experience due to longer block times.
+
+Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx) page, or the [Additional configuration parameters](/launch-arbitrum-chain/02-configure-your-chain/common/additional-configuration-parameters.mdx) for additional information.
+
+## Gas price floor
+
+- **Description**: This is the minimum L2 base fee (in `wei` per gas unit), preventing fees from dropping too low during periods of low activity. The actual base fee fluctuates based on demand, but it will not fall below this set floor. It will affect user transaction costs.
+- **Default**: 0.1 `gwei` (100,000,000 `wei`).
+- **Configuration**:
+  - **During deployment**: Set the `minL2BaseFee` field in the Arbitrum chain setup script's config JSON.
+  - **Post-deployment**: Call the `setMinimumL2BaseFee(uint256 newMinBaseFee)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newMinBaseFee` is the value in `wei`.
+
+Example using `cast`:
+
+```shell
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setMinimumL2BaseFee(uint256)" $NEW_FLOOR_IN_WEI
+```
+
+You can query the current floor via the `ArbGasInfo` precompile's `getMinimumGasPrice()`.
+
+Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-params.mdx), [Additional configuration parameters](/launch-arbitrum-chain/02-configure-your-chain/common/additional-configuration-parameters.mdx), or the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common/fees/07-fee-management.mdx) pages for additional information.
+
+## Per batch gas cost
+
+- **Description**: This refers to the fixed L1 base charge applied for the overhead of posting each batch to the parent chain. It is used in transaction pricing to amortize the parent chain's fixed costs (like calldata posting) over the batch's transactions. It can be adjusted to reflect actual posting costs or incentivize batching. The surplus (if any) gets rewarded to the batch poster.
+- **Default**: Varies based on parent chain fees, but typically around 210,000 gas (adjustable to match).
+- **Configuration**: Call the `setPerBatchGasCharge(int64 newCharge)` on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newCharge` is the fixed gas units per batch. This configuration adjusts the allocation of L2 gas for batch overhead in pricing. Additionally, you can configure related surplus fees (extra reward to batch poster) via `setL1PricingRewardRate(uint64 rate)`. The parent chain base fee estimates influence the actual cost, which is dynamic; therefore, monitor them via `ArbGasInfo`'s `getPricesInWei()` method.
+
+Example using `cast` (for per batch charge):
+
+```shell
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x000000000000000000000000000000000000000070 "setPerBatchGasCharge(int64)" $NEW_BATCH_COST
+```
+
+This configuration is adjustable post-deployment. When working with layers or parent chains, you may need to further configure the data availability setup.
+
+Refer to the [How to manage the fee parameters](/launch-arbitrum-chain/02-configure-your-chain/common/fees/07-fee-management.mdx) page for more information.
+
+## Gas floor per token
+
+:::info
+This setting is only available starting from [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51).
+:::
+
+- **Description**: Gas floor per token refers to the minimum gas price floor applied for batch posting to [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623)- enabled parent chains. It ensures that transactions with large calldata pay enough fees to cover data posting costs.
+- **Default**: Default value of this setting is based on the parent chain -
+  - If your L2 chain posts calldata to Ethereum, the value should be set to **10**, as specified in the [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623). \
+    **Note:** While this value does not affect posting EIP-4844 blobs, we recommend keeping the default value of 10 as a safeguard. If your chain falls back to calldata posting - due to higher fees for blob posting or configuration changes - this setting ensures you continue to collect sufficient fees to cover L1 data posting costs.
+  - If your L3 chain posts data to Arbitrum One / Nova, this parameter doesn't need to be set as these chains do not support EIP-7623.
+  - If your L2 or L3 chain posts data to another parent chain, the parameter will have to be set based on the parent chain.
+- **Configuration**: Call the `setParentGasFloorPerToken(uint64 newFloor)` on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) to set the value for `gasFloorPerToken`. This value should be adjusted based on the parent chain's EIP-7623 settings to ensure the data-posting costs are fully covered.
+
+:::warning
+Changing this value from the recommended default is not advised and should be left untouched in most circumstances, unless required by your parent chain.
+:::
+
+Example using `cast` (for per batch charge):
+
+```shell
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x000000000000000000000000000000000000000070 "setParentGasFloorPerToken(uint64)" $NEW_FLOOR_VALUE
+```
+
+This setting is adjustable post-deployment. You can query the current floor via the `ArbOwnerPublic` precompile's `getParentGasFloorPerToken()`.

@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2025-09-25
+last_reviewed: 2026-02-17
 ---
 
 ### Active Validator {#active-validator}
@@ -13,6 +13,15 @@ A bonded [Validator](/intro/glossary#validator) that makes disputable assertions
 ### Address Alias {#address-alias}
 
 An address deterministically generated from a parent chain contract address used on child chain to safely identify the source of an parent to child chain message.
+
+### Adjustment window {#adjustment-window}
+
+Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a gas target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.
+
+### Decentralized application {#dapp}
+
+A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.
+Note: In our documentation, "apps" and "decentralized applications" are used interchangeably.
 
 ### Arb Token Bridge {#arb-token-bridge}
 
@@ -44,7 +53,7 @@ A blockchain that runs on the Arbitrum protocol. Arbitrum chains are EVM compati
 
 ### Arbitrum Chains {#arbitrum-chains}
 
-Arbitrum chains (Orbit) refers to the ability for anyone to permissionlessly deploy [Layer 3 (L3)](/intro/glossary#layer-3-l3) chains on top of Arbitrum [Layer 2 (L2)](/intro/glossary#layer-2-l2) chains.
+An Arbitrum chain is any chain that is built using the Arbitrum stack. Anyone can deploy an Arbitrum chain permissionlessly.
 
 ### Arbitrum Classic {#arbitrum-classic}
 
@@ -82,6 +91,12 @@ Arbitrum's "operating system" that trustlessly handles system-level operations; 
 
 A bonded claim made by an Arbitrum [Validator](/intro/glossary#validator) representing a claim about an Arbitrum chain's state. An [Assertion](/intro/glossary#assertion) may, e.g., propose a new assertion, or may be a step in a [Challenge](/intro/glossary#challenge).
 
+Assertions can have different states:
+
+- **Proposed**: When a validator submits an assertion
+- **Challenged**: If another validator disputes the assertion, an interactive fraud-proof initiates.
+- **Confirmed**: An assertion becomes final if no one challenges it within the dispute window (6.4 days).
+
 ### Auction Contract {#auction-contract}
 
 A smart contract that handles the state, accounting of funds for bids, and various operations of the [Timeboost](/intro/glossary#timeboost) auction. The contract is deployed on the target chain for which Timeboost is enabled.
@@ -93,6 +108,10 @@ Offchain software that receives bids from [Timeboost](/intro/glossary#timeboost)
 ### Batch {#batch}
 
 A group of Arbitrum transactions posted in a single transaction on the [Underlying Chain](/intro/glossary#underlying-chain) into the [Sequencer Inbox](/intro/glossary#sequencer-inbox) by the [Sequencer](/intro/glossary#sequencer).
+
+### Batch Poster {#batch-poster}
+
+The batch poster is an Externally Owned Account (EOA) controlled by the Sequencer. It is responsible for submitting the compressed transaction batches to the Sequencer Inbox contract on the parent chain.
 
 ### Blockchain {#blockchain}
 
@@ -143,6 +162,10 @@ An Arbitrum Chain that settles to a [Parent chain](/intro/glossary#parent-chain)
 
 A program running on a user's machine, often in the user's browser, that interacts with contracts on an [Arbitrum chain](/intro/glossary#arbitrum-chain) and provides a user interface.
 
+### Commitment {#commitment}
+
+In the context of Arbitrum, commitments represents a part of a chain's history. Commitments are used during the fraud proof dispute resolution process, where validators create a Merkle commitment to the history between two assertions. This allows them to efficiently narrow down disagreements about the chain state by using Merkle proofs to specific blocks or states within that range[(1)](https://docs.arbitrum.io/how-arbitrum-works/bold/bold-technical-deep-dive).
+
 ### Confirmation {#confirmation}
 
 The decision by an [Arbitrum chain](/intro/glossary#arbitrum-chain) to finalize an assertion as part of the chain's history. Once an [assertion](/intro/glossary#assertion) is confirmed its [Child to parent chain Messages](/intro/glossary#l2-to-l1-message) (e.g., withdrawals) can be executed.
@@ -158,10 +181,6 @@ Any child chain token contract registered to the [Arb Token Bridge](/intro/gloss
 ### Custom gateway {#custom-gateway}
 
 Any [Token Gateway](/intro/glossary#token-gateway) that isn't the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway).
-
-### dApp {#dapp}
-
-Short for "decentralized application." A dApp typically consists of smart contracts as well as a user-interface for interacting with them.
 
 ### Data Availability Certificate {#data-availability-certificate}
 
@@ -181,6 +200,16 @@ A [Validator](/intro/glossary#validator) that watches an Arbitrum chain and take
 
 A contract that holds [Parent chain](/intro/glossary#parent-chain) initiated messages to be eventually included in the [Sequencer Inbox](/intro/glossary#sequencer). Inclusion of messages doesn't depend on the [Sequencer](/intro/glossary#sequencer).
 
+### Deterministic proving {#deterministic-proving}
+
+If challenged, state transitions are replayable and verified onchain.
+
+To achieve this, Arbitrum compiles the State Transition Function (STF) into different formats:
+
+- **Execution mode**: Uses Go's native compiler for high-performance execution on <a data-quicklook-from="validator">validator</a> nodes.
+
+- **Proving mode**: Compiles to WebAssembly (<a data-quicklook-from="wasm">WASM</a>), which transforms into WebAssembly for Arbitrum Virtual Machine (WAVM) for fraud-proof verification.
+
 ### Dev-Tools Dashboard {#devtools-dashboard}
 
 Web application built and maintained by [Offchain Labs](/intro/glossary#offchain-labs) for developers and users to debug Arbitrum transactions; i.e., executing or checking the status of [Cross-chain messages](/intro/glossary#crosschain-message); visit it [here](https://retryable-dashboard.arbitrum.io/).
@@ -193,9 +222,9 @@ A step in the [Challenge protocol](/intro/glossary#challenge-protocol) in which 
 
 A software application used for transacting with the Ethereum [Blockchain](/intro/glossary#blockchain).
 
-### EVM+ {#evm}
+### Execution claim {#execution-claim}
 
-The paradigm introduced by [Stylus](/intro/glossary#stylus) in which Arbitrum's EVM compatibility is preserved while new features and improvements are introduced.
+A cryptographic commitment to the computed state.
 
 ### Express Lane {#express-lane}
 
@@ -227,7 +256,11 @@ The means by which an [Active Validator](/intro/glossary#active-validator) prove
 
 ### Gas Price Floor {#gas-price-floor}
 
-Protocol-enforced minimum gas price on an Arbitrum chain; currently 0.1 `gwei` on [Arbitrum One](/intro/glossary#arbitrum-one) and 0.01 `gwei` on [Arbitrum Nova](/intro/glossary#arbitrum-nova).
+Protocol-enforced minimum gas price on an Arbitrum chain. These values can be found on the [chain info page](for-devs/dev-tools-and-resources/chain-info.mdx#chain-parameters).
+
+### Gas target {#gas-target}
+
+The target consumption rate for an Arbitrum chain. [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). When gas usage exceeds this limit, fees rise. Read more in the [gas and fees article](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 ### Gateway Router {#gateway-router}
 
@@ -244,6 +277,14 @@ An execution-layer client that defines the Ethereum state transition function an
 ### Ink {#ink}
 
 The equivalent of gas in the [Stylus](/intro/glossary#stylus) vm. Ink is introduced for finer granularity than gas offers since Stylus's operations are considerably cheaper than their EVM analogs.
+
+### L1 {#L1}
+
+L1, or Layer 1, refers to the underlying blockchain responsible for maintaining the integrity of the distributed ledger. In the context of Arbitrum One and Nova, L1 is the main Ethereum blockchain (Mainnet), and Arbitrum operates as a Layer 2 scaling solution built on top of this base layer. However, any EVM-compatible blockchain can be an L1 to an Arbitrum chain.
+
+### L2 {#L2}
+
+An L2, or Layer 2, is a trustless scaling solution built on top of Ethereum's Layer 1 (L1) base protocol. Arbitrum is a Layer 2 protocol that increases scalability and reduces the cost of transactions on Ethereum's Layer 1 without introducing additional trust assumptions. It does that by executing some computation offchain and batch-posting transactions on the underlying Layer 1.
 
 ### L2 Block {#l2-block}
 
@@ -265,6 +306,10 @@ Trustless scaling solutions built on top of Ethereum's [Layer 1 (L1)](/intro/glo
 
 An Arbitrum chain whose core contract reside on an Arbitrum [Layer 2 (L2)](/intro/glossary#layer-2-l2) chain.
 
+### MultiVM {#multivm}
+
+MultiVM refers Arbitrum's ability to support multiple virtual machines (VMs). Specifically, Arbitrum Stylus introduces a WebAssembly (WASM)-based virtual machine alongside the traditional Ethereum Virtual Machine (EVM). This means developers can write smart contracts in languages like Rust, C, or C++ (compiled to WASM) or continue using Solidity for the EVM, and both types of contracts can interact seamlessly on the same chain. This approach preserves EVM compatibility while enabling more efficient execution and access to a broader set of programming languages and libraries[(1)](https://docs.arbitrum.io/stylus/concepts/how-it-works)[(2)](https://docs.arbitrum.io/launch-arbitrum-chain/partials/config-other-language-support).
+
 ### Native Fee Token {#native-fee-token}
 
 An `ERC-20` token used as the native currency for gas fees on an [Arbitrum chain](/intro/glossary#arbitrum-chain) (i.e., as opposed to using Ether). [Arbitrum chains](/intro/glossary#arbitrum-chains) introduced the option for chains to use native fee tokens.
@@ -277,6 +322,10 @@ The initial builders Arbitrum; current contributors to the Arbitrum ecosystem an
 
 Final step in a challenge; a single operation of the Arbitrum VM ([WASM](/intro/glossary#wasm) ) is executed on the underlying chain, and the validity of its state transition is verified.
 
+### Oracle {#oracle}
+
+Oracles are third-party services that provide smart contracts with external information. They act as a bridge between blockchains and the outside world, which expands their functionality by enabling smart contracts to access data beyond their native networks.
+
 ### Outbox {#outbox}
 
 A parent chain contract responsible for tracking [Child to parent chain Message](/intro/glossary#l2-to-l1-message)s, including withdrawals, which can be executed once they are confirmed. The outbox stores a Merkle Root of all outgoing messages.
@@ -285,9 +334,21 @@ A parent chain contract responsible for tracking [Child to parent chain Message]
 
 EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka [Child chain](/intro/glossary#child-chain) ). E.g., Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with "underlying chain."
 
+### Permissionless validation {#permissionless-validation}
+
+Anyone can become a validator by running an Arbitrum node, without permission.
+
 ### Portal {#portal}
 
 A web application maintained by [Offchain Labs](/intro/glossary#offchain-labs) showcasing the Arbitrum ecosystem; visit it [here](https://portal.arbitrum.io/).
+
+### Precompile {#precompile}
+
+A precompile is a predefined smart contract with a special address that provides specific functionality executed natively by the Arbitrum client, rather than at the EVM bytecode level. Precompiles are used to introduce functions that would be computationally expensive if run in EVM bytecode, or to facilitate interactions between the parent and child chains. Arbitrum supports all Ethereum precompiles and also provides additional precompiles specific to Arbitrum chains, which can be called from smart contracts like regular Solidity functions[(1)](https://docs.arbitrum.io/build-decentralized-apps/precompiles/overview).
+
+### Predecessor Assertion {#predecessor-assertion}
+
+The last confirmed valid state of the chain.
 
 ### raas {#raas}
 
@@ -341,10 +402,6 @@ A computer program whose operations are defined and executed within a blockchain
 
 A semi-trusted promise from the [Sequencer](/intro/glossary#sequencer) to post a user's transaction in the near future; soft-confirmations happen prior to posting on the [Parent chain](/intro/glossary#parent-chain), and thus can be given near-instantaneously (i.e., faster than the parent chain's block times)
 
-### Speed Limit {#speed-limit}
-
-Target computation limit for an Arbitrum chain. [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova) currently target 7,000,000 gas / second. When computation exceeds this limit, fees rise, via [EIP-1559](https://notes.ethereum.org/@vbuterin/eip-1559-faq).
-
 ### Standard Arb-Token {#standard-arbtoken}
 
 An token contract on an Arbitrum chain deployed via the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway); offers basic `ERC-20` functionality in addition to deposit / withdrawal affordances.
@@ -355,7 +412,7 @@ An token contract on an Arbitrum chain deployed via the [`StandardERC20` gateway
 
 ### State Transition Function {#state-transition-function}
 
-The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.
+The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain. The State Transition Function's output is the result of applying those input messages (transactions).
 
 ### Stylus {#stylus}
 
@@ -382,6 +439,12 @@ The rules and logic employed by a chain to order incoming transactions into a bl
 In the context of Ethereum, trustless refers to the ability of a system to operate without reliance on a central authority or intermediary. Instead, users place their trust in math and protocols.
 
 This is achieved through the use of cryptographic techniques and decentralized consensus mechanisms that let users verify the integrity of network transactions using open-source software. Trustless systems are considered to be more secure and resistant to fraud or tampering because they don't rely on a single point of failure that can be exploited by attackers.
+
+### Trustless verification {#trustless-verification}
+
+#### Trustless verification
+
+Validators confirm assertions, ensuring transactions adhere to the protocol rules.
 
 ### Underlying Chain {#underlying-chain}
 

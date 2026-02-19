@@ -1,0 +1,342 @@
+---
+title: 'BoLD for Arbitrum chains'
+description: 'Learn how to integrate BoLD with your Arbitrum chain'
+user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about BoLD, a next-generation dispute protocol that enables permissionless validation.'
+content_type: concept
+author: leeederek
+sme: leeederek
+target_audience: 'Developers who want to build on Arbitrum using popular programming languages, like Rust'
+sidebar_position: 1
+---
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
+:::info PUBLIC PREVIEW DOCUMENT
+
+This document is currently in **public preview** and may change significantly as feedback is captured from readers like you. Click the **Request an update** button at the top of this document or [join the Arbitrum Discord](https://discord.gg/arbitrum) to share your feedback.
+
+:::
+
+## Launch status and key dates
+
+- **Status:** Generally available for L2s and launched on Arbitrum One and Arbitrum Nova. _BoLD for L3s are not yet supported at the time of writing._
+- **Arbitrum Sepolia** Dec 11, 2024
+- **Arbitrum One** 09:00 ET (GMT-5) on Feb 12, 2025{' '}
+- **Arbitrum Nova** 09:00 ET (GMT-5) on Feb 12, 2025{' '}
+
+### tldr;
+
+<a data-quicklook-from="bold">Arbitrum BoLD</a> is an upgrade to the dispute protocol on Arbitrum chains
+that delivers both permissionless validation and core security benefits. As with all features on the
+Arbitrum stack, Arbitrum chains can adopt BoLD at their own discretion and on their own timeline. To
+upgrade to BoLD, it is required to upgrade both the Nitro node software and the Rollup's smart contracts
+on its parent chain.
+
+### Recommended Adoption Path
+
+BoLD brings new security benefits to Arbitrum chains, regardless of whether their validators are permissioned or permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. We strongly recommend Arbitrum chains adopt Arbitrum BoLD to register these security benefits while **keeping validation permissioned**.
+
+:::warning
+
+It is strongly recommended that existing and prospective Arbitrum chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and challenge the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations. Please note that when a chain upgrades to use Arbitrum BoLD, any withdrawals (to the parent chain) will be delayed by an additional challenge period. The default challenge period is 6.4 days. We recommend informing the Offchain Labs teams of your timelines and intent to upgrade so adequate warning can be provided to your chain's users on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
+
+:::
+
+Below is a quick breakdown of the benefits of permissioned BoLD vs. permissionless BoLD for your Arbitrum chain:
+
+<ImageZoom
+  src="/img/orbit-bold-orbit-permissionless-vs-permissioned.png"
+  alt="AEP scenario 1"
+  className="img-600px"
+/>
+
+### Benefits of adopting Arbitrum BoLD
+
+Arbitrum BoLD enables an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum chain even if validation is kept permissioned on a BoLD-enabled Arbitrum chain.
+
+Below are some benefits for an Arbitrum chain that come with adopting Arbitrum BoLD—**regardless of whether validation is kept permissioned or not**:
+
+#### Improved resistance to delay attacks
+
+Disputes on a BoLD-enabled chain are resolved in a round-robin style format where disputes can be concurrently resolved. This is an evolution from the current dispute protocol, where challenges are resolved one-by-one. This evolution means that an upper time bound can be placed on all disputes such that a malicious actor cannot delay the chain indefinitely like they can today. Even when validation is kept permissioned, this upper time bound is critical to mitigating the risk of [delay attacks](https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a) by parties on the validator allowlist for an Arbitrum chain.
+
+#### Being on the latest version of Arbitrum technology
+
+Adopting Arbitrum BoLD for your Arbitrum chain will require upgrading the Nitro node software and deploying a new set of contracts on your parent chain. While not specifically related to Arbitrum BoLD, it is always strongly recommended that Arbitrum chain owners upgrade and keep their chain on the latest stable releases of both Nitro node software and the relevant onchain contracts. This is critical to ensure your Arbitrum chain benefits from the latest security improvements and features that the Offchain Labs team is constantly churning out.
+
+#### Secured by interactive fraud-proofs
+
+Arbitrum BoLD is not an upgrade to a different type of proving architecture and will continue to be secured with an interactive proving game between validators using fraud proofs. The same single-honest party assumption applies but now with strict improvements to security to the point where chains, like Arbitrum One, can be permissionlessly validated and have their state assertions be permissionlesly challenged.
+
+#### Use of your project's native token as the bonding asset to secure the chain
+
+Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and we do not recommend teams to use alternative tokens as the bonding asset. For more information on the rationale, we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](/how-arbitrum-works/bold/gentle-introduction.mdx#q-why-is-arb-not-the-bonding-token-used-for-bold-on-arbitrum-one) (and not `ARB`).
+
+#### Increased censorship resistance for `L3` Arbitrum chains
+
+Today, the force inclusion window is a fixed 24 hours. This force inclusion window exists to enable both users and validators to force-include their transactions and assertions on the parent chain, with a 24-hour delay, if the sequencer is offline or censoring transactions. Arbitrum BoLD's release will come with an optional _Censorship Timeout_ feature that can automatically reduce the force inclusion time window if the parent chain or sequencer is maliciously censoring user transactions/assertions or the Sequencer goes offline. This massively benefits Arbitrum `L3` chains (that settle to a BoLD-enabled parent chain) as it ensures the chain can advance with minimal UX degradation during periods of censorship. You can read more about how this feature works in the [gentle introduction to BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx#q-how-do-bold-based-l3s-challenge-periods-operate-considering-the-worst-case-scenario).
+
+By default, the Censorship Timeout feature is disabled because proper configuration depends on a variety of factors, including the batch posting frequency of the chain and which parent chain(s) an Arbitrum chain settles to. For example, both the maximum delay buffer and the threshold itself should both be higher than your chain's batch posting frequency, otherwise the Censorship Timeout feature will not work as.
+
+### Caveats that come with adopting Arbitrum BoLD for permissionless validation
+
+Arbitrum BoLD's implementation and specification have been thoroughly tested and audited. The upgrade to Arbitrum BoLD is not the subject of this section, but rather the caveats and nuances that come with whether to enable permissionless validation.
+
+:::warning
+
+It is strongly recommended that existing and prospective Arbitrum chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and challenge the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations.
+
+:::
+
+Enabling permissionless validation means that any entity can spin up a validator and open challenges to dispute invalid claims made by other validators on the network. This opens up an Arbitrum chain to the risk of spam and attacks by unknown and malicious entities. To mitigate this risk for Arbitrum One, a considerable amount of research and testing has been done to optimize the trade-offs between deterring attacks and managing the costs of defending Arbitrum for honest parties. This research includes carefully calculating all relevant bond sizes, challenge period durations, and relevant plans for operating the infrastructure. More information on this research can be found in the [BoLD whitepaper](https://arxiv.org/abs/2404.10491). Below are a few examples of various risks that an Arbitrum chain will hold should they pursue permissionless BoLD:
+
+#### Risk of resource exhaustion attacks
+
+Where malicious entities can acquire and utilize more resources than honest parties can put together during a challenge. Such an attack can take many forms and includes both onchain and offchain computational/infra costs. For example, a well-coordinated attack on an Arbitrum chain could overwhelm honest parties if the malicious actors can spend more gas and computational power and acquire more of the bonding asset than the defenders can. This risk can be mitigated by a combination of high bond sizes, use of a price-independent bonding asset, use of a bonding asset with high liquidity, strong economic guarantees that attackers will lose most of their resources, sufficiently long challenge periods, and robust infrastructure operations and resources that can respond and scale up when necessary. More information on resource exhaustion attacks and how Arbitrum BoLD's design accounts for this risk can be found in [Section 6.1.4 of the BoLD whitepaper](https://arxiv.org/abs/2404.10491). We recommend teams consider a resource exhaustion ratio greater than 5 assuming very high L1 gas costs (like 100 `gwei`/gas).
+
+#### Increased infrastructure costs and overhead
+
+Related to, and expanding on, the above point about resource exhaustion attacks, the honest parties operating active validators and proposers for a BoLD-enabled chain will need to be ready to vertically scale their infrastructure, and cover the offchain costs of doing so, in the event of an attack. This is because a malicious actor may choose to spam and overwhelm the honest defenders with multiple challenges. Making moves, honest or malicious, costs resources to perform bisections on history committments down to a single step of execution. If this happens, each malicious challenge must be met with an honest counter-challenge during the interactive fraud proof game. Arbitrum chains who decide to adopt Arbitrum BoLD in permissionless mode are strongly encouraged to work with their Rollup-as-a-Service (RaaS) team to: deploy robust monitoring for challenges, set aside a budget to vertically scale up infrastructure and fund counter-challenges, and have an incident response plan drafted and rehearsed to ensure prompt and decisive reactionary steps in the event of an attack.
+
+#### Risks to liveness or delays of the chain
+
+If the bond sizes are set too low, an adversary can cheaply create a challenge and delay confirmation of an assertion for up to an entire extra challenge period if they can censor honest BoLD moves. Remember that challenges, while time-bound, still take time to complete. Delaying the confirmation of assertions for a chain could negatively impact the chain in many ways that an attacker could benefit from (e.g., profiting from price volatility and price impacts on the Arbitrum chain's token may make delaying the chain worthwhile for an attacker). We recommend teams set bond sizes to be much greater than the opportunity cost of a week of delay, based on your chain's TVL (e.g., if your chain's TVL is \$1B, then the opportunity cost of \$1B should be used as a _floor_ for the block level bond amount size). We further recommend that the bonding token used is highly liquid on the parent chain and relatively non-volatile.
+
+### Conclusion for Arbitrum chains considering BoLD Permissionless Validation
+
+Due to the uniquely different tokenomics, sizes, and varying types of Arbitrum chains deployed (or in active development) today, <a data-quicklook-from= "offchain-labs">Offchain Labs</a> does not provide a "one-size-fits-all" recommendation for how best to safely set up and enable permissionless validation for Arbitrum chains. Instead, we recommend teams adopt Arbitrum BoLD but keep validation permissioned.
+
+Should Arbitrum chain teams strongly desire to adopt Arbitrum BoLD in permissionless mode, we do not endorse using configurations that differ from those on [Arbitrum One](https://github.com/OffchainLabs/nitro-contracts/blob/bold-merge/scripts/files/configs/arb1.ts). We especially do not recommend teams use custom `ERC-20` tokens as the bonding asset and/or with low bond minimums. If your team would like to have permissionless validation for your Arbitrum chain, please reach out to us [via this form](https://docs.google.com/forms/d/e/1FAIpQLSe5YWxFbJ8DgWcDNbIW2YYuTRmegtx2FHObym00_sOt0kq4wA/viewform) so that we can schedule some time to understand your needs better.
+
+### How to adopt Arbitrum BoLD
+
+As mentioned earlier, the upgrade to the dispute protocol involves both a Nitro node software upgrade and the deployment/upgrade of new smart contracts on your Arbitrum chain's parent chain.
+
+To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx).
+
+:::caution
+
+As mentioned in our guide on [BoLD adoption for Arbitrum chains](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains.mdx), the recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout) feature disabled.
+
+:::
+
+:::info This is not an ArbOS upgrade
+
+Enabling BoLD in your chain involves updating your chain's Nitro contracts and ensuring that your nodes are running the expected minimum (or higher) version.
+
+However, enabling BoLD does not require upgrading your ArbOS version.
+
+:::
+
+This how-to provides step-by-step instructions for L2 Arbitrum chain operators who want to enable BoLD on their chain. Familiarity with Nitro, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), and [chain ownership](/launch-arbitrum-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx) is expected.
+
+:::warning No support for L3s
+
+Currently, BoLD is not supported for L3s.
+
+:::
+
+### Overview
+
+To enable BoLD in your L2 Arbitrum chain, you'll have to perform these actions:
+
+1. Make sure your nodes are running at least [Nitro v3.5.4](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.4) and enable the required parameters after the upgrade
+2. Upgrade your Nitro contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
+
+Let's dive into it:
+
+### 1. Upgrade your nodes to Nitro v3.5.4 or higher
+
+Before updating the contracts, make sure your nodes are ready for the update. Nitro v3.5.4 introduced compatibility with pre-BoLD and BoLD chains to ensure a smooth upgrade, but Nitro v3.6.2 has many recommended improvements. Nodes will automatically detect whether the chain is running pre-BoLD or BoLD Rollup and challenge contracts and will perform the appropriate calls depending on that check.
+
+Most of the parameters used in Nitro before v3.5.4 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters after the upgrade:
+
+- For validator nodes: add `--node.staker.strategy=<MakeNodes | ResolveNodes | Defensive>` (--node.bold.strategy is deprecated and only available before Nitro v3.8.0) to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
+- For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode)
+- For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode) is automatically enabled
+
+Additionally, after performing the upgrade, the `--chain.info-json` object also needs to be modified:
+
+- Update the new Rollup address in the `rollup.rollup` field
+- Add the stake token in a new `rollup.stake-token` field
+
+### 2. Upgrade your Nitro contracts to v3.1.0
+
+This section explains how to upgrade your chain contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0); this guide follows the same steps outlined in the [3.1.0 upgrade guide](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/contract-upgrades/3.1.0) in the `orbit-actions` repo.
+
+Note that this process expects your chain to use the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
+
+During the upgrade operation, the following actions will be performed:
+
+1. Upgrade the `Bridge`, `Inbox`, `RollupEventInbox`, `Outbox`, and `SequencerInbox` contracts to v3.1.0
+2. Deploy the new v3.1.0 BoLD `ChallengeManager`
+3. Migrate the v2 Rollup contract into a new v3.1.0 Rollup contract address
+4. Set up the Rollup contract according to the new configuration and use the latest confirmed assertion on the old Rollup as the genesis of the new Rollup
+
+#### Step 0: Pre-requisites
+
+To effectively upgrade your Nitro contracts using the BoLD upgrade action, your contracts must be in one of these versions:
+
+- `Inbox`: v1.1.0 - v2.1.3 inclusive
+- `Outbox`: any
+- `SequencerInbox`: v1.2.1 - v2.1.3 inclusive
+- `Bridge`
+  - eth chain: v1.1.0 - v2.1.3 inclusive
+  - custom-fee token chain: v2.0.0 - v2.1.3 inclusive
+- `RollupProxy`: v1.1.0 - v2.1.3 inclusive
+- `RollupAdminLogic`: v2.0.0 - v2.1.3 inclusive
+- `RollupUserLogic`: v2.0.0 - v2.1.3 inclusive
+- `ChallengeManager`: v2.0.0 - v2.1.3 inclusive
+
+To determine the exact version your contracts use, [follow these instructions](https://github.com/OffchainLabs/orbit-actions#check-version-and-upgrade-path).
+
+#### Step 1: Clone the `nitro-contracts` repository and build the contracts
+
+You'll use a [`BOLDUpgradeAction.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/BOLDUpgradeAction.sol) contract in the `nitro-contracts` repository to perform the upgrade operation.
+
+First clone the `nitro-contracts` repository and checkout the appropriate version:
+
+```shell
+$ git clone https://github.com/OffchainLabs/nitro-contracts.git
+$ cd nitro-contracts
+$ git checkout v3.1.0-scripts
+```
+
+Once you have the correct version, install the dependencies and build the contracts:
+
+```shell
+$ yarn install
+$ yarn build:all
+```
+
+#### Step 2: Configure your chain parameters
+
+The BoLD upgrade action contract that performs the upgrade will need to include your chain information as parameters. To set this configuration, copy the [`scripts/files/configs/custom.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/scripts/files/configs/custom.ts) file and adjust the configuration to match that of your chain.
+
+#### Step 3: Prepare and deploy the upgrade contract
+
+You'll now prepare the upgrade contract with the parameters you just set and then deploy it in the parent chain of our chain.
+
+First, create a `.env` file based on the `.env-sample` file.
+
+```shell
+$ cp .env-sample .env
+```
+
+Ensure you update the `CONFIG_NETWORK_NAME` env variable to match the filename of the configuration file you created in the previous step.
+
+```shell
+CONFIG_NETWORK_NAME=custom
+```
+
+Now, you can run the `prepare` script to deploy the action contract with the specified configuration parameters. Note that:
+
+- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+
+- The `network` parameter should be your parent chain. You can find the identifiers of these networks in the `hardhat.config.ts`. Note that if your parent chain is an L1, you'll have to configure an additional `INFURA_KEY` env variable for its endpoint.
+
+```shell
+$ L1_PRIV_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+
+...
+Deployed contracts written to: `scripts/files/sepoliaDeployedContracts.json`
+Done.
+```
+
+Optionally, the script can try to verify the deployed contracts by adding the following parameters:
+
+- Set `DISABLE_VERIFICATION` to `false`.
+- Use the correct key for verifying the contracts on the block explorer depending on your parent chain: `ETHERSCAN_API_KEY | ARBISCAN_API_KEY | NOVA_ARBISCAN_API_KEY | BASESCAN_API_KEY`.
+
+```shell
+$ L1_PRIV_KEY=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+
+```
+
+:::note
+You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+
+:::
+
+#### Step 4: Gather the information of the current state of the chain
+
+The next script will gather information about the chain's current state (the last confirmed assertion), allowing you to initialize the new Rollup contract with that confirmed assertion. We recommended stopping all validators at this point to prevent them from confirming new assertions that might block the upgrade in the next step.
+
+:::info Last confirmed assertion
+
+As mentioned, this script will try to find the last confirmed assertion of your chain. Please note that:
+
+- If a new assertion is confirmed between Steps 4 and 5, step 5 will revert and Step 4 must be repeated.
+- The script looks for the `NodeCreated` event of the last confirmed assertion in the last 100,000 blocks. If the `NodeCreated` event was emitted in an older block, it won't be able to find it.
+
+:::
+
+```shell
+
+$ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+
+...
+Done.
+```
+
+Note that:
+
+- You can use any account in this step to call the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner's.
+
+#### Step 5: Run the upgrade script
+
+You are now ready to perform the upgrade. The following script will either perform the upgrade directly or print the upgrade payload depending on the private key used:
+
+- If `L1_PRIV_KEY` is the chain owner's, the script will perform the upgrade directly. Note that it will not ask for confirmation before sending the transaction.
+- If `L1_PRIV_KEY` is NOT the chain owner's, the script will print the upgrade payload.
+
+:::warning
+
+The following script will send the upgrade transaction directly if the `L1_PRIV_KEY` specified is the private key of the chain owner. Please note that the script **does not ask for confirmation**.
+
+:::
+
+```shell
+$ L1_PRIV_KEY=xxx yarn script:bold-local-execute --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+upgrade executor: 0x5FEe78FE9AD96c1d8557C6D6BB22Eb5A61eeD315
+execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca3702c09c78b957d4d820311125753c6d2000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4ebe03a93000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000008a8f0a24d7e58a76fc8f77bb68c7c902b91e182e00000000000000000000000087630025e63a30ecf9ca9d580d9d95922fea6af0000000000000000000000000c32b93e581db6ebc50c08ce381143a259b92f1ed00000000000000000000000000000000000000000000000000000000
+```
+
+#### Step 6: Update your nodes' configurations and restart them
+
+As stated at the beginning, you need to add a few parameters to your node configuration for it to support BoLD:
+
+- For validator nodes: add `--node.staker.strategy=<MakeNodes | ResolveNodes | Defensive>` (--node.bold.strategy is deprecated and only available before Nitro v3.8.0) to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
+- For all other types of node before Nitro v3.6.0: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode)
+- For all other types of node after Nitro v3.6.0: [watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode) is automatically enabled
+
+Additionally, the `--chain.info-json` object also needs to be modified:
+
+- Update the `rollup.rollup` field to point at the new Rollup contract address
+- Add a new `rollup.stake-token` field with the address of the stake token contract
+
+After updating the configuration, restart your node.
+
+:::info Validator nodes shutdown
+
+When enabling BoLD on a validator, it will default to read only finalized information from its parent chain. If you run your node before the blocks that contain the upgrade transactions are finalized, the node will stop with the following message:
+
+```shell
+error initializing staker: could not create assertion chain: no contract code at given address
+```
+
+In this case, wait until those blocks finalize, then start your node again.
+
+:::
+
+#### Step 7: Monitor the validation process
+
+Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is one hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is seven days).
+
+### Table of Arbitrum BoLD parameters
+
+The following configuration parameters can be applied when deploying or managing your Arbitrum chain. For an example of a configuration, feel free to reference this [sample configuration](#how-to-adopt-arbitrum-bold) in our guide on how to upgrade your chain to use BoLD.
+
+import OptionalOrbitCompatibleCLIFlagsPartial from '../../../../partials/_bold-config-params.mdx';
+
+<OptionalOrbitCompatibleCLIFlagsPartial />

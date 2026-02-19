@@ -1,14 +1,14 @@
 ---
 id: 'chainlink'
 title: 'Chainlink'
-description: Learn how to integrate oracles into your Arbitrum dapp
+description: Learn how to integrate oracles into your Arbitrum app
 user_story: As a developer, I want to understand how to use oracles in Arbitrum to get offchain data onchain.
 content_type: how-to
 ---
 
-[Chainlink](https://chain.link/) is a widely-recognized Web3 services platform that specializes in decentralized oracle networks. It lets you build Ethereum and Arbitrum dApps that connect to a variety of offchain data feeds and APIs, including those that provide asset prices, weather data, random number generation, and more.
+[Chainlink](https://chain.link/) is a widely-recognized Web3 services platform that specializes in decentralized oracle networks. It lets you build Ethereum and Arbitrum apps that connect to a variety of offchain data feeds and APIs, including those that provide asset prices, weather data, random number generation, and more.
 
-### Querying the price of `ARB` through Chainlink
+## Querying the price of `ARB` through Chainlink
 
 Here’s an example on how to use a price feed from Chainlink to query the current price of `ARB` onchain. We’ll use an interface provided by Chainlink that can be configured with the address of the proxy that holds the information we want to request, and wrap the operation in a contract.
 
@@ -61,6 +61,6 @@ contract ARBPriceConsumer {
 
 You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) available that goes through the process of compiling and deploying a contract.
 
-### More examples
+## More examples
 
 Refer to [Chainlink’s documentation](https://docs.chain.link/) for more examples of querying price feeds plus other data feeds available.
