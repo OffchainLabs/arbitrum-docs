@@ -1,0 +1,164 @@
+---
+title: 'Sequencer configuration'
+description: 'Learn how to configure the Sequencer on your Arbitrum chain.'
+author: pete-vielhaber
+sme: Jason-W123
+user_story: As an Arbitrum chain deployer, I want to understand how to fine-tune the Sequencer on my Arbitrum chain.
+content_type: how-to
+---
+
+Configuring the Sequencer for an Arbitrum chain involves setting up a Nitro node with specific parameters to enable sequencing functionality. This is typically done when deploying or running your chain's node, either via command-line flags (e.g., in a Docker run command) or a JSON configuration file. The process is similar for both Rollup and AnyTrust protocols in Arbitrum chains, but AnyTrust requires additional data availability (DA) settings. Note that for production setups, it's recommended to use a RaaS provider for simplified deployment.
+
+## Prerequisites
+
+- **Hardware**: At a minimum, 16 GB RAM, a 4-core CPU (prioritize single-core performance), and NVMe SSD storage (minimum 500 GB+).
+- **Software**: Docker installed. Use the [recommended Nitro node Docker image](/run-arbitrum-node/02-run-full-node.mdx#recommended-nitro-version), or the latest release.
+- **Accounts and keys**:
+  - A funded wallet on the parent chain (e.g., Ethereum Sepolia) with private keys for batch posting and staking.
+  - Access to parent chain RPC URL.
+- **For AnyTrust chains**: Data Availability Server (DAS) endpoints (REST and RPC aggregators).
+- **For Arbitrum chain deployment**: Assume you've already deployed your Arbitrum chain contracts (e.g., via the Chain SDK). The Sequencer configuration will build on that.
+
+## Method 1: Configure via command-line flags
+
+This is a straightforward way to spin up a Sequencer node. Use the following Docker flags to enable and tune the Sequencer.
+
+### Key parameters
+
+| Category                          | Flag/Example                                                                                                                                                                                                                                                                                                                                                                                                                                         | Description                                                                                                             |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Core Sequencer                    | `--node.sequencer=true`                                                                                                                                                                                                                                                                                                                                                                                                                              | Enables sequencer mode.                                                                                                 |
+| Execution                         | `--execution.sequencer.enable=true--execution.sequencer.max-tx-data-size=85000`                                                                                                                                                                                                                                                                                                                                                                      | Enables transaction sequencing and sets max data size per transaction; default is 85 KB).                               |
+| Delayed Sequencer                 | `--node.delayed-sequencer.enable=true--node.delayed-sequencer.use-merge-finality=false--node.delayed-sequencer.finalize-distance=1`                                                                                                                                                                                                                                                                                                                  | Handles delayed inbox transactions from the parent chain; reduces finality time.                                        |
+| Batch poster                      | `--node.batch-poster.enable=true--node.batch-poster.max-size=90000--node.batch-poster.parent-chain-wallet.private-key=<PRIVATE_KEY>`                                                                                                                                                                                                                                                                                                                 | Enables batching and posting to parent chain; set max batch size (e.g., 90 KB). Use the same key for staking if needed. |
+| Transaction forwarding            | `--execution.forwarding-target=""`                                                                                                                                                                                                                                                                                                                                                                                                                   | Disables forwarding, queues transactions directly in the Sequencer.                                                     |
+| Feed output                       | `--node.feed.output.enable=true--node.feed.output.addr=0.0.0.0--node.feed.output.port=<PORT>`                                                                                                                                                                                                                                                                                                                                                        | Allows other nodes to receive queued transactions (e.g., port 9642).                                                    |
+| Data Availability (AnyTrust Only) | `--node.data-availability.enable=true--node.data-availability.sequencer-inbox-address=<INBOX_ADDR>--node.data-availability.parent-chain-node-url=<PARENT_RPC>--node.data-availability.rest-aggregator.enable=true--node.data-availability.rest-aggregator.urls=<DAS_URLS>--node.data-availability.rpc-aggregator.enable=true--node.data-availability.rpc-aggregator.assumed-honest=1--node.data-availability.rpc-aggregator.backends=<RPC_BACKENDS>` | Configures DA for AnyTrust; replace with your DAS endpoints.                                                            |
+| Staking (Optional)                | `--node.staker.enable=true--node.staker.strategy=MakeNodes--node.staker.parent-chain-wallet.private-key=<PRIVATE_KEY>`                                                                                                                                                                                                                                                                                                                               | Enables staking for validation; useful for decentralization.                                                            |
+
+### Step-by-step
+
+#### 1. Create a persistent data directory
+
+- Run `mkdir -p /path/to/arbitrum-data && chmod -R 777 /path/to/arbitrum-data` to ensure writeability.
+
+#### 2. Run the Docker container
+
+- Use a command like this (replace placeholders with your values):
+
+```shell
+docker run --rm -it \
+  -v /path/to/arbitrum-data:/home/user/.arbitrum \
+  -p 0.0.0.0:8547:8547 \
+  -p 0.0.0.0:8548:8548 \
+  offchainlabs/nitro-node:v3.9.4-7f582c3 \
+  --node.sequencer=true \
+  --execution.sequencer.enable=true \
+  --execution.sequencer.max-tx-data-size=85000 \
+  --node.delayed-sequencer.enable=true \
+  --node.delayed-sequencer.use-merge-finality=false \
+  --node.delayed-sequencer.finalize-distance=1 \
+  --node.batch-poster.enable=true \
+  --node.batch-poster.max-size=90000 \
+  --node.batch-poster.parent-chain-wallet.private-key=<YOUR_BATCH_POSTER_PRIVATE_KEY> \
+  --execution.forwarding-target="" \
+  --node.feed.output.enable=true \
+  --node.feed.output.addr=0.0.0.0 \
+  --node.feed.output.port=9642 \
+  --node.data-availability.enable=true \  # If AnyTrust
+  --node.data-availability.sequencer-inbox-address=<YOUR_SEQUENCER_INBOX_ADDRESS> \
+  --node.data-availability.parent-chain-node-url=<PARENT_CHAIN_RPC_URL> \
+  --node.data-availability.rest-aggregator.enable=true \
+  --node.data-availability.rest-aggregator.urls=<DAS_REST_URLS> \
+  --node.data-availability.rpc-aggregator.enable=true \
+  --node.data-availability.rpc-aggregator.assumed-honest=1 \
+  --node.data-availability.rpc-aggregator.backends=<DAS_RPC_BACKENDS> \
+  --node.staker.enable=true \  # Optional
+  --node.staker.strategy=MakeNodes \
+  --node.staker.parent-chain-wallet.private-key=<YOUR_STAKER_PRIVATE_KEY>
+
+```
+
+- **Ports**: 8547 (RPC), 8548 (WebSocket). Expose more if needed (e.g., feed port).
+
+#### 3. Verify operation
+
+- Check logs for "Sequencer started", or similar messages.
+- Test by sending transactions to your chain's RPC endpoint.
+
+## Method 2: Configure via JSON file
+
+For more structured setups, especially when customizing the Arbitrum chain configuration, use a JSON config file generated by the Chain SDK package.
+
+### Step-by-step
+
+#### 1. Install the Chain SDK
+
+- In a Node.js project: `npm install @arbitrum/chain-sdk`.
+
+#### 2. Generate the config
+
+- Use the `prepareNodeConfig` function with inputs such as the chain name, config, contracts, and keys.
+  - Example script snippet:
+
+```typescript
+  import { prepareNodeConfig } from '@arbitrum/chain-sdk';
+  const config = prepareNodeConfig({
+  chainName: 'MyOrbitChain',
+  chainConfig: { chainId: 12345, ... }, // From your deployment
+  coreContracts: { sequencerInbox: '0xYourInboxAddress', ... },
+  batchPosterPrivateKey: '<BATCH_POSTER_KEY>',
+  validatorPrivateKey: '<VALIDATOR_KEY>',
+  parentChainId: 421614, // e.g., Arbitrum Sepolia
+  parentChainRpcUrl: 'https://sepolia-rollup.arbitrum.io/rpc',
+  // Additional for AnyTrust: DAS details
+  });
+
+  // Write to file
+  fs.writeFileSync('node-config.json', JSON.stringify(config, null, 2));
+
+```
+
+#### 3. Key sequencer settings in JSON
+
+- Under `"node"`:
+- `"sequencer-inbox-address"`: Your inbox contract address
+- `"parent-chain-node-url"`: Parent RPC
+- `"rest-aggregator"`: `{ "enable": true, "urls": "http://das-server:9876" }` (for DA)
+- `"rpc-aggregator"`: `{ "enable": true, "assumed-honest": 1, "backends": "[...]" }`
+- Full example:
+
+```json
+{
+  "node": {
+    "sequencer-inbox-address": "0xYourSequencerInbox",
+    "parent-chain-node-url": "https://parent-rpc.example.com",
+    "rest-aggregator": {
+      "enable": true,
+      "urls": "http://das-server:9876"
+    },
+    "rpc-aggregator": {
+      "enable": true,
+      "assumed-honest": 1,
+      "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"...\",\"signermask\":1}]"
+    }
+  },
+  "execution": {
+    "sequencer": {
+      "enable": true,
+      "max-tx-data-size": 85000
+    }
+  }
+}
+```
+
+#### 4. Run the Node with the config:
+
+- Add `--conf.file=node-config.json` to your Docker or binary run command.
+
+## Additional tips for Arbitrum chains
+
+- **Customization**: Tune parameters such as `max-tx-data-size` and batch sizes to match your chain’s throughput needs. For DA alternatives (e.g., Celestia), update aggregator URLs accordingly.
+- **Testing**: Start on testnets (e.g., Sepolia). Use tools like Foundry or Hardhat to deploy and test.
+- **Decentralization**: Initially centralized; eventually evolves to shared sequencers.
+- **Common pitfalls**: Ensure private keys are secure (never commit them). Monitor for errors like insufficient gas on the parent chain.
