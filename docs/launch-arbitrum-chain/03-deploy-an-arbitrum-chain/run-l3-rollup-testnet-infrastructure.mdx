@@ -1,0 +1,513 @@
+---
+title: 'Run L3 rollup infrastructure (product-level testnet)'
+description: 'Step-by-step guide to run your Arbitrum chain infrastructure as a production-level testnet with high availability.'
+author: GreatSoshiant, jose-franco
+sme: GreatSoshiant, jose-franco
+target_audience: 'Chain runners who want to run their testnet chain with production-like infrastructure.'
+user_story: I have a deployed chain and want to run it with high availability so users can connect from anywhere.
+content_type: how-to
+---
+
+import RaaSNotice from '../partials/_raas-providers-notice.mdx';
+
+<RaaSNotice />
+
+This page provides step-by-step instructions for running your chain's full infrastructure as a production-level testnet with high availability (HA).
+
+The setup uses multiple sequencers with automatic failover, Redis for coordination, relays for feed distribution, and separate full nodes, batch poster, and validator—the same architecture used in production.
+
+## Steps at a glance
+
+1. Extract chain info from `node-config.json`
+2. Add Helm repo and create a namespace
+3. Set up Redis
+4. Deploy sequencers (3 replicas)
+5. Deploy sequencer relays
+6. Deploy external relays
+7. Deploy full nodes
+8. Deploy batch poster
+9. Deploy validator
+10. Set up Sequencer Coordinator Manager (optional)
+11. Expose RPC
+12. Verify
+13. Deploy the token bridge
+
+:::tip Run all steps in the same terminal
+
+The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`, `$REDIS_URL`). Run Steps 1–11 in the **same terminal session** so these variables persist, or re-export them if you open a new terminal.
+
+:::
+
+## Prerequisites
+
+| Requirement            | What you need                                                                                                                                                                                                                 |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Deployed chain**     | Complete [Run an L3 rollup from scratch](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/run-l3-rollup-from-scratch.mdx), Steps 1–4 (deploy, generate config, fund batch poster and validator), **do not complete Step 5** |
+| **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g., EKS, GKE, AKS)                                                                                                                                                    |
+| **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                                                                           |
+| **kubectl**            | Configured to access your cluster                                                                                                                                                                                             |
+| **jq**                 | [Install jq](https://jqlang.github.io/jq/download/) for parsing `node-config.json`                                                                                                                                            |
+| **Go**                 | [Install Go](https://go.dev/dl/) (for Step 10, building SQM)                                                                                                                                                                  |
+| **Redis**              | In-cluster (Step 3) or managed (e.g., AWS ElastiCache)                                                                                                                                                                        |
+
+## Step 1: Extract chain info from `node-config.json`
+
+- On your local machine, in the folder that contains `node-config.json`, run:
+
+```bash
+# Export so variables persist for all steps below
+export CHAIN_ID=$(jq -r '.chain["info-json"]' node-config.json | jq -r '.[0]["chain-id"]')
+export PARENT_CHAIN_ID=$(jq -r '.chain["info-json"]' node-config.json | jq -r '.[0]["parent-chain-id"]')
+export PARENT_RPC=$(jq -r '.["parent-chain"].connection.url' node-config.json)
+
+# Save chain info to file (used by Helm --set-file)
+jq -r '.chain["info-json"]' node-config.json > chain-info.json
+
+echo "CHAIN_ID=$CHAIN_ID"
+echo "PARENT_CHAIN_ID=$PARENT_CHAIN_ID"
+echo "PARENT_RPC=$PARENT_RPC"
+echo "chain-info.json saved"
+```
+
+- In Step 8, you will extract the batch poster private key—never commit it to Git or expose it in logs.
+
+## Step 2: Add Helm repo and create namespace
+
+- Run the following commands:
+
+```bash
+helm repo add offchainlabs https://charts.arbitrum.io
+helm repo update
+
+kubectl create namespace my-l3-chain
+kubectl config set-context --current --namespace=my-l3-chain
+```
+
+- Replace `my-l3-chain` with your preferred namespace in all commands below.
+
+## Step 3: Set up Redis
+
+Redis coordinates which sequencer is active and shares state between components.
+
+#### Option A: In-cluster Redis (simplest for testnet)
+
+- Run the following commands:
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install redis bitnami/redis \
+  --namespace my-l3-chain \
+  --set auth.enabled=false \
+  --set replica.replicaCount=1
+
+export REDIS_URL="redis://redis-master.my-l3-chain.svc.cluster.local:6379"
+```
+
+#### Option B: Managed Redis (e.g., AWS ElastiCache)
+
+- Create a Redis cluster on your cloud provider. Note the endpoint, then:
+
+```bash
+export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
+```
+
+- Ensure Redis is reachable from your Kubernetes cluster (in the same VPC or network).
+
+## Step 4: Deploy sequencers
+
+- Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
+
+```bash
+helm install sequencer offchainlabs/nitro \
+  --namespace my-l3-chain \
+  --set replicaCount=3 \
+  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
+  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
+  --set configmap.data.chain.id=$CHAIN_ID \
+  --set-file configmap.data.chain.info-json=chain-info.json \
+  --set configmap.data.node.sequencer.enable=true \
+  --set configmap.data.node.delayed-sequencer.enable=true \
+  --set configmap.data.node.seq-coordinator.enable=true \
+  --set configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \
+  --set configmap.data.node.feed.output.enable=true \
+  --set configmap.data.node.feed.output.port=9642 \
+  --set configmap.data.execution.sequencer.enable=true \
+  --set configmap.data.init.empty=true \
+  --set perReplicaHeadlessService.enabled=true
+```
+
+- If sequencers fail to coordinate, each needs a unique URL. Create `sequencer-extra-env.yaml`:
+
+```yaml
+extraEnv:
+  - name: POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: NITRO_NODE_SEQ__COORDINATOR_MY__URL
+    value: 'http://$(POD_NAME).sequencer-nitro.my-l3-chain.svc.cluster.local:8547/rpc'
+```
+
+- Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
+
+- Wait for the sequencer pods to be ready:
+
+```bash
+kubectl get pods -l app.kubernetes.io/name=nitro -w
+```
+
+## Step 5: Deploy sequencer relays
+
+Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
+
+- Run the following commands:
+
+```bash
+helm install sequencer-relay offchainlabs/relay \
+  --namespace my-l3-chain \
+  --set replicaCount=2 \
+  --set configmap.data.chain.id=$CHAIN_ID \
+  --set configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro:9642,ws://sequencer-nitro-1.sequencer-nitro:9642,ws://sequencer-nitro-2.sequencer-nitro:9642
+```
+
+- The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro`).
+
+## Step 6: Deploy external relays
+
+External relays connect to sequencer relays and serve the public feed. They add a layer of isolation between the sequencers and public traffic.
+
+- Run the following command:
+
+```bash
+helm install external-relay offchainlabs/relay \
+  --namespace my-l3-chain \
+  --set replicaCount=2 \
+  --set configmap.data.chain.id=$CHAIN_ID \
+  --set configmap.data.node.feed.input.url=ws://sequencer-relay:9642
+```
+
+## Step 7: Deploy full nodes
+
+Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically.
+
+- Run the following commands:
+
+```bash
+helm install fullnode offchainlabs/nitro \
+  --namespace my-l3-chain \
+  --set replicaCount=2 \
+  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
+  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
+  --set configmap.data.chain.id=$CHAIN_ID \
+  --set-file configmap.data.chain.info-json=chain-info.json \
+  --set configmap.data.execution.forwarder.redis-url=$REDIS_URL \
+  --set configmap.data.node.feed.input.url=ws://external-relay:9642 \
+  --set configmap.data.init.empty=true
+```
+
+- If your chain already has blocks, use `--set configmap.data.init.latest=pruned` instead of `init.empty=true`.
+
+## Step 8: Deploy batch poster
+
+The batch poster posts transaction batches to the parent chain.
+
+- Save the private key to a file (do not commit this file to Git):
+
+```bash
+jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json > batch-poster-key.txt
+```
+
+- Deploy the batch poster:
+
+```bash
+helm install batchposter offchainlabs/nitro \
+  --namespace my-l3-chain \
+  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
+  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
+  --set configmap.data.chain.id=$CHAIN_ID \
+  --set-file configmap.data.chain.info-json=chain-info.json \
+  --set configmap.data.execution.forwarding-target=null \
+  --set configmap.data.node.seq-coordinator.enable=true \
+  --set configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \
+  --set configmap.data.node.batch-poster.enable=true \
+  --set configmap.data.node.feed.input.url=ws://sequencer-relay:9642 \
+  --set-file configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-key.txt
+```
+
+- Remove the key file after deployment:
+
+```bash
+rm batch-poster-key.txt
+```
+
+:::warning Do not add batch poster to sequencer priority
+
+Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer priority list. Otherwise, it could become the active sequencer unintentionally.
+
+:::
+
+## Step 9: Deploy validator
+
+The validator validates blocks and posts assertions to the parent chain. It is required for chain security. The validator wallet needs `ETH` on the parent chain (Arbitrum Sepolia) for gas.
+
+- Save the validator private key to a file (do not commit to Git):
+
+```bash
+jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' node-config.json > validator-key.txt
+```
+
+- Deploy the validator:
+
+```bash
+helm install validator offchainlabs/nitro \
+  --namespace my-l3-chain \
+  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
+  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
+  --set configmap.data.chain.id=$CHAIN_ID \
+  --set-file configmap.data.chain.info-json=chain-info.json \
+  --set configmap.data.node.sequencer.enable=false \
+  --set configmap.data.node.batch-poster.enable=false \
+  --set configmap.data.node.staker.enable=true \
+  --set configmap.data.node.staker.strategy=MakeNodes \
+  --set configmap.data.node.feed.input.url=ws://external-relay:9642 \
+  --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547 \
+  --set-file configmap.data.node.staker.parent-chain-wallet.private-key=validator-key.txt \
+  --set configmap.data.init.empty=true
+```
+
+- Remove the key file after deployment:
+
+```bash
+rm validator-key.txt
+```
+
+## Step 10: Set up Sequencer Coordinator Manager (optional)
+
+The chain works without this step—sequencers automatically coordinate via Redis. The SQM lets you view which sequencer is active and manually switch if needed. Run it on your local machine.
+
+#### 1. Port-forward Redis (if using in-cluster Redis from Step 2):
+
+- Run the following:
+
+```bash
+kubectl port-forward svc/redis-master 6379:6379 -n my-l3-chain
+```
+
+- Keep this running. In a **new terminal**:
+
+#### 2. Build and run SQM
+
+Requires [Go](https://go.dev/dl/) and build tools. If the build fails, the Nitro repo may need additional dependencies—the chain runs fine without SQM.
+
+- Run the following:
+
+```bash
+git clone --branch v3.9.4 https://github.com/OffchainLabs/nitro.git
+cd nitro
+make target/bin/seq-coordinator-manager
+./target/bin/seq-coordinator-manager redis://127.0.0.1:6379
+```
+
+- If Redis is external (e.g., ElastiCache), use its URL instead of `redis://127.0.0.1:6379`.
+
+#### 3. Use the SQM
+
+- Press `c` to switch between lists
+- Press `s` to save changes to Redis
+- Press `q` to quit
+- Do **not** add the batch poster to the priority list
+
+## Step 11: Expose RPC
+
+Expose the full node RPC so users can connect.
+
+#### Kubernetes LoadBalancer
+
+- Start the LoadBalancer:
+
+```bash
+kubectl patch svc fullnode-nitro -n my-l3-chain -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl get svc fullnode-nitro -n my-l3-chain
+```
+
+- Use the external IP as your chain RPC URL (e.g., `http://EXTERNAL_IP:8547`).
+
+#### Optional: CDN (Cloudflare)
+
+For production, put a CDN in front:
+
+1. Add a DNS A record pointing to your LoadBalancer IP
+2. Enable Cloudflare proxy (orange cloud) for DDoS protection
+3. Use the Cloudflare hostname as your RPC URL
+
+## Step 12: Verify
+
+#### Option A: Port-forward (quick test before exposing)
+
+- Run the following:
+
+```bash
+kubectl port-forward svc/fullnode-nitro 8547:8547 -n my-l3-chain
+```
+
+- Then in another terminal:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+  http://localhost:8547
+```
+
+#### Option B: After exposing via LoadBalancer
+
+- Run the following:
+
+```bash
+# Replace with your LoadBalancer IP or hostname
+RPC_URL="http://YOUR_FULLNODE_IP:8547"
+curl -X POST -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+  $RPC_URL
+```
+
+- You should get a JSON response with a block number (e.g., `{"jsonrpc":"2.0","id":1,"result":"0x..."}`). Wait until blocks are producing before proceeding to Step 13.
+
+## Step 13: Deploy token bridge
+
+This enables bridging tokens between your chain and Arbitrum Sepolia. Run this from your project folder (the one with `node-config.json` and `.env` from the from-scratch page). The chain must be producing blocks (Step 12).
+
+- Create `deploy-token-bridge.mjs` in your project folder:
+
+```javascript
+import { createPublicClient, http, defineChain } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { arbitrumSepolia } from 'viem/chains';
+import {
+  createRollupPrepareTransaction,
+  createRollupPrepareTransactionReceipt,
+  createTokenBridgePrepareTransactionRequest,
+  createTokenBridgePrepareTransactionReceipt,
+  createTokenBridgePrepareSetWethGatewayTransactionRequest,
+  createTokenBridgePrepareSetWethGatewayTransactionReceipt,
+} from '@arbitrum/chain-sdk';
+import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
+import { config } from 'dotenv';
+config();
+
+const parentChain = arbitrumSepolia;
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(process.env.PARENT_CHAIN_RPC),
+});
+
+const rollupOwner = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
+
+async function main() {
+  const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
+  if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
+
+  const tx = createRollupPrepareTransaction(
+    await parentChainPublicClient.getTransaction({ hash: txHash }),
+  );
+  const txReceipt = createRollupPrepareTransactionReceipt(
+    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
+  );
+  const coreContracts = txReceipt.getCoreContracts();
+  const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
+  const chainId = chainConfig.chainId;
+  const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
+
+  const chain = defineChain({
+    id: chainId,
+    network: 'Arbitrum chain',
+    name: 'arbitrum-chain',
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    rpcUrls: { default: { http: [chainRpc] } },
+    testnet: true,
+  });
+  const chainPublicClient = createPublicClient({ chain, transport: http() });
+
+  const txRequest = await createTokenBridgePrepareTransactionRequest({
+    params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
+  });
+
+  console.log('Deploying token bridge...');
+  const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
+    serializedTransaction: await rollupOwner.signTransaction(txRequest),
+  });
+  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
+  );
+  console.log('Token bridge deployed on parent chain');
+
+  console.log('Waiting for retryables on your chain...');
+  const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
+    orbitPublicClient: chainPublicClient,
+  });
+  if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
+    throw new Error('Retryables failed');
+  }
+  console.log('Token bridge contracts created on your chain');
+
+  const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+    rollup: coreContracts.rollup,
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
+  });
+  const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
+    serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
+  });
+  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
+  );
+  const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
+    orbitPublicClient: chainPublicClient,
+  });
+  if (wethRetryableReceipts[0].status !== 'success') {
+    throw new Error('WETH gateway retryable failed');
+  }
+  console.log('WETH gateway configured. Token bridge ready.');
+}
+
+main().catch(console.error);
+```
+
+- Run it with your chain's RPC URL (the LoadBalancer IP from Step 11):
+
+```bash
+CHAIN_RPC=http://YOUR_LOADBALANCER_IP:8547 node deploy-token-bridge.mjs
+```
+
+- Replace `YOUR_LOADBALANCER_IP` with your external IP. The script reads from your `.env` file. When you see `Token bridge ready.`, you now have the testnet infrastructure running.
+
+### Troubleshooting
+
+- Run `kubectl get pods -n my-l3-chain` to check pod status
+- Run `kubectl logs <pod-name> -n my-l3-chain` to inspect logs
+- Run `kubectl get svc -n my-l3-chain` to verify service names (if relay connection fails, the service name may differ)
+- **No blocks producing**: Ensure batch poster and validator were funded (from-scratch Step 4)
+- **Token bridge retryables fail**: Wait for blocks to be producing (Step 12) before running Step 13
+
+## Summary
+
+| Component            | Purpose                                                         |
+| :------------------- | :-------------------------------------------------------------- |
+| **Sequencers (3)**   | Redundant transaction queueing; one active, others standby      |
+| **Redis**            | Coordinates active sequencer selection                          |
+| **Sequencer relays** | Combine feeds from all sequencers                               |
+| **External relays**  | Public-facing feed endpoints                                    |
+| **Full nodes**       | Serve RPC and forward transactions to active sequencer          |
+| **Batch poster**     | Posts batches to the parent chain                               |
+| **Validator**        | Validates blocks and posts assertions to the parent chain       |
+| **SQM** (optional)   | Manual failover and sequencer management                        |
+| **Token bridge**     | Enables bridging tokens between your chain and Arbitrum Sepolia |
+
+Your chain RPC is at your full node URL (load balancer or CDN). Users and apps can connect from anywhere.
+
+### Next steps
+
+For running production mainnet, consider a RaaS provider. For a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
