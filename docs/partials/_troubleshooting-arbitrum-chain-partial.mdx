@@ -163,16 +163,16 @@ The estimated cost is approximately $600 per sequencer replica per month for a l
 
 ### What are the different validator modes?
 
-- **Defensive (allowlist required)**:- Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.
+- **Defensive (allowlist required)**: Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.
 
-- **StakeLatest (allowlist required)**:- Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
+- **StakeLatest (allowlist required)**: Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
 
-- **ResolveNodes (allowlist required)**:- Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
+- **ResolveNodes (allowlist required)**: Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
 
-- **MakeNodes (allowlist required)**:- Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
+- **MakeNodes (allowlist required)**: Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
 - Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.
 
-- **Watchtower**:- A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
+- **Watchtower**: A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
 
 ### What are the costs to run a validator?
 
@@ -182,9 +182,9 @@ The estimated monthly cost for Watchtower validators will be approximately $500.
 
 To participate in a fraud-proof game, your validator will need funds (can be any `ERC-20`) for two things:
 
-1. Gas costs to post assertions- Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.
+1. Gas costs to post assertions: Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.
 
-2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then 555+79 `ETH` per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
+2. Bonds to participate: Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then 555+79 `ETH` per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
 
 ### How do I export snapshots for nitro-based chains? Is there any tooling for this?
 

@@ -87,7 +87,7 @@ It's also possible to use `ParentToChildMessage.calculateSubmitRetryableId()`, h
 
 ## Tracing `DepositEth` from parent chain to child chain
 
-When it comes to a simple ETH deposit, the process is very similar to finding a retryable ticket's hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)` which returns an ETH deposit message containing the `childTxHash`.
+When it comes to a simple `ETH` deposit, the process is very similar to finding a retryable ticket's hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)` which returns an `ETH` deposit message containing the `childTxHash`.
 
 ```tsx
 import { providers } from 'ethers';
@@ -119,7 +119,7 @@ The transaction may not be sent to the child chain yet, but the transaction hash
 
 ## Tracing retryables from child chain to parent chain
 
-Tracing a retryable ticket from child chain to parent chain has multiple steps but is not too complicated. First, you need to create a contract for the `ArbRetryableTx` and take the hash of the retryable message and use it as a log query for the `RedeemScheduled` event. This is a unique value so there will only be one log. Once that log is found, get the transaction hash of the log - this is the retryable ticket hash. Grab the transaction info of the retryable ticket and parse its information; it contains a value called `requestId`. This is a unique value given to each retryable ticket and is also an indexed value for the `MessageDelivered` log on the parent chain bridge contract. Query the logs using the `requestId` and you'll get a single log, which will contain the transaction hash information.
+Tracing a retryable ticket from child chain to parent chain has multiple steps but is not too complicated. First, you need to create a contract for the `ArbRetryableTx` and take the hash of the retryable message and use it as a log query for the `RedeemScheduled` event. This is a unique value so there will only be one log. Once that log is found, get the transaction hash of the log—this is the retryable ticket hash. Grab the transaction info of the retryable ticket and parse its information; it contains a value called `requestId`. This is a unique value given to each retryable ticket and is also an indexed value for the `MessageDelivered` log on the parent chain bridge contract. Query the logs using the `requestId` and you'll get a single log, which will contain the transaction hash information.
 
 If you have the hash of the actual ticket and not the message that is executed from the ticket, you can skip finding the `RedeemScheduled` event and go straight to getting the `requestId`.
 
@@ -180,7 +180,7 @@ main();
 
 ## Tracing `DepositEth` from child chain to parent chain
 
-If you want to trace an `DepositEth` message from child to parent chain, it requires a bit more work and is not as efficient. Even though ETH deposit messages are given a `requestId`, the child chain transaction is not given that information, meaning you have no means of using it to query the parent chain bridge logs efficiently. Instead, you must rely on the `SequencerInbox` contract.
+If you want to trace an `DepositEth` message from child to parent chain, it requires a bit more work and is not as efficient. Even though `ETH` deposit messages are given a `requestId`, the child chain transaction is not given that information, meaning you have no means of using it to query the parent chain bridge logs efficiently. Instead, you must rely on the `SequencerInbox` contract.
 
 The first thing to do is find which batch your child chain transaction is in. With that info, you can query the `SequencerInbox` contract to find the block number that the batch was posted in, giving you certainty that the original parent chain message was sent before the block with the posted batch. From there, search through the `Bridge` contract for their `MessageDelivered` logs. You can then wrap the transaction that was responsible for emitting those logs with `ParentEthDepositTransactionReceipt`. When wrapped, you can call `getEthDeposits`, and if the hash calculated matches the hash you have, then that is the original parent chain message.
 

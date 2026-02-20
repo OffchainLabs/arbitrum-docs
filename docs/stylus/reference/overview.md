@@ -1,6 +1,7 @@
 ---
 title: 'Stylus Rust SDK overview'
 description: 'An overview of the features provided by the Stylus Rust SDK'
+content_type: reference
 author: jose-franco
 sme: jose-franco
 sidebar_position: 1
