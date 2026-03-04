@@ -13,7 +13,7 @@ import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
 This page is intended for all Arbitrum node operators and Arbitrum chain owners, it summarizes the changes brought by <a data-quicklook-from="arbos">ArbOS</a> 51 "Dia", and what you should do to ensure a seamless upgrade.
 
-The minimum Nitro version that supports ArbOS 51 "Dia" is [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.3-8bc5554`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators. For Arbitrum One and Nova, an ArbOS upgrade requires a governance vote to activate; the vote for ArbOS 51 was [passed on December 18, 2025](https://www.tally.xyz/gov/arbitrum/proposal/53154361738756237993090798888616593723057470462495169047773178676976253908001?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9) and was [activated on January 8, 2026](../../notices/arbos51-upgrade-notice.mdx).
+The minimum Nitro version that supports ArbOS 51 "Dia" is [Nitro v3.9.6](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.6), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.6-91bf578`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators. For Arbitrum One and Nova, an ArbOS upgrade requires a governance vote to activate; the vote for ArbOS 51 was [passed on December 18, 2025](https://www.tally.xyz/gov/arbitrum/proposal/53154361738756237993090798888616593723057470462495169047773178676976253908001?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9) and was [activated on January 8, 2026](../../notices/arbos51-upgrade-notice.mdx).
 
 As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 51 Dia is an upgrade that builds upon [ArbOS 40 Callisto](./arbos40.mdx).
 
@@ -21,12 +21,12 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 
 - Having read and understood the [ArbOS Software Releases Overview page](./01-overview.mdx).
 - Following the [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/13-arbos-upgrade.mdx).
-- Running [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher, which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.3-8bc5554`.
-  - Note that it's important to run Nitro v3.9.3 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
+- Running [Nitro v3.9.6](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.6) or higher, which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.9.6-91bf578`.
+  - Note that it's important to run Nitro v3.9.6 only against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (potentially inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. Avoiding unvalidated code is also mitigated by ensuring you run the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node inside Docker.
 - Running [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
   - If your chain isn't ready to activate <a data-quicklook-from="bold">BoLD</a>, use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher can't be used without activating BoLD.
   - If you want to enable [Native Token Mint/Burn capabilities](#native-token-mint-and-burn) for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
-- WASM module root: `0x8a7513bf7bb3e3db04b0d982d0e973bcf57bf8b88aef7c6d03dba3a81a56a499`
+- WASM module root (consensus-v51.1): `0xc2c02df561d4afaf9a1d6785f70098ec3874765c638e3cb6dbe8d3c83333e14c`
 - If the Arbitrum chain posts blobs to a Fusaka-enabled <a data-quicklook-from="parent-chain">Parent chain</a>, ensure that the consensus layer client is configured correctly as per the [Fusaka upgrade notice](../../notices/fusaka-upgrade-notice.mdx).
 
 ## High-level description of ArbOS 51 changes
@@ -141,7 +141,7 @@ Refer to [gas floor per token guide](/launch-arbitrum-chain/configure-your-chain
 
 - [Guide for how to upgrade ArbOS on your Arbitrum chain](../../launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/13-arbos-upgrade.mdx)
 - [README for how to upgrade your rollup contracts to support ArbOS 51 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
-- [Nitro v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3)
+- [Nitro v3.9.6](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.6)
 - [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1)
 - [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) (only relevant for Arbitrum chains that don't have BoLD enabled yet)
 - [On-chain vote to Activate ArbOS 51 (Dia) and Gas Pricing Updates](https://www.tally.xyz/gov/arbitrum/proposal/53154361738756237993090798888616593723057470462495169047773178676976253908001?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9)
