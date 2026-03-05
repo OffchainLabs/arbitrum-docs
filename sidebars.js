@@ -1131,32 +1131,6 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Reference',
-          items: [
-            {
-              type: 'doc',
-              label: 'ArbOS technical reference',
-              id: 'how-arbitrum-works/reference/arbos-reference',
-            },
-            {
-              type: 'doc',
-              label: 'Geth',
-              id: 'how-arbitrum-works/reference/geth',
-            },
-            {
-              type: 'doc',
-              label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/reference/parent-chain-pricing',
-            },
-            {
-              type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
-            },
-          ],
-        },
-        {
-          type: 'category',
           label: 'The BoLD dispute protocol',
           items: [
             {
