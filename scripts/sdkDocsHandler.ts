@@ -4,7 +4,7 @@ import { Application, RendererEvent } from 'typedoc';
 import { parseMarkdownContentTitle } from '@docusaurus/utils';
 
 // Manual SDK file constants
-const INDEX_FILENAME = 'index.mdx';
+const INDEX_FILENAME = 'introduction.mdx';
 const MIGRATE_FILENAME = 'migrate.mdx';
 const MANUAL_FILES = [INDEX_FILENAME, MIGRATE_FILENAME];
 
@@ -653,12 +653,6 @@ Message classes have been renamed and their methods updated:
   // Bootstrap: Write template files (only called when files don't exist)
   fs.writeFileSync(indexPath, introductionContent, 'utf8');
   fs.writeFileSync(migratePath, migrationContent, 'utf8');
-
-  // Remove the TypeDoc-generated index.md file if it exists
-  const indexMdPath = path.join(sdkOutputDir, 'index.md');
-  if (fs.existsSync(indexMdPath)) {
-    fs.unlinkSync(indexMdPath);
-  }
 }
 
 export { load };
