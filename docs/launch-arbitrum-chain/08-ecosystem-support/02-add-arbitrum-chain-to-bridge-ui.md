@@ -1,6 +1,7 @@
 ---
 title: "How to add your Arbitrum chain to Arbitrum's bridge"
 description: "Learn how to add your Arbitrum chain to Arbitrum's bridge."
+content_type: how-to
 author: ojurkowitz
 sme: jose-franco
 sidebar_position: 2

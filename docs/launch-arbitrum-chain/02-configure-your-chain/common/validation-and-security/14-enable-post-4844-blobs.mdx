@@ -7,8 +7,6 @@ content_type: how-to
 user_story: 'As an Arbitrum chain operator, I want to enable EIP-4844 blob transactions for my batch poster so I can reduce data availability costs.'
 ---
 
-# Enabling blob transactions for Arbitrum batch poster
-
 This guide explains how to configure your Arbitrum node to post [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blob transactions to the parent chain, which can significantly reduce data availability costs.
 
 ## Prerequisites
@@ -48,13 +46,18 @@ If your version is below 20, upgrade by following the [ArbOS upgrade guide](13-a
 
 ## Configuration
 
-To enable blob transaction posting, add the following configuration to your node:
+To enable blob transaction posting, add the following configuration to your batch poster node:
 
 ```json
 {
   "node": {
     "batch-poster": {
       "post-4844-blobs": true
+    }
+  },
+  "parent-chain": {
+    "blob-client": {
+      "beacon-url": "YOUR_BEACON_URL"
     }
   }
 }

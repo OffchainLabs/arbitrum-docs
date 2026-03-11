@@ -4,7 +4,7 @@ description: Learn more about what type of ARb node one needs to run.
 author-objective: Build a quickstart that helps readers understand why they might want to run a specific type of an Arbitrum node.
 reader-audience: Moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
 reader-task: Learn about the different types of Arbitrum nodes and understand the benefits and trade-offs of each type.
-content_type: overview
+content_type: concept
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
@@ -42,7 +42,7 @@ To be able to _interact with_ or _build applications on_ any of the Arbitrum cha
 
 When interacting with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quick start, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each node type, users can make an informed decision based on their specific requirements and objectives.
 
-### Considerations for running an Arbitrum full node
+## Considerations for running an Arbitrum full node
 
 - **Transaction validation and security**: Running a full node allows users to independently validate transactions and verify the state of the Arbitrum blockchain. Users can have complete confidence in the authenticity and integrity of the transactions they interact with.
 - **Reduced trust requirements**: By running a full node, users can interact with the Arbitrum network without relying on third-party services or infrastructure. This independence reduces the need to trust external entities and mitigates the risk of potential centralized failures or vulnerabilities.
@@ -50,19 +50,19 @@ When interacting with the Arbitrum network, users have the option to run either 
 
 For detailed instructions, read [how to run an Arbitrum full node](/run-arbitrum-node/02-run-full-node.mdx).
 
-### Considerations for running an Arbitrum archive node
+## Considerations for running an Arbitrum archive node
 
 While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require access to extensive historical data or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
 
 For detailed instructions, read [how to run an Arbitrum archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx).
 
-### Considerations for running an Arbitrum classic node
+## Considerations for running an Arbitrum classic node
 
 The significance of running an Arbitrum classic node is mainly applicable to individuals with specific needs for an archive node and access to classic-related commands.
 
 For detailed instructions, read [how to run an Arbitrum classic node](/run-arbitrum-node/more-types/03-run-classic-node.mdx).
 
-### Considerations for running a feed relay
+## Considerations for running a feed relay
 
 If you are running a single node, there is no requirement to set up a feed relay. However, if you have multiple nodes, it is highly recommended to have a single feed relay per data center. This setup offers several advantages, including reducing ingress fees and enhancing network stability.
 

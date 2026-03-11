@@ -4,7 +4,7 @@ description: 'A high-level overview of third-party Arbitrum chain infrastructure
 author: leartulaj
 sme: leartulaj
 user_story: As an Arbitrum chain deployer, I want to know what third-party infrastructure options are available that will help me deploy and maintain a production-grade Arbitrum chain.
-content_type: overview
+content_type: reference
 ---
 
 This document provides an overview of third-party Arbitrum chain infrastructure providers that support production-grade Arbitrum chain deployments.

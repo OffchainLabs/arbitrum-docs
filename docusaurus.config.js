@@ -159,7 +159,7 @@ const config = {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
               return undefined;
-            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/' + s.docPath;
+            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/docs/' + s.docPath;
           },
           showLastUpdateTime: true,
         },

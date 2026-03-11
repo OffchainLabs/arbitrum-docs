@@ -4,14 +4,18 @@
   "compilerOptions": {
     "baseUrl": ".",
     "moduleResolution": "bundler",
-    "allowJs": true,
+    "allowJs": false,
     "esModuleInterop": true,
     "jsx": "react",
     "lib": ["ESNext", "DOM"],
     "noEmit": true,
+    "target": "ES2020",
+    "skipLibCheck": true,
     "types": ["node"],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@site/*": ["./*"]
     }
-  }
+  },
+  "exclude": ["submodules", "node_modules", "build", ".docusaurus", "*.js"]
 }

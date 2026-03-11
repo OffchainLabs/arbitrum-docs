@@ -1,0 +1,188 @@
+---
+title: 'Use native interop token with mint/burn as your Arbitrum chain gas token'
+sidebar_label: 'Configure a native mint/burn gas token'
+description: 'Learn how use a native interop token with mint/burn (such as LayerZero OFT, xERC-20, or native USDC) as your Arbitrum chain gas token'
+user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about using a native interop token with mint/burn for bridging of gas tokens'
+content_type: concept
+---
+
+:::caution Bridge counterparty risk
+
+While this feature allows an Arbitrum chain to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the parent chain.
+
+However, by using a third-party bridge for the chain's gas token, your chain's gas token—and thus its liveness—becomes directly dependent on the security and integrity of the third-party bridge provider.
+
+:::
+
+:::info
+
+While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) to enable this feature.
+
+If you want to learn more about the concept of native mint/burn and the impact on your chain, refer to the [Choose native mint/burn page](/launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn.mdx).
+
+:::
+
+## Recommended configuration
+
+### Prerequisites
+
+Before starting, ensure that the chain has:
+
+| Item               | Minimum version                                                                                                                                   |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `nitro-contracts`  | [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher                                                           |
+| `nitro-node`       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher (includes the fix for `ArbNativeTokenManager` precompile inclusion) |
+| `go-ethereum` fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root) or later                           |
+
+We suggest the following baseline or values for production chains:
+
+- [ArbOS version 51](/run-arbitrum-node/arbos-releases/arbos51) or later.
+- Call [`ArbOwner.setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) to activate with a future timestamp ≥ 7 days ahead. This is recommended for chains which are already live.
+- Native-token owners list: only the bridge adapter contract(s) to minimize the attack surface.
+- Outbox sweep bot: run once per hour to prevent stray collateral build-up.
+- Adapter contract must implement replay‑protection and supply accounting as these requirements are out-of-scope for ArbOS.
+
+## How to configure the feature for your chain
+
+:::info
+
+The native token mint/burn feature is currently not available for implementation at chain genesis. The ability to activate it during chain initialization will be part of a future release.
+
+:::
+
+### Enable the feature post-genesis
+
+Below steps show the flow a chain owners can use to allowlist a bridge adapter. The example below uses a Foundry call, but you can also use other tools to interact with the precompiles directly.
+
+1. Update your chain to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) binaries and deploy the consensus-v51 WASM root.
+2. Call [`setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with the chain owner and a UNIX timestamp that is 7+ days in the future to enable the feature, otherwise the call will fail.
+
+   :::important
+
+   The feature becomes live once the chain timestamp passes `NativeTokenManagementFromTime`. Until then, the `add/removeNativeTokenOwner` call will revert.
+
+   :::
+
+3. Deploy your bridge adapter (e.g., LayerZero OFT) and note the contract address.
+4. Add the deployed bridge adapter as a native-token owner:
+   ```shell
+   cast send 0x0000000000000000000000000000000000000070 \
+     "addNativeTokenOwner(address)" \
+     {0xTheNewOwnerToBeAdded} \
+     --private-key $PRIVATE_KEY \
+     --rpc-url $RPC_URL
+   ```
+5. _(Optional)_ Deploy [`ERC20MigrationOutbox`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/extra/ERC20MigrationOutbox.sol) on L1 and run a bot to call `sweep()` on a desired cadence.
+6. Chain owners should monitor the following events:
+   - `OwnerActs(0xaeb3a464, address indexed owner, bytes data)` to see adding native owner
+   - `OwnerActs(0x96a3751d, address indexed owner, bytes data)` to see removing native owner
+   - `NativeTokenMinted` and `NativeTokenBurned` to see token mint and burn events
+
+### Temporarily disabling the mint/burn feature
+
+There may be situations where you want to disable the feature temporarily, e.g., to investigate a bridge bug or supply imbalance. All calls below are made from an [**ArbOwner**](https://github.com/OffchainLabs/nitro-precompile-interfaces/) wallet. These commands are for chain owners, bridge teams have their own operating procedures.
+
+1. Inspect the current list of owners.
+
+   ```shell
+   cast call 0x000000000000000000000000000000000000006b \
+     "getAllNativeTokenOwners()(address[])" \
+     --rpc-url $RPC_URL
+   ```
+
+2. Remove each owner.
+
+   ```shell
+   cast send 0x0000000000000000000000000000000000000070 \
+     "removeNativeTokenOwner(address)" \
+     {0xTheOwnerToBeRemoved} \
+     --private-key $PRIVATE_KEY \
+     --rpc-url $RPC_URL
+   ```
+
+   `mintNativeToken` and `burnNativeToken` now revert because no authorized senders remain.
+
+   Canonical bridge exits are now open, warn liquidity partners.
+
+3. Verify the pause.
+
+   ```shell
+   cast call 0x000000000000000000000000000000000000006b \
+     "getAllNativeTokenOwners()(address[])" \
+     --rpc-url $RPC_URL
+   ```
+
+   The list should be empty
+
+4. _(Optional but **recommended**)_ Notify downstream infrastructure: Bridges, indexers, and other relevant teams may need to be informed that canonical exits are open again and the adapter is offline.
+
+**To re-enable the feature later**
+
+- Add the adapter back (no delay if `NativeTokenManagementFromTime` is a past timestamp).
+
+  ```bash
+  cast send 0x0000000000000000000000000000000000000070 \
+    "addNativeTokenOwner(address)" \
+    {0xTheNewOwnerToBeAdded} \
+    --private-key $PRIVATE_KEY \
+    --rpc-url $RPC_URL
+  ```
+
+- You can call `GetNativeTokenManagementFrom` to verify `NativeTokenManagementFromTime` value:
+
+  ```jsx
+
+  cast send 0x000000000000000000000000000000000000006b \
+    "getNativeTokenManagementFrom()(uint64)" \
+    {0xTheNewOwnerToBeAdded} \
+    --private-key $PRIVATE_KEY \
+    --rpc-url $RPC_URL
+  ```
+
+### Disabling the native mint/burn feature permanently
+
+1. Remove all native-token owners via `removeNativeTokenOwner`.
+2. The `ArbOwner` calls the function `SetNativeTokenManagementFrom(0)` to freeze the action to add or remove the list of trusted adapters (owners). Setting this parameter to `0` disables future modifications to `NativeTokenOwners` ; do this after the list is empty. In other words, it will lock the token-owner list forever: no new owners can be added, and nobody can re-enable Native Mint/Burn.
+3. To verify behavior: `getAllNativeTokenOwners()` should return `[]` (empty list)
+4. Canonical-bridge withdrawals resume automatically once the list of native-token owners is empty.
+
+## Security checklist
+
+| Risk                                 | Mitigation                                                                                          |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| Admin key compromise enables minting | Seven-day timelock, set up alerting on `NativeTokenManagementFromTime` updates                      |
+| Buggy adapter over-mints tokens      | Remove owner would block mint/burn; users can burn & exit via canonical bridge after owners removed |
+| Collateral split across two exits    | Canonical bridge auto-blocks withdrawals when owners exist; run Outbox sweep                        |
+
+## FAQs
+
+### Who should read this page?
+
+- Bridge/infra engineers building an adapter that mints native gas.
+- Chain owners who need to allowlist such an adapter and run the sweeper bot.
+
+### Can I run the feature on an older ArbOS version?
+
+While native mint/burn was technically introduced in ArbOS 41, we strongly recommend upgrading to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) for those enabling this feature.
+
+### What happens to value-bearing withdrawals once I disable the feature?
+
+When the last native-token owner is removed, Nitro automatically re-opens canonical-bridge withdrawals. No additional action is needed.
+
+### How can developers get the timestamp value of `NativeTokenManagementFromTime`?
+
+Filter event `OwnerActs(bytes4 indexed method, address indexed owner, bytes data)` with first index `0xbdb8f707` to get all results, and decode the latest result's data field to get the last valid timestamp. That timestamp would be the point after which `ArbOwner`'s can take action to `nativeTokenOwner` list.
+
+:::caution Testing Responsibility
+
+While Offchain Labs has conducted comprehensive [system tests](https://github.com/OffchainLabs/nitro/blob/master/system_tests/arbos_upgrade_test.go#L292)
+to verify the core ArbOS logic for native mint/burn functionality, this does not cover your specific
+implementation.
+
+**Individual teams are responsible to:**
+
+- Thoroughly test their own adapter contracts and app-layer solutions.
+- Verify the security and collateralization of their specific third-party token providers (e.g., LayerZero, xERC20).
+- Ensure their custom configurations are compatible with their chain's unique environment.
+
+:::

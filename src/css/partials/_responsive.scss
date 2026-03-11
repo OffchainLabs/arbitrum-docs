@@ -1,12 +1,51 @@
-@media (max-width: 736px) {
-  .markdown h1:first-child {
-    font-size: 24px;
+// ========================================
+// Responsive Styles
+// Typography responsive is in _typography.scss
+// ========================================
+
+// Table overflow handling - constrain tables to content area
+.markdown {
+  // Wrapper divs around tables
+  > div:has(> table),
+  div:has(> table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
   }
 
-  .markdown > h3,
-  .markdown > .faq-question > h3 {
-    font-size: 18px;
-    margin-top: 35px;
-    margin-bottom: 10px;
+  // Direct tables (no wrapper)
+  > table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  // All tables
+  table {
+    display: table;
+  }
+}
+
+@media (max-width: 736px) {
+  // Sidebar adjustments
+  .theme-doc-sidebar-container {
+    font-size: 13px;
+  }
+
+  // Navbar adjustments
+  .navbar__item {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 996px) {
+  html {
+    overflow-x: hidden;
+  }
+
+  // Tablet breakpoint adjustments
+  main > .container {
+    padding-top: 50px !important;
   }
 }

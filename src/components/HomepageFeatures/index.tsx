@@ -59,7 +59,7 @@ function Feature({ title, Svg, description, href }: FeatureItem) {
   );
 }
 
-export default function HomepageFeatures(): JSX.Element {
+export default function HomepageFeatures(): React.ReactElement {
   return (
     <section className={styles.features}>
       <h3>Resources</h3>

@@ -72,27 +72,27 @@ Your DA provider exposes JSON-RPC methods that Nitro nodes call to store and ret
 
 **Reader methods** (data retrieval):
 
-- `daprovider_getSupportedHeaderBytes` - Returns header bytes identifying your provider
-- `daprovider_recoverPayload` - Recovers batch data from certificate (normal execution)
-- `daprovider_collectPreimages` - Collects preimages for validation and fraud-proof replay (validation)
-- `daprovider_recoverPayloadAndPreimages` - Recovers batch data from certificate and also collects preimages for validation
+- `daprovider_getSupportedHeaderBytes`: Returns header bytes identifying your provider
+- `daprovider_recoverPayload`: Recovers batch data from certificate (normal execution)
+- `daprovider_collectPreimages`: Collects preimages for validation and fraud-proof replay (validation)
+- `daprovider_recoverPayloadAndPreimages`: Recovers batch data from certificate and also collects preimages for validation
 
 **Writer methods** (for batch posting):
 
-- `daprovider_getMaxMessageSize` - Returns your provider's current maximum batch size
-- `daprovider_store` - Stores batch data and returns certificate
+- `daprovider_getMaxMessageSize`: Returns your provider's current maximum batch size
+- `daprovider_store`: Stores batch data and returns certificate
 - `daprovider_startChunkedStore`, `daprovider_sendChunk`, `daprovider_commitChunkedStore` - Optional streaming protocol for large batches (see [Appendix A](#appendix-a-streaming-protocol))
 
 **Validator methods** (fraud-proof generation):
 
-- `daprovider_generateReadPreimageProof` - Generates a proof for reading preimage data
-- `daprovider_generateCertificateValidityProof` - Generates proof of certificate validity
+- `daprovider_generateReadPreimageProof`: Generates a proof for reading preimage data
+- `daprovider_generateCertificateValidityProof`: Generates proof of certificate validity
 
 #### 2. Onchain validator contract (Solidity)
 
 - Implements `ICustomDAProofValidator` interface
-- `validateReadPreimage()` - Validates preimage read proofs onchain
-- `validateCertificate()` - Validates certificate authenticity onchain
+- `validateReadPreimage()`: Validates preimage read proofs onchain
+- `validateCertificate()`: Validates certificate authenticity onchain
 
 ### Development workflow
 
@@ -111,7 +111,7 @@ Your DA provider exposes JSON-RPC methods that Nitro nodes call to store and ret
 
 **`ReferenceDA` implementation**:
 
-- **Certificate format**: 99 bytes (header + SHA256 + ECDSA signature) - see `daprovider/referenceda/certificate.go`
+- **Certificate format**: 99 bytes (header + SHA256 + ECDSA signature), see `daprovider/referenceda/certificate.go`
 - **JSON-RPC server**: Complete working server at `cmd/daprovider/daprovider.go`
   - Implements all required RPC methods
   - Written in Go, but you can use any language
@@ -687,7 +687,7 @@ See [Appendix A: Streaming Protocol](#appendix-a-streaming-protocol) for complet
 
 ## 5. Implementing validator RPC methods
 
-Your JSON-RPC server implements two Validator methods that generate cryptographic proofs for fraud proof validation. These are **critical for security** - the fraud-proof system must be able to prove both valid and invalid certificates onchain.
+Your JSON-RPC server implements two Validator methods that generate cryptographic proofs for fraud proof validation. These are **critical for security**—the fraud-proof system must be able to prove both valid and invalid certificates onchain.
 
 ### Method 1: `daprovider_generateReadPreimageProof`
 
@@ -993,7 +993,7 @@ Complete proof = [machineProof..., certSize(8), certificate, claimedValid(1), yo
 
 The `ReferenceDA` server demonstrates the complete pattern:
 
-**GenerateCertificateValidityProof** - key logic:
+**GenerateCertificateValidityProof** key logic:
 
 ```go
 // Parse certificate
@@ -1021,7 +1021,7 @@ if err != nil {
 return proof{claimedValid: boolToByte(isTrusted), version: 1}
 ```
 
-**GenerateReadPreimageProof** - key logic:
+**GenerateReadPreimageProof** key logic:
 
 ```go
 // Parse certificate to get data hash
@@ -1504,20 +1504,20 @@ Your DA provider server exposes JSON-RPC methods that Nitro nodes call. You can 
 
 **Reader Methods**:
 
-- `daprovider_getSupportedHeaderBytes` - Returns header byte strings
-- `daprovider_recoverPayload` - Recovers batch payload
-- `daprovider_collectPreimages` - Collects preimages for validation
-- `daprovider_recoverPayloadAndPreimages` - Recovers batch data and also collects preimages for validation
+- `daprovider_getSupportedHeaderBytes`: Returns header byte strings
+- `daprovider_recoverPayload`: Recovers batch payload
+- `daprovider_collectPreimages`: Collects preimages for validation
+- `daprovider_recoverPayloadAndPreimages`: Recovers batch data and also collects preimages for validation
 
 **Writer Methods** (optional, for batch posting):
 
-- `daprovider_getMaxMessageSize` - Returns maximum batch size
-- `daprovider_store` - Stores batch and returns certificate
+- `daprovider_getMaxMessageSize`: Returns maximum batch size
+- `daprovider_store`: Stores batch and returns certificate
 
 **Validator Methods**:
 
-- `daprovider_generateReadPreimageProof` - Generates preimage read proof
-- `daprovider_generateCertificateValidityProof` - Generates validity proof
+- `daprovider_generateReadPreimageProof`: Generates preimage read proof
+- `daprovider_generateCertificateValidityProof`: Generates validity proof
 
 **Example: cmd/daprovider Server (Go)**
 
@@ -1660,10 +1660,10 @@ The Nitro repository includes system tests for the DA API with BoLD challenges:
 
 **BoLD Challenge Protocol Tests** (file: `system_tests/bold_challenge_protocol_test.go`):
 
-- `TestChallengeProtocolBOLDCustomDA_EvilDataGoodCert` - Corrupted data, valid certificate
-- `TestChallengeProtocolBOLDCustomDA_EvilDataEvilCert` - Corrupted data, invalid certificate
-- `TestChallengeProtocolBOLDCustomDA_UntrustedSignerCert` - Certificate signed by untrusted signer
-- `TestChallengeProtocolBOLDCustomDA_ValidCertClaimedInvalid` - Valid certificate incorrectly claimed invalid
+- `TestChallengeProtocolBOLDCustomDA_EvilDataGoodCert`: Corrupted data, valid certificate
+- `TestChallengeProtocolBOLDCustomDA_EvilDataEvilCert`: Corrupted data, invalid certificate
+- `TestChallengeProtocolBOLDCustomDA_UntrustedSignerCert`: Certificate signed by untrusted signer
+- `TestChallengeProtocolBOLDCustomDA_ValidCertClaimedInvalid`: Valid certificate incorrectly claimed invalid
 
 **Block Validator Tests**:
 
@@ -1902,8 +1902,8 @@ A JSON object with `BatchId` field (uint64). This field is a unique identifier g
 
 **Arguments**:
 
-- batchId (uint64) - The identifier generated by the start-stream.
-- chunkId (uint64) - The zero-indexed position of the data segment within the full batch.
+- batchId (uint64): The identifier generated by the start-stream.
+- chunkId (uint64): The zero-indexed position of the data segment within the full batch.
 - chunk (bytes)
 - signature (bytes)
 
@@ -1915,7 +1915,7 @@ A successful operation returns an HTTP 200 status code.
 
 **Arguments**:
 
-- `batchId` (uint64) - The identifier generated by the start-stream.
+- `batchId` (uint64): The identifier generated by the start-stream.
 - `signature` (bytes)
 
 **Return**:

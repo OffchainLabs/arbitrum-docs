@@ -2,6 +2,7 @@
 id: quickstart
 title: 'Quickstart: write a smart contract in Rust using Stylus'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
+content_type: quickstart
 author: chrisco512, anegg0
 sme: chrisco512, anegg0
 sidebar_position: 2
@@ -30,7 +31,7 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 <details>
 <summary>Rust toolchain</summary>
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </details>
 
@@ -94,14 +95,28 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.81 as well as adding the WASM build target:
+We'll add WASM ([WebAssembly](https://webassembly.org/)) as a build target by pinning a project-local Rust toolchain in `rust-toolchain.toml`.
+
+### Creating a project
+
+Let's create our first Stylus project by running:
 
 ```shell
-rustup default 1.81
-rustup target add wasm32-unknown-unknown --toolchain 1.81
+cargo stylus new <YOUR_PROJECT_NAME>
+cd <YOUR_PROJECT_NAME>
 ```
 
-You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
+Create a project-local Rust toolchain file:
+
+```shell
+cat <<'EOF' > rust-toolchain.toml
+[toolchain]
+channel = "stable"
+targets = ["wasm32-unknown-unknown"]
+EOF
+```
+
+You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands; we will use some of them in this guide:
 
 ```shell title="cargo stylus --help returns:"
 Cargo command for developing Stylus projects
@@ -125,14 +140,6 @@ Commands:
 Options:
   -h, --help     Print help
   -V, --version  Print version
-```
-
-### Creating a project
-
-Let's create our first Stylus project by running:
-
-```shell
-cargo stylus new <YOUR_PROJECT_NAME>
 ```
 
 `cargo stylus new` generates a starter template that implements a Rust version of the Solidity `Counter` smart contract example:

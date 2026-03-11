@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const { Application, RendererEvent } = require('typedoc');
-const { parseMarkdownContentTitle } = require('@docusaurus/utils');
+import fs from 'fs';
+import path from 'path';
+import { Application, RendererEvent } from 'typedoc';
+import { parseMarkdownContentTitle } from '@docusaurus/utils';
 
 // Manual SDK file constants
 const INDEX_FILENAME = 'index.mdx';
@@ -28,7 +28,7 @@ function load(app) {
   const indexPath = path.join(sdkOutputDir, INDEX_FILENAME);
   const migratePath = path.join(sdkOutputDir, MIGRATE_FILENAME);
 
-  app.renderer.on(RendererEvent.START, () => {
+  app.renderer.on(RendererEvent.BEGIN, () => {
     // Clean generated docs but preserve manually maintained files
     cleanDirectory(sdkOutputDir, MANUAL_FILES);
   });
@@ -661,4 +661,4 @@ Message classes have been renamed and their methods updated:
   }
 }
 
-exports.load = load;
+export { load };
