@@ -100,18 +100,18 @@ yarn dev
 
 **Environment Variables (.env)** \
 These parameters define the identity of your chain.
-| Variable | Description |
-| :--- | :--- |
-| `CHAIN_ID` | The unique numeric identifier for your new chain. |
-| `IS_ANYTRUST` | Whether the chain is an AnyTrust (DAC) chain (`true`) or a standard Rollup (`false`). |
-| `ARB_OS_VERSION` | The version of ArbOS to use for the genesis block. |
-| `CHAIN_OWNER` | The address that will have administrative ownership of the deployed chain. |
-| `L1_BASE_FEE` | The initial L1 gas price (in Wei) used to calibrate the chain's birth. |
-| `NITRO_NODE_IMAGE` | The Nitro node Docker image used for hashing and node operations. |
-| `CUSTOM_ALLOC_ACCOUNT_FILE` | _(Optional)_ Path to a JSON file containing your own account balances, contract bytecodes, and storage slots. The file should be in the standard Geth `alloc` format. |
-| `ENABLE_NATIVE_TOKEN_SUPPLY` | _(Optional)_ Set to `true` if you want to launch your chain with native interop tokens as [gas token with mint / burn enabled](/launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn) via third-party protocols. |
-| `LOAD_DEFAULT_PREDEPLOYS` | _(Optional)_ Set to `false` if you don't want the default predeploys. By default the value for this variable is considered as `true`. |
-| `ENABLE_TRANSACTION_FILTERING` | _(Optional)_ Set to `true` if you want to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. |
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `CHAIN_ID` | The unique numeric identifier for your new chain. | `31337` |
+| `IS_ANYTRUST` | Whether the chain is an AnyTrust (DAC) chain (`true`) or a standard Rollup (`false`). | `false` |
+| `ARBOS_VERSION` | The version of ArbOS to use for the genesis block. | `51` |
+| `CHAIN_OWNER` | The address that will have administrative ownership of the deployed chain. | — |
+| `L1_BASE_FEE` | The initial L1 gas price (in Wei) used to calibrate the chain's birth. | `1000000000` (1 gwei) |
+| `NITRO_NODE_IMAGE` | The Nitro node Docker image used for hashing and node operations. | — |
+| `CUSTOM_ALLOC_ACCOUNT_FILE` | _(Optional)_ Path to a JSON file containing your own account balances, contract bytecodes, and storage slots. The file should be in the standard Geth `alloc` format. | `""` (empty) |
+| `ENABLE_NATIVE_TOKEN_SUPPLY` | _(Optional)_ Set to `true` if you want to launch your chain with native interop tokens as [gas token with mint / burn enabled](/launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn) via third-party protocols. | `false` |
+| `LOAD_DEFAULT_PREDEPLOYS` | _(Optional)_ Set to `false` if you don't want the default predeploys. | `true` |
+| `ENABLE_TRANSACTION_FILTERING` | _(Optional)_ Set to `true` if you want to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. | `false` |
 
 #### Execution Process
 
