@@ -18,17 +18,17 @@ import { MDXProvider } from '@mdx-js/react';
 import './styles.css';
 
 // Import all config partials statically to avoid CSP issues
-import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/features/partials/_custom-gas-token-pc.mdx';
-import ConfigAltDa from '@site/docs/launch-arbitrum-chain/features/partials/_alt-da-pc.mdx';
+import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_custom-gas-token-pc.mdx';
+import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_alt-da-pc.mdx';
 import ConfigDedicatedThroughput from '@site/docs/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx';
-import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/features/partials/_native-eth-pc.mdx';
+import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_native-eth-pc.mdx';
 import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-hardware.mdx';
-import ConfigRollup from '@site/docs/launch-arbitrum-chain/features/partials/_rollup-pc.mdx';
-import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/features/partials/_anytrust-pc.mdx';
-import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/features/partials/_fast-withdrawals-pc.mdx';
-import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/features/partials/_timeboost-pc.mdx';
-import ConfigBold from '@site/docs/launch-arbitrum-chain/features/partials/_bold-pc.mdx';
-import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/features/partials/_permissioned-validators-pc.mdx';
+import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_rollup-pc.mdx';
+import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_anytrust-pc.mdx';
+import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_fast-withdrawals-pc.mdx';
+import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_timeboost-pc.mdx';
+import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_bold-pc.mdx';
+import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/feature-cards/_permissioned-validators-pc.mdx';
 import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
 import ConfigForceInclusion from '@site/docs/launch-arbitrum-chain/partials/config-force-inclusion.mdx';
 import ConfigAccountAbstraction from '@site/docs/launch-arbitrum-chain/partials/config-account-abstraction.mdx';

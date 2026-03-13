@@ -189,7 +189,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Features',
+          label: 'Configuration',
           collapsed: true,
           items: [
             {
@@ -199,22 +199,22 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/data-availability/choose-rollup',
+                  id: 'launch-arbitrum-chain/configuration/data-availability/choose-rollup',
                   label: 'Rollup',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/data-availability/choose-anytrust',
+                  id: 'launch-arbitrum-chain/configuration/data-availability/choose-anytrust',
                   label: 'AnyTrust',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/data-availability/choose-alt-da',
+                  id: 'launch-arbitrum-chain/configuration/data-availability/choose-alt-da',
                   label: 'Alt-DA',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/data-availability/config-data-availability',
+                  id: 'launch-arbitrum-chain/configuration/data-availability/config-data-availability',
                   label: 'Configure data availability',
                 },
                 {
@@ -224,29 +224,29 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/features/data-availability/dac-get-started',
+                      id: 'launch-arbitrum-chain/configuration/data-availability/dac-get-started',
                       label: 'Get started',
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/features/data-availability/deploy-das',
+                      id: 'launch-arbitrum-chain/configuration/data-availability/deploy-das',
                       label: 'Deploy DAS',
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/features/data-availability/deploy-mirror-das',
+                      id: 'launch-arbitrum-chain/configuration/data-availability/deploy-mirror-das',
                       label: 'Deploy mirror DAS',
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/features/data-availability/configure-dac',
+                      id: 'launch-arbitrum-chain/configuration/data-availability/configure-dac',
                       label: 'Configure DAC',
                     },
                   ],
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/data-availability/enable-4844-blobs',
+                  id: 'launch-arbitrum-chain/configuration/data-availability/enable-4844-blobs',
                   label: 'Enable post-4844 blobs',
                 },
               ],
@@ -258,52 +258,52 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/choose-custom-gas-token',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/choose-custom-gas-token',
                   label: 'Custom gas token',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/choose-fee-rebates',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/choose-fee-rebates',
                   label: 'Fee distribution',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/choose-native-eth',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/choose-native-eth',
                   label: 'Native ETH',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/choose-native-mint-burn',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/choose-native-mint-burn',
                   label: 'Native mint/burn gas token',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/custom-gas-token-anytrust',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/custom-gas-token-anytrust',
                   label: 'AnyTrust custom gas token',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/custom-gas-token-rollup',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/custom-gas-token-rollup',
                   label: 'Rollup custom gas token',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/configure-native-mint-burn',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/configure-native-mint-burn',
                   label: 'Configure native mint/burn',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/fee-management',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/fee-management',
                   label: 'Fee management',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/dynamic-pricing',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/dynamic-pricing',
                   label: 'Dynamic pricing',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/gas-and-fees/gas-optimization',
+                  id: 'launch-arbitrum-chain/configuration/gas-and-fees/gas-optimization',
                   label: 'Gas optimization tools',
                 },
               ],
@@ -315,42 +315,42 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/choose-bold',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/choose-bold',
                   label: 'BoLD',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/choose-challenge-period',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/choose-challenge-period',
                   label: 'Custom challenge period',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/choose-permissioned-validators',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/choose-permissioned-validators',
                   label: 'Permissioned validators',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/customizable-challenge-period',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/customizable-challenge-period',
                   label: 'Customize challenge period',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/stake-and-validator-configurations',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/stake-and-validator-configurations',
                   label: 'Stake & validator configuration',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/batch-posting-assertion-control',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/batch-posting-assertion-control',
                   label: 'Batch poster & assertion control',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/bold-adoption',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/bold-adoption',
                   label: 'Adopt BoLD',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/validation-and-security/chain-finality',
+                  id: 'launch-arbitrum-chain/configuration/validation-and-security/chain-finality',
                   label: 'Customize chain finality',
                 },
               ],
@@ -362,12 +362,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/mev/choose-timeboost',
+                  id: 'launch-arbitrum-chain/configuration/mev/choose-timeboost',
                   label: 'Timeboost',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/mev/timeboost-for-arbitrum-chains',
+                  id: 'launch-arbitrum-chain/configuration/mev/timeboost-for-arbitrum-chains',
                   label: 'Configure Timeboost',
                 },
               ],
@@ -379,12 +379,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/ux/choose-fast-withdrawals',
+                  id: 'launch-arbitrum-chain/configuration/ux/choose-fast-withdrawals',
                   label: 'Fast withdrawals',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/ux/fast-withdrawals',
+                  id: 'launch-arbitrum-chain/configuration/ux/fast-withdrawals',
                   label: 'Configure fast withdrawals',
                 },
               ],
@@ -396,27 +396,27 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/aep-fees/choose-aep-fees',
+                  id: 'launch-arbitrum-chain/configuration/aep-fees/choose-aep-fees',
                   label: 'AEP fees',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/aep-fees/aep-fee-router-introduction',
+                  id: 'launch-arbitrum-chain/configuration/aep-fees/aep-fee-router-introduction',
                   label: 'AEP fee router introduction',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/aep-fees/set-up-aep-fee-router',
+                  id: 'launch-arbitrum-chain/configuration/aep-fees/set-up-aep-fee-router',
                   label: 'Set up AEP fee router',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/aep-fees/calculate-aep-fees',
+                  id: 'launch-arbitrum-chain/configuration/aep-fees/calculate-aep-fees',
                   label: 'Calculate AEP fees',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/aep-fees/reporting-on-fees',
+                  id: 'launch-arbitrum-chain/configuration/aep-fees/reporting-on-fees',
                   label: 'Reporting on fees',
                 },
               ],
@@ -428,62 +428,62 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-arbos-version',
+                  id: 'launch-arbitrum-chain/configuration/advanced/choose-arbos-version',
                   label: 'ArbOS version',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-chain-precompiles',
+                  id: 'launch-arbitrum-chain/configuration/advanced/choose-chain-precompiles',
                   label: 'Precompiles',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-custom-behavior',
+                  id: 'launch-arbitrum-chain/configuration/advanced/choose-custom-behavior',
                   label: 'Chain behavior',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality',
+                  id: 'launch-arbitrum-chain/configuration/advanced/choose-custom-delay-inbox-finality',
                   label: 'Delayed inbox finality',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments',
+                  id: 'launch-arbitrum-chain/configuration/advanced/sequencer-timing-adjustments',
                   label: 'Sequencer timing',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/layer-leap',
+                  id: 'launch-arbitrum-chain/configuration/advanced/layer-leap',
                   label: 'Layer Leap',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/da-api-integration-guide',
+                  id: 'launch-arbitrum-chain/configuration/advanced/da-api-integration-guide',
                   label: 'DA API integration guide',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/config-sequencer-timing-adjustments',
+                  id: 'launch-arbitrum-chain/configuration/advanced/config-sequencer-timing-adjustments',
                   label: 'Configure sequencer timing',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/customize-precompile',
+                  id: 'launch-arbitrum-chain/configuration/advanced/customize-precompile',
                   label: 'Customize precompiles',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/customize-stf',
+                  id: 'launch-arbitrum-chain/configuration/advanced/customize-stf',
                   label: 'Customize chain behavior',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/customize-arbos',
+                  id: 'launch-arbitrum-chain/configuration/advanced/customize-arbos',
                   label: 'Customize ArbOS version',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/additional-configuration-parameters',
+                  id: 'launch-arbitrum-chain/configuration/advanced/additional-configuration-parameters',
                   label: 'Additional configuration parameters',
                 },
               ],
@@ -534,12 +534,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy/quickstart/l3-rollup-from-scratch',
+                  id: 'launch-arbitrum-chain/quickstart/l3-rollup-from-scratch',
                   label: 'Run an L3 rollup from scratch',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy/quickstart/l3-rollup-testnet',
+                  id: 'launch-arbitrum-chain/quickstart/l3-rollup-testnet',
                   label: 'Run L3 rollup infrastructure (testnet)',
                 },
               ],
@@ -635,17 +635,17 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/operate/node-runners/split-validator',
+                  id: 'launch-arbitrum-chain/running-a-node/split-validator',
                   label: 'Run split validator node',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/operate/node-runners/ha-sequencer',
+                  id: 'launch-arbitrum-chain/running-a-node/ha-sequencer',
                   label: 'Run a high availability sequencer',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/operate/node-runners/batch-poster',
+                  id: 'launch-arbitrum-chain/running-a-node/batch-poster',
                   label: 'Run a batch poster',
                 },
               ],
