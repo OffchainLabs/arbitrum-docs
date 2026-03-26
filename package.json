@@ -36,7 +36,8 @@
     "lint:markdown:fix": "markdownlint \"docs/**/*.{md,mdx}\" --fix --ignore \"docs/sdk/**\"",
     "generate-doc-manifest": "tsx scripts/generate-doc-manifest.ts",
     "audit-docs": "tsx scripts/generate-doc-manifest.ts && tsx scripts/audit-docs.ts",
-    "audit-docs:report-only": "tsx scripts/audit-docs.ts"
+    "audit-docs:report-only": "tsx scripts/audit-docs.ts",
+    "generate-cli-reference": "tsx scripts/generate-cli-reference.ts"
   },
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
