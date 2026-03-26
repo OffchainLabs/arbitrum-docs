@@ -955,11 +955,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/docker-and-cli-binaries',
-          label: 'Docker and CLI binaries',
-        },
-        {
-          type: 'doc',
           id: 'run-arbitrum-node/nitro/build-nitro-locally',
           label: 'Build Nitro locally',
         },
