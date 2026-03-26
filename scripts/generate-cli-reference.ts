@@ -10,6 +10,7 @@
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { execSync } from 'node:child_process';
 
 interface CliFlag {
   flag: string;
@@ -244,10 +245,24 @@ function main(): void {
       process.exit(1);
     }
     const existing = fs.readFileSync(outputPath, 'utf8');
-    if (existing !== mdx) {
-      console.error('Check failed: generated output differs from committed file.');
-      console.error('Run "yarn generate-cli-reference" to update.');
-      process.exit(1);
+
+    // Write to a temp file and run Prettier so the comparison accounts
+    // for table padding, asterisk escaping, and other formatting changes
+    // that Prettier applies to markdown tables.
+    const tmpPath = path.join(path.dirname(outputPath), '.cli-flags-check-tmp.mdx');
+    try {
+      fs.writeFileSync(tmpPath, mdx);
+      execSync(`npx prettier --write --config ./.prettierrc.js "${tmpPath}"`, {
+        stdio: 'pipe',
+      });
+      const formatted = fs.readFileSync(tmpPath, 'utf8');
+      if (existing !== formatted) {
+        console.error('Check failed: generated output differs from committed file.');
+        console.error('Run "yarn generate-cli-reference" to update.');
+        process.exit(1);
+      }
+    } finally {
+      if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
     }
     console.log('Check passed: output is up to date.');
     return;
