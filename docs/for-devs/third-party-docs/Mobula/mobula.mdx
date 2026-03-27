@@ -1,0 +1,94 @@
+---
+title: 'Mobula Quickstart - Crypto Data APIs for Arbitrum'
+description: 'Learn how to use Mobula APIs to get real-time market data, wallet analytics, token prices, and more on Arbitrum.'
+content_type: reference
+author: Sacha Delhoux
+sme: Sacha Delhoux
+sidebar_label: 'Mobula'
+third_party_content_owner: 'NBMSacha'
+---
+
+**[Mobula](https://mobula.io/?utm_source=arbitrum-docs&utm_medium=partner-docs)** is a developer-first crypto data API providing real-time and historical data across 60+ blockchains. From token prices, market data, and OHLCV candles, to wallet analytics, DeFi positions, and trade tracking, Mobula offers comprehensive APIs for building data-driven applications on Arbitrum and all major EVM chains.
+
+## Quickstart Guide
+
+Get started with Mobula APIs on Arbitrum by generating your free API key at [admin.mobula.io](https://admin.mobula.io/?utm_source=arbitrum-docs&utm_medium=partner-docs), or explore the [API documentation](https://docs.mobula.io/?utm_source=arbitrum-docs&utm_medium=partner-docs).
+
+## Mobula APIs
+
+All Mobula APIs support Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia testnet, along with 60+ other blockchains.
+
+:::info Endpoints
+
+Check out the [Mobula API Reference](https://docs.mobula.io/rest-api-reference/introduction/?utm_source=arbitrum-docs&utm_medium=partner-docs) for all available endpoints.
+
+:::
+
+### Token Data API
+
+Get comprehensive token information on Arbitrum including prices, ATH/ATL, security metrics, and more:
+
+```bash
+# Get token details (price, market cap, volume, ATH/ATL, liquidity)
+curl "https://api.mobula.io/api/2/token/details?blockchain=arbitrum&address=0x..." \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+- Real-time token prices and market data
+- All-time highs (ATH) and all-time lows (ATL) with timestamps
+- Holder distribution and trading activity
+- Liquidity and volume metrics across multiple timeframes
+
+### Token Security API
+
+Retrieve security information to protect users from malicious tokens:
+
+```bash
+# Get token security metrics (honeypot detection, taxes, contract risks)
+curl "https://api.mobula.io/api/2/token/security?blockchain=arbitrum&address=0x..." \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+- Honeypot detection and contract verification
+- Buy/sell tax analysis
+- Transfer restrictions and max wallet limits
+- Mint and freeze authority checks
+- Static code analysis for verified contracts
+
+### Wallet Positions with PnL
+
+Query wallet positions and track profit/loss on Arbitrum:
+
+```bash
+# Get wallet positions with PnL tracking
+curl "https://api.mobula.io/api/2/wallet/positions?wallet=0x...&blockchains=arbitrum" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+- Realized and unrealized PnL per position
+- Average buy/sell prices
+- Token balances and USD values
+- Wallet labels (whale, smart money, etc.)
+- Funding source tracking
+
+### Additional APIs
+
+- **Trade Data**: Real-time and historical trade data with enriched metadata
+- **WebSocket Streams**: Live price updates, new trades, wallet activity
+- **Portfolio**: Multi-chain wallet portfolio aggregation
+- **OHLCV**: Historical candlestick data for any token
+
+## Supported Arbitrum Networks
+
+| Network | Blockchain ID | Support |
+|---------|---------------|---------|
+| Arbitrum One | \`arbitrum\` or \`evm:42161\` | ✅ Full support |
+| Arbitrum Nova | \`arbitrum-nova\` or \`evm:42170\` | ✅ Full support |
+| Arbitrum Sepolia | \`arbitrum-sepolia\` | ✅ Testnet support |
+
+## Resources
+
+- [API Documentation](https://docs.mobula.io/?utm_source=arbitrum-docs&utm_medium=partner-docs)
+- [SDK Reference](https://docs.mobula.io/rest-api-reference/sdk/?utm_source=arbitrum-docs&utm_medium=partner-docs)
+- [Pricing](https://mobula.io/pricing/?utm_source=arbitrum-docs&utm_medium=partner-docs)
+- [Discord Community](https://discord.gg/JVT7xKm3AD)
