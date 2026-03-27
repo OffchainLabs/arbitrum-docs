@@ -975,11 +975,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/nitro-memory-management',
-          label: 'Nitro memory management',
-        },
-        {
-          type: 'doc',
           id: 'run-arbitrum-node/nitro/configuration-system',
           label: 'Configuration system',
         },
