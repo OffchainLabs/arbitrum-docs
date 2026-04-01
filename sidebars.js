@@ -1889,7 +1889,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/fundamentals/project-structure',
+              id: 'stylus/reference/stylus-toml-reference',
               label: 'Configuration reference',
             },
             {
