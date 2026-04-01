@@ -31,7 +31,7 @@ cover the following steps:
 <details>
 <summary>Rust toolchain</summary>
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.91 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </details>
 
@@ -111,7 +111,7 @@ Create a project-local Rust toolchain file:
 ```shell
 cat <<'EOF' > rust-toolchain.toml
 [toolchain]
-channel = "stable"
+channel = "1.91.0"
 targets = ["wasm32-unknown-unknown"]
 EOF
 ```
@@ -389,7 +389,7 @@ To enable testing, you'll need to add the following to your `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-stylus-sdk = { version = "0.8.4", features = ["stylus-test"] }
+stylus-sdk = { version = "0.10.2", features = ["stylus-test"] }
 ```
 
 ### Running your tests
