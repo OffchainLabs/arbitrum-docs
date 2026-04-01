@@ -102,10 +102,10 @@ Not sure where to start with Stylus? This guide helps you find the optimal learn
 | Solidity Pattern              | Stylus Equivalent           | Guide                                                                   |
 | ----------------------------- | --------------------------- | ----------------------------------------------------------------------- |
 | `mapping(address => uint)`    | `StorageMap<Address, U256>` | [Storage types](/stylus/fundamentals/data-types/storage)                |
-| `require(condition, "error")` | `ensure!(condition, Error)` | [Error handling](/stylus/fundamentals/contracts#error-handling)         |
-| `msg.sender`                  | `msg::sender()`             | [Global functions](/stylus/fundamentals/global-variables-and-functions) |
-| `constructor`                 | `impl` with initialization  | [Contracts](/stylus/fundamentals/contracts)                             |
-| Events                        | Derive `Erase` trait        | See Stylus SDK documentation                                            |
+| `require(condition, "error")` | `Result<T, E>` + `?`        | [Error handling](/stylus/fundamentals/contracts#error-handling)         |
+| `msg.sender`                  | `self.vm().msg_sender()`    | [Global functions](/stylus/fundamentals/global-variables-and-functions) |
+| `constructor`                 | `#[constructor]` method     | [Contracts](/stylus/fundamentals/contracts)                             |
+| Events                        | `self.vm().log(Event{})`    | [Global functions](/stylus/fundamentals/global-variables-and-functions) |
 
 ### Key resources
 

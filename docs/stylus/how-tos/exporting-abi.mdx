@@ -308,8 +308,8 @@ sol! {
 impl Token {
     pub fn transfer(&mut self, to: Address, value: U256) -> bool {
         // Transfer logic
-        evm::log(Transfer {
-            from: msg::sender(),
+        self.vm().log(Transfer {
+            from: self.vm().msg_sender(),
             to,
             value,
         });

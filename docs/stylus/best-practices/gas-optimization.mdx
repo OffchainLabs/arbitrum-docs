@@ -313,14 +313,14 @@ impl MyContract {
     // Public functions use internal helper
     #[external]
     pub fn deposit(&mut self, amount: U256) -> Result<(), Vec<u8>> {
-        self.internal_validate(msg::sender(), amount)?;
+        self.internal_validate(self.vm().msg_sender(), amount)?;
         // Deposit logic...
         Ok(())
     }
 
     #[external]
     pub fn withdraw(&mut self, amount: U256) -> Result<(), Vec<u8>> {
-        self.internal_validate(msg::sender(), amount)?;
+        self.internal_validate(self.vm().msg_sender(), amount)?;
         // Withdraw logic...
         Ok(())
     }
@@ -372,8 +372,8 @@ pub fn batch_transfer(
     // Process transfers...
 
     // Single event instead of N events
-    evm::log(BatchTransfer {
-        from: msg::sender(),
+    self.vm().log(BatchTransfer {
+        from: self.vm().msg_sender(),
         to: recipients,
         amounts,
     });
