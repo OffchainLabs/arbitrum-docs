@@ -1888,6 +1888,11 @@ const sidebars = {
               label: 'Opcode and hostio pricing',
             },
             {
+              type: 'doc',
+              id: 'stylus/reference/stylus-toml-reference',
+              label: 'Configuration reference',
+            },
+            {
               type: 'link',
               label: 'Stylus by Example',
               href: 'https://stylus-by-example.org/',
