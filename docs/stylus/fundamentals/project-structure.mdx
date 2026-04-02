@@ -201,7 +201,7 @@ pub enum TokenErrors {
 #[public]
 impl Token {
     pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), TokenErrors> {
-        const balance = self.balances.get(self.vm().msg_sender());
+        let balance = self.balances.get(self.vm().msg_sender());
         if (balance < amount) {
             return Err(TokenErrors::NotEnoughFunds(NotEnoughFunds {
                 request: amount,
