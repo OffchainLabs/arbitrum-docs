@@ -11,7 +11,7 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 :::tip Looking for implementation guides?
 
-This document explains the protocol-level concepts of child-to-parent messaging. For practical, step-by-step instructions on implementing withdrawals and messaging, see [How to bridge to parent chain from child chain](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx).
+This document explains the protocol-level concepts of child-to-parent messaging. For practical, step-by-step instructions on implementing withdrawals and messaging, see [How to bridge to parent chain from child chain](/build-decentralized-apps/bridging/withdraw/eth-and-messages.mdx).
 
 :::
 
@@ -41,7 +41,7 @@ Messages from child to parent chains are included in Arbitrum’s Rollup state a
 
 Child-to-parent messages are sent via the `ArbSys` precompile's `sendTxToL1` method. After the approximately 7-day challenge period, messages can be executed on the parent chain using the `Outbox.executeTransaction` method with a Merkle proof obtained from the `NodeInterface` contract.
 
-For step-by-step implementation instructions, see [How to bridge to parent chain](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx).
+For step-by-step implementation instructions, see [How to bridge to parent chain](/build-decentralized-apps/bridging/withdraw/eth-and-messages.mdx).
 
 ## Protocol design details
 
@@ -77,10 +77,10 @@ Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and a
 
 The `ArbSys` precompile provides a `withdrawEth` convenience method for withdrawing `ETH` from the child chain. This method burns the `ETH` on the child chain and creates a child-to-parent message. Like all child-to-parent messages, it requires execution on the parent chain after the challenge period via `Outbox.executeTransaction`.
 
-For implementation details, see [Withdrawing `ETH`](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx#withdrawing-eth).
+For implementation details, see [Withdrawing `ETH`](/build-decentralized-apps/bridging/withdraw/eth-and-messages.mdx#withdrawing-eth).
 
 ### `ERC-20` token withdrawals
 
 Token withdrawals use Arbitrum's canonical bridge architecture, detailed in the [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx). The process flows through the `L2GatewayRouter` to the appropriate gateway contract (`L2ArbitrumGateway`), which burns the child chain tokens and creates a message to the parent chain gateway. After the challenge period, the message can be executed on the parent chain to release tokens from escrow.
 
-For implementation details, see [Withdrawing `ERC-20` tokens](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx#withdrawing-erc-20-tokens).
+For implementation details, see [Withdrawing `ERC-20` tokens](/build-decentralized-apps/bridging/withdraw/eth-and-messages.mdx#withdrawing-erc-20-tokens).
