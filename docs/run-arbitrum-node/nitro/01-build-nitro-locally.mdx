@@ -143,12 +143,12 @@ nvm use 23
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
-rustup install 1.83.0
-rustup default 1.83.0
+rustup install 1.88.0
+rustup default 1.88.0
 rustup install nightly-2024-08-08
-rustup target add wasm32-unknown-unknown --toolchain 1.83.0
-rustup target add wasm32-wasi --toolchain 1.83.0
-rustup target add wasm32-wasip1 --toolchain 1.83.0
+rustup target add wasm32-unknown-unknown --toolchain 1.88.0
+rustup target add wasm32-wasi --toolchain 1.88.0
+rustup target add wasm32-wasip1 --toolchain 1.88.0
 rustup target add wasm32-unknown-unknown --toolchain nightly-2024-08-08
 rustup target add wasm32-wasi --toolchain nightly-2024-08-08
 rustup target add wasm32-wasip1 --toolchain nightly-2024-08-08

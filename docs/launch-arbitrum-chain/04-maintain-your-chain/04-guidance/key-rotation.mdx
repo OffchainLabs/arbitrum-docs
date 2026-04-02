@@ -1,0 +1,188 @@
+---
+title: 'Arbitrum Node Key Rotation Guide'
+sidebar_label: 'Node Key Rotation Guide'
+description: 'Learn how to rotate keys for the different roles in your Arbitrum chain.'
+author: Jason-W123
+sme: Jason-W123
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
+user_story: As a current or prospective Arbitrum chain deployer and maintainer, I need to learn how to rotate my Arbitrum node keys.
+content_type: how-to
+---
+
+This guide covers how to rotate keys for different roles in your Arbitrum Orbit chain: batch poster, validator/bonder, and Data Availability Servers (DAS).
+
+:::warning Important Prerequisites
+
+- **Backup**: Always back up your current configuration and private keys before starting
+- **Testing**: Test key rotation on a testnet environment first, if possible
+- **Downtime**: Plan for potential brief service interruptions during the rotation process
+- **Permissions**: Ensure you have the necessary permissions to call the required smart contract functions
+
+:::
+
+## 1. Batch poster key rotation
+
+:::danger Critical warning
+
+For sequencer nodes running both the sequencer and batch poster on the same server, you **must** first split them and then configure Redis for message synchronization. Failure to do so may cause chain reorganizations. Refer to the [High Availability Sequencer documentation](/launch-arbitrum-chain/07-arbitrum-node-runners/05-high-availability-sequencer-docs.mdx) for setup instructions.
+
+:::
+
+### Prerequisites
+
+- A new batch poster account funded with sufficient `ETH` for gas fees
+- Access to call functions on the `SequencerInbox` contract
+- Gracefully stop the current batch poster
+
+### Generate new batch poster keys
+
+#### 1. Enable the new batch poster
+
+Call the following function on the `SequencerInbox` contract. The caller must be the **rollup owner** or the **batch poster manager**.
+
+```solidity
+setIsBatchPoster(<new_address>, true)
+```
+
+If you also want to transfer the batch poster manager role to a new address, the **rollup owner** must call:
+
+```solidity
+setBatchPosterManager(<new_address>)
+```
+
+#### 2. Update the node configuration
+
+- Update your node configuration to use the new private key
+- Restart the batch poster service with the new configuration
+
+#### 3. Handle potential mempool issues
+
+If you encounter the error: `"posting this transaction will exceed max mempool size: transaction nonce: xxx, unconfirmed nonce: xx, max mempool size: xx"`
+
+**Temporary fix**:
+
+- Add the `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag
+- Restart the batch poster
+- **Remove this flag** before the next start
+
+#### 4. Verify operation
+
+- Monitor logs to confirm the new batch poster is successfully submitting batches
+- Check that transactions are processing normally
+
+#### 5. Disable the old batch poster
+
+```solidity
+setIsBatchPoster(<old_address>, false)
+```
+
+## 2. Validator/bonder key rotation
+
+### Prerequisites
+
+- A new validator account funded with sufficient `ETH`
+- The required bond amount available for the new validator
+- Access to call functions on the `Rollup` contract
+
+### Activate new keys
+
+#### 1. Enable new validator
+
+Call the following function on the `RollupAdminLogic` contract. The caller must be the **rollup owner**.
+
+Note that `setValidator` accepts arrays, allowing you to enable or disable multiple validators in a single call.
+
+```solidity
+setValidator([<new_validator_address>], [true])
+```
+
+#### 2. Update the node configuration
+
+- Update your validator node configuration to use the new private key
+- Restart the validator service
+
+#### 3. Handle potential mempool issues
+
+If you encounter the error: `"posting this transaction will exceed max mempool size: transaction nonce: xxx, unconfirmed nonce: xx, max mempool size: xx"`
+
+- Add `--node.staker.data-poster.dangerous.clear-dbstorage` flag temporarily
+- Restart the validator
+- **Remove this flag** before the next start
+
+#### 4. Verify the new validator operation
+
+- Monitor that the new validator successfully posts bond transactions
+- Confirm that assertion and confirmation transactions are submitted successfully
+
+#### 5. Disable the old validator
+
+```solidity
+setValidator([<old_validator_address>], [false])
+```
+
+#### 6. Recover old validator bond (if applicable)
+
+- Wait for your old validator's latest bond assertion to be confirmed
+- Call `reduceDeposit(0)` on the `RollupUserLogic` contract to reduce the staked bond to zero
+- Call `withdrawStakerFunds()` on the `RollupUserLogic` contract to withdraw the released funds
+
+## 3. AnyTrust Data Availability Committee (DAC) rotation
+
+### Prerequisites
+
+- A new DAC keyset generated
+- Access to call functions on the `SequencerInbox` contract
+
+### Generate, deploy, and verify new DAC keys
+
+#### 1. Generate a new keyset
+
+- Follow the [Generate Keyset documentation](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/04-configure-dac.mdx#step-1-generate-the-keyset-and-keyset-hash-with-all-the-information-from-the-servers) with your new group of DAS servers
+- Ensure that all new DASs are properly configured and accessible
+
+#### 2. Register the new keyset onchain
+
+Call the following function on the `SequencerInbox` contract. The caller must be the **rollup owner**.
+
+```solidity
+setValidKeyset(<new_keyset_bytes>)
+```
+
+:::note
+
+The `setValidKeyset` function takes the raw keyset bytes as its only parameter. The assumed-honest count is encoded within the keyset bytes themselves during keyset generation — it is not a separate contract parameter.
+
+:::
+
+#### 3. Deploy new DAS servers
+
+- Start the new DAS with the updated configuration
+- Verify they are accessible and responding to health checks
+
+#### 4. Verify integration
+
+- Monitor that the batch poster can successfully write batches to the new DAS servers
+- Check DAS server logs for successful data storage operations
+- Confirm data availability requests are getting handled successfully
+
+#### 5. Invalidate the old keyset (optional)
+
+Once the new DAS servers and keyset are fully verified, you can optionally invalidate the old keyset to prevent it from being used. Call the following function on the `SequencerInbox` contract. The caller must be the **rollup owner**.
+
+```solidity
+invalidateKeysetHash(<old_keyset_hash>)
+```
+
+:::note
+
+After invalidating the old keyset, you **must** stop and restart the batch poster so it picks up the new keyset. If you skip this step, the batch poster will continue attempting to use the old (now invalid) keyset and fail to submit batches.
+
+:::
+
+:::caution
+
+- You can obtain the old keyset hash from the `SetValidKeyset` event that was emitted when the old keyset was originally registered
+- Do **not** invalidate the old keyset until the new keyset is fully verified and the batch poster is successfully posting with the new DAS servers — invalidating prematurely can disrupt data availability for your chain
+- After invalidation, the old keyset can no longer be used to certify data availability certificates
+
+:::

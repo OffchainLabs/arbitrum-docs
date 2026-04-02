@@ -52,10 +52,10 @@ Arbitrum SDK can be used to bridge assets to or from an Arbitrum Network. The fo
 
 All asset bridgers have the following methods which accept different parameters depending on the asset bridger type:
 
-- [`deposit`](./assetBridger/assetBridger.md#deposit) - moves assets from the Parent to the Child chain
-- [`withdraw`](./assetBridger/assetBridger.md#withdraw) - moves assets from the Child to the Parent chain
+- [`deposit`](./assetBridger/assetBridger.md#deposit): moves assets from the Parent to the Child chain
+- [`withdraw`](./assetBridger/assetBridger.md#withdraw): moves assets from the Child to the Parent chain
 
-#### Example ETH Deposit to Arbitrum One
+#### Example `ETH` deposit to Arbitrum One
 
 ```ts
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
@@ -73,9 +73,9 @@ const ethDepositTxResponse = await ethBridger.deposit({
 const ethDepositTxReceipt = await ethDepositTxResponse.wait();
 ```
 
-[Learn more in the Eth Deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
+[Learn more in the `ETH` Deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
 
-#### Example ETH Withdrawal from Arbitrum One
+#### Example `ETH` withdrawal from Arbitrum One
 
 ```ts
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
@@ -92,7 +92,7 @@ const withdrawTx = await ethBridger.withdraw({
 const withdrawRec = await withdrawTx.wait();
 ```
 
-[Learn more in the Eth Withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
+[Learn more in the `ETH` Withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
 
 ### Networks
 
@@ -115,7 +115,7 @@ registerCustomArbitrumNetwork({
 
 When assets are moved by the Parent and Child cross chain messages are sent. The lifecycles of these messages are encapsulated in the classes [`ParentToChildMessage`](./message/ParentToChildMessage) and [`ChildToParentMessage`](./message/ChildToParentMessage). These objects are commonly created from the receipts of transactions that send cross chain messages. A cross chain message will eventually result in a transaction being executed on the destination chain, and these message classes provide the ability to wait for that finalizing transaction to occur.
 
-#### Redeem a Parent-to-Child Message
+#### Redeem a parent-to-child message
 
 ```ts
 import { ParentTransactionReceipt, ParentToChildMessageStatus } from '@arbitrum/sdk';
@@ -143,7 +143,7 @@ if (res.status === ParentToChildMessageStatus.Child) {
 
 [Learn more in the Redeem Failed Retryable Tickets tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/redeem-failed-retryable)
 
-### Inbox Tools
+### Inbox tools
 
 As part of normal operation, the Arbitrum sequencer will send messages into the rollup chain. However, if the sequencer is unavailable and not posting batches, the inbox tools can be used to force the inclusion of transactions into the Arbitrum network.
 
@@ -174,13 +174,13 @@ const inboxRec = await resultsParent.wait();
 
 ### Utils
 
-- [`EventFetcher`](./utils/eventFetcher) - A utility to provide typing for the fetching of events
-- [`MultiCaller`](./utils/multicall#multicaller) - A utility for executing multiple calls as part of a single RPC request. This can be useful for reducing round trips.
-- [`constants`](./dataEntities/constants) - A list of useful Arbitrum related constants
+- [`EventFetcher`](./utils/eventFetcher): A utility to provide typing for the fetching of events
+- [`MultiCaller`](./utils/multicall#multicaller): A utility for executing multiple calls as part of a single RPC request. This can be useful for reducing round trips.
+- [`constants`](./dataEntities/constants): A list of useful Arbitrum related constants
 
 ## Development
 
-### Run Integration tests
+### Run integration tests
 
 1. Copy the `.env-sample` file to `.env` and update the values with your own.
 1. First, make sure you have a [Nitro test node](https://github.com/Offchainlabs/nitro-testnode) running. Follow the instructions [here](https://docs.arbitrum.io/node-running/how-tos/local-dev-node).

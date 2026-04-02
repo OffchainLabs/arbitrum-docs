@@ -34,6 +34,11 @@ function load(app) {
   });
 
   app.renderer.on(RendererEvent.END, () => {
+    // Fix stale TypeDoc cross-references that produce numbered anchor suffixes
+    // TypeDoc resolves {@link L2Network.tokenBridge} to a numbered anchor (-2)
+    // that doesn't exist in the curlyBrace anchor format
+    fixStaleAnchors(sdkOutputDir);
+
     // Create manual SDK files only if they don't exist (bootstrap templates)
     // index.mdx and migrate.mdx are manually maintained and should not be regenerated
     if (!fs.existsSync(indexPath) || !fs.existsSync(migratePath)) {

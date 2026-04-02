@@ -1,0 +1,202 @@
+---
+title: 'ZeroDev Smart Account Integration Guide for Arbitrum'
+description: 'Learn about integrating smart accounts for Arbitrum and account abstraction.'
+content_type: how-to
+author:
+sme:
+sidebar_label: 'ZeroDev'
+third_party_content_owner:
+---
+
+## ZeroDev smart account
+
+Gas fees are one of the biggest barriers to mainstream adoption. ZeroDev, built by Offchain Labs (the creators of Arbitrum), solves this problem by enabling gasless transactions on Arbitrum through sponsored User Operations (UserOps). These are powered by our `ERC-4337` compliant Kernel Smart Account.
+With ZeroDev, you can:
+
+- Eliminate gas fees for your users by sponsoring their transactions.
+- Use plugins for advanced features like Passkey support, fine-grained permissions, and Session Keys.
+- Improve user experience with seamless onboarding using Social Login (email, social media, passkey).
+- Support `EIP-7702` for enhanced smart account functionality, allowing EOAs to gain smart account features while keeping their existing address.
+
+## Objectives
+
+After you complete this guide, you'll be able to:
+
+- Configure a ZeroDev project with the latest V3 RPC endpoint and gas sponsorship policies.
+- Set up the necessary clients using the Core SDK (@zerodev/sdk) and viem.
+- Implement smart account creation and send sponsored User Operations on Arbitrum using KERNEL_V3_3.
+
+## Prerequisites: Setting up ZeroDev for sponsorship
+
+To enable gasless transactions, you need a ZeroDev Project ID and a configured gas sponsorship policy.
+Quick Reference Examples: For complete, runnable code examples refer to these scripts:
+
+- [Batch Transactions Example](https://github.com/zerodevapp/zerodev-examples/tree/main/batch-transactions)
+- [EIP-7702 Example](https://github.com/zerodevapp/zerodev-examples/blob/main/7702/7702.ts)
+
+### Step 1. Create your ZeroDev account and project configuration
+
+1. Sign up or log in to the [ZeroDev Dashboard](https://dashboard.zerodev.app/).
+2. If you have an existing project, you can simply enable Arbitrum One or Arbitrum Sepolia for it—you don't need to create a new project for every chain.
+
+### Step 2. Configure a gas sponsorship policy
+
+To manage your gas costs, you must set up a gas sponsorship policy:
+
+1. Navigate to the **Gas Policies** section within your project dashboard.
+2. Create a new policy. Without a policy, ZeroDev won't sponsor any transactions.
+3. Choose between post-pay (credit card) or pre-pay (gas credits).
+
+### Step 3. Obtain the ZeroDev RPC URL
+
+The official V3 endpoint is the preferred method for connecting to ZeroDev infrastructure. `https://rpc.zerodev.app/api/v3{YOUR_PROJECT_ID}/chain/{ARBITRUM_CHAIN_ID}`
+
+- Replace `{YOUR_PROJECT_ID}` with the ID from your dashboard.
+- Replace `{ARBITRUM_CHAIN_ID}` with 42161 for Mainnet or 421614 for Sepolia.
+
+## Send gasless transactions for your users
+
+This section uses the Core SDK (@zerodev/sdk) and viem to send a sponsored transaction.
+
+1. Install dependencies
+
+```shell
+# Using npm
+npm install @zerodev/sdk @zerodev/ecdsa-validator viem
+```
+
+2. Set up clients and the Kernel smart account
+
+```typescript
+import {
+  createKernelAccount,
+  createKernelAccountClient,
+  createZeroDevPaymasterClient,
+} from '@zerodev/sdk';
+import { getEntryPoint, KERNEL_V3_3 } from '@zerodev/sdk/constants';
+import { signerToEcdsaValidator } from '@zerodev/ecdsa-validator';
+import { http, createPublicClient, parseAbi } from 'viem';
+import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
+import { arbitrumSepolia } from 'viem/chains';
+
+// --- Configuration ---
+const ZERODEV_PROJECT_ID = 'YOUR_ZERODEV_PROJECT_ID';
+const ARBITRUM_CHAIN_ID = 421614; // Arbitrum Sepolia
+const ZERODEV_RPC = `https://rpc.zerodev.app/api/v3/${ZERODEV_PROJECT_ID}/chain/${ARBITRUM_CHAIN_ID}`;
+
+// 1. Setup Public Client
+const chain = arbitrumSepolia;
+const publicClient = createPublicClient({
+  transport: http(), // Viem natively supports Arbitrum
+  chain,
+});
+
+// 2. Construct a Signer EOA
+const privateKey = generatePrivateKey();
+const signer = privateKeyToAccount(privateKey);
+const entryPoint = getEntryPoint('0.7');
+
+// 3. Construct the Paymaster Client
+const zerodevPaymaster = createZeroDevPaymasterClient({
+  chain,
+  transport: http(ZERODEV_RPC),
+});
+
+// 4. Construct the Kernel Smart Account
+const ecdsaValidator = await signerToEcdsaValidator(publicClient, {
+  signer,
+  entryPoint,
+  kernelVersion: KERNEL_V3_3,
+});
+
+const account = await createKernelAccount(publicClient, {
+  entryPoint,
+  plugins: {
+    sudo: ecdsaValidator,
+  },
+  kernelVersion: KERNEL_V3_3,
+});
+
+// 5. Construct the Kernel Account Client
+const kernelClient = createKernelAccountClient({
+  account,
+  chain,
+  bundlerTransport: http(ZERODEV_RPC),
+  client: publicClient,
+  paymaster: {
+    getPaymasterData: (userOperation) => {
+      return zerodevPaymaster.sponsorUserOperation({ userOperation });
+    },
+  },
+});
+```
+
+3. Send a gasless transaction (User Operation)
+
+```typescript
+const targetContractAddress = '0x...'; // Your contract
+const contractABI = parseAbi(['function setValue(uint256 newValue) public']);
+
+const callData = await kernelClient.account.encodeCalls([
+  {
+    to: targetContractAddress,
+    value: 0n,
+    data: kernelClient.account.encodeFunctionData({
+      abi: contractABI,
+      functionName: 'setValue',
+      args: [42n],
+    }),
+  },
+]);
+
+const userOpHash = await kernelClient.sendUserOperation({
+  callData: callData,
+});
+
+const receipt = await kernelClient.waitForUserOperationReceipt({
+  hash: userOpHash,
+});
+console.log('Transaction Hash:', receipt.receipt.transactionHash);
+```
+
+## Batching transactions
+
+Kernel allows you to batch multiple transactions into a single sponsored User Operation.
+
+```typescript
+const userOpHashBatch = await kernelClient.sendUserOperation({
+  callData: await kernelClient.account.encodeCalls([
+    { to: targetContractAddress, value: 0n, data: '...' },
+    { to: targetContractAddress, value: 0n, data: '...' },
+  ]),
+});
+```
+
+## Conclusion
+
+You've successfully integrated ZeroDev and implemented gasless, batched transactions on Arbitrum. This configuration, using the V3 RPC and Kernel V3.3, ensures a high-performance, gas-free experience for your users.
+
+## FAQ
+
+#### What is the recommended way to implement account abstraction (AA) on Arbitrum?
+
+ZeroDev is the preferred smart account infrastructure for the Arbitrum ecosystem. Now part of Offchain Labs (the creators of Arbitrum), ZeroDev provides a vertically integrated stack that allows developers to build invisible wallet experiences.
+
+By using ZeroDev's `ERC-4337` and `EIP-7702` compliant Kernel accounts, developers can:
+
+- Eliminate gas friction by sponsoring 100% of user gas fees via the ZeroDev Paymaster.
+- Simplify onboarding by allowing users to log in with familiar social accounts (Google, Facebook) or Passkeys (FaceID/TouchID), removing the need for seed phrases.
+- Enable one-click actions using Session Keys and Batching to combine complex multi-step transactions (like Approve + Swap) into a single signature.
+- Benefit from infrastructure that is built and maintained by the same team that scales the Arbitrum network, ensuring maximum reliability and performance.
+
+For technical integration, visit the [ZeroDev Documentation](https://docs.zerodev.app/).
+
+## Connect with ZeroDev
+
+Need further help? Check out all the ways you can reach ZeroDev for further questions and support:
+
+- Visit ZeroDev's official website at [zerodev.app](https://zerodev.app)
+- Read [Developer Docs](http://docs.zerodev.app/)
+- For assistance, contact the ZeroDev team at support@zerodev.app
+- Follow [ZeroDev on X](https://x.com/zerodev_app)
+- Connect with [ZeroDev on LinkedIn](https://www.linkedin.com/company)

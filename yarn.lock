@@ -4070,10 +4070,10 @@
   dependencies:
     "@octokit/openapi-types" "^24.2.0"
 
-"@offchainlabs/notion-docs-generator@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@offchainlabs/notion-docs-generator/-/notion-docs-generator-0.1.0.tgz#f263c4f7ddc3e47f21b7d479a0a6ba69894fc86e"
-  integrity sha512-4AEoSGPAgZDvH2B2qSzH5WYPCFVJCNm1YBY7VbK0P6DaQOH9ONkBpm+bYNIsyAg2ktL1WRIXR6SQ+T8g4+rb/Q==
+"@offchainlabs/notion-docs-generator@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@offchainlabs/notion-docs-generator/-/notion-docs-generator-0.1.2.tgz#9dc110857c23cc7e71a25df0a3bc28ef1500a22a"
+  integrity sha512-N/gZ2NM+HF5i0ITNQFJD2fPF8M58Ev5k22qboW3Fr8Nisa40Gc8vwNQuO6C1n8rNPR1sPkcaursvgRO60o32dQ==
   dependencies:
     "@notionhq/client" "^2.2.3"
     "@types/node" "^18.11.18"
@@ -5199,7 +5199,7 @@
 
 "@types/d3@^7.4.3":
   version "7.4.3"
-  resolved "https://registry.npmjs.org/@types/d3/-/d3-7.4.3.tgz"
+  resolved "https://registry.yarnpkg.com/@types/d3/-/d3-7.4.3.tgz#d4550a85d08f4978faf0a4c36b848c61eaac07e2"
   integrity sha512-lZXZ9ckh5R8uiFVt8ogUNf+pIrK4EsWrx2Np75WvF/eTpJ0FMHNhjXk8CKEx/+gpHbNQyJWehbFaTvqmHWB3ww==
   dependencies:
     "@types/d3-array" "*"

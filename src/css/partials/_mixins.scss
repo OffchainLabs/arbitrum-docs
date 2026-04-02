@@ -1,10 +1,10 @@
+// ========================================
+// Utility Mixins
+// Table typography is now in _typography.scss
+// ========================================
+
 @mixin enable-transition {
-  -o-transition: all 0.15s ease;
-  -ms-transition: all 0.15s ease;
-  -moz-transition: all 0.15s ease;
-  -webkit-transition: all 0.15s ease;
-  /* ...and now for the proper property */
-  transition: all 0.15s ease;
+  transition: all var(--arbitrum-transition-fast);
 }
 
 @mixin truncate {
@@ -15,175 +15,31 @@
 
 @mixin invisible-horizontal-scroll {
   -ms-overflow-style: none;
-  /* for Internet Explorer, Edge */
   scrollbar-width: none;
-  /* for Firefox */
   overflow-x: scroll;
 
   &::-webkit-scrollbar {
     display: none;
-    /* for Chrome, Safari, and Opera */
   }
 }
 
-@mixin small-table {
-  font-size: 12.5px;
-  margin-top: 20px;
-  margin-bottom: 30px;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.4rem;
-  overflow: hidden;
-  width: fit-content;
-
-  thead {
-    tr {
-      background-color: #e8ecf1;
-      border: none;
-
-      &:first-child {
-        th:first-child {
-          border-top-left-radius: 0.4rem;
-        }
-
-        th:last-child {
-          border-top-right-radius: 0.4rem;
-        }
-      }
-
-      th {
-        font-weight: 700;
-        padding: 12px 10px;
-        border: none;
-        text-align: left;
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-
-        &:last-child {
-          border-right: none;
-        }
-      }
-    }
+// Scrollbar
+@mixin fd-scrollbar {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
   }
 
-  tbody {
-    tr {
-      border: none;
-      background-color: transparent;
-
-      &:nth-child(even) {
-        background-color: rgba(0, 0, 0, 0.04);
-      }
-
-      &:last-child {
-        td:first-child {
-          border-bottom-left-radius: 0.4rem;
-        }
-
-        td:last-child {
-          border-bottom-right-radius: 0.4rem;
-        }
-      }
-
-      td {
-        padding: 10px;
-        border: none;
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-
-        &:last-child {
-          border-right: none;
-        }
-      }
-    }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: var(--arbitrum-scrollbar-thumb, var(--arbitrum-border));
   }
 
-  th,
-  td {
-    border: none;
-  }
-}
-
-[data-theme='dark'] .markdown table,
-[data-theme='dark'] table.small-table,
-[data-theme='dark'] .small-table {
-  // Table has no background - only rows have backgrounds for zebra striping
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 0.4rem;
-  overflow: hidden;
-  width: fit-content;
-
-  thead {
-    tr {
-      // Much lighter header background for better visibility
-      background-color: #3a4b5c;
-      border: none;
-
-      &:first-child {
-        th:first-child {
-          border-top-left-radius: 0.4rem;
-        }
-
-        th:last-child {
-          border-top-right-radius: 0.4rem;
-        }
-      }
-    }
-
-    th {
-      // Consistent lighter header background
-      background-color: #3a4b5c;
-      // High contrast text for readability
-      color: rgba(255, 255, 255, 0.95);
-      font-weight: 700;
-      border-right: 1px solid rgba(255, 255, 255, 0.15);
-
-      &:last-child {
-        border-right: none;
-      }
-    }
+  &::-webkit-scrollbar-track {
+    background: var(--arbitrum-scrollbar-track, transparent);
   }
 
-  tbody {
-    tr {
-      // Nearly transparent base for odd rows - creates dramatic contrast
-      background-color: rgba(255, 255, 255, 0.01);
-
-      &:nth-child(even) {
-        // Reduced zebra striping for improved readability (28% difference, 40% less contrast)
-        background-color: rgba(255, 255, 255, 0.29);
-      }
-
-      &:last-child {
-        td:first-child {
-          border-bottom-left-radius: 0.4rem;
-        }
-
-        td:last-child {
-          border-bottom-right-radius: 0.4rem;
-        }
-      }
-    }
-
-    td {
-      // High contrast text for optimal readability
-      color: rgba(255, 255, 255, 0.9);
-      border: none;
-      border-right: 1px solid rgba(255, 255, 255, 0.15);
-
-      &:last-child {
-        border-right: none;
-      }
-    }
-  }
-}
-
-@mixin medium-table {
-  font-size: 13px;
-  margin-top: 20px;
-  margin-bottom: 30px;
-
-  td {
-    padding: 15px;
+  &::-webkit-scrollbar-corner {
+    display: none;
   }
 }
