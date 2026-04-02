@@ -130,7 +130,12 @@ Replace with a single "Bridging" category:
 
 ### `buildSoliditySidebar`
 
-Check for and apply equivalent changes if it references any of the moved files.
+`buildSoliditySidebar` references two moved doc IDs that must be updated:
+
+- `build-decentralized-apps/cross-chain-messaging` → `build-decentralized-apps/bridging/cross-chain-messaging`
+- `build-decentralized-apps/custom-gas-token-sdk` → `build-decentralized-apps/bridging/custom-gas-token-chains`
+
+These are standalone doc entries (not part of a category) in `buildSoliditySidebar`. Update the IDs in place; no structural changes needed.
 
 ## Redirects
 
@@ -155,11 +160,30 @@ Implementation: use the project's existing redirect mechanism (check for `@docus
 
 ~30 references across these files need updating:
 
-- `docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx` (6 refs)
-- `docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx` (4 refs)
-- `docs/how-arbitrum-works/deep-dives/token-bridging.mdx` (5 refs)
-- `docs/partials/_troubleshooting-arbitrum-chain-partial.mdx` (1 ref)
+- `docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx` (6 markdown link refs)
+- `docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx` (4 markdown link refs)
+- `docs/how-arbitrum-works/deep-dives/token-bridging.mdx` (4 markdown link refs + 1 import statement — see below)
+- `docs/partials/_troubleshooting-arbitrum-chain-partial.mdx` (1 fully-qualified URL ref — convert to relative link)
 - All files within the new `bridging/` directory (internal cross-links between moved files)
+
+### Build-breaking import statements
+
+These import statements use relative paths and will cause build failures if not updated:
+
+1. **`docs/how-arbitrum-works/deep-dives/token-bridging.mdx`** (line 115):
+
+   ```javascript
+   // OLD
+   import TokenCompatibilityPartial from '../../build-decentralized-apps/token-bridging/partials/_token-compatibility.mdx';
+   // NEW
+   import TokenCompatibilityPartial from '../../build-decentralized-apps/bridging/partials/_token-compatibility.mdx';
+   ```
+
+2. **`bridging/configure-token-gateway/generic-custom.mdx`** (line 36): imports `../partials/_token-compatibility.mdx` — this relative path still resolves correctly after the move, no change needed.
+
+### Fully-qualified URL
+
+`docs/partials/_troubleshooting-arbitrum-chain-partial.mdx` (line 60) uses `https://docs.arbitrum.io/build-decentralized-apps/04-cross-chain-messaging`. Convert this to a relative Docusaurus link so it benefits from broken-link detection and the redirect.
 
 ## Content Changes to Moved Files
 
