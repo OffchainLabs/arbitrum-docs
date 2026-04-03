@@ -1,0 +1,66 @@
+import { Node, Edge } from 'reactflow';
+
+export interface ZoomConfig {
+  level: number;
+  duration: number;
+}
+
+export interface PauseConfig {
+  duration: number;
+}
+
+export interface FadeConfig {
+  duration: number;
+  easing: string;
+}
+
+export interface TransitionConfig {
+  fromFile: string;
+  trigger: string;
+  targetDiagram: string;
+  targetFile: string;
+  zoom: ZoomConfig;
+  pause: PauseConfig;
+  fade: FadeConfig;
+}
+
+export interface ManifestData {
+  id: string;
+  title: string;
+  entryDiagramFile: string;
+  diagrams: Map<string, string>;
+  transitions: TransitionConfig[];
+}
+
+export interface DiagramProps {
+  diagramFile?: string;
+  manifest?: string;
+  height?: string;
+  className?: string;
+}
+
+export type DrawioReactFlowProps = DiagramProps;
+
+export interface ReactFlowData {
+  nodes: Node[];
+  edges: Edge[];
+}
+
+export interface NavigationState {
+  currentDiagram: string;
+  history: string[];
+}
+
+export interface NodeData {
+  label: string;
+  shape: string;
+  colors: {
+    backgroundColor: string;
+    borderColor: string;
+  };
+  link?: string;
+  centerable?: boolean;
+  navigateTo?: string;
+  topAligned?: boolean;
+  onNavigate?: (link: string) => void;
+}
