@@ -9,6 +9,7 @@ content_type: how-to
 ---
 
 import RaaSNotice from '../partials/_raas-providers-notice.mdx';
+import CustomDetails from '@site/src/components/CustomDetails';
 
 <RaaSNotice />
 
@@ -54,6 +55,8 @@ The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`
 
 - On your local machine, in the folder that contains `node-config.json`, run:
 
+<CustomDetails summary="node-config.json">
+
 ```bash
 # Export so variables persist for all steps below
 export CHAIN_ID=$(jq -r '.chain["info-json"]' node-config.json | jq -r '.[0]["chain-id"]')
@@ -61,6 +64,9 @@ export PARENT_CHAIN_ID=$(jq -r '.chain["info-json"]' node-config.json | jq -r '.
 export PARENT_RPC=$(jq -r '.["parent-chain"].connection.url' node-config.json)
 
 # Save chain info to file (used by Helm --set-file)
+
+# Save chain info to file (used by Helm --set-file)
+
 jq -r '.chain["info-json"]' node-config.json > chain-info.json
 
 echo "CHAIN_ID=$CHAIN_ID"
@@ -68,6 +74,8 @@ echo "PARENT_CHAIN_ID=$PARENT_CHAIN_ID"
 echo "PARENT_RPC=$PARENT_RPC"
 echo "chain-info.json saved"
 ```
+
+</CustomDetails>
 
 - In Step 8, you will extract the batch poster private key—never commit it to Git or expose it in logs.
 
@@ -117,36 +125,32 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
 
 - Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
 
-```bash
-helm install sequencer offchainlabs/nitro \
-  --namespace my-l3-chain \
-  --set replicaCount=3 \
-  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
-  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
-  --set configmap.data.chain.id=$CHAIN_ID \
-  --set-file configmap.data.chain.info-json=chain-info.json \
-  --set configmap.data.node.sequencer=true \
-  --set configmap.data.node.delayed-sequencer.enable=true \
-  --set configmap.data.node.seq-coordinator.enable=true \
-  --set configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \
-  --set configmap.data.node.feed.output.enable=true \
-  --set configmap.data.node.feed.output.port=9642 \
-  --set configmap.data.execution.sequencer.enable=true \
-  --set configmap.data.init.empty=true \
+<CustomDetails summary="Deploy sequencers:">
+
+```shell \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+  configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
+  --set-file configmap.data.chain.info-json=chain-info.json \ --set
+  configmap.data.node.sequencer=true \ --set configmap.data.node.delayed-sequencer.enable=true \
+  --set configmap.data.node.seq-coordinator.enable=true \ --set
+  configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \ --set
+  configmap.data.node.feed.output.enable=true \ --set configmap.data.node.feed.output.port=9642 \
+  --set configmap.data.execution.sequencer.enable=true \ --set configmap.data.init.empty=true \
   --set perReplicaHeadlessService.enabled=true
 ```
 
-- If sequencers fail to coordinate, each needs a unique URL. Create `sequencer-extra-env.yaml`:
+</CustomDetails>
+
+- If sequencers fail to coordinate, each needs a unique URL.:
+
+<CustomDetails summary="Create sequencer-extra-env.yaml">
 
 ```yaml
-extraEnv:
-  - name: POD_NAME
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.name
-  - name: NITRO_NODE_SEQ__COORDINATOR_MY__URL
-    value: 'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc'
+extraEnv: - name: POD_NAME valueFrom: fieldRef: fieldPath: metadata.name - name:
+NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
+'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc'
 ```
+
+</CustomDetails>
 
 - Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
 
@@ -166,15 +170,14 @@ After deploying sequencers, you must set at least one sequencer in the priority 
 
 Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
 
-- Run the following commands:
+<CustomDetails summary="Run the following commands:">
 
-```bash
-helm install sequencer-relay offchainlabs/relay \
-  --namespace my-l3-chain \
-  --set replicaCount=2 \
-  --set configmap.data.chain.id=$CHAIN_ID \
-  --set configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
+```shell
+replicaCount=2 \ --set configmap.data.chain.id=$CHAIN_ID \ --set
+configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
 ```
+
+</CustomDetails>
 
 - The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro-headless`).
 
@@ -196,21 +199,18 @@ helm install external-relay offchainlabs/relay \
 
 Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically.
 
-- Run the following commands:
+<CustomDetails summary="Run the following commands:">
 
-```bash
-helm install fullnode offchainlabs/nitro \
-  --namespace my-l3-chain \
-  --set replicaCount=2 \
-  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
-  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
-  --set configmap.data.chain.id=$CHAIN_ID \
-  --set-file configmap.data.chain.info-json=chain-info.json \
-  --set configmap.data.execution.forwarder.redis-url=$REDIS_URL \
-  --set configmap.data.node.feed.input.url=ws://external-relay:9642 \
-  --set configmap.data.init.empty=true \
-  --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547
+```shell
+\ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
+--set-file configmap.data.chain.info-json=chain-info.json \ --set
+configmap.data.execution.forwarder.redis-url=$REDIS_URL \ --set
+configmap.data.node.feed.input.url=ws://external-relay:9642 \ --set configmap.data.init.empty=true
+\ --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547
 ```
+
+</CustomDetails>
 
 - If your chain already has blocks, use `--set configmap.data.init.latest=pruned` instead of `init.empty=true`.
 
@@ -224,22 +224,21 @@ The batch poster posts transaction batches to the parent chain.
 printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json)" > batch-poster-key.txt
 ```
 
-- Deploy the batch poster:
+<CustomDetails summary="Deploy the batch poster:">
 
-```bash
-helm install batchposter offchainlabs/nitro \
-  --namespace my-l3-chain \
-  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
-  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
-  --set configmap.data.chain.id=$CHAIN_ID \
-  --set-file configmap.data.chain.info-json=chain-info.json \
-  --set-string configmap.data.execution.forwarding-target=null \
-  --set configmap.data.node.seq-coordinator.enable=true \
-  --set configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \
-  --set configmap.data.node.batch-poster.enable=true \
-  --set configmap.data.node.feed.input.url=ws://sequencer-relay:9642 \
-  --set-file configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-key.txt
+```shell
+configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
+--set-file configmap.data.chain.info-json=chain-info.json \ --set-string
+configmap.data.execution.forwarding-target=null \ --set
+configmap.data.node.seq-coordinator.enable=true \ --set
+configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \ --set
+configmap.data.node.batch-poster.enable=true \ --set
+configmap.data.node.feed.input.url=ws://sequencer-relay:9642 \ --set-file
+configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-key.txt
 ```
+
+</CustomDetails>
 
 - Remove the key file after deployment:
 
@@ -263,24 +262,21 @@ The validator validates blocks and posts assertions to the parent chain. It is r
 printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' node-config.json)" > validator-key.txt
 ```
 
-- Deploy the validator:
+<CustomDetails summary="Deploy the validator:">
 
 ```bash
-helm install validator offchainlabs/nitro \
-  --namespace my-l3-chain \
-  --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \
-  --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
-  --set configmap.data.chain.id=$CHAIN_ID \
-  --set-file configmap.data.chain.info-json=chain-info.json \
-  --set configmap.data.node.sequencer=false \
-  --set configmap.data.node.batch-poster.enable=false \
-  --set configmap.data.node.staker.enable=true \
-  --set configmap.data.node.staker.strategy=MakeNodes \
-  --set configmap.data.node.feed.input.url=ws://external-relay:9642 \
-  --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547 \
-  --set-file configmap.data.node.staker.parent-chain-wallet.private-key=validator-key.txt \
-  --set configmap.data.init.empty=true
+  configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+  configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
+  --set-file configmap.data.chain.info-json=chain-info.json \ --set
+  configmap.data.node.sequencer=false \ --set configmap.data.node.batch-poster.enable=false \ --set
+  configmap.data.node.staker.enable=true \ --set configmap.data.node.staker.strategy=MakeNodes \
+  --set configmap.data.node.feed.input.url=ws://external-relay:9642 \ --set
+  configmap.data.execution.forwarding-target=http://sequencer-nitro:8547 \ --set-file
+  configmap.data.node.staker.parent-chain-wallet.private-key=validator-key.txt \ --set
+  configmap.data.init.empty=true
 ```
+
+</CustomDetails>
 
 - Remove the key file after deployment:
 
@@ -410,6 +406,8 @@ This enables bridging tokens between your chain and Arbitrum Sepolia. Run this f
 
 - Create `deploy-token-bridge.mjs` in your project folder:
 
+<CustomDetails summary="deploy-token-bridge.mjs">
+
 ```javascript
 import { createPublicClient, http, defineChain } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
@@ -507,6 +505,8 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+</CustomDetails>
 
 - Run it with your chain's RPC URL (the LoadBalancer IP from Step 11):
 

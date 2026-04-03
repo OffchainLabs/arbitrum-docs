@@ -10,6 +10,7 @@ sidebar_position: 0
 ---
 
 import RaaSNotice from '../partials/_raas-providers-notice.mdx';
+import CustomDetails from '@site/src/components/CustomDetails';
 
 <RaaSNotice />
 
@@ -72,7 +73,9 @@ Your key must start with `0x` and be 64 hex characters long (66 characters total
 
 In this step you will deploy your chain's contracts to Arbitrum Sepolia. It will cost a small amount of `ETH` in gas fees.
 
-- Create a new file named `deploy.mjs` in your propject folder. Then copy and paste this entire script:
+- Create a new file named `deploy.mjs` in your project folder. Then copy and paste this entire script:
+
+<CustomDetails summary="deploy.mjs">
 
 ```javascript
 import { createPublicClient, http } from 'viem';
@@ -143,6 +146,8 @@ async function main() {
 main().catch(console.error);
 ```
 
+</CustomDetails>
+
 - Run the deployment script:
 
 ```bash
@@ -158,6 +163,8 @@ node deploy.mjs
 In this step you will create the `node-config.json`—the file your node needs to know how to connect to your chain and Arbitrum Sepolia.
 
 - Create a new file named `prepare-node-config.mjs`. Copy and paste this entire script:
+
+<CustomDetails summary="prepare-node-config.mjs">
 
 ```javascript
 import { writeFile } from 'fs/promises';
@@ -210,6 +217,8 @@ async function main() {
 main().catch(console.error);
 ```
 
+</CustomDetails>
+
 - Now run the script:
 
 ```bash
@@ -254,6 +263,8 @@ In this step you'll enable the bridging tokens between your chain and Arbitrum S
 
 - Open a **new terminal** in the same project folder—leave the node running in the first one.
 - Create a new file named `deploy-token-bridge.mjs`. Copy and paste this entire script:
+
+<CustomDetails summary="deploy-token-bridge.mjs">
 
 ```javascript
 import { createPublicClient, http, defineChain } from 'viem';
@@ -355,6 +366,8 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+</CustomDetails>
 
 - Run the script (it reads from your `.env` file):
 

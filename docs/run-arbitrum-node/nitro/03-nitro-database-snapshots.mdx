@@ -18,6 +18,10 @@ There are multiple ways to supply Nitro with the database snapshot. The most str
 
 Nitro has a CLI configuration for downloading the latest snapshot from a remote server. Set the flag `--init.latest` to either `archive`, `pruned`, or `genesis`, and Nitro will download the preferred snapshot. You may also change the `--init.latest-base` flag to set the base URL when searching for the latest snapshot.
 
+:::info
+PathDB snapshot auto-download with `--init.latest` is not yet supported.
+:::
+
 ### How it works
 
 When searching for the latest snapshot, Nitro uses the chain name provided in `--chain.name`. Make sure to set it correctly; otherwise, Nitro might be unable to find the snapshot. Nitro will look for a remote file in `<latest-base>/<chain-name>/latest-<kind>.txt`, where `<kind>` is the option supplied to `--init.latest`. This file should contain either the path or the full URL to the snapshot; if it only contains the path, Nitro will use the `<latest-base>` as the base URL.
