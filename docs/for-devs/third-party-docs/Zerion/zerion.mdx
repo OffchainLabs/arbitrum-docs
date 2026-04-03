@@ -1,0 +1,132 @@
+---
+title: 'Quickstart - Zerion API for Arbitrum'
+description: 'Learn how to use the Zerion API to access wallet portfolios, token balances, DeFi positions, transactions, and NFT data on Arbitrum.'
+content_type: reference
+author: vshamanov
+sme: vshamanov
+third_party_content_owner: vshamanov
+sidebar_label: 'Zerion'
+---
+
+**[Zerion API](https://zerion.io/api?utm_source=arbitrum-docs&utm_medium=partner-docs)** is an enterprise-grade wallet data API that provides token balances, DeFi positions, NFTs, and transaction history on Arbitrum, other major EVM chains, and Solana. It powers the [Zerion app](https://zerion.io) used by millions of users, delivering sub-second responses through a unified schema across all supported chains—no per-chain parsing or custom logic needed.
+
+**Use Zerion API if you need:**
+
+- Wallet portfolios, token balances, and price data across Arbitrum and 50+ other chains
+- Decoded DeFi positions across 8,000+ protocols (lending, staking, LPs)
+- Enriched transaction history formatted for UIs or data exports
+- NFT holdings with metadata, floor prices, and media
+- Real-time transaction notifications via webhooks
+
+> **[Get a free API key to start building on Arbitrum](https://dashboard.zerion.io/?utm_source=arbitrum-docs&utm_medium=partner-docs)**
+
+## APIs
+
+The Zerion API enables developers to quickly access structured onchain data with consistent response schemas across all supported chains. All endpoints support Arbitrum alongside every other supported blockchain.
+
+:::info Endpoints
+
+Check out the [Zerion API Reference](https://developers.zerion.io?utm_source=arbitrum-docs&utm_medium=partner-docs) to see all available endpoints.
+
+:::
+
+### Wallet portfolio API
+
+- **Features:** Total wallet value, individual token positions, and portfolio breakdown across all supported chains. Prices in USD and other major currencies.
+- **Use cases:** Wallets, portfolio trackers, accounting dashboards, airdrop snapshots.
+
+### DeFi positions API
+
+- **Features:** Decoded and normalized positions across 8,000+ DeFi protocols—lending, staking, LPs, and more. Unified schema eliminates per-protocol parsing.
+- **Use cases:** Portfolio trackers, DeFi analytics, risk monitoring, reward calculators.
+
+### Transaction history API
+
+- **Features:** Enriched transaction feeds decoded into human-readable actions (trades, transfers, approvals). Filterable by type, chain, or date.
+- **Use cases:** In-app transaction receipts, accounting and tax tools, activity feeds.
+
+### NFT API
+
+- **Features:** Complete NFT portfolio data, including metadata, floor prices, and media across chains.
+- **Use cases:** NFT galleries, marketplaces, and token gating.
+
+### Fungible tokens API
+
+- **Features:** Token search, real-time and historical prices, market cap charts, and token metadata.
+- **Use cases:** Price feeds, market data dashboards, token explorers.
+
+### Webhooks
+
+- **Features:** Real-time transaction notifications without polling. Subscribe to wallet activity and get instant alerts.
+- **Use cases:** Notifications, monitoring, automated workflows.
+
+## Quickstart
+
+### 1. Get your API key
+
+Sign up at the [Zerion Dashboard](https://dashboard.zerion.io/?utm_source=arbitrum-docs&utm_medium=partner-docs) to get a free API key.
+
+### 2. Make your first request
+
+The Zerion API uses HTTP Basic Authentication with your API key as the username and an empty password.
+
+**cURL:**
+
+```bash
+curl --request GET \
+  --url https://api.zerion.io/v1/wallets/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045/portfolio \
+  --header 'accept: application/json' \
+  --header 'authorization: Basic YOUR_BASE64_ENCODED_API_KEY'
+```
+
+**JavaScript:**
+
+```javascript
+const apiKey = 'YOUR_API_KEY';
+const address = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
+
+const response = await fetch(`https://api.zerion.io/v1/wallets/${address}/portfolio`, {
+  headers: {
+    accept: 'application/json',
+    authorization: `Basic ${btoa(apiKey + ':')}`,
+  },
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+**Python:**
+
+```python
+import requests
+from base64 import b64encode
+
+api_key = "YOUR_API_KEY"
+address = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+
+headers = {
+    "accept": "application/json",
+    "authorization": f"Basic {b64encode(f'{api_key}:'.encode()).decode()}"
+}
+
+response = requests.get(
+    f"https://api.zerion.io/v1/wallets/{address}/portfolio",
+    headers=headers
+)
+
+print(response.json())
+```
+
+### 3. Explore more endpoints
+
+- [Wallet fungible positions](https://developers.zerion.io/api-reference/wallets/get-wallet-fungible-positions?utm_source=arbitrum-docs&utm_medium=partner-docs) — every token a wallet holds with quantities and USD values
+- [Wallet transactions](https://developers.zerion.io/api-reference/wallets/get-wallet-transactions?utm_source=arbitrum-docs&utm_medium=partner-docs) — decoded transaction history
+- [Wallet DeFi positions](https://developers.zerion.io/recipes/defi-positions#get-a-wallets-defi-positions) — active DeFi positions across protocols
+
+## Get started
+
+- **[API Key](https://dashboard.zerion.io/?utm_source=arbitrum-docs&utm_medium=partner-docs)**: sign up for free
+- **[Docs](https://developers.zerion.io?utm_source=arbitrum-docs&utm_medium=partner-docs)**: full API reference and guides
+- **[Quickstart](https://developers.zerion.io/quickstart?utm_source=arbitrum-docs&utm_medium=partner-docs)**: step-by-step getting started guide
+- **[Supported Blockchains](https://developers.zerion.io/reference/supported-blockchains?utm_source=arbitrum-docs&utm_medium=partner-docs)**: full list of supported chains, including Arbitrum

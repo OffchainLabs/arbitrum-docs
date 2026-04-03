@@ -1,0 +1,136 @@
+---
+title: 'Batch poster troubleshooting'
+sidebar_label: 'Batch poster troubleshooting'
+description: 'Diagnose and resolve common batch poster operational issues including mempool errors, balance management, backlog conditions, and retry failures.'
+author: pete-vielhaber
+sme: jason-w123
+user_story: As an Arbitrum chain operator, I need to diagnose and resolve common batch poster issues so I can maintain reliable batch posting to the parent chain.
+content_type: how-to
+---
+
+This guide covers common operational issues that batch poster operators encounter, with guidance on diagnosing root causes and resolving them. For initial setup, see [Run a batch poster](/launch-arbitrum-chain/07-arbitrum-node-runners/run-batch-poster.mdx). For fee-related tuning, see [Batch poster fee tuning](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/batch-poster-fee-tuning.mdx).
+
+## Batch poster balance management
+
+The batch poster account is an Externally Owned Account (EOA) that pays gas fees on the parent chain to submit batch transactions. There is no automatic mechanism to keep this account funded—operators must monitor the balance and replenish it manually or through external automation.
+
+### Symptoms of low balance
+
+- Batch posting transactions fail on the parent chain due to insufficient funds
+- The batch poster logs show transaction submission errors
+- Unposted batches accumulate, causing a growing backlog (see [Batch posting backlog diagnosis](#batch-posting-backlog-diagnosis))
+
+### Monitoring guidance
+
+The [Monitoring tools and considerations](/launch-arbitrum-chain/04-maintain-your-chain/06-monitoring-tools-and-considerations.mdx) guide recommends monitoring the batch poster balance. In practice, this means:
+
+- **Query the balance directly**: Use the parent chain RPC to check the batch poster EOA balance at regular intervals.
+- **Set up alerting**: Configure external monitoring (e.g., a balance-checking script, onchain monitoring service, or infrastructure alerting tool) to notify you when the balance drops below a threshold.
+
+:::info Balance threshold guidance
+
+There is no universally recommended balance threshold—the appropriate level depends on your parent chain's gas prices, your chain's batch posting frequency, and batch sizes. As a general approach, estimate your daily batch posting cost (number of batches per day multiplied by average gas cost per batch) and maintain a buffer of several days' worth of posting costs. Monitor actual spending over time and adjust accordingly.
+
+:::
+
+### Funding strategy
+
+- **Keep the account overfunded**: The recommendation is to keep the batch poster account overfunded rather than maintaining a tight balance. This provides a buffer against gas price spikes.
+- **Automate top-ups if possible**: Consider scripting periodic balance checks and transfers from a treasury account to the batch poster EOA.
+- **Monitor alongside gas prices**: A balance that seems adequate during low gas prices may drain quickly during sustained gas spikes. Factor in parent chain gas price volatility when developing your funding strategy.
+
+## Mempool errors
+
+### "Posting this transaction will exceed max mempool size"
+
+This error indicates that the parent chain node's mempool has rejected a transaction from the batch poster because it was at capacity.
+
+### What causes this error
+
+- **Too many pending transactions**: The batch poster has submitted multiple transactions that haven't yet been included in a block, and the parent chain node's mempool has reached its limit for pending transactions from a single account or overall.
+- **Gas price too low for inclusion**: If gas prices have risen since the transactions were submitted, older transactions may remain in the mempool and not be included. New submissions then push against the mempool’s size limits.
+- **RBF not escalating fast enough**: When using DB or Redis storage (which support RBF), the replacement fee schedule may not be aggressive enough to get transactions included during congestion, causing the mempool to fill with stale transactions.
+
+### Resolution
+
+1. **Check the parent chain's current gas prices** and compare them to your data poster's fee cap configuration. If gas prices are above your `--node.batch-poster.data-poster.target-price-gwei`, the data poster can't bid high enough to cover the fee. See [Batch poster fee tuning](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/batch-poster-fee-tuning.mdx) for guidance on adjustments.
+2. **Review your queued transaction storage configuration**: If you're using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (`--node.batch-poster.data-poster.replacement-times` for non-blob batch poster, `--node.batch-poster.data-poster.blob-tx-replacement-times` for blob batch poster) is escalating fees quickly enough. See Queued transaction database selection for storage option details.
+3. **Consider Noop storage for parent chains without mempools**: If your parent chain is an Arbitrum chain or another chain without a traditional mempool, Noop storage avoids this issue entirely by waiting for each transaction receipt before submitting the next one.
+
+:::info Mempool size limits
+
+The exact mempool weight limits depend on the parent chain node’s configuration, not the batch poster itself. The batch poster does not control the parent chain node’s mempool size. If you are running your own parent chain node, consult its documentation for mempool configuration. If using a third-party RPC provider, the mempool limits are determined by the provider’s infrastructure.
+
+:::
+
+## Batch posting backlog diagnosis
+
+A batch posting backlog occurs when the sequencer continues ordering transactions, but the batch poster can’t submit them to the parent chain at the same rate. This results in an accumulation of unposted messages.
+
+### Common causes
+
+| Cause                             | Description                                                                                                                                                    |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Insufficient batch poster balance | The EOA does not have enough funds to pay parent chain gas fees                                                                                                |
+| Gas prices exceeding fee cap      | Parent chain gas prices are above `--node.batch-poster.data-poster.target-price-gwei`, causing the data poster to pause submissions                            |
+| Parent chain congestion           | Even with adequate fees, high parent chain congestion can delay transaction inclusion                                                                          |
+| Node sync issues                  | The batch poster node may have fallen behind in syncing with the parent chain, preventing accurate fee estimation or transaction submission                    |
+| Reverted transactions (DB/Redis)  | When using DB or Redis storage, a reverted batch posting transaction causes the batch poster to halt. Noop storage tolerates reverts and retries automatically |
+
+### How to identify a backlog
+
+- **Monitor the `SequencerInbox` contract**: Track the frequency of batch submissions to the parent chain. A sudden drop or stop in batch submissions indicates an issue.
+- **Check the sequencer's transaction backlog size**: As noted in the [Monitoring tools and considerations](/launch-arbitrum-chain/04-maintain-your-chain/06-monitoring-tools-and-considerations.mdx) guide, a large and growing backlog can be a sign of network health issues.
+- **Review batch poster logs**: Look for error messages related to transaction submission failures, fee estimation errors, or the data poster pausing.
+
+:::info Backlog metrics
+
+The specific log messages and metrics that indicate a backlog depend on the Nitro node version and configuration. Operators should familiarize themselves with their node’s log output during normal operation so that deviations are easier to spot. Key log prefixes to watch for include `BatchPoster:` and `DataPoster:` entries.
+
+:::
+
+### Resolution approaches
+
+1. **Check the batch poster balance**: ensures the EOA has sufficient funds on the parent chain.
+2. **Check the parent chain gas prices**: If prices exceed your fee cap, either wait for prices to drop or increase `--node.batch-poster.data-poster.target-price-gwei` (see [Batch poster fee tuning](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/batch-poster-fee-tuning.mdx)).
+3. **Verify parent chain connectivity**: Ensure the batch poster node can reach the parent chain RPC endpoint and that the parent chain node is fully synced.
+4. **Check for reverted transactions**: If using DB or Redis storage, a reverted transaction halts the batch poster. Check the batch poster logs for revert errors. Restarting the batch poster or clearing the queued transaction storage (with caution) may be necessary.
+5. **Review node sync status**: Confirm the batch poster node is synced with both the Arbitrum chain and the parent chain.
+
+## Retry errors
+
+### "Failed to re-send transaction"
+
+This error appears when the data poster attempts to resubmit a batch posting transaction (typically as part of RBF), and the resubmission fails.
+
+### What causes this error
+
+- **Nonce conflicts**: The original transaction may have already been included onchain, making the replacement attempt invalid because the nonce has already been consumed.
+- **Storage inconsistencies**: When using DB or Redis for queued transaction tracking, mismatches between the stored transaction state and the onchain state can cause resubmission failures. This can happen after a node restart if the storage wasn't cleanly synced.
+- **Parent chain rejection**: The parent chain node may reject the replacement transaction for various reasons—the replacement fee isn't high enough (must be at least 10% higher for standard RBF), the transaction format is invalid, or the parent chain node is experiencing issues.
+
+:::info Error context
+
+The exact phrasing and context of retry errors can vary across Nitro versions. The "failed to re-send transaction" message generally indicates an RBF attempt that didn't succeed. Check the surrounding log lines for more specific error details (for example, "nonce too low", "replacement transaction underpriced", or connection errors).
+
+:::
+
+### Resolution
+
+1. **Check if the original transaction was included**: Query the parent chain for the batch poster’s latest nonce and compare it to what the data poster expects. If the original transaction was already included, the retry error is benign—the data poster should recover automatically on the next cycle.
+2. **Review the queued transaction storage**: If using DB or Redis, the stored transaction state may be stale. A node restart typically resolves transient storage inconsistencies.
+3. **Check parent chain connectivity**: Ensure the batch poster can reliably reach the parent chain RPC. Intermittent connectivity causes retry failures.
+4. **Inspect RBF fee escalation**: If the error mentions “replacement transaction underpriced”, the fee increase between attempts may be insufficient. The parent chain typically requires at least a 10% fee increase for RBF. Review the `blob-tx-replacement-times` schedule—shorter intervals may not allow enough price movement between attempts.
+5. **Consider clearing storage as a last resort**: The `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag clears the queued transaction database on startup. Use this only when necessary, as it discards any tracked pending transactions. See the [Node key rotation guide](/launch-arbitrum-chain/04-maintain-your-chain/04-guidance/key-rotation.mdx) for context on when this flag is used.
+
+## Quick reference
+
+| Symptom                                 | Likely cause                                                          | Resolution                                                          |
+| --------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Batch posting stopped, no error in logs | Batch poster balance depleted                                         | Fund the batch poster EOA on the parent chain                       |
+| "Mempool weight limit exceeded"         | Too many pending transactions in parent chain mempool                 | Review fee cap settings; check RBF escalation schedule              |
+| Batches not posting during gas spike    | Gas prices exceed `--node.batch-poster.data-poster.target-price-gwei` | Increase fee cap or wait for prices to normalize                    |
+| "Failed to re-send transaction"         | Nonce conflict or RBF underpriced                                     | Check if original transaction was included; review fee escalation   |
+| Growing sequencer backlog               | Multiple possible causes                                              | Check balance, gas prices, parent chain connectivity, and node sync |
+| Batch poster halted after revert        | Using DB/Redis storage with a reverted transaction                    | Review revert cause; restart batch poster or clear storage          |
+| Blob transactions pending for hours     | Blob tip cap too low                                                  | Increase `max-blob-tx-tip-cap-gwei`; review replacement schedule    |

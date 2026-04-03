@@ -1,7 +1,8 @@
 ---
 title: 'RPC methods'
 sidebar_position: 3
-description: This concept page provides information about the differences between Arbitrum and Ethereum in terms of RPC methods, so developers can easily understand what to expect when deploying to Arbitrum
+description: 'Compare Arbitrum and Ethereum RPC method responses, including additional transaction types, fields, and blocks returned by Arbitrum nodes. Covers eth_getTransactionByHash, eth_getBlockByHash, and other JSON-RPC methods.'
+user_story: 'As a developer, I want to know which RPC methods behave differently on Arbitrum so I can correctly parse responses in my dApp.'
 target_audience: developers who want to build on Arbitrum
 author: dzgoldman
 content_type: concept
@@ -22,7 +23,7 @@ When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/doc
 
 ### Transaction types
 
-In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/deep-dives/geth.mdx#transaction-types).
+In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/reference/geth.mdx#transaction-types).
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
@@ -135,14 +136,14 @@ If the sync process encounters an error while trying to collect the data above t
 
 ### `debug_traceTransaction`
 
-- [ ] The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
-      HostIOs are calls the WasmVM makes to read and write data in the EVM.
-      With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
+The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
+HostIOs are calls the WasmVM makes to read and write data in the EVM.
+With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
 
 :::info
 
 The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger.
-More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/how-tos/debugging-tx).
+More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/cli-tools/debugging-tx).
 
 :::
 

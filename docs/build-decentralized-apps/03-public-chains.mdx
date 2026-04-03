@@ -1,7 +1,7 @@
 ---
 title: 'Arbitrum chains overview'
-description: A high level description of the Arbitrum chains available
-user_story: As a developer, I want to understand the different Arbitrum chains and how they relate to each other.
+description: "Overview of Arbitrum's public chains including Arbitrum One (Rollup), Arbitrum Nova (AnyTrust), and available testnets. Compare chain features, technology stacks, and use cases for each network."
+user_story: 'As a developer, I want to understand the different Arbitrum chains available so I can choose the right network for my dApp.'
 content_type: concept
 displayed_sidebar: buildAppsSidebar
 ---
@@ -22,7 +22,7 @@ chains, their differences, and the technology stacks that these chains use.
 
 ### Arbitrum One
 
-**Arbitrum One** is a child chain Optimistic Rollup chain that implements the <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> and settles to Ethereum's <a data-quicklook-from="parent-chain">Parent chain</a>. It lets you build high-performance Ethereum dApps with low transaction costs and Ethereum-grade security guarantees, introducing no additional trust assumptions. This is made possible by the [Nitro](/how-arbitrum-works/deep-dives/geth.mdx) technology stack, a "Geth-at-the-core" architecture that gives Arbitrum One (and Nova) advanced calldata compression, separate contexts for common execution and fault proving, Ethereum parent chain gas compatibility, and more.
+**Arbitrum One** is a child chain Optimistic Rollup that implements the <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> and settles to Ethereum's <a data-quicklook-from="parent-chain">parent chain</a>. It lets you build high-performance Ethereum dApps with low transaction costs and Ethereum-grade security guarantees, introducing no additional trust assumptions. This is made possible by the [Nitro](/how-arbitrum-works/reference/geth.mdx) technology stack, a "Geth-at-the-core" architecture that gives Arbitrum One (and Nova) advanced calldata compression, separate contexts for common execution and fault proving, Ethereum parent chain gas compatibility, and more.
 
 ### Arbitrum Nova
 
@@ -44,21 +44,13 @@ The old testnet RinkArby was deprecated on December 20th, 2022.
 
 :::
 
-### Stylus testnet
+### Stylus testnet (deprecated)
 
-<a data-quicklook-from="stylus">Stylus</a> uses the Nitro technology and allows for efficient <a data-quicklook-from="smart-contract">
-  Smart Contract
-</a> creation using languages like Rust, C, and C++. Leveraging Arbitrum's EVM equivalence, Stylus contracts
-achieve remarkable speed and low gas fees. With full interoperability between Solidity and Stylus contracts,
-new horizons emerge, while significantly cheaper memory costs unlock novel blockchain use cases.
+<a data-quicklook-from="stylus">Stylus</a> is now available on Arbitrum One and Arbitrum Sepolia. The
+standalone Stylus testnet was deprecated as of June 17, 2024. For information about developing with Stylus,
+see the [Stylus documentation](/stylus/gentle-introduction).
 
-:::caution
-
-Stylus testnet was deprecated as of June 17, 2024.
-
-:::
-
-## What differences there are between the available Arbitrum chains?
+## What are the differences between the available Arbitrum chains?
 
 The main differences between the Arbitrum chains lie in their purpose and the environment they operate in.
 
@@ -70,7 +62,7 @@ Finally, Arbitrum Sepolia is a testnet chain. It's designed for testing purposes
 
 ### Nitro
 
-Nitro is the technology that powers Arbitrum One, Arbitrum Nova (with AnyTrust configuration),and Arbitrum Sepolia. It's designed to offer high throughput and low cost, making it ideal for scaling Ethereum applications. Nitro is a major upgrade to the “Classic” stack, offering several improvements including advanced calldata compression, separate contexts for common execution and fault proving, Ethereum parent chain gas compatibility, and more. You can find more information about Nitro in [How Arbitrum works](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
+Nitro is the technology that powers Arbitrum One, Arbitrum Nova (with AnyTrust configuration), and Arbitrum Sepolia. It's designed to offer high throughput and low cost, making it ideal for scaling Ethereum applications. Nitro is a major upgrade to the “Classic” stack, offering several improvements including advanced calldata compression, separate contexts for common execution and fault proving, Ethereum parent chain gas compatibility, and more. You can find more information about Nitro in [How Arbitrum works](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
 
 ### AnyTrust (variant of Nitro)
 

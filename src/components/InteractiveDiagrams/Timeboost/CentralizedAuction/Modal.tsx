@@ -9,7 +9,7 @@ import step5Content from './modal-centralized-auction-step-5.mdx';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
 import { MDXProvider } from '@mdx-js/react';
-import type { MDXComponents } from '@mdx-js/react/lib';
+import type { MDXComponents } from 'mdx/types';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
@@ -43,8 +43,9 @@ const components = {
       // During SSG, useColorMode throws an error - use default
     }
 
+    const Highlighter = SyntaxHighlighter as unknown as React.ComponentType<any>;
     return (
-      <SyntaxHighlighter
+      <Highlighter
         language={language}
         style={isDarkTheme ? oneDark : oneLight}
         customStyle={{
@@ -55,7 +56,7 @@ const components = {
         }}
       >
         {children}
-      </SyntaxHighlighter>
+      </Highlighter>
     );
   },
 };
@@ -94,22 +95,25 @@ export function Modal({ number }: { number: number }) {
     config: { duration: 200 },
   });
 
-  const renderCodeBlock = (block: CodeBlock, index: number) => (
-    <div key={index} style={{ position: 'relative' }}>
-      <SyntaxHighlighter
-        language={block.language}
-        style={isDarkTheme ? oneDark : oneLight}
-        customStyle={{
-          margin: 0,
-          padding: '16px',
-          borderRadius: '4px',
-          backgroundColor: isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
-        }}
-      >
-        {block.code.trim()}
-      </SyntaxHighlighter>
-    </div>
-  );
+  const renderCodeBlock = (block: CodeBlock, index: number) => {
+    const Highlighter = SyntaxHighlighter as unknown as React.ComponentType<any>;
+    return (
+      <div key={index} style={{ position: 'relative' }}>
+        <Highlighter
+          language={block.language}
+          style={isDarkTheme ? oneDark : oneLight}
+          customStyle={{
+            margin: 0,
+            padding: '16px',
+            borderRadius: '4px',
+            backgroundColor: isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
+          }}
+        >
+          {block.code.trim()}
+        </Highlighter>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -128,7 +132,7 @@ export function Modal({ number }: { number: number }) {
             <Dialog.Portal>
               {overlayTransitions(
                 (styles, item) =>
-                  item && <Dialog.Overlay className="modal__overlay" style={styles} />,
+                  item && <Dialog.Overlay className="modal__overlay" style={styles as any} />,
               )}
               {transitions(
                 (styles, item) =>
@@ -138,7 +142,7 @@ export function Modal({ number }: { number: number }) {
                         className="modal__content"
                         forceMount
                         style={{
-                          ...styles,
+                          ...(styles as any),
                           pointerEvents: 'auto',
                         }}
                       >

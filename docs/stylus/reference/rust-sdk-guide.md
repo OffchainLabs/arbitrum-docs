@@ -1,6 +1,7 @@
 ---
 title: 'Stylus Rust SDK advanced features'
 description: 'Advanced features of the Stylus Rust SDK'
+content_type: reference
 author: rachel-bousfield, jose-franco, mehdi-salehi
 sme: rachel-bousfield, jose-franco, mehdi-salehi
 sidebar_position: 1
@@ -9,7 +10,7 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 
 import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx';
 
-This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../quickstart.mdx).
+This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../quickstart.mdx).
 
 :::info
 
@@ -337,7 +338,7 @@ Starting with SDK version 0.7.0, the [`Router`](https://docs.rs/stylus-sdk/lates
 
 - [`fallback`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.fallback): This method is called when a transaction is sent to the contract with calldata that doesn't match any function signature. It serves as a catch-all function for contract interactions that don't match any defined interface.
 
-- [`receive`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.receive): This method is called when a transaction is sent to the contract with no calldata (empty calldata). It allows the contract to receive ETH.
+- [`receive`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.receive): This method is called when a transaction is sent to the contract with no calldata (empty calldata). It allows the contract to receive `ETH`.
 
 Here's an example implementation:
 
@@ -360,11 +361,11 @@ impl Contract {
 }
 ```
 
-Both methods can be annotated with `#[payable]` to accept ETH along with the transaction. Without this annotation, transactions that send ETH will be rejected.
+Both methods can be annotated with `#[payable]` to accept `ETH` along with the transaction. Without this annotation, transactions that send `ETH` will be rejected.
 
 ## Calls
 
-Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis).
+Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus#exporting-solidity-abis).
 
 :::tip
 

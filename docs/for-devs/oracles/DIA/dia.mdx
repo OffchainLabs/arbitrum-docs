@@ -1,0 +1,53 @@
+---
+title: 'DIA'
+description: 'Learn how to integrate DIA oracles into your Arbitrum app'
+third_party_content_owner: khawlahssn
+sidebar_label: 'DIA'
+---
+
+[DIA](https://www.diadata.org/) is a cross-chain, trustless oracle network delivering verifiable price feeds for Arbitrum. DIA sources raw trade data directly from primary markets and computes it onchain, ensuring complete transparency and data integrity.
+
+### Querying the price of `ARB` through DIA
+
+Call the getValue(string memory key) function on the oracle contract with the Query Symbol (e.g., "ARB/USD"). The function returns the asset price with 8 decimal precision and the timestamp of the last update. We'll use this oracle contract on the Arbitrum Sepolia testnet: `0x927ccBd9107bD63F8279Af83b96E7DAF924b9a7E`.
+
+Solidity Example:
+
+```solidity
+pragma solidity ^0.8.13;
+
+interface IDIAOracleV2 {
+    function getValue(string memory) external view returns (uint128,
+             uint128);
+}
+
+contract DIAOracleSample {
+
+    /**
+    * @notice The DIA oracle to read from.
+    * Oracle Address: "0x927ccBd9107bD63F8279Af83b96E7DAF924b9a7E"
+    * Network: Arbitrum Sepolia
+    */
+    address constant diaOracle = "0x927ccBd9107bD63F8279Af83b96E7DAF924b9a7E";
+
+    function getPrice(string memory key)
+    external
+    view
+    returns (
+        uint128 latestPrice,
+        uint128 timestampOfLatestPrice
+    ) {
+        (latestPrice, timestampOfLatestPrice) =
+                 IDIAOracleV2(diaOracle).getValue(key);
+    }
+}
+```
+
+### More examples
+
+Please refer to [DIA’s documentation](https://www.diadata.org/docs) for more examples on querying data feeds and learn about DIA's verifiable oracle stack.
+
+Additional resources:
+
+- [How DIA oracles work on Arbitrum](https://www.diadata.org/docs/guides/chain-specific-guide/arbitrum)
+- [How to request a custom oracle on Arbitrum](https://www.diadata.org/docs/guides/how-to-guides/request-a-custom-oracle)

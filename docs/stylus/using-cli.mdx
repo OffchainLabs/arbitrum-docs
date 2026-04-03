@@ -2,27 +2,28 @@
 id: using-cli
 title: 'Using Stylus CLI'
 description: 'Get started with Stylus CLI, a Rust toolkit for developing Stylus contracts'
+content_type: how-to
 author: 'anegg0'
 sme: 'anegg0'
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
-displayed_sidebar: buildAppsSidebar
+displayed_sidebar: buildStylusSidebar
 ---
 
-This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus), a CLI toolkit to help developers manage, compile, deploy, and optimize their Stylus contracts efficiently.
+This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus), a CLI toolkit to help developers manage, compile, deploy, and optimize their Stylus contracts efficiently.
 
 This overview will help you discover and learn how to uses cargo stylus tools.
 
-### Installing cargo stylus
+## Installing cargo stylus
 
 Cargo stylus is a plugin to the standard cargo tool for developing Rust programs.
 
-#### Prerequisites
+### Prerequisites
 
 <details>
 <summary>Rust toolchain</summary>
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </details>
 
@@ -58,7 +59,7 @@ cd nitro-devnode
 
 </details>
 
-#### Installation
+### Installation
 
 In your terminal, run:
 
@@ -66,18 +67,18 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.88 or newer as well as adding the WASM build target:
 
 ```shell
-rustup default 1.80
-rustup target add wasm32-unknown-unknown --toolchain 1.80
+rustup default 1.88
+rustup target add wasm32-unknown-unknown --toolchain 1.88
 ```
 
 You can verify the cargo stylus installation by running `cargo stylus -V` in your terminal, returning something like:`stylus 0.5.6`
 
-### Using cargo stylus
+## Using cargo stylus
 
-#### Cargo Stylus Commands Reference
+### Cargo Stylus Commands Reference
 
 | Command      | Description                                      | Arguments                                                                                                             | Options                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Example Usage                                                                                         |
 | ------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -93,7 +94,7 @@ You can verify the cargo stylus installation by running `cargo stylus -V` in you
 | `replay`     | Replay transaction in GDB                        | • `-t, --tx <TX>`: Transaction to replay                                                                              | • `-p, --project <PROJECT>`: Project path (default: `.`)<br />• `-u, --use-native-tracer`: Use the native tracer instead of the JavaScript one (may not be available in the node)<br />• `-s, --stable-rust`: Use stable Rust (note that nightly is needed to expand macros)                                                                                                                                                                                                                     | `cargo stylus replay --tx <TX>`                                                                       |
 | `trace`      | Trace a transaction                              | • `--tx`: Transaction hash                                                                                            | • `--endpoint`: RPC endpoint<br />• `--project`: Project path<br />• `--use-native-tracer`: Use native tracer                                                                                                                                                                                                                                                                                                                                                                                    |                                                                                                       |
 
-##### Common options
+#### Common options
 
 These options are available across multiple commands:
 
@@ -104,7 +105,7 @@ These options are available across multiple commands:
 | --source-files-for-project-hash | Paths to source files for project hash                 |
 | --max-fee-per-gas-gwei          | Optional max fee per gas in `gwei`                     |
 
-##### Authentication options
+#### Authentication options
 
 Available for commands involving transactions:
 
@@ -115,17 +116,17 @@ Available for commands involving transactions:
 | --keystore-path          | Path to Ethereum wallet keystore file                |
 | --keystore-password-path | Keystore password file path                          |
 
-#### How-tos
+### How-tos
 
-| Topic                                                                              | Description                                                                                                                                 |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Learn how to optimize WASM binaries](/stylus/how-tos/optimizing-binaries.mdx)     | The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.      |
-| [Debug Stylus transactions](/stylus/how-tos/debugging-tx.mdx)                      | A guide to debugging transactions, helping you identify and fix issues. Gain insights into your Stylus contracts by debugging transactions. |
-| [Verify contracts](/stylus/how-tos/verifying-contracts.mdx)                        | Ensure that your Stylus contracts are correctly verified. Step-by-step instructions on how to verify your contracts using `cargo-stylus`.   |
-| [Run a Stylus dev node](/run-arbitrum-node/03-run-local-full-chain-simulation.mdx) | Learn how to run a local Arbitrum dev node to test your Stylus contracts.                                                                   |
+| Topic                                                                       | Description                                                                                                                                 |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Learn how to optimize WASM binaries](/stylus/how-tos/optimizing-binaries)  | The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.      |
+| [Debug Stylus transactions](/stylus/cli-tools/debugging-tx)                 | A guide to debugging transactions, helping you identify and fix issues. Gain insights into your Stylus contracts by debugging transactions. |
+| [Verify contracts](/stylus/cli-tools/verify-contracts)                      | Ensure that your Stylus contracts are correctly verified. Step-by-step instructions on how to verify your contracts using `cargo-stylus`.   |
+| [Run a Stylus dev node](/run-arbitrum-node/run-local-full-chain-simulation) | Learn how to run a local Arbitrum dev node to test your Stylus contracts.                                                                   |
 
-#### Additional resources
+### Additional resources
 
-#### [Troubleshooting](/stylus/troubleshooting-building-stylus.md): solve the most common issues.
+### [Troubleshooting](/stylus/troubleshooting-building-stylus.md): solve the most common issues.
 
-#### [cargo-stylus repository](https://github.com/OffchainLabs/stylus): consult cargo stylus' source code.
+### [cargo-stylus repository](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus): consult cargo stylus' source code.
