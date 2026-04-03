@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagramStory
+  id="haw-transaction-lifecycle"
+  title="How Arbitrum Works — Transaction Lifecycle"
+  entryDiagram="transaction-lifecycle"
+>
+  <diagram
+    id="transaction-lifecycle"
+    file="/diagrams/haw-transaction-lifecycle.drawio"
+  />
+  <diagram
+    id="ticket-submission"
+    file="/diagrams/haw-ticket-submission.drawio"
+  />
+
+  <transition
+    from="transaction-lifecycle"
+    to="ticket-submission"
+    trigger="Delayed Inbox"
+  >
+    <zoom level="4" duration="1600" />
+    <pause duration="200" />
+    <fade duration="1500" easing="easeInOut" />
+  </transition>
+</diagramStory>

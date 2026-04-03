@@ -1,0 +1,9 @@
+graph TB
+  Inbox[Inbox Contract]:::link:/diagrams/inbox-details.mmd
+  Bridge[Token Bridge]
+  Rollup[Rollup Contract]
+  Validator[Validator Network]
+
+  Bridge --> Inbox
+  Inbox --> Rollup
+  Validator --> Rollup

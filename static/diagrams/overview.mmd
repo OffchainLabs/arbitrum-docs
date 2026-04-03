@@ -1,0 +1,46 @@
+---
+config:
+  layout: dagre
+---
+flowchart TB
+ subgraph SC1["Smart Contract"]
+        SC1ABI["ABI"]
+  end
+ subgraph SC2["Stylus Contract"]
+        SC2ABI["ABI"]
+  end
+ subgraph Blockchain["Blockchain"]
+        SC1
+        SC2
+  end
+ subgraph Nitro["Nitro's MultiVM"]
+        EVMvm["EVM"]
+        WASMvm["WASM VM"]
+  end
+    Solidity["<b>Solidity</b>"] -- Compiles --> EVMBytecode["<b>EVM Bytecode</b>"]
+    Rust["<b>Rust</b>"] -- Compiles --> WASM["<b>WASM</b>"]
+    C["<b>C</b>"] -- Compiles --> WASM
+    Cpp["<b>C++</b>"] -- Compiles --> WASM
+    EVMBytecode -- Executes in --> Nitro
+    WASM -- Executes in --> Nitro
+    EVMvm -- Deploys --> SC1
+    WASMvm -- Deploys --> SC2
+
+
+     SC1:::output
+     SC2:::output
+     EVMvm:::vm
+     WASMvm:::vm
+     Solidity:::language
+     EVMBytecode:::compilation
+     Rust:::language
+     WASM:::compilation
+     C:::language
+     Cpp:::language
+     Nitro:::runtime
+    classDef language fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000
+    classDef compilation fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    classDef runtime fill:#f3e5f5,stroke:#4a148c,stroke-width:3px,color:#fff,font-size:14px
+    classDef vm fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,color:#000
+    classDef output fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
+    classDef blockchain fill:#fce4ec

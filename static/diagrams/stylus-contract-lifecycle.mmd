@@ -1,0 +1,23 @@
+graph TD
+    A[Write Rust Code] --> B[Compile to WASM]
+    B --> C[Deploy Bytecode]
+    C --> D[Activate Program]
+    D --> E[Contract Ready]
+
+    E --> F{Incoming Call}
+    F -->|External call| G[user_entrypoint]
+    G --> H[Route to Method]
+    H --> I{Method Type}
+
+    I -->|View| J[Read Storage]
+    I -->|Mutable| K[Modify Storage]
+
+    J --> L[Return Result]
+    K --> L
+
+    L --> M[ABI Encode Response]
+    M --> N[Return to Caller]
+
+    style A fill:#FFE4B5
+    style E fill:#90EE90
+    style N fill:#87CEEB

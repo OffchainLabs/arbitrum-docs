@@ -1,0 +1,10 @@
+graph TB
+  subgraph Flow[Decision Flow]
+    S[Start]
+    D{Decision?}
+    P([Process])
+    R((Result))
+    S --> D
+    D --> P
+    P --> R
+  end

@@ -1,0 +1,10 @@
+graph TB
+  Queue[Message Queue]
+  Sequencer[Sequencer Inbox]
+  Delayed[Delayed Inbox]
+  Batch[Batch Poster]
+
+  Queue --> Sequencer
+  Queue --> Delayed
+  Sequencer --> Batch
+  Delayed --> Batch

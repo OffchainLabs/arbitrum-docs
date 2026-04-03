@@ -1,0 +1,18 @@
+graph TB
+    WASM["WASM Module"]
+
+    WASM --> Exports["Exports Section<br/>user_entrypoint"]
+    WASM --> Imports["Imports Section<br/>vm_hooks"]
+    WASM --> Memory["Memory Section<br/>Linear memory"]
+    WASM --> Custom["Custom Sections<br/>Metadata"]
+    WASM --> Code["Code Section<br/>Compiled bytecode"]
+
+    Imports --> storage_load["storage_load_bytes32"]
+    Imports --> msg_sender["msg_sender"]
+    Imports --> emit_log["emit_log"]
+
+    style WASM fill:#E1BEE7
+    style Exports fill:#C8E6C9
+    style Imports fill:#BBDEFB
+    style Memory fill:#FFE0B2
+    style Code fill:#F3E5F5
