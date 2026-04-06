@@ -1,6 +1,6 @@
 ---
-title: 'How to build Nitro locally (Debian, Ubuntu, MacOS)'
-description: This how-to provides step-by-step instructions for building Nitro locally using Docker on Debian, Ubuntu, or MacOS.
+title: 'How to build Nitro locally (Debian, Ubuntu, macOS)'
+description: This how-to provides step-by-step instructions for building Nitro locally using Docker on Debian, Ubuntu, or macOS.
 author: amsanghi
 sidebar_position: 7
 content_type: how-to
@@ -10,9 +10,9 @@ Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to show
 
 This how-to assumes that you're running one of the following operating systems:
 
-- [Debian 11.7 (arm64)](https://cdimage.debian.org/cdimage/archive/11.7.0/)
-- [Ubuntu 22.04 (amd64)](https://old-releases.ubuntu.com/releases/22.04.2/)
-- [MacOS Sonoma 14.3](https://developer.apple.com/documentation/macos-release-notes/macos-14_3-release-notes).
+- [Debian 12 (bookworm)](https://www.debian.org/releases/bookworm/)
+- [Ubuntu 24.04 (amd64)](https://releases.ubuntu.com/noble/)
+- [MacOS Sequoia 15](https://developer.apple.com/documentation/macos-release-notes/macos-15-release-notes).
 
 ## Build a Docker image
 
@@ -64,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.9.4@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.9.8@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -115,15 +115,15 @@ sudo mkdir -p /usr/local/bin
 echo "export PATH=/opt/homebrew/opt/llvm/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
 
-### Step 5. Configure node [23](https://github.com/nvm-sh/nvm)
+### Step 5. Configure node [24](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
 
 ```shell
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source "$HOME/.bashrc"
-nvm install 23
-nvm use 23
+nvm install 24
+nvm use 24
 ```
 
 #### For MacOS
@@ -132,8 +132,8 @@ nvm use 23
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install 23
-nvm use 23
+nvm install 24
+nvm use 24
 ```
 
 ### Step 6. Configure [Rust](https://www.rust-lang.org/tools/install)
@@ -143,16 +143,10 @@ nvm use 23
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
-rustup install 1.88.0
-rustup default 1.88.0
-rustup install nightly-2024-08-08
-rustup target add wasm32-unknown-unknown --toolchain 1.88.0
-rustup target add wasm32-wasi --toolchain 1.88.0
-rustup target add wasm32-wasip1 --toolchain 1.88.0
-rustup target add wasm32-unknown-unknown --toolchain nightly-2024-08-08
-rustup target add wasm32-wasi --toolchain nightly-2024-08-08
-rustup target add wasm32-wasip1 --toolchain nightly-2024-08-08
-rustup component add rust-src --toolchain nightly-2024-08-08
+rustup install 1.93.0
+rustup default 1.93.0
+rustup target add wasm32-unknown-unknown --toolchain 1.93.0
+rustup target add wasm32-wasip1 --toolchain 1.93.0
 cargo install cbindgen
 ```
 
@@ -170,7 +164,7 @@ sudo apt-get install bison
 brew install bison
 ```
 
-### Step 8. Configure Go [1.24](https://github.com/moovweb/gvm)
+### Step 8. Configure Go [1.25](https://github.com/moovweb/gvm)
 
 #### Install and configure Go
 
@@ -188,11 +182,11 @@ If you use zsh, replace `bash` with `zsh`.
 
 :::
 
-#### Install foundry version 1.0.0
+#### Install foundry version 1.2.3
 
 ```shell
 curl -L https://foundry.paradigm.xyz | bash
-foundryup -i 1.0.0
+foundryup -i 1.2.3
 ```
 
 ### Step 9. Check dependencies
