@@ -36,7 +36,7 @@ This feature allows you to initialize a new blockchain with a customized startin
 
 ## **How to use this feature?**
 
-You can use the feature via the SDK or by using the `genesis-file-generator` tool.
+You can use the feature via the SDK or by using the [genesis-file-generator](https://github.com/OffchainLabs/genesis-file-generator) tool.
 
 ### Use via chain SDK
 
@@ -94,7 +94,7 @@ yarn dev
 3. **[Optional] Create rollup** \
    After generating the `genesis.json` file, the SDK provides an option to deploy your rollup. Follow the prompts to continue or exit the process and deploy the rollup later.
 
-### Use via `genesis-file-generator` tool
+### Use via [genesis-file-generator](https://github.com/OffchainLabs/genesis-file-generator) tool
 
 #### Configuration Reference
 
@@ -115,13 +115,22 @@ These parameters define the identity of your chain.
 
 #### Execution Process
 
-- **Prepare the genesis state:** Use the [genesis-file-generator tool](https://github.com/OffchainLabs/genesis-file-generator), to generate a standard `genesis.json` file with a set of pre-deploy contracts.
+- **Prepare the genesis state:**
+
   - Set up the `.env` with the required parameters
-  - Post setting up the evnironment variables, run the script. The script will generate the file under `./genesis` folder.
+  - Run the [offchainlabs/genesis-file-generator](https://hub.docker.com/r/offchainlabs/genesis-file-generator/tags) docker image to generate `genesis.json` file with the required pre-deployed contracts and additional configs.
+
     ```bash
-    ./generate.sh > genesis/genesis.json
+    mkdir -p genesis
+
+    docker run --rm \
+    --env-file .env \
+    -v "$(pwd)/genesis":/app/genesis \
+    offchainlabs/genesis-file-generator:latest
     ```
+
   - You can also generate your own genesis.json file, but carefully read [this notice](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
+
 - **Generate required hashes:** After the genesis.json file is created, run the nitro container to compute the genesis block hash with `genesis-generator` entrypoint:
 
   ```bash
