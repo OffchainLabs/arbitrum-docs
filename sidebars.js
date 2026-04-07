@@ -551,31 +551,34 @@ const sidebars = {
           collapsed: true,
           items: [
             {
-              type: 'category',
-              label: 'Deploy a production chain',
-              collapsed: true,
-              items: [
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
-                  label: `Overview`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
-                  label: `Deploy an Arbitrum chain`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config',
-                  label: `Generate the node config file`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
-                  label: `Deploy a token bridge`,
-                },
-              ],
+              type: 'doc',
+              id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
+              label: `Overview`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
+              label: `Deploy an Arbitrum chain`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config',
+              label: `Generate the node config file`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
+              label: `Deploy a token bridge`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
+              label: `L3 rollup from scratch`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
+              label: `L3 rollup testnet infrastructure`,
             },
             {
               type: 'doc',
