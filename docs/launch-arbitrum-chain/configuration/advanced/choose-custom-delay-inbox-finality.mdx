@@ -25,17 +25,7 @@ It's worth noting that this page is based on a well-behaved sequencer, not one t
   - `--node.delayed-sequencer.use-merge-finality=false`: Uses block depth (finalize-distance) instead of Ethereum's finalized/safe block tags to determine L1 finality. .
   - `--node.delayed-sequencer.finalize-distance=1`: Sets the number of L2 block confirmations needed (default is higher; 1 enables ~1-minute finality; only works when `use-merge-finality` sets to false).
 
-## What it means to configure delayed inbox finality
-
-This configuration sets up the sequencer to release Delayed Inbox messages earlier, prioritizing speed over maximum security. For instance, in a default setup, a deposit from Ethereum to an L3 (via L2 settlement) waits for L1 to finalize the L2's batch posting. Enabling L2-only finality skips this, releasing after L2 confirmations (e.g., when a DACert posts on Nova). Further reducing the finalize-distance minimizes L2 waits, allowing near-instant execution but exposing the chain to parent re-orgs if unconfirmed blocks revert. It's ideal for low-latency apps but requires monitoring for re-org events.
-
-:::note
-
-This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (child-to-parent) finality uses separate mechanisms, such as DAC in AnyTrust mode, for ~15-minute confirmations.
-
-:::
-
-### Configuration process:
+## Configuration process:
 
 - **Prepare the sequencer node**: When running your Arbitrum chain's sequencer (e.g., via Docker or local build from Nitro source), add the flags to the startup command. Example for a Dockerized sequencer:
   `docker run --rm -it -p 8547:8547 offchainlabs/nitro-node:v3.7.2 --chain.id=12345 --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1`
@@ -47,16 +37,6 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 
 - **Default (L1-Dependent)**: Relies on Ethereum L1 finality for batches/DACerts, ensuring maximum security but slower deposits (~tens of minutes).
 - **Configured (L2-only with low distance)**: Shifts to L2 soft finality and minimal confirmations, achieving ~1-minute deposits but introducing re-org risks if the parent L2 reverts unconfirmed blocks.
-
-## Pros
-
-- Significantly faster cross-chain deposits (e.g., 1 minute vs. tens), enhancing UX for bridging and dApps.
-- Flexible for L3 setups settling to L2, optimizing for the parent chain's quicker confirmations.
-
-## Cons
-
-- Increases re-org vulnerability on the child chain if the parent experiences instability in unconfirmed blocks.
-- Not suitable for high-security applications; requires careful monitoring and may complicate fraud proofs if mismatches occur.
 
 ## Compatibility
 
@@ -71,7 +51,3 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 - **DACert-optimized**: On Nova settlement with default flags, finality ties to DACert posting (~tens of minutes); configuring low-distance speeds reduces this to ~1 minute for gaming apps needing quick asset transfers.
 
 This feature underscores Arbitrum's modularity for performance tuning while inheriting parent security. For implementation, refer to the latest Nitro sequencer docs or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.mdx#rollup-as-a-service-raas-providers).
-
-## How to configure
-
-For instructions on how to configure the delayed inbox finality, refer to the [How to configure Delayed Inbox finality](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/arbitrum-chain-finality.mdx) page.
