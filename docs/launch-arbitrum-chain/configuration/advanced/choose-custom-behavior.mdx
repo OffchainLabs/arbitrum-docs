@@ -1,5 +1,5 @@
 ---
-title: 'Why choose to customize the behavior on your Arbitrum chain'
+title: 'Customize the behavior on your Arbitrum chain'
 description: 'Learn about custom behaviors and the pros and cons of choosing to customize the behavior it on your chain.'
 author: pete-vielhaber
 sme: jason-w123
@@ -21,18 +21,6 @@ Customizing your chain's behavior refers to modifying the core logic that govern
 - Works with all Arbitrum chain DA modes (Rollup, AnyTrust, Alt-DA), gas tokens, and validation (<a data-quicklook-from="bold">BoLD</a> or permissioned), but STF changes must meet strict rules (e.g., no non-determinism).
 - Backward-compatible by design; upgrades activate features sequentially, including all intermediate ones.
 - Incompatible with external dependencies or changes that violate STF purity/performance.
-
-## Pros
-
-- Enables innovative, use-case-specific behaviors (e.g., custom rewards or opcodes) for competitive advantages.
-- Supports seamless live upgrades without downtime.
-- Builds on canonical releases for reliability.
-
-## Cons
-
-- High complexity; errors (e.g., in versioning) can cause re-orgs, security vulnerabilities, or proof failures.
-- Requires audits, expertise, and maintenance; no official support for custom code.
-- Trade-offs in performance/cost; skipping versions activates unintended features.
 
 ## Examples
 
