@@ -32,8 +32,12 @@ Please note that:
 
 - The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests. For nodes that need to process multiple simultaneous requests, both the RAM size and the number of CPU cores should be increased to accommodate higher levels of traffic.
 - Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor
-- The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended.
+- The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended. Note that snapshot extraction requires approximately 2x the snapshot size in temporary disk space, so plan accordingly during initial setup.
 - Path-based state schemes are supported for Nitro's state trie, but only for full nodes and archive nodes at this time, and not validators yet. As a result, HashDB is still the default state scheme used by Nitro, and you must take explicit action to enable PathDB. You can find more details in the table below for optional parameters.
+
+### Parent chain (L1) client
+
+Your Arbitrum node requires a connection to a parent chain RPC endpoint (e.g., an Ethereum execution client for Arbitrum One or Nova). Keep your parent chain client up to date—incompatible L1 client versions can cause your Arbitrum node to crash or fail to sync. When upgrading your L1 client, check the [Nitro release notes](https://github.com/OffchainLabs/nitro/releases) for any noted compatibility requirements.
 
 ### Recommended Nitro version
 
@@ -64,6 +68,20 @@ We provide a summary of the available parameters here, but we recommend reading 
 - Note that these parameters get ignored if a database already exists
 - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
 - Only snapshots formatted with your node's specified state scheme are compatible. In other words, a PathDB snapshot won't work for a node using HashDB, and vice versa.
+
+:::tip Which initialization mode should I use?
+
+| Scenario                                    | Recommended Parameter                                                                                                    |
+| :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------- |
+| Setting up a new **pruned** (full) node     | `--init.latest pruned`                                                                                                   |
+| Setting up a new **archive** node           | `--init.latest archive` (note: the publicly hosted archive snapshot may be outdated as it has not been updated recently) |
+| Reducing disk usage on an **existing** node | `--init.prune full` (or `minimal`) — only applicable to HashDB; PathDB handles state trie pruning automatically          |
+| Hosting one snapshot for **multiple nodes** | Download manually, then use `--init.url file:///path/to/archive.tar` on each node                                        |
+| Using a **custom snapshot URL**             | `--init.url https://your-snapshot-url/archive.tar`                                                                       |
+
+For more details on snapshot downloading and initialization, see the [complete snapshot guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx).
+
+:::
 
 :::warning Fusaka upgrade: Historical blobs
 
@@ -101,7 +119,14 @@ If you are running more than one node, you should [run a feed relay](/run-arbitr
 
 :::
 
-- To ensure the database persists across restarts, mount an external volume when running the Docker image. Use the mount point `/home/user/.arbitrum` within the Docker image.
+:::warning Docker volume mount
+
+To ensure the database persists across restarts, mount an external volume to **`/home/user/.arbitrum`** inside the Docker container. Make sure to:
+
+- Create the host directory **before** running Docker (e.g., `mkdir -p /some/local/dir/arbitrum`), otherwise Docker may create it as `root`, and the container (which runs as UID 1000) won't be able to write to it.
+- If you encounter permission errors on Linux or macOS, run `chmod -fR 777 /some/local/dir/arbitrum` on the host directory.
+
+:::
 
 :::note Node config file
 
@@ -175,9 +200,25 @@ The pruning process occurs when the node starts (upon initialization) and will n
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
 
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:
-  - `minimal`: The most aggressive prune and retains only the genesis state and the head state (at the latest snapshot). Takes the least amount of time to complete (approx. several hours)
-  - `full` : Mostly meant for full nodes serving RPC requests, this mode retains the genesis state, the state of the latest confirmed block, and the head state (at the latest snapshot). Will not work if the node is in `validator` mode. This may take a long time (~50hrs)
-  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root, and the head state (at the latest snapshot). This mode is expected to take about half as long as `full` pruning mode.
+  - `minimal`: The most aggressive prune and retains only the genesis state and the head state (at the latest snapshot). Takes the least amount of time to complete. Duration depends on the chain and database size (several hours for smaller chains; potentially days for large chains like Arbitrum One).
+  - `full` : Mostly intended for full nodes serving RPC requests, this mode retains the genesis state, the state of the latest confirmed block, and the head state (at the latest snapshot). Will not work if the node is in `validator` mode. Duration varies significantly by chain and database size—for Arbitrum One, this may take multiple days on NVMe SSDs. For smaller chains, it will be much faster. If pruning takes too long, consider downloading a fresh pruned snapshot with `--init.latest pruned` instead.
+  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root, and the head state (at the latest snapshot). This mode is expected to take longer than `full` pruning mode.
+
+### Memory management
+
+Under heavy RPC load or during operations such as large `debug_traceBlockByNumber` calls, Nitro nodes can consume significant memory. To prevent out-of-memory (OOM) crashes, consider configuring the following:
+
+- `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold (e.g., `--node.resource-mgmt.mem-free-limit=4GiB`). This helps protect the node from OOM under high request load.
+- `GOMEMLIMIT` environment variable: Sets a soft memory limit for the Go runtime garbage collector (e.g., `GOMEMLIMIT=48GiB` for a 64 GB machine), helping reduce memory spikes.
+
+:::tip
+For Docker deployments, you can set these in your `docker run` command:
+
+```shell
+docker run ... -e GOMEMLIMIT=48GiB ... offchainlabs/nitro-node:... --node.resource-mgmt.mem-free-limit=4GiB ...
+```
+
+:::
 
 ### Transaction prechecker
 
