@@ -56,11 +56,11 @@
   overflow: hidden;
   position: relative;
 
-  // Image nodes (e.g. envelope icons) — no border or background
+  // Image nodes (e.g. envelope icons) — no border, background, or shadow
   .react-flow__node-image {
-    background: transparent;
-    border: none;
-    box-shadow: none;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     padding: 0;
   }
 
