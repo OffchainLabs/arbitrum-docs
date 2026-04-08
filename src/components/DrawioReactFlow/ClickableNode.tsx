@@ -25,7 +25,7 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
   const baseStyle: React.CSSProperties = {
     cursor: isClickable ? 'pointer' : 'default',
     backgroundColor: colors.backgroundColor,
-    borderColor: colors.borderColor,
+    // borderColor handled by CSS (.custom-node)
     ...(data.topAligned ? { alignItems: 'flex-start', paddingTop: '4px' } : {}),
   };
 
