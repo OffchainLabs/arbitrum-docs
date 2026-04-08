@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Address } from '@arbitrum/sdk';
+
+const ADDRESS_ALIAS_OFFSET = 0x1111000000000000000000000000000000001111n;
+const ADDRESS_BIT_LENGTH = 160;
+
+function applyAlias(address: string): string {
+  const addr = BigInt(address);
+  const aliased = BigInt.asUintN(ADDRESS_BIT_LENGTH, addr + ADDRESS_ALIAS_OFFSET);
+  return '0x' + aliased.toString(16).padStart(40, '0');
+}
+
+function isAddress(value: string): boolean {
+  return /^0x[0-9a-fA-F]{40}$/.test(value);
+}
 
 export const AddressAliasHelper = () => {
   const [l1Address, setL1Address] = useState('');
@@ -10,9 +22,10 @@ export const AddressAliasHelper = () => {
       return setError(undefined);
     }
     try {
-      const l1addr = new Address(l1Address);
-      const afterApply = l1addr.applyAlias();
-      setL2Address(afterApply.value);
+      if (!isAddress(l1Address)) {
+        throw new Error(`Invalid address: ${l1Address}`);
+      }
+      setL2Address(applyAlias(l1Address));
       setError(undefined);
     } catch (err) {
       setL2Address(undefined);

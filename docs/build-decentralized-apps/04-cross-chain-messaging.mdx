@@ -14,7 +14,21 @@ Creating an arbitrary parent-to-child chain contract call occurs via the Inbox's
 
 - **How-to guide**: [How to bridge from the parent chain to the child chain](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx)
 - **Protocol details**: [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
-- **Example**: [`Greeter` tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter) using the [Arbitrum SDK](../../sdk)
+- **Example**: [`Greeter` tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter) using the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
+
+### Depositing from a smart contract (address aliasing)
+
+When a **contract** (rather than an EOA) sends a parent-to-child chain message, the sender's address is aliased on the child chain by adding `0x1111000000000000000000000000000000001111`. This prevents cross-chain address spoofing. You can compute the aliased address with the Arbitrum SDK:
+
+```ts
+import { Address } from '@arbitrum/sdk';
+
+// When depositing from a contract, the sender's address is aliased on the child chain
+const contractAddress = new Address(depositContract.address);
+const aliasedAddress = contractAddress.applyAlias().value;
+```
+
+For a complete working example, see the [contract-deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/contract-deposit).
 
 ## Arbitrum-to-Ethereum messaging
 
@@ -23,3 +37,33 @@ Similarly, child chain contracts can send arbitrary messages for execution on th
 - **How-to guide**: [How to bridge to parent chain from child chain](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx)
 - **Protocol details**: [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
 - **Example**: [Outbox Tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute)
+
+## Redeeming failed retryable tickets
+
+When a retryable ticket's initial auto-redeem fails on the child chain, you can manually redeem it using the Arbitrum SDK. This is useful for recovering from transactions where the child chain execution reverted due to insufficient gas or other issues.
+
+```ts
+import { ParentTransactionReceipt, ParentToChildMessageStatus } from '@arbitrum/sdk';
+
+// Wrap the parent chain transaction receipt
+const parentReceipt = new ParentTransactionReceipt(
+  await parentProvider.getTransactionReceipt(parentTxHash),
+);
+
+// Get the parent-to-child messages
+const messages = await parentReceipt.getParentToChildMessages(childSigner);
+const message = messages[0];
+
+// Check the status
+const result = await message.waitForStatus();
+if (result.status === ParentToChildMessageStatus.REDEEMED) {
+  console.log('Already redeemed');
+} else {
+  // Manually redeem the failed retryable ticket
+  const redeemTx = await message.redeem();
+  const redeemReceipt = await redeemTx.waitForRedeem();
+  console.log('Redeemed:', redeemReceipt.transactionHash);
+}
+```
+
+For a complete example, see the [redeem-pending-retryable tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/redeem-pending-retryable).

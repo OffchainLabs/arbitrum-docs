@@ -1,26 +1,5 @@
 // @ts-check
 
-// Use the generated SDK sidebar for API reference
-const sdkApiSidebar = require('./sdk-sidebar.js');
-// Use the generated stylus-by-example sidebars
-
-// Create a custom SDK sidebar that combines manual intro pages with generated API docs
-const sdkSidebar = {
-  sdkSidebar: [
-    {
-      type: 'doc',
-      id: 'sdk/introduction',
-      label: 'Introduction',
-    },
-    {
-      type: 'doc',
-      id: 'sdk/migrate',
-      label: 'Migrate from v3 to v4',
-    },
-    ...sdkApiSidebar.sdkSidebar,
-  ],
-};
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   // Get started sidebar - shared entry point
@@ -1410,11 +1389,6 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
-          label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
-        },
-        {
           type: 'link',
           label: 'Tutorials',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
@@ -1586,11 +1560,6 @@ const sidebars = {
           type: 'doc',
           label: 'Troubleshooting',
           id: 'for-devs/troubleshooting-building',
-        },
-        {
-          type: 'category',
-          label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
         },
         {
           type: 'link',
