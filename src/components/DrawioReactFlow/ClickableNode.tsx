@@ -4,7 +4,7 @@ import { NodeData } from './types';
 import { DiagramHoverModal } from './DiagramHoverModal';
 
 export function ClickableNode({ data }: NodeProps<NodeData>) {
-  const { label, shape, colors, link, centerable, onNavigate, hoverContentComponent } = data;
+  const { label, shape, link, centerable, onNavigate, hoverContentComponent } = data;
   const isClickable = !!link || !!centerable;
 
   const handleClick = () => {
@@ -24,8 +24,6 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
 
   const baseStyle: React.CSSProperties = {
     cursor: isClickable ? 'pointer' : 'default',
-    backgroundColor: colors.backgroundColor,
-    // borderColor handled by CSS (.custom-node)
     ...(data.topAligned ? { alignItems: 'flex-start', paddingTop: '4px' } : {}),
   };
 

@@ -59,19 +59,6 @@ function hasTopAlignedLabel(html: string): boolean {
   return /<div>\s*<br\s*\/?>\s*<\/div>\s*$/.test(html);
 }
 
-function extractFontColor(html: string): string {
-  if (!html) return '';
-  const match = html.match(/color:\s*([^;"]+)/i);
-  if (match) {
-    return match[1].trim();
-  }
-  const fontMatch = html.match(/fontColor[=:]([^;"&\s]+)/i);
-  if (fontMatch) {
-    return fontMatch[1].trim();
-  }
-  return '';
-}
-
 function isImageCell(styleProps: Record<string, string>): boolean {
   return styleProps['shape'] === 'image';
 }
@@ -296,9 +283,6 @@ function buildNodes(
     if (!label && !isGroup && !(cell.width > 0 && cell.height > 0)) continue;
 
     const fillColor = styleProps['fillColor'] ?? 'transparent';
-    const strokeColor = styleProps['strokeColor'] ?? '#333333';
-    const fontColor =
-      styleProps['fontColor'] ?? styleProps['labelColor'] ?? extractFontColor(cell.value) ?? '';
 
     const hasNonRootParentGroup =
       !ROOT_IDS.has(cell.parent) && groupIds.has(cell.parent) && !skippedGroups.has(cell.parent);
@@ -335,13 +319,7 @@ function buildNodes(
         style: {
           width: cell.width,
           height: cell.height,
-          backgroundColor: fillColor !== 'transparent' ? fillColor : 'transparent',
-          borderColor: strokeColor !== '#333333' ? strokeColor : 'transparent',
-          borderWidth: strokeColor !== '#333333' ? 1 : 0,
-          borderStyle: 'solid',
-          borderRadius: styleProps['rounded'] === '1' ? 8 : 0,
           padding: 0,
-          color: fontColor || '#ffffff',
         },
       });
       continue;
@@ -358,7 +336,7 @@ function buildNodes(
           height: cell.height,
           backgroundColor: 'transparent',
           border: 'none',
-          color: fontColor || '#ffffff',
+          color: '#ffffff',
           fontSize: '14px',
           lineHeight: '1.2',
           display: 'flex',
@@ -374,15 +352,11 @@ function buildNodes(
 
     const shape = determineShape(styleProps);
 
-    const isBlinking = fillColor.toUpperCase() === '#FF7700';
+    const isBlinking = fillColor.toUpperCase() === '#FF7700' || cell.hoverContent === 'blinking';
 
     const nodeData: NodeData = {
       label,
       shape,
-      colors: {
-        backgroundColor: fillColor,
-        borderColor: strokeColor,
-      },
       centerable: isBlinking || undefined,
       navigateTo: transitions?.find((t) => t.trigger === label)?.targetFile || undefined,
       topAligned: hasTopAlignedLabel(cell.value) || undefined,
@@ -399,7 +373,6 @@ function buildNodes(
       style: {
         width: cell.width,
         height: cell.height,
-        color: fontColor || '#ffffff',
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,

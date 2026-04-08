@@ -56,10 +56,6 @@ export interface NavigationState {
 export interface NodeData {
   label: string;
   shape: string;
-  colors: {
-    backgroundColor: string;
-    borderColor: string;
-  };
   link?: string;
   centerable?: boolean;
   navigateTo?: string;
