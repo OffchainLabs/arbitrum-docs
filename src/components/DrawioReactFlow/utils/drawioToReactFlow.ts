@@ -11,6 +11,7 @@ interface DrawioCell {
   target: string;
   parent: string;
   connectable: string;
+  hoverContent: string;
   x: number;
   y: number;
   width: number;
@@ -118,6 +119,15 @@ function parseCells(doc: Document): DrawioCell[] {
     const id = el.getAttribute('id') ?? '';
     const geo = el.querySelector('mxGeometry');
 
+    // Check for hoverContent on the cell itself or parent UserObject
+    let hoverContent = el.getAttribute('hoverContent') ?? '';
+    if (!hoverContent) {
+      const parentEl = el.parentElement;
+      if (parentEl && parentEl.tagName === 'UserObject') {
+        hoverContent = parentEl.getAttribute('hoverContent') ?? '';
+      }
+    }
+
     cells.push({
       id,
       value: el.getAttribute('value') ?? '',
@@ -128,6 +138,7 @@ function parseCells(doc: Document): DrawioCell[] {
       target: el.getAttribute('target') ?? '',
       parent: el.getAttribute('parent') ?? '',
       connectable: el.getAttribute('connectable') ?? '',
+      hoverContent,
       x: parseFloat(geo?.getAttribute('x') ?? '0'),
       y: parseFloat(geo?.getAttribute('y') ?? '0'),
       width: parseFloat(geo?.getAttribute('width') ?? '0'),
@@ -375,6 +386,7 @@ function buildNodes(
       centerable: isBlinking || undefined,
       navigateTo: transitions?.find((t) => t.trigger === label)?.targetFile || undefined,
       topAligned: hasTopAlignedLabel(cell.value) || undefined,
+      hoverContentKey: cell.hoverContent || undefined,
       onNavigate,
     };
 
@@ -451,15 +463,18 @@ function inferConnectionSide(
     : { sourcePosition: Position.Top, targetPosition: Position.Bottom };
 }
 
-function findEdgeLabelText(edgeId: string, cells: DrawioCell[]): string {
+function findEdgeLabelData(
+  edgeId: string,
+  cells: DrawioCell[],
+): { text: string; hoverContentKey?: string } {
   for (const cell of cells) {
     if (cell.parent !== edgeId || !cell.vertex) continue;
     const styleProps = parseStyleString(cell.style);
     if (styleProps['edgeLabel'] !== 'true') continue;
     const text = stripHtml(cell.value);
-    if (text) return text;
+    if (text) return { text, hoverContentKey: cell.hoverContent || undefined };
   }
-  return '';
+  return { text: '' };
 }
 
 function buildEdges(cells: DrawioCell[], cellMap: Map<string, DrawioCell>): Edge[] {
@@ -520,9 +535,17 @@ function buildEdges(cells: DrawioCell[], cellMap: Map<string, DrawioCell>): Edge
       },
     };
 
-    const edgeLabel = stripHtml(cell.value) || findEdgeLabelText(cell.id, cells);
+    const labelData = findEdgeLabelData(cell.id, cells);
+    const edgeLabel = stripHtml(cell.value) || labelData.text;
+    const edgeHoverKey = cell.hoverContent || labelData.hoverContentKey;
+
     if (edgeLabel) {
       edge.label = edgeLabel;
+    }
+
+    if (edgeHoverKey) {
+      edge.type = 'hoverEdge';
+      edge.data = { hoverContentKey: edgeHoverKey };
     }
 
     edges.push(edge);

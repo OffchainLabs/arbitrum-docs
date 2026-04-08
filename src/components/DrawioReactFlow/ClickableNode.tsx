@@ -1,9 +1,10 @@
 import React from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { NodeData } from './types';
+import { DiagramHoverModal } from './DiagramHoverModal';
 
 export function ClickableNode({ data }: NodeProps<NodeData>) {
-  const { label, shape, colors, link, centerable, onNavigate } = data;
+  const { label, shape, colors, link, centerable, onNavigate, hoverContentComponent } = data;
   const isClickable = !!link || !!centerable;
 
   const handleClick = () => {
@@ -39,6 +40,12 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
   const contentStyle: React.CSSProperties =
     shape === 'diamond' ? { transform: 'rotate(-45deg)' } : {};
 
+  const labelContent = hoverContentComponent ? (
+    <DiagramHoverModal ContentComponent={hoverContentComponent}>{label}</DiagramHoverModal>
+  ) : (
+    label
+  );
+
   return (
     <div
       className={`custom-node ${isClickable ? 'node-clickable' : 'node-static'} shape-${shape}`}
@@ -60,7 +67,7 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
       <Handle id="left-source" type="source" position={Position.Left} />
 
       <div className="node-content" style={contentStyle}>
-        {label}
+        {labelContent}
       </div>
     </div>
   );

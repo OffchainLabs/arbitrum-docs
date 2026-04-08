@@ -1,0 +1,35 @@
+## Retryable tickets
+
+Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages—parent-chain transactions that initiate a message to be executed on a child chain. A retryable is submittable for a fixed cost (dependent only on its calldata size) paid at the parent chain. Critically, the ticket's _submission_ on the parent chain is separable and asynchronous from its _execution_ on the child chain. This design provides atomicity for cross-chain operations: if the parent chain transaction to request submission succeeds (doesn't revert), then the execution of the retryable on the child chain has a strong guarantee to eventually succeed.
+
+For step-by-step instructions on creating retryable tickets, including parameter estimation and SDK usage, see [Creating retryable tickets](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#creating-retryable-tickets).
+
+### Retryable ticket lifecycle
+
+The lifecycle of a <a data-quicklook-from="retryable-ticket">retryable ticket</a> involves three stages: submission, automatic redemption, and manual redemption.
+
+#### Submission
+
+Creating a retryable ticket is initiated with a call to the `createRetryableTicket` function of the inbox contract. Key parameters include the destination address, call value, gas limits, refund addresses, and calldata. The ticket requires sufficient funds to cover both submission costs and gas for child chain execution. Upon successful submission, a unique `TicketID` is created and the `ArbRetryableTx` precompile emits a `TicketCreated` event.
+
+#### Automatic redemption
+
+Upon successful ticket creation, the system checks if conditions are met for automatic redemption: the user's child chain balance must cover the gas costs, and the provided `maxFeePerGas` must meet or exceed the child chain base fee. If these conditions are met, the system automatically attempts to execute the ticket (auto-redeem).
+
+If auto-redemption succeeds, the ticket executes immediately with the original parameters, and excess fees are refunded. If auto-redemption fails (for example, due to insufficient gas or an increase in gas prices), the ticket remains in the retryable buffer for up to one week, allowing for manual redemption.
+
+#### Manual redemption
+
+If automatic redemption fails, anyone can manually redeem the ticket by calling the `ArbRetryableTx` precompile's `redeem` method. The manual redemption attempt donates its call gas to the execution, and the gas limit is not constrained by the original ticket parameters. This allows tickets to be retried with different gas conditions.
+
+Tickets remain in the retryable buffer for one week. If not successfully redeemed within this period, the ticket expires and is automatically discarded. However, tickets can be kept alive indefinitely by paying a fee to extend the lifetime for another full period before expiration.
+
+If a ticket expires without successful redemption, the escrowed `callValue` is refunded to the `callValueRefundAddress` specified during submission. This protects user funds even if execution never succeeds.
+
+#### Receipt types
+
+Retryable tickets produce two types of receipts:
+
+- **Ticket creation receipt**: Confirms successful ticket creation and includes a `TicketCreated` event with the `ticketId`
+- **Redeem attempt receipt**: Records each redemption attempt and includes a `RedeemScheduled` event
+  Only one successful redemption can occur per ticket. Multiple failed redemption attempts each produce a receipt until one succeeds.

@@ -1,3 +1,4 @@
+import type React from 'react';
 import { Node, Edge } from 'reactflow';
 
 export interface ZoomConfig {
@@ -37,6 +38,7 @@ export interface DiagramProps {
   manifest?: string;
   height?: string;
   className?: string;
+  hoverContent?: Record<string, React.ComponentType>;
 }
 
 export type DrawioReactFlowProps = DiagramProps;
@@ -63,4 +65,11 @@ export interface NodeData {
   navigateTo?: string;
   topAligned?: boolean;
   onNavigate?: (link: string) => void;
+  hoverContentKey?: string;
+  hoverContentComponent?: React.ComponentType;
+}
+
+export interface EdgeData {
+  hoverContentKey?: string;
+  hoverContentComponent?: React.ComponentType;
 }

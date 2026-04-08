@@ -6,6 +6,7 @@ import 'reactflow/dist/style.css';
 import { ClickableNode } from './ClickableNode';
 import { SubgraphNode } from './SubgraphNode';
 import { ImageNode } from './ImageNode';
+import { HoverEdge } from './HoverEdge';
 import { convertDrawioToReactFlow } from './utils/drawioToReactFlow';
 import { fetchAndParseManifest } from './utils/parseManifest';
 import { ReactFlowData, DiagramProps, NodeData, ManifestData, TransitionConfig } from './types';
@@ -22,15 +23,19 @@ function useSafeColorMode() {
 function DiagramFlow({
   flowData,
   nodeTypes,
+  edgeTypes,
   defaultEdgeOptions,
   onDiagramNavigate,
   transitions,
+  hoverContent,
 }: {
   flowData: ReactFlowData;
   nodeTypes: Record<string, React.ComponentType<any>>;
+  edgeTypes: Record<string, React.ComponentType<any>>;
   defaultEdgeOptions: Record<string, any>;
   onDiagramNavigate?: (diagramPath: string) => void;
   transitions?: TransitionConfig[];
+  hoverContent?: Record<string, React.ComponentType>;
 }) {
   const { setCenter, setViewport, getViewport } = useReactFlow();
   const viewportHistory = useRef<Viewport[]>([]);
@@ -109,6 +114,7 @@ function DiagramFlow({
         nodes={flowData.nodes}
         edges={flowData.edges}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         onNodeClick={handleNodeClick}
         zoomOnScroll={true}
@@ -127,7 +133,13 @@ function DiagramFlow({
   );
 }
 
-export function NavigableDiagram({ diagramFile, manifest, height, className = '' }: DiagramProps) {
+export function NavigableDiagram({
+  diagramFile,
+  manifest,
+  height,
+  className = '',
+  hoverContent,
+}: DiagramProps) {
   const colorMode = useSafeColorMode();
   const [flowData, setFlowData] = useState<ReactFlowData>({ nodes: [], edges: [] });
   const [currentDiagram, setCurrentDiagram] = useState<string>('');
@@ -140,6 +152,8 @@ export function NavigableDiagram({ diagramFile, manifest, height, className = ''
     () => ({ custom: ClickableNode, group: SubgraphNode, image: ImageNode }),
     [],
   );
+
+  const edgeTypes = useMemo(() => ({ hoverEdge: HoverEdge }), []);
 
   const defaultEdgeOptions = useMemo(
     () => ({
@@ -205,6 +219,20 @@ export function NavigableDiagram({ diagramFile, manifest, height, className = ''
         const xmlString = await response.text();
         const data = await convertDrawioToReactFlow(xmlString, handleNavigate, currentTransitions);
         if (!controller.signal.aborted) {
+          // Resolve hover content components onto nodes and edges
+          if (hoverContent) {
+            for (const node of data.nodes) {
+              if (node.data?.hoverContentKey && hoverContent[node.data.hoverContentKey]) {
+                node.data.hoverContentComponent = hoverContent[node.data.hoverContentKey];
+              }
+            }
+            for (const edge of data.edges) {
+              const edgeData = edge.data as any;
+              if (edgeData?.hoverContentKey && hoverContent[edgeData.hoverContentKey]) {
+                edgeData.hoverContentComponent = hoverContent[edgeData.hoverContentKey];
+              }
+            }
+          }
           setFlowData(data);
         }
       } catch (err) {
@@ -222,7 +250,7 @@ export function NavigableDiagram({ diagramFile, manifest, height, className = ''
     return () => {
       controller.abort();
     };
-  }, [currentDiagram, handleNavigate, manifestData]);
+  }, [currentDiagram, handleNavigate, manifestData, hoverContent]);
 
   if (loading) {
     return (
@@ -290,9 +318,11 @@ export function NavigableDiagram({ diagramFile, manifest, height, className = ''
             <DiagramFlow
               flowData={flowData}
               nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
               defaultEdgeOptions={defaultEdgeOptions}
               onDiagramNavigate={handleNavigate}
               transitions={currentTransitions}
+              hoverContent={hoverContent}
             />
           </ReactFlowProvider>
         </motion.div>
