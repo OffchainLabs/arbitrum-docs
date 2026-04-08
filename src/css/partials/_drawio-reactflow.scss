@@ -221,8 +221,7 @@
 
   &.shape-process {
     border-radius: 0;
-    border-left: 3px solid;
-    border-right: 3px solid;
+    border-width: 1px 3px;
   }
 
   .node-content {
