@@ -30,6 +30,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn tsx scripts/check-releases.ts
 
+      - name: Propagate globalVars changes to docs
+        if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
+        run: yarn update-variable-refs
+
       - name: Configure Git
         if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
         run: |
@@ -49,8 +53,8 @@ jobs:
       - name: Commit and push changes
         if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
         run: |
-          git add dependencies.json
-          git commit -m "chore: update dependencies to latest versions
+          git add dependencies.json src/resources/globalVars.js docs/
+          git commit -m "chore: update dependencies and Nitro Docker image
 
           Updated projects:
           ${{ steps.check-releases.outputs.updated_projects }}"
