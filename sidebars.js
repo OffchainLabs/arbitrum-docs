@@ -1411,7 +1411,7 @@ const sidebars = {
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
@@ -1589,7 +1589,7 @@ const sidebars = {
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
