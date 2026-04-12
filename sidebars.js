@@ -1315,6 +1315,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'L1-to-L3 teleportation',
+              id: 'build-decentralized-apps/token-bridging/l1-l3-teleportation',
+            },
+            {
+              type: 'doc',
               label: 'Bridge to child chain',
               id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
             },
