@@ -12,6 +12,7 @@ interface DrawioCell {
   parent: string;
   connectable: string;
   hoverContent: string;
+  colorToken: string;
   x: number;
   y: number;
   width: number;
@@ -115,6 +116,8 @@ function parseCells(doc: Document): DrawioCell[] {
       }
     }
 
+    const colorToken = el.getAttribute('colorToken') ?? '';
+
     cells.push({
       id,
       value: el.getAttribute('value') ?? '',
@@ -126,6 +129,7 @@ function parseCells(doc: Document): DrawioCell[] {
       parent: el.getAttribute('parent') ?? '',
       connectable: el.getAttribute('connectable') ?? '',
       hoverContent,
+      colorToken,
       x: parseFloat(geo?.getAttribute('x') ?? '0'),
       y: parseFloat(geo?.getAttribute('y') ?? '0'),
       width: parseFloat(geo?.getAttribute('width') ?? '0'),
@@ -326,7 +330,7 @@ function buildNodes(
       continue;
     }
 
-    if (isText) {
+    if (isText && !cell.colorToken) {
       nodes.push({
         id: cell.id,
         type: 'default',
@@ -361,6 +365,7 @@ function buildNodes(
       centerable: isBlinking || undefined,
       navigateTo: transitions?.find((t) => t.trigger === label)?.targetFile || undefined,
       topAligned: hasTopAlignedLabel(cell.value) || undefined,
+      colorToken: cell.colorToken || undefined,
       hoverContentKey: cell.hoverContent || undefined,
       onNavigate,
     };

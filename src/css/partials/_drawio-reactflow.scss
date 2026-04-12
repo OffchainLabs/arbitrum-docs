@@ -3,20 +3,20 @@
 
 // Arbitrum glassmorphic color scheme
 :root {
-  // Node colors — translucent glass fills with subtle borders
-  // Palette: orange #f66826, green-yellow #cdff03, purple #9897fe, red-orange #fd5a1b
-  --node-rect-bg: rgba(246, 104, 38, 0.15);
-  --node-rect-border: rgba(246, 104, 38, 0.5);
-  --node-diamond-bg: rgba(246, 104, 38, 0.12);
-  --node-diamond-border: rgba(246, 104, 38, 0.4);
-  --node-circle-bg: rgba(205, 255, 3, 0.12);
-  --node-circle-border: rgba(205, 255, 3, 0.4);
-  --node-stadium-bg: rgba(152, 151, 254, 0.12);
-  --node-stadium-border: rgba(152, 151, 254, 0.4);
-  --node-round-bg: rgba(152, 151, 254, 0.15);
-  --node-round-border: rgba(152, 151, 254, 0.5);
-  --node-process-bg: rgba(253, 90, 27, 0.15);
-  --node-process-border: rgba(253, 90, 27, 0.5);
+  // Node colors — visible glass fills with strong borders
+  // Palette: orange #f66826, yellow #ffd600, purple #9897fe, red-orange #fd5a1b, blue #1a3a6b
+  --node-rect-bg: rgba(246, 104, 38, 0.5);
+  --node-rect-border: rgba(246, 104, 38, 0.85);
+  --node-diamond-bg: rgba(246, 104, 38, 0.45);
+  --node-diamond-border: rgba(246, 104, 38, 0.8);
+  --node-circle-bg: rgba(255, 214, 0, 0.4);
+  --node-circle-border: rgba(255, 214, 0, 0.75);
+  --node-stadium-bg: rgba(152, 151, 254, 0.45);
+  --node-stadium-border: rgba(152, 151, 254, 0.8);
+  --node-round-bg: rgba(152, 151, 254, 0.5);
+  --node-round-border: rgba(152, 151, 254, 0.85);
+  --node-process-bg: rgba(253, 90, 27, 0.5);
+  --node-process-border: rgba(253, 90, 27, 0.85);
 
   // Subgraph rotating palette — glassmorphic containers
   --subgraph-color-0-bg: rgba(18, 170, 255, 0.08);
@@ -32,12 +32,12 @@
 }
 
 [data-theme='dark'] {
-  --node-rect-bg: rgba(246, 104, 38, 0.12);
-  --node-diamond-bg: rgba(246, 104, 38, 0.1);
-  --node-circle-bg: rgba(205, 255, 3, 0.1);
-  --node-stadium-bg: rgba(152, 151, 254, 0.1);
-  --node-round-bg: rgba(152, 151, 254, 0.12);
-  --node-process-bg: rgba(253, 90, 27, 0.12);
+  --node-rect-bg: rgba(246, 104, 38, 0.45);
+  --node-diamond-bg: rgba(246, 104, 38, 0.4);
+  --node-circle-bg: rgba(255, 214, 0, 0.35);
+  --node-stadium-bg: rgba(152, 151, 254, 0.4);
+  --node-round-bg: rgba(152, 151, 254, 0.45);
+  --node-process-bg: rgba(253, 90, 27, 0.45);
 
   --subgraph-color-0-bg: rgba(18, 170, 255, 0.06);
   --subgraph-color-1-bg: rgba(56, 189, 127, 0.06);
@@ -237,6 +237,47 @@
     border-radius: 0;
     background-color: var(--node-process-bg);
     border-color: var(--node-process-border);
+  }
+
+  // Color token overrides — set via colorToken attribute in Draw.io XML
+  &.color-orange {
+    background-color: var(--node-rect-bg);
+    border-color: var(--node-rect-border);
+  }
+
+  &.color-yellow {
+    background-color: var(--node-circle-bg);
+    border-color: var(--node-circle-border);
+  }
+
+  &.color-purple {
+    background-color: var(--node-round-bg);
+    border-color: var(--node-round-border);
+  }
+
+  &.color-red {
+    background-color: var(--node-process-bg);
+    border-color: var(--node-process-border);
+  }
+
+  &.color-blue {
+    background-color: rgba(26, 58, 107, 0.7);
+    border-color: rgba(26, 58, 107, 0.9);
+  }
+
+  &.color-green {
+    background-color: rgba(46, 204, 113, 0.5);
+    border-color: rgba(46, 204, 113, 0.85);
+  }
+
+  &.color-grey {
+    background-color: rgba(160, 170, 180, 0.45);
+    border-color: rgba(160, 170, 180, 0.8);
+  }
+
+  &.color-lightblue {
+    background-color: rgba(91, 192, 222, 0.5);
+    border-color: rgba(91, 192, 222, 0.85);
   }
 
   .node-content {

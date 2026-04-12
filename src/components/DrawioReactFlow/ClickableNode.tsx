@@ -4,7 +4,7 @@ import { NodeData } from './types';
 import { DiagramHoverModal } from './DiagramHoverModal';
 
 export function ClickableNode({ data }: NodeProps<NodeData>) {
-  const { label, shape, link, centerable, onNavigate, hoverContentComponent } = data;
+  const { label, shape, link, centerable, colorToken, onNavigate, hoverContentComponent } = data;
   const isClickable = !!link || !!centerable;
 
   const handleClick = () => {
@@ -46,7 +46,9 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
 
   return (
     <div
-      className={`custom-node ${isClickable ? 'node-clickable' : 'node-static'} shape-${shape}`}
+      className={`custom-node ${isClickable ? 'node-clickable' : 'node-static'} shape-${shape}${
+        colorToken ? ` color-${colorToken}` : ''
+      }`}
       style={{ ...baseStyle, ...shapeStyle }}
       onClick={handleClick}
       onKeyDown={handleKeyDown}

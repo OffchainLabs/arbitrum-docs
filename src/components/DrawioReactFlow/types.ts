@@ -60,6 +60,7 @@ export interface NodeData {
   centerable?: boolean;
   navigateTo?: string;
   topAligned?: boolean;
+  colorToken?: string;
   onNavigate?: (link: string) => void;
   hoverContentKey?: string;
   hoverContentComponent?: React.ComponentType;
