@@ -88,7 +88,6 @@ import { getArbitrumNetwork, EthBridger, EthDepositMessageStatus } from '@arbitr
 const parentChainProvider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
 const childChainProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
 const parentChainWallet = new Wallet(process.env.PRIVATE_KEY, parentChainProvider);
-const childChainWallet = new Wallet(process.env.PRIVATE_KEY, childChainProvider);
 
 // Initialize the ETH bridger
 const childChainNetwork = await getArbitrumNetwork(childChainProvider);
