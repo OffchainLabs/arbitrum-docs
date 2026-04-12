@@ -76,6 +76,57 @@ if (childResult.complete) {
 }
 ```
 
+## Depositing ETH (or native token) using the Arbitrum SDK
+
+If you need to deposit the chain's native token (typically ETH) rather than an ERC-20 token, use `EthBridger` instead of `Erc20Bridger`:
+
+```javascript
+import { utils, providers, Wallet, constants } from 'ethers';
+import { getArbitrumNetwork, EthBridger, EthDepositMessageStatus } from '@arbitrum/sdk';
+
+// Set up providers and wallet
+const parentChainProvider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
+const childChainProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+const parentChainWallet = new Wallet(process.env.PRIVATE_KEY, parentChainProvider);
+const childChainWallet = new Wallet(process.env.PRIVATE_KEY, childChainProvider);
+
+// Initialize the ETH bridger
+const childChainNetwork = await getArbitrumNetwork(childChainProvider);
+const ethBridger = new EthBridger(childChainNetwork);
+
+// For custom gas token chains, approve the gas token first
+const isCustomGasTokenChain =
+  ethBridger.nativeToken && ethBridger.nativeToken !== constants.AddressZero;
+if (isCustomGasTokenChain) {
+  const approvalTx = await ethBridger.approveGasToken({
+    erc20ParentAddress: ethBridger.nativeToken,
+    parentSigner: parentChainWallet,
+  });
+  await approvalTx.wait();
+}
+
+// Deposit 0.0001 ETH (or native token) to the child chain
+const depositTx = await ethBridger.deposit({
+  amount: utils.parseEther('0.0001'),
+  parentSigner: parentChainWallet,
+  childProvider: childChainProvider,
+});
+
+const depositReceipt = await depositTx.wait();
+console.log(`Deposit initiated: ${depositReceipt.transactionHash}`);
+
+// Wait for the child chain to process (typically a few minutes)
+const result = await depositReceipt.waitForChildTransactionReceipt(childChainProvider);
+
+if (result.complete) {
+  console.log(`Deposit confirmed: ${EthDepositMessageStatus[await result.message.status()]}`);
+} else {
+  console.error(`Deposit failed: ${EthDepositMessageStatus[await result.message.status()]}`);
+}
+```
+
+ETH deposits use Arbitrum's parent-to-child message passing system. The SDK handles computing the retryable ticket's max submission cost and forwards the appropriate fees automatically. For details, see [ETH deposits under the hood](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#depositing-native-tokens).
+
 ## Depositing tokens manually
 
 If you prefer to interact with the contracts directly:
@@ -181,5 +232,6 @@ Make sure you approved the correct gateway contract (not the router). Use `getGa
 ## Resources
 
 - [Arbitrum SDK documentation](/sdk)
-- [Token deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
+- [ETH deposit source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
+- [ERC-20 deposit source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
 - [Contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
