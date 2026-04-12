@@ -47,8 +47,8 @@ npm install @arbitrum/sdk ethers@^5
 ### Step 1: Set up providers and the bridger
 
 ```javascript
-const { providers, Wallet } = require('ethers');
-const { Erc20L1L3Bridger, getArbitrumNetwork } = require('@arbitrum/sdk');
+import { providers, Wallet } from 'ethers';
+import { Erc20L1L3Bridger, getArbitrumNetwork } from '@arbitrum/sdk';
 
 // Connect to all three chains
 const l1Provider = new providers.JsonRpcProvider(process.env.L1_RPC);
@@ -67,15 +67,16 @@ const bridger = new Erc20L1L3Bridger(l3Network);
 The bridger needs approval to transfer your ERC-20 tokens. If the L3 uses a custom gas token, you also need to approve that token for fee payment:
 
 ```javascript
-const { utils } = require('ethers');
+import { utils } from 'ethers';
 
 const l1TokenAddress = '0x...'; // Your ERC-20 token address on L1
 const amount = utils.parseUnits('100', 18);
 
 // If L3 uses a custom gas token, approve it first
-if (bridger.isCustomGasTokenChain) {
+if (l3Network.nativeToken) {
   const gasTokenApproval = await bridger.approveGasToken({
     l1Signer: l1Wallet,
+    l2Provider,
   });
   await gasTokenApproval.wait();
   console.log('Gas token approved');
@@ -111,7 +112,7 @@ console.log(`Deposit initiated on L1: ${depositReceipt.transactionHash}`);
 The deposit progresses through multiple retryable tickets. You can monitor each one:
 
 ```javascript
-const { Erc20L1L3Bridger } = require('@arbitrum/sdk');
+// Using the bridger instance from Step 1
 
 // Check the status of all retryables in the teleport chain
 const depositStatus = await bridger.getDepositStatus({
@@ -136,8 +137,8 @@ Status values: `REDEEMED` (success), `CREATION_FAILED`, `EXPIRED`, `FUNDS_DEPOSI
 ETH teleportation uses a "double retryable" pattern — simpler than ERC-20 because no token approvals are needed.
 
 ```javascript
-const { EthL1L3Bridger, getArbitrumNetwork } = require('@arbitrum/sdk');
-const { providers, Wallet, utils } = require('ethers');
+import { EthL1L3Bridger, getArbitrumNetwork } from '@arbitrum/sdk';
+import { providers, Wallet, utils } from 'ethers';
 
 const l1Provider = new providers.JsonRpcProvider(process.env.L1_RPC);
 const l2Provider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
