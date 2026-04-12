@@ -1,0 +1,17 @@
+- `execution.caching.state-scheme=path` - sets state scheme → chooses TrieDB implementation
+  - path state scheme is not compatible with hash state scheme - the node can only be started from a snapshot that was created with the same state scheme
+  - to use path scheme, you need to either sync from genesis or use a public snapshot
+    - in case of Arb1, the sync from genesis involves [classic state import](https://docs.arbitrum.io/run-arbitrum-node/nitro/migrate-state-and-history-from-classic#step-3-initialize-your-nitro-node-importing-the-exported-data)
+- `execution.caching.state-history` - specifies number of blocks from the chain head for which state histories are retained
+  - `state-history=0` means “entire chain”
+  - state history is preserved in form of reverse-diffs and those are stored in cold database (also called state freezer, or ancients)
+  - state history allows recovery of the historical state—that should allow reorg to historical block (**not tested**)
+  - **important**: on its own, state history doesn’t allow retrieving historical state by RPC calls (see: `execution.caching.archive` )
+  - historical state is state older then `pathdb-max-diff-layers+1` (by default 129) blocks from current head block of the node
+  - before nitro 3.10 `state-history` defaults to 24 hours of blocks at configured block speed
+  - after nitro 3.10, defaults are chosen based on archive flag:
+    - if `execution.caching.archive` is set, `state-history` defaults to `0`, otherwise `state-history` defaults to 24 hours of blocks at configured block speed
+- `execution.caching.archive` - if set to true enables archive mode; in case of path state scheme:
+  - archive mode enables state history indexing:
+    - state history index is an extra data that needs to be persisted in hot database (pebble)
+    - the state history index allows accessing historical state → RPC calls can access state from older blocks then `pathdb-max-diff-layers+1`

@@ -8,10 +8,8 @@ function Card({ title, description, to, href, target }) {
 
   return (
     <Link {...linkProps} className={styles.card}>
-      <div>
-        <h3 className={styles.cardH3}>{title}</h3>
-        <p className={styles.cardP}>{description}</p>
-      </div>
+      <h3 className={styles.cardH3}>{title}</h3>
+      <p className={styles.cardP}>{description}</p>
     </Link>
   );
 }

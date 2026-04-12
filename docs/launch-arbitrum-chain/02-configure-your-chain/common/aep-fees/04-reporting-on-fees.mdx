@@ -16,24 +16,24 @@ As a RaaS or Chain Owner, if you require internal daily reporting on fees, we ha
 
 </VanillaAdmonition>
 
-## Fee Collection System Overview
+## Fee collection system overview
 
-### 1. Fee Collector Address Types (L1 Focus)
+### 1. Fee collector address types (L1 focus)
 
 There are two main L1 fee collector addresses:
 
 1. **L1 Base Fee**: Refunds batch poster for parent chain posting costs
 2. **L1 Surplus**: Collects profit on batch posting fees
 
-#### Important Distinction:
+#### Important distinction:
 
 - L1 Base Fee is for cost recovery only (NOT for profit)
 - L1 Surplus is for profit collection
 - Using L1 Base Fee for profit indicates misconfiguration
 
-### 2. How the System Works (Same Gas Token Scenario)
+### 2. How the system works (same gas token scenario)
 
-#### Transaction Flow:
+#### Transaction flow:
 
 1. Users send transactions on the child chain
 2. Transactions are packaged into batches
@@ -42,7 +42,7 @@ There are two main L1 fee collector addresses:
    - Batch size
    - Gas price used
 
-#### Fee Recovery Mechanism:
+#### Fee recovery mechanism:
 
 1. ArbOS consumes batch posting reports
 2. Creates gas price view of parent chain on child chain
@@ -51,9 +51,9 @@ There are two main L1 fee collector addresses:
    - Amount collected in L1 base fee ≈ Amount spent on batch posting
    - Uses estimates that average out over time
 
-### 3. Custom Gas Token Scenario (Different tokens on parent/child chains)
+### 3. Custom gas token scenario (different tokens on parent/child chains)
 
-#### Transaction Flow:
+#### Transaction flow:
 
 1. Users send transactions on the child chain
 2. Transactions are packaged into batches
@@ -63,20 +63,20 @@ There are two main L1 fee collector addresses:
    - Batch size
    - Gas price used **(scaled by the exchange rate)**
 
-#### Fee Recovery Mechanism:
+#### Fee recovery mechanism:
 
 Same as the same gas token scenario, but uses the gas price from the batch posting report that was already scaled by the exchange rate.
 
-#### The Exchange Rate Problem:
+#### The Exchange rate problem:
 
 - Batch poster spends in parent chain gas units
 - Gets refunded in child chain gas units
 - Creates exchange rate risk
 - Should NOT set artificially high exchange rate for profit
 
-#### Revenue Calculation Methods:
+#### Revenue calculation methods:
 
-#### Method 1 - Exchange Rate Analysis (Parent Chain Only):
+#### Method 1: Exchange rate analysis (parent chain only):
 
 - **Revenue Calculation**:
   - Simulated revenue = gas used × gas price (from batch posting report)
@@ -89,7 +89,7 @@ Same as the same gas token scenario, but uses the gas price from the batch posti
   3. Compare against actual costs in parent chain tokens (using ideal exchange rate)
 - **Advantage**: Lightweight - only needs parent chain data
 
-#### Method 2 - Direct Balance Tracking (Child Chain):
+#### Method 2: Direct balance tracking (child chain):
 
 - **Revenue**: Actual amount collected in L1 base fee collector address
 - **Data Source**: Child chain L1 base fee address balance
@@ -102,7 +102,7 @@ Method 1 and Method 2 should be roughly equivalent over the long term.
 
 :::
 
-#### Analysis Criteria (Both Must Be Met):
+#### Analysis criteria (both must be met):
 
 1. **Volume Threshold**
    - Check the total value in batch posting reports
@@ -118,7 +118,7 @@ If both criteria are met → indicates misconfiguration
 
 :::
 
-#### Exchange Rate Sources:
+#### Exchange rate sources:
 
 - Use third-party sources for "ideal" exchange rates (e.g., CoinGecko, CoinMarketCap, etc.)
 

@@ -1,12 +1,12 @@
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
-
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
 const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
 
 // Inkeep analytics event handler - forwards events to PostHog
 const handleInkeepEvent = (event) => {
@@ -62,37 +62,6 @@ const handleInkeepEvent = (event) => {
   }
 };
 
-// Shared Inkeep configuration
-const inkeepBaseSettings = {
-  apiKey: process.env.INKEEP_API_KEY,
-  primaryBrandColor: '#213147',
-  organizationDisplayName: 'Arbitrum',
-  onEvent: handleInkeepEvent,
-  theme: {
-    syntaxHighlighter: {
-      lightTheme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/palenight'),
-    },
-  },
-};
-
-const inkeepModalSettings = {
-  placeholder: 'Search documentation...',
-  defaultQuery: '',
-  maxResults: 40,
-  debounceTimeMs: 300,
-  shouldOpenLinksInNewTab: true,
-};
-
-const inkeepExampleQuestions = [
-  'How to estimate gas in Arbitrum?',
-  'What is the difference between Arbitrum One and Nova?',
-  'How to deploy a smart contract on Arbitrum?',
-  'What are Arbitrum Orbit chains?',
-  'How does Arbitrum handle L1 to L2 messaging?',
-  'What is Arbitrum Stylus?',
-];
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -101,6 +70,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
+  onBrokenAnchors: 'warn', // Allow build to succeed despite false positive anchor warnings from TypeDoc
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
@@ -121,6 +91,9 @@ const config = {
 
       return result;
     },
+  },
+  customFields: {
+    inkeepApiKey: process.env.INKEEP_API_KEY,
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -159,7 +132,7 @@ const config = {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
               return undefined;
-            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/' + s.docPath;
+            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/docs/' + s.docPath;
           },
           showLastUpdateTime: true,
         },
@@ -214,9 +187,11 @@ const config = {
         useCodeBlocks: true,
         expandParameters: true,
         parametersFormat: 'table',
-        propertiesFormat: 'table',
+        classPropertiesFormat: 'list',
+        interfacePropertiesFormat: 'list',
         enumMembersFormat: 'table',
         typeDeclarationFormat: 'table',
+        useHTMLAnchors: true, // Fix anchor mismatches in tables
         sanitizeComments: true,
         frontmatterGlobals: {
           layout: 'docs',

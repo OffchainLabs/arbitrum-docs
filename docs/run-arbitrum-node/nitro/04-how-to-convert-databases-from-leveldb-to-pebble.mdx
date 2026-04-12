@@ -5,7 +5,7 @@ description: 'Learn how convert your node database from leveldb to pebble'
 author: joshuacolvin0
 sme: joshuacolvin0
 user_story: As a node runner, I want to learn how to migrate my node database from leveldb to pebble.
-content_type: How-To
+content_type: how-to
 ---
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
@@ -71,9 +71,9 @@ docker run \
 
 `dbconv` tool can be used to:
 
-- Convert single database - copy all entries from a single source database to the destination database that may use a different database engine (`leveldb` or `pebble`)
-- Compact single database - run compaction on the destination database
-- Verify database contents - check if all keys (and optionally values) from the source database are present in the destination database
+- Convert single database: copy all entries from a single source database to the destination database that may use a different database engine (`leveldb` or `pebble`)
+- Compact single database: run compaction on the destination database
+- Verify database contents: check if all keys (and optionally values) from the source database are present in the destination database
 
 Selected command arguments:
 

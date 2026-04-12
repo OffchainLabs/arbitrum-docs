@@ -144,20 +144,18 @@ The `chainConfig` parameter within the `Config` struct is a stringified `JSON` o
 
 Again, most of these parameters don't need to be configured, since the Chain SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
 
-| Parameter                            | Type    | Description                                                                                                                                                     |
-| :----------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                            | number  | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                                      |
-| `arbitrum.DataAvailabilityCommittee` | bool    | Whether or not to use a Data Avalability Committee (DAC) to store your chain's data (this should be `false` for Rollup chains, and `true` for AnyTrust chains). |
-| `arbitrum.InitialArbOSVersion`       | number  | ArbOS version to use (it should be the latest ArbOS version available).                                                                                         |
-| `arbitrum.InitialChainOwner`         | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain.                                       |
-| `arbitrum.MaxCodeSize`               | number  | Sets the maximum size for contract bytecodes on the chain (it's recommended to use the default 24Kb, and not set it higher than 96Kb).                          |
-| `arbitrum.MaxInitCodeSize`           | number  | Maximum initialization bytecode size allowed (usually double the amount set in `MaxCodeSize`).                                                                  |
+| Parameter                            | Type    | Description                                                                                                                                                                                                                                                                                                            |
+| :----------------------------------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chainId`                            | number  | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                                                                                                                                                                                             |
+| `arbitrum.DataAvailabilityCommittee` | bool    | Whether or not to use a Data Availability Committee (DAC) to store your chain's data (this should be `false` for Rollup chains, and `true` for AnyTrust chains).                                                                                                                                                       |
+| `arbitrum.InitialArbOSVersion`       | number  | ArbOS version to use (it should be the latest ArbOS version available).                                                                                                                                                                                                                                                |
+| `arbitrum.InitialChainOwner`         | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain.                                                                                                                                                                                              |
+| `arbitrum.MaxCodeSize`               | number  | Sets the maximum size for contract bytecodes on the chain (it's recommended to use the default 24Kb, and not set it higher than 96Kb). For more information, refer to [Smart contract size limit](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/config-smart-contract-size-limit.mdx). |
+| `arbitrum.MaxInitCodeSize`           | number  | Maximum initialization bytecode size allowed (usually double the amount set in `MaxCodeSize`).                                                                                                                                                                                                                         |
 
-:::info
+import SizeLimit from '../partials/_size-limit.mdx';
 
-The `chainId` and `InitialChainOwner` parameters must be equal to the `chainId` and `owner` defined in the `Config` struct.
-
-:::
+<SizeLimit />
 
 ## How to create a new Arbitrum chain using the Chain SDK
 
@@ -328,4 +326,4 @@ This function will send the transaction and wait for its execution, returning th
 
 ### 5. Next step
 
-Once the chain's contracts are created, you can move to the next step: [configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md).
+Once the chain's contracts are created, you can move to the next step: [configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.mdx).
