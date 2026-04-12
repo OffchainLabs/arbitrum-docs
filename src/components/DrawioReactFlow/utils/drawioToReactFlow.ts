@@ -195,6 +195,7 @@ function getAbsolutePosition(
 
 function determineShape(styleProps: Record<string, string>): string {
   if (styleProps['shape'] === 'process') return 'process';
+  if (styleProps['ellipse'] === 'true') return 'circle';
   if (styleProps['rounded'] === '1') return 'round';
   return 'rect';
 }
