@@ -17,6 +17,7 @@
     from="transaction-lifecycle"
     to="ticket-submission"
     trigger="Delayed Inbox"
+    mode="modal"
   >
     <zoom level="4" duration="1600" />
     <pause duration="200" />
