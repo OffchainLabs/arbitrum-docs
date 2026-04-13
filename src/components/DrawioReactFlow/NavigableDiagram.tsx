@@ -7,6 +7,7 @@ import { ClickableNode } from './ClickableNode';
 import { SubgraphNode } from './SubgraphNode';
 import { ImageNode } from './ImageNode';
 import { HoverEdge } from './HoverEdge';
+import { DiagramModal } from './DiagramModal';
 import { convertDrawioToReactFlow } from './utils/drawioToReactFlow';
 import { fetchAndParseManifest } from './utils/parseManifest';
 import { ReactFlowData, DiagramProps, NodeData, ManifestData, TransitionConfig } from './types';
@@ -26,6 +27,7 @@ function DiagramFlow({
   edgeTypes,
   defaultEdgeOptions,
   onDiagramNavigate,
+  onModalRequest,
   transitions,
   hoverContent,
 }: {
@@ -34,6 +36,7 @@ function DiagramFlow({
   edgeTypes: Record<string, React.ComponentType<any>>;
   defaultEdgeOptions: Record<string, any>;
   onDiagramNavigate?: (diagramPath: string) => void;
+  onModalRequest?: (transition: TransitionConfig) => void;
   transitions?: TransitionConfig[];
   hoverContent?: Record<string, React.ComponentType>;
 }) {
@@ -54,6 +57,13 @@ function DiagramFlow({
     (_event: React.MouseEvent, node: RFNode<NodeData>) => {
       if (!node.data?.centerable) return;
 
+      const transConfig = transitions?.find((t) => t.trigger === node.data?.label);
+
+      if (transConfig?.mode === 'modal' && onModalRequest) {
+        onModalRequest(transConfig);
+        return;
+      }
+
       viewportHistory.current.push(getViewport());
       setCanGoBack(true);
 
@@ -62,7 +72,6 @@ function DiagramFlow({
       const x = node.position.x + nodeWidth / 2;
       const y = node.position.y + nodeHeight / 2;
 
-      const transConfig = transitions?.find((t) => t.trigger === node.data?.label);
       const zoomLevel = transConfig?.zoom.level ?? 4;
       const zoomDuration = transConfig?.zoom.duration ?? 1600;
       const pauseDuration = transConfig?.pause.duration ?? 200;
@@ -81,7 +90,7 @@ function DiagramFlow({
         }, zoomDuration + pauseDuration);
       }
     },
-    [setCenter, getViewport, onDiagramNavigate, transitions],
+    [setCenter, getViewport, onDiagramNavigate, onModalRequest, transitions],
   );
 
   const handleGoBack = useCallback(() => {
@@ -147,6 +156,15 @@ export function NavigableDiagram({
   const [history, setHistory] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalTransition, setModalTransition] = useState<TransitionConfig | null>(null);
+
+  const handleModalRequest = useCallback((transition: TransitionConfig) => {
+    setModalTransition(transition);
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setModalTransition(null);
+  }, []);
 
   const nodeTypes = useMemo(
     () => ({ custom: ClickableNode, group: SubgraphNode, image: ImageNode }),
@@ -321,12 +339,20 @@ export function NavigableDiagram({
               edgeTypes={edgeTypes}
               defaultEdgeOptions={defaultEdgeOptions}
               onDiagramNavigate={handleNavigate}
+              onModalRequest={handleModalRequest}
               transitions={currentTransitions}
               hoverContent={hoverContent}
             />
           </ReactFlowProvider>
         </motion.div>
       </AnimatePresence>
+      {modalTransition && (
+        <DiagramModal
+          diagramFile={modalTransition.targetFile}
+          title={modalTransition.trigger}
+          onClose={handleModalClose}
+        />
+      )}
     </div>
   );
 }
