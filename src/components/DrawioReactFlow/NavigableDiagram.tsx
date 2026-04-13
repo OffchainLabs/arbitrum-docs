@@ -29,7 +29,6 @@ function DiagramFlow({
   onDiagramNavigate,
   onModalRequest,
   transitions,
-  hoverContent,
 }: {
   flowData: ReactFlowData;
   nodeTypes: Record<string, React.ComponentType<any>>;
@@ -38,7 +37,6 @@ function DiagramFlow({
   onDiagramNavigate?: (diagramPath: string) => void;
   onModalRequest?: (transition: TransitionConfig) => void;
   transitions?: TransitionConfig[];
-  hoverContent?: Record<string, React.ComponentType>;
 }) {
   const { setCenter, setViewport, getViewport } = useReactFlow();
   const viewportHistory = useRef<Viewport[]>([]);
@@ -341,7 +339,6 @@ export function NavigableDiagram({
               onDiagramNavigate={handleNavigate}
               onModalRequest={handleModalRequest}
               transitions={currentTransitions}
-              hoverContent={hoverContent}
             />
           </ReactFlowProvider>
         </motion.div>
