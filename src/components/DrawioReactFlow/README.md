@@ -11,6 +11,7 @@ Contributors author diagrams in Draw.io's visual editor, then render them as int
 - **Draw.io native**: Author diagrams in draw.io, render them pixel-accurate in React Flow
 - **Manifest-driven navigation**: XML manifest defines diagram stories with animated transitions
 - **Zoom-to-node transitions**: Click a highlighted node to zoom in, pause, then cross-fade to the next diagram
+- **Modal transitions**: Opt a transition into `mode="modal"` to open the target diagram in a centered overlay instead of replacing the main view
 - **Subgroup support**: Draw.io groups render as labeled containers with styled borders
 - **Embedded images**: Inline SVG/base64 images from Draw.io cells render as image nodes
 - **Theme integration**: Adapts to Docusaurus light/dark mode via CSS variables
@@ -45,6 +46,13 @@ Create a manifest XML file (e.g., `static/diagrams/my-story.manifest.xml`) that 
     <pause duration="200" />
     <fade duration="1500" easing="easeInOut" />
   </transition>
+
+  <!-- Optional: open target as a modal overlay instead of zooming -->
+  <transition from="overview" to="detail" trigger="Inspect" mode="modal">
+    <zoom level="4" duration="1600" />
+    <pause duration="200" />
+    <fade duration="1500" easing="easeInOut" />
+  </transition>
 </diagramStory>
 ```
 
@@ -56,6 +64,17 @@ Create a manifest XML file (e.g., `static/diagrams/my-story.manifest.xml`) that 
 | `<zoom>`         | Zoom level and duration (ms) for the zoom-to-node animation.                           |
 | `<pause>`        | Pause duration (ms) between zoom and cross-fade.                                       |
 | `<fade>`         | Cross-fade duration (ms) and easing for the diagram swap.                              |
+
+### Transition attributes
+
+| Attribute | Values            | Default  | Description                                                                                         |
+| --------- | ----------------- | -------- | --------------------------------------------------------------------------------------------------- |
+| `from`    | diagram `id`      | required | Source diagram.                                                                                     |
+| `to`      | diagram `id`      | required | Target diagram.                                                                                     |
+| `trigger` | node label text   | required | Label of the node that fires the transition when clicked.                                           |
+| `mode`    | `zoom` \| `modal` | `zoom`   | `zoom` cross-fades to the target diagram (default). `modal` opens the target in a centered overlay. |
+
+Nested `<zoom>`, `<pause>`, `<fade>` are read only in `zoom` mode, but stay valid XML in `modal` mode — useful if you want to flip a transition back to zoom later without re-editing.
 
 ### 3. Use in MDX
 
@@ -92,10 +111,11 @@ Provide either `manifest` or `diagramFile`, not both.
 
 1. **Initial load**: Fetches the manifest, parses it, loads the `entryDiagram`
 2. **Draw.io XML parsing**: `convertDrawioToReactFlow()` extracts nodes, edges, groups, and images from the XML
-3. **Trigger nodes**: Nodes with fill color `#FFB347` blink and are clickable. On click, the camera zooms to the node center.
-4. **Transition**: After zoom + pause, the manifest's `<transition>` determines which diagram loads next. A cross-fade (via Framer Motion `AnimatePresence`) swaps the diagrams.
-5. **Back button**: Appears after the first navigation. Returns to the previous diagram.
-6. **Viewport history**: Within a single diagram, zoom-clicks are tracked in a viewport stack with their own back navigation.
+3. **Trigger nodes**: Nodes with fill color `#FFB347` blink and are clickable. On click, the matching transition is resolved by `trigger` label.
+4. **Zoom transition** (default, `mode="zoom"`): The camera zooms to the node center, pauses, then cross-fades (via Framer Motion `AnimatePresence`) to the target diagram.
+5. **Modal transition** (`mode="modal"`): The target diagram opens in a centered overlay (`DiagramModal`) with a blurred backdrop. The parent diagram stays untouched. Close with `Esc`, backdrop click, or the `×` button. Nested navigation inside the modal is disabled.
+6. **Back button**: Appears after the first zoom navigation. Returns to the previous diagram.
+7. **Viewport history**: Within a single diagram, zoom-clicks are tracked in a viewport stack with their own back navigation.
 
 ## File structure
 
@@ -103,10 +123,13 @@ Provide either `manifest` or `diagramFile`, not both.
 src/components/DrawioReactFlow/
 ├── index.tsx              Main export with BrowserOnly SSG wrapper
 ├── NavigableDiagram.tsx   Navigation state, transitions, ReactFlow rendering
+├── DiagramModal.tsx       Portal-rendered overlay for mode="modal" transitions
+├── DiagramHoverModal.tsx  Floating-UI tooltip for hover content on nodes/edges
 ├── ClickableNode.tsx      Custom node with shape variants and keyboard support
 ├── ImageNode.tsx          Renders embedded images from Draw.io cells
 ├── SubgraphNode.tsx       Group container with labeled header
-├── types.ts               TypeScript interfaces (ManifestData, TransitionConfig, NodeData, etc.)
+├── HoverEdge.tsx          Edge with optional hover content
+├── types.ts               TypeScript interfaces (ManifestData, TransitionConfig, TransitionMode, NodeData, etc.)
 └── utils/
     ├── drawioToReactFlow.ts   Draw.io XML → ReactFlow nodes/edges conversion
     └── parseManifest.ts       Manifest XML → ManifestData parser
@@ -184,8 +207,11 @@ Visit `/docs/test-interactive-diagrams` to see the system in action with the tra
 
 - [ ] Manifest loads and entry diagram renders
 - [ ] Trigger nodes (orange `#FFB347`) blink
-- [ ] Clicking a trigger node zooms to it, then fades to next diagram
-- [ ] Back button appears after navigation and returns to previous diagram
+- [ ] Clicking a zoom-mode trigger node zooms to it, then fades to next diagram
+- [ ] Clicking a `mode="modal"` trigger node opens the target diagram in a centered overlay
+- [ ] Modal closes on `Esc`, backdrop click, and `×` button; parent viewport is unchanged
+- [ ] Page body does not scroll while the modal is open
+- [ ] Back button appears after zoom navigation and returns to previous diagram
 - [ ] Theme switching updates colors (light/dark)
 - [ ] Keyboard Tab focuses clickable nodes, Enter/Space activates
 - [ ] Groups render with labels and styled borders
@@ -216,6 +242,14 @@ Visit `/docs/test-interactive-diagrams` to see the system in action with the tra
 - Only nodes with fill color `#FFB347` are interactive trigger nodes
 - Verify a `<transition>` exists in the manifest with a `trigger` matching the node's label text
 - The `from` diagram in the transition must match the current diagram
+
+### Modal opens, but nested node clicks do nothing
+
+This is intentional — `DiagramModal` passes a no-op navigation handler to the nested diagram to prevent modal-from-modal chains. If you need the nested diagram to be navigable too, use `mode="zoom"` or extend `DiagramModal.tsx` to accept a navigation callback.
+
+### Unknown `mode` attribute values fall back to zoom
+
+The parser only recognizes `mode="modal"`. Any other value (including typos like `"MODAL"`, `"Modal"`, or `"dialog"`) silently falls back to the default `zoom` behavior. Check the attribute spelling if a transition isn't opening the modal.
 
 ### Build errors
 
