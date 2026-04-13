@@ -23,11 +23,15 @@ function parseTransition(el: Element, diagrams: Map<string, string>): Transition
   const pauseEl = el.querySelector('pause');
   const fadeEl = el.querySelector('fade');
 
+  const rawMode = el.getAttribute('mode');
+  const mode: TransitionConfig['mode'] = rawMode === 'modal' ? 'modal' : 'zoom';
+
   return {
     fromFile,
     trigger,
     targetDiagram: to,
     targetFile,
+    mode,
     zoom: {
       level: parseFloat2(zoomEl?.getAttribute('level') ?? null, DEFAULT_ZOOM.level),
       duration: parseFloat2(zoomEl?.getAttribute('duration') ?? null, DEFAULT_ZOOM.duration),

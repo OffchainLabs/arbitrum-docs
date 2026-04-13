@@ -15,11 +15,14 @@ export interface FadeConfig {
   easing: string;
 }
 
+export type TransitionMode = 'zoom' | 'modal';
+
 export interface TransitionConfig {
   fromFile: string;
   trigger: string;
   targetDiagram: string;
   targetFile: string;
+  mode: TransitionMode;
   zoom: ZoomConfig;
   pause: PauseConfig;
   fade: FadeConfig;
