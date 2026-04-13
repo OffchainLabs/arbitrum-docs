@@ -55,7 +55,7 @@ A retryable is a special message type for creating an atomic parent-to-child cha
 
 ArbOS's state is managed through `ArbosState` objects that abstract over the underlying key-value storage. Most of this state supports [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). Key components include `blockhashes` (recent parent chain block hashes), `l1PricingState` (parent chain fee tracking and batch poster reimbursement), and `l2PricingState` (child chain gas pricing via dual gas pools).
 
-For the full technical details of ArbOS state, pricing internals, and the per-block gas limit mechanism, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#arbos-state). For parent chain pricing specifics, see [Parent chain pricing](/how-arbitrum-works/reference/parent-chain-pricing.mdx).
+For the full technical details of ArbOS state, pricing internals, and the per-block gas limit mechanism, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#arbos-state). For parent chain pricing specifics, see [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
 
 ## Gas and fees
 
@@ -68,7 +68,7 @@ ArbOS manages child chain gas pricing and fee collection for both child chain ex
 - Fee estimation and collection mechanisms
 - The gas target's role in validator security
 
-See [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx). For detailed mathematical formulas and parent chain pricing internals, see [Parent chain pricing](/how-arbitrum-works/reference/parent-chain-pricing.mdx).
+See [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) for the complete breakdown, including detailed mathematical formulas and parent chain pricing internals.
 
 ## Stylus-specific differences
 
