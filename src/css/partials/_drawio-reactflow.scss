@@ -416,3 +416,128 @@
     border-color: rgba(18, 170, 255, 0.25);
   }
 }
+
+// Diagram modal — full-screen overlay rendering a nested ReactFlow diagram
+.diagram-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(8, 10, 22, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 2vh 5vw;
+}
+
+.diagram-modal {
+  position: relative;
+  width: min(90vw, 1600px);
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a2e;
+  background-image: url('/diagrams/diagram-background.svg');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(18, 170, 255, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.diagram-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background-color: rgba(18, 170, 255, 0.08);
+  border-bottom: 1px solid rgba(18, 170, 255, 0.2);
+}
+
+.diagram-modal__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+}
+
+.diagram-modal__close {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease, transform 150ms ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #12aaff;
+    outline-offset: 2px;
+  }
+}
+
+.diagram-modal__body {
+  flex: 1 1 auto;
+  position: relative;
+  min-height: 0;
+
+  .react-flow {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.diagram-modal__status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.diagram-modal__status--error {
+  color: var(--ifm-color-danger);
+}
+
+// Responsive — smaller viewports get a tighter modal
+@media (max-width: 768px) {
+  .diagram-modal-backdrop {
+    padding: 0;
+  }
+
+  .diagram-modal {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+
+  .diagram-modal__title {
+    font-size: 14px;
+  }
+}
+
+// Reduced motion — suppress backdrop blur animation
+@media (prefers-reduced-motion: reduce) {
+  .diagram-modal-backdrop,
+  .diagram-modal {
+    transition: none;
+  }
+}
