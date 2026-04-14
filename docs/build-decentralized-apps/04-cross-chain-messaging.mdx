@@ -202,7 +202,7 @@ if (childTxReceipt.status === ParentToChildMessageStatus.REDEEMED) {
 
 **Address aliasing**: When a parent chain contract sends a message to the child chain, the `msg.sender` on the child chain is not the original contract address. Instead, it is _aliased_ by adding `0x1111000000000000000000000000000000001111` to the address. The `AddressAliasHelper` library handles this — see the `setGreeting` override in `GreeterChild` above.
 
-**Gas estimation**: The `ParentToChildMessageGasEstimator` calculates three values: `maxSubmissionCost` (data posting cost), `gasLimit` (child chain execution gas), and `maxFeePerGas` (child chain gas price). Together they determine the `value` (ETH) you must attach to the parent chain transaction.
+**Gas estimation**: The `ParentToChildMessageGasEstimator` calculates three values: `maxSubmissionCost` (data posting cost), `gasLimit` (child chain execution gas), and `maxFeePerGas` (child chain gas price). Together they determine the `value` (`ETH`) you must attach to the parent chain transaction.
 
 **Retryable tickets**: If the child chain execution runs out of gas, the ticket enters a "retry" state. It can be redeemed by anyone within its lifetime (default: 7 days) by calling `ArbRetryableTx.redeem()`. See the [redeem-pending-retryable tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/redeem-pending-retryable) for a worked example.
 
