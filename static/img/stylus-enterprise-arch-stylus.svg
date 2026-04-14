@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 560" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg-grad" x1="800" y1="560" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12aaff" />
+      <stop offset=".3" stop-color="#1b4add" />
+      <stop offset=".75" stop-color="#152c4e" />
+    </linearGradient>
+    <marker id="arrowW" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FFFFFF" />
+    </marker>
+    <marker id="arrowG" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#00CC88" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="560" fill="url(#bg-grad)" />
+
+  <!-- Decorative circuit lines -->
+  <g opacity="0.1" stroke="#fff" stroke-width="0.86" fill="none">
+    <polyline points="0,200 100,200 130,180 200,180 230,210 380,210 410,195 500,195" />
+    <circle cx="500" cy="195" r="3.2" fill="#fff" />
+    <polyline points="1600,350 1500,350 1470,370 1400,370 1370,340 1220,340 1190,355 1100,355" />
+    <circle cx="1100" cy="355" r="3.2" fill="#fff" />
+    <polyline points="0,440 90,440 120,425 190,425 210,450 360,450" />
+    <circle cx="360" cy="450" r="3.2" fill="#fff" />
+    <polyline points="1600,140 1510,140 1480,125 1410,125 1380,150 1250,150" />
+    <circle cx="1250" cy="150" r="3.2" fill="#fff" />
+    <polyline points="700,0 700,50 720,70 720,120" />
+    <circle cx="720" cy="120" r="3.2" fill="#fff" />
+    <polyline points="400,560 400,510 420,490 420,450" />
+    <circle cx="420" cy="450" r="3.2" fill="#fff" />
+  </g>
+
+  <!-- Title -->
+  <text x="800" y="55" fill="#FFFFFF" font-size="28" font-weight="bold" text-anchor="middle">With Stylus</text>
+  <text x="800" y="85" fill="#9DCCED" font-size="16" text-anchor="middle">Critical logic is verifiable — blockchain as a compute layer</text>
+
+  <!-- Client -->
+  <rect x="60" y="220" width="160" height="80" rx="12" fill="#9DCCED" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="140" y="267" fill="#FFFFFF" font-size="18" text-anchor="middle">Client</text>
+
+  <!-- Arrow: Client -> API Gateway -->
+  <line x1="220" y1="260" x2="315" y2="260" stroke="#FFFFFF" stroke-width="2.5" marker-end="url(#arrowW)" />
+  <text x="267" y="248" fill="#FFFFFF" font-size="14" text-anchor="middle">Request</text>
+
+  <!-- API Gateway -->
+  <rect x="320" y="220" width="180" height="80" rx="12" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="410" y="267" fill="#FFFFFF" font-size="18" text-anchor="middle">API gateway</text>
+
+  <!-- Arrow: API Gateway -> Backend -->
+  <line x1="500" y1="260" x2="595" y2="260" stroke="#FFFFFF" stroke-width="2.5" marker-end="url(#arrowW)" />
+
+  <!-- Backend Services -->
+  <rect x="600" y="220" width="180" height="80" rx="12" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <line x1="622" y1="220" x2="622" y2="300" stroke="#FFFFFF" stroke-width="1" opacity="0.4" />
+  <line x1="758" y1="220" x2="758" y2="300" stroke="#FFFFFF" stroke-width="1" opacity="0.4" />
+  <text x="690" y="255" fill="#FFFFFF" font-size="18" text-anchor="middle">Backend</text>
+  <text x="690" y="280" fill="#FFFFFF" font-size="18" text-anchor="middle">services</text>
+
+  <!-- Arrow: Backend -> Database (up) -->
+  <line x1="690" y1="220" x2="690" y2="170" stroke="#FFFFFF" stroke-width="2.5" marker-end="url(#arrowW)" />
+
+  <!-- Database -->
+  <ellipse cx="690" cy="153" rx="60" ry="14" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <rect x="630" y="113" width="120" height="40" fill="#12AAFF" stroke="none" />
+  <line x1="630" y1="113" x2="630" y2="153" stroke="#FFFFFF" stroke-width="1.5" />
+  <line x1="750" y1="113" x2="750" y2="153" stroke="#FFFFFF" stroke-width="1.5" />
+  <ellipse cx="690" cy="113" rx="60" ry="14" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="690" y="140" fill="#FFFFFF" font-size="16" text-anchor="middle">Database</text>
+
+  <!-- Arrow: Backend -> Stylus container -->
+  <line x1="780" y1="260" x2="895" y2="260" stroke="#FFFFFF" stroke-width="2.5" marker-end="url(#arrowW)" />
+  <text x="837" y="248" fill="#CCCCCC" font-size="13" text-anchor="middle">Critical logic</text>
+
+  <!-- Stylus container (Arbitrum) -->
+  <rect x="900" y="110" width="640" height="330" rx="14" fill="none" stroke="#E3066E" stroke-width="3" />
+  <text x="1220" y="140" fill="#FFFFFF" font-size="18" font-weight="bold" text-anchor="middle">Arbitrum (Stylus)</text>
+
+  <!-- WASM VM -->
+  <rect x="930" y="165" width="580" height="75" rx="10" fill="#E3066E" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="1220" y="200" fill="#FFFFFF" font-size="18" text-anchor="middle">WASM VM</text>
+  <text x="1220" y="225" fill="#CCCCCC" font-size="14" text-anchor="middle">(Rust / C++)</text>
+
+  <!-- EVM -->
+  <rect x="930" y="260" width="580" height="75" rx="10" fill="#E3066E" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="1220" y="295" fill="#FFFFFF" font-size="18" text-anchor="middle">EVM</text>
+  <text x="1220" y="320" fill="#CCCCCC" font-size="14" text-anchor="middle">(Solidity)</text>
+
+  <!-- Interop dashed line between VMs -->
+  <line x1="1220" y1="240" x2="1220" y2="256" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4,3" />
+  <text x="1270" y="254" fill="#999999" font-size="12">Interop</text>
+
+  <!-- Shared onchain state -->
+  <rect x="1020" y="360" width="400" height="45" rx="8" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="1220" y="389" fill="#FFFFFF" font-size="16" text-anchor="middle">Shared onchain state</text>
+
+  <!-- Arrows from VMs to state -->
+  <line x1="1100" y1="335" x2="1100" y2="355" stroke="#FFFFFF" stroke-width="1.5" marker-end="url(#arrowW)" />
+  <line x1="1340" y1="335" x2="1340" y2="355" stroke="#FFFFFF" stroke-width="1.5" marker-end="url(#arrowW)" />
+
+  <!-- Audit callout -->
+  <rect x="60" y="400" width="340" height="65" rx="10" fill="none" stroke="#00CC88" stroke-width="2.5" stroke-dasharray="8,4" />
+  <text x="230" y="430" fill="#00CC88" font-size="16" text-anchor="middle">Execution is publicly verifiable.</text>
+  <text x="230" y="453" fill="#00CC88" font-size="16" text-anchor="middle">Logic is tamper-proof.</text>
+
+  <!-- Dashed arrow from Client to callout -->
+  <line x1="140" y1="300" x2="140" y2="425" stroke="#00CC88" stroke-width="2" stroke-dasharray="6,4" />
+  <line x1="140" y1="425" x2="55" y2="425" stroke="#00CC88" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowG)" />
+
+</svg>
