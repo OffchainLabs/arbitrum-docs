@@ -12,11 +12,18 @@ sidebar_position: 2
 displayed_sidebar: buildStylusSidebar
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 ## In a nutshell
 
 - Traditional backend infrastructure relies on trust in the vendor — clients call an API and take the result on faith. Stylus lets you move critical business logic to a blockchain where every transaction is independently auditable and the execution is deterministic. The blockchain becomes a verifiable compute layer in your existing architecture.
 - Stylus lets you deploy compiled WASM modules to Arbitrum chains using languages like Rust and C++ — with their full ecosystems of libraries and tooling. No new language to learn; your existing Rust or C++ skills, crates, and testing patterns transfer directly.
 - WASM modules execute at a fraction of the compute cost of the chain's default virtual machine, making previously cost-prohibitive workloads practical onchain — with production deployments showing over 90% cost reduction for compute-heavy logic.
+
+<ImageZoom
+  src="/img/stylus-enterprise-architecture-comparison.svg"
+  alt="Traditional architecture vs. Stylus: blockchain as a verifiable compute layer within existing Web2 infrastructure"
+/>
 
 ## Why put computation onchain?
 
