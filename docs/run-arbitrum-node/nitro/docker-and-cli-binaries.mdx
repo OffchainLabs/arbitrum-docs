@@ -1,0 +1,266 @@
+---
+title: 'Docker images and CLI binaries'
+sidebar_label: 'Docker and CLI binaries'
+description: 'Nitro Docker image variants, available CLI binaries, entrypoint usage, and Docker Compose examples'
+user_story: 'As a node operator, I want to know what binaries are available in the Nitro Docker image and how to use them'
+content_type: 'reference'
+author: 'gzeoneth'
+sme: 'gzeoneth'
+# Content gap tracking:
+# - TW-692: Node operations runbook (partial — Docker setup)
+# - TW-695: Docker Compose examples
+---
+
+The Nitro Docker images bundle multiple CLI binaries that serve different roles in the Arbitrum ecosystem. This page documents the image variants, the binaries they contain, and how to override entrypoints to run specific tools.
+
+## Docker image variants
+
+Nitro is published as several Docker image targets, each building on the previous one and adding more functionality:
+
+| Image target           | Repository tag                        | Entrypoint                                                                                                                     | Description                                                                                                                                                                                 |
+| ---------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `nitro-node-slim`      | `offchainlabs/nitro-node:slim-*`      | `/usr/local/bin/nitro`                                                                                                         | Minimal node image with `nitro`, `relay`, `nitro-val`, `seq-coordinator-manager`, `prover`, and `dbconv`. No legacy WASM module roots for validation.                                       |
+| `nitro-node`           | `offchainlabs/nitro-node:*`           | `/usr/local/bin/nitro --validation.wasm.allowed-wasm-module-roots /home/user/nitro-legacy/machines,/home/user/target/machines` | Full node image with DA tools, Timeboost binaries, and both legacy and current WASM module roots for validation.                                                                            |
+| `nitro-node-validator` | `offchainlabs/nitro-node:validator-*` | `/usr/local/bin/split-val-entry.sh`                                                                                            | Runs dual validation servers (current and legacy `nitro-val` instances) behind the main `nitro` process. Used for block validation across WASM module root upgrades.                        |
+| `nitro-node-dev`       | `offchainlabs/nitro-node:dev-*`       | `/usr/local/bin/split-val-entry.sh`                                                                                            | Extends `nitro-node-validator` with `deploy`, `seq-coordinator-invalidate`, `mockexternalsigner`, and the latest locally-built WASM module root. Intended for development and testing only. |
+
+All images run as a non-root `user` account by default. The working directory is `/home/user/`.
+
+## Default entrypoint and flags
+
+The `nitro-node` image (the standard production image) uses this entrypoint:
+
+```shell
+/usr/local/bin/nitro --validation.wasm.allowed-wasm-module-roots /home/user/nitro-legacy/machines,/home/user/target/machines
+```
+
+The `--validation.wasm.allowed-wasm-module-roots` flag tells the node which WASM module roots are valid for block validation. The comma-separated value includes:
+
+- `/home/user/nitro-legacy/machines` — WASM roots from earlier Nitro versions, needed to validate historical blocks.
+- `/home/user/target/machines` — Current WASM roots shipped with this image version.
+
+:::warning
+
+If you override the entrypoint (for example, `--entrypoint relay`), the default flags are **not** applied. You must pass `--validation.wasm.allowed-wasm-module-roots` manually if the binary you are running requires validation support.
+
+:::
+
+### The split validator entrypoint
+
+The `nitro-node-validator` image uses `split-val-entry.sh` as its entrypoint. This script:
+
+1. Generates a shared JWT secret for authentication between the node and its validation servers.
+2. Launches two `nitro-val` instances on loopback addresses:
+   - Port `52000` — current validator using `/home/user/target/machines`.
+   - Port `52001` — legacy validator using `/home/user/nitro-legacy/machines`.
+3. Waits for both validation servers to become available.
+4. Launches the main `nitro` process with `--node.block-validator.validation-server-configs-list` pointing to both validators.
+
+You can pass validator-specific flags using the `--val-options`, `--val-options-legacy`, and `--val-options-latest` prefixes, separated by `--`:
+
+```shell
+docker run offchainlabs/nitro-node:validator-latest \
+  --val-options-latest --validation.api-auth=false -- \
+  --val-options-legacy --validation.api-auth=false -- \
+  --node.block-validator.enable
+```
+
+## Binary catalog
+
+### Core node
+
+| Binary      | Description                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------------- |
+| `nitro`     | Main Arbitrum Nitro node. Runs as sequencer, full node, archive node, or batch poster depending on configuration. |
+| `nitro-val` | Standalone validation server. Validates state transitions using WASM fraud proofs.                                |
+| `relay`     | Sequencer feed relay. Receives the transaction feed from a sequencer and redistributes it to downstream nodes.    |
+| `deploy`    | Deploys Arbitrum Rollup contracts to the parent chain. Used when launching new Arbitrum chains. Dev image only.   |
+| `replay`    | Replays state transitions for fraud proof verification. Compiled to WASM for onchain dispute resolution.          |
+| `prover`    | WASM prover binary for generating and verifying fraud proofs.                                                     |
+
+### Data availability
+
+| Binary           | Description                                                                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anytrustserver` | AnyTrust Data Availability Committee (DAC) server. Stores and serves batch data for AnyTrust chains. `daserver` is a symlink to this binary (deprecated name). |
+| `anytrusttool`   | CLI tool for AnyTrust key generation, keyset management, and certificate inspection. `datool` is a symlink to this binary (deprecated name).                   |
+| `daprovider`     | Unified data availability provider. Serves data from multiple backends (AnyTrust, blobs, or other DA layers).                                                  |
+| `blobtool`       | Testing utility for beacon chain blob endpoints. Reads and verifies EIP-4844 blobs from a beacon node.                                                         |
+
+### Timeboost
+
+| Binary                  | Description                                                                                                                        |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `autonomous-auctioneer` | Runs the Timeboost express lane auction. Accepts bids and determines express lane controllers.                                     |
+| `bidder-client`         | Submits bids to the Timeboost express lane auction on behalf of a searcher or application.                                         |
+| `el-proxy`              | Express lane proxy for testing. Wraps `eth_sendRawTransaction` calls and forwards them as express lane transactions. Testing only. |
+
+### Sequencer coordination
+
+| Binary                       | Description                                                                                                                                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `seq-coordinator-manager`    | Interactive TUI for managing sequencer coordination via Redis. Displays and controls active sequencer selection.                                  |
+| `seq-coordinator-invalidate` | Invalidates a sequencer coordination message in Redis. Usage: `seq-coordinator-invalidate [redis url] [signing key] [msg index]`. Dev image only. |
+
+### Utilities
+
+| Binary                 | Description                                                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `dbconv`               | Converts node databases between storage backends (for example, LevelDB to Pebble).                                        |
+| `genesis-generator`    | Generates genesis state and initialization data for new Arbitrum chains.                                                  |
+| `l2pricing-simulator`  | Simulates the behavior of Nitro's child chain pricing algorithm for testing gas pricing parameters.                       |
+| `transaction-filterer` | Filters transactions based on configurable rules before they reach the sequencer. Exposes a `/liveness` health endpoint.  |
+| `mockexternalsigner`   | Mock external transaction signer for testing. Accepts a private key and exposes an RPC signing interface. Dev image only. |
+
+### Image availability
+
+Not all binaries are present in every image. The following table shows which image targets include each binary:
+
+| Binary                        | `nitro-node-slim` | `nitro-node` | `nitro-node-validator` | `nitro-node-dev` |
+| ----------------------------- | :---------------: | :----------: | :--------------------: | :--------------: |
+| `nitro`                       |        Yes        |     Yes      |          Yes           |       Yes        |
+| `relay`                       |        Yes        |     Yes      |          Yes           |       Yes        |
+| `nitro-val`                   |        Yes        |     Yes      |          Yes           |       Yes        |
+| `prover`                      |        Yes        |     Yes      |          Yes           |       Yes        |
+| `dbconv`                      |        Yes        |     Yes      |          Yes           |       Yes        |
+| `seq-coordinator-manager`     |        Yes        |     Yes      |          Yes           |       Yes        |
+| `jit`                         |        No         |     Yes      |          Yes           |       Yes        |
+| `anytrustserver` / `daserver` |        No         |     Yes      |          Yes           |       Yes        |
+| `anytrusttool` / `datool`     |        No         |     Yes      |          Yes           |       Yes        |
+| `daprovider`                  |        No         |     Yes      |          Yes           |       Yes        |
+| `autonomous-auctioneer`       |        No         |     Yes      |          Yes           |       Yes        |
+| `bidder-client`               |        No         |     Yes      |          Yes           |       Yes        |
+| `el-proxy`                    |        No         |     Yes      |          Yes           |       Yes        |
+| `genesis-generator`           |        No         |     Yes      |          Yes           |       Yes        |
+| `transaction-filterer`        |        No         |     Yes      |          Yes           |       Yes        |
+| `deploy`                      |        No         |      No      |           No           |       Yes        |
+| `seq-coordinator-invalidate`  |        No         |      No      |           No           |       Yes        |
+| `mockexternalsigner`          |        No         |      No      |           No           |       Yes        |
+
+## Overriding entrypoints
+
+Use `--entrypoint` to run a different binary from the same Docker image. The examples below use the `nitro-node` image.
+
+### Feed relay
+
+```shell
+docker run --rm \
+  --entrypoint relay \
+  offchainlabs/nitro-node:latest \
+  --node.feed.input.url wss://arb1.arbitrum.io/feed \
+  --chain.id 42161
+```
+
+### Validation node
+
+```shell
+docker run --rm \
+  --entrypoint nitro-val \
+  offchainlabs/nitro-node:latest \
+  --help
+```
+
+### DA keyset dump
+
+```shell
+docker run --rm \
+  --entrypoint datool \
+  offchainlabs/nitro-node:latest \
+  dumpkeyset --url https://your-dac-url
+```
+
+`datool` is a symlink to `anytrusttool`. Both names work.
+
+### DA key generation
+
+```shell
+docker run --rm \
+  -v /path/to/keys:/data/keys \
+  --entrypoint datool \
+  offchainlabs/nitro-node:latest \
+  keygen --dir /data/keys
+```
+
+## Docker Compose example
+
+The following `docker-compose.yml` runs an Arbitrum One full node. Replace the placeholder URLs with your actual parent chain and beacon endpoints.
+
+```yaml
+# Arbitrum One full node — Docker Compose
+# Requires: parent chain RPC endpoint and beacon chain endpoint
+version: '3.8'
+
+services:
+  nitro:
+    image: offchainlabs/nitro-node:latest
+    restart: unless-stopped
+    ports:
+      # HTTP JSON-RPC endpoint
+      - '8547:8547'
+      # WebSocket JSON-RPC endpoint
+      - '8548:8548'
+    volumes:
+      # Persistent data directory for the node database
+      - nitro-data:/home/user/.arbitrum
+    environment:
+      # No environment variables are strictly required —
+      # all configuration is passed as command-line flags below.
+      # You can optionally set NITRO_LOG_TYPE=json for structured logging.
+      NITRO_LOG_TYPE: 'json'
+    command:
+      # Parent chain connection (Ethereum mainnet RPC)
+      - --parent-chain.connection.url=https://your-parent-chain-rpc-url
+      # Beacon chain endpoint for EIP-4844 blob retrieval
+      - --parent-chain.blob-client.beacon-url=https://your-beacon-chain-url
+      # Chain ID for Arbitrum One
+      - --chain.id=42161
+      # Initialize from the latest snapshot to avoid syncing from genesis.
+      # Set to "latest" for the most recent snapshot, or a specific URL.
+      - --init.url=https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar
+      # Enable HTTP RPC on all interfaces so the port mapping works
+      - --http.addr=0.0.0.0
+      - --http.port=8547
+      - --http.vhosts=*
+      - --http.corsdomain=*
+      - --http.api=net,web3,eth,arb
+      # Enable WebSocket RPC
+      - --ws.addr=0.0.0.0
+      - --ws.port=8548
+      - --ws.origins=*
+      - --ws.api=net,web3,eth,arb
+
+volumes:
+  nitro-data:
+    driver: local
+```
+
+To start the node:
+
+```shell
+docker compose up -d
+```
+
+To follow the logs:
+
+```shell
+docker compose logs -f nitro
+```
+
+## Ports and endpoints
+
+| Port | Protocol  | Service        | Notes                                                                                            |
+| ---- | --------- | -------------- | ------------------------------------------------------------------------------------------------ |
+| 8547 | HTTP      | JSON-RPC       | Main RPC endpoint for `eth_`, `net_`, `web3_`, and `arb_` namespaces.                            |
+| 8548 | WebSocket | JSON-RPC       | WebSocket RPC endpoint. Supports subscriptions (`eth_subscribe`).                                |
+| 8549 | HTTP      | AUTH RPC       | Authenticated RPC used by the split validator entrypoint for node-to-validator communication.    |
+| 9642 | WebSocket | Sequencer feed | Outbound transaction feed. Downstream nodes and relays connect here to receive new transactions. |
+| 6070 | HTTP      | Metrics server | Prometheus metrics endpoint at `/debug/metrics/prometheus`.                                      |
+
+### Health check endpoints
+
+The main `nitro` binary does not expose a dedicated health check endpoint. Health is typically inferred by checking RPC availability (for example, calling `eth_chainId` on port 8547).
+
+Other binaries provide explicit health endpoints:
+
+- `transaction-filterer` exposes `/liveness` for health monitoring.
+- `anytrustserver` (DA server) exposes `/health` for readiness checks.
