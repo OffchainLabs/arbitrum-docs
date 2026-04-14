@@ -2,12 +2,12 @@
 id: gentle-introduction-enterprise
 title: 'A gentle introduction to Stylus for enterprise architects'
 sidebar_label: 'Introduction (enterprise)'
-description: 'An introduction to Stylus for enterprise software architects coming from a Web2 and microservices background, with a focus on compute savings and leveraging existing Rust and C/C++ skills.'
-user_story: 'As an enterprise software architect with a microservices background, I want to understand how Stylus lets me use my existing Rust or C/C++ skills to build onchain programs with significant compute savings.'
+description: 'An introduction to Stylus for enterprise software architects coming from a Web2 and microservices background, with a focus on compute savings and leveraging existing Rust skills.'
+user_story: 'As an enterprise software architect with a microservices background, I want to understand how Stylus lets me use my existing Rust skills to build onchain programs with significant compute savings.'
 content_type: 'gentle-introduction'
 author: gael-blanchemain
 sme: amarrazza
-target_audience: 'Enterprise software architects coming from Web2 and microservices backgrounds, familiar with Rust or C/C++ but not Solidity'
+target_audience: 'Enterprise software architects coming from Web2 and microservices backgrounds, familiar with Rust but not Solidity'
 sidebar_position: 2
 displayed_sidebar: buildStylusSidebar
 ---
@@ -17,7 +17,7 @@ import ImageZoom from '@site/src/components/ImageZoom';
 ## In a nutshell
 
 - Traditional backend infrastructure relies on trust in the vendor — clients call an API and take the result on faith. Stylus lets you move critical business logic to a blockchain where every transaction is independently auditable and the execution is deterministic. The blockchain becomes a verifiable compute layer in your existing architecture.
-- Stylus lets you deploy compiled WASM modules to Arbitrum chains using languages like Rust and C++ — with their full ecosystems of libraries and tooling. No new language to learn; your existing Rust or C++ skills, crates, and testing patterns transfer directly.
+- Stylus lets you deploy compiled WASM modules to Arbitrum chains using Rust — with its full ecosystem of crates and tooling. No new language to learn; your existing Rust skills and testing patterns transfer directly.
 - WASM modules execute at a fraction of the compute cost of the chain's default virtual machine, making previously cost-prohibitive workloads practical onchain — with production deployments showing over 90% cost reduction for compute-heavy logic.
 
 <ImageZoom
@@ -45,7 +45,7 @@ Onchain execution gives you four properties that are hard to achieve in traditio
 
 The traditional way to write onchain logic is Solidity, a domain-specific language that runs on the Ethereum Virtual Machine (EVM). The EVM is reliable and battle-tested, but it's an interpreter — compute and memory operations are expensive. Complex workloads like cryptographic verification, data processing, or heavy business logic become cost-prohibitive.
 
-Stylus adds a second virtual machine alongside the EVM that executes <a data-quicklook-from="wasm">WASM</a>. Your code compiles through mature toolchains (`rustc`, Clang) and runs as native machine code — not interpreted bytecode. The result: the same logic runs at dramatically lower compute cost.
+Stylus adds a second virtual machine alongside the EVM that executes <a data-quicklook-from="wasm">WASM</a>. Your Rust code compiles through `rustc` and runs as native machine code — not interpreted bytecode. The result: the same logic runs at dramatically lower compute cost.
 
 Think of it like moving a performance-critical microservice from a scripted runtime to a compiled binary — same API surface, same interoperability with existing services, but fundamentally different execution economics.
 
@@ -55,11 +55,11 @@ Stylus is designed to slot into your existing architecture, not replace it. Your
 
 ### Build tooling
 
-Stylus uses `cargo` (Rust) or standard C/C++ compilers. The Stylus CLI ([`cargo-stylus`](/stylus/cli-tools/commands-reference)) integrates into your existing workflow for compiling, checking, and deploying programs.
+Stylus uses `cargo` and the Stylus CLI ([`cargo-stylus`](/stylus/cli-tools/commands-reference)), which integrates into your existing Rust workflow for compiling, checking, and deploying programs.
 
 ### Libraries
 
-You can use crates and C/C++ libraries in your programs. The constraint is `no_std` (no standard library) for Rust, since the execution environment is sandboxed — similar to writing for embedded targets. Many crates already support `no_std`.
+You can use crates in your programs. The constraint is `no_std` (no standard library), since the execution environment is sandboxed — similar to writing for embedded targets. Many crates already support `no_std`.
 
 ### Testing
 
@@ -113,7 +113,7 @@ Stylus programs go through four stages from source code to production:
 
 ### Build
 
-Write your program in Rust or C/C++. Compile to WASM using standard toolchains (`cargo build` for Rust, Clang for C/C++).
+Write your program in Rust. Compile to WASM using `cargo build`.
 
 ### Deploy and activate
 
@@ -135,7 +135,7 @@ If a dispute arises about execution results, the chain replays execution determi
 
 - **Compute-heavy business logic onchain:** Pricing engines, risk calculations, data validation pipelines — workloads where the compute cost in Solidity would dominate your transaction budget.
 - **Cryptographic verification:** Zero-knowledge proof verification, signature schemes, or custom cryptographic protocols that are impractical in the default VM. ([Case study: Renegade](https://blog.arbitrum.io/renegade-stylus-case-study/))
-- **Porting existing Rust or C/C++ code onchain:** Libraries and algorithms you've already built and tested can be deployed with minimal modification — no rewrite in a new language required.
+- **Porting existing Rust code onchain:** Libraries and algorithms you've already built and tested can be deployed with minimal modification — no rewrite in a new language required. Experimental C/C++ support is also available via Clang.
 - **Optimizing hot paths in existing Solidity systems:** You don't have to migrate everything. Identify the expensive computation, extract it to a Stylus program, and call it from your existing contracts — similar to writing a native extension for a performance-critical module.
 
 ## Getting started
