@@ -2,7 +2,7 @@
 id: debugging-tx
 title: 'How to debug Stylus transactions'
 sidebar_label: 'Debug transactions'
-description: 'Learn how to debug Stylus transactions using cargo-stylus replay, trace, and usertrace commands, as well as the StylusDB debugger for advanced multi-contract debugging.'
+description: 'Learn how to debug Stylus transactions using cargo stylus replay, usertrace, and cross-environment tools.'
 user_story: 'As a Stylus developer, I want to debug my smart contract transactions so that I can identify and fix issues in my contract logic.'
 content_type: how-to
 author: mahsamoosavi
@@ -24,6 +24,8 @@ Cargo Stylus provides several debugging capabilities:
 3. **Interactive debugging** (`cargo stylus replay`): Replay and debug <a data-quicklook-from="transaction">Transaction</a> execution using GDB, LLDB, or StylusDB. Set breakpoints, inspect variables, and step through code line by line.
 
 4. **Multi-contract debugging**: Debug transactions that span multiple Stylus contracts simultaneously using StylusDB.
+
+5. **Cross-environment debugging (Stylus ↔ Solidity)**: Debug transactions that cross Stylus and Solidity contracts by pairing StylusDB with SolDB through `soldb bridge`, enabling unified tracing and step-through across both environments.
 
 ## Requirements
 
@@ -275,15 +277,38 @@ The format is `ADDRESS:PATH` pairs separated by commas, where:
 - `ADDRESS` is the deployed contract address
 - `PATH` is the path to the contract's source directory
 
-### Handling Solidity contracts
+### Cross-environment debugging (Stylus ↔ Solidity)
 
-If your transaction interacts with both Stylus and Solidity contracts, mark the Solidity addresses with the `--addr-solidity` flag. The debugger displays contract addresses and function selectors for Solidity calls, but cannot provide source-level debugging for Solidity code:
+When debugging transactions that involve both Stylus and Solidity contracts, you can use these tools together:
+
+- [StylusDB](https://github.com/walnuthq/stylusdb): provides visual function call trees and step-through debugging for Rust-based smart contracts.
+- [SolDB](https://github.com/walnuthq/soldb): steps through Solidity execution, inspects variables, and debugs failing transactions.
+
+Start the cross-environment bridge:
 
 ```shell
-cargo stylus replay --debugger stylusdb --tx=$TX_HASH \
-  --contracts 0xSTYLUS_ADDR:/path/to/stylus/contract \
-  --addr-solidity 0xSOLIDITY_ADDR \
-  --endpoint=$RPC_URL
+soldb bridge
+# Bridge runs at http://127.0.0.1:8765
+```
+
+Debug Stylus transactions that call Solidity:
+
+```shell
+cargo stylus usertrace \
+  --tx=$TX_HASH \
+  --endpoint=$RPC_URL \
+  --cross-env-bridge http://127.0.0.1:8765 \
+  --solidity-contracts ./solidity-contracts.json
+```
+
+Debug Solidity transactions that call Stylus:
+
+```shell
+soldb trace <tx_hash> \
+  --ethdebug-dir <address>:<name>:./out \
+  --cross-env-bridge http://127.0.0.1:8765 \
+  --stylus-contracts ./stylus-contracts.json \
+  --rpc http://localhost:8547
 ```
 
 ## RPC endpoint compatibility
@@ -300,6 +325,7 @@ Both tracers are available on local nodes, but `stylusTracer` is more efficient.
 ## Additional resources
 
 - [StylusDB GitHub repository](https://github.com/walnuthq/stylusdb)
+- [SolDB Guide](https://github.com/walnuthq/soldb)
 - [Stylus SDK debugger documentation](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/cargo-stylus/docs/StylusDebugger.md)
 - [GDB documentation](https://sourceware.org/gdb/)
 - [LLDB documentation](https://lldb.llvm.org/)
