@@ -26,7 +26,7 @@ For `ETH` bridging, the flow uses a "double retryable"—a retryable ticket on L
 
 Each retryable in the chain requires gas fees on its destination chain:
 
-- **L1-to-L2 retryable**: Paid in ETH on L1 (or the L2 native token if using a custom gas token chain)
+- **L1-to-L2 retryable**: Paid in `ETH` on L1 (or the L2 native token if using a custom gas token chain)
 - **L2-to-L3 retryable**: Paid in the L3 native token, forwarded through the bridge
 
 The SDK calculates and bundles all required fees into a single L1 transaction.
