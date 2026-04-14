@@ -104,8 +104,7 @@
   <text x="230" y="430" fill="#00CC88" font-size="16" text-anchor="middle">Execution is publicly verifiable.</text>
   <text x="230" y="453" fill="#00CC88" font-size="16" text-anchor="middle">Logic is tamper-proof.</text>
 
-  <!-- Dashed arrow from Client to callout -->
-  <line x1="140" y1="300" x2="140" y2="425" stroke="#00CC88" stroke-width="2" stroke-dasharray="6,4" />
-  <line x1="140" y1="425" x2="55" y2="425" stroke="#00CC88" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowG)" />
+  <!-- Dashed arrow from Client down to callout box -->
+  <line x1="140" y1="300" x2="140" y2="395" stroke="#00CC88" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowG)" />
 
 </svg>
