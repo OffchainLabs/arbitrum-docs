@@ -1627,7 +1627,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'stylus/gentle-introduction-enterprise',
+          id: 'stylus/introduction-enterprise',
           label: 'Introduction (enterprise)',
         },
         {
