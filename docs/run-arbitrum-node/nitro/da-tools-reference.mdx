@@ -275,6 +275,7 @@ docker run --rm \
   -v "$(pwd)/keys:/keys" \
   -p 9876:9876 \
   -p 9877:9877 \
+  --entrypoint anytrustserver
   offchainlabs/nitro-node:latest \
   --enable-rpc \
   --rpc-addr 0.0.0.0 \
