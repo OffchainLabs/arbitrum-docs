@@ -28,12 +28,33 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 | Send **pre-Nitro** archive requests                                             | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](/run-arbitrum-node/more-types/03-run-classic-node.mdx) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                        | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                                           |
 
+:::info Archive-path node
+
+A Nitro Archive-path node is similar to a hash archive node; with the exception that a Nitro Archive-path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
+
+The recommendation is to use Nitro >= v.3.9.x to use Archive-path node.
+
+**Features**:
+
+- **Low disk usage**: Under ~4 TB for Arbitrum One
+- **Configurable retention**: users can choose how many historical states to retain
+
+**Limitations**:
+
+- block validation in not yet supported with path state scheme
+- fast NVME storage is required for reasonable sync speed
+- Snapshot auto-download with `--init.latest` is not yet supported
+
+:::
+
 ## System requirements
 
 :::caution
+
 As of May 2024, archive node snapshots for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are no longer being updated on https://snapshot-explorer.arbitrum.io/ due to accelerated database and state growth. Teams who use these publicly available archive snapshots will need to wait longer than usual for their nodes to sync up.
 
 The Offchain Labs team is actively exploring and working on solutions to address this and will provide an update as soon as possible. In the meantime, the Offchain Labs team continues to recommend that teams periodically create their own snapshots by stopping one of their archive nodes and backing up their database.
+
 :::
 
 :::caution
@@ -58,6 +79,7 @@ The minimum storage requirements will change as the Nitro chains grow (growing r
      - Note that other chains don't have Classic blocks and thus don't require an initial genesis database.
    - Snapshot Explorer
      - You can find more snapshots on our [snapshot explorer](https://snapshot-explorer.arbitrum.io/)
+   - [Archive-Path section of the snapshot explorer](https://snapshot-explorer.arbitrum.io/?chain=arb1)
 
 ## Review and configure ports
 
@@ -105,6 +127,17 @@ To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one o
 
 Note that the above commands both map to port `8547` on their hosts. To run both on the same host, you should edit those mapping to different ports and specify your Classic node RPC URL as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
 
+:::note Additional flags for Archive-path nodes
+
+For a Nitro path archive node, use the additional flags to start the node:
+
+```shell
+execution.caching.state-scheme=path
+execution.caching.state-history=0
+```
+
+:::
+
 ### A note on permissions
 
 The Docker image is configured to run as non-root `UID 1000`. If you're running in Linux and you're getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders, replacing `arbitrum-mainnet` as needed:
@@ -119,6 +152,12 @@ chmod -fR 777 /some/local/dir/arbitrum-mainnet
 Both Nitro and Classic have multiple other parameters that can be used to configure your node. For a full comprehensive list of the available parameters, use the flag `--help`.
 
 <!-- todo: FAQ -->
+
+## Archive-path node configuration details
+
+import PathNodeConfiguration from '../partials/run-full-node/_path-node-parameters.mdx';
+
+<PathNodeConfiguration />
 
 ## Troubleshooting
 

@@ -1,0 +1,641 @@
+---
+title: 'VM and execution differences'
+sidebar_label: 'VM differences'
+description: 'Understand the differences between EVM and WASM execution models in Stylus'
+user_story: 'As a developer, I want to understand how WASM execution differs from EVM'
+content_type: concept
+author: chrisco
+sme: chrisco
+sidebar_position: 4
+target_audience: Developers who need to understand how Stylus works with EVM differences.
+displayed_sidebar: buildStylusSidebar
+---
+
+Arbitrum Nitro supports two execution environments: the traditional Ethereum Virtual Machine (EVM) for Solidity contracts and a WebAssembly (WASM) VM for Stylus contracts. While both environments are fully interoperable and share the same state, they differ significantly in their execution models, performance characteristics, and developer experience.
+
+## Execution model
+
+### EVM: Stack-based architecture
+
+The EVM uses a stack-based execution model:
+
+- **Operations**: Work with values on a stack (PUSH, POP, ADD, etc.)
+- **Opcodes**: 256 predefined opcodes with fixed gas costs
+- **Memory**: Linear, byte-addressable memory that grows dynamically
+- **Storage**: 256-bit word-based key-value store
+- **Call depth**: Limited to 1024 levels
+
+**Example EVM execution:**
+
+```
+PUSH1 0x02    // Push 2 onto stack
+PUSH1 0x03    // Push 3 onto stack
+ADD           // Pop 2 values, push sum (5)
+```
+
+### WASM: Register-based architecture
+
+The Stylus WASM VM uses a register-based execution model:
+
+- **Operations**: Work with virtual registers and local variables
+- **Instructions**: Thousands of WASM instructions with fine-grained metering
+- **Memory**: Linear memory with explicit grow operations
+- **Storage**: Same 256-bit storage as EVM (shared state)
+- **Call depth**: Same 1024 limit for compatibility
+
+**Example WASM execution:**
+
+```wasm
+(local.get 0)    ;; Read from local variable 0
+(local.get 1)    ;; Read from local variable 1
+(i32.add)        ;; Add and store result
+(local.set 2)    ;; Store in local variable 2
+```
+
+## Memory model
+
+### EVM memory
+
+- **Dynamic expansion**: Memory grows in 32-byte chunks
+- **Gas cost**: Quadratic growth (memory expansion gets expensive)
+- **Access pattern**: Byte-level addressing
+- **Limit**: Practical limit around 15 MB due to gas costs
+
+### WASM memory
+
+- **Page-based**: Memory grows in 64 KB pages (WASM standard)
+- **Gas cost**: Linear cost per page through `pay_for_memory_grow`
+- **Access pattern**: Direct memory load/store instructions
+- **Limit**: Can grow much larger efficiently
+
+**Memory growth in Stylus:**
+
+```rust
+// The entrypoint macro automatically handles pay_for_memory_grow
+#[entrypoint]
+pub struct MyContract {
+    // Large data structures are more practical in WASM
+    data: StorageVec<StorageU256>,
+}
+
+// Nitro automatically inserts pay_for_memory_grow calls
+// when allocating new pages
+let large_vector = vec![0u8; 100_000]; // Efficient in WASM
+```
+
+:::note
+The Stylus SDK's `entrypoint!` macro includes a no-op call to `pay_for_memory_grow` to ensure the function is referenced. Nitro then automatically inserts actual calls when memory allocation occurs.
+:::
+
+## Gas metering: Ink and gas
+
+### EVM gas metering
+
+- **Unit**: Gas (standard Ethereum unit)
+- **Granularity**: Per opcode (e.g., ADD = 3 gas, SSTORE = 20,000 gas)
+- **Measurement**: Coarse-grained
+- **Refunds**: Available for storage deletions
+
+### Stylus ink metering
+
+Stylus introduces "ink" as a fine-grained metering unit:
+
+- **Unit**: Ink (Stylus-specific, converted to gas)
+- **Granularity**: Per WASM instruction (more fine-grained)
+- **Measurement**: Precise tracking of WASM execution costs
+- **Conversion**: Ink → Gas conversion happens automatically
+
+**Ink to gas conversion:**
+
+```rust
+// Check remaining ink
+let ink_left = evm_ink_left();
+
+// Check remaining gas
+let gas_left = evm_gas_left();
+
+// Get ink price (in gas basis points)
+let ink_price = tx_ink_price();
+
+// Conversion formula:
+// gas = ink * ink_price / 10000
+```
+
+**Why ink?**
+
+1. **Precision**: WASM instructions have varying costs that don't map cleanly to EVM gas
+2. **Efficiency**: Fine-grained metering allows for more accurate pricing
+3. **Performance**: Enables cheaper execution for compute-heavy operations
+4. **Flexibility**: Ink prices can be adjusted without changing contract code
+
+**Gas cost comparison:**
+
+| Operation           | EVM Gas   | Stylus Gas | Improvement     |
+| ------------------- | --------- | ---------- | --------------- |
+| Basic arithmetic    | 3-5       | ~1-2       | 2-3x cheaper    |
+| Memory operations   | Variable  | Efficient  | 10-100x cheaper |
+| Complex computation | Expensive | Cheap      | 10-100x cheaper |
+| Storage operations  | Same      | Same       | Equal           |
+| External calls      | Same      | Same       | Equal           |
+
+## Instruction sets
+
+### EVM opcodes
+
+- **Count**: ~140 opcodes
+- **Categories**: Arithmetic, logic, storage, flow control, system
+- **Size**: 1 byte per opcode
+- **Examples**:
+  - `ADD`, `MUL`, `SUB`, `DIV` (arithmetic)
+  - `SLOAD`, `SSTORE` (storage)
+  - `CALL`, `DELEGATECALL` (calls)
+  - `SHA3` (hashing)
+
+### WASM instructions
+
+- **Count**: Hundreds of instructions
+- **Categories**: Numeric, memory, control flow, function calls
+- **Size**: Variable encoding (1-5 bytes)
+- **Examples**:
+  - `i32.add`, `i64.mul`, `f64.div` (numeric)
+  - `memory.grow`, `memory.size` (memory)
+  - `call`, `call_indirect` (functions)
+  - Hostio imports (system operations)
+
+**WASM advantages:**
+
+- More expressive instruction set
+- Better compiler optimization targets
+- Efficient handling of complex data structures
+- Native support for 32-bit and 64-bit operations
+
+## Size limits
+
+### EVM contracts
+
+- **Maximum size**: 24,576 bytes (24 KB) of deployed bytecode
+- **Limit reason**: Block gas limit and deployment costs
+- **Workaround**: Contract splitting, proxies
+
+### Stylus contracts
+
+- **Initial limit**: 24 KB (same as EVM for compatibility)
+- **Compressed size**: Can be larger before compression
+- **Future**: Limit may be increased as WASM tooling improves
+- **Practical size**: Stylus programs are often smaller due to efficient compilation
+
+**Size optimization:**
+
+```rust
+// Stylus contracts benefit from:
+// 1. Rust's zero-cost abstractions
+// 2. Dead code elimination by wasm-opt
+// 3. Efficient WASM encoding
+
+#[no_std]  // Opt out of standard library for smaller binaries
+extern crate alloc;
+
+// Only the code actually used is included
+use stylus_sdk::prelude::*;
+```
+
+## Storage model
+
+Both EVM and WASM contracts use the **same storage system**:
+
+- **Format**: 256-bit key-value store
+- **Compatibility**: EVM and WASM contracts can share storage
+- **Costs**: SLOAD and SSTORE costs are identical
+- **Caching**: Stylus VM implements storage caching for efficiency
+
+### Storage caching in Stylus
+
+```rust
+use stylus_sdk::prelude::*;
+
+#[storage]
+pub struct Counter {
+    count: StorageU256,
+}
+
+#[public]
+impl Counter {
+    pub fn increment(&mut self) {
+        // First read: full SLOAD cost
+        let current = self.count.get();
+
+        // Write is cached
+        self.count.set(current + U256::from(1));
+
+        // Additional reads in same call are cheaper (cached)
+        let new_value = self.count.get();
+
+        // Cache is automatically flushed at call boundary
+    }
+}
+```
+
+**Cache benefits:**
+
+1. **Reduced gas costs**: Repeated reads are cheaper
+2. **Better performance**: Fewer state trie accesses
+3. **Automatic management**: SDK handles cache flushing
+4. **Compatibility**: Refund logic matches EVM exactly
+
+## Performance characteristics
+
+### Compute operations
+
+| Category            | EVM       | Stylus WASM | Winner       |
+| ------------------- | --------- | ----------- | ------------ |
+| Integer arithmetic  | Moderate  | Fast        | WASM (10x+)  |
+| Loops               | Expensive | Cheap       | WASM (100x+) |
+| Memory copying      | Expensive | Cheap       | WASM (10x+)  |
+| Hashing (keccak256) | Native    | Native      | Equal        |
+| Cryptography        | Limited   | Efficient   | WASM         |
+| String operations   | Expensive | Cheap       | WASM (100x+) |
+
+### Storage operations
+
+| Operation       | EVM        | Stylus WASM | Winner |
+| --------------- | ---------- | ----------- | ------ |
+| SLOAD           | 2,100 gas  | 2,100 gas   | Equal  |
+| SSTORE (new)    | 20,000 gas | 20,000 gas  | Equal  |
+| SSTORE (update) | 5,000 gas  | 5,000 gas   | Equal  |
+| Storage refunds | Standard   | Standard    | Equal  |
+| Cached reads    | No         | Yes         | WASM   |
+
+### External interactions
+
+| Operation            | EVM           | Stylus WASM   | Winner |
+| -------------------- | ------------- | ------------- | ------ |
+| Contract calls       | ~700 gas base | ~700 gas base | Equal  |
+| Cross-language calls | N/A           | Efficient     | WASM   |
+| Event emission       | Same cost     | Same cost     | Equal  |
+| Value transfers      | Same cost     | Same cost     | Equal  |
+
+## Call semantics
+
+### Interoperability
+
+Both environments support seamless interoperability:
+
+```rust
+// Stylus calling Solidity
+sol_interface! {
+    interface IERC20 {
+        function transfer(address to, uint256 amount) external returns (bool);
+    }
+}
+
+#[public]
+impl MyContract {
+    pub fn call_evm_contract(&self, token: Address) -> Result<bool, Vec<u8>> {
+        let erc20 = IERC20::new(token);
+        let result = erc20.transfer(self.vm(), recipient, amount)?;
+        Ok(result)
+    }
+}
+```
+
+```solidity
+// Solidity calling Stylus
+interface IStylusContract {
+    function computeHash(bytes calldata data) external view returns (bytes32);
+}
+
+contract EvmContract {
+    function useStylus(address stylusAddr, bytes calldata data) public view returns (bytes32) {
+        return IStylusContract(stylusAddr).computeHash(data);
+    }
+}
+```
+
+### Call costs
+
+- **Same call overhead**: Both directions have similar base costs
+- **ABI encoding**: Identical for both
+- **Gas forwarding**: Follows 63/64 rule in both cases
+- **Return data**: Handled consistently
+
+## Contract lifecycle
+
+### Deployment
+
+**EVM contracts:**
+
+1. Submit init code (constructor bytecode)
+2. EVM executes init code
+3. Returns runtime bytecode
+4. Bytecode stored onchain
+
+**Stylus contracts:**
+
+1. Compile Rust → WASM
+2. Submit WASM code
+3. **Activation step**: One-time compilation to native code
+4. Activated programs cached for efficiency
+5. WASM code stored onchain
+
+**Activation benefits:**
+
+```shell
+# Deploy and activate a Stylus program
+cargo stylus deploy --private-key $PRIVATE_KEY
+
+# Activation happens once
+# Subsequent calls use cached native code
+```
+
+- **One-time cost**: Pay activation gas once
+- **Future savings**: All executions use optimized native code
+- **Upgradeability**: Re-activation needed for upgrades
+
+### Execution flow
+
+**EVM contracts:**
+
+```
+Transaction → EVM → Opcode interpretation → State changes
+```
+
+**Stylus contracts:**
+
+```
+Transaction → WASM VM → Native code execution → State changes
+                ↓
+         Hostio calls for state access
+```
+
+## Developer experience
+
+### EVM development
+
+**Languages**: Solidity, Vyper, Huff
+
+**Tools**:
+
+- Hardhat, Foundry for testing
+- Remix for quick development
+- Ethers.js/Web3.js for interaction
+
+**Debugging**:
+
+- Revert messages
+- Events for tracing
+- Stack traces limited
+
+### Stylus development
+
+**Languages**: Rust, C, C++ (any WASM-compatible language)
+
+**Tools**:
+
+- `cargo stylus` for deployment
+- Standard Rust tooling (cargo, rustc)
+- `TestVM` for unit testing
+- Rust analyzer for IDE support
+
+**Debugging**:
+
+- Full Rust error messages
+- Compile-time safety checks
+- `console!` macro for debug builds
+- Stack traces in development
+
+**Development comparison:**
+
+| Aspect          | EVM            | Stylus              | Notes                                 |
+| --------------- | -------------- | ------------------- | ------------------------------------- |
+| Type safety     | Runtime        | Compile-time        | Rust catches errors before deployment |
+| Memory safety   | Manual         | Automatic           | Rust's borrow checker                 |
+| Testing         | External tools | Built-in Rust tests | `#[test]` functions work natively     |
+| Iteration speed | Slower         | Faster              | No need to redeploy for tests         |
+| Learning curve  | Moderate       | Steeper             | Rust has more concepts                |
+| Maturity        | Very mature    | Growing             | Solidity has more resources           |
+
+## Feature compatibility
+
+### Supported features
+
+Both EVM and Stylus support:
+
+✅ Contract calls and delegate calls
+✅ Value transfers
+✅ Event emission
+✅ Storage operations
+✅ Block and transaction properties
+✅ Cryptographic functions (keccak256)
+✅ Contract creation (CREATE, CREATE2)
+✅ Revert and error handling
+✅ Reentrancy guards
+
+### EVM-specific features not in WASM
+
+❌ Inline assembly (use hostio or Rust instead)
+❌ `selfdestruct` (deprecated in Ethereum anyway)
+❌ Solidity modifiers (use Rust functions)
+❌ Multiple inheritance (use traits and composition)
+
+### Stylus-specific features not in EVM
+
+✅ Access to Rust ecosystem (crates)
+✅ Efficient memory management
+✅ Zero-cost abstractions
+✅ Compile-time guarantees
+✅ Native testing support
+✅ Better optimization opportunities
+
+## State sharing
+
+EVM and WASM contracts share the same blockchain state:
+
+```rust
+// Stylus contract can read EVM contract storage
+#[storage]
+pub struct Bridge {
+    evm_contract: StorageAddress,
+}
+
+#[public]
+impl Bridge {
+    pub fn read_evm_storage(&self, key: U256) -> U256 {
+        // Both VMs use the same storage layout
+        // Can read storage written by EVM contracts
+        storage_load_bytes32(key)
+    }
+}
+```
+
+**Shared state:**
+
+- Account balances
+- Contract storage
+- Contract code
+- Transaction history
+- Block data
+
+## Gas economics
+
+### Cost structure
+
+**EVM contract execution:**
+
+```
+Total cost = Base transaction cost (21,000 gas)
+           + Input data cost (~16 gas/byte)
+           + Execution cost (opcode gas)
+           + Storage cost (SLOAD/SSTORE)
+```
+
+**Stylus contract execution:**
+
+```
+Total cost = Base transaction cost (21,000 gas)
+           + Input data cost (~16 gas/byte)
+           + Execution cost (ink → gas conversion)
+           + Storage cost (same as EVM)
+```
+
+### When to use each
+
+**Use EVM (Solidity) when:**
+
+- Quick prototyping needed
+- Simple contracts with minimal computation
+- Team expertise in Solidity
+- Extensive storage operations (cost is equal)
+- Maximum ecosystem compatibility
+
+**Use Stylus (Rust) when:**
+
+- Compute-intensive operations
+- Complex algorithms or data structures
+- Need for memory safety guarantees
+- Existing Rust codebase to port
+- Optimizing for gas efficiency
+- Cryptographic operations
+- String/byte manipulation
+
+## Best practices
+
+### For EVM contracts
+
+1. **Minimize storage operations**: Use memory when possible
+2. **Optimize loops**: Keep iterations minimal
+3. **Pack storage**: Use smaller types when possible
+4. **Avoid complex math**: Basic operations only
+5. **Use libraries**: Leverage audited code
+
+### For Stylus contracts
+
+1. **Leverage Rust's safety**: Let the compiler catch bugs
+2. **Use iterators**: More efficient than manual loops
+3. **Profile before optimizing**: Use cargo-stylus tools
+4. **Test thoroughly**: Use Rust's built-in test framework
+5. **Consider binary size**: Use `#[no_std]` if needed
+6. **Batch operations**: Take advantage of cheap compute
+
+### Hybrid approach
+
+Many projects can benefit from both:
+
+```rust
+// Compute-heavy logic in Stylus
+#[public]
+impl ComputeEngine {
+    pub fn complex_calculation(&self, data: Vec<u256>) -> Vec<U256> {
+        // Efficient loops and data processing
+        data.iter()
+            .map(|x| expensive_computation(*x))
+            .collect()
+    }
+}
+```
+
+```solidity
+// Coordination and state management in Solidity
+contract Coordinator {
+    IComputeEngine public engine; // Stylus contract
+
+    function process(uint256[] calldata data) public {
+        uint256[] memory results = engine.complex_calculation(data);
+        // Store results, emit events, etc.
+    }
+}
+```
+
+## Migration considerations
+
+### From Solidity to Stylus
+
+**What stays the same:**
+
+- Contract addresses
+- Storage layout
+- ABIs and interfaces
+- Gas for storage operations
+- Event signatures
+
+**What changes:**
+
+- Programming language (Solidity → Rust)
+- Execution engine (EVM → WASM)
+- Gas costs for compute (usually cheaper)
+- Development workflow
+- Testing approach
+
+**Migration strategy:**
+
+1. Start with compute-heavy functions
+2. Maintain same ABI for compatibility
+3. Test extensively with existing contracts
+4. Monitor gas costs in production
+5. Gradually migrate more functionality
+
+## Future developments
+
+### EVM evolution
+
+- EIP improvements
+- New opcodes
+- Gas repricing
+- EOF (EVM Object Format)
+
+### Stylus evolution
+
+- Support for more languages
+- SIMD instructions
+- Floating point operations
+- Larger contract size limits
+- Further gas optimizations
+- Enhanced debugging tools
+
+## Resources
+
+- [Stylus documentation](https://docs.arbitrum.io/stylus)
+- [Ink and gas metering](https://docs.arbitrum.io/stylus/concepts/gas-metering)
+- [WASM specification](https://webassembly.github.io/spec/)
+- [EVM opcodes reference](https://www.evm.codes/)
+- [Stylus SDK repository](https://github.com/OffchainLabs/stylus-sdk-rs)
+
+## Summary
+
+The WASM VM in Arbitrum Nitro represents a significant evolution in smart contract execution:
+
+**Key advantages of WASM:**
+
+- 10-100x cheaper for compute operations
+- More expressive programming languages
+- Better memory management
+- Compile-time safety guarantees
+- Access to mature language ecosystems
+
+**Key advantages of EVM:**
+
+- Mature tooling and ecosystem
+- Familiar to existing developers
+- No activation cost
+- Decades of collective knowledge
+
+Both execution environments coexist harmoniously on Arbitrum, allowing developers to choose the best tool for each use case while maintaining full interoperability.
