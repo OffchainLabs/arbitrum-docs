@@ -49,7 +49,7 @@ Stylus adds a second virtual machine alongside the EVM that executes <a data-qui
 
 Think of it like moving a performance-critical microservice from a scripted runtime to a compiled binary — same API surface, same interoperability with existing services, but fundamentally different execution economics.
 
-This is additive, not a replacement. Existing Solidity contracts keep working unchanged. Stylus programs and Solidity contracts call each other through standard interfaces. You can adopt incrementally — no big-bang migration required.
+Stylus is designed to slot into your existing architecture, not replace it. Your backend calls a Stylus program the same way it calls any other service — over a standard JSON-RPC interface. You can start with a single onchain component and expand from there. No migration, no rearchitecture.
 
 ## How your existing skills transfer
 
