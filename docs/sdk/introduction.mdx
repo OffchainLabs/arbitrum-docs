@@ -1,6 +1,7 @@
 ---
 id: introduction
 title: Introduction
+slug: /sdk
 ---
 
 # Introduction
@@ -52,13 +53,13 @@ pnpm install @arbitrum/sdk
 
 Arbitrum SDK can be used to bridge assets to or from an Arbitrum Network. The following asset bridgers are currently available:
 
-- [`EthBridger`](./assetBridger/ethBridger.md)
-- [`Erc20Bridger`](./assetBridger/erc20Bridger.md)
+- [`EthBridger`](/sdk/assetBridger/ethBridger.md)
+- [`Erc20Bridger`](/sdk/assetBridger/erc20Bridger.md)
 
 All asset bridgers have the following methods which accept different parameters depending on the asset bridger type:
 
-- [`deposit`](./assetBridger/assetBridger.md#deposit): moves assets from the Parent to the Child chain
-- [`withdraw`](./assetBridger/assetBridger.md#withdraw): moves assets from the Child to the Parent chain
+- [`deposit`](/sdk/assetBridger/assetBridger.md#deposit): moves assets from the Parent to the Child chain
+- [`withdraw`](/sdk/assetBridger/assetBridger.md#withdraw): moves assets from the Child to the Parent chain
 
 #### Example `ETH` deposit to Arbitrum One
 
@@ -105,7 +106,7 @@ Arbitrum SDK comes pre-configured for Mainnet and Sepolia, and their Arbitrum co
 
 #### Configuring network
 
-To interact with a custom [`ArbitrumNetwork`](./dataEntities/networks), you can register it using the [`registerCustomArbitrumNetwork`](./dataEntities/networks.md#registercustomarbitrumnetwork) function.
+To interact with a custom [`ArbitrumNetwork`](/sdk/dataEntities/networks), you can register it using the [`registerCustomArbitrumNetwork`](/sdk/dataEntities/networks.md#registercustomarbitrumnetwork) function.
 
 ```ts
 import { registerCustomArbitrumNetwork } from '@arbitrum/sdk';
@@ -118,7 +119,7 @@ registerCustomArbitrumNetwork({
 
 ### Cross chain messages
 
-When assets are moved by the Parent and Child cross chain messages are sent. The lifecycles of these messages are encapsulated in the classes [`ParentToChildMessage`](./message/ParentToChildMessage) and [`ChildToParentMessage`](./message/ChildToParentMessage). These objects are commonly created from the receipts of transactions that send cross chain messages. A cross chain message will eventually result in a transaction being executed on the destination chain, and these message classes provide the ability to wait for that finalizing transaction to occur.
+When assets are moved by the Parent and Child cross chain messages are sent. The lifecycles of these messages are encapsulated in the classes [`ParentToChildMessage`](/sdk/message/ParentToChildMessage) and [`ChildToParentMessage`](/sdk/message/ChildToParentMessage). These objects are commonly created from the receipts of transactions that send cross chain messages. A cross chain message will eventually result in a transaction being executed on the destination chain, and these message classes provide the ability to wait for that finalizing transaction to occur.
 
 #### Redeem a parent-to-child message
 
@@ -179,9 +180,9 @@ const inboxRec = await resultsParent.wait();
 
 ### Utils
 
-- [`EventFetcher`](./utils/eventFetcher): A utility to provide typing for the fetching of events
-- [`MultiCaller`](./utils/multicall#multicaller): A utility for executing multiple calls as part of a single RPC request. This can be useful for reducing round trips.
-- [`constants`](./dataEntities/constants): A list of useful Arbitrum related constants
+- [`EventFetcher`](/sdk/utils/eventFetcher): A utility to provide typing for the fetching of events
+- [`MultiCaller`](/sdk/utils/multicall#multicaller): A utility for executing multiple calls as part of a single RPC request. This can be useful for reducing round trips.
+- [`constants`](/sdk/dataEntities/constants): A list of useful Arbitrum related constants
 
 ## Development
 

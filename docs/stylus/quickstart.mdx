@@ -95,27 +95,6 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-We'll add WASM ([WebAssembly](https://webassembly.org/)) as a build target by pinning a project-local Rust toolchain in `rust-toolchain.toml`.
-
-### Creating a project
-
-Let's create our first Stylus project by running:
-
-```shell
-cargo stylus new <YOUR_PROJECT_NAME>
-cd <YOUR_PROJECT_NAME>
-```
-
-Create a project-local Rust toolchain file:
-
-```shell
-cat <<'EOF' > rust-toolchain.toml
-[toolchain]
-channel = "stable"
-targets = ["wasm32-unknown-unknown"]
-EOF
-```
-
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands; we will use some of them in this guide:
 
 ```shell title="cargo stylus --help returns:"
@@ -140,6 +119,15 @@ Commands:
 Options:
   -h, --help     Print help
   -V, --version  Print version
+```
+
+### Creating a project
+
+Let's create our first Stylus project by running:
+
+```shell
+cargo stylus new <YOUR_PROJECT_NAME>
+cd <YOUR_PROJECT_NAME>
 ```
 
 `cargo stylus new` generates a starter template that implements a Rust version of the Solidity `Counter` smart contract example:
