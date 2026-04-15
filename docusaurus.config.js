@@ -3,7 +3,6 @@
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
-const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
@@ -144,63 +143,6 @@ const config = {
   ],
   plugins: [
     [
-      'docusaurus-plugin-typedoc',
-      {
-        id: 'arbitrum-sdk',
-        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-        entryPoints: [`${sdkCodebasePath}/src/lib`],
-        entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
-        excludeNotDocumented: true,
-        excludeInternal: true,
-        excludeExternals: true,
-        readme: 'none',
-
-        // Output options
-        out: './docs/sdk',
-        cleanOutputDir: false, // Don't clean output dir to preserve manual files
-        hideGenerator: true,
-        validation: {
-          notExported: false,
-          invalidLink: true,
-          notDocumented: true,
-        },
-        skipErrorChecking: true,
-        logLevel: 'Verbose',
-        sidebar: {
-          autoConfiguration: false,
-        },
-
-        plugin: [
-          'typedoc-plugin-markdown',
-          `typedoc-plugin-frontmatter`,
-          './scripts/sdkDocsHandler.ts',
-        ],
-
-        // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-        outputFileStrategy: 'modules',
-        excludeGroups: false,
-        hidePageHeader: true,
-        hidePageTitle: true,
-        hideBreadcrumbs: true,
-        useCodeBlocks: true,
-        expandParameters: true,
-        parametersFormat: 'table',
-        classPropertiesFormat: 'list',
-        interfacePropertiesFormat: 'list',
-        enumMembersFormat: 'table',
-        typeDeclarationFormat: 'table',
-        useHTMLAnchors: true, // Fix anchor mismatches in tables
-        sanitizeComments: true,
-        frontmatterGlobals: {
-          layout: 'docs',
-          sidebar: true,
-          toc_max_heading_level: 5,
-        },
-      },
-    ],
-    [
       '@inkeep/cxkit-docusaurus',
       {
         SearchBar: {
@@ -236,6 +178,31 @@ const config = {
     ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        docsDir: 'docs',
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+        title: 'Arbitrum Documentation',
+        description:
+          'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
+        ignoreFiles: [
+          'sdk/assetBridger/**',
+          'sdk/dataEntities/**',
+          'sdk/inbox/**',
+          'sdk/message/**',
+          'sdk/utils/**',
+          'sdk/index.md',
+          'hosted-pdfs/**',
+        ],
+        pathTransformation: {
+          ignorePaths: ['docs'],
+        },
+      },
+    ],
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */

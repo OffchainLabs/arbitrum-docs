@@ -4070,7 +4070,7 @@
   dependencies:
     "@octokit/openapi-types" "^24.2.0"
 
-"@offchainlabs/notion-docs-generator@^0.1.2":
+"@offchainlabs/notion-docs-generator@0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@offchainlabs/notion-docs-generator/-/notion-docs-generator-0.1.2.tgz#9dc110857c23cc7e71a25df0a3bc28ef1500a22a"
   integrity sha512-N/gZ2NM+HF5i0ITNQFJD2fPF8M58Ev5k22qboW3Fr8Nisa40Gc8vwNQuO6C1n8rNPR1sPkcaursvgRO60o32dQ==
@@ -6384,6 +6384,13 @@ brace-expansion@^2.0.1:
   dependencies:
     balanced-match "^1.0.0"
 
+brace-expansion@^2.0.2:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-2.0.3.tgz#0493338bdd58e319b1039c67cf7ee439892c01d9"
+  integrity sha512-MCV/fYJEbqx68aE58kv2cA/kiky1G8vux3OR6/jbS+jIMe/6fJWa0DTzJU7dqijOWYwHi1t29FlfYI9uytqlpA==
+  dependencies:
+    balanced-match "^1.0.0"
+
 braces@^3.0.2, braces@~3.0.2:
   version "3.0.2"
   resolved "https://registry.npmjs.org/braces/-/braces-3.0.2.tgz"
@@ -7738,6 +7745,15 @@ docusaurus-plugin-fathom@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/docusaurus-plugin-fathom/-/docusaurus-plugin-fathom-1.2.0.tgz"
   integrity sha512-F6ieKLOqYfaBTtaCRXzb/aLBjKfX8LOUN3L+6DSp4hcXqPbs41Lvqt/CkOAUujP+qViUajQ7oB5gfUi33CHmWw==
+
+docusaurus-plugin-llms@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-llms/-/docusaurus-plugin-llms-0.3.0.tgz#de4dc96c1cfd460eb92eb5f1a09a63df94e43804"
+  integrity sha512-JuADAJA2fjTv1U4XQUoIu1LyjISDzxFhRK5HbCZiHum4HlmdPwyx8NBXsi+LfdUyjK9acbZgazGsHPhdwEZs0g==
+  dependencies:
+    gray-matter "^4.0.3"
+    minimatch "^9.0.3"
+    yaml "^2.8.1"
 
 docusaurus-plugin-sass@^0.2.5:
   version "0.2.5"
@@ -11320,6 +11336,13 @@ minimatch@^9.0.1:
   integrity sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==
   dependencies:
     brace-expansion "^2.0.1"
+
+minimatch@^9.0.3:
+  version "9.0.9"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.9.tgz#9b0cb9fcb78087f6fd7eababe2511c4d3d60574e"
+  integrity sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==
+  dependencies:
+    brace-expansion "^2.0.2"
 
 minimatch@^9.0.5:
   version "9.0.5"
