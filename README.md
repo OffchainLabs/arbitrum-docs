@@ -8,22 +8,21 @@ This repository is organized as follows:
 
 ### Documentation Content
 
-- **`docs/`**: Main documentation content directory
-  - `arbitrum-bridge/`: Bridge-related documentation
-  - `build-decentralized-apps/`: Developer guides and references
-  - `for-devs/`: Developer tools and third-party integrations
-  - `for-users/`: User-focused documentation
-  - `how-arbitrum-works/`: Technical explanations of Arbitrum
-  - `intro/`: Introduction and glossary
-  - `launch-arbitrum-chain/`: Arbitrum chain deployment guides
-  - `learn-more/`: Additional learning resources
-  - `node-running/`: Node operation guides
-  - `partials/`: Reusable content components and troubleshooting guides
-  - `run-arbitrum-node/`: Node setup and configuration
-  - `sdk/`: Auto-generated SDK documentation—Do not edit
-  - `stylus/`: Stylus smart contract development
-  - `stylus-by-example/`: Generated Stylus examples—Do not edit
-  - `welcome/`: Getting started content
+- **`docs/`** - Main documentation content directory
+  - `arbitrum-bridge/` - Bridge-related documentation
+  - `build-decentralized-apps/` - Developer guides and references
+  - `for-devs/` - Developer tools and third-party integrations
+  - `for-users/` - User-focused documentation
+  - `how-arbitrum-works/` - Technical explanations of Arbitrum
+  - `intro/` - Introduction and glossary
+  - `launch-arbitrum-chain/` - Arbitrum chain deployment guides
+  - `learn-more/` - Additional learning resources
+  - `node-running/` - Node operation guides
+  - `partials/` - Reusable content components and troubleshooting guides
+  - `run-arbitrum-node/` - Node setup and configuration
+  - `sdk/` - Auto-generated SDK documentation - Do not edit
+  - `stylus/` - Stylus smart contract development
+  - `welcome/` - Getting started content
 
 ### Application Code
 
