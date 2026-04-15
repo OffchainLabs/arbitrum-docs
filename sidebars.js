@@ -1059,11 +1059,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/reference/parent-chain-pricing',
-            },
-            {
-              type: 'doc',
               label: 'Transaction lifecycle',
               id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
             },
@@ -1092,11 +1087,6 @@ const sidebars = {
               type: 'doc',
               label: 'Geth',
               id: 'how-arbitrum-works/reference/geth',
-            },
-            {
-              type: 'doc',
-              label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/reference/parent-chain-pricing',
             },
           ],
         },

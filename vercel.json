@@ -1,7 +1,7 @@
 {
   "buildCommand": "yarn build",
   "outputDirectory": "build",
-  "installCommand": "bash scripts/init-submodules.sh && yarn install",
+  "installCommand": "yarn install",
   "framework": "docusaurus-2",
   "trailingSlash": false,
   "redirects": [
@@ -757,7 +757,12 @@
     },
     {
       "source": "/(how-arbitrum-works/deep-dives/parent-chain-pricing/?)",
-      "destination": "/how-arbitrum-works/reference/parent-chain-pricing",
+      "destination": "/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/reference/parent-chain-pricing/?)",
+      "destination": "/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing",
       "permanent": false
     },
     {
