@@ -16,9 +16,9 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 ## In a nutshell
 
-- Traditional backend infrastructure relies on trust in the vendor — clients call an API and take the result on faith. Stylus lets you move critical business logic to a blockchain where every transaction is independently auditable and the execution is deterministic. The blockchain becomes a verifiable compute layer in your existing architecture.
-- Stylus lets you deploy compiled WASM modules to Arbitrum chains using Rust — with its full ecosystem of crates and tooling. No new language to learn; your existing Rust skills and testing patterns transfer directly.
-- WASM modules execute at a fraction of the compute cost of the chain's default virtual machine, making previously cost-prohibitive workloads practical onchain — with production deployments showing over 90% cost reduction for compute-heavy logic.
+- Traditional backend infrastructure relies on trust in the vendor—clients call an API and take the result on faith. Stylus lets you move critical business logic to a blockchain where every transaction is independently auditable and the execution is deterministic. The blockchain becomes a verifiable compute layer in your existing architecture.
+- Stylus lets you deploy compiled WASM modules to Arbitrum chains using Rust—with its full ecosystem of crates and tooling. No new language to learn; your existing Rust skills and testing patterns transfer directly.
+- WASM modules execute at a fraction of the compute cost of the chain's default virtual machine, making previously cost-prohibitive workloads practical onchain—with production deployments showing over 90% cost reduction for compute-heavy logic.
 
 <ImageZoom
   src="/img/stylus-enterprise-arch-traditional.svg"
@@ -32,24 +32,24 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 ## Why put computation onchain?
 
-Every backend has business logic that people have to trust. Pricing engines, scoring algorithms, compliance checks — the computation happens behind an API, and consumers take the result on faith. In most systems, that's fine. But when the stakes are high enough that "trust us" isn't sufficient, you need a way to make computation verifiable without exposing your implementation.
+Every backend has business logic that people have to trust. Pricing engines, scoring algorithms, compliance checks—the computation happens behind an API, and consumers take the result on faith. In most systems, that's fine. But when the stakes are high enough that "trust us" isn't sufficient, you need a way to make computation verifiable without exposing your implementation.
 
 Onchain execution gives you four properties that are hard to achieve in traditional infrastructure:
 
-- **Verifiable execution.** Anyone can independently confirm what the deployed code does and that it produced the correct output for a given input. No "trust the API" required — the execution is publicly reproducible.
+- **Verifiable execution.** Anyone can independently confirm what the deployed code does and that it produced the correct output for a given input. No "trust the API" required—the execution is publicly reproducible.
 - **Tamper-proof computation.** Once deployed, the logic cannot be silently modified. No hotfix can change the rules without a visible onchain transaction.
 - **Deterministic execution.** No race conditions, no stale caches, no "works on my machine." Given the same inputs, the program produces the same outputs, every time, on every node.
-- **Incremental adoption.** You don't rip out your backend. You add one component — an onchain call — the same way you'd call any other microservice. The blockchain becomes a compute layer in your existing architecture.
+- **Incremental adoption.** You don't rip out your backend. You add one component—an onchain call—the same way you'd call any other microservice. The blockchain becomes a compute layer in your existing architecture.
 
 ## Why Stylus specifically?
 
-The traditional way to write onchain logic is Solidity, a domain-specific language that runs on the Ethereum Virtual Machine (EVM). The EVM is reliable and battle-tested, but it's an interpreter — compute and memory operations are expensive. Complex workloads like cryptographic verification, data processing, or heavy business logic become cost-prohibitive.
+The traditional way to write onchain logic is Solidity, a domain-specific language that runs on the Ethereum Virtual Machine (EVM). The EVM is reliable and battle-tested, but it's an interpreter—compute and memory operations are expensive. Complex workloads like cryptographic verification, data processing, or heavy business logic become cost-prohibitive.
 
-Stylus adds a second virtual machine alongside the EVM that executes <a data-quicklook-from="wasm">WASM</a>. Your Rust code compiles through `rustc` and runs as native machine code — not interpreted bytecode. The result: the same logic runs at dramatically lower compute cost.
+Stylus adds a second virtual machine alongside the EVM that executes <a data-quicklook-from="wasm">WASM</a>. Your Rust code compiles through `rustc` and runs as native machine code—not interpreted bytecode. The result: the same logic runs at dramatically lower compute cost.
 
-Think of it like moving a performance-critical microservice from a scripted runtime to a compiled binary — same API surface, same interoperability with existing services, but fundamentally different execution economics.
+Think of it like moving a performance-critical microservice from a scripted runtime to a compiled binary—same API surface, same interoperability with existing services, but fundamentally different execution economics.
 
-Stylus is designed to slot into your existing architecture, not replace it. Your backend calls a Stylus program the same way it calls any other service — over a standard JSON-RPC interface. You can start with a single onchain component and expand from there. No migration, no rearchitecture.
+Stylus is designed to slot into your existing architecture, not replace it. Your backend calls a Stylus program the same way it calls any other service—over a standard JSON-RPC interface. You can start with a single onchain component and expand from there. No migration, no rearchitecture.
 
 ## How your existing skills transfer
 
@@ -59,15 +59,15 @@ Stylus uses `cargo` and the Stylus CLI ([`cargo-stylus`](/stylus/cli-tools/comma
 
 ### Libraries
 
-You can use crates in your programs. The constraint is `no_std` (no standard library), since the execution environment is sandboxed — similar to writing for embedded targets. Many crates already support `no_std`.
+You can use crates in your programs. The constraint is `no_std` (no standard library), since the execution environment is sandboxed—similar to writing for embedded targets. Many crates already support `no_std`.
 
 ### Testing
 
-The SDK includes a `TestVM` — a mock host that simulates the onchain environment in-process. You write tests using standard `#[test]` attributes, and the `TestVM` provides the blockchain context (block numbers, callers, storage) without needing an actual node. Integration tests use `#[tokio::test]` to interact with deployed contracts over RPC. The testing model is trait-based: contracts access host functionality through a `HostAccess` trait, which the `TestVM` implements — similar to how you'd inject a mock database behind a repository interface.
+The SDK includes a `TestVM`—a mock host that simulates the onchain environment in-process. You write tests using standard `#[test]` attributes, and the `TestVM` provides the blockchain context (block numbers, callers, storage) without needing an actual node. Integration tests use `#[tokio::test]` to interact with deployed contracts over RPC. The testing model is trait-based: contracts access host functionality through a `HostAccess` trait, which the `TestVM` implements—similar to how you'd inject a mock database behind a repository interface.
 
 ### Storage primitives
 
-The SDK provides Solidity-equivalent persistent storage types that map to familiar data structures: `StorageMap` (hash map), `StorageVec` (dynamic array), `StorageArray` (fixed-size array), `StorageString`, `StorageBytes`, and typed primitives like `StorageU256` and `StorageAddress`. Storage layout is identical to the EVM's, which means Stylus programs can safely read and write the same state as Solidity contracts — enabling gradual migration without data model changes.
+The SDK provides Solidity-equivalent persistent storage types that map to familiar data structures: `StorageMap` (hash map), `StorageVec` (dynamic array), `StorageArray` (fixed-size array), `StorageString`, `StorageBytes`, and typed primitives like `StorageU256` and `StorageAddress`. Storage layout is identical to the EVM's, which means Stylus programs can safely read and write the same state as Solidity contracts—enabling gradual migration without data model changes.
 
 ### Macros and boilerplate
 
@@ -78,27 +78,27 @@ Procedural macros handle most of the ceremony that would otherwise be manual:
 - `sol_storage!` lets you define storage layouts using Solidity-like syntax, generating the correct Rust structs with proper EVM slot assignments.
 - `sol_interface!` defines external contract interfaces in Solidity syntax and auto-generates the calling code.
 
-The result is that a Stylus contract reads like a standard Rust struct with annotated methods — not a DSL.
+The result is that a Stylus contract reads like a standard Rust struct with annotated methods—not a DSL.
 
 ### Deployment model
 
-Compile locally, post the WASM binary to the chain, and the network compiles it to native code and activates it. Conceptually similar to building a container image, pushing to a registry, and having the orchestrator deploy it. The CLI (`cargo stylus deploy`) handles both steps by default, but you can separate them — deploy first with `--no-activate`, then activate later with `cargo stylus activate` — useful for staged rollouts or governance-gated activations.
+Compile locally, post the WASM binary to the chain, and the network compiles it to native code and activates it. Conceptually similar to building a container image, pushing to a registry, and having the orchestrator deploy it. The CLI (`cargo stylus deploy`) handles both steps by default, but you can separate them—deploy first with `--no-activate`, then activate later with `cargo stylus activate`—useful for staged rollouts or governance-gated activations.
 
 ## Compute savings
 
 ### Why WASM is cheaper
 
-WASM programs execute memory and compute operations at significantly lower cost than equivalent EVM bytecode — production deployments have measured over 90% cost reduction for compute-heavy workloads. The gains come from compiled native execution vs. interpreted bytecode, combined with more efficient memory management. WASM uses linear memory with page-level pricing rather than the EVM's per-word storage costs.
+WASM programs execute memory and compute operations at significantly lower cost than equivalent EVM bytecode—production deployments have measured over 90% cost reduction for compute-heavy workloads. The gains come from compiled native execution vs. interpreted bytecode, combined with more efficient memory management. WASM uses linear memory with page-level pricing rather than the EVM's per-word storage costs.
 
 ### How costs work
 
-Every operation on an Ethereum-compatible chain costs "gas" — a unit of computation that maps to a real cost paid per transaction. Gas is how the network prices resource usage, similar to how cloud providers charge per CPU-second or per GB of memory.
+Every operation on an Ethereum-compatible chain costs "gas"—a unit of computation that maps to a real cost paid per transaction. Gas is how the network prices resource usage, similar to how cloud providers charge per CPU-second or per GB of memory.
 
 Stylus uses a finer-grained unit called "ink" internally. The ink-to-gas conversion ratio is set dynamically by the chain via `tx_ink_price()`, allowing the network to tune pricing as WASM execution costs evolve. This exists because WASM operations are so much cheaper than EVM operations that gas alone is too coarse to price them accurately.
 
 ### Concrete impact
 
-Operations that would be cost-prohibitive in Solidity — like onchain cryptographic verification, matrix operations, or parsing complex data structures — become practical in Stylus. Storage operations cost the same on both VMs, but iterative math, weighted scoring, and any logic that loops over data is where WASM pulls ahead.
+Operations that would be cost-prohibitive in Solidity—like onchain cryptographic verification, matrix operations, or parsing complex data structures—become practical in Stylus. Storage operations cost the same on both VMs, but iterative math, weighted scoring, and any logic that loops over data is where WASM pulls ahead.
 
 Production examples:
 
@@ -117,7 +117,7 @@ Write your program in Rust. Compile to WASM using `cargo build`.
 
 ### Deploy and activate
 
-Post the WASM binary to the chain. The network compiles it to native machine code for the target architecture (ARM or x86) and runs safety checks — gas metering, memory limits, and stack depth verification. This is a one-time activation step.
+Post the WASM binary to the chain. The network compiles it to native machine code for the target architecture (ARM or x86) and runs safety checks—gas metering, memory limits, and stack depth verification. This is a one-time activation step.
 
 :::note
 Stylus contracts require reactivation once per year (365 days) or after any Stylus platform upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
@@ -125,18 +125,18 @@ Stylus contracts require reactivation once per year (365 days) or after any Styl
 
 ### Execute
 
-When called, your program runs in a sandboxed WASM runtime ([Wasmer](https://wasmer.io/)) at near-native speed. The system automatically routes calls to the right VM — EVM or WASM — so cross-contract calls between Solidity and Stylus programs are transparent to both sides.
+When called, your program runs in a sandboxed WASM runtime ([Wasmer](https://wasmer.io/)) at near-native speed. The system automatically routes calls to the right VM—EVM or WASM—so cross-contract calls between Solidity and Stylus programs are transparent to both sides.
 
 ### Verify
 
-If a dispute arises about execution results, the chain replays execution deterministically in WASM for fraud proofs. This is how Arbitrum validates correctness without re-executing everything onchain. Your WASM program is inherently provable — no extra work required on your part. For more details, see the [Nitro architecture documentation](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
+If a dispute arises about execution results, the chain replays execution deterministically in WASM for fraud proofs. This is how Arbitrum validates correctness without re-executing everything onchain. Your WASM program is inherently provable—no extra work required on your part. For more details, see the [Nitro architecture documentation](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx).
 
 ## Use cases
 
-- **Compute-heavy business logic onchain:** Pricing engines, risk calculations, data validation pipelines — workloads where the compute cost in Solidity would dominate your transaction budget.
+- **Compute-heavy business logic onchain:** Pricing engines, risk calculations, data validation pipelines—workloads where the compute cost in Solidity would dominate your transaction budget.
 - **Cryptographic verification:** Zero-knowledge proof verification, signature schemes, or custom cryptographic protocols that are impractical in the default VM. ([Case study: Renegade](https://blog.arbitrum.io/renegade-stylus-case-study/))
-- **Porting existing Rust code onchain:** Libraries and algorithms you've already built and tested can be deployed with minimal modification — no rewrite in a new language required. Experimental C/C++ support is also available via Clang.
-- **Optimizing hot paths in existing Solidity systems:** You don't have to migrate everything. Identify the expensive computation, extract it to a Stylus program, and call it from your existing contracts — similar to writing a native extension for a performance-critical module.
+- **Porting existing Rust code onchain:** Libraries and algorithms you've already built and tested can be deployed with minimal modification—no rewrite in a new language required. Experimental C/C++ support is also available via Clang.
+- **Optimizing hot paths in existing Solidity systems:** You don't have to migrate everything. Identify the expensive computation, extract it to a Stylus program, and call it from your existing contracts—similar to writing a native extension for a performance-critical module.
 
 ## Getting started
 
