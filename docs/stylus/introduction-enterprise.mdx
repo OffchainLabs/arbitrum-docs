@@ -16,9 +16,9 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 ## In a nutshell
 
-- Traditional backend infrastructure relies on trust in the vendor—clients call an API and take the result on faith. Stylus lets you move critical business logic to a blockchain where every transaction is independently auditable and the execution is deterministic. The blockchain becomes a verifiable compute layer in your existing architecture.
-- Stylus lets you deploy compiled WASM modules to Arbitrum chains using Rust—with its full ecosystem of crates and tooling. No new language to learn; your existing Rust skills and testing patterns transfer directly.
-- WASM modules execute at a fraction of the compute cost of the chain's default virtual machine, making previously cost-prohibitive workloads practical onchain—with production deployments showing over 90% cost reduction for compute-heavy logic.
+- Traditional backend infrastructure relies on trust in the vendor—clients call an API and take the result on faith. Stylus lets you move critical business logic to a blockchain where every transaction is independently auditable and the execution is deterministic. The blockchain becomes a verifiable computation layer in your existing architecture.
+- Stylus lets you deploy compiled WASM modules to Arbitrum chains using Rust—with its full ecosystem of crates and tooling. There's no new language to learn; your existing Rust skills and testing patterns transfer directly.
+- WASM modules execute at a fraction of the computation cost of the chain's default virtual machine, making previously cost-prohibitive workloads practical onchain—with production deployments showing over 90% cost reduction for computation-heavy logic.
 
 <ImageZoom
   src="/img/stylus-enterprise-arch-traditional.svg"
@@ -36,16 +36,16 @@ Every backend has business logic that people have to trust. Pricing engines, sco
 
 Onchain execution gives you four properties that are hard to achieve in traditional infrastructure:
 
-- **Verifiable execution.** Anyone can independently confirm what the deployed code does and that it produced the correct output for a given input. No "trust the API" required—the execution is publicly reproducible.
-- **Tamper-proof computation.** Once deployed, the logic cannot be silently modified. No hotfix can change the rules without a visible onchain transaction.
-- **Deterministic execution.** No race conditions, no stale caches, no "works on my machine." Given the same inputs, the program produces the same outputs, every time, on every node.
-- **Incremental adoption.** You don't rip out your backend. You add one component—an onchain call—the same way you'd call any other microservice. The blockchain becomes a compute layer in your existing architecture.
+- **Verifiable execution.** Anyone can independently verify what the deployed code does and that it produced the correct output for a given input. No "trust the API" required—the execution is publicly reproducible.
+- **Tamper-proof computation.** Once deployed, the logic cannot be modified. No hotfix can change the rules without a visible onchain transaction.
+- **Deterministic execution.** No conditions, no stale caches, no "works on my machine." Given the same inputs, the program produces the same outputs, every time, on every node.
+- **Incremental adoption.** You don't rip out your backend. You add one component—an onchain call—the same way you'd call any other microservice. The blockchain becomes a computation layer in your existing architecture.
 
 ## Why Stylus specifically?
 
-The traditional way to write onchain logic is Solidity, a domain-specific language that runs on the Ethereum Virtual Machine (EVM). The EVM is reliable and battle-tested, but it's an interpreter—compute and memory operations are expensive. Complex workloads like cryptographic verification, data processing, or heavy business logic become cost-prohibitive.
+The traditional way to write onchain logic is Solidity, a domain-specific language that runs on the Ethereum Virtual Machine (EVM). The EVM is reliable and battle-tested, but it's an interpreter—computation and memory operations are expensive. Complex workloads like cryptographic verification, data processing, or heavy business logic become cost-prohibitive.
 
-Stylus adds a second virtual machine alongside the EVM that executes <a data-quicklook-from="wasm">WASM</a>. Your Rust code compiles through `rustc` and runs as native machine code—not interpreted bytecode. The result: the same logic runs at dramatically lower compute cost.
+Stylus adds a second virtual machine alongside the EVM that executes <a data-quicklook-from="wasm">WASM</a>. Your Rust code compiles through `rustc` and runs as native machine code—not interpreted bytecode. The result: the same logic runs at dramatically lower cost.
 
 Think of it like moving a performance-critical microservice from a scripted runtime to a compiled binary—same API surface, same interoperability with existing services, but fundamentally different execution economics.
 
@@ -88,7 +88,7 @@ Compile locally, post the WASM binary to the chain, and the network compiles it 
 
 ### Why WASM is cheaper
 
-WASM programs execute memory and compute operations at significantly lower cost than equivalent EVM bytecode—production deployments have measured over 90% cost reduction for compute-heavy workloads. The gains come from compiled native execution vs. interpreted bytecode, combined with more efficient memory management. WASM uses linear memory with page-level pricing rather than the EVM's per-word storage costs.
+WASM programs execute memory and computation operations at significantly lower cost than equivalent EVM bytecode—production deployments have measured over 90% cost reduction for computation-heavy workloads. The gains come from compiled native execution vs. interpreted bytecode, combined with more efficient memory management. WASM uses linear memory with page-level pricing rather than the EVM's per-word storage costs.
 
 ### How costs work
 
