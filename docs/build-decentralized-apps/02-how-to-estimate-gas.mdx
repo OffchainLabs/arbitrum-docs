@@ -13,150 +13,320 @@ Head over to [the Stylus gas docs](/stylus/reference/opcode-hostio-pricing) for 
 
 :::
 
-This how-to covers how gas operates in Arbitrum, how it's calculated, and how to estimate it before submitting transactions. For a deeper understanding of the underlying pricing mechanisms, see the [Gas and Fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) concept page.
+This how-to covers estimating gas on Arbitrum, how it's calculated, and how to estimate it before submitting a transaction. It addresses both the **single-gas constraint model** (default, which is backwards compatible) and the **multi-gas constraint model** (ArbOS 60+). For a deeper understanding of the underlying pricing mechanisms, refer to the [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) deep-dive page.
 
 ## Quick start: use `eth_estimateGas`
 
-If you don't need to understand the formula, you can rely on the standard gas estimation process. Call an Arbitrum node's `eth_estimateGas` RPC, which returns a gas limit sufficient to cover the entire transaction fee at the current child chain gas price.
+If you don't need to understand the formula, you can call an Arbitrum node's `eth_estimateGas` RPC. It returns a single gas limit sufficient to cover the entire transaction fee—both L2 computation and L1 data-posting costs—at the current child-chain gas price.
 
-Multiplying the value from `eth_estimateGas` by the child chain gas price gives you the total `ETH` required for the transaction to succeed. Note that for a given operation, the `eth_estimateGas` value may vary over time as the parent chain calldata price fluctuates.
+Multiplying `eth_estimateGas` by the child-chain gas price yields the total `ETH` required. `eth_estimateGas` values change as parent-chain calldata prices flucuate.
 
-Alternatively, call `NodeInterface.gasEstimateComponents()` and use the first result (`gasEstimate`) as your gas limit. Multiply by the third result (`baseFee`) to get the total cost.
+Alternatively, call `NodeInterface.gasEstimateComponents()` and use the first result (`gasEstimate`) as your gas limit. Multiply it by the third result (`baseFee`) to get the total cost.
 
-For [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) (parent-to-child chain messages), use [`L1ToL2MessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) from the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.8@@/nodeInterface/NodeInterface.go#L120).
+For [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) (parent-to-child chain messages), use [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.8@@/nodeInterface/NodeInterface.go#L120) via `eth_estimateGas`. The `NodeInterface` is a virtual contract at address `0x00000000000000000000000000000000000000C8`—it does not exist onchain but is intercepted by the node.
 
-## The fee formula
+:::note
 
-Arbitrum uses a [two-dimensional fee model](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) where a transaction's total fee has two components: child chain execution costs and parent chain data posting costs. The total transaction fee is:
+`eth_estimateGas` and `NodeInterface.gasEstimateComponents()` return a single `uint64` gas value regardless of whether the chain uses a single or multi-gas model. Under the multi-gas model (ArbOS 60+), the actual fee charged may be **lower** than `baseFee * gasUsed` because of per-resource refunds (see [Multi-gas constraint model](#multi-gas-constraint-model-arbos-60) below).
 
-```
-Transaction fees (TXFEES) = L2 Gas Price (P) * Gas Limit (G)
-```
+:::
 
-The gas limit includes the gas for child chain computation plus an additional buffer to cover the parent chain gas the Sequencer pays when [posting the batch](/how-arbitrum-works/deep-dives/sequencer.mdx):
+## Single-gas constraint model
 
-```
-Gas Limit (G) = Gas used on L2 (L2G) + Extra Buffer for L1 cost (B)
-```
+This is the default Arbitrum gas model and remains the basis for gas estimation, including chains that have enabled multi-gas constraints.
 
-The buffer accounts for the cost of posting the transaction (batched and compressed) on the parent chain. The parent chain estimated posting cost is:
+### The fee formula
+
+Arbitrum uses a [two-dimensional fee model](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) where a transaction's total fee has two components: child-chain (L2) execution costs and parent-chain (L1) data-posting costs. The total transaction fee is:
 
 ```
-L1 Estimated Cost (L1C) = L1 price per byte of data (L1P) * Size of data to be posted in bytes (L1S)
+Transaction fees (TXFEES) = L2 gas Price (P) x Gas limit (G)
+```
+
+The gas limit includes gas for child-chain computation **plus** an additional buffer to cover the parent chain gas that the sequencer pays when [posting the batch](/how-arbitrum-works/deep-dives/sequencer.mdx):
+
+```
+Gas limit (G) = Gas used on L2 (L2G) + Extra buffer for L1 cost (B)
+```
+
+The buffer accounts for the cost of posting the transaction (batched and Brotli-compressed) on the parent chain. The parent-chain estimating posting cost is:
+
+```
+L1 estimated cost (L1C) = L1 price per unit (L1P) x Compressed size in units (L1S)
 ```
 
 Where:
 
-- **L1P** estimates the current parent chain price per byte of data, dynamically adjusted by the child chain over time
-- **L1S** estimates how many bytes the transaction will occupy in the batch by compressing it with Brotli
+- **L1P** is the current price per data unit, dynamically adjusted by ArbOS based on actual batch-posting costs. Retrieved from `L1PricingState.PricePerUnit()` onchain or `ArbGasInfo.GetL1BaseFeeEstimate()` from the precompile at `0x6c`.
+- **L1S** is the number of data units the transaction occupies after Brotli compression. Specifically, Nitro serializes the transaction, compresses it with Brotli at the chain's configured compression level, and multiplies the compressed byte count by 16 (`TxDataNonZeroGasEIP2028`). During gas estimation, an additional ~256 units, plus a 1% padding, are added to account for serialization differences between the estimate and the final batched transaction.
 
-The buffer converts this cost into child chain gas units:
+The buffer converts this cost into child-chain gas units:
 
 ```
-Extra Buffer (B) = L1 Estimated Cost (L1C) / L2 Gas Price (P)
+Extra buffer (B) = L1 estimated cost (L1C) / L2 gas price (P)
 ```
 
 Combining everything:
 
 ```
-TXFEES = P * (L2G + ((L1P * L1S) / P))
+TXFEES = P x (L2G + (L1P x L1S) / P)
 ```
 
-## Where to get each variable
+### Estimation padding
 
-You can use the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) to retrieve the fee components:
+During gas estimation, the node applies conservative padding to guard against price changes between estimation and execution:
 
-- **P** (L2 Gas Price): Price per gas unit. Starts at a gas floor price and increases with demand.
-  - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.
-- **L2G** (Gas used on L2): Gas consumed by child chain computation, excluding parent chain posting costs.
-  - Call `NodeInterface.GasEstimateComponents()` with the transaction data and subtract the second element (`gasEstimateForL1`) from the first (`gasEstimate`).
-- **L1P** (L1 estimated price per byte of data): Estimated cost of posting 1 byte of data on the parent chain.
-  - Call `NodeInterface.GasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
-- **L1S** (Size of data to be posted on L1, in bytes): Depends on the transaction data. Arbitrum adds a fixed amount (~140 bytes) for the static part of the transaction.
-  - Call `NodeInterface.GasEstimateComponents()`, take the second element `gasEstimateForL1` (this is `B` in the formula), multiply by `P` and divide by `L1P`.
-  - For Arbitrum Nova (AnyTrust), the data size is a fixed value since only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx#data-availability-certificates-dacert).
+- **L1 price padding**: The L1 poster cost is multiplied by 1.10 (10% padding via `GasEstimationL1PricePadding = 11000 bips`) to account for L1 gas price increases.
+- **L2 price adjustment**: The L2 gas price is reduced to 7/8 of its current value (to simulate congestion), floored at the minimum base fee. This increases the required gas units, providing a buffer if L2 gas prices rise.
+- **Data size padding**: An extra 256 units, plus 1%, are added to the compressed data size to account for differences between the estimated and actual serialized transaction sizes.
+
+### Where to get each variable
+
+You can use the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) (a virtual contract at `0xc8`) to retrieve the fee components. Call these methods via `eth_call`.
+
+#### Using `gasEstimateComponents()`
+
+`gasEstimateComponents(to, contractCreation, data)` returns four values:
+
+| Return value | Name                | Description                                                                   |
+| ------------ | ------------------- | ----------------------------------------------------------------------------- |
+| 1            | `gasEstimate`       | Total gas limit needed (L1 + L2 components, with padding)                     |
+| 2            | `gasEstimateForL1`  | L1 data-posting cost expressed as L2 gas units (this is **B** in the formula) |
+| 3            | `baseFee`           | Current L2 base fee (**P** in the formula)                                    |
+| 4            | `l1BaseFeeEstimate` | ArbOS's estimate of the L1 base fee (the raw `PricePerUnit`)                  |
+
+From the following, you can derive each formula variable:
+
+- **P** (L2 gas price): `baseFee` (3rd value returned)
+- **L2G** (gas used on L2): `gasEstimate - gasEstimateForL1` (1st minus 2nd value returned)
+- **B** (extra buffer for L1): `gasEstimateForL1` (2nd value returned)
+- **L1P** (L1 price per data unit): `l1BaseFeeEstimate * 16` (4th value returned x `TxDataNonZeroGasEIP2028`)
+- **L1S** (compressed data size in bytes): `(gasEstimateForL1 * baseFee) / (l1BaseFeeEstimate * 16)`
+
+For Arbitrum's chains with AnyTrust, the data size is fixed because the only Data Availability Certificate (DACert) is posted on the parent chain [as explained here](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx#data-availability-certificates-dacert).
+
+#### Using `gasEstimateL1Component()`
+
+`gasEstimateL1Component(to, contractCreation, data)` returns three values:
+
+| Return value | Name                | Description                          |
+| ------------ | ------------------- | ------------------------------------ |
+| 1            | `gasEstimateForL1`  | L1 data-posting cost as L2 gas units |
+| 2            | `baseFee`           | Current L2 base fee                  |
+| 3            | `l1BaseFeeEstimate` | ArbOS's L1 base fee estimate         |
+
+This method is similar to `gasEstimateComponents()` but only returns the L1 component. This is useful when you need the L1 cost even if the L2 execution might revert.
 
 :::note
-For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`.
+
+This method does not apply the same estimation padding as `gasEstimateComponents()`. If you use this value to set a gas limit, pad it by at least 10%.
+
 :::
 
-## Code example
+#### Using `ArbGasInfo` (precompile at `0x6c`)
 
-Here's how to estimate gas using the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk) and `NodeInterface`:
+The `ArbGasInfo` precompile provides onchain gas pricing information:
+
+- `GasPricesInWei()` returns six values: per-L2-tx cost (assuming a 140-byte tx) wei per L1 calldata byte, wei per storage write, base gas price, congestion component, and total L2 gas price
+- `GetL1BaseFeeEstimate()` returns the current L1 base fee estimate (same as `PricePerUnit`)
+- `GetMinimumGasPrice()` returns the minimum L2 gas price
+- `GetCurrentTxL1GasFees()` returns the L1 fee actually charged for the current transaction (only useful within a transaction context)
+
+### Code example
+
+Here's how to estimate gas using `NodeInterface` via ethers.js:
 
 First, instantiate the `NodeInterface`:
 
-```ts
-const { NodeInterface__factory } = require("@arbitrum/sdk/dist/lib/abi/factories/NodeInterface__factory");
-const { NODE_INTERFACE_ADDRESS } = require("@arbitrum/sdk/dist/lib/dataEntities/constants");
+```typescript
+import { ethers } from 'ethers';
 
-...
+const NODE_INTERFACE_ADDRESS = '0x00000000000000000000000000000000000000C8';
 
-// Instantiation of the NodeInterface object
-const nodeInterface = NodeInterface__factory.connect(
-    NODE_INTERFACE_ADDRESS,
-    baseL2Provider
-);
+const nodeInterfaceAbi = [
+  'function gasEstimateComponents(address to, bool contractCreation, bytes calldata data) external payable returns (uint64 gasEstimate, uint64 gasEstimateForL1, uint256 baseFee, uint256 l1BaseFeeEstimate)',
+  'function gasEstimateL1Component(address to, bool contractCreation, bytes calldata data) external payable returns (uint64 gasEstimateForL1, uint256 baseFee, uint256 l1BaseFeeEstimate)',
+];
+
+const provider = new ethers.JsonRpcProvider('YOUR_ARBITRUM_RPC_URL');
+const nodeInterface = new ethers.Contract(NODE_INTERFACE_ADDRESS, nodeInterfaceAbi, provider);
 ```
 
 Call `gasEstimateComponents()` with your transaction's destination address and data:
 
-```ts
-// Getting the gas prices from ArbGasInfo.getPricesInWei()
-const gasComponents = await arbGasInfo.callStatic.getPricesInWei();
-
-// And the estimations from NodeInterface.GasEstimateComponents()
-const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponents(
+```typescript
+const gasEstimateComponents = await nodeInterface.gasEstimateComponents.staticCall(
   destinationAddress,
-  false,
+  false, // contractCreation
   txData,
-  {
-    blockTag: 'latest',
-  },
+  { blockTag: 'latest' },
 );
 ```
 
 Extract the formula variables:
 
-```ts
-// Getting useful values for calculating the formula
-const l1GasEstimated = gasEstimateComponents.gasEstimateForL1;
-const l2GasUsed = gasEstimateComponents.gasEstimate.sub(gasEstimateComponents.gasEstimateForL1);
-const l2EstimatedPrice = gasEstimateComponents.baseFee;
-const l1EstimatedPrice = gasEstimateComponents.l1BaseFeeEstimate.mul(16);
+```typescript
+const gasEstimate = gasEstimateComponents.gasEstimate; // Total gas needed (G)
+const gasEstimateForL1 = gasEstimateComponents.gasEstimateForL1; // L1 buffer (B)
+const baseFee = gasEstimateComponents.baseFee; // L2 gas price (P)
+const l1BaseFeeEstimate = gasEstimateComponents.l1BaseFeeEstimate;
 
-// Calculating some extra values to be able to apply all variables of the formula
-// -------------------------------------------------------------------------------
-// NOTE: This one might be a bit confusing, but l1GasEstimated (B in the formula) is calculated based on l2 gas fees
-const l1Cost = l1GasEstimated.mul(l2EstimatedPrice);
-// NOTE: This is similar to 140 + utils.hexDataLength(txData);
-const l1Size = l1Cost.div(l1EstimatedPrice);
-
-// Setting the basic variables of the formula
-const P = l2EstimatedPrice;
-const L2G = l2GasUsed;
-const L1P = l1EstimatedPrice;
-const L1S = l1Size;
+// Derived values
+const l2GasUsed = gasEstimate - gasEstimateForL1; // L2G
+const l1EstimatedPrice = l1BaseFeeEstimate * 16n; // L1P (price per byte)
+const l1Cost = gasEstimateForL1 * baseFee; // L1C (L1 cost in wei)
+const l1Size = l1Cost / l1EstimatedPrice; // L1S (approx compressed bytes)
 ```
 
 Calculate the total fee:
 
-```ts
+```typescript
 // L1C (L1 Cost) = L1P * L1S
-const L1C = L1P.mul(L1S);
+const L1C = l1EstimatedPrice * l1Size;
 
 // B (Extra Buffer) = L1C / P
-const B = L1C.div(P);
+const B = L1C / baseFee;
 
 // G (Gas Limit) = L2G + B
-const G = L2G.add(B);
+const G = l2GasUsed + B;
 
 // TXFEES (Transaction fees) = P * G
-const TXFEES = P.mul(G);
+const TXFEES = baseFee * G;
+
+console.log(`Total gas limit: ${G}`);
+console.log(`Total fee (wei): ${TXFEES}`);
+console.log(`  L2 computation gas: ${l2GasUsed}`);
+console.log(`  L1 data buffer gas: ${B}`);
 ```
 
 Refer to [our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation) for a complete working example.
 
+## Multi-gas constraint model (ArbOS 60+)
+
+Starting with ArbOS 60, Arbitrum supports **multi-gas constraint pricing** instead of collapsing all resource consumption into a single gas metric, the system tracks each resource type separately with independent base fees and pricing constraints. This model is activated when the chain has multi-gas constraints configured; otherwise, the chain falls back to the single-gas constraint model (ArbOS 50+) or the legacy model.
+
+### `ResourceKind`'s
+
+| Resource Kind      | Description                        | Example charges                                               |
+| ------------------ | ---------------------------------- | ------------------------------------------------------------- |
+| Computation        | EVM execution costs                | `TxGas` (21000), `TxGasContractCreation`, opcode costs        |
+| HistoryGrowth      | Historical state archival          | State archival overhead                                       |
+| StorageAccessRead  | Storage read access                | Access list address/key pre-warming                           |
+| StorageAccessWrite | Storage write access               | SSTORE operations                                             |
+| StorageGrowth      | New state creation                 | `CallNewAccountGas`, auth list entries                        |
+| SingleDim          | Non-refundable costs (L1 calldata) | Poster gas for L1 data posting                                |
+| L2Calldata         | Transaction input data             | `TxDataNonZeroGasEIP2028` (16/byte), `TxDataZeroGas` (4/byte) |
+| WasmComputation    | Stylus (WASM) execution            | Stylus contract execution costs                               |
+
+### How multi-gas constraint pricing works
+
+Each configured constraint groups one or more `ResourceKind` with weighted contributions. The pricing for each `ResourceKind` is determined by:
+
+1. **Backlog tracking**: Each constraint maintains a backlog that grows when resource consumption exceeds the target rate and shrinks over time.
+2. **Per-resource base fee**: Calculated as `minBaseFee * exp((backlog * weight) / (adjustmentWindow * target * maxWeight))`. When a resource's backlog is zero, its base fee equals the minimum base fee.
+3. **Total multi-gas constraint cost**: `sum(amount[kind] * baseFee[kind])` across all `ResourceKind`'s.
+
+### Refund mechanism
+
+Under the multi-gas constraint model, users still pay at the single-gas constraint rate (`baseFee * gasUsed`) upfront. After execution, the node computes the true multi-gas constraint cost. If the multi-gas constraint cost is **less** than the single-gas constraint cost, the difference is **refunded** to the user:
+
+```
+refund = (baseFee * gasUsed) - sum(amount[kind] * baseFee[kind])
+```
+
+This means:
+
+- **Gas estimation is unchanged**: `eth_estimateGas` and `gasEstimateComponents()` still return a single `uint64`. The estimate represents an upper bound.
+- **Actual fees may be lower**: The refund means users can pay less than `baseFee * gasUsed` for transactions that are light on expensive `ResourceKind`'s.
+- **L1 poster gas (`SingleDim`) is not refunded**: The `SingleDim` resource uses the full L2 base fee and is excluded from the multi-gas constraint refund calculation.
+
+### Querying multi-gas constraint pricing
+
+The `ArbGasInfo` precompile at `0x6c` exposes the multi-gas constraint information:
+
+- `GetMultiGasBaseFee()` returns an array of base fees indexed by `ResourceKind`. Each entry is the current per-unit price for that resource.
+- `GetMultiGasPricingConstraints()` returns the full constraint configuration including:
+  - `Resources`: list of `(resourceKind, weight)` pairs in the constraint
+  - `AdjustmentWindowSecs`: time window for backlog adjustment
+  - `TargetPerSec`: target gas consumption rate
+  - `Backlog`: current accumulated excess
+
+### Multi-gas constraint in transaction receipts
+
+Transaction receipts include a `UsedMultiGas` field (when non-zero) that reports the per-resource gas consumption. This allows applications to inspect exactly how much of each `ResourceKind` a transaction consumed.
+
+### Code example: reading multi-gas constraint base fee
+
+```typescript
+const ARB_GAS_INFO_ADDRESS = '0x000000000000000000000000000000000000006C';
+
+const arbGasInfoAbi = [
+  'function getMultiGasBaseFee() external view returns (uint256[])',
+  'function getMultiGasPricingConstraints() external view returns (tuple(tuple(uint8 resource, uint64 weight)[] resources, uint32 adjustmentWindowSecs, uint64 targetPerSec, uint64 backlog)[])',
+  'function getPricesInWei() external view returns (uint256, uint256, uint256, uint256, uint256, uint256)',
+];
+
+const arbGasInfo = new ethers.Contract(ARB_GAS_INFO_ADDRESS, arbGasInfoAbi, provider);
+
+// Get per-resource base fees (indexed by ResourceKind)
+const baseFees = await arbGasInfo.getMultiGasBaseFee.staticCall();
+const resourceNames = [
+  'Unknown',
+  'Computation',
+  'HistoryGrowth',
+  'StorageAccessRead',
+  'StorageAccessWrite',
+  'StorageGrowth',
+  'SingleDim',
+  'L2Calldata',
+  'WasmComputation',
+];
+for (let i = 1; i < baseFees.length; i++) {
+  console.log(`${resourceNames[i]}: ${baseFees[i]} wei per unit`);
+}
+
+// Get constraint configuration
+const constraints = await arbGasInfo.getMultiGasPricingConstraints.staticCall();
+for (const c of constraints) {
+  console.log(
+    `Target: ${c.targetPerSec}/sec, Window: ${c.adjustmentWindowSecs}s, Backlog: ${c.backlog}`,
+  );
+  for (const r of c.resources) {
+    console.log(`  ${resourceNames[r.resource]}: weight ${r.weight}`);
+  }
+}
+```
+
+## Estimating gas for retryable tickets
+
+For parent-to-child messages (retryable tickets), use `NodeInterface.estimateRetryableTicket()`:
+
+```typescript
+const retryableAbi = [
+  'function estimateRetryableTicket(address sender, uint256 deposit, address to, uint256 l2CallValue, address excessFeeRefundAddress, address callValueRefundAddress, bytes calldata data) external',
+];
+
+const nodeInterface = new ethers.Contract(NODE_INTERFACE_ADDRESS, retryableAbi, provider);
+
+// Use eth_estimateGas on the estimateRetryableTicket call
+const gasEstimate = await provider.estimateGas({
+  to: NODE_INTERFACE_ADDRESS,
+  data: nodeInterface.interface.encodeFunctionData('estimateRetryableTicket', [
+    senderAddress, // Unaliased L1 sender
+    depositAmount, // Amount to deposit (add extra during estimation, e.g. 1e18)
+    destinationAddress, // L2 destination
+    l2CallValue, // Value to send with L2 call
+    refundAddress, // Excess fee refund address
+    callValueRefundAddress, // Call value refund address
+    calldata, // L2 calldata
+  ]),
+});
+```
+
+Since the gas usage is not yet known when estimating, you may need to provide an extra deposit (e.g., 1e18 wei) during estimation.
+
 ## Final note
 
-Gas estimations from the above techniques are approximate and the actual gas fees may differ. We encourage developers to set this expectation explicitly wherever this information is shared with end-users.
+Gas estimations are approximate, and actual gas fees may differ. The padding applied during estimation provides a safety margin, but rapid L1 gas price changes or L2 congestion spikes can cause the actual cost to exceed the estimate. Under the multi-gas model, actual fees may be **lower** than the estimate due to per-resource refunds.
+
+If you are a chain owner, set this expectation explicitly whenever you share gas estimates with users.
