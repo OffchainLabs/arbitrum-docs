@@ -28,13 +28,18 @@ Using a custom genesis allows you to initialize a new blockchain with a customiz
 
 :::info Prerequisites
 
+<!-- what Chain SDK version??? -->
+
 - [Nitro contracts](https://github.com/OffchainLabs/nitro-contracts) >= v3.2
   - first version to include full support for custom initialization in `genesis.json`
-- [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) >= xx.xx **or** <!-- what Chain SDK version??? -->
+- [Nitro node](/run-arbitrum-node/02-run-full-node.mdx) >= v3.9.9 is needed for using custom-genesis.
+- [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) >= xx.xx **or**
   - Chain SDK only supports the standard `genesis.json` format, which includes the predeployed contracts.
-- [genesis-file-generator tool](<(https://hub.docker.com/r/offchainlabs/genesis-file-generator)>)
+- [genesis-file-generator tool](https://hub.docker.com/r/offchainlabs/genesis-file-generator)
+
   - If you want to customize the `genesis.json` file or pass accounts/custom chain config, you should use the `genesis-file-generator`.
-  <!-- it seems a little misleading, as you eventually feed the output to the Chain SDK -->
+
+  **Note**: The chain configuration must be exactly the same at the string level, including the order of fields, potential whitespace, or special characters for the `serializedChainConfig` string
 
 :::
 
@@ -54,7 +59,7 @@ The following is required to generate the `genesis.json` file:
 | ------------------ | ------------------------------------------------------------------------- |
 | `CHAIN_ID`         | The unique numeric identifier for your chain.                             |
 | `IS_ANYTRUST`      | Whether the chain is an AnyTrust (`true`) or rollup (`false`).            |
-| `ARB_OS_VERSION`   | The version of ArbOS to use for the genesis block.                        |
+| `ARBOS_VERSION`    | The version of ArbOS to use for the genesis block.                        |
 | `CHAIN_OWNER`      | The address that will have admin ownership of the deployed chain.         |
 | `L1_BASE_FEE`      | The initial L1 gas price (in wei) used to calibrate the chain initiation. |
 | `NITRO_NODE_IMAGE` | The Nitro node Docker image used for hashing and node operations.         |
@@ -105,8 +110,6 @@ This step is only required if you choose to deploy the rollup to the parent chai
 
 These parameters define the identify of your chain
 
-<!-- the ARBOS_VERSION VARIABLE HERE DIFFERS FROM ABOVE -->
-
 | Variable                       | Description                                                                                                                                                                                                                                                 | Default               |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------------------------------------------------------- |
 | `CHAIN_ID`                     | The unique numeric identifier for your new chain.                                                                                                                                                                                                           | `31337`               |
@@ -133,7 +136,7 @@ These parameters define the identify of your chain
    docker run --rm \
    --env-file .env \
    -v "$(pwd)/genesis":/app/genesis \
-   offchainlabs/genesis-file-generator:v0.0.1-afad8d8
+   offchainlabs/genesis-file-generator:v0.0.2-4c37f62
    ```
 
    - You can also generate your own `genesis.json` file, but carefully read [this notice about the chain configuration property](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
