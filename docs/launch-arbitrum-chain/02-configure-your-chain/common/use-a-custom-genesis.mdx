@@ -126,7 +126,7 @@ These parameters define the identity of your chain.
     docker run --rm \
     --env-file .env \
     -v "$(pwd)/genesis":/app/genesis \
-    offchainlabs/genesis-file-generator:latest
+    offchainlabs/genesis-file-generator:v0.0.1-afad8d8
     ```
 
   - You can also generate your own genesis.json file, but carefully read [this notice](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
@@ -141,7 +141,6 @@ These parameters define the identity of your chain.
     --entrypoint genesis-generator \
     "$NITRO_NODE_IMAGE" \
     --genesis-json-file /data/genesisDir/genesis.json \
-    --initial-l1-base-fee "$L1_BASE_FEE"
   ```
 
   This bind-mounts the current directory into the container so it can read the genesis.json file generated in the previous step, and outputs the genesis block hash and sendRoot hash. The block hash and sendRoot hash will be logged as:
