@@ -178,6 +178,31 @@ const config = {
     ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        docsDir: 'docs',
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+        title: 'Arbitrum Documentation',
+        description:
+          'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
+        ignoreFiles: [
+          'sdk/assetBridger/**',
+          'sdk/dataEntities/**',
+          'sdk/inbox/**',
+          'sdk/message/**',
+          'sdk/utils/**',
+          'sdk/index.md',
+          'hosted-pdfs/**',
+        ],
+        pathTransformation: {
+          ignorePaths: ['docs'],
+        },
+      },
+    ],
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
