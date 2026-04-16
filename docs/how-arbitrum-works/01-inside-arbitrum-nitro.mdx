@@ -7,8 +7,6 @@ user_story: "As a developer, I need to understand how transactions flow through 
 content_type: concept
 ---
 
-import ImageWithCaption from '@site/src/components/ImageCaptions/';
-
 ## Transaction processing journey on Arbitrum
 
 As a developer initiating a transaction on Arbitrum, gaining a clear understanding of the end-to-end flow—from initial submission through to finality—is helpful, but it isn't required.
@@ -66,7 +64,7 @@ After batches and compression, the data posts to Ethereum through the Sequencer 
 
 2. As a fallback, calldata transactions embed data directly, ensuring compatibility even if blob fees rise or [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blobs are unavailable. This process yields 10-100 times the cost savings over individual postings and adapts to network conditions for consistent efficiency.
 
-For details on how parent chain costs are calculated and priced, including the adaptive pricing algorithm, see the [Parent chain pricing deep dive](/how-arbitrum-works/reference/parent-chain-pricing.mdx).
+For details on how parent chain costs are calculated and priced, including the adaptive pricing algorithm, see the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
 
 ## Step 3: Execution phase: State Transition Function
 
@@ -137,7 +135,7 @@ The canonical bridge architecture comprises asset contracts on both chains, gate
 
 Fees accumulate throughout the transaction lifecycle to fund processing (computation) and security. Arbitrum’s dual-fee model separates child chain gas fees, which cover the cost of EVM computation and storage with [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)-style dynamic pricing that adjusts for congestion, from parent chain data fees (blobs or calldata).
 
-Parent chain data fees account for posting data to Ethereum in compressed batches and apply only to Sequencer submissions. For comprehensive details on how parent chain pricing works, including the dynamic pricing algorithm, refer to the [Parent chain pricing deep dive](/how-arbitrum-works/reference/parent-chain-pricing.mdx). For a complete breakdown of how fees are calculated and collected, including both parent and child chain components, refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+Parent chain data fees account for posting data to Ethereum in compressed batches and apply only to Sequencer submissions. For a complete breakdown of how fees are calculated and collected, including the dynamic pricing algorithm and both parent and child chain components, refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 ### Gas
 
@@ -182,7 +180,7 @@ In this overview, you've learned about the complete transaction journey through 
 
 - [Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx): Detailed transaction lifecycle from submission to finality
 - [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx): How the Sequencer orders, batches, and posts transactions
-- [Parent chain pricing](/how-arbitrum-works/reference/parent-chain-pricing.mdx): Adaptive pricing algorithm for parent chain costs
+- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx): Gas pricing, fee calculations, and adaptive pricing algorithm
 - [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx): Foundational concepts of the STF
 - [Geth](/how-arbitrum-works/reference/geth.mdx): Geth core and EVM compatibility
 - [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx): Arbitrum Operating System features and capabilities
