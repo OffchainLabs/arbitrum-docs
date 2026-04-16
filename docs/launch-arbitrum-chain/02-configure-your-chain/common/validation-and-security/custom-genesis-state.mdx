@@ -1,5 +1,5 @@
 ---
-title: 'Custom genesis state'
+title: 'Customize genesis state'
 description: 'How to configure your Arbitrum chain with a custom genesis state'
 author:
 sme:
@@ -26,14 +26,14 @@ Using a custom genesis allows you to initialize a new blockchain with a customiz
 
 ## How to configure
 
-:::caution Prerequisites
+:::info Prerequisites
 
-- Nitro contracts >= v3.2
+- [Nitro contracts](https://github.com/OffchainLabs/nitro-contracts) >= v3.2
   - first version to include full support for custom initialization in `genesis.json`
-- Chain SDK >= xx.xx **or** <!-- what Chain SDK version??? -->
+- [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) >= xx.xx **or** <!-- what Chain SDK version??? -->
   - Chain SDK only supports the standard `genesis.json` format, which includes the predeployed contracts.
-- genesis-file-generator tool
-  - If you want to customize the `genesis.json` file or pass accounts/custom chain config, you should use the [`genesis-file-generator`](https://hub.docker.com/r/offchainlabs/genesis-file-generator).
+- [genesis-file-generator tool](<(https://hub.docker.com/r/offchainlabs/genesis-file-generator)>)
+  - If you want to customize the `genesis.json` file or pass accounts/custom chain config, you should use the `genesis-file-generator`.
   <!-- it seems a little misleading, as you eventually feed the output to the Chain SDK -->
 
 :::

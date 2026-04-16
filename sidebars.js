@@ -517,6 +517,11 @@ const sidebars = {
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit',
                       label: `Smart contract size limit`,
                     },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/custom-genesis-state',
+                      label: `Customize genesis state`,
+                    },
                   ],
                 },
                 {
