@@ -9,7 +9,7 @@
   },
   "adjustment-window": {
     "title": "Adjustment window",
-    "text": "<p>Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a gas target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.</p>\n"
+    "text": "<p>Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.</p>\n"
   },
   "dapp": {
     "title": "Decentralized application",
@@ -235,10 +235,6 @@
     "title": "Gas Price Floor",
     "text": "<p>Protocol-enforced minimum gas price on an Arbitrum chain. These values can be found on the <a href=\"for-devs/dev-tools-and-resources/chain-info.mdx#chain-parameters\">chain info page</a>.</p>\n"
   },
-  "gas-target": {
-    "title": "Gas target",
-    "text": "<p>The target consumption rate for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>. When gas usage exceeds this limit, fees rise. Read more in the <a href=\"/how-arbitrum-works/deep-dives/gas-and-fees.mdx\">gas and fees article</a>.</p>\n"
-  },
   "gateway-router": {
     "title": "Gateway Router",
     "text": "<p>Contracts in the <a href=\"/intro/glossary#arb-token-bridge\">Arb Token Bridge</a> responsible for mapping tokens to their appropriate <a href=\"/intro/glossary#token-gateway\">Token Gateway</a>.</p>\n"
@@ -394,6 +390,10 @@
   "stylus": {
     "title": "Stylus",
     "text": "<p>Upgrade to the <a href=\"/intro/glossary#arbitrum-nitro\">Arbitrum Nitro</a> virtual machine that allows smart contract support for languages like Rust and C++ by taking advantage of Nitro&#39;s use of WASM. Currently on testnet (<a href=\"https://docs.arbitrum.io/stylus/stylus-gentle-introduction\">read more</a>).</p>\n"
+  },
+  "target": {
+    "title": "Target",
+    "text": "<p>The target consumption rate for an Arbitrum chain. <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>. When gas usage exceeds this limit, fees rise. Read more in the <a href=\"/how-arbitrum-works/deep-dives/gas-and-fees.mdx\">gas and fees article</a>.</p>\n"
   },
   "timeboost": {
     "title": "Timeboost",

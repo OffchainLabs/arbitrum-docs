@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-02-17
+last_reviewed: 2026-04-16
 ---
 
 ### Active Validator {#active-validator}
@@ -16,7 +16,7 @@ An address deterministically generated from a parent chain contract address used
 
 ### Adjustment window {#adjustment-window}
 
-Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a gas target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.
+Window during which the gas pricing algorithm measures the transaction backlog. For example, there can be a target of 10Mgas/s over 10 minutes. That means the price will only increase if the average demand is over 10Mgas/s for that 10 minute window.
 
 ### Decentralized application {#dapp}
 
@@ -258,10 +258,6 @@ The means by which an [Active Validator](/intro/glossary#active-validator) prove
 
 Protocol-enforced minimum gas price on an Arbitrum chain. These values can be found on the [chain info page](for-devs/dev-tools-and-resources/chain-info.mdx#chain-parameters).
 
-### Gas target {#gas-target}
-
-The target consumption rate for an Arbitrum chain. [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). When gas usage exceeds this limit, fees rise. Read more in the [gas and fees article](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
-
 ### Gateway Router {#gateway-router}
 
 Contracts in the [Arb Token Bridge](/intro/glossary#arb-token-bridge) responsible for mapping tokens to their appropriate [Token Gateway](/intro/glossary#token-gateway).
@@ -417,6 +413,10 @@ The STF (State Transition Function) defines how new blocks are produced from inp
 ### Stylus {#stylus}
 
 Upgrade to the [Arbitrum Nitro](/intro/glossary#arbitrum-nitro) virtual machine that allows smart contract support for languages like Rust and C++ by taking advantage of Nitro's use of WASM. Currently on testnet ([read more](https://docs.arbitrum.io/stylus/stylus-gentle-introduction)).
+
+### Target {#target}
+
+The target consumption rate for an Arbitrum chain. [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). When gas usage exceeds this limit, fees rise. Read more in the [gas and fees article](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 ### Timeboost {#timeboost}
 
