@@ -198,7 +198,7 @@ Arbitrum's child chain pricing is based on a **gas backlog**—a running tally o
 
 This creates a natural feedback loop: sustained high demand builds backlog, which raises prices, which reduces demand, which drains the backlog, which lowers prices.
 
-The `basefee` is set by a pricing algorithm that governs fees across multiple adjustment windows. This algorithm uses several gas targets, each paired with its own adjustment window. Higher targets with shorter windows (for example, 60Mgas/s over nine seconds) absorb transient demand spikes without triggering aggressive fee increases. Lower targets with longer windows address slower traffic, with the lowest target measured over 86,400 seconds (one day), establishing the chain's long-term capacity.
+The `basefee` is set by a pricing algorithm that governs fees across multiple adjustment windows. This algorithm uses several targets, each paired with its own adjustment window. Higher targets with shorter windows (for example, 60Mgas/s over nine seconds) absorb transient demand spikes without triggering aggressive fee increases. Lower targets with longer windows address slower traffic, with the lowest target measured over 86,400 seconds (one day), establishing the chain's long-term capacity.
 
 This layered structure creates a dampening effect: overlapping windows smooth volatility at their respective timescales, reducing peak gas prices during congestion while preserving responsiveness to genuine capacity constraints.
 
@@ -286,7 +286,7 @@ The `maxWeight` normalization ensures that each constraint's contribution is sca
 
 > Source: arbos/l2pricing/model.go:242-328
 
-For more details on how gas targets affect chain security and validator assumptions, see [Understanding Arbitrum 2-dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-feees-fd1d582596c9).
+For more details on how targets affect chain security and validator assumptions, see [Understanding Arbitrum 2-dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-feees-fd1d582596c9).
 
 ### Child chain tips
 
@@ -345,9 +345,9 @@ Ethereum's EVM refund mechanism (e.g., storage slot clearing) only applies to co
 
 > Source: arbos/tx_processor.go:577-582
 
-## Multi-dimensional refunds
+## Multi-gas constraint refunds
 
-When multi-gas constraints are active, users initially pay `baseFee * totalGasUsed`—a single-dimensional charge using the maximum base fee across all `ResourceKind`'s. But if a transaction primarily uses cheaper resources, the actual multi-dimensional cost may be lower.
+When multi-gas constraints are active, users initially pay `baseFee * totalGasUsed`—a single-gas constraint charge using the maximum base fee across all `ResourceKind`'s. But if a transaction primarily uses cheaper resources, the actual multi-gas constraint cost may be lower.
 
 After execution, the system computes the true per-resource cost:
 
@@ -355,14 +355,14 @@ After execution, the system computes the true per-resource cost:
 multiCost = sum(gasUsed[k] * baseFee[k] for each resource kind k)
 ```
 
-If this is less than the single-dimensional charge, the difference is refunded from the network fee account to the transaction sender:
+If this is less than the single-gas constraint charge, the difference is refunded from the network fee account to the transaction sender:
 
 ```go
 singleCost = baseFee * totalGasUsed
 refund = max(0, singleCost 0 multiCost)
 ```
 
-For example, if storage is congested (pushing the block base fee high) but a transaction only performs computation (which has a lower per-resource base fee), the user gets refunded the difference. This ensures that users pay only for the resources they actually consume, even though the EVM's single-dimensional gas model charges them the highest rate.
+For example, if storage is congested (pushing the block base fee high) but a transaction only performs computation (which has a lower per-resource base fee), the user gets refunded the difference. This ensures that users pay only for the resources they actually consume, even though the EVM's single-dimension gas model charges them the highest rate.
 
 > Source: arbos/l2pricing/model.go:365-388, arbos/tx_processor.go:762-776
 
@@ -469,15 +469,15 @@ This change does not affect the `GasTarget`, and therefore does not affect how m
 
 The L1 Pricer Funds Pool subsequently disburses to batch posters (reimbursement for parent chain costs) and the reward recipient (sequencer incentive at `perUnitReward` wei per calldata unit).
 
-### The gas target
+### The target equilibrium
 
 The security of Arbitrum Nitro chains depends on the assumption that when one validator creates an assertion, other validators check it and respond with a correct assertion or a challenge if it's wrong.
 
 This requires that the other validators have the time and resources to quickly check each assertion and issue a timely challenge. The Arbitrum protocol accounts for this when setting assertion deadlines.
 
-This sets an effective gas target for executing an Arbitrum Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published faster than the gas target, their deadlines will keep moving farther into the future. Due to the limit imposed by the Rollup protocol contracts on how far in the future a deadline can be set, this will eventually slow down new assertions, thereby enforcing the effective gas target.
+This sets an effective target for executing an Arbitrum Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published faster than the target, their deadlines will keep moving farther into the future. Due to the limit imposed by the Rollup protocol contracts on how far in the future a deadline can be set, this will eventually slow down new assertions, thereby enforcing the effective target.
 
-Setting the gas target accurately depends on estimating the time required to validate an assertion with some accuracy. Any uncertainty in estimating validation time will force us to set the gas target lower, to be safe. And we do not want to set the gas target lower, so we try to enable accurate estimation.
+Setting the target accurately depends on estimating the time required to validate an assertion with some accuracy. Any uncertainty in estimating validation time will force us to set the target lower, to be safe. And we do not want to set the target lower, so we try to enable accurate estimation.
 
 ## Key parameters
 
