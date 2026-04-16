@@ -16,15 +16,15 @@ Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration c
 
 :::
 
-## Gas target
+## Target equilibrium
 
 This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). ArbOS uses this to update gas pools and enforce dynamic per-block gas limits.
 
 Arbitrum chains support 2 configuration modes -
 
-- **[RECOMMENDED] Multiple Gas Targets (supported starting [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51))**
+- **[RECOMMENDED] Multiple Targets (supported starting [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51))**
 
-  - **Description**: Provides smoother price transitions. It uses multiple gas targets to reduce the frequency and severity of child chain gas price spikes.
+  - **Description**: Provides smoother price transitions. It uses multiple targets to reduce the frequency and severity of child chain gas price spikes.
   - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata newConstraints)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newConstraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` tuples. \
     Detailed information on how to set these parameters can be found in [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains). \
     Example using cast:
@@ -32,8 +32,8 @@ Arbitrum chains support 2 configuration modes -
     cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setGasPricingConstraints((uint64,uint64,uint64)[])" $NEW_CONSTRAINTS
     ```
 
-- **Single Gas Target**
-  - **Description**: Uses a single gas target as the reference for price adjustments. If gas usage exceeds this limit, the base fee rises to throttle demand; if usage is below, the price moves towards the floor.
+- **Single Target**
+  - **Description**: Uses a single target as the reference for price adjustments. If gas usage exceeds this limit, the base fee rises to throttle demand; if usage is below, the price moves towards the floor.
   - **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newSpeedLimit` is the desired gas per second. \
     Example using cast:
     ```shell
@@ -46,7 +46,7 @@ Refer to the [Chain parameters](/build-decentralized-apps/reference/03-chain-par
 
 ## Block gas limit
 
-- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
+- **Description**: This limits the maximum amount consumable by all transactions in a single L2 block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the target and gas pools, but this sets a hard cap.
 - **Default**: 32,000,000 gas per block.
 - **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 

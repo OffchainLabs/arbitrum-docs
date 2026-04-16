@@ -141,11 +141,11 @@ Parent chain data fees account for posting data to Ethereum in compressed batche
 
 ### Gas
 
-A gas target is an optimal gas consumption rate per second. Exceeding this rate triggers [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) fee escalations to prevent node overloads and maintain chain activity. This rate prioritizes high-value transactions during peak periods while deterring spam, ensuring that validators and the Sequencer remain operational, even though parent contracts handle security.
+A target is an optimal gas consumption rate per second. Exceeding this rate triggers [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) fee escalations to prevent node overloads and maintain chain activity. This rate prioritizes high-value transactions during peak periods while deterring spam, ensuring that validators and the Sequencer remain operational, even though parent contracts handle security.
 
 You can read more about [how the child chain gas fees are calculated](/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees) in the gas and fees deep dive.
 
-Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting `ETH` totals. This model effectively covers all costs, with the gas target reinforcing security by keeping validation in sync.
+Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting `ETH` totals. This model effectively covers all costs, with the target reinforcing security by keeping validation in sync.
 
 ## Step 8: Advanced features
 

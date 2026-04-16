@@ -629,7 +629,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
-                  label: `Manage gas target`,
+                  label: `Manage target equilibrium`,
                 },
                 {
                   type: 'doc',

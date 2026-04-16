@@ -59,14 +59,14 @@ For the full technical details of ArbOS state, pricing internals, and the per-bl
 
 ## Gas and fees
 
-ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple gas targets over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the batch poster (for parent chain data costs) and the network (for child chain execution).
+ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple targets over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the batch poster (for parent chain data costs) and the network (for child chain execution).
 
 #### Comprehensive explanation of gas pricing
 
-- Child chain basefee calculation and gas targets
+- Child chain basefee calculation and targets
 - Parent chain calldata pricing and batch poster reimbursement
 - Fee estimation and collection mechanisms
-- The gas target's role in validator security
+- The target's role in validator security
 
 See [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) for the complete breakdown, including detailed mathematical formulas and parent chain pricing internals.
 
