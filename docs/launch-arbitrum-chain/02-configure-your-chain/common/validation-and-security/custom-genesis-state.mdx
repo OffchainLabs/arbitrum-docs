@@ -55,14 +55,16 @@ The script completes the following automated steps:
 
 The following is required to generate the `genesis.json` file:
 
-| Variable           | Description                                                               |
-| ------------------ | ------------------------------------------------------------------------- |
-| `CHAIN_ID`         | The unique numeric identifier for your chain.                             |
-| `IS_ANYTRUST`      | Whether the chain is an AnyTrust (`true`) or rollup (`false`).            |
-| `ARBOS_VERSION`    | The version of ArbOS to use for the genesis block.                        |
-| `CHAIN_OWNER`      | The address that will have admin ownership of the deployed chain.         |
-| `L1_BASE_FEE`      | The initial L1 gas price (in wei) used to calibrate the chain initiation. |
-| `NITRO_NODE_IMAGE` | The Nitro node Docker image used for hashing and node operations.         |
+| Variable                       | Description                                                                                                                                                                                                                 |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CHAIN_ID`                     | The unique numeric identifier for your chain.                                                                                                                                                                               |
+| `IS_ANYTRUST`                  | Whether the chain is an AnyTrust (`true`) or rollup (`false`).                                                                                                                                                              |
+| `ARBOS_VERSION`                | The version of ArbOS to use for the genesis block.                                                                                                                                                                          |
+| `CHAIN_OWNER`                  | The address that will have admin ownership of the deployed chain.                                                                                                                                                           |
+| `L1_BASE_FEE`                  | The initial L1 gas price (in wei) used to calibrate the chain initiation.                                                                                                                                                   |
+| `NITRO_NODE_IMAGE`             | The Nitro node Docker image used for hashing and node operations.                                                                                                                                                           |
+| `ENABLE_NATIVE_TOKEN_SUPPLY`   | Flag to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](http:///launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn) via third-party protocols. |
+| `ENABLE_TRANSACTION_FILTERING` | Flag to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._                                         |
 
 #### Deployment configuration (optional)
 
