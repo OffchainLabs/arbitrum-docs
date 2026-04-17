@@ -30,6 +30,7 @@ const aliasedAddress = contractAddress.applyAlias().value;
 
 For a complete working example, see the [contract-deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/contract-deposit).
 
+
 ## Arbitrum-to-Ethereum messaging
 
 Similarly, child chain contracts can send arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Upon confirmation (about one week later), you can execute them by retrieving the relevant data via a call to the `NodeInterface` contract's `constructOutboxProof` method, and then calling the `Outbox`'s `executeTransaction` method.

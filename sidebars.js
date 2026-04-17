@@ -1380,6 +1380,11 @@ const sidebars = {
         },
         {
           type: 'link',
+          label: 'Arbitrum SDK',
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
+        },
+        {
+          type: 'link',
           label: 'Tutorials',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
@@ -1550,6 +1555,11 @@ const sidebars = {
           type: 'doc',
           label: 'Troubleshooting',
           id: 'for-devs/troubleshooting-building',
+        },
+        {
+          type: 'link',
+          label: 'Arbitrum SDK',
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
