@@ -1189,6 +1189,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'build-decentralized-apps/quickstart-create-a-token',
+          label: 'Create a token',
+        },
+        {
+          type: 'doc',
           label: 'Estimate gas',
           id: 'build-decentralized-apps/how-to-estimate-gas',
         },
