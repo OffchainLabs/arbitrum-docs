@@ -22,7 +22,7 @@ Using a custom genesis allows you to initialize a new blockchain with a customiz
 
 - **Predeployed contracts**: standard chains start without any smart contracts. This feature allows you to preload contract bytecode in the very first block, so infrastructure is available at launch.
 - **Initial account state (allocations)**: you can pre-configure the ledger—including account balances and contract storage—before the network opens for transactions.
-- **Enable advanced features**: chain operators can use this feature to launch a chain with advanced customizations, such as [minting/burning gas tokens via third-party bridges](http:///launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn) and compliance-focused transaction filtering.
+- **Enable advanced features**: chain operators can use this feature to launch a chain with advanced customizations, such as [minting/burning gas tokens via third-party bridges](http://launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn) and compliance-focused transaction filtering.
 
 ## How to configure
 
@@ -84,15 +84,14 @@ This step is only required if you choose to deploy the rollup to the parent chai
    ```shell
    yarn install && yarn build
 
-   cd examples/generate-genesis-file && cp .env/example .env
+   cd examples/generate-genesis-file && cp .env.example .env
    ```
 
 2. Generate gensis
 
    - Ensure your .env is configured and run the dev script.
 
-   ```shell
-   bash yarn dev
+   
    ```
 
    :::info Configuration
