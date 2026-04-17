@@ -90,15 +90,11 @@ This step is only required if you choose to deploy the rollup to the parent chai
 2. Generate gensis
 
    - Ensure your .env is configured and run the dev script.
+     :::info Configuration
 
-   
-   ```
+     Double-check that your .env values match your intended chain specs before running the script.
 
-   :::info Configuration
-
-   Double-check that your .env values match your intended chain specs before running the script.
-
-   :::
+     :::
 
 3. Create rollup (optional)
    - After generating the `genesis.json` file, the Chain SDK provides an option to deploy your rollup. Follow the prompts to continue or exit the process and deploy the rollup later.
@@ -110,17 +106,17 @@ This step is only required if you choose to deploy the rollup to the parent chai
 These parameters define the identify of your chain
 
 | Variable                       | Description                                                                                                                                                                                                                                                 | Default               |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------------------------------------------------------- |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `CHAIN_ID`                     | The unique numeric identifier for your new chain.                                                                                                                                                                                                           | `31337`               |
 | `IS_ANYTRUST`                  | Whether the chain is an AnyTrust (`true`) or a rollup (`false`).                                                                                                                                                                                            | `false`               |
 | `ARBOS_VERSION`                | The version of ArbOS to use for the genesis block.                                                                                                                                                                                                          | `51`                  |
 | `CHAIN_OWNER`                  | The address that will have admin ownership of the deployed chain.                                                                                                                                                                                           | --                    |
-| `L1_BASE_FEE`                  | The initial L1 gas price (in wei) used to calibrate the chain creation                                                                                                                                                                                      | `1000000000` (1 gwei) |
+| `L1_BASE_FEE`                  | The initial L1 gas price (in wei) used to calibrate the chain creation.                                                                                                                                                                                     | `1000000000` (1 gwei) |
 | `NITRO_NODE_IMAGE`             | The Nitro node Docker image used for hashing and node operations.                                                                                                                                                                                           | --                    |
 | `CUSTOM_ALLOC_ACCOUNT_FILE`    | (optional) Path to a JSON file containing your own account balances, contract bytecode, and storage slots. The file should be in the the standard Geth `alloc` format.                                                                                      | `" "` (empty)         |
 | `ENABLE_NATIVE_TOKEN_SUPPLY`   | (optional) Set to `true` if you want to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](http:///launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn) via third-party protocols. | `false`               |
-| `LOAD_DEFAULT_PREDEPLOYS`      | (optional) Set to `false` if you don't want the default predeploys                                                                                                                                                                                          | `true`                |
-| `ENABLE_TRANSACTION_FILTERING` | (optional) Set to `true` if you want to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes.                                                                                                                  | `false`               | <!-- is this going to be in Nitro 3.10.0 or ArbOS 60??? --> |
+| `LOAD_DEFAULT_PREDEPLOYS`      | (optional) Set to `false` if you don't want the default predeploys.                                                                                                                                                                                         | `true`                |
+| `ENABLE_TRANSACTION_FILTERING` | (optional) Set to `true` if you want to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._                                         | `false`               |
 
 #### Execution process
 
