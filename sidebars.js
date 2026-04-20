@@ -1,26 +1,5 @@
 // @ts-check
 
-// Use the generated SDK sidebar for API reference
-const sdkApiSidebar = require('./sdk-sidebar.js');
-// Use the generated stylus-by-example sidebars
-
-// Create a custom SDK sidebar that combines manual intro pages with generated API docs
-const sdkSidebar = {
-  sdkSidebar: [
-    {
-      type: 'doc',
-      id: 'sdk/introduction',
-      label: 'Introduction',
-    },
-    {
-      type: 'doc',
-      id: 'sdk/migrate',
-      label: 'Migrate from v3 to v4',
-    },
-    ...sdkApiSidebar.sdkSidebar,
-  ],
-};
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   // Get started sidebar - shared entry point
@@ -1210,6 +1189,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'build-decentralized-apps/quickstart-create-a-token',
+          label: 'Create a token',
+        },
+        {
+          type: 'doc',
           label: 'Estimate gas',
           id: 'build-decentralized-apps/how-to-estimate-gas',
         },
@@ -1400,9 +1384,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
@@ -1578,9 +1562,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
