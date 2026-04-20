@@ -37,12 +37,9 @@ yarn-error.log*
 
 /i18n/*/docusaurus-plugin-content-docs/current/*
 
-sdk-sidebar.js
-
 ## Claude
 .agent/
 .audit/
 .cursor/
 .serena/
-.audit/
 .claude/plans
