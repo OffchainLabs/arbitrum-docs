@@ -39,7 +39,11 @@ interface ExcalidrawFile {
   elements?: ExcalidrawElement[];
 }
 
-function fixedPointToSide(fixedPoint: [number, number] | undefined): Position {
+function fixedPointToSide(
+  fixedPoint: [number, number] | undefined,
+  self: ExcalidrawElement,
+  other: ExcalidrawElement | undefined,
+): Position {
   if (!fixedPoint) return Position.Top;
   const [x, y] = fixedPoint;
   const distLeft = x;
@@ -47,10 +51,35 @@ function fixedPointToSide(fixedPoint: [number, number] | undefined): Position {
   const distTop = y;
   const distBottom = 1 - y;
   const min = Math.min(distLeft, distRight, distTop, distBottom);
-  if (min === distLeft) return Position.Left;
-  if (min === distRight) return Position.Right;
+
+  // Epsilon in normalized units — anchor points within this distance count as "tied"
+  const TIE_EPS = 0.05;
+  const tiedSides: Position[] = [];
+  if (distLeft <= min + TIE_EPS) tiedSides.push(Position.Left);
+  if (distRight <= min + TIE_EPS) tiedSides.push(Position.Right);
+  if (distTop <= min + TIE_EPS) tiedSides.push(Position.Top);
+  if (distBottom <= min + TIE_EPS) tiedSides.push(Position.Bottom);
+
+  if (tiedSides.length === 1) return tiedSides[0];
+
+  // Tie-break: pick the side of `self` that faces `other`. For a near-corner anchor,
+  // this aligns the handle with the direction the arrow actually travels.
+  if (other) {
+    const sc = { x: self.x + self.width / 2, y: self.y + self.height / 2 };
+    const oc = { x: other.x + other.width / 2, y: other.y + other.height / 2 };
+    const dx = oc.x - sc.x;
+    const dy = oc.y - sc.y;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      return dx > 0 ? Position.Right : Position.Left;
+    }
+    return dy > 0 ? Position.Bottom : Position.Top;
+  }
+
+  // Fallback — prefer top/bottom over left/right, since most diagram flows are vertical
   if (min === distTop) return Position.Top;
-  return Position.Bottom;
+  if (min === distBottom) return Position.Bottom;
+  if (min === distLeft) return Position.Left;
+  return Position.Right;
 }
 
 function determineShape(type: string): string {
@@ -88,6 +117,12 @@ export async function convertExcalidrawToReactFlow(
   }
 
   const elements = (parsed.elements ?? []).filter((el) => !el.isDeleted);
+
+  // Lookup by id (used for arrow side resolution below)
+  const elementById = new Map<string, ExcalidrawElement>();
+  for (const el of elements) {
+    elementById.set(el.id, el);
+  }
 
   // Map container element id -> bound text element (used for labels on shapes and arrows)
   const containerToText = new Map<string, ExcalidrawElement>();
@@ -213,8 +248,12 @@ export async function convertExcalidrawToReactFlow(
     if (el.type === 'arrow') {
       if (!el.startBinding?.elementId || !el.endBinding?.elementId) continue;
 
-      const sourcePosition = fixedPointToSide(el.startBinding.fixedPoint);
-      const targetPosition = fixedPointToSide(el.endBinding.fixedPoint);
+      const srcEl = elementById.get(el.startBinding.elementId);
+      const tgtEl = elementById.get(el.endBinding.elementId);
+      if (!srcEl || !tgtEl) continue;
+
+      const sourcePosition = fixedPointToSide(el.startBinding.fixedPoint, srcEl, tgtEl);
+      const targetPosition = fixedPointToSide(el.endBinding.fixedPoint, tgtEl, srcEl);
 
       const labelEl = containerToText.get(el.id);
       const label = labelEl?.text ?? '';
