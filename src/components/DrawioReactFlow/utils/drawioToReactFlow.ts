@@ -357,7 +357,8 @@ function buildNodes(
 
     const shape = determineShape(styleProps);
 
-    const isBlinking = fillColor.toUpperCase() === '#FF7700' || cell.hoverContent === 'blinking';
+    const isManifestTrigger = transitions?.some((t) => t.trigger === label) ?? false;
+    const isBlinking = isManifestTrigger || cell.hoverContent === 'blinking';
 
     const nodeData: NodeData = {
       label,
