@@ -25,7 +25,7 @@ Contributors author diagrams in Draw.io's visual editor, then render them as int
 
 Create `.drawio` files in `static/diagrams/` using the [draw.io editor](https://app.diagrams.net). Node positions, sizes, colors, and connections are preserved exactly as authored.
 
-Nodes with a fill color of `#FFB347` (pastel orange) are treated as **interactive trigger nodes** — they blink to signal clickability and zoom-navigate on click.
+Nodes whose label matches a `<transition trigger="...">` in the manifest are automatically treated as **interactive trigger nodes** — they blink to signal clickability and navigate on click. Draw.io fill colors are ignored; all color comes from the component's glassmorphic theme.
 
 ### 2. Create a manifest
 
@@ -111,7 +111,7 @@ Provide either `manifest` or `diagramFile`, not both.
 
 1. **Initial load**: Fetches the manifest, parses it, loads the `entryDiagram`
 2. **Draw.io XML parsing**: `convertDrawioToReactFlow()` extracts nodes, edges, groups, and images from the XML
-3. **Trigger nodes**: Nodes with fill color `#FFB347` blink and are clickable. On click, the matching transition is resolved by `trigger` label.
+3. **Trigger nodes**: Nodes whose label matches any `<transition trigger="...">` in the manifest blink and are clickable. Detection is manifest-driven — draw.io fill colors are ignored. You can also opt a node into blinking without a transition by setting `hoverContent="blinking"` on the cell.
 4. **Zoom transition** (default, `mode="zoom"`): The camera zooms to the node center, pauses, then cross-fades (via Framer Motion `AnimatePresence`) to the target diagram.
 5. **Modal transition** (`mode="modal"`): The target diagram opens in a centered overlay (`DiagramModal`) with a blurred backdrop. The parent diagram stays untouched. Close with `Esc`, backdrop click, or the `×` button. Nested navigation inside the modal is disabled.
 6. **Back button**: Appears after the first zoom navigation. Returns to the previous diagram.
@@ -171,7 +171,7 @@ The `.drawio-reactflow-container` uses a 16:9 aspect ratio with a custom SVG bac
 
 ### Node interactions
 
-- **Trigger nodes** (`#FFB347` fill): Blink animation (`2s ease-in-out infinite`). Hover pauses the blink and turns the node green.
+- **Trigger nodes** (manifest-matched labels): Blink animation (`2s ease-in-out infinite`). Hover pauses the blink and turns the node green.
 - **Clickable nodes**: `cursor: pointer`, `translateY(-2px)` hover lift, focus outline
 - **Static nodes**: `cursor: default`, no hover effects
 
@@ -206,7 +206,7 @@ Visit `/docs/test-interactive-diagrams` to see the system in action with the tra
 ### Manual testing checklist
 
 - [ ] Manifest loads and entry diagram renders
-- [ ] Trigger nodes (orange `#FFB347`) blink
+- [ ] Trigger nodes (labels matching a manifest `<transition trigger="...">`) blink
 - [ ] Clicking a zoom-mode trigger node zooms to it, then fades to next diagram
 - [ ] Clicking a `mode="modal"` trigger node opens the target diagram in a centered overlay
 - [ ] Modal closes on `Esc`, backdrop click, and `×` button; parent viewport is unchanged
@@ -239,9 +239,9 @@ Visit `/docs/test-interactive-diagrams` to see the system in action with the tra
 
 ### Node not clickable
 
-- Only nodes with fill color `#FFB347` are interactive trigger nodes
-- Verify a `<transition>` exists in the manifest with a `trigger` matching the node's label text
-- The `from` diagram in the transition must match the current diagram
+- Interactive trigger nodes are detected from the manifest — the node's label must exactly match a `<transition trigger="...">` value (fill color is irrelevant)
+- Verify the `<transition>` `from` diagram matches the current diagram
+- For nodes that should blink without a transition (e.g., hover content only), add `hoverContent="blinking"` to the cell in the drawio
 
 ### Modal opens, but nested node clicks do nothing
 
@@ -262,7 +262,7 @@ The parser only recognizes `mode="modal"`. Any other value (including typos like
 When adding new interactive diagrams:
 
 1. Create `.drawio` files in `static/diagrams/` using draw.io
-2. Color trigger nodes with `#FFB347` (pastel orange)
+2. Use any node label that matches a manifest `<transition trigger="...">` — the component auto-applies the trigger blink (author colors in draw.io are ignored)
 3. Create a manifest XML defining the diagram story and transitions
 4. Add an MDX page importing `DrawioReactFlow` with the manifest path
 5. Test the full navigation flow on the dev server
