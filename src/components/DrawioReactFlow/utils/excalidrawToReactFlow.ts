@@ -97,12 +97,48 @@ export async function convertExcalidrawToReactFlow(
     }
   }
 
+  // Spatial auto-binding: floating text whose center lies inside a shape that has no bound label
+  // is promoted to that shape's label. Matches the common authoring pattern of dropping text
+  // over a box without explicitly binding it. Ties broken by choosing the smallest enclosing shape.
+  const autoBoundTextIds = new Set<string>();
+  const isShapeType = (t: string) => t === 'rectangle' || t === 'ellipse' || t === 'diamond';
+
+  for (const text of elements) {
+    if (text.type !== 'text' || text.containerId) continue;
+    const tcx = text.x + text.width / 2;
+    const tcy = text.y + text.height / 2;
+
+    let bestShape: ExcalidrawElement | undefined;
+    let bestArea = Infinity;
+    for (const shape of elements) {
+      if (!isShapeType(shape.type)) continue;
+      if (containerToText.has(shape.id)) continue;
+      const inside =
+        tcx >= shape.x &&
+        tcx <= shape.x + shape.width &&
+        tcy >= shape.y &&
+        tcy <= shape.y + shape.height;
+      if (!inside) continue;
+      const area = shape.width * shape.height;
+      if (area < bestArea) {
+        bestArea = area;
+        bestShape = shape;
+      }
+    }
+
+    if (bestShape) {
+      containerToText.set(bestShape.id, text);
+      autoBoundTextIds.add(text.id);
+    }
+  }
+
   // Compute minX/minY across non-arrow elements for coordinate normalization
   let minX = Infinity;
   let minY = Infinity;
   for (const el of elements) {
     if (el.type === 'arrow' || el.type === 'line') continue;
     if (el.type === 'text' && el.containerId) continue; // bound text follows its container
+    if (el.type === 'text' && autoBoundTextIds.has(el.id)) continue; // auto-bound follows its shape
     minX = Math.min(minX, el.x);
     minY = Math.min(minY, el.y);
   }
@@ -113,8 +149,9 @@ export async function convertExcalidrawToReactFlow(
   const edges: Edge[] = [];
 
   for (const el of elements) {
-    // Text bound to a container is rendered as the container's label, not a separate node
+    // Text bound (explicitly OR auto-bound) to a container is rendered as its label, not a node
     if (el.type === 'text' && el.containerId) continue;
+    if (el.type === 'text' && autoBoundTextIds.has(el.id)) continue;
 
     // Shape nodes
     if (el.type === 'rectangle' || el.type === 'ellipse' || el.type === 'diamond') {
