@@ -8,7 +8,7 @@ import { SubgraphNode } from './SubgraphNode';
 import { ImageNode } from './ImageNode';
 import { HoverEdge } from './HoverEdge';
 import { DiagramModal } from './DiagramModal';
-import { convertDrawioToReactFlow } from './utils/drawioToReactFlow';
+import { convertDiagramToReactFlow } from './utils/convertDiagram';
 import { fetchAndParseManifest } from './utils/parseManifest';
 import { ReactFlowData, DiagramProps, NodeData, ManifestData, TransitionConfig } from './types';
 
@@ -232,8 +232,13 @@ export function NavigableDiagram({
         if (!response.ok) {
           throw new Error(`Failed to load diagram: ${currentDiagram}`);
         }
-        const xmlString = await response.text();
-        const data = await convertDrawioToReactFlow(xmlString, handleNavigate, currentTransitions);
+        const rawContent = await response.text();
+        const data = await convertDiagramToReactFlow(
+          rawContent,
+          currentDiagram,
+          handleNavigate,
+          currentTransitions,
+        );
         if (!controller.signal.aborted) {
           // Resolve hover content components onto nodes and edges
           if (hoverContent) {

@@ -6,7 +6,7 @@ import { ClickableNode } from './ClickableNode';
 import { SubgraphNode } from './SubgraphNode';
 import { ImageNode } from './ImageNode';
 import { HoverEdge } from './HoverEdge';
-import { convertDrawioToReactFlow } from './utils/drawioToReactFlow';
+import { convertDiagramToReactFlow } from './utils/convertDiagram';
 import { ReactFlowData } from './types';
 
 interface DiagramModalProps {
@@ -36,9 +36,14 @@ export function DiagramModal({ diagramFile, title, onClose }: DiagramModalProps)
       try {
         const response = await fetch(diagramFile, { signal: controller.signal });
         if (!response.ok) throw new Error(`Failed to load diagram: ${diagramFile}`);
-        const xml = await response.text();
+        const rawContent = await response.text();
         // Nested navigation is disabled inside the modal — pass a no-op handler.
-        const data = await convertDrawioToReactFlow(xml, () => undefined, undefined);
+        const data = await convertDiagramToReactFlow(
+          rawContent,
+          diagramFile,
+          () => undefined,
+          undefined,
+        );
         if (!controller.signal.aborted) setFlowData(data);
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') return;
