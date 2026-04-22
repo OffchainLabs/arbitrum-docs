@@ -17,6 +17,7 @@ interface DrawioCell {
   y: number;
   width: number;
   height: number;
+  waypoints: { x: number; y: number }[];
 }
 
 const ROOT_IDS = new Set(['0', '1']);
@@ -118,6 +119,19 @@ function parseCells(doc: Document): DrawioCell[] {
 
     const colorToken = el.getAttribute('colorToken') ?? '';
 
+    // Parse routing waypoints: <mxGeometry><Array as="points"><mxPoint x=.. y=../></Array></mxGeometry>
+    const waypoints: { x: number; y: number }[] = [];
+    if (geo) {
+      const pointsArray = geo.querySelector('Array[as="points"]');
+      if (pointsArray) {
+        for (const pt of Array.from(pointsArray.querySelectorAll('mxPoint'))) {
+          const px = parseFloat(pt.getAttribute('x') ?? '');
+          const py = parseFloat(pt.getAttribute('y') ?? '');
+          if (!isNaN(px) && !isNaN(py)) waypoints.push({ x: px, y: py });
+        }
+      }
+    }
+
     cells.push({
       id,
       value: el.getAttribute('value') ?? '',
@@ -134,6 +148,7 @@ function parseCells(doc: Document): DrawioCell[] {
       y: parseFloat(geo?.getAttribute('y') ?? '0'),
       width: parseFloat(geo?.getAttribute('width') ?? '0'),
       height: parseFloat(geo?.getAttribute('height') ?? '0'),
+      waypoints,
     });
   }
 
@@ -417,6 +432,30 @@ function resolveHandlePosition(entryX: string | undefined, entryY: string | unde
   return Position.Bottom;
 }
 
+function sideFromWaypoint(
+  waypoint: { x: number; y: number },
+  cell: DrawioCell,
+  cellMap: Map<string, DrawioCell>,
+): Position {
+  const abs = getAbsolutePosition(cell, cellMap);
+  const right = abs.x + cell.width;
+  const bottom = abs.y + cell.height;
+
+  // Waypoint is outside the cell's bounding box → use the side it lies beyond.
+  if (waypoint.x < abs.x) return Position.Left;
+  if (waypoint.x > right) return Position.Right;
+  if (waypoint.y < abs.y) return Position.Top;
+  if (waypoint.y > bottom) return Position.Bottom;
+
+  // Waypoint is inside the cell — fall back to the dominant axis from cell center.
+  const centerX = abs.x + cell.width / 2;
+  const centerY = abs.y + cell.height / 2;
+  const dx = waypoint.x - centerX;
+  const dy = waypoint.y - centerY;
+  if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? Position.Right : Position.Left;
+  return dy > 0 ? Position.Bottom : Position.Top;
+}
+
 function inferConnectionSide(
   sourceCell: DrawioCell,
   targetCell: DrawioCell,
@@ -479,9 +518,14 @@ function buildEdges(cells: DrawioCell[], cellMap: Map<string, DrawioCell>): Edge
 
     const hasExitMeta = styleProps['exitX'] !== undefined || styleProps['exitY'] !== undefined;
     const hasEntryMeta = styleProps['entryX'] !== undefined || styleProps['entryY'] !== undefined;
+    const waypoints = cell.waypoints;
+    const firstWaypoint = waypoints.length > 0 ? waypoints[0] : undefined;
+    const lastWaypoint = waypoints.length > 0 ? waypoints[waypoints.length - 1] : undefined;
 
     if (hasExitMeta) {
       sourcePosition = resolveHandlePosition(styleProps['exitX'], styleProps['exitY']);
+    } else if (firstWaypoint && sourceCell) {
+      sourcePosition = sideFromWaypoint(firstWaypoint, sourceCell, cellMap);
     } else if (sourceCell && targetCell) {
       sourcePosition = inferConnectionSide(sourceCell, targetCell, cellMap).sourcePosition;
     } else {
@@ -490,11 +534,16 @@ function buildEdges(cells: DrawioCell[], cellMap: Map<string, DrawioCell>): Edge
 
     if (hasEntryMeta) {
       targetPosition = resolveHandlePosition(styleProps['entryX'], styleProps['entryY']);
+    } else if (lastWaypoint && targetCell) {
+      targetPosition = sideFromWaypoint(lastWaypoint, targetCell, cellMap);
     } else if (sourceCell && targetCell) {
       targetPosition = inferConnectionSide(sourceCell, targetCell, cellMap).targetPosition;
     } else {
       targetPosition = Position.Top;
     }
+
+    const startArrow = styleProps['startArrow'];
+    const hasStartArrow = !!startArrow && startArrow !== 'none';
 
     const edge: Edge = {
       id: cell.id,
@@ -513,6 +562,14 @@ function buildEdges(cells: DrawioCell[], cellMap: Map<string, DrawioCell>): Edge
         type: MarkerType.ArrowClosed,
         color: resolvedStrokeColor,
       },
+      ...(hasStartArrow
+        ? {
+            markerStart: {
+              type: MarkerType.ArrowClosed,
+              color: resolvedStrokeColor,
+            },
+          }
+        : {}),
     };
 
     const labelData = findEdgeLabelData(cell.id, cells);
