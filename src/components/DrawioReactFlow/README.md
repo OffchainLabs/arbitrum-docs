@@ -1,19 +1,21 @@
 # DrawioReactFlow — Interactive Diagram Navigation
 
-Converts Draw.io (`.drawio`) diagrams into interactive React Flow visualizations with animated, manifest-driven navigation between diagrams.
+Converts Draw.io (`.drawio`) **and Excalidraw (`.excalidraw`)** diagrams into interactive React Flow visualizations with animated, manifest-driven navigation between diagrams.
 
 ## Overview
 
-Contributors author diagrams in Draw.io's visual editor, then render them as interactive, click-navigable diagrams inside Arbitrum Docs. A manifest XML file defines which diagrams exist and how users transition between them (zoom, pause, fade).
+Contributors author diagrams in either [Excalidraw](https://excalidraw.com) (recommended, cleaner data model) or [Draw.io](https://app.diagrams.net), then render them as interactive, click-navigable diagrams inside Arbitrum Docs. A manifest XML file defines which diagrams exist and how users transition between them (zoom, pause, fade).
+
+Format is chosen by file extension: `.excalidraw` → JSON converter, anything else → Draw.io XML converter. Both formats can coexist inside a single manifest while migrating.
 
 ## Features
 
-- **Draw.io native**: Author diagrams in draw.io, render them pixel-accurate in React Flow
+- **Two authoring formats**: Excalidraw JSON or Draw.io XML — pick whichever feels better to draw in
 - **Manifest-driven navigation**: XML manifest defines diagram stories with animated transitions
 - **Zoom-to-node transitions**: Click a highlighted node to zoom in, pause, then cross-fade to the next diagram
 - **Modal transitions**: Opt a transition into `mode="modal"` to open the target diagram in a centered overlay instead of replacing the main view
-- **Subgroup support**: Draw.io groups render as labeled containers with styled borders
-- **Embedded images**: Inline SVG/base64 images from Draw.io cells render as image nodes
+- **Subgroup support** (Draw.io): Groups render as labeled containers with styled borders
+- **Embedded images** (Draw.io): Inline SVG/base64 images render as image nodes
 - **Theme integration**: Adapts to Docusaurus light/dark mode via CSS variables
 - **Keyboard accessible**: Tab to focus nodes, Enter/Space to activate
 - **Responsive**: Works on mobile, tablet, and desktop
@@ -21,11 +23,21 @@ Contributors author diagrams in Draw.io's visual editor, then render them as int
 
 ## Quick start
 
-### 1. Create a Draw.io diagram
+### 1. Author a diagram
 
-Create `.drawio` files in `static/diagrams/` using the [draw.io editor](https://app.diagrams.net). Node positions, sizes, colors, and connections are preserved exactly as authored.
+**Option A — Excalidraw (recommended):** open [excalidraw.com](https://excalidraw.com), draw rectangles/ellipses/diamonds, connect them with arrows (the binding handles give exact anchor points), then File → Save to `static/diagrams/<name>.excalidraw`. Text can be a free-floating label OR bound to a shape/arrow (double-click inside the shape to bind it).
 
-Nodes whose label matches a `<transition trigger="...">` in the manifest are automatically treated as **interactive trigger nodes** — they blink to signal clickability and navigate on click. Draw.io fill colors are ignored; all color comes from the component's glassmorphic theme.
+**Option B — Draw.io:** create `.drawio` files in `static/diagrams/` using the [draw.io editor](https://app.diagrams.net).
+
+Nodes whose label matches a `<transition trigger="...">` in the manifest are automatically treated as **interactive trigger nodes** — they blink to signal clickability and navigate on click. Author-time fill colors are ignored; all color comes from the component's glassmorphic theme.
+
+#### Custom attributes
+
+| Attribute         | Draw.io                                   | Excalidraw                                                    |
+| ----------------- | ----------------------------------------- | ------------------------------------------------------------- |
+| Hover content key | `hoverContent="_partial-key"` on the cell | `customData: { hoverContent: "_partial-key" }` on the element |
+| Manual blink      | `hoverContent="blinking"`                 | `customData: { blinking: true }`                              |
+| Color token       | `colorToken="yellow"` on the cell         | `customData: { colorToken: "yellow" }`                        |
 
 ### 2. Create a manifest
 
@@ -98,19 +110,19 @@ You can also render a single diagram without a manifest:
 
 ### DrawioReactFlow props
 
-| Prop          | Type     | Default                  | Description                                                                  |
-| ------------- | -------- | ------------------------ | ---------------------------------------------------------------------------- |
-| `manifest`    | `string` | —                        | Path to manifest XML (relative to `static/`). Enables multi-diagram stories. |
-| `diagramFile` | `string` | —                        | Path to a single `.drawio` file. Used when no manifest is needed.            |
-| `height`      | `string` | CSS `aspect-ratio: 16/9` | Container height. Overrides the default aspect ratio.                        |
-| `className`   | `string` | `""`                     | Additional CSS classes on the container.                                     |
+| Prop          | Type     | Default                  | Description                                                                        |
+| ------------- | -------- | ------------------------ | ---------------------------------------------------------------------------------- |
+| `manifest`    | `string` | —                        | Path to manifest XML (relative to `static/`). Enables multi-diagram stories.       |
+| `diagramFile` | `string` | —                        | Path to a single `.drawio` or `.excalidraw` file. Used when no manifest is needed. |
+| `height`      | `string` | CSS `aspect-ratio: 16/9` | Container height. Overrides the default aspect ratio.                              |
+| `className`   | `string` | `""`                     | Additional CSS classes on the container.                                           |
 
 Provide either `manifest` or `diagramFile`, not both.
 
 ## Navigation behavior
 
 1. **Initial load**: Fetches the manifest, parses it, loads the `entryDiagram`
-2. **Draw.io XML parsing**: `convertDrawioToReactFlow()` extracts nodes, edges, groups, and images from the XML
+2. **Source parsing**: `convertDiagramToReactFlow()` dispatches on the file extension — `.excalidraw` → `convertExcalidrawToReactFlow()` (JSON), anything else → `convertDrawioToReactFlow()` (Draw.io XML). Both produce `{ nodes, edges }` for React Flow.
 3. **Trigger nodes**: Nodes whose label matches any `<transition trigger="...">` in the manifest blink and are clickable. Detection is manifest-driven — draw.io fill colors are ignored. You can also opt a node into blinking without a transition by setting `hoverContent="blinking"` on the cell.
 4. **Zoom transition** (default, `mode="zoom"`): The camera zooms to the node center, pauses, then cross-fades (via Framer Motion `AnimatePresence`) to the target diagram.
 5. **Modal transition** (`mode="modal"`): The target diagram opens in a centered overlay (`DiagramModal`) with a blurred backdrop. The parent diagram stays untouched. Close with `Esc`, backdrop click, or the `×` button. Nested navigation inside the modal is disabled.
@@ -131,8 +143,10 @@ src/components/DrawioReactFlow/
 ├── HoverEdge.tsx          Edge with optional hover content
 ├── types.ts               TypeScript interfaces (ManifestData, TransitionConfig, TransitionMode, NodeData, etc.)
 └── utils/
-    ├── drawioToReactFlow.ts   Draw.io XML → ReactFlow nodes/edges conversion
-    └── parseManifest.ts       Manifest XML → ManifestData parser
+    ├── convertDiagram.ts          Extension-based dispatcher (.excalidraw vs .drawio)
+    ├── drawioToReactFlow.ts       Draw.io XML → ReactFlow nodes/edges conversion
+    ├── excalidrawToReactFlow.ts   Excalidraw JSON → ReactFlow nodes/edges conversion
+    └── parseManifest.ts           Manifest XML → ManifestData parser
 
 static/diagrams/               Diagram source files
 ├── *.drawio                   Draw.io diagram files
