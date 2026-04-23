@@ -1,5 +1,16 @@
 ---
 title: Gas and fees
+description: Learn how gas and fees work on Arbitrum.
+---
+
+:::info L1 Fees are "Baked In"
+Unlike other rollups (e.g., Optimism, Base), Arbitrum does **not** charge a separate L1 fee. Instead, the cost of L1 calldata is automatically calculated and included in your transaction's gas limit. This means the gas limit you see may be higher than the actual L2 gas used – the difference covers L1 security costs. You don't need to do anything manually; the network handles this internally.
+
+> **💡 Tip:** If you're comparing gas costs across chains, remember that Arbitrum's higher gas limit already includes L1 costs – it's not "wasted" gas.
+:::
+
+---
+title: Gas and fees
 description: 'Learn the fundamentals of how to calculate fees on Arbitrum, including parent chain pricing formulas and child chain gas mechanics.'
 author: pete-vielhaber
 sme: TucksonDev
