@@ -1,0 +1,6 @@
+
+:::info L1 Fees are "Baked In"
+A common point of confusion for developers is how L1 fees are handled. In Arbitrum, the L1 fee is **not** a separate charge. Instead, the L1 calldata cost is "baked into" the transaction's gas limit. The `eth_estimateGas` response includes the necessary L1 calldata costs by providing an adjusted gas limit.
+
+See [mds1/evm-diff#31](https://github.com/mds1/evm-diff/pull/31) for technical context.
+:::
