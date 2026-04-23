@@ -81,47 +81,9 @@ When a <a data-quicklook-from="transaction">transaction</a> interacts with a Sty
 
 This process bypasses the EVM interpreter entirely, allowing Stylus contracts to execute significantly faster than their Solidity counterparts.
 
-### Stylus caching and gas pricing
 
-- **Stylus gas pricing model**
-  Unlike standard EVM gas pricing, Stylus pricing follows a multi-dimensional cost model, incorporating:
-  - **<a data-quicklook-from="ink">Ink</a> cost (memory and execution cost)**
-    - Measured in `Ink` units (Stylus's equivalent of computational gas).
-    - `Ink` pricing varies based on execution complexity, memory usage, and computation steps.
-    - Complex WASM operations consume more `Ink`, directly impacting execution costs.
-  - **Opcode pricing**
-    - WASM instructions are assigned individual execution costs similar to EVM opcodes.
-    - Heavy computation opcodes are priced higher.
-    - Cheap opcodes (e.g., simple arithmetic, bitwise operations) have minimal costs.
-  - **Host I/O pricing**
-    - Stylus introduces fine-grained pricing for different I/O calls:
-      - **Storage read/writes**: Priced based on access pattern and data size.
-      - **Precompile calls**: Stylus-specific precompiles have fixed execution costs.
-      - **External calls to EVM contracts**: Encapsulated within ArbOS transaction handling, with additional gas considerations.
+:::info L1 Fees are "Baked In"
+A common point of confusion for developers is how L1 fees are handled. In Arbitrum, the L1 fee is **not** a separate charge. Instead, the L1 calldata cost is "baked into" the transaction's gas limit. The `eth_estimateGas` response includes the necessary L1 calldata costs by providing an adjusted gas limit.
 
-#### Stylus caching
-
-Stylus contracts leverage an advanced caching system to minimize execution overhead within ArbOS:
-
-- **LRU (Least Recently Used) caching**: Keeps the most recently accessed Stylus contracts in memory for fast execution.
-- **Persistent long-term caching**: Caching for selected contracts may occur across blocks based on an economic auction model.
-- **Init costs and execution pricing**: Instead of a flat gas cost, Stylus contracts have dynamic execution costs based on WASM complexity. ArbOS maintains pricing parameters (`initCost`, `cachedCost`) that are adjusted based on future WASM execution optimizations.
-
-### Interaction with ArbOS and Geth
-
-| Execution Stage        | Handled By                                                |
-| ---------------------- | --------------------------------------------------------- |
-| Transaction submission | **Geth** (identifies target contract)                     |
-| Stylus execution       | **ArbOS** (switches to WASM runtime)                      |
-| Host I/O calls         | **ArbOS** (handles storage, call data, context retrieval) |
-| State commitment       | **Geth and ArbOS** (finalizes updates, commits to state)  |
-
-### Go-WASI and co-threads in Stylus execution
-
-ArbOS executes Stylus contracts using Go-WASI, a WASM-compatible runtime with custom optimizations for <a data-quicklook-from="arbitrum">Arbitrum</a>. Key features include:
-
-- **Memory management**: WASM modules execute in a sandboxed environment with strict memory allocation policies.
-- **Co-threads for efficient execution**: Instead of traditional synchronous execution, Stylus employs co-threading, enabling lightweight task switching and parallelism where possible.
-- **Deterministic execution**: Ensures that Stylus contracts remain fully deterministic and compatible with Ethereum's consensus model.
-
-These optimizations make Stylus an extremely efficient execution environment, capable of outperforming the EVM while maintaining security and compatibility with Ethereum's state model.
+See [mds1/evm-diff#31](https://github.com/mds1/evm-diff/pull/31) for technical context.
+:::
