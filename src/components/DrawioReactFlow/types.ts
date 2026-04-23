@@ -56,6 +56,9 @@ export interface NavigationState {
   history: string[];
 }
 
+export type NodeTextAlign = 'left' | 'center' | 'right';
+export type NodeVerticalAlign = 'top' | 'middle' | 'bottom';
+
 export interface NodeData {
   label: string;
   shape: string;
@@ -63,6 +66,8 @@ export interface NodeData {
   centerable?: boolean;
   navigateTo?: string;
   topAligned?: boolean;
+  textAlign?: NodeTextAlign;
+  verticalAlign?: NodeVerticalAlign;
   colorToken?: string;
   onNavigate?: (link: string) => void;
   hoverContentKey?: string;

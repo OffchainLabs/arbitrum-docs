@@ -1,5 +1,11 @@
 import { Node, Edge, MarkerType, Position } from 'reactflow';
-import { ReactFlowData, NodeData, TransitionConfig } from '../types';
+import {
+  ReactFlowData,
+  NodeData,
+  NodeTextAlign,
+  NodeVerticalAlign,
+  TransitionConfig,
+} from '../types';
 
 const PADDING = 30;
 
@@ -24,6 +30,8 @@ interface ExcalidrawElement {
   text?: string;
   containerId?: string | null;
   fontSize?: number;
+  textAlign?: string;
+  verticalAlign?: string;
   // arrow-specific
   points?: [number, number][];
   startBinding?: ExcalidrawBinding | null;
@@ -111,6 +119,16 @@ function getCustomString(
   if (!data) return undefined;
   const value = data[key];
   return typeof value === 'string' && value.length > 0 ? value : undefined;
+}
+
+function normalizeTextAlign(value: string | undefined): NodeTextAlign | undefined {
+  if (value === 'left' || value === 'center' || value === 'right') return value;
+  return undefined;
+}
+
+function normalizeVerticalAlign(value: string | undefined): NodeVerticalAlign | undefined {
+  if (value === 'top' || value === 'middle' || value === 'bottom') return value;
+  return undefined;
 }
 
 export async function convertExcalidrawToReactFlow(
@@ -215,6 +233,8 @@ export async function convertExcalidrawToReactFlow(
       const colorToken = getCustomString(el.customData, 'colorToken');
       const isManifestTrigger = !!transitions?.some((t) => t.trigger === label);
       const isBlinking = isManifestTrigger || el.customData?.blinking === true;
+      const textAlign = normalizeTextAlign(boundText?.textAlign);
+      const verticalAlign = normalizeVerticalAlign(boundText?.verticalAlign);
 
       const nodeData: NodeData = {
         label,
@@ -223,6 +243,8 @@ export async function convertExcalidrawToReactFlow(
         navigateTo: transitions?.find((t) => t.trigger === label)?.targetFile || undefined,
         colorToken,
         hoverContentKey: hoverKey,
+        textAlign,
+        verticalAlign,
         onNavigate,
       };
 

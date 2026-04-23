@@ -22,9 +22,29 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
     }
   };
 
+  // Resolve text alignment — explicit NodeData hints win, then the legacy `topAligned`
+  // shortcut from drawio, then default (centered)
+  const alignItems: React.CSSProperties['alignItems'] =
+    data.verticalAlign === 'top' || data.topAligned
+      ? 'flex-start'
+      : data.verticalAlign === 'bottom'
+      ? 'flex-end'
+      : 'center';
+  const justifyContent: React.CSSProperties['justifyContent'] =
+    data.textAlign === 'left' ? 'flex-start' : data.textAlign === 'right' ? 'flex-end' : 'center';
+  const paddingTop = alignItems === 'flex-start' ? '4px' : undefined;
+  const paddingBottom = alignItems === 'flex-end' ? '4px' : undefined;
+  const paddingLeft = justifyContent === 'flex-start' ? '6px' : undefined;
+  const paddingRight = justifyContent === 'flex-end' ? '6px' : undefined;
+
   const baseStyle: React.CSSProperties = {
     cursor: isClickable ? 'pointer' : 'default',
-    ...(data.topAligned ? { alignItems: 'flex-start', paddingTop: '4px' } : {}),
+    alignItems,
+    justifyContent,
+    ...(paddingTop ? { paddingTop } : {}),
+    ...(paddingBottom ? { paddingBottom } : {}),
+    ...(paddingLeft ? { paddingLeft } : {}),
+    ...(paddingRight ? { paddingRight } : {}),
   };
 
   // Apply shape-specific transforms
