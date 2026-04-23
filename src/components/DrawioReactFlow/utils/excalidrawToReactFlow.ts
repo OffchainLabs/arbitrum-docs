@@ -39,6 +39,17 @@ interface ExcalidrawFile {
   elements?: ExcalidrawElement[];
 }
 
+function remapFixedPoint(
+  fp: [number, number],
+  fromEl: ExcalidrawElement,
+  toEl: ExcalidrawElement,
+): [number, number] {
+  if (toEl.width === 0 || toEl.height === 0) return fp;
+  const absX = fromEl.x + fp[0] * fromEl.width;
+  const absY = fromEl.y + fp[1] * fromEl.height;
+  return [(absX - toEl.x) / toEl.width, (absY - toEl.y) / toEl.height];
+}
+
 function fixedPointToSide(
   fixedPoint: [number, number] | undefined,
   self: ExcalidrawElement,
@@ -167,6 +178,14 @@ export async function convertExcalidrawToReactFlow(
     }
   }
 
+  // Inverse map: text element id -> container shape id. Used to redirect arrows that
+  // are bound to a text element (common when the author clicks on the visible text
+  // overlay) to the underlying shape.
+  const textToContainer = new Map<string, string>();
+  for (const [shapeId, textEl] of containerToText.entries()) {
+    textToContainer.set(textEl.id, shapeId);
+  }
+
   // Compute minX/minY across non-arrow elements for coordinate normalization
   let minX = Infinity;
   let minY = Infinity;
@@ -248,12 +267,30 @@ export async function convertExcalidrawToReactFlow(
     if (el.type === 'arrow') {
       if (!el.startBinding?.elementId || !el.endBinding?.elementId) continue;
 
-      const srcEl = elementById.get(el.startBinding.elementId);
-      const tgtEl = elementById.get(el.endBinding.elementId);
+      const srcRawId = el.startBinding.elementId;
+      const tgtRawId = el.endBinding.elementId;
+      const srcShapeId = textToContainer.get(srcRawId) ?? srcRawId;
+      const tgtShapeId = textToContainer.get(tgtRawId) ?? tgtRawId;
+
+      const srcRawEl = elementById.get(srcRawId);
+      const tgtRawEl = elementById.get(tgtRawId);
+      const srcEl = elementById.get(srcShapeId);
+      const tgtEl = elementById.get(tgtShapeId);
       if (!srcEl || !tgtEl) continue;
 
-      const sourcePosition = fixedPointToSide(el.startBinding.fixedPoint, srcEl, tgtEl);
-      const targetPosition = fixedPointToSide(el.endBinding.fixedPoint, tgtEl, srcEl);
+      // Remap fixedPoints from the bound element's coordinate space to the shape's,
+      // so side resolution is computed relative to the actual rendered node geometry.
+      const sfp =
+        srcRawEl && srcRawEl !== srcEl && el.startBinding.fixedPoint
+          ? remapFixedPoint(el.startBinding.fixedPoint, srcRawEl, srcEl)
+          : el.startBinding.fixedPoint;
+      const efp =
+        tgtRawEl && tgtRawEl !== tgtEl && el.endBinding.fixedPoint
+          ? remapFixedPoint(el.endBinding.fixedPoint, tgtRawEl, tgtEl)
+          : el.endBinding.fixedPoint;
+
+      const sourcePosition = fixedPointToSide(sfp, srcEl, tgtEl);
+      const targetPosition = fixedPointToSide(efp, tgtEl, srcEl);
 
       const labelEl = containerToText.get(el.id);
       const label = labelEl?.text ?? '';
@@ -261,8 +298,8 @@ export async function convertExcalidrawToReactFlow(
 
       const edge: Edge = {
         id: el.id,
-        source: el.startBinding.elementId,
-        target: el.endBinding.elementId,
+        source: srcShapeId,
+        target: tgtShapeId,
         sourceHandle: `${sourcePosition}-source`,
         targetHandle: `${targetPosition}-target`,
         type: hoverKey ? 'hoverEdge' : 'smoothstep',
