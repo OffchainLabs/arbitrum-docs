@@ -66,6 +66,25 @@ function remapFixedPoint(
   return [(absX - toEl.x) / toEl.width, (absY - toEl.y) / toEl.height];
 }
 
+type AlongSidePercent = 20 | 50 | 80;
+
+function pickAlongSidePercent(coord: number): AlongSidePercent {
+  if (coord < 0.35) return 20;
+  if (coord > 0.65) return 80;
+  return 50;
+}
+
+function fixedPointToSideAndOffset(
+  fp: [number, number] | undefined,
+  self: ExcalidrawElement,
+  other: ExcalidrawElement | undefined,
+): { side: Position; alongPercent: AlongSidePercent } {
+  const side = fixedPointToSide(fp, self, other);
+  if (!fp) return { side, alongPercent: 50 };
+  const along = side === Position.Top || side === Position.Bottom ? fp[0] : fp[1];
+  return { side, alongPercent: pickAlongSidePercent(along) };
+}
+
 function fixedPointToSide(
   fixedPoint: [number, number] | undefined,
   self: ExcalidrawElement,
@@ -344,8 +363,10 @@ export async function convertExcalidrawToReactFlow(
           ? remapFixedPoint(el.endBinding.fixedPoint, tgtRawEl, tgtEl)
           : el.endBinding.fixedPoint;
 
-      const sourcePosition = fixedPointToSide(sfp, srcEl, tgtEl);
-      const targetPosition = fixedPointToSide(efp, tgtEl, srcEl);
+      const sourceAnchor = fixedPointToSideAndOffset(sfp, srcEl, tgtEl);
+      const targetAnchor = fixedPointToSideAndOffset(efp, tgtEl, srcEl);
+      const sourcePosition = sourceAnchor.side;
+      const targetPosition = targetAnchor.side;
 
       const labelEl = containerToText.get(el.id);
       const label = labelEl?.text ?? '';
@@ -355,8 +376,8 @@ export async function convertExcalidrawToReactFlow(
         id: el.id,
         source: srcShapeId,
         target: tgtShapeId,
-        sourceHandle: `${sourcePosition}-source`,
-        targetHandle: `${targetPosition}-target`,
+        sourceHandle: `${sourcePosition}-${sourceAnchor.alongPercent}-source`,
+        targetHandle: `${targetPosition}-${targetAnchor.alongPercent}-target`,
         type: hoverKey ? 'hoverEdge' : 'smoothstep',
         animated: false,
         style: { strokeWidth: 1.5 },

@@ -76,15 +76,82 @@ export function ClickableNode({ data }: NodeProps<NodeData>) {
       tabIndex={isClickable ? 0 : -1}
       aria-label={isClickable ? `Navigate to ${link || label}` : label}
     >
-      {/* Connection handles on all 4 sides for Draw.io edge routing */}
+      {/* Connection handles — 4 sides, 3 positions per side (20/50/80%), plus legacy
+          midpoint-only ids (e.g. "top-source") for the draw.io converter that doesn't
+          emit along-side offsets. */}
+      {/* Top — legacy midpoint */}
       <Handle id="top-target" type="target" position={Position.Top} />
       <Handle id="top-source" type="source" position={Position.Top} />
+      {/* Top — 20/50/80 */}
+      <Handle id="top-20-target" type="target" position={Position.Top} style={{ left: '20%' }} />
+      <Handle id="top-20-source" type="source" position={Position.Top} style={{ left: '20%' }} />
+      <Handle id="top-50-target" type="target" position={Position.Top} style={{ left: '50%' }} />
+      <Handle id="top-50-source" type="source" position={Position.Top} style={{ left: '50%' }} />
+      <Handle id="top-80-target" type="target" position={Position.Top} style={{ left: '80%' }} />
+      <Handle id="top-80-source" type="source" position={Position.Top} style={{ left: '80%' }} />
+
+      {/* Right — legacy midpoint */}
       <Handle id="right-target" type="target" position={Position.Right} />
       <Handle id="right-source" type="source" position={Position.Right} />
+      {/* Right — 20/50/80 */}
+      <Handle id="right-20-target" type="target" position={Position.Right} style={{ top: '20%' }} />
+      <Handle id="right-20-source" type="source" position={Position.Right} style={{ top: '20%' }} />
+      <Handle id="right-50-target" type="target" position={Position.Right} style={{ top: '50%' }} />
+      <Handle id="right-50-source" type="source" position={Position.Right} style={{ top: '50%' }} />
+      <Handle id="right-80-target" type="target" position={Position.Right} style={{ top: '80%' }} />
+      <Handle id="right-80-source" type="source" position={Position.Right} style={{ top: '80%' }} />
+
+      {/* Bottom — legacy midpoint */}
       <Handle id="bottom-target" type="target" position={Position.Bottom} />
       <Handle id="bottom-source" type="source" position={Position.Bottom} />
+      {/* Bottom — 20/50/80 */}
+      <Handle
+        id="bottom-20-target"
+        type="target"
+        position={Position.Bottom}
+        style={{ left: '20%' }}
+      />
+      <Handle
+        id="bottom-20-source"
+        type="source"
+        position={Position.Bottom}
+        style={{ left: '20%' }}
+      />
+      <Handle
+        id="bottom-50-target"
+        type="target"
+        position={Position.Bottom}
+        style={{ left: '50%' }}
+      />
+      <Handle
+        id="bottom-50-source"
+        type="source"
+        position={Position.Bottom}
+        style={{ left: '50%' }}
+      />
+      <Handle
+        id="bottom-80-target"
+        type="target"
+        position={Position.Bottom}
+        style={{ left: '80%' }}
+      />
+      <Handle
+        id="bottom-80-source"
+        type="source"
+        position={Position.Bottom}
+        style={{ left: '80%' }}
+      />
+
+      {/* Left — legacy midpoint */}
       <Handle id="left-target" type="target" position={Position.Left} />
       <Handle id="left-source" type="source" position={Position.Left} />
+      {/* Left — 20/50/80 */}
+      <Handle id="left-20-target" type="target" position={Position.Left} style={{ top: '20%' }} />
+      <Handle id="left-20-source" type="source" position={Position.Left} style={{ top: '20%' }} />
+      <Handle id="left-50-target" type="target" position={Position.Left} style={{ top: '50%' }} />
+      <Handle id="left-50-source" type="source" position={Position.Left} style={{ top: '50%' }} />
+      <Handle id="left-80-target" type="target" position={Position.Left} style={{ top: '80%' }} />
+      <Handle id="left-80-source" type="source" position={Position.Left} style={{ top: '80%' }} />
 
       <div className="node-content" style={contentStyle}>
         {labelContent}
