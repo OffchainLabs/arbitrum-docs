@@ -32,6 +32,8 @@ interface ExcalidrawElement {
   fontSize?: number;
   textAlign?: string;
   verticalAlign?: string;
+  // image-specific
+  fileId?: string;
   // arrow-specific
   points?: [number, number][];
   startBinding?: ExcalidrawBinding | null;
@@ -41,10 +43,16 @@ interface ExcalidrawElement {
   groupIds?: string[];
 }
 
+interface ExcalidrawFileEntry {
+  mimeType?: string;
+  dataURL?: string;
+}
+
 interface ExcalidrawFile {
   type?: string;
   version?: number;
   elements?: ExcalidrawElement[];
+  files?: Record<string, ExcalidrawFileEntry>;
 }
 
 function remapFixedPoint(
@@ -146,6 +154,14 @@ export async function convertExcalidrawToReactFlow(
   }
 
   const elements = (parsed.elements ?? []).filter((el) => !el.isDeleted);
+
+  // Top-level files dict maps fileId -> { dataURL } for image elements
+  const filesMap = new Map<string, string>();
+  if (parsed.files) {
+    for (const [fileId, entry] of Object.entries(parsed.files)) {
+      if (entry?.dataURL) filesMap.set(fileId, entry.dataURL);
+    }
+  }
 
   // Lookup by id (used for arrow side resolution below)
   const elementById = new Map<string, ExcalidrawElement>();
@@ -281,6 +297,23 @@ export async function convertExcalidrawToReactFlow(
           overflow: 'hidden',
           padding: 0,
         },
+      });
+      continue;
+    }
+
+    // Image nodes — resolve the data URL via fileId -> top-level files dict
+    if (el.type === 'image') {
+      if (!el.fileId) continue;
+      const dataUrl = filesMap.get(el.fileId);
+      if (!dataUrl) continue;
+      nodes.push({
+        id: el.id,
+        type: 'image',
+        position: { x: el.x - minX + PADDING, y: el.y - minY + PADDING },
+        data: { imageUrl: dataUrl },
+        style: { width: el.width, height: el.height },
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       });
       continue;
     }
