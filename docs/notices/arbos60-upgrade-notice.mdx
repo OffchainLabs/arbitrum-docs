@@ -1,8 +1,34 @@
 ---
 title: 'Upgrade notice for ArbOS 60'
-description: Upgrade notices for ArbOS 60 activation on Arbitrum One, Arbitrum Nova, and Arbitrum Spolia
+description: Upgrade notices for ArbOS 60 activation on Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia
 user_story: As an Arbitrum node operator, I want to keep my nodes in sync with Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia after the ArbOS 60 activation.
 content_type: notice
 ---
 
-This is a stub article for the Arbos60 upgrade notice
+[ArbOS 60 "Elara"](docs/run-arbitrum-node/arbos-releases/arbos60.mdx) will be activated on the Arbitrum Sepolia, Arbitrum One, and Arbitrum Nova chains.
+
+## Actions required for node operators
+
+:::warning Action required
+
+Arbitrum node operators **must upgrade** to Nitro **`[TBD]`** ahead of ArbOS 60 activation to continue syncing the chain.
+
+- **Docker image:** `offchainlabs/nitro-node:[TBD]`
+- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/[TBD]
+
+:::
+
+## Important dates
+
+The following dates are relevant for Arbitrum chain operators.
+
+| Date    | Network upgrade                       | Affected audience                    |
+| ------- | ------------------------------------- | ------------------------------------ |
+| `[TBD]` | Arbitrum Sepolia upgrade to ArbOS 60  | Node operators for Arbitrum Sepolia  |
+| `[TBD]` | Arbitrum One/Nova upgrade to ArbOS 60 | Node operators for Arbitrum One/Nova |
+
+## Context
+
+[ArbOS 60 "Elara"](docs/run-arbitrum-node/arbos-releases/arbos60.mdx) builds upon [ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-releases/arbos51.mdx) with the full activation of multi-dimensional constraint-based pricing, a Stylus smart contract size limit increase via a fragment-based deployment model, sanctioned address transaction filtering, a standardized alternative data availability API, and genesis configuration file generation with predeploy support.
+
+The ArbOS 60 on-chain vote was passed **`[TBD]`**.
