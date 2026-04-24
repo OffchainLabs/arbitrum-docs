@@ -530,6 +530,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
                   label: `DA API integration guide`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
               ],
             },
           ],
