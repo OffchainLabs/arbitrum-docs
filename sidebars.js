@@ -826,6 +826,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos60',
+              label: 'Elara (ArbOS 60)',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos51',
               label: 'Dia (ArbOS 51)',
             },
