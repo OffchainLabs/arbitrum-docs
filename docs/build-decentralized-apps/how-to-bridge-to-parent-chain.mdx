@@ -232,13 +232,14 @@ The SDK also provides an `EthBridger` class that simplifies `ETH` withdrawals:
 
 ```ts
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
+import { ethers } from 'ethers';
 
 const childNetwork = await getArbitrumNetwork(childProvider);
 const ethBridger = new EthBridger(childNetwork);
 
 // Initiate withdrawal from child chain
 const withdrawTx = await ethBridger.withdraw({
-  amount: utils.parseEther('0.1'),
+  amount: ethers.utils.parseEther('0.1'),
   childSigner,
   destinationAddress: walletAddress,
 });
