@@ -103,6 +103,7 @@ Despite these delays, Arbitrum guarantees that honest assertions always succeed,
 You can programmatically check whether a specific child chain block has been included in a confirmed assertion by querying the Rollup contract on the parent chain. This is useful for applications that need to verify finality beyond soft confirmation.
 
 ```ts
+import { Contract } from 'ethers';
 import { getArbitrumNetwork } from '@arbitrum/sdk';
 import { BoldRollupUserLogic__factory } from '@arbitrum/sdk/dist/lib/abi-bold/factories/BoldRollupUserLogic__factory';
 

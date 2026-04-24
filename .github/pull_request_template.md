@@ -1,14 +1,12 @@
 Thank you for contributing to our docs!
 
-Please fill out the below to ensure your doc gets quickly approved and merged.
+Please fill out the form below to ensure your doc gets quickly approved and merged.
 
 ## Description
 
 <!-- Provide a brief description of the changes in this PR -->
 
 ## Document type
-
-<!-- If this PR adds or modifies documentation, specify the document type -->
 
 - [ ] Gentle introduction
 - [ ] Quickstart
@@ -18,6 +16,7 @@ Please fill out the below to ensure your doc gets quickly approved and merged.
 - [ ] Troubleshooting
 - [ ] Reference
 - [ ] Third-party content
+- [ ] Codebase changes
 - [ ] Not applicable
 
 ## Checklist
@@ -35,10 +34,9 @@ Please fill out the below to ensure your doc gets quickly approved and merged.
 - [ ] I have checked for broken links
 - [ ] I have verified that my changes don't break the build
 - Third-party docs only: Do you agree to the third-party content policy outlined within [CONTRIBUTE.md](../CONTRIBUTE.md)?
-   - [ ] Yes
-   - [ ] Not applicable
+  - [ ] Yes
+  - [ ] Not applicable
 
 ## Additional Notes
 
 <!-- Add any additional notes or context for reviewers -->
-

@@ -65,16 +65,16 @@ To enable the fast withdrawals feature, there are three actions to take:
 
 ### Upgrading to `nitro-contracts` v2.1.0
 
-As mentioned above, the fast withdrawals feature is available for chains that are using `nitro-contracts` v2.1.0 or above, especially the `RollupAdminLogic` and the `RollupUserLogic` contracts. You can check what nitro-contracts version your chain is using by running the [Arbitrum chain versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path).
+As mentioned above, the fast withdrawals feature is available for chains that are using `nitro-contracts` v2.1.0 or above, especially the `RollupAdminLogic` and the `RollupUserLogic` contracts. You can check what nitro-contracts version your chain is using by running the [Arbitrum chain versioner script](https://github.com/OffchainLabs/chain-actions/blob/main/README.md#check-version-and-upgrade-path).
 
-If your chain is not running with `nitro-contracts` v2.1.0 or above, you’ll need to perform an upgrade to enable this version. The [Arbitrum chain versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path) will provide the upgrade paths needed to reach v2.1.0, but basically:
+If your chain is not running with `nitro-contracts` v2.1.0 or above, you’ll need to perform an upgrade to enable this version. The [Arbitrum chain versioner script](https://github.com/OffchainLabs/chain-actions/blob/main/README.md#check-version-and-upgrade-path) will provide the upgrade paths needed to reach v2.1.0, but basically:
 
-- If the chain is running nitro-contracts v1.1.x, you need to [upgrade first to v1.2.1](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/1.2.1/README.md).
-- If the chain is running nitro-contracts v1.2.1, you need to [upgrade to v2.1.0](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md).
+- If the chain is running nitro-contracts v1.1.x, you need to [upgrade first to v1.2.1](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/contract-upgrades/1.2.1/README.md).
+- If the chain is running nitro-contracts v1.2.1, you need to [upgrade to v2.1.0](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md).
 
 Upgrading to the new `nitro-contracts` version also requires updating the node software. For v2.1.0, validator nodes and the batch poster node should run [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
 
-Suppose you’re upgrading your `nitro-contracts` from v1.2.1 to v2.1.0 and using the standard WASM module root (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different WASM module root, you can still deploy the action contract referencing your modified WASM module root (pre and post upgrade).
+Suppose you’re upgrading your `nitro-contracts` from v1.2.1 to v2.1.0 and using the standard WASM module root (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different WASM module root, you can still deploy the action contract referencing your modified WASM module root (pre and post upgrade).
 
 ### Activating fast withdrawals
 
@@ -130,7 +130,7 @@ yarn run dev
 
 #### Arbitrum chain actions script
 
-The Arbitrum chain actions repository also provides an [action script](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md) to activate fast withdrawals by performing the following operations:
+The Arbitrum chain actions repository also provides an [action script](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/fast-confirm/README.md) to activate fast withdrawals by performing the following operations:
 
 1. Make sure the "Validate fast confirmation" has not been enabled yet
 2. Create a Safe contract for the fast confirmation committee
@@ -142,7 +142,7 @@ To configure the action script, you need to specify the following environment va
 
 | Variable Name                     | Description                                                                                                                                                                                                                                                                                                                                                                                                           |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UPGRADE_ACTION_ADDRESS`          | Address of the upgrade action to execute. A standard version is deployed in all [supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#deployed-instances). If you need to deploy your own action, execute the first step of [this process](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#how-to-use-it). |
+| `UPGRADE_ACTION_ADDRESS`          | Address of the upgrade action to execute. A standard version is deployed in all [supported chains](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/fast-confirm/README.md#deployed-instances). If you need to deploy your own action, execute the first step of [this process](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/fast-confirm/README.md#how-to-use-it). |
 | `PARENT_UPGRADE_EXECUTOR_ADDRESS` | Private key of the account with executor privileges in the UpgradeExecutor admin contract on the parent chain. It will be the deployer of the multi-sig Safe wallet.                                                                                                                                                                                                                                                  |
 | `PARENT_CHAIN_RPC`                | RPC endpoint of the parent chain.                                                                                                                                                                                                                                                                                                                                                                                     |
 | `ROLLUP`                          | Address of the Rollup contract.                                                                                                                                                                                                                                                                                                                                                                                       |

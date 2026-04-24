@@ -2396,6 +2396,16 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup",
+      "permanent": false
+    },
+    {
       "source": "/(withdrawals/?)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false

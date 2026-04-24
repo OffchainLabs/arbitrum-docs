@@ -254,6 +254,7 @@ ArbRetryableTx(address(110)).redeem(ticketId);
 The [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk) provides an `EthBridger` class that simplifies depositing `ETH` from the parent chain to the child chain:
 
 ```ts
+import { ethers } from 'ethers';
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
 
 // Get the Arbitrum network and create an EthBridger
@@ -262,7 +263,7 @@ const ethBridger = new EthBridger(childNetwork);
 
 // Deposit ETH from parent chain to child chain
 const depositTx = await ethBridger.deposit({
-  amount: utils.parseEther('0.1'),
+  amount: ethers.utils.parseEther('0.1'),
   parentSigner,
   childProvider,
 });
@@ -279,7 +280,7 @@ To deposit `ETH` to a recipient address that differs from the sender, use `depos
 
 ```ts
 const depositTx = await ethBridger.depositTo({
-  amount: utils.parseEther('0.1'),
+  amount: ethers.utils.parseEther('0.1'),
   parentSigner,
   childProvider,
   destinationAddress: '0x...recipient',

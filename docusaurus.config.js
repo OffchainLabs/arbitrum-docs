@@ -68,12 +68,14 @@ const config = {
   url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
   onBrokenAnchors: 'warn', // Allow build to succeed despite false positive anchor warnings from TypeDoc
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
     preprocessor: markdownPreprocessor,
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
     parseFrontMatter: async (params) => {
       // Use the default parser
       const result = await params.defaultParseFrontMatter(params);

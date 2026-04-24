@@ -374,6 +374,16 @@ const sidebars = {
                           id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
                           label: `Configure DAC`,
                         },
+                        {
+                          type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference',
+                          label: `DAS RPC method reference`,
+                        },
+                        {
+                          type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-configuration-defaults',
+                          label: `DAC configuration defaults`,
+                        },
                       ],
                     },
                   ],
@@ -551,13 +561,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
-              label: `L3 rollup from scratch`,
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup',
+              label: `Deploy your first rollup`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
-              label: `L3 rollup testnet infrastructure`,
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup',
+              label: `Run infrastructure for your first rollup`,
             },
             {
               type: 'doc',
