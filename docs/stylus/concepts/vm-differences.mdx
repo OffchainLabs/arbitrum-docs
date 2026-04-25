@@ -560,7 +560,24 @@ contract Coordinator {
 
     function process(uint256[] calldata data) public {
         uint256[] memory results = engine.complex_calculation(data);
-        // Store results, emit events, etc.
+        // Proper event definition and emission in Stylus
+        use stylus_sdk::{prelude::*, evm, msg};
+        use stylus_sdk::alloy_primitives::{Address, U256};
+
+        #[event]
+        pub struct Transfer {
+            #[indexed]
+            pub from: Address,
+            #[indexed]
+            pub to: Address,
+            pub value: U256,
+        }
+
+        evm::log(Transfer { 
+            from: msg::sender(), 
+            to, 
+            value 
+        });
     }
 }
 ```
