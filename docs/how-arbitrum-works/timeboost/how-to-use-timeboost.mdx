@@ -22,6 +22,19 @@ A round's express lane controller, at their choice, can still send transactions 
 
 </VanillaAdmonition>
 
+## How to query the Reserve Pricer API
+
+Any auction participant submitting a bid must first know the minimum acceptable bid amount for the round being bid on. The Timeboost Reserve Pricer API exposes this data publicly over HTTP, returning the current reserve price and the round it applies to. Query this API before submitting any bid.
+
+The reserve price is updated at the 31st second of every minute.
+
+### Endpoints
+
+The API exposes two endpoints:
+
+- `/api/latest` returns the newest reserve price and round.
+- `/api/recent` returns the reserve price and rounds for the last two hours.
+
 ## How to submit bids for the right to be the express lane controller
 
 To use the express lane for faster transaction inclusion, you must win an auction for the right to be the express lane controller for a specific round.
@@ -142,6 +155,12 @@ Remember that, by default, auctions for a given round open 60 seconds before tha
 :::
 
 Once we know the current round, we can bid for (`currentRound + 1`) and verify that the auction is still open (`!currentAuctionRoundIsClosed`), then we can submit a bid.
+
+:::tip Fetching the minimum bid amount
+
+Before submitting a bid, query the [Reserve Pricer API](#how-to-query-the-reserve-pricer-api) to retrieve the minimum acceptable bid amount for the round you're bidding on.
+
+:::
 
 When bids get submitted to the autonomous auctioneer endpoint, we need to send an `auctioneer_submitBid` request with the following information:
 
