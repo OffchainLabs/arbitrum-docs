@@ -152,12 +152,6 @@ When bids get submitted to the autonomous auctioneer endpoint, we need to send a
 - the amount in `wei` of the deposit `ERC-20` token to bid
 - signature (explained below)
 
-<VanillaAdmonition type="info"  title="Minimum reserve price">
-
-The amount to bid must be above the minimum reserve price at the moment you are bidding. This parameter is configurable per chain. You can obtain the minimum reserve price by calling the method `minReservePrice()(uint256)` in the `Auction` contract.
-
-</VanillaAdmonition>
-
 Let's see an example of a call to this RPC method:
 
 ```tsx
