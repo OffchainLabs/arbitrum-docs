@@ -168,6 +168,16 @@ const config = {
         },
       },
     ],
+    [
+      'posthog-docusaurus',
+      {
+        apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
+        appUrl: 'https://app.posthog.com',
+        enableInDevelopment: false,
+        persistence: 'memory',
+        disable_session_recording: true,
+      },
+    ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
     require.resolve('./src/plugins/interactive-tutorials'),
