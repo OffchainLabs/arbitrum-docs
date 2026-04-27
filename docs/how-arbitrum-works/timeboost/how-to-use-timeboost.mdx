@@ -40,7 +40,7 @@ Before we begin, make sure you have:
 
 The following table shows this information for the Arbitrum DAO-owned chains:
 
-#### Table 1: Timeboost reference URLs and addresses
+#### Timeboost reference URLs and addresses
 
 | Network          | Auction contract                                                              | Autonomous auctioneer endpoint             |
 | ---------------- | ----------------------------------------------------------------------------- | ------------------------------------------ |
@@ -253,7 +253,7 @@ You can also call the function `getBidHash` in the auction contract to obtain th
 
 When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if received correctly. If the result returned contains an error message, something went wrong. Following are some of the error messages that can help us understand what's happening:
 
-#### Table 2: Errors relating to bid submission
+#### Errors relating to bid submission
 
 | Error                   | Description                                                                                                 |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -392,7 +392,7 @@ const signature = await account.signMessage({
 
 When sending the request, the sequencer will return an empty result with an HTTP status `200` if it received it correctly. If the result returned contains an error message, something went wrong. Following are some of the error messages that can help us understand what's happening:
 
-#### Table 3: Errors relating to express lane transaction submission
+#### Errors relating to express lane transaction submission
 
 Note that if you get any of the errors below, then the sequence number used in your express lane transaction was _not_ consumed.
 | Error | Description |
@@ -492,7 +492,7 @@ In the sequencer feed, the `BroadcastFeedMessage` struct now contains a `blockMe
 
 In the current implementation, information about the winning bid for a resolved auction emits via the `AuctionResolved` event ([sample interface](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/express-lane-auction/IExpressLaneAuction.sol#L95-L103)). Historical bid information, including the round number and bid amounts, are published to a public S3 bucket at a regular cadence. The domain for the S3 bucket where historical bids get saved is:
 
-#### Table 4: S3 URLs for historical bid data
+#### S3 URLs for historical bid data
 
 :::info URL updates for historical bid data
 On June 9 2025, at around 17:27 ET (UTC−05:00), the region in which the Amazon S3 bucket for historical bid data on Arbitrum One was _changed_ from `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/` to `s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/`. The below table has been updated for the new, correct URL to access bid data after June 9, 2025 17:27 ET, but if you require data from before June 9, 2025 17:27 ET, then please use `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/`.
