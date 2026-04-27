@@ -5,14 +5,11 @@ author: jose-franco
 content_type: how-to
 ---
 
-Timeboost is a new transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the **Sequencer** for faster transaction inclusion.
+Timeboost is a transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the **Sequencer** for faster transaction inclusion.
 
 In this how-to, you'll learn how to bid for the right to use the express lane and submit transactions through the express lane. To learn more about Timeboost and the key terms used on this page, refer to the [gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
-This how-to assumes that you're familiar with the following:
-
-- [How Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx)
-- [viem](https://viem.sh/), since the snippets of code present in the how-to use this library
+This how-to assumes that you're familiar with [How Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx)
 
 <VanillaAdmonition type="note"  title="Note about transferring express lane rights">
 
@@ -73,6 +70,8 @@ Before bidding on an auction, we need to deposit funds in the auction contract. 
 To see the amount of tokens we have deposited in the auction contract, we can call the function `balanceOf` in the `Auction` contract:
 
 ```tsx
+// Code example uses viem
+
 const depositedBalance = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
@@ -85,6 +84,8 @@ console.log(`Current balance of ${userAddress} in auction contract: ${depositedB
 If we want to deposit more funds to the `Auction` contract, we first need to know what the bidding token is. To obtain the address of the bidding token, we can call the function `biddingToken` in the `Auction` contract:
 
 ```tsx
+// Code example uses viem
+
 const biddingTokenContractAddress = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
@@ -102,6 +103,8 @@ On Arbitrum One and Arbitrum Nova, the default bidding token is `WETH`.
 Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract after having it approved as spender of the amount we want to deposit:
 
 ```tsx
+// Code example uses viem
+
 // Approving spending tokens
 const approveHash = await walletClient.writeContract({
   account,
@@ -130,6 +133,8 @@ Once we have deposited funds into the auction contract, we can submit bids for t
 We can obtain the current round by calling the function `currentRound` in the `Auction` contract:
 
 ```tsx
+// Code example uses viem
+
 const currentRound = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
@@ -141,6 +146,8 @@ console.log(`Current round: ${currentRound}`);
 The above shows the current round that's running. At the same time, the auction for the next round might be open. For example, if the `currentRound` is 10, the auction for round 11 is currently happening. To check whether or not that auction is open, we can call the function `isAuctionRoundClosed` of the `Auction` contract:
 
 ```tsx
+// Code example uses viem
+
 let currentAuctionRoundIsClosed = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
@@ -174,6 +181,8 @@ When bids get submitted to the autonomous auctioneer endpoint, we need to send a
 Let's see an example of a call to this RPC method:
 
 ```tsx
+// Code example uses viem
+
 const currentAuctionRound = currentRound + 1;
 const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
 
@@ -208,6 +217,8 @@ The signature that needs to be sent is an [EIP-712](https://eips.ethereum.org/EI
 Here's an example to produce that signature with viem:
 
 ```tsx
+// Code example uses viem
+
 const currentAuctionRound = currentRound + 1;
 
 const signatureData = hashTypedData({
@@ -276,6 +287,8 @@ event SetExpressLaneController(
 Here's an example to get the log from the auction contract to determine the new express lane controller:
 
 ```tsx
+// Code example uses viem
+
 const fromBlock = <any recent block, for example during the auction>
 const logs = await publicClient.getLogs({
   address: auctionContractAddress,
@@ -318,6 +331,8 @@ Timeboost doesn't currently support the `eth_sendRawTransactionConditional` meth
 Let's see an example of a call to this RPC method:
 
 ```tsx
+// Code example uses viem
+
 const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
 
 const transaction = await walletClient.prepareTransactionRequest(...);
@@ -357,6 +372,8 @@ The required signature is an Ethereum signature that needs to be sent with the f
 Here's an example to produce that signature:
 
 ```tsx
+// Code example uses viem
+
 const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
 
 const transaction = await walletClient.prepareTransactionRequest(...);
@@ -457,6 +474,8 @@ Funds are deposited in the auction contract to have the right to bid in auctions
 To initiate a withdrawal, we can call the function `initiateWithdrawal` in the `Auction` contract:
 
 ```tsx
+// Code example uses viem
+
 const initWithdrawalTransaction = await walletClient.writeContract({
   account,
   address: auctionContractAddress,
@@ -481,6 +500,8 @@ In this event, the `account` is the address from which we will withdraw funds, `
 After two rounds have passed, we can call the method `finalizeWithdrawal` in the `Auction` contract to finalize the withdrawal:
 
 ```tsx
+// Code example uses viem
+
 const finalizeWithdrawalTransaction = await walletClient.writeContract({
   account,
   address: auctionContractAddress,
