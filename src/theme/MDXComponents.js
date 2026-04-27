@@ -5,6 +5,13 @@ import CustomDetails from '@site/src/components/CustomDetails';
 import { FloatingHoverModal } from '@site/src/components/FloatingHoverModal';
 import ImageWithCaption from '@site/src/components/ImageCaptions';
 import ImageZoom from '@site/src/components/ImageZoom';
+import {
+  CommandBlock,
+  SolidityLab,
+  SolidityLabStep,
+  TutorialChecklist,
+  TutorialStep,
+} from '@site/src/components/InteractiveTutorials';
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
 
 export default {
@@ -14,6 +21,11 @@ export default {
   FloatingHoverModal,
   ImageWithCaption,
   ImageZoom,
+  CommandBlock,
+  SolidityLab,
+  SolidityLabStep,
+  TutorialChecklist,
+  TutorialStep,
   VanillaAdmonition,
   img: (props) => {
     // Don't wrap images that are explicitly marked to not zoom

@@ -93,6 +93,54 @@ html body [class*='docMainContainer'] {
   box-sizing: border-box;
 }
 
+html body.interactive-tutorial-page {
+  [class*='docMainContainer'] {
+    padding-left: clamp(1rem, 2.5vw, 3rem);
+    padding-right: clamp(1rem, 2.5vw, 3rem);
+  }
+
+  .col[class*='docItemCol'] {
+    flex: 0 0 100%;
+    max-width: 100% !important;
+  }
+
+  .col:has(.theme-doc-toc-desktop),
+  .theme-doc-toc-desktop {
+    display: none;
+  }
+
+  .col[class*='docItemCol'],
+  .docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module,
+  [class*='docItemContainer'] {
+    max-width: min(100%, 1540px);
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+html body.interactive-tutorial-page .react-joyride__tooltip {
+  border: 1px solid #9bcaff !important;
+  border-radius: 6px !important;
+  background: #f3f3f3 !important;
+  box-shadow: 0 18px 44px rgb(31 35 40 / 28%) !important;
+  color: #1f2328 !important;
+}
+
+html body.interactive-tutorial-page .react-joyride__tooltip button {
+  color: #1f2328 !important;
+}
+
+html[data-theme='dark'] body.interactive-tutorial-page .react-joyride__tooltip {
+  border-color: #3794ff !important;
+  background: #252526 !important;
+  box-shadow: 0 18px 44px rgb(0 0 0 / 46%) !important;
+  color: #cccccc !important;
+}
+
+html[data-theme='dark'] body.interactive-tutorial-page .react-joyride__tooltip button {
+  color: #cccccc !important;
+}
+
 // Mobile responsive
 @media (max-width: 996px) {
   .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocPage-Layout-Main-styles-module,
