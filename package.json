@@ -44,7 +44,7 @@
     "@docusaurus/theme-mermaid": "^3.10.0",
     "@ethersproject/address": "^5.8.0",
     "@floating-ui/react": "^0.27.15",
-    "@inkeep/cxkit-docusaurus": "^0.5.91",
+    "@inkeep/cxkit-docusaurus": "^0.5.117",
     "@mdx-js/react": "^3.0.0",
     "@notionhq/client": "^2.2.3",
     "@radix-ui/react-dialog": "^1.1.15",
