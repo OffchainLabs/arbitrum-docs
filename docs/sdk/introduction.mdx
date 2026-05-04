@@ -61,7 +61,7 @@ All asset bridgers have the following methods which accept different parameters 
 - [`deposit`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts): moves assets from the Parent to the Child chain
 - [`withdraw`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts): moves assets from the Child to the Parent chain
 
-#### Example `ETH` deposit to Arbitrum One
+#### Example **ETH** deposit to Arbitrum One
 
 ```ts
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
@@ -79,9 +79,9 @@ const ethDepositTxResponse = await ethBridger.deposit({
 const ethDepositTxReceipt = await ethDepositTxResponse.wait();
 ```
 
-[Learn more in the `ETH` Deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
+[Learn more in the **ETH** Deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
 
-#### Example `ETH` withdrawal from Arbitrum One
+#### Example **ETH** withdrawal from Arbitrum One
 
 ```ts
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
@@ -98,7 +98,7 @@ const withdrawTx = await ethBridger.withdraw({
 const withdrawRec = await withdrawTx.wait();
 ```
 
-[Learn more in the `ETH` Withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
+[Learn more in the **ETH** Withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
 
 ### Networks
 

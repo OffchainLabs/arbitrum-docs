@@ -55,7 +55,7 @@ The following table shows this information for the Arbitrum DAO-owned chains:
 
 ### Step 1: Deposit funds into the auction contract
 
-Before bidding on an auction, we need to deposit funds in the auction contract. These funds are in the form of the `ERC-20` tokens used to bid, also known as the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
+Before bidding on an auction, we need to deposit funds in the auction contract. These funds are in the form of the **ERC-20** tokens used to bid, also known as the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
 
 To see the amount of tokens we have deposited in the auction contract, we can call the function `balanceOf` in the `Auction` contract:
 
@@ -82,7 +82,7 @@ console.log(`biddingToken: ${biddingTokenContractAddress}`);
 
 <VanillaAdmonition type="note"  title="Bidding token in Arbitrum chains">
 
-On Arbitrum One and Arbitrum Nova, the default bidding token is `WETH`.
+On Arbitrum One and Arbitrum Nova, the default bidding token is **WETH**.
 
 </VanillaAdmonition>
 
@@ -149,7 +149,7 @@ When bids get submitted to the autonomous auctioneer endpoint, we need to send a
 - address of the express lane controller candidate (for example, our address if we want to be the express lane controller)
 - address of the auction contract
 - round we are bidding for (in our example, `currentRound + 1`)
-- the amount in `wei` of the deposit `ERC-20` token to bid
+- the amount in `wei` of the deposit **ERC-20** token to bid
 - signature (explained below)
 
 <VanillaAdmonition type="info"  title="Minimum reserve price">
@@ -550,15 +550,15 @@ download: s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/09
 
 Below are a few of the default Timeboost parameters mentioned earlier. All these parameters and more are configurable by the chain owner.
 
-| Parameter name          | Description                                                                                                                                                                                                                  | Recommended default value                  |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                           | 60 seconds                                 |
-| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                           | 15 seconds                                 |
-| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                          | An address controlled by the chain's owner |
-| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any `ERC-20` token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard `ERC-20` logic). | `WETH`                                     |
-| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                             | 0.2 seconds, or 200 milliseconds           |
-| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                   | None                                       |
-| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                  | 0.001 `WETH`                               |
+| Parameter name          | Description                                                                                                                                                                                                                      | Recommended default value                  |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                               | 60 seconds                                 |
+| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                               | 15 seconds                                 |
+| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                              | An address controlled by the chain's owner |
+| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any **ERC-20** token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard **ERC-20** logic). | **WETH**                                   |
+| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                                 | 0.2 seconds, or 200 milliseconds           |
+| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                       | None                                       |
+| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                      | 0.001 **WETH**                             |
 
 ## Troubleshooting and best practices
 

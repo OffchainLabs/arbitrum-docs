@@ -19,7 +19,7 @@ The configuration ensures compliance with the AEP terms, streamlines reporting, 
 ## Compatibility
 
 - **DA modes**: Applies across Rollup, AnyTrust, and Alt-DA, as settlement costs vary by mode (e.g., lower in Alt-DA).
-- **Gas tokens**: For custom `ERC-20`'s, requires conversion mechanisms; native `ETH` simplifies bridging.
+- **Gas tokens**: For custom **ERC-20**'s, requires conversion mechanisms; native **ETH** simplifies bridging.
 - **Validation**: No impact on <a data-quicklook-from="bold">BoLD</a> or permissioned setups.
 
 ## Pros
@@ -36,7 +36,7 @@ The configuration ensures compliance with the AEP terms, streamlines reporting, 
 
 ## Examples
 
-- **DeFi-focused Arbitrum chain**: Configures the router to route 10% of surplus fees (after Ethereum posting costs) to the DAO, using a custom gas token with <a data-quicklook-from="oracle">oracle</a>-based pricing for accurate `ETH` conversion.
+- **DeFi-focused Arbitrum chain**: Configures the router to route 10% of surplus fees (after Ethereum posting costs) to the DAO, using a custom gas token with <a data-quicklook-from="oracle">oracle</a>-based pricing for accurate **ETH** conversion.
 - **Gaming L3 chain**: Low-revenue setups might skip full configuration initially but enable it upon profitability, bridging fees quarterly.
 
 ## How to configure
@@ -53,7 +53,7 @@ Additional resources:
 
 :::
 
-1. **Calculate net revenue**: Use tools or scripts to track total fees minus settlement costs (e.g., via on-chain queries or off-chain monitoring). For custom tokens, deploy a pricer contract to value fees in `ETH` equivalents.
+1. **Calculate net revenue**: Use tools or scripts to track total fees minus settlement costs (e.g., via on-chain queries or off-chain monitoring). For custom tokens, deploy a pricer contract to value fees in **ETH** equivalents.
 2. **Deploy fee router**: Use the Arbitrum Chain SDK script (e.g., [`aep-fee-router`](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-aep-fee-router)) to deploy contracts like RewardDistributor on your chain. Set it as a fee collector (e.g., for surplus fees via `ArbOwner` precompile).
 3. **Route and <a data-quicklook-from="bridge">bridge</a> fees**: Configure the router to send the 10% share to Ethereum (e.g., via native bridges), then deposit to the DAO address on Arbitrum One. Use functions like `RewardDistributor.distributeRewards` for periodic transfers.
 4. **Report fees**: Submit quarterly reports to the Arbitrum Foundation, including calculations and proofs of payment, to maintain license compliance.

@@ -48,7 +48,7 @@ Query information about accounts on the blockchain.
 
 #### `account_balance`
 
-Gets the `ETH` balance of an account in wei. Equivalent to EVM's `BALANCE` opcode.
+Gets the **ETH** balance of an account in wei. Equivalent to EVM's `BALANCE` opcode.
 
 ```rust
 pub fn account_balance(address: *const u8, dest: *mut u8);
@@ -234,7 +234,7 @@ For L1-to-L2 retryable ticket transactions, addresses are aliased. See [address 
 
 #### `msg_value`
 
-Gets the `ETH` value sent with the call in wei. Equivalent to EVM's `CALLVALUE` opcode.
+Gets the **ETH** value sent with the call in wei. Equivalent to EVM's `CALLVALUE` opcode.
 
 ```rust
 pub fn msg_value(value: *mut u8);

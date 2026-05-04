@@ -1,7 +1,7 @@
 [
   {
     "question": "Why do I need ETH to use the Arbitrum network?",
-    "answer": "`ETH` is the currency used to pay gas fees on Arbitrum, and it powers all transactions on Arbitrum. You can bridge `ETH` (and other tokens) from Ethereum to Arbitrum through [Arbitrum's bridge](https://bridge.arbitrum.io/).\n\n\n\n",
+    "answer": "**ETH** is the currency used to pay gas fees on Arbitrum, and it powers all transactions on Arbitrum. You can bridge **ETH** (and other tokens) from Ethereum to Arbitrum through [Arbitrum's bridge](https://bridge.arbitrum.io/).\n\n\n\n",
     "key": "why-do-i-need-eth-to-use-the-arbitrum-network"
   },
   {
@@ -11,7 +11,7 @@
   },
   {
     "question": "How can I see the balance of ETH and other tokens in my wallet on Arbitrum?",
-    "answer": "Most wallets are \"connected\" to one given network at a time. To view your ETH or token balances, ensure that you have an established connection to the appropriate Arbitrum chain. In MetaMask and OKX Wallet, you can switch networks via the **Networks** drop-down. In this drop-down, please select the desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your preferred network hasn't been added to your wallet yet, you can add it via the [Arbitrum Bridge](https://bridge.arbitrum.io/).\n\n\n\n",
+    "answer": "Most wallets are \"connected\" to one given network at a time. To view your **ETH** or token balances, ensure that you have an established connection to the appropriate Arbitrum chain. In MetaMask and OKX Wallet, you can switch networks via the **Networks** drop-down. In this drop-down, please select the desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your preferred network hasn't been added to your wallet yet, you can add it via the [Arbitrum Bridge](https://bridge.arbitrum.io/).\n\n\n\n",
     "key": "how-can-i-see-the-balance-of-eth-and-other-tokens-in-my-wallet-on-arbitrum"
   },
   {
@@ -100,8 +100,8 @@
     "key": "what-is-the-difference-between-an-child-chain-block-and-an-assertion"
   },
   {
-    "question": "Why do Arbitrum chains enforce a gas target? Isn't it better that the target grows without limits?",
+    "question": "Why do Arbitrum chains enforce a target (for pricing)? Isn't it better that the target grows without limits?",
     "answer": "The transaction lifecycle sets a target that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the target of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.\n\n\n\n",
-    "key": "why-do-arbitrum-chains-enforce-a-gas-target-isnt-it-better-that-the-target-grows-without-limits"
+    "key": "why-do-arbitrum-chains-enforce-a-target-for-pricing-isnt-it-better-that-the-target-grows-without-limits"
   }
 ]

@@ -16,14 +16,14 @@ This document explains the protocol-level concepts of parent-to-child messaging.
 In the [Bypassing the Sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">Sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
 - Submit a child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
-- Deposit `ETH` or native tokens from a parent chain to a child chain
+- Deposit **ETH** or native tokens from a parent chain to a child chain
 - Send arbitrary data or instructions from a parent chain to a child chain
 
 We generally categorize these parent-to-child chain messaging methods as follows:
 
 1. **Native token bridging**: Refers to depositing a child chain's native token from the parent chain to the child chain. Depending on the type of <a data-quicklook-from="arbitrum">Arbitrum</a> chain, this can include:
 
-- **`ETH` Bridging**: For Arbitrum chains that use `ETH` as their gas token, users can deposit `ETH` onto a child chain via the Delayed Inbox.
+- \***\*ETH** Bridging**: For Arbitrum chains that use **ETH** as their gas token, users can deposit **ETH\*\* onto a child chain via the Delayed Inbox.
 - **Custom gas token bridging**: For Arbitrum chains that use a custom gas token, users can deposit that chain's native token to a child chain using the same mechanism.
 
 2. **Transaction via the Delayed Inbox**: As described in the [Bypassing the Sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#bypassing-the-sequencer) section, this method allows users to send transactions through the parent chain. It includes two sub-types of messages:
@@ -42,32 +42,32 @@ This section will explore these categories in detail and explain how they work. 
 
 ## Native token bridging
 
-Native token bridging refers to depositing a chain's native currency (the token used to pay gas fees) from the parent chain to the child chain. This follows a different, simpler process than `ERC-20` token bridging through the canonical token bridge.
+Native token bridging refers to depositing a chain's native currency (the token used to pay gas fees) from the parent chain to the child chain. This follows a different, simpler process than **ERC-20** token bridging through the canonical token bridge.
 
-Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use `ETH` as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/build-decentralized-apps/custom-gas-token-sdk.mdx).
+Arbitrum chains can use **ETH** or any other **ERC-20** tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use **ETH** as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/build-decentralized-apps/custom-gas-token-sdk.mdx).
 
-Whether a chain uses `ETH` or a custom gas token, users can deposit tokens from a parent chain (for Arbitrum One, Ethereum) into a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain’s Delayed Inbox contract.
+Whether a chain uses **ETH** or a custom gas token, users can deposit tokens from a parent chain (for Arbitrum One, Ethereum) into a child chain. Below, we describe how to deposit **ETH** on chains that use **ETH** as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain’s Delayed Inbox contract.
 
 ### Depositing native tokens
 
-A special message type exists for simple native token deposits from parent-to-child chains. The `Inbox` contract's `depositEth` method provides this functionality for chains using `ETH`, while custom gas token chains use similar mechanisms through their Delayed Inbox contract.
+A special message type exists for simple native token deposits from parent-to-child chains. The `Inbox` contract's `depositEth` method provides this functionality for chains using **ETH**, while custom gas token chains use similar mechanisms through their Delayed Inbox contract.
 
 For step-by-step instructions on depositing native tokens, see [How to bridge from parent chain](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#bridging-eth-to-a-child-chain).
 
 #### How deposits work
 
-When you call `Inbox.depositEth`, the `ETH` is sent to the <a data-quicklook-from="bridge">bridge</a> contract on the parent chain. The bridge then "credits" the deposited amount to the designated address on the child chain. From the L1 perspective, the funds are held in Arbitrum’s bridge contract on your behalf.
+When you call `Inbox.depositEth`, the **ETH** is sent to the <a data-quicklook-from="bridge">bridge</a> contract on the parent chain. The bridge then "credits" the deposited amount to the designated address on the child chain. From the L1 perspective, the funds are held in Arbitrum’s bridge contract on your behalf.
 
 A diagram illustrating this deposit process is below:
 
 Note on caller type and aliasing:
 
 - **If the parent chain caller is an Externally Owned Account (EOA)**:
-  - The deposited `ETH` will appear in the same EOA address on the child chain.
+  - The deposited **ETH** will appear in the same EOA address on the child chain.
 - **If the parent chain caller is a contract**:
-  - The `ETH` will get deposited into the contract's aliased address on the child chain. In the next section, we will cover [Address aliasing](#address-aliasing).
+  - The **ETH** will get deposited into the contract's aliased address on the child chain. In the next section, we will cover [Address aliasing](#address-aliasing).
 - **If the caller is a `7702-enabled account` (EOA with temporary contract code)**:
-  - The `ETH` goes to the aliased address, similar to contracts. This is due to the presence of runtime code during execution, and ensures consistent aliasing behavior post-EIP-7702.
+  - The **ETH** goes to the aliased address, similar to contracts. This is due to the presence of runtime code during execution, and ensures consistent aliasing behavior post-EIP-7702.
 
 <ImageZoom src="/img/haw-aliasing.svg" alt="Address aliasing" className="img-600px" />
 
@@ -186,4 +186,4 @@ Retryable tickets produce two types of receipts:
 
 ## Token bridging
 
-Retryable tickets power Arbitrum's canonical token bridge. For the full token bridge architecture, including how `ETH` and `ERC-20` tokens are bridged between layers, see the [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx).
+Retryable tickets power Arbitrum's canonical token bridge. For the full token bridge architecture, including how **ETH** and **ERC-20** tokens are bridged between layers, see the [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx).

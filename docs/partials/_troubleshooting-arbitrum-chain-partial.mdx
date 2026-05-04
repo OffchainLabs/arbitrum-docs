@@ -39,7 +39,7 @@ Learn more: [Configure data availability](https://docs.arbitrum.io/launch-arbitr
 
 ### What token is used to pay gas fees on Arbitrum chains?
 
-By default, Arbitrum chains pay gas in `ETH`. However, Arbitrum chains that use AnyTrust are configurable to use any `ERC-20` token for the gas fee token of the chain.
+By default, Arbitrum chains pay gas in **ETH**. However, Arbitrum chains that use AnyTrust are configurable to use any **ERC-20** token for the gas fee token of the chain.
 
 Learn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).
 
@@ -75,7 +75,7 @@ Learn more: [The Graph](https://docs.arbitrum.io/for-devs/third-party-docs/TheGr
 
 Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)[`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) when calling [`prepareNodeConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43). Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.
 
-For more information, refer to the [Smart contract size limit](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/config-smart-contract-size-limit.mdx) documentation.
+For more information refer to the [Smart contract size limit page](https://docs.arbitrum.io/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/config-smart-contract-size-limit)
 
 ### How can I modify Nitro to force posting an invalid assertion and test the fraud proof mechanism?
 
@@ -139,7 +139,7 @@ Yes, we have documented fast deposits in [how to configure delayed inbox finalit
 
 There is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.
 
-For an L3 on Arb One, for example, we consider this a feature because they can instantly register a deposit on the child chain, as Arb One has an ultra-low re-org risk (having never re-organized).
+For an L3 on Arb One, for example, we consider this a feature because they can instantly register a deposit on the child chain, as Arbitrum One has an ultra-low re-org risk (having never re-organized).
 
 For an L2, however, we recommend waiting ~12 minutes for L1 finality, as there is a greater risk of reorganization, for example, the deposit transaction not being included immediately in the fork-choice.
 
@@ -173,9 +173,9 @@ The actual maximum throughput depends on the configurable execution parameters:
 
 ### Why is the WETH Gateway not necessary for custom gas token chains?
 
-The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).
+The **WETH** gateway used in the token bridge is a special, custom gateway that unwraps the **WETH **deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since **ETH** is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard **ERC-20** for **WETH** (this is the default case of the token bridge so that you wouldn't need a special **WETH** gateway).
 
-If you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.
+If you want to enable extra custom operations with **WETH**, you can create a custom token and a custom gateway to handle this case.
 
 Learn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).
 
@@ -186,11 +186,11 @@ If the token was bridged using the native token bridge, you can go to [parent_si
 
 Call the `calculateL2TokenAddress` address with the address of the token on the parent chain.
 
-For example, in the case of plugging in the `USDT` address on Arbitrum One `0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9`, you get `0xB2C565cd7e807e6A1C38bFE32D8FAb9c96ffCeCa`.
+For example, in the case of plugging in the **ERC-20** address on Arbitrum One `0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9`, you get `0xB2C565cd7e807e6A1C38bFE32D8FAb9c96ffCeCa`.
 
 ### What are the estimated infrastructure costs to run the Sequencer?
 
-The estimated cost is approximately \$600 per sequencer replica per month for a low-to-medium activity chain. With networking and storage included, the estimated monthly cost would be \$1,500 for the Sequencer.
+The estimated cost is approximately $600 per sequencer replica per month for a low-to-medium activity chain. With networking and storage included, the estimated monthly cost would be $1,500 for the Sequencer.
 
 ### What are the different validator modes?
 
@@ -209,15 +209,15 @@ Learn more: [Run a validator node](https://docs.arbitrum.io/run-arbitrum-node/mo
 
 ### What are the costs to run a validator?
 
-The estimated monthly cost for Watchtower validators will be approximately \$500. All other validators will cost \$800 to \$900 per month.
+The estimated monthly cost for Watchtower validators will be approximately $500. All other validators will cost $800 to $900 per month.
 
 ### What is the amount of funds that a validator needs in its wallet to participate in fraud proofs?
 
-To participate in a fraud-proof game, your validator will need funds (can be any `ERC-20`) for two things:
+To participate in a fraud-proof game, your validator will need funds (can be any **ERC-20**) for two things:
 
 1. Gas costs to post assertions- Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.
 
-2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then 555+79 `ETH` per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
+2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 **ETH** initially and then 555+79 **ETH** per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
 
 Learn more: [BoLD economics of disputes](https://docs.arbitrum.io/how-arbitrum-works/bold/bold-economics-of-disputes).
 

@@ -20,18 +20,18 @@ also supports permissioned validation).
 
 Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
-Arbitrum chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects bonding tokens (e.g., `WETH` for BoLD-enabled chains like Arbitrum One/Nova, or `ETH`/native for other chains).
+Arbitrum chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects bonding tokens (e.g., **WETH** for BoLD-enabled chains like Arbitrum One/Nova, or **ETH**/native for other chains).
 
 ## `stakeToken`
 
-The bonded token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. A bonded token can be `WETH` or the parent chain's native token.
+The bonded token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. A bonded token can be **WETH** or the parent chain's native token.
 
 ### Configuration details
 
-- Can be `ETH` (native gas token) or any `ERC-20` token.
-- **For BoLD-enabled chains** (e.g., settling to Arbitrum One or Nova), it defaults to `WETH`.
-- **For non-BoLD chains**, it defaults to the <a data-quicklook-from="parent-chain">parent chain</a>'s native token (usually `ETH`).
-- Currently, its value is often hardcoded to `ETH` in basic deployments, but customizable to an `ERC-20` contract address in advanced setups. Future updates will expand `ERC-20` support.
+- Can be **ETH** (native gas token) or any **ERC-20** token.
+- **For BoLD-enabled chains** (e.g., settling to Arbitrum One or Nova), it defaults to **WETH**.
+- **For non-BoLD chains**, it defaults to the <a data-quicklook-from="parent-chain">parent chain</a>'s native token (usually **ETH**).
+- Currently, its value is often hardcoded to **ETH** in basic deployments, but customizable to an **ERC-20** contract address in advanced setups. Future updates will expand **ERC-20** support.
 
 ### How to configure
 
@@ -64,7 +64,7 @@ The bonded token is the asset that validators must bond to participate in assert
    ```
 
 3. **Prepare deployment parameters, including `stakeToken`**:
-   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
+   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the **ERC-20** address on the parent chain) and `baseStake` (minimum stake amount in wei).
 
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
@@ -133,7 +133,7 @@ The bonded token is the asset that validators must bond to participate in assert
 
 ### Additional notes
 
-- Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
+- Ensure the `stakeToken` is a compliant **ERC-20** on the parent chain; mismatches can cause deployment failures.
 - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
 - The owner address gains control over upgrades and settings—use a secure multisig in production.
 - For production, consider a Rollup-as-a-Service (RaaS) provider for monitoring and scaling.
@@ -145,7 +145,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 ### Configuration details
 
-- Specified as a float value (e.g., in `wei` for `ETH`).
+- Specified as a float value (e.g., in `wei` for **ETH**).
 - Must be greater than 0.
 - **Balances security**: Low values ease entry but risk malicious challenges; high values deter attacks but exclude smaller validators.
 
@@ -180,7 +180,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
    ```
 
 3. **Prepare deployment parameters, including `stakeToken`**:
-   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
+   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the **ERC-20** address on the parent chain) and `baseStake` (minimum stake amount in wei).
 
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
@@ -251,7 +251,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 - **Validators and staking**: After deployment, validators bond by depositing at least `baseStake` of the `stakeToken` into the Rollup contract. This can be done via contract calls (e.g., using the `RollupUserLogic` interface).
 - **Warnings**:
-  - Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
+  - Ensure the `stakeToken` is a compliant **ERC-20** on the parent chain; mismatches can cause deployment failures.
   - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
   - The owner address gains control over upgrades and settings—use a secure multisig in production.
   - For production, consider a Rollup-as-a-Service (RaaS) provider for monitoring and scaling.

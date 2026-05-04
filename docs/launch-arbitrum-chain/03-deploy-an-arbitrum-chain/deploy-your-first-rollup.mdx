@@ -18,20 +18,20 @@ This how-to is where you should start if you have not deployed a chain on Arbitr
 ### What you'll do
 
 1. **Set up**: Create a folder, add your wallet key, and install the tools
-2. **Deploy**: Put your chain's contracts on Arbitrum Sepolia (costs a small amount of `ETH`)
+2. **Deploy**: Put your chain's contracts on Arbitrum Sepolia (costs a small amount of **ETH**)
 3. **Generate config**: Create the file your node needs to run
-4. **Fund wallets**: Send `ETH` to the batch poster and validator (they need it for gas)
+4. **Fund wallets**: Send **ETH** to the batch poster and validator (they need it for gas)
 5. **Run the node**: Start your chain (one Docker command)
 6. **Deploy token bridge**: Enable bridging tokens between your chain and Arbitrum Sepolia
 
 ### Before you start
 
-| Requirement                 | What you need                                                                                                                                |
-| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Node.js**                 | v23 or later. [Install Node.js](https://nodejs.org/)                                                                                         |
-| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                        |
-| **ETH on Arbitrum Sepolia** | Your deployer wallet needs `ETH` for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
-| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                                 |
+| Requirement                 | What you need                                                                                                                                  |
+| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Node.js**                 | v23 or later. [Install Node.js](https://nodejs.org/)                                                                                           |
+| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                          |
+| **ETH on Arbitrum Sepolia** | Your deployer wallet needs **ETH** for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
+| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                                   |
 
 ## Step 1: Set up the project
 
@@ -70,7 +70,7 @@ Your key must start with `0x` and be 64 hex characters long (66 characters total
 
 ## Step 2: Deploy the chain
 
-In this step you will deploy your chain's contracts to Arbitrum Sepolia. It will cost a small amount of `ETH` in gas fees.
+In this step you will deploy your chain's contracts to Arbitrum Sepolia. It will cost a small amount of **ETH** in gas fees.
 
 - Create a new file named `deploy.mjs` in your project folder. Then copy and paste this entire script:
 
@@ -228,10 +228,10 @@ node prepare-node-config.mjs
 
 ## Step 4: Fund the batch poster and validator
 
-The batch poster and validator need `ETH` on Arbitrum Sepolia to pay for gas when posting batches and assertions. Send `ETH` to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+The batch poster and validator need **ETH** on Arbitrum Sepolia to pay for gas when posting batches and assertions. Send **ETH** to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
 
 - Get the addresses from your Step 2 output (the lines starting with `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`).
-- Send at least 0.01 `ETH` to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+- Send at least 0.01 **ETH** to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
 
 Without this, the node will not produce blocks or finalize.
 
@@ -382,14 +382,14 @@ Congratulations! You now have a fully running L3 chain that settles to Arbitrum 
 
 ### If something failed
 
-| Problem                                               | What to check                                                                                       |
-| :---------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
-| Step 2 fails with "insufficient funds"                | Your deployer wallet needs `ETH` on Arbitrum Sepolia. Use a [faucet](https://arbitrum.faucet.dev/). |
-| Step 2 fails with "invalid private key"               | Your `DEPLOYER_PRIVATE_KEY` must start with `0x` and be 66 characters.                              |
-| Step 3 fails with "CHAIN_DEPLOYMENT_TRANSACTION_HASH" | You didn't add the three lines from Step 2's output to `.env`. Copy them exactly.                   |
-| Step 5: node runs but no blocks                       | Fund the batch poster and validator (Step 4). They need `ETH` on Arbitrum Sepolia.                  |
-| Step 6 fails or hangs                                 | Make sure the node from Step 5 is still running and has finished syncing.                           |
-| Step 5: "docker: command not found"                   | Install [Docker](https://docs.docker.com/get-docker/) and ensure it's running.                      |
+| Problem                                               | What to check                                                                                         |
+| :---------------------------------------------------- | :---------------------------------------------------------------------------------------------------- |
+| Step 2 fails with "insufficient funds"                | Your deployer wallet needs **ETH** on Arbitrum Sepolia. Use a [faucet](https://arbitrum.faucet.dev/). |
+| Step 2 fails with "invalid private key"               | Your `DEPLOYER_PRIVATE_KEY` must start with `0x` and be 66 characters.                                |
+| Step 3 fails with "CHAIN_DEPLOYMENT_TRANSACTION_HASH" | You didn't add the three lines from Step 2's output to `.env`. Copy them exactly.                     |
+| Step 5: node runs but no blocks                       | Fund the batch poster and validator (Step 4). They need **ETH** on Arbitrum Sepolia.                  |
+| Step 6 fails or hangs                                 | Make sure the node from Step 5 is still running and has finished syncing.                             |
+| Step 5: "docker: command not found"                   | Install [Docker](https://docs.docker.com/get-docker/) and ensure it's running.                        |
 
 ### Next steps
 

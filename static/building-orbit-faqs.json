@@ -26,7 +26,7 @@
   },
   {
     "question": "What token is used to pay gas fees on Arbitrum chains?",
-    "answer": "By default, Arbitrum chains pay gas in `ETH`. However, Arbitrum chains that use AnyTrust are configurable to use any `ERC-20` token for the gas fee token of the chain.\n\nLearn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).\n\n\n\n",
+    "answer": "By default, Arbitrum chains pay gas in **ETH**. However, Arbitrum chains that use AnyTrust are configurable to use any **ERC-20** token for the gas fee token of the chain.\n\nLearn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).\n\n\n\n",
     "key": "what-token-is-used-to-pay-gas-fees-on-arbitrum-chains"
   },
   {
@@ -91,7 +91,7 @@
   },
   {
     "question": "Can I set fast deposits for an L3?",
-    "answer": "Yes, we have documented fast deposits in [how to configure delayed inbox finality](https://docs.arbitrum.io/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/arbitrum-chain-finality).\n\n\n\nThere is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.\n\n\nFor an L3 on Arb One, for example, we consider this a feature because they can instantly register a deposit on the child chain, as Arb One has an ultra-low re-org risk (having never re-organized).\n\n\nFor an L2, however, we recommend waiting ~12 minutes for L1 finality, as there is a greater risk of reorganization, for example, the deposit transaction not being included immediately in the fork-choice.\n\n",
+    "answer": "Yes, we have documented fast deposits in [how to configure delayed inbox finality](https://docs.arbitrum.io/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/arbitrum-chain-finality).\n\n\n\nThere is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.\n\n\nFor an L3 on Arb One, for example, we consider this a feature because they can instantly register a deposit on the child chain, as Arbitrum One has an ultra-low re-org risk (having never re-organized).\n\n\nFor an L2, however, we recommend waiting ~12 minutes for L1 finality, as there is a greater risk of reorganization, for example, the deposit transaction not being included immediately in the fork-choice.\n\n",
     "key": "can-i-set-fast-deposits-for-an-l3"
   },
   {
@@ -106,12 +106,12 @@
   },
   {
     "question": "Why is the WETH Gateway not necessary for custom gas token chains?",
-    "answer": "The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).\n\nIf you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.\n\nLearn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).\n\n",
+    "answer": "The **WETH** gateway used in the token bridge is a special, custom gateway that unwraps the **WETH **deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since **ETH** is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard **ERC-20** for **WETH** (this is the default case of the token bridge so that you wouldn't need a special **WETH** gateway).\n\nIf you want to enable extra custom operations with **WETH**, you can create a custom token and a custom gateway to handle this case.\n\nLearn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).\n\n",
     "key": "why-is-the-weth-gateway-not-necessary-for-custom-gas-token-chains"
   },
   {
     "question": "How do we verify if an ERC-20 was bridged using the native bridge?",
-    "answer": "The following applies to a parent-side bridge deployed on Arbitrum One:\nIf the token was bridged using the native token bridge, you can go to [parent_side_bridge_contract](https://github.com/OffchainLabs/token-bridge-contracts/blob/5bdf33259d2d9ae52ddc69bc5a9cbc558c4c40c7/contracts/tokenbridge/arbitrum/gateway/L2ERC20Gateway.sol#L47)\n\n\n\nCall the `calculateL2TokenAddress` address with the address of the token on the parent chain.\n\n\nFor example, in the case of plugging in the `USDT` address on Arbitrum One `0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9`, you get `0xB2C565cd7e807e6A1C38bFE32D8FAb9c96ffCeCa`.\n\n",
+    "answer": "The following applies to a parent-side bridge deployed on Arbitrum One:\nIf the token was bridged using the native token bridge, you can go to [parent_side_bridge_contract](https://github.com/OffchainLabs/token-bridge-contracts/blob/5bdf33259d2d9ae52ddc69bc5a9cbc558c4c40c7/contracts/tokenbridge/arbitrum/gateway/L2ERC20Gateway.sol#L47)\n\n\n\nCall the `calculateL2TokenAddress` address with the address of the token on the parent chain.\n\n\nFor example, in the case of plugging in the **ERC-20** address on Arbitrum One `0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9`, you get `0xB2C565cd7e807e6A1C38bFE32D8FAb9c96ffCeCa`.\n\n",
     "key": "how-do-we-verify-if-an-erc20-was-bridged-using-the-native-bridge"
   },
   {
@@ -131,7 +131,7 @@
   },
   {
     "question": "What is the amount of funds that a validator needs in its wallet to participate in fraud proofs?",
-    "answer": "To participate in a fraud-proof game, your validator will need funds (can be any `ERC-20`) for two things:\n\n1. Gas costs to post assertions- Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.\n\n2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then 555+79 `ETH` per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.\n\nLearn more: [BoLD economics of disputes](https://docs.arbitrum.io/how-arbitrum-works/bold/bold-economics-of-disputes).\n\n",
+    "answer": "To participate in a fraud-proof game, your validator will need funds (can be any **ERC-20**) for two things:\n\n1. Gas costs to post assertions- Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.\n\n2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 **ETH** initially and then 555+79 **ETH** per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.\n\nLearn more: [BoLD economics of disputes](https://docs.arbitrum.io/how-arbitrum-works/bold/bold-economics-of-disputes).\n\n",
     "key": "what-is-the-amount-of-funds-that-a-validator-needs-in-its-wallet-to-participate-in-fraud-proofs"
   },
   {

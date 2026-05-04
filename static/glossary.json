@@ -13,11 +13,11 @@
   },
   "dapp": {
     "title": "Decentralized application",
-    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.\nNote: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
+    "text": "<p>A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.</p>\n<p><strong>Note</strong>: In our documentation, &quot;apps&quot; and &quot;decentralized applications&quot; are used interchangeably.</p>\n"
   },
   "arb-token-bridge": {
     "title": "Arb Token Bridge",
-    "text": "<p>A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of <code>ERC-20</code> tokens between the two layers.</p>\n"
+    "text": "<p>A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of <strong>ERC-20</strong> tokens between the two layers.</p>\n"
   },
   "arbified-token-list": {
     "title": "Arbified Token List",
@@ -161,7 +161,7 @@
   },
   "custom-arbtoken": {
     "title": "Custom Arb-Token",
-    "text": "<p>Any child chain token contract registered to the <a href=\"/intro/glossary#arb-token-bridge\">Arb Token Bridge</a> that isn&#39;t a standard arb-token (i.e., a token that uses any gateway other than the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a> ).</p>\n"
+    "text": "<p>Any child chain token contract registered to the <a href=\"/intro/glossary#arb-token-bridge\">Arbitrum Token Bridge</a> that isn&#39;t a standard arb-token (i.e., a token that uses any gateway other than the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a> ).</p>\n"
   },
   "custom-gateway": {
     "title": "Custom gateway",
@@ -241,7 +241,7 @@
   },
   "gateway-router": {
     "title": "Gateway Router",
-    "text": "<p>Contracts in the <a href=\"/intro/glossary#arb-token-bridge\">Arb Token Bridge</a> responsible for mapping tokens to their appropriate <a href=\"/intro/glossary#token-gateway\">Token Gateway</a>.</p>\n"
+    "text": "<p>Contracts in the <a href=\"/intro/glossary#arb-token-bridge\">Arbitrum Token Bridge</a> responsible for mapping tokens to their appropriate <a href=\"/intro/glossary#token-gateway\">Token Gateway</a>.</p>\n"
   },
   "genericcustom-gateway": {
     "title": "Generic-Custom Gateway",
@@ -289,7 +289,7 @@
   },
   "native-fee-token": {
     "title": "Native Fee Token",
-    "text": "<p>An <code>ERC-20</code> token used as the native currency for gas fees on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> (i.e., as opposed to using Ether). <a href=\"/intro/glossary#arbitrum-chains\">Arbitrum chains</a> introduced the option for chains to use native fee tokens.</p>\n"
+    "text": "<p>An <strong>ERC-20</strong> token used as the native currency for gas fees on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> (i.e., as opposed to using Ether). <a href=\"/intro/glossary#arbitrum-chains\">Arbitrum chains</a> introduced the option for chains to use native fee tokens.</p>\n"
   },
   "offchain-labs": {
     "title": "Offchain Labs",
@@ -309,7 +309,7 @@
   },
   "parent-chain": {
     "title": "Parent chain",
-    "text": "<p>EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka <a href=\"/intro/glossary#child-chain\">Child chain</a> ). E.g., Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with &quot;underlying chain.&quot;</p>\n"
+    "text": "<p>EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka <a href=\"/intro/glossary#child-chain\">Child chain</a> ). For example, Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with &quot;underlying chain.&quot;</p>\n"
   },
   "permissionless-validation": {
     "title": "Permissionless validation",
@@ -381,11 +381,11 @@
   },
   "standard-arbtoken": {
     "title": "Standard Arb-Token",
-    "text": "<p>An token contract on an Arbitrum chain deployed via the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a>; offers basic <code>ERC-20</code> functionality in addition to deposit / withdrawal affordances.</p>\n"
+    "text": "<p>An token contract on an Arbitrum chain deployed via the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a>; offers basic <strong>ERC-20</strong> functionality in addition to deposit / withdrawal affordances.</p>\n"
   },
   "standarderc20-gateway": {
     "title": "StandardERC20 gateway",
-    "text": "<p><a href=\"/intro/glossary#token-gateway\">Token Gateway</a> via which any underlying chain&#39;s <code>ERC-20</code> token can permissionlessly bridge; the <code>StandardERC20</code> gateway contracts deploy a <a href=\"/intro/glossary#standard-arbtoken\">Standard Arb-Token</a> on the <a href=\"/intro/glossary#child-chain\">Child chain</a> for each bridged token.</p>\n"
+    "text": "<p><a href=\"/intro/glossary#token-gateway\">Token Gateway</a> via which any underlying chain&#39;s <strong>ERC-20</strong> token can permissionlessly bridge; the <code>StandardERC20</code> gateway contracts deploy a <a href=\"/intro/glossary#standard-arbtoken\">Standard Arb-Token</a> on the <a href=\"/intro/glossary#child-chain\">Child chain</a> for each bridged token.</p>\n"
   },
   "state-transition-function": {
     "title": "State Transition Function",
@@ -401,7 +401,7 @@
   },
   "token-gateway": {
     "title": "Token Gateway",
-    "text": "<p>A pair of contracts in the token bridge — one on the <a href=\"/intro/glossary#parent-chain\">Parent chain</a> , one on the <a href=\"/intro/glossary#child-chain\">Child chain</a> — that provide a particular mechanism for handling the transfer of tokens between layers. Token gateways currently active in the bridge include the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a> , the <a href=\"/intro/glossary#genericcustom-gateway\">Generic-Custom Gateway</a> , and the <a href=\"/intro/glossary#weth-gateway\">WETH Gateway</a>.</p>\n"
+    "text": "<p>A pair of contracts in the token bridge — one on the <a href=\"/intro/glossary#parent-chain\">Parent chain</a> , one on the <a href=\"/intro/glossary#child-chain\">Child chain</a> — that provide a particular mechanism for handling the transfer of tokens between layers. Token gateways currently active in the bridge include the <a href=\"/intro/glossary#standarderc20-gateway\"><code>StandardERC20</code> gateway</a> , the <a href=\"/intro/glossary#genericcustom-gateway\">Generic-Custom Gateway</a> , and the <a href=\"/intro/glossary#weth-gateway\"><strong>WETH</strong> Gateway</a>.</p>\n"
   },
   "transaction": {
     "title": "Transaction",
@@ -417,7 +417,7 @@
   },
   "trustless-verification": {
     "title": "Trustless verification",
-    "text": "<h4>Trustless verification</h4>\n<p>Validators confirm assertions, ensuring transactions adhere to the protocol rules.</p>\n"
+    "text": "<p>Validators confirm assertions, ensuring transactions adhere to the protocol rules.</p>\n"
   },
   "underlying-chain": {
     "title": "Underlying Chain",
@@ -445,6 +445,6 @@
   },
   "weth-gateway": {
     "title": "WETH Gateway",
-    "text": "<p><a href=\"/intro/glossary#token-gateway\">Token Gateway</a> for handing the bridging of wrapped Ether (<code>WETH</code>). <code>WETH</code> is unwrapped on the parent chain and rewrapped on the parent chain upon depositing (and vice-versa upon withdrawing), ensuring <code>WETH</code> on the child chain always remains collateralized.</p>\n"
+    "text": "<p><a href=\"/intro/glossary#token-gateway\">Token Gateway</a> for handing the bridging of wrapped Ether (<strong>WETH</strong>). <strong>WETH</strong> is unwrapped on the parent chain and rewrapped on the parent chain upon depositing (and vice-versa upon withdrawing), ensuring <strong>WETH</strong> on the child chain always remains collateralized.</p>\n"
   }
 }
