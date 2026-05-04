@@ -1,5 +1,5 @@
 ---
-title: 'Run L3 rollup infrastructure (product-level testnet)'
+title: 'Run testnet infrastructure on your first rollup (product-level testnet)'
 description: 'Step-by-step guide to run your Arbitrum chain infrastructure as a production-level testnet with high availability.'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
@@ -9,7 +9,6 @@ content_type: how-to
 ---
 
 import RaaSNotice from '../partials/_raas-providers-notice.mdx';
-import CustomDetails from '@site/src/components/CustomDetails';
 
 <RaaSNotice />
 
@@ -41,15 +40,15 @@ The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`
 
 ## Prerequisites
 
-| Requirement            | What you need                                                                                                                                                                                                                 |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Deployed chain**     | Complete [Run an L3 rollup from scratch](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/run-l3-rollup-from-scratch.mdx), Steps 1–4 (deploy, generate config, fund batch poster and validator), **do not complete Step 5** |
-| **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g., EKS, GKE, AKS)                                                                                                                                                    |
-| **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                                                                           |
-| **kubectl**            | Configured to access your cluster                                                                                                                                                                                             |
-| **jq**                 | [Install jq](https://jqlang.github.io/jq/download/) for parsing `node-config.json`                                                                                                                                            |
-| **Go**                 | [Install Go](https://go.dev/dl/) (for Step 10, building SQM)                                                                                                                                                                  |
-| **Redis**              | In-cluster (Step 3) or managed (e.g., AWS ElastiCache)                                                                                                                                                                        |
+| Requirement            | What you need                                                                                                                                                                                                          |
+| :--------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Deployed chain**     | Complete [Deploy your first rollup](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/deploy-your-first-rollup.mdx), Steps 1–4 (deploy, generate config, fund batch poster and validator), **do not complete Step 5** |
+| **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g., EKS, GKE, AKS)                                                                                                                                             |
+| **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                                                                    |
+| **kubectl**            | Configured to access your cluster                                                                                                                                                                                      |
+| **jq**                 | [Install jq](https://jqlang.github.io/jq/download/) for parsing `node-config.json`                                                                                                                                     |
+| **Go**                 | [Install Go](https://go.dev/dl/) (for Step 10, building SQM)                                                                                                                                                           |
+| **Redis**              | In-cluster (Step 3) or managed (e.g., AWS ElastiCache)                                                                                                                                                                 |
 
 ## Step 1: Extract chain info from `node-config.json`
 

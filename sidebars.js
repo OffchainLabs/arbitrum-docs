@@ -1,26 +1,5 @@
 // @ts-check
 
-// Use the generated SDK sidebar for API reference
-const sdkApiSidebar = require('./sdk-sidebar.js');
-// Use the generated stylus-by-example sidebars
-
-// Create a custom SDK sidebar that combines manual intro pages with generated API docs
-const sdkSidebar = {
-  sdkSidebar: [
-    {
-      type: 'doc',
-      id: 'sdk/introduction',
-      label: 'Introduction',
-    },
-    {
-      type: 'doc',
-      id: 'sdk/migrate',
-      label: 'Migrate from v3 to v4',
-    },
-    ...sdkApiSidebar.sdkSidebar,
-  ],
-};
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   // Get started sidebar - shared entry point
@@ -173,7 +152,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/a-gentle-introduction',
-          label: 'A gentle introduction',
+          label: 'Arbitrum chains overview',
         },
         {
           type: 'doc',
@@ -395,6 +374,16 @@ const sidebars = {
                           id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
                           label: `Configure DAC`,
                         },
+                        {
+                          type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference',
+                          label: `DAS RPC method reference`,
+                        },
+                        {
+                          type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-configuration-defaults',
+                          label: `DAC configuration defaults`,
+                        },
                       ],
                     },
                   ],
@@ -572,13 +561,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
-              label: `L3 rollup from scratch`,
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup',
+              label: `Deploy your first rollup`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
-              label: `L3 rollup testnet infrastructure`,
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup',
+              label: `Run infrastructure for your first rollup`,
             },
             {
               type: 'doc',
@@ -1097,7 +1086,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
-              label: 'A gentle introduction',
+              label: 'BoLD overview',
             },
             {
               type: 'link',
@@ -1143,7 +1132,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
-              label: 'Public preview',
+              label: 'How Timeboost works',
             },
             {
               type: 'doc',
@@ -1207,6 +1196,11 @@ const sidebars = {
           type: 'doc',
           id: 'build-decentralized-apps/quickstart-solidity-remix',
           label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/quickstart-create-a-token',
+          label: 'Create a token',
         },
         {
           type: 'doc',
@@ -1405,9 +1399,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
@@ -1583,9 +1577,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
