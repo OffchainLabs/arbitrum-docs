@@ -5,13 +5,13 @@ user_story: 'As a developer, I want to set up standard gateway bridging for my E
 content_type: how-to
 ---
 
-This guide explains how to configure your `ERC-20` token to work with Arbitrum's standard gateway. The standard gateway is the simplest option—it automatically creates a standard `ERC-20` token on the child chain with no configuration required.
+This guide explains how to configure your **ERC-20** token to work with Arbitrum's standard gateway. The standard gateway is the simplest option—it automatically creates a standard **ERC-20** token on the child chain with no configuration required.
 
 ## When to use the standard gateway
 
 Use the standard gateway when:
 
-- You have a standard `ERC-20` token on the parent chain
+- You have a standard **ERC-20** token on the parent chain
 - You don't need custom functionality on the child chain token
 - You want automatic setup with no pre-configuration
 - Your token doesn't have special behaviors (rebasing, fee-on-transfer, and similar)
@@ -23,7 +23,7 @@ For custom token behavior, see:
 
 ## Prerequisites
 
-- A standard `ERC-20` token deployed on the parent chain (or deploy one following this guide)
+- A standard **ERC-20** token deployed on the parent chain (or deploy one following this guide)
 - Familiarity with [Arbitrum's token bridge system](/how-arbitrum-works/deep-dives/token-bridging.mdx)
 - Basic understanding of smart contracts and blockchain development
 
@@ -36,11 +36,11 @@ When using the standard gateway:
 3. **Escrow model**: Parent chain tokens are escrowed in the gateway; child chain tokens are minted and burned
 4. **Router handles routing**: The router automatically directs your token to the standard gateway
 
-For architectural details, see [Standard `ERC-20` bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging).
+For architectural details, see [Standard **ERC-20** bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging).
 
 ## Step 1: Deploy your token (or use an existing one)
 
-If you already have a token on the parent chain, skip to Step 2. Otherwise, create a standard `ERC-20` token:
+If you already have a token on the parent chain, skip to Step 2. Otherwise, create a standard **ERC-20** token:
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -176,7 +176,7 @@ Your token is now bridgeable! Users can:
 
 ### Token compatibility
 
-The standard gateway works for most `ERC-20` tokens, but **not** for:
+The standard gateway works for most **ERC-20** tokens, but **not** for:
 
 - Rebasing tokens (supply changes)
 - Fee-on-transfer tokens
@@ -203,6 +203,6 @@ The gateway controls the automatically deployed child chain token—you can't mo
 ## Resources
 
 - [Token bridge conceptual overview](/how-arbitrum-works/deep-dives/token-bridging.mdx)
-- [Standard `ERC-20` bridging details](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging)
+- [Standard **ERC-20** bridging details](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging)
 - [Arbitrum SDK documentation](/sdk)
 - [Contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)

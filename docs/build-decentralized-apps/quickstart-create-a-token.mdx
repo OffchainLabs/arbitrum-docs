@@ -7,11 +7,11 @@ content_type: quickstart
 displayed_sidebar: buildAppsSidebar
 ---
 
-Deploying an `ERC-20` token on Arbitrum One is fully permissionless and uses the same tooling and workflows as Ethereum.
+Deploying an **ERC-20** token on Arbitrum One is fully permissionless and uses the same tooling and workflows as Ethereum.
 
 You can deploy directly to Arbitrum One using Foundry, and optionally configure bridging, liquidity, and supporting smart contract infrastructure as part of your token creation.
 
-This guide walks you through deploying a standard `ERC-20` token on Arbitrum One, from local setup to testnet and mainnet deployment.
+This guide walks you through deploying a standard **ERC-20** token on Arbitrum One, from local setup to testnet and mainnet deployment.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ This guide walks you through deploying a standard `ERC-20` token on Arbitrum One
    curl -L https://foundry.paradigm.xyz | bash
    foundryup
    ````
-2. **Get test `ETH`**: Obtain Arbitrum Sepolia `ETH` from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (for example, MetaMask) configured for Arbitrum Sepolia and request testnet funds.
+2. **Get test **ETH\***\*: Obtain Arbitrum Sepolia **ETH\*\* from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (for example, MetaMask) configured for Arbitrum Sepolia and request testnet funds.
 
 :::info Resources
 
@@ -31,7 +31,7 @@ A list of faucets is available on the [Chain Info page](/for-devs/dev-tools-and-
 
 Faucets may require certain actions, e.g., bridging, use the official Arbitrum Bridge if the faucet requires it.
 
-All references to `ETH` on this document refers to test `ETH` on Sepolia.
+All references to **ETH** on this document refers to test **ETH** on Sepolia.
 
 :::
 
@@ -58,7 +58,7 @@ All references to `ETH` on this document refers to test `ETH` on Sepolia.
 
 ## Smart contract development
 
-Create `src/MyToken.sol` (this is a standard `ERC-20` contract and works on any EVM chain like Arbitrum):
+Create `src/MyToken.sol` (this is a standard **ERC-20** contract and works on any EVM chain like Arbitrum):
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -279,7 +279,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
    - Uses `https://arb1.arbitrum.io/rpc` (RPC URL).
    - Chain ID: 42161.
    - Verifies on [Arbiscan](https://arbiscan.io/).
-   - Requires sufficient `ETH` on Arbitrum One for gas fees (bridge from Ethereum mainnet if needed).
+   - Requires sufficient **ETH** on Arbitrum One for gas fees (bridge from Ethereum mainnet if needed).
 
 3. **Example of verifying on Arbiscan**:
    ```bash
@@ -302,7 +302,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
 ## Important notes
 
 - Always conduct security audits (e.g., via tools like Slither or other professional reviews) before mainnet deployment, as token contracts handle value.
-- Ensure your wallet has enough `ETH` for gas on the target network. Arbitrum fees are low, but mainnet deployments still cost real `ETH`.
+- Ensure your wallet has enough **ETH** for gas on the target network. Arbitrum fees are low, but mainnet deployments still cost real **ETH**.
 - If you encounter verification issues, double-check your Arbiscan API key and foundry.toml configs. For more advanced deployments, refer to general Foundry deployment docs or Arbitrum developer resources.
 
 ## Bridging considerations

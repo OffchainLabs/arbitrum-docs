@@ -19,7 +19,7 @@ This how-to covers how gas operates in Arbitrum, how it's calculated, and how to
 
 If you don't need to understand the formula, you can rely on the standard gas estimation process. Call an Arbitrum node's `eth_estimateGas` RPC, which returns a gas limit sufficient to cover the entire transaction fee at the current child chain gas price.
 
-Multiplying the value from `eth_estimateGas` by the child chain gas price gives you the total `ETH` required for the transaction to succeed. Note that for a given operation, the `eth_estimateGas` value may vary over time as the parent chain calldata price fluctuates.
+Multiplying the value from `eth_estimateGas` by the child chain gas price gives you the total **ETH** required for the transaction to succeed. Note that for a given operation, the `eth_estimateGas` value may vary over time as the parent chain calldata price fluctuates.
 
 Alternatively, call `NodeInterface.gasEstimateComponents()` and use the first result (`gasEstimate`) as your gas limit. Multiply by the third result (`baseFee`) to get the total cost.
 

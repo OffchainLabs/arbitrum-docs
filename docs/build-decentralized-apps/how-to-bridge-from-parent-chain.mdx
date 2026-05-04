@@ -9,19 +9,19 @@ This guide explains how to programmatically send messages and bridge assets from
 
 ## Prerequisites
 
-- A parent chain wallet with funds (`ETH` or the chain's native token)
+- A parent chain wallet with funds (**ETH** or the chain's native token)
 - Access to the parent chain's Inbox contract address
 - Familiarity with smart contract interactions
 
-## Bridging `ETH` to a child chain
+## Bridging **ETH** to a child chain
 
-To bridge `ETH` from a parent chain to a child chain, use the `depositEth` method on the Inbox contract:
+To bridge **ETH** from a parent chain to a child chain, use the `depositEth` method on the Inbox contract:
 
 ```javascript
 function depositEth(address destAddr) external payable override returns (uint256)
 ```
 
-### Example: depositing `ETH`
+### Example: depositing **ETH**
 
 ```javascript
 const inbox = new ethers.Contract(inboxAddress, inboxABI, parentSigner);
@@ -33,22 +33,22 @@ await tx.wait();
 
 :::warning
 
-Depositing `ETH` directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function. If you need to trigger a fallback function, use retryable tickets instead.
+Depositing **ETH** directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function. If you need to trigger a fallback function, use retryable tickets instead.
 
 :::
 
-### How `ETH` deposits work
+### How **ETH** deposits work
 
-When you deposit `ETH`, the funds are held in the Arbitrum Bridge contract on the parent chain. The bridge then credits the deposited amount to your address on the child chain:
+When you deposit **ETH**, the funds are held in the Arbitrum Bridge contract on the parent chain. The bridge then credits the deposited amount to your address on the child chain:
 
 <ImageZoom src="/img/apps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
 
 ### Address aliasing for contract depositors
 
-When you deposit `ETH` from the parent chain, the destination address on the child chain depends on the caller type:
+When you deposit **ETH** from the parent chain, the destination address on the child chain depends on the caller type:
 
-- **EOA caller**: The deposited `ETH` appears at the same address on the child chain
-- **Contract caller**: The `ETH` goes to the contract's aliased address on the child chain
+- **EOA caller**: The deposited **ETH** appears at the same address on the child chain
+- **Contract caller**: The **ETH** goes to the contract's aliased address on the child chain
 - **7702-enabled account**: Similar to contracts, uses the aliased address
 
 The alias is calculated as:
@@ -163,13 +163,13 @@ Retryable tickets are Arbitrum's canonical mechanism for reliable cross-chain me
 
 Understanding these parameters helps ensure successful retryable ticket creation:
 
-- **`l1CallValue`** (msg.value): Total `ETH` sent with the transaction from parent chain. This funds the ticket submission, gas, and call value.
+- **`l1CallValue`** (msg.value): Total **ETH** sent with the transaction from parent chain. This funds the ticket submission, gas, and call value.
 
 - **`to`**: The destination child chain address that will receive the retryable ticket execution.
 
-- **`l2CallValue`**: The amount of `ETH` to be sent as `callvalue` when executing the retryable on the child chain. This is supplied within the `l1CallValue` deposit.
+- **`l2CallValue`**: The amount of **ETH** to be sent as `callvalue` when executing the retryable on the child chain. This is supplied within the `l1CallValue` deposit.
 
-- **`maxSubmissionCost`**: Maximum `ETH` to pay for submitting the ticket. This amount is:
+- **`maxSubmissionCost`**: Maximum **ETH** to pay for submitting the ticket. This amount is:
 
   - Supplied within the deposit (`l1CallValue`)
   - Later deducted from the sender's child chain balance

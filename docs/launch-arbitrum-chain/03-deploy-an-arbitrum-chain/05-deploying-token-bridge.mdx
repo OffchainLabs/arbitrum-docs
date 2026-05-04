@@ -12,7 +12,7 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-The Arbitrum stack doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical token bridge" that ensures seamless `ERC-20` token transfers between the parent and child chains.
+The Arbitrum stack doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical token bridge" that ensures seamless **ERC-20** token transfers between the parent and child chains.
 
 The token bridge architecture includes contracts deployed on the parent and child chains. These entities communicate via the <a data-quicklook-from='retryable-ticket'>retryable ticket</a> protocol, ensuring efficient and secure interactions.
 
@@ -217,17 +217,17 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 
 :::note
 
-That step only applies to ETH-based Arbitrum chains (i.e., not custom gas token chains). The canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Arbitrum chain.
+That step only applies to ETH-based Arbitrum chains (i.e., not custom gas token chains). The canonical bridge design has a separate custom gateway for **WETH** to bridge it in and out of the Arbitrum chain.
 
-You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](/how-arbitrum-works/deep-dives/token-bridging.mdx#other-flavors-of-gateways).
+You can find more info about **WETH** gateways in our ["other gateways flavors" documentation](/how-arbitrum-works/deep-dives/token-bridging.mdx#other-flavors-of-gateways).
 
 :::
 
-Once the token bridge deploys, if the chain uses `ETH` as the gas token, you must set a special gateway to bridge `WETH`. This gateway unwraps `WETH` to bridge it as `ETH` and wraps it back to `WETH` on the destination chain.
+Once the token bridge deploys, if the chain uses **ETH** as the gas token, you must set a special gateway to bridge **WETH**. This gateway unwraps **WETH** to bridge it as **ETH** and wraps it back to **WETH** on the destination chain.
 
 You can use the methods `createTokenBridgePrepareSetWethGatewayTransactionRequest` and `createTokenBridgePrepareSetWethGatewayTransactionReceipt` to set this gateway, in a similar way to what we used to send the `createTokenBridge` request earlier.
 
-This action also sends a retryable ticket to the child chain to create and configure the `WETH` gateway, so you should wait to verify that the ticket executes successfully.
+This action also sends a retryable ticket to the child chain to create and configure the **WETH** gateway, so you should wait to verify that the ticket executes successfully.
 
 Below is an example of how to use these functions:
 

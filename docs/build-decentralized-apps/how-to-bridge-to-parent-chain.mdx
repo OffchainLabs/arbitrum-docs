@@ -146,9 +146,9 @@ const tx = await outbox.executeTransaction(
 await tx.wait();
 ```
 
-## Withdrawing `ETH`
+## Withdrawing **ETH**
 
-To withdraw `ETH` from the child chain, use the `ArbSys` precompile's `withdrawEth` method:
+To withdraw **ETH** from the child chain, use the `ArbSys` precompile's `withdrawEth` method:
 
 ```solidity
 function withdrawEth(
@@ -158,22 +158,22 @@ function withdrawEth(
 
 ### Parameters
 
-- **`destination`**: The parent chain address that will receive the `ETH`
-- **Value** (`msg.value`): The amount of `ETH` to withdraw from the child chain
+- **`destination`**: The parent chain address that will receive the **ETH**
+- **Value** (`msg.value`): The amount of **ETH** to withdraw from the child chain
 
 ### Return value
 
 Returns a unique identifier for the withdrawal message.
 
-### How `ETH` withdrawal works
+### How **ETH** withdrawal works
 
-1. **On the child chain**: The `ETH` balance is burned, and a message is created
+1. **On the child chain**: The **ETH** balance is burned, and a message is created
 2. **Challenge period**: Wait 6.4 days for the assertion to finalize
-3. **On the parent chain**: Execute via `Outbox.executeTransaction` to claim your `ETH`
+3. **On the parent chain**: Execute via `Outbox.executeTransaction` to claim your **ETH**
 
 `ArbSys.withdrawEth` is equivalent to calling `ArbSys.sendTxToL1` with an empty calldata argument. Like any child-to-parent message, it requires executing on the parent chain after the dispute period.
 
-### Example: withdrawing `ETH`
+### Example: withdrawing **ETH**
 
 ```javascript
 const arbSys = new ethers.Contract(
@@ -199,9 +199,9 @@ The withdrawal process:
   className="img-800px"
 />
 
-## Withdrawing `ERC-20` tokens
+## Withdrawing **ERC-20** tokens
 
-For `ERC-20` token withdrawals, see the dedicated [Withdraw tokens guide](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx), which provides detailed instructions for using Arbitrum's canonical token bridge.
+For **ERC-20** token withdrawals, see the dedicated [Withdraw tokens guide](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx), which provides detailed instructions for using Arbitrum's canonical token bridge.
 
 ## Using the Arbitrum SDK
 

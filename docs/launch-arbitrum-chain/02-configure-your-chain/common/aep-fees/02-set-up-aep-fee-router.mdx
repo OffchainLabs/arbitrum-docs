@@ -14,11 +14,11 @@ You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](ht
 
 ### Canonical contracts
 
-| Network       | Contract                                | Address                                                                                                                   | Configured for  |
-| ------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| Ethereum      | `Arbitrum Foundation's multisig wallet` | [0x1Afa41C006dA1605846271E7bdae942F2787f941](https://etherscan.io/address/0x1Afa41C006dA1605846271E7bdae942F2787f941)     | `ETH`, `ERC-20` |
-| Arbitrum Nova | `Child2ParentRouter`                    | [0xd27cb0fe2a696ebaa80d606ce0edf55aabaeab84](https://nova.arbiscan.io/address/0xd27cb0fe2a696ebaa80d606ce0edf55aabaeab84) | `ETH`           |
-| Base          | `Child2ParentRouter`                    | [0xd9a2e0e5d7509f0bf1b2d33884f8c1b4d4490879](https://basescan.org/address/0xd9a2e0e5d7509f0bf1b2d33884f8c1b4d4490879)     | `ETH`           |
+| Network       | Contract                                | Address                                                                                                                   | Configured for      |
+| ------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| Ethereum      | `Arbitrum Foundation's multisig wallet` | [0x1Afa41C006dA1605846271E7bdae942F2787f941](https://etherscan.io/address/0x1Afa41C006dA1605846271E7bdae942F2787f941)     | **ETH**, **ERC-20** |
+| Arbitrum Nova | `Child2ParentRouter`                    | [0xd27cb0fe2a696ebaa80d606ce0edf55aabaeab84](https://nova.arbiscan.io/address/0xd27cb0fe2a696ebaa80d606ce0edf55aabaeab84) | **ETH**             |
+| Base          | `Child2ParentRouter`                    | [0xd9a2e0e5d7509f0bf1b2d33884f8c1b4d4490879](https://basescan.org/address/0xd9a2e0e5d7509f0bf1b2d33884f8c1b4d4490879)     | **ETH**             |
 
 ## The AEP fee router contract system
 
@@ -49,7 +49,7 @@ This includes:
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
 - Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
 
-In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route `ETH` have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can [see which networks have a router deployed](#canonical-contracts).
+In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route **ETH** have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can [see which networks have a router deployed](#canonical-contracts).
 
 Here are a few flows to help visualize the deployment:
 
@@ -70,7 +70,7 @@ The Arbitrum Chain SDK provides a [configurable script](https://github.com/Offch
 <VanillaAdmonition type="info"  title="Note for L3 chains with custom gas tokens">
 The standard script deploys and sets up the AEP fee router contracts to route funds to the parent chain.
 L2 chains are expected to route funds to the [multisig wallet owned by the Arbitrum Foundation](#canonical-contracts) on Ethereum.
-L3 chains (or further layers) might need to specify a different target address on the parent chain depending on the gas token of the chain. If the chain uses `ETH` as the gas token, and a [ChildToParentRouter](#canonical-contracts) contract is deployed in the parent chain, they can route their funds to that contract. If the chain uses a different gas token, please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
+L3 chains (or further layers) might need to specify a different target address on the parent chain depending on the gas token of the chain. If the chain uses **ETH** as the gas token, and a [ChildToParentRouter](#canonical-contracts) contract is deployed in the parent chain, they can route their funds to that contract. If the chain uses a different gas token, please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
 
 </VanillaAdmonition>
 
@@ -121,29 +121,29 @@ cp .env.example .env
 yarn dev
 ```
 
-## Deploying a `ChildToParent` router for a custom `ERC-20` on Base
+## Deploying a `ChildToParent` router for a custom **ERC-20** on Base
 
-Some RaaS providers and Arbitrum chains may need to route AEP fees using a non-`ETH` `ERC-20` token on Base, or other L2s.
+Some RaaS providers and Arbitrum chains may need to route AEP fees using a non-**ETH** **ERC-20** token on Base, or other L2s.
 
-To support this, the Arbitrum Chain SDK now includes a helper for deploying a `ChildToParentRouter` on Base for any specified `ERC-20`.
+To support this, the Arbitrum Chain SDK now includes a helper for deploying a `ChildToParentRouter` on Base for any specified **ERC-20**.
 
-Starting with `arbitrum-chain-sdk` v0.24.2, you can deploy your own `ERC-20` router on Base programmatically.
+Starting with `arbitrum-chain-sdk` v0.24.2, you can deploy your own **ERC-20** router on Base programmatically.
 
 ### When you need this
 
-You should deploy your own `ERC-20` router if:
+You should deploy your own **ERC-20** router if:
 
 - Your chain uses a custom gas token
 
 - Your chain is an L3 that settles to Base (or another OP chain L2)
 
-- Your chain's custom gas token is represented as an `ERC-20` on Base or the chain that your chain settles to
+- Your chain's custom gas token is represented as an **ERC-20** on Base or the chain that your chain settles to
 
 ### How it works
 
 - The SDK exposes a function that handles deployment of a `ChildToParentRouter` contract configured for:
 
-- A specific `ERC-20` token address on Base
+- A specific **ERC-20** token address on Base
 
 - A target address on the parent chain (often Ethereum or a parent L2)
 
