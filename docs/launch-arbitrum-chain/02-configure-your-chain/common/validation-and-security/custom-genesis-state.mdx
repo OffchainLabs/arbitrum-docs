@@ -100,6 +100,11 @@ This step is only required if you choose to deploy the rollup to the parent chai
 
 3. Create rollup (optional)
    - After generating the `genesis.json` file, the Chain SDK provides an option to deploy your rollup. Follow the prompts to continue or exit the process and deploy the rollup later.
+4. Configure and launch your node:
+   - Set up your node as usual (directions here), but include the following properties to point to your custom state:
+     - `--init.genesis-json-file=/path/to/genesis.json`: the path to your custom `genesis.json` file
+     - `--init.empty=false`: **(Required)** Forces the node to load the provided genesis file instead of initializing a blank state.
+5. Start your chain, with the correct preloaded state.
 
 ### Use the `genesis-file-generator` tool
 
@@ -177,6 +182,7 @@ These parameters define the identify of your chain
 4. Configure and launch your node:
    - Set up your node as usual (directions here), but include the following properties to point to your custom state:
      - `--init.genesis-json-file=/path/to/genesis.json`: the path to your custom `genesis.json` file
+     - `--init.empty=false`: **(Required)** Forces the node to load the provided genesis file instead of initializing a blank state.
 5. Start your chain, with the correct preloaded state.
 
 ### Pre-deployed contracts registry
