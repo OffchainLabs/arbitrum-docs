@@ -430,6 +430,11 @@ const sidebars = {
                       id: 'launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
                       label: 'Dynamic Pricing for Arbitrum Chains',
                     },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/priority-fees',
+                      label: 'Priority fees',
+                    },
                   ],
                 },
                 {
