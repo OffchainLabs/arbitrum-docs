@@ -27,6 +27,14 @@ Note that when working with parent to child chain messages (also known as [retry
 
 ## The fee formula
 
+:::info L1 fee "baked in"
+
+The model below explains a two-dimensional fee model that captures both L1 and L2 costs. However, it is important to note that users will see a single fee—the L2 cost with the L1 fee "baked-in." This differs from other Rollups.
+
+Arbitrum converts L1 calldata costs into equivalent L2 gas, so the user sees a single fee rather than two (as explained in the model below). The formula detailed below is precisely how it is calculated—but just remember it is shown as a single fee to the user.
+
+:::
+
 Arbitrum uses a [two-dimensional fee model](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) where a transaction's total fee has two components: child chain execution costs and parent chain data posting costs. The total transaction fee is:
 
 ```

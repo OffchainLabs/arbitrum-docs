@@ -152,7 +152,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/a-gentle-introduction',
-          label: 'A gentle introduction',
+          label: 'Arbitrum chains overview',
         },
         {
           type: 'doc',
@@ -1091,7 +1091,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
-              label: 'A gentle introduction',
+              label: 'BoLD overview',
             },
             {
               type: 'link',
@@ -1137,7 +1137,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
-              label: 'Public preview',
+              label: 'How Timeboost works',
             },
             {
               type: 'doc',
