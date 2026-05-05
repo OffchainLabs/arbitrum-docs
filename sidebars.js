@@ -1337,6 +1337,11 @@ const sidebars = {
                   label: 'Set up standard gateway',
                   id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
                 },
+                {
+                  type: 'doc',
+                  label: 'Register via DAO governance',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/register-via-dao-governance',
+                },
               ],
             },
           ],
