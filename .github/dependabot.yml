@@ -1,7 +1,7 @@
 # Dependabot configuration.
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 #
-# Routine version updates are batched into a single monthly PR. Security
+# Routine version updates are batched into a single weekly PR. Security
 # advisories are handled by GitHub's separate Dependabot security-updates
 # feature (Settings → Code security & analysis), which bypasses this schedule
 # and opens individual PRs immediately when a vulnerability is matched.
@@ -11,7 +11,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'monthly'
+      interval: 'weekly'
     open-pull-requests-limit: 5
     groups:
       npm-minor-and-patch:
