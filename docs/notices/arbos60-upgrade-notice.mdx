@@ -15,7 +15,6 @@ ArbOS 60 removes support for the [WebAssembly multi-value extension](https://git
 ### Who is affected
 
 A Stylus contract is affected only if its compiled WASM uses the multi-value feature. In practice, this is uncommon for Rust Stylus SDK users, because the standard Rust toolchain targeting `wasm32-unknown-unknown` does not emit multi-value by default. You are most likely affected if:
-
 - You compiled with non-default LLVM flags that enable multi-value, or
 - You used a non-Rust toolchain (e.g., AssemblyScript or hand-written `wat`) that emits multi-value, or
 - A dependency in your build pipeline opted in to multi-value.
@@ -25,7 +24,7 @@ A Stylus contract is affected only if its compiled WASM uses the multi-value fea
 After ArbOS 60 activates, contracts using multi-value:
 
 - **Cannot be activated.** A fresh `cargo stylus deploy` of a multi-value WASM will fail at the activation step.
-- **Cannot be re-activated.** Contracts that were already deployed and activated before ArbOS 60 must be reactivated periodically (every 365 days, or after a Stylus upgrade). After ArbOS 60, re-activation will fail for multi-value contracts, making them uncallable until they are redeployed without multi-value. **[SME-VERIFY: exact error returned by `ArbWasm.activateProgram` for multi-value WASM]**
+- **Cannot be re-activated.** Contracts that were already deployed and activated before ArbOS 60 must be reactivated periodically (every 365 days, or after a Stylus upgrade). After ArbOS 60, re-activation will fail for multi-value contracts, making them uncallable until they are redeployed without multi-value.
 
 ### What to do
 
