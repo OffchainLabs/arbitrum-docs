@@ -125,7 +125,7 @@ When fragmentation is used, the deploy flow becomes:
 2. If the size exceeds 24 KB, the binary is bisected into the smallest number of fragments needed for each to fit under the limit.
 3. Each fragment is deployed in its own transaction.
 4. A collection contract is deployed last, containing the ordered list of fragment addresses.
-5. The collection contract is then activated via ArbWasm [SME-VERIFY: confirm activation entrypoint name — activateProgram or new method for collections]. Activation reads all fragments through the collection, concatenates them, and decompresses the result.
+5. The collection contract is then activated via ArbWasm. Activation reads all fragments through the collection, concatenates them, and decompresses the result.
 
 The address returned at the end of cargo stylus deploy is the collection contract address. This is the address users and other contracts call. From a caller's perspective, a fragmented Stylus contract is indistinguishable from a single-deployment Stylus contract: same ABI, same call semantics, same activation lifecycle.
 
