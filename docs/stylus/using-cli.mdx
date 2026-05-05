@@ -116,6 +116,23 @@ Available for commands involving transactions:
 | --keystore-path          | Path to Ethereum wallet keystore file                |
 | --keystore-password-path | Keystore password file path                          |
 
+### Deploying contracts larger than 24 KB
+
+Contracts whose compressed WASM exceeds the 24 KB single-contract code limit are deployed using fragmentation. No flags or special commands are required — cargo stylus deploy detects the size and handles fragmentation automatically.
+
+When fragmentation is used, the deploy flow becomes:
+1. `cargo stylus` compresses your WASM and checks its size.
+2. If the size exceeds 24 KB, the binary is bisected into the smallest number of fragments needed for each to fit under the limit.
+3. Each fragment is deployed in its own transaction.
+4. A collection contract is deployed last, containing the ordered list of fragment addresses.
+5. The collection contract is then activated via ArbWasm [SME-VERIFY: confirm activation entrypoint name — activateProgram or new method for collections]. Activation reads all fragments through the collection, concatenates them, and decompresses the result.
+
+The address returned at the end of cargo stylus deploy is the collection contract address. This is the address users and other contracts call. From a caller's perspective, a fragmented Stylus contract is indistinguishable from a single-deployment Stylus contract: same ABI, same call semantics, same activation lifecycle.
+
+Activation cost: For a fragmented contract, activation cost is approximately equal to the cost of an EXTCODEREAD against each fragment, plus the standard Stylus activation overhead (instrumentation, gas-metering injection, native compilation). Larger contracts therefore cost more to activate than smaller ones, in proportion to the number of fragments.
+
+Fragments are not reusable: Each fragment contract belongs to exactly one collection. Even if two different Stylus contracts happen to share identical bytes, they will deploy separate fragment contracts. This keeps the deployment model simple and avoids cross-contract dependencies at activation time.
+
 ### How-tos
 
 | Topic                                                                       | Description                                                                                                                                 |
