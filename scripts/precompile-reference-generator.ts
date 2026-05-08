@@ -37,7 +37,7 @@ const extractDocComment = (lines: string[], lineIdx: number): string => {
   for (let j = lineIdx - 1; j >= 0; j--) {
     const t = lines[j].trim();
     if (!t.startsWith('//')) break;
-    commentLines.unshift(t.replace(/^\/\/\s?/, ''));
+    commentLines.unshift(t.replace(/^\/\/+\s*/, ''));
   }
   return commentLines.join(' ').trim();
 };
@@ -72,7 +72,16 @@ const renderMethodsInTable = (
   for (let i = 0; i < interfaceLines.length; i++) {
     const trimmedLine = interfaceLines[i].trim();
     if (trimmedLine.startsWith('function')) {
-      const signature = trimmedLine.split(')')[0].replace('function', '').trim() + ')';
+      // Solidity function signatures may span multiple lines. Concatenate
+      // forward until we find the closing `)` of the parameter list.
+      let signatureSource = trimmedLine;
+      let j = i;
+      while (!signatureSource.includes(')') && j + 1 < interfaceLines.length) {
+        j++;
+        signatureSource += ' ' + interfaceLines[j].trim();
+      }
+      const signature =
+        signatureSource.split(')')[0].replace('function', '').replace(/\(\s+/, '(').trim() + ')';
       const methodName = signature.split('(')[0].toLowerCase();
       methodsInformation[methodName] = {
         signature,
@@ -229,11 +238,17 @@ const renderEventsInTable = (
   }
 
   if (eventOverrides) {
+    // Making all event names lowercase
+    const lowercasedEventOverrides = Object.keys(eventOverrides).reduce((acc, key) => {
+      acc[key.toLowerCase()] = eventOverrides[key];
+      return acc;
+    }, {});
+
     // Merge potential overrides
-    Object.keys(eventOverrides).map((eventName: string) => {
+    Object.keys(lowercasedEventOverrides).map((eventName: string) => {
       eventsInformation[eventName] = {
         ...eventsInformation[eventName],
-        ...eventOverrides[eventName],
+        ...lowercasedEventOverrides[eventName],
       };
     });
   }
