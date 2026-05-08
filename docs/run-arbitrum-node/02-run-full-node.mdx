@@ -38,7 +38,7 @@ To ensure the database persists across restarts, mount an external volume to **`
 If using a `node-config.json` file with Docker to mount, use the following command:
 
 ```
-docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.7-75e084e@@ --conf.file /home/user/.arbitrum/node-config.json
+docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ --conf.file /home/user/.arbitrum/node-config.json
 ```
 
 :::
