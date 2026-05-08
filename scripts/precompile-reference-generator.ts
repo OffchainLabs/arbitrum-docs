@@ -29,6 +29,19 @@ type PrecompileEventOverrides = {
   [key: string]: PrecompileEventInfo;
 };
 
+// Walks backward from `lineIdx` over consecutive `// ...` comment lines and joins
+// them into a single description. Handles Go-style multi-line doc comments above
+// a func/event/struct-field declaration. Returns '' if no comment immediately precedes.
+const extractDocComment = (lines: string[], lineIdx: number): string => {
+  const commentLines: string[] = [];
+  for (let j = lineIdx - 1; j >= 0; j--) {
+    const t = lines[j].trim();
+    if (!t.startsWith('//')) break;
+    commentLines.unshift(t.replace(/^\/\/\s?/, ''));
+  }
+  return commentLines.join(' ').trim();
+};
+
 const partialTablesBasePath = './docs/for-devs/dev-tools-and-resources/partials/precompile-tables';
 // Precompile interfaces are in the nitro-precompile-interfaces repository
 const interfaceBaseUrl = `https://github.com/OffchainLabs/${
@@ -55,46 +68,36 @@ const renderMethodsInTable = (
   const methodsInformation: { [key: string]: PrecompileMethodInfo } = {};
 
   // Detect all method signatures in the interface
-  let interfaceLineNumber = 0;
-  interfaceCode.split('\n').forEach((line) => {
-    interfaceLineNumber++;
-
-    const trimmedLine = line.trim();
+  const interfaceLines = interfaceCode.split('\n');
+  for (let i = 0; i < interfaceLines.length; i++) {
+    const trimmedLine = interfaceLines[i].trim();
     if (trimmedLine.startsWith('function')) {
       const signature = trimmedLine.split(')')[0].replace('function', '').trim() + ')';
       const methodName = signature.split('(')[0].toLowerCase();
-      const methodInfo: PrecompileMethodInfo = {
+      methodsInformation[methodName] = {
         signature,
-        interfaceLine: interfaceLineNumber,
+        interfaceLine: i + 1,
         implementationLine: 0,
         description: '',
       };
-
-      methodsInformation[methodName] = methodInfo;
     }
-  });
+  }
 
-  // Get information about the implementation of methods
-  let implementationLineNumber = 0;
-  let previousLine = '';
-  implementationCode.split('\n').forEach((line) => {
-    implementationLineNumber++;
-
-    const trimmedLine = line.trim();
-    if (trimmedLine.startsWith('func')) {
-      const methodName = trimmedLine.split(')')[1].split('(')[0].trim().toLowerCase();
-      const methodDescription = previousLine.trim().startsWith('//')
-        ? previousLine.split('//')[1].trim()
-        : '';
-
-      if (methodsInformation[methodName]) {
-        methodsInformation[methodName].implementationLine = implementationLineNumber;
-        methodsInformation[methodName].description = methodDescription;
-      }
+  // Get information about the implementation of methods.
+  // The Go doc comment may span multiple lines, so we walk backward from the func
+  // line and concatenate all consecutive `//` lines (Fix A).
+  const implLines = implementationCode.split('\n');
+  for (let i = 0; i < implLines.length; i++) {
+    const trimmedLine = implLines[i].trim();
+    if (!trimmedLine.startsWith('func')) continue;
+    const afterReceiver = trimmedLine.split(')')[1];
+    if (!afterReceiver) continue; // not a method (no receiver)
+    const methodName = afterReceiver.split('(')[0].trim().toLowerCase();
+    if (methodsInformation[methodName]) {
+      methodsInformation[methodName].implementationLine = i + 1;
+      methodsInformation[methodName].description = extractDocComment(implLines, i);
     }
-
-    previousLine = line;
-  });
+  }
 
   if (methodOverrides) {
     // Making all method names lowercase
@@ -110,6 +113,21 @@ const renderMethodsInTable = (
         ...lowercasedMethodOverrides[methodName],
       };
     });
+  }
+
+  // Guard rail (Fix C): a Solidity method without a matched Go function would
+  // produce a broken `#L0` GitHub link. Fail loudly so the writer knows to
+  // either fix the parser or pin a methodOverrides entry in
+  // src/resources/precompilesInformation.js.
+  for (const info of Object.values(methodsInformation)) {
+    if (!info.implementationLine) {
+      throw new Error(
+        `precompile-reference-generator: no Go implementation found for method ` +
+          `"${info.signature}" (interface line ${info.interfaceLine}). ` +
+          `Add a methodOverrides entry in src/resources/precompilesInformation.js ` +
+          `or update the parser.`,
+      );
+    }
   }
 
   // Deprecation flag
@@ -165,41 +183,50 @@ const renderEventsInTable = (
   // Initialization of list of events
   const eventsInformation: { [key: string]: PrecompileEventInfo } = {};
 
-  // Detect all event names in the interface
-  let interfaceLineNumber = 0;
-  let previousLine = '';
-  interfaceCode.split('\n').forEach((line) => {
-    interfaceLineNumber++;
-
-    const trimmedLine = line.trim();
+  // Detect all event names in the interface. Solidity doc comments may span
+  // multiple lines, so use the same backward-scan helper as for Go (Fix A).
+  const interfaceLines = interfaceCode.split('\n');
+  for (let i = 0; i < interfaceLines.length; i++) {
+    const trimmedLine = interfaceLines[i].trim();
     if (trimmedLine.startsWith('event')) {
       const eventName = trimmedLine.split('(')[0].replace('event', '').trim();
-      const eventDescription = previousLine.trim().startsWith('//')
-        ? previousLine.split('//')[1].trim()
-        : '';
-      const eventInfo: PrecompileEventInfo = {
+      eventsInformation[eventName.toLowerCase()] = {
         name: eventName,
-        interfaceLine: interfaceLineNumber,
+        interfaceLine: i + 1,
         implementationLine: 0,
-        description: eventDescription,
+        description: extractDocComment(interfaceLines, i),
       };
-
-      eventsInformation[eventName.toLowerCase()] = eventInfo;
     }
+  }
 
-    previousLine = line;
-  });
-
-  // Get information about where the events are emitted
-  let implementationLineNumber = 0;
-  implementationCode.split('\n').forEach((line) => {
-    implementationLineNumber++;
-    Object.keys(eventsInformation).map((eventName) => {
-      if (line.toLowerCase().includes(`con.${eventName}(`)) {
-        eventsInformation[eventName].implementationLine = implementationLineNumber;
+  // Find emit sites in the Go file: pattern `con.<eventname>(`. Take the FIRST
+  // match per event; deprecated events that are declared but never emitted will
+  // remain at 0 here and get filled in by the fallback below.
+  const implLines = implementationCode.split('\n');
+  for (let i = 0; i < implLines.length; i++) {
+    const lineLower = implLines[i].toLowerCase();
+    Object.keys(eventsInformation).forEach((eventKey) => {
+      if (eventsInformation[eventKey].implementationLine !== 0) return;
+      if (lineLower.includes(`con.${eventKey}(`)) {
+        eventsInformation[eventKey].implementationLine = i + 1;
       }
     });
-  });
+  }
+
+  // Fallback (Fix B): for events without an emit site (deprecated events that
+  // are only declared, or events emitted via wrapper/framework code outside this
+  // file), point the link at the FIRST occurrence of the event name in the Go
+  // source — typically its struct-field declaration. Guarantees a working link.
+  for (const eventKey of Object.keys(eventsInformation)) {
+    const info = eventsInformation[eventKey];
+    if (info.implementationLine !== 0) continue;
+    for (let i = 0; i < implLines.length; i++) {
+      if (implLines[i].includes(info.name)) {
+        eventsInformation[eventKey].implementationLine = i + 1;
+        break;
+      }
+    }
+  }
 
   if (eventOverrides) {
     // Merge potential overrides
@@ -209,6 +236,21 @@ const renderEventsInTable = (
         ...eventOverrides[eventName],
       };
     });
+  }
+
+  // Guard rail (Fix C): refuse to emit `#L0` links. If we get here with an
+  // unresolved event, neither the emit-site search nor the struct-field fallback
+  // found anything in the Go source — the writer needs to add an eventOverrides
+  // entry or fix the parser.
+  for (const info of Object.values(eventsInformation)) {
+    if (!info.implementationLine) {
+      throw new Error(
+        `precompile-reference-generator: no Go reference found for event ` +
+          `"${info.name}" (interface line ${info.interfaceLine}). ` +
+          `Add an eventOverrides entry in src/resources/precompilesInformation.js ` +
+          `or update the parser.`,
+      );
+    }
   }
 
   // Create HTML
