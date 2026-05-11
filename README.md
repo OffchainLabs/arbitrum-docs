@@ -1,5 +1,7 @@
 # Arbitrum Docs
 
+[![Tracked on web3-discover](https://web3-discover.vercel.app/badge/arbitrum-stip-unlock.svg)](https://web3-discover.vercel.app/airdrops/arbitrum-stip-unlock)
+
 Arbitrum Docs, built with docusaurus; docs are live at https://developer.arbitrum.io/.
 
 ## File structure
