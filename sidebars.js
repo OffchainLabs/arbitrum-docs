@@ -1033,6 +1033,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
+            },
+            {
+              type: 'doc',
               label: 'ArbOS',
               id: 'how-arbitrum-works/deep-dives/arbos',
             },
@@ -1342,11 +1347,11 @@ const sidebars = {
                   label: 'Set up standard gateway',
                   id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
                 },
-                {
-                  type: 'link',
-                  label: 'Register via DAO governance',
-                  id: 'https://docs.arbitrum.foundation/how-tos/register-token-via-dao-governance',
-                },
+                // {
+                //   type: 'link',
+                //   label: 'Register via DAO governance',
+                //   id: 'https://docs.arbitrum.foundation/how-tos/register-token-via-dao-governance',
+                // },
               ],
             },
           ],
