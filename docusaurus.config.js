@@ -185,6 +185,7 @@ const config = {
       {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
+        generateMarkdownFiles: true,
         docsDir: 'docs',
         excludeImports: true,
         removeDuplicateHeadings: true,

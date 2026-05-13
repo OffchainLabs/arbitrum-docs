@@ -781,6 +781,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/start-here',
+          label: 'Start here',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/run-full-node',
           label: 'Run a full node',
         },

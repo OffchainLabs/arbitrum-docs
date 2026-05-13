@@ -296,6 +296,14 @@ impl Hashes {
 
 Storage collections provide persistent arrays, vectors, and maps.
 
+<VanillaAdmonition type="note" title="`.set()` vs `.setter()` — when to use each">
+
+- **Primitives** (`StorageUint`, `StorageAddress`, `StorageBool`, …): call `.set(value)` directly to write.
+- **Collections** (`StorageMap`, `StorageVec`, `StorageArray`): call `.setter(key)` to obtain a `StorageGuardMut` handle, then `.set(value)`, `.get()`, or `.erase()` on it. The guard enforces Rust's borrow rules and prevents storage aliasing at compile time.
+- If you both read and write the same element, bind the `.setter(...)` result to a `let` so you avoid two slot lookups.
+
+</VanillaAdmonition>
+
 ### StorageVec (dynamic array)
 
 Dynamic arrays that can grow and shrink:

@@ -23,7 +23,7 @@ Multiplying the value from `eth_estimateGas` by the child chain gas price gives 
 
 Alternatively, call `NodeInterface.gasEstimateComponents()` and use the first result (`gasEstimate`) as your gas limit. Multiply by the third result (`baseFee`) to get the total cost.
 
-Note that when working with parent to child chain messages (also known as [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)), you can use the function [`ParentToChildMessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/message/ParentToChildMessageGasEstimator.ts) of the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.8@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
+Note that when working with parent to child chain messages (also known as [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)), you can use the function [`ParentToChildMessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/message/ParentToChildMessageGasEstimator.ts) of the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
 
 ## The fee formula
 
