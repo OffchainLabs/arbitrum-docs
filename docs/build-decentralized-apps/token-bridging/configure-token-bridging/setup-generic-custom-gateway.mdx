@@ -23,10 +23,9 @@ First of all, the **parent chain counterpart of the token** must conform to the 
 
 These methods are needed to register the token via the gateway contract. If your parent chain contract does not include these methods and it is not upgradeable, you could register in one of these ways:
 
-- Submit an [Arbitrum DAO proposal using the standardized token registrations template](/build-decentralized-apps/token-bridging/configure-token-bridging/register-via-dao-governance.mdx).
+- Submit an [Arbitrum DAO proposal using the standardized token registrations template](https://docs.arbitrum.foundation/how-tos/register-token-via-dao-governance).
 - Wrap your parent chain token and register the wrapped version of your token.
-
-Note that registration is a one-time event.
+  Note that registration is a one-time event.
 
 Also, the **child chain counterpart of the token** must conform to the [`IArbToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface, meaning that:
 
