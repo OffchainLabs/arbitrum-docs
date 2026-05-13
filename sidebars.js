@@ -1343,9 +1343,9 @@ const sidebars = {
                   id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
                 },
                 {
-                  type: 'doc',
+                  type: 'link',
                   label: 'Register via DAO governance',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/register-via-dao-governance',
+                  id: 'https://docs.arbitrum.foundation/how-tos/register-token-via-dao-governance',
                 },
               ],
             },
