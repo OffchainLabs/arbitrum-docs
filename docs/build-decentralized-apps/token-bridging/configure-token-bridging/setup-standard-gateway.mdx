@@ -3,9 +3,18 @@ title: Configure standard gateway bridging
 description: "Guide to configuring ERC-20 token bridging using Arbitrum's standard gateway, which automatically creates a standard token representation on the child chain with no custom configuration required."
 user_story: 'As a developer, I want to set up standard gateway bridging for my ERC-20 token so it can be transferred between Ethereum and Arbitrum.'
 content_type: how-to
+author: anegg0
+sme: TBD
+displayed_sidebar: buildAppsSidebar
 ---
 
-This guide explains how to configure your **ERC-20** token to work with Arbitrum's standard gateway. The standard gateway is the simplest option—it automatically creates a standard **ERC-20** token on the child chain with no configuration required.
+This guide explains how to configure your **ERC-20** token to work with Arbitrum's standard gateway. The standard gateway is the simplest option — it automatically creates a standard **ERC-20** token on the child chain with no configuration required.
+
+<VanillaAdmonition type="info">
+
+**Audience and scope.** This guide covers registration on Arbitrum One. The same mechanics apply on Arbitrum Nova and on Arbitrum chains you operate yourself — the standard gateway is permissionless on every Arbitrum chain, so no extra steps are needed if you operate the chain. The first deposit triggers automatic child chain token deployment in all cases.
+
+</VanillaAdmonition>
 
 ## When to use the standard gateway
 
@@ -57,9 +66,9 @@ contract DappToken is ERC20 {
 
 Deploy it to the parent chain:
 
-```javascript
-const { ethers } = require('hardhat');
-const { providers, Wallet } = require('ethers');
+```ts
+import { ethers } from 'hardhat';
+import { providers, Wallet } from 'ethers';
 
 const parentProvider = new providers.JsonRpcProvider(process.env.PARENT_RPC);
 const wallet = new Wallet(process.env.PRIVATE_KEY, parentProvider);
@@ -98,7 +107,7 @@ The child chain token is created automatically on the first deposit. You can tri
 
 ### Using the Arbitrum SDK
 
-```javascript
+```ts
 import { getArbitrumNetwork, Erc20Bridger } from '@arbitrum/sdk';
 import { providers, Wallet } from 'ethers';
 
@@ -135,7 +144,7 @@ After the first deposit, find your token's child chain address:
 
 ### Using the SDK
 
-```javascript
+```ts
 const childTokenAddress = await erc20Bridge.getChildErc20Address(
   parentTokenAddress,
   parentProvider,
@@ -165,12 +174,14 @@ The automatically deployed token is an instance of [`StandardArbERC20`](https://
 
 You can verify this on [Arbiscan](https://arbiscan.io/) by viewing the token contract.
 
+import TokenBridgingNextSteps from '../partials/_token-bridging-next-steps.mdx';
+import TokenBridgingResources from '../partials/_token-bridging-resources.mdx';
+
 ## Configuration complete
 
 Your token is now bridgeable! Users can:
 
-- [Deposit tokens to the child chain](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
-- [Withdraw tokens back to parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+<TokenBridgingNextSteps />
 
 ## Important considerations
 
@@ -193,16 +204,9 @@ Once the first deposit occurs, the token is permanently assigned to the standard
 
 The gateway controls the automatically deployed child chain token—you can't modify or upgrade it. For control over the child chain token, use the generic-custom gateway.
 
-## Next steps
-
-- [Deposit tokens](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
-- [Withdraw tokens](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
-- [Understand token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
-- [View example code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
-
 ## Resources
 
-- [Token bridge conceptual overview](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+<TokenBridgingResources />
+
 - [Standard **ERC-20** bridging details](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging)
-- [Arbitrum SDK documentation](/sdk)
-- [Contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
+- [Example code: token deposit](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)

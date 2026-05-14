@@ -3,10 +3,23 @@ title: 'Get started with token bridging'
 description: 'Get started with Arbitrum token bridging — learn the available options for bridging ERC-20 tokens between Ethereum and Arbitrum, including standard, generic-custom, and custom gateways.'
 user_story: 'As a developer, I want to understand my options for bridging tokens between Ethereum and Arbitrum so I can choose the right approach for my project.'
 content_type: quickstart
+author: anegg0
+sme: TBD
 displayed_sidebar: buildAppsSidebar
 ---
 
 Token bridging is a fundamental aspect of any child chain protocol. It allows projects to quickly integrate with the Arbitrum ecosystem by leveraging their existing parent chain tokens.
+
+<VanillaAdmonition type="info">
+
+**Audience and scope.** These guides describe how to make a token bridgeable on Arbitrum One. The Solidity interfaces, SDK calls, and on-chain mechanics generalize to any Arbitrum chain — including Arbitrum Nova and chains you operate yourself — but the privileged registration path for non-upgradeable parent chain tokens differs:
+
+- **Arbitrum One or Nova:** registration goes through Arbitrum DAO governance.
+- **An Arbitrum chain you operate:** as the chain owner, you can register tokens directly through your chain's `UpgradeExecutor`. No DAO vote required.
+
+The gateway you choose below is the same in either case.
+
+</VanillaAdmonition>
 
 ## I want to deposit or withdraw tokens
 
@@ -19,7 +32,16 @@ These guides work for any token that's already bridgeable, regardless of which g
 
 ## I want to make my token bridgeable
 
-If you're setting up bridging for a new token, you have three gateway options to choose from:
+If you're setting up bridging for a new token, choose a gateway based on what your token needs:
+
+| Your token                                                                                                | Gateway                                                                                                              | Why                                              |
+| --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Standard **ERC-20**, no special transfer behavior                                                         | [Standard](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx)             | Automatic, no pre-configuration                  |
+| Rebasing, fee-on-transfer, transfer hooks, or non-standard mint/burn                                      | [Generic-custom](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) | Standard gateway can't represent these correctly |
+| Standard transfer behavior but you need a custom child chain token (extra methods, role-gated mint, etc.) | [Generic-custom](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) | You control the child chain token contract       |
+| Custom deposit/withdraw mechanics, child-chain-native tokens, or other bridge-level behavior              | [Custom](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway.mdx)                 | You implement the gateway itself                 |
+
+Each option is described in more detail below.
 
 ### 1. Standard gateway (recommended for most tokens)
 
