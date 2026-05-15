@@ -7,14 +7,12 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
+You can submit transactions to <a data-quicklook-from="arbitrum">Arbitrum</a> through two main pathways:
 
-You can submit transactions to the <a data-quicklook-from="arbitrum">Arbitrum</a> chain through two main pathways:
+1. **Through the <a data-quicklook-from="sequencer">Sequencer</a>**: The standard method for most transactions.
+2. **Bypassing the Sequencer**: Using the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the parent chain.
 
-1. **Through the <a data-quicklook-from="sequencer">Sequencer</a>**: The standard method for most transactions
-2. **Bypassing the Sequencer**: Using the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the Parent chain
-
-This guide explains both methods, when to use each one, and how they work within Arbitrum's <a data-quicklook-from="transaction">transaction</a> lifecycle.
+This guide explains both methods, when to use each, and how they flow through Arbitrum’s transaction lifecycle.
 
 ## Transaction submission methods
 
@@ -31,12 +29,12 @@ The first three options route through a load balancer, while the Sequencer endpo
 
 ### Non-sequencer pathway
 
-You can also submit transactions directly to the Delayed Inbox contract on the Parent chain. This method works even when the Sequencer is unavailable and provides additional censorship resistance.
+You can also submit transactions directly to the Delayed Inbox contract on the parent chain. This method works even when the Sequencer is unavailable, providing an additional layer of censorship resistance.
 
 The following diagram shows the different ways you can submit transactions to Arbitrum:
 
 <ImageZoom
-  src="/img/haw-transaction-lifecycle.svg"
+  src="/img/haw-transaction-lifecycle.png"
   alt="Transaction lifecycle diagram showing various pathways for submitting transactions"
   className="img-600px"
 />
@@ -95,7 +93,7 @@ The following diagram shows the four methods for submitting transactions to the 
 
 ## Bypassing the Sequencer
 
-You can submit transactions directly to the Delayed Inbox contract on the Parent chain without using the Sequencer. This method provides:
+You can submit transactions directly to the Delayed Inbox contract on the parent chain without using the Sequencer. This method provides:
 
 - **Censorship resistance**: Transaction inclusion even if the Sequencer refuses to process it
 - **Availability guarantee**: Transactions work even when the Sequencer is offline

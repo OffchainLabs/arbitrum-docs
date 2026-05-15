@@ -24,7 +24,7 @@ For pure Rollup chains, enabling it effectively introduces a committee trust lay
 
 - **DA modes**: Optimized for AnyTrust (leverages DAC); possible but not recommended for Rollup or Alt-DA, as it adds trust assumptions.
 - **Validation**: Works with <a data-quicklook-from="bold">BoLD</a> (permissionless) or pre-BoLD (permissioned), but the committee must be allowlisted.
-- **Gas tokens**: No restrictions; compatible with native `ETH` or custom `ERC-20`s.
+- **Gas tokens**: No restrictions; compatible with native **ETH** or custom **ERC-20**s.
 - **Parent chain**: Interval must exceed the parent's finality time (e.g., >12.8 minutes for Ethereum L2s). (Refer to [Key Concepts above](#key-concepts) for more information about the Fast Withdrawal Mechanism.)
 
 <!-- Render Fast Withdrawals Pros & Cons partial -->
@@ -49,10 +49,10 @@ This is an abbreviated set of instructions on how to configure fast withdrawals.
 :::
 
 1. **Upgrade contracts and nodes**: Ensure nitro-contracts v2.1.0+ (update `RollupAdminLogic` and `RollupUserLogic`) and node software to nitro v3.1.2+. Use the Arbitrum chain versioner script to check and upgrade.
-2. **Run configuration scripts**: Use the Arbitrum Chain SDK (e.g., setup-fast-withdrawal example) or `orbit-actions` repo (e.g., fast-confirm script with Foundry's cast CLI) to create a Safe multisig for the committee, add validators to the allowlist, set the Safe as the `anytrustFastConfirmer`, and optionally adjust `minimumAssertionPeriod` (defaults to 75 blocks ~15 minutes, measured in the first non-Arbitrum ancestor chain's blocks).
+2. **Run configuration scripts**: Use the Arbitrum Chain SDK (e.g., setup-fast-withdrawal example) or `chain-actions` repo (e.g., fast-confirm script with Foundry's cast CLI) to create a Safe multisig for the committee, add validators to the allowlist, set the Safe as the `anytrustFastConfirmer`, and optionally adjust `minimumAssertionPeriod` (defaults to 75 blocks ~15 minutes, measured in the first non-Arbitrum ancestor chain's blocks).
 3. **Configure nodes**:
    - Batch Poster: Set `--node.batch-poster.max-delay` to match the assertion period (e.g., 15m).
    - Validators (BoLD mode): Enable `--node.bold.enable-fast-confirmation=true` and set `--node.bold.assertion-posting-interval` to the period.
    - Validators (pre-BoLD): Similar flags like `--node.staker.enable-fast-confirmation=true` and `--node.staker.make-assertion-interval`.
 
-This feature aligns with Arbitrum's focus on scalable, user-friendly chains while maintaining core security. For setup, consult the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
+This feature aligns with Arbitrum's focus on scalable, user-friendly chains while maintaining core security. For setup, consult the official docs, or your <a data-quicklook-from="raas">RaaS</a>; a [list of RaaSes is on the Third-party providers page](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.mdx#rollup-as-a-service-raas-providers).

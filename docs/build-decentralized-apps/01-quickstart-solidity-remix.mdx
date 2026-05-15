@@ -1,15 +1,12 @@
 ---
 title: 'Build a decentralized app with Solidity (Quickstart)'
-description: This quickstart walks you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Anvil/Foundry network, then Arbitrum Sepolia testnet, and finally Arbitrum One mainnet.
+description: 'Learn how to build and deploy your first Solidity smart contract on Arbitrum using Remix IDE. This beginner-friendly quickstart guides you from a JavaScript vending machine to a decentralized app deployed on Arbitrum One, covering smart contract basics, wallet setup, and testnet deployment.'
 author: symbolpunk
-user_story: As a web2 developer, I want to onboard into Arbitrum by building and deploying my first smart contract, and knowing how to build a web widget interacting with it.
+user_story: 'As a web2 developer new to blockchain, or a web3 developer new to Arbitrum, I want a step-by-step guide to writing, compiling, and deploying a Solidity smart contract on Arbitrum using Remix IDE so that I can understand the fundamentals of decentralized app development and start building on Arbitrum.'
 content_type: quickstart
 slug: /build-decentralized-apps/quickstart-solidity-remix
 displayed_sidebar: buildAppsSidebar
 ---
-
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
-import ImageZoom from '@site/src/components/ImageZoom';
 
 :::info Want to use Rust instead?
 
@@ -19,7 +16,6 @@ Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Ru
 
 This quickstart is for web developers who want to start building **decentralized applications** using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
-import CustomDetails from '@site/src/components/CustomDetails';
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
 ## What we'll learn
@@ -87,7 +83,7 @@ We'll address any remaining dependencies as we go.
     according to predefined rules. Ethereum's nodes host and execute smart contracts.
   - You can use smart contracts to build decentralized apps that use Ethereum's network to process transactions and store data. Think of smart contracts as your app's backend
   - Apps let users carry their data and identity between applications without trusting centralized service providers.
-  - People who run Ethereum validator nodes[^3] can earn `ETH` for processing and validating transactions on behalf of users and apps.
+  - People who run Ethereum validator nodes[^3] can earn **ETH** for processing and validating transactions on behalf of users and apps.
   - These transactions can be expensive when the network is under heavy load.
 - **Arbitrum**
   - Arbitrum is a suite of child chain scaling solutions for <a data-quicklook-from="dapp">app</a> developers.
@@ -142,7 +138,346 @@ class VendingMachine {
 
 The `VendingMachine` class uses _state variables_ and _functions_ to implement _predefined rules_. This implementation is useful because it automates cupcake distribution, but there's a problem: it's hosted by a centralized server controlled by a third-party service provider.
 
-Let's decentralize our vending machine's business logic and data by porting the above JavaScript implementation into a Solidity smart contract.
+:::info Working web2 version
+
+To use the Vending Machine (web2), copy and paste the HTML code below into a text document, then open it in your web browser.
+
+<CustomDetails summary="VendingMachine.html">
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cupcake Vending Machine - Arbitrum Quickstart</title>
+  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.25rem;
+      color: #58a6ff;
+    }
+
+    .subtitle {
+      color: #8b949e;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .machines {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .vending-machine {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .vending-machine h2 {
+      font-size: 1.25rem;
+      color: #e6edf3;
+    }
+
+    .vending-machine .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2em 0.6em;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .badge-web2 { background: #238636; color: #fff; }
+    .badge-web3 { background: #1f6feb; color: #fff; }
+
+    label {
+      font-size: 0.85rem;
+      color: #8b949e;
+      font-weight: 500;
+    }
+
+    input[type="text"] {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      color: #e6edf3;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #58a6ff;
+    }
+
+    input[type="text"]::placeholder {
+      color: #484f58;
+    }
+
+    .btn {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #238636;
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #2ea043; }
+
+    .btn-secondary {
+      background: transparent;
+      color: #58a6ff;
+      border: 1px solid #30363d;
+    }
+
+    .btn-secondary:hover { background: #161b22; border-color: #58a6ff; }
+
+    .cupcake-display {
+      font-size: 3rem;
+      text-align: center;
+      height: 4rem;
+      line-height: 4rem;
+      transition: opacity 0.3s;
+    }
+
+    .balance {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d1117;
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .balance-count {
+      font-weight: 700;
+      color: #58a6ff;
+      font-size: 1.1rem;
+    }
+
+    .status {
+      font-size: 0.8rem;
+      min-height: 1.2rem;
+      color: #f85149;
+      text-align: center;
+    }
+
+    .status.success { color: #3fb950; }
+
+    .hidden { display: none; }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .actions .btn { flex: 1; }
+
+    .description {
+      font-size: 0.8rem;
+      color: #8b949e;
+      line-height: 1.4;
+      border-left: 2px solid #30363d;
+      padding-left: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cupcake Vending Machine</h1>
+  <p class="subtitle">From the Arbitrum Solidity + Remix Quickstart</p>
+
+  <div class="machines">
+
+    <!-- WEB2 Vending Machine -->
+    <div class="vending-machine">
+      <span class="badge badge-web2">Web2</span>
+      <h2>Free Cupcakes</h2>
+      <p class="description">Pure JavaScript vending machine. Business logic runs in your browser — no blockchain involved.</p>
+
+      <label for="web2-name">Name</label>
+      <input type="text" id="web2-name" placeholder="Enter name" />
+
+      <div class="actions">
+        <button class="btn btn-primary" id="web2-vend">Cupcake please!</button>
+        <button class="btn btn-secondary" id="web2-refresh">Refresh balance</button>
+      </div>
+
+      <div class="cupcake-display" id="web2-cupcake"></div>
+
+      <div class="balance">
+        <span>Cupcake balance for <strong id="web2-who">—</strong>:</span>
+        <span class="balance-count" id="web2-balance">0</span>
+      </div>
+
+      <div class="status" id="web2-status"></div>
+    </div>
+
+
+
+<script>
+// ============================================================
+// VendingMachine.js — the JavaScript class from the quickstart
+// ============================================================
+class VendingMachine {
+  // state variables = internal memory of the vending machine
+  cupcakeBalances = {};
+  cupcakeDistributionTimes = {};
+
+  // Vend a cupcake to the caller
+  giveCupcakeTo(userId) {
+    if (this.cupcakeDistributionTimes[userId] === undefined) {
+      this.cupcakeBalances[userId] = 0;
+      this.cupcakeDistributionTimes[userId] = 0;
+    }
+
+    // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
+    const fiveSeconds = 5000;
+    const userCanReceiveCupcake = this.cupcakeDistributionTimes[userId] + fiveSeconds <= Date.now();
+    if (userCanReceiveCupcake) {
+      this.cupcakeBalances[userId]++;
+      this.cupcakeDistributionTimes[userId] = Date.now();
+      console.log(`Enjoy your cupcake, ${userId}!`);
+      return true;
+    } else {
+      console.error(
+        'HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)',
+      );
+      return false;
+    }
+  }
+
+  getCupcakeBalanceFor(userId) {
+    return this.cupcakeBalances[userId] || 0;
+  }
+}
+
+// ============================================================
+// VendingMachine.sol ABI (from the compiled Solidity contract)
+// ============================================================
+const VENDING_MACHINE_ABI = [
+  {
+    inputs: [{ internalType: "address", name: "userAddress", type: "address" }],
+    name: "getCupcakeBalanceFor",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [{ internalType: "address", name: "userAddress", type: "address" }],
+    name: "giveCupcakeTo",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "nonpayable",
+    type: "function"
+  }
+];
+
+// ============================================================
+// Helper: flash a cupcake emoji with fade-out
+// ============================================================
+function flashCupcake(elementId) {
+  const el = document.getElementById(elementId);
+  el.textContent = '\u{1F9C1}';
+  el.style.opacity = 1;
+  el.style.transition = 'none';
+  requestAnimationFrame(() => {
+    el.style.transition = 'opacity 4.5s ease-out';
+    el.style.opacity = 0;
+  });
+}
+
+function truncateAddress(text) {
+  if (!text) return '—';
+  if (text.length < 10) return text;
+  return text.slice(0, 6) + '...' + text.slice(-4);
+}
+
+// ============================================================
+// WEB2 Vending Machine
+// ============================================================
+(function initWeb2() {
+  const vm = new VendingMachine();
+
+  const nameInput    = document.getElementById('web2-name');
+  const vendBtn      = document.getElementById('web2-vend');
+  const refreshBtn   = document.getElementById('web2-refresh');
+  const balanceEl    = document.getElementById('web2-balance');
+  const whoEl        = document.getElementById('web2-who');
+  const statusEl     = document.getElementById('web2-status');
+
+  function refreshBalance() {
+    const name = nameInput.value.trim() || 'no name';
+    const bal = vm.getCupcakeBalanceFor(name);
+    balanceEl.textContent = bal;
+    whoEl.textContent = truncateAddress(name);
+  }
+
+  vendBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim() || 'no name';
+    const got = vm.giveCupcakeTo(name);
+    if (got) {
+      statusEl.textContent = `Enjoy your cupcake, ${name}!`;
+      statusEl.className = 'status success';
+      flashCupcake('web2-cupcake');
+      refreshBalance();
+    } else {
+      statusEl.textContent = 'Too many cupcakes! Wait at least 5 seconds.';
+      statusEl.className = 'status';
+    }
+  });
+
+  refreshBtn.addEventListener('click', refreshBalance);
+})();
+
+</script>
+
+</body>
+</html>
+
+
+```
+
+</CustomDetails>
+
+:::
+
+Now, let's decentralize our vending machine's business logic and data by porting the above JavaScript implementation into a Solidity smart contract.
 
 ## Review the Solidity vending machine
 
@@ -341,13 +676,13 @@ Next, click Metamask's network selector dropdown and click the **Add Network** b
 - Network Name: `localhost`
 - New RPC URL: `http://127.0.0.1:8545`
 - Chain ID: `31337`
-- Currency Symbol: `ETH`
+- Currency Symbol: **ETH**
 
 <CustomDetails summary="Add Localhost 8545 to Metamask">
   <ImageZoom src="/img/apps-metamask-add-localhost-2025-01-13.png" alt="" className="img-600px" />
 </CustomDetails>
 
-Your wallet won't have a balance on your local testnet's node, but you can import one of the test accounts into Metamask to access to 10,000 testnet `ETH`. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g., `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80` or `ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`) and import it into Metamask. Metamask will ask you if you want to connect this new account to Remix, to which you should answer "yes":
+Your wallet won't have a balance on your local testnet's node, but you can import one of the test accounts into Metamask to access to 10,000 testnet **ETH**. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g., `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80` or `ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`) and import it into Metamask. Metamask will ask you if you want to connect this new account to Remix, to which you should answer "yes":
 
 <ImageZoom
   src="/img/apps-quickstart-import-metamask.png"
@@ -363,7 +698,7 @@ Your Ethereum Mainnet wallet's private key is the password to all of your tokens
 
 Note that in the context of this quickstart, "account" refers to an EOA (externally owned account), and its associated private key[^5].
 
-You should see a balance of 10,000 `ETH`. Keep your private key handy; we'll use it again shortly.
+You should see a balance of 10,000 **ETH**. Keep your private key handy; we'll use it again shortly.
 
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to choose which network our cupcake transactions get sent to. We'll leave the network set to `Localhost 8545` for now.
 
@@ -415,7 +750,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
-| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet ETH** to testnet validators.                  | ← same, but instead of testnet `ETH`, they use **mainnet `ETH`**.                         |
+| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet ETH** to testnet validators.                  | ← same, but instead of testnet **ETH**, they use **mainnet **ETH\*\*\*\*.                 |
 
 So far, we've deployed our "Web3" app to an emulated blockchain (Anvil), which is a normal step in EVM development.
 
@@ -429,23 +764,23 @@ Sepolia is powered by a network of nodes ran across the world by various partici
 To be able to pay the transaction fee, we will:
 
 - Use our MetaMask crypto wallet
-- Obtain some Arbitrum Sepolia testnet's token called `ETH`.
+- Obtain some Arbitrum Sepolia testnet's token called **ETH**.
 
 Click Metamask's **Network selector** dropdown, and then click the **Add Network** button. Click **Add a network manually** and then provide the following information:
 
 - Network Name: `Arbitrum Sepolia`
 - New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
 - Chain ID: `421614`
-- Currency Symbol: `ETH`
+- Currency Symbol: **ETH**
 
 As we interact with the cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to.
 
-Next, let's deposit some `ETH` into the wallet corresponding to the private key we added to Remix. At the time of this quickstart's writing, the easiest way to acquire `ETH` is to bridge Sepolia `ETH` from Ethereum's parent chain Sepolia network to Arbitrum's child chain Sepolia network:
+Next, let's deposit some **ETH** into the wallet corresponding to the private key we added to Remix. At the time of this quickstart's writing, the easiest way to acquire **ETH** is to bridge Sepolia **ETH** from Ethereum's parent chain Sepolia network to Arbitrum's child chain Sepolia network:
 
-1. Use a parent chain Sepolia `ETH` faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet `ETH` on parent chain Sepolia.
-2. Bridge your parent chain Sepolia `ETH` into Arbitrum child chain using [the Arbitrum bridge](https://bridge.arbitrum.io/).
+1. Use a parent chain Sepolia **ETH** faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet **ETH** on parent chain Sepolia.
+2. Bridge your parent chain Sepolia **ETH** into Arbitrum child chain using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-Once you've acquired some `ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet.
+Once you've acquired some **ETH**, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet.
 You can proceed exactly as with the local testnet.
 
 1. Connect Remix to the Arbitrum Sepolia testnet
@@ -498,7 +833,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted and executed by Ethereum's public, decentralized network of nodes. Arbitrum has its own network of nodes that use advanced cryptography techniques to "batch process" Ethereum transactions and then submit them to the Ethereum parent chain, which significantly reduces the cost of using Ethereum. All without requiring developers to compromise on security or decentralization.
-[^3]: There are multiple types of Ethereum nodes. The ones that earn `ETH` for processing and validating transactions are called _validators_. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
+[^3]: There are multiple types of Ethereum nodes. The ones that earn **ETH** for processing and validating transactions are called _validators_. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
 [^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's Rollup protocol.

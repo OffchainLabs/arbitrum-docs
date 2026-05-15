@@ -40,7 +40,7 @@ The validator assertion posting frequency is controlled by the `--node.staker.ma
 - **Configuration Options for bold**: Configure this in the `node.bold` section, e.g., `"assertion-posting-interval": "45m"` for a 45-minute interval.
 - **Prevention of Issues**: Frequent assertions ensure the chain's state is regularly committed and verifiable on the parent chain, preventing reordering by allowing disputes over any manipulated transaction order. For reorganizations, assertions serve as checkpoints; if a reorganization affects prior batches, validators can challenge and resolve the state to the correct one, thereby maintaining integrity. Infrequent assertions could widen the dispute window vulnerability, but the default balances this with efficiency.
 - **Recommended Settings**: Set to 20-30 minutes for chains needing low-latency finality, but ensure it's >15 minutes to comply with the minimum period. Higher values (e.g., two hours) are suitable for low-stakes chains to reduce validator operational costs.
-- **Note**: Validators require staking (bonding `ETH` or tokens on the parent chain) to post assertions, with the minimum stake set via the Rollup contract during chain deployment. If an incorrect assertion is detected, the interval is bypassed, and a new challenge begins. No new assertions get posted if no new batches arrive or force inclusions occur.
+- **Note**: Validators require staking (bonding **ETH** or tokens on the parent chain) to post assertions, with the minimum stake set via the Rollup contract during chain deployment. If an incorrect assertion is detected, the interval is bypassed, and a new challenge begins. No new assertions get posted if no new batches arrive or force inclusions occur.
 
 ### Validator node confirmation frequency: Interval between validator assertions confirming
 
@@ -49,7 +49,7 @@ The validator assertion confirming frequency is controlled by the --node.staker.
 - **Configuration Options for legacy**: Configure this in the `node.staker` section, e.g., `"staker-interval": "45m"` for a 45-minute interval.
 - **Configuration Options for bold**: Configure this in the `node.bold` section, e.g., `"assertion-confirming-interval": "45m"` for a 45-minute interval.
 - **Recommended Settings**: Using the default setting will be fine.
-- **Note**: Validators require staking (bonding `ETH` or tokens on the parent chain) to confirm assertions.
+- **Note**: Validators require staking (bonding **ETH** or tokens on the parent chain) to confirm assertions.
 
 ## Reorganization prevention:
 

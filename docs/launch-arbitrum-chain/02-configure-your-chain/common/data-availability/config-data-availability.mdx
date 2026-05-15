@@ -8,33 +8,32 @@ user_story: As a current Arbitrum chain owner, I want to understand how to confi
 content_type: quickstart
 ---
 
-When you launch an <a data-quicklook-from="arbitrum">Arbitrum</a> chain, you set up data availability (DA) during the process. The choice affects how <a data-quicklook-from="transaction">transaction</a> data is stored and accessed for validation, thereby impacting security, costs, and performance.
+During <a data-quicklook-from="arbitrum">Arbitrum</a> chain configuration, you'll choose the data availability (DA) option that best suits your needs. This choice affects how <a data-quicklook-from="transaction">transaction</a> data is stored and accessed for validation—impacting security, costs, and performance.
 
-<a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> support multiple DA options, allowing you
-to choose based on your needs (e.g., maximum security vs. lower fees).
+Using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) lets you select from multiple DA options, tailoring your decision to meet your specific requirements.
 
 ## Available data availability options
 
-### 1. Rollup mode (Ethereum/Parent chain DA)
+### 1. Rollup mode (Ethereum/parent chain DA)
 
-This is the default option for chains that demand security. Transaction data is posted to the <a data-quicklook-from="parent-chain">parent chain</a> as calldata or blobs (after [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844)), using Ethereum's DA layer.
+This is the default option for chains that prioritize security. Transaction data is posted to the <a data-quicklook-from="parent-chain">parent chain</a> as calldata or blobs (after [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844)), using Ethereum's DA layer.
 
-- **Config**: Set `arbitrum.DataAvailabilityCommittee` to `false` in your chain config using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk). No extra set up is needed.
+- Set `DataAvailabilityCommittee` to `false` in your chain config using the Chain SDK. No additional steps are required.
 
 ### 2. AnyTrust mode
 
-This mode uses an external Data Availability Committee (DAC), which is a group of permissioned nodes that you choose and run, or outsource (<a data-quicklook-from="raas">RaaS</a>). Instead of posting all the data to the parent chain, the batch poster sends a lightweight <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert) signed by a sufficient number of DAC members. The data is stored offchain and provided when needed.
+This mode uses an external Data Availability Committee (DAC), which is a group of permissioned nodes that you choose and run, or outsource to a Rollup-as-a-Service (<a data-quicklook-from="raas">RaaS</a>). Instead of posting all the data to the parent chain, the <a data-quicklook-from="batch">batch</a> poster sends a lightweight <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert) signed by the required number of DAC members (configurable). The data is stored offchain and made available when needed.
 
-- **Config**: Set `arbitrumDataAvailabilityCommittee` to `true` in the chain config.
-- Deploy Data Availability Servers (DAS) for each DAC member (using Nitro's DAS software).
-- Generate a keyset (BLS public keys + quorum threshold) from DAC members.
-- Register the keyset on the `SequencerInbox` contract post-deployment.
-- Configure nodes (sequencer, <a data-quicklook-from="batch">batch</a> poster, validators) to connect to DAS endpoints (via REST/RPC aggregators).
+- Set `DataAvailabilityCommittee` to `true` in your chain config.
+- Deploy a Data Availability Server (DAS) for each DAC member using Nitro's DAS software.
+- Generate a keyset (BLS public keys and quorum threshold) from DAC members.
+- Register the generated keyset on the `SequencerInbox` contract after deployment.
+- Configure nodes (<a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, validators) to connect to the DAS endpoints (via REST/RPC aggregators).
 
-For a complete, detailed set of instructions on setting up DAC, DAS, and generating keysets refer to [Get started](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/01-get-started.mdx).
+For a complete, detailed set of instructions on setting up DAC, DAS, and generating keysets, refer to [Get started](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/01-get-started.mdx).
 
 ### 3. Alternative data availability (Alt-DA)
 
-In this mode, data is posted to an external modular DA network, such as Celestia, using blobs and data availability sampling. Integration happens through a sidecar server and onchain commitments, such as [Blobstream](https://docs.celestia.org/learn/blobstream/) for verification.
+In this mode, transaction data is posted to an external modular DA network (such as Celestia) using blobs and data availability sampling. You integrate this by running a sidecar server alongside your node, which handles communication with the external DA network. Onchain commitments, such as [Blobstream](https://docs.celestia.org/learn/blobstream/) for verification, ensure that transaction data is available and verifiable.
 
-- **Config**: use a modified Nitro build that includes [Celestia integration](https://docs.celestia.org/build/stacks/nitro-das-server/), such as the celestia-server sidecar. Set the DA provider in your node flags and adjust your preferences, for example, using Celestia as the main provider with a fallback to AnyTrust or Ethereum. Other DA options, such as [EigenDA](https://github.com/Layr-Labs/nitro) or [Avail](https://docs.availproject.org/da/build-with-avail/deploy-rollup-on-avail/Optimium/arbitrum-nitro/overview), can be added in a similar way.
+- Use a modified Nitro build with [Celestia integration](https://docs.celestia.org/build/stacks/nitro-das-server/), such as the celestia-server sidecar, to enable alternative data availability. Set the DA provider in your node flags and specify your preferences, for instance, selecting Celestia as the main provider with a fallback to AnyTrust or Ethereum. You can integrate other DA options, like [EigenDA](https://github.com/Layr-Labs/nitro) or [Avail](https://docs.availproject.org/da/build-with-avail/deploy-rollup-on-avail/Optimium/arbitrum-nitro/overview), in a similar way.

@@ -345,7 +345,7 @@ function buildCompactDoc(
   if (sidebars.length > 0) doc.sb = sidebars;
   if (Object.keys(flags).length > 0) doc.f = flags;
 
-  return doc as CompactDoc;
+  return doc as unknown as CompactDoc;
 }
 
 // --- Main ---
@@ -388,7 +388,11 @@ async function main() {
   // Write output
   fs.mkdirSync(AUDIT_DIR, { recursive: true });
   const jsonPath = path.join(AUDIT_DIR, 'doc-manifest.json');
-  const header = JSON.stringify({ generated: new Date().toISOString(), docsRoot: 'docs/' }, null, 2);
+  const header = JSON.stringify(
+    { generated: new Date().toISOString(), docsRoot: 'docs/' },
+    null,
+    2,
+  );
   // One doc per line for reasonable readability + compactness
   const docsLines = docs.map((d) => JSON.stringify(d));
   const output =
