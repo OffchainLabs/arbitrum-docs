@@ -4,6 +4,13 @@ import Head from '@docusaurus/Head';
 import { useLocation } from '@docusaurus/router';
 // import { PostHogProvider } from '@site/src/components/PostHogProvider';
 
+// Mirror middleware.ts: stripped trailing slash + ".md", except the root
+// "/" maps to "/index.md" (which is where the root page's companion lives).
+const mdAlternateHref = (pathname: string): string => {
+  const stripped = pathname.replace(/\/$/, '');
+  return stripped === '' ? '/index.md' : `${stripped}.md`;
+};
+
 const pathNameToPreviewText = (pathName: string) => {
   const splitPaths = pathName.split('/').filter((x) => x);
   const probablyID = splitPaths[splitPaths.length - 1];
@@ -27,6 +34,18 @@ export default function Layout(props) {
         <meta name="twitter:title" content={previewText || 'Arbitrum Docs!'} />
         <meta name="twitter:description" content="Arbitrum Docs" />
         <meta name="twitter:image" content="https://developer.arbitrum.io/img/devdocs.png" />
+        {/*
+          LLM-discovery hints. The .md companion is served either by appending
+          `.md` to any path or by sending `Accept: text/markdown` (see
+          middleware.ts). /llms.txt is the spec-aligned site index.
+        */}
+        <link rel="alternate" type="text/markdown" href={mdAlternateHref(pathname)} />
+        <link
+          rel="alternate"
+          type="text/llms.txt"
+          href="/llms.txt"
+          title="LLM-friendly site index"
+        />
       </Head>
       <div className="sr-only" aria-hidden="true">
         For AI agents: a documentation index is available at the root level at /llms.txt and

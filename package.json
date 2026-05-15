@@ -10,7 +10,7 @@
     "start": "yarn && yarn clear && docusaurus start",
     "build-glossary": "tsx scripts/build-glossary.ts",
     "build-translation": "yarn tsx ./scripts/move-untranslated-files.ts",
-    "build": "yarn && yarn clear && docusaurus build",
+    "build": "yarn && yarn clear && docusaurus build && node scripts/tidy-llms-txt.js",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

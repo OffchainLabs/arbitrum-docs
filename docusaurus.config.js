@@ -63,6 +63,12 @@ const handleInkeepEvent = (event) => {
 
 // Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
 // Shared between the sitemap and llms.txt so both indexes stay in sync.
+//
+// As a result, llms.txt covers ~55% of the sitemap on purpose — the missing
+// ~228 routes are SDK auto-generated helpers, partials imported into other
+// pages, Docusaurus auto-category index pages, and hosted PDFs. None are
+// user-facing content. Don't lower this bar without checking what's leaking
+// in.
 const nonCanonicalRoutePatterns = [
   '/sdk/assetBridger/**',
   '/sdk/dataEntities/**',
@@ -205,6 +211,30 @@ const config = {
         siteTitle: 'Arbitrum Documentation',
         siteDescription:
           'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
+        // Top-level section order in llms.txt — patterns listed first appear
+        // first; anything unmatched falls to the end alphabetically.
+        includeOrder: [
+          '/get-started/**',
+          '/intro/**',
+          '/build-decentralized-apps/**',
+          '/stylus/**',
+          '/stylus-by-example/**',
+          '/launch-arbitrum-chain/**',
+          '/run-arbitrum-node/**',
+          '/node-running/**',
+          '/sdk/**',
+          '/arbitrum-bridge/**',
+          '/how-arbitrum-works/**',
+          '/audit-reports*',
+          // Anything below this point becomes Optional via categoryName override.
+          '/for-devs/**',
+          '/learn-more/**',
+          '/notices/**',
+        ],
+        // Rename raw directory names to user-facing labels; group deferrable
+        // content under "Optional" per the llmstxt.org spec. The custom
+        // remark-llms-toc-tidy plugin merges the multiple ## Optional
+        // sections into a single one at the end of the TOC.
         content: {
           enableMarkdownFiles: true,
           enableLlmsFullTxt: true,
@@ -212,6 +242,31 @@ const config = {
           includeBlog: false,
           includePages: false,
           excludeRoutes: nonCanonicalRoutePatterns,
+          routeRules: [
+            { route: '/get-started/**', categoryName: 'Get started' },
+            { route: '/intro/**', categoryName: 'Introduction' },
+            {
+              route: '/build-decentralized-apps/**',
+              categoryName: 'Build apps with Solidity',
+            },
+            { route: '/stylus/**', categoryName: 'Build with Stylus' },
+            { route: '/stylus-by-example/**', categoryName: 'Stylus by example' },
+            {
+              route: '/launch-arbitrum-chain/**',
+              categoryName: 'Launch an Arbitrum chain',
+            },
+            { route: '/run-arbitrum-node/**', categoryName: 'Run an Arbitrum node' },
+            { route: '/node-running/**', categoryName: 'Node running' },
+            { route: '/sdk/**', categoryName: 'SDK reference' },
+            { route: '/arbitrum-bridge/**', categoryName: 'Arbitrum bridge' },
+            { route: '/how-arbitrum-works/**', categoryName: 'How Arbitrum works' },
+            { route: '/audit-reports', categoryName: 'Security audit reports' },
+            // Deferrable content — collapsed into a single ## Optional by
+            // remark-llms-toc-tidy.
+            { route: '/for-devs/**', categoryName: 'Optional' },
+            { route: '/learn-more/**', categoryName: 'Optional' },
+            { route: '/notices/**', categoryName: 'Optional' },
+          ],
           beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
           beforeDefaultRemarkPlugins: [
             require('./src/plugins/remark-llms-cleanup'),
