@@ -58,7 +58,7 @@
     "d3": "^7.9.0",
     "docusaurus-plugin-copy-page-button": "^0.4.2",
     "docusaurus-plugin-fathom": "^1.2.0",
-    "docusaurus-plugin-sass": "^0.2.5",
+    "docusaurus-plugin-sass": "^0.2.6",
     "dotenv": "^17.0.1",
     "ethers": "6.16.0",
     "got": "11.8.5",
