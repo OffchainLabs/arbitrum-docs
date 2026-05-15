@@ -361,6 +361,11 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
+                          label: `Configure DAC`,
+                        },
+                        {
+                          type: 'doc',
                           id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
                           label: `Deploy DAS`,
                         },
@@ -371,8 +376,8 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
-                          label: `Configure DAC`,
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations',
+                          label: `DAC/DAS operations`,
                         },
                         {
                           type: 'doc',
