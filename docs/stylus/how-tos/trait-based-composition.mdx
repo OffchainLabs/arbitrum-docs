@@ -8,9 +8,6 @@ sidebar_position: 1
 displayed_sidebar: buildStylusSidebar
 ---
 
-import CustomDetails from '@site/src/components/CustomDetails';
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
-
 Inheritance allows you to build upon existing smart contract functionality without duplicating code. In Stylus, the Rust SDK provides tools to implement inheritance patterns similar to Solidity, but with some important differences. This guide walks you through implementing trait-based composition in your Stylus smart contracts.
 
 <VanillaAdmonition type="caution" title="For Solidity developers">
@@ -185,7 +182,7 @@ When using trait-based composition, you need to be careful about function select
 <VanillaAdmonition type="caution" title="Selector precision">
   When implementing traits with methods that have matching names, you must manually use the
   `#[selector(name = "ActualName")]` attribute to avoid method selector collisions. This is
-  particularly important when implementing standard interfaces like `ERC-20` or `ERC-721`.
+  particularly important when implementing standard interfaces like **ERC-20** or **ERC-721**.
 </VanillaAdmonition>
 
 <CustomDetails summary="Selector issue example: ERC-721">

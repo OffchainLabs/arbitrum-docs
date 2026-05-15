@@ -17,5 +17,13 @@
       "@site/*": ["./*"]
     }
   },
-  "exclude": ["submodules", "stylus-by-example", "node_modules", "build", ".docusaurus", "*.js"]
+  "exclude": [
+    "submodules",
+    "stylus-by-example",
+    "node_modules",
+    "build",
+    ".docusaurus",
+    "*.js",
+    "middleware.ts"
+  ]
 }
