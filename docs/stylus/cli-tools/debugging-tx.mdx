@@ -297,6 +297,16 @@ Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that
 
 Both tracers are available on local nodes, but `stylusTracer` is more efficient. See the [list of RPC providers](/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support information.
 
+## Limitations
+
+<VanillaAdmonition type="warning" title="Cannot debug deployment or activation transactions">
+
+`cargo stylus replay` and `cargo stylus trace` only work on regular Stylus contract calls. They cannot trace contract **deployment** transactions (initial bytecode upload) or **activation** transactions (calls to the `ArbWasm` precompile).
+
+For issues at deploy or activate time, run `cargo stylus check` against a local devnet and inspect the resulting error messages directly.
+
+</VanillaAdmonition>
+
 ## Additional resources
 
 - [StylusDB GitHub repository](https://github.com/walnuthq/stylusdb)

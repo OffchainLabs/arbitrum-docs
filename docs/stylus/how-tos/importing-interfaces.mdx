@@ -12,16 +12,13 @@ sidebar_position: 8
 displayed_sidebar: buildStylusSidebar
 ---
 
-import CustomDetails from '@site/src/components/CustomDetails';
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
-
 Interfaces enable your Stylus contract to interact with other contracts on the blockchain, regardless of whether they're written in Solidity, Rust, or another language. This guide shows you how to import and use external contract interfaces in your Stylus smart contracts.
 
 ## Why use interfaces
 
 Contract interfaces provide a type-safe way to communicate with other contracts on the blockchain. Common use cases include:
 
-- **Interacting with existing protocols**: Call methods on deployed Solidity contracts like `ERC-20` tokens, oracles, or DeFi protocols
+- **Interacting with existing protocols**: Call methods on deployed Solidity contracts like **ERC-20** tokens, oracles, or DeFi protocols
 - **Composing functionality**: Build contracts that leverage other contracts' capabilities
 - **Cross-language interoperability**: Stylus contracts can call Solidity contracts and vice versa
 - **Upgradeability patterns**: Use interfaces to interact with proxy contracts

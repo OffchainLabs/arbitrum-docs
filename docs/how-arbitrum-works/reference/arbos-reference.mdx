@@ -41,7 +41,7 @@ This component maintains the last 256 parent chain block hashes in a circular bu
 In addition to supporting the [`ArbAggregator precompile`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator), the parent chain pricing state provides tools for determining the parent chain component of a transaction's gas costs. This part of the state tracks the total amount of funds collected from transactions in parent chain gas fees and the funds spent by batch posters to post data batches on the parent chain.
 
 Based on this information, ArbOS maintains a parent chain data fee, which is also tracked in this state and determines how much the parent chain fee will cost. ArbOS dynamically adjusts this value so that fees collected are approximately equal to batch posting costs.
-For more details about parent chain pricing, see [Parent chain pricing](/how-arbitrum-works/reference/parent-chain-pricing.mdx).
+For more details about parent chain pricing, see [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
 
 ### [`l2PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l2pricing/l2pricing.go#L14)
 

@@ -44,6 +44,12 @@ Nitro also supports importing files from the local file system. In this case, yo
 
 ## Downloading the snapshot manually
 
+:::tip For most users, automatic download is recommended
+
+Use `--init.latest pruned` (or `archive`) to enable Nitro's automatic handling of multi-part downloads, checksum verification, and extraction. In contrast, manual downloading is preferable only when you need to host a single snapshot locally for multiple nodes, offering direct control but requiring additional effort.
+
+:::
+
 It is possible to download the snapshot manually and supply the archive instead of having Nitro download it.
 
 The first step is downloading the snapshot. The command below illustrates how to do that on the command line using wget. The `-c` flag tells the wget to continue the download from where it left off, which is helpful because snapshots can be huge files, and the download can fail mid-way. The `-P` flag tells wget to place the snapshot on the temporary dir.
