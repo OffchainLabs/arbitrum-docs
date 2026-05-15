@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-15
 ---
 
 ### Active Validator {#active-validator}
@@ -475,12 +475,12 @@ Widely supported binary code format for executable programs. Used by [Arbitrum N
 
 A 32-byte cryptographic hash that uniquely identifies a specific version of Arbitrum's [State Transition Function](/intro/glossary#state-transition-function) (STF), compiled to [WASM](/intro/glossary#wasm) for use in [fraud proofs](/intro/glossary#fraud-proof). It is computed as the Merkle root over the Keccak256 hashes of every module in the compiled prover image — the main STF replay binary plus runtime libraries such as `soft-float`, `host_io`, `user_host`, and `program_exec`.
 
-The same WASM module root is recorded in two places that must stay in sync:
+The same WASM module root appears in two places:
 
 - **On-chain**, as the `wasmModuleRoot` field on the Rollup contract. It is set at deployment and updated by the chain owner via `setWasmModuleRoot`; every [Assertion](/intro/glossary#assertion) records the root used to compute it.
-- **Off-chain**, by every [Validator](/intro/glossary#validator), which keeps the corresponding compiled prover image under `target/machines/<root>/`.
+- **Off-chain**, by every [Validator](/intro/glossary#validator), as a compiled prover image under `target/machines/<root>/`. To validate or challenge an assertion, a validator must have the prover image matching the root recorded on **that** assertion — which may be the current on-chain root, or an older one if the assertion predates an [ArbOS](/intro/glossary#arbos) upgrade.
 
-Every [ArbOS](/intro/glossary#arbos) upgrade changes the STF, which produces a new WASM module root. After such an upgrade, validators must retain the prover images for any older roots they still need to validate or dispute historical assertions against.
+Every ArbOS upgrade changes the STF and therefore produces a new WASM module root. Validators must retain the prover images for every older root they may still need to validate or dispute historical assertions against.
 
 ### WASMer {#wasmer}
 
