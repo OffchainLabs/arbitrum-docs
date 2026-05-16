@@ -102,21 +102,25 @@ Despite these delays, Arbitrum guarantees that honest assertions always succeed,
 
 You can programmatically check whether a specific child chain block has been included in a confirmed assertion by querying the Rollup contract on the parent chain. This is useful for applications that need to verify finality beyond soft confirmation.
 
+The Rollup contract lives on the parent chain, but its address is exposed via the child chain's network metadata. The example below uses the child chain to look the address up, then attaches it to the parent provider for reads.
+
 ```ts
 import { Contract } from 'ethers';
 import { getArbitrumNetwork } from '@arbitrum/sdk';
 import { BoldRollupUserLogic__factory } from '@arbitrum/sdk/dist/lib/abi-bold/factories/BoldRollupUserLogic__factory';
 
+// Look up the child chain's network metadata to find the Rollup address.
 const childNetwork = await getArbitrumNetwork(childProvider);
+
+// The Rollup contract is deployed on the parent chain, so attach it to parentProvider.
 const rollup = new Contract(
   childNetwork.ethBridge.rollup,
   BoldRollupUserLogic__factory.abi,
   parentProvider,
 );
 
-// Get the latest confirmed assertion
+// Get the latest confirmed assertion hash.
 const assertionHash = await rollup.latestConfirmed();
-// Query AssertionCreated events and check the afterState for the last processed block
 ```
 
-For a complete working example, see the [block-verification tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/block-verification-in-parent-chain-assertion).
+To resolve `assertionHash` to a specific child chain block, query the Rollup's `AssertionCreated` events for that hash and decode the `afterState` — it contains the last processed `GlobalState` (block number and send count). See the [block-verification tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/block-verification-in-parent-chain-assertion) for a complete working example.
