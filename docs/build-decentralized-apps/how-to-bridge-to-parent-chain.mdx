@@ -241,6 +241,7 @@ const ethBridger = new EthBridger(childNetwork);
 const withdrawTx = await ethBridger.withdraw({
   amount: ethers.utils.parseEther('0.1'),
   childSigner,
+  from: walletAddress,
   destinationAddress: walletAddress,
 });
 const withdrawReceipt = await withdrawTx.wait();
