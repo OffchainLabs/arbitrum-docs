@@ -72,7 +72,7 @@ const l1l3Bridger = new Erc20L1L3Bridger(l3Network);
 
 // Initiate the teleport
 const result = await l1l3Bridger.deposit({
-  erc20ParentAddress: erc20Address, // Token address on L1
+  erc20L1Address: erc20Address, // Token address on L1
   amount, // Amount to bridge
   l1Signer, // Ethereum signer
   l2Provider, // Arbitrum L2 provider
@@ -90,13 +90,13 @@ import { Erc20L1L3Bridger } from '@arbitrum/sdk';
 
 const l1l3Bridger = new Erc20L1L3Bridger(l3Network);
 const status = await l1l3Bridger.getDepositStatus({
-  l1TxHash,
+  txHash: l1TxHash,
   l1Provider,
   l2Provider,
   l3Provider,
 });
 
-console.log(`Teleport status: ${status}`);
+console.log(`Teleport completed: ${status.completed}`);
 ```
 
 ## Best practices
