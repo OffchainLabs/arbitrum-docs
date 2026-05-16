@@ -265,7 +265,6 @@ const ethBridger = new EthBridger(childNetwork);
 const depositTx = await ethBridger.deposit({
   amount: ethers.utils.parseEther('0.1'),
   parentSigner,
-  childProvider,
 });
 const depositReceipt = await depositTx.wait();
 
