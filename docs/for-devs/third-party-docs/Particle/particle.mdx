@@ -130,7 +130,7 @@ console.log(primaryAssets);
 console.log(primaryAssets.totalAmountInUSD);
 ```
 
-Here you retrieve the Universal Account addresses, and the user's **primary assets** aggregated across chains (e.g., `USDC`, `ETH`, `USDT`).
+Here you retrieve the Universal Account addresses, and the user's **primary assets** aggregated across chains (e.g., **USDC**, **ETH**, **USDT**).
 
 ### 5. Interacting with your dApp
 
@@ -184,7 +184,7 @@ The previous example demonstrates how to use **Universal Accounts** specifically
 Here's a simplified sequence when your Arbitrum dApp accepts assets from any chain:
 
 1.  Get the user's UA deposit address (via `getSmartAccountOptions()`).
-2.  Display it in your UI: "Send `USDC`/`USDT` from any supported chain."
+2.  Display it in your UI: "Send **USDC**/**USDT** from any supported chain."
 3.  User sends on any chain (Ethereum, Polygon, Base, Solana, etc).
 4.  UA detects the deposit and credits it to the unified balance.
 5.  User interacts with your dApp on Arbitrum—UA automatically uses liquidity routing & abstracts gas.

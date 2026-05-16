@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-02-17
+last_reviewed: 2026-05-01
 ---
 
 ### Active Validator {#active-validator}
@@ -21,11 +21,12 @@ Window during which the gas pricing algorithm measures the transaction backlog. 
 ### Decentralized application {#dapp}
 
 A decentralized application typically consists of smart contracts as well as a user-interface for interacting with them.
-Note: In our documentation, "apps" and "decentralized applications" are used interchangeably.
+
+**Note**: In our documentation, "apps" and "decentralized applications" are used interchangeably.
 
 ### Arb Token Bridge {#arb-token-bridge}
 
-A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of `ERC-20` tokens between the two layers.
+A series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of **ERC-20** tokens between the two layers.
 
 ### Arbified Token List {#arbified-token-list}
 
@@ -176,7 +177,7 @@ An action taken on some chain A which asynchronously initiates an additional act
 
 ### Custom Arb-Token {#custom-arbtoken}
 
-Any child chain token contract registered to the [Arb Token Bridge](/intro/glossary#arb-token-bridge) that isn't a standard arb-token (i.e., a token that uses any gateway other than the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway) ).
+Any child chain token contract registered to the [Arbitrum Token Bridge](/intro/glossary#arb-token-bridge) that isn't a standard arb-token (i.e., a token that uses any gateway other than the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway) ).
 
 ### Custom gateway {#custom-gateway}
 
@@ -264,7 +265,7 @@ The target consumption rate for an Arbitrum chain. [Arbitrum One](/intro/glossar
 
 ### Gateway Router {#gateway-router}
 
-Contracts in the [Arb Token Bridge](/intro/glossary#arb-token-bridge) responsible for mapping tokens to their appropriate [Token Gateway](/intro/glossary#token-gateway).
+Contracts in the [Arbitrum Token Bridge](/intro/glossary#arb-token-bridge) responsible for mapping tokens to their appropriate [Token Gateway](/intro/glossary#token-gateway).
 
 ### Generic-Custom Gateway {#genericcustom-gateway}
 
@@ -312,7 +313,7 @@ MultiVM refers Arbitrum's ability to support multiple virtual machines (VMs). Sp
 
 ### Native Fee Token {#native-fee-token}
 
-An `ERC-20` token used as the native currency for gas fees on an [Arbitrum chain](/intro/glossary#arbitrum-chain) (i.e., as opposed to using Ether). [Arbitrum chains](/intro/glossary#arbitrum-chains) introduced the option for chains to use native fee tokens.
+An **ERC-20** token used as the native currency for gas fees on an [Arbitrum chain](/intro/glossary#arbitrum-chain) (i.e., as opposed to using Ether). [Arbitrum chains](/intro/glossary#arbitrum-chains) introduced the option for chains to use native fee tokens.
 
 ### Offchain Labs {#offchain-labs}
 
@@ -332,7 +333,7 @@ A parent chain contract responsible for tracking [Child to parent chain Message]
 
 ### Parent chain {#parent-chain}
 
-EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka [Child chain](/intro/glossary#child-chain) ). E.g., Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with "underlying chain."
+EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka [Child chain](/intro/glossary#child-chain) ). For example, Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with "underlying chain."
 
 ### Permissionless validation {#permissionless-validation}
 
@@ -404,11 +405,11 @@ A semi-trusted promise from the [Sequencer](/intro/glossary#sequencer) to post a
 
 ### Standard Arb-Token {#standard-arbtoken}
 
-An token contract on an Arbitrum chain deployed via the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway); offers basic `ERC-20` functionality in addition to deposit / withdrawal affordances.
+An token contract on an Arbitrum chain deployed via the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway); offers basic **ERC-20** functionality in addition to deposit / withdrawal affordances.
 
 ### StandardERC20 gateway {#standarderc20-gateway}
 
-[Token Gateway](/intro/glossary#token-gateway) via which any underlying chain's `ERC-20` token can permissionlessly bridge; the `StandardERC20` gateway contracts deploy a [Standard Arb-Token](/intro/glossary#standard-arbtoken) on the [Child chain](/intro/glossary#child-chain) for each bridged token.
+[Token Gateway](/intro/glossary#token-gateway) via which any underlying chain's **ERC-20** token can permissionlessly bridge; the `StandardERC20` gateway contracts deploy a [Standard Arb-Token](/intro/glossary#standard-arbtoken) on the [Child chain](/intro/glossary#child-chain) for each bridged token.
 
 ### State Transition Function {#state-transition-function}
 
@@ -424,7 +425,7 @@ A transaction ordering policy in which entities can bid for the right to access 
 
 ### Token Gateway {#token-gateway}
 
-A pair of contracts in the token bridge — one on the [Parent chain](/intro/glossary#parent-chain) , one on the [Child chain](/intro/glossary#child-chain) — that provide a particular mechanism for handling the transfer of tokens between layers. Token gateways currently active in the bridge include the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway) , the [Generic-Custom Gateway](/intro/glossary#genericcustom-gateway) , and the [WETH Gateway](/intro/glossary#weth-gateway).
+A pair of contracts in the token bridge — one on the [Parent chain](/intro/glossary#parent-chain) , one on the [Child chain](/intro/glossary#child-chain) — that provide a particular mechanism for handling the transfer of tokens between layers. Token gateways currently active in the bridge include the [`StandardERC20` gateway](/intro/glossary#standarderc20-gateway) , the [Generic-Custom Gateway](/intro/glossary#genericcustom-gateway) , and the [**WETH** Gateway](/intro/glossary#weth-gateway).
 
 ### Transaction {#transaction}
 
@@ -441,8 +442,6 @@ In the context of Ethereum, trustless refers to the ability of a system to opera
 This is achieved through the use of cryptographic techniques and decentralized consensus mechanisms that let users verify the integrity of network transactions using open-source software. Trustless systems are considered to be more secure and resistant to fraud or tampering because they don't rely on a single point of failure that can be exploited by attackers.
 
 ### Trustless verification {#trustless-verification}
-
-#### Trustless verification
 
 Validators confirm assertions, ensuring transactions adhere to the protocol rules.
 
@@ -472,4 +471,4 @@ A [Validator](/intro/glossary#validator) that never bonds / never takes on chain
 
 ### WETH Gateway {#weth-gateway}
 
-[Token Gateway](/intro/glossary#token-gateway) for handing the bridging of wrapped Ether (`WETH`). `WETH` is unwrapped on the parent chain and rewrapped on the parent chain upon depositing (and vice-versa upon withdrawing), ensuring `WETH` on the child chain always remains collateralized.
+[Token Gateway](/intro/glossary#token-gateway) for handing the bridging of wrapped Ether (**WETH**). **WETH** is unwrapped on the parent chain and rewrapped on the parent chain upon depositing (and vice-versa upon withdrawing), ensuring **WETH** on the child chain always remains collateralized.

@@ -43,7 +43,7 @@ We‘ll begin the process by creating and deploying a sample token on the parent
 
 However, you will need to upgrade the contract if it doesn’t include the required methods described in the previous step.
 
-We first create a standard `ERC-20` contract using OpenZeppelin’s implementation. We make only one adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
+We first create a standard **ERC-20** contract using OpenZeppelin’s implementation. We make only one adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
 
 We’ll also add the required methods to make our token bridgeable via the generic-custom gateway.
 
@@ -210,7 +210,7 @@ main()
 
 We’ll now create and deploy the counterpart of the token we created on the parent chain to the child chain.
 
-We’ll create a standard `ERC-20` contract using OpenZeppelin’s implementation, and add the required methods from `IArbToken`.
+We’ll create a standard **ERC-20** contract using OpenZeppelin’s implementation, and add the required methods from `IArbToken`.
 
 ```solidity
 // SPDX-License-Identifier: Apache-2.0
@@ -358,7 +358,7 @@ Upon completion, the parent and child chain tokens are connected via the generic
 
 You can bridge tokens between the parent and child chain using the origin parent chain token and the custom token deployed on the child chain, along with the router and gateway contracts from each layer.
 
-Suppose you want to see an example of bridging a token from the parent to the child chain using Arbitrum’s SDK. In that case, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/deposit-tokens.mdx), specifically in Steps 2-5.
+Suppose you want to see an example of bridging a token from the parent to the child chain using Arbitrum’s SDK. In that case, you can check out [How to bridge tokens via Arbitrum’s standard **ERC-20** gateway](/build-decentralized-apps/token-bridging/deposit-tokens.mdx), specifically in Steps 2-5.
 
 ## Frequently asked questions
 
@@ -370,9 +370,9 @@ No, you can only register once a child chain token for the same parent chain tok
 
 As mentioned on the concept page, token registration can also be completed as a chain owner registration via an **[Arbitrum DAO](https://forum.arbitrum.foundation/)** proposal.
 
-### Can I set up the generic-custom gateway after a standard `ERC-20` token has been deployed on the child chain?
+### Can I set up the generic-custom gateway after a standard **ERC-20** token has been deployed on the child chain?
 
-Yes, if your token has a standard `ERC-20` counterpart on the child chain, you can follow the process outlined on this page to register your custom child chain token. At that moment, your parent chain token will have two counterpart tokens on the child chain, but only your new custom child chain token will be minted when depositing tokens from the parent chain (parent-to-child chain bridging). Both child chain tokens will be withdrawable (child-to-parent chain bridging), so users holding the old standard `ERC-20` token will be able to withdraw back to the parent chain (using the `L2CustomGateway` contract instead of the bridge UI) and then deposit to the child chain to get the new custom child chain tokens.
+Yes, if your token has a standard **ERC-20** counterpart on the child chain, you can follow the process outlined on this page to register your custom child chain token. At that moment, your parent chain token will have two counterpart tokens on the child chain, but only your new custom child chain token will be minted when depositing tokens from the parent chain (parent-to-child chain bridging). Both child chain tokens will be withdrawable (child-to-parent chain bridging), so users holding the old standard **ERC-20** token will be able to withdraw back to the parent chain (using the `L2CustomGateway` contract instead of the bridge UI) and then deposit to the child chain to get the new custom child chain tokens.
 
 ## Next steps
 
