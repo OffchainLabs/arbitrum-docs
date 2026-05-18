@@ -155,7 +155,6 @@ const txRequest = await createTokenBridgePrepareTransactionRequest({
     rollupOwner: rollupOwner.address,
   },
   parentChainPublicClient,
-  orbitChainPublicClient,
   account: rollupOwner.address,
 });
 
@@ -250,7 +249,6 @@ const orbitChainPublicClient = createPublicClient({
 const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
   rollup: coreContracts.rollup,
   parentChainPublicClient,
-  orbitChainPublicClient,
   account: rollupOwner.address,
 });
 

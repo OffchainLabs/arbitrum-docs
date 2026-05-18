@@ -2410,5 +2410,15 @@
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
     }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [{ "key": "Vary", "value": "Accept" }]
+    },
+    {
+      "source": "/:path+",
+      "headers": [{ "key": "Vary", "value": "Accept" }]
+    }
   ]
 }

@@ -61,6 +61,22 @@ const handleInkeepEvent = (event) => {
   }
 };
 
+// Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
+// Shared between the sitemap and llms.txt so both indexes stay in sync.
+const nonCanonicalRoutePatterns = [
+  '/sdk/assetBridger/**',
+  '/sdk/dataEntities/**',
+  '/sdk/inbox/**',
+  '/sdk/message/**',
+  '/sdk/utils/**',
+  '/hosted-pdfs/**',
+  // Partials are imported into other pages, not standalone content.
+  // Docusaurus generates routes for them anyway.
+  '**/_*', // Docusaurus partial convention
+  '**/partials/**', // non-underscored partials in this repo's partials/ dirs
+  '/category/**', // auto-generated category index pages
+];
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -140,6 +156,9 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
+        sitemap: {
+          ignorePatterns: nonCanonicalRoutePatterns,
+        },
       }),
     ],
   ],
@@ -192,25 +211,16 @@ const config = {
           includeDocs: true,
           includeBlog: false,
           includePages: false,
-          excludeRoutes: [
-            '/sdk/assetBridger/**',
-            '/sdk/dataEntities/**',
-            '/sdk/inbox/**',
-            '/sdk/message/**',
-            '/sdk/utils/**',
-            '/hosted-pdfs/**',
-            // Internal building blocks (imported into other pages),
-            // not standalone content. Docusaurus generates routes for
-            // them anyway, but they shouldn't appear in llms.txt.
-            '**/_*', // Docusaurus partial convention
-            '**/partials/**', // non-underscored partials in this repo's partials/ dirs
-            '/category/**', // auto-generated category index pages
-          ],
+          excludeRoutes: nonCanonicalRoutePatterns,
           beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
-          beforeDefaultRemarkPlugins: [require('./src/plugins/remark-llms-cleanup')],
+          beforeDefaultRemarkPlugins: [
+            require('./src/plugins/remark-llms-cleanup'),
+            require('./src/plugins/remark-llms-page-header'),
+          ],
         },
       },
     ],
+    'docusaurus-plugin-copy-page-button',
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
