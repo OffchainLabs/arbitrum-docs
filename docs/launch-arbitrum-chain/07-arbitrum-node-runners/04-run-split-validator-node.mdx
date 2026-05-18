@@ -8,13 +8,13 @@ content_type: how-to
 
 ## Running split validators for Arbitrum chains
 
-Split validators move only the heavy WASM execution out of the staker process onto a separate, stateless validation node. The staker continues to do everything else — indexing the chain, preparing validation inputs, comparing results, deciding when to post assertions or open challenges, and signing transactions on-chain — and delegates execution requests to the validation node when it needs them. This split provides several key benefits:
+Split validators separate the validation work to a stateless validation node, which provides several key benefits:
 
 - **Resource management**: Easier to scale and manage compute resources independently
-- **Fault isolation**: A crash in the validation node (e.g., an OOM during WASM execution) does not corrupt the staker's database
+- **Fault isolation**: Prevents database corruption if the validation node crashes (e.g., due to OOM errors)
 - **Flexibility**: Allows running multiple validation nodes for horizontal scalability
 
-This guide explains how to set up a split validator configuration for Arbitrum chains by running a staker (a Nitro node with `--node.staker.enable=true`) and a separate validation node (running the `nitro-val` binary).
+This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
 
 Before you read this doc, please ensure you have already walked through [run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx) docs to understand the basics of a validator node.
 
@@ -174,7 +174,7 @@ This metric is a counter of the number of successful validation calls; if it is 
 You can also check where this log (`validation node started`) appears:
 
 - If this log appears on the validation node, it means your validation node is running correctly.
-- If this log appears on the staker instead, it means your staker is still running WASM execution itself rather than delegating to the validation node. That indicates the staker is not connecting to the validation node correctly; double-check your configuration.
+- If this log appears on the staker node, it means your staker node is still validating itself. It indicates that your staker node is not connecting to the validation node correctly; you need to double-check your configuration.
 
 ### Reference: the `validation_*` API {#reference-the-validation-api}
 
