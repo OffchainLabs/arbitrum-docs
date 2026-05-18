@@ -459,7 +459,6 @@ async function main() {
   const txRequest = await createTokenBridgePrepareTransactionRequest({
     params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
     parentChainPublicClient,
-    chainPublicClient,
     account: rollupOwner.address,
   });
 
@@ -484,7 +483,6 @@ async function main() {
   const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
     rollup: coreContracts.rollup,
     parentChainPublicClient,
-    chainPublicClient,
     account: rollupOwner.address,
   });
   const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
