@@ -10,7 +10,7 @@ import NativeETHPCPartial from '../../partials/_native-eth-pc.mdx';
 
 Choosing native Ethereum refers to configuring the chain to use **ETH**—the native currency of Ethereum—as the gas token for paying <a data-quicklook-from="transaction">transaction</a> fees. This is the default option in Arbitrum chain deployments, in contrast to selecting a custom **ERC-20** token for gas. The choice is set during chain deployment via genesis parameters and is immutable afterward, directly impacting how users pay for gas and how operators handle revenue and costs.
 
-Selecting native **ETH** means users must hold and spend **ETH** for all onchain activities, simplifying the fee mechanism without additional layers like token swaps or pricers. For operators, revenue is collected directly in **ETH**, which can be used seamlessly for data availability (DA) costs on the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., posting to Ethereum).
+Selecting native **ETH** means users must hold and spend **ETH** for all onchain activities, simplifying the fee mechanism without additional layers like token swaps or pricers. For operators, revenue is collected directly in **ETH**, which can be used for data availability (DA) costs on the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., posting to Ethereum).
 
 This option prioritizes straightforward integration with Ethereum's ecosystem, avoiding complexities associated with custom tokens. It's ideal for chains where **ETH** is naturally used or where minimal operational overhead is desired, such as general-purpose Rollups or those focused on DeFi interoperability with Ethereum.
 
