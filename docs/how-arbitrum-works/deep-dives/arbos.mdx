@@ -33,7 +33,7 @@ ArbOS manages host I/O calls, memory operations, and execution context for Stylu
 
 By offloading high-cost tasks from the parent chain, ArbOS enables them to be executed quickly and cost-effectively on the child chain. This design reduces computational and storage costs while offering significant flexibility, allowing child chain code to evolve or be customized more easily than in a parent-chain-enforced architecture.
 
-While Ethereum’s STF provides a secure, deterministic basis for state updates, Arbitrum’s Nitro stack builds on this foundation with key modifications—ranging from a dual-gas-account model to cross-chain messaging—optimizing performance and flexibility. These innovations are realized through minimal, yet strategic modifications to Geth that integrate seamlessly with ArbOS, forming the “Geth sandwich.”
+While Ethereum’s STF provides a secure, deterministic basis for state updates, Arbitrum’s Nitro stack builds on this foundation with key modifications—ranging from a dual-gas-account model to cross-chain messaging—optimizing performance and flexibility. These innovations are realized through minimal, yet strategic modifications to Geth that integrate with ArbOS, forming the “Geth sandwich.”
 
 With the introduction of Stylus, Arbitrum extends its execution model beyond the EVM, enabling high-performance WASM-based smart contracts. This integration introduces additional modifications to Geth, ensuring compatibility with Stylus transactions while preserving Ethereum-like execution guarantees. These changes include handling Stylus-specific transaction types and ensuring smooth interaction between the EVM and WASM environments.
 
