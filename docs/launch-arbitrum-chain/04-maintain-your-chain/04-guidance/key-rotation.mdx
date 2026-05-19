@@ -123,7 +123,7 @@ setValidator([<old_validator_address>], [false])
 #### 6. Recover old validator bond (if applicable)
 
 - Wait for your old validator's latest bond assertion to be confirmed
-- Call `reduceDeposit(0)` on the `RollupUserLogic` contract to reduce the staked bond to zero
+- Call `reduceDeposit(0)` on the `RollupUserLogic` contract to reduce the bond to zero
 - Call `withdrawStakerFunds()` on the `RollupUserLogic` contract to withdraw the released funds
 
 ## 3. AnyTrust Data Availability Committee (DAC) rotation

@@ -8,19 +8,19 @@ user_story: As a current or prospective Arbitrum chain owner, I need to understa
 content_type: quickstart
 ---
 
-Optimistic Rollups must sustain a multi-day challenge period to allow time for fraud proofs. This delays finality for users and dApps, resulting in multi-day withdrawal times and cross-chain communication delays.
+Optimistic Rollups must sustain a multi-day <a data-quicklook-from="challenge">challenge period</a> to allow time for fraud proofs. This delays finality for users and dApps, resulting in multi-day withdrawal times and cross-chain communication delays.
 
-Fast withdrawals is a new configuration allowing Arbitrum chains to achieve fast finality. When an Arbitrum chain operates on Fast Withdrawals, its transactions will be processed by a committee of validators. Transactions reaching a unanimous vote across the committee will be immediately confirmed.
+Fast withdrawals is a new configuration allowing Arbitrum chains to achieve fast finality. When an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> operates on Fast Withdrawals, its transactions will be processed by a committee of validators. Transactions reaching a unanimous vote across the committee will be immediately confirmed.
 
 This will allow:
 
 - Setting up a withdrawal frequency of any time period (up to 15 minutes)
-- Users' withdrawals confirmation on the parent chain at frequencies up to ~15 minutes
+- Users' withdrawals <a data-quicklook-from="confirmation">Confirmation</a> on the <a data-quicklook-from="parent-chain">parent chain</a> at frequencies up to ~15 minutes
 - Cross-chain dApps to read the finalized state at the same rate as the fast withdrawal frequency
 
 ## Recommended configuration
 
-While any Arbitrum chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by AnyTrust chains with a minimum validator and DAC member requirement. We explain both these recommendations below:
+While any Arbitrum chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by AnyTrust chains with a minimum <a data-quicklook-from="validator">validator</a> and DAC member requirement. We explain both these recommendations below:
 
 ### Fast withdrawals for AnyTrust chains
 
@@ -47,12 +47,12 @@ Chain owners and operators should be aware that the fast withdrawals committee m
 
 While a fast withdrawals-enabled chain can be configured to finality in as little as 15 seconds, there are externalities on the parent chain and from cross-chain messaging layers that must be considered.
 
-For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that L1.
+For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that <a data-quicklook-from="l1">L1</a>.
 
-For an Arbitrum One-based Layer-3, there are three tiers of finality to consider:
+For an <a data-quicklook-from="arbitrum-one">Arbitrum One</a>-based Layer-3, there are three tiers of finality to consider:
 
-1. Soft finality from the sequencer's confirmation of transaction inclusion (~250ms)
-2. Safe finality from batch inclusion after Arbitrum One's assertion is included in an Ethereum block.
+1. Soft finality from the <a data-quicklook-from="sequencer">Sequencer</a>'s confirmation of <a data-quicklook-from="transaction">transaction</a> inclusion (~250ms)
+2. Safe finality from <a data-quicklook-from="batch">batch</a> inclusion after Arbitrum One's <a data-quicklook-from="assertion">assertion</a> is included in an Ethereum block.
 3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes)
 
 ## Adoption instructions (example script)
@@ -72,9 +72,9 @@ If your chain is not running with `nitro-contracts` v2.1.0 or above, you’ll ne
 - If the chain is running nitro-contracts v1.1.x, you need to [upgrade first to v1.2.1](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/contract-upgrades/1.2.1/README.md).
 - If the chain is running nitro-contracts v1.2.1, you need to [upgrade to v2.1.0](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md).
 
-Upgrading to the new `nitro-contracts` version also requires updating the node software. For v2.1.0, validator nodes and the batch poster node should run [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
+Upgrading to the new `nitro-contracts` version also requires updating the node software. For v2.1.0, validator nodes and the <a data-quicklook-from="batch-poster">batch poster</a> node should run [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
 
-Suppose you’re upgrading your `nitro-contracts` from v1.2.1 to v2.1.0 and using the standard WASM module root (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different WASM module root, you can still deploy the action contract referencing your modified WASM module root (pre and post upgrade).
+Suppose you’re upgrading your `nitro-contracts` from v1.2.1 to v2.1.0 and using the standard <a data-quicklook-from="wasm-module-root">WASM module root</a> (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/chain-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different WASM module root, you can still deploy the action contract referencing your modified WASM module root (pre and post upgrade).
 
 ### Activating fast withdrawals
 
@@ -92,7 +92,7 @@ Even though two scripts are available to activate Fast Withdrawals, you only nee
 
 The Chain SDK provides an [example script](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-fast-withdrawal) to set up a fast withdrawal committee by performing the following operations:
 
-1. Create a new `n/n` Safe wallet with the specified validators as signers
+1. Create a new `n/n` Safe <a data-quicklook-from="wallet">wallet</a> with the specified validators as signers
 2. Add the specified validators to the Rollup validators allowlist
 3. Set the new Safe wallet as the `anytrustFastConfirmer` in the Rollup contract
 4. Set the new `minimumAssertionPeriod` if needed
@@ -100,13 +100,13 @@ The Chain SDK provides an [example script](https://github.com/OffchainLabs/arbit
 
 To configure the script, you need to specify the following environment variables:
 
-| Variable Name              | Description                                                                                                                                                                                                                                                                                                                                                  |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `CHAIN_OWNER_PRIVATE_KEY`  | Private key of the account with executor privileges in the UpgradeExecutor admin contract for the chain. It will be the deployer of the multi-sig Safe wallet.                                                                                                                                                                                               |
-| `PARENT_CHAIN_ID`          | ChainId of the parent chain.                                                                                                                                                                                                                                                                                                                                 |
-| `ROLLUP_ADDRESS`           | Address of the Rollup contract.                                                                                                                                                                                                                                                                                                                              |
-| `FC_VALIDATORS`            | Array of fast-withdrawal validators. They will be added as signers to the multisig Safe wallet and to the Rollup's validator allowlist. It is recommended that these are DAC members of the AnyTrust chain.                                                                                                                                                  |
-| `MINIMUM_ASSERTION_PERIOD` | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in block number of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain)). |
+| Variable Name              | Description                                                                                                                                                                                                                                                                                                                                                                                  |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CHAIN_OWNER_PRIVATE_KEY`  | Private key of the account with executor privileges in the UpgradeExecutor admin contract for the chain. It will be the deployer of the multi-sig Safe wallet.                                                                                                                                                                                                                               |
+| `PARENT_CHAIN_ID`          | ChainId of the parent chain.                                                                                                                                                                                                                                                                                                                                                                 |
+| `ROLLUP_ADDRESS`           | Address of the Rollup contract.                                                                                                                                                                                                                                                                                                                                                              |
+| `FC_VALIDATORS`            | Array of fast-withdrawal validators. They will be added as signers to the multisig Safe wallet and to the Rollup's validator allowlist. It is recommended that these are DAC members of the AnyTrust chain.                                                                                                                                                                                  |
+| `MINIMUM_ASSERTION_PERIOD` | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in block number of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for <a data-quicklook-from="l2">L2</a> chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain)). |
 
 Finally, follow these steps to execute the script (from the `examples/setup-fast-withdrawal` folder):
 
@@ -195,7 +195,7 @@ The following parameters need to be configured in those nodes.
 
 | Option                                           | Description                                                                                                                                                                                                                                                              |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--node.bold.enable-fast-confirmation=true`      | [BoLD only] Enables fast withdrawals in the validator node                                                                                                                                                                                                               |
+| `--node.bold.enable-fast-confirmation=true`      | [<a data-quicklook-from="bold">BoLD</a> only] Enables fast withdrawals in the validator node                                                                                                                                                                             |
 | `--node.bold.assertion-posting-interval=0h15m0s` | [BoLD only] Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value.     |
 | `--node.staker.enable-fast-confirmation=true`    | [Pre-BoLD only] Enables fast withdrawals in the validator node                                                                                                                                                                                                           |
 | `--node.staker.make-assertion-interval=0h15m0s`  | [Pre-BoLD only] Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |

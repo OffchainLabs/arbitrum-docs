@@ -14,14 +14,14 @@ Split validators separate the validation work to a stateless worker, which provi
 - **Fault isolation**: Prevents database corruption if the validation worker crashes (e.g., due to OOM errors)
 - **Flexibility**: Allows running multiple validation workers for horizontal scalability
 
-This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
+This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (bonder) and a validation node separately.
 
 Before you read this doc, please ensure you have already walked through [run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx) docs to understand the basics of a validator node.
 
 ### Prerequisites
 
 - Docker or Kubernetes with Helm installed
-- Staker private key
+- Bonder private key
 - Chain information JSON for your Arbitrum chain
 
 ### Docker deployment guide
@@ -52,7 +52,7 @@ docker run --rm -it \
 
 The validation node will listen on port 5200, which will also enable the metrics server on port 6070.
 
-#### Step 2: Set up the staker node
+#### Step 2: Set up the bonder node
 
 Copy the JWT secret to your mount directory:
 
@@ -60,7 +60,7 @@ Copy the JWT secret to your mount directory:
 cp /tmp/nitro-val.jwt /some/local/dir/arbitrum
 ```
 
-Start the staker node with the following command, connecting it to your validation node:
+Start the bonder node with the following command, connecting it to your validation node:
 
 ```bash
 docker run --rm -it \
@@ -78,7 +78,7 @@ docker run --rm -it \
 Replace the placeholders with your specific values:
 
 - `<parent-chain-endpoint>`: Your parent chain RPC endpoint
-- `<staker_private_key>`: Your staker's private key
+- `<staker_private_key>`: Your bonder's private key
 - `<Your_chain_info>`: Chain information JSON
 - `<forwarding_target>`: Your forwarding node URL (usually is the sequencer endpoint)
 - `Your_validation_address`: Address of your validation node (including port)
@@ -130,7 +130,7 @@ helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
 
 ### Monitoring and maintenance
 
-- Monitor your validator and staker logs regularly:
+- Monitor your validator and bonder logs regularly:
 
   ```bash
   # For Docker
@@ -140,7 +140,7 @@ helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
   kubectl logs -f <POD>
   ```
 
-- Check validator and staker status through the Arbitrum dashboard or API
+- Check validator and bonder status through the Arbitrum dashboard or API
 
 ### Additional configurations for validation nodes
 
@@ -163,4 +163,4 @@ This metric is a counter of the number of successful validation calls; if it is 
 You can also check where this log (`validation node started`) appears:
 
 - If this log appears on the validation node, it means your validation node is running correctly.
-- If this log appears on the staker node (validator node), it means your staker node is still validating itself. It indicates that your staker node is not connecting to the validation node correctly; you need to double-check your configuration.
+- If this log appears on the bonder node (validator node), it means your bonder node is still validating itself. It indicates that your bonder node is not connecting to the validation node correctly; you need to double-check your configuration.

@@ -72,9 +72,6 @@ See [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) for the comp
 
 ## Stylus-specific differences
 
-<a data-quicklook-from="stylus">Stylus</a> extends ArbOS to support WASM-based smart contracts alongside
-the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which
-uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional
-gas model based on Ink units, with LRU caching to minimize execution overhead.
+<a data-quicklook-from="stylus">Stylus</a> extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on Ink units, with LRU caching to minimize execution overhead.
 
 For the full technical details of Stylus execution flow, caching, gas pricing, and Go-WASI integration, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#stylus-specific-differences).
