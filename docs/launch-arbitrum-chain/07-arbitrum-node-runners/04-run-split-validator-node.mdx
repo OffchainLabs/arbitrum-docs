@@ -25,7 +25,7 @@ Nitro nodes can expose two separate WebSocket RPC interfaces:
 - **The public RPC** (configured under `--http.*` and `--ws.*`) serves the standard `eth_`, `net_`, and other namespaces that wallets and dApps use.
 - **AUTH-RPC** (configured under `--auth.*`) is a second, JWT-authenticated WebSocket interface intended for trusted intra-component communication. It listens on its own address and port and by default exposes only the `validation` namespace.
 
-The `validation_*` namespace is how the staker delegates WASM execution to the validation node — it carries `Validate` (run the WASM machine on a prepared input and return the resulting global state) plus `CreateExecutionRun`, `GetStepAt`, and `GetProofAt` (used during challenges to fetch step hashes and one-step proofs). The full method list is in the [`validation_*` API reference](#reference-the-validation-api) below. When the staker and validation node run in the same process, these calls happen in-memory and AUTH-RPC isn't involved. The moment you split them onto separate processes or hosts, AUTH-RPC is the secure transport between them, and a shared JWT secret is what authenticates one to the other.
+The `validation_*` namespace is how the staker delegates WASM execution to the validation node — it carries `Validate` (run the WASM machine on a prepared input and return the resulting global state) plus `CreateExecutionRun`, `GetStepAt`, and `GetProofAt` (used during challenges to fetch step hashes and one-step proofs). The full method list is in the [`validation_*` API reference](#reference-the-validation-api) below.
 
 The rest of this guide walks through the deployment; the API reference and the option to expose additional namespaces over AUTH-RPC are at the end.
 
