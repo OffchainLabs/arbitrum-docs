@@ -270,6 +270,12 @@ pub fn divide(&self, a: U256, b: U256) -> Result<U256, Vec<u8>> {
 RUST_BACKTRACE=1 cargo test
 ```
 
+<VanillaAdmonition type="warning" title="Panics produce a dataless revert">
+
+Panicking and other hard errors in Stylus programs cause a **dataless revert** — the transaction reverts but no error data is returned to the caller. If you need rich error messages onchain, return `Result<T, Vec<u8>>` from your function and encode the error explicitly rather than relying on `panic!`.
+
+</VanillaAdmonition>
+
 ### Storage slot conflicts
 
 **Problem**: Storage values overwriting each other unexpectedly.

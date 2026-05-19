@@ -1,0 +1,271 @@
+---
+title: 'DAC/DAS Operations Guide'
+sidebar_label: 'DAC/DAS operations guide'
+description: 'Learn about DAC and DAS specific operations such as key rotation, bitMask bit-level formatting, quorum mechanics, committee member management for your Arbitrum chain.'
+author: pete-vielhaber
+sme: Jason-W123
+user_story: As a current Arbitrum chain owner, I want to understand how to operate a DAC committee and a DAS server.
+content_type: quickstart
+---
+
+## DAC Quorum mechanics
+
+A Data Availability Committee has two critical parameters encoded in its **keyset**:
+
+| Parameter           | Symbol | Meaning                                                    |
+| ------------------- | ------ | ---------------------------------------------------------- |
+| `numberOfMembers`   | `N`    | Total committee members (derived from `publicKeys.length`) |
+| `assumedHonest`     | `H`    | Number of members assumed to be honest                     |
+| Required signatures | `K`    | Computed as `K = N + 1 - H`                                |
+
+The formula `K = N + 1 - H` means: if `H` members are honest, you need responses from at least `K` members to guarantee at least one honest signature.
+
+### Example configurations
+
+**Single member (test/dev)**
+
+- `N=1, H=1 → K = 1+1-1 = 1 signature required`
+
+**8-member production committee**
+
+- `N=8, H=2 → K = 8+1-2 = 7 signatures required `
+- This means you tolerate 1 unavailable member but assume at least 2 are honest
+
+**5-member committee with strong honesty assumption**
+
+- N=5, H=3 → K = 5+1-3 = 3 signatures required
+- Tolerates 2 unavailable members, assumes 3 are honest
+
+### How to configure
+
+Set the quorum when preparing the keyset:
+
+```typescript
+import { prepareKeyset } from './prepareKeyset';
+
+const publicKeys = [blsKey1, blsKey2, blsKey3 /* ... */]; // N = publicKeys.length
+const assumedHonest = 2; // H
+
+const keyset = prepareKeyset(publicKeys, assumedHonest);
+```
+
+The node config must match the `assumed-honest` number:
+
+```typescript
+'rpc-aggregator': {
+	'enable': true,
+	'assumed-honest': 2,  // H - must match keyset's assumedHonest parameter
+	'backends': '...',
+}
+```
+
+## Keyset binary encoding format
+
+The keyset is a compact, onchain-registered binary blob:
+
+```shell
+Offset    Size      Field                    Encoding
+──────    ────      ─────                    ────────
+0         8 bytes   assumedHonest (H)        uint64, big-endian
+8         8 bytes   numberOfMembers (N)      uint64, big-endian
+
+For each member i (0..N-1):
+  +0      2 bytes  keyLength[i]             uint16, big-endian
+  +2      variable publicKey[i] bytes       raw BLS12-381 key (decoded from base64)
+```
+
+**Concrete example:** single member, zero key
+
+```shell
+0x
+  0000000000000001    ← assumedHonest = 1
+  0000000000000001    ← numberOfMembers = 1
+  0121                ← keyLength = 0x0121 = 289 bytes
+  60000000...         ← 289 bytes of BLS public key
+```
+
+### Keyset hash computation
+
+Keysets are identified onchain by their hash:
+
+```shell
+hash = keccak256(0xfe || keccak256(keysetBytes))
+keysetHash = hash XOR (1 << 255)   // set the high bit
+```
+
+The high bit distinguishes keyset hashes from other hashes in the `SequencerInbox` storage.
+
+## DAS Committee member management
+
+### Adding/rotating members (set a new valid keyset)
+
+You cannot add individual memebers. You must register an entirely new keyset. Use `buildSetValidKeyset` to do so:
+
+```typescript
+import { prepareKeyset } from './prepareKeyset';
+import { buildSetValidKeyset } from './actions/buildSetValidKeyset';
+
+// 1. Prepare keyset bytes with the new member list
+const newKeyset = prepareKeyset(
+  [exisitingKey1, exisitingKey2, newMemberKey], // all BLS pubkeys (base64)
+  2, // assumedHonest
+);
+
+// 2. Register onchain via UpgradeExecutor -> SequencerInbox.setValidKeyset
+const tx = await buildSetValidKeyset(publicClient, {
+  account: ownerAddress,
+  upgradeExecutor: '0x...',
+  sequencerInbox: '0x...',
+  params: { keyset: newKeyset },
+});
+```
+
+This emits a `SetValidKeyset(bytes32 indexed keysetHash, bytes keysetBytes)` event.
+
+### Removing members (invalidate old keyset, set new one)
+
+Use `buildInvalidateKeysetHash`:
+
+```typescript
+import { prepareKeysetHash } from './prepareKeysetHash';
+import { buildInvalidateKeysetHash } from './actions/buildInvalidateKeysetHash';
+
+// 1. Compute hash of the keyset to remove
+const oldKeysetHash = prepareKeysetHash(oldKeysetBytes);
+
+// 2. Invalidate it onchain
+await buildInvalidateKeysetHash(publicClient, {
+  account: ownerAddress,
+  upgradeExecutor: '0x...',
+  sequencerInbox: '0x...',
+  params: { keysetHash: oldKeysetHash },
+});
+
+// 3. Set the new keyset (without the removed member)
+const newKeyset = prepareKeyset(remainingKeys, assumedHonest);
+await buildSetValidKeyset(publicClient, { /* ... */ params: { keyset: newKeyset } });
+```
+
+This emits an `InvalidateKeyset(bytes32 indexed keysetHash)` event.
+
+### Querying current valid keysets
+
+Use `getKeysets`, which replays `SetValidKeyset` and `InvalidateKeyset` events to reconstruct the current state:
+
+```typescript
+import { getKeysets } from './getKeysets';
+
+const { keysets } = await getKeysets(publicClient, {
+  sequencerInbox: '0x...',
+});
+
+// keysets = { [keysetHash]: keysetBytes, ... } - only currently valid ones
+```
+
+### Checking if a specific keyset is valid
+
+```typescript
+import { isValidKeysetHash } from './actions/isValidKeysetHash';
+
+const isValid = await isValidKeysetHash(publicClient, {
+  sequencerInbox: '0x...',
+  params: { keysetHash: '0x...' },
+});
+```
+
+## DAC failure modes and fallback to batch posting
+
+### Failure modes
+
+| Failure                    | Impact                                       | Recovery                                            |
+| -------------------------- | -------------------------------------------- | --------------------------------------------------- |
+| < `K` members respond      | Cannot form valid DACert                     | Batch poster falls back to onchain posting          |
+| Wrong BLS key              | Signature verification fails for that member | Other members still counted; if `K` met, cert valid |
+| All DAS backends down      | No DACert possible                           | Immediate fallback to batch posting                 |
+| Keyset invalidated onchain | DACerts referencing that keyset rejected     | Must set a new valid keyset                         |
+| Network partition          | Subset of members unreachable                | Falls back if remaining < `K`                       |
+
+### The fallback mechanism
+
+When `DataAvailabilityCommittee: true`, the batch poster first attempts to store data via the DAS RPC aggregator. If it cannot obtain a valid DACert (due to insufficient signatures), the batch poster falls back to posting the full batch data directly to the parent chain—the same way a standard rollup operates.
+
+The fallback is **enabled by default**:
+
+```typescript
+/** If unable to batch to DA provider, disable fallback storing data on chain */
+'disable-dap-fallback-store-data-on-chain'?: boolean;
+```
+
+:::danger Dangerous in production
+
+Setting this to `true` **disables the fallback**, meaning the batch poster will keep retrying the DAS and not post data onchain. Doing so in production is dangerous, a DAC outage would halt the chain.
+
+:::
+
+### How batch posters enable fallback
+
+Batch posters are authorized addresses on the `SequencerInbox` that can post transaction data. They are configured at rollup creation and managed via `setIsBatchPoster`. During normal AnyTrust operation, the batch poster posts compact DACerts. During fallback, it posts the full calldata.
+
+The batch poster config:
+
+```typescript
+'batch-poster': {
+  'max-size': 90000,      // max batch size in bytes
+  'enable': true,
+  'parent-chain-wallet': {
+    'private-key': '<batch poster key>',
+  },
+}
+```
+
+#### Normal vs fallback data flow
+
+```typescript
+Normal (AnyTrust):
+  Sequencer → DAS Store (RPC :9876) → K signatures → DACert posted to L1
+
+Fallback (Rollup-equivalent):
+  Sequencer → DAS Store fails → full batch data posted to L1 (calldata/blob)
+
+Retrieval:
+  Node → REST aggregator (:9877) → DAS backends → batch data
+  Node → (if REST fails) → reads L1 calldata directly
+```
+
+## Enabling AnyTrust at chain creation
+
+Set `DataAvailabilityCommittee: true` in the chain config at deployment time:
+
+```typescript
+chainConfig: prepareChainConfig({
+  chainId,
+  arbitrum: {
+    InitialChainOwner: deployer.address,
+    DataAvailabilityCommittee: true, // Enable AnyTrust/DAC mode
+  },
+});
+```
+
+To detect whether an exisitng chain uses AnyTrust, use `isAnyTrust`:
+
+```typescript
+import { isAnyTrust } from './isAnyTrust';
+
+const isDac = await isAnyTrust({
+  rollup: '0x...',
+  publicClient,
+});
+```
+
+## DAS committee member troubleshooting
+
+### Checklist for a non-responding DAS member
+
+1. **Verify BLS public key matches**: The base64-encoded pubkey in the node config backend must correspond to the same key encoded in the onchain keyset at the member's index position.
+2. **Check DAS server endpoints**: Two ports:
+   - RPC endpoint (default: `:9876`): used by the batch poster to store data
+   - REST endpoint (default: `:9877`): used by nodes to retrieve data
+3. **Check the `assumed-honest` value**: Must match the onchain keyset's `assumedHonest`. If they diverge, the aggregator may reject valid certificates or accept insufficient ones.
+4. **Review timeout settings**: `data-availability.request-timeout` defaults to `5s`. Slow DAS backends may need a longer timeout.
+5. **Panic on-error**: `data-availability.panic-on-error` should be `false` (default) in production. Setting it to `true` causes the node to crash on DAS errors rather than falling back.
+6. **REST aggregatory strategy**: The `simple-explore-exploit` strategy tracks per-endpoint latency and success rates. A member with sustained failures will be deprioritized. Check `max-per-endpoint-stats` (default 20) to control how quickly the strategy adapts.
