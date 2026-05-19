@@ -8,15 +8,17 @@ unlisted: true
 ---
 
 <a data-quicklook-from="arbitrum">Arbitrum</a> chains are customizable Layer 3 (L3) chains that settle
-to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">
+to an Arbitrum Layer 2 (<a data-quicklook-from="l2">L2</a>) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">
   validator
 </a> configurations to ensure chain security through bonding and <a data-quicklook-from="assertion">
   assertion
 </a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
   challenge
-</a> incorrect assertions. Arbitrum chains can be permissioned, meaning validators must be allowlisted.
-For chains that use that elect to use the BoLD protocol, permissionless validation is an option (BoLD
-also supports permissioned validation).
+</a> incorrect assertions. <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> can be permissioned,
+meaning validators must be allowlisted. For chains that use that elect to use the <a data-quicklook-from="bold">
+  BoLD
+</a> protocol, <a data-quicklook-from="permissionless-validation">permissionless validation</a> is an
+option (BoLD also supports permissioned validation).
 
 Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
@@ -24,7 +26,7 @@ Arbitrum chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded 
 
 ## `stakeToken`
 
-The bonded token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. A bonded token can be **WETH** or the parent chain's native token.
+The bonded token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. A bonded token can be **WETH** or the <a data-quicklook-from="parent-chain">parent chain's</a> native token.
 
 ### Configuration details
 
@@ -51,7 +53,7 @@ The bonded token is the asset that validators must bond to participate in assert
    ```
 
 2. **Set up the public client for the parent chain**:
-   Create a public client to interact with the parent chain.
+   Create a public <a data-quicklook-from="client">client</a> to interact with the parent chain.
 
    ```typescript
    import { createPublicClient, http } from 'viem';
@@ -83,7 +85,7 @@ The bonded token is the asset that validators must bond to participate in assert
    ```
 
 4. **Deploy the chain**:
-   Use `createRollup` to deploy. Provide validator and batch poster addresses. This step sends the transaction to the parent chain.
+   Use `createRollup` to deploy. Provide validator and <a data-quicklook-from="batch-poster">Batch Poster</a> addresses. This step sends the <a data-quicklook-from="transaction">transaction</a> to the parent chain.
 
    ```typescript
    import { createWalletClient } from 'viem';
@@ -136,8 +138,8 @@ The bonded token is the asset that validators must bond to participate in assert
 - Ensure the `stakeToken` is a compliant **ERC-20** on the parent chain; mismatches can cause deployment failures.
 - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
 - The owner address gains control over upgrades and settings—use a secure multisig in production.
-- For production, consider a Rollup-as-a-Service (RaaS) provider for monitoring and scaling.
-- **Verification**: This SDK-based method deploys directly via smart contract interactions and does not involve any UI or portal (the portal is for asset bridging, not chain deployment).
+- For production, consider a Rollup-as-a-Service (<a data-quicklook-from="raas">RaaS</a>) provider for monitoring and scaling.
+- **Verification**: This SDK-based method deploys directly via <a data-quicklook-from="smart-contract">smart contract</a> interactions and does not involve any UI or <a data-quicklook-from="portal">portal</a> (the portal is for asset bridging, not chain deployment).
 
 ## `baseStake`
 
@@ -264,7 +266,7 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
 ### Configuration details
 
 - Funds are escrowed rather than immediately burned, allowing potential recovery or governance decisions.
-- **Recommended**: Set to an address controlled by the chain owner(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
+- **Recommended**: Set to an address controlled by the <a data-quicklook-from="chain-owner">chain owner</a>(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
 
 ### Configuring during deployment
 
@@ -392,7 +394,7 @@ Key configuration parameters to include:
   - `StakeLatest`: Bonds on the latest correct assertion and challenges bad ones (available only on pre-BoLD chains).
   - `ResolveNodes`: Bonds on the latest assertion, resolves unconfirmed ones, and challenges bad assertions.
   - `MakeNodes`: Creates new assertions, resolves unconfirmed ones, and challenges bad ones (use cautiously, as it may lead to reverted transactions if multiple validators act at once).
-  - `Watchtower`: Passively monitors and logs errors without active challenging (enabled by default; no wallet needed, but set `--node.staker.enable=false` to disable if not wanted).
+  - `Watchtower`: Passively monitors and logs errors without active challenging (enabled by default; no <a data-quicklook-from="wallet">wallet</a> needed, but set `--node.staker.enable=false` to disable if not wanted).
 - `--node.staker.parent-chain-wallet.private-key=[0xYourPrivateKey]` or `--node.staker.parent-chain-wallet.password=[YourPassword]`: Provides access to the wallet for onchain operations. Use a secure method; password-protected keystores are safer than direct private keys.
 - `--node.bold.enable=true`: Enable this if the chain has BoLD activated (required for versions before Nitro v3.6.0).
 
@@ -405,7 +407,7 @@ Run the command in a persistent setup (e.g., using Docker Compose or a systemd s
 
 ### Step 2: Verify the validator is running correctly
 
-- Monitor the node logs for confirmation messages:
+- Monitor the node logs for <a data-quicklook-from="confirmation">confirmation</a> messages:
   - Look for `INFO [...] running as validator txSender=[your_wallet_address] actingAsWallet=[your_wallet_address] whitelisted=true strategy=[YourChosenStrategy]`. This indicates the node is in validator mode with a valid wallet.
   - `validation succeeded`: Shows the node is successfully validating blocks.
   - `found correct assertion`: Confirms the node is detecting and agreeing with onchain assertions.
@@ -428,7 +430,7 @@ This creates a wallet file in your mounted directory (e.g., under `arb1/wallet/`
 
 ### For permissioned chains
 
-If the Arbitrum chain is permissioned (not fully permissionless), add your validator wallet address to the allowlist:
+If the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> is permissioned (not fully permissionless), add your validator wallet address to the allowlist:
 
 1. Identify the `upgradeExecutor` contract address for the chain.
 2. Call the `executeCall` method on it:

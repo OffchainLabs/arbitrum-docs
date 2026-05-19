@@ -8,14 +8,12 @@ sidebar_position: 4
 content_type: how-to
 ---
 
-<p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
-  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
-  <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
-  members of the DAC run a Data Availability Server (DAS) to handle these operations. Once the DA
-  servers are running, the chain needs to be configured with their information to effectively store
-  and retrieve data from them.
-</p>
+<a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability
+Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">
+  parent chain
+</a> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS)
+to handle these operations. Once the DA servers are running, the chain needs to be configured with their
+information to effectively store and retrieve data from them.
 
 In this how-to, you'll learn how to configure the DAC in your chain. Refer to the [Introduction](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/01-get-started.mdx) for the full process of running DA servers and configuring the chain.
 
@@ -44,9 +42,9 @@ The AnyTrust protocol assumes that for the `n` members of the DAC, a minimum of 
 
 To perform this signing operation, each DAC member must generate their own set of BLS public and private keys. They should do this independently and ensure these keys are random and only used by them. You can find more information about how to generate a BLS pair of keys in [Generating BLS Keys](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/02-deploy-das.mdx#step-1-generate-the-bls-keypair).
 
-An AnyTrust chain needs to know all DAC members' public keys to validate the integrity of the data being batched and posted. A _keyset_ is a list of all DAC members' RPC endpoint and BLS public key. Additionally, it also contains information about how many signatures are needed to approve a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate (DACert)</a>, via a special `assumed-honest` parameter (i.e., the `h` parameter we mentioned above). This design lets the chain owner modify the DAC membership over time, and DAC members change their keys if needed. See [Inside AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) for more information.
+An AnyTrust chain needs to know all DAC members' public keys to validate the integrity of the data being batched and posted. A _keyset_ is a list of all DAC members' RPC endpoint and BLS public key. Additionally, it also contains information about how many signatures are needed to approve a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate (DACert)</a>, via a special `assumed-honest` parameter (i.e., the `h` parameter we mentioned above). This design lets the <a data-quicklook-from="chain-owner">chain Owner</a> modify the DAC membership over time, and DAC members change their keys if needed. See [Inside AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) for more information.
 
-We use this keyset, and its hash to configure the `SequencerInbox` contract with the valid keyset, and also the batch poster (to request storing information) and full nodes (to request information already stored).
+We use this keyset, and its hash to configure the `SequencerInbox` contract with the valid keyset, and also the <a data-quicklook-from="batch-poster">Batch Poster</a> (to request storing information) and full nodes (to request information already stored).
 
 ### How to generate a keyset and a keyset hash
 
@@ -140,7 +138,7 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $CHAIN_OWNER_PRIVATE_KEY $SE
 
 ## Step 3: Craft the new configuration for the batch poster
 
-To configure the batch poster, we'll use the JSON structure we created in Step 1. This will allow the batch poster to send RPC requests to all the DA servers (to store the information of the transactions being included in the next batch), craft the DACert, and store it in the `SequencerInbox`.
+To configure the batch poster, we'll use the JSON structure we created in Step 1. This will allow the batch poster to send RPC requests to all the DA servers (to store the information of the <a data-quicklook-from="transaction">transactions</a> being included in the next batch), craft the DACert, and store it in the `SequencerInbox`.
 
 The configuration to enable the DAC in the batch poster looks like this:
 

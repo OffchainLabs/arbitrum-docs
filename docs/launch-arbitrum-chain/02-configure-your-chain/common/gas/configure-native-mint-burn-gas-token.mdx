@@ -8,15 +8,15 @@ content_type: concept
 
 :::caution Bridge counterparty risk
 
-While this feature allows an Arbitrum chain to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the parent chain.
+While this feature allows an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the <a data-quicklook-from="parent-chain">parent chain</a>.
 
-However, by using a third-party bridge for the chain's gas token, your chain's gas token—and thus its liveness—becomes directly dependent on the security and integrity of the third-party bridge provider.
+However, by using a third-party <a data-quicklook-from="bridge">bridge</a> for the chain's gas token, your chain's gas token—and thus its liveness—becomes directly dependent on the security and integrity of the third-party bridge provider.
 
 :::
 
 :::info
 
-While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) to enable this feature.
+While Native Mint/Burn was introduced in <a data-quicklook-from="arbos">ArbOS</a> 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) to enable this feature.
 
 If you want to learn more about the concept of native mint/burn and the impact on your chain, refer to the [Choose native mint/burn page](/launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn.mdx).
 
@@ -28,18 +28,19 @@ If you want to learn more about the concept of native mint/burn and the impact o
 
 Before starting, ensure that the chain has:
 
-| Item               | Minimum version                                                                                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `nitro-contracts`  | [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher                                                           |
-| `nitro-node`       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher (includes the fix for `ArbNativeTokenManager` precompile inclusion) |
-| `go-ethereum` fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest WASM module root) or later                           |
+| Item               | Minimum version                                                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `nitro-contracts`  | [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher                                                                   |
+| `nitro-node`       | [v3.9.3](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.3) or higher (includes the fix for `ArbNativeTokenManager` precompile inclusion)         |
+| `go-ethereum` fork | Included in [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) (please use the latest <a data-quicklook-from="wasm">WASM</a> module root) or later |
 
 We suggest the following baseline or values for production chains:
 
 - [ArbOS version 51](/run-arbitrum-node/arbos-releases/arbos51) or later.
 - Call [`ArbOwner.setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) to activate with a future timestamp ≥ 7 days ahead. This is recommended for chains which are already live.
 - Native-token owners list: only the bridge adapter contract(s) to minimize the attack surface.
-- Outbox sweep bot: run once per hour to prevent stray collateral build-up.
+- <a data-quicklook-from="outbox">Outbox</a> sweep bot: run once per hour to prevent stray collateral
+  build-up.
 - Adapter contract must implement replay‑protection and supply accounting as these requirements are out-of-scope for ArbOS.
 
 ## How to configure the feature for your chain
@@ -52,7 +53,7 @@ The native token mint/burn feature is currently not available for implementation
 
 ### Enable the feature post-genesis
 
-Below steps show the flow a chain owners can use to allowlist a bridge adapter. The example below uses a Foundry call, but you can also use other tools to interact with the precompiles directly.
+Below steps show the flow a <a data-quicklook-from="chain-owner">chain owners</a> can use to allowlist a bridge adapter. The example below uses a Foundry call, but you can also use other tools to interact with the precompiles directly.
 
 1. Update your chain to [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) binaries and deploy the consensus-v51 WASM root.
 2. Call [`setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with the chain owner and a UNIX timestamp that is 7+ days in the future to enable the feature, otherwise the call will fail.

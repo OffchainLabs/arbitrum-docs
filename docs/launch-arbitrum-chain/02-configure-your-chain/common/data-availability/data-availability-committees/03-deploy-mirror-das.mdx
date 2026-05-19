@@ -89,7 +89,7 @@ To run the mirror DAS, we'll use the `daserver` tool and we'll configure the fol
 | --rest-addr                                                                 | REST server listening interface (default "localhost")                                                                                                                                       |
 | --rest-port                                                                 | (Optional) REST server listening port (default 9877)                                                                                                                                        |
 | --log-level                                                                 | Log level: 1 - ERROR, 2 - WARN, 3 - INFO, 4 - DEBUG, 5 - TRACE (default 3)                                                                                                                  |
-| --data-availability.rest-aggregator.enable                                  | Enables retrieval of sequencer batch data from a list of remote REST endpoints                                                                                                              |
+| --data-availability.rest-aggregator.enable                                  | Enables retrieval of <a data-quicklook-from="sequencer">Sequencer</a> <a data-quicklook-from="batch">Batch</a> data from a list of remote REST endpoints                                    |
 | --data-availability.rest-aggregator.online-url-list                         | A URL to a list of URLs of REST DAS endpoints that is checked at startup. This option is additive with the URLs option                                                                      |
 | --data-availability.rest-aggregator.urls                                    | List of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints. This option is additive with the online-url-list option                                     |
 | --data-availability.rest-aggregator.sync-to-storage.check-already-exists    | When using a REST aggregator, checks if the data already exists in this DAS's storage. Must be disabled for fast sync with an IPFS backend (default true)                                   |
@@ -283,7 +283,7 @@ For a mirror DAS, using a load balancer is recommended to manage incoming traffi
 
 ## What to do next?
 
-Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and configure the sequencer:
+Once the DAS is deployed and tested, you'll have to communicate the following information to the <a data-quicklook-from="chain-owner">chain owner</a>, so they can update the chain parameters and configure the sequencer:
 
 - The https URL for the REST endpoint (e.g., `das.your-chain.io/rest`)
 
