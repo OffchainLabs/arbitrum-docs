@@ -14,7 +14,7 @@ Gas fees are often a barrier to entry for users interacting with apps that proce
 
 ### How Circle Paymaster handles transactions with a bundler
 
-Paymaster is operated by Circle and integrates with bundlers such as Pimlico and Alchemy, which facilitate transaction bundling. A bundler is a service that collects user operations, combines them into a single transaction, and submits it to the blockchain network for execution, optimizing gas usage and efficiency. Below are the sequential steps outlining how Paymaster processes a transaction, with references to relevant contract functions:
+Paymaster is operated by Circle and integrates with bundlers such as Pimlico and Alchemy, which facilitate transaction bundling. A bundler is a service that collects user operations, combines them into a single transaction, and submits it to the blockchain network for execution, optimizing gas usage and efficiency. The following sequential steps outline how Paymaster processes a transaction, with references to relevant contract functions:
 
 1. **USDC Balance Verification:** Paymaster uses the `balanceOf(address)` function of the **USDC** token contract to check whether the user’s balance is sufficient to cover the transaction and associated gas fees.
 2. \***\*USDC** to **ETH** Conversion for Gas Calculation:** The `fetchPrice()` function retrieves the real-time **USDC** to **ETH** conversion rate, ensuring accurate calculation of the gas fee equivalent in **USDC\*\* and preventing overcharging.
