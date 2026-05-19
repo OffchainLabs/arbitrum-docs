@@ -134,16 +134,7 @@ const router = new ethers.Contract(routerAddress, routerABI, wallet);
 // Encode the data parameter
 const data = ethers.utils.defaultAbiCoder.encode(['uint256', 'bytes'], [maxSubmissionCost, '0x']);
 
-const tx = await router.outboundTransferCustomRefund(
-  tokenAddress,
-  refundAddress,
-  destinationAddress,
-  amount,
-  maxGas,
-  gasPriceBid,
-  data,
-  { value: maxSubmissionCost + maxGas * gasPriceBid },
-);
+const tx = await router.outboundTransferCustomRefund(tokenAddress, refundAddress, destinationAddress, amount, maxGas, gasPriceBid, data, { value: maxSubmissionCost + maxGas * gasPriceBid });
 
 await tx.wait();
 ```

@@ -136,10 +136,7 @@ After the first deposit, find your token's child chain address:
 ### Using the SDK
 
 ```javascript
-const childTokenAddress = await erc20Bridge.getChildErc20Address(
-  parentTokenAddress,
-  parentProvider,
-);
+const childTokenAddress = await erc20Bridge.getChildErc20Address(parentTokenAddress, parentProvider);
 
 console.log(`L2 token address: ${childTokenAddress}`);
 ```
