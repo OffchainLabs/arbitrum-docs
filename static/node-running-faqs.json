@@ -26,7 +26,7 @@
   },
   {
     "question": "How do I read messages from the Sequencer feed?",
-    "answer": "Running an Arbitrum relay locally as a [Feed Relay](https://docs.arbitrum.io/node-running/how-tos/running-a-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions off-chain. Refer to [How to read the sequencer feed](https://docs.arbitrum.io/node-running/how-tos/read-sequencer-feed) for a detailed guide.\n\n\n\n",
+    "answer": "Running an Arbitrum relay locally as a [Feed Relay](https://docs.arbitrum.io/node-running/how-tos/running-a-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions offchain. Refer to [How to read the sequencer feed](https://docs.arbitrum.io/node-running/how-tos/read-sequencer-feed) for a detailed guide.\n\n\n\n",
     "key": "how-do-i-read-messages-from-the-sequencer-feed"
   },
   {
