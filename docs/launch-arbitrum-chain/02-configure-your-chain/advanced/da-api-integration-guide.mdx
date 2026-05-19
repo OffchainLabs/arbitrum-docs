@@ -1411,7 +1411,7 @@ This section covers creating the Arbitrum chain with custom DA support, configur
 
 ### Create the Arbitrum chain with custom DA support
 
-To use a custom DA validator contract for the on-chain proving process, the minimum nitro-contracts version required is v3.2, which is available in the `deploy-custom-da-val` branch on the nitro-contracts repository.
+To use a custom DA validator contract for the onchain proving process, the minimum nitro-contracts version required is v3.2, which is available in the `deploy-custom-da-val` branch on the nitro-contracts repository.
 
 :::info
 
@@ -1421,7 +1421,7 @@ Nitro contracts v3.2 have not been publicly released yet and is not supported in
 
 You can deploy a RollupCreator factory contract following the instructions in [How to deploy new factory contracts](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx#deploying-a-rollupcreator).
 
-Before creating the Arbitrum chain, you must have the on-chain custom validator contract and the OneStepProof (OSP) contracts deployed on the parent chain. Deploy the on-chain validator contract first, and then use the script available at `scripts/deployOsp.ts` to deploy the OSP contracts. Specify the address of the custom validator contract in a `CUSTOM_DA_VALIDATOR` env variable and use hardhat to run the script:
+Before creating the Arbitrum chain, you must have the onchain custom validator contract and the OneStepProof (OSP) contracts deployed on the parent chain. Deploy the onchain validator contract first, and then use the script available at `scripts/deployOsp.ts` to deploy the OSP contracts. Specify the address of the custom validator contract in a `CUSTOM_DA_VALIDATOR` env variable and use hardhat to run the script:
 
 ```shell
 yarn run hardhat run scripts/deployOsp.ts --network parentChainNetwork
