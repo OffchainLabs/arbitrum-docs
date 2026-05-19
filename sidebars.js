@@ -1256,6 +1256,11 @@ const sidebars = {
               label: 'Solidity support',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
             },
+            {
+              type: 'doc',
+              label: 'Nonce management',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
+            },
           ],
         },
         {
@@ -1487,6 +1492,11 @@ const sidebars = {
               type: 'doc',
               label: 'Solidity support',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+            },
+            {
+              type: 'doc',
+              label: 'Nonce management',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
             },
           ],
         },
