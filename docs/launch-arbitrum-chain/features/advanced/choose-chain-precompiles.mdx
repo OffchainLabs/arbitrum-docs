@@ -21,7 +21,7 @@ There are several approaches, each building on the Nitro codebase:
 
 - **Add new methods to an existing <a data-quicklook-from="precompile">precompile</a>**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
 - **Create a new precompile**: Define a completely new precompile at a custom address (e.g., 0x011a for ArbHi) with its own methods.
-- **Define a new event**: Add events to methods for logging, making the method state-modifying and indexable for off-chain querying.
+- **Define a new event**: Add events to methods for logging, making the method state-modifying and indexable for offchain querying.
 - **Customize gas usage**: Adjust or implement gas costs for methods (e.g., cost 300 gas instead of 700 for a balance query) to optimize efficiency or prevent DoS attacks.
 - **Call and modify state**: Integrate with <a data-quicklook-from="arbos">ArbOS</a> state by adding storage variables and methods to read/write them, allowing persistent chain-specific data.
 
