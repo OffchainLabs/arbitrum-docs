@@ -10,11 +10,7 @@ content_type: gentle-introduction
 
 import { FlowChart } from '@site/src/components/InteractiveDiagrams/Timeboost/CentralizedAuction';
 
-<a data-quicklook-from="timeboost">Arbitrum Timeboost</a> is a novel <a data-quicklook-from="transaction-ordering-policy">
-  transaction ordering policy
-</a> for Arbitrum chains that enables chain owners to capture the Maximal Extractable Value (MEV) on
-their chain, reduce spam, and preserve fast block times, all while protecting users from harmful types
-of MEV, such as sandwich attacks and front-running.
+<a data-quicklook-from="timeboost">Arbitrum Timeboost</a> is a novel <a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a> for Arbitrum chains that enables chain owners to capture the Maximal Extractable Value (MEV) on their chain, reduce spam, and preserve fast block times, all while protecting users from harmful types of MEV, such as sandwich attacks and front-running.
 
 Timeboost is the culmination of over a year of [research and development](https://arxiv.org/abs/2306.02179) by the team at Offchain Labs. It is currently live on Arbitrum One and Arbitrum Nova, and is available for Arbitrum chains, whose owners can adopt and customize it as they choose.
 
@@ -60,11 +56,7 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
 
 ### The express lane
 
-<ImageZoom
-  src="/img/timeboost-centralized-timeboost-express-lane-workflow.jpg"
-  alt="using the express lane"
-  className="img-900px"
-/>
+<ImageZoom src="/img/timeboost-centralized-timeboost-express-lane-workflow.jpg" alt="using the express lane" className="img-900px" />
 
 The express lane implementation uses a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name "express lane." The sequencer will only accept valid transaction payloads to this endpoint if they are signed correctly by the current round’s <a data-quicklook-from='express-lane-controller'>express lane controller</a>.
 

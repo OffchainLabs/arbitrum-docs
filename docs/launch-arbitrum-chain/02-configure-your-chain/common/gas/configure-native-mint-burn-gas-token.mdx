@@ -39,8 +39,7 @@ We suggest the following baseline or values for production chains:
 - [ArbOS version 51](/run-arbitrum-node/arbos-releases/arbos51) or later.
 - Call [`ArbOwner.setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) to activate with a future timestamp ≥ 7 days ahead. This is recommended for chains which are already live.
 - Native-token owners list: only the bridge adapter contract(s) to minimize the attack surface.
-- <a data-quicklook-from="outbox">Outbox</a> sweep bot: run once per hour to prevent stray collateral
-  build-up.
+- <a data-quicklook-from="outbox">Outbox</a> sweep bot: run once per hour to prevent stray collateral build-up.
 - Adapter contract must implement replay‑protection and supply accounting as these requirements are out-of-scope for ArbOS.
 
 ## How to configure the feature for your chain

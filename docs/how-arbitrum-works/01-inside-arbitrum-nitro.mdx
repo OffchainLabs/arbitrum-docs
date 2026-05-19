@@ -13,11 +13,7 @@ As a developer initiating a <a data-quicklook-from="transaction">transaction</a>
 
 This overview methodically traces the transaction lifecycle, emphasizing how Arbitrum’s architecture ensures precise, efficient, and secure handling at every stage. This article covers the complete <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack, beginning with the <a data-quicklook-from="sequencer">Sequencer</a>, which is responsible for transaction ordering, advancing to the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) for execution, and culminating in validation mechanisms that uphold integrity.
 
-<ImageZoom
-  src="/img/haw-transaction-lifecycle.png"
-  className="img-600px"
-  alt="Transaction lifecycle"
->
+<ImageZoom src="/img/haw-transaction-lifecycle.png" className="img-600px" alt="Transaction lifecycle">
   Transaction lifecycle
 </ImageZoom>
 
@@ -27,10 +23,7 @@ Along the way, you'll learn about Arbitrum's ability to deliver security on par 
 
 Before delving into the journey of a transaction, it's important to outline the foundational architecture that powers Arbitrum's operations. Central to the architecture is a simple yet powerful principle: deterministic state transitions, which ensure consistent outcomes across the network. The system revolves around three core components:
 
-<ImageWithCaption
-  caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten"
-  src="/img/haw-eds-napkin-drawing.png"
-/>
+<ImageWithCaption caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten" src="/img/haw-eds-napkin-drawing.png" />
 
 Transactions first enter the Inbox, serving as the primary gateway into the ecosystem. From there, the STF processes them deterministically, applying rules that guarantee reproducibility. Finally, the Outputs component generates the resulting data and state updates, completing the cycle.
 
@@ -155,9 +148,7 @@ For more details, refer to the [Stylus gentle introduction](/stylus/gentle-intro
 
 ### Timeboost
 
-<a data-quicklook-from="timeboost">Timeboost</a> refines ordering to capture MEV (maximum extractable
-value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion,
-and enables customizable policies. Timeboost preserves fast block times (250ms default).
+<a data-quicklook-from="timeboost">Timeboost</a> refines ordering to capture MEV (maximum extractable value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion, and enables customizable policies. Timeboost preserves fast block times (250ms default).
 
 #### Timeboost references
 

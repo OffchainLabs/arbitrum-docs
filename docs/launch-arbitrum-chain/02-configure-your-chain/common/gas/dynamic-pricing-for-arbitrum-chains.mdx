@@ -9,10 +9,7 @@ sme: asomani
 
 ## Dynamic pricing: a new pricing algorithm introduced in ArbOS 51 Dia
 
-<a data-quicklook-from="arbitrum-chain">Arbitrum chains</a> support a new gas pricing algorithm that
-uses multiple-gas targets, as part of the [ArbOS 51 upgrade](/run-arbitrum-node/arbos-releases/arbos51),
-to reduce the frequency and severity of child-chain gas price spikes. This is the first optimization
-of many towards Dynamic Pricing.
+<a data-quicklook-from="arbitrum-chain">Arbitrum chains</a> support a new gas pricing algorithm that uses multiple-gas targets, as part of the [ArbOS 51 upgrade](/run-arbitrum-node/arbos-releases/arbos51), to reduce the frequency and severity of child-chain gas price spikes. This is the first optimization of many towards Dynamic Pricing.
 
 - This change is **backward compatible**. Setting new <a data-quicklook-from="gas-target">gas targets</a> is **not mandatory**; if no new configuration is set, the legacy gas pricing algorithm with a single gas target remains active.
 - **Additional details:** For those interested in how these values are derived, refer to the [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees#the-gas-target) page as it provides the underlying parameters used to calculate the new gas targets and adjustment windows.
@@ -63,10 +60,7 @@ Refer to the definitions below to understand what each parameter means:
 
 ## How to calculate the values for your chain
 
-<a data-quicklook-from="offchain-labs">Offchain Labs</a> has developed a [script to help calculate pricing
-constraints](https://colab.research.google.com/drive/1D28YghOmCjvvrLWS5FsTp5xNKz9JHAA3?usp=sharing),
-which takes in certain parameters to find the most optimized gas targets to use for your chain. The script
-takes in the following params:
+<a data-quicklook-from="offchain-labs">Offchain Labs</a> has developed a [script to help calculate pricing constraints](https://colab.research.google.com/drive/1D28YghOmCjvvrLWS5FsTp5xNKz9JHAA3?usp=sharing), which takes in certain parameters to find the most optimized gas targets to use for your chain. The script takes in the following params:
 
 - `long_term_gas_target` is the desired long-term average gas throughput for the chain. A higher gas target means that your chain can handle more TPS before the gas begins to spike. However, a higher gas target also leads to faster state growth and requires more powerful hardware.
   - [State size limits](/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit): Guidance for setting your chains gas target

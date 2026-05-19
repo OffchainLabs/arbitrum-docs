@@ -15,15 +15,7 @@ Generally, transactions executed through the <a data-quicklook-from="sequencer">
 
 Messages being sent through the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> of a parent chain as [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#retryable-tickets), including deposits through token bridges, are released by the [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) once it has reasonable confidence of finality on the parent chain. For example, on an <a data-quicklook-from="l2">L2</a> chain settling to Ethereum, the sequencer will release delayed messages to the inbox after 40 blocks. Following this, the transaction must complete another finality period for the Ethereum transaction that prompted it to achieve finality.
 
-<a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> L3s may configure the finality of transactions
-executed through the Delayed Inbox to depend on different layers of finality. By default, Arbitrum chains
-will rely on the number of <a data-quicklook-from="l1">L1</a> block confirmations, effectively finalizing
-an L3 deposit as soon as L1 finalizes the <a data-quicklook-from="batch">batch</a> posted by <a data-quicklook-from="arbitrum-one">
-  Arbitrum One
-</a> or when a <a data-quicklook-from="data-availability-certificate">DACert</a> is posted by <a data-quicklook-from="arbitrum-nova">
-  Arbitrum Nova
-</a>
-. This would be on the order of tens of minutes.
+<a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> L3s may configure the finality of transactions executed through the Delayed Inbox to depend on different layers of finality. By default, Arbitrum chains will rely on the number of <a data-quicklook-from="l1">L1</a> block confirmations, effectively finalizing an L3 deposit as soon as L1 finalizes the <a data-quicklook-from="batch">batch</a> posted by <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or when a <a data-quicklook-from="data-availability-certificate">DACert</a> is posted by <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>. This would be on the order of tens of minutes.
 
 However, in the instance of an L3 settling to Arbitrum One or Nova an L3 may also choose to rely only on L2 finality by configuring their sequencer as follows:
 

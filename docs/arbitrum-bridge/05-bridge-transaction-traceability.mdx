@@ -21,12 +21,7 @@ The following code demonstrates how to trace a parent-to-child message:
 ```tsx
 import { config } from 'dotenv';
 import { providers } from 'ethers';
-import {
-  ChildTransactionReceipt,
-  ParentToChildMessageStatus,
-  ParentToChildMessageReader,
-  ParentTransactionReceipt,
-} from '@arbitrum/sdk';
+import { ChildTransactionReceipt, ParentToChildMessageStatus, ParentToChildMessageReader, ParentTransactionReceipt } from '@arbitrum/sdk';
 
 const ParentTransactionHash = PARENT_TRANSACTION_HASH;
 
@@ -43,9 +38,7 @@ async function main() {
 
   const ParentReceipt = await sepoliaProvider.getTransactionReceipt(ParentTransactionHash);
   const wrappedParentReceipt = new ParentTransactionReceipt(ParentReceipt);
-  const parentToChildMsg = (
-    await wrappedParentReceipt.getParentToChildMessages(arbSepoliaProvider)
-  )[0];
+  const parentToChildMsg = (await wrappedParentReceipt.getParentToChildMessages(arbSepoliaProvider))[0];
 
   if (parentToChildMsg.retryableCreationId == null) {
     throw new Error('Child Transaction Hash is null');
@@ -54,23 +47,14 @@ async function main() {
   console.log('Child RetryableHash is:', parentToChildMsg.retryableCreationId);
 
   //this is the start of searching for the child ticket and its retryable transaction
-  const childReceipt = await arbSepoliaProvider.getTransactionReceipt(
-    parentToChildMsg.retryableCreationId,
-  );
+  const childReceipt = await arbSepoliaProvider.getTransactionReceipt(parentToChildMsg.retryableCreationId);
 
   if (childReceipt == null) {
     throw new Error('Retryable submission has not been sent to the child chain');
   }
 
   const retryableReceipt = new ChildTransactionReceipt(childReceipt);
-  const parentToChildMessageReader = new ParentToChildMessageReader(
-    arbSepoliaProvider,
-    arbSepoliaProvider.network.chainId,
-    retryableReceipt.from,
-    parentToChildMsg.messageNumber,
-    parentToChildMsg.parentBaseFee,
-    parentToChildMsg.messageData,
-  );
+  const parentToChildMessageReader = new ParentToChildMessageReader(arbSepoliaProvider, arbSepoliaProvider.network.chainId, retryableReceipt.from, parentToChildMsg.messageNumber, parentToChildMsg.parentBaseFee, parentToChildMsg.messageData);
 
   const manualRedeemMessage = await parentToChildMessageReader.getSuccessfulRedeem();
 
@@ -145,11 +129,7 @@ async function main() {
     throw new Error('Bridge address cannot be empty');
   }
 
-  const retryableContract = new Contract(
-    constants.ARB_RETRYABLE_TX_ADDRESS,
-    arbRetryableABI,
-    arbSepoliaProvider,
-  );
+  const retryableContract = new Contract(constants.ARB_RETRYABLE_TX_ADDRESS, arbRetryableABI, arbSepoliaProvider);
 
   const redeemFilter = retryableContract.filters.RedeemScheduled(null, childMessageHash);
   const redeemLog = (await retryableContract.queryFilter(redeemFilter))[0];
@@ -161,8 +141,7 @@ async function main() {
   const retryableTicketID = redeemLog.transactionHash;
   const retryableTransaction = await arbSepoliaProvider.getTransaction(retryableTicketID);
 
-  const parsedRetryableTransaction =
-    retryableContract.interface.parseTransaction(retryableTransaction);
+  const parsedRetryableTransaction = retryableContract.interface.parseTransaction(retryableTransaction);
   const retryableID = parsedRetryableTransaction.args.requestId;
 
   const bridgeContract = new Contract(bridgeContractAddress, bridgeABI, sepoliaProvider);
@@ -210,22 +189,13 @@ async function main() {
     throw new Error('Bridge address cannot be empty');
   }
 
-  const childEthDepositTransaction = await arbSepoliaProvider.getTransactionReceipt(
-    depositEthHashChild,
-  );
+  const childEthDepositTransaction = await arbSepoliaProvider.getTransactionReceipt(depositEthHashChild);
   const ethDepositChildTransactionReceipt = new ChildTransactionReceipt(childEthDepositTransaction);
-  var ethDepositBatchNumber = await ethDepositChildTransactionReceipt.getBatchNumber(
-    arbSepoliaProvider,
-  );
+  var ethDepositBatchNumber = await ethDepositChildTransactionReceipt.getBatchNumber(arbSepoliaProvider);
 
-  const sepoliaSequencerInboxContract = new Contract(
-    sequencerInboxAddress,
-    sepoliaSequencerInboxABI,
-    sepoliaProvider,
-  );
+  const sepoliaSequencerInboxContract = new Contract(sequencerInboxAddress, sepoliaSequencerInboxABI, sepoliaProvider);
 
-  const seqInboxFilter =
-    sepoliaSequencerInboxContract.filters.SequencerBatchDelivered(ethDepositBatchNumber);
+  const seqInboxFilter = sepoliaSequencerInboxContract.filters.SequencerBatchDelivered(ethDepositBatchNumber);
   const batchDeliveredEvent = (await sepoliaSequencerInboxContract.queryFilter(seqInboxFilter))[0];
 
   if (batchDeliveredEvent == null) {
@@ -236,16 +206,10 @@ async function main() {
 
   const bridgeFilter = bridgeContract.filters.MessageDelivered();
 
-  const bridgeLogs = await bridgeContract.queryFilter(
-    bridgeFilter,
-    batchDeliveredEvent.blockNumber - 100,
-    batchDeliveredEvent.blockNumber,
-  );
+  const bridgeLogs = await bridgeContract.queryFilter(bridgeFilter, batchDeliveredEvent.blockNumber - 100, batchDeliveredEvent.blockNumber);
 
   for (let i = 0; i < bridgeLogs.length; i++) {
-    const transactionReceipt = await sepoliaProvider.getTransactionReceipt(
-      bridgeLogs[i].transactionHash,
-    );
+    const transactionReceipt = await sepoliaProvider.getTransactionReceipt(bridgeLogs[i].transactionHash);
     const transactionReceiptWrapped = new ParentEthDepositTransactionReceipt(transactionReceipt);
     const ethDeposit = await transactionReceiptWrapped.getEthDeposits(arbSepoliaProvider);
 
@@ -255,9 +219,7 @@ async function main() {
       return;
     }
   }
-  throw new Error(
-    'Original Transaction hash not found, logs may not be available anymore or search window is too small',
-  );
+  throw new Error('Original Transaction hash not found, logs may not be available anymore or search window is too small');
 }
 main();
 ```
@@ -300,9 +262,7 @@ async function main() {
   const withdrawalReceipt = await arbSepoliaProvider.getTransactionReceipt(childWithdrawHash);
   const withdrawalReceiptWrapped = new ChildTransactionReceipt(withdrawalReceipt);
 
-  const childToParentMessages = await withdrawalReceiptWrapped.getChildToParentMessages(
-    sepoliaProvider,
-  );
+  const childToParentMessages = await withdrawalReceiptWrapped.getChildToParentMessages(sepoliaProvider);
   const status = await childToParentMessages[0].status(arbSepoliaProvider);
   if (status != ChildToParentMessageStatus.EXECUTED) {
     throw new Error('Message has not been executed on the parent chain');
@@ -329,10 +289,7 @@ async function main() {
   const startingBlock = confirmationLength.add(parsedLog.args.ethBlockNum);
 
   const outboxContract = new Contract(outboxAddress, outboxABI, sepoliaProvider);
-  const eventFilter = outboxContract.filters.OutBoxTransactionExecuted(
-    parsedLog.args.destination,
-    parsedLog.args.caller,
-  );
+  const eventFilter = outboxContract.filters.OutBoxTransactionExecuted(parsedLog.args.destination, parsedLog.args.caller);
 
   const events = await outboxContract.queryFilter(eventFilter, startingBlock.toNumber());
   console.log(events);
@@ -394,9 +351,7 @@ async function main() {
 
   const arbSysContract = new Contract(constants.ARB_SYS_ADDRESS, arbSysABI, arbSepoliaProvider);
   const eventFilter = arbSysContract.filters.L2ToL1Tx(null, null, null, withdrawPosition);
-  const event = (
-    await arbSysContract.queryFilter(eventFilter, l2WithdrawBlock, l2WithdrawBlock)
-  )[0];
+  const event = (await arbSysContract.queryFilter(eventFilter, l2WithdrawBlock, l2WithdrawBlock))[0];
   if (event == null) {
     throw new Error('log not found, may be unavailable');
   }

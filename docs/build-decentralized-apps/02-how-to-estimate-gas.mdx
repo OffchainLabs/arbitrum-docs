@@ -114,14 +114,9 @@ Call `gasEstimateComponents()` with your transaction's destination address and d
 const gasComponents = await arbGasInfo.callStatic.getPricesInWei();
 
 // And the estimations from NodeInterface.GasEstimateComponents()
-const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponents(
-  destinationAddress,
-  false,
-  txData,
-  {
-    blockTag: 'latest',
-  },
-);
+const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponents(destinationAddress, false, txData, {
+  blockTag: 'latest',
+});
 ```
 
 Extract the formula variables:

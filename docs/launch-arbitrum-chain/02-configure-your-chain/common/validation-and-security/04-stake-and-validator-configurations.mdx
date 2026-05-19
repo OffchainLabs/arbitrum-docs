@@ -7,18 +7,7 @@ content_type: how-to
 unlisted: true
 ---
 
-<a data-quicklook-from="arbitrum">Arbitrum</a> chains are customizable Layer 3 (L3) chains that settle
-to an Arbitrum Layer 2 (<a data-quicklook-from="l2">L2</a>) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">
-  validator
-</a> configurations to ensure chain security through bonding and <a data-quicklook-from="assertion">
-  assertion
-</a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
-  challenge
-</a> incorrect assertions. <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> can be permissioned,
-meaning validators must be allowlisted. For chains that use that elect to use the <a data-quicklook-from="bold">
-  BoLD
-</a> protocol, <a data-quicklook-from="permissionless-validation">permissionless validation</a> is an
-option (BoLD also supports permissioned validation).
+<a data-quicklook-from="arbitrum">Arbitrum</a> chains are customizable Layer 3 (L3) chains that settle to an Arbitrum Layer 2 (<a data-quicklook-from="l2">L2</a>) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">validator</a> configurations to ensure chain security through bonding and <a data-quicklook-from="assertion">assertion</a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">challenge</a> incorrect assertions. <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> can be permissioned, meaning validators must be allowlisted. For chains that use that elect to use the <a data-quicklook-from="bold">BoLD</a> protocol, <a data-quicklook-from="permissionless-validation">permissionless validation</a> is an option (BoLD also supports permissioned validation).
 
 Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
@@ -71,17 +60,14 @@ The bonded token is the asset that validators must bond to participate in assert
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
 
-   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
-     parentChainPublicClient,
-     {
-       chainId: 123456, // Must match the chainId from Step 1
-       owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
-       chainConfig,
-       stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
-       baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
-       // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
-     },
-   );
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+     chainId: 123456, // Must match the chainId from Step 1
+     owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
+     chainConfig,
+     stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
+     baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
+     // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
+   });
    ```
 
 4. **Deploy the chain**:
@@ -187,17 +173,14 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
 
-   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
-     parentChainPublicClient,
-     {
-       chainId: 123456, // Must match the chainId from Step 1
-       owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
-       chainConfig,
-       stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
-       baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
-       // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
-     },
-   );
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+     chainId: 123456, // Must match the chainId from Step 1
+     owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
+     chainConfig,
+     stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
+     baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
+     // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
+   });
    ```
 
 4. **Deploy the chain**:
@@ -302,16 +285,13 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
 
-   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
-     parentChainPublicClient,
-     {
-       chainId: 123456,
-       owner: '0xYourOwnerAddressHere',
-       chainConfig,
-       loserStakeEscrow: '0xYourEscrowAddressHere', // e.g., owner-controlled or burn address
-       // Optional: baseStake: 100000000000000000n, stakeToken: '0xERC20Address', etc.
-     },
-   );
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+     chainId: 123456,
+     owner: '0xYourOwnerAddressHere',
+     chainConfig,
+     loserStakeEscrow: '0xYourEscrowAddressHere', // e.g., owner-controlled or burn address
+     // Optional: baseStake: 100000000000000000n, stakeToken: '0xERC20Address', etc.
+   });
    ```
 
 4. **Deploy the chain**:

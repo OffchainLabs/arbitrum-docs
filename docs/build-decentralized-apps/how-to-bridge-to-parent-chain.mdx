@@ -46,16 +46,9 @@ The `ArbSys` precompile is located at address `0x0000000000000000000000000000000
 **Example**: Sending a simple message
 
 ```javascript
-const arbSys = new ethers.Contract(
-  '0x0000000000000000000000000000000000000064',
-  arbSysABI,
-  childChainSigner,
-);
+const arbSys = new ethers.Contract('0x0000000000000000000000000000000000000064', arbSysABI, childChainSigner);
 
-const tx = await arbSys.sendTxToL1(
-  parentChainDestination,
-  ethers.utils.toUtf8Bytes('Hello from L2!'),
-);
+const tx = await arbSys.sendTxToL1(parentChainDestination, ethers.utils.toUtf8Bytes('Hello from L2!'));
 const receipt = await tx.wait();
 ```
 
@@ -92,11 +85,7 @@ function constructOutboxProof(
 **Example usage:**
 
 ```javascript
-const nodeInterface = new ethers.Contract(
-  '0x00000000000000000000000000000000000000C8',
-  nodeInterfaceABI,
-  childChainProvider,
-);
+const nodeInterface = new ethers.Contract('0x00000000000000000000000000000000000000C8', nodeInterfaceABI, childChainProvider);
 
 const proofData = await nodeInterface.constructOutboxProof(batchNumber, indexInBatch);
 ```
@@ -132,17 +121,7 @@ All parameters come from the `constructOutboxProof` call. The method executes th
 ```javascript
 const outbox = new ethers.Contract(outboxAddress, outboxABI, parentChainSigner);
 
-const tx = await outbox.executeTransaction(
-  proofData.proof,
-  proofData.path,
-  proofData.l2Sender,
-  proofData.l1Dest,
-  proofData.l2Block,
-  proofData.l1Block,
-  proofData.timestamp,
-  proofData.amount,
-  proofData.calldataForL1,
-);
+const tx = await outbox.executeTransaction(proofData.proof, proofData.path, proofData.l2Sender, proofData.l1Dest, proofData.l2Block, proofData.l1Block, proofData.timestamp, proofData.amount, proofData.calldataForL1);
 await tx.wait();
 ```
 
@@ -176,11 +155,7 @@ Returns a unique identifier for the withdrawal message.
 ### Example: withdrawing **ETH**
 
 ```javascript
-const arbSys = new ethers.Contract(
-  '0x0000000000000000000000000000000000000064',
-  arbSysABI,
-  childChainSigner,
-);
+const arbSys = new ethers.Contract('0x0000000000000000000000000000000000000064', arbSysABI, childChainSigner);
 
 // Withdraw 0.1 ETH
 const tx = await arbSys.withdrawEth(parentChainAddress, {
@@ -193,11 +168,7 @@ const receipt = await tx.wait();
 
 The withdrawal process:
 
-<ImageZoom
-  src="/img/apps-withdrawing-ether.svg"
-  alt="Process that funds follow during a withdrawal operation"
-  className="img-800px"
-/>
+<ImageZoom src="/img/apps-withdrawing-ether.svg" alt="Process that funds follow during a withdrawal operation" className="img-800px" />
 
 ## Withdrawing **ERC-20** tokens
 

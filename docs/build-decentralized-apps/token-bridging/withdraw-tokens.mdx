@@ -113,11 +113,7 @@ You can check the status on the [Arbitrum Bridge UI](https://bridge.arbitrum.io/
 After the challenge period, get the proof data using `NodeInterface`:
 
 ```javascript
-const nodeInterface = new ethers.Contract(
-  '0x00000000000000000000000000000000000000C8',
-  nodeInterfaceABI,
-  childProvider,
-);
+const nodeInterface = new ethers.Contract('0x00000000000000000000000000000000000000C8', nodeInterfaceABI, childProvider);
 
 // Get proof data (you'll need the batch number and index from the withdrawal receipt)
 const proofData = await nodeInterface.constructOutboxProof(batchNumber, indexInBatch);
@@ -128,17 +124,7 @@ Then execute on the parent chain using the Outbox contract:
 ```javascript
 const outbox = new ethers.Contract(outboxAddress, outboxABI, parentWallet);
 
-const executeTx = await outbox.executeTransaction(
-  proofData.proof,
-  proofData.path,
-  proofData.l2Sender,
-  proofData.l1Dest,
-  proofData.l2Block,
-  proofData.l1Block,
-  proofData.timestamp,
-  proofData.amount,
-  proofData.calldataForL1,
-);
+const executeTx = await outbox.executeTransaction(proofData.proof, proofData.path, proofData.l2Sender, proofData.l1Dest, proofData.l2Block, proofData.l1Block, proofData.timestamp, proofData.amount, proofData.calldataForL1);
 
 await executeTx.wait();
 console.log('Withdrawal executed on parent chain!');
@@ -148,11 +134,7 @@ console.log('Withdrawal executed on parent chain!');
 
 The token withdrawal process:
 
-<ImageZoom
-  src="/img/apps-bridge_withdrawals.png"
-  alt="Withdrawal process using the gateway"
-  className="img-800px"
-/>
+<ImageZoom src="/img/apps-bridge_withdrawals.png" alt="Withdrawal process using the gateway" className="img-800px" />
 
 1. **Child chain**: Tokens are burned (or escrowed for custom tokens)
 2. **Message created**: A child-to-parent message is encoded and included in an assertion
