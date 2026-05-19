@@ -152,7 +152,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/a-gentle-introduction',
-          label: 'A gentle introduction',
+          label: 'Arbitrum chains overview',
         },
         {
           type: 'doc',
@@ -361,6 +361,11 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
+                          label: `Configure DAC`,
+                        },
+                        {
+                          type: 'doc',
                           id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
                           label: `Deploy DAS`,
                         },
@@ -371,8 +376,8 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
-                          label: `Configure DAC`,
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations',
+                          label: `DAC/DAS operations`,
                         },
                         {
                           type: 'doc',
@@ -469,7 +474,7 @@ const sidebars = {
                     {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations',
-                      label: `Stake & validator configuration`,
+                      label: `Bond & validator configuration`,
                     },
                     {
                       type: 'doc',
@@ -781,6 +786,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/start-here',
+          label: 'Start here',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/run-full-node',
           label: 'Run a full node',
         },
@@ -1086,7 +1096,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
-              label: 'A gentle introduction',
+              label: 'BoLD overview',
             },
             {
               type: 'link',
@@ -1132,7 +1142,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
-              label: 'Public preview',
+              label: 'How Timeboost works',
             },
             {
               type: 'doc',
@@ -1245,6 +1255,11 @@ const sidebars = {
               type: 'doc',
               label: 'Solidity support',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+            },
+            {
+              type: 'doc',
+              label: 'Nonce management',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
             },
           ],
         },
@@ -1477,6 +1492,11 @@ const sidebars = {
               type: 'doc',
               label: 'Solidity support',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+            },
+            {
+              type: 'doc',
+              label: 'Nonce management',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
             },
           ],
         },
@@ -1922,6 +1942,11 @@ const sidebars = {
 
   // Notices sidebar
   noticeSidebar: [
+    {
+      type: 'doc',
+      id: 'notices/arbos60-upgrade-notice',
+      label: 'Upgrade notice for ArbOS 60',
+    },
     {
       type: 'doc',
       id: 'notices/arbos51-upgrade-notice',

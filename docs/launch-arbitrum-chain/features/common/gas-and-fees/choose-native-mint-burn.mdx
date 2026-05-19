@@ -22,7 +22,7 @@ Arbitrum chains are designed to “lock and mint” the native gas token in the 
 
 This "lock and mint" pattern is not compatible with an emerging category of "native interop tokens." These tokens rely on cross-chain messaging layers to facilitate a "burn and mint" approach to cross-chain bridging, meaning the representative asset is burned on the source chain and minted on the destination chain. Examples of tokens with this pattern include: LayerZero OFTs, the xERC-20 standard, or stablecoins such as Circle’s Native USDC (possible with Circle-supplied adapter) and Tether's USDT0.
 
-[ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) introduces the ability for native-interop tokens to work seamlessly as the gas token of an Arbitrum chain. This feature allows a chain owner (`ArbOwner`) to manage:
+[ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) introduces the ability for native-interop tokens to be the gas token of an Arbitrum chain. This feature allows a chain owner (`ArbOwner`) to manage:
 
 1. Permissioning of onchain addresses (typically, a token adapter contract) that have mint and burn access to the chain's native gas token on the child chain.
 2. A security switch to timelock changes to native mint and burn permissioned addresses (mitigating the risk of misuse or attack).
@@ -43,8 +43,8 @@ The native mint/burn feature permits mint and burn capability of the Rollup’s 
 ## Use cases
 
 - LayerZero OFT as a gas token.
-- xERC-20 token as a gas token.
-- Stablecoins (e.g., `USDC`) use mint/burn functionality for cross-chain interop.
+- **xERC-20** token as a gas token.
+- Stablecoins (e.g., **USDC**) use mint/burn functionality for cross-chain interop.
 
 ### What this feature helps with:
 
@@ -74,11 +74,7 @@ There are three components make up the native mint/burn feature:
 
 Below is a high-level data-flow diagram:
 
-<ImageZoom
-  src="/img/mint-burn-gas-token-hld.png"
-  alt="Bridge provider mint and burn"
-  className="img-600px"
-/>
+<ImageZoom src="/img/mint-burn-gas-token-hld.png" alt="Bridge provider mint and burn" className="img-600px" />
 
 ### Security timeLock
 
@@ -106,12 +102,7 @@ The native token mint/burn feature is currently not available for implementation
    - [`addNativeTokenOwner(address)`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L44-L46)
    - [`removeNativeTokenOwner(address)`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L50-L52)
 
-<ImageZoom
-  src="/img/bridge-provider-mint-burn-diagram.png"
-  alt="Bridge provider mint and burn"
-  caption="A third-party messaging layer triggers its Adapter to unlock to a specific address. The Adapter mints new tokens and distributes them to the user."
-  className="img-600px"
-/>
+<ImageZoom src="/img/bridge-provider-mint-burn-diagram.png" alt="Bridge provider mint and burn" caption="A third-party messaging layer triggers its Adapter to unlock to a specific address. The Adapter mints new tokens and distributes them to the user." className="img-600px" />
 
 ### Collateralization technique
 
