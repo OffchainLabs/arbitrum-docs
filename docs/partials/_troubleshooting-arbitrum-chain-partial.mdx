@@ -194,13 +194,13 @@ The estimated cost is approximately $600 per sequencer replica per month for a l
 
 ### What are the different validator modes?
 
-- **Defensive (allowlist required)**:- Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.
+- **Defensive (allowlist required)**:- Post bonds and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post bonds onchain if a bad assertion is found.
 
-- **StakeLatest (allowlist required)**:- Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
+- **StakeLatest (allowlist required)**:- Stay bonded on the latest assertion and challenge any bad assertions found (wallet required, always bonded, uses some gas every time new assertion created)
 
-- **ResolveNodes (allowlist required)**:- Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
+- **ResolveNodes (allowlist required)**:- Stay bonded on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always bonded, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
 
-- **MakeNodes (allowlist required)**:- Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
+- **MakeNodes (allowlist required)**:- Continuously create new assertions, challenging any bad assertions found (wallet required, always bonded, most expensive node to run)
 - Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.
 
 - **Watchtower**:- A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).

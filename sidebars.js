@@ -474,7 +474,7 @@ const sidebars = {
                     {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations',
-                      label: `Stake & validator configuration`,
+                      label: `Bond & validator configuration`,
                     },
                     {
                       type: 'doc',

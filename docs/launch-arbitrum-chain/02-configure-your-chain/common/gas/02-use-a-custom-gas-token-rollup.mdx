@@ -8,13 +8,13 @@ content_type: how-to
 
 import CustomGasTokenNote from '../../../partials/_custom-gas-token-note.mdx';
 
-When deploying an Arbitrum chain in [Rollup mode](/run-arbitrum-node/data-availability.mdx#rollup-mode), you can use a custom **ERC-20** token as the native gas token. This token is usable for <a data-quicklook-from="transaction">Transaction</a> fees on that specific Arbitrum chain and reimbursing the <a data-quicklook-from="batch">Batch</a> poster for data posted to Ethereum. An example would be an L2 Rollup that uses **USDC** as its custom gas token but pays **ETH** to post data to L1 Ethereum.
+When deploying an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> in [Rollup mode](/run-arbitrum-node/data-availability.mdx#rollup-mode), you can use a custom **ERC-20** token as the native gas token. This token is usable for <a data-quicklook-from="transaction">Transaction</a> fees on that specific Arbitrum chain and reimbursing the <a data-quicklook-from="batch-poster">Batch Poster</a> for data posted to Ethereum. An example would be an <a data-quicklook-from="l2">L2</a> Rollup that uses **USDC** as its custom gas token but pays **ETH** to post data to <a data-quicklook-from="l1">L1</a> Ethereum.
 
 Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-arbitrum-chain/02-configure-your-chain/common/gas/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
 ## Requirements of the custom gas token
 
-A key requirement for a custom gas token is that it has a representation on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain. Additional requirements include:
+A key requirement for a custom gas token is that it has a representation on the <a data-quicklook-from="parent-chain">parent chain</a>. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain. Additional requirements include:
 
 - Must be a standard **ERC-20** token
 - Transfers and approvals must occur directly via the token contract, not via proxies or hooks
@@ -23,7 +23,7 @@ A key requirement for a custom gas token is that it has a representation on the 
 
 ## Understanding the fee token pricer
 
-In Rollup mode, data posting costs to the <a data-quicklook-from="parent-chain">Parent chain</a> are paid in the parent chain’s native token but get reimbursed in the <a data-quicklook-from="child-chain">Child chain</a>’s fee token. To facilitate this, you must deploy and register a fee token pricer contract, providing an exchange rate between the two tokens (child fee token and parent fee token). We use this exchange rate to calculate the custom fee tokens required to reimburse the batch poster for each batch they post to the parent chain.
+In Rollup mode, data posting costs to the <a data-quicklook-from="parent-chain">Parent chain</a> are paid in the parent chain’s native token but get reimbursed in the <a data-quicklook-from="child-chain">Child chain</a>’s fee token. To facilitate this, you must deploy and register a fee token pricer contract, providing an exchange rate between the two tokens (child fee token and parent fee token). We use this exchange rate to calculate the custom fee tokens required to reimburse the <a data-quicklook-from="batch-poster">Batch Poster</a> for each batch they post to the parent chain.
 
 Below are three example implementation options that chain owners may consider. Chain owners are free to develop their custom fee token pricers.
 
@@ -35,7 +35,7 @@ The implementations included in the examples below have not undergone comprehens
 
 ### 1. Manual exchange rate
 
-The <a data-quicklook-from="chain-owner">Chain Owner</a> manually sets and updates the exchange rate; this is the simplest option but requires manual updates to track price changes or dependence on an owner-defined oracle.
+The <a data-quicklook-from="chain-owner">Chain Owner</a> manually sets and updates the exchange rate; this is the simplest option but requires manual updates to track price changes or dependence on an owner-defined <a data-quicklook-from="oracle">oracle</a>.
 
 This approach generally makes sense if:
 
@@ -87,7 +87,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
    - `FEE_TOKEN_ADDRESS` = your **ERC-20** gas token
    - `FEE_TOKEN_PRICER_ADDRESS` = your deployed pricer
    - `ROLLUP_CREATOR_ADDRESS` = the Rollup creator contract on L1
-   - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
+   - `STAKE_TOKEN_ADDRESS` = token used for bonding (see [BoLD docs](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
    - The script will deploy and initialize the Rollup accordingly.
 
 You can refer to the source files for more details on:
@@ -95,6 +95,6 @@ You can refer to the source files for more details on:
 - [`fee-token-pricers`](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
 - [`createERC20Rollup.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
 
-You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
+You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with <a data-quicklook-from="offchain-labs">Offchain Labs</a> or your chain’s deployment provider.
 
 <CustomGasTokenNote />

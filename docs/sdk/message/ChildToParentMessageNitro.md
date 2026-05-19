@@ -400,9 +400,7 @@ Instantiates a new `ChildToParentMessageWriterNitro` or `ChildToParentMessageRea
 ### ChildToParentMessageReaderOrWriterNitro
 
 ```ts
-type ChildToParentMessageReaderOrWriterNitro<T> = T extends Provider
-  ? ChildToParentMessageReaderNitro
-  : ChildToParentMessageWriterNitro;
+type ChildToParentMessageReaderOrWriterNitro<T> = T extends Provider ? ChildToParentMessageReaderNitro : ChildToParentMessageWriterNitro;
 ```
 
 Defined in: message/ChildToParentMessageNitro.ts:64
