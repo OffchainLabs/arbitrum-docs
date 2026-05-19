@@ -146,7 +146,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 #### 3 weeks before → 2 weeks before migration: build and test
 
 - [ ] RaaS: set up private Arbitrum chain
-- [ ] Testnet deployment: Sequencer, batch poster, staker, DA config.
+- [ ] Testnet deployment: Sequencer, batch poster, bonder, DA config.
 - [ ] Inventory contracts & state: Addresses, precompiles, proxies, admin keys, governance
 - [ ] Stand up Dual-RPC gateway prototype: Route pre-migration range to old stack archive; post-migration to Arbitrum chain.
 - [ ] Prepare official asset list: Canonical bridge(s), authoritative token addresses, symbols, decimals.
@@ -168,7 +168,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 - [ ] Stop old chain block/transaction production: disable proposer/sequencer, set legacy RPC to read-only, block `eth_sendRawTransaction` method, thus no new blocks or transactions.
 - [ ] Take a snapshot or confirm the last block for state replay
 - [ ] Bring up the new Arbitrum chain mainnet: import state or launch genesis.
-- [ ] Start batch poster/staker and verify assertions on L1.
+- [ ] Start batch poster/bonder and verify assertions on L1.
 - [ ] Flip DNS for RPC/explorer; enable dual-RPC gateway for historical queries
 - [ ] Open canonical bridges and publish asset list
 - [ ] Make announcements after all health checks clear and partner confirmations pass.
