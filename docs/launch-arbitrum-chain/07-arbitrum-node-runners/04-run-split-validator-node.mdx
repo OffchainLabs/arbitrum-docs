@@ -14,7 +14,7 @@ Split validators separate the validation work to a stateless validation node, wh
 - **Fault isolation**: Prevents database corruption if the validation node crashes (e.g., due to OOM errors)
 - **Flexibility**: Allows running multiple validation nodes for horizontal scalability
 
-This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (staker) and a validation node separately.
+This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (bonder) and a validation node separately.
 
 Before you read this doc, please ensure you have already walked through [run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx) docs to understand the basics of a validator node.
 
@@ -25,7 +25,7 @@ Nitro nodes can expose two separate WebSocket RPC interfaces:
 - **The public RPC** (configured under `--http.*` and `--ws.*`) serves the standard `eth_`, `net_`, and other namespaces that wallets and dApps use.
 - **AUTH-RPC** (configured under `--auth.*`) is a second, JWT-authenticated WebSocket interface intended for trusted intra-component communication. It listens on its own address and port and by default exposes only the `validation` namespace.
 
-The `validation_*` namespace is how the staker delegates WASM execution to the validation node — it carries `Validate` (run the WASM machine on a prepared input and return the resulting global state) plus `CreateExecutionRun`, `GetStepAt`, and `GetProofAt` (used during challenges to fetch step hashes and one-step proofs). The full method list is in the [`validation_*` API reference](#reference-the-validation-api) below. When the staker and validation node run in the same process, these calls happen in-memory and AUTH-RPC isn't involved. The moment you split them onto separate processes or hosts, AUTH-RPC is the secure transport between them, and a shared JWT secret is what authenticates one to the other.
+The `validation_*` namespace is how the bonder delegates WASM execution to the validation node—it carries `Validate` (run the WASM machine on a prepared input and return the resulting global state) plus `CreateExecutionRun`, `GetStepAt`, and `GetProofAt` (used during challenges to fetch step hashes and one-step proofs). The full method list is in the [`validation_*` API reference](#reference-the-validation-api) below. When the bonder and validation node run in the same process, these calls occur in-memory and don’t involve AUTH-RPC. The moment you split them across separate processes or hosts, AUTH-RPC provides the secure transport, and a shared JWT secret authenticates one to the other.
 
 The rest of this guide walks through the deployment; the API reference and the option to expose additional namespaces over AUTH-RPC are at the end.
 
@@ -141,7 +141,7 @@ helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
 
 ### Monitoring and maintenance
 
-- Monitor your staker and validation node logs regularly:
+- Monitor your bonding and validation node logs regularly:
 
   ```bash
   # For Docker
@@ -151,7 +151,7 @@ helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
   kubectl logs -f <POD>
   ```
 
-- Check the status of both the staker and the validation node through the Arbitrum dashboard or API
+- Check the status of both the bond and the validation node through the Arbitrum dashboard or API
 
 ### Additional configurations for validation nodes
 
@@ -174,7 +174,7 @@ This metric is a counter of the number of successful validation calls; if it is 
 You can also check where this log (`validation node started`) appears:
 
 - If this log appears on the validation node, it means your validation node is running correctly.
-- If this log appears on the staker node, it means your staker node is still validating itself. It indicates that your staker node is not connecting to the validation node correctly; you need to double-check your configuration.
+- If this log appears on the bond node, it means your bond node is still validating itself. It indicates that your bond node is not connecting to the validation node correctly; you need to double-check your configuration.
 
 ### Reference: the `validation_*` API {#reference-the-validation-api}
 
@@ -197,11 +197,11 @@ When AUTH-RPC is enabled, the validation node registers the `validation` namespa
 | `validation_checkAlive`                   | Probes that an execution run is still loaded on the validation node. |
 | `validation_closeExec`                    | Releases an execution run's resources.                               |
 
-These methods are internal protocol calls between the staker and the validation node. You normally don't invoke them directly — the staker calls them automatically when it needs validation work. This reference is useful mainly when reading logs or debugging connectivity between the two components.
+These methods are internal protocol calls between the bond and the validation node. You normally don't invoke them directly—the bonder calls them automatically when it needs validation work. This reference is most useful for reading logs or debugging connectivity between the two components.
 
 ### Advanced: exposing additional namespaces over AUTH-RPC
 
-`--auth.api` accepts a list of namespaces, not just `validation`. You can add others — for example `eth` or `net` — if you want to grant a trusted client read access to those APIs without exposing them on the public RPC:
+`--auth.api` accepts a list of namespaces, not just `validation`. You can add others—for example, `eth` or `net` — if you want to grant a trusted client read access to those APIs without exposing them on the public RPC:
 
 ```
 --auth.api validation,eth,net
@@ -209,4 +209,4 @@ These methods are internal protocol calls between the staker and the validation 
 
 Anything listed here is served on the AUTH-RPC endpoint and gated by the JWT, so the caller must hold the same JWT secret to access it. The endpoint still listens only on `--auth.addr` (default `127.0.0.1`), so keep it on loopback or a private network — JWT authentication alone is not a substitute for network isolation.
 
-This is rarely needed for stakers; the main use case is internal services (a custom monitor, an indexer behind your own bastion) that need authenticated read access to the node.
+This is rarely needed for bonders; the main use case is internal services (a custom monitor, an indexer behind your own bastion) that need authenticated read access to the node.
