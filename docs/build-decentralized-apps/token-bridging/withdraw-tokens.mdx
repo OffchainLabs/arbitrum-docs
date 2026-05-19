@@ -48,11 +48,11 @@ console.log(`Withdrawal initiated: ${withdrawReceipt.transactionHash}`);
 ### Step 2: Wait for the challenge period (~6.4 days)
 
 ```javascript
-import { L2ToL1MessageStatus } from '@arbitrum/sdk';
+import { ChildToParentMessageStatus, ChildTransactionReceipt } from '@arbitrum/sdk';
 
 // Get the withdrawal message
-const childReceipt = new L2TransactionReceipt(withdrawReceipt);
-const messages = await childReceipt.getL2ToL1Messages(childWallet);
+const childReceipt = new ChildTransactionReceipt(withdrawReceipt);
+const messages = await childReceipt.getChildToParentMessages(childWallet);
 const message = messages[0];
 
 // Wait for the message to be confirmed (takes ~6.4 days)
@@ -172,7 +172,7 @@ The challenge period hasn't passed yet. Withdrawals take approximately 6.4 days 
 
 ```javascript
 const status = await message.status(childProvider);
-console.log(L2ToL1MessageStatus[status]); // Should show "CONFIRMED" when ready
+console.log(ChildToParentMessageStatus[status]); // Should show "CONFIRMED" when ready
 ```
 
 ### "Message already executed"
@@ -191,7 +191,7 @@ If you need to construct the proof manually, you can find the batch number and i
 
 ## Resources
 
-- [Arbitrum SDK documentation](/sdk)
+- [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 - [Token withdrawal tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw)
 - [Contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
 - [Arbitrum Bridge UI](https://bridge.arbitrum.io/)

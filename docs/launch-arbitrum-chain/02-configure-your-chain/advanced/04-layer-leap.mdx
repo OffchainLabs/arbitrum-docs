@@ -62,24 +62,22 @@ To integrate Layer Leap into your custom bridge UI:
 
 2. **Implement the bridging flow**
 
-   The simplest implementation uses the [Arbitrum SDK teleporter package](https://www.npmjs.com/package/@arbitrum/sdk/v/3.5.1-teleporter.0) (v3.5.1-teleporter.0):
+   The simplest implementation uses the [Arbitrum SDK](https://www.npmjs.com/package/@arbitrum/sdk) (`Erc20L1L3Bridger` from `@arbitrum/sdk`):
 
 ```typescript
-import { TeleportTokenParameters, teleportToken } from '@arbitrum/sdk/dist/lib/teleport/teleport';
+import { Erc20L1L3Bridger } from '@arbitrum/sdk';
 
-// Configure the token teleport parameters
-const params: TeleportTokenParameters = {
+// Create an L1-L3 bridger instance
+const l1l3Bridger = new Erc20L1L3Bridger(l3Network);
+
+// Initiate the teleport
+const result = await l1l3Bridger.deposit({
+  erc20L1Address: erc20Address, // Token address on L1
+  amount, // Amount to bridge
   l1Signer, // Ethereum signer
   l2Provider, // Arbitrum L2 provider
   l3Provider, // Arbitrum chain provider
-  erc20Address, // Token address (or null for ETH)
-  amount, // Amount to bridge
-  l3WalletAddress, // Recipient address on the Arbitrum chain
-  teleportType: TeleportType.STANDARD, // For ETH-fee chains
-};
-
-// Initiate the teleport
-const result = await teleportToken(params);
+});
 console.log(`Teleport initiated with hash: ${result.hash}`);
 ```
 
@@ -88,16 +86,17 @@ console.log(`Teleport initiated with hash: ${result.hash}`);
    Track the status of a teleport:
 
 ```typescript
-import { TeleportStatus, getTeleportStatus } from '@arbitrum/sdk/dist/lib/teleport/status';
+import { Erc20L1L3Bridger } from '@arbitrum/sdk';
 
-const status = await getTeleportStatus({
+const l1l3Bridger = new Erc20L1L3Bridger(l3Network);
+const status = await l1l3Bridger.getDepositStatus({
+  txHash: l1TxHash,
   l1Provider,
   l2Provider,
   l3Provider,
-  l1TxHash,
 });
 
-console.log(`Teleport status: ${TeleportStatus[status.status]}`);
+console.log(`Teleport completed: ${status.completed}`);
 ```
 
 ## Best practices
@@ -130,5 +129,5 @@ You can see Layer Leap in action on the Arbitrum Bridge by bridging to:
 ## Resources
 
 - [Layer Leap repository](https://github.com/OffchainLabs/l1-l3-teleport-contracts)
-- [SDK documentation](https://www.npmjs.com/package/@arbitrum/sdk/v/3.5.1-teleporter.0)
+- [SDK documentation](https://www.npmjs.com/package/@arbitrum/sdk)
 - [Request Layer Leap for your Arbitrum chain](https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new?assignees=&labels=feat,triage&projects=&template=add-layerleap-request.yml&title=[feat])

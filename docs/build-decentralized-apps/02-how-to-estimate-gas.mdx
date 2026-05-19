@@ -110,10 +110,7 @@ const nodeInterface = NodeInterface__factory.connect(
 Call `gasEstimateComponents()` with your transaction's destination address and data:
 
 ```ts
-// Getting the gas prices from ArbGasInfo.getPricesInWei()
-const gasComponents = await arbGasInfo.callStatic.getPricesInWei();
-
-// And the estimations from NodeInterface.GasEstimateComponents()
+// Getting the estimations from NodeInterface.gasEstimateComponents()
 const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponents(
   destinationAddress,
   false,
@@ -128,23 +125,27 @@ Extract the formula variables:
 
 ```ts
 // Getting useful values for calculating the formula
-const l1GasEstimated = gasEstimateComponents.gasEstimateForL1;
-const l2GasUsed = gasEstimateComponents.gasEstimate.sub(gasEstimateComponents.gasEstimateForL1);
-const l2EstimatedPrice = gasEstimateComponents.baseFee;
-const l1EstimatedPrice = gasEstimateComponents.l1BaseFeeEstimate.mul(16);
+const parentChainGasEstimated = gasEstimateComponents.gasEstimateForL1;
+const childChainGasUsed = gasEstimateComponents.gasEstimate.sub(
+  gasEstimateComponents.gasEstimateForL1,
+);
+const childChainEstimatedPrice = gasEstimateComponents.baseFee;
+const parentChainEstimatedPrice = gasEstimateComponents.l1BaseFeeEstimate.mul(16);
 
 // Calculating some extra values to be able to apply all variables of the formula
 // -------------------------------------------------------------------------------
-// NOTE: This one might be a bit confusing, but l1GasEstimated (B in the formula) is calculated based on l2 gas fees
-const l1Cost = l1GasEstimated.mul(l2EstimatedPrice);
-// NOTE: This is similar to 140 + utils.hexDataLength(txData);
-const l1Size = l1Cost.div(l1EstimatedPrice);
+// NOTE: parentChainGasEstimated (B in the formula) is calculated based on the child chain's gas price
+const parentChainCost = parentChainGasEstimated.mul(childChainEstimatedPrice);
+// Guard against zero parent-chain base-fee estimates (some AnyTrust/Orbit configs)
+const parentChainSize = parentChainEstimatedPrice.eq(0)
+  ? 0
+  : parentChainCost.div(parentChainEstimatedPrice);
 
 // Setting the basic variables of the formula
-const P = l2EstimatedPrice;
-const L2G = l2GasUsed;
-const L1P = l1EstimatedPrice;
-const L1S = l1Size;
+const P = childChainEstimatedPrice;
+const L2G = childChainGasUsed;
+const L1P = parentChainEstimatedPrice;
+const L1S = parentChainSize;
 ```
 
 Calculate the total fee:
@@ -164,6 +165,25 @@ const TXFEES = P.mul(G);
 ```
 
 Refer to [our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation) for a complete working example.
+
+## Checking parent chain confirmations and batch information
+
+The `NodeInterface` also exposes methods for querying confirmation status and batch membership of child chain blocks. This is useful when you need to verify that a child chain block has been posted to the parent chain.
+
+```ts
+import { NodeInterface__factory } from '@arbitrum/sdk/dist/lib/abi/factories/NodeInterface__factory';
+import { NODE_INTERFACE_ADDRESS } from '@arbitrum/sdk/dist/lib/dataEntities/constants';
+
+const nodeInterface = NodeInterface__factory.connect(NODE_INTERFACE_ADDRESS, childProvider);
+
+// Get parent chain confirmations for a child chain block
+const { confirmations } = await nodeInterface.functions.getL1Confirmations(blockHash);
+
+// Find which batch contains a specific block
+const { batch } = await nodeInterface.functions.findBatchContainingBlock(blockNumber);
+```
+
+For a complete working example, see the [parent-chain-confirmation-checker tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/parent-chain-confirmation-checker).
 
 ## Final note
 
