@@ -9,7 +9,7 @@ sidebar_position: 1
 displayed_sidebar: buildStylusSidebar
 ---
 
-[Arbitrum Stylus](../gentle-introduction.mdx) is a new technology developed for Arbitrum chains which gives smart contract developers more tools. With Stylus, developers can write EVM-compatible smart contracts in many different programming languages, and reap massive performance gains. Stylus reduces fees, with performance gains ranging from 10-70x, and memory efficiency gains as high as 100-500x.
+[Arbitrum Stylus](../gentle-introduction.mdx) is a new technology developed for Arbitrum chains which gives smart contract developers more tools. With Stylus, developers can write EVM-compatible smart contracts in many different programming languages and reap massive performance gains. Stylus reduces fees, with performance gains ranging from 10-70x, and memory efficiency gains as high as 100-500x.
 
 This is possible thanks to [WebAssembly](https://www.infoworld.com/article/3291780/what-is-webassembly-the-next-generation-web-platform-explained.html) technology, which all Stylus contracts compile to. Stylus smart contracts live under the **same Ethereum state trie** in Arbitrum nodes, and can fully interoperate with Solidity or Vyper EVM smart contracts. With Stylus, developers can write smart contracts in Rust that talk to Solidity and vice versa without any limitations.
 
@@ -217,7 +217,7 @@ Works!
 
 ## Prime number checker implementation
 
-Let's build something a little bit fancier: this time we'll implement a primality checker in Zig using an ancient algorithm called the [sieve of erathosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes). Given a number, our contract will output 1 if it is prime, or 0 otherwise. We'll implement in a pretty naive way, while leveraging one of Zig's features: [comptime](https://kristoff.it/blog/what-is-zig-comptime/).
+Let's build something a little bit fancier: this time we'll implement a primality checker in Zig using an ancient algorithm called the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes). Given a number, our contract will output 1 if it is prime, or 0 otherwise. We'll implement in a pretty naive way, while leveraging one of Zig's features: [comptime](https://kristoff.it/blog/what-is-zig-comptime/).
 
 The `comptime` keyword tells the Zig compiler to evaluate the code involved at compile time, allowing you to define computation that would normally make runtime more expensive and do it while your binary is being compiled! Comptime in Zig is extremely flexible. In this example, we use it to define a slice of booleans up to a certain limit at compile time, which we'll use to mark which numbers are prime or not.
 
