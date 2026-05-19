@@ -14,7 +14,7 @@ delegate_call](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-sta
 
 ### Is it possible to verify Stylus contracts on the block explorer?
 
-Yes, you can verify Stylus contracts on Arbiscan and Blockscout.
+Currently it is not possible to verify contracts compiled to WASM on the block explorer, but we are actively working with providers to have the verification process ready for when Stylus reaches mainnet-ready status.
 
 ### Do Stylus contracts compile down to EVM bytecode like prior other attempts?
 
@@ -26,7 +26,7 @@ Stylus contracts are deployed onchain as a blob of bytes, just like EVM ones. Th
 
 ### Is there a new transaction type to deploy Stylus contracts?
 
-You deploy a Stylus contract the same way that Solidity contracts are deployed. There are no special transaction types. As a UX note: a WASM will revert until a special instrumentation operation is performed by a call to the new  `ArbWasm` precompile, which readies the program for calls on-chain.
+You deploy a Stylus contract the same way that Solidity contracts are deployed. There are no special transaction types. As a UX note: a WASM will revert until a special instrumentation operation is performed by a call to the new  `ArbWasm` precompile, which readies the program for calls onchain.
 
 You can find instructions for deploying a Stylus contract in our [Quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart#checking-your-stylus-project-is-valid).
 

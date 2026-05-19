@@ -7,15 +7,12 @@ content_type: how-to
 ---
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
-  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
-  <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
-  members of the DAC run a Data Availability Server (DAS) to handle these operations.
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
 In this how-to, you'll learn how to deploy a DAS that exposes:
 
-1. **An RPC interface** that the sequencer uses to store batches of data on the DAS.
+1. **An RPC interface** that the <a data-quicklook-from="sequencer">Sequencer</a> uses to store batches of data on the DAS.
 2. **An HTTP REST interface** that lets the DAS respond to requests for those batches of data.
 
 For more information related to configuring a DAC, refer to the [Introduction](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/01-get-started.mdx).
@@ -27,9 +24,9 @@ This how-to assumes that you're familiar with:
 
 ## How does a DAS work?
 
-A Data Availability Server (DAS) allows storage and retrieval of transaction data batches for an AnyTrust chain. It's the software that the members of the DAC run in order to provide the Data Availability service.
+A Data Availability Server (DAS) allows storage and retrieval of <a data-quicklook-from="transaction">transaction</a> data batches for an AnyTrust chain. It's the software that the members of the DAC run in order to provide the Data Availability service.
 
-DA servers accept time-limited requests to store data batches from the sequencer of an AnyTrust chain, and return a signed certificate promising to store that data during the established time. They also respond to requests to retrieve the data batches.
+DA servers accept time-limited requests to store data <a data-quicklook-from="batch">batches</a> from the sequencer of an AnyTrust chain, and return a signed certificate promising to store that data during the established time. They also respond to requests to retrieve the data batches.
 
 ## Configuration options
 
@@ -87,7 +84,7 @@ DA servers also have an optional REST aggregator which, when a data batch is not
 
 Gather the following information:
 
-- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@`
+- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/02-run-full-node.mdx) to prevent being rate limited.
 - The `SequencerInbox` contract address in the parent chain.
 
@@ -127,7 +124,7 @@ Here's an example of how to use the `datool keygen` utility inside Docker and st
 
 ```shell
 docker run -v $(pwd)/bls_keys:/data/keys --entrypoint datool \
-@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@ keygen --dir /data/keys
+@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ keygen --dir /data/keys
 ```
 
 ### Step 2: Deploy the DAS
@@ -253,7 +250,7 @@ template:
         - |
         mkdir -p /home/user/data/badgerdb
         /usr/local/bin/daserver --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --data-availability.key.key-dir /home/user/data/keys --enable-rpc --rpc-addr '0.0.0.0' --log-level 3 --enable-rest --rest-addr '0.0.0.0' --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.s3-storage.discard-after-timeout false --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
-        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@
+        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@
         imagePullPolicy: Always
         resources:
         limits:
@@ -350,7 +347,7 @@ datool keygen --dir /some/local/dir/keys --ecdsa
 You can also use the `docker run` command as follows:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@ keygen --dir /home/user/data/keys --ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ keygen --dir /home/user/data/keys --ecdsa
 ```
 
 #### Step 2: Change the DAS configuration and restart the server
@@ -386,7 +383,7 @@ datool client rpc store  --server-url http://localhost:9876 --message "Hello wor
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@ client rpc store --server-url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ client rpc store --server-url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
 The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
@@ -402,7 +399,7 @@ datool client rest getbyhash --server-url http://localhost:9877 --data-hash 0xDa
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@ client rest getbyhash --server-url http://localhost:9877 --data-hash 0xDataHash
+docker run --rm -it --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ client rest getbyhash --server-url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 If we set `0xDataHash` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
@@ -421,7 +418,7 @@ curl -I <YOUR REST ENDPOINT>/health
 
 ### Test 4: Retrieve data from a batch poster transaction
 
-You can also do a test to retrieve the transaction data posted by a batch poster transaction. The transaction will contain both keyset and data hash information in its `data` field in method `addSequencerL2BatchFromOrigin(uint256 sequenceNumber, bytes data,uint256 afterDelayedMessagesRead, address gasRefunder,uint256 prevMessageCount,uint256 newMessageCount)`.
+You can also do a test to retrieve the transaction data posted by a <a data-quicklook-from="batch-poster">Batch Poster</a> transaction. The transaction will contain both keyset and data hash information in its `data` field in method `addSequencerL2BatchFromOrigin(uint256 sequenceNumber, bytes data,uint256 afterDelayedMessagesRead, address gasRefunder,uint256 prevMessageCount,uint256 newMessageCount)`.
 
 After you decode a batch poster transaction and get its `data` within the function data, you can continue to decode the `data` as follows:
 
@@ -448,13 +445,13 @@ Keep in mind the following information when running the DAS.
 
 A DAS should strive not to miss any batch of information sent by the sequencer. Although it can use a REST aggregator to fetch missing information from other DA servers, it should aim to synchronize all received information directly. To facilitate this, avoid placing any load balancing layer before the DAS, enabling it to handle all incoming traffic.
 
-Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the chain owner through a private channel to maintain security.
+Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the <a data-quicklook-from="chain-owner">chain owner</a> through a private channel to maintain security.
 
 Finally, as explained in the previous section, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
 
 ## External signer support
 
-By default the batch poster uses the same ECDSA key to sign `das_store` requests as it uses to sign the batch transactions sent to the sequencer inbox contract. Many installations use an external signer for securing the batch poster's key. While using an external signer is suported for signing batch transactions, it is not currently supported for signing the requests sent to the DA Committee. Currently, if you want to use an external signer for the batch transactions together with AnyTrust, you must generate a separate key for signing the requests sent to the DA Committee. If a wallet file is used the account must be named "l1-batch-poster".
+By default the batch poster uses the same ECDSA key to sign `das_store` requests as it uses to sign the batch transactions sent to the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract. Many installations use an external signer for securing the batch poster's key. While using an external signer is suported for signing batch transactions, it is not currently supported for signing the requests sent to the DA Committee. Currently, if you want to use an external signer for the batch transactions together with AnyTrust, you must generate a separate key for signing the requests sent to the DA Committee. If a <a data-quicklook-from="wallet">wallet</a> file is used the account must be named "l1-batch-poster".
 
 The batch poster would need to have the configuration for the external signer
 

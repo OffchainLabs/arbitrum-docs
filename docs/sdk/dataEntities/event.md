@@ -59,11 +59,7 @@ Typechain contract factories have additional properties
 ### parseTypedLog()
 
 ```ts
-function parseTypedLog<TContract, TFilterName>(
-  contractFactory: TypeChainContractFactory<TContract>,
-  log: Log,
-  filterName: TFilterName,
-): EventArgs<EventFromFilter<ReturnType<TContract['filters'][TFilterName]>>> | null;
+function parseTypedLog<TContract, TFilterName>(contractFactory: TypeChainContractFactory<TContract>, log: Log, filterName: TFilterName): EventArgs<EventFromFilter<ReturnType<TContract['filters'][TFilterName]>>> | null;
 ```
 
 Defined in: dataEntities/event.ts:53
@@ -97,11 +93,7 @@ Null if filter name topic does not match log topic
 ### parseTypedLogs()
 
 ```ts
-function parseTypedLogs<TContract, TFilterName>(
-  contractFactory: TypeChainContractFactory<TContract>,
-  logs: Log[],
-  filterName: TFilterName,
-): EventArgs<EventFromFilter<ReturnType<TContract['filters'][TFilterName]>>>[];
+function parseTypedLogs<TContract, TFilterName>(contractFactory: TypeChainContractFactory<TContract>, logs: Log[], filterName: TFilterName): EventArgs<EventFromFilter<ReturnType<TContract['filters'][TFilterName]>>>[];
 ```
 
 Defined in: dataEntities/event.ts:78

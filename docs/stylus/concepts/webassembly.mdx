@@ -134,6 +134,12 @@ Custom sections can store:
 - Compiler metadata
 - ABI information
 
+## VM runtime
+
+Stylus executes WebAssembly on a modified version of the [Wasmer](https://github.com/wasmerio/wasmer) runtime. Wasmer is used unmodified at the runtime layer; Stylus extends the environment with **host I/O imports** ([documented in `hostio-exports.mdx`](/stylus/advanced/hostio-exports)) that let WASM programs call into native blockchain functions (storage, calls, logs, cryptography).
+
+For Arbitrum-specific adaptations to Wasmer (gas metering, deterministic fraud-proof support), see Offchain Labs' fork: [github.com/OffchainLabs/wasmer](https://github.com/OffchainLabs/wasmer).
+
 ## Compression and deployment
 
 Before deployment, Stylus contracts undergo compression:
@@ -153,9 +159,9 @@ pub fn brotli_compress(wasm: impl Read, compression_level: u32) -> io::Result<Ve
 
 Using Brotli compression typically reduces the WASM size by 50-70%.
 
-### 0xEFF000 prefix
+### 0xEFF00000 prefix
 
-Compressed WASM is prefixed with `0xEFF000` to identify it as a Stylus program:
+Compressed WASM is prefixed with `0xEFF00000` (4 bytes, defined in the SDK as `EOF_NO_DICT`) to identify it as a Stylus program:
 
 ```rust
 pub fn add_prefix(compressed_wasm: impl IntoIterator<Item = u8>, prefix: &str) -> Vec<u8> {
