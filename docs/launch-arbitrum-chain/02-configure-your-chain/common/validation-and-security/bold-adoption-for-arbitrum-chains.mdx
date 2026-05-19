@@ -156,7 +156,7 @@ Most of the parameters used in Nitro before v3.5.4 will stay the same when runni
 Additionally, after performing the upgrade, the `--chain.info-json` object also needs to be modified:
 
 - Update the new Rollup address in the `rollup.rollup` field
-- Add the stake token in a new `rollup.stake-token` field
+- Add the bond token in a new `rollup.stake-token` field
 
 ### 2. Upgrade your Nitro contracts to v3.1.0
 
@@ -311,7 +311,7 @@ As stated at the beginning, you need to add a few parameters to your node config
 Additionally, the `--chain.info-json` object also needs to be modified:
 
 - Update the `rollup.rollup` field to point at the new Rollup contract address
-- Add a new `rollup.stake-token` field with the address of the stake token contract
+- Add a new `rollup.stake-token` field with the address of the bond token contract
 
 After updating the configuration, restart your node.
 
