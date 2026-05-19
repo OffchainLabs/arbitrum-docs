@@ -51,7 +51,7 @@
   },
   {
     "question": "Why was \"one week\" chosen for Arbitrum One's dispute window?",
-    "answer": "The expectation is that one week should be sufficient for validators to conduct an interactive dispute, provided they do not face challenges in getting their transactions included on Layer 1. The one-week decision occurred following a consensus among the Ethereum research community and other Layer 2 projects. The intention is to allow the community sufficient time to coordinate socially in the event of a coordinated Ethereum staker censorship attack.\n\n\n\n",
+    "answer": "The expectation is that one week should be sufficient for validators to conduct an interactive dispute, provided they do not face challenges in getting their transactions included on Layer 1. The one-week decision occurred following a consensus among the Ethereum research community and other Layer 2 projects. The intention is to allow the community sufficient time to coordinate socially in the event of a coordinated Ethereum bonder censorship attack.\n\n\n\n",
     "key": "why-was-one-week-chosen-for-arbitrum-ones-dispute-window"
   },
   {
