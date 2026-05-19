@@ -393,7 +393,7 @@ Key configuration parameters to include:
   - `ResolveNodes`: Bonds on the latest assertion, resolves unconfirmed ones, and challenges bad assertions.
   - `MakeNodes`: Creates new assertions, resolves unconfirmed ones, and challenges bad ones (use cautiously, as it may lead to reverted transactions if multiple validators act at once).
   - `Watchtower`: Passively monitors and logs errors without active challenging (enabled by default; no wallet needed, but set `--node.staker.enable=false` to disable if not wanted).
-- `--node.staker.parent-chain-wallet.private-key=[0xYourPrivateKey]` or `--node.staker.parent-chain-wallet.password=[YourPassword]`: Provides access to the wallet for on-chain operations. Use a secure method; password-protected keystores are safer than direct private keys.
+- `--node.staker.parent-chain-wallet.private-key=[0xYourPrivateKey]` or `--node.staker.parent-chain-wallet.password=[YourPassword]`: Provides access to the wallet for onchain operations. Use a secure method; password-protected keystores are safer than direct private keys.
 - `--node.bold.enable=true`: Enable this if the chain has BoLD activated (required for versions before Nitro v3.6.0).
 
 For custom Arbitrum chains:
@@ -408,7 +408,7 @@ Run the command in a persistent setup (e.g., using Docker Compose or a systemd s
 - Monitor the node logs for confirmation messages:
   - Look for `INFO [...] running as validator txSender=[your_wallet_address] actingAsWallet=[your_wallet_address] whitelisted=true strategy=[YourChosenStrategy]`. This indicates the node is in validator mode with a valid wallet.
   - `validation succeeded`: Shows the node is successfully validating blocks.
-  - `found correct assertion`: Confirms the node is detecting and agreeing with on-chain assertions.
+  - `found correct assertion`: Confirms the node is detecting and agreeing with onchain assertions.
 - If issues arise, check for errors related to wallet funding, RPC connectivity, or chain syncing.
 
 ### Advanced: Creating a dedicated validator wallet
