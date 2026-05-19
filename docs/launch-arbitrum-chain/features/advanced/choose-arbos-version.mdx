@@ -50,7 +50,7 @@ It is important to understand that this is part of customizing the behavior of y
 
 1. **Clone and modify Nitro**: Use a branch like v3.7.2 (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`). Edit files (e.g., precompile.go, arbosstate.go) for changes, adding version gates.
 2. **Upgrade nodes/validators**: Update to the custom Nitro version (e.g., v2.3.1+ for ArbOS 20 base).
-3. **Build custom node**: Create Docker images, extract the new WASM module root, and update it on the parent chain via `setWasmModuleRoot` on the rollup contract.
+3. **Build custom node**: Create Docker images, extract the new <a data-quicklook-from="wasm-module-root">WASM module root</a>, and update it on the parent chain via `setWasmModuleRoot` on the rollup contract.
 4. **Schedule upgrade**: Call `scheduleArbOSUpgrade` on ArbOwner precompile with the new version and timestamp (0 for immediate).
 5. **Enable features**: Post-upgrade, configure any version-specific flags.
 

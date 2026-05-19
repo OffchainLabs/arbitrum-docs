@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-05-08
+last_reviewed: 2026-05-15
 ---
 
 ### Active Validator {#active-validator}
@@ -385,6 +385,16 @@ A parent-to-child cross-chain message initiated by a parent chain transaction se
 
 A [Token Gateway](/intro/glossary#token-gateway) in which the [Child chain](/intro/glossary#child-chain) gateway contract escrows and releases tokens, which the [Parent chain](/intro/glossary#parent-chain) Gateway contract mints and burns tokens. This in the inverse to how "typical" gateways work.
 
+### Rollup Event Inbox {#rollup-event-inbox}
+
+A parent-chain contract (one per [Arbitrum chain](/intro/glossary#arbitrum-chain)) that acts as an authorized [delayed inbox](/intro/glossary#delayed-inbox) used exclusively by the Rollup contract to communicate chain-level protocol events to the child chain. It is separate from the regular `Inbox`, `Bridge`, and `SequencerInbox` contracts that handle user transactions.
+
+Its main role is to seed the child chain with its bootstrap configuration. During initialization, the Rollup admin contract calls `rollupInitialized(chainId, chainConfig, l1BaseFeeEstimate)` on it exactly once; this enqueues a delayed message of type `INITIALIZATION_MSG_TYPE` carrying the chain's `chainId`, full chain config JSON, and an initial parent-chain base-fee estimate. That delayed message is then read by the child chain as its very first L2 message, which initializes the L2 state.
+
+Two implementations share the `IRollupEventInbox` interface and `AbsRollupEventInbox` base: `RollupEventInbox` for ETH-based chains, and `ERC20RollupEventInbox` for chains using a custom (ERC-20) gas token. The contract is deployed by `BridgeCreator` and registered as an allowed delayed inbox on the `Bridge`.
+
+In some support contexts the contract is informally referred to as "rollupEventBox"; the canonical name in the codebase is `RollupEventInbox`.
+
 ### Sequencer {#sequencer}
 
 An entity (currently a single-party on Arbitrum One) given rights to order transactions in the [Sequencer Inbox](/intro/glossary#sequencer-inbox) over a fixed window of time, who can thus give clients sub-blocktime [Soft Confirmations](/intro/glossary#soft-confirmation). (Not to be confused with a [Validator](/intro/glossary#validator)).
@@ -466,6 +476,17 @@ When referring to a wallet, we mean the user client software enabling user actio
 ### WASM {#wasm}
 
 Widely supported binary code format for executable programs. Used by [Arbitrum Nitro](/intro/glossary#arbitrum-nitro) for [Fraud proofs](/intro/glossary#fraud-proof) , and more broadly used by [Stylus](/intro/glossary#stylus) to support performant smart contracts in a wide variety of languages.
+
+### WASM module root {#wasm-module-root}
+
+A 32-byte cryptographic hash that uniquely identifies a specific version of Arbitrum's [State Transition Function](/intro/glossary#state-transition-function) (STF), compiled to [WASM](/intro/glossary#wasm) for use in [fraud proofs](/intro/glossary#fraud-proof). It is computed as the Merkle root over the Keccak256 hashes of every module in the compiled prover image — the main STF replay binary plus runtime libraries such as `soft-float`, `host_io`, `user_host`, and `program_exec`.
+
+The same WASM module root appears in two places:
+
+- **On-chain**, as the `wasmModuleRoot` field on the Rollup contract. It is set at deployment and updated by the chain owner via `setWasmModuleRoot`; every [Assertion](/intro/glossary#assertion) records the root used to compute it.
+- **Off-chain**, by every [Validator](/intro/glossary#validator), as a compiled prover image under `target/machines/<root>/`. To validate or challenge an assertion, a validator must have the prover image matching the root recorded on **that** assertion — which may be the current on-chain root, or an older one if the assertion predates an [ArbOS](/intro/glossary#arbos) upgrade.
+
+Every ArbOS upgrade changes the STF and therefore produces a new WASM module root. Validators must retain the prover images for every older root they may still need to validate or dispute historical assertions against.
 
 ### WASMer {#wasmer}
 
