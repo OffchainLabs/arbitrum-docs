@@ -1,15 +1,307 @@
 ---
 title: 'cargo-stylus command reference'
 sidebar_label: 'Commands reference'
-description: 'Complete reference for all cargo-stylus CLI commands'
-user_story: 'As a Stylus developer, I want a complete reference of all CLI commands'
+description: 'Complete reference for all cargo-stylus CLI commands, including flags, defaults, and aliases'
+user_story: 'As a Stylus developer, I want a complete reference of all CLI commands so I can deploy, debug, and manage Stylus contracts'
 content_type: reference
 author: offchainlabs
 sme: offchainlabs
 sidebar_position: 5
 ---
 
-Complete reference for all `cargo-stylus` commands.
+Complete reference for all `cargo-stylus` commands (v0.10.2). Every command supports the `--verbose` global flag for debug output.
+
+## activate
+
+Activate an already deployed Stylus contract onchain.
+
+**Alias:** `a`
+
+**Usage:**
+
+```shell
+cargo stylus activate \
+  --address <CONTRACT_ADDRESS> \
+  --private-key <KEY> \
+  --endpoint <RPC_URL>
+```
+
+**Options:**
+
+| Option                              | Description                                       | Default |
+| ----------------------------------- | ------------------------------------------------- | ------- |
+| `--address <ADDRESS>`               | Deployed contract address to activate (required)  | —       |
+| `--estimate-gas`                    | Only estimate gas without sending a transaction   | `false` |
+| `--data-fee-bump-percent <PERCENT>` | Percent to bump the estimated activation data fee | `20`    |
+
+Also accepts [authentication options](#authentication-options) and [provider options](#provider-options).
+
+## build
+
+Compile a Stylus contract to WASM.
+
+**Alias:** `b`
+
+**Usage:**
+
+```shell
+cargo stylus build
+```
+
+**Options:**
+
+| Option                                    | Description                                                                                                                     | Default |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `--features <FEATURES>`                   | Cargo features to enable when building                                                                                          | —       |
+| `--source-files-for-project-hash <FILES>` | Paths to include in the project hash for verification. If omitted, all `.rs`, `Cargo.toml`, and `Cargo.lock` files are included | —       |
+
+Also accepts [project options](#project-options).
+
+## cache
+
+Manage contract caching using the Stylus CacheManager. Has three subcommands.
+
+### cache bid
+
+Place a bid to cache a deployed and activated contract.
+
+**Alias:** `b`
+
+**Usage:**
+
+```shell
+cargo stylus cache bid <ADDRESS> <BID>
+```
+
+**Positional arguments:**
+
+| Argument    | Description                               |
+| ----------- | ----------------------------------------- |
+| `<ADDRESS>` | Deployed and activated contract address   |
+| `<BID>`     | Bid amount in wei (a value of 0 is valid) |
+
+Also accepts [authentication options](#authentication-options) and [provider options](#provider-options).
+
+### cache status
+
+Check a contract's cache status.
+
+**Alias:** `s`
+
+**Usage:**
+
+```shell
+cargo stylus cache status --address <ADDRESS>
+```
+
+**Options:**
+
+| Option                | Description               | Default |
+| --------------------- | ------------------------- | ------- |
+| `--address <ADDRESS>` | Contract address to check | —       |
+
+Also accepts [provider options](#provider-options).
+
+### cache suggest-bid
+
+Get the suggested minimum bid for caching a contract.
+
+**Usage:**
+
+```shell
+cargo stylus cache suggest-bid <ADDRESS>
+```
+
+**Positional arguments:**
+
+| Argument    | Description                               |
+| ----------- | ----------------------------------------- |
+| `<ADDRESS>` | Contract address to get suggested bid for |
+
+Also accepts [provider options](#provider-options).
+
+## cgen
+
+Generate C code bindings for a Stylus contract.
+
+**Usage:**
+
+```shell
+cargo stylus cgen <INPUT_FILE> <OUTPUT_DIR>
+```
+
+**Positional arguments:**
+
+| Argument       | Description           |
+| -------------- | --------------------- |
+| `<INPUT_FILE>` | Input file path       |
+| `<OUTPUT_DIR>` | Output directory path |
+
+## check
+
+Verify that a contract compiles to valid WASM and passes onchain activation checks.
+
+**Alias:** `c`
+
+**Usage:**
+
+```shell
+cargo stylus check --endpoint <RPC_URL>
+```
+
+**Options:**
+
+| Option                              | Description                                                    | Default |
+| ----------------------------------- | -------------------------------------------------------------- | ------- |
+| `--wasm-file <PATH>`                | Prebuilt WASM file(s) to check instead of building from source | —       |
+| `--wasm-file-address <ADDRESS>`     | Deployment address for the WASM file                           | random  |
+| `--contract-address <ADDRESS>`      | Deployment address for the contract                            | random  |
+| `--data-fee-bump-percent <PERCENT>` | Percent to bump the estimated activation data fee              | `20`    |
+
+Also accepts [build options](#build-options), [project options](#project-options), and [provider options](#provider-options).
+
+**Example:**
+
+```shell
+cargo stylus check --endpoint https://sepolia-rollup.arbitrum.io/rpc
+```
+
+## codehash-keepalive
+
+Request to keep a contract's codehash from expiring in the ArbOS codehash registry.
+
+**Alias:** `k`
+
+**Usage:**
+
+```shell
+cargo stylus codehash-keepalive \
+  --codehash <HASH> \
+  --private-key <KEY>
+```
+
+**Options:**
+
+| Option              | Description                           | Default |
+| ------------------- | ------------------------------------- | ------- |
+| `--codehash <HASH>` | The codehash to keep alive (required) | —       |
+
+Also accepts [authentication options](#authentication-options) and [provider options](#provider-options).
+
+## constructor
+
+Print the signature of a contract's constructor.
+
+**Usage:**
+
+```shell
+cargo stylus constructor
+```
+
+Also accepts [project options](#project-options) and [reflection options](#reflection-options).
+
+## deploy
+
+Deploy one or more Stylus contracts. By default, contracts are deployed through the Stylus deployer contract, which handles deployment, activation, and constructor initialization.
+
+**Alias:** `d`
+
+**Usage:**
+
+```shell
+cargo stylus deploy \
+  --private-key <KEY> \
+  --endpoint <RPC_URL>
+```
+
+**Options:**
+
+| Option                             | Description                                             | Default                 |
+| ---------------------------------- | ------------------------------------------------------- | ----------------------- |
+| `--estimate-gas`                   | Only estimate gas, don't deploy                         | `false`                 |
+| `--no-verify`                      | Skip reproducible Docker container verification         | `false`                 |
+| `--no-activate`                    | Skip activation after deployment                        | `false`                 |
+| `--cargo-stylus-version <VERSION>` | cargo-stylus version for the Docker image               | local version           |
+| `--deployer-address <ADDRESS>`     | Address of the Stylus deployer contract                 | Stylus default deployer |
+| `--deployer-salt <SALT>`           | Salt passed to the deployer for deterministic addresses | `0x0...0`               |
+| `--constructor-args <ARGS>...`     | Constructor arguments (supports multiple values)        | —                       |
+| `--constructor-value <ETHER>`      | Ether to send through the constructor (in ETH)          | `0`                     |
+| `--constructor-signature <SIG>`    | Constructor signature when using `--wasm-file`          | —                       |
+| `--wasm-file <PATH>`               | Deploy a prebuilt WASM file directly                    | —                       |
+
+Also accepts [authentication options](#authentication-options), [build options](#build-options), [project options](#project-options), and [provider options](#provider-options).
+
+**Example:**
+
+```shell
+cargo stylus deploy \
+  --endpoint https://sepolia-rollup.arbitrum.io/rpc \
+  --private-key $PRIVATE_KEY \
+  --constructor-args "0xMyTokenName" "0xMTK" \
+  --estimate-gas
+```
+
+## export-abi
+
+Export a Solidity ABI interface for a Stylus contract.
+
+**Usage:**
+
+```shell
+cargo stylus export-abi
+```
+
+Also accepts [project options](#project-options) and [reflection options](#reflection-options).
+
+**Example:**
+
+```shell
+cargo stylus export-abi > IMyContract.sol
+cargo stylus export-abi --json > abi.json
+```
+
+## get-initcode
+
+Generate and print the initialization code (initcode) for a Stylus contract.
+
+**Alias:** `e`
+
+**Usage:**
+
+```shell
+cargo stylus get-initcode
+```
+
+**Options:**
+
+| Option            | Description                            | Default |
+| ----------------- | -------------------------------------- | ------- |
+| `--output <FILE>` | Output file for the generated hex code | stdout  |
+
+Also accepts [build options](#build-options) and [project options](#project-options).
+
+## init
+
+Initialize a Stylus project in an existing directory.
+
+**Usage:**
+
+```shell
+cargo stylus init [PATH]
+```
+
+**Positional arguments:**
+
+| Argument | Description                                                 | Default |
+| -------- | ----------------------------------------------------------- | ------- |
+| `[PATH]` | Path to existing directory, cargo crate, or cargo workspace | `.`     |
+
+**Options:**
+
+| Option        | Description                      | Default |
+| ------------- | -------------------------------- | ------- |
+| `--contract`  | Initialize as a Stylus contract  | default |
+| `--workspace` | Initialize as a Stylus workspace | `false` |
 
 ## new
 
@@ -21,9 +313,18 @@ Create a new Stylus project.
 cargo stylus new <PROJECT_NAME>
 ```
 
+**Positional arguments:**
+
+| Argument         | Description                      |
+| ---------------- | -------------------------------- |
+| `<PROJECT_NAME>` | Name or path for the new project |
+
 **Options:**
 
-- `--minimal` - Create minimal project structure
+| Option        | Description                    | Default |
+| ------------- | ------------------------------ | ------- |
+| `--contract`  | Create a new contract project  | default |
+| `--workspace` | Create a new workspace project | `false` |
 
 **Example:**
 
@@ -31,182 +332,11 @@ cargo stylus new <PROJECT_NAME>
 cargo stylus new my-stylus-contract
 ```
 
-## init
-
-Initialize a Stylus project in the current directory.
-
-**Usage:**
-
-```shell
-cargo stylus init
-```
-
-**Options:**
-
-- `--minimal` - Create minimal project structure
-
-## check
-
-Verify a contract compiles to valid WASM and passes onchain activation checks.
-
-**Usage:**
-
-```shell
-cargo stylus check
-```
-
-**Options:**
-
-- `--endpoint <URL>` - RPC endpoint (default: http://localhost:8547)
-- `--wasm-file <PATH>` - WASM file to check (defaults to any found in current directory)
-- `--contract-address <ADDRESS>` - Optional deployment address
-
-**Example:**
-
-```shell
-cargo stylus check --endpoint https://sepolia-rollup.arbitrum.io/rpc
-```
-
-## deploy
-
-Deploy a Stylus contract.
-
-**Usage:**
-
-```shell
-cargo stylus deploy \
-  --endpoint <RPC_URL> \
-  --private-key <PRIVATE_KEY>
-```
-
-**Options:**
-
-- `--endpoint <URL>` - RPC endpoint (required)
-- `--private-key <KEY>` - Private key for deployment (required)
-- `--contract-address <ADDRESS>` - Specific deployment address (defaults to random)
-- `--estimate-gas` - Estimate gas only, don't deploy
-- `--no-verify` - Skip reproducible container verification
-- `--wasm-file <PATH>` - WASM file to deploy
-- `--max-fee-per-gas-gwei <GWEI>` - Optional max fee per gas
-
-**Example:**
-
-```shell
-cargo stylus deploy \
-  --endpoint https://sepolia-rollup.arbitrum.io/rpc \
-  --private-key $PRIVATE_KEY \
-  --estimate-gas
-```
-
-## activate
-
-Activate an already deployed contract.
-
-**Usage:**
-
-```shell
-cargo stylus activate \
-  --endpoint <RPC_URL> \
-  --private-key <PRIVATE_KEY> \
-  --address <CONTRACT_ADDRESS>
-```
-
-**Options:**
-
-- `--endpoint <URL>` - RPC endpoint (required)
-- `--private-key <KEY>` - Private key for activation (required)
-- `--address <ADDRESS>` - Contract address to activate (required)
-- `--data-fee-bump-percent <PERCENT>` - Percent to bump estimated fee (default: 20%)
-- `--estimate-gas` - Only estimate gas without sending transaction
-
-## verify
-
-Verify the deployment of a Stylus contract.
-
-**Usage:**
-
-```shell
-cargo stylus verify \
-  --deployment-tx <TX_HASH>
-```
-
-**Options:**
-
-- `--endpoint <URL>` - RPC endpoint
-- `--deployment-tx <HASH>` - Deployment transaction hash (required)
-- `--no-verify` - Skip reproducible container
-- `--cargo-stylus-version <VERSION>` - Version for Docker image
-
-**Example:**
-
-```shell
-cargo stylus verify --deployment-tx 0xd4...85
-```
-
-## cache
-
-Manage contract caching using the Stylus CacheManager.
-
-**Usage:**
-
-```shell
-# Place a bid on a contract
-cargo stylus cache bid --address <ADDRESS>
-
-# Check contract cache status
-cargo stylus cache status --address <ADDRESS>
-
-# Get suggested minimum bid
-cargo stylus cache suggest-bid --address <ADDRESS>
-```
-
-**Options:**
-
-- `--address <ADDRESS>` - Contract address (required)
-- `--endpoint <URL>` - RPC endpoint
-
-## export-abi
-
-Export a Solidity ABI interface.
-
-**Usage:**
-
-```shell
-cargo stylus export-abi
-```
-
-**Options:**
-
-- `--output <FILE>` - Output file (defaults to stdout)
-- `--json` - Write JSON ABI using solc format
-
-**Example:**
-
-```shell
-cargo stylus export-abi > IMyContract.sol
-cargo stylus export-abi --json > abi.json
-```
-
-## cgen
-
-Generate C code bindings for a Stylus contract.
-
-**Usage:**
-
-```shell
-cargo stylus cgen \
-  --input <INPUT_FILE> \
-  --out-dir <OUTPUT_DIR>
-```
-
-**Options:**
-
-- `--input <FILE>` - Input file path (required)
-- `--out-dir <DIR>` - Output directory path (required)
-
 ## replay
 
-Replay a transaction in GDB for debugging.
+Replay a transaction using an external debugger (GDB, LLDB, or StylusDB).
+
+**Alias:** `r`
 
 **Usage:**
 
@@ -216,15 +346,59 @@ cargo stylus replay --tx <TX_HASH>
 
 **Options:**
 
-- `--tx <HASH>` - Transaction hash to replay (required)
-- `--endpoint <URL>` - RPC endpoint
-- `--project <PATH>` - Project path (default: current directory)
-- `--use-native-tracer` - Use native tracer instead of JavaScript
-- `--stable-rust` - Use stable Rust (note: nightly needed to expand macros)
+| Option                        | Description                                               | Default |
+| ----------------------------- | --------------------------------------------------------- | ------- |
+| `--tx <HASH>`                 | Transaction hash to replay (required)                     | —       |
+| `--project <PATH>`            | Project path                                              | `.`     |
+| `--debugger <DEBUGGER>`       | Debugger to use: `gdb`, `lldb`, `stylusdb`, or `auto`     | `auto`  |
+| `--features <FEATURES>`       | Cargo features for building                               | —       |
+| `--package <NAME>`            | Specific package to build during replay                   | —       |
+| `--contracts <MAPPING>`       | Multi-contract debugging: `ADDRESS1:PATH1,ADDRESS2:PATH2` | —       |
+| `--addr-solidity <ADDRESSES>` | Comma-separated Solidity contract addresses for display   | —       |
+| `--use-native-tracer`         | Use the native tracer instead of JavaScript               | `false` |
+
+Also accepts [project options](#project-options) and [provider options](#provider-options).
+
+**Example:**
+
+```shell
+cargo stylus replay \
+  --tx 0xd4...85 \
+  --endpoint https://sepolia-rollup.arbitrum.io/rpc \
+  --debugger stylusdb
+```
+
+## simulate
+
+Simulate a transaction without executing it onchain.
+
+**Alias:** `s`
+
+**Usage:**
+
+```shell
+cargo stylus simulate --to <ADDRESS> --data <HEX_DATA>
+```
+
+**Options:**
+
+| Option                | Description                                          | Default |
+| --------------------- | ---------------------------------------------------- | ------- |
+| `--from <ADDRESS>`    | Sender address                                       | —       |
+| `--to <ADDRESS>`      | Target contract address                              | —       |
+| `--gas <LIMIT>`       | Gas limit                                            | —       |
+| `--gas-price <PRICE>` | Gas price (in wei)                                   | —       |
+| `--value <AMOUNT>`    | Value to send (in wei)                               | —       |
+| `--data <HEX>`        | Calldata as hex string (with or without `0x` prefix) | —       |
+| `--use-native-tracer` | Use the native tracer instead of JavaScript          | `false` |
+
+Also accepts [provider options](#provider-options).
 
 ## trace
 
-Trace a transaction.
+Display a trace of a transaction.
+
+**Alias:** `t`
 
 **Usage:**
 
@@ -234,25 +408,131 @@ cargo stylus trace --tx <TX_HASH>
 
 **Options:**
 
-- `--tx <HASH>` - Transaction hash (required)
-- `--endpoint <URL>` - RPC endpoint
-- `--project <PATH>` - Project path
-- `--use-native-tracer` - Use native tracer
+| Option                | Description                                 | Default |
+| --------------------- | ------------------------------------------- | ------- |
+| `--tx <HASH>`         | Transaction hash to trace (required)        | —       |
+| `--project <PATH>`    | Project path                                | `.`     |
+| `--use-native-tracer` | Use the native tracer instead of JavaScript | `false` |
+
+Also accepts [provider options](#provider-options).
+
+## usertrace
+
+Trace a transaction with StylusDB, capturing user function calls. Provides a higher-level view than `trace` by filtering for user-defined function calls.
+
+**Alias:** `ut`
+
+**Usage:**
+
+```shell
+cargo stylus usertrace --tx <TX_HASH>
+```
+
+**Options:**
+
+| Option                                | Description                                             | Default |
+| ------------------------------------- | ------------------------------------------------------- | ------- |
+| `--tx <HASH>`                         | Transaction hash to trace (required)                    | —       |
+| `--project <PATH>`                    | Project path                                            | `.`     |
+| `--features <FEATURES>`               | Cargo features for building                             | —       |
+| `--package <NAME>`                    | Specific package to build during trace                  | —       |
+| `--contracts <MAPPING>`               | Multi-contract tracing: `ADDRESS1:PATH1,ADDRESS2:PATH2` | —       |
+| `--verbose-usertrace`                 | Include `stylus_sdk` functions in the trace             | `false` |
+| `--trace-external-usertrace <CRATES>` | Comma-separated list of additional crates to trace      | —       |
+| `--enable-stylusdb-output`            | Show StylusDB output (silenced by default)              | `false` |
+| `--use-native-tracer`                 | Use the native tracer instead of JavaScript             | `false` |
+
+Also accepts [project options](#project-options) and [provider options](#provider-options).
+
+## verify
+
+Verify the deployment of a Stylus contract using reproducible builds.
+
+**Usage:**
+
+```shell
+cargo stylus verify --deployment-tx <TX_HASH>
+```
+
+**Options:**
+
+| Option                             | Description                                          | Default       |
+| ---------------------------------- | ---------------------------------------------------- | ------------- |
+| `--deployment-tx <HASH>`           | Deployment transaction hash(es) to verify (required) | —             |
+| `--cargo-stylus-version <VERSION>` | cargo-stylus version for the Docker image            | local version |
+| `--no-verify`                      | Skip reproducible Docker container                   | `false`       |
+| `--skip-clean`                     | Skip cleaning before verification                    | `false`       |
+
+Also accepts [project options](#project-options) and [provider options](#provider-options).
+
+**Example:**
+
+```shell
+cargo stylus verify \
+  --deployment-tx 0xd4...85 \
+  --endpoint https://sepolia-rollup.arbitrum.io/rpc
+```
 
 ---
 
 ## Common options
 
-These options are available across multiple commands:
+These option groups are shared across multiple commands. Each command's documentation notes which groups it accepts.
 
-| Option                   | Description                                   |
-| ------------------------ | --------------------------------------------- |
-| `--endpoint <URL>`       | RPC endpoint URL                              |
-| `--private-key <KEY>`    | Private key for transactions                  |
-| `--estimate-gas`         | Estimate gas without sending transaction      |
-| `--no-verify`            | Skip reproducible container verification      |
-| `--cargo-stylus-version` | Specify cargo-stylus version for Docker image |
+### Provider options
+
+| Option                 | Description               | Default                 |
+| ---------------------- | ------------------------- | ----------------------- |
+| `-e, --endpoint <URL>` | Arbitrum RPC endpoint URL | `http://localhost:8547` |
+
+### Authentication options
+
+| Option                            | Description                                                | Default |
+| --------------------------------- | ---------------------------------------------------------- | ------- |
+| `--private-key <KEY>`             | Private key as a hex string (exposes key to shell history) | —       |
+| `--private-key-path <FILE>`       | Path to a text file containing a hex-encoded private key   | —       |
+| `--keystore-path <FILE>`          | Path to an Ethereum wallet keystore file (e.g., Clef)      | —       |
+| `--keystore-password-path <FILE>` | Path to the keystore password file                         | —       |
+| `--max-fee-per-gas-gwei <GWEI>`   | Maximum fee per gas in gwei                                | —       |
+
+### Build options
+
+| Option                                    | Description                                       | Default                               |
+| ----------------------------------------- | ------------------------------------------------- | ------------------------------------- |
+| `--features <FEATURES>`                   | Cargo features to enable                          | —                                     |
+| `--source-files-for-project-hash <FILES>` | Paths to include in project hash for verification | all `.rs`, `Cargo.toml`, `Cargo.lock` |
+
+### Project options
+
+| Option              | Description                                           | Default               |
+| ------------------- | ----------------------------------------------------- | --------------------- |
+| `--contract <NAME>` | Specific contract package(s) to target in a workspace | all default contracts |
+
+### Reflection options
+
+| Option                       | Description                                  | Default |
+| ---------------------------- | -------------------------------------------- | ------- |
+| `--output <FILE>`            | Output file path                             | stdout  |
+| `--json`                     | Write JSON ABI (requires `solc`)             | `false` |
+| `--rust-features <FEATURES>` | Rust crate features to include in ABI export | —       |
 
 ---
 
-For detailed usage examples, see the [CLI tools guides](/stylus/cli-tools/overview).
+## Command aliases
+
+| Alias | Command            |
+| ----- | ------------------ |
+| `a`   | activate           |
+| `b`   | build              |
+| `c`   | check              |
+| `d`   | deploy             |
+| `e`   | get-initcode       |
+| `k`   | codehash-keepalive |
+| `r`   | replay             |
+| `s`   | simulate           |
+| `t`   | trace              |
+| `ut`  | usertrace          |
+
+---
+
+For usage examples and workflow guides, see the [CLI tools overview](/stylus/cli-tools/overview).

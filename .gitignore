@@ -43,3 +43,4 @@ yarn-error.log*
 .cursor/
 .serena/
 .claude/plans
+docs/superpowers/
