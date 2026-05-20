@@ -2410,5 +2410,21 @@
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
     }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        { "key": "Vary", "value": "Accept" },
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"service-doc\"; type=\"text/plain\"; title=\"LLM-friendly site index\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\""
+        }
+      ]
+    },
+    {
+      "source": "/:path+",
+      "headers": [{ "key": "Vary", "value": "Accept" }]
+    }
   ]
 }

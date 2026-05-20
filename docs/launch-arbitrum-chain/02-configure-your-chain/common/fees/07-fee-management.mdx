@@ -6,7 +6,7 @@ sme: jose-franco
 content_type: how-to
 ---
 
-Different fees get collected for every transaction as part of an Arbitrum chain activity. These fees are collected as a single amount (the transaction fees) but split internally into different components depending on their purpose. Each component is transferrable to a different fee collector address that is configurable on your chain.
+Different fees get collected for every <a data-quicklook-from="transaction">transaction</a> as part of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> activity. These fees are collected as a single amount (the transaction fees) but split internally into different components depending on their purpose. Each component is transferrable to a different fee collector address that is configurable on your chain.
 
 This guide describes the different collected fees and explains how to specify the fee collector address on your chain for each fee type.
 This guide describes the different fees collected on your chain, how to configure them, and how to specify the fee collector address for each type.
@@ -19,9 +19,9 @@ There are four fee types that are collected on every transaction of an Arbitrum 
 
 - **Arbitrum chain surplus fee**: if the chain is congested (i.e., the base price paid for the transaction is higher than the minimum base price), these fees account for executing the transaction on the chain based on any gas price paid above the minimum base price configured.
 
-- **Parent chain base fee**: relative fees paid for posting the transaction on the parent chain. This amount is calculated based on the transaction's estimated size and the current view of the parent chain's base fee.
+- **Parent chain base fee**: relative fees paid for posting the transaction on the <a data-quicklook-from="parent-chain">parent chain</a>. This amount is calculated based on the transaction's estimated size and the current view of the parent chain's base fee.
 
-- **Parent chain surplus fee**: if configured, these are extra fees rewarded to the batch poster.
+- **Parent chain surplus fee**: if configured, these are extra fees rewarded to the <a data-quicklook-from="batch-poster">Batch Poster</a>.
 
 You can find more detailed information about these fee types in these pages:
 
@@ -104,7 +104,7 @@ You can then calculate the current Arbitrum chain surplus fees as `currentBaseFe
 
 :::info Arbitrum chain surplus fees are automatically adjusted
 
-Arbitrum chains automatically adjust the Arbitrum chain surplus fee based on the traffic of the chain. If the gas consumed goes over the gas target, the chain's base fee will start increasing. Likewise, the base fee will gradually go down if demand of gas returns to below the configured gas target, until it reaches the minimum base fee configured.
+Arbitrum chains automatically adjust the Arbitrum chain surplus fee based on the traffic of the chain. If the gas consumed goes over the <a data-quicklook-from="gas-target">gas target</a>, the chain's base fee will start increasing. Likewise, the base fee will gradually go down if demand of gas returns to below the configured gas target, until it reaches the minimum base fee configured.
 
 :::
 
