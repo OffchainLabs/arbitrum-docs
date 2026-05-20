@@ -1,0 +1,12 @@
+# Arbitrum docs robots.txt — https://docs.arbitrum.io
+# Compliant with RFC 9309 (https://www.rfc-editor.org/rfc/rfc9309)
+
+User-agent: *
+Allow: /
+
+# Non-canonical routes that exist in the Docusaurus build but aren't indexable
+# content; kept in sync with sitemap ignorePatterns in docusaurus.config.js.
+Disallow: /category/
+Disallow: /hosted-pdfs/
+
+Sitemap: https://docs.arbitrum.io/sitemap.xml

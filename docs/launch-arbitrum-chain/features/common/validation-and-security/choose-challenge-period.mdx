@@ -14,7 +14,7 @@ It's set by the chain owner and can be chosen based on the application's risk to
 
 ## Key concepts
 
-- **Challenge period (`confirmPeriodBlocks`)**: The main window for validators to bond stakes and initiate challenges against potentially fraudulent assertions. If no valid challenge is raised, the <a data-quicklook-from="assertion">assertion</a> confirms, and the chain's state advances securely.
+- **Challenge period (`confirmPeriodBlocks`)**: The main window for validators to bond and initiate challenges against potentially fraudulent assertions. If no valid challenge is raised, the <a data-quicklook-from="assertion">assertion</a> confirms, and the chain's state advances securely.
 - **Extra challenge period (`extraChallengeTimeBlocks`)**: A post-main-period buffer to resolve any ongoing disputes or last-minute challenges, preventing premature finalization. (Legacy only config)
 - **Measurement**: Always denominated in the underlying <a data-quicklook-from="l1">L1</a> chain's blocks (e.g., Ethereum's `block.number`, ~12 seconds per block), even for L3 chains settling to an L2 like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>. This ensures consistent timing aligned with the parent chain's finality.
 - **Defaults**:
@@ -24,7 +24,7 @@ It's set by the chain owner and can be chosen based on the application's risk to
 
 ## Compatibility
 
-- **With DA modes**: Fully compatible across Rollup (full on-chain DA), AnyTrust (DAC-based), and Alt-DA (e.g., Celestia). In AnyTrust, fast withdrawals can reduce the effective period to 15 minutes by leveraging the DAC for rapid verification, bypassing traditional delays.
+- **With DA modes**: Fully compatible across Rollup (full onchain DA), AnyTrust (DAC-based), and Alt-DA (e.g., Celestia). In AnyTrust, fast withdrawals can reduce the effective period to 15 minutes by leveraging the DAC for rapid verification, bypassing traditional delays.
 - **With gas tokens**: No direct impact; works with native **ETH** or custom **ERC-20**'s, as the period governs validation timing rather than fee mechanics.
 - **With validation** (e.g., **<a data-quicklook-from="bold">BoLD</a>)**: Integrates with BoLD's permissionless disputes, where the period sets the initial challenge window, but BoLD bounds total delays to at most two periods (~12.8 days max on Ethereum) during active disputes, mitigating delay attacks.
 

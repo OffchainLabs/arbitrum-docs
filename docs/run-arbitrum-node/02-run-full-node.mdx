@@ -5,108 +5,16 @@ sidebar_position: 1
 content_type: how-to
 ---
 
-:::info
-
-If you’re interested in accessing an Arbitrum chain but don’t want to set up your own node, see our [Node Providers](/build-decentralized-apps/reference/01-node-providers.mdx) to get RPC access to fully managed nodes hosted by a third-party provider.
-
-:::
-
-This how-to provides step-by-step instructions for running a full node for Arbitrum on your local machine.
-
-## Prerequisites
-
-In addition to the hardware requirements, the following prerequisites will be necessary when initially setting up your node. It is essential not to skip over these items. You would benefit by copying and pasting them into a notepad or text editor, as you will need to combine them with other commands and configuration/parameter options when you initially run your Arbitrum node.
-
-### Minimum hardware configuration
-
-The following are the minimum hardware requirements to set up a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
-
-import HardwarePartial from '../partials/_hardware-requirements.mdx';
-
-<HardwarePartial />
-
-Please note that:
-
-- The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests. For nodes that need to process multiple simultaneous requests, both the RAM size and the number of CPU cores should be increased to accommodate higher levels of traffic.
-- Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor
-- The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended. Note that snapshot extraction requires approximately 2x the snapshot size in temporary disk space, so plan accordingly during initial setup.
-- Path-based state schemes are supported for Nitro's state trie, but only for full nodes and archive nodes at this time, and not validators yet. As a result, HashDB is still the default state scheme used by Nitro, and you must take explicit action to enable PathDB. You can find more details in the table below for optional parameters.
-
-### Parent chain (L1) client
-
-Your Arbitrum node requires a connection to a parent chain RPC endpoint (e.g., an Ethereum execution client for Arbitrum One or Nova). Keep your parent chain client up to date—incompatible L1 client versions can cause your Arbitrum node to crash or fail to sync. When upgrading your L1 client, check the [Nitro release notes](https://github.com/OffchainLabs/nitro/releases) for any noted compatibility requirements.
-
-### Recommended Nitro version
-
-:::caution
-
-Although there are beta and release candidate versions of the Arbitrum Nitro software, use only the release version when running your node. Running beta or RC versions is not supported and might lead to unexpected behaviors and/or database corruption.
-
-:::
-
-Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@</code>
-
-### Database snapshots
-
-::::info Snapshots availability
-
-Database snapshots are available and located in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/) for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia. Currently, only archive node snapshots using PathDB are available for Arbitrum One and Arbitrum Sepolia. Pruned PathDB snapshots for full nodes on Arbitrum One and Arbitrum Sepolia will be uploaded soon.
-
-Database snapshots for other Arbitrum chains may be available at the discretion of the chain's team. Get in touch with them if you're interested in using a database snapshot for their chains.
-
-::::
-
-Supplying a database snapshot when starting your node for the first time is required for Arbitrum One (to provide information from the Classic era) but is optional for other chains. Supplying a database snapshot on the first run will provide the state and data for that chain up to a specific block, allowing the node to sync faster to the head of the chain.
-
-We provide a summary of the available parameters here, but we recommend reading the [complete guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx) if you plan to use snapshots.
-
-- Use the parameter `--init.latest <snapshot type>` (accepted values: `archive`, `pruned`, `genesis`) to instruct your node to download the corresponding snapshot from the configured URL
-- Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
-- Note that these parameters get ignored if a database already exists
-- When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
-- Only snapshots formatted with your node's specified state scheme are compatible. In other words, a PathDB snapshot won't work for a node using HashDB, and vice versa.
-
-:::tip Which initialization mode should I use?
-
-| Scenario                                    | Recommended Parameter                                                                                                    |
-| :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------- |
-| Setting up a new **pruned** (full) node     | `--init.latest pruned`                                                                                                   |
-| Setting up a new **archive** node           | `--init.latest archive` (note: the publicly hosted archive snapshot may be outdated as it has not been updated recently) |
-| Reducing disk usage on an **existing** node | `--init.prune full` (or `minimal`) — only applicable to HashDB; PathDB handles state trie pruning automatically          |
-| Hosting one snapshot for **multiple nodes** | Download manually, then use `--init.url file:///path/to/archive.tar` on each node                                        |
-| Using a **custom snapshot URL**             | `--init.url https://your-snapshot-url/archive.tar`                                                                       |
-
-For more details on snapshot downloading and initialization, see the [complete snapshot guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx).
-
-:::
-
-:::warning Fusaka upgrade: Historical blobs
-
-If running a beacon node, historical data will now be in blobs. To make this transition to using historical blobs refer to the [Historical Blobs for Beacon Nodes](/run-arbitrum-node/beacon-nodes-historical-blobs.mdx) guide.
-
-:::
-
-### Required parameters
-
-The following list contains all the parameters needed to configure your node. Select the appropriate option depending on the chain you want to run your node for.
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import DAOChainsParameters from './partials/run-full-node/_dao-chains-parameters.mdx';
-import OrbitChainsParameters from './partials/run-full-node/_orbit-chains-parameters.mdx';
 import DAOChainsExample from './partials/run-full-node/_dao-chains-example.mdx';
 import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.mdx';
 
-<div className="dynamic-content-tabs">
-  <Tabs className="tabgroup" defaultValue={null}>
-    <TabItem value="dao-governed-chains" label="Arbitrum One, Nova, Sepolia">
-      <DAOChainsParameters />
-    </TabItem>
-    <TabItem value="orbit-chains" label="Arbitrum chains">
-      <OrbitChainsParameters />
-    </TabItem>
-  </Tabs>
-</div>
+:::info Prerequisites
+
+This page assumes you've completed the steps from the [Start here](/run-arbitrum-node/start-here.mdx) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, database snapshots, and other information required to run the node.
+
+:::
 
 ## Putting it into practice: run a node
 
@@ -130,7 +38,7 @@ To ensure the database persists across restarts, mount an external volume to **`
 If using a `node-config.json` file with Docker to mount, use the following command:
 
 ```
-docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.7-75e084e@@ --conf.file /home/user/.arbitrum/node-config.json
+docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ --conf.file /home/user/.arbitrum/node-config.json
 ```
 
 :::
@@ -191,7 +99,9 @@ By default, all node types will use HashDB, go-ethereum's original state trie st
 For nodes using PathDB, pruning will be automatic, can be done online, and defaults to retaining only the last 24 hours' worth of state history on disk.
 
 :::note
+
 The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
+
 :::
 
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
