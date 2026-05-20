@@ -10,7 +10,7 @@ content_type: how-to
 
 <VanillaAdmonition type="info">
 
-As a RaaS or Chain Owner, if you require internal daily reporting on fees, we have an [RPC script you can leverage for reporting purposes](https://github.com/yahgwai/aep-fee-tracker/).
+As a <a data-quicklook-from="raas">RaaS</a> or <a data-quicklook-from="chain-owner">Chain Owner</a>, if you require internal daily reporting on fees, we have an [RPC script you can leverage for reporting purposes](https://github.com/yahgwai/aep-fee-tracker/).
 
 </VanillaAdmonition>
 
@@ -18,10 +18,10 @@ As a RaaS or Chain Owner, if you require internal daily reporting on fees, we ha
 
 ### 1. Fee collector address types (L1 focus)
 
-There are two main L1 fee collector addresses:
+There are two main <a data-quicklook-from="l1">L1</a> fee collector addresses:
 
-1. **L1 Base Fee**: Refunds batch poster for parent chain posting costs
-2. **L1 Surplus**: Collects profit on batch posting fees
+1. **L1 Base Fee**: Refunds <a data-quicklook-from="batch-poster">Batch Poster</a> for <a data-quicklook-from="parent-chain">parent chain</a> posting costs
+2. **L1 Surplus**: Collects profit on <a data-quicklook-from="batch">Batch</a> posting fees
 
 #### Important distinction:
 
@@ -33,7 +33,7 @@ There are two main L1 fee collector addresses:
 
 #### Transaction flow:
 
-1. Users send transactions on the child chain
+1. Users send transactions on the <a data-quicklook-from="child-chain">child chain</a>
 2. Transactions are packaged into batches
 3. Batch poster sends batches to parent chain (paying parent chain gas)
 4. Batch posting reports are generated containing:
@@ -42,7 +42,7 @@ There are two main L1 fee collector addresses:
 
 #### Fee recovery mechanism:
 
-1. ArbOS consumes batch posting reports
+1. <a data-quicklook-from="arbos">ArbOS</a> consumes batch posting reports
 2. Creates gas price view of parent chain on child chain
 3. Uses this view for pricing future transactions
 4. Implements balancing mechanism to ensure:

@@ -3,9 +3,7 @@
 ### argSerializerConstructor()
 
 ```ts
-function argSerializerConstructor(
-  arbProvider: Provider,
-): (params: PrimativeOrPrimativeArray[]) => Promise<Uint8Array<ArrayBufferLike>>;
+function argSerializerConstructor(arbProvider: Provider): (params: PrimativeOrPrimativeArray[]) => Promise<Uint8Array<ArrayBufferLike>>;
 ```
 
 Defined in: utils/byte_serialize_params.ts:102
@@ -44,10 +42,7 @@ mySerializeParamsFunction(['4', '5', '6']);
 ### serializeParams()
 
 ```ts
-function serializeParams(
-  params: PrimativeOrPrimativeArray[],
-  addressToIndex: (address: string) => Promise<number>,
-): Promise<Uint8Array<ArrayBufferLike>>;
+function serializeParams(params: PrimativeOrPrimativeArray[], addressToIndex: (address: string) => Promise<number>): Promise<Uint8Array<ArrayBufferLike>>;
 ```
 
 Defined in: utils/byte_serialize_params.ts:138

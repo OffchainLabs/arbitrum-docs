@@ -80,9 +80,7 @@ Create an EthDepositMessage from data emitted in event when calling ethDeposit o
 ### ParentToChildMessageReaderOrWriter
 
 ```ts
-type ParentToChildMessageReaderOrWriter<T> = T extends Provider
-  ? ParentToChildMessageReader
-  : ParentToChildMessageWriter;
+type ParentToChildMessageReaderOrWriter<T> = T extends Provider ? ParentToChildMessageReader : ParentToChildMessageWriter;
 ```
 
 Defined in: message/ParentToChildMessage.ts:98

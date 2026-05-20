@@ -21,10 +21,7 @@ Any links on this page may point to older versions of Nitro or our fork of Geth.
 
 ## Hooks
 
-<a data-quicklook-from="arbitrum">Arbitrum</a> uses various hooks to modify Geth’s behavior during transaction
-processing. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction
-during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152)
-function.
+<a data-quicklook-from="arbitrum">Arbitrum</a> uses various hooks to modify Geth’s behavior during transaction processing. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
 
 Below is `ApplyTransaction`'s callgraph, with additional info on where the various Arbitrum-specific hooks are. Click any to jump to their section. By default, these hooks do nothing to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#enablearbos) set to true, [`ReadyEVMForL2`](#readyevmforl2) installs the alternative <a data-quicklook-from="child-chain">child chain</a> hooks.
 
