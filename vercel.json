@@ -2414,7 +2414,13 @@
   "headers": [
     {
       "source": "/",
-      "headers": [{ "key": "Vary", "value": "Accept" }]
+      "headers": [
+        { "key": "Vary", "value": "Accept" },
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"service-doc\"; type=\"text/plain\"; title=\"LLM-friendly site index\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\""
+        }
+      ]
     },
     {
       "source": "/:path+",
