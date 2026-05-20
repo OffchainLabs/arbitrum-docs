@@ -199,6 +199,7 @@ const config = {
     ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
+    require.resolve('./src/plugins/interactive-tutorials'),
     [
       '@signalwire/docusaurus-plugin-llms-txt',
       {
@@ -256,7 +257,7 @@ const config = {
             items: [
               {
                 label: 'Build with Solidity',
-                to: '/build-decentralized-apps/quickstart-solidity-remix',
+                to: '/build-decentralized-apps/quickstart-solidity',
               },
               {
                 label: 'Build with Stylus',
