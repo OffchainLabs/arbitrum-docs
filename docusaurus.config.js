@@ -3,7 +3,6 @@
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
-const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
@@ -62,6 +61,22 @@ const handleInkeepEvent = (event) => {
   }
 };
 
+// Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
+// Shared between the sitemap and llms.txt so both indexes stay in sync.
+const nonCanonicalRoutePatterns = [
+  '/sdk/assetBridger/**',
+  '/sdk/dataEntities/**',
+  '/sdk/inbox/**',
+  '/sdk/message/**',
+  '/sdk/utils/**',
+  '/hosted-pdfs/**',
+  // Partials are imported into other pages, not standalone content.
+  // Docusaurus generates routes for them anyway.
+  '**/_*', // Docusaurus partial convention
+  '**/partials/**', // non-underscored partials in this repo's partials/ dirs
+  '/category/**', // auto-generated category index pages
+];
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Arbitrum Docs',
@@ -69,12 +84,14 @@ const config = {
   url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
   onBrokenAnchors: 'warn', // Allow build to succeed despite false positive anchor warnings from TypeDoc
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
     preprocessor: markdownPreprocessor,
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
     parseFrontMatter: async (params) => {
       // Use the default parser
       const result = await params.defaultParseFrontMatter(params);
@@ -139,67 +156,13 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
+        sitemap: {
+          ignorePatterns: nonCanonicalRoutePatterns,
+        },
       }),
     ],
   ],
   plugins: [
-    [
-      'docusaurus-plugin-typedoc',
-      {
-        id: 'arbitrum-sdk',
-        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-        entryPoints: [`${sdkCodebasePath}/src/lib`],
-        entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
-        excludeNotDocumented: true,
-        excludeInternal: true,
-        excludeExternals: true,
-        readme: 'none',
-
-        // Output options
-        out: './docs/sdk',
-        cleanOutputDir: false, // Don't clean output dir to preserve manual files
-        hideGenerator: true,
-        validation: {
-          notExported: false,
-          invalidLink: true,
-          notDocumented: true,
-        },
-        skipErrorChecking: true,
-        logLevel: 'Verbose',
-        sidebar: {
-          autoConfiguration: false,
-        },
-
-        plugin: [
-          'typedoc-plugin-markdown',
-          `typedoc-plugin-frontmatter`,
-          './scripts/sdkDocsHandler.ts',
-        ],
-
-        // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-        outputFileStrategy: 'modules',
-        excludeGroups: false,
-        hidePageHeader: true,
-        hidePageTitle: true,
-        hideBreadcrumbs: true,
-        useCodeBlocks: true,
-        expandParameters: true,
-        parametersFormat: 'table',
-        classPropertiesFormat: 'list',
-        interfacePropertiesFormat: 'list',
-        enumMembersFormat: 'table',
-        typeDeclarationFormat: 'table',
-        useHTMLAnchors: true, // Fix anchor mismatches in tables
-        sanitizeComments: true,
-        frontmatterGlobals: {
-          layout: 'docs',
-          sidebar: true,
-          toc_max_heading_level: 5,
-        },
-      },
-    ],
     [
       '@inkeep/cxkit-docusaurus',
       {
@@ -236,6 +199,28 @@ const config = {
     ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        siteTitle: 'Arbitrum Documentation',
+        siteDescription:
+          'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
+        content: {
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: true,
+          includeDocs: true,
+          includeBlog: false,
+          includePages: false,
+          excludeRoutes: nonCanonicalRoutePatterns,
+          beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
+          beforeDefaultRemarkPlugins: [
+            require('./src/plugins/remark-llms-cleanup'),
+            require('./src/plugins/remark-llms-page-header'),
+          ],
+        },
+      },
+    ],
+    'docusaurus-plugin-copy-page-button',
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */

@@ -367,10 +367,7 @@ We now deploy that gateway to the parent chain.
 const { ethers } = require('hardhat');
 const { providers, Wallet, BigNumber } = require('ethers');
 const { getArbitrumNetwork, ParentToChildMessageStatus } = require('@arbitrum/sdk');
-const {
-  AdminErc20Bridger,
-  Erc20Bridger,
-} = require('@arbitrum/sdk/dist/lib/assetBridger/erc20Bridger');
+const { AdminErc20Bridger, Erc20Bridger } = require('@arbitrum/sdk/dist/lib/assetBridger/erc20Bridger');
 require('dotenv').config();
 
 /**
@@ -688,12 +685,7 @@ We now deploy that gateway to the child chain.
 ```tsx
 const { ethers } = require('hardhat');
 const { providers, Wallet, BigNumber } = require('ethers');
-const {
-  getArbitrumNetwork,
-  ParentToChildMessageStatus,
-  AdminErc20Bridger,
-  Erc20Bridger,
-} = require('@arbitrum/sdk');
+const { getArbitrumNetwork, ParentToChildMessageStatus, AdminErc20Bridger, Erc20Bridger } = require('@arbitrum/sdk');
 require('dotenv').config();
 
 /**
@@ -754,28 +746,16 @@ This step will also depend on your setup. In this case, our simplified gateway r
  * avoided if you are using proxies or the opcode CREATE2 for example)
  */
 console.log('Setting token bridge information on L1CustomGateway:');
-const setTokenBridgeInfoOnL1 = await l1CustomGateway.setTokenBridgeInformation(
-  l1CustomToken.address,
-  l2CustomToken.address,
-  l2CustomGatewayAddress,
-);
+const setTokenBridgeInfoOnL1 = await l1CustomGateway.setTokenBridgeInformation(l1CustomToken.address, l2CustomToken.address, l2CustomGatewayAddress);
 
 const setTokenBridgeInfoOnL1Rec = await setTokenBridgeInfoOnL1.wait();
-console.log(
-  `Token bridge information set on L1CustomGateway! L1 receipt is: ${setTokenBridgeInfoOnL1Rec.transactionHash}`,
-);
+console.log(`Token bridge information set on L1CustomGateway! L1 receipt is: ${setTokenBridgeInfoOnL1Rec.transactionHash}`);
 
 console.log('Setting token bridge information on L2CustomGateway:');
-const setTokenBridgeInfoOnL2 = await l2CustomGateway.setTokenBridgeInformation(
-  l1CustomToken.address,
-  l2CustomToken.address,
-  l1CustomGatewayAddress,
-);
+const setTokenBridgeInfoOnL2 = await l2CustomGateway.setTokenBridgeInformation(l1CustomToken.address, l2CustomToken.address, l1CustomGatewayAddress);
 
 const setTokenBridgeInfoOnL2Rec = await setTokenBridgeInfoOnL2.wait();
-console.log(
-  `Token bridge information set on L2CustomGateway! L2 receipt is: ${setTokenBridgeInfoOnL2Rec.transactionHash}`,
-);
+console.log(`Token bridge information set on L2CustomGateway! L2 receipt is: ${setTokenBridgeInfoOnL2Rec.transactionHash}`);
 ```
 
 ## Step 5: Register the custom token with your custom gateway
@@ -788,27 +768,18 @@ In this case, when using this function, a single action occurs:
 
 1. Call the function `setGateway` of `L1GatewayRouter`. This call updates the `l1TokenToGateway` internal mapping and sends a retryable ticket to the counterpart `L2GatewayRouter` contract on the child chain to set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK and call the method [`registerCustomToken`](../../../sdk/assetBridger/erc20Bridger#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the `registerTokenOnL2` method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK and call the method [`registerCustomToken`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/erc20Bridger.ts) of the [`AdminErc20Bridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/erc20Bridger.ts) class, which will call the `registerTokenOnL2` method of the token passed by parameter.
 
 ```tsx
 /**
  * Register the custom gateway as the gateway of our custom token
  */
 console.log('Registering custom token on L2:');
-const registerTokenTx = await adminTokenBridger.registerCustomToken(
-  l1CustomToken.address,
-  l2CustomToken.address,
-  l1Wallet,
-  l2Provider,
-);
+const registerTokenTx = await adminTokenBridger.registerCustomToken(l1CustomToken.address, l2CustomToken.address, l1Wallet, l2Provider);
 
 const registerTokenRec = await registerTokenTx.wait();
-console.log(
-  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}.`,
-);
-console.log(
-  `Waiting for L2 retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`,
-);
+console.log(`Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}.`);
+console.log(`Waiting for L2 retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`);
 
 /**
  * The L1 side is confirmed; now we listen and wait for the L2 side to be executed; we can do this by computing the expected txn hash of the L2 transaction.

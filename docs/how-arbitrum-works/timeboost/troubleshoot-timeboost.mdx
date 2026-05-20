@@ -51,7 +51,7 @@ The below two tables can also be found on our guide on [How to use Timeboost](/h
 | `WRONG_CHAIN_ID`        | wrong chain id for the target chain                                                                         |
 | `WRONG_SIGNATURE`       | signature failed to verify                                                                                  |
 | `BAD_ROUND_NUMBER`      | incorrect round, such as one from the past                                                                  |
-| `RESERVE_PRICE_NOT_MET` | bid amount does not meet the minimum required reserve price on-chain                                        |
+| `RESERVE_PRICE_NOT_MET` | bid amount does not meet the minimum required reserve price onchain                                         |
 | `INSUFFICIENT_BALANCE`  | the bid amount specified in the request is higher than the deposit balance of the depositor in the contract |
 
 #### Table 2: Errors relating to express lane transaction submission
@@ -64,7 +64,7 @@ Note that if you get any of the errors below or errors related to invalidity of 
 | `WRONG_SIGNATURE` | signature failed to verify |
 | `BAD_ROUND_NUMBER` | incorrect round, such as one from the past |
 | `NOT_EXPRESS_LANE_CONTROLLER` | the sender is not the express lane controller |
-| `NO_ONCHAIN_CONTROLLER` | there is no defined, on-chain express lane controller for the round |
+| `NO_ONCHAIN_CONTROLLER` | there is no defined, onchain express lane controller for the round |
 | `SEQUENCE_NUMBER_ALREADY_SEEN` | the sequence number used for the given transaction was already consumed, try resubmitting with a new sequence number |
 | `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
 | `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached |

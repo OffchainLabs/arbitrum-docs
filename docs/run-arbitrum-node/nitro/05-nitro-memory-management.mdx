@@ -7,7 +7,7 @@ user_story: As a node operator, I need to understand how Nitro allocates memory 
 content_type: how-to
 ---
 
-Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. This is because Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills.
+Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. This is because Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills. Nitro also includes built-in [runtime memory protection](#runtime-memory-protection) settings. These can throttle RPC requests or pause block validation when free memory runs low, providing a safety net against OOM kills.
 
 ## Memory allocators in Nitro
 
@@ -152,6 +152,68 @@ GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
 :::
 
+## Runtime memory protection
+
+Even with well-sized caches and tuned `GOMEMLIMIT`, nodes can face OOM due to workload spikes or unexpected memory pressure. Nitro provides two memory protection mechanisms. These use Linux cgroups to monitor real-time container memory usage and intervene before the kernel's OOM killer takes action.
+
+Both mechanisms read the container's cgroup memory files (v1 or v2). They compute memory usage while exlcuding page cache, while the kernel can reclaim. They compare the result against the container's memory limit minus a configurable free-memory threshold:
+
+```
+effective_usage = cgroup_memory_usage - (active_file_cache + inactive_file_cache)
+threshold       = cgroup_memory_limit - configured_free_limit
+exceeded        = effective_usage >= threshold
+```
+
+Subtracting active and inactive file cache from usage avoids false positives. The check excludes memory that the kernel can reclaim, which does not count as actual consumption.
+
+:::note
+Both features require Linux cgroups (v1 or v2). They only work inside containers or environments with groups limits. On bare-metal hosts without cgroup limits, these features are unavailable.
+:::
+
+### RPC throttling
+
+This setting protects the node by rejecting incoming RPC requests with an HTTP 429 (Too Many Requests) status code when free memory drops below the configured threshold. It acts as a back-pressure mechanism, preventing new RPC work from pushing the node over its memory limit.
+
+| Parameter                           | Default         | Description                                                                                                                     |
+| ----------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `node.resource-mgmt.mem-free-limit` | `""` (disabled) | Minimum free memory required to accept RPC requests. Accepts values with suffixes: `B`, `K`/`KB`, `M`/`MB`, `G`/`GB`, `T`/`TB`. |
+
+When enabled, Nitro wraps the HTTP server with a middleware that checks free memory before every RPC call. If the limit is exceeded, the request is rejected immediately without being processed.
+
+**Example configuration:**
+
+```shell
+--node.resource-mgmt.mem-free-limit=1GB
+```
+
+Nitro emits metrics under the `arb/rpc/limitcheck/` and `arb/memory/` namespaces. These emtrics track accepted and rejected requests, as well as current memory usage. At startup Nitro logs whether cgroup-based throttling is enabled and logs errors if memory checks fail during runtime.
+
+### Block validator throttling
+
+This setting protects the node by pausing block validation when free memory drops below the configured threshold. Block validation is memory-intensive, so pausing it under memory pressure prevents the validation workload from triggering an OOM kill.
+
+| Parameter                                | Default            | Description                                                                                                                                     |
+| ---------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `node.block-validator.memory-free-limit` | `"default"` (1 GB) | Minimum free memory required to continue block validation. Set to `""` (empty string) to disable. Accepts the same suffixes as the RPC setting. |
+
+This setting is enabled by default with a 1 GB threshold. When free memory drops below this amount, the block validator pauses recording new blocks and halts sending pending validations. Validation resumes once memory usage goes back below the threshold.
+
+**Example configuration:**
+
+To increase the threshold to 2 GB:
+
+```shell
+--node.block-validator.memory-free-limit=2GB
+```
+
+To disable the protection:
+
+```shell
+--node.block-validator.memory-free-limit=""
+```
+
+Nitro exposes the `arb/validator/memory/limit_exceeded` gauge metric (`1` when paused, `0` otherwise) and logs error-level messages when validation is paused, or memory checks fail. Alert on this metric to detect when validation is paused due to memory pressure—sustained pauses may indicate that the node needs more memory or that cache sizes should be reduced.
+
 ## Tuning recommendations
 
 1. **Set `MALLOC_ARENA_MAX=2`**: This is the single most impactful change for containerized nodes. Without it, glibc can waste gigabytes on arena overhead, causing RSS to drift upward over days. Set this environment variable on every Nitro container.
@@ -161,3 +223,7 @@ If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garba
 3. **Monitor RSS, not just Go heap**: Set container memory alerts based on actual RSS (`container_memory_rss` in Prometheus / cAdvisor), not Go-reported memory.
 
 4. **All caches are bounded**: Unlike memory leaks, all non-Go memory in Nitro is bounded by configuration. With `MALLOC_ARENA_MAX` set, if RSS is stable and predictable, the node is behaving correctly. The memory is simply allocated outside Go's visibility.
+
+5. **Enable RPC throttling on public-facing nodes**: Set `node.resource-mgmt.mem-free-limit` (e.g., `1GB`) on nodes that serve external RPC traffic. This prevents request surges from causing the node to go OOM. Monitor `arb/rpc/limitcheck/failure` to track how often throttling activates.
+
+6. **Monitor block validator memory pauses**: The block validator's memory protection is on by default. Alert on `arb/validator/memory/limit_exceeded == 1` to detect when validation is paused due to memory pressure.
