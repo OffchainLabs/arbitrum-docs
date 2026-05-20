@@ -313,17 +313,10 @@ To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the [`regist
  * Register custom token on our custom gateway
  */
 const adminTokenBridger = new AdminErc20Bridger(l2Network);
-const registerTokenTx = await adminTokenBridger.registerCustomToken(
-  l1CustomToken.address,
-  l2CustomToken.address,
-  l1Wallet,
-  l2Provider,
-);
+const registerTokenTx = await adminTokenBridger.registerCustomToken(l1CustomToken.address, l2CustomToken.address, l1Wallet, l2Provider);
 
 const registerTokenRec = await registerTokenTx.wait();
-console.log(
-  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}`,
-);
+console.log(`Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}`);
 
 /**
  * The L1 side is confirmed; now we listen and wait for the L2 side to be executed; we can do this by computing the expected txn hash of the L2 transaction.
@@ -347,9 +340,7 @@ expect(setTokenTx.status, 'Set token not redeemed.').to.eq(ParentToChildMessageS
 const setGateways = await l1ToL2Msgs[1].waitForStatus();
 expect(setGateways.status, 'Set gateways not redeemed.').to.eq(ParentToChildMessageStatus.REDEEMED);
 
-console.log(
-  'Your custom token is now registered on our custom gateway 🥳  Go ahead and make the deposit!',
-);
+console.log('Your custom token is now registered on our custom gateway 🥳  Go ahead and make the deposit!');
 ```
 
 ## Conclusion
