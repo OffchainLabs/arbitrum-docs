@@ -6,6 +6,8 @@ module.exports = {
       files: '*.{md,mdx}',
       options: {
         parser: 'mdx',
+        printWidth: 9999,
+        proseWrap: 'preserve',
       },
     },
   ],

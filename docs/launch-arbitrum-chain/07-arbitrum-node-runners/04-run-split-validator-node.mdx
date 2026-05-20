@@ -32,7 +32,7 @@ The rest of this guide walks through the deployment; the API reference and the o
 ### Prerequisites
 
 - Docker or Kubernetes with Helm installed
-- Staker private key
+- Bonder private key
 - Chain information JSON for your Arbitrum chain
 
 ### Docker deployment guide
@@ -63,7 +63,7 @@ docker run --rm -it \
 
 The validation node will listen on port 5200, which will also enable the metrics server on port 6070.
 
-#### Step 2: Set up the staker node
+#### Step 2: Set up the bonder node
 
 Copy the JWT secret to your mount directory:
 
@@ -71,7 +71,7 @@ Copy the JWT secret to your mount directory:
 cp /tmp/nitro-val.jwt /some/local/dir/arbitrum
 ```
 
-Start the staker node with the following command, connecting it to your validation node:
+Start the bonder node with the following command, connecting it to your validation node:
 
 ```bash
 docker run --rm -it \
@@ -89,7 +89,7 @@ docker run --rm -it \
 Replace the placeholders with your specific values:
 
 - `<parent-chain-endpoint>`: Your parent chain RPC endpoint
-- `<staker_private_key>`: Your staker's private key
+- `<staker_private_key>`: Your bonder's private key
 - `<Your_chain_info>`: Chain information JSON
 - `<forwarding_target>`: Your forwarding node URL (usually is the sequencer endpoint)
 - `Your_validation_address`: Address of your validation node (including port)
@@ -174,6 +174,7 @@ This metric is a counter of the number of successful validation calls; if it is 
 You can also check where this log (`validation node started`) appears:
 
 - If this log appears on the validation node, it means your validation node is running correctly.
+
 - If this log appears on the bond node, it means your bond node is still validating itself. It indicates that your bond node is not connecting to the validation node correctly; you need to double-check your configuration.
 
 ### Reference: the `validation_*` API {#reference-the-validation-api}
@@ -210,3 +211,5 @@ These methods are internal protocol calls between the bond and the validation no
 Anything listed here is served on the AUTH-RPC endpoint and gated by the JWT, so the caller must hold the same JWT secret to access it. The endpoint still listens only on `--auth.addr` (default `127.0.0.1`), so keep it on loopback or a private network — JWT authentication alone is not a substitute for network isolation.
 
 This is rarely needed for bonders; the main use case is internal services (a custom monitor, an indexer behind your own bastion) that need authenticated read access to the node.
+
+- If this log appears on the bonder node (validator node), it means your bonder node is still validating itself. It indicates that your bonder node is not connecting to the validation node correctly; you need to double-check your configuration.

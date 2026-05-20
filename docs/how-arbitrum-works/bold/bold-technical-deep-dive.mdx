@@ -12,14 +12,7 @@ sidebar_position: 1
 
 ## Overview
 
-<a data-quicklook-from="arbitrum">Arbitrum</a>'s current dispute protocol involves defending against
-challengers individually in a 1-vs-1 tournament setting. In contrast, <a data-quicklook-from="bold">
-  BoLD
-</a> enables an all-vs-all battle royale between Good and Evil, with a single winner always
-determined. This dynamic is made possible by BoLD's time-bounded, permissionless validation using
-deterministic Merkle proofs and hashes. This allows any party to bond in the correct state and prove
-their claim through interactive fraud proofs, ensuring that a single honest party bonding in the
-correct state will always prevail in disputes.
+<a data-quicklook-from="arbitrum">Arbitrum</a>'s current dispute protocol involves defending against challengers individually in a 1-vs-1 tournament setting. In contrast, <a data-quicklook-from="bold">BoLD</a> enables an all-vs-all battle royale between Good and Evil, with a single winner always determined. This dynamic is made possible by BoLD's time-bounded, permissionless validation using deterministic Merkle proofs and hashes. This allows any party to bond in the correct state and prove their claim through interactive fraud proofs, ensuring that a single honest party bonding in the correct state will always prevail in disputes.
 
 Validators on Arbitrum can post their claim on the validity of state roots, known as **assertions**. Ethereum, of course, does not know anything about the validity of these Arbitrum state roots, but it _can_ help prove their correctness. _Anyone_ in the world can then initiate a <a data-quicklook-from="challenge">challenge</a> over any unconfirmed <a data-quicklook-from="assertion">assertion</a> to start the protocol’s game.
 
@@ -85,11 +78,7 @@ When it comes to implementing the protocol, BoLD needs to be deployed on a credi
 
 A helpful mental model for understanding the system is that it uses Ethereum itself as the ultimate referee for deciding assertion results. Participants in the challenge protocol can disagree over the _results of child chain state transitions_ and provide proofs to the protocol's smart contracts on Ethereum to determine which result is correct. Because computation is deterministic, there will always be a single correct result.
 
-<ImageZoom
-  src="/img/haw-transaction-lifecycle.svg"
-  alt="Transaction lifecycle diagram showing various pathways for submitting transactions"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-transaction-lifecycle.svg" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
 
 _From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. Parent chain blocks are “settled to the parent chain” after a 6.4 day period has elapsed and nobody has challenged their validity on Ethereum._
 
