@@ -5,7 +5,7 @@ User-agent: *
 # Content usage preferences per draft-romm-aipref-contentsignals
 # (https://contentsignals.org/). Permissive: docs may be indexed for search,
 # used as input to AI assistants, and used to train AI models.
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 
 # Non-canonical routes that exist in the Docusaurus build but aren't indexable
