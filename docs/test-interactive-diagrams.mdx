@@ -1,0 +1,26 @@
+---
+id: test-interactive-diagrams
+title: 'Interactive Diagram Test'
+description: 'Test page for click-through interactive diagrams'
+---
+
+import DrawioReactFlow from '@site/src/components/DrawioReactFlow';
+import RetryableTicketsPartial from './how-arbitrum-works/partials/_retryable-tickets-partial.mdx';
+
+This page demonstrates interactive diagrams rendered from Draw.io files. The diagram below shows the Arbitrum transaction lifecycle.
+
+## Transaction Lifecycle
+
+The diagram below shows how transactions flow through the Arbitrum system. Hover over "Retryable ticket" to see details.
+
+<DrawioReactFlow
+  manifest="/diagrams/haw-transaction-lifecycle.manifest.xml"
+  hoverContent={{ '_retryable-tickets-partial': RetryableTicketsPartial }}
+/>
+
+## Features
+
+- **Theme-aware**: Diagrams adapt to light/dark mode
+- **Exact layout**: Positions and colors match the original Draw.io file
+- **Responsive**: Zoom and pan to explore the diagram
+- **Hover modals**: Hover over annotated elements to see detailed content

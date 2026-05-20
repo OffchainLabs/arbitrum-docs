@@ -15,6 +15,11 @@ const sidebars = {
       label: 'Arbitrum: introduction',
     },
     {
+      type: 'doc',
+      id: 'test-interactive-diagrams',
+      label: 'Test interactive diagrams',
+    },
+    {
       type: 'category',
       label: 'Build apps',
       collapsed: true,
