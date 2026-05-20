@@ -3,6 +3,7 @@ title: 'Troubleshooting: Run a node'
 description: 'Troubleshoot common issues when running an Arbitrum node, with configuration-specific guidance and a report generator for getting help.'
 content_type: troubleshooting
 author: symbolpunk
+sme: Jason-W123
 ---
 
 import Tabs from '@theme/Tabs';
@@ -208,6 +209,14 @@ You can check logs by different log types: info, warn, and error.
           </td>
           <td>This is a normal behavior while the node is catching up to the tip of the chain; once a node has been fully synced, "Resuming state snapshot generation" shouldn't be logged unless it falls behind again.</td>
         </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>track-block-metadata-from is set but blockMetadata fetcher is not enabled</code>.
+          </td>
+          <td>
+            You started the node with <code>--node.transaction-streamer.track-block-metadata-from</code> set to a non-zero block but did not enable the blockMetadata fetcher. The node will still run, but blockMetadata won't be backfilled. Either remove the flag, or enable the fetcher with <code>--node.block-metadata-fetcher.enable</code> — and when enabling the fetcher you'll typically also need to set <code>--node.block-metadata-fetcher.source.url</code> to point at a node that serves block metadata.
+          </td>
+        </tr>
       </tbody>
     </table>
   </TabItem>
@@ -250,6 +259,62 @@ You can check logs by different log types: info, warn, and error.
             You see <code>P2P server will be useless, neither dialing nor listening</code>
           </td>
           <td>Arbitrum Nitro doesn’t need P2P mode, so you can ignore this log.</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>Getting file info dir=&lt;path&gt;/machines error="stat &lt;path&gt;/machines: no such file or directory"</code>.
+          </td>
+          <td>
+            Nitro is checking one of the expected locations for WASM machine artifacts, but that particular <code>machines/</code> directory does not exist. This warning can be harmless if Nitro finds the required machine artifacts in another location. If it is followed by validation or WASM module-root errors, make sure you're running a supported/current Nitro image for your chain, and that the image or mounted <code>machines/</code> directory contains artifacts matching the chain's on-chain WASM module root. If you're using an older Docker image, upgrade to a newer Nitro release; if you're building or running from source, mount or download the matching machine artifacts for that Nitro version/module root.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>broadcaster queue jumped positions queuedMessages=N expectedNextIdx=M</code>.
+          </td>
+          <td>
+            The feed delivered messages out of the expected order; the node skipped ahead in its broadcast queue. This typically self-heals as later messages arrive. If it persists, check your feed URL connectivity or try a fallback feed via <code>--node.feed.input.url</code>.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>Compression was not negotiated when connecting to feed server, non-critical: node will continue without compression</code>.
+          </td>
+          <td>The feed server didn't agree to compression during the WebSocket handshake. This is informational — the node continues without compression and your sync is unaffected. You can ignore this warning.</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>readData returned EOF url=wss://...feed... opcode=0</code>.
+          </td>
+          <td>The feed server closed the WebSocket connection. The broadcast client will automatically reconnect; no operator action is needed unless EOF repeats continuously. Persistent EOFs suggest a network/firewall issue or that all configured feeds are unreachable.</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>`error reading inbox` err="previous delayed accumulator mismatch for message N"</code>.
+          </td>
+          <td>The delayed-inbox accumulator your node computed doesn't match the on-chain one at message N — typically caused by a parent-chain endpoint serving inconsistent data or by a reorg. Switch to a different parent-chain RPC and restart; if it persists, re-sync from a recent snapshot.</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>`error reading inbox` err="unexpected delayed sequence number N, expected M"</code>.
+          </td>
+          <td>The delayed inbox produced a sequence number that is not the next expected one — usually a parent-chain RPC inconsistency or a reorg on the parent chain. Switch to a different parent-chain RPC; if the gap persists, re-sync the node.</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>Trie prefetcher failed opening storage trie root=... err="missing trie node ..."</code>.
+          </td>
+          <td>
+            Your local state database is inconsistent — typically caused by an ungraceful shutdown or by enabling <code>--init.recreate-missing-state-from</code> on a non-archive node. Restart without pruning; if the node still can't recover, re-sync from a recent <a href="https://snapshot-explorer.arbitrum.io/">official snapshot</a>.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>`error reading inbox` err="...pebble: not found"</code> (same root cause as the <code>leveldb: not found</code> case above; different database backend).
+          </td>
+          <td>
+            Same root cause as the <code>leveldb: not found</code> case above: your local DB is missing a message it expected to have. Use <code>--init.reorg-to-message-batch x-1</code> to roll back to before the missing index, or re-sync from a snapshot.
+          </td>
         </tr>
       </tbody>
     </table>
@@ -294,6 +359,50 @@ You can check logs by different log types: info, warn, and error.
             You see <code>error acting as staker</code>
           </td>
           <td>In most cases, this error is caused by your parent chain endpoint's rate limit or other issues, you can check your parent chain endpoint. If the error still persists, please ask in our discord node-running [channel](https://discord.gg/arbitrum).</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>wrong msgIdx got X expected Y</code>.
+          </td>
+          <td>
+            The transaction streamer received a message whose index doesn't match the next expected one — your node's local DB is behind or ahead of the sequencer feed. Restart the node; if the gap persists, re-sync from a snapshot or use <code>--init.reorg-to-message-batch</code> to roll back to a known-good index.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>`error reading inbox` err="...header not found"</code> or <code>header for hash not found</code>.
+          </td>
+          <td>The parent-chain RPC returned a block header your node expected to exist — usually your parent-chain endpoint hasn't synced to the height nitro asked for, or the endpoint serves a different chain history. Wait for the parent-chain node to finish syncing, or switch to a fully-synced parent-chain RPC.</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>accumulator not found</code> or <code>delayed accumulator not found for index N</code>.
+          </td>
+          <td>Nitro tried to read an inbox accumulator or sequencer-batch metadata entry that is not yet present in the local consensus database. This can happen transiently while the inbox reader or message extractor is still catching up, and batch-posting paths intentionally treat this as an ephemeral error for the first few minutes. If the error keeps repeating, make sure the node has caught up, your parent-chain RPC can serve the relevant SequencerInbox / delayed inbox logs, and the local database or snapshot is not missing historical inbox data. Try restarting with a healthy parent-chain RPC; if the same index remains missing, re-sync from a recent snapshot.</td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>error initializing database err="found N unexpected files in database directory, including: ..."</code>.
+          </td>
+          <td>
+            The data directory you pointed nitro at already contains files that don't belong to a fresh DB. Either empty the directory before init, or point <code>--persistent.chain</code> at a fresh path and extract your snapshot there.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>error validating feed signature error="signature not verified: signer ..." sequence number=N</code>.
+          </td>
+          <td>
+            A feed message was signed by an address that is not in your allowed signer list. Check that <code>--node.feed.input.verify.allowed-addresses</code> includes the expected sequencer feed signer for your chain; for Arbitrum One/Sepolia this should be the official feed signer published in the docs.
+          </td>
+        </tr>
+        <tr className="scenario">
+          <td>
+            You see <code>no connected feed</code> or <code>no connected feed on startup</code>.
+          </td>
+          <td>
+            The broadcast client failed to connect to any feed URL you configured. Check network / firewall rules for outbound WebSocket connections, verify the feed URLs in <code>--node.feed.input.url</code> are reachable, and confirm you can <code>curl</code> them from the node host.
+          </td>
         </tr>
       </tbody>
     </table>
