@@ -2,6 +2,8 @@
 
 Yes! The Arbitrum Chain SDK's core technology has undergone a comprehensive audit and is now capable of supporting deployments to mainnet. You can read more about it in our [preview expectations notice](https://docs.arbitrum.io/launch-orbit-chain/concepts/public-preview-expectations#arbitrum-orbit-is-mainnet-ready-but-deploy-to-testnet-first).
 
+Learn more: [Chain SDK introduction](https://docs.arbitrum.io/launch-arbitrum-chain/arbitrum-chain-sdk-introduction).
+
 ### Do I need permission/license to launch an Arbitrum chain?
 
 You can launch any Arbitrum chain permissionlessly.
@@ -10,13 +12,19 @@ Nitro's license is under a [Business Source license](https://github.com/Offchain
 
 However, Arbitrum chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the [AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
 
+Learn more: [AEP license](https://docs.arbitrum.io/launch-arbitrum-chain/aep-license).
+
 ### Does Arbitrum officially deploy and/or maintain L3s for external teams?
 
 No. Teams are required to deploy and maintain their Arbitrum chains. There are, however, several RaaS (Rollup as a Service) providers that can deploy and maintain your Arbitrum chain on your behalf.
 
+Learn more: [Third-party providers](https://docs.arbitrum.io/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers).
+
 ### Can I modify the underlying technology to customize my Arbitrum chain?
 
 Yes, you can make any changes you require to the underlying Nitro code base.
+
+Learn more: [Customize the State Transition Function](https://docs.arbitrum.io/launch-arbitrum-chain/05-customize-your-chain/customize-stf).
 
 ### What Data Availability (DA) solutions are currently available for Arbitrum chains?
 
@@ -27,9 +35,13 @@ Arbitrum chains currently support three different DA solutions:
 - Celestia, posting data to the [Celestia network](https://blog.celestia.org/celestia-is-first-modular-data-availability-network-to-integrate-with-arbitrum-orbit/).
   Note that using AnyTrust provides the chain owner with the most flexibility and the most cost-effective fees.
 
+Learn more: [Configure data availability](https://docs.arbitrum.io/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/config-data-availability).
+
 ### What token is used to pay gas fees on Arbitrum chains?
 
 By default, Arbitrum chains pay gas in `ETH`. However, Arbitrum chains that use AnyTrust are configurable to use any `ERC-20` token for the gas fee token of the chain.
+
+Learn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).
 
 ### Can I use Ethereum toolkits to develop on my Arbitrum chain?
 
@@ -39,17 +51,25 @@ Arbitrum chains are fully EVM-compatible. Most tools that support Ethereum shoul
 
 No, but ZeroDev is heavily tested, easy to use and to integrate.
 
+Learn more: [ZeroDev smart account integration](https://docs.arbitrum.io/for-devs/third-party-docs/ZeroDev/zero-dev).
+
 ### Is there any cross-chain bridging solution between two Arbitrum chains?
 
 There is currently no native Arbitrum-to-Arbitrum chain bridging solution, except for going through the parent chain (even if they share the same parent chain). However, many third-party bridges have expressed interest in supporting Arbitrum chains.
+
+Learn more: [Cross-chain messaging](https://docs.arbitrum.io/build-decentralized-apps/04-cross-chain-messaging).
 
 ### Is there an official block explorer for Arbitrum chains?
 
 Arbitrum chains deployments usually come with an open-source Blockscout explorer by default, but there are many third-party solutions that have expressed interest in supporting Arbitrum chains.
 
+Learn more: [Monitoring tools and block explorers](https://docs.arbitrum.io/build-decentralized-apps/reference/06-monitoring-tools-block-explorers).
+
 ### Is there any indexing solution that supports Arbitrum chains?
 
 Similar to bridges and block explorers, there are many third-party indexing solutions that have expressed interest in supporting Arbitrum chains.
+
+Learn more: [The Graph](https://docs.arbitrum.io/for-devs/third-party-docs/TheGraph/thegraph).
 
 ### Can I increase the maximum contract size for my Arbitrum chain?
 
@@ -78,9 +98,13 @@ Four fee types are configurable on an Arbitrum chain:
 
 To learn more about precompiles, refer to the [Precompiles reference page](https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference).
 
+Learn more: [Fee management](https://docs.arbitrum.io/launch-arbitrum-chain/02-configure-your-chain/common/fees/07-fee-management).
+
 ### What is the lowest you can set the base fee to?
 
 You can set the base fee to any amount to charge users less. You can even set it to `0` (however, this would open the chain to DOS attacks). If the Arbitrum chain base fee is `0`, users are then only paying for the cost of DA.
+
+Learn more: [Gas and fees deep dive](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/gas-and-fees).
 
 ### How does fee collection work in Nitro?
 
@@ -97,6 +121,7 @@ Four fee types are configurable on Nitro:
 - [L2 fees](https://docs.arbitrum.io/arbos/gas)
 
 And information about the precompiles methods in the [Precompile References](https://docs.arbitrum.io/build-decentralized-apps/precompiles/reference).
+Learn more: [Gas and fees deep dive](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/gas-and-fees).
 
 ### Can you upgrade the smart contract size limit once deployed?
 
@@ -106,9 +131,11 @@ No. There's no way to version it so that old blocks are executed under the past 
 
 The implications of reducing the block speed below 100ms are that an increased block count will put more strain on third-party providers, node runners, indexers, etc.
 
+Learn more: [Sequencer timing adjustments](https://docs.arbitrum.io/launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments).
+
 ### Can I set fast deposits for an L3?
 
-Yes, we have documented fast deposits in [how to configure delayed inbox finality](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/arbitrum-chain-finality.mdx).
+Yes, we have documented fast deposits in [how to configure delayed inbox finality](https://docs.arbitrum.io/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/arbitrum-chain-finality).
 
 There is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.
 
@@ -122,7 +149,7 @@ For an L2, however, we recommend waiting ~12 minutes for L1 finality, as there i
 
 Test this thoroughly on a testnet first.
 
-1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.
+1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](https://docs.arbitrum.io/launch-arbitrum-chain/05-customize-your-chain/customize-stf) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.
 2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.
 3. Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus respecting L2 transaction size limits.
 
@@ -150,6 +177,8 @@ The `WETH` gateway used in the token bridge is a special, custom gateway that un
 
 If you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.
 
+Learn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).
+
 ### How do we verify if an ERC-20 was bridged using the native bridge?
 
 The following applies to a parent-side bridge deployed on Arbitrum One:
@@ -176,6 +205,8 @@ The estimated cost is approximately \$600 per sequencer replica per month for a 
 
 - **Watchtower**:- A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
 
+Learn more: [Run a validator node](https://docs.arbitrum.io/run-arbitrum-node/more-types/02-run-validator-node).
+
 ### What are the costs to run a validator?
 
 The estimated monthly cost for Watchtower validators will be approximately \$500. All other validators will cost \$800 to \$900 per month.
@@ -188,9 +219,13 @@ To participate in a fraud-proof game, your validator will need funds (can be any
 
 2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then 555+79 `ETH` per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
 
+Learn more: [BoLD economics of disputes](https://docs.arbitrum.io/how-arbitrum-works/bold/bold-economics-of-disputes).
+
 ### How do I export snapshots for nitro-based chains? Is there any tooling for this?
 
 We currently don't have any toolkits available for this. The best way to make a snapshot is to gracefully stop the node and make a copy of the database.
+
+Learn more: [Nitro database snapshots](https://docs.arbitrum.io/run-arbitrum-node/nitro/03-nitro-database-snapshots).
 
 ### What happens if I don't post an assertion for a long period of time?
 
@@ -210,4 +245,4 @@ Using Nitro's split validation, it can be run as a separate container using:
 node.block-validator.validation-server-configs-list
 ```
 
-It's possible to run it in the same container. That is the default way, and then Nitro uses a loopback connection. You can read more about this in [running a split-validator](/launch-arbitrum-chain/07-arbitrum-node-runners/04-run-split-validator-node.mdx).
+It's possible to run it in the same container. That is the default way, and then Nitro uses a loopback connection. You can read more about this in [running a split-validator](https://docs.arbitrum.io/launch-arbitrum-chain/07-arbitrum-node-runners/04-run-split-validator-node).

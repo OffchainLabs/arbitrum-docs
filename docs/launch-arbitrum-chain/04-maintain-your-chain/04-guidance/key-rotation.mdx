@@ -55,22 +55,12 @@ setBatchPosterManager(<new_address>)
 - Update your node configuration to use the new private key
 - Restart the batch poster service with the new configuration
 
-#### 3. Handle potential mempool issues
-
-If you encounter the error: `"posting this transaction will exceed max mempool size: transaction nonce: xxx, unconfirmed nonce: xx, max mempool size: xx"`
-
-**Temporary fix**:
-
-- Add the `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag
-- Restart the batch poster
-- **Remove this flag** before the next start
-
-#### 4. Verify operation
+#### 3. Verify operation
 
 - Monitor logs to confirm the new batch poster is successfully submitting batches
 - Check that transactions are processing normally
 
-#### 5. Disable the old batch poster
+#### 4. Disable the old batch poster
 
 ```solidity
 setIsBatchPoster(<old_address>, false)
@@ -101,20 +91,12 @@ setValidator([<new_validator_address>], [true])
 - Update your validator node configuration to use the new private key
 - Restart the validator service
 
-#### 3. Handle potential mempool issues
-
-If you encounter the error: `"posting this transaction will exceed max mempool size: transaction nonce: xxx, unconfirmed nonce: xx, max mempool size: xx"`
-
-- Add `--node.staker.data-poster.dangerous.clear-dbstorage` flag temporarily
-- Restart the validator
-- **Remove this flag** before the next start
-
-#### 4. Verify the new validator operation
+#### 3. Verify the new validator operation
 
 - Monitor that the new validator successfully posts bond transactions
 - Confirm that assertion and confirmation transactions are submitted successfully
 
-#### 5. Disable the old validator
+#### 4. Disable the old validator
 
 ```solidity
 setValidator([<old_validator_address>], [false])

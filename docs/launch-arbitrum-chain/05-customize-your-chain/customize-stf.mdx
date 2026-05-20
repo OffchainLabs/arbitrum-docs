@@ -60,7 +60,7 @@ To modify the State Transition Function, you'll need to build a modified Arbitru
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.9.4@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.9.8@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -72,7 +72,7 @@ Next, make your changes to the State Transition Function. For example, you could
 After this step, you should visit [Customize ArbOS version](./customize-arbos.mdx) to see if your changes need to upgrade the ArbOS version. If so, please continue
 follow that document to add an ArbOS upgrade logic to your code.
 
-### Step 3. Run the node without fraud proofs
+### Step 3. Run the node
 
 To build the Arbitrum Nitro node image, you'll first need to install Docker.
 You can confirm if it's already setup by running `docker version` in a terminal.
@@ -81,23 +81,13 @@ install Docker from your distribution's package manager and start the Docker ser
 
 Once you have Docker installed, you can simply run `docker build . --tag custom-nitro-node` in the `nitro` folder to build your custom node.
 
-Once you've built your new Nitro node image, you have to modify the configuration file of your node to add a new parameter, `--node.staker.dangerous.without-block-validator`, which disables fraud proof verification.
+:::note
 
-To do that, open your `nodeConfig.json` file (stored by default in the `config` folder) and add the new parameter inside the `staker` element:
+A chain running a customized State Transition Function will produce blocks that don't match the verified Nitro WASM module root on the parent chain. Coordinate with Offchain Labs before operating a customized STF against a production chain, as the validator configuration required is not covered in this guide.
 
-```json
-...
-"staker": {
-  ...
-  "dangerous": {
-    "without-block-validator": true
-  }
-  ...
-},
-...
-```
+:::
 
-With that, you have now two ways of running your node.
+You have two ways of running your node.
 
 #### 1. Using the docker-compose file
 
@@ -163,11 +153,9 @@ Once you have the WASM module root, you can put it onchain by calling `setWasmMo
 The `upgradeExecutor` contract address and Rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the Rollup contract.
 
-Once you have set the new WASM module root onchain, you can re-enable fraud proofs and run your node.
+Once you have set the new WASM module root onchain, the validator will recognize blocks produced by your customized STF. You can now run your node with fraud proof verification enabled.
 
-To re-enable fraud proofs, open your `nodeConfig.json` file again, and remove the `"dangerous"` section (containing the `without-block-validator` property) that you previously added.
-
-After that, you'll have, again, two ways of running your node.
+You have two ways of running your node.
 
 #### 1. Using the docker-compose file
 
