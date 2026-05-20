@@ -196,7 +196,7 @@ docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:84
 The primary issue with simply using a nitro-node-dev build is that, whenever the code changes at all, the replay binary will also change.
 
 If the node is missing the replay binary corresponding to the onchain WASM module root, it will be unable to act as a validator.
-Therefore, when releasing new node Docker images it's important to include the currently on-chain WASM module root.
+Therefore, when releasing new node Docker images it's important to include the currently onchain WASM module root.
 
 To do that, you'll need to first extract the replay binary from the `nitro-node-dev` Docker image built earlier:
 

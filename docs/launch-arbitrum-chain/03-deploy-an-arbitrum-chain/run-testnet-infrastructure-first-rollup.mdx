@@ -411,14 +411,7 @@ This enables bridging tokens between your chain and Arbitrum Sepolia. Run this f
 import { createPublicClient, http, defineChain } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia } from 'viem/chains';
-import {
-  createRollupPrepareTransaction,
-  createRollupPrepareTransactionReceipt,
-  createTokenBridgePrepareTransactionRequest,
-  createTokenBridgePrepareTransactionReceipt,
-  createTokenBridgePrepareSetWethGatewayTransactionRequest,
-  createTokenBridgePrepareSetWethGatewayTransactionReceipt,
-} from '@arbitrum/chain-sdk';
+import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, createTokenBridgePrepareTransactionRequest, createTokenBridgePrepareTransactionReceipt, createTokenBridgePrepareSetWethGatewayTransactionRequest, createTokenBridgePrepareSetWethGatewayTransactionReceipt } from '@arbitrum/chain-sdk';
 import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
 import { config } from 'dotenv';
 config();
@@ -435,12 +428,8 @@ async function main() {
   const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
   if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
 
-  const tx = createRollupPrepareTransaction(
-    await parentChainPublicClient.getTransaction({ hash: txHash }),
-  );
-  const txReceipt = createRollupPrepareTransactionReceipt(
-    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
-  );
+  const tx = createRollupPrepareTransaction(await parentChainPublicClient.getTransaction({ hash: txHash }));
+  const txReceipt = createRollupPrepareTransactionReceipt(await parentChainPublicClient.getTransactionReceipt({ hash: txHash }));
   const coreContracts = txReceipt.getCoreContracts();
   const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
   const chainId = chainConfig.chainId;
@@ -466,9 +455,7 @@ async function main() {
   const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
     serializedTransaction: await rollupOwner.signTransaction(txRequest),
   });
-  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
-    await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
-  );
+  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }));
   console.log('Token bridge deployed on parent chain');
 
   console.log('Waiting for retryables on your chain...');
@@ -488,9 +475,7 @@ async function main() {
   const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
     serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
   });
-  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
-  );
+  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }));
   const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
     orbitPublicClient: chainPublicClient,
   });
