@@ -2,23 +2,6 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 require('dotenv').config();
 
-// image-size v2 dropped SVG support but Docusaurus's mdx-loader still calls it
-// on every image and emits a console.error + logger.warn for each SVG. Filter
-// is narrowly scoped: non-SVG broken images still warn normally.
-{
-  const origError = console.error;
-  const origWarn = console.warn;
-  console.error = (...args) => {
-    if (args[0] instanceof Error && args[0].message === 'unsupported file type: undefined') return;
-    origError.apply(console, args);
-  };
-  console.warn = (...args) => {
-    const msg = typeof args[0] === 'string' ? args[0] : '';
-    if (msg.includes('.svg') && msg.includes("can't be read correctly")) return;
-    origWarn.apply(console, args);
-  };
-}
-
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -216,18 +199,6 @@ const config = {
     ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
-    () => ({
-      name: 'silence-transitive-dep-warnings',
-      configureWebpack() {
-        return {
-          ignoreWarnings: [
-            /Critical dependency: require function is used in a way in which dependencies cannot be statically extracted/,
-            /Can't resolve 'bufferutil'/,
-            /Can't resolve 'utf-8-validate'/,
-          ],
-        };
-      },
-    }),
     [
       '@signalwire/docusaurus-plugin-llms-txt',
       {
