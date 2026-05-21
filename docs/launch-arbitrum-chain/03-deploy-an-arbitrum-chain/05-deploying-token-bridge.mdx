@@ -12,7 +12,7 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-The Arbitrum stack doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical token bridge" that ensures seamless **ERC-20** token transfers between the parent and child chains.
+The Arbitrum stack doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical token bridge" that ensures **ERC-20** token transfers between the parent and child chains.
 
 The token bridge architecture includes contracts deployed on the parent and child chains. These entities communicate via the <a data-quicklook-from='retryable-ticket'>retryable ticket</a> protocol, ensuring efficient and secure interactions.
 
@@ -90,10 +90,7 @@ The following example shows how to use these functions:
 
 ```typescript
 import { createPublicClient, http } from 'viem';
-import {
-  createTokenBridgeEnoughCustomFeeTokenAllowance,
-  createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest,
-} from '@arbitrum/chain-sdk';
+import { createTokenBridgeEnoughCustomFeeTokenAllowance, createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -107,9 +104,7 @@ const allowanceParams = {
 };
 
 if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
-  const approvalTxRequest = await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(
-    allowanceParams,
-  );
+  const approvalTxRequest = await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(allowanceParams);
 
   // sign and send the transaction
   const approvalTxHash = await parentChainPublicClient.sendRawTransaction({
@@ -135,10 +130,7 @@ Below is an example of how to use these functions:
 
 ```typescript
 import { createPublicClient, http } from 'viem';
-import {
-  createTokenBridgePrepareTransactionRequest,
-  createTokenBridgePrepareTransactionReceipt,
-} from '@arbitrum/chain-sdk';
+import { createTokenBridgePrepareTransactionRequest, createTokenBridgePrepareTransactionReceipt } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -155,7 +147,6 @@ const txRequest = await createTokenBridgePrepareTransactionRequest({
     rollupOwner: rollupOwner.address,
   },
   parentChainPublicClient,
-  orbitChainPublicClient,
   account: rollupOwner.address,
 });
 
@@ -165,9 +156,7 @@ const txHash = await parentChainPublicClient.sendRawTransaction({
 });
 
 // get the transaction receipt after waiting for the transaction to complete
-const txReceipt = createTokenBridgePrepareTransactionReceipt(
-  await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash }),
-);
+const txReceipt = createTokenBridgePrepareTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash }));
 ```
 
 ### 3. Wait for retryable tickets to execute
@@ -185,21 +174,13 @@ const orbitChainRetryableReceipts = await txReceipt.waitForRetryables({
   orbitPublicClient: orbitChainPublicClient,
 });
 console.log(`Retryables executed`);
-console.log(
-  `Transaction hash for first retryable is ${orbitChainRetryableReceipts[0].transactionHash}`,
-);
-console.log(
-  `Transaction hash for second retryable is ${orbitChainRetryableReceipts[1].transactionHash}`,
-);
+console.log(`Transaction hash for first retryable is ${orbitChainRetryableReceipts[0].transactionHash}`);
+console.log(`Transaction hash for second retryable is ${orbitChainRetryableReceipts[1].transactionHash}`);
 if (orbitChainRetryableReceipts[0].status !== 'success') {
-  throw new Error(
-    `First retryable status is not success: ${orbitChainRetryableReceipts[0].status}. Aborting...`,
-  );
+  throw new Error(`First retryable status is not success: ${orbitChainRetryableReceipts[0].status}. Aborting...`);
 }
 if (orbitChainRetryableReceipts[1].status !== 'success') {
-  throw new Error(
-    `Second retryable status is not success: ${orbitChainRetryableReceipts[1].status}. Aborting...`,
-  );
+  throw new Error(`Second retryable status is not success: ${orbitChainRetryableReceipts[1].status}. Aborting...`);
 }
 ```
 
@@ -233,10 +214,7 @@ Below is an example of how to use these functions:
 
 ```typescript
 import { createPublicClient, http } from 'viem';
-import {
-  createTokenBridgePrepareSetWethGatewayTransactionRequest,
-  createTokenBridgePrepareSetWethGatewayTransactionReceipt,
-} from '@arbitrum/chain-sdk';
+import { createTokenBridgePrepareSetWethGatewayTransactionRequest, createTokenBridgePrepareSetWethGatewayTransactionReceipt } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -250,7 +228,6 @@ const orbitChainPublicClient = createPublicClient({
 const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
   rollup: coreContracts.rollup,
   parentChainPublicClient,
-  orbitChainPublicClient,
   account: rollupOwner.address,
 });
 
@@ -260,22 +237,16 @@ const setWethGatewayTxHash = await parentChainPublicClient.sendRawTransaction({
 });
 
 // get the transaction receipt after waiting for the transaction to complete
-const setWethGatewayTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-  await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethGatewayTxHash }),
-);
+const setWethGatewayTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethGatewayTxHash }));
 
 // Wait for retryables to execute
 const orbitChainSetWethGatewayRetryableReceipt = await setWethGatewayTxReceipt.waitForRetryables({
   orbitPublicClient: orbitChainPublicClient,
 });
 console.log(`Retryables executed`);
-console.log(
-  `Transaction hash for retryable is ${orbitChainSetWethGatewayRetryableReceipt[0].transactionHash}`,
-);
+console.log(`Transaction hash for retryable is ${orbitChainSetWethGatewayRetryableReceipt[0].transactionHash}`);
 if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
-  throw new Error(
-    `Retryable status is not success: ${orbitChainSetWethGatewayRetryableReceipt[0].status}. Aborting...`,
-  );
+  throw new Error(`Retryable status is not success: ${orbitChainSetWethGatewayRetryableReceipt[0].status}. Aborting...`);
 }
 ```
 

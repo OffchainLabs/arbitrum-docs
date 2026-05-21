@@ -3,9 +3,7 @@
 ### getFirstBlockForL1Block()
 
 ```ts
-function getFirstBlockForL1Block(
-  arbitrumProvider: GetFirstBlockForL1BlockProps,
-): Promise<number | undefined>;
+function getFirstBlockForL1Block(arbitrumProvider: GetFirstBlockForL1BlockProps): Promise<number | undefined>;
 ```
 
 Defined in: utils/lib.ts:90
@@ -30,12 +28,7 @@ The function returns a Promise that resolves to a number if a block is found, or
 ### getTransactionReceipt()
 
 ```ts
-function getTransactionReceipt(
-  provider: Provider,
-  txHash: string,
-  confirmations?: number,
-  timeout?: number,
-): Promise<TransactionReceipt | null>;
+function getTransactionReceipt(provider: Provider, txHash: string, confirmations?: number, timeout?: number): Promise<TransactionReceipt | null>;
 ```
 
 Defined in: utils/lib.ts:33

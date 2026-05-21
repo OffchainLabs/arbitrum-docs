@@ -8,7 +8,7 @@ user_story: As a current Arbitrum chain owner, I want to know what the DAC defau
 content_type: quickstart
 ---
 
-Default settings for a Data Availability Committee (AnyTrust) chain as defined in the Arbitrum Orbit SDK.
+Default settings for a Data Availability Committee (AnyTrust) chain as defined in the Arbitrum Chain SDK.
 
 - `src/prepareChainConfig.ts`
 - `src/prepareNodeConfig.ts`
@@ -82,27 +82,27 @@ Every DAC-related setting with its documented default, organized by config secti
 
 ### `node.data-availability`
 
-| Key                                | Default | Description                                                       |
-| ---------------------------------- | ------- | ----------------------------------------------------------------- |
-| `enable`                           | `false` | Enable AnyTrust Data Availability mode                            |
-| `panic-on-error`                   | `false` | Fail immediately on DAS errors (not recommended)                  |
-| `parent-chain-connection-attempts` | `15`    | Parent chain RPC retries (standalone daserver only; 0 = infinite) |
-| `parent-chain-node-url`            | —       | Parent chain RPC URL (standalone daserver only)                   |
-| `request-timeout`                  | `5s`    | Timeout for Store requests                                        |
-| `sequencer-inbox-address`          | —       | SequencerInbox contract address on parent chain                   |
+| Key                                | Default | Description                                                                                                 |
+| ---------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| `enable`                           | `false` | Enable AnyTrust Data Availability mode                                                                      |
+| `panic-on-error`                   | `false` | Fail immediately on DAS errors (not recommended)                                                            |
+| `parent-chain-connection-attempts` | `15`    | <a data-quicklook-from="parent-chain">Parent chain</a> RPC retries (standalone daserver only; 0 = infinite) |
+| `parent-chain-node-url`            | —       | Parent chain RPC URL (standalone daserver only)                                                             |
+| `request-timeout`                  | `5s`    | Timeout for Store requests                                                                                  |
+| `sequencer-inbox-address`          | —       | SequencerInbox contract address on parent chain                                                             |
 
 ### `node.data-availability.rest-aggregator`
 
-| Key                              | Default                  | Description                                           |
-| -------------------------------- | ------------------------ | ----------------------------------------------------- |
-| `enable`                         | `false`                  | Enable REST retrieval of batch data                   |
-| `max-per-endpoint-stats`         | `20`                     | Latency/success-rate stats entries per endpoint       |
-| `online-url-list`                | —                        | URL to a remote list of REST DAS endpoint URLs        |
-| `online-url-list-fetch-interval` | `1h0m0s`                 | How often to re-fetch the online URL list             |
-| `strategy`                       | `simple-explore-exploit` | Endpoint selection strategy                           |
-| `strategy-update-interval`       | `10s`                    | How often to refresh strategy with latency/error data |
-| `urls`                           | `[]`                     | Static list of REST DAS endpoint URLs                 |
-| `wait-before-try-next`           | `2s`                     | Time before trying the next set of REST endpoints     |
+| Key                              | Default                  | Description                                                            |
+| -------------------------------- | ------------------------ | ---------------------------------------------------------------------- |
+| `enable`                         | `false`                  | Enable REST retrieval of <a data-quicklook-from="batch">batch</a> data |
+| `max-per-endpoint-stats`         | `20`                     | Latency/success-rate stats entries per endpoint                        |
+| `online-url-list`                | —                        | URL to a remote list of REST DAS endpoint URLs                         |
+| `online-url-list-fetch-interval` | `1h0m0s`                 | How often to re-fetch the online URL list                              |
+| `strategy`                       | `simple-explore-exploit` | Endpoint selection strategy                                            |
+| `strategy-update-interval`       | `10s`                    | How often to refresh strategy with latency/error data                  |
+| `urls`                           | `[]`                     | Static list of REST DAS endpoint URLs                                  |
+| `wait-before-try-next`           | `2s`                     | Time before trying the next set of REST endpoints                      |
 
 ### `node.data-availability.rest-aggregator.simple-explore-exploit-strategy`
 
@@ -113,16 +113,16 @@ Every DAC-related setting with its documented default, organized by config secti
 
 ### `node.data-availability.rest-aggregator.sync-to-storage`
 
-| Key                            | Default    | Description                                               |
-| ------------------------------ | ---------- | --------------------------------------------------------- |
-| `delay-on-error`               | `1s`       | Wait time before retrying after sync error                |
-| `eager`                        | `false`    | Eagerly sync batch data using L1 as index (vs lazy)       |
-| `eager-lower-bound-block`      | —          | Starting L1 block for eager sync (only if no prior state) |
-| `ignore-write-errors`          | `true`     | Log-only on write failures during sync                    |
-| `parent-chain-blocks-per-read` | `100`      | Max L1 blocks to read per eager sync poll                 |
-| `retention-period`             | `360h0m0s` | How long to retain synced data                            |
-| `state-dir`                    | —          | Directory to persist sync progress                        |
-| `sync-expired-data`            | `true`     | Sync expired data (needed for mirror configs)             |
+| Key                            | Default    | Description                                                                         |
+| ------------------------------ | ---------- | ----------------------------------------------------------------------------------- |
+| `delay-on-error`               | `1s`       | Wait time before retrying after sync error                                          |
+| `eager`                        | `false`    | Eagerly sync batch data using <a data-quicklook-from="l1">L1</a> as index (vs lazy) |
+| `eager-lower-bound-block`      | —          | Starting L1 block for eager sync (only if no prior state)                           |
+| `ignore-write-errors`          | `true`     | Log-only on write failures during sync                                              |
+| `parent-chain-blocks-per-read` | `100`      | Max L1 blocks to read per eager sync poll                                           |
+| `retention-period`             | `360h0m0s` | How long to retain synced data                                                      |
+| `state-dir`                    | —          | Directory to persist sync progress                                                  |
+| `sync-expired-data`            | `true`     | Sync expired data (needed for mirror configs)                                       |
 
 ### `node.data-availability.rpc-aggregator`
 
@@ -130,7 +130,7 @@ Every DAC-related setting with its documented default, organized by config secti
 | ---------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `assumed-honest` | —       | `H` value; required signatures `K = N + 1 - H`                                                                                                                                                                            |
 | `backends`       | `null`  | JSON array of `{url, pubkey}` objects. The aggregator assigns each backend a `signersMask` of `1 << i` based on its index in the array, so member order must match the position of each public key in the onchain keyset. |
-| `enable`         | `false` | Enable RPC storage of batch data (batch poster only)                                                                                                                                                                      |
+| `enable`         | `false` | Enable RPC storage of batch data (<a data-quicklook-from="batch-poster">Batch Poster</a> only)                                                                                                                            |
 
 ### `node.data-availability.rpc-aggregator.das-rpc-client`
 
@@ -155,31 +155,31 @@ Every DAC-related setting with its documented default, organized by config secti
 
 ### `node.batch-poster` (DAC-relevant settings)
 
-| Key                                        | Default    | Description                                                          |
-| ------------------------------------------ | ---------- | -------------------------------------------------------------------- |
-| `das-retention-period`                     | `360h0m0s` | Period DASes retain stored batches in AnyTrust mode                  |
-| `disable-dap-fallback-store-data-on-chain` | `false`    | If `true`, disables fallback to on-chain batch posting when DA fails |
-| `enable`                                   | `false`    | Enable batch posting                                                 |
-| `max-size`                                 | `100000`   | Maximum estimated compressed batch size (bytes)                      |
-| `error-delay`                              | `10s`      | Delay after batch posting error before retry                         |
-| `extra-batch-gas`                          | `50000`    | Extra gas added to batch posting estimate                            |
-| `max-delay`                                | `1h0m0s`   | Maximum batch posting delay                                          |
-| `max-empty-batch-delay`                    | `72h0m0s`  | Maximum delay before posting an empty batch                          |
-| `poll-interval`                            | `10s`      | Interval to check for ready batches                                  |
-| `check-batch-correctness`                  | `true`     | Verify batch against inbox multiplexer                               |
-| `compression-level`                        | `11`       | Batch compression level                                              |
-| `l1-block-bound-bypass`                    | `1h0m0s`   | Post even if outside L1 bounds, within this margin                   |
-| `delay-buffer-always-updatable`            | `true`     | Always treat delay buffer as updatable                               |
-| `delay-buffer-threshold-margin`            | `25`       | Blocks before delay buffer threshold to post batch                   |
+| Key                                        | Default    | Description                                                         |
+| ------------------------------------------ | ---------- | ------------------------------------------------------------------- |
+| `das-retention-period`                     | `360h0m0s` | Period DASes retain stored batches in AnyTrust mode                 |
+| `disable-dap-fallback-store-data-on-chain` | `false`    | If `true`, disables fallback to onchain batch posting when DA fails |
+| `enable`                                   | `false`    | Enable batch posting                                                |
+| `max-size`                                 | `100000`   | Maximum estimated compressed batch size (bytes)                     |
+| `error-delay`                              | `10s`      | Delay after batch posting error before retry                        |
+| `extra-batch-gas`                          | `50000`    | Extra gas added to batch posting estimate                           |
+| `max-delay`                                | `1h0m0s`   | Maximum batch posting delay                                         |
+| `max-empty-batch-delay`                    | `72h0m0s`  | Maximum delay before posting an empty batch                         |
+| `poll-interval`                            | `10s`      | Interval to check for ready batches                                 |
+| `check-batch-correctness`                  | `true`     | Verify batch against inbox multiplexer                              |
+| `compression-level`                        | `11`       | Batch compression level                                             |
+| `l1-block-bound-bypass`                    | `1h0m0s`   | Post even if outside L1 bounds, within this margin                  |
+| `delay-buffer-always-updatable`            | `true`     | Always treat delay buffer as updatable                              |
+| `delay-buffer-threshold-margin`            | `25`       | Blocks before delay buffer threshold to post batch                  |
 
 ### `node.da-provider` (Newer DAProvider interface)
 
-| Key                  | Default            | Description                                       |
-| -------------------- | ------------------ | ------------------------------------------------- |
-| `enable`             | `false`            | Enable DAProvider client                          |
-| `store-rpc-method`   | `daprovider_store` | Single-shot store RPC method name                 |
-| `use-data-streaming` | `false`            | Use chunked streaming protocol for large payloads |
-| `with-writer`        | `false`            | DAProvider server supports writer interface       |
+| Key                  | Default            | Description                                                  |
+| -------------------- | ------------------ | ------------------------------------------------------------ |
+| `enable`             | `false`            | Enable DAProvider <a data-quicklook-from="client">client</a> |
+| `store-rpc-method`   | `daprovider_store` | Single-shot store RPC method name                            |
+| `use-data-streaming` | `false`            | Use chunked streaming protocol for large payloads            |
+| `with-writer`        | `false`            | DAProvider server supports writer interface                  |
 
 ### `node.da-provider.data-stream`
 

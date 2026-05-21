@@ -14,16 +14,16 @@ import TokenBridgingResources from '../partials/_token-bridging-resources.mdx';
 
 <VanillaAdmonition type="caution">
 
-**Do you really need a custom gateway?** Before deploying one, evaluate Arbitrum's built-in options: the [standard gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx) and the [generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) cover the majority of bridging needs. If in doubt, ask on the [Arbitrum Discord](https://discord.gg/arbitrum).
+**Do you really need a custom gateway?** Before deploying one, evaluate Arbitrum's built-in options: the [standard gateway](/build-decentralized-apps/bridging/configure-token-gateway/standard.mdx) and the [generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx) cover the majority of bridging needs. If in doubt, ask on the [Arbitrum Discord](https://discord.gg/arbitrum).
 
 </VanillaAdmonition>
 
-In this how-to, you'll learn how to bridge your own token between Ethereum (parent chain) and Arbitrum (child chain) using a custom gateway. For alternative ways of bridging tokens, see the [token bridging overview](/build-decentralized-apps/token-bridging/get-started.mdx).
+In this how-to, you'll learn how to bridge your own token between Ethereum (parent chain) and Arbitrum (child chain) using a custom gateway. For alternative ways of bridging tokens, see the [token bridging overview](/build-decentralized-apps/bridging/overview.mdx).
 
 For other gateway types, see:
 
-- [Standard gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx) — for standard **ERC-20** tokens with no custom logic.
-- [Generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) — when you only need a custom child chain token, not custom bridge mechanics.
+- [Standard gateway](/build-decentralized-apps/bridging/configure-token-gateway/standard.mdx) — for standard **ERC-20** tokens with no custom logic.
+- [Generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx) — when you only need a custom child chain token, not custom bridge mechanics.
 
 <VanillaAdmonition type="info">
 
@@ -38,7 +38,9 @@ For other gateway types, see:
 
 We will go through all the steps involved in the process. However, if you want to jump straight to the code, we have created a [custom gateway bridging tutorial script](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging) that encapsulates the entire process.
 
-## Prerequisites
+## Step 0: Review the prerequisites (a.k.a. do I really need a custom gateway?)
+
+Before implementing and deploying a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/build-decentralized-apps/bridging/deposit/tokens.mdx) and the [generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 There are several prerequisites to consider when deploying your own custom gateway.
 
@@ -61,7 +63,7 @@ On the other hand, the **child chain counterpart of the gateway** must conform t
 
 ### What about my custom tokens?
 
-If you are deploying custom gateways, you will likely want to support your custom tokens on both the parent and child chains. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx).
+If you are deploying custom gateways, you will likely want to support your custom tokens on both the parent and child chains. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx).
 
 ## Step 1: Create a gateway and deploy it on the parent chain
 
@@ -747,7 +749,7 @@ main()
 
 This step will depend on your setup. In this case, since our simplified gateway supports only one token, we'll deploy it on both the parent and child chains to enable calling the `setTokenBridgeInformation` method on both gateways afterwards.
 
-We won't go through the process of deploying custom tokens in this how-to, but you can see a detailed explanation of the steps to take on the [generic-custom gateway setup page](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx).
+We won't go through the process of deploying custom tokens in this how-to, but you can see a detailed explanation of the steps to take on the [generic-custom gateway setup page](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx).
 
 ## Step 4: Configure your custom tokens on your gateways
 
@@ -761,35 +763,23 @@ This step will also depend on your setup. In this case, our simplified gateway r
  * avoided if you are using proxies or the opcode CREATE2, for example.)
  */
 console.log('Setting token bridge information on L1CustomGateway:');
-const setTokenBridgeInfoOnParent = await parentCustomGateway.setTokenBridgeInformation(
-  parentCustomToken.address,
-  childCustomToken.address,
-  childCustomGatewayAddress,
-);
+const setTokenBridgeInfoOnParent = await parentCustomGateway.setTokenBridgeInformation(parentCustomToken.address, childCustomToken.address, childCustomGatewayAddress);
 
 const setTokenBridgeInfoOnParentRec = await setTokenBridgeInfoOnParent.wait();
-console.log(
-  `Token bridge information set on L1CustomGateway! Receipt: ${setTokenBridgeInfoOnParentRec.transactionHash}`,
-);
+console.log(`Token bridge information set on L1CustomGateway! Receipt: ${setTokenBridgeInfoOnParentRec.transactionHash}`);
 
 console.log('Setting token bridge information on L2CustomGateway:');
-const setTokenBridgeInfoOnChild = await childCustomGateway.setTokenBridgeInformation(
-  parentCustomToken.address,
-  childCustomToken.address,
-  parentCustomGatewayAddress,
-);
+const setTokenBridgeInfoOnChild = await childCustomGateway.setTokenBridgeInformation(parentCustomToken.address, childCustomToken.address, parentCustomGatewayAddress);
 
 const setTokenBridgeInfoOnChildRec = await setTokenBridgeInfoOnChild.wait();
-console.log(
-  `Token bridge information set on L2CustomGateway! Receipt: ${setTokenBridgeInfoOnChildRec.transactionHash}`,
-);
+console.log(`Token bridge information set on L2CustomGateway! Receipt: ${setTokenBridgeInfoOnChildRec.transactionHash}`);
 ```
 
 ## Step 5: Register the custom token with your custom gateway
 
 Once all contracts are deployed successfully on their respective chains, and they all have the information of the gateways and tokens, it's time to register the token in your custom gateway.
 
-As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx), this action needs to be completed by the parent chain token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
+As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx), this action needs to be completed by the parent chain token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
 
 In this case, when using this function, a single action occurs:
 
@@ -802,20 +792,11 @@ To simplify the process, we’ll use Arbitrum’s SDK and call the method [`regi
  * Register the custom gateway as the gateway of our custom token.
  */
 console.log('Registering custom token on the child chain:');
-const registerTokenTx = await adminTokenBridger.registerCustomToken(
-  parentCustomToken.address,
-  childCustomToken.address,
-  parentWallet,
-  childProvider,
-);
+const registerTokenTx = await adminTokenBridger.registerCustomToken(parentCustomToken.address, childCustomToken.address, parentWallet, childProvider);
 
 const registerTokenRec = await registerTokenTx.wait();
-console.log(
-  `Registering token txn confirmed on the parent chain! 🙌 Receipt: ${registerTokenRec.transactionHash}.`,
-);
-console.log(
-  `Waiting for child chain retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`,
-);
+console.log(`Registering token txn confirmed on the parent chain! 🙌 Receipt: ${registerTokenRec.transactionHash}.`);
+console.log(`Waiting for child chain retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`);
 
 /**
  * The parent chain side is confirmed; now we wait for the child chain side to execute.
@@ -844,25 +825,11 @@ import { Contract } from 'ethers';
 
 const routerAbi = ['function l1TokenToGateway(address) view returns (address)'];
 
-const parentRouter = new Contract(
-  arbitrumNetwork.tokenBridge.l1GatewayRouter,
-  routerAbi,
-  parentProvider,
-);
-const childRouter = new Contract(
-  arbitrumNetwork.tokenBridge.l2GatewayRouter,
-  routerAbi,
-  childProvider,
-);
+const parentRouter = new Contract(arbitrumNetwork.tokenBridge.l1GatewayRouter, routerAbi, parentProvider);
+const childRouter = new Contract(arbitrumNetwork.tokenBridge.l2GatewayRouter, routerAbi, childProvider);
 
-console.log(
-  'Parent router → gateway:',
-  await parentRouter.l1TokenToGateway(parentCustomToken.address),
-);
-console.log(
-  'Child router → gateway: ',
-  await childRouter.l1TokenToGateway(parentCustomToken.address),
-);
+console.log('Parent router → gateway:', await parentRouter.l1TokenToGateway(parentCustomToken.address));
+console.log('Child router → gateway: ', await childRouter.l1TokenToGateway(parentCustomToken.address));
 ```
 
 If either call returns `0x0000…0000`, the retryable likely failed. Inspect its status with `parentToChildMsgs[0].status()` and manually redeem if needed; see [Parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for the recovery procedure.
