@@ -99,5 +99,5 @@ Compliance Filtering is disabled by default. Chain owners must explicitly config
 ## Security considerations
 
 - **Force inclusion protection:** Without STF-level enforcement via the Transaction Guardian, a restricted user could bypass sequencer filtering by waiting for the force inclusion window. The sentinel + precompile combination closes this gap.
-- **L1 bridge deposits:** If a restricted address deposits ETH via `depositEth()` on L1, the ETH enters the L1 bridge contract before any L2 filtering occurs. If the corresponding L2 credit is dropped, the ETH may become locked in the bridge with no corresponding L2 asset. Chain owners should account for this in their compliance design and user communication strategy.
+- **Parent chain bridge deposits:** If a restricted address deposits ETH via `depositEth()` on the parent chain, the ETH enters the bridge contract on the parent chain before any filtering occurs on the child chain. If the corresponding credit is dropped on the child chain, the ETH may become locked in the bridge with no corresponding child chain asset. Chain owners should account for this in their compliance design and user communication strategy.
 - **Address privacy:** Restricted addresses are never stored in plaintext. Salted hashing ensures that the list cannot be trivially reversed to enumerate sanctioned addresses.
