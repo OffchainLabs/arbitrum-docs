@@ -12,23 +12,19 @@ sidebar_position: 8
 displayed_sidebar: buildStylusSidebar
 ---
 
-import CustomDetails from '@site/src/components/CustomDetails';
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
-
 Interfaces enable your Stylus contract to interact with other contracts on the blockchain, regardless of whether they're written in Solidity, Rust, or another language. This guide shows you how to import and use external contract interfaces in your Stylus smart contracts.
 
 ## Why use interfaces
 
 Contract interfaces provide a type-safe way to communicate with other contracts on the blockchain. Common use cases include:
 
-- **Interacting with existing protocols**: Call methods on deployed Solidity contracts like `ERC-20` tokens, oracles, or DeFi protocols
+- **Interacting with existing protocols**: Call methods on deployed Solidity contracts like **ERC-20** tokens, oracles, or DeFi protocols
 - **Composing functionality**: Build contracts that leverage other contracts' capabilities
 - **Cross-language interoperability**: Stylus contracts can call Solidity contracts and vice versa
 - **Upgradeability patterns**: Use interfaces to interact with proxy contracts
 
 <VanillaAdmonition type="info" title="Language agnostic">
-  Since interfaces operate at the ABI level, they work identically whether the target contract is
-  written in Solidity, Rust, or any other language that compiles to EVM bytecode.
+  Since interfaces operate at the ABI level, they work identically whether the target contract is written in Solidity, Rust, or any other language that compiles to EVM bytecode.
 </VanillaAdmonition>
 
 ## Prerequisites
@@ -104,8 +100,7 @@ sol_interface! {
 ```
 
 <VanillaAdmonition type="info" title="Solidity syntax">
-  Interface declarations use standard Solidity syntax. The SDK computes the correct 4-byte function
-  selectors based on the exact names and parameter types you provide.
+  Interface declarations use standard Solidity syntax. The SDK computes the correct 4-byte function selectors based on the exact names and parameter types you provide.
 </VanillaAdmonition>
 
 ## Calling external contract methods
@@ -232,8 +227,7 @@ impl MyContract {
 ```
 
 <VanillaAdmonition type="caution" title="Mutating calls require &mut self">
-  When using `Call::new_mutating(self)`, your method must take `&mut self` as its first parameter.
-  This ensures the Stylus runtime properly handles state changes and reentrancy protection.
+  When using `Call::new_mutating(self)`, your method must take `&mut self` as its first parameter. This ensures the Stylus runtime properly handles state changes and reentrancy protection.
 </VanillaAdmonition>
 
 ### Payable calls with `Call::new_payable(self, value)`

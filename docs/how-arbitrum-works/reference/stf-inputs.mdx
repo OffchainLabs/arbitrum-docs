@@ -51,7 +51,7 @@ uint8 constant INITIALIZATION_MSG_TYPE = 11;
 | `ROLLUP_PROTOCOL_EVENT_TYPE`       | 8     | <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> used it for messages sent to <a data-quicklook-from="bridge">bridge</a>, Nitro does not use it. |
 | `L1MessageType_submitRetryableTx`  | 9     | Submitting parent chain messages to the child chain via retryable tickets.                                                                                     |
 | `INITIALIZATION_MSG_TYPE`          | 11    | The first message added to a new Rollup inbox. Its presence indicates proper initialization of the Rollup.                                                     |
-| `L1MessageType_ethDeposit`         | 12    | Child chain messages that handle deposits of native tokens (`ETH`) into the child chain.                                                                       |
+| `L1MessageType_ethDeposit`         | 12    | Child chain messages that handle deposits of native tokens (**ETH**) into the child chain.                                                                     |
 | `L1MessageType_batchPostingReport` | 13    | Used by the Sequencer to update the pricing model based on payment(s) by the batch poster.                                                                     |
 
 These identifiers enable nodes to route messages correctly.

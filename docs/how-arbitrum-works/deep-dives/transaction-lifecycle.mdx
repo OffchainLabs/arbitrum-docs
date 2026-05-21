@@ -7,8 +7,6 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
-
 You can submit transactions to <a data-quicklook-from="arbitrum">Arbitrum</a> through two main pathways:
 
 1. **Through the <a data-quicklook-from="sequencer">Sequencer</a>**: The standard method for most transactions.
@@ -35,11 +33,7 @@ You can also submit transactions directly to the Delayed Inbox contract on the p
 
 The following diagram shows the different ways you can submit transactions to Arbitrum:
 
-<ImageZoom
-  src="/img/haw-transaction-lifecycle.png"
-  alt="Transaction lifecycle diagram showing various pathways for submitting transactions"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-transaction-lifecycle.png" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
 
 ## Submitting transactions to the Sequencer
 
@@ -87,11 +81,7 @@ Use this method when you need the lowest possible latency for time-sensitive tra
 
 The following diagram shows the four methods for submitting transactions to the Sequencer:
 
-<ImageZoom
-  src="/img/haw-submit-tx-to-sequencer.svg"
-  alt="Submit transaction to the Sequencer"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-submit-tx-to-sequencer.svg" alt="Submit transaction to the Sequencer" className="img-600px" />
 
 ## Bypassing the Sequencer
 
@@ -110,11 +100,7 @@ When you submit a transaction to the Delayed Inbox, two things can happen:
 
 This two-path system ensures your transaction will always be processed, even if the Sequencer is unresponsive or censoring transactions.
 
-<ImageZoom
-  src="/img/haw-bypassing-the-sequencer.svg"
-  alt="Bypassing the Sequencer"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-bypassing-the-sequencer.svg" alt="Bypassing the Sequencer" className="img-600px" />
 
 ### Using the Delayed Inbox
 

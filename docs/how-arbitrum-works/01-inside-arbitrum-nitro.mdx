@@ -7,32 +7,23 @@ user_story: "As a developer, I need to understand how transactions flow through 
 content_type: concept
 ---
 
-import ImageWithCaption from '@site/src/components/ImageCaptions/';
-
 ## Transaction processing journey on Arbitrum
 
-As a developer initiating a transaction on Arbitrum, gaining a clear understanding of the end-to-end flow—from initial submission through to finality—is helpful, but it isn't required.
+As a developer initiating a <a data-quicklook-from="transaction">transaction</a> on <a data-quicklook-from="arbitrum">Arbitrum</a>, gaining a clear understanding of the end-to-end flow—from initial submission through to finality—is helpful, but it isn't required.
 
-This overview methodically traces the transaction lifecycle, emphasizing how Arbitrum’s architecture ensures precise, efficient, and secure handling at every stage. This article covers the complete Arbitrum Nitro stack, beginning with the Sequencer, which is responsible for transaction ordering, advancing to the State Transition Function (STF) for execution, and culminating in validation mechanisms that uphold integrity.
+This overview methodically traces the transaction lifecycle, emphasizing how Arbitrum’s architecture ensures precise, efficient, and secure handling at every stage. This article covers the complete <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack, beginning with the <a data-quicklook-from="sequencer">Sequencer</a>, which is responsible for transaction ordering, advancing to the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) for execution, and culminating in validation mechanisms that uphold integrity.
 
-<ImageZoom
-  src="/img/haw-transaction-lifecycle.png"
-  className="img-600px"
-  alt="Transaction lifecycle"
->
+<ImageZoom src="/img/haw-transaction-lifecycle.png" className="img-600px" alt="Transaction lifecycle">
   Transaction lifecycle
 </ImageZoom>
 
-Along the way, you will learn about Arbitrum’s ability to deliver security on par with Ethereum, while achieving fee reductions by a factor of ten and transaction speeds accelerated by a factor of 100 using optimized scaling techniques.
+Along the way, you'll learn about Arbitrum's ability to deliver security on par with Ethereum, while achieving fee reductions by a factor of ten and transaction speeds accelerated by a factor of 100 using optimized mechanisms.
 
 ## The foundation: Arbitrum's core architecture overview
 
 Before delving into the journey of a transaction, it's important to outline the foundational architecture that powers Arbitrum's operations. Central to the architecture is a simple yet powerful principle: deterministic state transitions, which ensure consistent outcomes across the network. The system revolves around three core components:
 
-<ImageWithCaption
-  caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten"
-  src="/img/haw-eds-napkin-drawing.png"
-/>
+<ImageWithCaption caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten" src="/img/haw-eds-napkin-drawing.png" />
 
 Transactions first enter the Inbox, serving as the primary gateway into the ecosystem. From there, the STF processes them deterministically, applying rules that guarantee reproducibility. Finally, the Outputs component generates the resulting data and state updates, completing the cycle.
 
@@ -46,9 +37,9 @@ The submission process for a transaction on Arbitrum starts with the user sendin
 
 This path accommodates various submission methods, including public RPC for development and light usage, third-party RPCs for improved throughput, direct Sequencer endpoints for minimal latency in critical operations, and self-hosted Arbitrum nodes for ultimate privacy and customization.
 
-Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the Delayed Inbox contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than 24 hours, any network participant can force inclusion into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
+Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than 24 hours, any network participant can force inclusion into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
 
-While the Sequencer route offers faster soft finality and streamlines workflows, the Delayed Inbox path doubles processing time but emphasizes censorship resistance (blocking transactions). Overall, the Sequencer’s commitment to ordered inclusion provides “soft finality” for a responsive experience, complemented by these alternatives for robust, flexible operations across applications.
+While the Sequencer route offers faster soft finality and streamlines workflows, the Delayed Inbox path doubles processing time but emphasizes censorship resistance (blocking transactions). Overall, the Sequencer’s <a data-quicklook-from="commitment">commitment</a> to ordered inclusion provides “soft finality” for a responsive experience, complemented by these alternatives for robust, flexible operations across applications.
 
 For more technical detail about the transaction lifecycle, refer to the [Transaction Lifecycle deep dive](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx).
 
@@ -56,17 +47,17 @@ For more technical detail about the transaction lifecycle, refer to the [Transac
 
 Once a transaction reaches the Sequencer, it integrates into a refined system for ordering and broadcasting, designed to maximize performance while upholding security. The Sequencer immediately shares the transaction through its real-time feed, offering instant network-wide visibility.
 
-This feed delivers immediate confirmation of acceptance and sequencing, keeping all nodes synchronized with the latest order and enabling soft finality, allowing users to proceed with confidence based on the Sequencer’s reliable commitment.
+This feed delivers immediate <a data-quicklook-from="confirmation">confirmation</a> of acceptance and sequencing, keeping all nodes synchronized with the latest order and enabling soft finality, allowing users to proceed with confidence based on the Sequencer’s reliable commitment.
 
 To further optimize, the sequencer groups transactions into batches rather than processing them individually, reducing costs and boosting efficiency. Batches form when transactions accumulate to a predefined size or after a set time interval to prevent lags. The data is then compressed using the Brotli algorithm, with the compression level dynamically adjusted from 0 to 11 based on congestion. Higher compression reduces Layer 1 posting expenses at the cost of increased computation, while the system prioritizes speed during heavy backlogs.
 
-After batches and compression, the data posts to Ethereum through the Sequencer Inbox contract using one of two methods:
+After batches and compression, the data posts to Ethereum through the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract using one of two methods:
 
 1. The default blob transactions under [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) provide cost-effective and scalable data inclusion when supported by Ethereum.
 
 2. As a fallback, calldata transactions embed data directly, ensuring compatibility even if blob fees rise or [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blobs are unavailable. This process yields 10-100 times the cost savings over individual postings and adapts to network conditions for consistent efficiency.
 
-For details on how parent chain costs are calculated and priced, including the adaptive pricing algorithm, see the [Parent chain pricing deep dive](/how-arbitrum-works/reference/parent-chain-pricing.mdx).
+For details on how <a data-quicklook-from="parent-chain">parent chain</a> costs are calculated and priced, including the adaptive pricing algorithm, see the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
 
 ## Step 3: Execution phase: State Transition Function
 
@@ -74,11 +65,11 @@ With ordering and batching complete, execution shifts to the State Transition Fu
 
 For foundational concepts about how the STF works, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
 
-Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-layer architecture. At the base, the Geth core handles EVM execution, aligning behaviors with Ethereum and drawing on its extensively tested code for security.
+Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-layer architecture. At the base, the <a data-quicklook-from="geth">Geth</a> core handles EVM execution, aligning behaviors with Ethereum and drawing on its extensively tested code for security.
 
 For more technical details about Geth, refer to the [Geth deep dive](/how-arbitrum-works/reference/geth.mdx).
 
-Above this, ArbOS—the Arbitrum operating system—adds child chain features such as cross-chain messaging, fee management, gas pricing, deposit and withdrawal handling, and advanced tooling, such as Stylus. The top layer, the node interface, manages RPC connections and APIs, providing Ethereum-like functionality for clients.
+Above this, <a data-quicklook-from="arbos">ArbOS</a>—the Arbitrum operating system—adds <a data-quicklook-from="child-chain">child chain</a> features such as cross-chain messaging, fee management, gas pricing, deposit and withdrawal handling, and advanced tooling, such as <a data-quicklook-from="stylus">Stylus</a>. The top layer, the node interface, manages RPC connections and APIs, providing Ethereum-like functionality for clients.
 
 In the STF, transactions follow a structured workflow: first, ArbOS validates formatting and funds, then charges gas for Layer 2 execution and Layer 1 posting. Then Geth executes per EVM standards. Finally, ArbOS updates state and cross-chain elements, generating receipts and logs to finalize the process.
 
@@ -86,7 +77,7 @@ For technical details about ArbOS, refer to the [ArbOS deep dive documentation](
 
 <ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
-For Stylus contracts that use WebAssembly (WASM), execution is diverted to a WASM runtime, where contracts access state via specialized host I/O calls. This diversion yields 10-70 times faster performance than EVM equivalents and full interoperability for mixed calls. The Geth base lets Ethereum apps run unchanged, while ArbOS and Stylus enable Layer 2 optimizations and high-performance innovations.
+For Stylus contracts that use WebAssembly (<a data-quicklook-from="wasm">WASM</a>), execution is diverted to a WASM runtime, where contracts access state via specialized host I/O calls. This diversion yields 10-70 times faster performance than EVM equivalents and full interoperability for mixed calls. The Geth base lets Ethereum apps run unchanged, while ArbOS and Stylus enable Layer 2 optimizations and high-performance innovations.
 
 Consult the [State Transition Function deep dive](/how-arbitrum-works/reference/stf-inputs.mdx) for further mechanics.
 
@@ -94,9 +85,9 @@ Consult the [State Transition Function deep dive](/how-arbitrum-works/reference/
 
 At this stage, the transaction achieves two complementary levels of finality, each tailored to Arbitrum’s security needs:
 
-1. Soft finality emerges immediately upon inclusion in the Sequencer feed, offering instant acceptance feedback, a commitment to order, and the ability to act without wait times—as noted in the submission phase. This "soft finality" relies on the Sequencer's trustworthiness for usability but lacks cryptographic backing.
+1. Soft finality emerges immediately upon inclusion in the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a>, offering instant acceptance feedback, a commitment to order, and the ability to act without wait times—as noted in the submission phase. This "soft finality" relies on the Sequencer's trustworthiness for usability but lacks cryptographic backing.
 
-2. Hard finality, conversely, solidifies when the batch is posted and is confirmed on Ethereum, inheriting its consensus security, ensuring public data availability, and making the transaction irreversible. This process typically takes 10-20 minutes, which varies depending on Ethereum’s block times and batch frequency. Hard finality depends on Rollup assertions being confirmed on Ethereum.
+2. Hard finality, conversely, solidifies when the <a data-quicklook-from="batch">batch</a> is posted and is confirmed on Ethereum, inheriting its consensus security, ensuring public data availability, and making the transaction irreversible. This process typically takes 10-20 minutes, which varies depending on Ethereum’s block times and batch frequency. Hard finality depends on Rollup assertions being confirmed on Ethereum.
 
 The dual model combines quick "soft finality" for a better user experience with Ethereum-level safeguards for hard finality, along with censorship-resistant paths for assured inclusion. This balance delivers immediate feedback alongside strong protections, which is ideal for high-stakes transactions.
 
@@ -104,9 +95,9 @@ For more on how assertions work, see the [Assertions deep dive](/how-arbitrum-wo
 
 ## Step 5: Validation and dispute resolution
 
-Following execution, Arbitrum verifies correctness through its validation and dispute systems. Central to this is the BoLD (Bounded Liquidity Delay) protocol, which is an advanced dispute framework that enables permissionless validation. Unlike conventional optimistic Rollups, BoLD permits any participant to validate without approval, while ensuring dispute resolution within bounded timeframes to prevent indefinite delays.
+Following execution, Arbitrum verifies correctness through its validation and dispute systems. Central to this is the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol, which is an advanced dispute framework that enables <a data-quicklook-from="permissionless-validation">permissionless validation</a>. Unlike conventional optimistic Rollups, BoLD permits any participant to validate without approval, while ensuring dispute resolution within bounded timeframes to prevent indefinite delays.
 
-BoLD facilitates a challenge-based defense where honest parties can protect the chain's state against malicious actors. The individual who raises the dispute and the validator will narrow the conflict to a single execution step via supporting claims, which culminate in a one-step proof (OSP) that Ethereum, as an impartial arbiter, verifies to determine the outcome. While BoLD's intricacies—such as its multi-round challenge games and economic incentives—are extensive, they enhance the chain's decentralization and resilience. Validation occurs through assertions submitted to the Rollup contract.
+BoLD facilitates a <a data-quicklook-from="challenge">Challenge</a>-based defense where honest parties can protect the chain's state against malicious actors. The individual who raises the dispute and the <a data-quicklook-from="validator">validator</a> will narrow the conflict to a single execution step via supporting claims, which culminate in a one-step proof (OSP) that Ethereum, as an impartial arbiter, verifies to determine the outcome. While BoLD's intricacies—such as its multi-round challenge games and economic incentives—are extensive, they enhance the chain's decentralization and resilience. Validation occurs through assertions submitted to the Rollup contract.
 
 #### BoLD references
 
@@ -117,19 +108,19 @@ BoLD facilitates a challenge-based defense where honest parties can protect the 
 
 ## Step 6: Bridging—Cross-chain communication
 
-Many transactions involve asset or data transfers between Ethereum and Arbitrum, which are managed through secure bridging protocols. For parent-to-child from Ethereum to Arbitrum, options include native token bridging for direct `ETH` deposits, `ERC-20` transfers via the canonical bridge, or support for custom gas tokens.
+Many transactions involve asset or data transfers between Ethereum and Arbitrum, which are managed through secure bridging protocols. For parent-to-child from Ethereum to Arbitrum, options include native token bridging for direct **ETH** deposits, **ERC-20** transfers via the canonical <a data-quicklook-from="bridge">bridge</a>, or support for custom gas tokens.
 
 Retryable tickets enable atomic operations with guaranteed retries if execution fails, featuring predictable gas costs and a one-week validity period redeemable by anyone. Direct messaging handles signed EOA messages with verification or unsigned contract messages using address aliasing for security.
 
 See the [Parent-to-Child messaging deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for details.
 
-Child-to-parent transfers from Arbitrum to Ethereum begin with creating a message via [`ArbSys.sendTxToL1()`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys), followed by inclusion in a Rollup assertion, a 6.4-day challenge period, and manual Layer 1 execution by any party. Messages are validated via Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints.
+Child-to-parent transfers from Arbitrum to Ethereum begin with creating a message via [`ArbSys.sendTxToL1()`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys), followed by inclusion in a Rollup <a data-quicklook-from="assertion">Assertion</a>, a 6.4-day <a data-quicklook-from="challenge-period">challenge period</a>, and manual Layer 1 execution by any party. Messages are validated via Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints.
 
 For details on how Rollup assertions work and their role in finality, see the [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions.mdx).
 
 See the [Child-to-parent messaging deep dive](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) documentation for more details on how cross-chain messages work.
 
-The canonical bridge architecture comprises asset contracts on both chains, gateway pairs for specific logic, and routers to direct traffic flow. It securely locks tokens on one chain while minting equivalents on the other, with a seven-day challenge period to safeguard withdrawals. This setup fosters seamless, unified interactions while safeguarding the integrity of each chain.
+The canonical bridge architecture comprises asset contracts on both chains, gateway pairs for specific logic, and routers to direct traffic flow. It securely locks tokens on one chain while minting equivalents on the other, with a seven-day challenge period to safeguard withdrawals. This setup fosters unified interactions while safeguarding the integrity of each chain.
 
 ## Step 7: The economics of execution: gas and fees
 
@@ -137,15 +128,15 @@ The canonical bridge architecture comprises asset contracts on both chains, gate
 
 Fees accumulate throughout the transaction lifecycle to fund processing (computation) and security. Arbitrum’s dual-fee model separates child chain gas fees, which cover the cost of EVM computation and storage with [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)-style dynamic pricing that adjusts for congestion, from parent chain data fees (blobs or calldata).
 
-Parent chain data fees account for posting data to Ethereum in compressed batches and apply only to Sequencer submissions. For comprehensive details on how parent chain pricing works, including the dynamic pricing algorithm, refer to the [Parent chain pricing deep dive](/how-arbitrum-works/reference/parent-chain-pricing.mdx). For a complete breakdown of how fees are calculated and collected, including both parent and child chain components, refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+Parent chain data fees account for posting data to Ethereum in compressed batches and apply only to Sequencer submissions. For a complete breakdown of how fees are calculated and collected, including the dynamic pricing algorithm and both parent and child chain components, refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
 
 ### Gas
 
-A gas target is an optimal gas consumption rate per second. Exceeding this rate triggers [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) fee escalations to prevent node overloads and maintain chain activity. This rate prioritizes high-value transactions during peak periods while deterring spam, ensuring that validators and the Sequencer remain operational, even though parent contracts handle security.
+A <a data-quicklook-from="gas-target">gas target</a> is an optimal gas consumption rate per second. Exceeding this rate triggers [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) fee escalations to prevent node overloads and maintain chain activity. This rate prioritizes high-value transactions during peak periods while deterring spam, ensuring that validators and the Sequencer remain operational, even though parent contracts handle security.
 
 You can read more about [how the child chain gas fees are calculated](/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees) in the gas and fees deep dive.
 
-Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting `ETH` totals. This model effectively covers all costs, with the gas target reinforcing security by keeping validation in sync.
+Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting **ETH** totals. This model effectively covers all costs, with the gas target reinforcing security by keeping validation in sync.
 
 ## Step 8: Advanced features
 
@@ -157,7 +148,7 @@ For more details, refer to the [Stylus gentle introduction](/stylus/gentle-intro
 
 ### Timeboost
 
-Timeboost refines ordering to capture MEV (maximum extractable value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion, and enables customizable policies. Timeboost preserves fast block times (250ms default).
+<a data-quicklook-from="timeboost">Timeboost</a> refines ordering to capture MEV (maximum extractable value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion, and enables customizable policies. Timeboost preserves fast block times (250ms default).
 
 #### Timeboost references
 
@@ -182,7 +173,7 @@ In this overview, you've learned about the complete transaction journey through 
 
 - [Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx): Detailed transaction lifecycle from submission to finality
 - [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx): How the Sequencer orders, batches, and posts transactions
-- [Parent chain pricing](/how-arbitrum-works/reference/parent-chain-pricing.mdx): Adaptive pricing algorithm for parent chain costs
+- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx): Gas pricing, fee calculations, and adaptive pricing algorithm
 - [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx): Foundational concepts of the STF
 - [Geth](/how-arbitrum-works/reference/geth.mdx): Geth core and EVM compatibility
 - [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx): Arbitrum Operating System features and capabilities

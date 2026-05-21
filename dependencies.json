@@ -11,16 +11,6 @@
       "description": "Core Arbitrum protocol implementation"
     },
     {
-      "id": "arbitrum-sdk",
-      "name": "Arbitrum SDK",
-      "repo": "https://github.com/OffchainLabs/arbitrum-sdk",
-      "currentDocsVersion": "v4.0.4",
-      "latestRelease": "v4.0.4",
-      "latestReleaseDate": "2025-04-03",
-      "docsPath": "docs/arbitrum-docs/sdk",
-      "description": "JavaScript SDK for interacting with Arbitrum chains"
-    },
-    {
       "id": "stylus-sdk",
       "name": "Arbitrum Stylus SDK",
       "repo": "https://github.com/OffchainLabs/stylus-sdk-rs",
