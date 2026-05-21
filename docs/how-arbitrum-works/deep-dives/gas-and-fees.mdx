@@ -51,11 +51,11 @@ To overcome these challenges, Arbitrum Nitro implements a two-fold strategy:
 
 There are two types of parent chain costs: batch posting costs and rewards.
 
-Batch posting costs reflect the actual cost a batch poster pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain ArbOS, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's <a data-quicklook-from="delayed-inbox">delayed inbox</a> so that it will be delivered to the child chain ArbOS after some delay.
+Batch posting costs reflect the actual cost a batch poster pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain ArbOS, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's [<a data-quicklook-from="delayed-inbox">delayed inbox</a>](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#transacting-via-the-delayed-inbox) so that it will be delivered to the child chain ArbOS after some delay.
 
 When a batch posting report message arrives at the child chain, ArbOS computes the cost of the referenced batch by multiplying the reported basefee by the batch's data cost. (ArbOS retrieves the batch's data from its inbox state and computes the parent chain gas the batch would have used by counting the number of zero bytes and non-zero bytes in the batch.) The pricer records the resulting cost as funds due to the party who is reported to have submitted the batch.
 
-The second type of parent chain cost is an optional (per chain) per-unit reward for handling transaction calldata. In general, the reward might be paid to the <a data-quicklook-from="sequencer">Sequencer</a>, or to members of the Data Availability Committee in an AnyTrust chain, or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
+The second type of parent chain cost is an optional (per chain) per-unit reward for handling transaction calldata. In general, the reward might be paid to the [<a data-quicklook-from="sequencer">Sequencer</a>](/how-arbitrum-works/deep-dives/sequencer.mdx), or to members of the Data Availability Committee in an [AnyTrust chain](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx), or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
 
 The parent chain pricer keeps track of funds due to the reward address based on the number of data units processed so far. This amount is updated whenever a batch posting report arrives at the child chain.
 
@@ -215,7 +215,7 @@ Gas estimation for retryable submissions is possible via the [`NodeInterface`](/
 
 ### The gas target
 
-The security of Arbitrum Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">validator</a> creates an assertion, other validators check it and respond with a correct assertion or a <a data-quicklook-from="challenge">challenge</a> if it's wrong.
+The security of Arbitrum Nitro chains depends on the assumption that when one [<a data-quicklook-from="validator">validator</a>](/how-arbitrum-works/deep-dives/assertions.mdx) creates an [assertion](/how-arbitrum-works/deep-dives/assertions.mdx), other validators check it and respond with a correct assertion or a [<a data-quicklook-from="challenge">challenge</a>](/how-arbitrum-works/bold/gentle-introduction.mdx) if it's wrong.
 
 This requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account when setting deadlines for assertions.
 
