@@ -1382,11 +1382,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/json-rpc-methods',
-              label: 'JSON-RPC methods',
-            },
-            {
-              type: 'doc',
               id: 'build-decentralized-apps/reference/mainnet-risks',
               label: 'Mainnet risks',
             },
