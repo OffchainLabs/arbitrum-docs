@@ -1395,11 +1395,15 @@ const sidebars = {
               label: 'Debugging tools',
               id: 'build-decentralized-apps/reference/debugging-tools',
             },
-
             {
               type: 'doc',
               id: 'build-decentralized-apps/reference/mainnet-risks',
               label: 'Mainnet risks',
+            },
+            {
+              type: 'doc',
+              id: 'build-decentralized-apps/reference/json-rpc-methods',
+              label: 'JSON-RPC methods',
             },
           ],
         },
