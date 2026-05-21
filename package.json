@@ -33,7 +33,10 @@
     "lint:markdown:fix": "markdownlint \"docs/**/*.{md,mdx}\" --fix --ignore \"docs/sdk/**\"",
     "generate-doc-manifest": "tsx scripts/generate-doc-manifest.ts",
     "audit-docs": "tsx scripts/generate-doc-manifest.ts && tsx scripts/audit-docs.ts",
-    "audit-docs:report-only": "tsx scripts/audit-docs.ts"
+    "audit-docs:report-only": "tsx scripts/audit-docs.ts",
+    "fetch-edge-challenge-data": "node scripts/fetch-edge-challenge-data.mjs",
+    "check-globalvars": "tsx scripts/check-globalvars-updates.ts",
+    "check-lunr-exclude": "tsx scripts/check-lunr-exclude-hide-from-search.ts"
   },
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
@@ -70,7 +73,7 @@
     "prismjs": "^1.30.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-syntax-highlighter": "^15.6.1",
+    "react-syntax-highlighter": "^16.1.1",
     "rehype-katex": "7",
     "remark-math": "6",
     "sass": "^1.99.0",
@@ -80,6 +83,7 @@
     "@actions/core": "^3.0.1",
     "@actions/github": "^6.0.0",
     "@docusaurus/module-type-aliases": "^3.10.1",
+    "@docusaurus/types": "^3.10.1",
     "@offchainlabs/notion-docs-generator": "0.1.2",
     "@offchainlabs/prettier-config": "0.3.0",
     "@signalwire/docusaurus-plugin-llms-txt": "^1.2.2",
@@ -88,6 +92,8 @@
     "@types/node": "^22.10.10",
     "@types/react": "^18.3.23",
     "@types/semver": "^7.7.1",
+    "fs-extra": "^11.3.5",
+    "glob": "^13.0.6",
     "gray-matter": "^4.0.3",
     "hast-util-select": "^6",
     "hastscript": "^6",
@@ -99,6 +105,10 @@
     "styled-components": "^6.4.2",
     "tsx": "^4.22.3",
     "typescript": "^5.1"
+  },
+  "resolutions": {
+    "elliptic": "^6.6.1",
+    "serialize-javascript": "^7.0.5"
   },
   "browserslist": {
     "production": [
