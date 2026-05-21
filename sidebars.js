@@ -1233,6 +1233,16 @@ const sidebars = {
               id: 'build-decentralized-apps/bridging/overview',
             },
             {
+              type: 'doc',
+              label: 'Cross-chain messaging',
+              id: 'build-decentralized-apps/bridging/cross-chain-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'Custom gas token chains',
+              id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
+            },
+            {
               type: 'category',
               label: 'Deposit (parent → child)',
               items: [
@@ -1263,16 +1273,6 @@ const sidebars = {
                   id: 'build-decentralized-apps/bridging/withdraw/tokens',
                 },
               ],
-            },
-            {
-              type: 'doc',
-              label: 'Cross-chain messaging',
-              id: 'build-decentralized-apps/bridging/cross-chain-messaging',
-            },
-            {
-              type: 'doc',
-              label: 'Custom gas token chains',
-              id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
             },
             {
               type: 'category',
