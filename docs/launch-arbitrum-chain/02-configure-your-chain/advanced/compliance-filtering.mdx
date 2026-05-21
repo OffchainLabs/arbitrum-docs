@@ -8,11 +8,11 @@ target_audience: 'Developers who want to configure compliance rules on their cha
 ---
 
 New, optional components can be added to the Sequencer and State Transition Function (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
-The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the Delayed Inbox.
+The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the Delayed Inbox on the parent chain.
 
 ## Rationale
 
-The Arbitrum platform must evolve alongside the needs of a new wave of teams looking to come onchain - specifically teams who have an obligation to comply with regulatory frameworks and rules in their respective jurisdictions.
+The Arbitrum platform must evolve to meet the needs of a new wave of teams looking to come onchain - specifically teams who have an obligation to comply with regulatory frameworks and rules in their respective jurisdictions.
 This feature represents the first of many to ensure that the Arbitrum platform can serve the needs of enterprises and institutions looking to tap into internet-scale, blockchain technology to increase margins, reduce risk, and improve transparency across their businesses.
 
 While this feature is not intended or proposed to be used by Arbitrum One, its inclusion in ArbOS 60 Elara is intended to simplify the codebase and canonicalize this feature in the node software.
@@ -40,7 +40,7 @@ This is the primary enforcement layer and handles the vast majority of cases.
 ### Compliance rules
 
 Specific rules can be defined by the chain owner for any address found on the restricted list.
-These rules apply whether the transfer is direct or uses a delegated approval mechanism.
+These rules apply to direct transfers as well as delegated approval mechanisms.
 
 ### Delayed Inbox filtering (STF level)
 
@@ -60,7 +60,7 @@ The sentinel is responsible for monitoring the delayed inbox for restricted tran
 2. Ensures this occurs before the force inclusion window closes
 3. Allows the sequencer to then process the transaction, which will fail at the STF level as expected
 
-This ensures that even transactions submitted through the L1 → L2 messaging path are subject to compliance enforcement.
+This ensures that even transactions submitted through the parent chain → child chain messaging path are subject to compliance enforcement.
 
 ### Exception rules (burn allowance)
 
@@ -70,10 +70,10 @@ ERC-20, ERC-721, and ERC-1155 transfers where the `to` field of the Transfer eve
 
 Important constraints:
 
-- If a transaction includes any other compliance violation in addition to a burn, the entire transaction still fails.
+- If a "burn" transaction includes any other compliance violation, the entire transaction will fail.
 - A restricted address cannot initiate a burn themselves — their `tx.origin` is blocked at the sequencer level regardless.
 
-This design allows third-party liquidators and protocol contracts (e.g., Paxos, Aave) to burn sanctioned balances while preventing the sanctioned address from taking any action on the chain.
+This design allows third-party liquidators and protocol contracts (e.g., Paxos, Aave) to burn non-compliant balances while preventing the restricted address from taking any action on the chain.
 
 ### Synchronization pipeline
 
@@ -100,4 +100,4 @@ Compliance Filtering is disabled by default. Chain owners must explicitly config
 
 - **Force inclusion protection:** Without STF-level enforcement via the Transaction Guardian, a restricted user could bypass sequencer filtering by waiting for the force inclusion window. The sentinel + precompile combination closes this gap.
 - **L1 bridge deposits:** If a restricted address deposits ETH via `depositEth()` on L1, the ETH enters the L1 bridge contract before any L2 filtering occurs. If the corresponding L2 credit is dropped, the ETH may become locked in the bridge with no corresponding L2 asset. Chain owners should account for this in their compliance design and user communication strategy.
-- **Address privacy:** Restricted addresses are never stored in plaintext. Salted hashing ensures that the list cannot be trivially reversed to enumerate sanctioned accounts.
+- **Address privacy:** Restricted addresses are never stored in plaintext. Salted hashing ensures that the list cannot be trivially reversed to enumerate sanctioned addresses.
