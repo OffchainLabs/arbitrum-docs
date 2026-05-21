@@ -103,7 +103,7 @@ The Sequencer in Arbitrum is critical in collecting and organizing child chain t
 #### Transaction collection and ordering:
 
 - **Continuous reception**: The Sequencer continuously receives transactions submitted by users.
-- **Ordering**: Transactions are ordered by the order in which they are received, ensuring deterministic transaction order.
+- **Ordering**: Transactions are ordered by the order in which they are received, ensuring deterministic transaction order. Chains can override this default first-come-first-served policy with [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), which auctions an "express lane" for faster inclusion.
 - **Buffering**: Received transactions are temporarily stored in a buffer awaiting batch formation.
 
 #### Batch formation criteria:
@@ -290,4 +290,4 @@ We believe that the Censorship Timeout feature provides stronger guarantees of c
 
 ### Decentralized fair sequencing
 
-Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or validators) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization.
+Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or validators) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization. The [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) ordering policy is designed to be compatible with decentralized sequencing.
