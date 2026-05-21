@@ -321,7 +321,7 @@
   },
   "prechecker-node": {
     "title": "Prechecker Node",
-    "text": "<p>An <a href=\"/intro/glossary#arbitrum-full-node\">Arbitrum full node</a> configured to pre-validate transactions before forwarding <code>eth_sendRawTransaction</code> to the <a href=\"/intro/glossary#sequencer\">Sequencer</a>, insulating it from transactions that would fail.</p>\n<p>At a configurable strictness level, a prechecker verifies the transaction type, signature, intrinsic gas (including L1 calldata gas), fee cap, nonce, sender balance, and any <code>eth_sendRawTransactionConditional</code> storage conditions. When <a href=\"/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering\">compliance filtering</a> is enabled, it also rejects transactions that touch restricted addresses.</p>\n"
+    "text": "<p>An <a href=\"/intro/glossary#arbitrum-full-node\">Arbitrum full node</a> configured to pre-validate transactions before forwarding <code>eth_sendRawTransaction</code> to the <a href=\"/intro/glossary#sequencer\">Sequencer</a>, insulating it from transactions that would fail.</p>\n<p>At a configurable strictness level, a prechecker verifies the transaction type, signature, intrinsic gas (including L1 calldata gas), fee cap, nonce, sender balance, and any <code>eth_sendRawTransactionConditional</code> storage conditions. When <a href=\"/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering\">compliance filtering</a> is enabled, it also rejects transactions that touch restricted addresses.</p>\n"
   },
   "precompile": {
     "title": "Precompile",
