@@ -40,7 +40,11 @@ This is the primary enforcement layer and handles the vast majority of cases.
 ### Compliance rules
 
 Specific rules can be defined by the chain owner for any address found on the restricted list.
-These rules apply to direct transfers as well as delegated approval mechanisms.
+These rules apply to direct transfers as well as delegated approval mechanisms. A few examples:
+- Block any transaction originating from or to a restricted address
+- Block execution of ERC20 / ERC721 / ERC1155 transfers from or to a restricted address
+- Block execution of the following opcodes targeting a restricted address: `CALL`, `CREATE`, `CREATE2`, `SELFDESTRUCT`
+
 
 ### Delayed Inbox filtering (STF level)
 
