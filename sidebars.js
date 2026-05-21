@@ -1362,33 +1362,13 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/node-providers',
-              label: 'RPC endpoints and providers',
-            },
-            {
-              type: 'doc',
-              label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/contract-addresses',
-            },
-            {
-              type: 'doc',
               label: 'Chain parameters',
               id: 'build-decentralized-apps/reference/chain-params',
             },
             {
               type: 'doc',
-              label: 'Development frameworks',
-              id: 'build-decentralized-apps/reference/development-frameworks',
-            },
-            {
-              type: 'doc',
-              label: 'Web3 libraries and tools',
-              id: 'build-decentralized-apps/reference/web3-libraries-tools',
-            },
-            {
-              type: 'doc',
-              label: 'Monitoring tools and block explorers',
-              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
+              label: 'Contract addresses',
+              id: 'build-decentralized-apps/reference/contract-addresses',
             },
             {
               type: 'doc',
@@ -1397,13 +1377,33 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/mainnet-risks',
-              label: 'Mainnet risks',
+              label: 'Development frameworks',
+              id: 'build-decentralized-apps/reference/development-frameworks',
             },
             {
               type: 'doc',
               id: 'build-decentralized-apps/reference/json-rpc-methods',
               label: 'JSON-RPC methods',
+            },
+            {
+              type: 'doc',
+              id: 'build-decentralized-apps/reference/mainnet-risks',
+              label: 'Mainnet risks',
+            },
+            {
+              type: 'doc',
+              label: 'Monitoring tools and block explorers',
+              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
+            },
+            {
+              type: 'doc',
+              id: 'build-decentralized-apps/reference/node-providers',
+              label: 'RPC endpoints and providers',
+            },
+            {
+              type: 'doc',
+              label: 'Web3 libraries and tools',
+              id: 'build-decentralized-apps/reference/web3-libraries-tools',
             },
           ],
         },
