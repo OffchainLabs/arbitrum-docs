@@ -77,7 +77,7 @@ This design allows third-party liquidators and protocol contracts (e.g., Paxos, 
 
 ### Synchronization pipeline
 
-The restricted address list is distributed to sequencer and prechecker nodes via a cloud-based pipeline:
+The restricted address list is distributed to sequencer and <a data-quicklook-from='prechecker-node'>prechecker nodes</a> via a cloud-based pipeline:
 
 - The compliance provider periodically publishes a new hash list to a designated S3 bucket.
 - An SNS notification triggers ingestion into the chain operator's own S3 bucket.
@@ -87,12 +87,12 @@ Nodes are expected to always have a valid list in memory. On startup or restart,
 
 ## Deployment considerations
 
-| Component | Availability | Notes |
-| --- | --- | --- |
-| Sequencer-level filtering | ArbOS 60 Elara | Opcode and event filtering |
-| Transaction Guardian Precompile | ArbOS 60 Elara | Required for Delayed Inbox enforcement |
-| Delayed Inbox Sentinel (STF) | ArbOS 60 Elara | Requires audit; must be activated at deployment |
-| Burn exception rules | ArbOS 60 Elara | Covers Aave, Paxos, and similar protocols |
+| Component                       | Availability   | Notes                                           |
+| ------------------------------- | -------------- | ----------------------------------------------- |
+| Sequencer-level filtering       | ArbOS 60 Elara | Opcode and event filtering                      |
+| Transaction Guardian Precompile | ArbOS 60 Elara | Required for Delayed Inbox enforcement          |
+| Delayed Inbox Sentinel (STF)    | ArbOS 60 Elara | Requires audit; must be activated at deployment |
+| Burn exception rules            | ArbOS 60 Elara | Covers Aave, Paxos, and similar protocols       |
 
 Compliance Filtering is disabled by default. Chain owners must explicitly configure and enable each component. Activation after chain deployment may require an ArbOS upgrade.
 
