@@ -14,15 +14,15 @@ There are two parties a user pays when submitting a transaction:
 - **Poster**: If reimbursable, covers the parent chain resources such as the parent chain calldata needed to post the transaction.
 - **Network fee account**: Covers the child chain's resources, including computation, storage, and other burdens that child chain nodes must bear to service transactions.
 
-The parent chain component is the product of the <a data-quicklook-from="transaction">transaction</a>'s estimated contribution to its <a data-quicklook-from="batch">batch</a>'s size—computed using Brotli on the transaction alone—and the child chain's view of the parent chain data price. This value dynamically adjusts over time to ensure the batch poster is ultimately fairly compensated.
+The parent chain component is the product of the <a data-quicklook-from="transaction">transaction</a>'s estimated contribution to its <a data-quicklook-from="batch">batch</a>'s size—computed using [Brotli](/how-arbitrum-works/deep-dives/sequencer.mdx#compression) on the transaction alone—and the child chain's view of the parent chain data price. This value dynamically adjusts over time to ensure the batch poster is ultimately fairly compensated.
 
-The child chain component consists of the traditional fees <a data-quicklook-from="geth">Geth</a> would pay to bonders in a vanilla parent chain, such as the computation and storage charges that apply to the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF). <a data-quicklook-from="arbos">ArbOS</a> charges additional fees for executing its child-chain-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced based on the resources used during execution.
+The child chain component consists of the traditional fees <a data-quicklook-from="geth">Geth</a> would pay to bonders in a vanilla parent chain, such as the computation and storage charges that apply to the [<a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx). [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx) charges additional fees for executing its child-chain-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced based on the resources used during execution.
 
 The following sections detail how parent and child chain fees are calculated. For a practical guide on estimating gas for your transactions, see [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx).
 
 ## Parent chain gas pricing
 
-ArbOS dynamically prices the parent chain gas, with the price adjusting to ensure that the amount collected in the parent chain gas fees is as close as possible to the costs that must be covered, over time.
+[ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) dynamically prices the parent chain gas, with the price adjusting to ensure that the amount collected in the parent chain gas fees is as close as possible to the costs that must be covered, over time.
 
 ### Challenges in pricing parent chain resources
 
@@ -30,7 +30,7 @@ There are two main challenges in accurately pricing parent chain resources:
 
 #### 1. Apportioning batch costs among transactions
 
-- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm (Brotli). The effectiveness of compression depends on shared patterns among transactions in a batch.
+- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm ([Brotli](/how-arbitrum-works/deep-dives/sequencer.mdx#compression)). The effectiveness of compression depends on shared patterns among transactions in a batch.
 - **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the batch's overall compressibility.
 - **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
 
@@ -149,7 +149,7 @@ When the Sequencer posts a batch to the parent chain inbox:
 
 #### Compression levels
 
-Dynamic adjustments of compression levels are based on backlog size ($B$):
+For an operational overview of how the Sequencer applies these levels, see [Compression](/how-arbitrum-works/deep-dives/sequencer.mdx#compression). Dynamic adjustments of compression levels are based on backlog size ($B$):
 
 - **Compression level ($CL$)** (where $UC$ is the user-configured compression level):
 
@@ -257,7 +257,7 @@ A second term is added to the parent chain gas basefee, based on the derivative 
 
 ## Effective block gas limit
 
-Post-Fusaka, the block gas limit and transaction filtering have changed. Instead of using a hard limit of 32M (Arbitrum One), a new "Effective Block Gas Limit" has been introduced.
+Post-Fusaka, the block gas limit and transaction filtering have changed. Instead of using a hard limit of 32M (Arbitrum One), a new "Effective Block Gas Limit" has been introduced. For the underlying gas-pool and per-block-limit mechanics in ArbOS, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#arbos-state).
 
 ### Filtering
 
