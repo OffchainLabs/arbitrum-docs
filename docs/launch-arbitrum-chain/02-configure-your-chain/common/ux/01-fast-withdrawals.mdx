@@ -20,7 +20,7 @@ This will allow:
 
 ## Recommended configuration
 
-While any Arbitrum chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by AnyTrust chains with a minimum <a data-quicklook-from="validator">validator</a> and DAC member requirement. We explain both these recommendations below:
+While any Arbitrum chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chains with a minimum <a data-quicklook-from="validator">validator</a> and DAC member requirement. We explain both these recommendations below:
 
 ### Fast withdrawals for AnyTrust chains
 
@@ -51,8 +51,8 @@ For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency r
 
 For an <a data-quicklook-from="arbitrum-one">Arbitrum One</a>-based Layer-3, there are three tiers of finality to consider:
 
-1. Soft finality from the <a data-quicklook-from="sequencer">Sequencer</a>'s confirmation of <a data-quicklook-from="transaction">transaction</a> inclusion (~250ms)
-2. Safe finality from <a data-quicklook-from="batch">batch</a> inclusion after Arbitrum One's <a data-quicklook-from="assertion">assertion</a> is included in an Ethereum block.
+1. Soft finality from the [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx)'s confirmation of <a data-quicklook-from="transaction">transaction</a> inclusion (~250ms)
+2. Safe finality from <a data-quicklook-from="batch">batch</a> inclusion after Arbitrum One's [assertion](/how-arbitrum-works/deep-dives/assertions.mdx) is included in an Ethereum block.
 3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes)
 
 ## Adoption instructions (example script)
