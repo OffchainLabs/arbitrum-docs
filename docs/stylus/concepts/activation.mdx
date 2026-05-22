@@ -17,7 +17,7 @@ Stylus contracts undergo a two-step process to become executable on Arbitrum cha
 Unlike traditional EVM contracts that become immediately executable after deployment, Stylus contracts require an additional activation step:
 
 1. **Deployment**: Stores the compressed WASM bytecode onchain at a contract address
-2. **Activation**: Converts the bytecode into an executable Stylus program by registering it with the ArbWasm precompile
+2. **Activation**: Converts the bytecode into an executable Stylus program by registering it with the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles)
 
 **Why two steps?**
 
@@ -424,7 +424,7 @@ You can deploy the contract normally, and it will automatically use the existing
 
 ### Contract caching
 
-After activation, contracts can be cached for cheaper calls:
+After activation, contracts can be [cached](../how-tos/caching-contracts) for cheaper calls:
 
 ```solidity
 // ArbWasmCache precompile (0x0000000000000000000000000000000000000072)
