@@ -1223,14 +1223,79 @@ const sidebars = {
           id: 'build-decentralized-apps/public-chains',
         },
         {
-          type: 'doc',
-          label: 'Cross-chain messaging',
-          id: 'build-decentralized-apps/cross-chain-messaging',
-        },
-        {
-          type: 'doc',
-          id: 'build-decentralized-apps/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
+          type: 'category',
+          label: 'Bridging',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'build-decentralized-apps/bridging/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Cross-chain messaging',
+              id: 'build-decentralized-apps/bridging/cross-chain-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'Custom gas token chains',
+              id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
+            },
+            {
+              type: 'category',
+              label: 'Deposit (parent → child)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'build-decentralized-apps/bridging/deposit/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'build-decentralized-apps/bridging/deposit/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Withdraw (child → parent)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'build-decentralized-apps/bridging/withdraw/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'build-decentralized-apps/bridging/withdraw/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Configure token gateway',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Standard gateway',
+                  id: 'build-decentralized-apps/bridging/configure-token-gateway/standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Generic-custom gateway',
+                  id: 'build-decentralized-apps/bridging/configure-token-gateway/generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Custom gateway',
+                  id: 'build-decentralized-apps/bridging/configure-token-gateway/custom',
+                },
+              ],
+            },
+          ],
         },
         {
           type: 'category',
@@ -1299,60 +1364,6 @@ const sidebars = {
               type: 'doc',
               label: 'Reference',
               id: 'build-decentralized-apps/nodeinterface/reference',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Token bridging',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Get started',
-              id: 'build-decentralized-apps/token-bridging/get-started',
-            },
-            {
-              type: 'doc',
-              label: 'Deposit tokens',
-              id: 'build-decentralized-apps/token-bridging/deposit-tokens',
-            },
-            {
-              type: 'doc',
-              label: 'Withdraw tokens',
-              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
-            },
-            {
-              type: 'doc',
-              label: 'Bridge to child chain',
-              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
-            },
-            {
-              type: 'doc',
-              label: 'Bridge to parent chain',
-              id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
-            },
-            ,
-            {
-              type: 'category',
-              label: 'Configure token bridging',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Set up custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway',
-                },
-                {
-                  type: 'doc',
-                  label: 'Set up generic custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway',
-                },
-                {
-                  type: 'doc',
-                  label: 'Set up standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
-                },
-              ],
             },
           ],
         },
@@ -1462,12 +1473,12 @@ const sidebars = {
         {
           type: 'doc',
           label: 'Cross-chain messaging',
-          id: 'build-decentralized-apps/cross-chain-messaging',
+          id: 'build-decentralized-apps/bridging/cross-chain-messaging',
         },
         {
           type: 'doc',
-          id: 'build-decentralized-apps/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
+          id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
+          label: 'Custom gas token chains',
         },
         {
           type: 'category',
