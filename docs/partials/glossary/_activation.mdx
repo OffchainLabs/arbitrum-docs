@@ -1,0 +1,7 @@
+---
+title: Activation
+key: activation
+titleforSort: Activation
+---
+
+The post-deployment step that a [Stylus](/intro/glossary#stylus) contract must complete before it can be called. Activation compiles the deployed [WASM](/intro/glossary#wasm) bytecode into native machine code and caches it at the chain level, so subsequent calls execute at native speed. Activation costs gas proportional to program size and only needs to happen once per unique bytecode.
