@@ -1,5 +1,7 @@
 // Shared Inkeep configuration
 
+const { themes: prismThemes } = require('prism-react-renderer');
+
 // Forwards analytics events from the Inkeep widget into PostHog.
 // Called once per event fired by @inkeep/cxkit-docusaurus.
 const handleInkeepEvent = (event) => {
@@ -61,8 +63,8 @@ const inkeepBaseSettings = {
   onEvent: handleInkeepEvent,
   theme: {
     syntaxHighlighter: {
-      lightTheme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/palenight'),
+      lightTheme: prismThemes.github,
+      darkTheme: prismThemes.palenight,
     },
   },
 };
