@@ -40,7 +40,7 @@
     "check-lunr-exclude": "tsx scripts/check-lunr-exclude-hide-from-search.ts"
   },
   "dependencies": {
-    "@arbitrum/sdk": "^3.0.0",
+    "@arbitrum/sdk": "^4.0.5",
     "@docusaurus/core": "^3.10.1",
     "@docusaurus/preset-classic": "^3.10.1",
     "@docusaurus/theme-common": "^3.10.1",

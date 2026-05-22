@@ -243,10 +243,10 @@
     package-manager-detector "^1.3.0"
     tinyexec "^1.0.1"
 
-"@arbitrum/sdk@^3.0.0":
-  version "3.4.0"
-  resolved "https://registry.npmjs.org/@arbitrum/sdk/-/sdk-3.4.0.tgz"
-  integrity sha512-bFPaVOgT/T4OIfmjKFF3I2qi1tTPdW4afy1fv4+kewZi9z/j2CSY71F49xol/ZNU3giU41/mgUQOkzBLAPo+xQ==
+"@arbitrum/sdk@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@arbitrum/sdk/-/sdk-4.0.5.tgz#c7abf6fcec72b36faee7af704245a7e14c49ad7f"
+  integrity sha512-bADi4kVzSBUAV+GkxuKMx7zrkCVahIE4+fkBi0Ee18EPqGt1Wiub+yQCGTh+llApn1RpRtwwtYeZXhz9XelqGQ==
   dependencies:
     "@ethersproject/address" "^5.0.8"
     "@ethersproject/bignumber" "^5.1.1"
