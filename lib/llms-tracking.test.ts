@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
-import { classifyUA } from './llms-tracking';
+import { classifyUA, pathInfo } from './llms-tracking';
 
 test('classifyUA: OpenAI search bot', () => {
   assert.equal(
@@ -110,4 +110,76 @@ test('classifyUA: anthropic-ai wins over ClaudeBot when both tokens present', ()
   // Defensive: if Anthropic ships a UA combining both identifiers, anthropic-ai (the more
   // specific library fetcher) should take precedence over the generic ClaudeBot crawler tag.
   assert.equal(classifyUA('ClaudeBot/1.0 anthropic-ai/1.0'), 'anthropic');
+});
+
+test('pathInfo: /llms.txt is index, tracked as-is', () => {
+  assert.deepEqual(pathInfo('/llms.txt', ''), {
+    kind: 'llms-index',
+    trackedPath: '/llms.txt',
+    fileType: 'index',
+  });
+});
+
+test('pathInfo: /llms-full.txt is index', () => {
+  assert.deepEqual(pathInfo('/llms-full.txt', ''), {
+    kind: 'llms-index',
+    trackedPath: '/llms-full.txt',
+    fileType: 'index',
+  });
+});
+
+test('pathInfo: /foo/bar.md is markdown page', () => {
+  assert.deepEqual(pathInfo('/foo/bar.md', ''), {
+    kind: 'markdown-direct',
+    trackedPath: '/foo/bar.md',
+    fileType: 'page',
+  });
+});
+
+test('pathInfo: /sdk/foo.md is excluded (auto-generated)', () => {
+  assert.deepEqual(pathInfo('/sdk/foo.md', ''), {
+    kind: 'ignored',
+    trackedPath: null,
+    fileType: null,
+  });
+});
+
+test('pathInfo: /foo with Accept text/markdown is a negotiation rewrite', () => {
+  assert.deepEqual(pathInfo('/foo', 'text/markdown'), {
+    kind: 'markdown-negotiate',
+    trackedPath: '/foo.md',
+    fileType: 'page',
+  });
+});
+
+test('pathInfo: root negotiation rewrites to /index.md', () => {
+  assert.deepEqual(pathInfo('/', 'text/markdown'), {
+    kind: 'markdown-negotiate',
+    trackedPath: '/index.md',
+    fileType: 'page',
+  });
+});
+
+test('pathInfo: trailing slash stripped before .md suffix', () => {
+  assert.deepEqual(pathInfo('/foo/bar/', 'text/markdown'), {
+    kind: 'markdown-negotiate',
+    trackedPath: '/foo/bar.md',
+    fileType: 'page',
+  });
+});
+
+test('pathInfo: clean URL without markdown accept is ignored', () => {
+  assert.deepEqual(pathInfo('/foo/bar', 'text/html'), {
+    kind: 'ignored',
+    trackedPath: null,
+    fileType: null,
+  });
+});
+
+test('pathInfo: /llms.txt always wins regardless of accept', () => {
+  assert.deepEqual(pathInfo('/llms.txt', 'text/markdown'), {
+    kind: 'llms-index',
+    trackedPath: '/llms.txt',
+    fileType: 'index',
+  });
 });
