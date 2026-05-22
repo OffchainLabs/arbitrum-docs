@@ -79,7 +79,7 @@ It's also possible to use `ParentToChildMessage.calculateSubmitRetryableId()`, h
 
 ## Tracing `DepositEth` from parent chain to child chain
 
-When it comes to a simple **ETH** deposit, the process is very similar to finding a <a data-quicklook-from="retryable-ticket">retryable ticket</a>'s hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)` which returns an **ETH** deposit message containing the `childTxHash`. For the equivalent **ERC-20** flow at the higher level, see [Deposit tokens to Arbitrum](/build-decentralized-apps/token-bridging/deposit-tokens.mdx).
+When it comes to a simple **ETH** deposit, the process is very similar to finding a <a data-quicklook-from="retryable-ticket">retryable ticket</a>'s hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)` which returns an **ETH** deposit message containing the `childTxHash`. For the equivalent **ERC-20** flow at the higher level, see [Deposit tokens to Arbitrum](/build-decentralized-apps/bridging/deposit/tokens.mdx).
 
 ```tsx
 import { providers } from 'ethers';
@@ -234,7 +234,7 @@ main();
 
 ## Tracing withdrawals from child chain to parent chain
 
-For the protocol-level model behind withdrawals (assertions, outbox, dispute window), see [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). The equivalent **ERC-20** withdrawal flow at the higher level is described in [Withdraw tokens to parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx).
+For the protocol-level model behind withdrawals (assertions, outbox, dispute window), see [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). The equivalent **ERC-20** withdrawal flow at the higher level is described in [Withdraw tokens to parent chain](/build-decentralized-apps/bridging/withdraw/tokens.mdx).
 
 To trace a withdrawal, you first need to wrap the transaction receipt in a `ChildTransactionReceipt` class. You then need to get the emitted log [`L2ToL1Tx`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbSys.sol#L114) — emitted by the [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile — as it contains the parameter `position` which is a unique value for each withdrawal and can be used for a search on the parent chain. To do this, you need to parse the log via the `arbSysABI` to check for the name of the log being `L2ToL1Tx`.
 
@@ -377,8 +377,8 @@ main();
 - [Parent-to-child messaging (retryables) — deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
 - [Child-to-parent messaging (withdrawals) — deep dive](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
 - [How token bridging works (deep dive)](/how-arbitrum-works/deep-dives/token-bridging.mdx)
-- [Deposit tokens to Arbitrum](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
-- [Withdraw tokens to parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+- [Deposit tokens to Arbitrum](/build-decentralized-apps/bridging/deposit/tokens.mdx)
+- [Withdraw tokens to parent chain](/build-decentralized-apps/bridging/withdraw/tokens.mdx)
 - [Precompiles reference](/build-decentralized-apps/precompiles/02-reference.mdx) (`ArbSys`, `ArbRetryableTx`)
 - [Arbitrum SDK on GitHub](https://github.com/OffchainLabs/arbitrum-sdk)
 - [Cross-chain dashboard](https://retryable-dashboard.arbitrum.io/tx) (redeem stuck retryables and execute withdrawals)
