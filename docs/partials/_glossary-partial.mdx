@@ -8,7 +8,7 @@ last_reviewed: 2026-05-22
 
 ### Activation {#activation}
 
-The post-deployment step that a [Stylus](/intro/glossary#stylus) contract must complete before it can be called. Activation compiles the deployed [WASM](/intro/glossary#wasm) bytecode into native machine code and caches it at the chain level, so subsequent calls execute at native speed. Activation costs gas proportional to program size and only needs to happen once per unique bytecode.
+The step that prepares a deployed [Stylus](/intro/glossary#stylus) contract to be called. Activation registers the program with [ArbOS](/intro/glossary#arbos), validates the [WASM](/intro/glossary#wasm) bytecode, and primes the per-node compiled-artifact cache so subsequent calls can execute the program at native speed. Activation costs gas proportional to program size, and re-activation is required after the cache entry expires (365 days by default) or after an ArbOS upgrade that changes the [WASM module root](/intro/glossary#wasm-module-root).
 
 ### Active Validator {#active-validator}
 
@@ -169,7 +169,7 @@ When two [bonders](/intro/glossary#bonder) disagree about the correct verdict on
 
 ### Challenge bond {#challenge-bond}
 
-The smaller, per-level [bond](/intro/glossary#bonder) required to open or move within a sub-challenge under [BoLD](/intro/glossary#bold). Distinct from the larger assertion bond that backs the proposed [Assertion](/intro/glossary#assertion) itself, the challenge bond scales down at deeper levels of the dispute tree so that participation costs less as a dispute narrows.
+The per-level [bond](/intro/glossary#bonder) required to open or move within a sub-challenge under [BoLD](/intro/glossary#bold). Each level of the dispute tree has its own configured bond amount, set at chain deployment. Challenge bonds are distinct from the larger assertion bond that backs the proposed [Assertion](/intro/glossary#assertion) itself.
 
 ### Challenge Period {#challenge-period}
 
@@ -205,7 +205,7 @@ Any child chain token contract registered to the [Arbitrum Token Bridge](/intro/
 
 ### Custom gas token {#custom-gas-token}
 
-A non-ETH ERC-20 token chosen at [Arbitrum chain](/intro/glossary#arbitrum-chain) deployment time to be used for paying transaction fees on that chain. The custom gas token replaces ETH everywhere ETH would otherwise be charged for gas, and is bridged from the [parent chain](/intro/glossary#parent-chain) like any other token.
+A non-ETH ERC-20 token chosen at [Arbitrum chain](/intro/glossary#arbitrum-chain) deployment time to be used for paying transaction fees on that chain. Deposits work by escrowing the ERC-20 in the chain's bridge on the [parent chain](/intro/glossary#parent-chain) and crediting the equivalent amount as the native asset on the child chain, where it replaces ETH everywhere ETH would otherwise be charged for gas.
 
 ### Custom gateway {#custom-gateway}
 
@@ -379,7 +379,7 @@ An **ERC-20** token used as the native currency for gas fees on an [Arbitrum cha
 
 ### Native mint/burn gas token {#native-mint-burn-gas-token}
 
-A [custom gas token](/intro/glossary#custom-gas-token) variant whose supply on the [Arbitrum chain](/intro/glossary#arbitrum-chain) is controlled by mint/burn calls from a [chain-owner](/intro/glossary#chain-owner)-authorized account, rather than bridged in from the parent chain. Suited to closed-economy chains that need full control over gas-token issuance.
+A [custom gas token](/intro/glossary#custom-gas-token) variant whose supply on the [Arbitrum chain](/intro/glossary#arbitrum-chain) is controlled by mint and burn calls to the `ArbNativeTokenManager` precompile (address `0x73`) rather than by bridging from the parent chain. Only accounts in the chain's `nativeTokenOwners` set — managed through the `ArbOwner` precompile — may mint or burn. Suited to closed-economy chains that need full control over gas-token issuance.
 
 ### Offchain Labs {#offchain-labs}
 
@@ -419,7 +419,7 @@ The last confirmed valid state of the chain.
 
 ### Proposer {#proposer}
 
-A [Validator](/intro/glossary#validator) running in MakeNodes mode under [BoLD](/intro/glossary#bold), actively submitting new [Assertions](/intro/glossary#assertion) to the parent chain. Proposers are bonded at the largest tier to deter delay attacks. Contrast with a [Watchtower Validator](/intro/glossary#watchtower-validator) (passive, no on-chain action) and a [Defensive Validator](/intro/glossary#defensive-validator) (acts only to counter an invalid claim).
+A [Validator](/intro/glossary#validator) configured to actively submit new [Assertions](/intro/glossary#assertion) to the parent chain under [BoLD](/intro/glossary#bold). Proposers post the largest bonds in the staking hierarchy to deter delay attacks. Contrast with a [Watchtower Validator](/intro/glossary#watchtower-validator), which only observes, and a [Defensive Validator](/intro/glossary#defensive-validator), which acts only to counter an invalid claim.
 
 ### raas {#raas}
 
@@ -539,7 +539,7 @@ Synonymous with [Parent chain](/intro/glossary#parent-chain).
 
 ### Upgrade Executor {#upgrade-executor}
 
-The privileged contract — deployed once per chain side — that authorizes protocol upgrades and admin actions on an [Arbitrum chain](/intro/glossary#arbitrum-chain). The Upgrade Executor sits at the root of every Arbitrum chain's permission hierarchy; only it can call upgrade entry points on the core contracts, and its admin role is typically held by the [chain owner](/intro/glossary#chain-owner).
+The single privileged contract — deployed once per [Arbitrum chain](/intro/glossary#arbitrum-chain) by the rollup creator — that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain's rollup contracts and its `ProxyAdmin`, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the [chain owner](/intro/glossary#chain-owner).
 
 ### Validator {#validator}
 
@@ -574,7 +574,7 @@ A [Validator](/intro/glossary#validator) that never bonds / never takes on chain
 
 ### WAVM {#wavm}
 
-Arbitrum's variant of [WASM](/intro/glossary#wasm), used inside the [State Transition Function](/intro/glossary#state-transition-function) for [fraud-proof](/intro/glossary#fraud-proof) execution. WAVM is semantically equivalent to standard WASM but deterministic and provable onchain; the specific WAVM prover image in use is identified by the [WASM module root](/intro/glossary#wasm-module-root).
+Arbitrum's variant of [WASM](/intro/glossary#wasm), used inside the [State Transition Function](/intro/glossary#state-transition-function) for [fraud-proof](/intro/glossary#fraud-proof) execution. WAVM constrains standard WASM so that execution is deterministic and provable onchain — non-deterministic instructions are removed and floating-point operations are replaced with software implementations. The specific WAVM prover image in use is identified by the [WASM module root](/intro/glossary#wasm-module-root).
 
 ### WETH Gateway {#weth-gateway}
 

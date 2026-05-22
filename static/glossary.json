@@ -1,7 +1,7 @@
 {
   "activation": {
     "title": "Activation",
-    "text": "<p>The post-deployment step that a <a href=\"/intro/glossary#stylus\">Stylus</a> contract must complete before it can be called. Activation compiles the deployed <a href=\"/intro/glossary#wasm\">WASM</a> bytecode into native machine code and caches it at the chain level, so subsequent calls execute at native speed. Activation costs gas proportional to program size and only needs to happen once per unique bytecode.</p>\n"
+    "text": "<p>The step that prepares a deployed <a href=\"/intro/glossary#stylus\">Stylus</a> contract to be called. Activation registers the program with <a href=\"/intro/glossary#arbos\">ArbOS</a>, validates the <a href=\"/intro/glossary#wasm\">WASM</a> bytecode, and primes the per-node compiled-artifact cache so subsequent calls can execute the program at native speed. Activation costs gas proportional to program size, and re-activation is required after the cache entry expires (365 days by default) or after an ArbOS upgrade that changes the <a href=\"/intro/glossary#wasm-module-root\">WASM module root</a>.</p>\n"
   },
   "active-validator": {
     "title": "Active Validator",
@@ -153,7 +153,7 @@
   },
   "challenge-bond": {
     "title": "Challenge bond",
-    "text": "<p>The smaller, per-level <a href=\"/intro/glossary#bonder\">bond</a> required to open or move within a sub-challenge under <a href=\"/intro/glossary#bold\">BoLD</a>. Distinct from the larger assertion bond that backs the proposed <a href=\"/intro/glossary#assertion\">Assertion</a> itself, the challenge bond scales down at deeper levels of the dispute tree so that participation costs less as a dispute narrows.</p>\n"
+    "text": "<p>The per-level <a href=\"/intro/glossary#bonder\">bond</a> required to open or move within a sub-challenge under <a href=\"/intro/glossary#bold\">BoLD</a>. Each level of the dispute tree has its own configured bond amount, set at chain deployment. Challenge bonds are distinct from the larger assertion bond that backs the proposed <a href=\"/intro/glossary#assertion\">Assertion</a> itself.</p>\n"
   },
   "challenge-period": {
     "title": "Challenge Period",
@@ -189,7 +189,7 @@
   },
   "custom-gas-token": {
     "title": "Custom gas token",
-    "text": "<p>A non-ETH ERC-20 token chosen at <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> deployment time to be used for paying transaction fees on that chain. The custom gas token replaces ETH everywhere ETH would otherwise be charged for gas, and is bridged from the <a href=\"/intro/glossary#parent-chain\">parent chain</a> like any other token.</p>\n"
+    "text": "<p>A non-ETH ERC-20 token chosen at <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> deployment time to be used for paying transaction fees on that chain. Deposits work by escrowing the ERC-20 in the chain&#39;s bridge on the <a href=\"/intro/glossary#parent-chain\">parent chain</a> and crediting the equivalent amount as the native asset on the child chain, where it replaces ETH everywhere ETH would otherwise be charged for gas.</p>\n"
   },
   "custom-gateway": {
     "title": "Custom gateway",
@@ -349,7 +349,7 @@
   },
   "native-mint-burn-gas-token": {
     "title": "Native mint/burn gas token",
-    "text": "<p>A <a href=\"/intro/glossary#custom-gas-token\">custom gas token</a> variant whose supply on the <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> is controlled by mint/burn calls from a <a href=\"/intro/glossary#chain-owner\">chain-owner</a>-authorized account, rather than bridged in from the parent chain. Suited to closed-economy chains that need full control over gas-token issuance.</p>\n"
+    "text": "<p>A <a href=\"/intro/glossary#custom-gas-token\">custom gas token</a> variant whose supply on the <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> is controlled by mint and burn calls to the <code>ArbNativeTokenManager</code> precompile (address <code>0x73</code>) rather than by bridging from the parent chain. Only accounts in the chain&#39;s <code>nativeTokenOwners</code> set — managed through the <code>ArbOwner</code> precompile — may mint or burn. Suited to closed-economy chains that need full control over gas-token issuance.</p>\n"
   },
   "offchain-labs": {
     "title": "Offchain Labs",
@@ -389,7 +389,7 @@
   },
   "proposer": {
     "title": "Proposer",
-    "text": "<p>A <a href=\"/intro/glossary#validator\">Validator</a> running in MakeNodes mode under <a href=\"/intro/glossary#bold\">BoLD</a>, actively submitting new <a href=\"/intro/glossary#assertion\">Assertions</a> to the parent chain. Proposers are bonded at the largest tier to deter delay attacks. Contrast with a <a href=\"/intro/glossary#watchtower-validator\">Watchtower Validator</a> (passive, no on-chain action) and a <a href=\"/intro/glossary#defensive-validator\">Defensive Validator</a> (acts only to counter an invalid claim).</p>\n"
+    "text": "<p>A <a href=\"/intro/glossary#validator\">Validator</a> configured to actively submit new <a href=\"/intro/glossary#assertion\">Assertions</a> to the parent chain under <a href=\"/intro/glossary#bold\">BoLD</a>. Proposers post the largest bonds in the staking hierarchy to deter delay attacks. Contrast with a <a href=\"/intro/glossary#watchtower-validator\">Watchtower Validator</a>, which only observes, and a <a href=\"/intro/glossary#defensive-validator\">Defensive Validator</a>, which acts only to counter an invalid claim.</p>\n"
   },
   "raas": {
     "title": "raas",
@@ -501,7 +501,7 @@
   },
   "upgrade-executor": {
     "title": "Upgrade Executor",
-    "text": "<p>The privileged contract — deployed once per chain side — that authorizes protocol upgrades and admin actions on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a>. The Upgrade Executor sits at the root of every Arbitrum chain&#39;s permission hierarchy; only it can call upgrade entry points on the core contracts, and its admin role is typically held by the <a href=\"/intro/glossary#chain-owner\">chain owner</a>.</p>\n"
+    "text": "<p>The single privileged contract — deployed once per <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> by the rollup creator — that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain&#39;s rollup contracts and its <code>ProxyAdmin</code>, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the <a href=\"/intro/glossary#chain-owner\">chain owner</a>.</p>\n"
   },
   "validator": {
     "title": "Validator",
@@ -529,7 +529,7 @@
   },
   "wavm": {
     "title": "WAVM",
-    "text": "<p>Arbitrum&#39;s variant of <a href=\"/intro/glossary#wasm\">WASM</a>, used inside the <a href=\"/intro/glossary#state-transition-function\">State Transition Function</a> for <a href=\"/intro/glossary#fraud-proof\">fraud-proof</a> execution. WAVM is semantically equivalent to standard WASM but deterministic and provable onchain; the specific WAVM prover image in use is identified by the <a href=\"/intro/glossary#wasm-module-root\">WASM module root</a>.</p>\n"
+    "text": "<p>Arbitrum&#39;s variant of <a href=\"/intro/glossary#wasm\">WASM</a>, used inside the <a href=\"/intro/glossary#state-transition-function\">State Transition Function</a> for <a href=\"/intro/glossary#fraud-proof\">fraud-proof</a> execution. WAVM constrains standard WASM so that execution is deterministic and provable onchain — non-deterministic instructions are removed and floating-point operations are replaced with software implementations. The specific WAVM prover image in use is identified by the <a href=\"/intro/glossary#wasm-module-root\">WASM module root</a>.</p>\n"
   },
   "weth-gateway": {
     "title": "WETH Gateway",
