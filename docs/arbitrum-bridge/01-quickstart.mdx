@@ -8,7 +8,13 @@ content_type: quickstart
 
 This quickstart is for users who want to deposit **ETH** or any **ERC-20** tokens from a <a data-quicklook-from="parent-chain">parent chain</a> to a <a data-quicklook-from="child-chain">child chain</a> or vice versa, using [Arbitrum’s bridge](https://bridge.arbitrum.io/). For example, from Ethereum to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, or from Arbitrum One to a Layer 3 Arbitrum chain.
 
-We will walk you through the entire process step by step, providing as much detail as possible. If you feel stuck at any step, don’t hesitate to contact us through our [Discord](https://discord.gg/arbitrum), and we will be happy to help you complete the process.
+We will walk you through the entire process step by step, providing as much detail as possible. If you feel stuck at any step, see [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx), or contact us through our [Discord](https://discord.gg/arbitrum), and we will be happy to help you complete the process.
+
+:::info Bridging **USDC**?
+
+Arbitrum One supports two distinct forms of **USDC** (native and bridged). Before you deposit, see [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx) so you receive the form you intend.
+
+:::
 
 The only prerequisite for this quickstart is to have a Web3 <a data-quicklook-from="wallet">wallet</a> installed, such as MetaMask or OKX Wallet. If you don’t have one installed, visit the [Arbitrum portal](https://portal.arbitrum.io/?categories=wallet) for a list of available wallets to download.
 
@@ -90,7 +96,7 @@ Also, ensure your wallet is set to the destination network so you can see when y
 
 :::info Seven day withdrawal period for Arbitrum One and Nova networks
 
-Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least seven days to receive them on the Ethereum mainnet. For more details, see [Arbitrum Bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-a-withdrawal-from-arbitrum-chains-one-and-nova).
+Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least seven days to receive them on the Ethereum mainnet. For more details, see [Arbitrum Bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-a-withdrawal-from-arbitrum-chains-one-and-nova). For the protocol-level reason behind the dispute window, see [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) and the FAQ entry on [why one week was chosen](/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window).
 
 :::
 
@@ -125,6 +131,13 @@ You can check the status of your withdrawal by clicking on your profile in the t
 
 Once the countdown is complete, press the **Claim** button to receive your funds.
 
-## What's next?
+## See also
+
+- [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx)
+- [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx)
+- [Arbitrum embedded bridge widget](/arbitrum-bridge/04-embedded-bridge-widget.mdx)
+- [Bridge transaction traceability](/arbitrum-bridge/05-bridge-transaction-traceability.mdx)
+- [How token bridging works (deep dive)](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- [Bridge tokens programmatically](/build-decentralized-apps/token-bridging/get-started.mdx)
 
 The team working on Arbitrum is always interested and looking forward to engaging with its users. Why not follow us on [X (Twitter)](https://x.com/arbitrum) or join our community on [Discord](https://discord.gg/arbitrum)?
