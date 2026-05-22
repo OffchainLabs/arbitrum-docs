@@ -68,3 +68,58 @@ export function pathInfo(pathname: string, accept: string): PathInfoResult {
 
   return { kind: 'ignored', trackedPath: null, fileType: null };
 }
+
+export function dailySalt(now: Date = new Date()): string {
+  return now.toISOString().slice(0, 10);
+}
+
+export async function ipHash(ip: string, salt: string): Promise<string> {
+  const data = new TextEncoder().encode(`${ip}|${salt}`);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+export interface BuildPayloadInput {
+  trackedPath: string;
+  fileType: 'index' | 'page';
+  userAgent: string;
+  referrer: string;
+  ip: string;
+  posthogKey: string;
+  now?: Date;
+}
+
+export interface TrackingPayload {
+  api_key: string;
+  event: 'llms_file_fetched';
+  distinct_id: string;
+  properties: {
+    $current_url: string;
+    file: string;
+    file_type: 'index' | 'page';
+    bot_category: BotCategory;
+    $user_agent: string;
+    $referrer: string;
+  };
+}
+
+export async function buildTrackingPayload(input: BuildPayloadInput): Promise<TrackingPayload> {
+  const category = classifyUA(input.userAgent);
+  const salt = dailySalt(input.now);
+  const distinct_id = await ipHash(input.ip, salt);
+  return {
+    api_key: input.posthogKey,
+    event: 'llms_file_fetched',
+    distinct_id,
+    properties: {
+      $current_url: `https://docs.arbitrum.io${input.trackedPath}`,
+      file: input.trackedPath,
+      file_type: input.fileType,
+      bot_category: category,
+      $user_agent: input.userAgent,
+      $referrer: input.referrer,
+    },
+  };
+}
