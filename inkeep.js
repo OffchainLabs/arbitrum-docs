@@ -2,6 +2,8 @@
 // The Inkeep `onEvent` analytics handler lives in `./inkeep.config.js` (client module).
 // Functions can't be passed through themeConfig — they get stripped during JSON serialization.
 
+const { themes: prismThemes } = require('prism-react-renderer');
+
 const inkeepBaseSettings = {
   apiKey: process.env.INKEEP_API_KEY,
   primaryBrandColor: '#213147',
