@@ -13,6 +13,8 @@ Feed endpoints will soon require compression with a custom dictionary, so if con
 
 :::
 
+For context on where the feed relay fits into Arbitrum's overall data flow, see [Data availability](/run-arbitrum-node/data-availability.mdx#how-full-nodes-sync-the-data-from-the-sequencer-feed). For the wire format the feed delivers, see [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
+
 :::info Websocket connection stability
 
 Websocket connections to feed endpoints may occasionally be reset by infrastructure providers. The feed client in the relay automatically restarts immediately on disconnect. For most users, a delay of several blocks is not noticeable.
