@@ -9,7 +9,7 @@ target_audience: 'Developers maintaining Arbitrum chains.'
 sidebar_position: 3
 ---
 
-This how-to provides step-by-step instructions for <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> operators who want to upgrade ArbOS on their Arbitrum chain(s). Familiarity with <a data-quicklook-from="arbos">ArbOS</a>, Arbitrum chains, and [chain ownership](/launch-arbitrum-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx) is expected. Note that Arbitrum chain owners have full discretion over when and whether to upgrade their ArbOS version.
+This how-to provides step-by-step instructions for <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> operators who want to upgrade ArbOS on their Arbitrum chain(s). Familiarity with [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx), Arbitrum chains, and [chain ownership](/launch-arbitrum-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx) is expected. Note that Arbitrum chain owners have full discretion over when and whether to upgrade their ArbOS version.
 
 The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.mdx#list-of-available-arbos-releases).
 
@@ -51,7 +51,7 @@ To schedule an ArbOS version upgrade for your Arbitrum chain, [follow this guide
 1. **`newVersion`**: Specify the ArbOS version you wish to upgrade to (e.g., `51`).
 2. **`timestamp`**: Set the exact UNIX timestamp at which you want your Arbitrum chain (Orbit) to transition to the new ArbOS version.
 
-If you would prefer to do this manually, simply call the [`scheduleArbOSUpgrade`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbOwner.sol#L116) function on the `ArbOwner` <a data-quicklook-from="precompile">precompile</a> of the Arbitrum chain(s) you're upgrading. Because this is an administrative action (similar to upgrading your Wasm module root), the **chain owner account** must call the target chain's `upgrade executor` contract with the appropriate calldata in order to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile. This will schedule the ArbOS upgrade using the specified version and timestamp.
+If you would prefer to do this manually, simply call the [`scheduleArbOSUpgrade`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbOwner.sol#L116) function on the `ArbOwner` [precompile](/build-decentralized-apps/precompiles/02-reference.mdx) of the Arbitrum chain(s) you're upgrading. Because this is an administrative action (similar to upgrading your Wasm module root), the **chain owner account** must call the target chain's `upgrade executor` contract with the appropriate calldata in order to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile. This will schedule the ArbOS upgrade using the specified version and timestamp.
 
 <VanillaAdmonition type="tip" title="Immediate upgrades">
 
