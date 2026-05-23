@@ -105,3 +105,78 @@ Compliance Filtering is disabled by default. Chain owners must explicitly config
 - **Force inclusion protection:** Without STF-level enforcement via the Transaction Guardian, a restricted user could bypass sequencer filtering by waiting for the force inclusion window. The sentinel + precompile combination closes this gap.
 - **Parent chain bridge deposits:** If a restricted address deposits ETH via `depositEth()` on the parent chain, the ETH enters the bridge contract on the parent chain before any filtering occurs on the child chain. If the corresponding credit is dropped on the child chain, the ETH may become locked in the bridge with no corresponding child chain asset. Chain owners should account for this in their compliance design and user communication strategy.
 - **Address privacy:** Restricted addresses are never stored in plaintext. Salted hashing ensures that the list cannot be trivially reversed to enumerate sanctioned addresses.
+
+## Configuration
+
+To set up transaction filters, Arbitrum Nitro nodes provide a few configuration options for both address level filtering and event filtering. Event filters are optional, but address filters must both be enabled and configured properly before transactions will be properly filtered.
+
+### Address filter
+
+To define the addresses that are to be restricted from executing or receiving onchain transactions, an S3-compatible file store must be used. When address filtering is enabled, Arbitrum Nitro will poll and read the latest file from the S3 bucket. The addresses are defined as hashes where `hashed_address = SHA256(salt16Byte || address20Byte)`.
+
+- `--execution.transaction-filtering.address-filter.enable`: true/false value that enables address filtering
+- `--execution.transaction-filtering.address-filter.poll-interval`: how often to resync from S3 (e.g. `60m`)
+- `--execution.transaction-filtering.address-filter.s3.bucket`: S3 bucket holding the hashed list
+- `--execution.transaction-filtering.address-filter.s3.object-key`: S3 object key for the hash list
+- `--execution.transaction-filtering.address-filter.s3.region`: AWS region where S3 bucket is hosted (e.g. `us-east-1`)
+- `--execution.address-filter.s3.access-key`: AWS access key
+- `--execution.address-filter.s3.secret-key`: AWS secret key
+- `--execution.address-filter.s3.endpoint`: S3-compatible endpoint where file is hosted (if not using AWS S3)
+
+The hash list of restricted addresses should be provided as a JSON file with the following format:
+
+```json
+{
+  salt: string, # UUID
+  hashes: [string], # list of 32-byte hashes as hex encoded strings
+  issued_at: string, # timestamp
+  hashing_scheme: string # sha256-stringinput or sha256-rawbytesinput.
+}
+```
+
+Note: `sha256-stringinput` assumes that the string-based representation of the UUID salt is concatenated with the string-based version of the hex-encoded address (e.g. `sha256("d35e8ac5-9775-44af-878e-bad86409e80c" || "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")`). Raw bytes uses the raw 16 bytes of the UUID and raw 20 bytes of the address concatenated as input to the sha256 function to produce the 32-byte hash.
+
+### Event filters
+
+Event filters allow for chain owners to filter out transactions based on an arbitrary list of emitted events. For example, a chain owner might want to block all ERC20 transfers involving a restricted address. A chain owner can setup their nodes to listen for `Transfer(address,address,uint256)` events and block any transactions that target a restricted address in either the `from` or `to` field. To setup event filters, two CLI flags are provided:
+
+- `--execution.transaction-filtering.event-filter.rules`: optional inline list of event rules (passed as a JSON string)
+- `--execution.transaction-filtering.event-filter.path`: optional path to a JSON file containing event filter rules. If both `path` and `rules` are provided, the file rules are loaded first and then inline rules are appended after them. Generally, path-based JSON rules should be preferred.
+
+Each entry in the rules is an `EventRule` with the following shape:
+
+- `event`: human-readable event signature (e.g. `Transfer(address,address,uint256)`
+- `selector`: hex string of the first 4 bytes of `keccak256(event)`; the canonical signature of the event type
+- `topicAddresses`: list of 1-indexed topic positions (1-3) whose values should be treated as addresses for filtering
+- `bypass`: defines an optional exception condition that allows the transaction to execute if a specific value is true (example would be transfers to `0x0` burn address). It is a nested object with:
+  - `topicIndex`: 1-indexed topic position (1-3)
+  - `equals`: conditional value for the exception at the topic position defined
+
+An example JSON file to provide to `--execution.transaction-filtering.event-filter.path`:
+
+```json
+{
+   "rules":[
+      {
+         "event":"Transfer(address,address,uint256)",
+         "selector":"0xddf252ad",
+         "topicAddresses":[
+            1,
+            2
+         ],
+         "bypass":{
+            "topicIndex":2,
+            "equals":"0x0000000000000000000000000000000000000000"
+         }
+      },
+      {
+         "event":"Approval(address,address,uint256)",
+         "selector":"0x8c5be1e5",
+         "topicAddresses":[
+            1,
+            2
+         ]
+      }
+   ]
+}
+```
