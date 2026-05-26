@@ -36,11 +36,10 @@ This repository is organized as follows:
 
 ### Configuration & Dependencies
 
-- **`submodules/`**: Git submodule containing SDK source code
-  - **`arbitrum-sdk/`**: Git submodule containing SDK source code
-  - **`stylus-by-example/`**: Git submodule containing Stylus examples
 - **`scripts/`**: Repository maintenance, build scripts, and content generators
 - **`static/`**: Static assets (images, files, JSON data)
+
+> **Note:** SDK API docs (`docs/sdk/`) and Stylus examples (`docs/stylus/`) are committed directly to the repository. They are regenerated from upstream repos ([arbitrum-sdk](https://github.com/OffchainLabs/arbitrum-sdk), [stylus-by-example](https://github.com/offchainlabs/stylus-by-example)) via the `update-external-content` GitHub Actions workflow.
 
 ## Contribution
 
@@ -66,19 +65,13 @@ git clone git@github.com:OffchainLabs/arbitrum-docs.git
 yarn
 ```
 
-3. Update the submodules
-
-```shell
-git submodule update --init --recursive
-```
-
-4. Build
+3. Build
 
 ```shell
 yarn build
 ```
 
-5. Start the development server
+4. Start the development server
 
 ```shell
 yarn start

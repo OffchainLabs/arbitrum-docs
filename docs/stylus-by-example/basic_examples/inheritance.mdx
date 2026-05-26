@@ -1,0 +1,137 @@
+---
+title: 'Inheritance • Stylus by Example'
+description: 'How to leverage inheritance using the Arbitrum Stylus Rust SDK.'
+---
+
+{/* Begin Content */}
+
+# Inheritance
+
+The Stylus Rust SDK replicates the composition pattern of Solidity. The `#[public]` macro provides the [Router](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html) trait, which can be used to connect types via inheritance, via the `#[inherit]` macro.
+
+**Please note:** Stylus doesn't support contract multi-inheritance yet.
+
+Let's see an example:
+
+import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
+
+<NotForProductionBannerPartial />
+
+```rust
+#[public]
+#[inherit(Erc20)]
+impl Token {
+    pub fn mint(&mut self, amount: U256) -> Result<(), Vec<u8>> {
+        ...
+    }
+}
+
+#[public]
+impl Erc20 {
+    pub fn balance_of() -> Result<U256> {
+        ...
+    }
+}
+```
+
+In the above code, we can see how `Token` inherits from `Erc20`, meaning that it will inherit the public methods available in `Erc20`. If someone called the `Token` contract on the function `balanceOf`, the function `Erc20.balance_of()` would be executed.
+
+Additionally, the inheriting type must implement the [Borrow](https://doc.rust-lang.org/core/borrow/trait.Borrow.html) trait for borrowing data from the inherited type. In the case above, `Token` should implement `Borrow<Erc20>`. For simplicity, `#[storage]` and `sol_storage!` provide a `#[borrow]` annotation that can be used instead of manually implementing the trait:
+
+```rust
+sol_storage! {
+    #[entrypoint]
+    pub struct Token {
+        #[borrow]
+        Erc20 erc20;
+        ...
+    }
+
+    pub struct Erc20 {
+        ...
+    }
+}
+```
+
+## Methods search order
+
+A type can inherit multiple other types (as long as they use the `#[public]` macro). Since execution begins in the type that uses the `#[entrypoint]` macro, that type will be first checked when searching a specific method. If the method is not found in that type, the search will continue in the inherited types, in order of inheritance. If the method is not found in any of the inherited methods, the call will revert.
+
+Let's see an example:
+
+```rust
+#[public]
+#[inherit(B, C)]
+impl A {
+    pub fn foo() -> Result<(), Vec<u8>> {
+        ...
+    }
+}
+
+#[public]
+impl B {
+    pub fn bar() -> Result<(), Vec<u8>> {
+        ...
+    }
+}
+
+#[public]
+impl C {
+    pub fn bar() -> Result<(), Vec<u8>> {
+        ...
+    }
+
+    pub fn baz() -> Result<(), Vec<u8>> {
+        ...
+    }
+}
+```
+
+In the code above:
+
+- calling `foo()` will search the method in `A`, find it, and execute `A.foo()`
+- calling `bar()` will search the method in `A` first, then in `B`, find it, and execute `B.bar()`
+- calling `baz()` will search the method in `A`, `B` and finally `C`, so it will execute `C.baz()`
+
+Notice that `C.bar()` won't ever be reached, since the inheritance goes through `B` first, which has a method named `bar()` too.
+
+Finally, since the inherited types can also inherit other types themselves, keep in mind that method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
+
+## Overriding methods
+
+Because methods are checked in the inherited order, if two types implement the same method, the one in the higher level in the hierarchy will override the one in the lower levels, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like ERC-20, and then adds or overrides just the methods they want to without modifying the imported ERC-20 type.
+
+**Important warning**: The Stylus Rust SDK does not currently contain explicit `override` or `virtual` keywords for explicitly marking override functions. It is important, therefore, to carefully ensure that contracts are only overriding the functions.
+
+Let's see an example:
+
+```rust
+#[public]
+#[inherit(B, C)]
+impl A {
+    pub fn foo() -> Result<(), Vec<u8>> {
+        ...
+    }
+}
+
+#[public]
+impl B {
+    pub fn foo() -> Result<(), Vec<u8>> {
+        ...
+    }
+
+    pub fn bar() -> Result<(), Vec<u8>> {
+        ...
+    }
+}
+```
+
+In the example above, even though `B` has an implementation for `foo()`, calling `foo()` will execute `A.foo()` since the method is searched first in `A`.
+
+## Learn more
+
+- [`Arbitrum documentation`](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#inheritance-inherit-and-borrow)
+- [`inheritance, #[inherit] and #[borrow]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html#inheritance-inherit-and-borrow)
+- [`Router trait`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html)
+- [`Borrow trait`](https://doc.rust-lang.org/core/borrow/trait.Borrow.html)
+- [`BorrowMut trait`](https://doc.rust-lang.org/core/borrow/trait.BorrowMut.html)
