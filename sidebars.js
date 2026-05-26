@@ -1259,6 +1259,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'L1-to-L3 teleportation',
+              id: 'build-decentralized-apps/bridging/l1-l3-teleportation',
+            },
+            {
+              type: 'doc',
               label: 'Custom gas token chains',
               id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
             },
@@ -1393,18 +1398,18 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/node-providers',
-              label: 'RPC endpoints and providers',
+              label: 'Chain parameters',
+              id: 'build-decentralized-apps/reference/chain-params',
             },
             {
               type: 'doc',
-              label: 'Smart contract addresses',
+              label: 'Contract addresses',
               id: 'build-decentralized-apps/reference/contract-addresses',
             },
             {
               type: 'doc',
-              label: 'Chain parameters',
-              id: 'build-decentralized-apps/reference/chain-params',
+              label: 'Debugging tools',
+              id: 'build-decentralized-apps/reference/debugging-tools',
             },
             {
               type: 'doc',
@@ -1413,8 +1418,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Web3 libraries and tools',
-              id: 'build-decentralized-apps/reference/web3-libraries-tools',
+              id: 'build-decentralized-apps/reference/mainnet-risks',
+              label: 'Mainnet risks',
             },
             {
               type: 'doc',
@@ -1423,14 +1428,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Debugging tools',
-              id: 'build-decentralized-apps/reference/debugging-tools',
+              id: 'build-decentralized-apps/reference/node-providers',
+              label: 'RPC endpoints and providers',
             },
-
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/mainnet-risks',
-              label: 'Mainnet risks',
+              label: 'Web3 libraries and tools',
+              id: 'build-decentralized-apps/reference/web3-libraries-tools',
             },
           ],
         },
@@ -1446,7 +1450,7 @@ const sidebars = {
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
@@ -1629,7 +1633,7 @@ const sidebars = {
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
