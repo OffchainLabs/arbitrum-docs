@@ -119,10 +119,27 @@ The reserve price is updated at the 31st second of every minute.
 
 #### Endpoints
 
-The API exposes two endpoints:
+The API exposes two endpoints over HTTPS:
 
 - `/api/latest` returns the newest reserve price and round.
 - `/api/recent` returns the reserve price and rounds for the last two hours.
+
+The base URL differs per network:
+
+| Network          | Base URL                                        |
+| ---------------- | ----------------------------------------------- |
+| Arbitrum Sepolia | `https://arbsepolia-reserve-pricer.arbitrum.io` |
+| Arbitrum One     | `https://arb1-reserve-pricer.arbitrum.io`       |
+
+For example, to fetch the latest reserve price and round:
+
+```shell
+# Arbitrum One
+curl https://arb1-reserve-pricer.arbitrum.io/api/latest
+
+# Arbitrum Sepolia
+curl https://arbsepolia-reserve-pricer.arbitrum.io/api/latest
+```
 
 ### Step 3: submit bids
 
