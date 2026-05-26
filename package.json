@@ -99,7 +99,7 @@
     "hast-util-select": "^6",
     "hastscript": "^6",
     "husky": "^9.1.7",
-    "markdown-link-extractor": "^3.1.0",
+    "markdown-link-extractor": "^4.0.3",
     "markdownlint-cli": "^0.48.0",
     "prettier": "^2.8.3",
     "semver": "^7.8.0",
