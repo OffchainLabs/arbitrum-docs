@@ -151,6 +151,7 @@ function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
 
 function escapeMarkdownTable(text: string): string {
   return text
+    .replace(/\\/g, '\\\\')
     .replace(/\|/g, '\\|')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
