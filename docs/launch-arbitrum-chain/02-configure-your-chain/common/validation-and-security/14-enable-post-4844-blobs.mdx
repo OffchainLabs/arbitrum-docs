@@ -7,7 +7,7 @@ content_type: how-to
 user_story: 'As an Arbitrum chain operator, I want to enable EIP-4844 blob transactions for my batch poster so I can reduce data availability costs.'
 ---
 
-This guide explains how to configure your Arbitrum node to post [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blob transactions to the parent chain, which can significantly reduce data availability costs.
+This guide explains how to configure your <a data-quicklook-from="arbitrum">Arbitrum</a> node to post [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blob transactions to the <a data-quicklook-from="parent-chain">parent chain</a>, which can significantly reduce data availability costs.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ Before enabling blob transactions, verify that your setup meets these requiremen
 
 ### 1. Chain configuration
 
-- Your Arbitrum chain must be running in **Rollup mode**
+- Your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> must be running in **Rollup mode**
 
 ### 2. Parent chain compatibility
 
@@ -26,15 +26,15 @@ Your parent chain (typically Ethereum mainnet or a testnet) must support [EIP-48
 
 ### 3. ArbOS version
 
-Your ArbOS version must be **20 or higher**. To check your current version:
+Your [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) version must be **20 or higher**. To check your current version:
 
 #### Method 1: Smart contract call
 
-Call the `arbOSVersion()` function on the ArbSys precompile contract:
+Call the `arbOSVersion()` function on the ArbSys [precompile](/build-decentralized-apps/precompiles/02-reference.mdx) contract:
 
 - Contract address: `0x0000000000000000000000000000000000000064`
 - Function: `arbOSVersion()` returns `uint256`
-- You can call this using any Ethereum client or block explorer on your Arbitrum chain
+- You can call this using any Ethereum <a data-quicklook-from="client">client</a> or block explorer on your Arbitrum chain
 
 #### Method 2: Using `cast` (if you have Foundry installed)
 
@@ -46,7 +46,7 @@ If your version is below 20, upgrade by following the [ArbOS upgrade guide](13-a
 
 ## Configuration
 
-To enable blob transaction posting, add the following configuration to your batch poster node:
+To enable blob <a data-quicklook-from="transaction">transaction</a> posting, add the following configuration to your [Batch Poster](/how-arbitrum-works/deep-dives/assertions.mdx) node:
 
 ```json
 {

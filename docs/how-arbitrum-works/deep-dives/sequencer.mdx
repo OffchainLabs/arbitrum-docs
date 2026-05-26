@@ -7,15 +7,9 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
-
 The Sequencer is a pivotal component of the Arbitrum stack, responsible for efficiently ordering and processing transactions. It plays a crucial role in providing users with fast transaction confirmations while maintaining the security and integrity of the blockchain. In Arbitrum, the Sequencer orders incoming transactions and manages the batching, compression, and posting of transaction data to the parent chain, optimizing costs and performance.
 
-<ImageZoom
-  src="/img/haw-sequencer-operations.svg"
-  alt="Sequencer operations"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-sequencer-operations.svg" alt="Sequencer operations" className="img-600px" />
 
 In this section, we will explore the Sequencer's operations in detail. The topics covered include:
 
@@ -154,11 +148,7 @@ After batching and compressing transactions, the Sequencer posts these batches t
 
 There are two primary methods the Sequencer uses to send batches to the parent chain, depending on whether the chain supports [EIP-4844 (Proto-Danksharding)](https://eips.ethereum.org/EIPS/eip-4844) and the current network conditions:
 
-<ImageZoom
-  src="/img/haw-submit-to-sequencer-inbox.svg"
-  alt="Submit to Sequencer inbox"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-submit-to-sequencer-inbox.svg" alt="Submit to Sequencer inbox" className="img-600px" />
 
 ### 1. Using blobs with `addSequencerL2BatchFromBlobs`
 

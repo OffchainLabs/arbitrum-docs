@@ -1,4 +1,5 @@
 import * as fs from 'fs/promises';
+import * as fsSync from 'fs';
 import * as path from 'path';
 import semver from 'semver';
 import * as github from '@actions/github';
@@ -87,6 +88,55 @@ function isNewerVersion(newVersion: string, currentVersion: string): boolean {
   }
 
   return semver.gt(cleanNew, cleanCurrent);
+}
+
+async function resolveTagCommitSha(
+  owner: string,
+  repo: string,
+  tagName: string,
+): Promise<string | null> {
+  const headers: Record<string, string> = { 'User-Agent': 'arbitrum-docs-bot' };
+  const token = process.env.GITHUB_TOKEN;
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  try {
+    const refRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/ref/tags/${tagName}`,
+      { headers },
+    );
+    if (!refRes.ok) return null;
+    const ref = await refRes.json();
+
+    let sha: string = ref.object.sha;
+
+    // Annotated tag → dereference to the underlying commit
+    if (ref.object.type === 'tag') {
+      const tagRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/tags/${sha}`, {
+        headers,
+      });
+      if (!tagRes.ok) return null;
+      const tagObj = await tagRes.json();
+      sha = tagObj.object.sha;
+    }
+
+    return sha.slice(0, 7);
+  } catch (error) {
+    console.error(`Error resolving tag SHA for ${tagName}:`, error);
+    return null;
+  }
+}
+
+function updateGlobalVarsDockerImage(dockerImage: string): void {
+  const filePath = path.join(process.cwd(), 'src/resources/globalVars.js');
+  const content = fsSync.readFileSync(filePath, 'utf-8');
+  const updated = content.replace(
+    /latestNitroNodeImage:\s*'[^']*'/,
+    `latestNitroNodeImage: '${dockerImage}'`,
+  );
+  if (updated !== content) {
+    fsSync.writeFileSync(filePath, updated, 'utf-8');
+    console.log(`✅ Updated latestNitroNodeImage to: ${dockerImage}`);
+  }
 }
 
 async function createPullRequest(updatedProjects: Project[]) {
@@ -230,6 +280,26 @@ async function main() {
       );
 
       console.log('✅ dependencies.json updated successfully');
+
+      // If Nitro was updated, also derive and update the Docker image tag in globalVars.js
+      const nitroUpdate = updatedProjects.find((p) => p.id === 'nitro');
+      if (nitroUpdate) {
+        const repoInfo = extractRepoInfo(nitroUpdate.repo);
+        if (repoInfo) {
+          console.log(`\n🐳 Resolving Docker image tag for Nitro ${nitroUpdate.latestRelease}...`);
+          const shortSha = await resolveTagCommitSha(
+            repoInfo.owner,
+            repoInfo.repo,
+            nitroUpdate.latestRelease,
+          );
+          if (shortSha) {
+            const dockerImage = `offchainlabs/nitro-node:${nitroUpdate.latestRelease}-${shortSha}`;
+            updateGlobalVarsDockerImage(dockerImage);
+          } else {
+            console.warn('  ⚠️  Could not resolve tag SHA — globalVars.js not updated');
+          }
+        }
+      }
 
       // Set output to indicate updates were made
       core.setOutput('updates_made', 'true');

@@ -8,22 +8,20 @@ This repository is organized as follows:
 
 ### Documentation Content
 
-- **`docs/`**: Main documentation content directory
-  - `arbitrum-bridge/`: Bridge-related documentation
-  - `build-decentralized-apps/`: Developer guides and references
-  - `for-devs/`: Developer tools and third-party integrations
-  - `for-users/`: User-focused documentation
-  - `how-arbitrum-works/`: Technical explanations of Arbitrum
-  - `intro/`: Introduction and glossary
-  - `launch-arbitrum-chain/`: Arbitrum chain deployment guides
-  - `learn-more/`: Additional learning resources
-  - `node-running/`: Node operation guides
-  - `partials/`: Reusable content components and troubleshooting guides
-  - `run-arbitrum-node/`: Node setup and configuration
-  - `sdk/`: Auto-generated SDK documentation—Do not edit
-  - `stylus/`: Stylus smart contract development
-  - `stylus-by-example/`: Generated Stylus examples—Do not edit
-  - `welcome/`: Getting started content
+- **`docs/`** - Main documentation content directory
+  - `arbitrum-bridge/` - Bridge-related documentation
+  - `build-decentralized-apps/` - Developer guides and references
+  - `for-devs/` - Developer tools and third-party integrations
+  - `for-users/` - User-focused documentation
+  - `how-arbitrum-works/` - Technical explanations of Arbitrum
+  - `intro/` - Introduction and glossary
+  - `launch-arbitrum-chain/` - Arbitrum chain deployment guides
+  - `learn-more/` - Additional learning resources
+  - `node-running/` - Node operation guides
+  - `partials/` - Reusable content components and troubleshooting guides
+  - `run-arbitrum-node/` - Node setup and configuration
+  - `stylus/` - Stylus smart contract development
+  - `welcome/` - Getting started content
 
 ### Application Code
 
@@ -37,9 +35,6 @@ This repository is organized as follows:
 
 ### Configuration & Dependencies
 
-- **`submodules/`**: Git submodule containing SDK source code
-  - **`arbitrum-sdk/`**: Git submodule containing SDK source code
-  - **`stylus-by-example/`**: Git submodule containing Stylus examples
 - **`scripts/`**: Repository maintenance, build scripts, and content generators
 - **`static/`**: Static assets (images, files, JSON data)
 
@@ -67,19 +62,13 @@ git clone git@github.com:OffchainLabs/arbitrum-docs.git
 yarn
 ```
 
-3. Update the submodules
-
-```shell
-git submodule update --init --recursive
-```
-
-4. Build
+3. Build
 
 ```shell
 yarn build
 ```
 
-5. Start the development server
+4. Start the development server
 
 ```shell
 yarn start
@@ -138,6 +127,24 @@ npx tsx scripts/build-glossary.ts
 This part will update the glossary.
 
 4. Commit your changes and open a PR.
+
+### Update Nitro CLI flag reference
+
+`docs/run-arbitrum-node/nitro/cli-flags-reference.mdx` is auto-generated from `scripts/data/nitro-cli-flags.json` by `scripts/generate-cli-reference.ts`. Do not edit the `.mdx` file by hand — your changes will be overwritten on the next regeneration.
+
+To regenerate the reference after updating the JSON data file:
+
+```shell
+yarn generate-cli-reference
+```
+
+To verify the committed `.mdx` is in sync with the JSON data (used in CI):
+
+```shell
+yarn generate-cli-reference --check
+```
+
+The script also accepts `--output <path>` to write to a different location and `--nitro-path <path>` (or the `NITRO_REPO_PATH` env var) to point at a local Nitro checkout — useful when refreshing the JSON data against a specific Nitro version.
 
 ### Formatting
 

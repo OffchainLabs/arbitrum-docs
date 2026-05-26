@@ -26,7 +26,7 @@ The Arbitrum chain Verification Script is currently under active development and
 
 ## Data Availability Server (DAS) health checks
 
-If you've deployed an AnyTrust chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/02-deploy-das.mdx) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `datool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
+If you've deployed an [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/02-deploy-das.mdx) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `datool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
 
 ## Further monitoring considerations
 
@@ -36,7 +36,7 @@ Following is a non-comprehensive list of other elements of the network that shou
 
 - **Batches posted in the `SequencerInbox` contract on the parent chain**: The sequencer regularly posts batches on the parent chain, as long as it receives transactions on the Arbitrum chain. If batches are not being posted in the `SequencerInbox` for any reason, further analysis should be conducted to understand why.
 
-- **RBlocks (nodes) created in the Rollup contract on the parent chain**: RBlocks are created by validators and contain assertions of the current state of the chain (viewed by the validators). If RBlocks are not being created or confirmed on the parent chain, further analysis should be conducted to understand why.
+- **RBlocks (nodes) created in the Rollup contract on the parent chain**: RBlocks are created by validators and contain [assertions](/how-arbitrum-works/deep-dives/assertions.mdx) of the current state of the chain (viewed by the validators). If RBlocks are not being created or confirmed on the parent chain, further analysis should be conducted to understand why.
 
 - **High periods of inactivity**: As an extension of the previous point, if no RBlocks (nodes) are created for a certain period of time (due to having no activity in the chain, or any other reason), the validator allowlist mechanism of the Rollup contract can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). That period of time is determined by `confirmPeriodBlocks` + the constant `45818` since the last RBlock (node) created. In this case, time is measured in L1 blocks (around 7 days + the `confirmPeriodBlocks` period) for Arbitrum chains settling to Ethereum or an Arbitrum chain, or measured in the parent chain's block time when settling to other chains.
 

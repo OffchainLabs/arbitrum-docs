@@ -29,7 +29,7 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 
 | Transaction type code | Transaction type name           | Description                                                                                                                                                                        |
 | --------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `100`                 | `ArbitrumDepositTxType`         | Used to deposit `ETH` from a parent chain to a child chain via the Arbitrum bridge                                                                                                 |
+| `100`                 | `ArbitrumDepositTxType`         | Used to deposit **ETH** from a parent chain to a child chain via the Arbitrum bridge                                                                                               |
 | `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parent chain, originated by a user through the Arbitrum bridge                                                                          |
 | `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                                      |
 | `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
@@ -136,14 +136,14 @@ If the sync process encounters an error while trying to collect the data above t
 
 ### `debug_traceTransaction`
 
-- [ ] The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
-      HostIOs are calls the WasmVM makes to read and write data in the EVM.
-      With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
+The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
+HostIOs are calls the WasmVM makes to read and write data in the EVM.
+With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
 
 :::info
 
 The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger.
-More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/how-tos/debugging-tx).
+More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/cli-tools/debugging-tx).
 
 :::
 

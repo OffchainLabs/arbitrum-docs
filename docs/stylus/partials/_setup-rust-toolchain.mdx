@@ -1,0 +1,28 @@
+### Installing Rust
+
+You'll use Rust to write your smart contracts. Stylus compiles Rust code to WASM, which runs on the Stylus virtual machine alongside the EVM.
+
+The Rust toolchain includes `rustc` (compiler), `cargo` (package manager), and `rustup` (version manager).
+
+**macOS/Linux:**
+
+```shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+**Windows:**
+
+Download and run [rustup-init.exe](https://rustup.rs/).
+
+**Configure for WASM:**
+
+```shell
+rustup target add wasm32-unknown-unknown
+```
+
+**Verify:**
+
+```shell
+rustc --version
+cargo --version
+```

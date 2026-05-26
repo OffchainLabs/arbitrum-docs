@@ -1,0 +1,247 @@
+---
+title: 'Nitro configuration system'
+sidebar_label: 'Configuration system'
+description: 'How Nitro loads configuration from files, environment variables, CLI flags, and S3 — including precedence rules and how to dump running config'
+user_story: 'As a node operator, I want to understand how Nitro configuration works so I can correctly set up and debug my node config'
+content_type: 'how-to'
+author: 'gzeoneth'
+sme: 'gzeoneth'
+# Content gap tracking:
+# - TW-693: Nitro CLI reference (partial — config system portion)
+---
+
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+Nitro nodes accept configuration from multiple sources. When the same setting appears in more than one source, Nitro applies a deterministic precedence order so you always know which value wins. This guide explains each configuration source, how they interact, and how to inspect the merged result.
+
+## Config sources and precedence
+
+Nitro loads configuration in the following order. Each source overrides values set by sources listed before it:
+
+1. **Hardcoded defaults** — built into the Nitro binary. Every flag has a default value defined in the Go source code.
+2. **S3 config** (`--conf.s3.*`) — a JSON config file fetched from an Amazon S3 bucket at startup.
+3. **Config files** (`--conf.file`) — one or more local JSON files. If you pass multiple `--conf.file` flags, later files override earlier ones.
+4. **Config string** (`--conf.string`) — an inline JSON string passed directly on the command line.
+5. **CLI flags** — individual flags like `--http.port 8547`. CLI flags are re-applied after each config source loads, so they override config files and config strings.
+6. **Environment variables** — variables matching the configured prefix (see [Environment variables](#environment-variables)). These are applied last and override everything else, including CLI flags.
+
+<VanillaAdmonition type="tip">
+  Because environment variables have the highest precedence, they are the safest way to inject
+  secrets or per-environment overrides without modifying config files.
+</VanillaAdmonition>
+
+## Config file format
+
+Nitro config files use **JSON format only** (not YAML or TOML). Keys use flat dot-separated names that match the corresponding CLI flag names. Nitro uses the [koanf](https://github.com/knadh/koanf) library with its JSON parser to load config files.
+
+Here is an example `node-config.json` for a full node on Arbitrum One:
+
+```json
+{
+  "parent-chain": {
+    "connection": {
+      "url": "https://your-parent-chain-rpc.example.com"
+    }
+  },
+  "chain": {
+    "id": 42161
+  },
+  "http": {
+    "addr": "0.0.0.0",
+    "port": 8547,
+    "vhosts": ["*"],
+    "corsdomain": ["*"],
+    "api": ["net", "web3", "eth", "arb"]
+  },
+  "node": {
+    "feed": {
+      "input": {
+        "url": ["wss://arb1.arbitrum.io/feed"]
+      }
+    }
+  },
+  "persistent": {
+    "chain": "/home/user/data/"
+  },
+  "init": {
+    "url": "https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar"
+  },
+  "log-level": "INFO",
+  "metrics": false
+}
+```
+
+Pass the file to Nitro with the `--conf.file` flag:
+
+```shell
+nitro --conf.file /path/to/node-config.json
+```
+
+You can pass multiple config files. Later files override values from earlier ones:
+
+```shell
+nitro --conf.file /path/to/base.json --conf.file /path/to/overrides.json
+```
+
+## Environment variables
+
+Set the `--conf.env-prefix` flag to tell Nitro which environment variables to read. For example, `--conf.env-prefix NITRO` causes Nitro to load any environment variable starting with `NITRO_`.
+
+Nitro transforms environment variable names into config keys using these rules (applied in order):
+
+1. Strip the prefix and its trailing underscore (e.g., `NITRO_`).
+2. Convert all characters to **lowercase**.
+3. Replace every `__` (double underscore) with `-` (dash).
+4. Replace every `_` (single underscore) with `.` (dot).
+
+The following table shows how environment variable names map to CLI flags:
+
+| Environment variable                             | Equivalent CLI flag                         |
+| ------------------------------------------------ | ------------------------------------------- |
+| `NITRO_PARENT__CHAIN_CONNECTION_URL=http://...`  | `--parent-chain.connection.url=http://...`  |
+| `NITRO_HTTP_PORT=8547`                           | `--http.port=8547`                          |
+| `NITRO_NODE_FEED_INPUT_URL=wss://feed.example`   | `--node.feed.input.url=wss://feed.example`  |
+| `NITRO_NODE_BATCH__POSTER_ENABLE=true`           | `--node.batch-poster.enable=true`           |
+| `NITRO_LOG__LEVEL=DEBUG`                         | `--log-level=DEBUG`                         |
+| `NITRO_EXECUTION_FORWARDING__TARGET=https://...` | `--execution.forwarding-target=https://...` |
+| `NITRO_PERSISTENT_CHAIN=/data`                   | `--persistent.chain=/data`                  |
+
+### Comma-separated list values
+
+Certain config keys accept lists. When you set these through environment variables, Nitro automatically splits the value on commas. The full list of comma-split fields:
+
+| Config key                                                          | Description                           |
+| ------------------------------------------------------------------- | ------------------------------------- |
+| `auth.api`                                                          | Auth RPC API namespaces               |
+| `auth.origins`                                                      | Auth allowed origins                  |
+| `chain.info-files`                                                  | Chain info file paths                 |
+| `conf.file`                                                         | Config file paths                     |
+| `execution.secondary-forwarding-target`                             | Secondary forwarding targets          |
+| `execution.sequencer.sender-whitelist`                              | Allowed sender addresses              |
+| `graphql.corsdomain`                                                | GraphQL CORS domains                  |
+| `graphql.vhosts`                                                    | GraphQL virtual hosts                 |
+| `http.api`                                                          | HTTP RPC API namespaces               |
+| `http.corsdomain`                                                   | HTTP CORS domains                     |
+| `http.vhosts`                                                       | HTTP virtual hosts                    |
+| `node.batch-poster.data-poster.blob-tx-replacement-times`           | Batch poster blob-tx fee bumps        |
+| `node.batch-poster.data-poster.replacement-times`                   | Batch poster tx fee bumps             |
+| `node.data-availability.rest-aggregator.urls`                       | DA REST aggregator URLs               |
+| `node.feed.input.secondary-url`                                     | Secondary feed URLs                   |
+| `node.feed.input.url`                                               | Feed input URLs                       |
+| `node.feed.input.verify.allowed-addresses`                          | Feed signature addresses              |
+| `node.seq-coordinator.signer.ecdsa.allowed-addresses`               | Sequencer coordinator signers         |
+| `node.staker.batch-poster.data-poster.blob-tx-replacement-times`    | Staker batch-poster blob-tx fee bumps |
+| `node.staker.batch-poster.data-poster.replacement-times`            | Staker batch-poster tx fee bumps      |
+| `p2p.bootnodes`                                                     | P2P bootstrap nodes                   |
+| `p2p.bootnodes-v5`                                                  | P2P v5 bootstrap nodes                |
+| `validation.api-auth`                                               | Validation API auth                   |
+| `validation.arbitrator.redis-validation-server-config.module-roots` | Arbitrator WASM module roots          |
+| `validation.wasm.allowed-wasm-module-roots`                         | Allowed WASM module roots             |
+| `ws.api`                                                            | WebSocket API namespaces              |
+| `ws.origins`                                                        | WebSocket allowed origins             |
+
+For example, to enable multiple HTTP API namespaces:
+
+```shell
+export NITRO_HTTP_API=net,web3,eth,arb
+```
+
+## Mounting config in Docker
+
+When running Nitro in Docker, mount your config file into the container and reference it with `--conf.file`:
+
+```shell
+docker run --rm -it -v /path/to/local/node-config.json:/home/user/node-config.json \
+  -p 8547:8547 -p 8548:8548 \
+  offchainlabs/nitro-node:v3.5.3-3b3e2fa \
+  --conf.file /home/user/node-config.json
+```
+
+Mount to `/home/user/` because Nitro runs as a non-root user inside the container with that home directory. The `-v` flag maps your local file path to the container path.
+
+## Dumping running config
+
+Use the `--conf.dump` flag to inspect the fully merged configuration. Nitro loads all config sources (defaults, S3, files, config string, CLI flags, environment variables), scrubs sensitive fields, prints the merged result as JSON to stdout, and then exits immediately:
+
+```shell
+docker run --rm offchainlabs/nitro-node:v3.5.3-3b3e2fa \
+  --conf.dump \
+  --conf.file /path/to/node-config.json
+```
+
+To save the output to a file:
+
+```shell
+docker run --rm offchainlabs/nitro-node:v3.5.3-3b3e2fa \
+  --conf.dump \
+  --conf.file /path/to/node-config.json > merged-config.json
+```
+
+### Scrubbed fields
+
+For security, `--conf.dump` replaces the following fields with empty strings in the output:
+
+| Scrubbed field                                      |
+| --------------------------------------------------- |
+| `node.batch-poster.parent-chain-wallet.password`    |
+| `node.batch-poster.parent-chain-wallet.private-key` |
+| `node.staker.parent-chain-wallet.password`          |
+| `node.staker.parent-chain-wallet.private-key`       |
+| `chain.dev-wallet.password`                         |
+| `chain.dev-wallet.private-key`                      |
+
+If you need to verify that secrets are being picked up correctly, check that the node starts successfully rather than relying on `--conf.dump` output.
+
+## Hot reload
+
+Nitro supports reloading certain configuration values at runtime without restarting the node. Enable periodic reloading with the `--conf.reload-interval` flag:
+
+```shell
+nitro --conf.file /path/to/node-config.json --conf.reload-interval 5m
+```
+
+The default value is `0`, which disables periodic reloading. When enabled, Nitro re-reads all configuration sources at the specified interval and applies changes to fields that support hot reload.
+
+Fields that support hot reload are marked with the `reload:"hot"` tag in the Go source code. The following top-level configuration groups support hot reload:
+
+| Config group               | Description                      |
+| -------------------------- | -------------------------------- |
+| `conf`                     | Configuration system settings    |
+| `node`                     | Consensus node settings          |
+| `execution`                | Execution layer settings         |
+| `validation`               | Validator settings               |
+| `parent-chain`             | Parent chain connection settings |
+| `log-level`                | Log verbosity level              |
+| `log-type`                 | Log output format                |
+| `file-logging`             | File logging settings            |
+| `ensure-rollup-deployment` | Rollup deployment check          |
+| `version-alerter`          | Version alerter settings         |
+
+If a reload changes a field that does not support hot reload, Nitro rejects the entire reload and logs an error. Fields like `chain`, `persistent`, `http`, `ws`, and `init` require a node restart to take effect.
+
+## S3 config loading
+
+Nitro can fetch a base configuration file from Amazon S3 at startup. This is useful for managing fleet-wide configuration where many nodes share the same base settings stored in a central S3 bucket.
+
+Configure S3 loading with the following flags:
+
+| Flag                   | Description                              |
+| ---------------------- | ---------------------------------------- |
+| `--conf.s3.access-key` | AWS access key ID                        |
+| `--conf.s3.secret-key` | AWS secret access key                    |
+| `--conf.s3.region`     | S3 bucket region                         |
+| `--conf.s3.bucket`     | S3 bucket name                           |
+| `--conf.s3.object-key` | Object key (file path within the bucket) |
+
+The S3 config file must be in JSON format. It is loaded early in the precedence chain, so local config files, CLI flags, and environment variables all override S3 values:
+
+```shell
+nitro --conf.s3.access-key AKIAIOSFODNN7EXAMPLE \
+  --conf.s3.secret-key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \
+  --conf.s3.region us-east-1 \
+  --conf.s3.bucket my-nitro-configs \
+  --conf.s3.object-key production/node-config.json \
+  --conf.file /path/to/local-overrides.json
+```
+
+In this example, the S3 config provides the base settings and the local file provides environment-specific overrides.

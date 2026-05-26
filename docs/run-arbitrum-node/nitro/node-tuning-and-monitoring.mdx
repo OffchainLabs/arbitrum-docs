@@ -11,6 +11,8 @@ sme: 'gzeoneth'
 # - TW-692: Node operations runbook (partial — monitoring)
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, how to tune validators, and how to monitor node health is essential for stable operation.
 
 ## Memory allocators in Nitro
@@ -78,9 +80,11 @@ MALLOC_ARENA_MAX=2
 
 Setting `MALLOC_ARENA_MAX=2` caps glibc to two arenas, reducing worst-case arena overhead from gigabytes to ~128 MB. In testing, this eliminated the slow memory growth with no measurable performance impact on RPC throughput.
 
-:::caution
-Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.
-:::
+<VanillaAdmonition type="caution">
+  Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena
+  overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage.
+  This is the most common cause of unexplained memory growth in long-running Nitro nodes.
+</VanillaAdmonition>
 
 ### Thread stacks
 
@@ -225,9 +229,10 @@ The same server also exposes pprof profiling endpoints at `/debug/pprof/` for CP
 | `arb_feed_backlog_messages` | Number of messages in the feed backlog. A growing backlog indicates the node is falling behind the sequencer feed. |
 | Batch poster backlog        | For batch poster nodes, tracks how many batches are pending submission to the parent chain.                        |
 
-:::tip
-Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.
-:::
+<VanillaAdmonition type="tip">
+  Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in
+  Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.
+</VanillaAdmonition>
 
 ### Kubernetes ServiceMonitor
 
@@ -348,9 +353,6 @@ GOMEMLIMIT=12288MiB
 GOMAXPROCS=4
 
 nitro \
-  --execution.caching.database-cache 1024 \
-  --execution.caching.trie-clean-cache 300 \
-  --execution.caching.snapshot-cache 200 \
   --metrics \
   --metrics-server.addr 0.0.0.0
 ```
