@@ -414,7 +414,7 @@ It depends on which Arbitrum chain you're targeting:
 
 ### One of the retryables didn't redeem. How do I recover?
 
-`registerCustomToken` produces two parent-to-child retryables (one for the router, one for the gateway). If either fails to auto-redeem — for example, because the supplied gas wasn't enough — the corresponding child chain mapping won't update and the verification calls in [Step 4](#verify-the-registration) will return `0x0000…0000`. Manually redeem the failed retryable from the child chain by calling `redeem()` on the message; see [Parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for the procedure. Registration succeeds as soon as both retryables are redeemed.
+`registerCustomToken` produces two parent-to-child retryables (one for the router, one for the gateway). If either fails to auto-redeem—for example, because the supplied gas wasn't enough — the corresponding child chain mapping won't update and the verification calls in [Step 4](#verify-the-registration) will return `0x0000…0000`. Manually redeem the failed retryable from the child chain by calling `redeem()` on the message; see [Parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for the procedure. Registration succeeds as soon as both retryables are redeemed.
 
 ### Can I set up the generic-custom gateway after a standard **ERC-20** token has been deployed on the child chain?
 
