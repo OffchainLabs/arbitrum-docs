@@ -191,7 +191,7 @@ const childProvider = new providers.JsonRpcProvider(process.env.CHILD_RPC);
 const parentWallet = new Wallet(walletPrivateKey, parentProvider);
 
 /**
- * For the purpose of our tests, here we deploy a standard ERC-20 token (L1Token) to the parent chain.
+ * For the purpose of our tests, here we deploy a standard **ERC-20** token (`L1Token`) to the parent chain.
  * It sends its deployer (us) the initial supply of 1000.
  */
 const main = async () => {
