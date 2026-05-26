@@ -26,7 +26,7 @@
   },
   {
     "question": "Is there a new transaction type to deploy Stylus contracts?",
-    "answer": "You deploy a Stylus contract the same way that Solidity contracts are deployed. There are no special transaction types. As a UX note: a WASM will revert until a special instrumentation operation is performed by a call to the new  `ArbWasm` precompile, which readies the program for calls on-chain.\n\nYou can find instructions for deploying a Stylus contract in our [Quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart#checking-your-stylus-project-is-valid).\n\n",
+    "answer": "You deploy a Stylus contract the same way that Solidity contracts are deployed. There are no special transaction types. As a UX note: a WASM will revert until a special instrumentation operation is performed by a call to the new  `ArbWasm` precompile, which readies the program for calls onchain.\n\nYou can find instructions for deploying a Stylus contract in our [Quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart#checking-your-stylus-project-is-valid).\n\n",
     "key": "is-there-a-new-transaction-type-to-deploy-stylus-contracts"
   },
   {

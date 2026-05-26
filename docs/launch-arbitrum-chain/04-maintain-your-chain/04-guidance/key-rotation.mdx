@@ -30,7 +30,7 @@ For sequencer nodes running both the sequencer and batch poster on the same serv
 
 ### Prerequisites
 
-- A new batch poster account funded with sufficient `ETH` for gas fees
+- A new batch poster account funded with sufficient **ETH** for gas fees
 - Access to call functions on the `SequencerInbox` contract
 - Gracefully stop the current batch poster
 
@@ -70,7 +70,7 @@ setIsBatchPoster(<old_address>, false)
 
 ### Prerequisites
 
-- A new validator account funded with sufficient `ETH`
+- A new validator account funded with sufficient **ETH**
 - The required bond amount available for the new validator
 - Access to call functions on the `Rollup` contract
 
@@ -105,7 +105,7 @@ setValidator([<old_validator_address>], [false])
 #### 6. Recover old validator bond (if applicable)
 
 - Wait for your old validator's latest bond assertion to be confirmed
-- Call `reduceDeposit(0)` on the `RollupUserLogic` contract to reduce the staked bond to zero
+- Call `reduceDeposit(0)` on the `RollupUserLogic` contract to reduce the bond to zero
 - Call `withdrawStakerFunds()` on the `RollupUserLogic` contract to withdraw the released funds
 
 ## 3. AnyTrust Data Availability Committee (DAC) rotation

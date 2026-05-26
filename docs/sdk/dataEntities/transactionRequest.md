@@ -49,9 +49,7 @@ If this request were sent now, would it have enough margin to reliably succeed
 ### isChildToParentTransactionRequest()
 
 ```ts
-function isChildToParentTransactionRequest<T>(
-  possibleRequest: ChildToParentTransactionRequest | IsNotTransactionRequest<T>,
-): possibleRequest is ChildToParentTransactionRequest;
+function isChildToParentTransactionRequest<T>(possibleRequest: ChildToParentTransactionRequest | IsNotTransactionRequest<T>): possibleRequest is ChildToParentTransactionRequest;
 ```
 
 Defined in: dataEntities/transactionRequest.ts:70
@@ -79,9 +77,7 @@ Check if an object is of ChildToParentTransactionRequest type
 ### isParentToChildTransactionRequest()
 
 ```ts
-function isParentToChildTransactionRequest<T>(
-  possibleRequest: ParentToChildTransactionRequest | IsNotTransactionRequest<T>,
-): possibleRequest is ParentToChildTransactionRequest;
+function isParentToChildTransactionRequest<T>(possibleRequest: ParentToChildTransactionRequest | IsNotTransactionRequest<T>): possibleRequest is ParentToChildTransactionRequest;
 ```
 
 Defined in: dataEntities/transactionRequest.ts:57

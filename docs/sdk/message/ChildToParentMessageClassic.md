@@ -463,9 +463,7 @@ Instantiates a new `ChildToParentMessageWriterClassic` or `ChildToParentMessageR
 ### ChildToParentMessageReaderOrWriterClassic
 
 ```ts
-type ChildToParentMessageReaderOrWriterClassic<T> = T extends Provider
-  ? ChildToParentMessageReaderClassic
-  : ChildToParentMessageWriterClassic;
+type ChildToParentMessageReaderOrWriterClassic<T> = T extends Provider ? ChildToParentMessageReaderClassic : ChildToParentMessageWriterClassic;
 ```
 
 Defined in: message/ChildToParentMessageClassic.ts:98

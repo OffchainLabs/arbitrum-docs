@@ -20,7 +20,6 @@ This repository is organized as follows:
   - `node-running/` - Node operation guides
   - `partials/` - Reusable content components and troubleshooting guides
   - `run-arbitrum-node/` - Node setup and configuration
-  - `sdk/` - Auto-generated SDK documentation - Do not edit
   - `stylus/` - Stylus smart contract development
   - `welcome/` - Getting started content
 
@@ -38,8 +37,6 @@ This repository is organized as follows:
 
 - **`scripts/`**: Repository maintenance, build scripts, and content generators
 - **`static/`**: Static assets (images, files, JSON data)
-
-> **Note:** SDK API docs (`docs/sdk/`) and Stylus examples (`docs/stylus/`) are committed directly to the repository. They are regenerated from upstream repos ([arbitrum-sdk](https://github.com/OffchainLabs/arbitrum-sdk), [stylus-by-example](https://github.com/offchainlabs/stylus-by-example)) via the `update-external-content` GitHub Actions workflow.
 
 ## Contribution
 

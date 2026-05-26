@@ -59,13 +59,14 @@ To enable PathDB on your archive node, start your node with the following flags:
 
 The minimum storage requirements will change as the Nitro chains grow (see the growth rates below). We recommend exceeding the minimum requirements as much as you can to minimize risk and maintenance overhead. The disk size for archive nodes is expected to grow over time. Carefully monitor your node's disk requirements and disk growth rates to ensure your node has adequate resources.
 
-1. **RAM:** 64GB+ for Nitro and 32GB+ for Classic
-2. **CPU:** 8+ core CPU
-3. **Storage (PathDB, last updated on March 2026):** Arbitrum One: 3.27TB SSD, currently growing at a rate of ~100GB/month.
-4. **Docker images:** We'll specify these in the below commands; you don't need to download them manually.
-   - Latest Docker image for **Arbitrum One Nitro**: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@</code>
+import HardwarePartial from '../../partials/_hardware-requirements.mdx';
+
+<HardwarePartial />
+
+1. **Docker images:** We'll specify these in the below commands; you don't need to download them manually.
+   - Latest Docker image for **Arbitrum One Nitro**: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@</code>
    - Latest Docker image for **Arbitrum One Classic**: <code>@@latestClassicNodeImage=offchainlabs/arb-node:v1.4.6-551a39b3@@</code>
-5. **Database snapshots:**
+2. **Database snapshots:**
    - Nitro database snapshot
      - Use the parameter `--init.url=` on the first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot-explorer.arbitrum.io/)). Example: <code>--init.url="@@arbOneNitroArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar@@"</code>
    - Arbitrum One Classic database snapshot
@@ -92,7 +93,7 @@ The minimum storage requirements will change as the Nitro chains grow (see the g
 | `--chain.id=<L2 chain ID>`                                 | `--l2.chain-id=<L2 Chain ID>`                                                                                                                                                                                                                                                                                                                                                                                                                                                  | See [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of Arbitrum chains and the respective child chain IDs                                     |
 | `--execution.caching.archive`                              | `--node.caching.archive`                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Required for running an **Arbitrum One Nitro** archival node and retains past block state                                                                                                         |
 | `--execution.caching.state-scheme`                         | Default: `hash`. This flag sets the schema used in Nitro's state trie, inherited from Geth. You can set this to `path` to enable PathDB, but note that PathDB isn't yet supported for validators.                                                                                                                                                                                                                                                                              |
-| `--execution.caching.state-history`                        | Default: 345600 blocks, calculated as 24 hours worth of blocks at the default block speed of 250ms. Number of recent blocks of state history to retain on disk. Set to `0` for unlimited (i.e. Archive nodes). Only available for PathDB enabled nodes                                                                                                                                                                                                                         |
+| `--execution.caching.state-history`                        | Default: 345600 blocks, calculated as 24 hours worth of blocks at the default block speed of 250ms. Number of recent blocks of state history to retain on disk. Set to `0` for unlimited (i.e., Archive nodes). Only available for PathDB enabled nodes                                                                                                                                                                                                                        |
 | `--execution.caching.pathdb-max-diff-layers`               | Default: 128 layers. Maximum number of diff layers kept in the node's memory before flushing to disk. Increasing the number of diff layers may cause the node to fall behind the chain head during busy periods since doing so slows down block processing speed and reduces sync speed. This configuration is primarily used to improve performance of shallow re-orgs (which are a concern on Ethereum but not on Arbitrum chains) and for efficient access to recent state. |
 | -                                                          | `--node.cache.allow-slow-lookup`                                                                                                                                                                                                                                                                                                                                                                                                                                               | Required for running an **Arbitrum One Classic** archival node. When this option is present, it will load old blocks from disk if not in memory cache.                                            |
 | -                                                          | `--core.checkpoint-gas-frequency=156250000`                                                                                                                                                                                                                                                                                                                                                                                                                                    | Required for running an **Arbitrum One Classic** archival node.                                                                                                                                   |
@@ -111,7 +112,7 @@ To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one o
 
 - **Arbitrum One Nitro archive node**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
   ```
 - **Arbitrum One Classic archive node**:
   ```shell
@@ -119,7 +120,7 @@ To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one o
   ```
 - **Arbitrum One Nitro archive node with forwarding classic execution support**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.8-4624977@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --execution.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --execution.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
   ```
 
 Note that the above commands both map to port `8547` on their hosts. To run both on the same host, you should edit those mapping to different ports and specify your Classic node RPC URL as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).

@@ -87,15 +87,11 @@ create your inputs as a tuple and pass the tuple in. The return type will be
 a tuple of the decoded return types. eg.
 
 ```typescript
-const inputs: [
-  CallInput<Awaited<ReturnType<ERC20['functions']['balanceOf']>>[0]>,
-  CallInput<Awaited<ReturnType<ERC20['functions']['name']>>[0]>,
-] = [
+const inputs: [CallInput<Awaited<ReturnType<ERC20['functions']['balanceOf']>>[0]>, CallInput<Awaited<ReturnType<ERC20['functions']['name']>>[0]>] = [
   {
     targetAddr: token.address,
     encoder: () => token.interface.encodeFunctionData('balanceOf', ['']),
-    decoder: (returnData: string) =>
-      token.interface.decodeFunctionResult('balanceOf', returnData)[0],
+    decoder: (returnData: string) => token.interface.decodeFunctionResult('balanceOf', returnData)[0],
   },
   {
     targetAddr: token.address,
