@@ -62,15 +62,70 @@ console.log('Message confirmed! Ready to execute on parent chain.');
 
 ### Step 3: Execute on the parent chain
 
-```javascript
-// Execute the withdrawal on the parent chain
-const parentWallet = new Wallet(process.env.PRIVATE_KEY, parentProvider);
-const executeResult = await message.execute(childProvider);
-await executeResult.wait();
+After the challenge period, use the SDK to execute the withdrawal via the outbox. This requires a parent chain wallet with `ETH` for gas:
 
-console.log('Withdrawal complete!');
-console.log(`Parent chain transaction: ${executeResult.transactionHash}`);
+```javascript
+import { providers, Wallet } from 'ethers';
+import { ChildTransactionReceipt, ChildToParentMessageStatus } from '@arbitrum/sdk';
+
+const parentChainProvider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
+const childChainProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+const parentChainWallet = new Wallet(process.env.PRIVATE_KEY, parentChainProvider);
+
+// Get the withdrawal transaction receipt from the child chain
+const receipt = await childChainProvider.getTransactionReceipt(withdrawTxHash);
+const childReceipt = new ChildTransactionReceipt(receipt);
+
+// Extract child-to-parent messages (typically one per withdrawal)
+const messages = await childReceipt.getChildToParentMessages(parentChainWallet);
+const message = messages[0];
+
+// Check the current status
+const status = await message.status(childChainProvider);
+if (status === ChildToParentMessageStatus.EXECUTED) {
+  console.log('Already executed — tokens are on the parent chain');
+} else {
+  // Wait until the outbox entry exists (challenge period must pass)
+  await message.waitUntilReadyToExecute(childChainProvider, 60_000);
+  console.log('Ready to execute — submitting parent chain transaction');
+
+  const executeTx = await message.execute(childChainProvider);
+  const executeReceipt = await executeTx.wait();
+  console.log(`Withdrawal complete: ${executeReceipt.transactionHash}`);
+}
 ```
+
+## Withdrawing `ETH` (or native token) using the Arbitrum SDK
+
+To withdraw the chain's native token (typically `ETH`) rather than an `ERC-20`, use `EthBridger`:
+
+```javascript
+import { utils, providers, Wallet } from 'ethers';
+import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
+
+const childChainProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+const childChainWallet = new Wallet(process.env.PRIVATE_KEY, childChainProvider);
+
+const childChainNetwork = await getArbitrumNetwork(childChainProvider);
+const ethBridger = new EthBridger(childChainNetwork);
+
+// Initiate withdrawal of 0.000001 ETH
+const withdrawTx = await ethBridger.withdraw({
+  amount: utils.parseEther('0.000001'),
+  childSigner: childChainWallet,
+  destinationAddress: childChainWallet.address,
+});
+
+const withdrawReceipt = await withdrawTx.wait();
+console.log(`Withdrawal initiated: ${withdrawReceipt.transactionHash}`);
+
+// Get withdrawal event data
+const withdrawEvents = withdrawReceipt.getChildToParentEvents();
+console.log('Withdrawal data:', withdrawEvents);
+console.log(`After the challenge period (~6.4 days), execute via the outbox using tx hash: ${withdrawReceipt.transactionHash}`);
+```
+
+The withdrawal creates a child-to-parent message. After the challenge period, execute it using the outbox as shown in Step 3 above. The same outbox execution pattern works for both `ETH` and `ERC-20` withdrawals.
 
 ## Withdraw tokens manually
 
@@ -174,6 +229,8 @@ If you need to construct the proof manually, you can find the batch number and i
 ## Resources
 
 - [Arbitrum SDK documentation](/sdk)
-- [Token withdrawal tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw)
+- [`ETH` withdrawal source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
+- [`ERC-20` withdrawal source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw)
+- [Outbox execution source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute)
 - [Contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
 - [Arbitrum Bridge UI](https://bridge.arbitrum.io/)

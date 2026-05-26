@@ -1239,6 +1239,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'L1-to-L3 teleportation',
+              id: 'build-decentralized-apps/bridging/l1-l3-teleportation',
+            },
+            {
+              type: 'doc',
               label: 'Custom gas token chains',
               id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
             },
@@ -1426,7 +1431,7 @@ const sidebars = {
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
@@ -1609,7 +1614,7 @@ const sidebars = {
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
