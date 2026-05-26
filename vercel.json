@@ -217,7 +217,7 @@
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview/?)",
-      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "destination": "/build-decentralized-apps/bridging/overview",
       "permanent": false
     },
     {
@@ -227,12 +227,12 @@
     },
     {
       "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started/?)",
-      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "destination": "/build-decentralized-apps/bridging/overview",
       "permanent": false
     },
     {
       "source": "/(build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started/?)",
-      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "destination": "/build-decentralized-apps/bridging/overview",
       "permanent": false
     },
     {
@@ -267,22 +267,22 @@
     },
     {
       "source": "/(build-decentralized-apps/token-bridging/01-get-started/?)",
-      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "destination": "/build-decentralized-apps/bridging/overview",
       "permanent": false
     },
     {
       "source": "/(build-decentralized-apps/token-bridging/02-token-bridge-ether/?)",
-      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
+      "destination": "/build-decentralized-apps/bridging/deposit/eth-and-messages",
       "permanent": false
     },
     {
       "source": "/(build-decentralized-apps/token-bridging/token-bridge-ether/?)",
-      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
+      "destination": "/build-decentralized-apps/bridging/deposit/eth-and-messages",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/token-bridging/eth-bridging/?)",
-      "destination": "/build-decentralized-apps/how-to-bridge-from-parent-chain",
+      "destination": "/build-decentralized-apps/bridging/deposit/eth-and-messages",
       "permanent": false
     },
     {
@@ -472,7 +472,7 @@
     },
     {
       "source": "/(for-devs/cross-chain-messsaging/?)",
-      "destination": "/build-decentralized-apps/cross-chain-messaging",
+      "destination": "/build-decentralized-apps/bridging/cross-chain-messaging",
       "permanent": false
     },
     {
@@ -852,7 +852,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/concepts/custom-gas-token-sdk/?)",
-      "destination": "/build-decentralized-apps/custom-gas-token-sdk",
+      "destination": "/build-decentralized-apps/bridging/custom-gas-token-chains",
       "permanent": false
     },
     {
@@ -2409,6 +2409,72 @@
       "source": "/(withdrawals/?)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/cross-chain-messaging/?)",
+      "destination": "/build-decentralized-apps/bridging/cross-chain-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/custom-gas-token-sdk/?)",
+      "destination": "/build-decentralized-apps/bridging/custom-gas-token-chains",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/how-to-bridge-from-parent-chain/?)",
+      "destination": "/build-decentralized-apps/bridging/deposit/eth-and-messages",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/how-to-bridge-to-parent-chain/?)",
+      "destination": "/build-decentralized-apps/bridging/withdraw/eth-and-messages",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/get-started/?)",
+      "destination": "/build-decentralized-apps/bridging/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/deposit-tokens/?)",
+      "destination": "/build-decentralized-apps/bridging/deposit/tokens",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/withdraw-tokens/?)",
+      "destination": "/build-decentralized-apps/bridging/withdraw/tokens",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway/?)",
+      "destination": "/build-decentralized-apps/bridging/configure-token-gateway/standard",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/bridging/configure-token-gateway/generic-custom",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/bridging/configure-token-gateway/custom",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        { "key": "Vary", "value": "Accept" },
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"service-doc\"; type=\"text/plain\"; title=\"LLM-friendly site index\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\""
+        }
+      ]
+    },
+    {
+      "source": "/:path+",
+      "headers": [{ "key": "Vary", "value": "Accept" }]
     }
   ]
 }

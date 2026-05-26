@@ -6,7 +6,7 @@ sme: jason-w123
 content_type: concept
 ---
 
-Configuring the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> finality refers to adjusting <a data-quicklook-from="sequencer">Sequencer</a> node flags to control the timing and dependencies for when transactions (e.g., cross-chain messages or deposits) sent through the Delayed Inbox achieve finality on the <a data-quicklook-from="child-chain">child chain</a>. The Delayed Inbox is a fallback mechanism for parent-to-child communications that bypasses the sequencer for direct inclusion, ensuring censorship resistance.
+Configuring the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> finality refers to adjusting [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) node flags to control the timing and dependencies for when transactions (e.g., cross-chain messages or deposits) sent through the Delayed Inbox achieve finality on the <a data-quicklook-from="child-chain">child chain</a>. The Delayed Inbox is a fallback mechanism for parent-to-child communications that bypasses the sequencer for direct inclusion, ensuring censorship resistance.
 
 By default, finality for these transactions relies on Layer-1 (<a data-quicklook-from="l1">L1</a>) Ethereum block confirmations (typically tens of minutes). Configuration allows shifting to faster <a data-quicklook-from="l2">L2</a>-based finality or reducing <a data-quicklook-from="confirmation">confirmation</a> waits, trading speed for potential re-org risks. This reduction is an advanced sequencer-level setting, not a deployment-time parameter, and is primarily used to optimize bridging speed for use cases like high-frequency DeFi or gaming.
 
@@ -31,7 +31,7 @@ This configuration sets up the sequencer to release Delayed Inbox messages earli
 
 :::note
 
-This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (child-to-parent) finality uses separate mechanisms, such as DAC in AnyTrust mode, for ~15-minute confirmations.
+This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (child-to-parent) finality uses separate mechanisms, such as DAC in [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) mode, for ~15-minute confirmations.
 
 :::
 
@@ -61,8 +61,8 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 ## Compatibility
 
 - Primarily for Arbitrum L3 chains settling to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or Nova; not directly applicable to L2s settling to Ethereum.
-- Compatible with all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native `ETH` or custom), as it focuses on sequencer logic.
-- Integrates with <a data-quicklook-from="bold">BoLD</a> or permissioned validation; for AnyTrust, pairs well with DAC for symmetric fast incoming/outgoing flows.
+- Compatible with all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native **ETH** or custom), as it focuses on sequencer logic.
+- Integrates with [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) or permissioned validation; for AnyTrust, pairs well with DAC for symmetric fast incoming/outgoing flows.
 
 ## Examples
 

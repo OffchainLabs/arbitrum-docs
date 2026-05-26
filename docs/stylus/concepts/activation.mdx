@@ -131,7 +131,7 @@ let final_fee = data_fee * (1 + bump_percent / 100);
 - Uses state override simulation to estimate the fee
 - No actual transaction sent during estimation
 - Configurable bump percentage protects against variance (default: 20%)
-- The fee is paid in `ETH` when activating
+- The fee is paid in **ETH** when activating
 
 ### Step 4: Activate the contract
 
@@ -586,7 +586,7 @@ cargo stylus activate --address=0x...
 
 - Check current data fee: `cargo stylus check`
 - Increase fee bump percentage
-- Ensure sufficient `ETH` balance
+- Ensure sufficient **ETH** balance
 
 #### "Program not WASM"
 
@@ -764,7 +764,7 @@ cast send 0x0000000000000000000000000000000000000072 \
 
 - **Two-step process**: Deployment stores code, activation makes it executable
 - **cargo-stylus handles both**: Use `deploy` for automatic activation
-- **Data fee required**: Activation costs `ETH` (separate from deployment gas)
+- **Data fee required**: Activation costs **ETH** (separate from deployment gas)
 - **Code reuse**: Identical contracts share activation, saving costs
 - **Expiration**: Programs expire after ~1 year without a `keepalive`
 - **ArbWasm precompile**: All activation goes through address `0x71`

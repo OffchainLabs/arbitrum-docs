@@ -8,16 +8,16 @@ user_story: As a current Arbitrum chain owner, I want to refer to the DAS RPC me
 content_type: reference
 ---
 
-This document covers the JSON-RPC methods exposed by Arbitrum Data Availability Servers (DAS) and the newer DAProvider interface, as defined in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/) node configuration types [`NodeConfig.generated.ts`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/types/NodeConfig.generated.ts)
+This document covers the JSON-RPC methods exposed by <a data-quicklook-from="arbitrum">Arbitrum</a> Data Availability Servers (DAS) and the newer DAProvider interface, as defined in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/) node configuration types [`NodeConfig.generated.ts`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/types/NodeConfig.generated.ts)
 
 ## Overview
 
 DAS servers exposed two interfaces for data storage and retrieval:
 
-| Interface | Port (typical) | Used by      | Purpose                          |
-| --------- | -------------- | ------------ | -------------------------------- |
-| RPC       | `:9876`        | Batch poster | Store batch data, obtain DACerts |
-| REST      | `:9877`        | Nitro nodes  | Retrieve batch data by hash      |
+| Interface | Port (typical) | Used by                                                | Purpose                                                             |
+| --------- | -------------- | ------------------------------------------------------ | ------------------------------------------------------------------- |
+| RPC       | `:9876`        | <a data-quicklook-from="batch-poster">Batch Poster</a> | Store <a data-quicklook-from="batch">batch</a> data, obtain DACerts |
+| REST      | `:9877`        | Nitro nodes                                            | Retrieve batch data by hash                                         |
 
 The RPC interface supports two storage modes:
 
@@ -89,7 +89,7 @@ Finalizes a chunked store session, signaling that all chunks have been transmitt
 **Behavior:**
 
 - Called once after all chunks have been sent via `das_sendChunk`
-- The DAS server assembles the chunks, stores the complete payload, and returns a signed DACert component (the server's BLS signature over the data hash)
+- The DAS server assembles the chunks, stores the complete payload, and returns a signed DACert component (the server's <a data-quicklook-from="bls-signature">BLS Signature</a> over the data hash)
 - On success, the server commits the data to its configured storage backend
 
 ## DAProvider RPC Methods (newer interface)
@@ -240,16 +240,18 @@ Full config path: `node.da-provider`
 
 Full config path: `node.data-availability.rpc-aggregator.backends` (JSON string)
 
-```typscript
+```typescript
 // Type: NodeConfigDataAvailabilityRpcAggregatorBackendsJson
 // Source: src/types/NodeConfig.ts:23-29
 [
   {
-    "url": "http://das-member-0:9876",        // DAS RPC endpoint
-    "pubkey": "<base64 BLS public key>",       // member's BLS key
-    "signermask": 1                            // bitmask (2^memberIndex)
-  }
-]
+    url: 'http://das-member-0:9876', // DAS RPC endpoint
+    pubkey: '<base64 BLS public key>', // member's BLS key
+  },
+  // Additional members go here. Each backend's signer bit is auto-derived from
+  // its index in this array (index i -> mask 1 << i) and must line up with
+  // the member's position in the onchain keyset.
+];
 ```
 
 ## Method Summary Table
@@ -267,16 +269,16 @@ Full config path: `node.data-availability.rpc-aggregator.backends` (JSON string)
 
 ### Related Configuration
 
-| Config Key                                  | Default                  | Description                           |
-| ------------------------------------------- | ------------------------ | ------------------------------------- |
-| `data-availability.enable`                  | `false`                  | Enable AnyTrust DA mode               |
-| `data-availability.request-timeout`         | `5s`                     | Store request timeout                 |
-| `data-availability.panic-on-error`          | `false`                  | Crash on DAS errors (not recommended) |
-| `data-availability.sequencer-inbox-address` | —                        | SequencerInbox contract address       |
-| `data-availability.parent-chain-node-url`   | —                        | Parent chain RPC URL                  |
-| `batch-poster.das-retention-period`         | `360h`                   | How long DAS retains stored batches   |
-| `rpc-aggregator.assumed-honest`             | —                        | H value for quorum (K=N+1-H)          |
-| `das-rpc-client.enable-chunked-store`       | `true`                   | Use streaming protocol                |
-| `rest-aggregator.strategy`                  | `simple-explore-exploit` | Endpoint selection strategy           |
-| `rest-aggregator.wait-before-try-next`      | `2s`                     | Timeout before next endpoint          |
-| `sync-to-storage.retention-period`          | `360h`                   | Synced data retention period          |
+| Config Key                                  | Default                  | Description                                                    |
+| ------------------------------------------- | ------------------------ | -------------------------------------------------------------- |
+| `data-availability.enable`                  | `false`                  | Enable AnyTrust DA mode                                        |
+| `data-availability.request-timeout`         | `5s`                     | Store request timeout                                          |
+| `data-availability.panic-on-error`          | `false`                  | Crash on DAS errors (not recommended)                          |
+| `data-availability.sequencer-inbox-address` | —                        | SequencerInbox contract address                                |
+| `data-availability.parent-chain-node-url`   | —                        | <a data-quicklook-from="parent-chain">Parent chain</a> RPC URL |
+| `batch-poster.das-retention-period`         | `360h`                   | How long DAS retains stored batches                            |
+| `rpc-aggregator.assumed-honest`             | —                        | H value for quorum (K=N+1-H)                                   |
+| `das-rpc-client.enable-chunked-store`       | `true`                   | Use streaming protocol                                         |
+| `rest-aggregator.strategy`                  | `simple-explore-exploit` | Endpoint selection strategy                                    |
+| `rest-aggregator.wait-before-try-next`      | `2s`                     | Timeout before next endpoint                                   |
+| `sync-to-storage.retention-period`          | `360h`                   | Synced data retention period                                   |
