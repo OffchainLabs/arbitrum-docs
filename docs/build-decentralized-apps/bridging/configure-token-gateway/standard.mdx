@@ -18,8 +18,8 @@ Use the standard gateway when:
 
 For custom token behavior, see:
 
-- [Generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx)—for custom child chain token logic
-- [Custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway.mdx)—for advanced use cases
+- [Generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx)—for custom child chain token logic
+- [Custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/custom.mdx)—for advanced use cases
 
 ## Prerequisites
 
@@ -127,7 +127,7 @@ const receipt = await depositTx.wait();
 console.log(`Deposit complete: ${receipt.transactionHash}`);
 ```
 
-For complete deposit instructions, see [Deposit tokens](/build-decentralized-apps/token-bridging/deposit-tokens.mdx).
+For complete deposit instructions, see [Deposit tokens](/build-decentralized-apps/bridging/deposit/tokens.mdx).
 
 ## Step 4: Find your child chain token address
 
@@ -136,10 +136,7 @@ After the first deposit, find your token's child chain address:
 ### Using the SDK
 
 ```javascript
-const childTokenAddress = await erc20Bridge.getChildErc20Address(
-  parentTokenAddress,
-  parentProvider,
-);
+const childTokenAddress = await erc20Bridge.getChildErc20Address(parentTokenAddress, parentProvider);
 
 console.log(`L2 token address: ${childTokenAddress}`);
 ```
@@ -169,8 +166,8 @@ You can verify this on [Arbiscan](https://arbiscan.io/) by viewing the token con
 
 Your token is now bridgeable! Users can:
 
-- [Deposit tokens to the child chain](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
-- [Withdraw tokens back to parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+- [Deposit tokens to the child chain](/build-decentralized-apps/bridging/deposit/tokens.mdx)
+- [Withdraw tokens back to parent chain](/build-decentralized-apps/bridging/withdraw/tokens.mdx)
 
 ## Important considerations
 
@@ -183,7 +180,7 @@ The standard gateway works for most **ERC-20** tokens, but **not** for:
 - Tokens with transfer hooks
 - Tokens with unique minting and burning logic
 
-For these cases, use a [generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx) or a [custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway.mdx).
+For these cases, use a [generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx) or a [custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/custom.mdx).
 
 ### Gateway assignment
 
@@ -195,8 +192,8 @@ The gateway controls the automatically deployed child chain token—you can't mo
 
 ## Next steps
 
-- [Deposit tokens](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
-- [Withdraw tokens](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+- [Deposit tokens](/build-decentralized-apps/bridging/deposit/tokens.mdx)
+- [Withdraw tokens](/build-decentralized-apps/bridging/withdraw/tokens.mdx)
 - [Understand token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
 - [View example code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
 

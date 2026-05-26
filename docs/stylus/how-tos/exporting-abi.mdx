@@ -530,11 +530,7 @@ import { ethers } from 'ethers';
 import MyContractABI from './abi.json';
 
 const provider = new ethers.JsonRpcProvider('https://arb1.arbitrum.io/rpc');
-const contract = new ethers.Contract(
-  '0x1234567890123456789012345678901234567890',
-  MyContractABI,
-  provider,
-);
+const contract = new ethers.Contract('0x1234567890123456789012345678901234567890', MyContractABI, provider);
 
 // Call view function
 const value = await contract.getValue();

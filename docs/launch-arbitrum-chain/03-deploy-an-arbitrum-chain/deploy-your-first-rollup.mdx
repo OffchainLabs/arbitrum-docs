@@ -80,11 +80,7 @@ In this step you will deploy your chain's contracts to Arbitrum Sepolia. It will
 import { createPublicClient, http } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia } from 'viem/chains';
-import {
-  prepareChainConfig,
-  createRollupPrepareDeploymentParamsConfig,
-  createRollup,
-} from '@arbitrum/chain-sdk';
+import { prepareChainConfig, createRollupPrepareDeploymentParamsConfig, createRollup } from '@arbitrum/chain-sdk';
 import { sanitizePrivateKey, generateChainId } from '@arbitrum/chain-sdk/utils';
 import { config } from 'dotenv';
 config();
@@ -130,10 +126,7 @@ async function main() {
 
   console.log('Deployment successful!');
   console.log('Transaction hash:', result.transactionReceipt.transactionHash);
-  console.log(
-    'Save this for the next step: CHAIN_DEPLOYMENT_TRANSACTION_HASH=' +
-      result.transactionReceipt.transactionHash,
-  );
+  console.log('Save this for the next step: CHAIN_DEPLOYMENT_TRANSACTION_HASH=' + result.transactionReceipt.transactionHash);
   console.log('Save these keys (they were used for batch poster and validator):');
   console.log('BATCH_POSTER_PRIVATE_KEY=' + batchPosterPrivateKey);
   console.log('VALIDATOR_PRIVATE_KEY=' + validatorPrivateKey);
@@ -169,11 +162,7 @@ In this step you will create the `node-config.json`—the file your node needs t
 import { writeFile } from 'fs/promises';
 import { createPublicClient, http } from 'viem';
 import { arbitrumSepolia } from 'viem/chains';
-import {
-  createRollupPrepareTransaction,
-  createRollupPrepareTransactionReceipt,
-  prepareNodeConfig,
-} from '@arbitrum/chain-sdk';
+import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, prepareNodeConfig } from '@arbitrum/chain-sdk';
 import { config } from 'dotenv';
 config();
 
@@ -187,12 +176,8 @@ async function main() {
   const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
   if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
 
-  const tx = createRollupPrepareTransaction(
-    await parentChainPublicClient.getTransaction({ hash: txHash }),
-  );
-  const txReceipt = createRollupPrepareTransactionReceipt(
-    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
-  );
+  const tx = createRollupPrepareTransaction(await parentChainPublicClient.getTransaction({ hash: txHash }));
+  const txReceipt = createRollupPrepareTransactionReceipt(await parentChainPublicClient.getTransactionReceipt({ hash: txHash }));
 
   const config = tx.getInputs()[0].config;
   const chainConfig = JSON.parse(config.chainConfig);
@@ -228,7 +213,7 @@ node prepare-node-config.mjs
 
 ## Step 4: Fund the batch poster and validator
 
-The batch poster and validator need **ETH** on Arbitrum Sepolia to pay for gas when posting batches and assertions. Send **ETH** to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+The batch poster and validator need **ETH** on Arbitrum Sepolia to pay for gas when posting [batches and assertions](/how-arbitrum-works/deep-dives/assertions.mdx). Send **ETH** to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
 
 - Get the addresses from your Step 2 output (the lines starting with `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`).
 - Send at least 0.01 **ETH** to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
@@ -269,14 +254,7 @@ In this step you'll enable the bridging tokens between your chain and Arbitrum S
 import { createPublicClient, http, defineChain } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia } from 'viem/chains';
-import {
-  createRollupPrepareTransaction,
-  createRollupPrepareTransactionReceipt,
-  createTokenBridgePrepareTransactionRequest,
-  createTokenBridgePrepareTransactionReceipt,
-  createTokenBridgePrepareSetWethGatewayTransactionRequest,
-  createTokenBridgePrepareSetWethGatewayTransactionReceipt,
-} from '@arbitrum/chain-sdk';
+import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, createTokenBridgePrepareTransactionRequest, createTokenBridgePrepareTransactionReceipt, createTokenBridgePrepareSetWethGatewayTransactionRequest, createTokenBridgePrepareSetWethGatewayTransactionReceipt } from '@arbitrum/chain-sdk';
 import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
 import { config } from 'dotenv';
 config();
@@ -293,12 +271,8 @@ async function main() {
   const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
   if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
 
-  const tx = createRollupPrepareTransaction(
-    await parentChainPublicClient.getTransaction({ hash: txHash }),
-  );
-  const txReceipt = createRollupPrepareTransactionReceipt(
-    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
-  );
+  const tx = createRollupPrepareTransaction(await parentChainPublicClient.getTransaction({ hash: txHash }));
+  const txReceipt = createRollupPrepareTransactionReceipt(await parentChainPublicClient.getTransactionReceipt({ hash: txHash }));
   const coreContracts = txReceipt.getCoreContracts();
   const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
   const chainId = chainConfig.chainId;
@@ -327,9 +301,7 @@ async function main() {
   const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
     serializedTransaction: await rollupOwner.signTransaction(txRequest),
   });
-  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
-    await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
-  );
+  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }));
   console.log('Token bridge deployed on parent chain');
 
   console.log('Waiting for retryables on your chain...');
@@ -349,9 +321,7 @@ async function main() {
   const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
     serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
   });
-  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
-  );
+  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }));
   const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
     orbitPublicClient: chainPublicClient,
   });

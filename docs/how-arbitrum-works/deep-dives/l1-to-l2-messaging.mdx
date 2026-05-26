@@ -9,7 +9,7 @@ content_type: concept
 
 :::tip Looking for implementation guides?
 
-This document explains the protocol-level concepts of parent-to-child messaging. For practical, step-by-step instructions on implementing bridging and messaging, see [How to bridge from parent chain to child chain](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx).
+This document explains the protocol-level concepts of parent-to-child messaging. For practical, step-by-step instructions on implementing bridging and messaging, see [How to bridge from parent chain to child chain](/build-decentralized-apps/bridging/deposit/eth-and-messages.mdx).
 
 :::
 
@@ -44,7 +44,7 @@ This section will explore these categories in detail and explain how they work. 
 
 Native token bridging refers to depositing a chain's native currency (the token used to pay gas fees) from the parent chain to the child chain. This follows a different, simpler process than **ERC-20** token bridging through the canonical token bridge.
 
-Arbitrum chains can use **ETH** or any other **ERC-20** tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use **ETH** as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/build-decentralized-apps/custom-gas-token-sdk.mdx).
+Arbitrum chains can use **ETH** or any other **ERC-20** tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use **ETH** as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/build-decentralized-apps/bridging/configure-token-gateway/custom.mdx).
 
 Whether a chain uses **ETH** or a custom gas token, users can deposit tokens from a parent chain (for Arbitrum One, Ethereum) into a child chain. Below, we describe how to deposit **ETH** on chains that use **ETH** as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain’s Delayed Inbox contract.
 
@@ -52,7 +52,7 @@ Whether a chain uses **ETH** or a custom gas token, users can deposit tokens fro
 
 A special message type exists for simple native token deposits from parent-to-child chains. The `Inbox` contract's `depositEth` method provides this functionality for chains using **ETH**, while custom gas token chains use similar mechanisms through their Delayed Inbox contract.
 
-For step-by-step instructions on depositing native tokens, see [How to bridge from parent chain](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#bridging-eth-to-a-child-chain).
+For step-by-step instructions on depositing native tokens, see [How to bridge from parent chain](/build-decentralized-apps/bridging/deposit/eth-and-messages.mdx#bridging-eth-to-a-child-chain).
 
 #### How deposits work
 
@@ -126,19 +126,17 @@ Signed messages let a parent chain EOA prove ownership of an address, ensuring t
 
 When submitting through the Delayed Inbox, a child chain transaction signature gets included in the message's calldata. Because it matches the EOA's signature, the child chain can safely treat the signer's address as the sender.
 
-The Delayed Inbox provides two methods for signed messages: `sendL2Message` (more flexible, can be called by EOAs or contracts) and `sendL2MessageFromOrigin` (cheaper gas costs, EOA-only). For implementation details, see [Sending signed messages](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#sending-signed-messages).
+The Delayed Inbox provides two methods for signed messages: `sendL2Message` (more flexible, can be called by EOAs or contracts) and `sendL2MessageFromOrigin` (cheaper gas costs, EOA-only). For implementation details, see [Sending signed messages](/build-decentralized-apps/bridging/deposit/eth-and-messages.mdx#sending-signed-messages).
 
 ### Unsigned messages
 
 Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale).
 
-The Delayed Inbox provides methods for unsigned messages from both EOAs and contracts, with variants for whether funds are transferred from the parent chain or drawn from the child chain balance. For implementation details and method signatures, see [Sending unsigned messages](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#sending-unsigned-messages).
+The Delayed Inbox provides methods for unsigned messages from both EOAs and contracts, with variants for whether funds are transferred from the parent chain or drawn from the child chain balance. For implementation details and method signatures, see [Sending unsigned messages](/build-decentralized-apps/bridging/deposit/eth-and-messages.mdx#sending-unsigned-messages).
 
 ### Message types
 
-<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> defines various **message types** to distinguish
-between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message
-types help the protocol route and process each incoming message securely.
+<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> defines various **message types** to distinguish between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message types help the protocol route and process each incoming message securely.
 
 You can find additional details on message types in the next section of this documentation.
 
@@ -152,7 +150,7 @@ Refer to the [Address aliasing](#address-aliasing) discussion for more backgroun
 
 Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages—parent-chain transactions that initiate a message to be executed on a child chain. A retryable is submittable for a fixed cost (dependent only on its calldata size) paid at the parent chain. Critically, the ticket's _submission_ on the parent chain is separable and asynchronous from its _execution_ on the child chain. This design provides atomicity for cross-chain operations: if the parent chain transaction to request submission succeeds (doesn't revert), then the execution of the retryable on the child chain has a strong guarantee to eventually succeed.
 
-For step-by-step instructions on creating retryable tickets, including parameter estimation and SDK usage, see [Creating retryable tickets](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#creating-retryable-tickets).
+For step-by-step instructions on creating retryable tickets, including parameter estimation and SDK usage, see [Creating retryable tickets](/build-decentralized-apps/bridging/deposit/eth-and-messages.mdx#creating-retryable-tickets).
 
 ### Retryable ticket lifecycle
 

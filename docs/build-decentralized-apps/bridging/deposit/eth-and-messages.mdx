@@ -5,15 +5,15 @@ user_story: 'As a developer, I want to programmatically bridge assets and messag
 content_type: how-to
 ---
 
-This guide explains how to programmatically send messages and bridge assets from a parent chain (like Ethereum) to an Arbitrum child chain. For conceptual information about the messaging protocol, see [Parent-to-child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+This guide explains how to programmatically send messages and <a data-quicklook-from="bridge">bridge</a> assets from a <a data-quicklook-from="parent-chain">parent chain</a> (like Ethereum) to an <a data-quicklook-from="arbitrum">Arbitrum</a> <a data-quicklook-from="child-chain">child chain</a>. For conceptual information about the messaging protocol, see [Parent-to-child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 
 ## Prerequisites
 
-- A parent chain wallet with funds (**ETH** or the chain's native token)
+- A parent chain <a data-quicklook-from="wallet">wallet</a> with funds (**ETH** or the chain's native token)
 - Access to the parent chain's Inbox contract address
-- Familiarity with smart contract interactions
+- Familiarity with <a data-quicklook-from="smart-contract">smart contract</a> interactions
 
-## Bridging **ETH** to a child chain
+## Bridging ETH to a child chain
 
 To bridge **ETH** from a parent chain to a child chain, use the `depositEth` method on the Inbox contract:
 
@@ -71,7 +71,7 @@ modifier onlyFromMyL1Contract() {
 
 ## Sending transactions via the Delayed Inbox
 
-The Delayed Inbox allows you to send arbitrary messages from the parent chain to the child chain, bypassing the Sequencer if needed.
+The <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> allows you to send arbitrary messages from the parent chain to the child chain, bypassing the <a data-quicklook-from="sequencer">Sequencer</a> if needed.
 
 ### Sending signed messages
 
@@ -157,13 +157,13 @@ function sendL1FundedContractTransaction(
 
 ## Creating retryable tickets
 
-Retryable tickets are Arbitrum's canonical mechanism for reliable cross-chain message delivery. They automatically retry failed executions.
+Retryable tickets are Arbitrum's canonical mechanism for reliable <a data-quicklook-from="cross-chain-message">cross-chain message</a> delivery. They automatically retry failed executions.
 
 ### Key retryable ticket parameters
 
-Understanding these parameters helps ensure successful retryable ticket creation:
+Understanding these parameters helps ensure successful <a data-quicklook-from="retryable-ticket">retryable ticket</a> creation:
 
-- **`l1CallValue`** (msg.value): Total **ETH** sent with the transaction from parent chain. This funds the ticket submission, gas, and call value.
+- **`l1CallValue`** (msg.value): Total **ETH** sent with the <a data-quicklook-from="transaction">transaction</a> from parent chain. This funds the ticket submission, gas, and call value.
 
 - **`to`**: The destination child chain address that will receive the retryable ticket execution.
 
@@ -253,4 +253,4 @@ ArbRetryableTx(address(110)).redeem(ticketId);
 
 - For protocol-level details, see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
 - For token bridging, see [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx)
-- For bridging tokens programmatically, see [Bridge tokens programmatically](/build-decentralized-apps/token-bridging/get-started.mdx)
+- For bridging tokens programmatically, see [Bridge tokens programmatically](/build-decentralized-apps/bridging/overview.mdx)
