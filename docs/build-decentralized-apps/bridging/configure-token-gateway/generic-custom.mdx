@@ -23,7 +23,7 @@ For other gateway types, see:
 
 <VanillaAdmonition type="info">
 
-**Audience and scope.** This guide covers registration on Arbitrum One. The Solidity interfaces, SDK calls, and on-chain mechanics generalize to any Arbitrum chain — including Arbitrum Nova and chains you operate yourself — but the registration fallback for non-upgradeable parent chain tokens differs:
+**Audience and scope.** This guide covers registration on Arbitrum One. The Solidity interfaces, SDK calls, and on-chain mechanics generalize to any Arbitrum chain—including Arbitrum Nova and chains you operate yourself—but the registration fallback for non-upgradeable parent chain tokens differs:
 
 - **Arbitrum One or Nova:** register through Arbitrum DAO governance, or wrap your token (see [Step 1](#step-1-review-the-prerequisites)).
 - **An Arbitrum chain you operate:** as the chain owner, call `forceRegisterTokenToL2` and `setGateways` directly through your chain's `UpgradeExecutor`. No DAO vote is involved. You will also need to register your chain with the SDK via [`registerCustomArbitrumNetwork`](/sdk/dataEntities/networks.md) before calling `getArbitrumNetwork`.
