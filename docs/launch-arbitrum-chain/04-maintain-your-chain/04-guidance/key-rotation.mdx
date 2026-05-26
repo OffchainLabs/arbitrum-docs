@@ -9,24 +9,26 @@ user_story: As a current or prospective Arbitrum chain deployer and maintainer, 
 content_type: how-to
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 This guide covers how to rotate keys for different roles in your Arbitrum Orbit chain: batch poster, validator/bonder, and Data Availability Servers (DAS).
 
-:::warning Important Prerequisites
+<VanillaAdmonition type="warning" title="Important Prerequisites">
 
 - **Backup**: Always back up your current configuration and private keys before starting
 - **Testing**: Test key rotation on a testnet environment first, if possible
 - **Downtime**: Plan for potential brief service interruptions during the rotation process
 - **Permissions**: Ensure you have the necessary permissions to call the required smart contract functions
 
-:::
+</VanillaAdmonition>
 
 ## 1. Batch poster key rotation
 
-:::danger Critical warning
+<VanillaAdmonition type="danger" title="Critical warning">
 
 For sequencer nodes running both the sequencer and batch poster on the same server, you **must** first split them and then configure Redis for message synchronization. Failure to do so may cause chain reorganizations. Refer to the [High Availability Sequencer documentation](/launch-arbitrum-chain/07-arbitrum-node-runners/05-high-availability-sequencer-docs.mdx) for setup instructions.
 
-:::
+</VanillaAdmonition>
 
 ### Prerequisites
 
@@ -130,11 +132,11 @@ Call the following function on the `SequencerInbox` contract. The caller must be
 setValidKeyset(<new_keyset_bytes>)
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 The `setValidKeyset` function takes the raw keyset bytes as its only parameter. The assumed-honest count is encoded within the keyset bytes themselves during keyset generation — it is not a separate contract parameter.
 
-:::
+</VanillaAdmonition>
 
 #### 3. Deploy new DAS servers
 
@@ -155,16 +157,16 @@ Once the new DAS servers and keyset are fully verified, you can optionally inval
 invalidateKeysetHash(<old_keyset_hash>)
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 After invalidating the old keyset, you **must** stop and restart the batch poster so it picks up the new keyset. If you skip this step, the batch poster will continue attempting to use the old (now invalid) keyset and fail to submit batches.
 
-:::
+</VanillaAdmonition>
 
-:::caution
+<VanillaAdmonition type="caution">
 
 - You can obtain the old keyset hash from the `SetValidKeyset` event that was emitted when the old keyset was originally registered
 - Do **not** invalidate the old keyset until the new keyset is fully verified and the batch poster is successfully posting with the new DAS servers — invalidating prematurely can disrupt data availability for your chain
 - After invalidation, the old keyset can no longer be used to certify data availability certificates
 
-:::
+</VanillaAdmonition>

@@ -7,6 +7,7 @@ sidebar_position: 4
 content_type: how-to
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 import CustomizeCautionBannerPartial from '../partials/_arbitrum-chain-customize-caution-banner-partial.mdx';
 
 <CustomizeCautionBannerPartial />
@@ -81,11 +82,11 @@ install Docker from your distribution's package manager and start the Docker ser
 
 Once you have Docker installed, you can simply run `docker build . --tag custom-nitro-node` in the `nitro` folder to build your custom node.
 
-:::note
+<VanillaAdmonition type="note">
 
 A chain running a customized State Transition Function will produce blocks that don't match the verified Nitro WASM module root on the parent chain. Coordinate with Offchain Labs before operating a customized STF against a production chain, as the validator configuration required is not covered in this guide.
 
-:::
+</VanillaAdmonition>
 
 You have two ways of running your node.
 
@@ -111,11 +112,11 @@ This method will only run the customized Nitro node (i.e., it will not run Block
 docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node --conf.file /home/user/.arbitrum/nodeConfig.json
 ```
 
-:::info
+<VanillaAdmonition type="info">
 
 The instructions provided in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx) **will not** work with your Arbitrum chain node. See [Optional parameters (Arbitrum chain)](/run-arbitrum-node/02-run-full-node.mdx#optional-parameters) for Arbitrum chain-specific CLI flags.
 
-:::
+</VanillaAdmonition>
 
 Once your node is running, you can try out your modifications to the State Transition Function and confirm they work as expected.
 
