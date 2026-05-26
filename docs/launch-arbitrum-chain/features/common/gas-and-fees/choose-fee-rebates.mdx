@@ -10,11 +10,11 @@ Choosing fee distribution refers to configuring the chain's fee management syste
 
 Fee distribution can incentivize usage, reward high-volume participants, or align with project tokenomics, but they are not a default setting—instead, they require intentional configuration during or after deployment. This choice contrasts with directing all fees to a single owner or treasury address without redistribution.
 
-Configuration requires <a data-quicklook-from="chain-owner">chain owner</a> privileges and can be done post-deployment using precompiles or the <a data-quicklook-from="arbitrum">Arbitrum</a> Arbitrum Chain SDK. It's compatible with all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native `ETH` or custom), though custom tokens add complexity in exchange rate management for reimbursements. For example, surplus fees could be distributed to high-activity users or contributed to a community fund.
+Configuration requires <a data-quicklook-from="chain-owner">chain owner</a> privileges and can be done post-deployment using precompiles or the <a data-quicklook-from="arbitrum">Arbitrum</a> Arbitrum Chain SDK. It's compatible with all DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native **ETH** or custom), though custom tokens add complexity in exchange rate management for reimbursements. For example, surplus fees could be distributed to high-activity users or contributed to a community fund.
 
 ## Key concepts
 
-- **Gas and fees in Arbitrum chains**: Fees are charged for transaction execution and data posting, denominated in the chain's gas token (`ETH` by default or a custom `ERC-20`). They cover operational costs like sequencing, data availability, and <a data-quicklook-from="parent-chain">parent chain</a> interactions. Surplus fees (beyond minimum costs) can accumulate during congestion, providing a pool for potential distribution.
+- **Gas and fees in Arbitrum chains**: Fees are charged for transaction execution and data posting, denominated in the chain's gas token (**ETH** by default or a custom **ERC-20**). They cover operational costs like sequencing, data availability, and <a data-quicklook-from="parent-chain">parent chain</a> interactions. Surplus fees (beyond minimum costs) can accumulate during congestion, providing a pool for potential distribution.
 - **Fee distribution**: Distribution involves returning part of the paid fees, often as incentives. In Arbitrum chains, this isn't an explicit "toggle" but is facilitated by routing fees to smart contracts that automate distributions (e.g., proportional payouts). This can be similar to rebate programs seen in apps on Arbitrum (e.g., trading fee rebates funded by incentives), but applied at the chain level.
 
 ## Types of fees available for distribution
@@ -26,13 +26,13 @@ Configuration requires <a data-quicklook-from="chain-owner">chain owner</a> priv
 
 ## Compatibility and considerations
 
-- **With custom gas token**: Distributions work but require a fee token pricer for parent chain reimbursements (e.g., converting custom tokens to `ETH`). Pricers (manual, <a data-quicklook-from="oracle">oracle</a>-based, or trade-tracking) ensure accurate reimbursements to batch posters, which can include refund-like mechanics if reserves are managed.
-- **With native `ETH`**: Simpler, as no conversions are needed; distribution can be direct `ETH` payouts.
+- **With custom gas token**: Distributions work but require a fee token pricer for parent chain reimbursements (e.g., converting custom tokens to **ETH**). Pricers (manual, <a data-quicklook-from="oracle">oracle</a>-based, or trade-tracking) ensure accurate reimbursements to batch posters, which can include refund-like mechanics if reserves are managed.
+- **With native **ETH\***\*: Simpler, as no conversions are needed; distribution can be direct **ETH\*\* payouts.
 
 ## Pros
 
 - Boosts user engagement by reducing effective costs (e.g., 75-100% distribution in dApp examples).
-- Flexible tokenomics, such as funding distributions with surplus or incentives like `ARB` grants.
+- Flexible tokenomics, such as funding distributions with surplus or incentives like **ARB** grants.
 - Enhances competitiveness for high-throughput apps like gaming or DeFi.
 
 ## Cons
@@ -43,7 +43,7 @@ Configuration requires <a data-quicklook-from="chain-owner">chain owner</a> priv
 
 ## Examples
 
-- **App-level distribution**: Protocols like GMX or Synthetix on Arbitrum distribute 75%+ of trading fees using `ARB` incentives, which Arbitrum chains can emulate at the chain level.
+- **App-level distribution**: Protocols like GMX or Synthetix on Arbitrum distribute 75%+ of trading fees using **ARB** incentives, which Arbitrum chains can emulate at the chain level.
 - **Chain-level**: Set surplus fees to a distributor that distributes to top users or integrates with programs like ArbiFuel for sponsored gas in early stages.
 
 ## How to configure

@@ -16,6 +16,18 @@ While **crates.io** is a fantastic resource, many of these libraries were not de
 
 Using the standard Rust library often bloats contract sizes beyond the maximum size. For this reason, libraries designated as `no_std` are typically much stronger candidates for usage as a smart contract dependency. **crates.io** has a special tag for marking crates as `no_std`; however, it's not universally used. Still, it can be a good starting point for locating supported libraries. See ["No standard library"](https://crates.io/categories/no-std) crates for more details.
 
+<VanillaAdmonition type="info" title="Library compatibility checklist">
+
+A Rust library is compatible with Stylus if it meets all of the following:
+
+- **Single-threaded**: no `async`/`await`, no thread spawning, no concurrent execution primitives.
+- **No floating-point**: `f32` and `f64` are not supported by the Stylus VM.
+- **No randomness**: no entropy is available onchain; libraries that depend on `rand` or system entropy will not work.
+- **`no_std`-friendly**: prefer crates that compile without the standard library; the `std` lib pulls in OS-level features that are unavailable and inflates the binary.
+- **WASM-compatible target**: must build for `wasm32-unknown-unknown`.
+
+</VanillaAdmonition>
+
 ## Curated crates
 
 To save developers time on smart contract development for common dependencies, we've curated a list of crates and utilities that we found helpful. Keep in mind that we have not audited this code, and you should always be mindful about pulling dependencies into your codebase, whether they've been audited or not. We provide this list for you to use at your discretion and risk.

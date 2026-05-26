@@ -69,6 +69,18 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 - Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
 - Cryptographic applications: Implement applications that require advanced cryptography or other compute-heavy operations that would be cost-prohibitive in Solidity.
 
+## When Stylus saves gas (and when it doesn't)
+
+Stylus's gas advantage is concentrated in **computation**. Storage operations cost roughly the same as in the EVM, so storage-heavy contracts gain little by porting.
+
+<VanillaAdmonition type="info" title="Quick rule of thumb">
+
+- **Use Stylus** for compute-heavy logic: cryptography, math-heavy DeFi, ZK verification, in-memory algorithms, ports of existing Rust/C/C++ libraries.
+- **Stick with Solidity** when the contract mostly reads and writes storage with little computation in between — you won't see a meaningful gas reduction.
+- **Hybrid approach**: keep your storage layout in Solidity and call out to a Stylus contract for the compute-heavy hot paths.
+
+</VanillaAdmonition>
+
 ## Getting started
 
 1. Follow the [quickstart](/stylus/quickstart) to deploy your first Stylus contract, and explore the [Rust SDK](/stylus/reference/overview) documentation.

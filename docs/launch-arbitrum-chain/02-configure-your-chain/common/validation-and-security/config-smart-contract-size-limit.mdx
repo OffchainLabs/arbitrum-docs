@@ -6,7 +6,7 @@ sme: jason-w123
 content_type: how-to
 ---
 
-The smart contract size limit must be set during the initial configuration and deployment of a custom chain (Layer 2 or Layer 3 Rollup). It is not possible to modify it post-deployment due to the lack of a versioning mechanism for such parameters.
+The <a data-quicklook-from="smart-contract">smart contract</a> size limit must be set during the initial configuration and deployment of a custom chain (Layer 2 or Layer 3 Rollup). It is not possible to modify it post-deployment due to the lack of a versioning mechanism for such parameters.
 
 The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). Both are configurable up to 96KB (98,304 bytes), which is higher than the default 24KB (24,576 bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
 
@@ -14,8 +14,8 @@ The limit applies to both deployed contract code (`MaxCodeSize`) and initializat
 
 - **Default values**: 24KB (24,576 bytes) for `MaxCodeSize` and `MaxInitCodeSize` is `2 * DefaultMaxCodeSize`.
 - **Maximum values**: 96KB (98,304 bytes) for each. Setting higher is not supported and may cause deployment failures or compatibility issues.
-- **Where applicable**: Only in custom Arbitrum chains. Public chains like Arbitrum One or Nova remain fixed at 24KB without a network-wide upgrade.
-- **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded wallet on the parent chain (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
+- **Where applicable**: Only in custom <a data-quicklook-from="arbitrum-chain">Arbitrum chains</a>. Public chains like <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or Nova remain fixed at 24KB without a network-wide upgrade.
+- **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded <a data-quicklook-from="wallet">wallet</a> on the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
 
 import SizeLimit from '../../../partials/_size-limit.mdx';
 
@@ -79,7 +79,7 @@ console.log(JSON.stringify(chainConfig, null, 2));
 
 ### 2. Full node configuration and deployment example
 
-- This extends Step 1 in preparation of the full node config (e.g., for running a sequencer or validator node). Place this in a file like `deployOrbitChain.ts`. It assumes you’re deploying to a parent chain, such as Sepolia (testnet).
+- This extends Step 1 in preparation of the full node config (e.g., for running a [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) or validator node). Place this in a file like `deployOrbitChain.ts`. It assumes you’re deploying to a parent chain, such as Sepolia (testnet).
 
 ```typescript
 import { prepareChainConfig, prepareNodeConfig } from '@offchainlabs/chain-sdk'; // Import SDK functions
@@ -88,7 +88,7 @@ import { writeFileSync } from 'fs'; // For saving config files
 
 // Load environment variables (e.g., from .env file)
 const parentChainRpcUrl = process.env.PARENT_RPC_URL; // e.g., https://sepolia.infura.io/v3/YOUR_KEY
-const privateKey = process.env.PRIVATE_KEY; // Your wallet private key (funded with `ETH`)
+const privateKey = process.env.PRIVATE_KEY; // Your wallet private key (funded with ETH)
 
 // Step 1: Prepare chain config with increased size limits
 const orbitChainParams = {
@@ -136,4 +136,4 @@ console.log('Use the generated my-arbitrum-chain.toml to run your node.');
 
 - Run this with `ts-node deployOrbitChain.ts`. This script deploys the chain and generates the node config with your custom limits embedded.
 
-For exact SDK function signatures and more options, refer to the official [Arbitrum Chain SDK repository on GitHub](https://github.com/OffchainLabs/arbitrum-chain-sdk). Always test in a development environment, as incorrect configs can lead to failed deployments or insecure chains. If your contracts still exceed the limit, consider optimizations such as code splitting or using Stylus to create more efficient WASM-based contracts.
+For exact SDK function signatures and more options, refer to the official [Arbitrum Chain SDK repository on GitHub](https://github.com/OffchainLabs/arbitrum-chain-sdk). Always test in a development environment, as incorrect configs can lead to failed deployments or insecure chains. If your contracts still exceed the limit, consider optimizations such as code splitting or using [Stylus](/stylus/gentle-introduction.mdx) to create more efficient <a data-quicklook-from="wasm">WASM</a>-based contracts.
