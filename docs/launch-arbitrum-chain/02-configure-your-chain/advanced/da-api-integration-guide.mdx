@@ -25,7 +25,7 @@ The DA API is an extensibility feature in Arbitrum Nitro that allows external da
 
 - **No forking required**: Integrate your DA system without modifying Nitro or contracts
 - **Pluggable architecture**: Define your own certificate formats and validation logic
-- **Fraud-proof compatible**: Full support for <a data-quicklook-from="bold">BoLD</a> <a data-quicklook-from="challenge">challenge</a> protocol and fraud proofs
+- **Fraud-proof compatible**: Full support for [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) <a data-quicklook-from="challenge">challenge</a> protocol and fraud proofs
 - **Multi-provider support**: Multiple DA systems can coexist on the same chain
 
 ### Architecture overview
@@ -39,7 +39,7 @@ The DA API has four main components:
 
 These components work together to enable:
 
-- **Normal execution**: <a data-quicklook-from="batch-poster">Batch Poster</a> stores data -> generates certificate -> posts to <a data-quicklook-from="l1">L1</a>
+- **Normal execution**: [Batch Poster](/how-arbitrum-works/deep-dives/assertions.mdx) stores data -> generates certificate -> posts to <a data-quicklook-from="l1">L1</a>
 - **Validation**: Node reads certificate -> recovers data -> executes
 - **Fraud proofs**: Prover generates proof -> enhances with DA data -> validates onchain
 
@@ -126,7 +126,7 @@ Your JSON-RPC server must implement three Reader methods that Nitro nodes call t
 
 ### Method 1: `daprovider_getSupportedHeaderBytes`
 
-Returns the header byte that identifies your DA provider in <a data-quicklook-from="sequencer">Sequencer</a> messages.
+Returns the header byte that identifies your DA provider in [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) messages.
 
 **Parameters**: None
 
@@ -796,7 +796,7 @@ Proof format: [element_value, opening_proof, auxiliary_data]
 
 **Comparison**:
 | Approach | Proof Size (5MB batch) | Pros | Cons |
-| -------- | ---------------------- | ---- | ---- |
+| ---------------------- | ---------------------- | ------------------------ | ----------------------------------------------- |
 | **Full Preimage** | 5MB | Simple to implement | Huge proofs, expensive L1 verification |
 | **KZG Commitments** | ~128 bytes | Constant size, efficient | Requires trusted setup, pairing-friendly curves |
 | **Merkle Trees** | ~512 bytes | No trusted setup, simple | Logarithmic size, multiple hashes to verify |

@@ -6,9 +6,15 @@ user_story: As a developer, I want to integrate the Arbitrum bridge widget into 
 content_type: how-to
 ---
 
-The embedded bridge helps applications bring users and assets into markets built on the Arbitrum Platform.
+The embedded bridge helps applications bring users and assets into markets built on the Arbitrum Platform. To see what the end-user bridge flow looks like outside the widget, see the [Arbitrum bridge quickstart](/arbitrum-bridge/01-quickstart.mdx).
 
 You can embed the widget onto your webpage using a simple iframe and configure colors and window sizing by modifying the iframe code. Transactions are routed through [Li.fi's API](https://li.fi), which then requests quotes from various third-party bridging providers, such as Layer Zero, Across, or Relay. The fastest and cheapest paths are highlighted to users based on the quotes. Users can pick their preferred bridging option.
+
+:::info Bridging **USDC** through the widget
+
+The widget routes **USDC** alongside other tokens. For background on Arbitrum One's two **USDC** forms (native vs `USDC.e`), see [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx).
+
+:::
 
 ## Functionalities
 
@@ -47,7 +53,7 @@ Before integrating, review the current chain offerings to ensure that your desir
 
 Contact [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com) to discuss specific chain and token support.
 
-For transaction support, users should [create a support ticket ](https://support.arbitrum.io/hc/en-gb/requests/new) with the Arbitrum Foundation and select the "Widget" option in the dropdown.
+For transaction support, users should [create a support ticket ](https://support.arbitrum.io/hc/en-gb/requests/new) with the Arbitrum Foundation and select the "Widget" option in the dropdown. For self-service troubleshooting of common bridging issues, see [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx).
 
 ### Chain and bridge support
 
@@ -63,8 +69,15 @@ If you are interested in on-ramp support, please contact [partnerships@offchainl
 
 #### 2. If I'm an Arbitrum chain and I want support, how do I adopt?
 
-You'll need an integration with Li.fi and a minimum number of bridges to enable a good experience. Contact [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com) to discuss adding support for your chain.
+You'll need an integration with Li.fi and a minimum number of bridges to enable a good experience. Contact [partnerships@offchainlabs.com](mailto:partnerships@offchainlabs.com) to discuss adding support for your chain. To also be listed in the main bridge UI at [bridge.arbitrum.io](https://bridge.arbitrum.io/), see [How to add your Arbitrum chain to Arbitrum's bridge](/launch-arbitrum-chain/08-ecosystem-support/02-add-arbitrum-chain-to-bridge-ui.mdx).
 
 #### 3. Are there any fees associated with the embedded bridge?
 
 The embedded bridge routes orders through Li.fi's route aggregator, which charges a 16-basis-point fee on all transactions.
+
+## See also
+
+- [Arbitrum bridge quickstart](/arbitrum-bridge/01-quickstart.mdx)
+- [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx)
+- [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx)
+- [How to add your Arbitrum chain to Arbitrum's bridge](/launch-arbitrum-chain/08-ecosystem-support/02-add-arbitrum-chain-to-bridge-ui.mdx)
