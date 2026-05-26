@@ -9,11 +9,11 @@ displayed_sidebar: buildAppsSidebar
 
 :::caution Do you really need a custom gateway?
 
-Before implementing and deploying a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum's token bridge provides: the [standard gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway.mdx) and the [generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
+Before implementing and deploying a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum's token bridge provides: the [standard gateway](/build-decentralized-apps/bridging/configure-token-gateway/standard.mdx) and the [generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 :::
 
-In this how-to, you'll learn how to bridge your own token between Ethereum (the parent chain) and Arbitrum (the child chain), using a custom gateway. For alternative ways of bridging tokens, check out the [token bridging overview](/build-decentralized-apps/token-bridging/get-started.mdx).
+In this how-to, you'll learn how to bridge your own token between Ethereum (the parent chain) and Arbitrum (the child chain), using a custom gateway. For alternative ways of bridging tokens, check out the [token bridging overview](/build-decentralized-apps/bridging/overview.mdx).
 
 Familiarity with [Arbitrum's token bridge system](/how-arbitrum-works/deep-dives/token-bridging.mdx), smart contracts, and decentralized application development is expected. If you're new to developing on Arbitrum, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Remix)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We'll use [Arbitrum's SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
@@ -21,7 +21,7 @@ We will go through all the steps involved in the process. However, if you want t
 
 ## Step 0: Review the prerequisites (a.k.a. do I really need a custom gateway?)
 
-Before implementing and deploying a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/build-decentralized-apps/token-bridging/deposit-tokens.mdx) and the [generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
+Before implementing and deploying a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/build-decentralized-apps/bridging/deposit/tokens.mdx) and the [generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 There are several prerequisites to consider when deploying your own custom gateway.
 
@@ -44,7 +44,7 @@ On the other hand, the **child chain counterpart of the gateway** must conform t
 
 ### What about my custom tokens?
 
-If you are deploying custom gateways, you will likely want to support your custom tokens on both the parent and child chains. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx).
+If you are deploying custom gateways, you will likely want to support your custom tokens on both the parent and child chains. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx).
 
 ## Step 1: Create a gateway and deploy it on the parent chain
 
@@ -732,7 +732,7 @@ main()
 
 This step will depend on your setup. In this case, since our simplified gateway supports only one token, we'll deploy it on both the parent and child chains to enable calling the `setTokenBridgeInformation` method on both gateways afterwards.
 
-We won't go through the process of deploying custom tokens in this how-to, but you can see a detailed explanation of the steps to take on the [generic-custom gateway setup page](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx).
+We won't go through the process of deploying custom tokens in this how-to, but you can see a detailed explanation of the steps to take on the [generic-custom gateway setup page](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx).
 
 ## Step 4: Configure your custom tokens on your gateways
 
@@ -762,7 +762,7 @@ console.log(`Token bridge information set on L2CustomGateway! L2 receipt is: ${s
 
 Once all contracts are deployed successfully on their respective chains, and they all have the information of the gateways and tokens, it's time to register the token in your custom gateway.
 
-As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway.mdx), this action needs to be completed by the parent chain token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
+As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/bridging/configure-token-gateway/generic-custom.mdx), this action needs to be completed by the parent chain token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
 
 In this case, when using this function, a single action occurs:
 
@@ -810,8 +810,8 @@ The full code for this how-to and other more extensive deployment and testing sc
 
 Your custom gateway is now configured! Users can:
 
-- [Deposit tokens to the child chain](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
-- [Withdraw tokens back to the parent chain](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
+- [Deposit tokens to the child chain](/build-decentralized-apps/bridging/deposit/tokens.mdx)
+- [Withdraw tokens back to the parent chain](/build-decentralized-apps/bridging/withdraw/tokens.mdx)
 
 ## Resources
 
