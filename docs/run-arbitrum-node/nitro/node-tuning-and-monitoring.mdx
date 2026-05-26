@@ -31,7 +31,7 @@ Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO 
 The Go runtime manages its own heap for all pure-Go allocations. Key consumers include:
 
 - **Contract code cache**: An LRU cache of contract bytecode, hardcoded at 256 MB. Isn't configurable.
-- **Activated WASM cache**: Compiled Stylus WASM modules cached on the Go heap, hardcoded at 64 MB.
+- **Stylus LRU cache**: Compiled Stylus WASM modules cached on the Go heap. Default capacity is 256 MB, configurable via `--execution.caching.stylus-lru-cache-capacity`.
 - **fastcache index maps**: Although fastcache stores its data via `mmap`, each instance maintains a Go-side index (bucket maps of `uint64` to `uint64`). These index maps can consume hundreds of MB on the Go heap.
 - **Goroutine stacks, block/receipt caches, and GC overhead**: Goroutine stacks, recently accessed blocks/receipts, and Go's own GC metadata collectively add further pressure.
 
@@ -76,9 +76,11 @@ MALLOC_ARENA_MAX=2
 
 Setting `MALLOC_ARENA_MAX=2` caps glibc to two arenas, reducing worst-case arena overhead from gigabytes to ~128 MB. In testing, this eliminated the slow memory growth with no measurable performance impact on RPC throughput.
 
-:::caution
-Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.
-:::
+<VanillaAdmonition type="caution">
+  Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena
+  overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage.
+  This is the most common cause of unexplained memory growth in long-running Nitro nodes.
+</VanillaAdmonition>
 
 ### Thread stacks
 
@@ -113,9 +115,11 @@ GOMEMLIMIT = Container_Memory_Limit - Non_Go_Memory - Safety_Margin
 
 You should use a safety margin of 300-500 MB to account for allocator overhead, transient allocations, and kernel page cache.
 
-:::caution
-If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
-:::
+<VanillaAdmonition type="caution">
+  If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector
+  defers collection, expecting more room than actually exists. The OS then OOM-kills the process
+  when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
+</VanillaAdmonition>
 
 ### Helm chart shortcut
 
@@ -186,9 +190,10 @@ The same server also exposes pprof profiling endpoints at `/debug/pprof/` for CP
 | `arb_feed_backlog_messages` | Number of messages in the feed backlog. A growing backlog indicates the node is falling behind the sequencer feed. |
 | Batch poster backlog        | For batch poster nodes, tracks how many batches are pending submission to the parent chain.                        |
 
-:::tip
-Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.
-:::
+<VanillaAdmonition type="tip">
+  Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in
+  Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.
+</VanillaAdmonition>
 
 ### Kubernetes ServiceMonitor
 

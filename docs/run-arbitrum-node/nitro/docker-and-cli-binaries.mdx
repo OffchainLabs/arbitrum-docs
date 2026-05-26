@@ -39,11 +39,11 @@ The `--validation.wasm.allowed-wasm-module-roots` flag tells the node which WASM
 - `/home/user/nitro-legacy/machines` — WASM roots from earlier Nitro versions, needed to validate historical blocks.
 - `/home/user/target/machines` — Current WASM roots shipped with this image version.
 
-:::warning
+<VanillaAdmonition type="warning">
 
 If you override the entrypoint (for example, `--entrypoint relay`), the default flags are **not** applied. You must pass `--validation.wasm.allowed-wasm-module-roots` manually if the binary you are running requires validation support.
 
-:::
+</VanillaAdmonition>
 
 ### The split validator entrypoint
 
@@ -75,7 +75,6 @@ docker run offchainlabs/nitro-node:validator-latest \
 | `nitro-val` | Standalone validation server. Validates state transitions using WASM fraud proofs.                                |
 | `relay`     | Sequencer feed relay. Receives the transaction feed from a sequencer and redistributes it to downstream nodes.    |
 | `deploy`    | Deploys Arbitrum Rollup contracts to the parent chain. Used when launching new Arbitrum chains. Dev image only.   |
-| `replay`    | Replays state transitions for fraud proof verification. Compiled to WASM for onchain dispute resolution.          |
 | `prover`    | WASM prover binary for generating and verifying fraud proofs.                                                     |
 
 ### Data availability
@@ -85,7 +84,6 @@ docker run offchainlabs/nitro-node:validator-latest \
 | `anytrustserver` | AnyTrust Data Availability Committee (DAC) server. Stores and serves batch data for AnyTrust chains. `daserver` is a symlink to this binary (deprecated name). |
 | `anytrusttool`   | CLI tool for AnyTrust key generation, keyset management, and certificate inspection. `datool` is a symlink to this binary (deprecated name).                   |
 | `daprovider`     | Unified data availability provider. Serves data from multiple backends (AnyTrust, blobs, or other DA layers).                                                  |
-| `blobtool`       | Testing utility for beacon chain blob endpoints. Reads and verifies EIP-4844 blobs from a beacon node.                                                         |
 
 ### Timeboost
 

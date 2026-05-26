@@ -1,7 +1,7 @@
 ---
 title: 'Data availability tools reference'
 sidebar_label: 'DA tools reference'
-description: 'Reference for anytrusttool (keygen, dumpkeyset, client), daserver, and daprovider CLI tools'
+description: 'Reference for anytrusttool (keygen, dumpkeyset, client), anytrustserver, and daprovider CLI tools'
 user_story: 'As an Orbit chain operator, I want to generate keys, configure keysets, and interact with my DA committee'
 content_type: 'reference'
 author: 'gzeoneth'
@@ -12,7 +12,7 @@ sme: 'gzeoneth'
 # - TW-698: AnyTrust docs with operational parameters (partial)
 ---
 
-Nitro ships three binaries for operating [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) data availability (DA) infrastructure: `anytrusttool` for key management and testing, `daserver` for running a DA committee member, and `daprovider` for running a DA provider server that exposes a unified JSON-RPC interface over different DA backends.
+Nitro ships three binaries for operating [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) data availability (DA) infrastructure: `anytrusttool` for key management and testing, `anytrustserver` for running a DA committee member, and `daprovider` for running a DA provider server that exposes a unified JSON-RPC interface over different DA backends.
 
 ## anytrusttool
 
@@ -22,9 +22,11 @@ Nitro ships three binaries for operating [AnyTrust](/how-arbitrum-works/deep-div
 anytrusttool [keygen | dumpkeyset | client | generatehash] ...
 ```
 
-:::caution Deprecation notice
-The `datool` binary name is deprecated. The Docker image still includes a `datool` symlink for backward compatibility, but running it logs a deprecation warning. Update your scripts to use `anytrusttool`.
-:::
+<VanillaAdmonition type="caution" title="Deprecation notice">
+  The `datool` binary name is deprecated. The Docker image still includes a `datool` symlink for
+  backward compatibility, but running it logs a deprecation warning. Update your scripts to use
+  `anytrusttool`.
+</VanillaAdmonition>
 
 ### keygen
 
@@ -78,7 +80,7 @@ You are prompted for a password to encrypt the wallet.
 
 ```shell
 docker run --rm \
-  --entrypoint datool \
+  --entrypoint anytrusttool \
   -v "$(pwd)/keys:/data/keys" \
   offchainlabs/nitro-node:latest \
   keygen --dir /data/keys
@@ -135,7 +137,7 @@ The `Keyset` value is the hex-encoded keyset bytes. The `KeysetHash` value is th
 
 ```shell
 docker run --rm \
-  --entrypoint datool \
+  --entrypoint anytrusttool \
   -v "$(pwd)/config:/config" \
   offchainlabs/nitro-node:latest \
   dumpkeyset --conf.file /config/keyset-config.json
@@ -218,13 +220,15 @@ Hex Encoded Data Hash: 0x...
 
 The argument is a positional parameter (not a flag).
 
-## daserver
+## anytrustserver
 
-`daserver` runs a DA committee member server that stores and serves batch data. It exposes RPC and REST interfaces for clients to store and retrieve data.
+`anytrustserver` runs a DA committee member server that stores and serves batch data. It exposes RPC and REST interfaces for clients to store and retrieve data.
 
-:::caution Deprecation notice
-The `daserver` binary name is deprecated. The Docker image still includes a `daserver` symlink for backward compatibility, but running it logs a deprecation warning. Update your scripts to use `daserver`.
-:::
+<VanillaAdmonition type="caution" title="Deprecation notice">
+  The `daserver` binary name is deprecated. The Docker image still installs a `daserver` symlink for
+  backward compatibility, but invoking it logs a deprecation warning. Update your scripts to use
+  `anytrustserver`.
+</VanillaAdmonition>
 
 ### Key flags
 
@@ -247,12 +251,12 @@ The `daserver` binary name is deprecated. The Docker image still includes a `das
 
 At least one of `--enable-rpc` or `--enable-rest` is required.
 
-The `--data-availability.*` flags configure the server's storage backend, BLS key, and caching. Run `daserver --help` for the full list of data availability options.
+The `--data-availability.*` flags configure the server's storage backend, BLS key, and caching. Run `anytrustserver --help` for the full list of data availability options.
 
 ### Example
 
 ```shell
-daserver \
+anytrustserver \
   --enable-rpc \
   --rpc-addr 0.0.0.0 \
   --rpc-port 9876 \
@@ -275,7 +279,7 @@ docker run --rm \
   -v "$(pwd)/keys:/keys" \
   -p 9876:9876 \
   -p 9877:9877 \
-  --entrypoint daserver \
+  --entrypoint anytrustserver \
   offchainlabs/nitro-node:latest \
   --enable-rpc \
   --rpc-addr 0.0.0.0 \
@@ -339,6 +343,6 @@ daprovider \
   --parent-chain.node-url https://your-parent-chain-rpc.example.com
 ```
 
-### When to use daprovider versus daserver
+### When to use daprovider versus anytrustserver
 
-`daserver` is the original standalone DA server binary that exposes native RPC and REST interfaces for a single AnyTrust committee member. `daprovider` is a newer binary that wraps DA backends behind a unified JSON-RPC interface, supports multiple DA modes (including `referenceda`), and is designed for integration with external systems that consume the provider API. Use `daserver` when running a traditional AnyTrust DA committee member. Use `daprovider` when you need a standardized provider interface or are using a non-AnyTrust DA backend.
+`anytrustserver` is the standalone DA server binary that exposes native RPC and REST interfaces for a single AnyTrust committee member. `daprovider` is a newer binary that wraps DA backends behind a unified JSON-RPC interface, supports multiple DA modes (including `referenceda`), and is designed for integration with external systems that consume the provider API. Use `anytrustserver` when running a traditional AnyTrust DA committee member. Use `daprovider` when you need a standardized provider interface or are using a non-AnyTrust DA backend.
