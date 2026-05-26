@@ -80,11 +80,7 @@ MALLOC_ARENA_MAX=2
 
 Setting `MALLOC_ARENA_MAX=2` caps glibc to two arenas, reducing worst-case arena overhead from gigabytes to ~128 MB. In testing, this eliminated the slow memory growth with no measurable performance impact on RPC throughput.
 
-<VanillaAdmonition type="caution">
-  Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena
-  overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage.
-  This is the most common cause of unexplained memory growth in long-running Nitro nodes.
-</VanillaAdmonition>
+<VanillaAdmonition type="caution">Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.</VanillaAdmonition>
 
 ### Thread stacks
 
@@ -178,10 +174,16 @@ GOMEMLIMIT ≈ 16,384 MB × 0.75 = ~12,288 MB ≈ 12 GB
 
 ### Memory free limits
 
-Two multipliers control how much free memory Nitro reserves before throttling operations:
+Nitro can throttle RPC and pause block validation when system free memory drops below a configurable threshold. This protection is **disabled by default in Nitro** — it only kicks in once you set the corresponding flags. The [community Helm chart](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/nitro) enables these limits with the following multipliers against the container memory limit:
 
 - **`resourceMgmtMemFreeLimit`**: Multiplier `0.05` (5% of container memory). When free memory drops below this threshold, the node throttles incoming RPC requests to prevent OOM conditions.
 - **`blockValidatorMemFreeLimit`**: Multiplier `0.05` (5% of container memory). When free memory drops below this threshold, the validator pauses block validation until memory is reclaimed.
+
+<VanillaAdmonition type="note">
+
+The `0.05` multipliers above come from the community Helm chart's defaults, not from Nitro itself. If you're not running the Helm chart, set the equivalent Nitro flags explicitly to enable this protection.
+
+</VanillaAdmonition>
 
 ### GOMAXPROCS
 
@@ -229,10 +231,7 @@ The same server also exposes pprof profiling endpoints at `/debug/pprof/` for CP
 | `arb_feed_backlog_messages` | Number of messages in the feed backlog. A growing backlog indicates the node is falling behind the sequencer feed. |
 | Batch poster backlog        | For batch poster nodes, tracks how many batches are pending submission to the parent chain.                        |
 
-<VanillaAdmonition type="tip">
-  Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in
-  Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.
-</VanillaAdmonition>
+<VanillaAdmonition type="tip">Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.</VanillaAdmonition>
 
 ### Kubernetes ServiceMonitor
 
