@@ -14,7 +14,7 @@ The **teleport** feature in the Arbitrum SDK solves this by letting users bridge
 
 ## How teleportation works
 
-A teleport deposit creates a chain of [retryable tickets](/build-decentralized-apps/04-cross-chain-messaging.mdx) that propagate your tokens through each layer:
+A teleport deposit creates a chain of [retryable tickets](/build-decentralized-apps/bridging/cross-chain-messaging.mdx) that propagate your tokens through each layer:
 
 1. **L1 transaction**: Your tokens are deposited into the L1-to-L2 token bridge
 2. **L2 retryable**: The L2 bridge receives the tokens and forwards them to the L2-to-L3 bridge
@@ -181,7 +181,7 @@ This means the L1-to-L2 leg completed but the L2-to-L3 retryable has not yet bee
 
 ### Retryable shows `EXPIRED`
 
-Retryable tickets expire after their lifetime (default: 7 days). If a retryable expired, the tokens are sitting on L2 rather than L3. You can manually bridge them from L2 to L3 using the standard [deposit flow](/build-decentralized-apps/token-bridging/deposit-tokens.mdx).
+Retryable tickets expire after their lifetime (default: 7 days). If a retryable expired, the tokens are sitting on L2 rather than L3. You can manually bridge them from L2 to L3 using the standard [deposit flow](/build-decentralized-apps/bridging/deposit/tokens.mdx).
 
 ### Custom gas token approval failed
 
@@ -189,9 +189,9 @@ If the L3 chain uses a custom gas token (not `ETH`), you must approve the gas to
 
 ## Next steps
 
-- [Deposit tokens (L1 to L2)](/build-decentralized-apps/token-bridging/deposit-tokens.mdx)
-- [Withdraw tokens (L2 to L1)](/build-decentralized-apps/token-bridging/withdraw-tokens.mdx)
-- [Cross-chain messaging overview](/build-decentralized-apps/04-cross-chain-messaging.mdx)
+- [Deposit tokens (L1 to L2)](/build-decentralized-apps/bridging/deposit/tokens.mdx)
+- [Withdraw tokens (L2 to L1)](/build-decentralized-apps/bridging/withdraw/tokens.mdx)
+- [Cross-chain messaging overview](/build-decentralized-apps/bridging/cross-chain-messaging.mdx)
 - [Source code: L1-L3 teleport tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/l1-l3-teleport)
 
 ## Resources
