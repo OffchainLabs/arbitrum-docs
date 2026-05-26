@@ -20,7 +20,6 @@ This repository is organized as follows:
   - `node-running/` - Node operation guides
   - `partials/` - Reusable content components and troubleshooting guides
   - `run-arbitrum-node/` - Node setup and configuration
-  - `sdk/` - Auto-generated SDK documentation - Do not edit
   - `stylus/` - Stylus smart contract development
   - `welcome/` - Getting started content
 
@@ -38,8 +37,6 @@ This repository is organized as follows:
 
 - **`scripts/`**: Repository maintenance, build scripts, and content generators
 - **`static/`**: Static assets (images, files, JSON data)
-
-> **Note:** SDK API docs (`docs/sdk/`) and Stylus examples (`docs/stylus/`) are committed directly to the repository. They are regenerated from upstream repos ([arbitrum-sdk](https://github.com/OffchainLabs/arbitrum-sdk), [stylus-by-example](https://github.com/offchainlabs/stylus-by-example)) via the `update-external-content` GitHub Actions workflow.
 
 ## Contribution
 
@@ -130,6 +127,24 @@ npx tsx scripts/build-glossary.ts
 This part will update the glossary.
 
 4. Commit your changes and open a PR.
+
+### Update Nitro CLI flag reference
+
+`docs/run-arbitrum-node/nitro/cli-flags-reference.mdx` is auto-generated from `scripts/data/nitro-cli-flags.json` by `scripts/generate-cli-reference.ts`. Do not edit the `.mdx` file by hand — your changes will be overwritten on the next regeneration.
+
+To regenerate the reference after updating the JSON data file:
+
+```shell
+yarn generate-cli-reference
+```
+
+To verify the committed `.mdx` is in sync with the JSON data (used in CI):
+
+```shell
+yarn generate-cli-reference --check
+```
+
+The script also accepts `--output <path>` to write to a different location and `--nitro-path <path>` (or the `NITRO_REPO_PATH` env var) to point at a local Nitro checkout — useful when refreshing the JSON data against a specific Nitro version.
 
 ### Formatting
 

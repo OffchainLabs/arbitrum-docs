@@ -10,6 +10,8 @@ sme: 'gzeoneth'
 # - TW-693: Nitro CLI reference (partial — config system portion)
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
 Nitro nodes accept configuration from multiple sources. When the same setting appears in more than one source, Nitro applies a deterministic precedence order so you always know which value wins. This guide explains each configuration source, how they interact, and how to inspect the merged result.
 
 ## Config sources and precedence
@@ -23,9 +25,10 @@ Nitro loads configuration in the following order. Each source overrides values s
 5. **CLI flags** — individual flags like `--http.port 8547`. CLI flags are re-applied after each config source loads, so they override config files and config strings.
 6. **Environment variables** — variables matching the configured prefix (see [Environment variables](#environment-variables)). These are applied last and override everything else, including CLI flags.
 
-:::tip
-Because environment variables have the highest precedence, they are the safest way to inject secrets or per-environment overrides without modifying config files.
-:::
+<VanillaAdmonition type="tip">
+  Because environment variables have the highest precedence, they are the safest way to inject
+  secrets or per-environment overrides without modifying config files.
+</VanillaAdmonition>
 
 ## Config file format
 
@@ -107,31 +110,35 @@ The following table shows how environment variable names map to CLI flags:
 
 Certain config keys accept lists. When you set these through environment variables, Nitro automatically splits the value on commas. The full list of comma-split fields:
 
-| Config key                                                          | Description                   |
-| ------------------------------------------------------------------- | ----------------------------- |
-| `auth.api`                                                          | Auth RPC API namespaces       |
-| `auth.origins`                                                      | Auth allowed origins          |
-| `chain.info-files`                                                  | Chain info file paths         |
-| `conf.file`                                                         | Config file paths             |
-| `execution.secondary-forwarding-target`                             | Secondary forwarding targets  |
-| `execution.sequencer.sender-whitelist`                              | Allowed sender addresses      |
-| `graphql.corsdomain`                                                | GraphQL CORS domains          |
-| `graphql.vhosts`                                                    | GraphQL virtual hosts         |
-| `http.api`                                                          | HTTP RPC API namespaces       |
-| `http.corsdomain`                                                   | HTTP CORS domains             |
-| `http.vhosts`                                                       | HTTP virtual hosts            |
-| `node.data-availability.rest-aggregator.urls`                       | DA REST aggregator URLs       |
-| `node.feed.input.secondary-url`                                     | Secondary feed URLs           |
-| `node.feed.input.url`                                               | Feed input URLs               |
-| `node.feed.input.verify.allowed-addresses`                          | Feed signature addresses      |
-| `node.seq-coordinator.signer.ecdsa.allowed-addresses`               | Sequencer coordinator signers |
-| `p2p.bootnodes`                                                     | P2P bootstrap nodes           |
-| `p2p.bootnodes-v5`                                                  | P2P v5 bootstrap nodes        |
-| `validation.api-auth`                                               | Validation API auth           |
-| `validation.arbitrator.redis-validation-server-config.module-roots` | Arbitrator WASM module roots  |
-| `validation.wasm.allowed-wasm-module-roots`                         | Allowed WASM module roots     |
-| `ws.api`                                                            | WebSocket API namespaces      |
-| `ws.origins`                                                        | WebSocket allowed origins     |
+| Config key                                                          | Description                           |
+| ------------------------------------------------------------------- | ------------------------------------- |
+| `auth.api`                                                          | Auth RPC API namespaces               |
+| `auth.origins`                                                      | Auth allowed origins                  |
+| `chain.info-files`                                                  | Chain info file paths                 |
+| `conf.file`                                                         | Config file paths                     |
+| `execution.secondary-forwarding-target`                             | Secondary forwarding targets          |
+| `execution.sequencer.sender-whitelist`                              | Allowed sender addresses              |
+| `graphql.corsdomain`                                                | GraphQL CORS domains                  |
+| `graphql.vhosts`                                                    | GraphQL virtual hosts                 |
+| `http.api`                                                          | HTTP RPC API namespaces               |
+| `http.corsdomain`                                                   | HTTP CORS domains                     |
+| `http.vhosts`                                                       | HTTP virtual hosts                    |
+| `node.batch-poster.data-poster.blob-tx-replacement-times`           | Batch poster blob-tx fee bumps        |
+| `node.batch-poster.data-poster.replacement-times`                   | Batch poster tx fee bumps             |
+| `node.data-availability.rest-aggregator.urls`                       | DA REST aggregator URLs               |
+| `node.feed.input.secondary-url`                                     | Secondary feed URLs                   |
+| `node.feed.input.url`                                               | Feed input URLs                       |
+| `node.feed.input.verify.allowed-addresses`                          | Feed signature addresses              |
+| `node.seq-coordinator.signer.ecdsa.allowed-addresses`               | Sequencer coordinator signers         |
+| `node.staker.batch-poster.data-poster.blob-tx-replacement-times`    | Staker batch-poster blob-tx fee bumps |
+| `node.staker.batch-poster.data-poster.replacement-times`            | Staker batch-poster tx fee bumps      |
+| `p2p.bootnodes`                                                     | P2P bootstrap nodes                   |
+| `p2p.bootnodes-v5`                                                  | P2P v5 bootstrap nodes                |
+| `validation.api-auth`                                               | Validation API auth                   |
+| `validation.arbitrator.redis-validation-server-config.module-roots` | Arbitrator WASM module roots          |
+| `validation.wasm.allowed-wasm-module-roots`                         | Allowed WASM module roots             |
+| `ws.api`                                                            | WebSocket API namespaces              |
+| `ws.origins`                                                        | WebSocket allowed origins             |
 
 For example, to enable multiple HTTP API namespaces:
 

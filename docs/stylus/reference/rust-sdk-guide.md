@@ -82,7 +82,7 @@ sol_storage! {
 }
 ```
 
-The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait. Many contracts, like [our example `ERC-20`](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs), do exactly this.
+The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait. Many contracts, like [our example **ERC-20**](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs), do exactly this.
 
 Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
@@ -234,7 +234,7 @@ sol_storage! {
 }
 ```
 
-The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [`WETH` sample contract](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs) for a full example of this feature.
+The above allows consumers of Erc20 to choose immutable constants via specialization. See our [**WETH** sample contract](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs) for a full example of this feature.
 
 ## Functions
 
@@ -305,7 +305,7 @@ impl Erc20 {
 
 Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html), calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
 
-Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the `ERC-20`, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
+Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the **ERC-20**, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
 ::::warning
 
@@ -338,7 +338,7 @@ Starting with SDK version 0.7.0, the [`Router`](https://docs.rs/stylus-sdk/lates
 
 - [`fallback`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.fallback): This method is called when a transaction is sent to the contract with calldata that doesn't match any function signature. It serves as a catch-all function for contract interactions that don't match any defined interface.
 
-- [`receive`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.receive): This method is called when a transaction is sent to the contract with no calldata (empty calldata). It allows the contract to receive `ETH`.
+- [`receive`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html#tymethod.receive): This method is called when a transaction is sent to the contract with no calldata (empty calldata). It allows the contract to receive **ETH**.
 
 Here's an example implementation:
 
@@ -361,7 +361,7 @@ impl Contract {
 }
 ```
 
-Both methods can be annotated with `#[payable]` to accept `ETH` along with the transaction. Without this annotation, transactions that send `ETH` will be rejected.
+Both methods can be annotated with `#[payable]` to accept **ETH** along with the transaction. Without this annotation, transactions that send **ETH** will be rejected.
 
 ## Calls
 

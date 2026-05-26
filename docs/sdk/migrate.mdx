@@ -25,15 +25,15 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 - The `L1Network` is no longer required to be registered before bridging.
 - Only Arbitrum networks need to be registered.
 - Arbitrum networks are defined as Arbitrum One, Arbitrum testnets, and any Orbit chain.
-- If you need a full list of Arbitrum networks, you can use the new [`getArbitrumNetworks`](./dataEntities/networks#getarbitrumnetworks) function.
-- To list all of the children of a network, use the new [`getChildrenForNetwork`](./dataEntities/networks#getchildrenfornetwork) function.
+- If you need a full list of Arbitrum networks, you can use the new [`getArbitrumNetworks`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L322) function.
+- To list all of the children of a network, use the new [`getChildrenForNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L300) function.
 
 | v3 Name               | v4 Name                                                                                            |
 | --------------------- | -------------------------------------------------------------------------------------------------- |
-| `L2Network`           | [`ArbitrumNetwork`](./dataEntities/networks#arbitrumnetwork)                             |
-| `getL2Network`        | [`getArbitrumNetwork`](./dataEntities/networks#getarbitrumnetwork)                       |
-| `l2Networks`          | [`getArbitrumNetworks`](./dataEntities/networks#getarbitrumnetworks)                     |
-| `addCustomNetwork`    | [`registerCustomArbitrumNetwork`](./dataEntities/networks#registercustomarbitrumnetwork) |
+| `L2Network`           | [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L32)                             |
+| `getL2Network`        | [`getArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#getarbitrumnetwork)                       |
+| `l2Networks`          | [`getArbitrumNetworks`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L318)                     |
+| `addCustomNetwork`    | [`registerCustomArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L417) |
 | `Network`             | *removed*                                                                                          |
 | `L1Network`           | *removed*                                                                                          |
 | `getL1Network`        | *removed*                                                                                          |
@@ -41,7 +41,7 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 
 #### `ArbitrumNetwork` type
 
-`Network` type has been replaced with the [`ArbitrumNetwork`](./dataEntities/networks#arbitrumnetwork) type and some properties have been removed or renamed.
+`Network` type has been replaced with the [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L32) type and some properties have been removed or renamed.
 
 | v3 Name               | v4 Name         |
 | --------------------- | --------------- |
@@ -57,7 +57,7 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 
 #### `TokenBridge` type
 
-The `TokenBridge` type within the[`ArbitrumNetwork`](./dataEntities/networks#arbitrumnetwork) object has been updated.
+The `TokenBridge` type within the [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L32) object has been updated.
 
 | v3 Name           | v4 Name               |
 | ----------------- | --------------------- |
@@ -78,9 +78,9 @@ The `TokenBridge` type within the[`ArbitrumNetwork`](./dataEntities/networks#arb
 
 ### 3. Updates to `AssetBridger` and `Erc20Bridger` classes
 
-#### [`AssetBridger`](./assetBridger/assetBridger.md)  Class Methods
+#### [`AssetBridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts)  Class Methods
 
-The [`AssetBridger`](./assetBridger/assetBridger.md) class methods and properties have been renamed to reflect the new parent-child terminology.
+The [`AssetBridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts) class methods and properties have been renamed to reflect the new parent-child terminology.
 
 | v3 Name          | v4 Name              |
 | ---------------- | -------------------- |
@@ -88,9 +88,9 @@ The [`AssetBridger`](./assetBridger/assetBridger.md) class methods and propertie
 | `checkL1Network` | `checkParentNetwork` |
 | `checkL2Network` | `checkChildNetwork`  |
 
-#### [`AssetBridger`](./assetBridger/assetBridger.md)  Class Method Parameters
+#### [`AssetBridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts)  Class Method Parameters
 
-The objects passed to the class methods of classes that inherit from [`AssetBridger`](./assetBridger/assetBridger.md) ([`EthBridger`](./assetBridger/ethBridger.md) and [`Erc20Bridger`](./assetBridger/erc20Bridger.md)) have been renamed.
+The objects passed to the class methods of classes that inherit from [`AssetBridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts) ([`EthBridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/ethBridger.ts) and [`Erc20Bridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/erc20Bridger.ts)) have been renamed.
 
 | v3 Name          | v4 Name              |
 | ---------------- | -------------------- |
@@ -100,7 +100,7 @@ The objects passed to the class methods of classes that inherit from [`AssetBrid
 | `l1Signer`       | `parentSigner`       |
 | `l2Signer`       | `childSigner`        |
 
-#### [`Erc20Bridger`](./assetBridger/erc20Bridger.md) Class Methods
+#### [`Erc20Bridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/erc20Bridger.ts) Class Methods
 
 | v3 Name                 | v4 Name                     |
 | ----------------------- | --------------------------- |
@@ -116,7 +116,7 @@ The objects passed to the class methods of classes that inherit from [`AssetBrid
 | `getL1GatewaySetEvents` | `getParentGatewaySetEvents` |
 | `getL2GatewaySetEvents` | `getChildGatewaySetEvents`  |
 
-#### [`Erc20L1L3Bridger`](./assetBridger/l1l3Bridger.md) Class Methods
+#### [`Erc20L1L3Bridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/l1l3Bridger.ts) Class Methods
 
 | v3 Name             | v4 Name             |
 | ------------------- | ------------------- |
