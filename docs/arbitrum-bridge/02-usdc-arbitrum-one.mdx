@@ -7,7 +7,7 @@ content_type: concept
 sidebar_position: 4
 ---
 
-Arbitrum One supports two different types of **USDC**:
+<a data-quicklook-from="arbitrum-one">Arbitrum One</a> supports two different types of **USDC**:
 
 1.  **Native USDC**: **USDC** tokens that are native to the Arbitrum One chain.
 2.  **Bridged USDC (**USDC.e**)**: Ethereum-native **USDC** tokens that have been bridged to Arbitrum One.
@@ -33,14 +33,10 @@ Arbitrum One supports two different types of **USDC**:
   <tr>
     <td>Token Address</td>
     <td>
-      <a href="https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831">
-        0xaf88d065e77c8cC2239327C5EDb3A432268e5831
-      </a>
+      <a href="https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831">0xaf88d065e77c8cC2239327C5EDb3A432268e5831</a>
     </td>
     <td>
-      <a href="https://arbiscan.io/token/0xff970a61a04b1ca14834a43f5de4533ebddb5cc8">
-        0xff970a61a04b1ca14834a43f5de4533ebddb5cc8
-      </a>
+      <a href="https://arbiscan.io/token/0xff970a61a04b1ca14834a43f5de4533ebddb5cc8">0xff970a61a04b1ca14834a43f5de4533ebddb5cc8</a>
     </td>
   </tr>
   <tr>
@@ -50,12 +46,24 @@ Arbitrum One supports two different types of **USDC**:
   </tr>
 </table>
 
-The Arbitrum Bridge will continue to facilitate transfers of all **USDC** tokens. When depositing Ethereum-native **USDC**, the option exists to receive Bridged **USDC** using Arbitrum's bridge or Arbitrum-native **USDC** using Circle's [Cross-Chain Transfer Protocol](https://www.circle.com/en/cross-chain-transfer-protocol).
+The Arbitrum <a data-quicklook-from="bridge">Bridge</a> will continue to facilitate transfers of all **USDC** tokens. When depositing Ethereum-native **USDC**, the option exists to receive Bridged **USDC** using Arbitrum's bridge (the canonical lock-and-mint flow described in the [token bridging deep dive](/how-arbitrum-works/deep-dives/token-bridging.mdx)) or Arbitrum-native **USDC** using Circle's [Cross-Chain Transfer Protocol](https://www.circle.com/en/cross-chain-transfer-protocol).
 
-To start bridging on Arbitrum refer to the [Quickstart](/arbitrum-bridge/01-quickstart.mdx) or the [Embedded bridge widget](/arbitrum-bridge/04-embedded-bridge-widget.mdx).
+To start bridging on Arbitrum refer to the [Quickstart](/arbitrum-bridge/01-quickstart.mdx) or the [Embedded bridge widget](/arbitrum-bridge/04-embedded-bridge-widget.mdx). If you run into issues bridging **USDC**, see [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx).
+
+## For Arbitrum chain operators
+
+If you're launching an Arbitrum chain and want to support **USDC** without locking users into the canonical bridged form, see [How to adopt the bridged USDC standard on your Arbitrum chain](/launch-arbitrum-chain/06-third-party-integrations/01-bridged-usdc-standard.mdx). It explains the gateway implementation that lets Circle upgrade your chain's **USDC** to native issuance later.
 
 ## Historical context
 
 The Arbitrum Bridge will continue to facilitate transfers of all **USDC** tokens. When depositing **USDC** from Ethereum, the option exists to receive **USDC** using Circle's Cross-Chain Transfer Protocol or receive Bridged **USDC** using Arbitrum's lock-and-mint bridge.
 
 In 2023, Circle launched **USDC** natively on Arbitrum One and added support for the Cross-Chain Transfer Protocol, which enabled direct minting and burning of **USDC** between Ethereum and Arbitrum One. Due to this, the token symbol for Bridged **USDC** has been renamed to **USDC.e** to accommodate an ecosystem-wide liquidity migration to native **USDC**. The expectation is that over time, the liquidity migration of **USDC.e** to **USDC** will continue.
+
+## See also
+
+- [Arbitrum bridge quickstart](/arbitrum-bridge/01-quickstart.mdx)
+- [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx)
+- [Arbitrum embedded bridge widget](/arbitrum-bridge/04-embedded-bridge-widget.mdx)
+- [How to adopt the bridged USDC standard on your Arbitrum chain](/launch-arbitrum-chain/06-third-party-integrations/01-bridged-usdc-standard.mdx)
+- [How token bridging works (deep dive)](/how-arbitrum-works/deep-dives/token-bridging.mdx)

@@ -28,15 +28,15 @@ This section describes the different fee distribution and router contracts that 
 
 The **AEP fee router** system relies on configuring an escrow contract as the intended reward address for protocol fee components. This intermediary contract is known as the `RewardDistributor.`
 
-The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. A `rewardDistributor` will be deployed in three instances to collect from `L2Surplus`, `L2BaseFee`, `L1surplus` addresses.
+The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the <a data-quicklook-from="chain-owner">chain owner</a>. A `rewardDistributor` will be deployed in three instances to collect from `L2Surplus`, `L2BaseFee`, `L1surplus` addresses.
 
-The `RewardDistributor` can be _permissionlessly_ called to perform a withdrawal, which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
+The `RewardDistributor` can be _permissionlessly_ called to perform a withdrawal, which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the <a data-quicklook-from="parent-chain">parent chain</a>. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
 
 ### ChildToParentRouter
 
-AEP fees from the `RewardDistributor` must first be sent to Ethereum before they can be deposited to the DAO-controlled address on Arbitrum One. To facilitate this transfer to Ethereum, AEP fees are sent through a series of contracts known as `ChildToParentRouters.`
+AEP fees from the `RewardDistributor` must first be sent to Ethereum before they can be deposited to the DAO-controlled address on <a data-quicklook-from="arbitrum-one">Arbitrum One</a>. To facilitate this transfer to Ethereum, AEP fees are sent through a series of contracts known as `ChildToParentRouters.`
 
-The `ChildToParentRouter` is configured to withdraw a single token (immutable and specified at deployment) from the child chain to a specific target address on the parent chain: either another `ChildToParentRouter` or an address controlled by the Arbitrum Foundation on Ethereum.
+The `ChildToParentRouter` is configured to withdraw a single token (immutable and specified at deployment) from the <a data-quicklook-from="child-chain">child chain</a> to a specific target address on the parent chain: either another `ChildToParentRouter` or an address controlled by the Arbitrum Foundation on Ethereum.
 
 ## Deploying your AEP fee router contracts
 
@@ -44,7 +44,7 @@ An Arbitrum chain is responsible for deploying all `ChildToParentRouters` necess
 
 This includes:
 
-- Deploying a `ChildToParentRouter` on their Arbitrum chain configured for their gas token and configured to send funds to either:
+- Deploying a `ChildToParentRouter` on their <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> configured for their gas token and configured to send funds to either:
   - An address controlled by the Arbitrum Foundation on Ethereum (assuming the network is a Layer-2)
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
 - Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
@@ -58,8 +58,8 @@ Here are a few flows to help visualize the deployment:
 <ImageZoom src="/img/arb-chain-aep-scenario-2.svg" alt="AEP scenario 2" className="img-800px" />
 
 <VanillaAdmonition type="info"  title="Please reach out if:">
-    1. Your chain is on another L2 for which we do not have a `ChildToParent` router deployed
-    2. Your custom gas token is only available on the L2 and non-EVM L1
+    1. Your chain is on another <a data-quicklook-from="l2">L2</a> for which we do not have a `ChildToParent` router deployed
+    2. Your custom gas token is only available on the L2 and non-EVM <a data-quicklook-from="l1">L1</a>
 
 </VanillaAdmonition>
 
@@ -123,7 +123,7 @@ yarn dev
 
 ## Deploying a `ChildToParent` router for a custom **ERC-20** on Base
 
-Some RaaS providers and Arbitrum chains may need to route AEP fees using a non-**ETH** **ERC-20** token on Base, or other L2s.
+Some <a data-quicklook-from="raas">RaaS</a> providers and Arbitrum chains may need to route AEP fees using a non-**ETH** **ERC-20** token on Base, or other L2s.
 
 To support this, the Arbitrum Chain SDK now includes a helper for deploying a `ChildToParentRouter` on Base for any specified **ERC-20**.
 

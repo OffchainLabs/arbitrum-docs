@@ -42,9 +42,7 @@ since v4
 ### ~~L2Network~~
 
 ```ts
-type L2Network = Prettify<
-  Omit<ArbitrumNetwork, 'chainId' | 'parentChainId' | 'tokenBridge'> & object
->;
+type L2Network = Prettify<Omit<ArbitrumNetwork, 'chainId' | 'parentChainId' | 'tokenBridge'> & object>;
 ```
 
 Defined in: dataEntities/networks.ts:94
@@ -62,9 +60,7 @@ since v4
 ### assertArbitrumNetworkHasTokenBridge()
 
 ```ts
-function assertArbitrumNetworkHasTokenBridge<T>(
-  network: T,
-): asserts network is T & { tokenBridge: TokenBridge };
+function assertArbitrumNetworkHasTokenBridge<T>(network: T): asserts network is T & { tokenBridge: TokenBridge };
 ```
 
 Defined in: dataEntities/networks.ts:556
@@ -149,10 +145,7 @@ Throws if the chain is not an Arbitrum chain.
 ### getArbitrumNetworkInformationFromRollup()
 
 ```ts
-function getArbitrumNetworkInformationFromRollup(
-  rollupAddress: string,
-  parentProvider: Provider,
-): Promise<ArbitrumNetworkInformationFromRollup>;
+function getArbitrumNetworkInformationFromRollup(rollupAddress: string, parentProvider: Provider): Promise<ArbitrumNetworkInformationFromRollup>;
 ```
 
 Defined in: dataEntities/networks.ts:378

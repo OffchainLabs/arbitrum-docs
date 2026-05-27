@@ -177,17 +177,17 @@ const isValid = await isValidKeysetHash(publicClient, {
 
 ### Failure modes
 
-| Failure                    | Impact                                       | Recovery                                            |
-| -------------------------- | -------------------------------------------- | --------------------------------------------------- |
-| < `K` members respond      | Cannot form valid DACert                     | Batch poster falls back to onchain posting          |
-| Wrong BLS key              | Signature verification fails for that member | Other members still counted; if `K` met, cert valid |
-| All DAS backends down      | No DACert possible                           | Immediate fallback to batch posting                 |
-| Keyset invalidated onchain | DACerts referencing that keyset rejected     | Must set a new valid keyset                         |
-| Network partition          | Subset of members unreachable                | Falls back if remaining < `K`                       |
+| Failure                    | Impact                                       | Recovery                                                                             |
+| -------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
+| < `K` members respond      | Cannot form valid DACert                     | <a data-quicklook-from="batch-poster">Batch Poster</a> falls back to onchain posting |
+| Wrong BLS key              | Signature verification fails for that member | Other members still counted; if `K` met, cert valid                                  |
+| All DAS backends down      | No DACert possible                           | Immediate fallback to batch posting                                                  |
+| Keyset invalidated onchain | DACerts referencing that keyset rejected     | Must set a new valid keyset                                                          |
+| Network partition          | Subset of members unreachable                | Falls back if remaining < `K`                                                        |
 
 ### The fallback mechanism
 
-When `DataAvailabilityCommittee: true`, the batch poster first attempts to store data via the DAS RPC aggregator. If it cannot obtain a valid DACert (due to insufficient signatures), the batch poster falls back to posting the full batch data directly to the parent chain—the same way a standard rollup operates.
+When `DataAvailabilityCommittee: true`, the batch poster first attempts to store data via the DAS RPC aggregator. If it cannot obtain a valid DACert (due to insufficient signatures), the batch poster falls back to posting the full batch data directly to the <a data-quicklook-from="parent-chain">Parent chain</a>—the same way a standard rollup operates.
 
 The fallback is **enabled by default**:
 
@@ -204,7 +204,7 @@ Setting this to `true` **disables the fallback**, meaning the batch poster will 
 
 ### How batch posters enable fallback
 
-Batch posters are authorized addresses on the `SequencerInbox` that can post transaction data. They are configured at rollup creation and managed via `setIsBatchPoster`. During normal AnyTrust operation, the batch poster posts compact DACerts. During fallback, it posts the full calldata.
+Batch posters are authorized addresses on the `SequencerInbox` that can post <a data-quicklook-from="transaction">transaction</a> data. They are configured at rollup creation and managed via `setIsBatchPoster`. During normal [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) operation, the batch poster posts compact DACerts. During fallback, it posts the full calldata.
 
 The batch poster config:
 

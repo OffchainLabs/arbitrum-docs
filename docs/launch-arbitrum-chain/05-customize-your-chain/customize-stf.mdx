@@ -43,7 +43,7 @@ Some potential modifications are incompatible with Arbitrum Nitro and would not 
   - Every node would disagree on the correct amount of balance and the blockchain would not function correctly. However, it is acceptable to take a non-deterministic path to a deterministic output. For instance, if you randomly shuffled a list of addresses, and then gave them each one **ETH**, that would be fine, because no matter how the list of addresses is shuffled the result is the same and all addresses are given one **ETH**.
 - The STF must not reach a new result for old blocks. For instance, if you have been running an Arbitrum Nitro chain for a while, and then you decide to modify the STF to not charge for gas, a new node that syncs the blockchain will reach a different result for historical blocks. It's also important to synchronize between nodes when an upgrade takes effect. A common mechanism for doing this is having an upgrade take effect at a certain timestamp, by which all nodes must be upgraded.
 - The STF must be "pure" and not use external resources. For instance, it must not use the filesystem, make external network calls, or launch processes. That's because the fraud proving system does not (and for the most part, cannot) support these resources. For instance, it's impossible to fraud prove what the result of an external network call is, because the fraud prover smart contracts on L1 are unable to do networking.
-- The STF must not carry state between blocks outside of the "global state". In practice this means persistent state must be stored within block headers or the Ethereum state trie. For instance, ArbOS stores all retryables in contract storage under a special ArbOS address.
+- The STF must not carry state between blocks outside of the "global state". In practice this means persistent state must be stored within block headers or the Ethereum state trie. For instance, [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) stores all retryables in contract storage under a special ArbOS address.
 - The STF must not modify Ethereum state outside of a transaction. This is important to ensure that replaying old blocks reaches the same result, both for tracing and for validation. The ArbOS internal transaction is useful to modify state at the start of blocks.
 - The STF must reach a result in under a second. This is a rough rule, but for nodes to keep in sync it's highly recommended to keep blocks quick.
   - It's also important for the fraud proofs that execution reliably finishes in a relatively short amount of time.
@@ -196,7 +196,7 @@ docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:84
 The primary issue with simply using a nitro-node-dev build is that, whenever the code changes at all, the replay binary will also change.
 
 If the node is missing the replay binary corresponding to the onchain WASM module root, it will be unable to act as a validator.
-Therefore, when releasing new node Docker images it's important to include the currently on-chain WASM module root.
+Therefore, when releasing new node Docker images it's important to include the currently onchain WASM module root.
 
 To do that, you'll need to first extract the replay binary from the `nitro-node-dev` Docker image built earlier:
 
