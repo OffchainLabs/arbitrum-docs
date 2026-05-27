@@ -35,6 +35,7 @@
     "generate-doc-manifest": "tsx scripts/generate-doc-manifest.ts",
     "audit-docs": "tsx scripts/generate-doc-manifest.ts && tsx scripts/audit-docs.ts",
     "audit-docs:report-only": "tsx scripts/audit-docs.ts",
+    "generate-cli-reference": "tsx scripts/generate-cli-reference.ts",
     "fetch-edge-challenge-data": "node scripts/fetch-edge-challenge-data.mjs",
     "check-globalvars": "tsx scripts/check-globalvars-updates.ts",
     "check-lunr-exclude": "tsx scripts/check-lunr-exclude-hide-from-search.ts"

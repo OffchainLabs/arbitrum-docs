@@ -1,0 +1,350 @@
+---
+title: 'Data availability tools reference'
+sidebar_label: 'DA tools reference'
+description: 'Reference for anytrusttool (keygen, dumpkeyset, client), anytrustserver, and daprovider CLI tools'
+user_story: 'As an Orbit chain operator, I want to generate keys, configure keysets, and interact with my DA committee'
+content_type: 'reference'
+author: 'gzeoneth'
+sme: 'gzeoneth'
+# Content gap tracking:
+# - TW-696: DAC/DAS operations guide (partial — tooling portion)
+# - TW-697: DAS RPC reference
+# - TW-698: AnyTrust docs with operational parameters (partial)
+---
+
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+Nitro ships three binaries for operating [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) data availability (DA) infrastructure: `anytrusttool` for key management and testing, `anytrustserver` for running a DA committee member, and `daprovider` for running a DA provider server that exposes a unified JSON-RPC interface over different DA backends.
+
+## anytrusttool
+
+`anytrusttool` is a command-line utility for generating cryptographic keys, computing keyset hashes, and interacting with DA committee members through RPC and REST endpoints. It has four subcommands:
+
+```
+anytrusttool [keygen | dumpkeyset | client | generatehash] ...
+```
+
+<VanillaAdmonition type="caution" title="Deprecation notice">
+  The `datool` binary name is deprecated. The Docker image still includes a `datool` symlink for
+  backward compatibility, but running it logs a deprecation warning. Update your scripts to use
+  `anytrusttool`.
+</VanillaAdmonition>
+
+### keygen
+
+Generate BLS or ECDSA keys for a Data Availability Server (DAS).
+
+#### Flags
+
+| Flag       | Type     | Default    | Description                                                      |
+| ---------- | -------- | ---------- | ---------------------------------------------------------------- |
+| `--dir`    | `string` | (required) | Directory to write generated key files into                      |
+| `--ecdsa`  | `bool`   | `false`    | Generate an ECDSA keypair instead of BLS                         |
+| `--wallet` | `bool`   | `false`    | Generate the ECDSA keypair in a wallet file (requires `--ecdsa`) |
+
+#### Generate BLS keys
+
+BLS keys are the default. The DAS uses BLS keys to sign data availability certificates.
+
+```shell
+anytrusttool keygen --dir /path/to/keys
+```
+
+This creates two files in the target directory:
+
+- `das_bls.pub` — base64-encoded BLS public key
+- `das_bls` — base64-encoded BLS private key
+
+#### Generate ECDSA keys
+
+ECDSA keys are used for signing store requests when interacting with a DA committee.
+
+```shell
+anytrusttool keygen --dir /path/to/keys --ecdsa
+```
+
+This creates two files:
+
+- `ecdsa.pub` — hex-encoded ECDSA public key
+- `ecdsa` — hex-encoded ECDSA private key
+
+#### Generate ECDSA wallet
+
+To store the ECDSA key in an encrypted wallet file instead of a plaintext file:
+
+```shell
+anytrusttool keygen --dir /path/to/keystore --ecdsa --wallet
+```
+
+You are prompted for a password to encrypt the wallet.
+
+#### Docker example
+
+```shell
+docker run --rm \
+  --entrypoint anytrusttool \
+  -v "$(pwd)/keys:/data/keys" \
+  offchainlabs/nitro-node:latest \
+  keygen --dir /data/keys
+```
+
+### dumpkeyset
+
+Compute the keyset bytes and keyset hash from a DA committee backend configuration. You need the keyset hash when configuring the `SequencerInbox` contract on the parent chain.
+
+#### Usage
+
+`dumpkeyset` reads its configuration from a JSON file passed with `--conf.file`. The JSON file specifies the committee members and the assumed-honest count:
+
+```json
+{
+  "keyset": {
+    "assumed-honest": 1,
+    "backends": [
+      {
+        "url": "https://das-member-1.example.com:9876",
+        "pubkey": "BASE64_BLS_PUBLIC_KEY_1"
+      },
+      {
+        "url": "https://das-member-2.example.com:9876",
+        "pubkey": "BASE64_BLS_PUBLIC_KEY_2"
+      },
+      {
+        "url": "https://das-member-3.example.com:9876",
+        "pubkey": "BASE64_BLS_PUBLIC_KEY_3"
+      }
+    ]
+  }
+}
+```
+
+The `assumed-honest` field (H) defines the trust assumption for the committee. With N backends, K = N + 1 - H valid responses are required for a store request to succeed. In the example above, H = 1 and N = 3, so K = 3 valid signatures are required.
+
+#### Running dumpkeyset
+
+```shell
+anytrusttool dumpkeyset --conf.file /path/to/keyset-config.json
+```
+
+Expected output:
+
+```
+Keyset: 0x00000003...
+KeysetHash: 0xabcdef12...
+```
+
+The `Keyset` value is the hex-encoded keyset bytes. The `KeysetHash` value is the hash you set in the `SequencerInbox` contract.
+
+#### Docker example
+
+```shell
+docker run --rm \
+  --entrypoint anytrusttool \
+  -v "$(pwd)/config:/config" \
+  offchainlabs/nitro-node:latest \
+  dumpkeyset --conf.file /config/keyset-config.json
+```
+
+### client
+
+Interact with DA committee members through RPC (store data) or REST (retrieve data).
+
+#### client rpc store
+
+Store a message on the DA committee through an RPC endpoint.
+
+##### Flags
+
+| Flag                          | Type       | Default  | Description                                                                                                                                                      |
+| ----------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--message`                   | `string`   | `""`     | Message to store. Either `--message` or `--random-message-size` is required.                                                                                     |
+| `--random-message-size`       | `int`      | `0`      | Store a message of the specified number of random bytes                                                                                                          |
+| `--signing-key`               | `string`   | `""`     | ECDSA private key to sign the message with. Treated as hex if prefixed with `0x`, otherwise treated as a file path. If not specified, the message is not signed. |
+| `--signing-wallet`            | `string`   | `""`     | Path to a wallet file containing the ECDSA signing key                                                                                                           |
+| `--signing-wallet-password`   | `string`   | (prompt) | Password to unlock the wallet. If not specified, you are prompted interactively.                                                                                 |
+| `--anytrust-retention-period` | `duration` | `24h`    | Period that AnyTrust nodes are requested to retain the stored batch                                                                                              |
+| `--rpc-client.rpc.url`        | `string`   | `""`     | URL of the AnyTrust RPC endpoint                                                                                                                                 |
+
+##### Example
+
+```shell
+anytrusttool client rpc store \
+  --message "Hello, AnyTrust" \
+  --rpc-client.rpc.url http://localhost:9876 \
+  --signing-key 0xYOUR_PRIVATE_KEY_HEX
+```
+
+Expected output:
+
+```
+Hex Encoded Cert: 0x...
+Hex Encoded Data Hash: 0x...
+```
+
+#### client rest getbyhash
+
+Retrieve a message from a DA server by its data hash through a REST endpoint.
+
+##### Flags
+
+| Flag          | Type     | Default                 | Description                                                                                      |
+| ------------- | -------- | ----------------------- | ------------------------------------------------------------------------------------------------ |
+| `--url`       | `string` | `http://localhost:9877` | URL of the AnyTrust REST server                                                                  |
+| `--data-hash` | `string` | `""`                    | Hash of the message to retrieve. Treated as hex if prefixed with `0x`, otherwise base64-encoded. |
+
+##### Example
+
+```shell
+anytrusttool client rest getbyhash \
+  --url http://localhost:9877 \
+  --data-hash 0xYOUR_DATA_HASH
+```
+
+Expected output:
+
+```
+Message: <original message content>
+```
+
+### generatehash
+
+Compute the data hash of a message string. This is the same hash used by the DA committee to identify stored data.
+
+```shell
+anytrusttool generatehash "Hello, AnyTrust"
+```
+
+Expected output:
+
+```
+Hex Encoded Data Hash: 0x...
+```
+
+The argument is a positional parameter (not a flag).
+
+## anytrustserver
+
+`anytrustserver` runs a DA committee member server that stores and serves batch data. It exposes RPC and REST interfaces for clients to store and retrieve data.
+
+<VanillaAdmonition type="caution" title="Deprecation notice">
+  The `daserver` binary name is deprecated. The Docker image still installs a `daserver` symlink for
+  backward compatibility, but invoking it logs a deprecation warning. Update your scripts to use
+  `anytrustserver`.
+</VanillaAdmonition>
+
+### Key flags
+
+| Flag                                     | Type     | Default     | Description                                                                       |
+| ---------------------------------------- | -------- | ----------- | --------------------------------------------------------------------------------- |
+| `--enable-rpc`                           | `bool`   | `false`     | Enable the HTTP-RPC server                                                        |
+| `--rpc-addr`                             | `string` | `localhost` | HTTP-RPC server listening interface                                               |
+| `--rpc-port`                             | `uint`   | `9876`      | HTTP-RPC server listening port                                                    |
+| `--rpc-server-body-limit`                | `int`    | `0`         | Maximum request body size in bytes (0 uses geth's 5 MB limit)                     |
+| `--enable-rest`                          | `bool`   | `false`     | Enable the REST server                                                            |
+| `--rest-addr`                            | `string` | `localhost` | REST server listening interface                                                   |
+| `--rest-port`                            | `uint`   | `9877`      | REST server listening port                                                        |
+| `--parent-chain.node-url`                | `string` | `""`        | URL of the parent chain node                                                      |
+| `--parent-chain.connection-attempts`     | `int`    | `15`        | Parent chain RPC connection attempts (0 retries infinitely)                       |
+| `--parent-chain.sequencer-inbox-address` | `string` | `""`        | Parent chain address of the `SequencerInbox` contract. Set to `none` for testing. |
+| `--log-level`                            | `string` | `INFO`      | Log level: `CRIT`, `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`                      |
+| `--log-type`                             | `string` | `plaintext` | Log format: `plaintext` or `json`                                                 |
+| `--metrics`                              | `bool`   | `false`     | Enable Prometheus metrics                                                         |
+| `--pprof`                                | `bool`   | `false`     | Enable pprof profiling endpoint                                                   |
+
+At least one of `--enable-rpc` or `--enable-rest` is required.
+
+The `--data-availability.*` flags configure the server's storage backend, BLS key, and caching. Run `anytrustserver --help` for the full list of data availability options.
+
+### Example
+
+```shell
+anytrustserver \
+  --enable-rpc \
+  --rpc-addr 0.0.0.0 \
+  --rpc-port 9876 \
+  --enable-rest \
+  --rest-addr 0.0.0.0 \
+  --rest-port 9877 \
+  --parent-chain.node-url https://your-parent-chain-rpc.example.com \
+  --parent-chain.sequencer-inbox-address 0xYOUR_SEQUENCER_INBOX_ADDRESS \
+  --data-availability.key.key-dir /path/to/bls-keys \
+  --data-availability.local-file-storage.enable \
+  --data-availability.local-file-storage.data-dir /path/to/das-data \
+  --conf.file /path/to/das-config.json
+```
+
+### Docker example
+
+```shell
+docker run --rm \
+  -v "$(pwd)/das-data:/data" \
+  -v "$(pwd)/keys:/keys" \
+  -p 9876:9876 \
+  -p 9877:9877 \
+  --entrypoint anytrustserver \
+  offchainlabs/nitro-node:latest \
+  --enable-rpc \
+  --rpc-addr 0.0.0.0 \
+  --enable-rest \
+  --rest-addr 0.0.0.0 \
+  --parent-chain.node-url https://your-parent-chain-rpc.example.com \
+  --parent-chain.sequencer-inbox-address 0xYOUR_SEQUENCER_INBOX_ADDRESS \
+  --data-availability.key.key-dir /keys \
+  --data-availability.local-file-storage.enable \
+  --data-availability.local-file-storage.data-dir /data
+```
+
+## daprovider
+
+`daprovider` runs a DA provider server that implements a unified JSON-RPC interface on top of a specific DA backend. It supports two modes: `anytrust` (for AnyTrust DA committees) and `referenceda` (for a reference DA implementation).
+
+### Key flags
+
+| Flag                                      | Type     | Default     | Description                                                                            |
+| ----------------------------------------- | -------- | ----------- | -------------------------------------------------------------------------------------- |
+| `--mode`                                  | `string` | (required)  | DA provider mode: `anytrust` or `referenceda`                                          |
+| `--provider-server.addr`                  | `string` | `localhost` | JSON-RPC server listening interface                                                    |
+| `--provider-server.port`                  | `uint`   | `9880`      | JSON-RPC server listening port                                                         |
+| `--provider-server.jwtsecret`             | `string` | `""`        | Path to file containing a JWT secret for request validation                            |
+| `--provider-server.enable-da-writer`      | `bool`   | `false`     | Enable the DA writer interface for store requests                                      |
+| `--provider-server.rpc-server-body-limit` | `int`    | `0`         | Maximum request body size in bytes (0 uses geth's 5 MB limit)                          |
+| `--with-data-signer`                      | `bool`   | `false`     | Enable data signing for store requests. Requires `--data-signer-wallet` configuration. |
+| `--parent-chain.node-url`                 | `string` | `""`        | URL of the parent chain node                                                           |
+| `--parent-chain.connection-attempts`      | `int`    | `15`        | Parent chain RPC connection attempts (0 retries infinitely)                            |
+| `--parent-chain.sequencer-inbox-address`  | `string` | `""`        | Parent chain address of the `SequencerInbox` contract                                  |
+| `--log-level`                             | `string` | `INFO`      | Log level: `CRIT`, `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`                           |
+| `--log-type`                              | `string` | `plaintext` | Log format: `plaintext` or `json`                                                      |
+| `--metrics`                               | `bool`   | `false`     | Enable Prometheus metrics                                                              |
+| `--pprof`                                 | `bool`   | `false`     | Enable pprof profiling endpoint                                                        |
+
+Mode-specific flags are prefixed with `--anytrust.*` or `--referenceda.*`. Run `daprovider --help` for the full list.
+
+### AnyTrust mode example
+
+```shell
+daprovider \
+  --mode anytrust \
+  --provider-server.addr 0.0.0.0 \
+  --provider-server.port 9880 \
+  --parent-chain.node-url https://your-parent-chain-rpc.example.com \
+  --parent-chain.sequencer-inbox-address 0xYOUR_SEQUENCER_INBOX_ADDRESS \
+  --anytrust.enable \
+  --anytrust.key.key-dir /path/to/bls-keys \
+  --anytrust.local-file-storage.enable \
+  --anytrust.local-file-storage.data-dir /path/to/das-data
+```
+
+### ReferenceDA mode example
+
+```shell
+daprovider \
+  --mode referenceda \
+  --provider-server.addr 0.0.0.0 \
+  --provider-server.port 9880 \
+  --referenceda.enable \
+  --parent-chain.node-url https://your-parent-chain-rpc.example.com
+```
+
+### When to use daprovider versus anytrustserver
+
+`anytrustserver` is the standalone DA server binary that exposes native RPC and REST interfaces for a single AnyTrust committee member. `daprovider` is a newer binary that wraps DA backends behind a unified JSON-RPC interface, supports multiple DA modes (including `referenceda`), and is designed for integration with external systems that consume the provider API. Use `anytrustserver` when running a traditional AnyTrust DA committee member. Use `daprovider` when you need a standardized provider interface or are using a non-AnyTrust DA backend.

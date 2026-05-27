@@ -128,6 +128,24 @@ This part will update the glossary.
 
 4. Commit your changes and open a PR.
 
+### Update Nitro CLI flag reference
+
+`docs/run-arbitrum-node/nitro/cli-flags-reference.mdx` is auto-generated from `scripts/data/nitro-cli-flags.json` by `scripts/generate-cli-reference.ts`. Do not edit the `.mdx` file by hand — your changes will be overwritten on the next regeneration.
+
+To regenerate the reference after updating the JSON data file:
+
+```shell
+yarn generate-cli-reference
+```
+
+To verify the committed `.mdx` is in sync with the JSON data (used in CI):
+
+```shell
+yarn generate-cli-reference --check
+```
+
+The script also accepts `--output <path>` to write to a different location and `--nitro-path <path>` (or the `NITRO_REPO_PATH` env var) to point at a local Nitro checkout — useful when refreshing the JSON data against a specific Nitro version.
+
 ### Formatting
 
 1. Run `yarn format` from the root directory.
