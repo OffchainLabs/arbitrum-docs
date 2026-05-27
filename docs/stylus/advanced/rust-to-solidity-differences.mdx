@@ -597,9 +597,9 @@ new MyContract{value: amount}(arg1, arg2);
 use stylus_sdk::deploy::RawDeploy;
 
 let contract_address = unsafe {
-    RawDeploy::new(self.vm())
-        .value(amount)
-        .deploy(&bytecode, salt)?
+    RawDeploy::new()
+        .salt(salt)
+        .deploy(self.vm(), &bytecode, amount)?
 };
 ```
 

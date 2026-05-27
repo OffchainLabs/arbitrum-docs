@@ -174,9 +174,9 @@ sol! {
 
 #[public]
 impl AuctionContract {
-    pub fn bid() {
+    pub fn bid(&mut self) {
         // ...
-        evm::log(HighestBidIncreased {
+        self.vm().log(HighestBidIncreased {
             bidder: Address::from([0x11; 20]),
             amount: U256::from(42),
         });
@@ -201,7 +201,7 @@ pub enum TokenErrors {
 #[public]
 impl Token {
     pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), TokenErrors> {
-        const balance = self.balances.get(msg::sender());
+        let balance = self.balances.get(self.vm().msg_sender());
         if (balance < amount) {
             return Err(TokenErrors::NotEnoughFunds(NotEnoughFunds {
                 request: amount,

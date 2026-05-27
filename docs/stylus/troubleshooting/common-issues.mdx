@@ -51,7 +51,7 @@ source ~/.bashrc  # or source ~/.zshrc
 rustup target add wasm32-unknown-unknown
 
 # If using specific toolchain
-rustup target add wasm32-unknown-unknown --toolchain 1.81
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 **Verify**:
@@ -381,7 +381,7 @@ mod tests {
 
 ```toml
 [toolchain]
-channel = "1.81"
+channel = "1.91.0"
 components = ["rustfmt", "clippy"]
 targets = ["wasm32-unknown-unknown"]
 ```
@@ -404,17 +404,17 @@ targets = ["wasm32-unknown-unknown"]
 
 **Solution**:
 
-1. **Ensure methods use `#[external]` macro**:
+1. **Ensure methods use `#[public]` macro**:
 
 ```rust
-#[external]
+#[public]
 impl MyContract {
     // ✅ This will be exported
     pub fn public_method(&self) -> U256 {
         U256::from(42)
     }
 
-    // ❌ This won't be exported (no #[external])
+    // ❌ This won't be exported (no #[public])
     fn internal_method(&self) -> U256 {
         U256::from(42)
     }
