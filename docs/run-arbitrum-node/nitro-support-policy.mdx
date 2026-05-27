@@ -1,0 +1,96 @@
+---
+title: 'Nitro support policy'
+description: Learn the details of the support policy for Nitro.
+reader-audience: Moderately-technical readers who are familiar or learning about running a Nitro node.
+reader-task: Learn about the short/long term support policy for Nitro.
+content_type: reference
+---
+
+## Nitro support
+
+This policy defines which versions of Nitro the team at Offchain actively supports—and what "support" actually means. It exists so node operators, chain operators, and integrators know what to run, when to upgrade, and what kind of help to expect when they don't upgrade.
+
+### Currently supported Nitro versions
+
+| Currently supported                                                        | Supported until                            | Supported deployment |
+| -------------------------------------------------------------------------- | ------------------------------------------ | -------------------- |
+| [Nitro 3.10.x](https://github.com/OffchainLabs/nitro/releases/tag/v3.10.0) | 30 calendar days after 3.11.x is released. | Docker               |
+| [Nitro 3.9.9](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.9)   | June 11, 2026                              | Docker               |
+
+### Special note about ArbOS & Arbitrum Classic
+
+- **Only the ArbOS release that is activated on mainnet Arbitrum One** will receive security updates and urgent vulnerability patches. We strongly recommend you stay up to date with the latest ArbOS since only the latest version will receive security updates. The activation timestamps for ArbOS upgrades on Arbitrum One can be found [here](https://github.com/OffchainLabs/nitro/releases/tag/v3.10.0), with the most recent entry being the ArbOS version that is actively being used on Arbitrum One.
+  - Alternatively, you may verify the ArbOS version on Arbitrum One using the `arbOSVersion()` method on the `ArbSys` percompile at `0x000....64`. The result will be offset by 55 as the first version of Nitro is known as version 56 (e.g., a response of 106 indicates that the ArbOS version is 51).
+- Arbitrum Classic will also continue to be supported.
+
+### Our support windows, explained
+
+We will always support the current minor release of Nitro. The previous minor release will be supported for 30 calendar days after a newer minor release has been made available. In other words: support for a Nitro minor release **stops** once a minor release of the Nitro node software is made available for 30 calendar days.
+
+This means that we will, effectively, support at most two minor releases for a maximum period of 30 calendar days.
+
+:::caution
+
+Under exceptional cases, such as for stability or security fixes, we may cut a new minor Nitro release within 30 days of a previous minor release and immediately drop support for the previous minor release, When this happens, we may ask teams to upgrade sooner to the new release for security and stability reasons.
+
+:::
+
+Below is an illustrative example of how these windows overlap over the course of a year and several placeholder versions. Note that this is an example.
+
+<ImageZoom src="/img/nitro-support-policy.png" className="img-600px" alt="Transaction lifecycle">
+  Nitro support windows
+</ImageZoom>
+
+The current supported versions can be found on the [Nitro Start here](/run-arbitrum-node/start-here.mdx#recommended-nitro-version) page.
+
+### What "supported" means
+
+If you are running a supported Nitro version, we will make our best effort to:
+
+- Respond to bug reports (Slack, Telegram, etc.) and ship fixes and security patches against it
+- Work with you to help debug operational issues you uncover
+- Treat the release as a valid baseline for compatibility testing
+
+If you are running an unsupported Nitro version:
+
+- We may decline to investigate issues and will recommend upgrading first before investigating
+- We will not back-port non-critical fixes or features
+- You assume responsibility for any operational, consensus, or security risk
+
+You are free to run any version of our software. This policy describes where we will spend our time, not what we will permit.
+
+### Carve-out: ArbOS upgrades on older Nitro versions
+
+If we determine an ArbOS upgrade is required—including for security—we do **not** commit to porting those ArbOS changes back to any version. Operators on unsupported Nitro must first upgrade Nitro to receive the ArbOS change. This is intentional: backporting state-transition logic into stale node code is high-risk, and a guarantee here would dilute the upgrade pressure that keeps the network on supportable client versions.
+
+### Security fixes
+
+Security fixes are handled inside the supported window:
+
+1. Private disclosure to chain operators when actionable
+2. Coordinated release across all in-window versions (current minor + still-in-window prior minor)
+3. Public disclosure after operators have had time to upgrade
+
+A client version exception (CVE) does not retroactively extend support for older versions. If you are out of support when a fix lands, the path forward is to upgrade.
+
+## Out of scope
+
+This policy covers upstream release of Nitro by Offchain.
+
+It does not cover:
+
+- Forks or custom builds maintained by third parties
+- Builds compiled from non-release commits
+- Configurations or patches not present in the upstream release
+
+We will help where we can, but cannot commit to a support level on builds outside the upstream releases.
+
+## Staying up to date
+
+- Subscribe to the [Nitro GitHub repository](https://github.com/OffchainLabs/nitro) for GitHub notifications on new releases.
+- Follow our [X handle](https://x.com/ArbitrumDevs) for all things geared towards Developers building with/on Arbitrum!
+- The [Arbitrum Discord server](https://discord.com/invite/arbitrum) for all announcements and discussions
+- Telegram channels:
+  - `@arbitrumnodeupgrade` for important updates about Arbitrum node software upgrade notices and announcements
+  - `@arbitrum` for general announcements about things happening in the Arbitrum ecosystem
+  - `@OffchainLabsannouncements` for Offchain specific announcements or notices!
