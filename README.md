@@ -130,8 +130,7 @@ This part will update the glossary.
 
 ### Restructuring docs (moving or renaming pages)
 
-Moving a doc breaks internal links, sidebar entries, and external URLs. These commands handle all
-of that in one step, so a restructure costs minutes instead of hours.
+The following workflow handles internal links, sidebar entries, and external URLs in one step.
 
 `redirects.config.js` is the single source of truth for internal redirects. It is consumed by the
 `@docusaurus/plugin-client-redirects` plugin (in-app redirects) and mirrored into `vercel.json` for
