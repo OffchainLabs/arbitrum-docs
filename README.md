@@ -177,6 +177,10 @@ Notes:
 - Links whose URL is built from a JavaScript expression (e.g. `<Link to={someVar}>`) cannot be
   rewritten automatically; `move-doc` lists them so you can update them by hand.
 - `yarn move-doc` does not run the build for you — run `yarn build` (step 4) to confirm.
+- If the moved page is referenced by a glossary term (quicklook), also run `yarn build-glossary`
+  to regenerate `static/glossary.json`. Quicklook tooltips are rendered from that file at runtime,
+  so `yarn build` will not flag a stale glossary link — `move-doc` prints a reminder when it
+  rewrites glossary content.
 
 ### Formatting
 

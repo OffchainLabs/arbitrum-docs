@@ -274,6 +274,16 @@ async function main(): Promise<void> {
       ? updateSidebars(sidebarsBefore, oldId, newId)
       : { content: sidebarsBefore, count: 0 };
 
+  // Glossary terms are rendered into runtime quicklook tooltips from the generated
+  // static/glossary.json, which `yarn build` does NOT validate. If a glossary source partial
+  // was rewritten (or moved), the generated JSON must be regenerated separately.
+  const isGlossary = (p: string) => p.replace(/\\/g, '/').includes('/partials/glossary/');
+  const touchedGlossary =
+    edits.some((edit) => isGlossary(edit.abs)) || isGlossary(fromAbs) || isGlossary(toAbs);
+  const glossaryReminder =
+    'Glossary content was affected — run `yarn build-glossary` to refresh static/glossary.json ' +
+    '(the quicklook tooltips). `yarn build` does not flag stale glossary links.';
+
   const inboundRefCount = edits.reduce((sum, edit) => sum + edit.rewrites.length, 0);
   console.log(
     `${dryRun ? '[dry-run] ' : ''}move ${fromFile.rel} -> ${path.relative(repoRoot, toAbs)}`,
@@ -315,6 +325,7 @@ async function main(): Promise<void> {
     }
     if (!partial && oldUrl !== newUrl)
       console.log(`  redirect: { from: '${oldUrl}', to: '${newUrl}' }`);
+    if (touchedGlossary) console.log(`\n  ${glossaryReminder}`);
     console.log('\n[dry-run] no files were changed.');
     return;
   }
@@ -334,12 +345,13 @@ async function main(): Promise<void> {
       newUrl,
       false,
     );
-    console.log(`  redirects.config.ts: ${status} { from: '${oldUrl}', to: '${newUrl}' }`);
+    console.log(`  redirects.config.js: ${status} { from: '${oldUrl}', to: '${newUrl}' }`);
   }
 
   console.log(
     '\nDone. Next: `yarn build` to verify links, then `yarn sync-redirects` to update vercel.json.',
   );
+  if (touchedGlossary) console.log(`Also: ${glossaryReminder}`);
 }
 
 main().catch((error) => {
