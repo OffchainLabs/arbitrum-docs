@@ -10,7 +10,7 @@
  *   2. moves the file, recomputing the file's *own* relative links so they stay valid from the
  *      new location;
  *   3. updates the doc id referenced in `sidebars.js`;
- *   4. records the old→new URL in `redirects.config.ts` (created if absent).
+ *   4. records the old→new URL in `redirects.config.js` (created if absent).
  *
  * `--dry-run` prints every change without touching the filesystem. After a real run, verify with
  * `yarn build` and propagate the redirect to the edge with `yarn sync-redirects`.
@@ -185,7 +185,7 @@ export const redirects = [
 `;
 }
 
-/** Append a redirect entry to redirects.config.ts (creating the file if needed). Idempotent on `from`. */
+/** Append a redirect entry to redirects.config.js (creating the file if needed). Idempotent on `from`. */
 async function appendRedirect(
   redirectsPath: string,
   from: string,
