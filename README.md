@@ -128,6 +128,57 @@ This part will update the glossary.
 
 4. Commit your changes and open a PR.
 
+### Restructuring docs (moving or renaming pages)
+
+Moving a doc breaks internal links, sidebar entries, and external URLs. These commands handle all
+of that in one step, so a restructure costs minutes instead of hours.
+
+`redirects.config.js` is the single source of truth for internal redirects. It is consumed by the
+`@docusaurus/plugin-client-redirects` plugin (in-app redirects) and mirrored into `vercel.json` for
+the edge by `yarn sync-redirects`.
+
+Let's assume you want to move `docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx`
+to `docs/launch-arbitrum-chain/customize-stf.mdx`.
+
+1. Size the blast radius — list every internal link that points at the page (accepts a path or a glob):
+
+```shell
+yarn inventory-links docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx
+```
+
+2. Preview the move without changing any files:
+
+```shell
+yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx --dry-run
+```
+
+3. Perform the move. This moves the file, rewrites every reference to it (and the moved file's own
+   relative links), updates the doc id in `sidebars.js`, and appends a redirect to `redirects.config.js`:
+
+```shell
+yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx
+```
+
+4. Verify links resolve. The build fails on any broken internal link:
+
+```shell
+yarn build
+```
+
+5. Mirror the redirect into `vercel.json` for the edge:
+
+```shell
+yarn sync-redirects
+```
+
+6. Commit your changes and open a PR.
+
+Notes:
+
+- Links whose URL is built from a JavaScript expression (e.g. `<Link to={someVar}>`) cannot be
+  rewritten automatically; `move-doc` lists them so you can update them by hand.
+- `yarn move-doc` does not run the build for you — run `yarn build` (step 4) to confirm.
+
 ### Formatting
 
 1. Run `yarn format` from the root directory.
