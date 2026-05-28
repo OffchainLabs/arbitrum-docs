@@ -74,7 +74,9 @@ test('extractLinkRefs finds all four surfaces', () => {
   assert.ok(urls.includes('/how-arbitrum-works/foo'));
   assert.ok(urls.includes('/get-started/quickstart')); // title is excluded from the range
   assert.ok(urls.includes('/sdk/intro#section')); // anchor kept in raw url
-  assert.ok(urls.includes('https://example.com'));
+  // Exact-match rather than `.includes('https://example.com')`: this is array membership in a
+  // test, not URL validation, but the substring form trips CodeQL's incomplete-url-sanitization rule.
+  assert.ok(urls.some((u) => u === 'https://example.com'));
 
   // JSX attributes
   const link = refs.find(
