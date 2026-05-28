@@ -21,7 +21,13 @@ import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import matter from 'gray-matter';
 
-import { resolveDocUrl, resolveDocId, applyRewrites, type Rewrite } from './lib/mdx-link-codemod';
+import {
+  resolveDocUrl,
+  resolveDocId,
+  applyRewrites,
+  isExternalOrFragment,
+  type Rewrite,
+} from './lib/mdx-link-codemod';
 import {
   buildDocsIndex,
   scanLinks,
@@ -284,6 +290,16 @@ async function main(): Promise<void> {
     'Glossary content was affected — run `yarn build-glossary` to refresh static/glossary.json ' +
     '(the quicklook tooltips). `yarn build` does not flag stale glossary links.';
 
+  // A relative link inside a partial cannot be resolved statically: a partial has no fixed URL,
+  // so `../x` depends on which page imports it. Such links are never auto-rewritten — flag them
+  // (like expression links) so a move never silently leaves one pointing at the old location.
+  const ambiguousPartialLinks = records.filter((record) => {
+    if (record.toFile !== null || !isPartial(record.fromFile)) return false;
+    const { pathPart } = splitSuffix(record.ref.rawUrl);
+    if (isExternalOrFragment(pathPart)) return false;
+    return pathPart.startsWith('.');
+  });
+
   const inboundRefCount = edits.reduce((sum, edit) => sum + edit.rewrites.length, 0);
   console.log(
     `${dryRun ? '[dry-run] ' : ''}move ${fromFile.rel} -> ${path.relative(repoRoot, toAbs)}`,
@@ -311,6 +327,15 @@ async function main(): Promise<void> {
       `  WARNING: ${unparsed.length} file(s) could not be parsed and were not scanned for references:`,
     );
     for (const { file } of unparsed) console.warn(`    ${path.relative(repoRoot, file)}`);
+  }
+  if (ambiguousPartialLinks.length > 0) {
+    console.warn(
+      `  WARNING: ${ambiguousPartialLinks.length} relative link(s) inside partials cannot be resolved ` +
+        `(a partial has no fixed URL); if this move affects their target, update them manually:`,
+    );
+    for (const record of ambiguousPartialLinks) {
+      console.warn(`    ${path.relative(repoRoot, record.fromFile)}: ${record.ref.rawUrl}`);
+    }
   }
 
   if (dryRun) {
