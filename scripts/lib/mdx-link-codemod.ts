@@ -70,6 +70,22 @@ function toDocsRelative(filePath: string): string {
 }
 
 /**
+ * Split a docs-relative path into the segments shared by both the URL and the doc id: drop the
+ * file extension from the last segment and strip the numeric ordering prefix (`02-`) from every
+ * segment. {@link resolveDocUrl} and {@link resolveDocId} share this step, then diverge on
+ * slug/index handling — keep the segment transform here so the two can never drift apart.
+ */
+function normalizeDocSegments(filePath: string): string[] {
+  return toDocsRelative(filePath)
+    .split('/')
+    .filter(Boolean)
+    .map((segment, index, all) =>
+      index === all.length - 1 ? segment.replace(EXTENSION, '') : segment,
+    )
+    .map((segment) => segment.replace(NUMERIC_PREFIX, ''));
+}
+
+/**
  * Resolve the site URL Docusaurus serves a doc file at.
  *
  * `docs/` is mounted at the site root (`routeBasePath: '/'`). Numeric directory prefixes
@@ -82,15 +98,9 @@ function toDocsRelative(filePath: string): string {
  * @returns The site URL path, with no trailing slash (matching `trailingSlash: false`).
  */
 export function resolveDocUrl(filePath: string, frontmatter?: Record<string, unknown>): string {
-  const relative = toDocsRelative(filePath);
-  const segments = relative
-    .split('/')
-    .filter(Boolean)
-    .map((segment, index, all) =>
-      index === all.length - 1 ? segment.replace(EXTENSION, '') : segment,
-    )
-    .map((segment) => segment.replace(NUMERIC_PREFIX, ''));
+  const segments = normalizeDocSegments(filePath);
 
+  // `index`/`README` resolve to the folder root (drop the trailing segment).
   if (segments.length > 0 && /^(?:index|readme)$/i.test(segments[segments.length - 1])) {
     segments.pop();
   }
@@ -116,14 +126,8 @@ export function resolveDocUrl(filePath: string, frontmatter?: Record<string, unk
  * @returns The document id, e.g. `how-arbitrum-works/inside-arbitrum-nitro`.
  */
 export function resolveDocId(filePath: string): string {
-  return toDocsRelative(filePath)
-    .split('/')
-    .filter(Boolean)
-    .map((segment, index, all) =>
-      index === all.length - 1 ? segment.replace(EXTENSION, '') : segment,
-    )
-    .map((segment) => segment.replace(NUMERIC_PREFIX, ''))
-    .join('/');
+  // Same segment transform as the URL, but no slug override and no index/README collapse.
+  return normalizeDocSegments(filePath).join('/');
 }
 
 /** Locate the destination token of a markdown `[text](dest)` / `[text](dest "title")` link. */
@@ -242,6 +246,8 @@ export function extractLinkRefs(source: string): LinkRef[] {
   const tree = processor.parse(body);
   const refs: LinkRef[] = [];
 
+  // `node` is typed `any`: typing it precisely would mean importing and unioning every
+  // remark-mdx node type, which is noise for tooling that only branches on `node.type`.
   visit(tree, (node: any) => {
     const position = node.position;
     if (!position || position.start.offset == null || position.end.offset == null) return;
@@ -298,7 +304,10 @@ export function extractLinkRefs(source: string): LinkRef[] {
     }
 
     if (node.type === 'mdxjsEsm') {
-      for (const specifier of locateEsmSpecifiers(start, node.value ?? '')) {
+      // Scan the original source slice (not `node.value`): the parsed value comes from the
+      // comment/heading-id-blanked body, so searching the real source guarantees the specifier
+      // offsets line up with what `applyRewrites` will splice.
+      for (const specifier of locateEsmSpecifiers(start, source.slice(start, end))) {
         refs.push({
           surface: 'esm-import',
           rawUrl: specifier.url,

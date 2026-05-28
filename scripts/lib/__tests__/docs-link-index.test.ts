@@ -18,6 +18,8 @@ test('detectLinkStyle classifies each written form', () => {
   assert.equal(detectLinkStyle('./x.md'), 'fileRel');
   assert.equal(detectLinkStyle('/x/y'), 'urlAbs');
   assert.equal(detectLinkStyle('../y'), 'urlRel');
+  // A bare relative file link is classified fileRel; renderRef normalizes it to `./page.mdx`.
+  assert.equal(detectLinkStyle('page.mdx'), 'fileRel');
 });
 
 test('splitSuffix separates anchor and query', () => {

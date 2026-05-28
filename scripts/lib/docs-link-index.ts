@@ -136,7 +136,11 @@ function toPosix(p: string): string {
   return p.replace(/\\/g, '/');
 }
 
-/** Ensure a relative path is explicitly relative (`./x`, not `x`). */
+/**
+ * Ensure a relative path is explicitly relative (`./x`, not `x`). Note this normalizes a
+ * bare relative link (`page.mdx`) to `./page.mdx` on rewrite — a deliberate, harmless change
+ * that keeps the form unambiguous; bare relative links are not used in this repo's docs.
+ */
 function dotSlash(rel: string): string {
   return rel.startsWith('.') ? rel : './' + rel;
 }

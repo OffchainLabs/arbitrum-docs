@@ -27,6 +27,12 @@ function entryLine(source: string, destination: string): string {
   return INDENT + JSON.stringify({ source, destination, permanent: false }) + ',';
 }
 
+// Every block line (including the END sentinel) carries a trailing comma. That is correct
+// because the block is inserted at the FRONT of the `redirects` array, ahead of the existing
+// hand-maintained entries — so a comma always separates it from what follows. This assumes the
+// array is non-empty (always true for this repo's vercel.json); inserting into a completely
+// empty `redirects: []` would leave a trailing comma before `]`, which the JSON.parse guard
+// below would reject (fail-safe: it refuses to write rather than emit invalid JSON).
 function buildBlock(): string[] {
   const lines = [entryLine(START_SOURCE, '/')];
   for (const redirect of redirects) lines.push(entryLine(redirect.from, redirect.to));

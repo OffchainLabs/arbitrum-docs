@@ -72,6 +72,42 @@ interface Change {
   next: string;
 }
 
+/** The disposition of one link under a move: rewrite it, flag it, or leave it. */
+type RewritePlan =
+  | { kind: 'rewrite'; rewrite: Rewrite; change: Change }
+  | { kind: 'unrenderable' }
+  | { kind: 'skip' };
+
+/**
+ * Render one link's rewrite, preserving its written form (`@site/…`, absolute URL, relative
+ * file/url, with any `#anchor`/`?query` suffix). Shared by both planners — the only thing that
+ * differs between inbound and outbound is which side moved, expressed via `target`/`container`.
+ *
+ * Returns `unrenderable` when the link has a byte range but its style can't be re-expressed in
+ * this context (e.g. a relative URL link inside a partial, which has no base URL) so the caller
+ * can surface it for manual review; `skip` when the rendered form is unchanged. Callers must
+ * handle a null `record.ref.range` themselves before calling.
+ */
+function planLinkRewrite(
+  record: LinkRecord,
+  target: { abs: string; url: string | null },
+  container: { abs: string; url: string | null },
+  index: DocsIndex,
+): RewritePlan {
+  const range = record.ref.range;
+  if (range === null) return { kind: 'skip' };
+  const { pathPart, suffix } = splitSuffix(record.ref.rawUrl);
+  const newPath = renderRef(detectLinkStyle(pathPart), target, container, index);
+  if (newPath === null) return { kind: 'unrenderable' };
+  const next = newPath + suffix;
+  if (next === record.ref.rawUrl) return { kind: 'skip' };
+  return {
+    kind: 'rewrite',
+    rewrite: { range, newText: next },
+    change: { file: container.abs, old: record.ref.rawUrl, next },
+  };
+}
+
 /** Build rewrites for links pointing AT the moved file (target moved, container unchanged). */
 function planInbound(
   records: LinkRecord[],
@@ -91,32 +127,24 @@ function planInbound(
   const edits: FileEdit[] = [];
   const unrenderable: LinkRecord[] = [];
   const changes: Change[] = [];
+  const target = { abs: toAbs, url: newUrl };
   for (const [abs, recs] of byFile) {
     const file = index.files.find((candidate) => candidate.abs === abs);
     if (!file) continue;
-    const containerUrl = index.fileToUrl.get(abs) ?? null;
+    const container = { abs, url: index.fileToUrl.get(abs) ?? null };
     const rewrites: Rewrite[] = [];
     for (const record of recs) {
+      // A range-less ref that resolves to the moved file (e.g. a markdown link whose destination
+      // could not be located) is known-broken-by-the-move but not auto-fixable — flag it.
       if (record.ref.range === null) {
         unrenderable.push(record);
         continue;
       }
-      const { pathPart, suffix } = splitSuffix(record.ref.rawUrl);
-      const style = detectLinkStyle(pathPart);
-      const newPath = renderRef(
-        style,
-        { abs: toAbs, url: newUrl },
-        { abs, url: containerUrl },
-        index,
-      );
-      if (newPath === null) {
-        unrenderable.push(record);
-        continue;
-      }
-      const next = newPath + suffix;
-      if (next !== record.ref.rawUrl) {
-        rewrites.push({ range: record.ref.range, newText: next });
-        changes.push({ file: abs, old: record.ref.rawUrl, next });
+      const plan = planLinkRewrite(record, target, container, index);
+      if (plan.kind === 'unrenderable') unrenderable.push(record);
+      else if (plan.kind === 'rewrite') {
+        rewrites.push(plan.rewrite);
+        changes.push(plan.change);
       }
     }
     if (rewrites.length > 0) edits.push({ abs, content: file.content, rewrites });
@@ -134,25 +162,23 @@ function planOutbound(
 ): { rewrites: Rewrite[]; changes: Change[] } {
   const rewrites: Rewrite[] = [];
   const changes: Change[] = [];
+  const container = { abs: toAbs, url: newUrl };
   for (const record of records) {
     if (record.fromFile !== fromAbs || record.ref.range === null || record.toFile === null)
       continue;
-    const { pathPart, suffix } = splitSuffix(record.ref.rawUrl);
-    const style = detectLinkStyle(pathPart);
+    const style = detectLinkStyle(splitSuffix(record.ref.rawUrl).pathPart);
     // Absolute forms (`/x`, `@site/…`) are location-independent; only relative forms move.
     if (style !== 'fileRel' && style !== 'urlRel') continue;
-    const targetUrl = index.fileToUrl.get(record.toFile) ?? null;
-    const newPath = renderRef(
-      style,
-      { abs: record.toFile, url: targetUrl },
-      { abs: toAbs, url: newUrl },
-      index,
-    );
-    if (newPath === null) continue;
-    const next = newPath + suffix;
-    if (next !== record.ref.rawUrl) {
-      rewrites.push({ range: record.ref.range, newText: next });
-      changes.push({ file: toAbs, old: record.ref.rawUrl, next });
+    // A self-link points back at the moved file, so its target is the NEW location — `index`
+    // still maps `fromAbs` to the pre-move URL, so don't look it up there.
+    const target =
+      record.toFile === fromAbs
+        ? { abs: toAbs, url: newUrl }
+        : { abs: record.toFile, url: index.fileToUrl.get(record.toFile) ?? null };
+    const plan = planLinkRewrite(record, target, container, index);
+    if (plan.kind === 'rewrite') {
+      rewrites.push(plan.rewrite);
+      changes.push(plan.change);
     }
   }
   return { rewrites, changes };
@@ -201,7 +227,9 @@ async function appendRedirect(
   const existed = existsSync(redirectsPath);
   const current = existed ? await readFile(redirectsPath, 'utf8') : redirectsTemplate();
 
-  if (current.includes(`from: '${from}'`)) return 'exists';
+  // Anchor the idempotency check to the entry's opening (`{ from: '…'`) so it matches a real
+  // redirect entry and never a substring of some other value.
+  if (current.includes(`{ from: '${from}'`)) return 'exists';
   if (!current.includes(REDIRECTS_END)) {
     throw new Error(
       `move-doc: ${path.basename(redirectsPath)} is missing the ${REDIRECTS_END} sentinel`,
