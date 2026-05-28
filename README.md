@@ -130,14 +130,34 @@ This part will update the glossary.
 
 ### Restructuring docs (moving or renaming pages)
 
-The following workflow handles internal links, sidebar entries, and external URLs in one step.
+The tooling handles internal links, the moved file's own relative links, sidebar entries,
+redirects, and quicklook glossary data so a move costs minutes instead of hours.
 
 `redirects.config.js` is the single source of truth for internal redirects. It is consumed by the
 `@docusaurus/plugin-client-redirects` plugin (in-app redirects) and mirrored into `vercel.json` for
 the edge by `yarn sync-redirects`.
 
-Let's assume you want to move `docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx`
-to `docs/launch-arbitrum-chain/customize-stf.mdx`.
+#### One command (recommended)
+
+`yarn restructure <from> <to>` runs the whole sequence in the order that keeps the edge consistent:
+it moves the file and rewrites references, then runs `yarn build` as a verification gate,
+regenerates the glossary only if a glossary term was affected, and finally mirrors the redirect
+into `vercel.json`. If the build fails, it aborts **before** touching `vercel.json`.
+
+```shell
+# preview only — no files are changed
+yarn restructure docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx --dry-run
+
+# perform the move end to end
+yarn restructure docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx
+```
+
+Then commit your changes and open a PR.
+
+#### Step by step (for batch moves or granular control)
+
+Use the individual commands when you want to inspect the blast radius first, or move several files
+before building once (build and sync a single time, after all the moves).
 
 1. Size the blast radius — list every internal link that points at the page (accepts a path or a glob):
 
@@ -164,23 +184,28 @@ yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.m
 yarn build
 ```
 
-5. Mirror the redirect into `vercel.json` for the edge:
+5. If the move affected a glossary term, regenerate the quicklook data:
+
+```shell
+yarn build-glossary
+```
+
+6. Mirror the redirect into `vercel.json` for the edge:
 
 ```shell
 yarn sync-redirects
 ```
 
-6. Commit your changes and open a PR.
+7. Commit your changes and open a PR.
 
 Notes:
 
-- Links whose URL is built from a JavaScript expression (e.g. `<Link to={someVar}>`) cannot be
-  rewritten automatically; `move-doc` lists them so you can update them by hand.
-- `yarn move-doc` does not run the build for you — run `yarn build` (step 4) to confirm.
-- If the moved page is referenced by a glossary term (quicklook), also run `yarn build-glossary`
-  to regenerate `static/glossary.json`. Quicklook tooltips are rendered from that file at runtime,
-  so `yarn build` will not flag a stale glossary link — `move-doc` prints a reminder when it
-  rewrites glossary content.
+- Links whose URL is built from a JavaScript expression (e.g. `<Link to={someVar}>`), and relative
+  links inside partials (a partial has no fixed URL), cannot be rewritten automatically; `move-doc`
+  lists both so you can update them by hand.
+- `yarn move-doc` does not run the build — `yarn restructure` does. With the manual steps, run
+  `yarn build` yourself, plus `yarn build-glossary` if a glossary term changed: quicklook tooltips
+  render from `static/glossary.json` at runtime, which `yarn build` does not validate.
 
 ### Formatting
 

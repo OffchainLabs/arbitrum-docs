@@ -41,6 +41,7 @@
     "check-lunr-exclude": "tsx scripts/check-lunr-exclude-hide-from-search.ts",
     "inventory-links": "tsx scripts/inventory-links.ts",
     "move-doc": "tsx scripts/move-doc.ts",
+    "restructure": "tsx scripts/restructure.ts",
     "sync-redirects": "tsx scripts/sync-vercel-redirects.ts"
   },
   "dependencies": {
