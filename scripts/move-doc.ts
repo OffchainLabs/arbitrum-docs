@@ -185,20 +185,25 @@ function planOutbound(
   return { rewrites, changes };
 }
 
-/** Replace a doc id everywhere it is referenced as a quoted string in `sidebars.js`. */
+/**
+ * Rewrite references to the moved doc in `sidebars.js`. A doc-item entry references it by id, while
+ * a `link`-type entry references it by URL (`href: '/x'`) — both must be updated or the URL ones
+ * 404, and the sidebar renders site-wide so one stale href breaks the build on every page. Each
+ * token is matched quote-delimited so a swap can't hit a substring of a longer id or path.
+ */
 function updateSidebars(
   content: string,
-  oldId: string,
-  newId: string,
+  swaps: ReadonlyArray<readonly [from: string, to: string]>,
 ): { content: string; count: number } {
   let count = 0;
   let updated = content;
-  for (const quote of ["'", '"']) {
-    const needle = `${quote}${oldId}${quote}`;
-    const replacement = `${quote}${newId}${quote}`;
-    const parts = updated.split(needle);
-    count += parts.length - 1;
-    updated = parts.join(replacement);
+  for (const [from, to] of swaps) {
+    if (from === to) continue;
+    for (const quote of ["'", '"']) {
+      const parts = updated.split(`${quote}${from}${quote}`);
+      count += parts.length - 1;
+      updated = parts.join(`${quote}${to}${quote}`);
+    }
   }
   return { content: updated, count };
 }
@@ -335,10 +340,10 @@ async function main(): Promise<void> {
 
   const sidebarsPath = path.join(repoRoot, 'sidebars.js');
   const sidebarsBefore = await readFile(sidebarsPath, 'utf8');
-  const sidebarsResult =
-    oldId && newId && oldId !== newId
-      ? updateSidebars(sidebarsBefore, oldId, newId)
-      : { content: sidebarsBefore, count: 0 };
+  const sidebarsSwaps: Array<readonly [string, string]> = [];
+  if (oldId && newId) sidebarsSwaps.push([oldId, newId]);
+  if (oldUrl && newUrl) sidebarsSwaps.push([oldUrl, newUrl]);
+  const sidebarsResult = updateSidebars(sidebarsBefore, sidebarsSwaps);
 
   // Glossary terms are rendered into runtime quicklook tooltips from the generated
   // static/glossary.json, which `yarn build` does NOT validate. If a glossary source partial
@@ -372,7 +377,7 @@ async function main(): Promise<void> {
   for (const edit of edits)
     console.log(`    ${path.relative(repoRoot, edit.abs)} (${edit.rewrites.length})`);
   console.log(`  moved-file relative links rewritten: ${outboundRewrites.length}`);
-  console.log(`  sidebars.js id replacements: ${sidebarsResult.count}`);
+  console.log(`  sidebars.js references updated (id + href): ${sidebarsResult.count}`);
 
   if (unrenderable.length > 0) {
     console.warn(
