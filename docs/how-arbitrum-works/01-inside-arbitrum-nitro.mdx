@@ -114,7 +114,7 @@ Retryable tickets enable atomic operations with guaranteed retries if execution 
 
 See the [Parent-to-Child messaging deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for details.
 
-Child-to-parent transfers from Arbitrum to Ethereum begin with creating a message via [`ArbSys.sendTxToL1()`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys), followed by inclusion in a Rollup <a data-quicklook-from="assertion">Assertion</a>, a 6.4-day <a data-quicklook-from="challenge-period">challenge period</a>, and manual Layer 1 execution by any party. Messages are validated via Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints.
+Child-to-parent transfers from Arbitrum to Ethereum begin with creating a message via [`ArbSys.sendTxToL1()`](/arbitrum-essentials/precompiles/reference.mdx#arbsys), followed by inclusion in a Rollup <a data-quicklook-from="assertion">Assertion</a>, a 6.4-day <a data-quicklook-from="challenge-period">challenge period</a>, and manual Layer 1 execution by any party. Messages are validated via Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints.
 
 For details on how Rollup assertions work and their role in finality, see the [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions.mdx).
 

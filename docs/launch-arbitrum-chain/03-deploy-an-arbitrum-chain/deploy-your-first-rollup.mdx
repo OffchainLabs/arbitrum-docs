@@ -53,14 +53,14 @@ DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
 
 ### Environment variables reference
 
-| Variable                            | Required?              | When         | Description                                                                                                                                                                                    |
-| :---------------------------------- | :--------------------- | :----------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DEPLOYER_PRIVATE_KEY`              | **Yes**                | Step 1       | Your wallet's private key (starts with `0x`, 66 chars). Used to deploy the chain and token bridge. Never share or commit it.                                                                   |
-| `PARENT_CHAIN_RPC`                  | Optional               | Step 2, 3, 6 | Arbitrum Sepolia RPC URL. If omitted, uses the default public RPC (can be slow or time out). Use a [node provider](/build-decentralized-apps/reference/01-node-providers.mdx) for reliability. |
-| `BATCH_POSTER_PRIVATE_KEY`          | Optional               | Step 2       | Private key for the batch poster. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                            |
-| `VALIDATOR_PRIVATE_KEY`             | Optional               | Step 2       | Private key for the validator. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                               |
-| `CHAIN_DEPLOYMENT_TRANSACTION_HASH` | **Yes** (after Step 2) | Step 3, 6    | Transaction hash from the deploy script. Copy it from Step 2's output into `.env`.                                                                                                             |
-| `CHAIN_RPC`                         | Optional               | Step 6       | Your chain's RPC URL. Defaults to `http://localhost:8547` when running locally. Override if your node is elsewhere.                                                                            |
+| Variable                            | Required?              | When         | Description                                                                                                                                                                            |
+| :---------------------------------- | :--------------------- | :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DEPLOYER_PRIVATE_KEY`              | **Yes**                | Step 1       | Your wallet's private key (starts with `0x`, 66 chars). Used to deploy the chain and token bridge. Never share or commit it.                                                           |
+| `PARENT_CHAIN_RPC`                  | Optional               | Step 2, 3, 6 | Arbitrum Sepolia RPC URL. If omitted, uses the default public RPC (can be slow or time out). Use a [node provider](/arbitrum-essentials/reference/node-providers.mdx) for reliability. |
+| `BATCH_POSTER_PRIVATE_KEY`          | Optional               | Step 2       | Private key for the batch poster. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                    |
+| `VALIDATOR_PRIVATE_KEY`             | Optional               | Step 2       | Private key for the validator. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                       |
+| `CHAIN_DEPLOYMENT_TRANSACTION_HASH` | **Yes** (after Step 2) | Step 3, 6    | Transaction hash from the deploy script. Copy it from Step 2's output into `.env`.                                                                                                     |
+| `CHAIN_RPC`                         | Optional               | Step 6       | Your chain's RPC URL. Defaults to `http://localhost:8547` when running locally. Override if your node is elsewhere.                                                                    |
 
 :::caution Private key format
 
