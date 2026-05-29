@@ -171,8 +171,9 @@ yarn inventory-links docs/launch-arbitrum-chain/05-customize-your-chain/customiz
 yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx --dry-run
 ```
 
-3. Perform the move. This moves the file, rewrites every reference to it (and the moved file's own
-   relative links), updates the doc id in `sidebars.js`, and appends a redirect to `redirects.config.js`:
+3. Perform the move. This moves the file with `git mv` (staging it as a rename so `git log --follow`
+   keeps the page's history), rewrites every reference to it (and the moved file's own relative
+   links), updates the doc id in `sidebars.js`, and appends a redirect to `redirects.config.js`:
 
 ```shell
 yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx
@@ -206,6 +207,13 @@ Notes:
 - `yarn move-doc` does not run the build — `yarn restructure` does. With the manual steps, run
   `yarn build` yourself, plus `yarn build-glossary` if a glossary term changed: quicklook tooltips
   render from `static/glossary.json` at runtime, which `yarn build` does not validate.
+- The move uses `git mv`, so the rename is staged for you (the link-rewrite shows as a follow-on
+  modification). If the source isn't tracked or you're outside a git work tree, it falls back to a
+  plain filesystem move and warns that the move is unstaged.
+- The doc id in `sidebars.js` is updated in place — the entry is **not** relocated. A page's URL
+  comes from its file path and slug, not its sidebar position, so reorganizing the sidebar by hand
+  (shifting a section elsewhere, reordering items) needs no tooling and no redirects: just edit
+  `sidebars.js` and run `yarn build`, which validates that every entry resolves to a real doc.
 
 ### Formatting
 
