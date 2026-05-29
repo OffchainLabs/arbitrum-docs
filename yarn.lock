@@ -4274,6 +4274,11 @@
     "@types/node-fetch" "^2.5.10"
     node-fetch "^2.6.1"
 
+"@notionhq/client@^5.22.0":
+  version "5.22.0"
+  resolved "https://registry.yarnpkg.com/@notionhq/client/-/client-5.22.0.tgz#41be4c484596141f40483ae9ee96fc6c39660725"
+  integrity sha512-lZ3JGBCd6O6MNHWn/58QcUqX1FgmlcODcx/EaUEEpuxLXF5tSi+v29Vzoz8mZ6JgDWDn5pMzzjB69QevYjQQZA==
+
 "@octokit/auth-token@^4.0.0":
   version "4.0.0"
   resolved "https://registry.npmjs.org/@octokit/auth-token/-/auth-token-4.0.0.tgz"
