@@ -17,10 +17,10 @@ This policy defines which versions of Nitro the Offchain team actively supportsâ
 | [Nitro 3.10.x](https://github.com/OffchainLabs/nitro/releases/tag/v3.10.0) | 30 calendar days after 3.11.x is released. | Docker               |
 | [Nitro 3.9.9](https://github.com/OffchainLabs/nitro/releases/tag/v3.9.9)   | June 11, 2026                              | Docker               |
 
-### Special note about ArbOS & Arbitrum Classic
+### Special note about ArbOS and Arbitrum Classic
 
-- **Only the ArbOS release that is activated on mainnet Arbitrum One** will receive security updates and urgent vulnerability patches. We strongly recommend that you stay up to date with the latest ArbOS, as only the latest version receives security updates. The activation timestamps for ArbOS upgrades on Arbitrum One are available **[here](https://docs.arbitrum.foundation/network-upgrades),** with the most recent entry corresponding to the ArbOS version currently in use on Arbitrum One.
-  - Alternatively, you may verify the ArbOS version on Arbitrum One using the `arbOSVersion()` method on the `ArbSys` percompile at `0x000....64`. The result will be offset by 55 as the first version of Nitro is known as version 56 (e.g., a response of 106 indicates that the ArbOS version is 51).
+- **Only the ArbOS release that is activated on mainnet Arbitrum One** will receive security updates and urgent vulnerability patches. We strongly recommend that you stay up to date with the latest ArbOS, as only the latest version receives security updates. The activation timestamps for ArbOS upgrades on Arbitrum One are available on the **[Arbitrum Foundation network upgrades page](https://docs.arbitrum.foundation/network-upgrades),** with the most recent entry corresponding to the ArbOS version currently in use on Arbitrum One.
+  - Alternatively, you can verify the ArbOS version on Arbitrum One using the `arbOSVersion()` method on the `ArbSys` precompile at `0x000....64`. The result will be offset by 55 as the first version of Nitro is known as version 56 (for example, a response of 106 indicates that the ArbOS version is 51).
 - Arbitrum Classic will also continue to be supported.
 
 ### Our support windows, explained
@@ -37,11 +37,11 @@ In exceptional cases, such as for stability or security fixes, we may cut a new 
 
 Below is an illustrative example of how these windows overlap over the course of a year, along with several placeholder versions. Note that this is an example.
 
-<ImageZoom src="/img/nitro-support-policy.png" className="img-600px" alt="Transaction lifecycle">
+<ImageZoom src="/img/nitro-support-policy.png" className="img-600px" alt="Nitro support windows">
   Nitro support windows
 </ImageZoom>
 
-The current supported versions can be found on the [Nitro Start here](/run-arbitrum-node/start-here.mdx#recommended-nitro-version) page.
+The currently supported versions can be found on the [Nitro start here](/run-arbitrum-node/start-here.mdx#recommended-nitro-version) page.
 
 ### What "supported" means
 
@@ -88,7 +88,7 @@ We will help where we can, but we cannot commit to a support level on builds oth
 ## Staying up to date
 
 - Subscribe to the [Nitro GitHub repository](https://github.com/OffchainLabs/nitro) for GitHub notifications on new releases.
-- Follow our [X handle](https://x.com/ArbitrumDevs) for all things geared towards Developers building with/on Arbitrum!
+- Follow our [X handle](https://x.com/ArbitrumDevs) for all things geared towards developers building with and on Arbitrum.
 - The [Arbitrum Discord server](https://discord.com/invite/arbitrum) for all announcements and discussions
 - Telegram channels:
   - `@arbitrumnodeupgrade` for important updates about Arbitrum node software upgrade notices and announcements
