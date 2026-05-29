@@ -269,10 +269,22 @@ async function main(): Promise<void> {
   const toAbs = path.resolve(repoRoot, to);
   const docsRoot = path.join(repoRoot, 'docs');
 
-  for (const [label, abs] of [
-    ['from', fromAbs],
-    ['to', toAbs],
+  for (const [label, raw, abs] of [
+    ['from', from, fromAbs],
+    ['to', to, toAbs],
   ] as const) {
+    // A leading slash makes the arg an absolute path, so it resolves outside the repo. It usually
+    // means the caller passed a site URL ("/docs/…") instead of a repo-relative file path.
+    if (raw.startsWith('/')) {
+      console.error(
+        `move-doc: <${label}> starts with '/': ${raw}\n` +
+          `  Pass a repo-relative file path, not a site URL — drop the leading slash, e.g. '${raw.replace(
+            /^\/+/,
+            '',
+          )}'.`,
+      );
+      process.exit(1);
+    }
     if (!abs.startsWith(docsRoot + path.sep) || !/\.mdx?$/.test(abs)) {
       console.error(`move-doc: <${label}> must be a .md/.mdx file under docs/: ${abs}`);
       process.exit(1);
