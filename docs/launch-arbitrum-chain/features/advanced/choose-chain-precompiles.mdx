@@ -19,16 +19,16 @@ Customization allows developers to add new methods, events, gas logic, or state 
 
 There are several approaches, each building on the Nitro codebase:
 
-- **Add new methods to an existing <a data-quicklook-from="precompile">precompile</a>**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
+- **Add new methods to an existing [precompile](/build-decentralized-apps/precompiles/02-reference.mdx)**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
 - **Create a new precompile**: Define a completely new precompile at a custom address (e.g., 0x011a for ArbHi) with its own methods.
 - **Define a new event**: Add events to methods for logging, making the method state-modifying and indexable for offchain querying.
 - **Customize gas usage**: Adjust or implement gas costs for methods (e.g., cost 300 gas instead of 700 for a balance query) to optimize efficiency or prevent DoS attacks.
-- **Call and modify state**: Integrate with <a data-quicklook-from="arbos">ArbOS</a> state by adding storage variables and methods to read/write them, allowing persistent chain-specific data.
+- **Call and modify state**: Integrate with [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) state by adding storage variables and methods to read/write them, allowing persistent chain-specific data.
 
 ## Compatibility with chain types
 
 - Works with all Arbitrum chain DA modes (Rollup, AnyTrust, Alt-DA) and gas tokens (native **ETH** or custom), as it's a Nitro-level change.
-- Compatible with <a data-quicklook-from="bold">BoLD</a> or permissioned validation.
+- Compatible with [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) or permissioned validation.
 
 ## Pros
 

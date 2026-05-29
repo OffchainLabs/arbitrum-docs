@@ -3,6 +3,7 @@
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
+const { themes: prismThemes } = require('prism-react-renderer');
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
@@ -345,8 +346,8 @@ const config = {
       },
       prism: {
         additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
-        theme: require('prism-react-renderer/themes/github'),
-        darkTheme: require('prism-react-renderer/themes/palenight'),
+        theme: prismThemes.github,
+        darkTheme: prismThemes.palenight,
       },
       liveCodeBlock: {
         /**
