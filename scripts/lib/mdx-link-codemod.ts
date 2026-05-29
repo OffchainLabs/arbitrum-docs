@@ -62,6 +62,12 @@ export function normalizeUrl(url: string): string {
   return result === '' ? '/' : result;
 }
 
+/** A non-empty string `id:` frontmatter value, or null. Docusaurus disallows slashes in `id`. */
+function frontmatterId(frontmatter?: Record<string, unknown>): string | null {
+  const id = frontmatter?.id;
+  return typeof id === 'string' && id.length > 0 ? id : null;
+}
+
 /** Strip everything up to and including the `docs/` segment, yielding a docs-relative path. */
 function toDocsRelative(filePath: string): string {
   const normalized = filePath.replace(/\\/g, '/');
@@ -91,10 +97,12 @@ function normalizeDocSegments(filePath: string): string[] {
  * `docs/` is mounted at the site root (`routeBasePath: '/'`). Numeric directory prefixes
  * (`02-foo`) are stripped from every segment, `index`/`README` files resolve to their
  * folder root, and a `slug:` frontmatter value overrides the path-derived URL — absolute
- * (`/x`) replacing it entirely, relative (`x`) resolving against the doc's directory.
+ * (`/x`) replacing it entirely, relative (`x`) resolving against the doc's directory. With no
+ * `slug`, an `id:` frontmatter value replaces the final URL segment (Docusaurus derives the
+ * permalink from the doc id, so an id override moves the URL too).
  *
  * @param filePath Doc file path (absolute or repo-relative).
- * @param frontmatter Parsed frontmatter; only `slug` is consulted.
+ * @param frontmatter Parsed frontmatter; `slug` then `id` are consulted.
  * @returns The site URL path, with no trailing slash (matching `trailingSlash: false`).
  */
 export function resolveDocUrl(filePath: string, frontmatter?: Record<string, unknown>): string {
@@ -112,6 +120,9 @@ export function resolveDocUrl(filePath: string, frontmatter?: Record<string, unk
     return normalizeUrl(path.posix.join(directory, slug));
   }
 
+  const id = frontmatterId(frontmatter);
+  if (id !== null && segments.length > 0) segments[segments.length - 1] = id;
+
   return normalizeUrl('/' + segments.join('/'));
 }
 
@@ -119,15 +130,21 @@ export function resolveDocUrl(filePath: string, frontmatter?: Record<string, unk
  * Resolve the Docusaurus document id for a doc file.
  *
  * The id is the docs-relative path without extension and with numeric directory prefixes
- * stripped from every segment — the form referenced in `sidebars.js`. Unlike {@link resolveDocUrl},
- * it ignores `slug` frontmatter and does not collapse `index`/`README` to the folder root.
+ * stripped from every segment — the form referenced in `sidebars.js`. An `id:` frontmatter
+ * value replaces the final segment (e.g. `oracles/01-overview.mdx` with `id: overview-oracles`
+ * resolves to `oracles/overview-oracles`). Unlike {@link resolveDocUrl}, it ignores `slug`
+ * frontmatter and does not collapse `index`/`README` to the folder root.
  *
  * @param filePath Doc file path (absolute or repo-relative).
+ * @param frontmatter Parsed frontmatter; only `id` is consulted.
  * @returns The document id, e.g. `how-arbitrum-works/inside-arbitrum-nitro`.
  */
-export function resolveDocId(filePath: string): string {
+export function resolveDocId(filePath: string, frontmatter?: Record<string, unknown>): string {
   // Same segment transform as the URL, but no slug override and no index/README collapse.
-  return normalizeDocSegments(filePath).join('/');
+  const segments = normalizeDocSegments(filePath);
+  const id = frontmatterId(frontmatter);
+  if (id !== null && segments.length > 0) segments[segments.length - 1] = id;
+  return segments.join('/');
 }
 
 /** Locate the destination token of a markdown `[text](dest)` / `[text](dest "title")` link. */

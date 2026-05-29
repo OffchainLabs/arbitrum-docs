@@ -320,8 +320,8 @@ async function main(): Promise<void> {
   const toRel = path.join('docs', path.relative(docsRoot, toAbs));
   const oldUrl = partial ? null : resolveDocUrl(fromFile.rel, frontmatter);
   const newUrl = partial ? null : resolveDocUrl(toRel, frontmatter);
-  const oldId = partial ? null : resolveDocId(fromFile.rel);
-  const newId = partial ? null : resolveDocId(toRel);
+  const oldId = partial ? null : resolveDocId(fromFile.rel, frontmatter);
+  const newId = partial ? null : resolveDocId(toRel, frontmatter);
 
   const { records, unparsed } = scanLinks(index);
   const {

@@ -47,12 +47,34 @@ test('resolveDocUrl: relative slug resolves against the doc directory', () => {
   assert.equal(resolveDocUrl('docs/a/b/c.mdx', { slug: 'renamed' }), '/a/b/renamed');
 });
 
+test('resolveDocUrl: id frontmatter replaces the final URL segment', () => {
+  assert.equal(
+    resolveDocUrl('docs/build-decentralized-apps/oracles/01-overview.mdx', {
+      id: 'overview-oracles',
+    }),
+    '/build-decentralized-apps/oracles/overview-oracles',
+  );
+});
+
+test('resolveDocUrl: slug takes precedence over id', () => {
+  assert.equal(resolveDocUrl('docs/a/b/c.mdx', { slug: '/custom', id: 'ignored' }), '/custom');
+});
+
 test('resolveDocId strips numeric prefixes and extension, keeps index', () => {
   assert.equal(
     resolveDocId('docs/02-how-arbitrum-works/01-inside-arbitrum-nitro.mdx'),
     'how-arbitrum-works/inside-arbitrum-nitro',
   );
   assert.equal(resolveDocId('docs/foo/index.mdx'), 'foo/index');
+});
+
+test('resolveDocId: id frontmatter replaces the final id segment', () => {
+  assert.equal(
+    resolveDocId('docs/build-decentralized-apps/oracles/01-overview.mdx', {
+      id: 'overview-oracles',
+    }),
+    'build-decentralized-apps/oracles/overview-oracles',
+  );
 });
 
 test('extractLinkRefs locates every URL token exactly', () => {
