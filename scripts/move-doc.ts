@@ -17,8 +17,9 @@
  */
 
 import path from 'node:path';
-import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import matter from 'gray-matter';
 
 import {
@@ -242,6 +243,25 @@ async function appendRedirect(
   return existed ? 'appended' : 'created';
 }
 
+/**
+ * Move `fromAbs` to `toAbs`, preferring `git mv` so the rename is staged and git records it as a
+ * rename — preserving `git log --follow` history. The moved file's own links are rewritten right
+ * after, which would otherwise drop content similarity below git's rename-detection threshold and
+ * make the move read as delete+add. Falls back to a filesystem move when git can't do it (outside a
+ * work tree, or an untracked source); the move still happens, just unstaged. Returns true when the
+ * move was staged via git.
+ */
+async function moveFile(fromAbs: string, toAbs: string, repoRoot: string): Promise<boolean> {
+  await mkdir(path.dirname(toAbs), { recursive: true });
+  try {
+    execFileSync('git', ['mv', fromAbs, toAbs], { cwd: repoRoot, stdio: 'pipe' });
+    return true;
+  } catch {
+    await rename(fromAbs, toAbs);
+    return false;
+  }
+}
+
 async function main(): Promise<void> {
   const { from, to, dryRun } = parseArgs(process.argv.slice(2));
   const repoRoot = process.cwd();
@@ -386,9 +406,10 @@ async function main(): Promise<void> {
   for (const edit of edits) {
     await writeFile(edit.abs, applyRewrites(edit.content, edit.rewrites));
   }
-  await mkdir(path.dirname(toAbs), { recursive: true });
+  const staged = await moveFile(fromAbs, toAbs, repoRoot);
   await writeFile(toAbs, movedContent);
-  await rm(fromAbs);
+  if (!staged)
+    console.warn('  note: moved without git (untracked source or no work tree) — move is unstaged');
   if (sidebarsResult.count > 0) await writeFile(sidebarsPath, sidebarsResult.content);
 
   if (!partial && oldUrl && newUrl && oldUrl !== newUrl) {
