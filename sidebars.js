@@ -1038,6 +1038,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
+            },
+            {
+              type: 'doc',
               label: 'ArbOS',
               id: 'how-arbitrum-works/deep-dives/arbos',
             },
@@ -1143,6 +1148,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
               label: 'How Timeboost works',
+            },
+            {
+              type: 'doc',
+              label: 'Reserve originator',
+              id: 'how-arbitrum-works/timeboost/timeboost-reserve-originator',
             },
             {
               type: 'doc',

@@ -1,0 +1,38 @@
+---
+title: 'Timeboost - Reserve Originator'
+description: Learn how to use timeboost
+author: alxdca
+sme: alxdca
+content_type: how-to
+sidebar_position: 2
+target_audience: Developers writing Stylus contracts in Rust using Stylus
+---
+
+## What’s the Reserve Originator ?
+
+Timeboost is an auction-based mechanism to gain exclusive access to the Arbitrum sequencer express lane for a given amount of time. It was recently noticed that auction participation is low and collusion may be happening to lower the winning bid price.
+
+The reserve originator is part of a new design that introduces a reserve price, a minimum per round fair access price to the auction. The reserve originator basically acts as a participant to the auction, fetches the reserve price from a dedicated service and submits a bid to the Auctioneer service. If the reserve originator ends up being the winner of the auction, the auctioneer will nullify the round, meaning no one gains the express lane. In that case, the reserve originator doesn’t pay anything.
+
+## Links
+
+Problem definition and requirements: [[PRD] Timeboost Dynamic Reserve Price](https://www.notion.so/PRD-Timeboost-Dynamic-Reserve-Price-30c01a3f59f880c8abdaf6be9e3846f5?pvs=21)
+
+Timeboost docs: https://docs.arbitrum.io/how-arbitrum-works/timeboost/gentle-introduction
+
+Repository: https://github.com/OffchainLabs/timeboost-virtual-bidder
+
+Reserve pricer: https://github.com/OffchainLabs/timeboost-reserve-pricer
+
+Auctioneer code: https://github.com/OffchainLabs/nitro/tree/master/cmd/autonomous-auctioneer
+
+## How to use it?
+
+Any auction participant looking to submit a valid bid will need to access the Timeboost Reserve Pricer API to get the round and minimum bid amount. There are two API endpoints that can be access using the following command
+
+`curl -H "Authorization: Bearer replace_with_api_token" ip_addr:port/api/latest`
+
+- `/api/latest` which returns the newest reserve price and round
+- `/api/recent` which returns the reserve price and rounds of the last two hours
+
+The price gets updated at the 31st second of every minute.
