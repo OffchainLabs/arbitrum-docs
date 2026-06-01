@@ -19,7 +19,7 @@ Customization allows developers to add new methods, events, gas logic, or state 
 
 There are several approaches, each building on the Nitro codebase:
 
-- **Add new methods to an existing [precompile](/build-decentralized-apps/precompiles/02-reference.mdx)**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
+- **Add new methods to an existing [precompile](/arbitrum-essentials/precompiles/reference.mdx)**: Extend a built-in precompile (e.g., `ArbSys`) with additional functions.
 - **Create a new precompile**: Define a completely new precompile at a custom address (e.g., 0x011a for ArbHi) with its own methods.
 - **Define a new event**: Add events to methods for logging, making the method state-modifying and indexable for offchain querying.
 - **Customize gas usage**: Adjust or implement gas costs for methods (e.g., cost 300 gas instead of 700 for a balance query) to optimize efficiency or prevent DoS attacks.
