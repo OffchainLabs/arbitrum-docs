@@ -88,7 +88,7 @@
   },
   "devDependencies": {
     "@actions/core": "^3.0.1",
-    "@actions/github": "^6.0.0",
+    "@actions/github": "^9.1.1",
     "@docusaurus/module-type-aliases": "^3.10.1",
     "@docusaurus/types": "^3.10.1",
     "@offchainlabs/notion-docs-generator": "0.1.2",
