@@ -3808,28 +3808,28 @@
     "@iconify/types" "^2.0.0"
     mlly "^1.8.0"
 
-"@inkeep/cxkit-color-mode@^0.5.117":
-  version "0.5.117"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.117.tgz#7d4dbf605e619843206e9830254d33b0812b56e3"
-  integrity sha512-IyLd3aUyOk78B4Jn85Qbk8Rwcs17y51LAGskgCd2+l+0qpIkGUo17WJ2RDIv4vt7BZIYKZ7TzAP1ikNTuZ99kw==
+"@inkeep/cxkit-color-mode@^0.5.119":
+  version "0.5.119"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.119.tgz#86923500cda2b2f2858770efb46f71244efa9539"
+  integrity sha512-rWoNoZy6w/1lrQhnI43KseoEYMb3Q/+BoI8Bv3FyiKaXx7MIIV6VBtSBZni2Cc9/0Tnxp1xfAmBrJxyPUPUGzw==
 
-"@inkeep/cxkit-docusaurus@^0.5.117":
-  version "0.5.117"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-docusaurus/-/cxkit-docusaurus-0.5.117.tgz#ea05fc67ef416966421337685baf99b5470353a7"
-  integrity sha512-X8i7D8lx4hc9EEffG3eXYVn7qlo0LSOsRAKw77ZinZB2lHadRWqvsUOfrBMroYqaa73byykFFDBjKfiGm53HnQ==
+"@inkeep/cxkit-docusaurus@^0.5.119":
+  version "0.5.119"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-docusaurus/-/cxkit-docusaurus-0.5.119.tgz#e59facb7baacb075e5b0b7b7759c4ad0f88cea1b"
+  integrity sha512-yyR4Q37DDo6mxl2jgoQih9ZkVT0drJsqMDWNVqNBoSbGT4fJCX1nN59nYhhWlthffqwgB7vOt7+do5Jl27N4kw==
   dependencies:
-    "@inkeep/cxkit-react" "0.5.117"
+    "@inkeep/cxkit-react" "0.5.119"
     merge-anything "5.1.7"
     path "^0.12.7"
 
-"@inkeep/cxkit-primitives@0.5.117":
-  version "0.5.117"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.117.tgz#91dc4d6d14f5d00d9a77baa30c20663cbe5ea2b2"
-  integrity sha512-/jZOAmeHswGgMXPRopCx+H+WAHjO/whg46y62rQUJP+g2flzSkm/6M00W1vDFGPQzrbD9Smvv9Qm6Jfh+Dblcw==
+"@inkeep/cxkit-primitives@0.5.119":
+  version "0.5.119"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.119.tgz#88d7c1be76fd9540186937b9b8b8cf6a58de6fb7"
+  integrity sha512-yBtSrbPCSiD2iwdAAKeJJgDqZtg8YwHyiCO9+62hNOe8LLV/WWC1xMP4mLfdejDr6qT47xvV/aXgtS75dVG6IA==
   dependencies:
-    "@inkeep/cxkit-color-mode" "^0.5.117"
-    "@inkeep/cxkit-theme" "0.5.117"
-    "@inkeep/cxkit-types" "0.5.117"
+    "@inkeep/cxkit-color-mode" "^0.5.119"
+    "@inkeep/cxkit-theme" "0.5.119"
+    "@inkeep/cxkit-types" "0.5.119"
     "@radix-ui/number" "^1.1.1"
     "@radix-ui/primitive" "^1.1.1"
     "@radix-ui/react-avatar" "1.1.2"
@@ -3879,37 +3879,37 @@
     unist-util-visit "^5.0.0"
     use-sync-external-store "^1.4.0"
 
-"@inkeep/cxkit-react@0.5.117":
-  version "0.5.117"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.117.tgz#9064cbc2616c80f96c82965eddc4103a3e35c988"
-  integrity sha512-hFttMi2k3EOoHFfIMQgE/mg1W75L9FViGXJazFIxUyR8V7gePUYJacr/Ll1GvJRU5JzI9+0dAX9j3nzgVEuByw==
+"@inkeep/cxkit-react@0.5.119":
+  version "0.5.119"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.119.tgz#d9e7c90d853b9c43657e48444230fa8dc5faf13b"
+  integrity sha512-xQFXt60eUonNpUKU/ed8zlvfDi11ce5oPJVxEYIcXcL117Sougep/QxI5axjsi3/XCQ4fEG0yS3+BpamQxAodw==
   dependencies:
-    "@inkeep/cxkit-styled" "0.5.117"
+    "@inkeep/cxkit-styled" "0.5.119"
     "@radix-ui/react-use-controllable-state" "^1.1.0"
     lucide-react "^0.503.0"
 
-"@inkeep/cxkit-styled@0.5.117":
-  version "0.5.117"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.117.tgz#619838ee2de59632276c903b78e9a90f1fc6179f"
-  integrity sha512-URigNxPuzVy/LL5maIWcT6rRyrB1gtpFvXkdOtMZGdh0GrKqbrHlAV6pMpaWiDwjsZFvm7TJOM300jVfC4RBBA==
+"@inkeep/cxkit-styled@0.5.119":
+  version "0.5.119"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.119.tgz#73d10a2e976c42fc97f193806311d02d0c2ddab9"
+  integrity sha512-lbO1ls5wpXvV5SRNwvOLkdUHnbaMwGTIFdgg5OaaMCZK71sgROcyDcz/JM78TRjzLLGINsXwenGjgbPkvbxYbg==
   dependencies:
-    "@inkeep/cxkit-primitives" "0.5.117"
+    "@inkeep/cxkit-primitives" "0.5.119"
     class-variance-authority "0.7.1"
     clsx "2.1.1"
     merge-anything "5.1.7"
     tailwind-merge "2.6.0"
 
-"@inkeep/cxkit-theme@0.5.117":
-  version "0.5.117"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.117.tgz#a34bca11ffaf84e3cbe78828df25d7ea721611a4"
-  integrity sha512-5tQ68DVKSbFeTzizrjCjx3J4+GlM0KuShhc/tBN8UYJwsnV53ktdF+DXIKM3mtIgOtksCxYtItxf4/7M6bGjHg==
+"@inkeep/cxkit-theme@0.5.119":
+  version "0.5.119"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.119.tgz#fcbf1fd739d2a1902225313540666636dedd54df"
+  integrity sha512-eX9ZvN32yK6YvWE8+7/hQT6NXSzt7hdVSYmq0Zf4WD/5KLlTKiJ9vkojsEckuJVv3aR/5NlYxP0f8gc02Zg8uQ==
   dependencies:
     colorjs.io "0.5.2"
 
-"@inkeep/cxkit-types@0.5.117":
-  version "0.5.117"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.117.tgz#3afa2d55dbf973d3fe4a2180b9d3e504243df1fc"
-  integrity sha512-LTbfGyy/9QofivzyGCNN3bhZsuR0Xo0I1ZY8xwPbGwwVekCsZycOzExswUBOCAP+/LqsLSO0kJ98FTQgwWpa5g==
+"@inkeep/cxkit-types@0.5.119":
+  version "0.5.119"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.119.tgz#d225a7d3e5309591c438428cb9bf088ba9f7e983"
+  integrity sha512-knp2rnA8hPw+eH6TUu5KM1Y824Vm8Pie0E/vEQZb3tZ0XI3ioXyEj8ym8ovcICuHsuDIGtiATtK35QVjeabQlw==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
@@ -4732,17 +4732,17 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/core@1.29.9":
-  version "1.29.9"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.29.9.tgz#58133ce5d21ff21574f3629e227df766ccab6a6e"
-  integrity sha512-DjvuIyBZ2Z/gBhtZlITlM2D8PlnMsHSQ1D78dbUYoVsgGguvanpJTobZObjLlFkybyvfZFYkpoJkFNI/2Pw4IQ==
+"@posthog/core@1.29.13":
+  version "1.29.13"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.29.13.tgz#45fa76fc1bef5d581bf51678e046c760211191ae"
+  integrity sha512-7Me5zaeAue/wmA364Go8ChYbsVAfNAHbtDxXopWu3D6hq9PVScUcauRgjD1njgvP8NzN91SrIllE+pri3XvJVw==
   dependencies:
-    "@posthog/types" "1.376.0"
+    "@posthog/types" "1.376.4"
 
-"@posthog/types@1.376.0":
-  version "1.376.0"
-  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.376.0.tgz#e69201709db3baee4caaf9b95c06e7d294ff2c9a"
-  integrity sha512-gbFfxCuZDs/D4QZMwdE+smD1jsuqgGpS6yKGHZZ19foxMy8RYHsU1E47iG1b88n/uN02fAabLibVwuxLtq8juw==
+"@posthog/types@1.376.4":
+  version "1.376.4"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.376.4.tgz#a84df993a8f02d5c17c0af4f36d3f2208c3c4086"
+  integrity sha512-EoDEvA925lf6yxPpbP4wozlXgu4b9WEqxZlFBUDd4k2akP5R/RWyHpvQT8aYyfY6BtSLn8TnVwxPQOM4b90isA==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -8517,10 +8517,10 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
-docusaurus-plugin-copy-page-button@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/docusaurus-plugin-copy-page-button/-/docusaurus-plugin-copy-page-button-0.6.2.tgz#fee47fa75f77ab634d90694c47e832ce9dadcc6c"
-  integrity sha512-RbldmCJ6FEYx515ptp1Ei9WwQAQyK6ty5UaHVaSlOyBfh/Nm+wu+6y3g/V7sVejBrMCxpGLnAuIJn3h8nqdjcQ==
+docusaurus-plugin-copy-page-button@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-copy-page-button/-/docusaurus-plugin-copy-page-button-0.7.0.tgz#7c6c2b5e342ad705c879e04979540dfc5fdfea68"
+  integrity sha512-2YGcDHlgGjTuemVVqSBV7C7myT3aKo7PiNIPJH1zwy0ltE41qgS+wFHmEH8202SrQaszu9DYiAFEJ/TAGAL0WQ==
 
 docusaurus-plugin-fathom@^1.2.0:
   version "1.2.0"
@@ -13025,18 +13025,18 @@ posthog-docusaurus@^2.0.5:
   resolved "https://registry.yarnpkg.com/posthog-docusaurus/-/posthog-docusaurus-2.0.5.tgz#5ce7ea9659a3845cba094712743194eaf84aa527"
   integrity sha512-Ray65LYEJrMMqDtsBUBXunEVP/g4wtATvq/xz9rchUoLy/9mSkkFgUko/8DVtGxgiP3vivpFMgfb9HpCuDrBHg==
 
-posthog-js@^1.376.0:
-  version "1.376.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.376.0.tgz#1efd59b0eab1391047c288b02ccadc02549c409a"
-  integrity sha512-YGfQ6gSmqmEh287PHjXRDJ9zML3Su1UIt1+xjRy7Yk6yW43Sc7sFK3CpCkLchCGhIA4x6VaqK+LaqB+7+MCo7A==
+posthog-js@^1.376.4:
+  version "1.376.4"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.376.4.tgz#f32ee06e5ec6dae55c853d69c6d283015d6e93a4"
+  integrity sha512-SGhZWMBpd9GyV1+Klhx/vRwyy/reRRpJGYc1n1rYG9+LAML/YUEIrfl3Y2CLvuwmhKbPVY5W98Z7pAVQ88Qf1A==
   dependencies:
     "@opentelemetry/api" "^1.9.0"
     "@opentelemetry/api-logs" "^0.208.0"
     "@opentelemetry/exporter-logs-otlp-http" "^0.208.0"
     "@opentelemetry/resources" "^2.2.0"
     "@opentelemetry/sdk-logs" "^0.208.0"
-    "@posthog/core" "1.29.9"
-    "@posthog/types" "1.376.0"
+    "@posthog/core" "1.29.13"
+    "@posthog/types" "1.376.4"
     core-js "^3.38.1"
     dompurify "^3.3.2"
     fflate "^0.4.8"
