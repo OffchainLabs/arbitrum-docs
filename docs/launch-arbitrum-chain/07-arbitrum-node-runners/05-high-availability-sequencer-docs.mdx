@@ -14,7 +14,7 @@ This documentation is for production sequencer deployments. If you want to set u
 
 ## Introduction
 
-The sequencer is a critical component of your Arbitrum chain and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from full nodes, queuing them, and returning feed messages to those full nodes. It subsequently sends queued transactions to batch posters for data posting.
+The [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) is a critical component of your Arbitrum chain and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from full nodes, queuing them, and returning feed messages to those full nodes. It subsequently sends queued transactions to batch posters for data posting.
 
 If your sequencer goes offline, the network cannot process new transactions arriving at the child chain's RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 

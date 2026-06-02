@@ -20,7 +20,7 @@ As a <a data-quicklook-from="raas">RaaS</a> or <a data-quicklook-from="chain-own
 
 There are two main <a data-quicklook-from="l1">L1</a> fee collector addresses:
 
-1. **L1 Base Fee**: Refunds <a data-quicklook-from="batch-poster">Batch Poster</a> for <a data-quicklook-from="parent-chain">parent chain</a> posting costs
+1. **L1 Base Fee**: Refunds [Batch Poster](/how-arbitrum-works/deep-dives/assertions.mdx) for <a data-quicklook-from="parent-chain">parent chain</a> posting costs
 2. **L1 Surplus**: Collects profit on <a data-quicklook-from="batch">Batch</a> posting fees
 
 #### Important distinction:
@@ -42,7 +42,7 @@ There are two main <a data-quicklook-from="l1">L1</a> fee collector addresses:
 
 #### Fee recovery mechanism:
 
-1. <a data-quicklook-from="arbos">ArbOS</a> consumes batch posting reports
+1. [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) consumes batch posting reports
 2. Creates gas price view of parent chain on child chain
 3. Uses this view for pricing future transactions
 4. Implements balancing mechanism to ensure:
