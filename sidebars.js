@@ -1,26 +1,5 @@
 // @ts-check
 
-// Use the generated SDK sidebar for API reference
-const sdkApiSidebar = require('./sdk-sidebar.js');
-// Use the generated stylus-by-example sidebars
-
-// Create a custom SDK sidebar that combines manual intro pages with generated API docs
-const sdkSidebar = {
-  sdkSidebar: [
-    {
-      type: 'doc',
-      id: 'sdk/introduction',
-      label: 'Introduction',
-    },
-    {
-      type: 'doc',
-      id: 'sdk/migrate',
-      label: 'Migrate from v3 to v4',
-    },
-    ...sdkApiSidebar.sdkSidebar,
-  ],
-};
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   // Get started sidebar - shared entry point
@@ -173,7 +152,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/a-gentle-introduction',
-          label: 'A gentle introduction',
+          label: 'Arbitrum chains overview',
         },
         {
           type: 'doc',
@@ -382,6 +361,11 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
+                          label: `Configure DAC`,
+                        },
+                        {
+                          type: 'doc',
                           id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
                           label: `Deploy DAS`,
                         },
@@ -392,8 +376,18 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
-                          label: `Configure DAC`,
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations',
+                          label: `DAC/DAS operations`,
+                        },
+                        {
+                          type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference',
+                          label: `DAS RPC method reference`,
+                        },
+                        {
+                          type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-configuration-defaults',
+                          label: `DAC configuration defaults`,
                         },
                       ],
                     },
@@ -480,7 +474,7 @@ const sidebars = {
                     {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations',
-                      label: `Stake & validator configuration`,
+                      label: `Bond & validator configuration`,
                     },
                     {
                       type: 'doc',
@@ -572,13 +566,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
-              label: `L3 rollup from scratch`,
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup',
+              label: `Deploy your first rollup`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
-              label: `L3 rollup testnet infrastructure`,
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup',
+              label: `Run infrastructure for your first rollup`,
             },
             {
               type: 'doc',
@@ -789,6 +783,16 @@ const sidebars = {
           type: 'doc',
           id: 'run-arbitrum-node/overview',
           label: 'Overview',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro-support-policy',
+          label: 'Nitro support policy',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/start-here',
+          label: 'Start here',
         },
         {
           type: 'doc',
@@ -1097,7 +1101,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
-              label: 'A gentle introduction',
+              label: 'BoLD overview',
             },
             {
               type: 'link',
@@ -1143,7 +1147,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
-              label: 'Public preview',
+              label: 'How Timeboost works',
             },
             {
               type: 'doc',
@@ -1210,6 +1214,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'build-decentralized-apps/quickstart-create-a-token',
+          label: 'Create a token',
+        },
+        {
+          type: 'doc',
           label: 'Estimate gas',
           id: 'build-decentralized-apps/how-to-estimate-gas',
         },
@@ -1219,14 +1228,84 @@ const sidebars = {
           id: 'build-decentralized-apps/public-chains',
         },
         {
-          type: 'doc',
-          label: 'Cross-chain messaging',
-          id: 'build-decentralized-apps/cross-chain-messaging',
-        },
-        {
-          type: 'doc',
-          id: 'build-decentralized-apps/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
+          type: 'category',
+          label: 'Bridging',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'build-decentralized-apps/bridging/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Cross-chain messaging',
+              id: 'build-decentralized-apps/bridging/cross-chain-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'L1-to-L3 teleportation',
+              id: 'build-decentralized-apps/bridging/l1-l3-teleportation',
+            },
+            {
+              type: 'doc',
+              label: 'Custom gas token chains',
+              id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
+            },
+            {
+              type: 'category',
+              label: 'Deposit (parent → child)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'build-decentralized-apps/bridging/deposit/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'build-decentralized-apps/bridging/deposit/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Withdraw (child → parent)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'build-decentralized-apps/bridging/withdraw/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'build-decentralized-apps/bridging/withdraw/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Configure token gateway',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Standard gateway',
+                  id: 'build-decentralized-apps/bridging/configure-token-gateway/standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Generic-custom gateway',
+                  id: 'build-decentralized-apps/bridging/configure-token-gateway/generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Custom gateway',
+                  id: 'build-decentralized-apps/bridging/configure-token-gateway/custom',
+                },
+              ],
+            },
+          ],
         },
         {
           type: 'category',
@@ -1251,6 +1330,11 @@ const sidebars = {
               type: 'doc',
               label: 'Solidity support',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+            },
+            {
+              type: 'doc',
+              label: 'Nonce management',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
             },
           ],
         },
@@ -1295,76 +1379,22 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Token bridging',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Get started',
-              id: 'build-decentralized-apps/token-bridging/get-started',
-            },
-            {
-              type: 'doc',
-              label: 'Deposit tokens',
-              id: 'build-decentralized-apps/token-bridging/deposit-tokens',
-            },
-            {
-              type: 'doc',
-              label: 'Withdraw tokens',
-              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
-            },
-            {
-              type: 'doc',
-              label: 'Bridge to child chain',
-              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
-            },
-            {
-              type: 'doc',
-              label: 'Bridge to parent chain',
-              id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
-            },
-            ,
-            {
-              type: 'category',
-              label: 'Configure token bridging',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Set up custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway',
-                },
-                {
-                  type: 'doc',
-                  label: 'Set up generic custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway',
-                },
-                {
-                  type: 'doc',
-                  label: 'Set up standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: 'category',
           label: 'Reference',
           items: [
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/node-providers',
-              label: 'RPC endpoints and providers',
+              label: 'Chain parameters',
+              id: 'build-decentralized-apps/reference/chain-params',
             },
             {
               type: 'doc',
-              label: 'Smart contract addresses',
+              label: 'Contract addresses',
               id: 'build-decentralized-apps/reference/contract-addresses',
             },
             {
               type: 'doc',
-              label: 'Chain parameters',
-              id: 'build-decentralized-apps/reference/chain-params',
+              label: 'Debugging tools',
+              id: 'build-decentralized-apps/reference/debugging-tools',
             },
             {
               type: 'doc',
@@ -1373,8 +1403,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Web3 libraries and tools',
-              id: 'build-decentralized-apps/reference/web3-libraries-tools',
+              id: 'build-decentralized-apps/reference/mainnet-risks',
+              label: 'Mainnet risks',
             },
             {
               type: 'doc',
@@ -1383,14 +1413,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Debugging tools',
-              id: 'build-decentralized-apps/reference/debugging-tools',
+              id: 'build-decentralized-apps/reference/node-providers',
+              label: 'RPC endpoints and providers',
             },
-
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/mainnet-risks',
-              label: 'Mainnet risks',
+              label: 'Web3 libraries and tools',
+              id: 'build-decentralized-apps/reference/web3-libraries-tools',
             },
           ],
         },
@@ -1400,13 +1429,13 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
@@ -1453,12 +1482,12 @@ const sidebars = {
         {
           type: 'doc',
           label: 'Cross-chain messaging',
-          id: 'build-decentralized-apps/cross-chain-messaging',
+          id: 'build-decentralized-apps/bridging/cross-chain-messaging',
         },
         {
           type: 'doc',
-          id: 'build-decentralized-apps/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
+          id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
+          label: 'Custom gas token chains',
         },
         {
           type: 'category',
@@ -1483,6 +1512,11 @@ const sidebars = {
               type: 'doc',
               label: 'Solidity support',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+            },
+            {
+              type: 'doc',
+              label: 'Nonce management',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
             },
           ],
         },
@@ -1578,13 +1612,13 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
-          label: 'Tutorials',
+          label: 'Example code repository',
           href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
@@ -1881,6 +1915,11 @@ const sidebars = {
               label: 'Opcode and hostio pricing',
             },
             {
+              type: 'doc',
+              id: 'stylus/reference/stylus-toml-reference',
+              label: 'Configuration reference',
+            },
+            {
               type: 'link',
               label: 'Stylus by Example',
               href: 'https://stylus-by-example.org/',
@@ -1928,6 +1967,11 @@ const sidebars = {
 
   // Notices sidebar
   noticeSidebar: [
+    {
+      type: 'doc',
+      id: 'notices/arbos60-upgrade-notice',
+      label: 'Upgrade notice for ArbOS 60',
+    },
     {
       type: 'doc',
       id: 'notices/arbos51-upgrade-notice',

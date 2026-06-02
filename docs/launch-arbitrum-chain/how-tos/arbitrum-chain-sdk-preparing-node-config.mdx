@@ -59,7 +59,7 @@ The following table briefly describes the type of parameters that can be configu
 
 ### Additional configuration for Arbitrum AnyTrust chains:
 
-For <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</a>, the Nitro node configuration object has an additional segment under the `node` field to configure the AnyTrust specific properties:
+For [Arbitrum AnyTrust chains](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx), the Nitro node configuration object has an additional segment under the `node` field to configure the AnyTrust specific properties:
 
 ```typescript
 {
@@ -117,12 +117,7 @@ This transaction hash is not strictly required; it's only for obtaining the core
 
 ```typescript
 import { createPublicClient, http } from 'viem';
-import {
-  createRollupPrepareTransaction,
-  createRollupPrepareTransactionReceipt,
-  ChainConfig,
-  prepareNodeConfig,
-} from '@arbitrum/chain-sdk';
+import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, ChainConfig, prepareNodeConfig } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
@@ -130,14 +125,10 @@ const parentChainPublicClient = createPublicClient({
 });
 
 // get the transaction
-const tx = createRollupPrepareTransaction(
-  await parentChainPublicClient.getTransaction({ hash: txHash }),
-);
+const tx = createRollupPrepareTransaction(await parentChainPublicClient.getTransaction({ hash: txHash }));
 
 // get the transaction receipt
-const txReceipt = createRollupPrepareTransactionReceipt(
-  await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
-);
+const txReceipt = createRollupPrepareTransactionReceipt(await parentChainPublicClient.getTransactionReceipt({ hash: txHash }));
 
 // get the chain config and core contracts
 const config = tx.getInputs()[0].config;
