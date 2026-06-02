@@ -15,6 +15,7 @@ This how-to assumes that you're familiar with the following:
 - How to run a full node (see instructions [here](/run-arbitrum-node/02-run-full-node.mdx))
 - [How the Rollup protocol works](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx)
 - [How BoLD works](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
+- [Data availability](/run-arbitrum-node/data-availability.mdx), for how Rollup-mode and AnyTrust-mode chains differ in the data your validator must reconstruct
 
 ## Validation strategies
 
@@ -29,7 +30,7 @@ Validators can be configured to follow a specific validation strategy. Here we d
 
 ### The watchtower strategy
 
-One more validation strategy is available for all types of nodes: `watchtower`. This strategy is enabled by default in all nodes (full and archive), and it doesn't require a wallet, as it never takes any action onchain.
+One more validation strategy is available for all types of nodes: `watchtower`. This strategy is enabled by default in all nodes (full and archive)—see [Watchtower mode in the full node guide](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode) for the default-behavior context—and it doesn't require a wallet, as it never takes any action onchain.
 
 A node in `watchtower` mode will immediately log an error if an onchain assertion deviates from the locally computed chain state.
 
