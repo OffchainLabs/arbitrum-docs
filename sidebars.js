@@ -786,6 +786,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/nitro-support-policy',
+          label: 'Nitro support policy',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/start-here',
           label: 'Start here',
         },
