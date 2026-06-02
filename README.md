@@ -145,6 +145,92 @@ yarn generate-cli-reference --check
 ```
 
 The script also accepts `--output <path>` to write to a different location and `--nitro-path <path>` (or the `NITRO_REPO_PATH` env var) to point at a local Nitro checkout — useful when refreshing the JSON data against a specific Nitro version.
+### Restructuring docs (moving or renaming pages)
+
+The tooling handles internal links, the moved file's own relative links, sidebar entries,
+redirects, and quicklook glossary data so a move costs minutes instead of hours.
+
+`redirects.config.js` is the single source of truth for internal redirects. It is consumed by the
+`@docusaurus/plugin-client-redirects` plugin (in-app redirects) and mirrored into `vercel.json` for
+the edge by `yarn sync-redirects`.
+
+#### One command (recommended)
+
+`yarn restructure <from> <to>` runs the whole sequence in the order that keeps the edge consistent:
+it moves the file and rewrites references, then runs `yarn build` as a verification gate,
+regenerates the glossary only if a glossary term was affected, and finally mirrors the redirect
+into `vercel.json`. If the build fails, it aborts **before** touching `vercel.json`.
+
+```shell
+# preview only — no files are changed
+yarn restructure docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx --dry-run
+
+# perform the move end to end
+yarn restructure docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx
+```
+
+Then commit your changes and open a PR.
+
+#### Step by step (for batch moves or granular control)
+
+Use the individual commands when you want to inspect the blast radius first, or move several files
+before building once (build and sync a single time, after all the moves).
+
+1. Size the blast radius — list every internal link that points at the page (accepts a path or a glob):
+
+```shell
+yarn inventory-links docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx
+```
+
+2. Preview the move without changing any files:
+
+```shell
+yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx --dry-run
+```
+
+3. Perform the move. This moves the file with `git mv` (staging it as a rename so `git log --follow`
+   keeps the page's history), rewrites every reference to it (and the moved file's own relative
+   links), updates the doc id in `sidebars.js`, and appends a redirect to `redirects.config.js`:
+
+```shell
+yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx
+```
+
+4. Verify links resolve. The build fails on any broken internal link:
+
+```shell
+yarn build
+```
+
+5. If the move affected a glossary term, regenerate the quicklook data:
+
+```shell
+yarn build-glossary
+```
+
+6. Mirror the redirect into `vercel.json` for the edge:
+
+```shell
+yarn sync-redirects
+```
+
+7. Commit your changes and open a PR.
+
+Notes:
+
+- Links whose URL is built from a JavaScript expression (e.g. `<Link to={someVar}>`), and relative
+  links inside partials (a partial has no fixed URL), cannot be rewritten automatically; `move-doc`
+  lists both so you can update them by hand.
+- `yarn move-doc` does not run the build — `yarn restructure` does. With the manual steps, run
+  `yarn build` yourself, plus `yarn build-glossary` if a glossary term changed: quicklook tooltips
+  render from `static/glossary.json` at runtime, which `yarn build` does not validate.
+- The move uses `git mv`, so the rename is staged for you (the link-rewrite shows as a follow-on
+  modification). If the source isn't tracked or you're outside a git work tree, it falls back to a
+  plain filesystem move and warns that the move is unstaged.
+- The doc id in `sidebars.js` is updated in place — the entry is **not** relocated. A page's URL
+  comes from its file path and slug, not its sidebar position, so reorganizing the sidebar by hand
+  (shifting a section elsewhere, reordering items) needs no tooling and no redirects: just edit
+  `sidebars.js` and run `yarn build`, which validates that every entry resolves to a real doc.
 
 ### Formatting
 
