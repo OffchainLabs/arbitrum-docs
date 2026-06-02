@@ -93,6 +93,7 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
 - By default, the full node runs in Watchtower mode, meaning that it watches the onchain assertions and, if it disagrees with them, logs an error containing the string `found incorrect assertion in watchtower mode`. For a BoLD-enabled chain like Arbitrum One or Arbitrum Nova if you are running Nitro before v3.6.0, the `--node.bold.enable=true` flag should be set to ensure your node can monitor for onchain assertions properly.
 - Setting this flag is not required as your node will continue to operate correctly, validate the Arbitrum One/Nova chain, and serve RPC requests as usual, regardless of this flag.
 - Note that watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode using the parameter `--node.staker.enable=false`.
+- For details on watchtower mode alongside the other validator strategies (`defensive`, `stakeLatest`, `resolveNodes`, `makeNodes`), see [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
 
 ### Pruning
 
@@ -111,7 +112,7 @@ If you are using the default storage scheme (HashDB), then you can activate prun
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:
   - `minimal`: The most aggressive prune and retains only the genesis state and the head state (at the latest snapshot). Takes the least amount of time to complete. Duration depends on the chain and database size (several hours for smaller chains; potentially days for large chains like Arbitrum One).
   - `full` : Mostly intended for full nodes serving RPC requests, this mode retains the genesis state, the state of the latest confirmed block, and the head state (at the latest snapshot). Will not work if the node is in `validator` mode. Duration varies significantly by chain and database size—for Arbitrum One, this may take multiple days on NVMe SSDs. For smaller chains, it will be much faster. If pruning takes too long, consider downloading a fresh pruned snapshot with `--init.latest pruned` instead.
-  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root, and the head state (at the latest snapshot). This mode is expected to take longer than `full` pruning mode.
+  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root, and the head state (at the latest snapshot). This mode is expected to take longer than `full` pruning mode. For validator-specific setup details, see [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
 
 ### Memory management
 
@@ -119,6 +120,8 @@ Under heavy RPC load or during operations such as large `debug_traceBlockByNumbe
 
 - `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold (e.g., `--node.resource-mgmt.mem-free-limit=4GiB`). This helps protect the node from OOM under high request load.
 - `GOMEMLIMIT` environment variable: Sets a soft memory limit for the Go runtime garbage collector (e.g., `GOMEMLIMIT=48GiB` for a 64 GB machine), helping reduce memory spikes.
+
+For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [Nitro memory management](/run-arbitrum-node/nitro/05-nitro-memory-management.mdx).
 
 :::tip
 For Docker deployments, you can set these in your `docker run` command:
