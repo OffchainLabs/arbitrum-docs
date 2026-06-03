@@ -400,7 +400,7 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/fees/fee-management',
+                      id: 'launch-arbitrum-chain/chain-config/costs/fee-management',
                       label: `Fee management`,
                     },
                   ],

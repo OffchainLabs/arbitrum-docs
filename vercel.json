@@ -211,6 +211,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/data-availability/enable-4844-blobs",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/fee-management",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

@@ -171,5 +171,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs',
     to: '/launch-arbitrum-chain/chain-config/data-availability/enable-4844-blobs',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management',
+    to: '/launch-arbitrum-chain/chain-config/costs/fee-management',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
