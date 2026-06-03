@@ -59,5 +59,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/third-party-integrations/third-party-providers',
     to: '/launch-arbitrum-chain/integrations/infrastructure-providers',
   },
+  {
+    from: '/launch-arbitrum-chain/customize-your-chain/customize-arbos',
+    to: '/launch-arbitrum-chain/chain-configuration/core/arbos',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

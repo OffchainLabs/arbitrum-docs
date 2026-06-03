@@ -656,7 +656,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/customize-your-chain/customize-arbos',
+              id: 'launch-arbitrum-chain/chain-configuration/core/arbos',
               label: `Customize ArbOS version`,
             },
           ],
