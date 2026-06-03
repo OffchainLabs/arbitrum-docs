@@ -195,5 +195,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
     to: '/launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

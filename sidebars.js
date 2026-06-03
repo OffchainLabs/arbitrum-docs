@@ -444,7 +444,7 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains',
+                      id: 'launch-arbitrum-chain/chain-config/sequencer/timeboost',
                       label: `Timeboost`,
                     },
                   ],
