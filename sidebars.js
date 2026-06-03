@@ -745,7 +745,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain',
+          id: 'launch-arbitrum-chain/overview/faq',
           label: 'FAQ',
         },
       ],

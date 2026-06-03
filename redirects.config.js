@@ -31,5 +31,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/concepts/public-preview-expectations',
     to: '/launch-arbitrum-chain/overview/public-preview',
   },
+  {
+    from: '/launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain',
+    to: '/launch-arbitrum-chain/overview/faq',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
