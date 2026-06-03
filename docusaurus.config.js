@@ -3,9 +3,11 @@
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
+const { themes: prismThemes } = require('prism-react-renderer');
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
+import { redirects } from './redirects.config.js';
 
 // Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
 // Shared between the sitemap and llms.txt so both indexes stay in sync.
@@ -109,6 +111,13 @@ const config = {
     ],
   ],
   plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Source of truth: redirects.config.ts (also mirrored to vercel.json via `yarn sync-redirects`).
+        redirects,
+      },
+    ],
     [
       '@inkeep/cxkit-docusaurus',
       {
@@ -345,8 +354,8 @@ const config = {
       },
       prism: {
         additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
-        theme: require('prism-react-renderer/themes/github'),
-        darkTheme: require('prism-react-renderer/themes/palenight'),
+        theme: prismThemes.github,
+        darkTheme: prismThemes.palenight,
       },
       liveCodeBlock: {
         /**

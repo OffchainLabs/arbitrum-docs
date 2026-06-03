@@ -22,8 +22,8 @@ This document is provided for informational purposes only and does not constitut
 
 Teams typically migrate when they need one or more of the following:
 
-- **Lower fees**: <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> Rollup or AnyTrust for low <a data-quicklook-from="transaction">transaction</a> fees.
-- **Various customization options**: Custom gas token, flexible DA, <a data-quicklook-from="timeboost">Timeboost</a>, <a data-quicklook-from="bold">BoLD</a>, etc.
+- **Lower fees**: <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> Rollup or [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) for low <a data-quicklook-from="transaction">transaction</a> fees.
+- **Various customization options**: Custom gas token, flexible DA, [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), etc.
 - **Mature tooling and ecosystem**: Bridges, indexers, wallets, monitoring, and partners with Arbitrum chain-ready integrations.
 
 ### Two migration paths
@@ -100,7 +100,7 @@ Coordinate early with wallets, indexers, bridges, and oracles to repoint routes 
 
 ### What breaks with zk-specific features?
 
-Zero knowledge (zk) pre-compiles don’t carry over. Port logic to Solidity or <a data-quicklook-from="stylus">Stylus</a> or remove/replace functionality. Please check with your RaaS regarding this matter.
+Zero knowledge (zk) pre-compiles don’t carry over. Port logic to Solidity or [Stylus](/stylus/gentle-introduction.mdx) or remove/replace functionality. Please check with your RaaS regarding this matter.
 
 #### What is the process for migrating an existing chain on a different stack to Arbitrum chain?
 
@@ -118,7 +118,7 @@ The rest of this answer assumes that the team wants to perform the latter. For c
 #### Node Migration & Set Up:
 
 1. Freeze legacy chain writes and make RPC read-only:
-   1. Stop the legacy chain’s proposer/<a data-quicklook-from="sequencer">Sequencer</a> so no new blocks or transactions get created after the chosen upgrade block.
+   1. Stop the legacy chain’s proposer/[Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) so no new blocks or transactions get created after the chosen upgrade block.
    2. Configure the legacy RPC to reject write methods (e.g., `eth_sendRawTransaction`) and only serve readable requests for historical data.
 2. Ensure that you can export required state from your EVM-compatible <a data-quicklook-from="client">client</a> at the upgrade block.
 3. Expect a freeze window of hours (depends on state size) for snapshot integrity.
@@ -146,7 +146,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 #### 3 weeks before → 2 weeks before migration: build and test
 
 - [ ] RaaS: set up private Arbitrum chain
-- [ ] Testnet deployment: Sequencer, <a data-quicklook-from="batch-poster">Batch Poster</a>, <a data-quicklook-from="bonder">Bonder</a>, DA config.
+- [ ] Testnet deployment: Sequencer, [Batch Poster](/how-arbitrum-works/deep-dives/assertions.mdx), <a data-quicklook-from="bonder">Bonder</a>, DA config.
 - [ ] Inventory contracts & state: Addresses, precompiles, proxies, admin keys, governance
 - [ ] Stand up Dual-RPC gateway prototype: Route pre-migration range to old stack archive; post-migration to Arbitrum chain.
 - [ ] Prepare official asset list: Canonical bridge(s), authoritative token addresses, symbols, decimals.

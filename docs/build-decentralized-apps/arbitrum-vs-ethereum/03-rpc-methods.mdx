@@ -23,7 +23,7 @@ When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/doc
 
 ### Transaction types
 
-In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/reference/geth.mdx#transaction-types).
+In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/reference/geth.mdx#transaction-types). Many of these types are emitted when [bridging from a parent chain](/build-decentralized-apps/bridging/cross-chain-messaging.mdx#ethereum-to-arbitrum-messaging).
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
@@ -43,6 +43,18 @@ On RPC calls that return transactions, the following fields are added to the ret
 | Field name  | Description                                                                                        |
 | ----------- | -------------------------------------------------------------------------------------------------- |
 | `requestId` | On parent to child chain transactions, this field is added to indicate position in the Inbox queue |
+
+## Arbitrum specific `eth` JSON-RPC additions
+
+- `eth_sendRawTransactionConditional` submits a raw signed transaction with extra preconditions that the sequencer must verify before accepting it. If any condition fails, the transaction is rejected with JSON-RPC error -32003 (rejected).
+
+| `ConditionalOptions` payload        | Description                                      |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `knownAccounts`                     | map of address → (storageRootHash                | { `slot: expectedValue` }). The transaction is rejected unless each account's storage root matches, or each listed slot still holds the expected value. |
+| `blockNumberMin` / `blockNumberMax` | L1 block-number window the transaction is valid. |
+| `timestampMin` / `timestampMax`     | L2 timestamp window.                             |
+
+- `eth_sendRawTransactionSync` submits a raw signed transaction and blocks until the node sees its receipt (or a timeout fires), returning the full receipt instead of just the tx hash.
 
 ### Existing fields with different behavior
 
