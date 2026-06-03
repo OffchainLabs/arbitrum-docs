@@ -456,7 +456,7 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals',
+                      id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                       label: `Fast withdrawals`,
                     },
                   ],

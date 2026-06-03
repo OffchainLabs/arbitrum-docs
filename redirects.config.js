@@ -199,5 +199,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains',
     to: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals',
+    to: '/launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

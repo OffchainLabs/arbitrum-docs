@@ -246,6 +246,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/sequencer/timeboost",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/fast-withdrawals",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
