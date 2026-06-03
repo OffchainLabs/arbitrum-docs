@@ -95,5 +95,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
     to: '/launch-arbitrum-chain/operate/key-rotation',
   },
+  {
+    from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup',
+    to: '/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

@@ -566,7 +566,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup',
+              id: 'launch-arbitrum-chain/quickstart/l3-rollup-from-scratch',
               label: `Deploy your first rollup`,
             },
             {
