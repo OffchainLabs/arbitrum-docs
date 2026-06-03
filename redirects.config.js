@@ -251,5 +251,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control',
     to: '/launch-arbitrum-chain/chain-config/validation/assertion-control',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-configuration-defaults',
+    to: '/launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
