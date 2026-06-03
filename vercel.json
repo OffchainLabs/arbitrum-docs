@@ -166,6 +166,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/costs/calculate-aep-fees",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/reporting-on-fees",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

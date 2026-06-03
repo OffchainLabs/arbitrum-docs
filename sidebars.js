@@ -339,7 +339,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees',
+                      id: 'launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
                       label: `Reporting on fees`,
                     },
                   ],
