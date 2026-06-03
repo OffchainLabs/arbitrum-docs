@@ -27,7 +27,7 @@ Below, you will find four examples of ArbOS-related code changes and, generally,
 
 ### 1. Add a new method to existing precompile on a specific ArbOS version:
 
-After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile Option 1](../../05-customize-your-chain/customize-precompile.mdx#option-1-add-new-methods-to-an-existing-precompile),
+After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile Option 1](./precompiles.mdx#option-1-add-new-methods-to-an-existing-precompile),
 you need continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go).
 
 For example, the original code is:
@@ -54,7 +54,7 @@ In this way, this method will be executed normally and return results only after
 
 ### 2. Create a new precompile contract on a specific ArbOS version
 
-After you add a new precompile named `ArbHi` according to the guide in [customize precompile Option 2](../../05-customize-your-chain/customize-precompile.mdx#option-2-create-a-new-precompile) and make changes to [`precompile.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go),
+After you add a new precompile named `ArbHi` according to the guide in [customize precompile Option 2](./precompiles.mdx#option-2-create-a-new-precompile) and make changes to [`precompile.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go),
 you also need to make the following changes:
 
 ```go
@@ -71,7 +71,7 @@ In this way, `ArbHi` and all its methods will be activated after the ArbOS versi
 
 ### 3. Create a new ArbOS state on a specific ArbOS version
 
-After you add a new state `myNumber` according to the guide in [customize precompile Option 5](../../05-customize-your-chain/customize-precompile.mdx#option-5-call-and-modify-state), you also need to rewrite [`UpgradeArbosVersion`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/arbos/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go#L253) in [`arbosstate.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go):
+After you add a new state `myNumber` according to the guide in [customize precompile Option 5](./precompiles.mdx#option-5-call-and-modify-state), you also need to rewrite [`UpgradeArbosVersion`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/arbos/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go#L253) in [`arbosstate.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go):
 Add your expected ArbOS version to the switch case statement of `nextArbosVersion`. Here we will take ArbOS V21 as an example:
 
 ```go
@@ -102,7 +102,7 @@ Here, we will ensure that the initial value of $(a random number) after ArbOS is
 
 :::caution
 
-It should be noted that when you initialize the state (initial code is in [customize precompile Option 5](../../05-customize-your-chain/customize-precompile.mdx#option-5-call-and-modify-state)), you need to initialize it to `0` or `null` value first to avoid a potential re-org on your chain.
+It should be noted that when you initialize the state (initial code is in [customize precompile Option 5](./precompiles.mdx#option-5-call-and-modify-state)), you need to initialize it to `0` or `null` value first to avoid a potential re-org on your chain.
 
 :::
 

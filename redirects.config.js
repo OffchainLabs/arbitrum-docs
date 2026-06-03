@@ -63,5 +63,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/customize-your-chain/customize-arbos',
     to: '/launch-arbitrum-chain/chain-configuration/core/arbos',
   },
+  {
+    from: '/launch-arbitrum-chain/customize-your-chain/customize-precompile',
+    to: '/launch-arbitrum-chain/chain-configuration/core/precompiles',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
