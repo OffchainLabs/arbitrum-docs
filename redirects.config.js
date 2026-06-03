@@ -231,5 +231,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit',
     to: '/launch-arbitrum-chain/chain-config/core/smart-contract-size-limit',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters',
+    to: '/launch-arbitrum-chain/chain-config/additional-configuration-parameters',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

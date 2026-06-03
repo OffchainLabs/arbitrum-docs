@@ -515,7 +515,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters',
+                  id: 'launch-arbitrum-chain/chain-config/additional-configuration-parameters',
                   label: `Additional configuration parameters`,
                 },
               ],

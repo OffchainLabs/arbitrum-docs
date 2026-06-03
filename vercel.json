@@ -286,6 +286,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/core/smart-contract-size-limit",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters",
+      "destination": "/launch-arbitrum-chain/chain-config/additional-configuration-parameters",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
