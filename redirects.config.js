@@ -239,5 +239,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
     to: '/launch-arbitrum-chain/quickstart/sdk-introduction',
   },
+  {
+    from: '/launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting',
+    to: '/launch-arbitrum-chain/operate/batch-poster-troubleshooting',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

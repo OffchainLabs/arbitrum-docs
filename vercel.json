@@ -296,6 +296,11 @@
       "destination": "/launch-arbitrum-chain/quickstart/sdk-introduction",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting",
+      "destination": "/launch-arbitrum-chain/operate/batch-poster-troubleshooting",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
