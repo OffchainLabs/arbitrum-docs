@@ -127,5 +127,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction',
     to: '/launch-arbitrum-chain/chain-config/costs/aep-overview',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router',
+    to: '/launch-arbitrum-chain/chain-config/costs/aep-router-contracts',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

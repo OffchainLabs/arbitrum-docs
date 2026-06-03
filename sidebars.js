@@ -329,7 +329,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router',
+                      id: 'launch-arbitrum-chain/chain-config/costs/aep-router-contracts',
                       label: `Set up AEP fee router`,
                     },
                     {
