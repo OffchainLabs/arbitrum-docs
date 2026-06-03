@@ -11,6 +11,8 @@ import CustomizeCautionBannerPartial from '../../partials/_arbitrum-chain-custom
 
 <CustomizeCautionBannerPartial />
 
+Customizing your chain's precompiles involves modifying or extending the built-in, system-level <a data-quicklook-from="smart-contract">smart contract</a>-like functions (precompiles) that provide efficient access to chain-specific operations, such as interacting with the <a data-quicklook-from="parent-chain">parent chain</a> (L1/L2), querying state, or performing computations. Precompiles are hardcoded at specific addresses (e.g., 0x64 for `ArbSys`) and executed outside the EVM bytecode level for performance. They inherit Ethereum's standard precompiles (e.g., for hashing or elliptic curves) while adding <a data-quicklook-from="arbitrum">Arbitrum</a>-specific ones (e.g., `ArbAddressTable` for address compression).
+
 :::caution
 
 The guidance in this document will only work if you use `eth_call` to call the new precompiles. If you call them from other contracts or add non-view/pure methods, this approach will break the block validation.
