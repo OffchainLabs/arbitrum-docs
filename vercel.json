@@ -236,6 +236,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/dynamic-pricing",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

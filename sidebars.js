@@ -432,7 +432,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
+                      id: 'launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
                       label: 'Dynamic Pricing for Arbitrum Chains',
                     },
                   ],

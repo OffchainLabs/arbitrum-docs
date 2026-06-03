@@ -26,7 +26,7 @@ This is the target gas consumption rate per second that the chain can sustainabl
 
   - **Description**: Provides smoother price transitions. It uses multiple gas targets to reduce the frequency and severity of <a data-quicklook-from="child-chain">child chain</a> gas price spikes.
   - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata newConstraints)` method on the [`ArbOwner` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner), where `newConstraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` tuples. \
-    Detailed information on how to set these parameters can be found in [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains). \
+    Detailed information on how to set these parameters can be found in [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing). \
     Example using cast:
     ```shell
     cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setGasPricingConstraints((uint64,uint64,uint64)[])" $NEW_CONSTRAINTS

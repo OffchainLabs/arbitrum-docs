@@ -191,5 +191,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
     to: '/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
+    to: '/launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
