@@ -235,5 +235,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters',
     to: '/launch-arbitrum-chain/chain-config/additional-configuration-parameters',
   },
+  {
+    from: '/launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
+    to: '/launch-arbitrum-chain/quickstart/sdk-introduction',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

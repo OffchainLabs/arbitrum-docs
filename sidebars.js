@@ -546,7 +546,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
+              id: 'launch-arbitrum-chain/quickstart/sdk-introduction',
               label: `Overview`,
             },
             {
