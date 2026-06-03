@@ -115,5 +115,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
     to: '/launch-arbitrum-chain/deploy/canonical-factory-contracts',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
+    to: '/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
