@@ -83,7 +83,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/customize-your-chain/customize-stf",
-      "destination": "/launch-arbitrum-chain/chain-configuration/core/stf",
+      "destination": "/launch-arbitrum-chain/chain-config/core/stf",
       "permanent": false
     },
     {
@@ -324,6 +324,11 @@
     {
       "source": "/launch-arbitrum-chain/chain-configuration/core/precompiles",
       "destination": "/launch-arbitrum-chain/chain-config/core/precompiles",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-configuration/core/stf",
+      "destination": "/launch-arbitrum-chain/chain-config/core/stf",
       "permanent": false
     },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
