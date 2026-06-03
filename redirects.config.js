@@ -147,5 +147,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started',
     to: '/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
+    to: '/launch-arbitrum-chain/chain-config/data-availability/deploy-das',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

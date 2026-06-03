@@ -366,7 +366,7 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
+                          id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-das',
                           label: `Deploy DAS`,
                         },
                         {
