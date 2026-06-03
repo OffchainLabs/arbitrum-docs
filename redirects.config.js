@@ -10,5 +10,9 @@
  */
 export const redirects = [
   // AUTO-GENERATED REDIRECTS START
+  {
+    from: '/launch-arbitrum-chain/a-gentle-introduction',
+    to: '/launch-arbitrum-chain/overview/introduction',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

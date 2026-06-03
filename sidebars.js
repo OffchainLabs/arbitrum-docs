@@ -34,7 +34,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'Run an Arbitrum chain',
-      href: '/launch-arbitrum-chain/a-gentle-introduction',
+      href: '/launch-arbitrum-chain/overview/introduction',
     },
     {
       type: 'link',
@@ -151,7 +151,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/a-gentle-introduction',
+          id: 'launch-arbitrum-chain/overview/introduction',
           label: 'Arbitrum chains overview',
         },
         {
