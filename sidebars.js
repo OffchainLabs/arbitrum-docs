@@ -556,7 +556,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config',
+              id: 'launch-arbitrum-chain/deploy/configure-node',
               label: `Generate the node config file`,
             },
             {

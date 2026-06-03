@@ -23,5 +23,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/migrate-from-another-stack',
     to: '/launch-arbitrum-chain/migrate/from-another-stack',
   },
+  {
+    from: '/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config',
+    to: '/launch-arbitrum-chain/deploy/configure-node',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
