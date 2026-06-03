@@ -468,7 +468,7 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period',
+                      id: 'docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
                       label: `Customize challenge period`,
                     },
                     {

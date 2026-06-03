@@ -203,5 +203,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals',
     to: '/launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period',
+    to: '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
