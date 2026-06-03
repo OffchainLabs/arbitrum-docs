@@ -121,7 +121,7 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 2. **Review the queued transaction storage**: If using DB or Redis, the stored transaction state may be stale. A node restart typically resolves transient storage inconsistencies.
 3. **Check parent chain connectivity**: Ensure the batch poster can reliably reach the parent chain RPC. Intermittent connectivity causes retry failures.
 4. **Inspect RBF fee escalation**: If the error mentions “replacement transaction underpriced”, the fee increase between attempts may be insufficient. The parent chain typically requires at least a 10% fee increase for RBF. Review the `blob-tx-replacement-times` schedule—shorter intervals may not allow enough price movement between attempts.
-5. **Consider clearing storage as a last resort**: The `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag clears the queued transaction database on startup. Use this only when necessary, as it discards any tracked pending transactions. See the [Node key rotation guide](/launch-arbitrum-chain/04-maintain-your-chain/04-guidance/key-rotation.mdx) for context on when this flag is used.
+5. **Consider clearing storage as a last resort**: The `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag clears the queued transaction database on startup. Use this only when necessary, as it discards any tracked pending transactions. See the [Node key rotation guide](/launch-arbitrum-chain/operate/key-rotation.mdx) for context on when this flag is used.
 
 ## Quick reference
 

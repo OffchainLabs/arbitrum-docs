@@ -91,5 +91,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
     to: '/launch-arbitrum-chain/operate/gas-target',
   },
+  {
+    from: '/launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
+    to: '/launch-arbitrum-chain/operate/key-rotation',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
