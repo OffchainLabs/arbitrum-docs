@@ -151,5 +151,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
     to: '/launch-arbitrum-chain/chain-config/data-availability/deploy-das',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das',
+    to: '/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

@@ -371,7 +371,7 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das',
+                          id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
                           label: `Deploy mirror DAS`,
                         },
                         {
