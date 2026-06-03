@@ -227,5 +227,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
     to: '/launch-arbitrum-chain/chain-config/validation/bold',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit',
+    to: '/launch-arbitrum-chain/chain-config/core/smart-contract-size-limit',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
