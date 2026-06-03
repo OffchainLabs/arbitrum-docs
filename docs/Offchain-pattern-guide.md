@@ -1,12 +1,14 @@
-# Pattern guide - Docs
-
-Last edited time: October 17, 2025 10:39 AM
-
-This document provides guidance on how to write a document that complies with OCL editorial standards
-
+---
+title: 'Offchain Pattern guide'
+description: 'Offchain Pattern guide'
+author: anegg0
+user_story: As an Offchain content contributor, I want to ensure my write-up complies with Offchain standards
+content_type: reference
 ---
 
-### 2.1 Content Types
+This document provides guidance on how to write a document that complies with Offchain's editorial standards
+
+## Content Types
 
 Choose the right content type based on your audience and purpose:
 
@@ -21,7 +23,7 @@ Choose the right content type based on your audience and purpose:
 | **Troubleshooting**     | Problem-solution mapping            | Users are encountering specific issues         | [Node Troubleshooting](https://developer.arbitrum.io/node-running/troubleshooting-running-nodes)   |
 |                         |                                     |                                                |                                                                                                    |
 
-### 2.2 Writing Principles
+### Writing Principles
 
 | Principle                     | Description                                               | Good Example                                                                                                                                                     | Avoid                                                                                                 |
 | ----------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
@@ -32,7 +34,7 @@ Choose the right content type based on your audience and purpose:
 | **Write concisely**           | Use short, clear sentences                                | Break up complex ideas                                                                                                                                           | Write three-line sentences                                                                            |
 | Use Quicklooks                | Use Quicklooks with terms found in docs/partials/glossary | In the past, Arbitrum chains ordered incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. | In the past, Arbitrum chains ordered incoming transactions on "First-Come, First-Serve (FCFS)" basis. |
 
-### 2.3 Terminology Guide
+### Guide
 
 | Term       | Correct                                   | Incorrect                  |
 | ---------- | ----------------------------------------- | -------------------------- |
@@ -56,9 +58,9 @@ subsequent mentions → app | dapp, dApp |
 | allowlist | allowlist | whitelist |
 | denylist | denylist | blacklist |
 
-### 6.3 Diagrams and Visual Content
+### Diagrams and Visual Content
 
-### Preferred Format
+#### Preferred Format
 
 - Use SVG for scalability and code-friendliness
 - Avoid PNG unless necessary
