@@ -183,5 +183,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup',
     to: '/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
+    to: '/launch-arbitrum-chain/chain-config/costs/gas-optimization',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

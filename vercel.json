@@ -226,6 +226,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/gas-optimization",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

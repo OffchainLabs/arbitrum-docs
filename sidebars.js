@@ -427,7 +427,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
+                      id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                       label: `Gas optimization tools`,
                     },
                     {
