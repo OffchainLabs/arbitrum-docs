@@ -206,6 +206,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/enable-4844-blobs",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

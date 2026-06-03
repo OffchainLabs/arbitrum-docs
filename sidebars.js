@@ -488,7 +488,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs',
+                      id: 'launch-arbitrum-chain/chain-config/data-availability/enable-4844-blobs',
                       label: `Enable post-4844 blobs`,
                     },
                     {

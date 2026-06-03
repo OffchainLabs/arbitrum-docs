@@ -167,5 +167,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference',
     to: '/launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs',
+    to: '/launch-arbitrum-chain/chain-config/data-availability/enable-4844-blobs',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
