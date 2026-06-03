@@ -15,5 +15,9 @@ export const redirects = [
     to: '/launch-arbitrum-chain/overview/introduction',
   },
   { from: '/launch-arbitrum-chain/aep-license', to: '/launch-arbitrum-chain/overview/license' },
+  {
+    from: '/launch-arbitrum-chain/migrate-between-raases',
+    to: '/launch-arbitrum-chain/migrate/between-raases',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

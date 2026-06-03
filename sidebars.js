@@ -673,7 +673,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/migrate-between-raases',
+              id: 'launch-arbitrum-chain/migrate/between-raases',
               label: 'Migrate between RaaSes',
             },
           ],
