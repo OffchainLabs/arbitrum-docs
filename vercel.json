@@ -78,7 +78,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/customize-your-chain/customize-precompile",
-      "destination": "/launch-arbitrum-chain/chain-configuration/core/precompiles",
+      "destination": "/launch-arbitrum-chain/chain-config/core/precompiles",
       "permanent": false
     },
     {
@@ -319,6 +319,11 @@
     {
       "source": "/launch-arbitrum-chain/chain-configuration/core/arbos",
       "destination": "/launch-arbitrum-chain/chain-config/core/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-configuration/core/precompiles",
+      "destination": "/launch-arbitrum-chain/chain-config/core/precompiles",
       "permanent": false
     },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },

@@ -65,7 +65,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-precompile',
-    to: '/launch-arbitrum-chain/chain-configuration/core/precompiles',
+    to: '/launch-arbitrum-chain/chain-config/core/precompiles',
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-stf',
@@ -258,6 +258,10 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/chain-configuration/core/arbos',
     to: '/launch-arbitrum-chain/chain-config/core/arbos',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-configuration/core/precompiles',
+    to: '/launch-arbitrum-chain/chain-config/core/precompiles',
   },
   // AUTO-GENERATED REDIRECTS END
 ];

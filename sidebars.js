@@ -646,7 +646,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/chain-configuration/core/precompiles',
+              id: 'launch-arbitrum-chain/chain-config/core/precompiles',
               label: `Customize your chain's precompiles`,
             },
             {
