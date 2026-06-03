@@ -685,7 +685,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard',
+              id: 'launch-arbitrum-chain/integrations/bridged-usdc',
               label: `Implement Circle bridged USDC`,
             },
             {

@@ -51,5 +51,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
     to: '/launch-arbitrum-chain/run-a-node/batch-poster',
   },
+  {
+    from: '/launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard',
+    to: '/launch-arbitrum-chain/integrations/bridged-usdc',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
