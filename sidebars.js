@@ -627,7 +627,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
+                  id: 'launch-arbitrum-chain/operate/post-launch-deployments',
                   label: `Post-launch deployments`,
                 },
               ],

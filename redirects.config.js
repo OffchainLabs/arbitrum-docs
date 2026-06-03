@@ -75,5 +75,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control',
     to: '/launch-arbitrum-chain/operate/ownership-and-access',
   },
+  {
+    from: '/launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
+    to: '/launch-arbitrum-chain/operate/post-launch-deployments',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
