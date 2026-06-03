@@ -493,7 +493,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
+                      id: 'launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning',
                       label: `Batch poster fee tuning`,
                     },
                     {

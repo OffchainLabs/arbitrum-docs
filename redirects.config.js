@@ -219,5 +219,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
     to: '/launch-arbitrum-chain/chain-config/validation/chain-finality',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
