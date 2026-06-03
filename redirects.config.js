@@ -19,5 +19,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/migrate-between-raases',
     to: '/launch-arbitrum-chain/migrate/between-raases',
   },
+  {
+    from: '/launch-arbitrum-chain/migrate-from-another-stack',
+    to: '/launch-arbitrum-chain/migrate/from-another-stack',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
