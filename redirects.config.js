@@ -119,5 +119,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
     to: '/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
+    to: '/launch-arbitrum-chain/integrations/da-api-guide',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
