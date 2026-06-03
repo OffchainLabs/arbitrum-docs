@@ -117,7 +117,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
-    to: '/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
@@ -266,6 +266,10 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/chain-configuration/core/stf',
     to: '/launch-arbitrum-chain/chain-config/core/stf',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
   },
   // AUTO-GENERATED REDIRECTS END
 ];

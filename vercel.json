@@ -143,7 +143,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments",
-      "destination": "/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
       "permanent": false
     },
     {
@@ -329,6 +329,11 @@
     {
       "source": "/launch-arbitrum-chain/chain-configuration/core/stf",
       "destination": "/launch-arbitrum-chain/chain-config/core/stf",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
       "permanent": false
     },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
