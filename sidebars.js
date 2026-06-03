@@ -381,7 +381,7 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference',
+                          id: 'launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference',
                           label: `DAS RPC method reference`,
                         },
                         {

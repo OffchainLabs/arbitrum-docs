@@ -163,5 +163,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations',
     to: '/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference',
+    to: '/launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
