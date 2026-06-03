@@ -61,7 +61,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-arbos',
-    to: '/launch-arbitrum-chain/chain-configuration/core/arbos',
+    to: '/launch-arbitrum-chain/chain-config/core/arbos',
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-precompile',
@@ -254,6 +254,10 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-configuration-defaults',
     to: '/launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-configuration/core/arbos',
+    to: '/launch-arbitrum-chain/chain-config/core/arbos',
   },
   // AUTO-GENERATED REDIRECTS END
 ];

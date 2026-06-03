@@ -73,7 +73,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/customize-your-chain/customize-arbos",
-      "destination": "/launch-arbitrum-chain/chain-configuration/core/arbos",
+      "destination": "/launch-arbitrum-chain/chain-config/core/arbos",
       "permanent": false
     },
     {
@@ -314,6 +314,11 @@
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-configuration-defaults",
       "destination": "/launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-configuration/core/arbos",
+      "destination": "/launch-arbitrum-chain/chain-config/core/arbos",
       "permanent": false
     },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
