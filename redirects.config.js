@@ -99,5 +99,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup',
     to: '/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch',
   },
+  {
+    from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup',
+    to: '/launch-arbitrum-chain/quickstart/l3-rollup-testnet',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

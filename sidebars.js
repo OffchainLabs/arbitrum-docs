@@ -571,7 +571,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup',
+              id: 'launch-arbitrum-chain/quickstart/l3-rollup-testnet',
               label: `Run infrastructure for your first rollup`,
             },
             {
