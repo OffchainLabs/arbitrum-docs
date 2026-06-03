@@ -622,7 +622,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
+                  id: 'launch-arbitrum-chain/operate/gas-target',
                   label: `Manage gas target`,
                 },
                 {

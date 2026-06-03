@@ -87,5 +87,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations',
     to: '/launch-arbitrum-chain/operate/monitoring',
   },
+  {
+    from: '/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
+    to: '/launch-arbitrum-chain/operate/gas-target',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
