@@ -417,7 +417,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup',
+                      id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
                       label: `Rollup custom gas token`,
                     },
                     {
