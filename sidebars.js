@@ -723,7 +723,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node',
+              id: 'launch-arbitrum-chain/run-a-node/split-validator-node',
               label: 'Run split validator node',
             },
             {

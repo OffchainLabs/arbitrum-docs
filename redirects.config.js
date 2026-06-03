@@ -39,5 +39,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
     to: '/launch-arbitrum-chain/integrations/bridge-ui',
   },
+  {
+    from: '/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node',
+    to: '/launch-arbitrum-chain/run-a-node/split-validator-node',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
