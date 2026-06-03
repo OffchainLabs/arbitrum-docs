@@ -95,7 +95,7 @@
     "@signalwire/docusaurus-plugin-llms-txt": "^1.2.2",
     "@tsconfig/docusaurus": "^2.0.9",
     "@types/d3": "^7.4.3",
-    "@types/node": "^22.10.10",
+    "@types/node": "^25.9.1",
     "@types/react": "^18.3.23",
     "@types/semver": "^7.7.1",
     "fs-extra": "^11.3.5",
