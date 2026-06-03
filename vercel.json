@@ -61,6 +61,51 @@
       "destination": "/launch-arbitrum-chain/run-a-node/batch-poster",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard",
+      "destination": "/launch-arbitrum-chain/integrations/bridged-usdc",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/third-party-integrations/third-party-providers",
+      "destination": "/launch-arbitrum-chain/integrations/infrastructure-providers",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/customize-your-chain/customize-arbos",
+      "destination": "/launch-arbitrum-chain/chain-configuration/core/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/customize-your-chain/customize-precompile",
+      "destination": "/launch-arbitrum-chain/chain-configuration/core/precompiles",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/customize-your-chain/customize-stf",
+      "destination": "/launch-arbitrum-chain/chain-configuration/core/stf",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control",
+      "destination": "/launch-arbitrum-chain/operate/ownership-and-access",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments",
+      "destination": "/launch-arbitrum-chain/operate/post-launch-deployments",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth",
+      "destination": "/launch-arbitrum-chain/operate/state-growth",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations",
+      "destination": "/launch-arbitrum-chain/operate/monitoring",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
