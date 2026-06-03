@@ -107,5 +107,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
     to: '/launch-arbitrum-chain/deploy/deploy-chain',
   },
+  {
+    from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
+    to: '/launch-arbitrum-chain/deploy/token-bridge',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
