@@ -1,0 +1,31 @@
+---
+title: 'Batch Poster'
+sidebar_label: 'Batch Poster'
+description: 'Learn how to configure the Batch Poster.'
+author: pete-vielhaber
+sme: Jason-W123
+user_story:
+content_type: quickstart
+---
+
+<a data-quicklook-from="batch">Batch</a> posting configurations allow the [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) to group, compress, and post <a data-quicklook-from="transaction">transaction</a> batches from the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> (L3) to its <a data-quicklook-from="parent-chain">parent chain</a> (typically an <a data-quicklook-from="l2">L2</a> such as <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or Nova). Key parameters include the maximum delay before posting a batch and the maximum size of a batch to be posted, both of which control the frequency and timeliness of postings. These help prevent transaction reordering by ensuring that the sequencer commits batches in the order transactions are received, posting them atomically to the parent chain's inbox contract. This batch posting creates an immutable record on <a data-quicklook-from="l1">L1</a> (via the L2), reducing the risk of malicious reordering. For chain reorganizations, timely batch posting minimizes the window for L1 reorgs to affect unposted data, as posted batches become part of the canonical chain history.
+
+[Assertion](/how-arbitrum-works/deep-dives/assertions.mdx) posting configurations enable validators to periodically create and post assertions (state roots) of the <a data-quicklook-from="arbitrum-chain">Arbitrum chain's</a> execution to the parent chain. Parameters control the interval between assertions and staking requirements. These prevent reordering and reorgs by allowing any honest <a data-quicklook-from="validator">validator</a> to <a data-quicklook-from="challenge">challenge</a> incorrect assertions during a dispute window (typically seven days on Arbitrum chains). Regular assertions ensure state commitments are frequent enough to detect discrepancies early, triggering onchain resolution via bisection games, which enforce the correct <a data-quicklook-from="chain-state">chain state</a> and deter reorganizations.
+
+## Batch posting minimum frequency:
+
+### Maximum wait time to post a batch
+
+The batch posting minimum frequency is primarily controlled by the `--node.batch-poster.max-delay` parameter in the [Nitro node's configuration](https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go) (set via the JSON config file or command-line flags when deploying an Arbitrum chain). This parameter defines the maximum time the <a data-quicklook-from="batch-poster">Batch Poster</a> will wait after receiving a transaction before posting a batch that includes it. The default value is one hour (3600 seconds).
+
+- **Configuration Options**: Set this in the `node.batch-poster` section of the config, e.g., `"max-delay": "30m"` for a 30-minute maximum wait. Lower values increase posting frequency but may result in smaller, less efficient batches during periods of low activity, thereby increasing gas costs on the parent chain. If no transactions are received, no batches will post regardless of this setting.
+- **Prevention of Issues**: A shorter max delay reduces the opportunity for transaction reordering by minimizing the time transactions sit uncommitted in the sequencer's mempool. It also limits exposure to chain reorgs, as batches post sooner, anchoring them to the parent chain before potential L1 fluctuations can invalidate sequencing. However, extremely low settings (e.g., seconds) could spam the parent chain with tiny batches, resulting in increased costs without any benefits.
+- **Recommended Settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, stick to the default one hour to avoid unnecessary postings.
+
+### Maximum batch size to post a batch
+
+Maximum size of a batch, if total queued but not posted transaction size archive this number, then batch poster will post this batch, it is controlled by the `--node.batch-poster.max-size` parameter in the [Nitro node's configuration](https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go) (set via the JSON config file or command-line flags when deploying an Arbitrum chain).
+
+- **Configuration Options**: Set this in the `node.batch-poster` section of the config, e.g., `"max-size": "100000"` for 100000 bytes. Lower values increase posting frequency but may result in smaller, less efficient batches during periods of low activity, thereby increasing gas costs on the parent chain. If no transactions are received, no batches will post regardless of this setting.
+- **Prevention of Issues**: A smaller max size reduces the opportunity for transaction reordering by minimizing the time transactions sit uncommitted in the sequencer's mempool. It also limits exposure to chain reorgs, as batches post sooner, anchoring them to the parent chain before potential L1 fluctuations can invalidate sequencing. However, extremely low settings (e.g., seconds) could spam the parent chain with tiny batches, resulting in increased costs without any benefits.
+- **Recommended Settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, stick to the default one hour to avoid unnecessary postings.
