@@ -14,5 +14,6 @@ export const redirects = [
     from: '/launch-arbitrum-chain/a-gentle-introduction',
     to: '/launch-arbitrum-chain/overview/introduction',
   },
+  { from: '/launch-arbitrum-chain/aep-license', to: '/launch-arbitrum-chain/overview/license' },
   // AUTO-GENERATED REDIRECTS END
 ];

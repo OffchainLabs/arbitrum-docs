@@ -156,7 +156,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/aep-license',
+          id: 'launch-arbitrum-chain/overview/license',
           label: 'Arbitrum chain licensing',
         },
         {
