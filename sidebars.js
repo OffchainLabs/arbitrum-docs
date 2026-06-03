@@ -324,7 +324,7 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction',
+                      id: 'launch-arbitrum-chain/chain-config/costs/aep-overview',
                       label: `AEP fee router introduction`,
                     },
                     {

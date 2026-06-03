@@ -151,6 +151,11 @@
       "destination": "/launch-arbitrum-chain/integrations/da-api-guide",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/aep-overview",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
