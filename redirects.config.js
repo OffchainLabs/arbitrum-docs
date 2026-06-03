@@ -223,5 +223,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
     to: '/launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
+    to: '/launch-arbitrum-chain/chain-config/validation/bold',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

@@ -503,7 +503,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
+                      id: 'launch-arbitrum-chain/chain-config/validation/bold',
                       label: `Adopt BoLD`,
                     },
                     {

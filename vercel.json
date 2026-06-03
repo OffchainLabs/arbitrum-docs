@@ -276,6 +276,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/bold",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
