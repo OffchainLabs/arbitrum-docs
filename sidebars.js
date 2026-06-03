@@ -728,7 +728,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
+              id: 'launch-arbitrum-chain/run-a-node/high-availability-sequencer',
               label: 'Run a high availability sequencer',
             },
           ],

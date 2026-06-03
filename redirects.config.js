@@ -43,5 +43,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node',
     to: '/launch-arbitrum-chain/run-a-node/split-validator-node',
   },
+  {
+    from: '/launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
+    to: '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
