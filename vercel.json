@@ -266,6 +266,11 @@
       "destination": "/launch-arbitrum-chain/operate/arbos-upgrade",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/chain-finality",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

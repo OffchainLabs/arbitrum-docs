@@ -215,5 +215,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade',
     to: '/launch-arbitrum-chain/operate/arbos-upgrade',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
+    to: '/launch-arbitrum-chain/chain-config/validation/chain-finality',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

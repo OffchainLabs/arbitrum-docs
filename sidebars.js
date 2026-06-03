@@ -498,7 +498,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
+                      id: 'launch-arbitrum-chain/chain-config/validation/chain-finality',
                       label: `Customize chain finality`,
                     },
                     {
