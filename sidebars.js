@@ -617,7 +617,7 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-growth',
+                  id: 'launch-arbitrum-chain/operate/state-growth',
                   label: `Manage gas state growth`,
                 },
                 {

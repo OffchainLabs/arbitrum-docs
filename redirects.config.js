@@ -79,5 +79,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
     to: '/launch-arbitrum-chain/operate/post-launch-deployments',
   },
+  {
+    from: '/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth',
+    to: '/launch-arbitrum-chain/operate/state-growth',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

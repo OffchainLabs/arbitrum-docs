@@ -64,7 +64,7 @@ Refer to the definitions below to understand what each parameter means:
 
 - `long_term_gas_target` is the desired long-term average gas throughput for the chain. A higher gas target means that your chain can handle more TPS before the gas begins to spike. However, a higher gas target also leads to faster state growth and requires more powerful hardware.
   - [State size limits](/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit): Guidance for setting your chains gas target
-  - [State growth guidance](/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth): Impact of high gas targets on state growth and its consequences
+  - [State growth guidance](/launch-arbitrum-chain/operate/state-growth): Impact of high gas targets on state growth and its consequences
 - `node_throughput` is the sustainable maximum throughput that the nodes can maintain without any issues. It is highly dependent on your specific hardware and the workload of your chain. Offchain Labs will soon publish testing frameworks and tools to benchmark the throughput your nodes can handle across various workloads.
 - `gas_limit` is the theoretical max block size limit. With the introduction of the `MaxTxGasLimit` in ArbOS 51, the effective block gas limit is twice the `MaxBlockGasLimit`. We recommend using an in-between value of `MaxBlockGasLimit` and Effective Block Gas Limit `(MaxTxGasLimit + MaxBlockGasLimit)` for this parameter.
 - `max_rate_of_increase_percent_per_second` is the maximum allowed rate of increase in the fee per second when the chain is working at the maximum capacity.
