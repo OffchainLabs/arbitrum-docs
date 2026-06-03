@@ -690,7 +690,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/third-party-integrations/third-party-providers',
+              id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
               label: 'Third-party infrastructure providers',
             },
           ],

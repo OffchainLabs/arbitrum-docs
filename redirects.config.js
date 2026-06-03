@@ -55,5 +55,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard',
     to: '/launch-arbitrum-chain/integrations/bridged-usdc',
   },
+  {
+    from: '/launch-arbitrum-chain/third-party-integrations/third-party-providers',
+    to: '/launch-arbitrum-chain/integrations/infrastructure-providers',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
