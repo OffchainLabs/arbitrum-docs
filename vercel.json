@@ -231,6 +231,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/costs/gas-optimization",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

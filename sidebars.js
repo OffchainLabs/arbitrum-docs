@@ -422,7 +422,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
+                      id: 'launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
                       label: 'Native mint/burn gas token',
                     },
                     {

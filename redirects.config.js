@@ -187,5 +187,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
     to: '/launch-arbitrum-chain/chain-config/costs/gas-optimization',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
+    to: '/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
