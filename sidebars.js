@@ -551,7 +551,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
+              id: 'launch-arbitrum-chain/deploy/deploy-chain',
               label: `Deploy an Arbitrum chain`,
             },
             {
