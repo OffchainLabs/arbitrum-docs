@@ -412,7 +412,7 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust',
+                      id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
                       label: `AnyTrust custom gas token`,
                     },
                     {

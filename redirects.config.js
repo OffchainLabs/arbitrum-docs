@@ -175,5 +175,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management',
     to: '/launch-arbitrum-chain/chain-config/costs/fee-management',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust',
+    to: '/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
