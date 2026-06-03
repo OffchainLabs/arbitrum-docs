@@ -35,5 +35,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain',
     to: '/launch-arbitrum-chain/overview/faq',
   },
+  {
+    from: '/launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
+    to: '/launch-arbitrum-chain/integrations/bridge-ui',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

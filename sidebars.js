@@ -735,7 +735,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
+          id: 'launch-arbitrum-chain/integrations/bridge-ui',
           label: `Add your chain to the bridge`,
         },
         {
