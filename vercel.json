@@ -171,6 +171,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/costs/reporting-on-fees",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/config-data-availability",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
