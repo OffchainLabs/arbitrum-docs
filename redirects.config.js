@@ -247,5 +247,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap',
     to: '/launch-arbitrum-chain/integrations/layer-leap',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control',
+    to: '/launch-arbitrum-chain/chain-config/validation/assertion-control',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

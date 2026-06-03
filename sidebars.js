@@ -478,7 +478,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control',
+                      id: 'launch-arbitrum-chain/chain-config/validation/assertion-control',
                       label: `Batch poster & assertion control`,
                     },
                     {
