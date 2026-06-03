@@ -361,7 +361,7 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
+                          id: 'launch-arbitrum-chain/chain-config/data-availability/configure-dac',
                           label: `Configure DAC`,
                         },
                         {
