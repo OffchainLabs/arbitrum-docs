@@ -483,7 +483,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade',
+                      id: 'launch-arbitrum-chain/operate/arbos-upgrade',
                       label: `Upgrade ArbOS`,
                     },
                     {
@@ -605,7 +605,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade',
+                  id: 'launch-arbitrum-chain/operate/arbos-upgrade',
                   label: `Upgrade ArbOS`,
                 },
               ],
