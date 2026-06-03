@@ -356,7 +356,7 @@ const sidebars = {
                       items: [
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started',
+                          id: 'launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
                           label: `Get started`,
                         },
                         {
