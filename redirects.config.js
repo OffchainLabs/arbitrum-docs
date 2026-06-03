@@ -27,5 +27,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config',
     to: '/launch-arbitrum-chain/deploy/configure-node',
   },
+  {
+    from: '/launch-arbitrum-chain/concepts/public-preview-expectations',
+    to: '/launch-arbitrum-chain/overview/public-preview',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

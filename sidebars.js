@@ -740,7 +740,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
+          id: 'launch-arbitrum-chain/overview/public-preview',
           label: 'Public preview',
         },
         {
