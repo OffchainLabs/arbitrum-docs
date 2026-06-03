@@ -651,7 +651,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/customize-your-chain/customize-stf',
+              id: 'launch-arbitrum-chain/chain-configuration/core/stf',
               label: `Customize your chain's behavior`,
             },
             {

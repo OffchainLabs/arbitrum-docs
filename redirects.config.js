@@ -67,5 +67,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/customize-your-chain/customize-precompile',
     to: '/launch-arbitrum-chain/chain-configuration/core/precompiles',
   },
+  {
+    from: '/launch-arbitrum-chain/customize-your-chain/customize-stf',
+    to: '/launch-arbitrum-chain/chain-configuration/core/stf',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
