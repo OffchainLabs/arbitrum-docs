@@ -83,5 +83,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth',
     to: '/launch-arbitrum-chain/operate/state-growth',
   },
+  {
+    from: '/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations',
+    to: '/launch-arbitrum-chain/operate/monitoring',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

@@ -22,7 +22,7 @@ The [batch poster](/how-arbitrum-works/deep-dives/assertions.mdx) account is an 
 
 ### Monitoring guidance
 
-The [Monitoring tools and considerations](/launch-arbitrum-chain/04-maintain-your-chain/06-monitoring-tools-and-considerations.mdx) guide recommends monitoring the batch poster balance. In practice, this means:
+The [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx) guide recommends monitoring the batch poster balance. In practice, this means:
 
 - **Query the balance directly**: Use the parent chain RPC to check the batch poster EOA balance at regular intervals.
 - **Set up alerting**: Configure external monitoring (e.g., a balance-checking script, onchain monitoring service, or infrastructure alerting tool) to notify you when the balance drops below a threshold.
@@ -80,7 +80,7 @@ A batch posting backlog occurs when the sequencer continues ordering transaction
 ### How to identify a backlog
 
 - **Monitor the `SequencerInbox` contract**: Track the frequency of batch submissions to the parent chain. A sudden drop or stop in batch submissions indicates an issue.
-- **Check the sequencer's transaction backlog size**: As noted in the [Monitoring tools and considerations](/launch-arbitrum-chain/04-maintain-your-chain/06-monitoring-tools-and-considerations.mdx) guide, a large and growing backlog can be a sign of network health issues.
+- **Check the sequencer's transaction backlog size**: As noted in the [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx) guide, a large and growing backlog can be a sign of network health issues.
 - **Review batch poster logs**: Look for error messages related to transaction submission failures, fee estimation errors, or the data poster pausing.
 
 :::info Backlog metrics

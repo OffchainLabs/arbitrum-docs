@@ -634,7 +634,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations',
+              id: 'launch-arbitrum-chain/operate/monitoring',
               label: 'Monitoring tools and considerations',
             },
           ],
