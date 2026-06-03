@@ -207,5 +207,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period',
     to: '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations',
+    to: '/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

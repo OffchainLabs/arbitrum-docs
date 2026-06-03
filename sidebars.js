@@ -473,7 +473,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations',
+                      id: 'launch-arbitrum-chain/chain-config/validation/bond-and-validator',
                       label: `Bond & validator configuration`,
                     },
                     {
