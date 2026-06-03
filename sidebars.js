@@ -588,7 +588,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control',
+              id: 'launch-arbitrum-chain/operate/ownership-and-access',
               label: 'Ownership structure and access control',
             },
             {

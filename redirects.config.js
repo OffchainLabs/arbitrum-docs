@@ -71,5 +71,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/customize-your-chain/customize-stf',
     to: '/launch-arbitrum-chain/chain-configuration/core/stf',
   },
+  {
+    from: '/launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control',
+    to: '/launch-arbitrum-chain/operate/ownership-and-access',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
