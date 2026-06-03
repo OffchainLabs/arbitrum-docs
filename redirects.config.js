@@ -159,5 +159,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
     to: '/launch-arbitrum-chain/chain-config/data-availability/configure-dac',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations',
+    to: '/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

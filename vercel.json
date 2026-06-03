@@ -196,6 +196,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/data-availability/configure-dac",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

@@ -376,7 +376,7 @@ const sidebars = {
                         },
                         {
                           type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations',
+                          id: 'launch-arbitrum-chain/chain-config/data-availability/dac-das-operations',
                           label: `DAC/DAS operations`,
                         },
                         {
