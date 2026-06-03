@@ -334,7 +334,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees',
+                      id: 'launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
                       label: `Calculate AEP fees`,
                     },
                     {
