@@ -106,6 +106,36 @@
       "destination": "/launch-arbitrum-chain/operate/monitoring",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit",
+      "destination": "/launch-arbitrum-chain/operate/gas-target",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation",
+      "destination": "/launch-arbitrum-chain/operate/key-rotation",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup",
+      "destination": "/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup",
+      "destination": "/launch-arbitrum-chain/quickstart/l3-rollup-testnet",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "destination": "/launch-arbitrum-chain/deploy/deploy-chain",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge",
+      "destination": "/launch-arbitrum-chain/deploy/token-bridge",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
