@@ -576,7 +576,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
+              id: 'launch-arbitrum-chain/deploy/canonical-factory-contracts',
               label: 'Canonical factory contracts',
             },
           ],

@@ -111,5 +111,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
     to: '/launch-arbitrum-chain/deploy/token-bridge',
   },
+  {
+    from: '/launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
+    to: '/launch-arbitrum-chain/deploy/canonical-factory-contracts',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

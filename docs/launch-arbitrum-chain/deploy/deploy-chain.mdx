@@ -34,7 +34,7 @@ Custom gas token Arbitrum chains let participants pay transaction fees in an **E
 
 Before we describe the process of creating a chain using the Chain SDK, let's see what configuration options we have available when creating a chain.
 
-Deploying a new Arbitrum chain is done through a [`RollupCreator`](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain.
+Deploying a new Arbitrum chain is done through a [`RollupCreator`](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain.
 
 `RollupCreator` has a `createRollup` function that deploys your chain's core contracts to the parent chain. `createRollup` takes a complex struct called `RollupDeploymentParams` as its only input. This struct defines the parameters of the Arbitrum chain to be created.
 

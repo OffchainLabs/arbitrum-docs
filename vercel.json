@@ -136,6 +136,11 @@
       "destination": "/launch-arbitrum-chain/deploy/token-bridge",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts",
+      "destination": "/launch-arbitrum-chain/deploy/canonical-factory-contracts",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
