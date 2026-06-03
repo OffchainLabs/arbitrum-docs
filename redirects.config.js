@@ -243,5 +243,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting',
     to: '/launch-arbitrum-chain/operate/batch-poster-troubleshooting',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap',
+    to: '/launch-arbitrum-chain/integrations/layer-leap',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

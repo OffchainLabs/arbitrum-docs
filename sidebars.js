@@ -528,7 +528,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   label: 'Use Layer Leap',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/layer-leap',
+                  id: 'launch-arbitrum-chain/integrations/layer-leap',
                 },
                 {
                   type: 'doc',

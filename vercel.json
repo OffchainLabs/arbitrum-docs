@@ -301,6 +301,11 @@
       "destination": "/launch-arbitrum-chain/operate/batch-poster-troubleshooting",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
+      "destination": "/launch-arbitrum-chain/integrations/layer-leap",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
