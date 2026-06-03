@@ -47,5 +47,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
     to: '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
   },
+  {
+    from: '/launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
+    to: '/launch-arbitrum-chain/run-a-node/batch-poster',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
