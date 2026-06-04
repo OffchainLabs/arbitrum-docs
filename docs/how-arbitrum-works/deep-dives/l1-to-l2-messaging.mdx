@@ -13,7 +13,7 @@ This document explains the protocol-level concepts of parent-to-child messaging.
 
 :::
 
-In the [Bypassing the Sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">Sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
+In the [Bypassing the Sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the [<a data-quicklook-from="sequencer">Sequencer</a>](/how-arbitrum-works/deep-dives/sequencer.mdx). This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
 - Submit a child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
 - Deposit **ETH** or native tokens from a parent chain to a child chain
@@ -136,9 +136,9 @@ The Delayed Inbox provides methods for unsigned messages from both EOAs and cont
 
 ### Message types
 
-<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> defines various **message types** to distinguish between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message types help the protocol route and process each incoming message securely.
+[<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx) defines various **message types** to distinguish between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message types help the protocol route and process each incoming message securely.
 
-You can find additional details on message types in the next section of this documentation.
+For the full list of message-type identifiers used by ArbOS, see [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) and the [ArbOS messages section](/how-arbitrum-works/deep-dives/arbos.mdx#messages).
 
 :::note
 
@@ -158,7 +158,7 @@ The lifecycle of a <a data-quicklook-from="retryable-ticket">retryable ticket</a
 
 #### Submission
 
-Creating a retryable ticket is initiated with a call to the `createRetryableTicket` function of the inbox contract. Key parameters include the destination address, call value, gas limits, refund addresses, and calldata. The ticket requires sufficient funds to cover both submission costs and gas for child chain execution. Upon successful submission, a unique `TicketID` is created and the `ArbRetryableTx` precompile emits a `TicketCreated` event.
+Creating a retryable ticket is initiated with a call to the `createRetryableTicket` function of the inbox contract. Key parameters include the destination address, call value, gas limits, refund addresses, and calldata. The ticket requires sufficient funds to cover both submission costs and gas for child chain execution. Upon successful submission, a unique `TicketID` is created and the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile emits a `TicketCreated` event.
 
 #### Automatic redemption
 
@@ -168,7 +168,7 @@ If auto-redemption succeeds, the ticket executes immediately with the original p
 
 #### Manual redemption
 
-If automatic redemption fails, anyone can manually redeem the ticket by calling the `ArbRetryableTx` precompile's `redeem` method. The manual redemption attempt donates its call gas to the execution, and the gas limit is not constrained by the original ticket parameters. This allows tickets to be retried with different gas conditions.
+If automatic redemption fails, anyone can manually redeem the ticket by calling the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile's `redeem` method. The manual redemption attempt donates its call gas to the execution, and the gas limit is not constrained by the original ticket parameters. This allows tickets to be retried with different gas conditions.
 
 Tickets remain in the retryable buffer for one week. If not successfully redeemed within this period, the ticket expires and is automatically discarded. However, tickets can be kept alive indefinitely by paying a fee to extend the lifetime for another full period before expiration.
 

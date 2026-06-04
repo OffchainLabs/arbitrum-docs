@@ -33,7 +33,7 @@ When launching an Arbitrum chain, the Sequencer plays a central role in ordering
 
 ## 5. Balance latency, censorship resistance, and reliability
 
-- Timestamp adjustmnet boundaries and other sequencer behaviors allow minor tweaks to prevent re-orgs if batch posting lags.
+- Timestamp adjustment boundaries and other sequencer behaviors allow minor tweaks to prevent re-orgs if batch posting lags.
 - Overall, adjustments prevent undue delays in low-traffic scenarios, enhance responsiveness for latency-sensitive apps, or prioritize cost savings/security based on your chain's expected activity.
 
 These configs are set when running your sequencer node (e.g., via the Arbitrum Chain SDK's `prepareNodeConfig` or direct Nitro flags). Always test changes on a devnet, as they impact economics, UX, and infrastructure load.
