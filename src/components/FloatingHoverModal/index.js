@@ -26,7 +26,7 @@ import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-har
 import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/_rollup-pc.mdx';
 import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/_anytrust-pc.mdx';
 import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/_fast-withdrawals-pc.mdx';
-import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/features/partials/_timeboost-pc.mdx';
+import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/_timeboost-pc.mdx';
 import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/_bold-pc.mdx';
 import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/_permissioned-validators-pc.mdx';
 import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
