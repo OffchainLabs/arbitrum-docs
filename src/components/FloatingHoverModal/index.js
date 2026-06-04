@@ -19,7 +19,7 @@ import './styles.css';
 
 // Import all config partials statically to avoid CSP issues
 import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/features/partials/_custom-gas-token-pc.mdx';
-import ConfigAltDa from '@site/docs/launch-arbitrum-chain/features/partials/_alt-da-pc.mdx';
+import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/_alt-da-pc.mdx';
 import ConfigDedicatedThroughput from '@site/docs/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx';
 import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/features/partials/_native-eth-pc.mdx';
 import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-hardware.mdx';
