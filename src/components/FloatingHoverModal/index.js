@@ -23,7 +23,7 @@ import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/_alt-da-pc.md
 import ConfigDedicatedThroughput from '@site/docs/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx';
 import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/partials/_native-eth-pc.mdx';
 import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-hardware.mdx';
-import ConfigRollup from '@site/docs/launch-arbitrum-chain/features/partials/_rollup-pc.mdx';
+import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/_rollup-pc.mdx';
 import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/_anytrust-pc.mdx';
 import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/_fast-withdrawals-pc.mdx';
 import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/features/partials/_timeboost-pc.mdx';
