@@ -253,7 +253,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period",
-      "destination": "/docs/launch-arbitrum-chain/chain-config/validation/challenge-period",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/challenge-period",
       "permanent": false
     },
     {
@@ -334,6 +334,11 @@
     {
       "source": "/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments",
       "destination": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
+      "permanent": false
+    },
+    {
+      "source": "/docs/launch-arbitrum-chain/chain-config/validation/challenge-period",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/challenge-period",
       "permanent": false
     },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },

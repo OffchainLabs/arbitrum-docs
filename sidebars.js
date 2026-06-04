@@ -171,28 +171,6 @@ const sidebars = {
               items: [
                 {
                   type: 'category',
-                  label: 'Data availability',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-rollup',
-                      label: `Rollup`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-anytrust',
-                      label: `AnyTrust`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-alt-da',
-                      label: `Alt-DA`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
                   label: 'Gas and fees',
                   collapsed: true,
                   items: [
@@ -240,42 +218,6 @@ const sidebars = {
                     },
                   ],
                 },
-                {
-                  type: 'category',
-                  label: 'MEV',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/mev/choose-timeboost',
-                      label: `Timeboost`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'UX',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/ux/choose-fast-withdrawals',
-                      label: `Fast withdrawals`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'AEP fees',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/configure-aep/configure-aep-fees',
-                      label: `AEP fees`,
-                    },
-                  ],
-                },
               ],
             },
             {
@@ -283,16 +225,6 @@ const sidebars = {
               label: 'Advanced',
               collapsed: true,
               items: [
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-arbos-version',
-                  label: `ArbOS version`,
-                },
-                {
-                  type: 'doc',
-                  label: 'Precompiles',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-chain-precompiles',
-                },
                 {
                   type: 'doc',
                   label: 'Chain behavior',
@@ -468,7 +400,7 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
+                      id: 'launch-arbitrum-chain/chain-config/validation/challenge-period',
                       label: `Customize challenge period`,
                     },
                     {

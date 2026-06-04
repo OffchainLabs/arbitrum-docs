@@ -205,7 +205,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period',
-    to: '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
+    to: '/launch-arbitrum-chain/chain-config/validation/challenge-period',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations',
@@ -270,6 +270,10 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments',
     to: '/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
+  },
+  {
+    from: '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
+    to: '/launch-arbitrum-chain/chain-config/validation/challenge-period',
   },
   // AUTO-GENERATED REDIRECTS END
 ];
