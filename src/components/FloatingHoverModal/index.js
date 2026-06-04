@@ -28,7 +28,7 @@ import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/_anytrust-
 import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/_fast-withdrawals-pc.mdx';
 import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/_timeboost-pc.mdx';
 import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/_bold-pc.mdx';
-import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/_permissioned-validators-pc.mdx';
+import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/_permissioned-validators.mdx';
 import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
 import ConfigForceInclusion from '@site/docs/launch-arbitrum-chain/partials/config-force-inclusion.mdx';
 import ConfigAccountAbstraction from '@site/docs/launch-arbitrum-chain/partials/config-account-abstraction.mdx';
