@@ -109,11 +109,11 @@ BoLD facilitates a <a data-quicklook-from="challenge">Challenge</a>-based defens
 
 ## Step 6: Bridging—Cross-chain communication
 
-Many transactions involve asset or data transfers between Ethereum and Arbitrum, which are managed through secure bridging protocols (see the [Token bridging deep dive](/how-arbitrum-works/deep-dives/token-bridging.mdx) for the architecture overview). For parent-to-child from Ethereum to Arbitrum, options include native token bridging for direct **ETH** [deposits](/build-decentralized-apps/bridging/deposit/tokens.mdx), **ERC-20** transfers via the canonical <a data-quicklook-from="bridge">bridge</a>, or support for [custom gas tokens](/launch-arbitrum-chain/02-configure-your-chain/common/gas/02-use-a-custom-gas-token-rollup.mdx).
+Many transactions involve asset or data transfers between Ethereum and Arbitrum, which are managed through secure bridging protocols (see the [Token bridging deep dive](/how-arbitrum-works/deep-dives/token-bridging.mdx) for the architecture overview). For parent-to-child transfers from Ethereum to Arbitrum, options include native token bridging for direct **ETH** [deposits](/build-decentralized-apps/bridging/deposit/tokens.mdx), **ERC-20** transfers via the canonical <a data-quicklook-from="bridge">bridge</a>, or support for [custom gas tokens](/launch-arbitrum-chain/02-configure-your-chain/common/gas/02-use-a-custom-gas-token-rollup.mdx).
 
 [Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#retryable-tickets) enable atomic operations with guaranteed retries if execution fails, featuring predictable gas costs and a one-week validity period redeemable by anyone. Direct messaging handles signed EOA messages with verification or unsigned contract messages using [address aliasing](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#address-aliasing) for security.
 
-See the [Parent-to-Child messaging deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for details.
+See the [Parent-to-child messaging deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for details.
 
 Child-to-parent transfers from Arbitrum to Ethereum begin with creating a message via [`ArbSys.sendTxToL1()`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys), followed by inclusion in a Rollup <a data-quicklook-from="assertion">Assertion</a>, a 6.4-day <a data-quicklook-from="challenge-period">challenge period</a>, and manual Layer 1 execution by any party (see [withdrawing tokens](/build-decentralized-apps/bridging/withdraw/tokens.mdx) for a hands-on guide). Messages are validated via Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints.
 
@@ -137,7 +137,7 @@ A <a data-quicklook-from="gas-target">gas target</a> is an optimal gas consumpti
 
 You can read more about [how the child chain gas fees are calculated](/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees) in the gas and fees deep dive.
 
-Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting **ETH** totals. This model effectively covers all costs, with the gas target reinforcing security by keeping validation in sync. For practical gas estimation in dapps, see [How to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx).
+Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting **ETH** totals. This model effectively covers all costs, with the gas target reinforcing security by keeping validation in sync. For practical gas estimation in decentralized apps, see [How to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx).
 
 ## Step 8: Advanced features
 
@@ -179,14 +179,14 @@ In this overview, you've learned about the complete transaction journey through 
 - [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx): Arbitrum Operating System features and capabilities
 - [State Transition Function inputs](/how-arbitrum-works/reference/stf-inputs.mdx): Message types and STF processing mechanics
 - [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx): Rollup assertions and validation structure
-- [Parent-to-Child Messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx): L1 to L2 messaging and bridging
-- [Child-to-Parent Messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx): L2 to L1 messaging and withdrawals
-- [Token Bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx): Canonical bridge architecture, gateways, and routers
-- [AnyTrust Protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx): Data availability committee and cost optimization
+- [Parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx): L1 to L2 messaging and bridging
+- [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx): L2 to L1 messaging and withdrawals
+- [Token bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx): Canonical bridge architecture, gateways, and routers
+- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx): Data availability committee and cost optimization
 
 ### BoLD (Bounded Liquidity Delay)
 
-- [BoLD: Gentle Introduction](/how-arbitrum-works/bold/gentle-introduction.mdx): Overview of permissionless validation
+- [BoLD: Gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx): Overview of permissionless validation
 - [BoLD technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx): Implementation details of the dispute protocol
 - [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx): Narrowing disputes to a single execution step
 - [Economics of disputes](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx): Bonding, incentives, and cost considerations

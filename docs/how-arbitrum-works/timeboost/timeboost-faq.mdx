@@ -98,13 +98,13 @@ Yes. Timeboost is compatible with both the current centralized sequencer and a f
 
 For the first point about a more straightforward user interface, users can subscribe to the [sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx#real-time-sequencer-feed) to view, in real time, the final order of transactions. Using the sequencer feed is a sufficient solution for helping users understand the logic behind how their transactions get sorted. Additional documentation and diagrams will be forthcoming to help illustrate this workflow.
 
-To the second point, chain owners can adjust the amount of time that non-express lane transactions get delayed. This parameter, defined as `NonExpressDelayMsec', is denominated in milliseconds and is proposed to be 200ms initially.
+To the second point, chain owners can adjust the amount of time that non-express lane transactions get delayed. This parameter, defined as `NonExpressDelayMsec`, is denominated in milliseconds and is proposed to be 200ms initially.
 
-#### How will Timeboost affect block time finality on Arbitrum chains? Does this mean that an Arbitrum chain’s new block time will be 450ms
+#### How will Timeboost affect block time finality on Arbitrum chains? Does this mean that an Arbitrum chain's new block time will be 450ms?
 
 Recall that Arbitrum chains have two types of finality: (1) a trusted or soft confirmation and (2) Ethereum-equivalent finality. A trusted or soft confirmation for a user’s transaction relies on the user trusting the sequencer and the near-instant transaction receipt issued by the sequencer, which takes approximately 250ms. For (2), the user can use the Ethereum-equivalent finality heuristic once their child chain transaction becomes finalized on the parent chain as part of a batch of transactions posted to Ethereum, which can take two epochs, or roughly 13 minutes, in today’s Proof-of-Stake Ethereum. Read more about these two types of finality in [Finality](/how-arbitrum-works/deep-dives/sequencer.mdx#finality).
 
-With Timeboost, both finality timelines for non-express lane transactions (250ms for soft finality and ~13minutes for Ethereum-equivalent finality) will extend by the default 200ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively.
+With Timeboost, both finality timelines for non-express lane transactions (250ms for soft finality and ~13 minutes for Ethereum-equivalent finality) will extend by the default 200ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively.
 
 For express lane transactions, there will be no impact on transaction finality, meaning that finality will remain at 250ms and ~13 minutes for soft finality and Etheruem-equivalent finality, respectively.
 
@@ -138,11 +138,11 @@ Yes. We recommend that teams monitor and verify transaction receipts to obtain f
 
 #### For Timeboost, is there a limit on the number of transactions that can receive a boost from the winner in a round?
 
-There is no transaction limit, but there is a block-based limit: if your Timeboosted transactions do not get sequenced within five Arbitrum blocks (1250ms) from the time that the sequencer received them, then they will get dropped. The 200ms Timeboost time advantage only lasts for 1000ms anyway, so this is a safe limit that people will not hit. Note that the block gas limit may be a reason why your transaction(s) doesn't get included in an Arbitrum block. More details on this limit can be found in this section of our docs [here](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx)
+There is no transaction limit, but there is a block-based limit: if your Timeboosted transactions do not get sequenced within five Arbitrum blocks (1250ms) from the time that the sequencer received them, then they will get dropped. The 200ms Timeboost time advantage only lasts for 1000ms anyway, so this is a safe limit that people will not hit. Note that the block gas limit may be a reason why your transaction(s) doesn't get included in an Arbitrum block. More details on this limit can be found in the [Timeboost troubleshooting guide](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx).
 
 #### If a transaction is Timeboosted and we assume it arrived in the current block creation period, which includes other non-express lane transactions, would that Timeboosted transaction queue in front of those other non-express lane transactions that have already arrived but not included yet?
 
-It depends on the arrival timestamp of all the transactions. "Regular" transactions will receive a 200ms delay before being sequenced, while Timeboosted transactions will receive zero delay before being sequenced. In this scenario, if the "regular" transactions had arrived 200 milliseconds earlier than the Timeboosted transaction, they would get sequenced alongside the Timeboosted transaction based on their arrival timestamps. In this case, for that block, some "regular" transactions may indeed be ahead of Timeboosted transactions due to the timestamps. For additional information read this [document that explains how Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+It depends on the arrival timestamp of all the transactions. "Regular" transactions will receive a 200ms delay before being sequenced, while Timeboosted transactions will receive zero delay before being sequenced. In this scenario, if the "regular" transactions had arrived 200 milliseconds earlier than the Timeboosted transaction, they would get sequenced alongside the Timeboosted transaction based on their arrival timestamps. In this case, for that block, some "regular" transactions may indeed be ahead of Timeboosted transactions due to the timestamps. For additional information, read this [document that explains how Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
 #### Apart from Timeboost, are there any other mechanisms or factors that can affect transaction priority or latency?
 
