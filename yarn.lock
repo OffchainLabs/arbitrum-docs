@@ -3187,18 +3187,6 @@
     utility-types "^3.10.0"
     webpack "^5.88.1"
 
-"@emotion/is-prop-valid@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-1.4.0.tgz#e9ad47adff0b5c94c72db3669ce46de33edf28c0"
-  integrity sha512-QgD4fyscGcbbKwJmqNvUMSE02OsHUa+lAWKdEUIJKgqe5IwRSKd7+KhibEWdaKwgjLj0DRSHA9biAIqGBk05lw==
-  dependencies:
-    "@emotion/memoize" "^0.9.0"
-
-"@emotion/memoize@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.9.0.tgz#745969d649977776b43fc7648c556aaa462b4102"
-  integrity sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==
-
 "@esbuild/aix-ppc64@0.28.0":
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/@esbuild/aix-ppc64/-/aix-ppc64-0.28.0.tgz#7a289c158e29cbf59ea0afc83cc80f06d1c89402"
@@ -7341,11 +7329,6 @@ camelcase@^7.0.1:
   resolved "https://registry.npmjs.org/camelcase/-/camelcase-7.0.1.tgz"
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
-camelize@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/camelize/-/camelize-1.0.1.tgz"
-  integrity sha512-dU+Tx2fsypxTgtLoE36npi3UqcjSSMNYfkqgmoEhtZrraP5VWq0K7FkWVTYa8eMPtnU/G2txVsfdCJTn9uzpuQ==
-
 caniuse-api@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/caniuse-api/-/caniuse-api-3.0.0.tgz"
@@ -7504,11 +7487,6 @@ class-variance-authority@0.7.1:
   integrity sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==
   dependencies:
     clsx "^2.1.1"
-
-classnames@^2.5.1:
-  version "2.5.1"
-  resolved "https://registry.npmjs.org/classnames/-/classnames-2.5.1.tgz"
-  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
 
 clean-css@^5.2.2, clean-css@^5.3.3, clean-css@~5.3.2:
   version "5.3.3"
@@ -7840,11 +7818,6 @@ css-blank-pseudo@^7.0.1:
   dependencies:
     postcss-selector-parser "^7.0.0"
 
-css-color-keywords@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/css-color-keywords/-/css-color-keywords-1.0.0.tgz"
-  integrity sha512-FyyrDHZKEjXDpNJYvVsV960FiqQyXc/LlYmsxl2BcdMb2WPx0OGRVgTg55rPSyLSNMqP52R9r8geSp7apN3Ofg==
-
 css-declaration-sorter@^7.2.0:
   version "7.2.0"
   resolved "https://registry.npmjs.org/css-declaration-sorter/-/css-declaration-sorter-7.2.0.tgz"
@@ -7916,15 +7889,6 @@ css-selector-parser@^3.0.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/css-selector-parser/-/css-selector-parser-3.3.0.tgz#1a34220d76762c929ae99993df5a60721f505082"
   integrity sha512-Y2asgMGFqJKF4fq4xHDSlFYIkeVfRsm69lQC1q9kbEsH5XtnINTMrweLkjYMeaUgiXBy/uvKeO/a1JHTNnmB2g==
-
-css-to-react-native@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/css-to-react-native/-/css-to-react-native-3.2.0.tgz"
-  integrity sha512-e8RKaLXMOFii+02mOlqwjbD00KSEKqblnpO9e++1aXS1fPQOpS1YoqdVHBqPjHNoxeF2mimzVqawm2KCbEdtHQ==
-  dependencies:
-    camelize "^1.0.0"
-    css-color-keywords "^1.0.0"
-    postcss-value-parser "^4.0.2"
 
 css-tree@^2.3.1:
   version "2.3.1"
@@ -12981,7 +12945,7 @@ postcss-unique-selectors@^6.0.4:
   dependencies:
     postcss-selector-parser "^6.0.16"
 
-postcss-value-parser@^4.0.2, postcss-value-parser@^4.1.0, postcss-value-parser@^4.2.0:
+postcss-value-parser@^4.1.0, postcss-value-parser@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
@@ -14444,16 +14408,6 @@ style-to-object@^1.0.0:
   dependencies:
     inline-style-parser "0.2.3"
 
-styled-components@^6.4.2:
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-6.4.2.tgz#2e92f7b8a1e49f5791c80c864eddf215dd1046c6"
-  integrity sha512-xZBhBJsMtGqb+aKcwKgaT+BtuFums9VynX2JRvXJGTx5UfZzN12rk5r4nVdhXYvRw+hE7yiYxVrOqJZaK2+Txg==
-  dependencies:
-    "@emotion/is-prop-valid" "1.4.0"
-    css-to-react-native "3.2.0"
-    csstype "3.2.3"
-    stylis "4.3.6"
-
 stylehacks@^6.1.1:
   version "6.1.1"
   resolved "https://registry.npmjs.org/stylehacks/-/stylehacks-6.1.1.tgz"
@@ -14461,11 +14415,6 @@ stylehacks@^6.1.1:
   dependencies:
     browserslist "^4.23.0"
     postcss-selector-parser "^6.0.16"
-
-stylis@4.3.6:
-  version "4.3.6"
-  resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.3.6.tgz#7c7b97191cb4f195f03ecab7d52f7902ed378320"
-  integrity sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==
 
 stylis@^4.3.6:
   version "4.4.0"
@@ -14640,13 +14589,6 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
-
-to-vfile@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/to-vfile/-/to-vfile-8.0.0.tgz#4e1282bf251ce2beacae8e23a1752b3b3986bd29"
-  integrity sha512-IcmH1xB5576MJc9qcfEC/m/nQCFt3fzMHz45sSlgJyTWjRbKW1HAkJpuf3DgE57YzIlZcwcBZA5ENQbBo4aLkg==
-  dependencies:
-    vfile "^6.0.0"
 
 toidentifier@~1.0.1:
   version "1.0.1"
@@ -15129,14 +15071,6 @@ vfile@^6.0.0, vfile@^6.0.1:
   dependencies:
     "@types/unist" "^3.0.0"
     unist-util-stringify-position "^4.0.0"
-    vfile-message "^4.0.0"
-
-vfile@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/vfile/-/vfile-6.0.3.tgz#3652ab1c496531852bf55a6bac57af981ebc38ab"
-  integrity sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==
-  dependencies:
-    "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
 vscode-jsonrpc@8.2.0:
