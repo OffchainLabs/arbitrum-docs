@@ -18,9 +18,9 @@ This will allow:
 - Users' withdrawals <a data-quicklook-from="confirmation">Confirmation</a> on the <a data-quicklook-from="parent-chain">parent chain</a> at frequencies up to ~15 minutes
 - Cross-chain dApps to read the finalized state at the same rate as the fast withdrawal frequency
 
-Enabling this feature shifts the chain from relying solely on time-based fraud proofs to a committee-driven confirmation process, where validators (recommended to be at least three for reduced trust risks) must agree unanimously. It's primarily recommended for AnyTrust chains, as it leverages the existing DAC trust model without adding new assumptions—ideally, DAC members run the validators.
+Enabling this feature shifts the chain from relying solely on time-based fraud proofs to a committee-driven confirmation process, where validators must agree unanimously. A minimum of three validators is recommended to reduce trust risks. This feature is primarily recommended for AnyTrust chains, as it leverages the existing DAC trust model without adding new assumptions. Ideally, DAC members run the validators.
 
-For pure Rollup chains, enabling it effectively introduces a committee trust layer, making it less "trust-minimized" than standard mode. Once enabled, the chain processes a potential backlog of unconfirmed assertions before operating at full speed, and confirmations may slightly delay under high load (e.g., >1 Mgas/s throughput), but security remains intact.
+For pure Rollup chains, enabling this feature effectively introduces a committee trust layer, making it less "trust-minimized" than standard mode. Once enabled, the chain processes a potential backlog of unconfirmed assertions before operating at full speed. Confirmations may be slightly delayed under high load (e.g., >1 Mgas/s throughput), but security remains intact.
 
 ## Recommended configuration
 

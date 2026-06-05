@@ -20,7 +20,7 @@ Creating a new Arbitrum chain involves deploying a set of contracts on your chai
 
 You can explore the code of these contracts in the [nitro-contracts repository](https://github.com/OffchainLabs/nitro-contracts).
 
-Upon deployment, an Arbitrum chain can be configured as a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chain, and use **ETH** or any standard `ERC-20 `token as its gas token.
+Upon deployment, an Arbitrum chain can be configured as a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chain, and use **ETH** or any standard **ERC-20** token as its gas token.
 
 This page explains how to deploy an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> using the Arbitrum Chain SDK. See the [Overview](/launch-arbitrum-chain/quickstart/sdk-introduction.mdx) for an introduction to the process of creating and configuring an Arbitrum chain.
 
@@ -283,7 +283,7 @@ type CreateRollupResults = {
 
 ### 4. Set the DAC keyset in the `SequencerInbox` (for AnyTrust chains)
 
-If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/launch-arbitrum-chain/chain-config/data-availability/dac-get-started.mdx) to learn more about setting up a DAC.
+If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS keys. See [How to configure a DAC](/launch-arbitrum-chain/chain-config/data-availability/dac-get-started.mdx) to learn more about setting up a DAC.
 
 :::info
 
