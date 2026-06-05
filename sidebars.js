@@ -198,11 +198,6 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
-                  label: `Enable EIP-4844 blobs`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster',
                   label: `Batch poster`,
                 },
@@ -210,6 +205,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/batch-poster/fee-tuning',
                   label: `Batch poster fee tuning`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
+                  label: `Enable EIP-4844 blobs`,
                 },
               ],
             },
@@ -334,6 +334,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/core/da-api-guide',
+                  label: 'DA API guide',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/core/precompiles',
                   label: `Precompiles`,
                 },
@@ -451,11 +456,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/integrations/bridged-usdc',
               label: 'Bridged USDC',
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/chain-config/core/da-api-guide',
-              label: 'DA API guide',
             },
             {
               type: 'doc',
