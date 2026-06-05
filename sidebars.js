@@ -205,7 +205,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'Core',
+              label: 'Core hacks',
               collapsed: true,
               items: [
                 {
