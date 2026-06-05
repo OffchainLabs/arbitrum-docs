@@ -193,6 +193,18 @@ const sidebars = {
           items: [
             {
               type: 'category',
+              label: 'Batch poster',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
+                  label: `Enable EIP-4844 blobs`,
+                },
+              ],
+            },
+            {
+              type: 'category',
               label: 'Core',
               collapsed: true,
               items: [
@@ -324,11 +336,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
                   label: `Deploy mirror DAS`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/data-availability/enable-4844-blobs',
-                  label: `Enable EIP-4844 blobs`,
                 },
               ],
             },

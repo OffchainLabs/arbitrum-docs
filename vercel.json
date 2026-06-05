@@ -208,7 +208,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs",
-      "destination": "/launch-arbitrum-chain/chain-config/data-availability/enable-4844-blobs",
+      "destination": "/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs",
       "permanent": false
     },
     {
