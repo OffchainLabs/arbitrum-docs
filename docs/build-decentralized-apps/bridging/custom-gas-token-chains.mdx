@@ -34,7 +34,7 @@ You should use `EthBridger` when bridging the native token between the parent ch
 :::note Important Notes
 
 - You should use `Erc20Bridger` when bridging an **ERC-20** token between the parent chain and the Arbitrum chain.
-- These APIs are just needed for `custom gas token` <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> and for **ETH**-powered rollup and AnyTrust Arbitrum chains, you don't need to use them.
+- These APIs are just needed for [`custom gas token`](/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token.mdx) <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> and for **ETH**-powered rollup and AnyTrust Arbitrum chains, you don't need to use them.
 - When native tokens are transferred to the custom gas token Arbitrum chain, they function equivalently to **ETH** on EVM chains. This means these tokens will exhibit behavior identical to that of **ETH**, the native currency on EVM chains. This similarity in functionality is a key feature to consider in <a data-quicklook-from="transaction">transactions</a> and operations within the Arbitrum chain.
 - everything else is under the hood, and the custom gas token code paths will be executed just if the `L2Network` object config has a `nativeToken` field.
 

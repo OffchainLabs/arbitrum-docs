@@ -36,6 +36,12 @@
     "description": "json encoded list of block ranges in the form of start and end block numbers in a list of size 2"
   },
   {
+    "flag": "blocks-reexecutor.commit-state-to-disk",
+    "type": "bool",
+    "default": "",
+    "description": "if set, blocks-reexecutor not only re-executes blocks but it also commits their state to triedb"
+  },
+  {
     "flag": "blocks-reexecutor.enable",
     "type": "bool",
     "default": "",
@@ -153,31 +159,31 @@
     "flag": "conf.s3.access-key",
     "type": "string",
     "default": "",
-    "description": "S3 access key"
+    "description": "S3 access key for fetching the node configuration file from S3"
   },
   {
     "flag": "conf.s3.bucket",
     "type": "string",
     "default": "",
-    "description": "S3 bucket"
+    "description": "S3 bucket containing the node configuration file"
   },
   {
     "flag": "conf.s3.object-key",
     "type": "string",
     "default": "",
-    "description": "S3 object key"
+    "description": "S3 object key of the node configuration file (JSON format)"
   },
   {
     "flag": "conf.s3.region",
     "type": "string",
     "default": "",
-    "description": "S3 region"
+    "description": "S3 region of the bucket containing the node configuration file"
   },
   {
     "flag": "conf.s3.secret-key",
     "type": "string",
     "default": "",
-    "description": "S3 secret key"
+    "description": "S3 secret key for fetching the node configuration file from S3 (triggers S3 config loading)"
   },
   {
     "flag": "conf.string",
@@ -278,7 +284,7 @@
   {
     "flag": "execution.caching.state-history",
     "type": "uint",
-    "default": "345600",
+    "default": "18446744073709551615",
     "description": "number of recent blocks to retain state history for (path state-scheme only)"
   },
   {
@@ -288,10 +294,22 @@
     "description": "scheme to use for state trie storage (hash, path)"
   },
   {
+    "flag": "execution.caching.state-size-tracking",
+    "type": "bool",
+    "default": "",
+    "description": "enable tracking of state size over time"
+  },
+  {
     "flag": "execution.caching.stylus-lru-cache-capacity",
     "type": "uint32",
     "default": "256",
     "description": "capacity, in megabytes, of the LRU cache that keeps initialized stylus programs"
+  },
+  {
+    "flag": "execution.caching.trie-cap-batch-size",
+    "type": "uint32",
+    "default": "",
+    "description": "batch size in bytes used in the TrieDB Cap operation (0 = use geth default)"
   },
   {
     "flag": "execution.caching.trie-cap-limit",
@@ -304,6 +322,12 @@
     "type": "int",
     "default": "600",
     "description": "amount of memory in megabytes to cache unchanged state trie nodes with"
+  },
+  {
+    "flag": "execution.caching.trie-commit-batch-size",
+    "type": "uint32",
+    "default": "",
+    "description": "batch size in bytes used in the TrieDB Commit operation (0 = use geth default)"
   },
   {
     "flag": "execution.caching.trie-dirty-cache",
@@ -328,6 +352,66 @@
     "type": "duration",
     "default": "",
     "description": "if greater then 0, the block processing time period of each trie write to hard-disk is shortened by a random value from range [0, trie-time-limit-random-offset)"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "execution.disable-arbowner-ethcall",
+    "type": "bool",
+    "default": "",
+    "description": "disable ArbOwner precompile calls outside on-chain execution (ethcall, gas estimation)"
   },
   {
     "flag": "execution.enable-prefetch-block",
@@ -382,6 +466,12 @@
     "type": "string",
     "default": "",
     "description": "transaction forwarding target URL, or \"null\" to disable forwarding (iff not sequencer)"
+  },
+  {
+    "flag": "execution.legacy-zero-base-fee-until",
+    "type": "uint",
+    "default": "",
+    "description": "orbit-chain compat: re-enables the pre-v3.7 behavior of treating ArbOS<=40 blocks with zero base fee as non-arbitrum, for blocks with unix timestamp strictly less than this value (0 disables; set to a timestamp past the last zero-basefee block on the chain)"
   },
   {
     "flag": "execution.parent-chain-reader.dangerous.wait-for-tx-approval-safe-poll",
@@ -454,6 +544,24 @@
     "type": "int",
     "default": "1024",
     "description": "like trie-dirty-cache for the separate, recording database (used for validation)"
+  },
+  {
+    "flag": "execution.rpc-server.authenticated",
+    "type": "bool",
+    "default": "true",
+    "description": "rpc is authenticated"
+  },
+  {
+    "flag": "execution.rpc-server.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable execution node to serve over rpc"
+  },
+  {
+    "flag": "execution.rpc-server.public",
+    "type": "bool",
+    "default": "",
+    "description": "rpc is public"
   },
   {
     "flag": "execution.rpc.allow-method",
@@ -556,6 +664,18 @@
     "type": "float",
     "default": "1",
     "description": "cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap)"
+  },
+  {
+    "flag": "execution.rpc.tx-sync-default-timeout",
+    "type": "duration",
+    "default": "20s",
+    "description": "default timeout for eth_sendRawTransactionSync"
+  },
+  {
+    "flag": "execution.rpc.tx-sync-max-timeout",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "maximum allowed timeout for eth_sendRawTransactionSync "
   },
   {
     "flag": "execution.secondary-forwarding-target",
@@ -759,13 +879,19 @@
     "flag": "execution.sequencer.timeboost.redis-url",
     "type": "string",
     "default": "unset",
-    "description": "the Redis URL for expressLaneService to coordinate via"
+    "description": "the Redis URL for ExpressLaneService to coordinate via"
   },
   {
     "flag": "execution.sequencer.timeboost.sequencer-http-endpoint",
     "type": "string",
     "default": "http://localhost:8547",
     "description": "this sequencer's http endpoint"
+  },
+  {
+    "flag": "execution.stylus-target.allow-fallback",
+    "type": "bool",
+    "default": "true",
+    "description": "if true, fall back to an alternative compiler when compilation of a Stylus program fails"
   },
   {
     "flag": "execution.stylus-target.amd64",
@@ -792,6 +918,24 @@
     "description": "stylus programs compilation target for system other than 64-bit ARM or 64-bit x86"
   },
   {
+    "flag": "execution.stylus-target.max-stylus-call-depth",
+    "type": "uint16",
+    "default": "",
+    "description": "max number of Stylus frames simultaneously on the call stack (counts only Stylus frames; EVM frames between two Stylus frames do not decrement it); exceeding the limit rejects non-on-chain calls; 0 disables the limit"
+  },
+  {
+    "flag": "execution.stylus-target.max-stylus-open-pages",
+    "type": "uint16",
+    "default": "128",
+    "description": "max open WASM pages per tx; exceeding the limit rejects non-on-chain calls and filters sequencer-committed txs (delayed inbox is exempt); 0 disables the limit"
+  },
+  {
+    "flag": "execution.stylus-target.native-stack-size",
+    "type": "uint",
+    "default": "",
+    "description": "initial native stack size in bytes for Wasmer coroutines used by Stylus execution (0 = default 1MB)"
+  },
+  {
     "flag": "execution.sync-monitor.finalized-block-wait-for-block-validator",
     "type": "bool",
     "default": "",
@@ -808,6 +952,216 @@
     "type": "bool",
     "default": "",
     "description": "wait for block validator to complete before returning safe block number"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.address-checker-queue-size",
+    "type": "int",
+    "default": "8192",
+    "description": "work queue size for address checker"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.address-checker-worker-count",
+    "type": "int",
+    "default": "4",
+    "description": "number of workers for address checker"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.cache-size",
+    "type": "int",
+    "default": "10000",
+    "description": "LRU cache size for address lookup results"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable restricted address synchronization service"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.poll-interval",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "interval between polling S3 for hash list updates"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.access-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 access key"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.bucket",
+    "type": "string",
+    "default": "",
+    "description": "S3 bucket name"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.chunk-size-mb",
+    "type": "int",
+    "default": "32",
+    "description": "S3 multipart download part size in MB"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.concurrency",
+    "type": "int",
+    "default": "10",
+    "description": "S3 multipart download concurrency"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.endpoint",
+    "type": "string",
+    "default": "",
+    "description": "custom S3 endpoint URL (for MinIO, localstack, or other S3-compatible services)"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.max-retries",
+    "type": "int",
+    "default": "3",
+    "description": "maximum retries for S3 part body download"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.object-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 object key (path) to the file"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.region",
+    "type": "string",
+    "default": "",
+    "description": "S3 region"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.secret-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 secret key"
+  },
+  {
+    "flag": "execution.transaction-filtering.disable-delayed-sequencing-filter",
+    "type": "bool",
+    "default": "",
+    "description": "disable delayed sequencing filter"
+  },
+  {
+    "flag": "execution.transaction-filtering.enable-ethcall-filter",
+    "type": "bool",
+    "default": "",
+    "description": "enable address filtering for eth_estimateGas and eth_call"
+  },
+  {
+    "flag": "execution.transaction-filtering.event-filter.path",
+    "type": "string",
+    "default": "",
+    "description": "path to JSON file containing event filter rules"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
   },
   {
     "flag": "execution.tx-indexer.enable",
@@ -1050,6 +1404,12 @@
     "description": "path for genesis json file"
   },
   {
+    "flag": "init.genesis-json-file-directory",
+    "type": "string",
+    "default": "",
+    "description": "directory path for genesis json files - will search for a file named by the chain ID"
+  },
+  {
     "flag": "init.import-file",
     "type": "string",
     "default": "",
@@ -1064,8 +1424,8 @@
   {
     "flag": "init.latest",
     "type": "string",
-    "default": "\"pruned\"",
-    "description": "if set, searches for the latest snapshot of the given kind (accepted values: \"archive\""
+    "default": "",
+    "description": "if set, searches for the latest snapshot of the given kind (accepted values: \"archive\" | \"pruned\" | \"genesis\")"
   },
   {
     "flag": "init.latest-base",
@@ -1106,8 +1466,8 @@
   {
     "flag": "init.rebuild-local-wasm",
     "type": "string",
-    "default": "",
-    "description": "rebuild local wasm database on boot if needed (otherwise-will be done lazily). Three modes are supported  \"auto\"- (enabled by default) if any previous rebuilding attempt was successful then rebuilding is disabled else continues to rebuild, \"force\"- force rebuilding which would commence rebuilding despite the status of previous attempts, \"false\"- do not rebuild on startup (default \"auto\")"
+    "default": "auto",
+    "description": "rebuild local wasm database on boot if needed (otherwise-will be done lazily). Three modes are supported  \"auto\"- (enabled by default) if any previous rebuilding attempt was successful then rebuilding is disabled else continues to rebuild, \"force\"- force rebuilding which would commence rebuilding despite the status of previous attempts, \"false\"- do not rebuild on startup"
   },
   {
     "flag": "init.recreate-missing-state-from",
@@ -1200,6 +1560,12 @@
     "description": "metrics server update interval"
   },
   {
+    "flag": "node.batch-poster.anytrust-retention-period",
+    "type": "duration",
+    "default": "360h0m0s",
+    "description": "In AnyTrust mode, the period which AnyTrust nodes are requested to retain the stored batches."
+  },
+  {
     "flag": "node.batch-poster.check-batch-correctness",
     "type": "bool",
     "default": "true",
@@ -1208,8 +1574,14 @@
   {
     "flag": "node.batch-poster.compression-level",
     "type": "int",
-    "default": "11",
-    "description": "batch compression level"
+    "default": "",
+    "description": "DEPRECATED: use compression-levels instead. batch compression level"
+  },
+  {
+    "flag": "node.batch-poster.compression-levels",
+    "type": "CompressionLevelStepList",
+    "default": "null",
+    "description": "JSON array of compression level steps. Format: [{\"backlog\":<int>,\"level\":<int>,\"recompression-level\":<int>},...]. First entry must have backlog:0. Both Level and recomp-level must be 0-11, weakly descending. Example: [{\"backlog\":0,\"level\":11,\"recompression-level\":11},{\"backlog\":21,\"level\":6,\"recompression-level\":11}]"
   },
   {
     "flag": "node.batch-poster.dangerous.allow-posting-first-batch-when-sequencer-message-count-mismatch",
@@ -1222,12 +1594,6 @@
     "type": "uint",
     "default": "",
     "description": "use this gas limit for batch posting instead of estimating it"
-  },
-  {
-    "flag": "node.batch-poster.das-retention-period",
-    "type": "duration",
-    "default": "360h0m0s",
-    "description": "In AnyTrust mode, the period which DASes are requested to retain the stored batches."
   },
   {
     "flag": "node.batch-poster.data-poster.allocate-mempool-balance",
@@ -1458,6 +1824,12 @@
     "description": "how long to delay after error posting batch"
   },
   {
+    "flag": "node.batch-poster.ethda-fallback-batch-count",
+    "type": "int",
+    "default": "10",
+    "description": "number of batches to post to EthDA before retrying AltDA after a fallback"
+  },
+  {
     "flag": "node.batch-poster.extra-batch-gas",
     "type": "uint",
     "default": "50000",
@@ -1500,6 +1872,12 @@
     "description": "maximum estimated compressed 4844 blob enabled batch size"
   },
   {
+    "flag": "node.batch-poster.max-calldata-batch-size",
+    "type": "int",
+    "default": "100000",
+    "description": "maximum estimated compressed calldata batch size"
+  },
+  {
     "flag": "node.batch-poster.max-delay",
     "type": "duration",
     "default": "1h0m0s",
@@ -1509,13 +1887,13 @@
     "flag": "node.batch-poster.max-empty-batch-delay",
     "type": "duration",
     "default": "72h0m0s",
-    "description": "maximum empty batch posting delay, batch poster will only be able to post an empty batch if this time period building a batch has passed"
+    "description": "maximum empty batch posting delay, batch poster will only be able to post an empty batch if this time period building a batch has passed; if 0, disable automatic empty batch posting"
   },
   {
     "flag": "node.batch-poster.max-size",
     "type": "int",
-    "default": "100000",
-    "description": "maximum estimated compressed batch size"
+    "default": "",
+    "description": "DEPRECATED: use node.batch-poster.max-calldata-batch-size instead"
   },
   {
     "flag": "node.batch-poster.parent-chain-eip7623",
@@ -1676,13 +2054,13 @@
   {
     "flag": "node.block-metadata-fetcher.source.retry-errors",
     "type": "string",
-    "default": "websocket: close.*",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
     "description": "Errors matching this regular expression are automatically retried"
   },
   {
     "flag": "node.block-metadata-fetcher.source.timeout",
     "type": "duration",
-    "default": "",
+    "default": "10s",
     "description": "per-response timeout (0-disabled)"
   },
   {
@@ -1886,13 +2264,13 @@
   {
     "flag": "node.block-validator.validation-server.retry-errors",
     "type": "string",
-    "default": "websocket: close.*",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
     "description": "Errors matching this regular expression are automatically retried"
   },
   {
     "flag": "node.block-validator.validation-server.timeout",
     "type": "duration",
-    "default": "",
+    "default": "10s",
     "description": "per-response timeout (0-disabled)"
   },
   {
@@ -1912,6 +2290,12 @@
     "type": "uint",
     "default": "1",
     "description": "number of attempts allowed when trying to spawn a validation before erroring out"
+  },
+  {
+    "flag": "node.block-validator.validation-spawning-allowed-timeouts",
+    "type": "uint",
+    "default": "3",
+    "description": "number of timeout errors allowed per validation attempt before treating it as a fatal error (separate from allowed-attempts)"
   },
   {
     "flag": "node.bold.api",
@@ -2064,103 +2448,343 @@
     "description": "Interval in which finality and sync data is pushed from consensus to execution"
   },
   {
-    "flag": "node.da-provider.data-stream.max-store-chunk-body-size",
+    "flag": "node.da.anytrust.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable Anytrust Data Availability mode"
+  },
+  {
+    "flag": "node.da.anytrust.max-batch-size",
+    "type": "int",
+    "default": "1000000",
+    "description": "maximum batch size for AnyTrust DA (compressed)"
+  },
+  {
+    "flag": "node.da.anytrust.panic-on-error",
+    "type": "bool",
+    "default": "",
+    "description": "whether the Data Availability Service should fail immediately on errors (not recommended)"
+  },
+  {
+    "flag": "node.da.anytrust.request-timeout",
+    "type": "duration",
+    "default": "5s",
+    "description": "Data Availability Service timeout duration for Store requests"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.connection-wait",
+    "type": "duration",
+    "default": "1s",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable retrieval of sequencer batch data from a list of remote REST endpoints; if other AnyTrust storage types are enabled, this mode is used as a fallback"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.max-per-endpoint-stats",
+    "type": "int",
+    "default": "20",
+    "description": "number of stats entries (latency and success rate) to keep for each REST endpoint; controls whether strategy is faster or slower to respond to changing conditions"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.online-url-list",
+    "type": "string",
+    "default": "",
+    "description": "a URL to a list of URLs of REST AnyTrust endpoints that is checked at startup; additive with the url option"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.online-url-list-fetch-interval",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "time interval to periodically fetch url list from online-url-list"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.simple-explore-exploit-strategy.exploit-iterations",
+    "type": "uint32",
+    "default": "1000",
+    "description": "number of consecutive GetByHash calls to the aggregator where each call will cause it to select from REST endpoints in order of best latency and success rate, before switching to explore mode"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.simple-explore-exploit-strategy.explore-iterations",
+    "type": "uint32",
+    "default": "20",
+    "description": "number of consecutive GetByHash calls to the aggregator where each call will cause it to randomly select from REST endpoints until one returns successfully, before switching to exploit mode"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.strategy",
+    "type": "string",
+    "default": "simple-explore-exploit",
+    "description": "strategy to use to determine order and parallelism of calling REST endpoint URLs; valid options are 'simple-explore-exploit'"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.strategy-update-interval",
+    "type": "duration",
+    "default": "10s",
+    "description": "how frequently to update the strategy with endpoint latency and error rate data"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.delay-on-error",
+    "type": "duration",
+    "default": "1s",
+    "description": "time to wait if encountered an error before retrying"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.eager",
+    "type": "bool",
+    "default": "",
+    "description": "eagerly sync batch data to this AnyTrust server's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.eager-lower-bound-block",
+    "type": "uint",
+    "default": "",
+    "description": "when eagerly syncing, start indexing forward from this L1 block. Only used if there is no sync state"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.ignore-write-errors",
+    "type": "bool",
+    "default": "true",
+    "description": "log only on failures to write when syncing; otherwise treat it as an error"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.parent-chain-blocks-per-read",
+    "type": "uint",
+    "default": "100",
+    "description": "when eagerly syncing, max l1 blocks to read per poll"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.retention-period",
+    "type": "duration",
+    "default": "360h0m0s",
+    "description": "period to request storage to retain synced data"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.state-dir",
+    "type": "string",
+    "default": "",
+    "description": "directory to store the sync state in, ie the block number currently synced up to, so that we don't sync from scratch each time"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.sync-expired-data",
+    "type": "bool",
+    "default": "true",
+    "description": "sync even data that is expired; needed for mirror configuration"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.urls",
+    "type": "strings",
+    "default": "",
+    "description": "list of URLs including 'http://' or 'https://' prefixes and port numbers to REST AnyTrust endpoints; additive with the online-url-list option"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.wait-before-try-next",
+    "type": "duration",
+    "default": "2s",
+    "description": "time to wait until trying the next set of REST endpoints while waiting for a response; the next set of REST endpoints is determined by the strategy selected"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.assumed-honest",
+    "type": "int",
+    "default": "",
+    "description": "Number of assumed honest backends (H). If there are N backends, K=N+1-H valid responses are required to consider an Store request to be successful."
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.backends",
+    "type": "backendConfigList",
+    "default": "null",
+    "description": "JSON RPC backend configuration. This can be specified on the command line as a JSON array, eg: [{\"url\": \"...\", \"pubkey\": \"...\"},...], or as a JSON array in the config file."
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable storage of sequencer batch data from a list of RPC endpoints; this should only be used by the batch poster and not in combination with other AnyTrust storage types"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.max-store-chunk-body-size",
     "type": "int",
     "default": "5242880",
     "description": "maximum HTTP body size for chunked store requests"
   },
   {
-    "flag": "node.da-provider.data-stream.rpc-methods.finalize-stream",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.finalize-stream",
     "type": "string",
-    "default": "daprovider_commitChunkedStore",
+    "default": "das_commitChunkedStore",
     "description": "name of the RPC method to finalize a chunked data stream"
   },
   {
-    "flag": "node.da-provider.data-stream.rpc-methods.start-stream",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.start-stream",
     "type": "string",
-    "default": "daprovider_startChunkedStore",
+    "default": "das_startChunkedStore",
     "description": "name of the RPC method to start a chunked data stream"
   },
   {
-    "flag": "node.da-provider.data-stream.rpc-methods.stream-chunk",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.stream-chunk",
     "type": "string",
-    "default": "daprovider_sendChunk",
+    "default": "das_sendChunk",
     "description": "name of the RPC method to send a chunk of data"
   },
   {
-    "flag": "node.da-provider.enable",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.enable-chunked-store",
     "type": "bool",
-    "default": "",
-    "description": "enable daprovider client"
+    "default": "true",
+    "description": "enable data to be sent to AnyTrust in chunks instead of all at once"
   },
   {
-    "flag": "node.da-provider.rpc.arg-log-limit",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.arg-log-limit",
     "type": "uint",
     "default": "2048",
     "description": "limit size of arguments in log entries"
   },
   {
-    "flag": "node.da-provider.rpc.connection-wait",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.connection-wait",
     "type": "duration",
     "default": "",
     "description": "how long to wait for initial connection"
   },
   {
-    "flag": "node.da-provider.rpc.jwtsecret",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.jwtsecret",
     "type": "string",
     "default": "",
     "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
   },
   {
-    "flag": "node.da-provider.rpc.retries",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.retries",
     "type": "uint",
     "default": "3",
     "description": "number of retries in case of failure(0 mean one attempt)"
   },
   {
-    "flag": "node.da-provider.rpc.retry-delay",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.retry-delay",
     "type": "duration",
     "default": "",
     "description": "delay between retries"
   },
   {
-    "flag": "node.da-provider.rpc.retry-errors",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.retry-errors",
     "type": "string",
-    "default": "websocket: close.*",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
     "description": "Errors matching this regular expression are automatically retried"
   },
   {
-    "flag": "node.da-provider.rpc.timeout",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.timeout",
     "type": "duration",
-    "default": "",
+    "default": "10s",
     "description": "per-response timeout (0-disabled)"
   },
   {
-    "flag": "node.da-provider.rpc.url",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.url",
     "type": "string",
-    "default": "",
+    "default": "self-auth",
     "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
   },
   {
-    "flag": "node.da-provider.rpc.websocket-message-size-limit",
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.websocket-message-size-limit",
     "type": "int",
     "default": "268435456",
     "description": "websocket message size limit used by the RPC client. 0 means no limit"
   },
   {
-    "flag": "node.da-provider.store-rpc-method",
+    "flag": "node.da.external-provider.data-stream.max-store-chunk-body-size",
+    "type": "int",
+    "default": "5242880",
+    "description": "maximum HTTP body size for chunked store requests"
+  },
+  {
+    "flag": "node.da.external-provider.data-stream.rpc-methods.finalize-stream",
+    "type": "string",
+    "default": "daprovider_commitChunkedStore",
+    "description": "name of the RPC method to finalize a chunked data stream"
+  },
+  {
+    "flag": "node.da.external-provider.data-stream.rpc-methods.start-stream",
+    "type": "string",
+    "default": "daprovider_startChunkedStore",
+    "description": "name of the RPC method to start a chunked data stream"
+  },
+  {
+    "flag": "node.da.external-provider.data-stream.rpc-methods.stream-chunk",
+    "type": "string",
+    "default": "daprovider_sendChunk",
+    "description": "name of the RPC method to send a chunk of data"
+  },
+  {
+    "flag": "node.da.external-provider.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable daprovider client"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "node.da.external-provider.store-rpc-method",
     "type": "string",
     "default": "daprovider_store",
     "description": "name of the store rpc method on the daprovider server (used when data streaming is disabled)"
   },
   {
-    "flag": "node.da-provider.use-data-streaming",
+    "flag": "node.da.external-provider.use-data-streaming",
     "type": "bool",
     "default": "",
     "description": "use data streaming protocol for storing large payloads"
   },
   {
-    "flag": "node.da-provider.with-writer",
+    "flag": "node.da.external-provider.with-writer",
     "type": "bool",
     "default": "",
     "description": "implies if the daprovider rpc server supports writer interface"
@@ -2190,22 +2814,16 @@
     "description": "enable Anytrust Data Availability mode"
   },
   {
+    "flag": "node.data-availability.max-batch-size",
+    "type": "int",
+    "default": "1000000",
+    "description": "maximum batch size for AnyTrust DA (compressed)"
+  },
+  {
     "flag": "node.data-availability.panic-on-error",
     "type": "bool",
     "default": "",
     "description": "whether the Data Availability Service should fail immediately on errors (not recommended)"
-  },
-  {
-    "flag": "node.data-availability.parent-chain-connection-attempts",
-    "type": "int",
-    "default": "15",
-    "description": "parent chain RPC connection attempts (spaced out at least 1 second per attempt, 0 to retry infinitely), only used in standalone daserver; when running as part of a node that node's parent chain configuration is used"
-  },
-  {
-    "flag": "node.data-availability.parent-chain-node-url",
-    "type": "string",
-    "default": "",
-    "description": "URL for parent chain node, only used in standalone daserver and daprovider; when running as part of a node that node's L1 configuration is used"
   },
   {
     "flag": "node.data-availability.request-timeout",
@@ -2214,10 +2832,16 @@
     "description": "Data Availability Service timeout duration for Store requests"
   },
   {
+    "flag": "node.data-availability.rest-aggregator.connection-wait",
+    "type": "duration",
+    "default": "1s",
+    "description": "how long to wait for initial connection"
+  },
+  {
     "flag": "node.data-availability.rest-aggregator.enable",
     "type": "bool",
     "default": "",
-    "description": "enable retrieval of sequencer batch data from a list of remote REST endpoints; if other DAS storage types are enabled, this mode is used as a fallback"
+    "description": "enable retrieval of sequencer batch data from a list of remote REST endpoints; if other AnyTrust storage types are enabled, this mode is used as a fallback"
   },
   {
     "flag": "node.data-availability.rest-aggregator.max-per-endpoint-stats",
@@ -2229,7 +2853,7 @@
     "flag": "node.data-availability.rest-aggregator.online-url-list",
     "type": "string",
     "default": "",
-    "description": "a URL to a list of URLs of REST das endpoints that is checked at startup; additive with the url option"
+    "description": "a URL to a list of URLs of REST AnyTrust endpoints that is checked at startup; additive with the url option"
   },
   {
     "flag": "node.data-availability.rest-aggregator.online-url-list-fetch-interval",
@@ -2271,7 +2895,7 @@
     "flag": "node.data-availability.rest-aggregator.sync-to-storage.eager",
     "type": "bool",
     "default": "",
-    "description": "eagerly sync batch data to this DAS's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily"
+    "description": "eagerly sync batch data to this AnyTrust server's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily"
   },
   {
     "flag": "node.data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block",
@@ -2313,7 +2937,7 @@
     "flag": "node.data-availability.rest-aggregator.urls",
     "type": "strings",
     "default": "",
-    "description": "list of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints; additive with the online-url-list option"
+    "description": "list of URLs including 'http://' or 'https://' prefixes and port numbers to REST AnyTrust endpoints; additive with the online-url-list option"
   },
   {
     "flag": "node.data-availability.rest-aggregator.wait-before-try-next",
@@ -2334,58 +2958,106 @@
     "description": "JSON RPC backend configuration. This can be specified on the command line as a JSON array, eg: [{\"url\": \"...\", \"pubkey\": \"...\"},...], or as a JSON array in the config file."
   },
   {
-    "flag": "node.data-availability.rpc-aggregator.das-rpc-client.data-stream.max-store-chunk-body-size",
+    "flag": "node.data-availability.rpc-aggregator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable storage of sequencer batch data from a list of RPC endpoints; this should only be used by the batch poster and not in combination with other AnyTrust storage types"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.max-store-chunk-body-size",
     "type": "int",
     "default": "5242880",
     "description": "maximum HTTP body size for chunked store requests"
   },
   {
-    "flag": "node.data-availability.rpc-aggregator.das-rpc-client.data-stream.rpc-methods.finalize-stream",
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.rpc-methods.finalize-stream",
     "type": "string",
     "default": "das_commitChunkedStore",
     "description": "name of the RPC method to finalize a chunked data stream"
   },
   {
-    "flag": "node.data-availability.rpc-aggregator.das-rpc-client.data-stream.rpc-methods.start-stream",
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.rpc-methods.start-stream",
     "type": "string",
     "default": "das_startChunkedStore",
     "description": "name of the RPC method to start a chunked data stream"
   },
   {
-    "flag": "node.data-availability.rpc-aggregator.das-rpc-client.data-stream.rpc-methods.stream-chunk",
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.rpc-methods.stream-chunk",
     "type": "string",
     "default": "das_sendChunk",
     "description": "name of the RPC method to send a chunk of data"
   },
   {
-    "flag": "node.data-availability.rpc-aggregator.das-rpc-client.enable-chunked-store",
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.enable-chunked-store",
     "type": "bool",
     "default": "true",
-    "description": "enable data to be sent to DAS in chunks instead of all at once"
+    "description": "enable data to be sent to AnyTrust in chunks instead of all at once"
   },
   {
-    "flag": "node.data-availability.rpc-aggregator.das-rpc-client.server-url",
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.jwtsecret",
     "type": "string",
     "default": "",
-    "description": "URL of DAS server to connect to"
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
   },
   {
-    "flag": "node.data-availability.rpc-aggregator.enable",
-    "type": "bool",
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.retry-delay",
+    "type": "duration",
     "default": "",
-    "description": "enable storage of sequencer batch data from a list of RPC endpoints; this should only be used by the batch poster and not in combination with other DAS storage types"
+    "description": "delay between retries"
   },
   {
-    "flag": "node.data-availability.sequencer-inbox-address",
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.retry-errors",
     "type": "string",
-    "default": "",
-    "description": "parent chain address of SequencerInbox contract"
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.timeout",
+    "type": "duration",
+    "default": "10s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.url",
+    "type": "string",
+    "default": "self-auth",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
   },
   {
     "flag": "node.delayed-sequencer.enable",
     "type": "bool",
     "default": "",
     "description": "enable delayed sequencer"
+  },
+  {
+    "flag": "node.delayed-sequencer.filtered-tx-full-retry-interval",
+    "type": "duration",
+    "default": "30s",
+    "description": "how often to do a full re-execution when halted on a filtered delayed message"
   },
   {
     "flag": "node.delayed-sequencer.finalize-distance",
@@ -2410,6 +3082,60 @@
     "type": "bool",
     "default": "true",
     "description": "whether to use The Merge's notion of finality before sequencing delayed messages"
+  },
+  {
+    "flag": "node.execution-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.execution-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.execution-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.execution-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.execution-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.execution-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.execution-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.execution-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.execution-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
   },
   {
     "flag": "node.feed.input.enable-compression",
@@ -2625,7 +3351,7 @@
     "flag": "node.feed.output.signed",
     "type": "bool",
     "default": "",
-    "description": "sign broadcast messages"
+    "description": "sign broadcast messages with the batch poster wallet"
   },
   {
     "flag": "node.feed.output.workers",
@@ -2730,6 +3456,42 @@
     "description": "how long between consecutive calls to redis"
   },
   {
+    "flag": "node.message-extraction.blocks-to-prefetch",
+    "type": "uint",
+    "default": "499",
+    "description": "the number of blocks to prefetch relevant logs from. Recommend using max allowed range for eth_getLogs rpc query"
+  },
+  {
+    "flag": "node.message-extraction.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable message extraction service"
+  },
+  {
+    "flag": "node.message-extraction.log-extraction-status-frequency-blocks",
+    "type": "uint",
+    "default": "100",
+    "description": "frequency of logging message extraction status in terms of number of blocks processed"
+  },
+  {
+    "flag": "node.message-extraction.read-mode",
+    "type": "string",
+    "default": "latest",
+    "description": "mode to only read latest or safe or finalized L1 blocks. Enabling safe or finalized disables feed input and output. Defaults to latest. Takes string input, valid strings- latest, safe, finalized"
+  },
+  {
+    "flag": "node.message-extraction.retry-interval",
+    "type": "duration",
+    "default": "500ms",
+    "description": "wait time before retring upon a failure"
+  },
+  {
+    "flag": "node.message-extraction.stall-tolerance",
+    "type": "uint",
+    "default": "10",
+    "description": "max times the MEL fsm is allowed to be stuck without logging error"
+  },
+  {
     "flag": "node.message-pruner.enable",
     "type": "bool",
     "default": "true",
@@ -2806,6 +3568,24 @@
     "type": "string",
     "default": "",
     "description": "Decline RPC calls if free memory excluding the page cache is below this amount"
+  },
+  {
+    "flag": "node.rpc-server.authenticated",
+    "type": "bool",
+    "default": "true",
+    "description": "rpc is authenticated"
+  },
+  {
+    "flag": "node.rpc-server.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable consensus node to serve over rpc"
+  },
+  {
+    "flag": "node.rpc-server.public",
+    "type": "bool",
+    "default": "",
+    "description": "rpc is public"
   },
   {
     "flag": "node.seq-coordinator.block-metadata-duration",
@@ -3330,6 +4110,30 @@
     "description": "block number to start saving blockmetadata, 0 to disable"
   },
   {
+    "flag": "node.version-alerter-server.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable arb_getMinRequiredNitroVersion endpoint that returns minimum required version of the nitro node software"
+  },
+  {
+    "flag": "node.version-alerter-server.min-required-nitro-by-date",
+    "type": "string",
+    "default": "",
+    "description": "minimum required version of the nitro node software by date. Second string in the result of querying arb_getMinRequiredNitroVersion endpoint"
+  },
+  {
+    "flag": "node.version-alerter-server.min-required-nitro-by-version",
+    "type": "string",
+    "default": "",
+    "description": "minimum required version of the nitro node software. First string in the result of querying arb_getMinRequiredNitroVersion endpoint"
+  },
+  {
+    "flag": "node.version-alerter-server.upgrade-deadline",
+    "type": "string",
+    "default": "",
+    "description": "deadline to upgrade the nitro node software. Third string in the result of querying arb_getMinRequiredNitroVersion endpoint"
+  },
+  {
     "flag": "parent-chain.blob-client.authorization",
     "type": "string",
     "default": "",
@@ -3669,13 +4473,25 @@
     "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.idletime-to-autoclaim",
     "type": "duration",
     "default": "5m0s",
-    "description": "After a message spends this amount of time in PEL (Pending Entries List i.e claimed by another consumer but not Acknowledged) it will be allowed to be autoclaimed by other consumers"
+    "description": "After a message spends this amount of time in PEL (Pending Entries List i.e claimed by another consumer but not Acknowledged) it will be allowed to be autoclaimed by other consumers. This option should be set to the same value for all consumers and producers."
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.max-retry-count",
+    "type": "int",
+    "default": "-1",
+    "description": "number of message retries after which this consumer will set an error response and Acknowledge the message (-1 = no limit)"
   },
   {
     "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.response-entry-timeout",
     "type": "duration",
     "default": "1h0m0s",
     "description": "timeout for response entry"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.retry",
+    "type": "bool",
+    "default": "true",
+    "description": "enables autoclaim for this consumer, if set to false this consumer will not check messages from PEL (Pending Entries List)"
   },
   {
     "flag": "validation.arbitrator.redis-validation-server-config.module-roots",
@@ -3765,7 +4581,79 @@
     "flag": "validation.wasm.root-path",
     "type": "string",
     "default": "",
-    "description": "path to machine folders, each containing wasm files (machine.wavm.br, replay.wasm)"
+    "description": "path to machine folders, each containing wasm files (machine.v2.wavm.br, replay.wasm)"
+  },
+  {
+    "flag": "version-alerter.connection.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "version-alerter.connection.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "version-alerter.connection.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "version-alerter.connection.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "version-alerter.connection.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "version-alerter.connection.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "version-alerter.connection.timeout",
+    "type": "duration",
+    "default": "10s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "version-alerter.connection.url",
+    "type": "string",
+    "default": "self-auth",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "version-alerter.connection.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "version-alerter.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable querying arb_getMinRequiredNitroVersion endpoint in regular intervals and firing alerts if the node software is below the required version"
+  },
+  {
+    "flag": "version-alerter.ping-interval",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "how often the nitro version alerter should ping arb_getMinRequiredNitroVersion for data"
+  },
+  {
+    "flag": "version-alerter.upgrade-grace-period",
+    "type": "duration",
+    "default": "",
+    "description": "represents grace period up until the upgrade deadline received from arb_getMinRequiredNitroVersion, determines escalation of messages regarding node software upgrade"
   },
   {
     "flag": "ws.addr",
