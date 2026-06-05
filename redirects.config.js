@@ -275,5 +275,9 @@ export const redirects = [
     from: '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
     to: '/launch-arbitrum-chain/chain-config/validation/challenge-period',
   },
+  {
+    from: '/launch-arbitrum-chain/operate/gas-target',
+    to: '/launch-arbitrum-chain/chain-config/costs/gas-target',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

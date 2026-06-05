@@ -273,6 +273,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                   label: `Gas optimization`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/gas-target',
+                  label: 'Gas target',
+                },
               ],
             },
             {
@@ -488,11 +493,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/batch-poster-troubleshooting',
               label: 'Batch poster troubleshooting',
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/operate/gas-target',
-              label: 'Gas target',
             },
             {
               type: 'doc',

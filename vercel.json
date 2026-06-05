@@ -341,6 +341,11 @@
       "destination": "/launch-arbitrum-chain/chain-config/validation/challenge-period",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/operate/gas-target",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/gas-target",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
