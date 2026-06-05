@@ -329,7 +329,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'Sequencer',
+              label: 'Sequencing',
               collapsed: true,
               items: [
                 {
