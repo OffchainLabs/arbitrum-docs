@@ -256,12 +256,12 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
-                  label: `Custom gas token AnyTrust`,
+                  label: `Custom gas token (AnyTrust)`,
                 },
                 {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
-                  label: `Custom gas token Rollup`,
+                  label: `Custom gas token (Rollup)`,
                 },
                 {
                   type: 'doc',
@@ -458,7 +458,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-arbitrum-chain/integrations/layer-leap',
-              label: 'Layer leap',
+              label: 'Layer Leap',
             },
           ],
         },
@@ -517,7 +517,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/post-launch-deployments',
-              label: 'Post launch deployments',
+              label: 'Post-launch deployments',
             },
             {
               type: 'doc',
