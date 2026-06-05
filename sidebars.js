@@ -510,7 +510,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Run a node for an Arbitrum chain',
+          label: 'Protocol hacks',
           collapsed: true,
           items: [
             {
