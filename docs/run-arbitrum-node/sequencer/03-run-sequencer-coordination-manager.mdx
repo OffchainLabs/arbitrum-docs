@@ -5,15 +5,13 @@ sidebar_position: 10
 content_type: how-to
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
-
 The Sequencer Coordinator Manager (SQM) is a command-line tool that allows you to manage the priority list of sequencers, update their positions, add new sequencers to the list, and refresh the lists from the Redis server.
 The tool offers keyboard-only support. Any changes you make are stored locally until you choose to save and push them to the Redis server.
 
 - Clone and enter nitro repository:
 
   ```shell
-  git clone --branch @@nitroVersionTag=v3.6.5@@ https://github.com/OffchainLabs/nitro.git
+  git clone --branch @@nitroVersionTag=v3.9.9@@ https://github.com/OffchainLabs/nitro.git
   cd nitro
   ```
 
@@ -29,11 +27,7 @@ The tool offers keyboard-only support. Any changes you make are stored locally u
 If mouse support is enabled, you can use your mouse to explore the tool. Otherwise, use your keyboard to explore the UI. The `enter` key selects options; `c` switches focus between lists.
 When you bring up any form, you can navigate within the form's options using the `Tab` key and use the up/down arrow keys to select options from the dropdown menu.
 
-<ImageZoom
-  src="/img/run-node-seq-coordinator-manager.png"
-  alt="Sequencer coordinator manager"
-  className="img-600px"
-/>
+<ImageZoom src="/img/run-node-seq-coordinator-manager.png" alt="Sequencer coordinator manager" className="img-600px" />
 
 :::note
 One of the sequencers is marked with a `chosen` indicator. This visual cue helps you identify the current chosen sequencer.
@@ -50,6 +44,8 @@ After selecting a sequencer from the non-priority list, you are given the option
 <ImageZoom src="/img/run-node-add-to-priority.png" alt="Add to priority" className="img-600px" />
 
 You can also add a new sequencer to the priority list by pressing `a` from the keyboard shortcuts. This action will bring up a form to enter the sequencer details. After adding the sequencer URL, you can click `Add` to see the changes or `Cancel` to abort the operation.
+
+There is a flag in the sequencer's config, `--node.seq-coordinator.my-url`, which needs to be set to your sequencer's endpoint URL. Ensure that the URL of your sequencer added to the sequencer coordinator manager matches this flag.
 
 <ImageZoom src="/img/run-node-add-new-seq.png" alt="Add new Sequencer" className="img-600px" />
 

@@ -1,8 +1,9 @@
 ---
 title: 'Precompiles overview'
-description: A high level description of what precompiles are and how they work
-user_story: As a developer, I want to understand what precompiles are and how they work.
+description: 'Overview of Arbitrum precompiled contracts — predefined smart contracts executed natively by the Arbitrum client for optimized performance. Covers both Ethereum-standard and Arbitrum-specific precompiles.'
+user_story: 'As a developer, I want to understand what Arbitrum precompiles are so I can leverage their optimized functionality in my smart contracts.'
 content_type: concept
+displayed_sidebar: buildAppsSidebar
 ---
 
 Precompiles are predefined smart contracts that have special addresses and provide specific functionality which is executed not at the EVM bytecode level, but natively by the Arbitrum client itself. Precompiles are primarily used to introduce specific functions that would be computationally expensive if executed in EVM bytecode, and functions that facilitate the interaction between the parent chain and the child chain. By having them natively in the Arbitrum client, they can be optimized for performance.

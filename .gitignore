@@ -1,4 +1,5 @@
 .vscode
+.devcontainer/
 
 .vercel
 .DS_Store
@@ -11,16 +12,17 @@ node_modules
 build
 
 # Generated files
+# Generated docusaurus
 .docusaurus
 .cache-loader
-
-# Generated docs
-docs/sdk/
-!docs/sdk/index.mdx
-!docs/sdk/migrate.mdx
+# Generated notion export CSVs
+scripts/out/*.csv
+# Generated api:mutes Typedoc quirk
+docs/api/
 
 # Misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -35,4 +37,12 @@ yarn-error.log*
 
 /i18n/*/docusaurus-plugin-content-docs/current/*
 
-sdk-sidebar.js
+## Claude
+.agent/
+.audit/
+.cursor/
+.serena/
+.claude/plans
+
+# Local-only design specs / brainstorming docs (not part of the published docs site)
+docs/superpowers/

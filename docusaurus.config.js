@@ -1,13 +1,29 @@
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
-
 require('dotenv').config();
 
-const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
-const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
-const sdkCodebasePath = './arbitrum-sdk';
+const markdownPreprocessor = require('./scripts/markdown-preprocessor');
+const { themes: prismThemes } = require('prism-react-renderer');
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
+import { redirects } from './redirects.config.js';
+
+// Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
+// Shared between the sitemap and llms.txt so both indexes stay in sync.
+const nonCanonicalRoutePatterns = [
+  '/sdk/assetBridger/**',
+  '/sdk/dataEntities/**',
+  '/sdk/inbox/**',
+  '/sdk/message/**',
+  '/sdk/utils/**',
+  '/hosted-pdfs/**',
+  // Partials are imported into other pages, not standalone content.
+  // Docusaurus generates routes for them anyway.
+  '**/_*', // Docusaurus partial convention
+  '**/partials/**', // non-underscored partials in this repo's partials/ dirs
+  '/category/**', // auto-generated category index pages
+];
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -16,11 +32,33 @@ const config = {
   url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  onBrokenAnchors: 'warn', // Allow build to succeed despite false positive anchor warnings from TypeDoc
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
     preprocessor: markdownPreprocessor,
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+    parseFrontMatter: async (params) => {
+      // Use the default parser
+      const result = await params.defaultParseFrontMatter(params);
+
+      // Check if this is a partial file (starts with underscore)
+      const fileName = params.filePath.split('/').pop();
+      const isPartialFile = fileName && fileName.startsWith('_');
+
+      // For partial files, clear frontmatter to prevent Docusaurus warnings
+      // The documentation-graph tool reads raw files directly, so this doesn't affect analysis
+      if (isPartialFile) {
+        result.frontMatter = {};
+      }
+
+      return result;
+    },
+  },
+  customFields: {
+    inkeepApiKey: process.env.INKEEP_API_KEY,
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -49,7 +87,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          // path: './docs',
+          exclude: ['**/api/**', '**/*.pdf'],
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
@@ -59,147 +97,48 @@ const config = {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
               return undefined;
-            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/' + s.docPath;
+            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/docs/' + s.docPath;
           },
           showLastUpdateTime: true,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
+        sitemap: {
+          ignorePatterns: nonCanonicalRoutePatterns,
+        },
       }),
     ],
   ],
   plugins: [
     [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Source of truth: redirects.config.ts (also mirrored to vercel.json via `yarn sync-redirects`).
+        redirects,
+      },
+    ],
+    [
       '@inkeep/cxkit-docusaurus',
       {
         SearchBar: {
-          baseSettings: {
-            apiKey: process.env.INKEEP_API_KEY,
-            primaryBrandColor: '#213147', // Arbitrum's primary brand color
-            organizationDisplayName: 'Arbitrum',
-            theme: {
-              syntaxHighlighter: {
-                lightTheme: require('prism-react-renderer/themes/github'),
-                darkTheme: require('prism-react-renderer/themes/palenight'),
-              },
-            },
-          },
-          modalSettings: {
-            placeholder: 'Search documentation...',
-            defaultQuery: '',
-            maxResults: 40,
-            debounceTimeMs: 300,
-            shouldOpenLinksInNewTab: true,
-          },
-          searchSettings: {
-            // optional settings
-          },
+          baseSettings: inkeepBaseSettings,
+          modalSettings: inkeepModalSettings,
           aiChatSettings: {
-            aiAssistantAvatar: '/img/logo.svg', // Using Arbitrum logo as AI assistant avatar
-            exampleQuestions: [
-              'How to estimate gas in Arbitrum?',
-              'What is the difference between Arbitrum One and Nova?',
-              'How to deploy a smart contract on Arbitrum?',
-              'What are Arbitrum Orbit chains?',
-              'How does Arbitrum handle L1 to L2 messaging?',
-              'What is Arbitrum Stylus?',
-            ],
+            aiAssistantAvatar: '/img/logo.svg',
+            exampleQuestions: inkeepExampleQuestions,
             botName: 'Arbitrum Assistant',
             getStartedMessage:
               "Hi! I'm here to help you navigate Arbitrum documentation. Ask me anything about building on Arbitrum, deploying contracts, or understanding our technology.",
           },
         },
         ChatButton: {
-          baseSettings: {
-            // see https://docusaurus.io/docs/deployment#using-environment-variables to use docusaurus environment variables
-            apiKey: process.env.INKEEP_API_KEY,
-            primaryBrandColor: '#213147', // Arbitrum's primary brand color
-            organizationDisplayName: 'Arbitrum',
-            // ...optional settings
-            theme: {
-              syntaxHighlighter: {
-                lightTheme: require('prism-react-renderer/themes/github'),
-                darkTheme: require('prism-react-renderer/themes/palenight'),
-              },
-            },
-          },
-          modalSettings: {
-            placeholder: 'Search documentation...',
-            defaultQuery: '',
-            maxResults: 40,
-            debounceTimeMs: 300,
-            shouldOpenLinksInNewTab: true,
-          },
-          searchSettings: {
-            // optional settings
-          },
+          baseSettings: inkeepBaseSettings,
+          modalSettings: inkeepModalSettings,
           aiChatSettings: {
-            // optional settings
-            aiAssistantAvatar: '/img/logo.svg', // optional -- use your own AI assistant avatar
-            exampleQuestions: [
-              'How to estimate gas in Arbitrum?',
-              'What is the difference between Arbitrum One and Nova?',
-              'How to deploy a smart contract on Arbitrum?',
-              'What are Arbitrum Orbit chains?',
-              'How does Arbitrum handle L1 to L2 messaging?',
-              'What is Arbitrum Stylus?',
-            ],
+            aiAssistantAvatar: '/img/logo.svg',
+            exampleQuestions: inkeepExampleQuestions,
           },
-        },
-      },
-    ],
-    [
-      'docusaurus-plugin-typedoc',
-      {
-        id: 'arbitrum-sdk',
-        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-        entryPoints: [`${sdkCodebasePath}/src/lib`],
-        entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
-        excludeNotDocumented: true,
-        excludeInternal: true,
-        excludeExternals: true,
-        readme: 'none',
-
-        // Output options
-        out: './docs/sdk',
-        hideGenerator: true,
-        validation: {
-          notExported: false,
-          invalidLink: true,
-          notDocumented: true,
-        },
-        logLevel: 'Verbose',
-        sidebar: {
-          autoConfiguration: false,
-        },
-
-        plugin: [
-          'typedoc-plugin-markdown',
-          `typedoc-plugin-frontmatter`,
-          './src/scripts/sdkDocsHandler.ts',
-          './src/scripts/stylusByExampleDocsHandler.ts',
-        ],
-
-        // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-        outputFileStrategy: 'modules',
-        excludeGroups: false,
-        hidePageHeader: true,
-        hidePageTitle: true,
-        hideBreadcrumbs: true,
-        useCodeBlocks: true,
-        expandParameters: true,
-        parametersFormat: 'table',
-        propertiesFormat: 'table',
-        enumMembersFormat: 'table',
-        typeDeclarationFormat: 'table',
-        sanitizeComments: true,
-        frontmatterGlobals: {
-          layout: 'docs',
-          sidebar: true,
-          toc_max_heading_level: 5,
         },
       },
     ],
@@ -215,6 +154,28 @@ const config = {
     ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        siteTitle: 'Arbitrum Documentation',
+        siteDescription:
+          'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
+        content: {
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: true,
+          includeDocs: true,
+          includeBlog: false,
+          includePages: false,
+          excludeRoutes: nonCanonicalRoutePatterns,
+          beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
+          beforeDefaultRemarkPlugins: [
+            require('./src/plugins/remark-llms-cleanup'),
+            require('./src/plugins/remark-llms-page-header'),
+          ],
+        },
+      },
+    ],
+    'docusaurus-plugin-copy-page-button',
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -222,27 +183,77 @@ const config = {
       fathomAnalytics: {
         siteId: 'DOHOZGJO',
       },
+      announcementBar: {
+        backgroundColor: '#e3246e',
+        textColor: 'white',
+        content:
+          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/gentle-introduction#activation" target="_blank">here’s how to do it.</a>',
+        isCloseable: false,
+      },
       navbar: {
         title: 'Arbitrum Docs',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
-          href: '/welcome/arbitrum-gentle-introduction',
+          href: '/',
         },
         items: [
-          // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
-          //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
-          //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          // }
+          {
+            type: 'docSidebar',
+            sidebarId: 'getStartedSidebar',
+            position: 'right',
+            label: 'Get started',
+          },
+          {
+            type: 'dropdown',
+            label: 'Build apps',
+            position: 'right',
+            items: [
+              {
+                label: 'Build with Solidity',
+                to: '/build-decentralized-apps/quickstart-solidity-remix',
+              },
+              {
+                label: 'Build with Stylus',
+                to: '/stylus/quickstart',
+              },
+            ],
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runArbitrumChainSidebar',
+            position: 'right',
+            label: 'Launch a chain',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'runNodeSidebar',
+            position: 'right',
+            label: 'Run a node',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'bridgeSidebar',
+            position: 'right',
+            label: 'Use the bridge',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'howItWorksSidebar',
+            position: 'right',
+            label: 'How it works',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'noticeSidebar',
+            position: 'right',
+            label: 'Notices',
+          },
         ],
       },
       footer: {
         style: 'dark',
         links: [
-          {},
           {
             items: [
               {
@@ -258,8 +269,8 @@ const config = {
                 to: 'https://arbitrum.io/anytrust',
               },
               {
-                label: 'Arbitrum Orbit',
-                to: 'https://arbitrum.io/orbit',
+                label: 'Arbitrum chains',
+                to: 'https://arbitrum.io/launch-chain',
               },
               {
                 label: 'Arbitrum Stylus',
@@ -270,8 +281,7 @@ const config = {
                 to: 'https://arbitrum.foundation/',
               },
               {
-                label: 'Nitro whitepaper',
-                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+                html: '<a href="/nitro-whitepaper.pdf">Arbitrum whitepaper</a>',
               },
             ],
           },
@@ -344,6 +354,8 @@ const config = {
       },
       prism: {
         additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
+        theme: prismThemes.github,
+        darkTheme: prismThemes.palenight,
       },
       liveCodeBlock: {
         /**
@@ -367,24 +379,5 @@ const config = {
       },
     }),
 };
-
-// HACK
-// this was originally included above
-// it broke local builds on Windows, not sure why yet. Works fine on Mac
-// `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
-const isRunningLocally = process.env.NODE_ENV === 'development';
-const isRunningOnWindows = process.platform === 'win32';
-if (isRunningLocally && isRunningOnWindows) {
-  config.plugins = config.plugins.filter((plugin) => {
-    if (Array.isArray(plugin) && plugin[0] === '@docusaurus/plugin-content-docs') {
-      return false; // remove the offending plugin config
-    }
-    return true; // keep everything else
-  });
-} else {
-  // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
-  config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
-  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
-}
 
 module.exports = config;

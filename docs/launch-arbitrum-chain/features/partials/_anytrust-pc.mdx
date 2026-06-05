@@ -1,0 +1,16 @@
+## Pros
+
+- **Ultra-low transaction fees**: By offloading data availability to a Data Availability Committee (DAC) instead of posting all transaction data directly to Ethereum L1, AnyTrust significantly reduces costs, making micro-transactions viable.
+- **Higher throughput and speed**: Supports a much larger volume of transactions per second compared to traditional rollups, ideal for high-frequency applications.
+- **Faster withdrawals**: Withdrawals to Ethereum can occur immediately if vouched for by the DAC, avoiding the typical seven-day challenge period.
+- **Minimal trust assumptions with strong feedback**: Requires only a small number of honest DAC members for normal operation, which is less trust-intensive. If the DAC fails, it automatically falls back to rollup mode, posting data to Ethereum for security.
+- **Customization**: Enables flexible configurations like custom gas tokens, governance, and execution logic while inheriting low-cost benefits.
+- **Ideal for specific use cases**: Best for high-volume, low-value applications such as Web3 gaming, decentralized social media, NFT platforms, and micro-payment systems where cost efficiency outweighs maximum decentralization.
+
+## Cons
+
+- **Introduced trust assumptions**: Relies on the DAC's honesty and availability, which adds a layer of trust not present in full trustless Rollups. This trust assumption could be a risk if committee members collude or fail.
+- **Reduced decentralization and security guarantees**: Lacks the full trustlessness, permissionlessness, and censorship resistance of Rollups, as not all data is posted to Ethereum by default. This lack of data posting makes it less suitable for high-value DeFi or applications requiring Ethereum-level security.
+- **Potential for fallback mode issues**: If the DAC cannot come to a quorum, the chain reverts to Rollup mode, which could increase costs temporarily and introduce delays similar to standard Rollups.
+- **Liquidity and adoption changes**: May face lower liquidity or ecosystem integration compared to Rollup-based chains like Arbitrum One, potentially limiting interoperability with certain <a data-quicklook-from="dapp">apps</a>.
+- **Not optimal for all use cases**: For applications handling significant financial value or needing maximum security, the trade-offs in decentralization could outweigh the benefits.

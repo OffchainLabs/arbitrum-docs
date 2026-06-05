@@ -1,5 +1,0 @@
-node_modules
-.env
-bin
-.DS_store
-yarn-error.log

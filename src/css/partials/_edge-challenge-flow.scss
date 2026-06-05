@@ -1,0 +1,600 @@
+// ========================================
+// Edge Challenge Flow Visualization
+// ========================================
+
+// Break out of Docusaurus narrow content column
+.ecf-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 40px;
+
+  // Reset Docusaurus default heading margins inside the visualization
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+// Override Docusaurus narrow content column for this page
+.markdown:has(.ecf-page) {
+  max-width: 100% !important;
+}
+
+[class*='docItemCol']:has(.ecf-page),
+[class*='docItemContainer']:has(.ecf-page) {
+  max-width: 100% !important;
+}
+
+// Ensure no ancestor overflow clips sticky positioning
+// Sticky requires ALL ancestors up to the scroll root to have overflow: visible
+div:has(.ecf-page),
+article:has(.ecf-page),
+section:has(.ecf-page),
+main:has(.ecf-page) {
+  overflow: visible !important;
+}
+
+.ecf-header-info {
+  margin-bottom: 16px;
+
+  p {
+    margin: 0;
+    color: var(--fd-muted-foreground);
+    line-height: 1.5;
+  }
+}
+
+.ecf-error {
+  padding: 20px;
+  color: #ff4d4d;
+  text-align: center;
+}
+
+.ecf-loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--fd-muted-foreground);
+}
+
+// ── Controls ────────────────────────────────────────────────
+
+.ecf-controls {
+  margin: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.ecf-btn {
+  background: var(--ecf-btn-bg, #1d2430);
+  color: var(--ecf-btn-color, #f5f5f5);
+  border: 1px solid var(--ecf-btn-border, #2a3343);
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover:not([disabled]) {
+    opacity: 0.85;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.ecf-btn--play {
+  background: #4caf50;
+  border-color: #4caf50;
+
+  &:hover:not([disabled]) {
+    background: #388e3c;
+    border-color: #388e3c;
+  }
+}
+
+.ecf-btn--show-all {
+  background: #2e7d32;
+  border-color: #2e7d32;
+
+  &:hover:not([disabled]) {
+    background: #1b5e20;
+    border-color: #1b5e20;
+  }
+}
+
+.ecf-btn--pause {
+  background: #f9a825;
+  border-color: #f9a825;
+  color: #1a2030;
+
+  &:hover:not([disabled]) {
+    background: #f57f17;
+    border-color: #f57f17;
+  }
+}
+
+.ecf-speed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--fd-foreground);
+}
+
+.ecf-select {
+  background: var(--ecf-btn-bg, #1d2430);
+  color: var(--ecf-btn-color, #f5f5f5);
+  border: 1px solid var(--ecf-btn-border, #2a3343);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ecf-progress {
+  font-size: 14px;
+  color: var(--fd-muted-foreground);
+}
+
+// ── Flow Steps ──────────────────────────────────────────────
+
+.ecf-flow {
+  border: 1px solid var(--ecf-border, #202636);
+  background: var(--ecf-panel-bg, #141924);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.ecf-flow-steps {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ecf-step {
+  border: 1px solid var(--ecf-border, #2a3343);
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: var(--ecf-card-bg, #1a2030);
+  transition: border-color 0.2s ease;
+  flex: 1 1 0;
+  min-width: 120px;
+
+  h3 {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin: 0 0 2px !important;
+    white-space: nowrap;
+  }
+
+  p {
+    margin: 0;
+    font-size: 11px;
+    color: var(--ecf-muted, #bfc6d3);
+    line-height: 1.3;
+  }
+
+  &--active {
+    border-color: #6aa7ff;
+    background: color-mix(in srgb, #6aa7ff 10%, var(--ecf-card-bg, #1a2030));
+  }
+
+  &--done {
+    border-color: #4cd5a7;
+  }
+}
+
+// ── Grid Layout ─────────────────────────────────────────────
+
+.ecf-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.ecf-panel {
+  border: 1px solid var(--ecf-border, #202636);
+  border-radius: 10px;
+  background: var(--ecf-panel-bg, #131825);
+  padding: 14px;
+
+  h2 {
+    margin: 0 0 12px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+  }
+}
+
+.ecf-tree {
+  grid-column: 1;
+  min-width: 0;
+}
+
+// ── Sidebar (sticky container, holds .ecf-panel children) ───
+
+.ecf-sidebar {
+  grid-column: 2;
+  position: sticky;
+  top: 76px; // below Docusaurus navbar
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 96px); // viewport minus navbar + breathing room
+  overflow-y: auto;
+
+  .ecf-panel {
+    min-height: auto;
+  }
+}
+
+// Inner log panel inside sidebar
+.ecf-log {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h2 {
+    margin: 0 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+  }
+}
+
+// Fixed-height grid splitting Node Info and Event Timeline 50/50
+.ecf-log-split {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  height: 520px;
+  max-height: 60vh;
+  min-height: 320px;
+}
+
+// ── Tree ────────────────────────────────────────────────────
+
+.ecf-tree-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ecf-tree-panel {
+  border: 1px solid var(--ecf-inner-border, #1f2635);
+  border-radius: 10px;
+  background: var(--ecf-tree-bg, #0f131d);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  h3 {
+    margin: 0 !important;
+    font-size: 17px !important;
+    color: var(--ecf-heading, #c7cdd8);
+    font-weight: 600 !important;
+  }
+}
+
+.ecf-tree-canvas {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  svg {
+    border: 1px solid var(--ecf-inner-border, #1f2635);
+    border-radius: 8px;
+    background: var(--ecf-tree-bg, #0f131d);
+    display: block;
+    min-width: 100%; // fill container when tree is narrow, scroll when wide
+  }
+}
+
+.ecf-tree-empty {
+  font-size: 12px;
+  color: var(--ecf-muted, #8a93a5);
+  text-align: center;
+  padding: 16px 0;
+}
+
+// ── D3 Tree Nodes ───────────────────────────────────────────
+
+.ecf-node rect {
+  fill: var(--ecf-node-fill, #1b2232);
+  stroke: var(--ecf-node-stroke, #2a3343);
+  stroke-width: 1.8;
+  rx: 8;
+  ry: 8;
+}
+
+.ecf-node text {
+  fill: var(--ecf-node-text, #d7dbe6);
+  font-size: 14px;
+}
+
+.ecf-node--active rect {
+  stroke: #6aa7ff;
+}
+
+.ecf-node--bisected rect {
+  stroke: #ffb347;
+}
+
+.ecf-node--hasRival rect {
+  stroke: #ff4d4d;
+  stroke-width: 2;
+}
+
+.ecf-node--osp rect {
+  stroke: #4cd5a7;
+}
+
+.ecf-link {
+  fill: none;
+  stroke: var(--ecf-link-color, #3a4354);
+  stroke-width: 1.2;
+}
+
+.ecf-node-label {
+  font-size: 13px;
+  fill: var(--ecf-label-color, #aeb7c6);
+}
+
+// ── Legend & Hints ───────────────────────────────────────────
+
+.ecf-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  font-size: 12px;
+
+  span {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: var(--ecf-badge-bg, #1d2430);
+    border: 1px solid var(--ecf-border, #2a3343);
+  }
+}
+
+.ecf-hint {
+  font-size: 13px;
+  color: var(--ecf-muted, #98a2b3);
+  margin-top: 8px;
+}
+
+// ── Info sections ───────────────────────────────────────────
+
+.ecf-log-section {
+  border: 1px solid var(--ecf-inner-border, #1f2635);
+  border-radius: 8px;
+  background: var(--ecf-tree-bg, #0f131d);
+  padding: 10px;
+  overflow: auto;
+  min-height: 0; // allow grid to constrain height — prevents content from expanding the section
+
+  h3 {
+    margin: 0 0 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--ecf-heading, #c7cdd8);
+  }
+}
+
+.ecf-placeholder-text {
+  color: var(--ecf-muted, #8a93a5);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 8px 0;
+}
+
+// ── Node Details ────────────────────────────────────────────
+
+.ecf-node-details {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ecf-text, #d7dbe6);
+
+  h4 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    color: #6aa7ff;
+    border-bottom: 1px solid var(--ecf-border, #2a3343);
+    padding-bottom: 6px;
+  }
+}
+
+.ecf-field {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.ecf-field-label {
+  color: var(--ecf-muted, #8a93a5);
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.ecf-copy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ecf-copy-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ecf-copy-text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+}
+
+.ecf-copy-btn {
+  margin-left: 4px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--ecf-border, #2a3343);
+  background: var(--ecf-btn-bg, #1d2430);
+  color: var(--ecf-muted, #cfd6e4);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.ecf-tx-link {
+  color: #6aa7ff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ── Edge items in details ───────────────────────────────────
+
+.ecf-edge-list {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ecf-border, #2a3343);
+}
+
+.ecf-edge-item {
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border: 1px solid var(--ecf-border, #2a3343);
+  border-radius: 6px;
+  background: var(--ecf-card-bg, #141924);
+  font-size: 12px;
+}
+
+.ecf-edge-item-header {
+  font-weight: 600;
+  color: var(--ecf-heading, #c7cdd8);
+  margin-bottom: 4px;
+}
+
+.ecf-edge-item-detail {
+  color: var(--ecf-label-color, #aeb7c6);
+  font-size: 11px;
+}
+
+// ── Event Timeline ──────────────────────────────────────────
+
+.ecf-timeline {
+  // No overflow here — parent .ecf-log-section handles scrolling
+
+  h3 {
+    margin: 0 0 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--ecf-heading, #c7cdd8);
+  }
+}
+
+.ecf-event-log {
+  padding-left: 18px;
+  margin: 0;
+  list-style-position: inside;
+
+  li {
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--ecf-heading, #c7cdd8);
+  }
+
+  .ecf-log-current {
+    color: #ffffff;
+    font-weight: 600;
+  }
+}
+
+// ── Light Mode ──────────────────────────────────────────────
+
+[data-theme='light'] {
+  --ecf-btn-bg: #f0f2f5;
+  --ecf-btn-color: #1a1a1a;
+  --ecf-btn-border: #d0d5dd;
+  --ecf-border: #d0d5dd;
+  --ecf-inner-border: #e0e4ea;
+  --ecf-panel-bg: #f8f9fb;
+  --ecf-card-bg: #ffffff;
+  --ecf-tree-bg: #f0f2f5;
+  --ecf-node-fill: #ffffff;
+  --ecf-node-stroke: #c0c8d4;
+  --ecf-node-text: #1a1a1a;
+  --ecf-text: #1a1a1a;
+  --ecf-heading: #333;
+  --ecf-muted: #6b7280;
+  --ecf-label-color: #4a5568;
+  --ecf-link-color: #c0c8d4;
+  --ecf-badge-bg: #e8ecf0;
+
+  .ecf-log-current {
+    color: #000000;
+  }
+}
+
+// ── Dark Mode (explicit) ────────────────────────────────────
+
+[data-theme='dark'] {
+  --ecf-btn-bg: #1d2430;
+  --ecf-btn-color: #f5f5f5;
+  --ecf-btn-border: #2a3343;
+  --ecf-border: #202636;
+  --ecf-inner-border: #1f2635;
+  --ecf-panel-bg: #131825;
+  --ecf-card-bg: #1a2030;
+  --ecf-tree-bg: #0f131d;
+  --ecf-node-fill: #1b2232;
+  --ecf-node-stroke: #2a3343;
+  --ecf-node-text: #d7dbe6;
+  --ecf-text: #d7dbe6;
+  --ecf-heading: #c7cdd8;
+  --ecf-muted: #8a93a5;
+  --ecf-label-color: #aeb7c6;
+  --ecf-link-color: #3a4354;
+  --ecf-badge-bg: #1d2430;
+}
+
+// ── Responsive ──────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  .ecf-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ecf-tree,
+  .ecf-sidebar {
+    grid-column: 1;
+  }
+
+  .ecf-sidebar {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .ecf-log-split {
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    grid-template-rows: auto auto;
+  }
+
+  .ecf-flow-steps {
+    flex-direction: column;
+  }
+}

@@ -10,9 +10,9 @@ user_story: As a current or prospective Arbitrum chain deployer, I need to under
 content_type: how-to
 ---
 
-As the Arbitrum ecosystem grows, more and more teams are choosing to build on the Arbitrum tech stack. Arbitrum chains offer a feature-rich and scalable rollup stack that allows teams to focus on their ecosystem growth and build great products. As a result, many Arbitrum chains are seeing usage and throughput increase rapidly, often with sustained transaction load at the chain’s throughput limit for months on end.
+As the Arbitrum ecosystem grows, more and more teams are choosing to build on the Arbitrum tech stack. Arbitrum chains offer a feature-rich and scalable Rollup stack that allows teams to focus on their ecosystem growth and build great products. As a result, many Arbitrum chains are seeing usage and throughput increase rapidly, often with sustained transaction load at the chain’s throughput limit for months on end.
 
-This page aims to educate Arbitrum chain operators and owners on safely operating a high throughput chain. Amongst all the factors, the primary consideration is **state growth rate** and **state size**. We’ll discuss how increased state size affects the performance of different components in the Arbitrum chain (Orbit) stack and how certain metrics can be used to indicate a need to upgrade various infrastructure components.
+This page aims to educate Arbitrum chain operators and owners on safely operating a high throughput chain. Amongst all the factors, the primary consideration is **state growth rate** and **state size**. We’ll discuss how increased state size affects the performance of different components in the Arbitrum chain stack and how certain metrics can be used to indicate a need to upgrade various infrastructure components.
 
 ## Understanding state size and state growth rate
 
@@ -20,9 +20,9 @@ When we say ‘state size’, we mean the total amount of data recorded on the b
 
 The state growth rate is simply the rate at which state size increases. A high state growth rate creates higher requirements for nodes to process state transitions and perform operations needed to keep up with the tip of the chain.
 
-The critical Nitro stack parameter affecting state growth and state growth rate is the **gas speed limit**. Offchain Labs has set the gas speed limit to a default (7,000,000 gas/s), ensuring a safe, sustained operating limit for Arbitrum chains. You can read more about the nuances of the gas speed limit [here](/how-arbitrum-works/09-gas-fees.mdx#the-speed-limit).
+The critical Nitro stack parameter affecting state growth and state growth rate is the **gas target**. Offchain Labs has built an algorithm to ensuring a safe, sustained operating limit for Arbitrum chains. You can read more about the nuances of the gas target [here](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#the-gas-target).
 
-The default gas speed limit is designed to ensure Arbitrum chains operate performantly and sustainably.
+The default gas target is designed to ensure Arbitrum chains operate performantly and sustainably.
 
 ## Behaviour at ultra-high throughput
 

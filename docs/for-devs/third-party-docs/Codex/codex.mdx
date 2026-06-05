@@ -1,0 +1,87 @@
+---
+title: 'Codex Quickstart - DeFi Data API for Arbitrum'
+description: 'Learn how to use the Codex GraphQL API to access real-time and historical DeFi data on Arbitrum, including token prices, DEX trades, liquidity pools, and wallet analytics.'
+content_type: quickstart
+author: Nealo
+sme: Nealo
+third_party_content_owner: Nealo
+sidebar_label: 'Codex'
+---
+
+[Codex](https://www.codex.io/?utm_source=arbitrum-docs&utm_medium=partner-docs) is a blockchain data API that provides real-time and historical DeFi data across 100+ networks via GraphQL, including Arbitrum. With access to over 70 million tokens and 700 million wallets, Codex delivers sub-second data for building token explorers, trading bots, portfolio trackers, and DeFi dashboards.
+
+## Quickstart
+
+Get started by [creating a free account](https://dashboard.codex.io/signup) and grabbing your API key from the dashboard. All requests are sent as HTTPS POST to `https://graph.codex.io/graphql` with your API key in the `Authorization` header:
+
+```bash
+curl -X POST https://graph.codex.io/graphql \
+  -H "Content-Type: application/json" \
+  -H "Authorization: YOUR_API_KEY" \
+  -d '{"query": "{ getNetworks { name id } }"}'
+```
+
+Use the [GraphQL Explorer](https://docs.codex.io/explore) to interactively build and test queries.
+
+## APIs
+
+Codex exposes a single GraphQL endpoint with 73 query operations covering current and historical data. All APIs support Arbitrum alongside 100+ other networks.
+
+:::info Endpoints
+
+Check out the [Codex API Reference](https://docs.codex.io/api-reference?utm_source=arbitrum-docs&utm_medium=partner-docs) to see all available query operations.
+
+:::
+
+### Token Data
+
+Get real-time and historical token prices, OHLCV candlestick charts, metadata, and scam filtering across all supported networks.
+
+### DEX Trades
+
+Fetch swap events across decentralized exchanges with pair-level detail, filtering, and sorting.
+
+### Liquidity Pools
+
+Access pool reserves, volume, fees, and newly created pairs for DEX protocols on Arbitrum.
+
+### Wallet Analytics
+
+Retrieve token balances, transaction history, and holdings across 100+ networks. Analyze wallet performance and discover high-performing traders.
+
+### Real-Time Subscriptions
+
+Codex supports 25 real-time data streams via WebSocket (`wss://graph.codex.io/graphql`), enabling live updates for token price changes, trade events, new DEX pairs, wallet activity, and new token launches.
+
+### Webhooks
+
+Push-based notifications for onchain events, delivering data to your server as events occur without requiring persistent WebSocket connections.
+
+## Developer Tools
+
+Codex provides two primary ways to interact with the API:
+
+1. **[GraphQL API](https://docs.codex.io/api-reference?utm_source=arbitrum-docs&utm_medium=partner-docs)**: Send custom GraphQL queries directly to the API endpoint for full flexibility.
+
+2. **[TypeScript/JavaScript SDK](https://docs.codex.io/?utm_source=arbitrum-docs&utm_medium=partner-docs)**: A thin wrapper around the GraphQL API with predefined queries, mutations, and built-in subscription connection handling.
+
+   ```
+   npm install @codex-data/sdk
+   ```
+
+## Recipes & Guides
+
+- [Token Discovery](https://docs.codex.io/recipes/discover-tokens): Build token discovery pages with trending data, advanced filtering, and search
+- [Price Charts](https://docs.codex.io/recipes/charts): Render token charts with OHLCV data and real-time updates
+- [Wallet Analytics](https://docs.codex.io/recipes/wallets): Analyze wallet performance and discover high-performing traders
+- [Token Swap Events](https://docs.codex.io/recipes/events): Fetch and display token swaps with filtering, sorting, and real-time updates
+- [Launchpad Monitoring](https://docs.codex.io/recipes/launchpads): Build a launchpad dashboard with filtering, sorting, and real-time updates
+- [Real-Time Price Tracking](https://docs.codex.io/recipes/realtime): Build a Node.js app that listens for token price changes in real time
+
+## Get Started
+
+- **[Dashboard](https://dashboard.codex.io/?utm_source=arbitrum-docs&utm_medium=partner-docs)**: Sign up and get your API key for free
+- **[Docs](https://docs.codex.io/?utm_source=arbitrum-docs&utm_medium=partner-docs)**: Full API documentation and guides
+- **[GraphQL Explorer](https://docs.codex.io/explore)**: Interactively build and test queries
+- **[GitHub](https://github.com/Codex-Data)**: SDK and examples
+- **[Discord](https://discord.com/invite/mFpUhT3vAq)**: Community support

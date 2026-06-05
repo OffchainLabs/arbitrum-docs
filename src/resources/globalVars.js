@@ -21,8 +21,8 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.6.5-89cef87',
-  latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.9.9-6b0af88',
+  latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
 
   // Node snapshots (taken around April 20th, 2013)
   arbOneNitroGenesisSnapshot: 'https://snapshot.arbitrum.foundation/arb1/nitro-genesis.tar',
@@ -38,7 +38,7 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.6.5',
+  nitroVersionTag: 'v3.9.9',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
@@ -47,20 +47,20 @@ const globalVars = {
 
   // Precompile interfaces repository
   nitroPrecompilesRepositorySlug: 'nitro-precompile-interfaces',
-  nitroPrecompilesCommit: 'fe4121240ca1ee2cbf07d67d0e6c38015d94e704',
+  nitroPrecompilesCommit: '9056310e554d04829bc590d4ba7e17d40d0a9635',
   nitroPrecompilesPathToInterfaces: '',
 
-  goEthereumCommit: 'd98903bdea0cf6092b023afa309be540f448e0fb',
+  goEthereumCommit: 'fd780d6d2b0b23adb6808c0734802d40042fe0d3',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',
   nitroPathToStorage: 'arbos/storage',
 
   // gas floor
-  arbOneGasFloorGwei: '0.01',
-  novaGasFloorGwei: '0.01',
+  arbOneGasFloorGwei: '0.02',
+  novaGasFloorGwei: '0.02',
   goerliGasFloorGwei: '0.1',
-  sepoliaGasFloorGwei: '0.1',
+  sepoliaGasFloorGwei: '0.2',
 
   // dispute window
   arbOneDisputeWindowBlocks,
@@ -90,12 +90,6 @@ const globalVars = {
   novaForceIncludePeriodHours: secondsToHours(86400),
   goerliForceIncludePeriodHours: secondsToHours(86400),
   sepoliaForceIncludePeriodHours: secondsToHours(86400),
-
-  // speed limit
-  arbOneGasSpeedLimitGasPerSec: '7,000,000',
-  novaGasSpeedLimitGasPerSec: '7,000,000',
-  goerliGasSpeedLimitGasPerSec: '3,000,000',
-  sepoliaGasSpeedLimitGasPerSec: '7,000,000',
 
   // block gas limit
   arbOneBlockGasLimit: '32,000,000',

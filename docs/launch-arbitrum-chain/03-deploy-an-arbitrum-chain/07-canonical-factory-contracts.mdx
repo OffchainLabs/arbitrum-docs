@@ -8,13 +8,13 @@ content_type: how-to
 
 import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
 
-Deploying new Arbitrum chains is usually done through a `RollupCreator` contract that processes the creation of the needed contracts and sends the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Arbitrum chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
+Deploying new Arbitrum chains is usually done through a `RollupCreator` contract that processes the creation of the needed contracts and sends the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Arbitrum chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)).
 
 This page describes the benefits of using these canonical factory contracts and lists their addresses in all supported chains.
 
-:::info Use the Arbitrum chain (Orbit) SDK
+:::info Use the Arbitrum Chain SDK
 
-You can use these contracts to create Arbitrum chains. However, it is strongly recommended to go through the [Arbitrum chain (Orbit) SDK](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) to interact with them. Doing so prevents misconfiguring parameters and using appropriate defaults for most of them.
+You can use these contracts to create Arbitrum chains. However, it is strongly recommended to go through the [Chain SDK](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.mdx) to interact with them. Doing so prevents misconfiguring parameters and using appropriate defaults for most of them.
 
 :::
 
@@ -24,13 +24,13 @@ The main benefits of using the canonical factory contracts are:
 
 - **End-to-end deployment and initialization**: The canonical contracts will create all needed contracts, initialize them, and configure them with the parameters passed. Additionally, they will send the appropriate initialization messages to the chain's Inbox contract so the sequencer can process them upon starting. This process is done atomically in a single transaction, guaranteeing a successful chain or token bridge creation.
 - **Gas efficiency**: The canonical contract design is to be gas efficient. Creating and initializing all contracts for a chain or token bridge is a gas-consuming process, so special care has been taken to fit everything into one transaction.
-- **Updated with the latest features**: Whenever a new version is available for the contracts of an Arbitrum chain, the canonical factory contracts get updated, so new rollups and token bridges are created using the updated version.
+- **Updated with the latest features**: Whenever a new version is available for the contracts of an Arbitrum chain, the canonical factory contracts get updated, so new Rollups and token bridges are created using the updated version.
 
 ## Addresses of the canonical factory contracts
 
 This table shows the addresses of the deployed and maintained canonical factory contracts.
 
-| Network          | Chain id | RollupCreator                                                                   | TokenBridgeCreator                                                              |
+| Network          | Chain id | `RollupCreator`                                                                 | `TokenBridgeCreator`                                                            |
 | ---------------- | -------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | Ethereum         | 1        | <AEL address="0x43698080f40dB54DEE6871540037b8AB8fD0AB44" chainID={1} />        | <AEL address="0x60D9A46F24D5a35b95A78Dd3E793e55D94EE0660" chainID={1} />        |
 | Arbitrum One     | 42161    | <AEL address="0xB90e53fd945Cd28Ec4728cBfB566981dD571eB8b" chainID={42161} />    | <AEL address="0x2f5624dc8800dfA0A82AC03509Ef8bb8E7Ac000e" chainID={42161} />    |
@@ -52,9 +52,9 @@ This section describes the process of deploying new factory contracts. This can 
 
 ### Deploying a `RollupCreator`
 
-To deploy the `RollupCreator` and the core contract templates, we'll use the [nitro-contracts](https://github.com/OffchainLabs/nitro-contracts) repository.
+To deploy the `RollupCreator` and the core contract templates, we'll use the [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) repository.
 
-#### Step 1: Clone nitro-contracts repo and checkout the desired release
+#### Step 1: Clone `nitro-contracts` repo and checkout the desired release
 
 ```shell
 git clone https://github.com/OffchainLabs/nitro-contracts.git
@@ -69,7 +69,7 @@ yarn install
 yarn build:all
 ```
 
-#### Step 3: Create the .env file and set the desired env parameters
+#### Step 3: Create the `.env` file and set the desired env parameters
 
 ```shell
 cp .env-sample .env
@@ -108,7 +108,7 @@ This last step will create the template contracts and the `RollupCreator` contra
 
 To deploy the `TokenBridgeCreator` and the token bridge contract templates, we'll use the [token-bridge-contracts](https://github.com/OffchainLabs/token-bridge-contracts) repository.
 
-#### Step 1: Clone token-bridge-contracts repo and checkout the desired release
+#### Step 1: Clone `token-bridge-contracts` repo and checkout the desired release
 
 ```shell
 git clone https://github.com/OffchainLabs/token-bridge-contracts.git

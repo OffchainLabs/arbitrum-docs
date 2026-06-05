@@ -7,3 +7,7 @@
 ../arbitrum-docs/partials/_troubleshooting-stylus-partial.mdx
 ../arbitrum-docs/partials/_troubleshooting-users-partial.mdx
 ../arbitrum-docs/CODEOWNERS.md
+
+# SDK documentation landing pages (manually maintained, skip formatting)
+docs/sdk/index.mdx
+docs/sdk/migrate.mdx

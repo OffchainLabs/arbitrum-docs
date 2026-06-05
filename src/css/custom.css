@@ -15,86 +15,62 @@
   fill: #000;
 }
 
-/* ImageZoom Component styles */
-.image-zoom__modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.image-zoom__container {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-zoom__image {
-  max-width: 90vw;
-  max-height: 90vh;
-  object-fit: contain;
-}
-
-.image-zoom__close {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 8px;
-  z-index: 1001;
-}
-
-.image-zoom__close:hover {
-  opacity: 0.8;
-}
-
-.image-zoom__loading {
-  color: white;
-  font-size: 18px;
-  padding: 20px;
-}
-
 /* Image width presets */
 .img-20px {
   width: 20px;
+  max-width: 100%;
 }
 .img-50px {
   width: 50px;
+  max-width: 100%;
 }
 .img-100px {
   width: 100px;
+  max-width: 100%;
 }
 .img-200px {
   width: 200px;
+  max-width: 100%;
 }
 .img-400px {
   width: 400px;
+  max-width: 100%;
 }
 .img-500px {
   width: 500px;
+  max-width: 100%;
 }
 .img-600px {
   width: 600px;
+  max-width: 100%;
 }
 .img-900px {
   width: 900px;
+  max-width: 100%;
 }
 
 /* Wrap code in code blocks by default */
 .wrapcode code {
   white-space: pre-wrap;
+}
+
+/* Details/Summary collapsible elements - border radius override */
+details,
+details.alert {
+  border-radius: 0.5rem !important;
+  overflow: hidden;
+  border: none !important;
+}
+
+details[open],
+details.alert[open] {
+  border-radius: 0.5rem !important;
+  overflow: hidden;
+  border: none !important;
+}
+
+/* Ensure summary element also respects border radius at top */
+details > summary {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }

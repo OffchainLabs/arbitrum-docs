@@ -20,7 +20,7 @@
     font-size: 13px;
     font-weight: 500;
     border: 1px solid transparent;
-    border-radius: 5px;
+    border-radius: var(--arbitrum-border-radius-sm, 8px);
     overflow: hidden;
     position: static;
     margin-bottom: 10px;
@@ -30,20 +30,21 @@
       font-weight: 500;
       border-top: 1px solid var(--tab-gray);
       border-bottom: 1px solid var(--tab-gray);
-      padding: 10px 15px;
+      padding: 10px 18px;
       border-radius: 0px !important;
       position: relative;
+      transition: all var(--arbitrum-transition-fast);
 
       &:first-child {
-        border-top-left-radius: 5px !important;
-        border-bottom-left-radius: 5px !important;
+        border-top-left-radius: var(--arbitrum-border-radius-sm, 8px) !important;
+        border-bottom-left-radius: var(--arbitrum-border-radius-sm, 8px) !important;
         border-left: 1px solid var(--tab-gray);
         border-right: 0px !important;
       }
 
       &:last-child {
-        border-top-right-radius: 5px !important;
-        border-bottom-right-radius: 5px !important;
+        border-top-right-radius: var(--arbitrum-border-radius-sm, 8px) !important;
+        border-bottom-right-radius: var(--arbitrum-border-radius-sm, 8px) !important;
         border-right: 1px solid var(--tab-gray);
         border-top: 1px solid var(--tab-gray);
         border-bottom: 1px solid var(--tab-gray);
@@ -52,7 +53,7 @@
 
       &.tabs__item--active {
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         background-color: var(--tab-active-color) !important;
         border-color: var(--tab-active-color) !important;
         color: white !important;
@@ -60,6 +61,7 @@
 
       &.disabled-tab {
         color: #999 !important;
+        cursor: not-allowed;
       }
     }
 
@@ -69,7 +71,7 @@
       padding: 10px 15px;
       position: relative;
       border-color: transparent !important;
-      transition: all 0.15s linear;
+      transition: all var(--arbitrum-transition-fast);
       background: transparent;
       color: transparent;
       display: inline-block;
@@ -89,7 +91,7 @@
     .tabs__item {
       &:first-child {
         cursor: default !important;
-        color: black;
+        color: var(--ifm-color-content);
         width: 150px;
         border: 1px solid transparent !important;
         border-right: 0px !important;
@@ -101,8 +103,8 @@
       }
 
       &:nth-child(2) {
-        border-top-left-radius: 5px !important;
-        border-bottom-left-radius: 5px !important;
+        border-top-left-radius: var(--arbitrum-border-radius-sm, 8px) !important;
+        border-bottom-left-radius: var(--arbitrum-border-radius-sm, 8px) !important;
         border-left: 1px solid var(--tab-gray);
         border-right: 0px !important;
         z-index: 2;

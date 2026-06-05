@@ -5,16 +5,15 @@
   margin-bottom: 15px;
   min-height: 35px;
   text-align: right;
-  /*pragmatism over perfection*/
 
   .header-badge {
     @include truncate;
-    transition-property: all;
-    transition-duration: 0.2s;
+    transition: all var(--arbitrum-transition-fast);
     display: inline-block;
     border-radius: 20px;
-    background-color: #efefef;
-    padding: 3px 20px 3px 3px;
+    background-color: rgba(1, 107, 229, 0.08);
+    border: 1px solid rgba(1, 107, 229, 0.15);
+    padding: 3px 16px 3px 3px;
     height: 31px;
     margin-right: 6px;
     margin-bottom: 5px;
@@ -26,25 +25,25 @@
 
     &:hover {
       text-decoration: none;
-      background-color: #e6e6e6;
-      opacity: 1;
+      background-color: rgba(1, 107, 229, 0.12);
+      border-color: rgba(1, 107, 229, 0.25);
 
       .badge-avatar {
         opacity: 1;
       }
 
       .badge-label {
-        color: #000;
+        color: var(--ifm-color-primary);
       }
     }
 
     .badge-label {
       @include truncate;
-      transition-property: all;
-      transition-duration: 0.2s;
+      transition: all var(--arbitrum-transition-fast);
       font-size: 13px;
+      font-weight: 500;
       line-height: 24px;
-      color: #333;
+      color: var(--ifm-color-content);
       display: inline-block;
       vertical-align: top;
       height: 25px;
@@ -52,23 +51,35 @@
     }
 
     .badge-avatar {
-      transition-property: all;
-      transition-duration: 0.2s;
+      transition: all var(--arbitrum-transition-fast);
       display: inline-block;
       border-radius: 30px;
       width: 25px;
       height: 25px;
       background-size: cover;
-      margin-right: 12px;
+      margin-right: 10px;
       font-size: 12px;
       vertical-align: top;
       line-height: 23px;
       padding-left: 8px;
-      opacity: 0.7;
+      opacity: 0.8;
     }
 
     .emoji-avatar {
       margin-right: 8px !important;
+    }
+  }
+}
+
+// Dark mode badges
+[data-theme='dark'] .header-badges {
+  .header-badge {
+    background-color: rgba(16, 225, 255, 0.08);
+    border-color: rgba(16, 225, 255, 0.15);
+
+    &:hover {
+      background-color: rgba(16, 225, 255, 0.12);
+      border-color: rgba(16, 225, 255, 0.25);
     }
   }
 }

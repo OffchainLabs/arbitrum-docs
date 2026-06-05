@@ -3,7 +3,7 @@ title: 'How to migrate state and history from a classic (pre-Nitro) node to a Ni
 description: This how-to provides step-by-step instructions for migrating the state and history from a classic (pre-Nitro) node to a Nitro node
 author: jose-franco
 sme: jose-franco
-target_audience: 'Node runners interested in creating the full state of the Arbitrum One chain on their own (i.e., without an initial database)'
+target_audience: 'Node runners interested in creating the full state of the Arbitrum One chain on their own'
 content_type: how-to
 sidebar_position: 11
 ---
@@ -68,7 +68,7 @@ This data does not impact consensus and is optional. It allows a Nitro node to p
 
 ## Step 3: Initialize your Nitro node importing the exported data
 
-- Place the `l2chaindata` and `classic-msg` (if exported) directories in Nitro's instance directory (e.g. `${HOME}/.arbitrum/arb1-nitro/`).
+- Place the `l2chaindata` and `classic-msg` (if exported) directories in Nitro's instance directory (e.g., `${HOME}/.arbitrum/arb1-nitro/`).
 - Launch the Nitro node with the argument `--init.import-file=/path/to/state/index.json`
 
 :::caution Caution
