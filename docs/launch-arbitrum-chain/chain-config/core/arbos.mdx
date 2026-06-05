@@ -11,11 +11,11 @@ import CustomizeCautionBannerPartial from '../../partials/_arbitrum-chain-custom
 
 <CustomizeCautionBannerPartial />
 
-Customizing the [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) version involves modifying the Nitro codebase to introduce a new, version-controlled iteration of ArbOS (<a data-quicklook-from="arbitrum">Arbitrum</a>'s operating system-like layer) that activates custom behaviors, features, or state changes while maintaining backward compatibility and determinism for fraud proofs.
+Customizing the [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) version involves modifying the Nitro codebase to introduce a new, version-controlled iteration of ArbOS (<a data-quicklook-from="arbitrum">Arbitrum</a>'s operating system-like layer). This lets you activate custom behaviors, features, or state changes while maintaining backward compatibility and determinism for fraud proofs.
 
-This is an advanced customization primarily for live chains, allowing developers to extend or alter the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)—the core logic for block production and state updates—while ensuring safe, non-disruptive upgrades. Unlike standard upgrades (e.g., to canonical versions like ArbOS 20 "Atlas"), customization involves creating intermediate or project-specific versions (e.g., ArbOS 32, a fork of 31) to incorporate bespoke elements such as new precompiles, EVM opcodes, or state variables, without conflicting with official releases.
+This is an advanced customization primarily for live chains, allowing developers to extend or alter the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)—the core logic for block production and state updates—while ensuring safe, non-disruptive upgrades. Unlike standard upgrades (e.g., to canonical versions like ArbOS 20 "Atlas"), customization involves creating intermediate or project-specific versions (e.g., ArbOS 32, a fork of 31). This lets you incorporate bespoke elements such as new precompiles, EVM opcodes, or state variables without conflicting with official releases.
 
-It's recommended for teams with expertise or partners (e.g., Rollup-as-a-Service providers), as it requires audits, maintenance, and careful handling to avoid issues like chain re-orgs or failed fraud proofs.
+This customization is recommended for teams with expertise or partners (e.g., Rollup-as-a-Service providers), as it requires audits, maintenance, and careful handling to avoid issues like chain re-orgs or failed fraud proofs.
 
 ## Cases where you may want to consider customizing your own ArbOS upgrade
 
@@ -31,10 +31,10 @@ Also, if you made changes to a live and operational chain and want to upgrade th
 
 Below, you will find four examples of ArbOS-related code changes and, generally, how to make them:
 
-### 1. Add a new method to existing precompile on a specific ArbOS version:
+### 1. Add a new method to existing precompile on a specific ArbOS version
 
 After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile Option 1](./precompiles.mdx#option-1-add-new-methods-to-an-existing-precompile),
-you need continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go).
+you need to continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go).
 
 For example, the original code is:
 
@@ -112,7 +112,7 @@ It should be noted that when you initialize the state (initial code is in [custo
 
 :::
 
-Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions may change the value of `myNumber` before ArbOS v21.
+Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions that may change the value of `myNumber` before ArbOS v21.
 To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](./arbos.mdx#1-add-a-new-method-to-existing-precompile-on-a-specific-arbos-version) or
 [point 2](./arbos.mdx#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
 If your nitro code needs to call this method to change the state, you can continue reading [Step 4](./arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result-arbos-version-control).
