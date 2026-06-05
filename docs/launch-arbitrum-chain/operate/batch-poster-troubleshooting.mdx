@@ -8,7 +8,7 @@ user_story: As an Arbitrum chain operator, I need to diagnose and resolve common
 content_type: how-to
 ---
 
-This guide covers common operational issues that batch poster operators encounter, with guidance on diagnosing root causes and resolving them. For initial setup, see [Run a batch poster](/launch-arbitrum-chain/run-a-node/batch-poster.mdx). For fee-related tuning, see [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning.mdx).
+This guide covers common operational issues that batch poster operators encounter, with guidance on diagnosing root causes and resolving them. For initial setup, see [Run a batch poster](/launch-arbitrum-chain/run-a-node/batch-poster.mdx). For fee-related tuning, see [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning.mdx).
 
 ## Batch poster balance management
 
@@ -53,7 +53,7 @@ This error indicates that the parent chain node's mempool has rejected a transac
 
 ### Resolution
 
-1. **Check the parent chain's current gas prices** and compare them to your data poster's fee cap configuration. If gas prices are above your `--node.batch-poster.data-poster.target-price-gwei`, the data poster can't bid high enough to cover the fee. See [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning.mdx) for guidance on adjustments.
+1. **Check the parent chain's current gas prices** and compare them to your data poster's fee cap configuration. If gas prices are above your `--node.batch-poster.data-poster.target-price-gwei`, the data poster can't bid high enough to cover the fee. See [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning.mdx) for guidance on adjustments.
 2. **Review your queued transaction storage configuration**: If you're using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (`--node.batch-poster.data-poster.replacement-times` for non-blob batch poster, `--node.batch-poster.data-poster.blob-tx-replacement-times` for blob batch poster) is escalating fees quickly enough. See Queued transaction database selection for storage option details.
 3. **Consider Noop storage for parent chains without mempools**: If your parent chain is an Arbitrum chain or another chain without a traditional mempool, Noop storage avoids this issue entirely by waiting for each transaction receipt before submitting the next one.
 
@@ -92,7 +92,7 @@ The specific log messages and metrics that indicate a backlog depend on the Nitr
 ### Resolution approaches
 
 1. **Check the batch poster balance**: ensures the EOA has sufficient funds on the parent chain.
-2. **Check the parent chain gas prices**: If prices exceed your fee cap, either wait for prices to drop or increase `--node.batch-poster.data-poster.target-price-gwei` (see [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning.mdx)).
+2. **Check the parent chain gas prices**: If prices exceed your fee cap, either wait for prices to drop or increase `--node.batch-poster.data-poster.target-price-gwei` (see [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning.mdx)).
 3. **Verify parent chain connectivity**: Ensure the batch poster node can reach the parent chain RPC endpoint and that the parent chain node is fully synced.
 4. **Check for reverted transactions**: If using DB or Redis storage, a reverted transaction halts the batch poster. Check the batch poster logs for revert errors. Restarting the batch poster or clearing the queued transaction storage (with caution) may be necessary.
 5. **Review node sync status**: Confirm the batch poster node is synced with both the Arbitrum chain and the parent chain.

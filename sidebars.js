@@ -201,6 +201,16 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
                   label: `Enable EIP-4844 blobs`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster',
+                  label: `Batch poster`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/fee-tuning',
+                  label: `Batch poster fee tuning`,
+                },
               ],
             },
             {
@@ -344,16 +354,6 @@ const sidebars = {
               label: 'Sequencing',
               collapsed: true,
               items: [
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/sequencer/batch-poster',
-                  label: `Batch poster`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning',
-                  label: `Batch poster fee tuning`,
-                },
                 {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/chain-finality',

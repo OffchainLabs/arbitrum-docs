@@ -273,7 +273,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning",
-      "destination": "/launch-arbitrum-chain/chain-config/sequencer/batch-poster-fee-tuning",
+      "destination": "/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning",
       "permanent": false
     },
     {
