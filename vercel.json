@@ -148,7 +148,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide",
-      "destination": "/launch-arbitrum-chain/integrations/da-api-guide",
+      "destination": "/launch-arbitrum-chain/chain-config/core/da-api-guide",
       "permanent": false
     },
     {

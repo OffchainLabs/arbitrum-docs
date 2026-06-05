@@ -121,7 +121,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
-    to: '/launch-arbitrum-chain/integrations/da-api-guide',
+    to: '/launch-arbitrum-chain/chain-config/core/da-api-guide',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction',
