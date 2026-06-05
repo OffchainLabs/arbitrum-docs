@@ -324,33 +324,13 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'Protocol hacks',
+              label: 'Core',
               collapsed: true,
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/arbos',
-                  label: `ArbOS`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/da-api-guide',
-                  label: 'DA API guide',
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/precompiles',
-                  label: `Precompiles`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/core/smart-contract-size-limit',
                   label: `Smart contract size`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/stf',
-                  label: `State Transition Function`,
                 },
               ],
             },
@@ -525,6 +505,33 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/state-growth',
               label: 'State growth',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Run a node for an Arbitrum chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/arbos',
+              label: `ArbOS`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/da-api-guide',
+              label: 'DA API guide',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/precompiles',
+              label: `Precompiles`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/stf',
+              label: `State Transition Function`,
             },
           ],
         },

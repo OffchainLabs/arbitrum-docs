@@ -61,15 +61,15 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-arbos',
-    to: '/launch-arbitrum-chain/chain-config/core/arbos',
+    to: '/launch-arbitrum-chain/protocol-hacks/arbos',
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-precompile',
-    to: '/launch-arbitrum-chain/chain-config/core/precompiles',
+    to: '/launch-arbitrum-chain/protocol-hacks/precompiles',
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-stf',
-    to: '/launch-arbitrum-chain/chain-config/core/stf',
+    to: '/launch-arbitrum-chain/protocol-hacks/stf',
   },
   {
     from: '/launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control',
@@ -121,7 +121,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
-    to: '/launch-arbitrum-chain/chain-config/core/da-api-guide',
+    to: '/launch-arbitrum-chain/protocol-hacks/da-api-guide',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction',
@@ -256,18 +256,6 @@ export const redirects = [
     to: '/launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults',
   },
   {
-    from: '/launch-arbitrum-chain/chain-configuration/core/arbos',
-    to: '/launch-arbitrum-chain/chain-config/core/arbos',
-  },
-  {
-    from: '/launch-arbitrum-chain/chain-configuration/core/precompiles',
-    to: '/launch-arbitrum-chain/chain-config/core/precompiles',
-  },
-  {
-    from: '/launch-arbitrum-chain/chain-configuration/core/stf',
-    to: '/launch-arbitrum-chain/chain-config/core/stf',
-  },
-  {
     from: '/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments',
     to: '/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
   },
@@ -282,6 +270,22 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/chain-config/validation/chain-finality',
     to: '/launch-arbitrum-chain/chain-config/sequencer/chain-finality',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-config/core/arbos',
+    to: '/launch-arbitrum-chain/protocol-hacks/arbos',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-config/core/da-api-guide',
+    to: '/launch-arbitrum-chain/protocol-hacks/da-api-guide',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-config/core/precompiles',
+    to: '/launch-arbitrum-chain/protocol-hacks/precompiles',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-config/core/stf',
+    to: '/launch-arbitrum-chain/protocol-hacks/stf',
   },
   // AUTO-GENERATED REDIRECTS END
 ];

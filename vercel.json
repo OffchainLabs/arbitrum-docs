@@ -73,17 +73,17 @@
     },
     {
       "source": "/launch-arbitrum-chain/customize-your-chain/customize-arbos",
-      "destination": "/launch-arbitrum-chain/chain-config/core/arbos",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/arbos",
       "permanent": false
     },
     {
       "source": "/launch-arbitrum-chain/customize-your-chain/customize-precompile",
-      "destination": "/launch-arbitrum-chain/chain-config/core/precompiles",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/precompiles",
       "permanent": false
     },
     {
       "source": "/launch-arbitrum-chain/customize-your-chain/customize-stf",
-      "destination": "/launch-arbitrum-chain/chain-config/core/stf",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/stf",
       "permanent": false
     },
     {
@@ -148,7 +148,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide",
-      "destination": "/launch-arbitrum-chain/chain-config/core/da-api-guide",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/da-api-guide",
       "permanent": false
     },
     {
@@ -317,21 +317,6 @@
       "permanent": false
     },
     {
-      "source": "/launch-arbitrum-chain/chain-configuration/core/arbos",
-      "destination": "/launch-arbitrum-chain/chain-config/core/arbos",
-      "permanent": false
-    },
-    {
-      "source": "/launch-arbitrum-chain/chain-configuration/core/precompiles",
-      "destination": "/launch-arbitrum-chain/chain-config/core/precompiles",
-      "permanent": false
-    },
-    {
-      "source": "/launch-arbitrum-chain/chain-configuration/core/stf",
-      "destination": "/launch-arbitrum-chain/chain-config/core/stf",
-      "permanent": false
-    },
-    {
       "source": "/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments",
       "destination": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
       "permanent": false
@@ -349,6 +334,26 @@
     {
       "source": "/launch-arbitrum-chain/chain-config/validation/chain-finality",
       "destination": "/launch-arbitrum-chain/chain-config/sequencer/chain-finality",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/arbos",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/da-api-guide",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/da-api-guide",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/precompiles",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/precompiles",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/stf",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/stf",
       "permanent": false
     },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
