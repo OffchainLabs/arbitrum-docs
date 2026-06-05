@@ -215,33 +215,6 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'Core hacks',
-              collapsed: true,
-              items: [
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/arbos',
-                  label: `ArbOS`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/precompiles',
-                  label: `Precompiles`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/smart-contract-size-limit',
-                  label: `Smart contract size`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/stf',
-                  label: `State Transition Function`,
-                },
-              ],
-            },
-            {
-              type: 'category',
               label: 'Costs',
               collapsed: true,
               items: [
@@ -346,6 +319,33 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
                   label: `Deploy mirror DAS`,
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Protocol hacks',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/core/arbos',
+                  label: `ArbOS`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/core/precompiles',
+                  label: `Precompiles`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/core/smart-contract-size-limit',
+                  label: `Smart contract size`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/core/stf',
+                  label: `State Transition Function`,
                 },
               ],
             },
