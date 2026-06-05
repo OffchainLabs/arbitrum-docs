@@ -161,11 +161,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/overview/public-preview',
-          label: 'Public preview',
-        },
-        {
-          type: 'doc',
           id: 'launch-arbitrum-chain/overview/faq',
           label: 'FAQ',
         },
@@ -288,7 +283,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/config-data-availability',
-                  label: `Data availability`,
+                  label: `Data availability options`,
                 },
                 {
                   type: 'doc',
