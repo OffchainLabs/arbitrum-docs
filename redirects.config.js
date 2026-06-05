@@ -89,7 +89,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
-    to: '/launch-arbitrum-chain/operate/gas-target',
+    to: '/launch-arbitrum-chain/chain-config/costs/gas-target',
   },
   {
     from: '/launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
@@ -217,7 +217,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
-    to: '/launch-arbitrum-chain/chain-config/validation/chain-finality',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/chain-finality',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
@@ -278,6 +278,10 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/operate/gas-target',
     to: '/launch-arbitrum-chain/chain-config/costs/gas-target',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-config/validation/chain-finality',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/chain-finality',
   },
   // AUTO-GENERATED REDIRECTS END
 ];

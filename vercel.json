@@ -108,7 +108,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit",
-      "destination": "/launch-arbitrum-chain/operate/gas-target",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/gas-target",
       "permanent": false
     },
     {
@@ -268,7 +268,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality",
-      "destination": "/launch-arbitrum-chain/chain-config/validation/chain-finality",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/chain-finality",
       "permanent": false
     },
     {
@@ -344,6 +344,11 @@
     {
       "source": "/launch-arbitrum-chain/operate/gas-target",
       "destination": "/launch-arbitrum-chain/chain-config/costs/gas-target",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/validation/chain-finality",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/chain-finality",
       "permanent": false
     },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
