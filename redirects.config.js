@@ -244,10 +244,6 @@ export const redirects = [
     to: '/launch-arbitrum-chain/operate/batch-poster-troubleshooting',
   },
   {
-    from: '/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap',
-    to: '/launch-arbitrum-chain/integrations/layer-leap',
-  },
-  {
     from: '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control',
     to: '/launch-arbitrum-chain/chain-config/validation/assertion-control',
   },

@@ -303,7 +303,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
-      "destination": "/launch-arbitrum-chain/integrations/layer-leap",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {
@@ -1269,7 +1269,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {
@@ -1454,7 +1454,7 @@
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {
