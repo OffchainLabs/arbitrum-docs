@@ -61,11 +61,11 @@
   },
   "arbitrum-dao": {
     "title": "Arbitrum DAO",
-    "text": "<p>The onchain governance body that owns and operates <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>. Holders of the ARB token vote on protocol upgrades, treasury actions, and <a href=\"/intro/glossary#arbitrum-expansion-program\">Arbitrum Expansion Program</a> revenue distributions.</p>\n"
+    "text": "<p>The onchain governance body that owns and operates <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>. Holders of the <strong>ARB</strong> token vote on protocol upgrades, treasury actions, and <a href=\"/intro/glossary#arbitrum-expansion-program\">Arbitrum Expansion Program</a> revenue distributions.</p>\n"
   },
   "arbitrum-expansion-program": {
     "title": "Arbitrum Expansion Program (AEP)",
-    "text": "<p>The licensing framework under which third parties can deploy new <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chains</a> outside <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>. In exchange for permissionless deployment, the chain remits 10% of net revenue — 8% to the <a href=\"/intro/glossary#arbitrum-dao\">Arbitrum DAO</a> and 2% to ecosystem programs.</p>\n"
+    "text": "<p>The licensing framework under which third parties can deploy new <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chains</a> outside <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> and <a href=\"/intro/glossary#arbitrum-nova\">Arbitrum Nova</a>. In exchange for permissionless deployment, the chain remits 10% of net revenue—8% to the <a href=\"/intro/glossary#arbitrum-dao\">Arbitrum DAO</a> and 2% to ecosystem programs.</p>\n"
   },
   "arbitrum-full-node": {
     "title": "Arbitrum Full Node",
@@ -189,7 +189,7 @@
   },
   "custom-gas-token": {
     "title": "Custom gas token",
-    "text": "<p>A non-ETH ERC-20 token chosen at <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> deployment time to be used for paying transaction fees on that chain. Deposits work by escrowing the ERC-20 in the chain&#39;s bridge on the <a href=\"/intro/glossary#parent-chain\">parent chain</a> and crediting the equivalent amount as the native asset on the child chain, where it replaces ETH everywhere ETH would otherwise be charged for gas.</p>\n"
+    "text": "<p>A non-<strong>ETH</strong> <strong>ERC-20</strong> token chosen at <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> deployment time to be used for paying transaction fees on that chain. Deposits work by escrowing the <strong>ERC-20</strong> in the chain&#39;s bridge on the <a href=\"/intro/glossary#parent-chain\">parent chain</a> and crediting the equivalent amount as the native asset on the child chain, where it replaces <strong>ETH</strong> everywhere <strong>ETH</strong> would otherwise be charged for gas.</p>\n"
   },
   "custom-gateway": {
     "title": "Custom gateway",
@@ -293,11 +293,11 @@
   },
   "history-commitment": {
     "title": "History commitment",
-    "text": "<p>A Merkle-tree root committing to a sequence of execution states — either block hashes or instruction-level state hashes, depending on the level of the dispute. Each <a href=\"/intro/glossary#bold\">BoLD</a> <a href=\"/intro/glossary#edge\">edge</a> carries a start and end history commitment to represent a claim over a range of chain history.</p>\n"
+    "text": "<p>A Merkle-tree root committing to a sequence of execution states—either block hashes or instruction-level state hashes, depending on the level of the dispute. Each <a href=\"/intro/glossary#bold\">BoLD</a> <a href=\"/intro/glossary#edge\">edge</a> carries a start and end history commitment to represent a claim over a range of chain history.</p>\n"
   },
   "host-io": {
     "title": "Host I/O",
-    "text": "<p>The set of low-level imports that a <a href=\"/intro/glossary#stylus\">Stylus</a> <a href=\"/intro/glossary#wasm\">WASM</a> program uses to access chain state and runtime services — the equivalent of EVM opcodes for Solidity contracts. Host I/O calls cover storage access, account info, environment data, math primitives, and re-entrancy controls. Each call has a fixed <a href=\"/intro/glossary#ink\">ink</a> cost.</p>\n"
+    "text": "<p>The set of low-level imports that a <a href=\"/intro/glossary#stylus\">Stylus</a> <a href=\"/intro/glossary#wasm\">WASM</a> program uses to access chain state and runtime services—the equivalent of EVM opcodes for Solidity contracts. Host I/O calls cover storage access, account info, environment data, math primitives, and re-entrancy controls. Each call has a fixed <a href=\"/intro/glossary#ink\">ink</a> cost.</p>\n"
   },
   "ink": {
     "title": "Ink",
@@ -305,7 +305,7 @@
   },
   "keyset": {
     "title": "Keyset",
-    "text": "<p>The onchain configuration object that defines a <a href=\"/intro/glossary#data-availability-committee-dac\">Data Availability Committee (DAC)</a> — the <a href=\"/intro/glossary#bls-signature\">BLS public keys</a> of every committee member and the signature threshold required to produce a valid <a href=\"/intro/glossary#data-availability-certificate\">Data Availability Certificate</a>. A new keyset is published whenever committee membership or the threshold changes.</p>\n"
+    "text": "<p>The onchain configuration object that defines a <a href=\"/intro/glossary#data-availability-committee-dac\">Data Availability Committee (DAC)</a>—the <a href=\"/intro/glossary#bls-signature\">BLS public keys</a> of every committee member and the signature threshold required to produce a valid <a href=\"/intro/glossary#data-availability-certificate\">Data Availability Certificate</a>. A new keyset is published whenever committee membership or the threshold changes.</p>\n"
   },
   "L1": {
     "title": "L1",
@@ -337,7 +337,7 @@
   },
   "layer-leap": {
     "title": "Layer Leap",
-    "text": "<p>A protocol that allows users to bridge ETH and ERC-20 tokens from Ethereum directly to an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> in a single transaction, without first depositing onto an intermediate <a href=\"/intro/glossary#parent-chain\">parent chain</a>.</p>\n"
+    "text": "<p>A protocol that allows users to bridge <strong>ETH</strong> and <strong>ERC-20</strong> tokens from Ethereum directly to an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> in a single transaction, without first depositing onto an intermediate <a href=\"/intro/glossary#parent-chain\">parent chain</a>.</p>\n"
   },
   "multivm": {
     "title": "MultiVM",
@@ -349,7 +349,7 @@
   },
   "native-mint-burn-gas-token": {
     "title": "Native mint/burn gas token",
-    "text": "<p>A <a href=\"/intro/glossary#custom-gas-token\">custom gas token</a> variant whose supply on the <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> is controlled by mint and burn calls to the <code>ArbNativeTokenManager</code> precompile (address <code>0x73</code>) rather than by bridging from the parent chain. Only accounts in the chain&#39;s <code>nativeTokenOwners</code> set — managed through the <code>ArbOwner</code> precompile — may mint or burn. Suited to closed-economy chains that need full control over gas-token issuance.</p>\n"
+    "text": "<p>A <a href=\"/intro/glossary#custom-gas-token\">custom gas token</a> variant whose supply on the <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> is controlled by mint and burn calls to the <code>ArbNativeTokenManager</code> precompile (address <code>0x73</code>) rather than by bridging from the parent chain. Only accounts in the chain&#39;s <code>nativeTokenOwners</code> set—managed through the <code>ArbOwner</code> precompile—may mint or burn. Suited to closed-economy chains that need full control over gas-token issuance.</p>\n"
   },
   "offchain-labs": {
     "title": "Offchain Labs",
@@ -427,6 +427,10 @@
     "title": "Rollup Event Inbox",
     "text": "<p>A parent chain contract (one per <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a>) that serves as an authorized <a href=\"/intro/glossary#delayed-inbox\">delayed inbox</a> used exclusively by the Rollup contract to communicate chain-level protocol events to the child chain. It is separate from the regular <code>Inbox</code>, <code>Bridge</code>, and <code>SequencerInbox</code> contracts that handle user transactions.</p>\n<p>Its main role is to seed the child chain with its bootstrap configuration. During initialization, the Rollup admin contract calls <code>rollupInitialized(chainId, chainConfig, l1BaseFeeEstimate)</code> exactly once; this enqueues a delayed message of type <code>INITIALIZATION_MSG_TYPE</code> carrying the chain&#39;s <code>chainId</code>, full chain config JSON, and an initial parent-chain base-fee estimate. That delayed message is then read by the child chain as its very first L2 message, which initializes the L2 state.</p>\n<p>Two implementations share the <code>IRollupEventInbox</code> interface and <code>AbsRollupEventInbox</code> base: <code>RollupEventInbox</code> for <strong>ETH</strong>-based chains, and <code>ERC20RollupEventInbox</code> for chains using a custom (<strong>ERC-20</strong>) gas token. The contract is deployed by <code>BridgeCreator</code> and registered as an allowed delayed inbox on the <code>Bridge</code>.</p>\n<p>In some support contexts the contract is informally referred to as &quot;rollupEventBox&quot;; the canonical name in the codebase is <code>RollupEventInbox</code>.</p>\n"
   },
+  "rollup-improvement-proposal": {
+    "title": "Rollup Improvement Proposal",
+    "text": "<p>A Rollup Improvement Proposal (RIP) is a process for proposing, discussing, and recording changes or additions to Ethereum’s rollup ecosystem.</p>\n"
+  },
   "sequencer": {
     "title": "Sequencer",
     "text": "<p>An entity (currently a single-party on Arbitrum One) given rights to order transactions in the <a href=\"/intro/glossary#sequencer-inbox\">Sequencer Inbox</a> over a fixed window of time, who can thus give clients sub-blocktime <a href=\"/intro/glossary#soft-confirmation\">Soft Confirmations</a>. (Not to be confused with a <a href=\"/intro/glossary#validator\">Validator</a>).</p>\n"
@@ -501,7 +505,7 @@
   },
   "upgrade-executor": {
     "title": "Upgrade Executor",
-    "text": "<p>The single privileged contract — deployed once per <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> by the rollup creator — that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain&#39;s rollup contracts and its <code>ProxyAdmin</code>, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the <a href=\"/intro/glossary#chain-owner\">chain owner</a>.</p>\n"
+    "text": "<p>The single privileged contract—deployed once per <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> by the rollup creator—that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain&#39;s rollup contracts and its <code>ProxyAdmin</code>, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the <a href=\"/intro/glossary#chain-owner\">chain owner</a>.</p>\n"
   },
   "validator": {
     "title": "Validator",
@@ -529,7 +533,7 @@
   },
   "wavm": {
     "title": "WAVM",
-    "text": "<p>Arbitrum&#39;s variant of <a href=\"/intro/glossary#wasm\">WASM</a>, used inside the <a href=\"/intro/glossary#state-transition-function\">State Transition Function</a> for <a href=\"/intro/glossary#fraud-proof\">fraud-proof</a> execution. WAVM constrains standard WASM so that execution is deterministic and provable onchain — non-deterministic instructions are removed and floating-point operations are replaced with software implementations. The specific WAVM prover image in use is identified by the <a href=\"/intro/glossary#wasm-module-root\">WASM module root</a>.</p>\n"
+    "text": "<p>Arbitrum&#39;s variant of <a href=\"/intro/glossary#wasm\">WASM</a>, used inside the <a href=\"/intro/glossary#state-transition-function\">State Transition Function</a> for <a href=\"/intro/glossary#fraud-proof\">fraud-proof</a> execution. WAVM constrains standard WASM so that execution is deterministic and provable onchain—non-deterministic instructions are removed and floating-point operations are replaced with software implementations. The specific WAVM prover image in use is identified by the <a href=\"/intro/glossary#wasm-module-root\">WASM module root</a>.</p>\n"
   },
   "weth-gateway": {
     "title": "WETH Gateway",
