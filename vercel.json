@@ -283,7 +283,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit",
-      "destination": "/launch-arbitrum-chain/chain-config/core/smart-contract-size-limit",
+      "destination": "/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit",
       "permanent": false
     },
     {
@@ -299,11 +299,6 @@
     {
       "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting",
       "destination": "/launch-arbitrum-chain/operate/batch-poster-troubleshooting",
-      "permanent": false
-    },
-    {
-      "source": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
-      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {

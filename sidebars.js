@@ -324,12 +324,12 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'Core',
+              label: 'Execution',
               collapsed: true,
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/core/smart-contract-size-limit',
+                  id: 'launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit',
                   label: `Smart contract size`,
                 },
               ],
