@@ -79,7 +79,7 @@ It's also possible to use `ParentToChildMessage.calculateSubmitRetryableId()`, h
 
 ## Tracing `DepositEth` from parent chain to child chain
 
-When it comes to a simple **ETH** deposit, the process is very similar to finding a <a data-quicklook-from="retryable-ticket">retryable ticket</a>'s hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)` which returns an **ETH** deposit message containing the `childTxHash`. For the equivalent **ERC-20** flow at the higher level, see [Deposit tokens to Arbitrum](/arbitrum-essentials/bridging/deposit/tokens.mdx).
+For a simple **ETH** deposit, the process is similar to finding a <a data-quicklook-from="retryable-ticket">retryable ticket</a>'s hash on the child chain. Simply wrap the transaction receipt in the `ParentEthDepositTransactionReceipt` class, and then use the class function `getEthDeposits(childProvider)`, which returns an **ETH** deposit message containing the `childTxHash`. For the equivalent **ERC-20** flow at the higher level, see [Deposit tokens to Arbitrum](/arbitrum-essentials/bridging/deposit/tokens.mdx).
 
 ```tsx
 import { providers } from 'ethers';
