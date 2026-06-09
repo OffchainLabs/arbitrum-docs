@@ -78,7 +78,7 @@ const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 */
 ```
 
-The Arbitrum block number can also be retrieved within an Arbitrum contract via [ArbSys](/arbitrum-essentials/precompiles/reference.mdx#arbsys) precompile:
+The Arbitrum block number can also be retrieved within an Arbitrum contract via the [ArbSys](/arbitrum-essentials/precompiles/reference.mdx#arbsys) precompile:
 
 ```solidity
 ArbSys(100).arbBlockNumber() // returns Arbitrum block number
