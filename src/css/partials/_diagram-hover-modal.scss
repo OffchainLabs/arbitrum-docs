@@ -1,0 +1,164 @@
+// Diagram Hover Modal — Arbitrum glassmorphic style
+// Hover-triggered floating modal for diagram cell annotations
+
+.diagram-hover-modal__trigger {
+  border-bottom: 1px dotted rgba(18, 170, 255, 0.6);
+  cursor: pointer;
+  transition: border-color var(--arbitrum-transition-normal, 0.2s ease);
+
+  &:hover {
+    border-bottom-color: rgba(18, 170, 255, 1);
+  }
+}
+
+.diagram-hover-modal__content {
+  background: rgba(33, 49, 71, 0.95);
+  border: 1px solid rgba(18, 170, 255, 0.3);
+  border-radius: 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(18, 170, 255, 0.1);
+  backdrop-filter: blur(12px);
+  max-width: 500px;
+  max-height: 60vh;
+  min-width: 320px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--arbitrum-font-family, var(--ifm-font-family-base));
+}
+
+.diagram-hover-modal__header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 10px 0;
+  flex-shrink: 0;
+}
+
+.diagram-hover-modal__close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: rgba(157, 204, 237, 0.6);
+  padding: 4px 8px;
+  border-radius: 0;
+  transition: all var(--arbitrum-transition-normal, 0.2s ease);
+  font-family: var(--arbitrum-font-family, var(--ifm-font-family-base));
+
+  &:hover {
+    color: #ffffff;
+    background: rgba(18, 170, 255, 0.15);
+  }
+}
+
+.diagram-hover-modal__body {
+  padding: 0 20px 20px;
+  overflow-y: auto;
+  flex: 1;
+  color: #ffffff;
+}
+
+.diagram-hover-modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #ffffff;
+}
+
+.diagram-hover-modal__subtitle {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 16px 0 8px 0;
+  color: #9dcced;
+}
+
+.diagram-hover-modal__heading3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 14px 0 6px 0;
+  color: #9dcced;
+}
+
+.diagram-hover-modal__heading4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 12px 0 6px 0;
+  color: rgba(157, 204, 237, 0.8);
+}
+
+.diagram-hover-modal__paragraph {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.diagram-hover-modal__list {
+  margin: 0 0 12px 0;
+  padding-left: 18px;
+}
+
+.diagram-hover-modal__list-item {
+  margin-bottom: 6px;
+  line-height: 1.5;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.diagram-hover-modal__strong {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.diagram-hover-modal__inline-code {
+  background: rgba(18, 170, 255, 0.1);
+  border: 1px solid rgba(18, 170, 255, 0.2);
+  padding: 1px 5px;
+  border-radius: 0;
+  font-family: var(--arbitrum-mono-font, var(--ifm-font-family-monospace));
+  font-size: 0.85em;
+  color: rgba(18, 170, 255, 0.9);
+}
+
+.diagram-hover-modal__link {
+  color: rgba(18, 170, 255, 0.9);
+  text-decoration: underline;
+  text-decoration-color: rgba(18, 170, 255, 0.4);
+
+  &:hover {
+    color: #12aaff;
+    text-decoration-color: #12aaff;
+  }
+}
+
+.diagram-hover-modal__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.diagram-hover-modal__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.diagram-hover-modal__body::-webkit-scrollbar-thumb {
+  background: rgba(18, 170, 255, 0.2);
+  border-radius: 0;
+
+  &:hover {
+    background: rgba(18, 170, 255, 0.4);
+  }
+}
+
+@media (max-width: 768px) {
+  .diagram-hover-modal__content {
+    min-width: 280px;
+    max-width: calc(100vw - 32px);
+    max-height: 50vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagram-hover-modal__trigger,
+  .diagram-hover-modal__close {
+    transition: none;
+  }
+}

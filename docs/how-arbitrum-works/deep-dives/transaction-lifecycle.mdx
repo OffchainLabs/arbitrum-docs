@@ -7,6 +7,8 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
+import DrawioReactFlow from '@site/src/components/DrawioReactFlow';
+
 You can submit transactions to <a data-quicklook-from="arbitrum">Arbitrum</a> through two main pathways:
 
 1. **Through the [<a data-quicklook-from="sequencer">Sequencer</a>](/how-arbitrum-works/deep-dives/sequencer.mdx)**: The standard method for most transactions.
@@ -33,7 +35,7 @@ You can also submit transactions directly to the Delayed Inbox contract on the p
 
 The following diagram shows the different ways you can submit transactions to Arbitrum:
 
-<ImageZoom src="/img/haw-transaction-lifecycle.png" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
+<DrawioReactFlow manifest="/diagrams/haw-transaction-lifecycle.manifest.xml" />
 
 ## Submitting transactions to the Sequencer
 

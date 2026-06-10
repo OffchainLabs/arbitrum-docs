@@ -6,6 +6,11 @@ const sidebars = {
   getStartedSidebar: [
     {
       type: 'doc',
+      id: 'test-interactive-diagrams',
+      label: 'Test interactive diagrams',
+    },
+    {
+      type: 'doc',
       id: 'get-started/overview',
       label: 'Get started',
     },
@@ -13,6 +18,11 @@ const sidebars = {
       type: 'doc',
       id: 'get-started/arbitrum-introduction',
       label: 'Arbitrum: introduction',
+    },
+    {
+      type: 'doc',
+      id: 'test-interactive-diagrams',
+      label: 'Test interactive diagrams',
     },
     {
       type: 'category',
