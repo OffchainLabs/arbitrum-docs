@@ -151,13 +151,13 @@ The "hash <a data-quicklook-from="oracle">oracle</a> trick" of storing the Merkl
 
 Arbitrum is an Optimistic Rollup. Let's unpack what that means.
 
-_Rollup_
+#### Rollup
 
 Arbitrum is a Rollup, which means that the inputs to the chain—the messages that are put into the inbox—are all recorded on the Ethereum chain as EIP-4844 blobs or as calldata if blobs are unavailable. Because of this, everyone has the information they need to determine the chain's current state—they have the full history of the inbox, and the results are uniquely determined by that history, so they can reconstruct the chain's state based on public information, if needed.
 
 This also allows anyone to participate in the Arbitrum protocol by running an Arbitrum node or serving as a validator. Nothing about the chain's history or state is a secret.
 
-_Optimistic_
+#### Optimistic
 
 Arbitrum is optimistic, meaning that it advances the state of the chain by allowing any party (a "validator") to post an <a data-quicklook-from="assertion">assertion</a> on Layer 1 that the party claims is correct, and then giving everyone else a chance to challenge that claim. If the <a data-quicklook-from="challenge-period">challenge period</a> (6.4 days) passes and no one challenges the claimed assertion, Arbitrum confirms it as correct. If someone challenges the claim during the challenge period Arbitrum uses an efficient dispute-resolution protocol (detailed below) to determine which party is lying. The liar will forfeit a deposit, and the truth-teller will take part of that deposit as a reward for their efforts (some of the deposit is burned, guaranteeing that the liar is punished even if there's some collusion going on).
 
