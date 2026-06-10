@@ -7,7 +7,7 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-ArbOS is the child-EVM virtual machine monitor (VMM—aka hypervisor) for the Arbitrum chain, providing the execution environment for the chain. It acts as a trusted “system glue” component within the State Transition Function (STF).
+ArbOS is the child-EVM virtual machine monitor (VMM—aka hypervisor) for the Arbitrum chain, providing the execution environment for the chain. It acts as a trusted “system glue” component within the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
 
 ArbOS is responsible for:
 
@@ -17,11 +17,11 @@ ArbOS allocates and tracks the resources needed to execute transactions on the c
 
 ## 2. Block production
 
-ArbOS processes incoming sequencer data batches to produce child chain blocks, ensuring the state is updated correctly.
+ArbOS processes incoming [sequencer data batches](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting) to produce child chain blocks, ensuring the state is updated correctly.
 
 ## 3. Cross-chain messaging
 
-It facilitates communication between the parent and child chains, supporting features such as **ETH** and token deposits and withdrawals.
+It facilitates communication between the parent and child chains, supporting features such as **ETH** and token [deposits](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) and [withdrawals](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx).
 
 ## 4. Enhanced EVM execution
 
@@ -45,7 +45,7 @@ ArbOS implements precompiles using a Solidity interface paired with a Golang bac
 
 ## Messages
 
-An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming sequencer message. A message includes one or more user transactions, depending on load, and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, the relationship is still bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that made it. A sequencer batch may contain more than one `L1IncomingMessage`.
+An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) message. A message includes one or more user transactions, depending on load, and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, the relationship is still bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that made it. A sequencer batch may contain more than one `L1IncomingMessage`.
 
 ## Retryables
 
@@ -72,6 +72,6 @@ See [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) for the comp
 
 ## Stylus-specific differences
 
-<a data-quicklook-from="stylus">Stylus</a> extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on Ink units, with LRU caching to minimize execution overhead.
+[<a data-quicklook-from="stylus">Stylus</a>](/stylus/gentle-introduction.mdx) extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on Ink units, with LRU caching to minimize execution overhead.
 
 For the full technical details of Stylus execution flow, caching, gas pricing, and Go-WASI integration, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#stylus-specific-differences).
