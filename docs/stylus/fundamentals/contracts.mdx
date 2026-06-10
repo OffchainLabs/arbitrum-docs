@@ -8,7 +8,7 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 displayed_sidebar: buildStylusSidebar
 ---
 
-Stylus smart contracts are fully compatible with Solidity contracts on Arbitrum chains. They compile to WebAssembly and share the same EVM state trie as Solidity contracts, enabling seamless interoperability.
+Stylus smart contracts are fully compatible with Solidity contracts on Arbitrum chains. They compile to WebAssembly and share the same EVM state trie as Solidity contracts, enabling interoperability.
 
 ## Contract basics
 
@@ -522,7 +522,7 @@ See the [Global Variables and Functions](./global-variables-and-functions.mdx) d
 
 ## Events
 
-Events allow contracts to log data to the blockchain, enabling off-chain monitoring and indexing.
+Events allow contracts to log data to the blockchain, enabling offchain monitoring and indexing.
 
 ### Defining events
 
@@ -783,7 +783,7 @@ impl Token {
 
 ## Complete example
 
-Here's a complete `ERC-20`-style token contract demonstrating all major features:
+Here's a complete **ERC-20**-style token contract demonstrating all major features:
 
 ```rust
 #![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
@@ -1341,7 +1341,7 @@ impl SendEther {
 }
 ```
 
-### Where can you send `ETH`
+### Where can you send **ETH**
 
 1. **Externally owned account (EOA) addresses**: Directly send ether to any EOA address
 2. **Solidity contracts with the `receive()` function**: Send ether without calldata to contracts implementing `receive()`
@@ -1652,3 +1652,4 @@ impl Vault {
 - [Compound Types](./data-types/compound-types.mdx): Arrays, structs, tuples
 - [Storage Types](./data-types/storage.mdx): Persistent storage
 - [Global Variables and Functions](./global-variables-and-functions.mdx): VM context methods
+- [Minimal entrypoint contracts](../advanced/minimal-entrypoint-contracts.mdx): Hand-craft an entrypoint without macros

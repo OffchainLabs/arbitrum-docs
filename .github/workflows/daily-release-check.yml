@@ -2,7 +2,7 @@ name: Daily Dependency Release Check
 
 on:
   schedule:
-    - cron: '0 8 * * *' # Runs at 8 AM UTC every day
+    - cron: '0 8 * * 1' # Runs at 8 AM UTC every Monday
   workflow_dispatch: # Allows manual triggering
 
 jobs:

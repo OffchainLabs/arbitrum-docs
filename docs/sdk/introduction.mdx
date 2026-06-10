@@ -1,6 +1,7 @@
 ---
 id: introduction
 title: Introduction
+slug: /sdk
 ---
 
 # Introduction
@@ -10,7 +11,7 @@ The Arbitrum SDK is a powerful TypeScript library that streamlines interactions 
 **Key Features**
 
 - Token Bridging: Effortlessly bridge tokens between Ethereum and Arbitrum.
-- Message Passing: Seamlessly pass messages across networks.
+- Message Passing: Easily pass messages across networks.
 - Contracts Interface: Leverage a strongly-typed interface for interacting with smart contracts.
 
 Below is an overview of the Arbitrum SDK functionality. See the [tutorials](https://github.com/OffchainLabs/arbitrum-tutorials) for more examples.
@@ -52,15 +53,15 @@ pnpm install @arbitrum/sdk
 
 Arbitrum SDK can be used to bridge assets to or from an Arbitrum Network. The following asset bridgers are currently available:
 
-- [`EthBridger`](./assetBridger/ethBridger.md)
-- [`Erc20Bridger`](./assetBridger/erc20Bridger.md)
+- [`EthBridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/ethBridger.ts)
+- [`Erc20Bridger`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/erc20Bridger.ts)
 
 All asset bridgers have the following methods which accept different parameters depending on the asset bridger type:
 
-- [`deposit`](./assetBridger/assetBridger.md#deposit): moves assets from the Parent to the Child chain
-- [`withdraw`](./assetBridger/assetBridger.md#withdraw): moves assets from the Child to the Parent chain
+- [`deposit`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts): moves assets from the Parent to the Child chain
+- [`withdraw`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/assetBridger/assetBridger.ts): moves assets from the Child to the Parent chain
 
-#### Example `ETH` deposit to Arbitrum One
+#### Example **ETH** deposit to Arbitrum One
 
 ```ts
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
@@ -78,9 +79,9 @@ const ethDepositTxResponse = await ethBridger.deposit({
 const ethDepositTxReceipt = await ethDepositTxResponse.wait();
 ```
 
-[Learn more in the `ETH` Deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
+[Learn more in the **ETH** Deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
 
-#### Example `ETH` withdrawal from Arbitrum One
+#### Example **ETH** withdrawal from Arbitrum One
 
 ```ts
 import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
@@ -97,7 +98,7 @@ const withdrawTx = await ethBridger.withdraw({
 const withdrawRec = await withdrawTx.wait();
 ```
 
-[Learn more in the `ETH` Withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
+[Learn more in the **ETH** Withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
 
 ### Networks
 
@@ -105,7 +106,7 @@ Arbitrum SDK comes pre-configured for Mainnet and Sepolia, and their Arbitrum co
 
 #### Configuring network
 
-To interact with a custom [`ArbitrumNetwork`](./dataEntities/networks), you can register it using the [`registerCustomArbitrumNetwork`](./dataEntities/networks.md#registercustomarbitrumnetwork) function.
+To interact with a custom [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts), you can register it using the [`registerCustomArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts) function.
 
 ```ts
 import { registerCustomArbitrumNetwork } from '@arbitrum/sdk';
@@ -118,7 +119,7 @@ registerCustomArbitrumNetwork({
 
 ### Cross chain messages
 
-When assets are moved by the Parent and Child cross chain messages are sent. The lifecycles of these messages are encapsulated in the classes [`ParentToChildMessage`](./message/ParentToChildMessage) and [`ChildToParentMessage`](./message/ChildToParentMessage). These objects are commonly created from the receipts of transactions that send cross chain messages. A cross chain message will eventually result in a transaction being executed on the destination chain, and these message classes provide the ability to wait for that finalizing transaction to occur.
+When assets are moved by the Parent and Child cross chain messages are sent. The lifecycles of these messages are encapsulated in the classes [`ParentToChildMessage`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/message/ParentToChildMessage.ts) and [`ChildToParentMessage`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/message/ChildToParentMessage.ts). These objects are commonly created from the receipts of transactions that send cross chain messages. A cross chain message will eventually result in a transaction being executed on the destination chain, and these message classes provide the ability to wait for that finalizing transaction to occur.
 
 #### Redeem a parent-to-child message
 
@@ -179,9 +180,9 @@ const inboxRec = await resultsParent.wait();
 
 ### Utils
 
-- [`EventFetcher`](./utils/eventFetcher): A utility to provide typing for the fetching of events
-- [`MultiCaller`](./utils/multicall#multicaller): A utility for executing multiple calls as part of a single RPC request. This can be useful for reducing round trips.
-- [`constants`](./dataEntities/constants): A list of useful Arbitrum related constants
+- [`EventFetcher`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/utils/eventFetcher.ts): A utility to provide typing for the fetching of events
+- [`MultiCaller`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/utils/multicall.ts): A utility for executing multiple calls as part of a single RPC request. This can be useful for reducing round trips.
+- [`constants`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/constants.ts): A list of useful Arbitrum related constants
 
 ## Development
 

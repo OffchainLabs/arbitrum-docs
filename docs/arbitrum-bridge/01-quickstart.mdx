@@ -6,24 +6,28 @@ user_story: As a user, I want to learn how to use Arbitrum's bridge to transfer 
 content_type: quickstart
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
+This quickstart is for users who want to deposit **ETH** or any **ERC-20** tokens from a <a data-quicklook-from="parent-chain">parent chain</a> to a <a data-quicklook-from="child-chain">child chain</a> or vice versa, using [Arbitrum’s bridge](https://bridge.arbitrum.io/). For example, from Ethereum to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, or from Arbitrum One to a Layer 3 Arbitrum chain.
 
-This quickstart is for users who want to deposit `ETH` or any `ERC-20` tokens from a <a data-quicklook-from="parent-chain">parent chain</a> to a <a data-quicklook-from="child-chain">child chain</a> or vice versa, using [Arbitrum’s bridge](https://bridge.arbitrum.io/). For example, from Ethereum to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, or from Arbitrum One to a Layer 3 Arbitrum chain.
+We will walk you through the entire process step by step, providing as much detail as possible. If you feel stuck at any step, see [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx), or contact us through our [Discord](https://discord.gg/arbitrum), and we will be happy to help you complete the process.
 
-We will walk you through the entire process step by step, providing as much detail as possible. If you feel stuck at any step, don’t hesitate to contact us through our [Discord](https://discord.gg/arbitrum), and we will be happy to help you complete the process.
+:::info Bridging **USDC**?
+
+Arbitrum One supports two distinct forms of **USDC** (native and bridged). Before you deposit, see [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx) so you receive the form you intend.
+
+:::
 
 The only prerequisite for this quickstart is to have a Web3 <a data-quicklook-from="wallet">wallet</a> installed, such as MetaMask or OKX Wallet. If you don’t have one installed, visit the [Arbitrum portal](https://portal.arbitrum.io/?categories=wallet) for a list of available wallets to download.
 
-## Deposit `ETH` or `ERC-20` tokens (from parent chain to child chain)
+## Deposit **ETH** or **ERC-20** tokens (from parent chain to child chain)
 
 ### Step 1: Get some native currency
 
-You’ll need the native currency of the parent chain to bridge your assets to the destination chain. For example, if you want to bridge assets from Ethereum to Arbitrum One, you’ll need `ETH` on Ethereum to initiate the process.
+You’ll need the native currency of the parent chain to bridge your assets to the destination chain. For example, if you want to bridge assets from Ethereum to Arbitrum One, you’ll need **ETH** on Ethereum to initiate the process.
 
 There are several ways to obtain the native currency:
 
-- Using a [supported centralized exchange](https://portal.arbitrum.io/projects?chains=arbitrum-one_arbitrum-nova&subcategories=centralized-exchanges), which allows you to purchase `ETH` and withdraw it to your wallet. Most major centralized exchanges support direct withdrawals from your centralized exchange wallet to the Arbitrum network.
-- Using an [on-ramp service](https://portal.arbitrum.io/projects?chains=arbitrum-one_arbitrum-nova&subcategories=fiat-on-ramp), which allows you to purchase `ETH` and send it directly to your wallet.
+- Using a [supported centralized exchange](https://portal.arbitrum.io/projects?chains=arbitrum-one_arbitrum-nova&subcategories=centralized-exchanges), which allows you to purchase **ETH** and withdraw it to your wallet. Most major centralized exchanges support direct withdrawals from your centralized exchange wallet to the Arbitrum network.
+- Using an [on-ramp service](https://portal.arbitrum.io/projects?chains=arbitrum-one_arbitrum-nova&subcategories=fiat-on-ramp), which allows you to purchase **ETH** and send it directly to your wallet.
 - If you are using a testnet, request funds from a Sepolia or Arbitrum Sepolia [faucet](../for-devs/dev-tools-and-resources/chain-info#faucet-list).
 
 ### Step 2: Add the preferred network to your wallet
@@ -34,11 +38,7 @@ You'll also need to add the desired chain's RPC endpoint to your wallet. Here, w
 2. Click the network selector drop-down in the top-right corner.
 3. Click the **Add a custom network** and then provide the information corresponding to the chain you want to send your assets to (see below).
 
-<ImageZoom
-  src="/img/bridge-quickstart-metamask-set-network.gif"
-  alt="Add the desired destination network to your MetaMask"
-  className="img-600px"
-/>
+<ImageZoom src="/img/bridge-quickstart-metamask-set-network.gif" alt="Add the desired destination network to your MetaMask" className="img-600px" />
 
 Below are the the most common Arbitrum chains. For a more exhaustive list, please visit our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) page.
 
@@ -47,12 +47,12 @@ Below are the the most common Arbitrum chains. For a more exhaustive list, pleas
 | Network name       | Arbitrum One                 | Arbitrum Nova                                            | Arbitrum Sepolia                       |
 | RPC URL            | https://arb1.arbitrum.io/rpc | https://nova.arbitrum.io/rpc                             | https://sepolia-rollup.arbitrum.io/rpc |
 | Chain ID           | 42161                        | 42170                                                    | 421614                                 |
-| Currency symbol    | `ETH`                        | `ETH`                                                    | SepoliaETH                             |
+| Currency symbol    | **ETH**                      | **ETH**                                                  | SepoliaETH                             |
 | Block explorer URL | https://arbiscan.io          | https://nova.arbiscan.io/                                | https://sepolia.arbiscan.io            |
 
 ### Step 3: Initiate the deposit
 
-To bridge your `ETH` or `ERC-20` tokens to a different chain, start by visiting [bridge.arbitrum.io](https://bridge.arbitrum.io/).
+To bridge your **ETH** or **ERC-20** tokens to a different chain, start by visiting [bridge.arbitrum.io](https://bridge.arbitrum.io/).
 
 1. Connect your wallet to the bridge.
 2. Ensure the **source** network is selected (from where you want to deposit your assets) at the top of the page.
@@ -66,57 +66,37 @@ Also note, that when choosing the **source** or **destination** network, a pop u
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-2.png"
-  alt="Add the desired network to your Web3 wallet"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-2.png" alt="Add the desired network to your Web3 wallet" className="img-600px" />
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-3.png"
-  alt="Add the desired network to your Web3 wallet"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-3.png" alt="Add the desired network to your Web3 wallet" className="img-600px" />
 
 4. Select the token you want to bridge in the token drop-down menu.
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-4.png"
-  alt="Select the token to bridge"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-4.png" alt="Select the token to bridge" className="img-600px" />
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-5.png"
-  alt="Select the token to bridge"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-5.png" alt="Select the token to bridge" className="img-600px" />
 
-5. Enter the amount of `ETH` or `ERC-20` tokens you want to bridge over in the **From** box.
+5. Enter the amount of **ETH** or **ERC-20** tokens you want to bridge over in the **From** box.
 6. Press **Move** funds.
 7. Follow the additional prompts from your Web3 wallet.
 
-:::info Ensure sufficient `ETH` balance
+:::info Ensure sufficient **ETH** balance
 
-Please ensure you have sufficient `ETH` in your wallet to cover the transation costs; otherwise, the Web3 wallet pop-up will not appear.
+Please ensure you have sufficient **ETH** in your wallet to cover the transation costs; otherwise, the Web3 wallet pop-up will not appear.
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-6.png"
-  alt="Enter the amount of tokens to bridge"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-6.png" alt="Enter the amount of tokens to bridge" className="img-600px" />
 
 After you submit the <a data-quicklook-from="transaction">transaction</a> through your Web3 wallet, you can expect your funds to arrive on the destination chain within roughly 15-30 minutes (depending on chain congestion).
 
 Also, ensure your wallet is set to the destination network so you can see when your funds arrive.
 
-## Withdraw `ETH` or `ERC-20` tokens (from child chain to parent chain)
+## Withdraw **ETH** or **ERC-20** tokens (from child chain to parent chain)
 
 :::info Seven day withdrawal period for Arbitrum One and Nova networks
 
-Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least seven days to receive them on the Ethereum mainnet. For more details, see [Arbitrum Bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-a-withdrawal-from-arbitrum-chains-one-and-nova).
+Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least seven days to receive them on the Ethereum mainnet. For more details, see [Arbitrum Bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-a-withdrawal-from-arbitrum-chains-one-and-nova). For the protocol-level reason behind the dispute window, see [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) and the FAQ entry on [why one week was chosen](/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window).
 
 :::
 
@@ -128,41 +108,36 @@ Testnets like Arbitrum Sepolia only appear if you have an established connection
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-7.png"
-  alt="Select the token to withdraw"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-7.png" alt="Select the token to withdraw" className="img-600px" />
 
 1. Select the token you want to bridge in the token drop-down menu.
-2. Enter the amount of `ETH` or `ERC-20` tokens you want to bridge in the **From** box.
+2. Enter the amount of **ETH** or **ERC-20** tokens you want to bridge in the **From** box.
 3. Press **Move funds**.
 4. Follow the prompts from your Web3 wallet.
 
-:::info Ensure sufficient `ETH` balance
+:::info Ensure sufficient **ETH** balance
 
-Please ensure you have sufficient `ETH` in your wallet to cover the transaction costs; otherwise, no Web3 wallet pop-up will appear.
+Please ensure you have sufficient **ETH** in your wallet to cover the transaction costs; otherwise, no Web3 wallet pop-up will appear.
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-8.png"
-  alt="Enter the amount of token to withdraw"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-8.png" alt="Enter the amount of token to withdraw" className="img-600px" />
 
 A countdown will appear stating that you'll receive your funds in 7-8 days.
 
 You can check the status of your withdrawal by clicking on your profile in the top-right corner and opening the **Transactions** tab, where you can claim it when it's ready.
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-9.png"
-  alt="See the transaction history"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-9.png" alt="See the transaction history" className="img-600px" />
 
-Once the countdown is complete, switch to the destination network in your wallet and press the **Claim** button, which is now blue, to receive your funds.
+Once the countdown is complete, press the **Claim** button to receive your funds.
 
-## What's next?
+## See also
+
+- [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx)
+- [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx)
+- [Arbitrum embedded bridge widget](/arbitrum-bridge/04-embedded-bridge-widget.mdx)
+- [Bridge transaction traceability](/arbitrum-bridge/05-bridge-transaction-traceability.mdx)
+- [How token bridging works (deep dive)](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- [Bridge tokens programmatically](/build-decentralized-apps/bridging/overview.mdx)
 
 The team working on Arbitrum is always interested and looking forward to engaging with its users. Why not follow us on [X (Twitter)](https://x.com/arbitrum) or join our community on [Discord](https://discord.gg/arbitrum)?

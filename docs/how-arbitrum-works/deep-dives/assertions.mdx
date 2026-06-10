@@ -1,6 +1,6 @@
 ---
 title: Assertions
-description: 'Deep dive information on assertions and creating them.'
+description: 'Deep dive information on assertions and how to make an assertion.'
 author: pete-vielhaber
 sme: Mehdi
 user_story: As a current or prospective Arbitrum user, I need to learn more about the Rollup protocol and validation.
@@ -9,7 +9,7 @@ content_type: concept
 
 ## The Rollup chain assertions vs. child chain blocks
 
-The Rollup chain consists of assertions, which serve as checkpoints summarizing multiple child chain blocks.
+The Rollup chain consists of assertions, which serve as checkpoints summarizing multiple child chain blocks. Assertions are what give Arbitrum its hard finality guarantee — for the broader soft- vs. hard-finality picture, see [Finality](/how-arbitrum-works/deep-dives/sequencer.mdx#finality).
 
 - Child chain blocks contain individual transaction data
 - Assertions provide state summaries recorded on Ethereum
@@ -40,7 +40,7 @@ For more details on how the Rollup chain works under <a data-quicklook-from="bol
 
 :::note Validators and proposers serve different roles
 
-Validators validate transactions by computing the next <a data-quicklook-from="chain-state">chain state</a> using the chain's STF, whereas proposers can also assert and challenge the chain state on the parent chain.
+Validators validate transactions by computing the next <a data-quicklook-from="chain-state">chain state</a> using the chain's [STF](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx), whereas proposers can also assert and challenge the chain state on the parent chain.
 
 :::
 
@@ -50,7 +50,7 @@ An assertion implicitly claims that its predecessor is correct, meaning it also 
 
 An assertion also implicitly claims that its older siblings (other assertions with the same predecessor) are incorrect, if any exist. If two assertions are siblings, and the older sibling is correct, then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 
-The assertion is assigned a deadline, which indicates how much time other validators have to respond to it. For an assertion `R` with no older siblings, the deadline will equal the time when the assertion posts, plus an interval of time known as the <a data-quicklook-from="challenge-period">challenge period</a>; subsequent younger siblings will have the same deadline as their oldest sibling (`R`). You don't need to do anything if you're a validator and agree that an assertion is correct. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the party that proposed the first assertion (or another party acting in support of that assertion). More on challenges below:
+The assertion is assigned a deadline, which indicates how much time other validators have to respond to it. For an assertion `R` with no older siblings, the deadline will equal the time when the assertion posts, plus an interval of time known as the <a data-quicklook-from="challenge-period">challenge period</a>; subsequent younger siblings will have the same deadline as their oldest sibling (`R`). You don't need to do anything if you're a validator and agree that an assertion is correct. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the party that proposed the first assertion (or another party acting in support of that assertion). For the bisection protocol used to resolve such challenges, see [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx).
 
 ## Delays
 
@@ -60,9 +60,9 @@ The only delay users experience during a dispute is in their [child-to-parent ch
 
 ## Staking and validator incentives
 
-Arbitrum requires validators to bond `ETH` as a security deposit to ensure honest participation and prevent malicious behavior. This mechanism enforces economic accountability:
+Arbitrum requires validators to bond **ETH** as a security deposit to ensure honest participation and prevent malicious behavior. This mechanism enforces economic accountability (for a deeper analysis of bond sizing and dispute incentives, see [The economics of disputes in BoLD](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx)):
 
-- **Proposers** (validators submitting assertions) must bond `ETH` to support their claims.
+- **Proposers** (validators submitting assertions) must bond **ETH** to support their claims.
 - **Challenges** against incorrect assertions result in bond forfeiture for dishonest validators.
 - **Successful challengers** receive a portion of the dishonest validator's bond as a reward.
 
@@ -76,11 +76,11 @@ The protocol design requires only one honest validator to secure the system, mak
 
 ## Staking mechanism
 
-Some validators will act as bonders at any given time, while others remain passive. Bonders deposit `ETH` bonds into Arbitrum's smart contracts, which are forfeited if they lose a challenge.
+Some validators will act as bonders at any given time, while others remain passive. Bonders deposit **ETH** bonds into Arbitrum's smart contracts, which are forfeited if they lose a challenge.
 
 :::note
 
-Arbitrum Nitro chains accept `ETH` as the only collateral for staking.
+Arbitrum Nitro chains accept **ETH** as the only collateral for staking.
 
 :::
 

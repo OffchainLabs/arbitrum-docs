@@ -2,7 +2,7 @@
 
 Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages—parent-chain transactions that initiate a message to be executed on a child chain. A retryable is submittable for a fixed cost (dependent only on its calldata size) paid at the parent chain. Critically, the ticket's _submission_ on the parent chain is separable and asynchronous from its _execution_ on the child chain. This design provides atomicity for cross-chain operations: if the parent chain transaction to request submission succeeds (doesn't revert), then the execution of the retryable on the child chain has a strong guarantee to eventually succeed.
 
-For step-by-step instructions on creating retryable tickets, including parameter estimation and SDK usage, see [Creating retryable tickets](/build-decentralized-apps/how-to-bridge-from-parent-chain.mdx#creating-retryable-tickets).
+For step-by-step instructions on creating retryable tickets, including parameter estimation and SDK usage, see [Creating retryable tickets](/build-decentralized-apps/bridging/cross-chain-messaging.mdx#ethereum-to-arbitrum-messaging).
 
 ### Retryable ticket lifecycle
 

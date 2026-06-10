@@ -7,31 +7,22 @@ content_type: how-to
 unlisted: true
 ---
 
-<a data-quicklook-from="arbitrum">Arbitrum</a> chains are customizable Layer 3 (L3) chains that settle
-to an Arbitrum Layer 2 (L2) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">
-  validator
-</a> configurations to ensure chain security through bonding and <a data-quicklook-from="assertion">
-  assertion
-</a> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">
-  challenge
-</a> incorrect assertions. Arbitrum chains can be permissioned, meaning validators must be allowlisted.
-For chains that use that elect to use the BoLD protocol, permissionless validation is an option (BoLD
-also supports permissioned validation).
+<a data-quicklook-from="arbitrum">Arbitrum</a> chains are customizable Layer 3 (L3) chains that settle to an Arbitrum Layer 2 (<a data-quicklook-from="l2">L2</a>) chain, such as Arbitrum One. They support <a data-quicklook-from="validator">validator</a> configurations to ensure chain security through bonding and [assertion](/how-arbitrum-works/deep-dives/assertions.mdx) challenges. Validators post assertions about the chain's state on the parent L2 chain and can <a data-quicklook-from="challenge">challenge</a> incorrect assertions. <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> can be permissioned, meaning validators must be allowlisted. For chains that use that elect to use the [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) protocol, <a data-quicklook-from="permissionless-validation">permissionless validation</a> is an option (BoLD also supports permissioned validation).
 
 Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
-Arbitrum chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects bonding tokens (e.g., `WETH` for BoLD-enabled chains like Arbitrum One/Nova, or `ETH`/native for other chains).
+Arbitrum chains may utilize the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol for efficient dispute resolution, which affects bonding tokens (e.g., **WETH** for BoLD-enabled chains like Arbitrum One/Nova, or **ETH**/native for other chains).
 
 ## `stakeToken`
 
-The bonded token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. A bonded token can be `WETH` or the parent chain's native token.
+The bonded token is the asset that validators must bond to participate in asserting the chain's state on the parent L2 chain. It serves as collateral for challenges. A bonded token can be **WETH** or the <a data-quicklook-from="parent-chain">parent chain's</a> native token.
 
 ### Configuration details
 
-- Can be `ETH` (native gas token) or any `ERC-20` token.
-- **For BoLD-enabled chains** (e.g., settling to Arbitrum One or Nova), it defaults to `WETH`.
-- **For non-BoLD chains**, it defaults to the <a data-quicklook-from="parent-chain">parent chain</a>'s native token (usually `ETH`).
-- Currently, its value is often hardcoded to `ETH` in basic deployments, but customizable to an `ERC-20` contract address in advanced setups. Future updates will expand `ERC-20` support.
+- Can be **ETH** (native gas token) or any **ERC-20** token.
+- **For BoLD-enabled chains** (e.g., settling to Arbitrum One or Nova), it defaults to **WETH**.
+- **For non-BoLD chains**, it defaults to the <a data-quicklook-from="parent-chain">parent chain</a>'s native token (usually **ETH**).
+- Currently, its value is often hardcoded to **ETH** in basic deployments, but customizable to an **ERC-20** contract address in advanced setups. Future updates will expand **ERC-20** support.
 
 ### How to configure
 
@@ -51,7 +42,7 @@ The bonded token is the asset that validators must bond to participate in assert
    ```
 
 2. **Set up the public client for the parent chain**:
-   Create a public client to interact with the parent chain.
+   Create a public <a data-quicklook-from="client">client</a> to interact with the parent chain.
 
    ```typescript
    import { createPublicClient, http } from 'viem';
@@ -64,26 +55,23 @@ The bonded token is the asset that validators must bond to participate in assert
    ```
 
 3. **Prepare deployment parameters, including `stakeToken`**:
-   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
+   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the **ERC-20** address on the parent chain) and `baseStake` (minimum stake amount in wei).
 
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
 
-   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
-     parentChainPublicClient,
-     {
-       chainId: 123456, // Must match the chainId from Step 1
-       owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
-       chainConfig,
-       stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
-       baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
-       // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
-     },
-   );
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+     chainId: 123456, // Must match the chainId from Step 1
+     owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
+     chainConfig,
+     stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
+     baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
+     // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
+   });
    ```
 
 4. **Deploy the chain**:
-   Use `createRollup` to deploy. Provide validator and batch poster addresses. This step sends the transaction to the parent chain.
+   Use `createRollup` to deploy. Provide validator and <a data-quicklook-from="batch-poster">Batch Poster</a> addresses. This step sends the <a data-quicklook-from="transaction">transaction</a> to the parent chain.
 
    ```typescript
    import { createWalletClient } from 'viem';
@@ -133,11 +121,11 @@ The bonded token is the asset that validators must bond to participate in assert
 
 ### Additional notes
 
-- Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
+- Ensure the `stakeToken` is a compliant **ERC-20** on the parent chain; mismatches can cause deployment failures.
 - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
 - The owner address gains control over upgrades and settings—use a secure multisig in production.
-- For production, consider a Rollup-as-a-Service (RaaS) provider for monitoring and scaling.
-- **Verification**: This SDK-based method deploys directly via smart contract interactions and does not involve any UI or portal (the portal is for asset bridging, not chain deployment).
+- For production, consider a Rollup-as-a-Service (<a data-quicklook-from="raas">RaaS</a>) provider for monitoring and scaling.
+- **Verification**: This SDK-based method deploys directly via <a data-quicklook-from="smart-contract">smart contract</a> interactions and does not involve any UI or <a data-quicklook-from="portal">portal</a> (the portal is for asset bridging, not chain deployment).
 
 ## `baseStake`
 
@@ -145,7 +133,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 ### Configuration details
 
-- Specified as a float value (e.g., in `wei` for `ETH`).
+- Specified as a float value (e.g., in `wei` for **ETH**).
 - Must be greater than 0.
 - **Balances security**: Low values ease entry but risk malicious challenges; high values deter attacks but exclude smaller validators.
 
@@ -180,22 +168,19 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
    ```
 
 3. **Prepare deployment parameters, including `stakeToken`**:
-   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the `ERC-20` address on the parent chain) and `baseStake` (minimum stake amount in wei).
+   Use `createRollupPrepareDeploymentParamsConfig` to define the rollout config. This is where you configure the `stakeToken` (the **ERC-20** address on the parent chain) and `baseStake` (minimum stake amount in wei).
 
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
 
-   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
-     parentChainPublicClient,
-     {
-       chainId: 123456, // Must match the chainId from Step 1
-       owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
-       chainConfig,
-       stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
-       baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
-       // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
-     },
-   );
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+     chainId: 123456, // Must match the chainId from Step 1
+     owner: '0xYourOwnerAddressHere', // Must match InitialChainOwner from Step 1
+     chainConfig,
+     stakeToken: '0xYourStakeTokenERC20AddressHere', // ERC-20 token address on parent chain for validator staking
+     baseStake: 1000000000000000000n, // Example: 1 token (adjust based on token decimals)
+     // Optional: Other params like confirmPeriodBlocks, loserStakeEscrow, etc.
+   });
    ```
 
 4. **Deploy the chain**:
@@ -251,7 +236,7 @@ The `baseStake` is the minimum amount of the bond token that validators must dep
 
 - **Validators and staking**: After deployment, validators bond by depositing at least `baseStake` of the `stakeToken` into the Rollup contract. This can be done via contract calls (e.g., using the `RollupUserLogic` interface).
 - **Warnings**:
-  - Ensure the `stakeToken` is a compliant `ERC-20` on the parent chain; mismatches can cause deployment failures.
+  - Ensure the `stakeToken` is a compliant **ERC-20** on the parent chain; mismatches can cause deployment failures.
   - Test on a testnet (e.g., Sepolia) first, as deployments are irreversible and cost gas.
   - The owner address gains control over upgrades and settings—use a secure multisig in production.
   - For production, consider a Rollup-as-a-Service (RaaS) provider for monitoring and scaling.
@@ -264,7 +249,7 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
 ### Configuration details
 
 - Funds are escrowed rather than immediately burned, allowing potential recovery or governance decisions.
-- **Recommended**: Set to an address controlled by the chain owner(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
+- **Recommended**: Set to an address controlled by the <a data-quicklook-from="chain-owner">chain owner</a>(s) for management, or a burn address (e.g., `0x000000000000000000000000000000000000dEaD`) if funds should be permanently removed.
 
 ### Configuring during deployment
 
@@ -300,16 +285,13 @@ The `loserStakeEscrow` is the address where a validator's bonded funds are sent 
    ```typescript
    import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
 
-   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(
-     parentChainPublicClient,
-     {
-       chainId: 123456,
-       owner: '0xYourOwnerAddressHere',
-       chainConfig,
-       loserStakeEscrow: '0xYourEscrowAddressHere', // e.g., owner-controlled or burn address
-       // Optional: baseStake: 100000000000000000n, stakeToken: '0xERC20Address', etc.
-     },
-   );
+   const createRollupConfig = await createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+     chainId: 123456,
+     owner: '0xYourOwnerAddressHere',
+     chainConfig,
+     loserStakeEscrow: '0xYourEscrowAddressHere', // e.g., owner-controlled or burn address
+     // Optional: baseStake: 100000000000000000n, stakeToken: '0xERC20Address', etc.
+   });
    ```
 
 4. **Deploy the chain**:
@@ -392,8 +374,8 @@ Key configuration parameters to include:
   - `StakeLatest`: Bonds on the latest correct assertion and challenges bad ones (available only on pre-BoLD chains).
   - `ResolveNodes`: Bonds on the latest assertion, resolves unconfirmed ones, and challenges bad assertions.
   - `MakeNodes`: Creates new assertions, resolves unconfirmed ones, and challenges bad ones (use cautiously, as it may lead to reverted transactions if multiple validators act at once).
-  - `Watchtower`: Passively monitors and logs errors without active challenging (enabled by default; no wallet needed, but set `--node.staker.enable=false` to disable if not wanted).
-- `--node.staker.parent-chain-wallet.private-key=[0xYourPrivateKey]` or `--node.staker.parent-chain-wallet.password=[YourPassword]`: Provides access to the wallet for on-chain operations. Use a secure method; password-protected keystores are safer than direct private keys.
+  - `Watchtower`: Passively monitors and logs errors without active challenging (enabled by default; no <a data-quicklook-from="wallet">wallet</a> needed, but set `--node.staker.enable=false` to disable if not wanted).
+- `--node.staker.parent-chain-wallet.private-key=[0xYourPrivateKey]` or `--node.staker.parent-chain-wallet.password=[YourPassword]`: Provides access to the wallet for onchain operations. Use a secure method; password-protected keystores are safer than direct private keys.
 - `--node.bold.enable=true`: Enable this if the chain has BoLD activated (required for versions before Nitro v3.6.0).
 
 For custom Arbitrum chains:
@@ -405,10 +387,10 @@ Run the command in a persistent setup (e.g., using Docker Compose or a systemd s
 
 ### Step 2: Verify the validator is running correctly
 
-- Monitor the node logs for confirmation messages:
+- Monitor the node logs for <a data-quicklook-from="confirmation">confirmation</a> messages:
   - Look for `INFO [...] running as validator txSender=[your_wallet_address] actingAsWallet=[your_wallet_address] whitelisted=true strategy=[YourChosenStrategy]`. This indicates the node is in validator mode with a valid wallet.
   - `validation succeeded`: Shows the node is successfully validating blocks.
-  - `found correct assertion`: Confirms the node is detecting and agreeing with on-chain assertions.
+  - `found correct assertion`: Confirms the node is detecting and agreeing with onchain assertions.
 - If issues arise, check for errors related to wallet funding, RPC connectivity, or chain syncing.
 
 ### Advanced: Creating a dedicated validator wallet
@@ -428,7 +410,7 @@ This creates a wallet file in your mounted directory (e.g., under `arb1/wallet/`
 
 ### For permissioned chains
 
-If the Arbitrum chain is permissioned (not fully permissionless), add your validator wallet address to the allowlist:
+If the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> is permissioned (not fully permissionless), add your validator wallet address to the allowlist:
 
 1. Identify the `upgradeExecutor` contract address for the chain.
 2. Call the `executeCall` method on it:

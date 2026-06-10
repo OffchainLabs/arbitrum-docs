@@ -1,6 +1,6 @@
 ---
-title: 'A gentle Introduction: Timeboost'
-sidebar_label: 'A gentle introduction'
+title: 'How Timeboost works'
+sidebar_label: 'How Timeboost works'
 description: 'Learn how Timeboost works and how it can benefit your Arbitrum-based project.'
 author: leeederek
 sme: leeederek
@@ -9,10 +9,8 @@ content_type: gentle-introduction
 ---
 
 import { FlowChart } from '@site/src/components/InteractiveDiagrams/Timeboost/CentralizedAuction';
-import ImageWithCaption from '@site/src/components/ImageCaptions/';
-import ImageZoom from '@site/src/components/ImageZoom';
- 
-<a data-quicklook-from='timeboost'>Arbitrum Timeboost</a> is a novel <a data-quicklook-from='transaction-ordering-policy'>transaction ordering policy</a> for Arbitrum chains that enables chain owners to capture the Maximal Extractable Value (MEV) on their chain, reduce spam, and preserve fast block times, all while protecting users from harmful types of MEV, such as sandwich attacks and front-running.
+
+<a data-quicklook-from="timeboost">Arbitrum Timeboost</a> is a novel <a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a> for Arbitrum chains that enables chain owners to capture the Maximal Extractable Value (MEV) on their chain, reduce spam, and preserve fast block times, all while protecting users from harmful types of MEV, such as sandwich attacks and front-running.
 
 Timeboost is the culmination of over a year of [research and development](https://arxiv.org/abs/2306.02179) by the team at Offchain Labs. It is currently live on Arbitrum One and Arbitrum Nova, and is available for Arbitrum chains, whose owners can adopt and customize it as they choose.
 
@@ -26,9 +24,9 @@ However, there are a few downsides to an FCFS ordering policy. Under FCFS, searc
 
 Timeboost retains most FCFS benefits while addressing FCFS limitations.
 
-Timeboost is a _transaction ordering policy_. It's a set of rules that the sequencer of an Arbitrum chain is trusted to follow when ordering transactions submitted by users. In the near future, multiple sequencers will be able to enforce those rules with decentralized Timeboost.
+Timeboost is a _transaction ordering policy_. It's a set of rules that the [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) of an Arbitrum chain is trusted to follow when ordering transactions submitted by users. In the near future, multiple sequencers will be able to enforce those rules with decentralized Timeboost.
 
-For Arbitrum chains, the sequencer’s sole job is to take arriving, valid transactions from users, place them into an order dictated by the transaction ordering policy, and then publish the final sequence to a real-time feed and in compressed batches to the chain’s data availability layer. Before Timeboost, the transaction ordering policy was FCFS, and Timeboost is a modified FCFS ordering policy.
+For Arbitrum chains, the sequencer’s sole job is to take arriving, valid transactions from users, place them into an order dictated by the transaction ordering policy, and then publish the final sequence to a [real-time feed](/how-arbitrum-works/deep-dives/sequencer.mdx#real-time-sequencer-feed) and in compressed batches to the chain’s data availability layer. Before Timeboost, the transaction ordering policy was FCFS, and Timeboost is a modified FCFS ordering policy.
 
 #### Timeboost preserves the great UX that Arbitrum chains are known for
 
@@ -58,11 +56,7 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
 
 ### The express lane
 
-<ImageZoom
-  src="/img/timeboost-centralized-timeboost-express-lane-workflow.jpg"
-  alt="using the express lane"
-  className="img-900px"
-/>
+<ImageZoom src="/img/timeboost-centralized-timeboost-express-lane-workflow.jpg" alt="using the express lane" className="img-900px" />
 
 The express lane implementation uses a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name "express lane." The sequencer will only accept valid transaction payloads to this endpoint if they are signed correctly by the current round’s <a data-quicklook-from='express-lane-controller'>express lane controller</a>.
 
@@ -76,11 +70,11 @@ The value of the express lane will be the sum of how much MEV the express lane c
 
 ### The Timeboost auction
 
-Determining control of the express lane in each round (default: 60 seconds) happens by a per-round auction, which is a sealed-bid, second-price auction. This auction occurs to determine the express lane controller for the next round. In other words, determining the express lane controller can happen at any point in time in the previous auction round. Bids for the auction can be made with any `ERC-20` token, in any amount, and can be collected by any address—at the full discretion of the chain owner.
+Determining control of the express lane in each round (default: 60 seconds) happens by a per-round auction, which is a sealed-bid, second-price auction. This auction occurs to determine the express lane controller for the next round. In other words, determining the express lane controller can happen at any point in time in the previous auction round. Bids for the auction can be made with any **ERC-20** token, in any amount, and can be collected by any address—at the full discretion of the chain owner.
 
 <FlowChart />
 
-The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This closing time means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bidding is over and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the on-chain auction contract to formally resolve the auction.
+The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This closing time means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bidding is over and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the onchain auction contract to formally resolve the auction.
 
 :::info Bid behavior
 
@@ -90,7 +84,7 @@ The autonomous auctioneer will consider only an address’s most recent bid, mea
 
 ### Auction contract
 
-Before placing a bid in the auction, a party must deposit funds into the `Auction` Contract. At any time, you can make a deposit or add additional funds to an existing deposit. These deposits are fully withdrawable, with a nominal delay (two rounds or two minutes by default), to prevent impacting the outcome of an existing round. There is no minimum deposit amount, but a starting minimum bid of 0.001 `WETH` (the default amount and token) is required, known as the "minimum reserve price".
+Before placing a bid in the auction, a party must deposit funds into the `Auction` Contract. At any time, you can make a deposit or add additional funds to an existing deposit. These deposits are fully withdrawable, with a nominal delay (two rounds or two minutes by default), to prevent impacting the outcome of an existing round. There is no minimum deposit amount, but a starting minimum bid of 0.001 **WETH** (the default amount and token) is required, known as the "minimum reserve price".
 
 The chain owner sets the minimum reserve price, which can be updated at any time up to 30 seconds (default) before the start of the next round, ensuring that auction participants always know the reserve price at least 30 seconds before they must submit their bids. A reserve price can also be set by the chain owner (or by an address designated by the chain owner) as a way to raise the minimum bid, as the `Auction` Contract enforces that the reserve price is never less than the minimum reserve price.
 

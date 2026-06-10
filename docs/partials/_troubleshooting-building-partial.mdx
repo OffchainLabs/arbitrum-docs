@@ -1,6 +1,6 @@
 ### How does gas work on Arbitrum?
 
-Fees on Arbitrum chains are collected on L2 in the chains' native currency (`ETH` on both Arbitrum One and Nova).
+Fees on Arbitrum chains are collected on L2 in the chains' native currency (**ETH** on both Arbitrum One and Nova).
 
 A transaction fee is comprised of both an L1 and an L2 component:
 
@@ -8,7 +8,7 @@ The L1 component is meant to compensate the Sequencer for the cost of posting tr
 
 The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that, unlike on Ethereum, Arbitrum chains enforce a gas price floor. See the [chain info page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#chain-parameters) for current values.
 
-L2 Gas price adjusts responsively to chain congestion, ala EIP 1559.
+L2 Gas price adjusts responsively to chain congestion, ala EIP-1559.
 
 ### I tried to create a retryable ticket but the transaction reverted on L1. How can I debug the issue?
 
@@ -20,7 +20,7 @@ Creation of retryable tickets can revert with one of these custom errors:
 4. **`DataTooLarge`**: provided data is greater than 117.964 KB (90% of Geth's 128 KB transaction size limit).
    To figure out which error caused your transaction to revert, we recommend using Etherscan's Parity VM trace support (Tenderly is generally a useful debugging tool; however, it can be buggy when it comes to custom Geth errors).
 
-Use the following link to view the Parity VM trace of your failed transaction (replacing the tx-hash with your own, and using the appropriate etherscan root url):
+Use the following link to view the Parity VM trace of your failed transaction (replacing the `tx-hash` with your own, and using the appropriate etherscan root url):
 
 [https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw](https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw)
 
@@ -32,7 +32,7 @@ The first four bytes of the output are the custom error signature; in our exampl
 
 To let's find out which custom error this signature represents, we can use this handy tool by Samzcsun:  [https://sig.eth.samczsun.com/](https://sig.eth.samczsun.com/)
 
-Checking 0xfadf238a gives us `InsufficientSubmissionCost(uint256,uint256)`.
+Checking `0xfadf238a` gives us `InsufficientSubmissionCost(uint256,uint256)`.
 
 ### How is the L1 portion of an Arbitrum transaction's gas fee computed?
 
@@ -212,7 +212,7 @@ Notably, the sender account remains consistent across all instances of this tran
 
 ### Why do some blocks have a total gas limit that's over the standard block gas limit?
 
-The execution gas block limit of Arbitrum chains is 32 million. However, when querying a block, we may find a gasLimit value that exceeds the specified number.
+The execution gas block limit of Arbitrum chains is 32 million. However, when querying a block, we may find a `gasLimit` value that exceeds the specified number.
 
 Finding it exceeds happens because this `gasLimit` field accounts for both execution gas and the corresponding gas limit of the L1 costs (you can find more information about the role of the L1 costs in a transaction's gas limit in [this article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9)). The gas limit corresponding to L1 costs is practically unlimited, leading to the possibility of finding very high values on the gasLimit field of a block.
 
