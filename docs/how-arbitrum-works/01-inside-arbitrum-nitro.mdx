@@ -20,8 +20,6 @@ The body of this document will describe Arbitrum Rollup, the primary use case fo
 - **Scalability**: moving contracts' computation and storage off of the main Ethereum chain, allowing much higher throughput.
 - **Minimum cost**: designed and engineered to minimize the <a data-quicklook-from="l1">L1</a> gas footprint of the system, minimizing per-transaction cost.
 
-Some other Layer 2 systems provide some of these features, but to our knowledge, no other system offers the same combination of features at the same cost.
-
 Nitro is a major upgrade to Arbitrum, improving over <a data-quicklook-from="arbitrum-classic">"classic" Arbitrum</a> in several ways:
 
 - **Advanced calldata compression** further reduces <a data-quicklook-from="transaction">transaction</a> costs on Arbitrum by reducing the amount of data posted to L1.
@@ -99,9 +97,7 @@ The Sequencer's <a data-quicklook-from="batch">batches</a> are compressed using 
 
 The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers to [go-ethereum](/how-arbitrum-works/reference/geth.mdx), the most common node software for Ethereum. As its name would suggest, go-ethereum is written in the Go programming language, as is almost all of Nitro.
 
-<VanillaAdmonition type="info">
-In Ethereum's post-Merge architecture, Geth is an **execution client**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles Geth's execution core in as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.
-</VanillaAdmonition>
+<VanillaAdmonition type="info">In Ethereum's post-Merge architecture, Geth is an **execution client**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles Geth's execution core in as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.</VanillaAdmonition>
 
 <ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
