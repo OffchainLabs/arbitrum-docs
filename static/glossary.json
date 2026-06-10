@@ -253,7 +253,7 @@
   },
   "fast-withdrawals": {
     "title": "Fast withdrawals",
-    "text": "<p>A protocol-level withdrawal path on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full <a href=\"/intro/glossary#challenge-period\">challenge period</a>. Distinct from a <a href=\"/intro/glossary#fast-exit-liquidity-exit\">fast-exit liquidity exit</a>, which is a third-party liquidity provider rather than a protocol primitive.</p>\n"
+    "text": "<p>A protocol-level withdrawal path on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full <a href=\"/intro/glossary#challenge-period\">challenge period</a>. Distinct from a <a href=\"/intro/glossary#fast-exit--liquidity-exit\">fast-exit liquidity exit</a>, which is a third-party liquidity provider rather than a protocol primitive.</p>\n"
   },
   "first-come-first-serve-fcfs": {
     "title": "First Come First Serve (FCFS)",
