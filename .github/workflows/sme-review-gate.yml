@@ -35,8 +35,11 @@ permissions:
   pull-requests: read
 
 jobs:
-  sme-review-gate:
-    name: 'sme-review-gate'
+  # Job name MUST differ from the published check-run context (`sme-review-gate`),
+  # or the job's own always-green check collides with the script's verdict and a
+  # ruleset could match the wrong one — making the gate silently bypassable.
+  evaluate:
+    name: 'evaluate'
     runs-on: ubuntu-latest
     steps:
       - name: Resolve PR number

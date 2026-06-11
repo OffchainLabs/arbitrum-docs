@@ -111,8 +111,10 @@ permissions:
   pull-requests: read
 
 jobs:
-  sme-review-gate:
-    name: 'sme-review-gate'
+  # Job name MUST differ from the published check-run context (`sme-review-gate`)
+  # to avoid the job's always-green check colliding with the script's verdict.
+  evaluate:
+    name: 'evaluate'
     runs-on: ubuntu-latest
     steps:
       - name: Resolve PR number
