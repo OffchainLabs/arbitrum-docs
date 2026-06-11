@@ -16,9 +16,9 @@ There are two parties a user pays when submitting a transaction:
 
 The parent chain component is the product of the <a data-quicklook-from="transaction">transaction</a>'s estimated contribution to its <a data-quicklook-from="batch">batch</a>'s size—computed using [Brotli](/how-arbitrum-works/deep-dives/sequencer.mdx#compression) on the transaction alone—and the child chain's view of the parent chain data price. This value dynamically adjusts over time to ensure the batch poster is ultimately fairly compensated.
 
-The child chain component consists of the traditional fees <a data-quicklook-from="geth">Geth</a> would pay to bonders in a vanilla parent chain, such as the computation and storage charges that apply to the [<a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx). [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx) charges additional fees for executing its child-chain-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced based on the resources used during execution.
+The child chain component consists of the traditional fees <a data-quicklook-from="geth">Geth</a> would pay to bonders in a vanilla parent chain, such as the computation and storage charges that apply to the [<a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx). [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx) charges additional fees for executing its child-chain-specific [precompiles](/arbitrum-essentials/precompiles/overview.mdx), whose fees are dynamically priced based on the resources used during execution.
 
-The following sections detail how parent and child chain fees are calculated. For a practical guide on estimating gas for your transactions, see [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx).
+The following sections detail how parent and child chain fees are calculated. For a practical guide on estimating gas for your transactions, see [How to estimate gas in Arbitrum](/arbitrum-essentials/how-to-estimate-gas.mdx).
 
 ## Parent chain gas pricing
 
@@ -179,13 +179,13 @@ The parent chain pricer also records the total number of "data units" (the sum o
 
 ## Child chain gas pricing
 
-The child chain gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method.
+The child chain gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method.
 
 ### Estimating child chain gas
 
 Calling the Arbitrum Node's `eth_estimateGas` RPC returns a value sufficient to cover the full transaction fee at the given child chain gas price; i.e., the value returned from `eth_estimateGas` multiplied by the child chain gas price tells you how much total **ETH** is required for the transaction to succeed.
 
-This means that, for a given operation, the value returned by `eth_estimateGas` will change over time (as the parent chain's calldata price fluctuates). (See [2-dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more.)
+This means that, for a given operation, the value returned by `eth_estimateGas` will change over time (as the parent chain's calldata price fluctuates). (See [2-dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/arbitrum-essentials/how-to-estimate-gas.mdx) for more.)
 
 ### Child chain gas fees
 
@@ -209,9 +209,9 @@ The sequencer prioritizes transactions on a first-come, first-served basis (chai
 
 When a transaction schedules another, the cost of the subsequent transaction's execution [will be included](https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999) in the gas estimation via the node's RPC. A transaction's gas estimate can only be found if all the transactions succeed at a given gas limit. This is especially important when working with retryables and scheduling redeem attempts.
 
-Because a call to [`redeem`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) donates all of the call's gas, doing multiple calls requires limiting the amount of gas provided to each subcall. Otherwise, the first will take all the gas and force the second to fail, irrespective of the estimation's gas limit.
+Because a call to [`redeem`](/arbitrum-essentials/precompiles/reference.mdx#arbretryabletx) donates all of the call's gas, doing multiple calls requires limiting the amount of gas provided to each subcall. Otherwise, the first will take all the gas and force the second to fail, irrespective of the estimation's gas limit.
 
-Gas estimation for retryable submissions is possible via the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) and similarly requires the auto-redeem attempt to succeed.
+Gas estimation for retryable submissions is possible via the [`NodeInterface`](/arbitrum-essentials/nodeinterface/reference.mdx) and similarly requires the auto-redeem attempt to succeed.
 
 ### The gas target
 
@@ -243,7 +243,7 @@ Now the pricer pays out the allocated funds to cover the rewards due and the amo
 
 ### Getting parent chain fee info
 
-The parent chain gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo). To estimate the parent chain fee a transaction will use, call [`NodeInterface.gasEstimateComponents()`](/build-decentralized-apps/nodeinterface/02-reference.mdx) or [`NodeInterface.gasEstimateL1Component()`](/build-decentralized-apps/nodeinterface/02-reference.mdx).
+The parent chain gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo). To estimate the parent chain fee a transaction will use, call [`NodeInterface.gasEstimateComponents()`](/arbitrum-essentials/nodeinterface/reference.mdx) or [`NodeInterface.gasEstimateL1Component()`](/arbitrum-essentials/nodeinterface/reference.mdx).
 
 Arbitrum transaction receipts include a `gasUsedForL1` field that shows the amount of gas used on the parent chain, in units of the child chain's gas.
 

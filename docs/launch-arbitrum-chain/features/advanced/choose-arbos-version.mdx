@@ -35,7 +35,7 @@ Customizing the [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) version involv
 
 ## Examples
 
-- **New [precompile](/build-decentralized-apps/precompiles/02-reference.mdx) method**: Add `sayHi()` to ArbSys, gated by `ArbOwner.methodsByName["SayHi"].arbosVersion = 32`.
+- **New [precompile](/arbitrum-essentials/precompiles/reference.mdx) method**: Add `sayHi()` to ArbSys, gated by `ArbOwner.methodsByName["SayHi"].arbosVersion = 32`.
 - **New precompile**: Create ArbHi with `ArbHi.arbosVersion = 32` and method gates.
 - **New state variable**: Add `myNumber` initialized in `UpgradeArbosVersion` switch for v21: `ensure(state.SetNewMyNumber(randomNumber))`.
 - **STF Logic change**: Branch in a method: `if p.state.ArbOSVersion() >= 32 { return "hi, new version" } else { return "hi" }`.

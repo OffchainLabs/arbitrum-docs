@@ -1,5 +1,5 @@
 const { buildMarkerValue } = require('./llms-markers');
-const h = require('hastscript');
+const { h } = require('hastscript');
 // hast-util-select is ESM; Node 22.x supports require() of ESM modules that
 // don't use top-level await, which this package doesn't. Loads synchronously.
 const { matches, select, selectAll } = require('hast-util-select');
