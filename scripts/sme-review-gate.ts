@@ -13,6 +13,10 @@
  * (`reportOnly: true` in config) the conclusion is always `neutral` so it never
  * blocks a merge; flipping `reportOnly` to false makes it pass/fail (Phase 1).
  *
+ * Fork-safe: PR file content is read over the API (`refs/pull/N/head`), never from
+ * a checkout, so the workflow can run under `pull_request_target` (needed to get a
+ * write token + secrets on fork PRs) without executing untrusted PR code.
+ *
  * Config: .github/sme-config.json
  * Auth:   gh CLI (GH_TOKEN). Reading org team membership needs `members:read`;
  *         without it a team is reported "unverifiable" rather than failing.
@@ -21,7 +25,7 @@
  *         (PR number also read from $PR_NUMBER or $GITHUB_REF refs/pull/N/merge)
  */
 import { execFileSync } from 'node:child_process';
-import { readFileSync, existsSync, appendFileSync } from 'node:fs';
+import { readFileSync, appendFileSync } from 'node:fs';
 import path from 'node:path';
 
 interface SmeConfig {
@@ -47,6 +51,25 @@ function gh(args: string[]): string {
 
 function ghJson<T>(args: string[]): T {
   return JSON.parse(gh(args)) as T;
+}
+
+/**
+ * Fetch a file's lines at the PR head via the contents API (works for fork PRs
+ * via `refs/pull/N/head`). Returns null if the file is absent/binary/unreadable.
+ * Reading content over the API — not from a checkout — is what lets this run
+ * safely under `pull_request_target` without executing untrusted PR code.
+ */
+function fileLinesAtPullHead(pr: number, file: string): string[] | null {
+  try {
+    const resp = ghJson<{ content?: string }>([
+      'api',
+      `repos/${REPO}/contents/${file}?ref=refs/pull/${pr}/head`,
+    ]);
+    if (!resp.content) return null;
+    return Buffer.from(resp.content, 'base64').toString('utf8').split('\n');
+  } catch {
+    return null;
+  }
 }
 
 function loadConfig(): SmeConfig {
@@ -100,11 +123,8 @@ function changedLines(patch: string | undefined): Set<number> {
 const START_RE = /\{\/\*\s*sme:start\s+team=([A-Za-z0-9._-]+)/;
 const END_RE = /\{\/\*\s*sme:end\b/;
 
-/** Find `sme:start … sme:end` regions (1-based, inclusive) in a checked-out file. */
-function regionsInFile(file: string): Region[] {
-  const abs = path.join(ROOT, file);
-  if (!existsSync(abs)) return [];
-  const text = readFileSync(abs, 'utf8').split('\n');
+/** Find `sme:start … sme:end` regions (1-based, inclusive) in file lines. */
+function regionsIn(text: string[]): Region[] {
   const regions: Region[] = [];
   let open: { team: string; start: number } | null = null;
   for (let i = 0; i < text.length; i++) {
@@ -129,7 +149,11 @@ interface ChangedFile {
 }
 
 /** Map each required SME team to the reasons (files/regions) that triggered it. */
-function requiredTeams(config: SmeConfig, files: ChangedFile[]): Map<string, Set<string>> {
+function requiredTeams(
+  config: SmeConfig,
+  files: ChangedFile[],
+  contents: Map<string, string[]>,
+): Map<string, Set<string>> {
   const required = new Map<string, Set<string>>();
   const add = (team: string, reason: string) => {
     if (!config.smeTeams[team]) return; // unknown team slug — ignore
@@ -142,7 +166,8 @@ function requiredTeams(config: SmeConfig, files: ChangedFile[]): Map<string, Set
   };
   for (const f of files) {
     const lines = changedLines(f.patch);
-    for (const region of regionsInFile(f.filename)) {
+    const fileLines = contents.get(f.filename);
+    for (const region of fileLines ? regionsIn(fileLines) : []) {
       if ([...lines].some((l) => l >= region.start && l <= region.end)) {
         add(region.team, `${f.filename} (region L${region.start}-${region.end})`);
       }
@@ -155,12 +180,15 @@ function requiredTeams(config: SmeConfig, files: ChangedFile[]): Map<string, Set
 }
 
 /** Lint SME markers in changed files: unbalanced start/end and unknown team slugs. */
-function markerIssues(config: SmeConfig, files: ChangedFile[]): string[] {
+function markerIssues(
+  config: SmeConfig,
+  files: ChangedFile[],
+  contents: Map<string, string[]>,
+): string[] {
   const issues: string[] = [];
   for (const f of files) {
-    const abs = path.join(ROOT, f.filename);
-    if (!existsSync(abs)) continue;
-    const text = readFileSync(abs, 'utf8').split('\n');
+    const text = contents.get(f.filename);
+    if (!text) continue;
     let openTeam: string | null = null;
     let openLine = 0;
     for (let i = 0; i < text.length; i++) {
@@ -332,10 +360,19 @@ function main(): void {
   ]);
   const files = ghJson<ChangedFile[]>(['api', `repos/${REPO}/pulls/${pr}/files`, '--paginate']);
 
-  const required = requiredTeams(config, files);
+  // Read changed doc content from the PR head over the API (fork-safe; no checkout
+  // of untrusted code). Only markdown can carry region markers.
+  const contents = new Map<string, string[]>();
+  for (const f of files) {
+    if (!/\.mdx?$/.test(f.filename)) continue;
+    const lines = fileLinesAtPullHead(pr, f.filename);
+    if (lines) contents.set(f.filename, lines);
+  }
+
+  const required = requiredTeams(config, files, contents);
   const approved = approvers(pr);
   const verdicts = evaluateTeams(required, config.org, approved);
-  const issues = markerIssues(config, files);
+  const issues = markerIssues(config, files, contents);
 
   const editorialMembers = teamMembers(config.org, config.editorialTeam);
   const editorial = {

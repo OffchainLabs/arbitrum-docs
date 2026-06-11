@@ -5,13 +5,29 @@ run-name: SME review gate (report-only)
 # conclusion (never blocks merges) so the diff -> region/path -> required-team
 # logic can be validated on real PRs. Phase 1 flips `reportOnly` to false in
 # .github/sme-config.json and adds the check to the branch ruleset to enforce.
+#
+# SECURITY — why `pull_request_target`:
+# External contributors open PRs from forks. A plain `pull_request` run on a fork
+# gets a read-only token, no secrets (no SME_GATE_TOKEN), and no checks:write — so
+# the gate could neither read team membership nor post its check. `pull_request_target`
+# runs in the BASE repo context (full token + secrets) for fork PRs too. It is safe
+# here ONLY because this job checks out the trusted base ref (never the PR head) and
+# the script reads PR file content over the API — it never executes untrusted PR code.
+# Do not add a step that checks out or runs the PR's code.
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - master
+    types: [opened, synchronize, reopened]
   pull_request_review:
     types: [submitted, dismissed, edited]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number to evaluate'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -23,10 +39,22 @@ jobs:
     name: 'sme-review-gate'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR head
+      - name: Resolve PR number
+        id: resolve
+        env:
+          GH_TOKEN: ${{ secrets.SME_GATE_TOKEN || secrets.GITHUB_TOKEN }}
+          INPUT_PR: ${{ inputs.pr }}
+          EVENT_PR: ${{ github.event.pull_request.number }}
+        run: |
+          PR="${INPUT_PR:-$EVENT_PR}"
+          if [ -z "$PR" ]; then echo "No PR number to evaluate"; exit 1; fi
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+
+      # Trusted base checkout only — provides the script + sme-config.json. The PR's
+      # own content is fetched over the API by the script, never checked out here.
+      - name: Checkout base
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 1
 
       - name: Setup Node.js
@@ -41,10 +69,10 @@ jobs:
 
       - name: Run SME review gate (report-only)
         env:
-          # The default GITHUB_TOKEN cannot read org team membership. When eng/infra
-          # provisions a GitHub App / fine-grained token with `members:read`, expose it
-          # as the SME_GATE_TOKEN secret and it is preferred automatically; until then
-          # the gate degrades to "unverifiable" rather than failing.
+          # Default GITHUB_TOKEN cannot read org team membership. When eng/infra
+          # provisions a GitHub App / fine-grained token with `members:read`, expose
+          # it as SME_GATE_TOKEN and it is preferred automatically; until then the
+          # gate degrades to "unverifiable" rather than failing.
           GH_TOKEN: ${{ secrets.SME_GATE_TOKEN || secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ steps.resolve.outputs.pr }}
         run: yarn tsx scripts/sme-review-gate.ts

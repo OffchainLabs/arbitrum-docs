@@ -84,6 +84,44 @@ PRs before it gates merges. While in this state you will see SME teams reported 
    widen coverage later, add teams + globs to `.github/sme-config.json` and paths to
    `.github/CODEOWNERS`.
 
+## Contributor model: forks vs internal branches
+
+External contributors open PRs from **forks**; internal contributors push branches to
+**origin**. A plain `pull_request` workflow on a fork PR gets a read-only token, no
+secrets, and no `checks: write` — so it couldn't post the check or read team membership.
+The workflow therefore uses **`pull_request_target`**, which runs in the base-repo context
+(full token + secrets) for fork PRs too. It is safe because the job checks out only the
+trusted base ref and the script reads PR content over the API (`refs/pull/N/head`) — it
+never checks out or runs the PR's code. Do not add a step that builds or executes PR code.
+
+## Smoke-testing in a sandbox
+
+To exercise the *blocking* behavior without risking real PRs, use a throwaway private repo.
+
+**One-time setup (admin):**
+
+1. Create a private repo, e.g. `OffchainLabs/arbitrum-docs-gate-sandbox`.
+2. Copy the gate files into its default branch: `.github/workflows/sme-review-gate.yml`,
+   `scripts/sme-review-gate.ts`, `.github/sme-config.json`, `.github/CODEOWNERS`
+   (plus a minimal `package.json` with `tsx`, or reuse this repo's). Keep `sme-config.json`
+   identical so `stylus-sme` maps to `docs/stylus/**`.
+3. Create an `stylus-sme` team with **write** access and set the `SME_GATE_TOKEN` secret
+   (`members:read`).
+
+**Run the matrix:**
+
+```shell
+scripts/sme-gate-sandbox.sh --repo OffchainLabs/arbitrum-docs-gate-sandbox --dry-run
+scripts/sme-gate-sandbox.sh --repo OffchainLabs/arbitrum-docs-gate-sandbox
+```
+
+This opens four internal-branch PRs (editorial-only, path-fallback, region-tag, malformed
+marker). Flip `reportOnly: false` in the sandbox to see `success`/`failure`/`action_required`
+instead of `neutral`, and apply the ruleset (active) to confirm the merge button actually
+locks/unlocks. The script prints the manual rows it can't drive: an SME approval flipping the
+check to success, dismissing it to re-block, and a **fork PR** (from a second account) to
+confirm the `pull_request_target` path posts and resolves the check.
+
 ## Rollback
 
 Set `"reportOnly": true` in `.github/sme-config.json` (instant, code-side), and/or set the
