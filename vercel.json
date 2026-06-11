@@ -5,6 +5,353 @@
   "framework": "docusaurus-2",
   "trailingSlash": false,
   "redirects": [
+    { "source": "/__redirects-autogen-start__", "destination": "/", "permanent": false },
+    {
+      "source": "/launch-arbitrum-chain/a-gentle-introduction",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/aep-license",
+      "destination": "/launch-arbitrum-chain/overview/license",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/migrate-between-raases",
+      "destination": "/launch-arbitrum-chain/migrate/between-raases",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/migrate-from-another-stack",
+      "destination": "/launch-arbitrum-chain/migrate/from-another-stack",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config",
+      "destination": "/launch-arbitrum-chain/deploy/configure-node",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/concepts/public-preview-expectations",
+      "destination": "/launch-arbitrum-chain/overview/public-preview",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain",
+      "destination": "/launch-arbitrum-chain/overview/faq",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui",
+      "destination": "/launch-arbitrum-chain/integrations/bridge-ui",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node",
+      "destination": "/launch-arbitrum-chain/run-a-node/split-validator-node",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs",
+      "destination": "/launch-arbitrum-chain/run-a-node/high-availability-sequencer",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster",
+      "destination": "/launch-arbitrum-chain/run-a-node/batch-poster",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard",
+      "destination": "/launch-arbitrum-chain/integrations/bridged-usdc",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/third-party-integrations/third-party-providers",
+      "destination": "/launch-arbitrum-chain/integrations/infrastructure-providers",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/customize-your-chain/customize-arbos",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/customize-your-chain/customize-precompile",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/precompiles",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/customize-your-chain/customize-stf",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/stf",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control",
+      "destination": "/launch-arbitrum-chain/operate/ownership-and-access",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments",
+      "destination": "/launch-arbitrum-chain/operate/post-launch-deployments",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth",
+      "destination": "/launch-arbitrum-chain/operate/state-growth",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations",
+      "destination": "/launch-arbitrum-chain/operate/monitoring",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/gas-target",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation",
+      "destination": "/launch-arbitrum-chain/operate/key-rotation",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploy-your-first-rollup",
+      "destination": "/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/run-testnet-infrastructure-first-rollup",
+      "destination": "/launch-arbitrum-chain/quickstart/l3-rollup-testnet",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain",
+      "destination": "/launch-arbitrum-chain/deploy/deploy-chain",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge",
+      "destination": "/launch-arbitrum-chain/deploy/token-bridge",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts",
+      "destination": "/launch-arbitrum-chain/deploy/canonical-factory-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/da-api-guide",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/aep-overview",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/aep-router-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/reporting-on-fees",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/config-data-availability",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/dac-get-started",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/deploy-das",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/configure-dac",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-das-operations",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs",
+      "destination": "/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/fees/fee-management",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/fee-management",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/gas-optimization",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/dynamic-pricing",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/timeboost",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/fast-withdrawals",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/challenge-period",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/bond-and-validator",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade",
+      "destination": "/launch-arbitrum-chain/operate/arbos-upgrade",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/chain-finality",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning",
+      "destination": "/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/bold",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit",
+      "destination": "/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters",
+      "destination": "/launch-arbitrum-chain/chain-config/additional-configuration-parameters",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/arbitrum-chain-sdk-introduction",
+      "destination": "/launch-arbitrum-chain/quickstart/sdk-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting",
+      "destination": "/launch-arbitrum-chain/operate/batch-poster-troubleshooting",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/assertion-control",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/dac-configuration-defaults",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-configuration/sequencer/sequencer-timing-adjustments",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
+      "permanent": false
+    },
+    {
+      "source": "/docs/launch-arbitrum-chain/chain-config/validation/challenge-period",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/challenge-period",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/operate/gas-target",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/gas-target",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/validation/chain-finality",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/chain-finality",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/arbos",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/da-api-guide",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/da-api-guide",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/precompiles",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/precompiles",
+      "permanent": false
+    },
+    {
+      "source": "/launch-arbitrum-chain/chain-config/core/stf",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/stf",
+      "permanent": false
+    },
+    { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
@@ -917,7 +1264,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {
@@ -1102,7 +1449,7 @@
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {
