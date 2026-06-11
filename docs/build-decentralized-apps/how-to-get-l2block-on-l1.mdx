@@ -1,7 +1,7 @@
 ---
-title: 'How to verify child chain state on parent chain'
+title: 'How to verify child chain state on the parent chain'
 description: Learn how to verify child chain state on its parent chain
-user_story: As a developer, I want to understand how to verify child chain state on parent chain.
+user_story: As a developer, I want to understand how to verify child chain state on the parent chain.
 content_type: how-to
 displayed_sidebar: buildAppsSidebar
 ---
@@ -51,7 +51,7 @@ struct AssertionState {
 }
 ```
 
-The piece we care about is `afterState.globalState`: it contains the child chain **block hash** and **send root** that this assertion claims. We can extract them with the `GlobalStateLib` helpers `getBlockHash()` and `getSendRoot()`.
+The key field is `afterState.globalState`: it contains the child chain **block hash** and **send root** that this assertion claims. We can extract them with the `GlobalStateLib` helpers `getBlockHash()` and `getSendRoot()`.
 
 The assertion hash itself authenticates these values — it is computed as:
 
@@ -79,7 +79,7 @@ Because this mapping stores the block hash, you can also recover the child chain
 
 Assume there is a contract called `foo` on the child chain at address `fooAddress`, and we want to prove its storage value at `slot`.
 
-To verify the state, we need a Merkle Trie verifier contract — for example a `Lib_MerkleTrie`-style library that exposes a `get(key, proof, root)` function.
+To verify the state, we need a Merkle Trie verifier contract — for example, a `Lib_MerkleTrie`-style library that exposes a `get(key, proof, root)` function.
 
 :::note Why we can trust an untrusted child chain RPC
 
@@ -88,7 +88,7 @@ The steps below query a child chain RPC several times (`eth_getBlockByHash`, `et
 - The block header is only accepted if its RLP hash reproduces the confirmed block hash.
 - The account and storage values are only accepted if their Merkle proofs verify against the state root inside that header.
 
-Because each link is bound to the confirmed parent chain commitment by a cryptographic hash, a malicious or buggy RPC **cannot forge data that passes verification**. The worst it can do is return wrong or missing data, which makes verification _fail_ (a denial of service) — it can never produce a false positive. This one-directional guarantee is what makes the whole procedure sound.
+Because each link is bound to the confirmed parent chain commitment by a cryptographic hash, a malicious or buggy RPC **cannot forge data that passes verification**. The worst it can do is return wrong or missing data, which makes verification _fail_ (a denial of service) — it can never produce a false positive. This one-way guarantee is what makes the whole procedure sound.
 
 :::
 
@@ -103,11 +103,10 @@ For security, we use the latest _confirmed_ assertion rather than the latest _pr
 
 ### 2. Prove the state root belongs to the block hash, using the block header
 
-Having the block hash, fetch the corresponding block from the child chain provider: `l2blockRaw = eth_getBlockByHash(blockHash)`.
+With the block hash, fetch the corresponding block from the child chain provider: `l2blockRaw = eth_getBlockByHash(blockHash)`.
 
 Then re-derive the block hash by RLP-encoding and hashing the header fields:
 
-```
 blockarray = [
   l2blockRaw.parentHash,
   l2blockRaw.sha3Uncles,
