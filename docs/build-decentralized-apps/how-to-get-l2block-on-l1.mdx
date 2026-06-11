@@ -129,7 +129,7 @@ blockarray = [
 ```
 
 - Compute `calculated_blockhash = keccak256(RLP.encode(blockarray))`.
-- Check it matches the value from step 1: `calculated_blockhash === blockHash`.
+- Check that it matches the value from step 1: `calculated_blockhash === blockHash`.
 
 If they match, the header — and in particular the `stateRoot` — is proven correct.
 
