@@ -219,9 +219,9 @@ Notes:
 
 1. Run `yarn format` from the root directory.
 
-### Flagging content for SME review (preview — subject to change)
+### Flagging content for SME review
 
-> **Status:** report-only pilot. The `sme-review-gate` check posts an advisory result and **does not block merges yet**. This section will be revised once enforcement (per-domain SME teams + a branch ruleset) is confirmed.
+> **Status:** report-only — the `sme-review-gate` check posts an advisory result and does not block merges yet. Enforcement (per-domain SME teams + a branch ruleset) is configured by repo admins; see [.github/SME_REVIEW_GATE.md](.github/SME_REVIEW_GATE.md).
 
 Highly technical docs need a subject-matter expert (SME) approval in addition to editorial review. As a PR creator you can mark exactly which parts of your change need SME eyes, so SMEs review just that subset instead of the whole PR.
 
