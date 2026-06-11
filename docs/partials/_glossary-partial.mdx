@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-10
 ---
 
 ### Activation {#activation}
@@ -277,7 +277,7 @@ A means by which a user can bypass an Arbitrum chain's [Challenge Period](/intro
 
 ### Fast withdrawals {#fast-withdrawals}
 
-A protocol-level withdrawal path on an [Arbitrum chain](/intro/glossary#arbitrum-chain) in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full [challenge period](/intro/glossary#challenge-period). Distinct from a [fast-exit liquidity exit](/intro/glossary#fast-exit-liquidity-exit), which is a third-party liquidity provider rather than a protocol primitive.
+A protocol-level withdrawal path on an [Arbitrum chain](/intro/glossary#arbitrum-chain) in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full [challenge period](/intro/glossary#challenge-period). Distinct from a [fast-exit liquidity exit](/intro/glossary#fast-exit--liquidity-exit), which is a third-party liquidity provider rather than a protocol primitive.
 
 ### First Come First Serve (FCFS) {#first-come-first-serve-fcfs}
 
@@ -331,13 +331,19 @@ The equivalent of gas in the [Stylus](/intro/glossary#stylus) vm. Ink is introdu
 
 The onchain configuration object that defines a [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac)—the [BLS public keys](/intro/glossary#bls-signature) of every committee member and the signature threshold required to produce a valid [Data Availability Certificate](/intro/glossary#data-availability-certificate). A new keyset is published whenever committee membership or the threshold changes.
 
-### L1 {#L1}
+### L1 {#l1}
 
-See [Layer 1](/intro/glossary#layer-1-l1)
+L1, or Layer 1, refers to the underlying blockchain responsible for maintaining the integrity of the distributed ledger and executing smart contracts. It contains both Ethereum's execution layer and consensus layer.
 
-### L2 {#L2}
+In the context of Arbitrum One and Nova, L1 is the main Ethereum blockchain (Mainnet), and Arbitrum is a Layer 2 platform built on top of this base (Ethereum) layer.
 
-See [Layer 2](/intro/glossary#layer-2-l2).
+However, any EVM-compatible blockchain can be an L1 to an Arbitrum chain.
+
+### L2 {#l2}
+
+An L2, or Layer 2, is a trustless scaling solution built on top of Ethereum's Layer 1 (L1) base protocol.
+
+Arbitrum is a Layer 2 platform that increases throughput and reduces the cost of transactions on Ethereum's (L1) without introducing additional trust assumptions. It does that by executing some computation offchain and batch-posting transactions on the underlying Layer 1 chain (Ethereum for Arbitrum One/Nova).
 
 ### L2 Block {#l2-block}
 
