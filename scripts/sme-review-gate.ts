@@ -154,6 +154,34 @@ function requiredTeams(config: SmeConfig, files: ChangedFile[]): Map<string, Set
   return required;
 }
 
+/** Lint SME markers in changed files: unbalanced start/end and unknown team slugs. */
+function markerIssues(config: SmeConfig, files: ChangedFile[]): string[] {
+  const issues: string[] = [];
+  for (const f of files) {
+    const abs = path.join(ROOT, f.filename);
+    if (!existsSync(abs)) continue;
+    const text = readFileSync(abs, 'utf8').split('\n');
+    let openTeam: string | null = null;
+    let openLine = 0;
+    for (let i = 0; i < text.length; i++) {
+      const startMatch = text[i].match(START_RE);
+      if (startMatch) {
+        if (openTeam) issues.push(`${f.filename}:${openLine} sme:start (team=${openTeam}) reopened before sme:end`);
+        openTeam = startMatch[1];
+        openLine = i + 1;
+        if (!config.smeTeams[startMatch[1]]) {
+          issues.push(`${f.filename}:${i + 1} unknown SME team '${startMatch[1]}' (not in .github/sme-config.json)`);
+        }
+      } else if (END_RE.test(text[i])) {
+        if (!openTeam) issues.push(`${f.filename}:${i + 1} sme:end with no matching sme:start`);
+        openTeam = null;
+      }
+    }
+    if (openTeam) issues.push(`${f.filename}:${openLine} sme:start (team=${openTeam}) never closed`);
+  }
+  return issues;
+}
+
 interface Review {
   user: { login: string } | null;
   state: string;
@@ -212,40 +240,60 @@ function evaluateTeams(
 function buildSummary(
   verdicts: TeamVerdict[],
   editorial: { satisfied: boolean; unverifiable: boolean },
+  issues: string[],
   reportOnly: boolean,
-): { title: string; body: string; blocking: boolean } {
+): { title: string; body: string } {
+  const mode = reportOnly ? 'report-only — not blocking' : 'enforcing';
+  const issueBlock =
+    issues.length === 0 ? [] : ['', '**Marker problems (fix these):**', ...issues.map((i) => `- ${i}`)];
+
   if (verdicts.length === 0) {
     return {
-      title: 'No SME-tagged content changed',
-      body: 'This PR touches no SME-required regions or paths — editorial (TW) approval alone is sufficient.',
-      blocking: false,
+      title: issues.length ? 'Fix SME marker problems' : 'No SME-tagged content changed',
+      body: [
+        `**SME gate** (${mode})`,
+        '',
+        'This PR touches no SME-required regions or paths — editorial (TW) approval alone is sufficient.',
+        ...issueBlock,
+      ].join('\n'),
     };
   }
+
   const rows = verdicts.map((v) => {
     const mark = v.unverifiable ? '❓ unverifiable' : v.satisfied ? '✅ approved' : '⛔ awaiting';
     return `| \`${v.team}\` | ${mark} | ${v.reasons.join('; ')} |`;
   });
-  const pending = verdicts.filter((v) => !v.satisfied);
+  const pending = verdicts.filter((v) => !v.satisfied && !v.unverifiable);
+  const unresolved = verdicts.filter((v) => v.unverifiable);
   const edit = editorial.unverifiable
     ? '❓ editorial membership unverifiable'
     : editorial.satisfied
-    ? '✅ editorial (TW) approved'
-    : '⛔ editorial (TW) approval pending';
+      ? '✅ editorial (TW) approved'
+      : '⛔ editorial (TW) approval pending';
+
+  let title: string;
+  if (issues.length) title = 'Fix SME marker problems';
+  else if (unresolved.length) title = `Cannot verify ${unresolved.length} SME team(s) — gate misconfigured`;
+  else if (pending.length) title = `Awaiting ${pending.length} SME team(s)`;
+  else title = 'All required SME teams approved';
+
+  const notes = unresolved.length
+    ? ['', '> ❓ **unverifiable** = the gate could not read this team\'s membership. It likely does not exist yet or the token lacks `members:read`. See `.github/SME_REVIEW_GATE.md`.']
+    : [];
+
   return {
-    title:
-      pending.length === 0
-        ? 'All required SME teams approved'
-        : `Awaiting ${pending.length} SME team(s)`,
+    title,
     body: [
-      `**SME gate** (${reportOnly ? 'report-only — not blocking' : 'enforcing'})`,
+      `**SME gate** (${mode})`,
       '',
       '| SME team | Status | Triggered by |',
       '| --- | --- | --- |',
       ...rows,
+      ...notes,
       '',
       `${edit} — _editorial gate is enforced by the branch ruleset, shown here for context._`,
+      ...issueBlock,
     ].join('\n'),
-    blocking: pending.length > 0,
   };
 }
 
@@ -287,6 +335,7 @@ function main(): void {
   const required = requiredTeams(config, files);
   const approved = approvers(pr);
   const verdicts = evaluateTeams(required, config.org, approved);
+  const issues = markerIssues(config, files);
 
   const editorialMembers = teamMembers(config.org, config.editorialTeam);
   const editorial = {
@@ -294,8 +343,17 @@ function main(): void {
     satisfied: editorialMembers !== null && [...editorialMembers].some((m) => approved.has(m)),
   };
 
-  const { title, body, blocking } = buildSummary(verdicts, editorial, config.reportOnly);
-  const conclusion = config.reportOnly ? 'neutral' : blocking ? 'failure' : 'success';
+  const { title, body } = buildSummary(verdicts, editorial, issues, config.reportOnly);
+  const misconfigured = issues.length > 0 || verdicts.some((v) => v.unverifiable);
+  const pending = verdicts.some((v) => !v.satisfied && !v.unverifiable);
+  // report-only never blocks; otherwise setup/marker problems need action, missing approvals fail.
+  const conclusion = config.reportOnly
+    ? 'neutral'
+    : misconfigured
+      ? 'action_required'
+      : pending
+        ? 'failure'
+        : 'success';
 
   console.log(`sme-review-gate: ${title} (conclusion=${conclusion})`);
   console.log(body);
