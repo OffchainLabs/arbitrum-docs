@@ -33,6 +33,11 @@ const sidebars = {
     },
     {
       type: 'link',
+      label: 'Arbitrum essentials',
+      href: '/arbitrum-essentials',
+    },
+    {
+      type: 'link',
       label: 'Run an Arbitrum chain',
       href: '/launch-arbitrum-chain/overview/introduction',
     },
