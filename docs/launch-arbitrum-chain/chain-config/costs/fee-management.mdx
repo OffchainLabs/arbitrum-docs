@@ -34,7 +34,7 @@ Let's see in what ways we can configure each fee type:
 
 ### Arbitrum chain base fee (minimum)
 
-Your chain is configured with a minimum base fee for execution. This value can be obtained by calling the method `getMinimumGasPrice()(uint256)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
+Your chain is configured with a minimum base fee for execution. This value can be obtained by calling the method `getMinimumGasPrice()(uint256)` of the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) precompile.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getMinimumGasPrice() (uint256)"
@@ -59,7 +59,7 @@ This minimum base fee defines the minimum value that the chain's base fee can ha
 
 :::
 
-To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the new minimum base fee in `wei`. For example:
+To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile, and pass the new minimum base fee in `wei`. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setMinimumL2BaseFee(uint256) ()" $NEW_MINIMUM_BASE_FEE_IN_WEI
@@ -88,7 +88,7 @@ await orbitChainClient.sendRawTransaction({
 
 ### Arbitrum chain surplus fee
 
-In periods of congestion, the actual base fee of your Arbitrum chain might be higher than the configured minimum. You can see the current base fee of your chain by calling the method `getPricesInWei()(uint256,uint256,uint256,uint256,uint256,uint256)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile, and check the last result of the returned tuple.
+In periods of congestion, the actual base fee of your Arbitrum chain might be higher than the configured minimum. You can see the current base fee of your chain by calling the method `getPricesInWei()(uint256,uint256,uint256,uint256,uint256,uint256)` of the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) precompile, and check the last result of the returned tuple.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getPricesInWei() (uint256,uint256,uint256,uint256,uint256,uint256)"
@@ -110,7 +110,7 @@ Arbitrum chains automatically adjust the Arbitrum chain surplus fee based on the
 
 ### Parent chain base fee
 
-To obtain the current parent chain base fee of your chain, you can call the method `getL1BaseFeeEstimate()(uint256)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
+To obtain the current parent chain base fee of your chain, you can call the method `getL1BaseFeeEstimate()(uint256)` of the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) precompile.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1BaseFeeEstimate() (uint256)"
@@ -129,7 +129,7 @@ const parentChainBaseFee = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-You can modify the current estimate of the parent chain base fee by calling the method `setL1PricePerUnit(uint256)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
+You can modify the current estimate of the parent chain base fee by calling the method `setL1PricePerUnit(uint256)` of the [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricePerUnit(uint256) ()" $NEW_PARENT_CHAIN_BASE_FEE
@@ -170,7 +170,7 @@ Arbitrum chains that use a custom gas token should have their parent chain base 
 
 ### Parent chain surplus fee
 
-The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. This function will return the amount of `wei` per gas unit paid to the appropriate fee collector. For example:
+The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) precompile. This function will return the amount of `wei` per gas unit paid to the appropriate fee collector. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRate() (uint64)"
@@ -189,7 +189,7 @@ const parentChainRewardRate = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile and pass the amount of `wei` per gas unit to reward. For example:
+To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile and pass the amount of `wei` per gas unit to reward. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRate(uint64) ()" $NEW_REWARD_RATE
@@ -222,7 +222,7 @@ Let's now look at how to configure the collector addresses for each fee type.
 
 ### Arbitrum chain base fee
 
-Arbitrum chain base fees are paid to the `infraFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getInfraFeeAccount()(address)` of the [`ArbOwnerPublic`](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
+Arbitrum chain base fees are paid to the `infraFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getInfraFeeAccount()(address)` of the [`ArbOwnerPublic`](/arbitrum-essentials/precompiles/reference.mdx#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getInfraFeeAccount() (address)"
@@ -230,7 +230,7 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B 
 
 :::note
 
-The [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain.
+The [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain.
 
 :::
 
@@ -247,7 +247,7 @@ const infraFeeAccount = await orbitChainClient.arbOwnerReadContract({
 });
 ```
 
-To set a new `infraFeeAccount`, use the method `setInfraFeeAccount(address)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
+To set a new `infraFeeAccount`, use the method `setInfraFeeAccount(address)` of the [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setInfraFeeAccount(address) ()" $NEW_INFRAFEEACCOUNT_ADDRESS
@@ -276,7 +276,7 @@ await orbitChainClient.sendRawTransaction({
 
 ### Arbitrum chain surplus fee
 
-Arbitrum chain surplus fees are paid to the `networkFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getNetworkFeeAccount()(address)` of the [`ArbOwnerPublic`](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
+Arbitrum chain surplus fees are paid to the `networkFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getNetworkFeeAccount()(address)` of the [`ArbOwnerPublic`](/arbitrum-essentials/precompiles/reference.mdx#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getNetworkFeeAccount() (address)"
@@ -284,7 +284,7 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B 
 
 :::note
 
-The [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain.
+The [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain.
 
 :::
 
@@ -301,7 +301,7 @@ const networkFeeAccount = await orbitChainClient.arbOwnerReadContract({
 });
 ```
 
-To set a new `networkFeeAccount`, use the method `setNetworkFeeAccount(address)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
+To set a new `networkFeeAccount`, use the method `setNetworkFeeAccount(address)` of the [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setNetworkFeeAccount(address) ()" $NEW_NETWORKFEEACCOUNT_ADDRESS
@@ -356,7 +356,7 @@ cast call --rpc-url $PARENT_CHAIN_RPC $SEQUENCER_INBOX_ADDRESS "isBatchPoster(ad
 
 **Alternative method using ArbAggregator:**
 
-You can also query batch posters by calling the `getBatchPosters()(address[])` method of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile on your Arbitrum chain:
+You can also query batch posters by calling the `getBatchPosters()(address[])` method of the [`ArbAggregator`](/arbitrum-essentials/precompiles/reference.mdx#arbaggregator) precompile on your Arbitrum chain:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
@@ -373,7 +373,7 @@ This method is primarily used for fee management purposes, not for authoritative
 
 #### Managing fee collectors
 
-Once you have the batch poster address, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)(address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile:
+Once you have the batch poster address, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)(address)` of the [`ArbAggregator`](/arbitrum-essentials/precompiles/reference.mdx#arbaggregator) precompile:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
@@ -402,7 +402,7 @@ Before calling `ArbAggregator.setFeeCollector()`, you must ensure the batch post
 - The address having successfully posted at least one batch
   :::
 
-To set a new fee collector for a specific batch poster, use the method `setFeeCollector(address, address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile:
+To set a new fee collector for a specific batch poster, use the method `setFeeCollector(address, address)` of the [`ArbAggregator`](/arbitrum-essentials/precompiles/reference.mdx#arbaggregator) precompile:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "setFeeCollector(address,address) ()" $BATCH_POSTER_ADDRESS $NEW_FEECOLLECTOR_ADDRESS
@@ -439,7 +439,7 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCE
 
 **Optional: Pre-register for fee management**
 
-If you want to configure a fee collector before the batch poster sends its first batch, you can optionally pre-register the address on the Arbitrum chain by calling `addBatchPoster(address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile:
+If you want to configure a fee collector before the batch poster sends its first batch, you can optionally pre-register the address on the Arbitrum chain by calling `addBatchPoster(address)` of the [`ArbAggregator`](/arbitrum-essentials/precompiles/reference.mdx#arbaggregator) precompile:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "addBatchPoster(address) ()" $NEW_BATCH_POSTER_ADDRESS
@@ -453,7 +453,7 @@ When setting a new batch poster, its fee collector will be configured to the sam
 
 ### Parent chain surplus fee
 
-Parent chain surplus fees are paid to a specific `L1RewardRecipient` address that is configured individually per chain. The current fee collector address can be obtained by calling the method `getL1RewardRecipient()(address)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. For example:
+Parent chain surplus fees are paid to a specific `L1RewardRecipient` address that is configured individually per chain. The current fee collector address can be obtained by calling the method `getL1RewardRecipient()(address)` of the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRecipient() (address)"
@@ -472,7 +472,7 @@ const parentChainRewardRecipient = await orbitChainClient.arbGasInfoReadContract
 });
 ```
 
-To set a new `L1RewardRecipient` address, you can call the method `setL1PricingRewardRecipient(address)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the address of the new reward recipient. For example:
+To set a new `L1RewardRecipient` address, you can call the method `setL1PricingRewardRecipient(address)` of the [`ArbOwner`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) precompile, and pass the address of the new reward recipient. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRecipient(address) ()" $NEW_L1REWARDRECIPIENT_ADDRESS

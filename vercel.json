@@ -7,6 +7,161 @@
   "redirects": [
     { "source": "/__redirects-autogen-start__", "destination": "/", "permanent": false },
     {
+      "source": "/build-decentralized-apps/how-to-estimate-gas",
+      "destination": "/arbitrum-essentials/how-to-estimate-gas",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/public-chains",
+      "destination": "/arbitrum-essentials/public-chains",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "destination": "/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time",
+      "destination": "/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods",
+      "destination": "/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support",
+      "destination": "/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/arbitrum-vs-ethereum/nonce-management",
+      "destination": "/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/overview",
+      "destination": "/arbitrum-essentials/bridging/overview",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/cross-chain-messaging",
+      "destination": "/arbitrum-essentials/bridging/cross-chain-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/custom-gas-token-chains",
+      "destination": "/arbitrum-essentials/bridging/custom-gas-token-chains",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/l1-l3-teleportation",
+      "destination": "/arbitrum-essentials/bridging/l1-l3-teleportation",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/configure-token-gateway/custom",
+      "destination": "/arbitrum-essentials/bridging/configure-token-gateway/custom",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/configure-token-gateway/generic-custom",
+      "destination": "/arbitrum-essentials/bridging/configure-token-gateway/generic-custom",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/configure-token-gateway/standard",
+      "destination": "/arbitrum-essentials/bridging/configure-token-gateway/standard",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/deposit/eth-and-messages",
+      "destination": "/arbitrum-essentials/bridging/deposit/eth-and-messages",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/deposit/tokens",
+      "destination": "/arbitrum-essentials/bridging/deposit/tokens",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/withdraw/eth-and-messages",
+      "destination": "/arbitrum-essentials/bridging/withdraw/eth-and-messages",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/bridging/withdraw/tokens",
+      "destination": "/arbitrum-essentials/bridging/withdraw/tokens",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/nodeinterface/overview",
+      "destination": "/arbitrum-essentials/nodeinterface/overview",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/nodeinterface/reference",
+      "destination": "/arbitrum-essentials/nodeinterface/reference",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/oracles/overview-oracles",
+      "destination": "/arbitrum-essentials/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/precompiles/overview",
+      "destination": "/arbitrum-essentials/precompiles/overview",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/precompiles/reference",
+      "destination": "/arbitrum-essentials/precompiles/reference",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/node-providers",
+      "destination": "/arbitrum-essentials/reference/node-providers",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/contract-addresses",
+      "destination": "/arbitrum-essentials/reference/contract-addresses",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/chain-params",
+      "destination": "/arbitrum-essentials/reference/chain-params",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/development-frameworks",
+      "destination": "/arbitrum-essentials/reference/development-frameworks",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/web3-libraries-tools",
+      "destination": "/arbitrum-essentials/reference/web3-libraries-tools",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/monitoring-tools-block-explorers",
+      "destination": "/arbitrum-essentials/reference/monitoring-tools-block-explorers",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/debugging-tools",
+      "destination": "/arbitrum-essentials/reference/debugging-tools",
+      "permanent": false
+    },
+    {
+      "source": "/build-decentralized-apps/reference/mainnet-risks",
+      "destination": "/arbitrum-essentials/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
       "source": "/launch-arbitrum-chain/a-gentle-introduction",
       "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false

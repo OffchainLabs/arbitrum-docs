@@ -41,7 +41,7 @@ In the following section, we’ll dive deep into these modifications, exploring 
 
 ## How precompiles work
 
-ArbOS implements precompiles using a Solidity interface paired with a Golang backend, connected through runtime reflection for type safety and ABI conformance. For full technical details of the precompile architecture, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#how-precompiles-work). For a complete list of precompiles, refer to the [precompile references](/build-decentralized-apps/precompiles/02-reference.mdx).
+ArbOS implements precompiles using a Solidity interface paired with a Golang backend, connected through runtime reflection for type safety and ABI conformance. For full technical details of the precompile architecture, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#how-precompiles-work). For a complete list of precompiles, refer to the [precompile references](/arbitrum-essentials/precompiles/reference.mdx).
 
 ## Messages
 
@@ -53,7 +53,7 @@ A retryable is a special message type for creating an atomic parent-to-child cha
 
 ## ArbOS state
 
-ArbOS's state is managed through `ArbosState` objects that abstract over the underlying key-value storage. Most of this state supports [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). Key components include `blockhashes` (recent parent chain block hashes), `l1PricingState` (parent chain fee tracking and batch poster reimbursement), and `l2PricingState` (child chain gas pricing via dual gas pools).
+ArbOS's state is managed through `ArbosState` objects that abstract over the underlying key-value storage. Most of this state supports [precompiles](/arbitrum-essentials/precompiles/reference.mdx). Key components include `blockhashes` (recent parent chain block hashes), `l1PricingState` (parent chain fee tracking and batch poster reimbursement), and `l2PricingState` (child chain gas pricing via dual gas pools).
 
 For the full technical details of ArbOS state, pricing internals, and the per-block gas limit mechanism, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#arbos-state). For parent chain pricing specifics, see [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
 

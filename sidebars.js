@@ -33,6 +33,11 @@ const sidebars = {
     },
     {
       type: 'link',
+      label: 'Arbitrum essentials',
+      href: '/arbitrum-essentials',
+    },
+    {
+      type: 'link',
       label: 'Run an Arbitrum chain',
       href: '/launch-arbitrum-chain/overview/introduction',
     },
@@ -1043,215 +1048,46 @@ const sidebars = {
           label: 'Create a token',
         },
         {
-          type: 'doc',
-          label: 'Estimate gas',
-          id: 'build-decentralized-apps/how-to-estimate-gas',
-        },
-        {
-          type: 'doc',
-          label: 'Chains and testnets',
-          id: 'build-decentralized-apps/public-chains',
-        },
-        {
-          type: 'category',
-          label: 'Bridging',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/bridging/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Cross-chain messaging',
-              id: 'build-decentralized-apps/bridging/cross-chain-messaging',
-            },
-            {
-              type: 'doc',
-              label: 'L1-to-L3 teleportation',
-              id: 'build-decentralized-apps/bridging/l1-l3-teleportation',
-            },
-            {
-              type: 'doc',
-              label: 'Custom gas token chains',
-              id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
-            },
-            {
-              type: 'category',
-              label: 'Deposit (parent → child)',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'ETH and messages',
-                  id: 'build-decentralized-apps/bridging/deposit/eth-and-messages',
-                },
-                {
-                  type: 'doc',
-                  label: 'Tokens',
-                  id: 'build-decentralized-apps/bridging/deposit/tokens',
-                },
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Withdraw (child → parent)',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'ETH and messages',
-                  id: 'build-decentralized-apps/bridging/withdraw/eth-and-messages',
-                },
-                {
-                  type: 'doc',
-                  label: 'Tokens',
-                  id: 'build-decentralized-apps/bridging/withdraw/tokens',
-                },
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Configure token gateway',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Standard gateway',
-                  id: 'build-decentralized-apps/bridging/configure-token-gateway/standard',
-                },
-                {
-                  type: 'doc',
-                  label: 'Generic-custom gateway',
-                  id: 'build-decentralized-apps/bridging/configure-token-gateway/generic-custom',
-                },
-                {
-                  type: 'doc',
-                  label: 'Custom gateway',
-                  id: 'build-decentralized-apps/bridging/configure-token-gateway/custom',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Arbitrum vs Ethereum',
-          items: [
-            {
-              type: 'doc',
-              label: 'Comparison overview',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview',
-            },
-            {
-              type: 'doc',
-              label: 'Block gas limit, numbers and time',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
-            },
-            {
-              type: 'doc',
-              label: 'RPC methods',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods',
-            },
-            {
-              type: 'doc',
-              label: 'Solidity support',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
-            },
-            {
-              type: 'doc',
-              label: 'Nonce management',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          label: 'Oracles',
-          id: 'build-decentralized-apps/oracles/overview-oracles',
-        },
-        {
-          type: 'category',
-          label: 'Precompiles',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/precompiles/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Reference',
-              id: 'build-decentralized-apps/precompiles/reference',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'NodeInterface',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/nodeinterface/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Reference',
-              id: 'build-decentralized-apps/nodeinterface/reference',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Reference',
-          items: [
-            {
-              type: 'doc',
-              label: 'Chain parameters',
-              id: 'build-decentralized-apps/reference/chain-params',
-            },
-            {
-              type: 'doc',
-              label: 'Contract addresses',
-              id: 'build-decentralized-apps/reference/contract-addresses',
-            },
-            {
-              type: 'doc',
-              label: 'Debugging tools',
-              id: 'build-decentralized-apps/reference/debugging-tools',
-            },
-            {
-              type: 'doc',
-              label: 'Development frameworks',
-              id: 'build-decentralized-apps/reference/development-frameworks',
-            },
-            {
-              type: 'doc',
-              id: 'build-decentralized-apps/reference/mainnet-risks',
-              label: 'Mainnet risks',
-            },
-            {
-              type: 'doc',
-              label: 'Monitoring tools and block explorers',
-              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
-            },
-            {
-              type: 'doc',
-              id: 'build-decentralized-apps/reference/node-providers',
-              label: 'RPC endpoints and providers',
-            },
-            {
-              type: 'doc',
-              label: 'Web3 libraries and tools',
-              id: 'build-decentralized-apps/reference/web3-libraries-tools',
-            },
-          ],
+          type: 'ref',
+          label: 'Solidity support',
+          id: 'arbitrum-essentials/arbitrum-vs-ethereum/solidity-support',
         },
         {
           type: 'doc',
           label: 'Troubleshooting',
           id: 'for-devs/troubleshooting-building',
+        },
+        {
+          type: 'category',
+          label: 'Arbitrum essentials',
+          collapsed: true,
+          items: [
+            {
+              type: 'ref',
+              label: 'Bridging',
+              id: 'arbitrum-essentials/bridging/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Oracles',
+              id: 'arbitrum-essentials/oracles/overview-oracles',
+            },
+            {
+              type: 'ref',
+              label: 'Precompiles',
+              id: 'arbitrum-essentials/precompiles/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Estimate gas',
+              id: 'arbitrum-essentials/how-to-estimate-gas',
+            },
+            {
+              type: 'link',
+              label: 'See all Arbitrum essentials →',
+              href: '/arbitrum-essentials',
+            },
+          ],
         },
         {
           type: 'link',
@@ -1282,37 +1118,109 @@ const sidebars = {
     },
   ],
 
-  // Solidity-focused sidebar (only shows Solidity content)
-  buildSoliditySidebar: [
+  // Language-neutral platform content, shared by both the Solidity and Stylus build tracks
+  arbitrumEssentialsSidebar: [
     {
       type: 'category',
-      label: 'Build apps with Solidity',
+      label: 'Arbitrum essentials',
       collapsed: false,
+      link: {
+        type: 'generated-index',
+        title: 'Arbitrum essentials',
+        description:
+          'Core, language-agnostic guidance for building on Arbitrum — bridging, oracles, precompiles, the NodeInterface, RPC and provider references, networks, gas, and how Arbitrum differs from Ethereum. Applies whether you write contracts in Solidity or Stylus.',
+        slug: '/arbitrum-essentials',
+      },
       items: [
         {
           type: 'doc',
-          id: 'build-decentralized-apps/quickstart-solidity-remix',
-          label: 'Quickstart',
-        },
-        {
-          type: 'doc',
           label: 'Estimate gas',
-          id: 'build-decentralized-apps/how-to-estimate-gas',
+          id: 'arbitrum-essentials/how-to-estimate-gas',
         },
         {
           type: 'doc',
           label: 'Chains and testnets',
-          id: 'build-decentralized-apps/public-chains',
+          id: 'arbitrum-essentials/public-chains',
         },
         {
-          type: 'doc',
-          label: 'Cross-chain messaging',
-          id: 'build-decentralized-apps/bridging/cross-chain-messaging',
-        },
-        {
-          type: 'doc',
-          id: 'build-decentralized-apps/bridging/custom-gas-token-chains',
-          label: 'Custom gas token chains',
+          type: 'category',
+          label: 'Bridging',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'arbitrum-essentials/bridging/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Cross-chain messaging',
+              id: 'arbitrum-essentials/bridging/cross-chain-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'L1-to-L3 teleportation',
+              id: 'arbitrum-essentials/bridging/l1-l3-teleportation',
+            },
+            {
+              type: 'doc',
+              label: 'Custom gas token chains',
+              id: 'arbitrum-essentials/bridging/custom-gas-token-chains',
+            },
+            {
+              type: 'category',
+              label: 'Deposit (parent → child)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'arbitrum-essentials/bridging/deposit/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'arbitrum-essentials/bridging/deposit/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Withdraw (child → parent)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'arbitrum-essentials/bridging/withdraw/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'arbitrum-essentials/bridging/withdraw/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Configure token gateway',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Standard gateway',
+                  id: 'arbitrum-essentials/bridging/configure-token-gateway/standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Generic-custom gateway',
+                  id: 'arbitrum-essentials/bridging/configure-token-gateway/generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Custom gateway',
+                  id: 'arbitrum-essentials/bridging/configure-token-gateway/custom',
+                },
+              ],
+            },
+          ],
         },
         {
           type: 'category',
@@ -1321,34 +1229,34 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Comparison overview',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview',
             },
             {
               type: 'doc',
               label: 'Block gas limit, numbers and time',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
               type: 'doc',
               label: 'RPC methods',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods',
             },
             {
               type: 'doc',
               label: 'Solidity support',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/solidity-support',
             },
             {
               type: 'doc',
               label: 'Nonce management',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/nonce-management',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/nonce-management',
             },
           ],
         },
         {
           type: 'doc',
           label: 'Oracles',
-          id: 'build-decentralized-apps/oracles/overview-oracles',
+          id: 'arbitrum-essentials/oracles/overview-oracles',
         },
         {
           type: 'category',
@@ -1358,12 +1266,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'build-decentralized-apps/precompiles/overview',
+              id: 'arbitrum-essentials/precompiles/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'build-decentralized-apps/precompiles/reference',
+              id: 'arbitrum-essentials/precompiles/reference',
             },
           ],
         },
@@ -1375,12 +1283,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'build-decentralized-apps/nodeinterface/overview',
+              id: 'arbitrum-essentials/nodeinterface/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'build-decentralized-apps/nodeinterface/reference',
+              id: 'arbitrum-essentials/nodeinterface/reference',
             },
           ],
         },
@@ -1390,61 +1298,45 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/node-providers',
-              label: 'RPC endpoints and providers',
-            },
-            {
-              type: 'doc',
-              label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/contract-addresses',
-            },
-            {
-              type: 'doc',
               label: 'Chain parameters',
-              id: 'build-decentralized-apps/reference/chain-params',
+              id: 'arbitrum-essentials/reference/chain-params',
             },
             {
               type: 'doc',
-              label: 'Development frameworks',
-              id: 'build-decentralized-apps/reference/development-frameworks',
-            },
-            {
-              type: 'doc',
-              label: 'Web3 libraries and tools',
-              id: 'build-decentralized-apps/reference/web3-libraries-tools',
-            },
-            {
-              type: 'doc',
-              label: 'Monitoring tools and block explorers',
-              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
+              label: 'Contract addresses',
+              id: 'arbitrum-essentials/reference/contract-addresses',
             },
             {
               type: 'doc',
               label: 'Debugging tools',
-              id: 'build-decentralized-apps/reference/debugging-tools',
+              id: 'arbitrum-essentials/reference/debugging-tools',
             },
-
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/mainnet-risks',
+              label: 'Development frameworks',
+              id: 'arbitrum-essentials/reference/development-frameworks',
+            },
+            {
+              type: 'doc',
+              id: 'arbitrum-essentials/reference/mainnet-risks',
               label: 'Mainnet risks',
             },
+            {
+              type: 'doc',
+              label: 'Monitoring tools and block explorers',
+              id: 'arbitrum-essentials/reference/monitoring-tools-block-explorers',
+            },
+            {
+              type: 'doc',
+              id: 'arbitrum-essentials/reference/node-providers',
+              label: 'RPC endpoints and providers',
+            },
+            {
+              type: 'doc',
+              label: 'Web3 libraries and tools',
+              id: 'arbitrum-essentials/reference/web3-libraries-tools',
+            },
           ],
-        },
-        {
-          type: 'doc',
-          label: 'Troubleshooting',
-          id: 'for-devs/troubleshooting-building',
-        },
-        {
-          type: 'link',
-          label: 'Arbitrum SDK',
-          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
-        },
-        {
-          type: 'link',
-          label: 'Example code repository',
-          href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
     },
@@ -1763,6 +1655,38 @@ const sidebars = {
               type: 'link',
               label: 'Source Code Repository',
               href: 'https://github.com/OffchainLabs/stylus-sdk-rs',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Arbitrum essentials',
+          collapsed: true,
+          items: [
+            {
+              type: 'ref',
+              label: 'Bridging',
+              id: 'arbitrum-essentials/bridging/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Oracles',
+              id: 'arbitrum-essentials/oracles/overview-oracles',
+            },
+            {
+              type: 'ref',
+              label: 'Precompiles',
+              id: 'arbitrum-essentials/precompiles/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Estimate gas',
+              id: 'arbitrum-essentials/how-to-estimate-gas',
+            },
+            {
+              type: 'link',
+              label: 'See all Arbitrum essentials →',
+              href: '/arbitrum-essentials',
             },
           ],
         },
