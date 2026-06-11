@@ -1,0 +1,50 @@
+name: SME review gate
+run-name: SME review gate (report-only)
+
+# Phase 0: report-only. Publishes a `sme-review-gate` check run with a NEUTRAL
+# conclusion (never blocks merges) so the diff -> region/path -> required-team
+# logic can be validated on real PRs. Phase 1 flips `reportOnly` to false in
+# .github/sme-config.json and adds the check to the branch ruleset to enforce.
+
+on:
+  pull_request:
+    branches:
+      - master
+  pull_request_review:
+    types: [submitted, dismissed, edited]
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: read
+
+jobs:
+  sme-review-gate:
+    name: 'sme-review-gate'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        uses: OffchainLabs/actions/node-modules/install@main
+        with:
+          install-command: yarn install --frozen-lockfile
+
+      - name: Run SME review gate (report-only)
+        env:
+          # The default GITHUB_TOKEN cannot read org team membership. When eng/infra
+          # provisions a GitHub App / fine-grained token with `members:read`, expose it
+          # as the SME_GATE_TOKEN secret and it is preferred automatically; until then
+          # the gate degrades to "unverifiable" rather than failing.
+          GH_TOKEN: ${{ secrets.SME_GATE_TOKEN || secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: yarn tsx scripts/sme-review-gate.ts

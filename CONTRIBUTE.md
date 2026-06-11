@@ -212,6 +212,29 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 :::
 ```
 
+### Flagging content for SME review
+
+Highly technical docs need approval from a **subject-matter expert (SME)** in addition to editorial review. To keep SME review fast, tag only the parts that genuinely need technical eyes — the rest merges on editorial approval alone.
+
+Wrap a technical region in invisible MDX markers (they render to nothing):
+
+```mdx
+{/* sme:start team=protocol-sme reason="dispute-window timing" */}
+
+The challenge period is exactly 6.4 days because…
+
+{/* sme:end */}
+```
+
+Available SME teams: `protocol-sme` (how Arbitrum works), `stylus-sme` (Stylus), `chain-sme` (launch an Arbitrum chain).
+
+You don't always need a marker:
+
+- Editing anything under a technical section (`how-arbitrum-works/`, `stylus/`, `launch-arbitrum-chain/`) automatically requires that section's SME team.
+- Large or reusable technical blocks can instead live in an SME-owned partial under `docs/partials/_sme/`, which requires its SME team by path.
+
+A `sme-review-gate` check reports which SME team(s) a PR needs and whether they've approved. It is currently **report-only** (advisory, non-blocking) while the workflow is validated.
+
 ### Frequently asked questions
 
 #### Can I point to my product from core docs? For example—if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) section?

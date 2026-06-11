@@ -19,6 +19,16 @@ Please fill out the form below to ensure your doc gets quickly approved and merg
 - [ ] Codebase changes
 - [ ] Not applicable
 
+## SME review
+
+<!-- Highly technical content needs subject-matter-expert (SME) approval in addition to editorial review. Tagging the parts that need SME eyes lets SMEs review just that subset. Check all that apply: -->
+
+- [ ] No content here needs SME review (editorial only)
+- [ ] I tagged the technical region(s) needing SME review with `{/* sme:start team=<team> */}` … `{/* sme:end */}` (teams: `protocol-sme`, `stylus-sme`, `chain-sme`)
+- [ ] This PR only touches a technical section (`how-arbitrum-works/`, `stylus/`, `launch-arbitrum-chain/`), which auto-requires its SME team
+
+<!-- See CONTRIBUTE.md ("Flagging content for SME review") for how tagging works. -->
+
 ## Checklist
 
 <!-- Mark completed items with an "x" -->
