@@ -235,6 +235,11 @@ You don't always need a marker:
 
 A `sme-review-gate` check reports which SME team(s) a PR needs and whether they've approved. It is currently **report-only** (advisory, non-blocking) while the workflow is validated.
 
+SME tags are **transient**: once your PR merges, an automated job removes the
+`{/* sme:start … */}` / `{/* sme:end */}` markers from `master`. Don't rely on a
+past tag still gating an area — if a later change needs SME review, tag it again
+in that PR.
+
 ### Frequently asked questions
 
 #### Can I point to my product from core docs? For example—if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) section?

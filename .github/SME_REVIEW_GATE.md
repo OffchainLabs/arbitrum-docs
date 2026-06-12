@@ -33,6 +33,21 @@ If a PR touches no SME content, the check passes on its own and editorial approv
 | `failure` | A required SME team has not approved yet. |
 | `action_required` | Misconfiguration: malformed `sme:*` markers, an unknown team slug, or team membership could not be read (missing team / token). Fix setup — not a normal "awaiting approval". |
 
+## Transient markers (post-merge cleanup)
+
+SME markers are **transient per-PR signals**, not durable content. After a PR
+merges to `master`, the `SME marker cleanup` workflow
+(`.github/workflows/sme-marker-cleanup.yml`) strips the `{/* sme:* */}` markers
+from the files that PR changed and commits the result directly to `master` as the
+cleanup bot. A future edit to that area is re-tagged by its own author if the new
+diff needs SME review. Always-on protection for whole technical sections still
+comes from the path globs in `.github/sme-config.json`, which do not depend on
+markers.
+
+Enabling cleanup needs (admin): a dedicated bot/GitHub App token in the repo
+secret `SME_CLEANUP_TOKEN` with `contents: write`, and that bot added to the
+branch-ruleset **bypass list** so its commit isn't blocked by required reviews.
+
 ## Current state: report-only (Phase 0)
 
 `.github/sme-config.json` has `"reportOnly": true`, so the check posts `neutral` and
