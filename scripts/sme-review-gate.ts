@@ -27,6 +27,7 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync, appendFileSync } from 'node:fs';
 import path from 'node:path';
+import { START_RE, END_RE } from './sme-markers';
 
 interface SmeConfig {
   org: string;
@@ -120,9 +121,6 @@ function changedLines(patch: string | undefined): Set<number> {
   return lines;
 }
 
-const START_RE = /\{\/\*\s*sme:start\s+team=([A-Za-z0-9._-]+)/;
-const END_RE = /\{\/\*\s*sme:end\b/;
-
 /** Find `sme:start … sme:end` regions (1-based, inclusive) in file lines. */
 function regionsIn(text: string[]): Region[] {
   const regions: Region[] = [];
@@ -194,18 +192,26 @@ function markerIssues(
     for (let i = 0; i < text.length; i++) {
       const startMatch = text[i].match(START_RE);
       if (startMatch) {
-        if (openTeam) issues.push(`${f.filename}:${openLine} sme:start (team=${openTeam}) reopened before sme:end`);
+        if (openTeam)
+          issues.push(
+            `${f.filename}:${openLine} sme:start (team=${openTeam}) reopened before sme:end`,
+          );
         openTeam = startMatch[1];
         openLine = i + 1;
         if (!config.smeTeams[startMatch[1]]) {
-          issues.push(`${f.filename}:${i + 1} unknown SME team '${startMatch[1]}' (not in .github/sme-config.json)`);
+          issues.push(
+            `${f.filename}:${i + 1} unknown SME team '${
+              startMatch[1]
+            }' (not in .github/sme-config.json)`,
+          );
         }
       } else if (END_RE.test(text[i])) {
         if (!openTeam) issues.push(`${f.filename}:${i + 1} sme:end with no matching sme:start`);
         openTeam = null;
       }
     }
-    if (openTeam) issues.push(`${f.filename}:${openLine} sme:start (team=${openTeam}) never closed`);
+    if (openTeam)
+      issues.push(`${f.filename}:${openLine} sme:start (team=${openTeam}) never closed`);
   }
   return issues;
 }
@@ -273,7 +279,9 @@ function buildSummary(
 ): { title: string; body: string } {
   const mode = reportOnly ? 'report-only — not blocking' : 'enforcing';
   const issueBlock =
-    issues.length === 0 ? [] : ['', '**Marker problems (fix these):**', ...issues.map((i) => `- ${i}`)];
+    issues.length === 0
+      ? []
+      : ['', '**Marker problems (fix these):**', ...issues.map((i) => `- ${i}`)];
 
   if (verdicts.length === 0) {
     return {
@@ -296,17 +304,21 @@ function buildSummary(
   const edit = editorial.unverifiable
     ? '❓ editorial membership unverifiable'
     : editorial.satisfied
-      ? '✅ editorial (TW) approved'
-      : '⛔ editorial (TW) approval pending';
+    ? '✅ editorial (TW) approved'
+    : '⛔ editorial (TW) approval pending';
 
   let title: string;
   if (issues.length) title = 'Fix SME marker problems';
-  else if (unresolved.length) title = `Cannot verify ${unresolved.length} SME team(s) — gate misconfigured`;
+  else if (unresolved.length)
+    title = `Cannot verify ${unresolved.length} SME team(s) — gate misconfigured`;
   else if (pending.length) title = `Awaiting ${pending.length} SME team(s)`;
   else title = 'All required SME teams approved';
 
   const notes = unresolved.length
-    ? ['', '> ❓ **unverifiable** = the gate could not read this team\'s membership. It likely does not exist yet or the token lacks `members:read`. See `.github/SME_REVIEW_GATE.md`.']
+    ? [
+        '',
+        "> ❓ **unverifiable** = the gate could not read this team's membership. It likely does not exist yet or the token lacks `members:read`. See `.github/SME_REVIEW_GATE.md`.",
+      ]
     : [];
 
   return {
@@ -387,10 +399,10 @@ function main(): void {
   const conclusion = config.reportOnly
     ? 'neutral'
     : misconfigured
-      ? 'action_required'
-      : pending
-        ? 'failure'
-        : 'success';
+    ? 'action_required'
+    : pending
+    ? 'failure'
+    : 'success';
 
   console.log(`sme-review-gate: ${title} (conclusion=${conclusion})`);
   console.log(body);
