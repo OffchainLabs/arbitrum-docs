@@ -226,6 +226,8 @@ The challenge period is exactly 6.4 days because…
 {/* sme:end */}
 ```
 
+Keep each marker on a single line — the `sme:start` and `sme:end` comments must each stay on one line, or the gate won't recognize the region (it reports the marker as malformed).
+
 Available SME teams: `protocol-sme` (how Arbitrum works), `stylus-sme` (Stylus), `chain-sme` (launch an Arbitrum chain).
 
 You don't always need a marker:
