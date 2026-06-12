@@ -33,6 +33,8 @@ GATE_FILES=(
   ".github/CODEOWNERS"
   ".github/SME_REVIEW_GATE.md"
   "scripts/sme-review-gate.ts"
+  "scripts/sme-markers.ts"
+  "scripts/strip-sme-markers.ts"
   "scripts/sme-gate-sandbox.sh"
 )
 
@@ -143,6 +145,65 @@ jobs:
 YAML
 }
 
+write_sandbox_cleanup_workflow() {
+  # Quoted heredoc delimiter keeps ${{ ... }} literal for GitHub Actions.
+  cat >.github/workflows/sme-marker-cleanup.yml <<'YAML'
+name: SME marker cleanup (sandbox)
+
+# Sandbox variant of the post-merge marker stripper. Same pull_request_target
+# model; simplified install (npx tsx). Needs the SME_CLEANUP_TOKEN secret and a
+# bot on the sandbox ruleset bypass list to push to the default branch.
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: sme-marker-cleanup
+  cancel-in-progress: false
+
+jobs:
+  strip:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SME_CLEANUP_TOKEN }}
+          persist-credentials: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - name: Collect merged PR's markdown files
+        id: files
+        env:
+          GH_TOKEN: ${{ secrets.SME_CLEANUP_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename' \
+            | grep -E '\.mdx?$' > "$RUNNER_TEMP/sme-files.txt" || true
+          echo "count=$(wc -l < "$RUNNER_TEMP/sme-files.txt" | tr -d ' ')" >> "$GITHUB_OUTPUT"
+      - name: Strip and push
+        if: steps.files.outputs.count != '0'
+        run: |
+          mapfile -t FILES < "$RUNNER_TEMP/sme-files.txt"
+          npx -y tsx scripts/strip-sme-markers.ts "${FILES[@]}"
+          if git diff --quiet; then echo "nothing to strip"; exit 0; fi
+          git config user.name "sme-gate-sandbox"
+          git config user.email "sme-gate-sandbox@local"
+          git commit -am "chore: strip transient SME markers (post-merge of #${{ github.event.pull_request.number }})"
+          git push
+YAML
+}
+
 bootstrap() {
   for f in "${GATE_FILES[@]}"; do
     [ -f "$SRC_DIR/$f" ] || {
@@ -161,6 +222,7 @@ bootstrap() {
     cp "$SRC_DIR/$f" "$f"
   done
   write_sandbox_workflow
+  write_sandbox_cleanup_workflow
   chmod +x scripts/sme-gate-sandbox.sh
   git add -A
   git commit -q -m "Bootstrap SME review gate (sandbox)"
@@ -267,3 +329,6 @@ echo "  5. Have an $SME_TEAM member approve the path-fallback PR -> check flips 
 echo "  6. Dismiss that approval -> check re-blocks."
 echo "  Fork case: open a PR from a fork (second account) -> confirm the check still"
 echo "  posts and resolves (this is the pull_request_target path)."
+echo "  Cleanup: merge the region-tag PR, then confirm the marker is gone:"
+echo "    gh api repos/${REPO}/contents/${EDIT_PATH}/_sandbox-region-tag.mdx \\"
+echo "      --jq '.content' | base64 -d | grep -c 'sme:start' # expect 0 after cleanup runs"
