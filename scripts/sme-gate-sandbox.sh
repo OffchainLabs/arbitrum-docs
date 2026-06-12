@@ -213,7 +213,9 @@ bootstrap() {
   done
   if [ "$DRY_RUN" = true ]; then
     echo "[dry-run] would install into ${REPO}@${DEFAULT_BRANCH}:"
-    printf '  %s\n' "${GATE_FILES[@]}" ".github/workflows/sme-review-gate.yml (sandbox variant)"
+    printf '  %s\n' "${GATE_FILES[@]}" \
+      ".github/workflows/sme-review-gate.yml (sandbox variant)" \
+      ".github/workflows/sme-marker-cleanup.yml (sandbox variant)"
     return
   fi
   clone_sandbox
