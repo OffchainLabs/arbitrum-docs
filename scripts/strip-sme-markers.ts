@@ -31,3 +31,23 @@ export function stripMarkers(content: string): string {
   }
   return out.join('\n');
 }
+
+function main(args: string[]): void {
+  const files = args.includes('--all')
+    ? globSync('docs/**/*.{md,mdx}')
+    : args.filter((a) => !a.startsWith('--'));
+  let changed = 0;
+  for (const file of files) {
+    const before = readFileSync(file, 'utf8');
+    const after = stripMarkers(before);
+    if (after !== before) {
+      writeFileSync(file, after);
+      console.log(`stripped SME markers: ${file}`);
+      changed++;
+    }
+  }
+  console.log(`strip-sme-markers: ${changed} file(s) changed`);
+}
+
+const isMain = import.meta.url === `file://${process.argv[1]}`;
+if (isMain) main(process.argv.slice(2));
