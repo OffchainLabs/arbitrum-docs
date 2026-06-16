@@ -1,0 +1,299 @@
+---
+title: The Batch Poster
+description: 'Learn the fundamentals of the Arbitrum Batch Poster.'
+author: pete-vielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need to learn more about the batch poster mechanism/protocol.
+content_type: concept
+---
+
+Batch posting is a fundamental process for the Sequencer's operation in Arbitrum. It involves collecting multiple child chain transactions, organizing them into batches, compressing the data to reduce size, and sending these batches to the Sequencer Inbox contract on the parent chain. This mechanism is crucial for ensuring that transactions are securely recorded on the parent chain blockchain while optimizing for costs and performance.
+
+Understanding batch posting is essential for grasping how Arbitrum achieves scalability and cost-efficiency without compromising security. By delving into these subtopics, you’ll gain insight into the Sequencer’s role in optimizing transaction throughput and minimizing fees, as well as the innovative solutions implemented to address the challenges of parent chain data pricing.
+
+<ImageZoom src="/img/haw-batching.svg" alt="Batching" className="img-600px" />
+
+#### Batch formation criteria:
+
+- **Size thresholds**: Batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transactions, improving cost efficiency.
+- **Time constraints**: The Sequencer also monitors the elapsed time since the last batch update to prevent undue delays. Upon reaching the maximum time threshold, the Sequencer will create a batch with the transactions collected so far, even if the batch doesn’t meet the size threshold.
+
+#### Batch creation process:
+
+- **Aggregation**: Once the batch-formation criteria (size or time threshold) are satisfied, the Sequencer aggregates buffered transactions into a single batch.
+- **Metadata inclusion**: The batch includes all necessary metadata for all transactions.
+- **Preparation for compression**: Batch preparation for the compression stage begins, with techniques that minimize data size before posting to the parent chain.
+
+The batching mechanism allows the Sequencer to efficiently manage transactions by balancing the need for cost-effective parent chain posting with the requirement for prompt transaction processing. By strategically grouping transactions into batches based on size and time criteria, the Sequencer reduces per-transaction costs and enhances the overall scalability of the Arbitrum network.
+
+## How it works
+
+### The Main Posting Loop: `MaybePostSequencerBatch`
+
+1. **Safety check first**: if a previous batch failed on L1, stop and wait for operator intervention.
+2. **Find your place**: ask "What's the next batch number and nonce I should use?"
+3. **Start a fresh batch** (if one isn't already in progress), choosing calldata vs. blobs vs. offchain storage.
+4. **Pin time/block bounds** from L1 so the batch can't claim timestamps L1 would reject.
+5. **Fill it up**: pull L2 messages in order, stopping if a message would break the bounds or the batch is full.
+6. **Decide go/no-go**: post now if it's full, or if enough time has passed, or if a delayed message is about to expire—otherwise wait and try later.
+7. **Seal it**: recompress and finalize the batch bytes.
+8. **Route the data**: send it to the chosen storage backend, falling back to plain L1 if needed.
+9. **Wrap it for L1**: build the calldata for the right contract method.
+10. **Estimate gas**, accounting for any batches still pending ahead of this one.
+11. **Double-check correctness**: replay the batch in a simulator to confirm it decodes back to the exact same messages.
+12. **Send it** via the `DataPoster`.
+13. **Update the backlog estimate** so future batches compress and bid appropriately.
+
+### DataPoster: L1 transaction management
+
+#### Queue storage backends
+
+1. The DataPoster keeps a queue of L1 transactions it has sent but not yet seen confirmed.
+2. That queue needs to survive restarts (so it doesn't lose track of nonces), which is why the default stores it in a local database.
+3. If several posters share the job, the queue lives in Redis so they all see the same state.
+4. On an Arbitrum parent chain there's no public mempool to worry about, so a no-op store is enough.
+5. In-memory storage exists mainly for tests and throwaway setups.
+
+#### Transaction posting flow
+
+1. Confirm the nonce is the one expected, so this transaction slots in correctly.
+2. Refresh how much L1 balance the poster has to spend.
+3. Work out the fee bids (max fee, tip, and blob fee if applicable) for current conditions.
+4. Build the right transaction shape—a normal fee transaction, or a blob-carrying transaction.
+5. For blob transactions, do the extra cryptographic work (KZG commitments and proofs) that Ethereum requires.
+6. Sign it weith the poster's key.
+7. Record it in the queue (so it can be tracked and replaced) and broadcast it to L1.
+
+#### Fee cap formula
+
+1. Start from a baseline target price the operator considers reasonable.
+2. Add a term that grows with the **backlog**: the more batches waiting, the higher the bid—and it grows as the square so pressure ramps up fast.
+3. Add another term that grows with how **long** this batch has been waiting, also squared.
+4. The result: a batch that's both backed up and old bids very aggressively, while a calm, fresh batch bids modestly near the target price.
+
+#### Replace-by-fee (RBF)
+
+1. After sending, the poster keeps watching transactions that haven't been confirmed.
+2. When a transaction waiting past its scheduled replacement time, it resends the **same** transaction with a higher fee (replace-by-fee).
+3. Ethereum requires a minimum bump to accept a replacement: at least +10% for normal transactions, +100% (double) for blob transactions.
+4. The schedule starts aggressive (5m, 10m, ...) then stretches out, so it bumps quickly at first and then backs off.
+5. This keeps a batch moving toward inclusion without overpaying the instant it's sent.
+
+#### Balance allocation
+
+1. With several batches queued, they all need **ETH** to pay fees, but there's only so much in the wallet.
+2. The earliest transaction gets the biggest slice (half), since it's next to confirm.
+3. The remaining balance is split so earlier-in-line transactions get more than later ones.
+4. This way one stuck, expensive transaction can't drain the wallet and leave the others unable to bid—yet the ordering priority is preserved.
+
+#### Nonce management
+
+1. The poster asks L1 "how many of my transactions have actually landed?" (the onchain nonce).
+2. Anything below that nonce has confirmed, so it can be dropped from the local queue.
+3. It keeps the most recent confirmed one around as a reference point for metadata.
+4. By default it reads the **finalized** nonce, so it won't prune based on a number that a reorg could still undo.
+
+#### Mempool safety
+
+1. Ethereum mempools treat blob transactions and normal transactions as separate kinds and won't let them sit back-to-back by nonce.
+2. So before sending a new transaction of a **different** type than the one just before it, the poster checks that the previous one already confirmed.
+3. This avoids creating a "gap" the mempool refuses to bridge, which would stall every later transaction.
+
+### EIP-4844 blob support
+
+#### Decision logic
+
+1. First, blobs must be turned on in config and supported by the parent chain and ArbOS version—otherwise it's calldata, no question.
+2. If blobs are possible, it compares the per-byte cost of each lane right now.
+3. Whichever is cheaper for the current L1 market wins.
+4. To avoid flip-flopping every block (which wastes the mempool-ordering rules above), once it switches off blobs it waits for a run of non-blob batches before switching back.
+
+#### Blob encoding
+
+1. A blob is a fixed-size container of "field elements," and only 31 of every 32 bytes can hold real data.
+2. The batch is RLP-encoded, then poured into those 31-byte slots across the blob.
+3. The leftover bits from each slot are gathered up and packed separately so no space is wasted.
+4. Each finished blob gets a cryptographic commitment and proofs, which is what lets Ethereum verify the blob without storing it forever.
+
+#### Blob transaction construction
+
+1. The actual blobs ride in a "sidecar" attached to the transaction, not in the main calldata.
+2. Alongside the blobs go their commitments and proofs, so validators can check them.
+3. The transaction body itself only carries lightweight `BlobHashes` (verisoned hashes) that point at the blobs.
+4. This split is why blobs are cheap: the heavy data is gossiped separately and isn't stored by L1 execution forever.
+
+#### EIP-7623 auto-detection
+
+1. The cost of calldata depends on whether the parent chain has adopted EIP-7623, which raised the floor price per byte.
+2. Rather than guess, the poster runs two gas estimates with differently-sized calldata.
+3. It looks at how much the gas rose per extra byte—that difference reveals the true per-byte rate (16 vs. 40).
+4. It feeds that rate into the blobs-vs-calldata comparison so the cheaper-lane decision stays accurate on any chain.
+
+### Data availability integration
+
+#### Writer interface
+
+1. Any storage backend only has to promise two things to be usable.
+2. `Store` takes the batch bytes and a deadline, stashes the data, and returns something that proves it was stored (like a certificate).
+3. `GetMaxMessageSize` tells the poster the biggest batch that backend will accept, so it can size batches correctly.
+4. Because the interface is this small, new DA systems can be plugged in without changing the `BatchPoster`.
+
+#### DA fallback chain
+
+1. If there are no offchain backends (or we're in forced-L1 mode), just put the data on Ethereum directly.
+2. Otherwise, try the current preferred backend first.
+3. If it complains the batch is too big, rebuild a smaller batch and try again.
+4. If it asks to fall back, move to the next backend; if every backend declines, drop to Ethereum (unless that's been disabled).
+5. If it fails for any other reason, stop—that's a real problem needing a human.
+6. When a backend succeeds, reset to the top of the preference list for next time.
+
+#### EthDA fallback batching
+
+1. When the offchain backend fails and the poster falls back to Ethereum, it commits to staying on Ethereum for a while.
+2. It sets a counter (default 10) and counts down one per successful L1 batch.
+3. Only when the counter hits zero does it try the offchain backend again.
+4. This stops the poster from retrying a flaky backend on every single batch and ping-ponging between the two.
+
+#### AnyTrust aggregator
+
+1. The aggregator sends the batch to all the committee's storage nodes at the same time.
+2. Each node that stores it signs a receipt promising to keep the data until a deadline.
+3. The aggregator waits until enough nodes have signed (enough that at least one honest node must hold the data).
+4. It combines those signatures into one compact certificate.
+5. That certificate—not the raw data—is what gets posted to L1, which is why AnyTrust is cheaper than putting everything onchain.
+
+#### DA header bytes
+
+1. The very first byte of every posted batch is a tag describing how to read the rest.
+2. A reader checks that byte before anything else to know the format (plain Brotli, a DA certificate, blob hashes, etc.).
+3. Some tags are combinations—bits OR'd together—so one byte can say "AnyTrust **and** tree-encoded."
+4. This lets a single decoder handle every data-availability format just by branching on the header byte.
+
+### Backlog tracking
+
+#### Estimation
+
+1. "Backlog" answers: roughly how mnay batches' worth of messages are waiting but not yet posted?
+2. It takes the count of unposted messages and divides by the typical messages-per-batch.
+3. That typical figure is a rolling average over the last 20 batches, so it adapts smoothly instead of jumping.
+4. If the poster only paused because it bumped into L1 time bounds (not real congestion), it reports zero backlog so it doesn't needlessly degrade compression or overbid.
+
+#### Effects of backlog
+
+1. The same backlog figure feeds three different behaviors.
+2. It lowers compression quality so batches go out faster when work piles up.
+3. It raises the fee bid (squared) so batches comopete harder for L1 inclusion.
+4. It drives operator alerts—a warning past 10 batches behind, an error past 30—so humans notice a poster falling behind.
+
+### L1 bounds, delay proofs, and the `SequencerInbox`
+
+#### L1 block bounds
+
+1. The L1 contract will reject a batch whose claimed time/block drifts too far from L1 reality, so the poster stays inside a window.
+2. The **upper** edge: don't include messages that reference an L1 time/block further ahead than allowed.
+3. The **lower** edge: don't include message so old they're near the bottom of the window, because an L1 reorg could invalidate them.
+4. The catch: if a message is **forced** to be near the lower edge (e.g., an old delayed message), strictly enforcing the bound would stall the chain—so past a 1-hour threshold the bound check is bypassed to keep things moving.
+
+#### Reorg resistance margin
+
+`ReorgResistanceMargin` (default 10 minutes) adds a safety buffer.
+
+1. Even inside the legal lower bound, posting right at the edge is risky: a small L1 reorg could push the bound past your batch and invalidate it.
+2. So the poster keeps an extra 10-minute buffer above that lower edge.
+3. If the batch's first real message sits inside that buffer, it waits rather than posts.
+4. Waiting a little for more L1 settling is cheaper than having a posted batch rejected.
+
+#### Delay buffer
+
+1. The delay buffer is an onchain mechanism that rewards the power for including delayed (L1-submitted) message promptly.
+2. The poster tracks the buffer's state (how full, how synced) so it knows whether it still needs updating.
+3. If a delayed message has been waiting and is approaching its threshold, the poster force-posts a batch so it doesn't miss the window.
+4. This guarantees censorship-resistant L1 messages actually get pulled into a batch in time.
+
+#### Delay proofs
+
+Generated when a batch contains delayed messages **and** the delay buffer is enabled **and** updatable.
+
+1. When a batch pulls in delayed messages and the delay buffer is active, the poster attaches a small proof.
+2. The proof carries the accumulator value just before the delayed message plus that message's key fields.
+3. On L1, the `SequencerInbox` uses it to update its delay-buffer accounting in the same transaction.
+4. Because there's extra data to pass, the poster calls a special `*DelayProof` variant of the contract method instead of the plain one.
+
+### Reading batches back: `SequencerInbox` reader
+
+#### Batch header format
+
+Each batch is serialized with a 40-byte header (5 x uint64).
+
+1. Every batch begins with five numbers packed into 40 bytes, then the data.
+2. The first four record the time/block window the batch is valid for (the same bounds the poster computed before posting).
+3. The fifth records how many delayed messages have been consumed up to this batch.
+4. A reader uses these to re-establish the exact context before decoding the payload that follows.
+
+#### Reading flow
+
+`LookupBatchsInRange` filters `SequencerBatchDelivered` events from the SequencerInbox contract, parses them into `SequencerInboxBatch` structs with time bounds, accumulator hashes, and data location.
+
+1. To learn what batches exist, the reader scans L1 for `SequencerBatchDelivered` events in a block range.
+2. Each event becomes a structured record: its time bounds, its accumulator hashes, and where to find its data.
+3. With that record, the reader knows enough to go fetch and decode the batch's contents.
+
+### Access lists
+
+The `AccessList` function pre-computes storage slots to reduce gas costs.
+
+1. Ethereum charges less for storage slots if you warn it in advance which ones you'll read.
+2. The poster knows exactly which contract slots its batch transaction will touch (in the SequencerInbox, the bridge, and optionally a gas refunder).
+3. It lists those slots up front in the transaction's access list to get the discount.
+4. On an Arbitrum parent chain this trick doesn't pay off (data is already cheap there), so it's switched off for L3s.
+
+### Error Handling and Retries
+
+#### Batch poster error handling
+
+The `Start()` loop uses `EphemeralErrorHandler` instances to suppress transient errors.
+
+1. Many errors are transient (a race, a temporary L1 hiccup), so the poster doesn't shout about them right away—it stays quiet for a minute or so.
+2. A known set of "expected" errors gets a longer grace period (debug, then warn, then error) before it botehrs an operator.
+3. Whenever anything goes wrong, the half-built batch is discarded and rebuilt next time—partial state is never reused.
+4. The return value sets the rhythm: error → wait 10s, nothing to do → wait 10s, success → immediately go post the next batch.
+
+#### Revert detection
+
+`pollForReverts()` runs as a background goroutine subscribing to L1 headers.
+
+1. A background watcher follows every new L1 block.
+2. It looks for transactions sent from the batch poster's address.
+3. If one of them failed (reverted) onchain, that's serious—the data may not have landed correctly.
+4. It flips a "stop" flag that halts all further posting and logs a detailed reason, so a human investigates before anything else goes out.
+
+#### DataPoster error handling
+
+Tracks consecutive intermittent errors per nonce in an `ErrorCount` map.
+
+1. The DataPoster keeps a per-nonce tally of how many times in a row a transaction hit a known transient error.
+2. Certain expected errors are tolerated up to 20 repeats before it escalates the log level.
+3. This avoids alarming operators over brief, self-correcting conditions while still surfacing anything that's genuinely stuck.
+
+### Compression
+
+The Sequencer employs compression when forming transaction batches to optimize the data and cost of batches posted to the parent chain. Arbitrum uses the Brotli compression algorithm due to its high compression ratio and efficiency, crucial for reducing parent chain posting costs.
+
+<ImageZoom src="/img/haw-compression.svg" alt="Compression" className="img-600px" />
+
+#### Compression level in the Brotli algorithm
+
+Brotli’s compression algorithm includes a parameter: **compression level**, which ranges from **0 to 11**. This parameter allows you to balance two key factors:
+
+- **Compression efficiency**: Higher levels result in greater size reduction.
+- **Computational cost**: Higher levels require more processing power and time.
+
+As the compression level increases, you can achieve better compression ratios at the expense of longer compression times.
+
+#### Dynamic compression level setting
+
+The compression level on Arbitrum is dynamically adjusted based on the current backlog of batches waiting to be posted to the parent chain by the Sequencer. In scenarios where multiple batches are queued in the buffer, it is possible to adjust the compression level to improve throughput dynamically. When the buffer becomes overloaded with overdue batches, the compression level decreases. For the exact backlog thresholds and how compression interacts with parent chain pricing, see [Compression levels](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#compression-levels).
+
+This trade-off prioritizes speed over compression efficiency, enabling faster processing and transmission of pending batches. Doing so clears the buffer more quickly, ensuring smoother overall system performance.
+
+Now that transactions are batched and compressed, they pass to the batch poster for transmission to the parent chain.

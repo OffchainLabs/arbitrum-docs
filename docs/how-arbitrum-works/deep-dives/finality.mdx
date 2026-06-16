@@ -1,0 +1,172 @@
+---
+title: Finality
+description: 'Learn the fundamentals of how Arbitrum handles finality.'
+author: pete-vielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need to learn more about finality on Arbitrum.
+content_type: concept
+---
+
+Finality in blockchain systems refers to the point at which a transaction becomes irreversible and is permanently included in the blockchain’s ledger. In the context of Arbitrum’s Nitro architecture, understanding finality is crucial for developers and users to make informed decisions about transaction confirmations, security guarantees, and application design.
+
+Arbitrum offers two levels of finality:
+
+1. **Soft finality**: Provided by the Sequencer’s real-time feed, offering immediate but provisional transaction confirmations.
+2. **Hard finality**: Occurs when transactions are included in batches posted to and finalized on the parent chain, providing strong security assurances. Final settlement on the parent chain happens via [assertions](/how-arbitrum-works/deep-dives/assertions.mdx) confirmed by the Rollup protocol.
+
+## Soft finality
+
+Soft finality refers to the preliminary confirmation of transactions based on the Sequencer’s real-time feed. Key characteristics include:
+
+- **Immediate confirmation**: Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer.
+- **Provisional assurance**: The confirmations are provisional and rely on the Sequencer’s integrity and availability.
+- **High performance**: Enables applications to offer rapid responses and real-time interactions, enhancing user experience.
+
+#### Advantages of soft finality
+
+- **Low latency**: Users receive immediate feedback on transaction status.
+- **Optimized for speed**: Ideal for applications where responsiveness is critical.
+- **Improved user experience**: Reduces waiting times and uncertainty.
+
+#### Limitations of soft finality
+
+- **Trust dependency**: Relies on the Sequencer’s honesty and ability to maintain uptime.
+- **Potential for reordering**: In rare cases, if the Sequencer acts maliciously or encounters issues, the provisional ordering could change.
+- **Not suitable for high-value transactions**: For transactions requiring strong security guarantees, soft finality may not suffice.
+
+## Hard finality
+
+Hard finality occurs when batched transactions get posted to the parent chain. Key characteristics include:
+
+- **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
+- **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
+- **Data availability**: All transaction data is recorded onchain, ensuring transparency and verifiability.
+
+#### Advantages of hard finality
+
+- **Maximum security**: Protected by the robustness of the parent chain’s consensus mechanism.
+- **Trust minimization**: This does not require trust in the Sequencer; the underlying blockchain provides security.
+- **Suitable for high-value transactions**: Ideal for scenarios where security and immutability are paramount.
+
+#### Limitations of hard finality
+
+- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The challenge protocol that backs this guarantee is described in [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx).
+- **Cost considerations**: Posting batches to the parent chain incurs fees, potentially increasing transaction costs.
+
+## How it works
+
+### Part 1: Soft finality—the sequencer feed in detail
+
+#### 1. How a transaction becomes a feed message
+
+1. You send a transaction. It doesn't go straight to the feed; it lands in a queue inside the Sequencer.
+2. The Sequencer's main loop pulls your transaciton off the queue.
+3. It hands the transaciton to the execution engine, which runs it and builds a new L2 block.
+4. The finished block (now a "message") is saved to the Sequencer's own database.
+5. Only after it's saved does the Sequencer broadcast it to everyone listening on the feed (nodes).
+6. The moment that broadcast hits the wire, you have "soft finality."
+
+#### 1b. What's actually in a feed message
+
+1. The Sequencer wraps your transaction in a small envelope before sending it out.
+2. It stamps a `SequencerNumber` on it—a permanent "this is slot `N`" claim that no other transaction can ever take.
+3. It includes the `BlockHash` so anyone can re-run the transaction themselves and check they get the same result.
+4. It adds a `Signature` that only the Sequencer's key could produce.
+5. A listener receives the envelope and now knows: the slot, the expected outcome, and proof of who wrote it.
+
+#### 1c. The signature is what makes "soft" trust-minimal
+
+1. The Sequencer gathers the fields that matter (chain ID, sequencer number, block hash, delayed-message count, raw transaction bytes) and glues them together.
+2. It prepends a fixed label, "Arbitrum Nitro Feed:", so a signature for one chain can't be reused on another.
+3. It hashes that whole blob and signs the hash with its private key.
+4. The client receives the message, rebuilds the exact same blob and hash on its own.
+5. The client checks the signature against that hash. If it matches, the message genuinely came from the Sequencer.
+6. Because the Sequencer signed it, any attempt to later contradict slot `N` is permanent, public proof of cheating.
+
+#### 1d. What the feed cannot guarantee yet
+
+1. So far your transaction only lives in the Sequencer's memory and in listerners' caches—nothing is on Ethereum yet.
+2. If the Sequencer vanished right now, the ordering could still be lost or shuffled, because nothing durable recorded it.
+3. The Sequencer could also just ignore your transaction and never sequence it at all.
+4. To guard against being ignored, you can instead push your transaction through Ethereum's "delayed inbox," which forces eventual inclusion.
+5. These gaps (durability + censorship) are exactly what posting a batch to L1 in Part 2 fixes.
+
+### Part 2: Hard finality: Stage A—the Sequencer inbox commitment
+
+#### 2a. The `BatchPoster` lifecycle
+
+1. A timer fires, and the `BatchPoster` wwakes up to consider posting a new batch.
+2. It asks L1 "What have I already posted?" so it doesn't repeat itself, and double-checks that its local record agrees.
+3. It picks the cheapest way to put the data on Ethereum (plain calldata vs. blobs) based on current L1 prices.
+4. It bundles many L2 messages together and compresses them (with Brotli) to save space and costs.
+5. It tags the batch with L1 time/block bounds so Ethereum can reject it if the timestamps look wrong.
+6. If any messages came through the delayed inbox, it attaches a proof for them.
+7. It chooses the matching contract function (blobs or not, with delay proof or not) and packs the data in.
+8. It estimates the gas cost, and optionally simulates decoding the batch to make sure it will reproduce the same message.
+9. It hands everything to the `DataPoster`, which actually sends the Ethereum transaction and manages nonces/fees/retries.
+
+#### 2b. Why this is "hard" finality
+
+1. Once Ethereum includes and finalizes the batch transaction, your transaction data is permanently public on L1.
+2. To undo it, someone would have to reverse finalized Ethereum itself—which would cost attackers a massive, slashed stake.
+3. Because the raw data is on L1, anyone can rebuild the L2 state from scratch without trusting the Sequencer at all.
+4. It takes ~12 seconds for a transaction to land in a block, then ~13 minutes for Ethereum to mark that block finalized.
+
+### Part 3: Bridging back—`InboxReader` → `InboxTracker` → feed `Confirm`
+
+#### 3a. The `InboxReader` watches L1 at a chosen level
+
+1. The `InboxReader` is the node's "eyes on Ethereum," constantly watching for posted batches.
+2. The operator tells it how cautious to be: `latest` (fastest, can be reorged), `safe` (~30s lag), or `finalized` (~13 min, rock solid).
+3. For `safe/finalized`, it asks L1 for the latest block at the confidence level and reads only up to there.
+4. It translates that L1 block into "how many L2 messages are covered" via `GetSafeMsgCount` / `GetFinalizedMsgCount`.
+5. When you query the L2 with "finalized," the node answers using only data Ethereum has already finalized.
+
+#### 3b. `InboxTracker` writes the batch and emits a feed `Confirm`
+
+1. The `InboxReader` spots a new batch event on L1 and hands it to the `InboxTracker`.
+2. The `InboxTracker` records the batch in its local database.
+3. To stay safe against a small L1 reorg, it doesn't confirm the just-posted batch—it confirms the one **before** the previous batch.
+4. It sends a special "Confirm" message over the feed carrying that confirmed sequence number.
+5. Feed-only clients see this and learn: these messages are now backed by Ethereum, not just the Sequencer's signature.
+
+### Part 4: Hard finality, Stage B—Rollup assertion confirmation
+
+#### 4a. Two protocols coexist in this repo
+
+1. L1 inclusion proved the **data** exists, but not that the resulting L2 **state** is correct—that's a separate guarantee.
+2. Validators ("bonders") are the ones who vouch for the state correctness on L1.
+3. A wrapper checks the onchain rollupo contract at runtime and picks the dispute protocol the chain is using (the interactive legacy, or BoLD).
+4. Both protocols expose the same two signals—"latest bonded" and "latest confirmed"—so the rest of the node doesn't care which one is running.
+
+#### 4b. The poll loop (legacy)
+
+1. One a repeating timer, the legacy bonder checks the rollup contract.
+2. First it asks "what's the latest assertion **my** wallet has bonded on?" and tells the bonded-notifiers that message count.
+3. Then it asks the same contract with the empty (zero) address, which means "what has the **whole chain** confirmed as final?"
+4. It tells the confirmed-notifiers that count.
+5. It waits for the configured interval and repeats.
+
+#### 4c. The poll loop (BoLD)
+
+1. The BoLD bonder runs the same kind of timed poll as the legacy one.
+2. It asks for the latest globally **confirmed** state and notifies the confirmed-notifiers.
+3. It asks for the latest **agreed/bonded** state and notifies the bonded-notifiers.
+4. The key difference: by default it reads from `finalized` L1 blocks, never shaky recent ones.
+5. Because it only trusts finalized Ethereum data, the L2 finality it produces is at least as strong as Ethereum's own.
+
+#### 4d. What downstream subscribers do
+
+1. The block validator has subscribed to the bonder's "latest bonded/confirmed" signals.
+2. When a new signal arrives, it checks whether this point is further ahead than what it already validated; if not, it ignores it.
+3. If it's genuinely new, it records this as the new high-water mark of trusted L2 state.
+4. With that point locked in, the node can throw away older validation work it no longer needs (pruning).
+5. From then on, blocks up to that point are served as `finalized` to anyone querying the L2.
+
+#### 4e. Fast confirmation
+
+1. Normally an assertion must wait out the full challenge window before it's confirmed.
+2. Some chains appoint a trusted "fast-confirmer" multisig to skip that wait.
+3. The bonder checks whether its own wallet is a member (owner) of that multisig.
+4. If it is, it calls `fastConfirmNode(...)` to confirm the assertion on L1 immediately.
+5. The real L1 confirmation still occurs—only the dispute timer is bypassed—in exchange for trusting the multisig.
