@@ -1714,6 +1714,33 @@ const sidebars = {
     },
   ],
 
+  // Enterprise solutions sidebar
+  enterpriseSolutionsSidebar: [
+    {
+      type: 'category',
+      label: 'Enterprise solutions',
+      collapsed: false,
+      items: [
+        {
+          type: 'category',
+          label: 'Payments',
+          collapsed: false,
+          link: {
+            type: 'doc',
+            id: 'solutions/payments',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'solutions/payments/prove-your-first-settlement',
+              label: 'Testnet settlement walkthrough',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
   // Notices sidebar
   noticeSidebar: [
     {

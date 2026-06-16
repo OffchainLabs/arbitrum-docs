@@ -1,0 +1,60 @@
+---
+title: 'Payments on Arbitrum'
+sidebar_label: 'Payments'
+description: 'Implementation entry point for building payments on Arbitrum. Restates the three deployment paths — settle on Arbitrum One, build a payments application, or launch a dedicated chain — and routes each into the technical documentation needed to implement it.'
+user_story: 'As a lead or senior developer who has chosen a payments deployment path during evaluation, I want a single page that restates that path and routes me into the implementation docs I need.'
+content_type: concept
+author: gblanchemain
+sme: gblanchemain
+---
+
+This page is the implementation entry point for teams building payments on Arbitrum. During evaluation you chose a deployment path, a settlement currency, and a set of provider categories. This page restates the three deployment paths in the same order you saw them, then routes each one into the technical documentation you need to implement it. It assumes the decision is already made — this is orientation, not a decision aid.
+
+The three deployment paths, in order:
+
+1. **Settle on Arbitrum One** — send stablecoin transfers with no custom contracts.
+2. **Build a payments application on Arbitrum One** — enforce payout logic onchain.
+3. **Launch a dedicated Arbitrum chain** — operate payments with chain-level control.
+
+Each path routes into existing documentation. Where a path needs material that does not yet exist, that is marked explicitly below.
+
+## Settle on Arbitrum One
+
+For teams sending stablecoin transfers with no custom contracts. This path is mostly a matter of pointing existing tools at the right network.
+
+- **Network setup** (chain IDs, RPC endpoints, faucets) → [Chain info](/for-devs/dev-tools-and-resources/chain-info) and [Chains and testnets](/arbitrum-essentials/public-chains)
+- **First stablecoin transfer** → [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide)
+- **USDC on Arbitrum One** (native vs. bridged) → [USDC on Arbitrum One](/arbitrum-bridge/usdc-arbitrum-one)
+- **Wallet experience** → [ZeroDev](/for-devs/third-party-docs/ZeroDev/zero-dev)
+
+If you want to confirm the full flow end to end before integrating, follow the [testnet settlement walkthrough](/solutions/payments/prove-your-first-settlement), which strings the steps above into a single payment-shaped recipe.
+
+## Build a payments application on Arbitrum One
+
+For teams enforcing payout logic onchain. This path routes into the application-layer documentation.
+
+- **Contract deployment basics** → [Solidity quickstart](/build-decentralized-apps/quickstart-solidity-remix)
+- **FX rates and external data** → [Oracles overview](/arbitrum-essentials/oracles/overview-oracles)
+- **Cross-chain coordination** → [Cross-chain messaging](/arbitrum-essentials/bridging/cross-chain-messaging)
+
+<VanillaAdmonition type="info">A reviewed batch-payout and treasury reference contract is in progress and not yet available. Until it ships, build payout logic on the application-layer references above. This page will link the reference contract here once it is published and audited.</VanillaAdmonition>
+
+## Launch a dedicated Arbitrum chain
+
+For teams that need chain-level control. This path has the deepest existing coverage; route directly into it.
+
+- **Overview** → [A gentle introduction to Arbitrum chains](/launch-arbitrum-chain/overview/introduction)
+- **Deploy** → [Chain SDK overview](/launch-arbitrum-chain/quickstart/sdk-introduction)
+- **Custom gas token** (stablecoin-denominated fees) → [Custom gas token (Rollup)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup) and [Custom gas token (AnyTrust)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust)
+- **Bridged USDC** → [Adopt the bridged USDC standard](/launch-arbitrum-chain/integrations/bridged-usdc)
+- **Access control** → [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access)
+
+Chain-level compliance tooling and private chain configurations are not yet available. This page does not document them until they ship.
+
+## Shared reference
+
+Relevant to all three paths:
+
+- **Transaction lifecycle and finality** → [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle)
+- **Gas and fees** → [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees)
+- **Reconciliation and data tooling** → indexing and data providers such as [The Graph](/for-devs/third-party-docs/TheGraph) and [Covalent](/for-devs/third-party-docs/Covalent)
