@@ -868,6 +868,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              label: 'Sequencer',
+              id: 'how-arbitrum-works/deep-dives/sequencer',
+            },
+            {
+              type: 'doc',
               label: 'AnyTrust',
               id: 'how-arbitrum-works/deep-dives/anytrust-protocol',
             },
@@ -903,8 +908,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
+              label: 'Finality',
+              id: 'how-arbitrum-works/deep-dives/finality',
+            },
+            {
+              type: 'doc',
+              label: 'Batch poster',
+              id: 'how-arbitrum-works/deep-dives/batchposter',
             },
           ],
         },
@@ -914,13 +924,18 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              label: 'Sequencer',
-              id: 'how-arbitrum-works/deep-dives/sequencer',
+              label: 'Geth',
+              id: 'how-arbitrum-works/reference/geth',
             },
             {
               type: 'doc',
-              label: 'Geth',
-              id: 'how-arbitrum-works/reference/geth',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
+            },
+            {
+              type: 'doc',
+              label: 'ArbOS reference',
+              id: 'how-arbitrum-works/reference/arbos-reference',
             },
           ],
         },
