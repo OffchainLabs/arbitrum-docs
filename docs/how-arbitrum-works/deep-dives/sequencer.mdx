@@ -19,19 +19,6 @@ The Sequencer feed serves several vital functions within the Arbitrum ecosystem:
 - **Application development**: Developers can build applications that respond instantly to network events, enabling features such as live updates, instant notifications, and real-time analytics.
 - **Ecosystem transparency**: The feed promotes transparency and trust within the community by providing visibility into transaction sequencing and network activity.
 
-## Sequencer architecture
-
-| Component             | Role                                                               |
-| --------------------- | ------------------------------------------------------------------ |
-| `Sequencer`           | Receives transactions, queues them, drives block creation          |
-| `ExecutionEngine`     | Produces blocks by executing transactions against ArbOS state      |
-| `TransactionStreamer` | Persists sequenced messages to DB, bridges consensus and execution |
-| `SeqCoordinator`      | Redis-based leader election for sequencer HA                       |
-| `BatchPoster`         | Compresses and posts message batches to L1 SequencerInbox          |
-| `DelayedSequencer`    | Sequences L1-originated messages (deposits, retryables) into L2    |
-| `Broadcaster`         | WebSocket feed server pushing sequenced messages to nodes          |
-| `ExpressLaneService`  | Manages Timeboost Express Lane transaction ordering                |
-
 ## How it works
 
 #### 1. Transaction receipt
