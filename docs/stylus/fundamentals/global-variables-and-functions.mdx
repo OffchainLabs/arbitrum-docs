@@ -1,0 +1,912 @@
+---
+title: 'Global variables and functions'
+description: 'Stylus Rust SDK global variables and functions for blockchain context access'
+author: chrisco
+sme: chrisco
+sidebar_position: 3
+target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
+displayed_sidebar: buildStylusSidebar
+---
+
+Stylus contracts access blockchain context and utilities through the VM (Virtual Machine) interface via `self.vm()`. This provides access to message context, block information, transaction details, account data, cryptographic functions, and gas metering.
+
+## Accessing the VM
+
+All public contract methods have access to the VM context through `self.vm()`:
+
+```rust
+use stylus_sdk::prelude::*;
+use alloy_primitives::{Address, U256};
+
+#[public]
+impl MyContract {
+    pub fn get_context_info(&self) -> (Address, U256, u64) {
+        let vm = self.vm();
+        (
+            vm.msg_sender(),      // Caller's address
+            vm.msg_value(),       // ETH sent with call
+            vm.block_number(),    // Current block number
+        )
+    }
+}
+```
+
+The VM provides methods organized into several categories:
+
+## Message Context (`msg`)
+
+Methods for accessing information about the current call.
+
+### `msg_sender()`
+
+Gets the address of the account that called the program.
+
+```rust
+pub fn msg_sender(&self) -> Address
+```
+
+**Equivalent to**: Solidity's `msg.sender`
+
+**Example:**
+
+```rust
+#[public]
+impl Token {
+    pub fn transfer(&mut self, to: Address, amount: U256) -> bool {
+        let from = self.vm().msg_sender();
+        // Transfer from the caller to recipient
+        self._transfer(from, to, amount)
+    }
+}
+```
+
+**Important Notes:**
+
+- For normal L2-to-L2 transactions, behaves like EVM's `CALLER` opcode
+- For L1-to-L2 retryable ticket transactions, the top-level sender's address will be [aliased](https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing)
+- In delegate calls, returns the original caller (not the delegating contract)
+
+### `msg_value()`
+
+Gets the ETH value in wei sent to the program.
+
+```rust
+pub fn msg_value(&self) -> U256
+```
+
+**Equivalent to**: Solidity's `msg.value`
+
+**Example:**
+
+```rust
+#[public]
+impl PaymentContract {
+    #[payable]
+    pub fn deposit(&mut self) -> U256 {
+        let amount = self.vm().msg_value();
+        let sender = self.vm().msg_sender();
+
+        let balance = self.balances.get(sender);
+        self.balances.setter(sender).set(balance + amount);
+
+        amount
+    }
+}
+```
+
+**Note:** Only functions marked with `#[payable]` can receive ETH. Non-payable functions will revert if `msg_value() > 0`.
+
+### `msg_reentrant()`
+
+Checks whether the current call is reentrant.
+
+```rust
+pub fn msg_reentrant(&self) -> bool
+```
+
+**Example:**
+
+```rust
+#[public]
+impl Vault {
+    pub fn withdraw(&mut self, amount: U256) {
+        if self.vm().msg_reentrant() {
+            // Handle reentrancy
+            panic!("Reentrant call detected");
+        }
+        // Withdrawal logic...
+    }
+}
+```
+
+**Note:** By default, Stylus contracts prevent reentrancy unless the `reentrant` feature is enabled.
+
+## Transaction Context (`tx`)
+
+Methods for accessing information about the current transaction.
+
+### `tx_origin()`
+
+Gets the top-level sender of the transaction.
+
+```rust
+pub fn tx_origin(&self) -> Address
+```
+
+**Equivalent to**: Solidity's `tx.origin`
+
+**Example:**
+
+```rust
+#[public]
+impl Factory {
+    #[constructor]
+    pub fn constructor(&mut self) {
+        // Use tx_origin when deploying via a factory
+        let deployer = self.vm().tx_origin();
+        self.owner.set(deployer);
+    }
+}
+```
+
+**Important:** Returns the original EOA (Externally Owned Account) that initiated the transaction, even through multiple contract calls.
+
+### `tx_gas_price()`
+
+Gets the gas price in wei per gas, which on Arbitrum chains equals the basefee.
+
+```rust
+pub fn tx_gas_price(&self) -> U256
+```
+
+**Equivalent to**: Solidity's `tx.gasprice`
+
+**Example:**
+
+```rust
+#[public]
+impl Analytics {
+    pub fn record_gas_price(&mut self) {
+        let price = self.vm().tx_gas_price();
+        self.gas_prices.push(price);
+    }
+}
+```
+
+### `tx_ink_price()`
+
+Gets the price of ink in EVM gas basis points.
+
+```rust
+pub fn tx_ink_price(&self) -> u32
+```
+
+**Description:** Stylus uses "ink" as its unit of computation. This method returns the conversion rate from ink to gas. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for more information.
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn get_ink_price(&self) -> u32 {
+        self.vm().tx_ink_price()
+    }
+}
+```
+
+## Block Context (`block`)
+
+Methods for accessing information about the current block.
+
+### `block_number()`
+
+Gets a bounded estimate of the L1 block number at which the Sequencer sequenced the transaction.
+
+```rust
+pub fn block_number(&self) -> u64
+```
+
+**Equivalent to**: Solidity's `block.number`
+
+**Example:**
+
+```rust
+#[public]
+impl TimeLock {
+    pub fn lock_until(&mut self, blocks: u64) {
+        let unlock_block = self.vm().block_number() + blocks;
+        self.unlock_block.set(U256::from(unlock_block));
+    }
+
+    pub fn can_unlock(&self) -> bool {
+        let current = self.vm().block_number();
+        let unlock = self.unlock_block.get().try_into().unwrap_or(u64::MAX);
+        current >= unlock
+    }
+}
+```
+
+**Note:** See [Block Numbers and Time](https://developer.arbitrum.io/time) for more information on how this value is determined on Arbitrum.
+
+### `block_timestamp()`
+
+Gets a bounded estimate of the Unix timestamp at which the Sequencer sequenced the transaction.
+
+```rust
+pub fn block_timestamp(&self) -> u64
+```
+
+**Equivalent to**: Solidity's `block.timestamp`
+
+**Example:**
+
+```rust
+#[public]
+impl Auction {
+    pub fn place_bid(&mut self, amount: U256) {
+        let now = self.vm().block_timestamp();
+        let deadline = self.deadline.get().try_into().unwrap_or(0);
+
+        if now > deadline {
+            panic!("Auction ended");
+        }
+
+        // Process bid...
+    }
+}
+```
+
+**Note:** See [Block Numbers and Time](https://developer.arbitrum.io/time) for more information on how this value is determined on Arbitrum.
+
+### `block_basefee()`
+
+Gets the basefee of the current block.
+
+```rust
+pub fn block_basefee(&self) -> U256
+```
+
+**Equivalent to**: Solidity's `block.basefee`
+
+**Example:**
+
+```rust
+#[public]
+impl FeeTracker {
+    pub fn current_basefee(&self) -> U256 {
+        self.vm().block_basefee()
+    }
+}
+```
+
+### `block_coinbase()`
+
+Gets the coinbase of the current block.
+
+```rust
+pub fn block_coinbase(&self) -> Address
+```
+
+**Equivalent to**: Solidity's `block.coinbase`
+
+**Important:** On Arbitrum chains, this is the L1 batch poster's address, which differs from Ethereum where the validator determines the coinbase.
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn get_batch_poster(&self) -> Address {
+        self.vm().block_coinbase()
+    }
+}
+```
+
+### `block_gas_limit()`
+
+Gets the gas limit of the current block.
+
+```rust
+pub fn block_gas_limit(&self) -> u64
+```
+
+**Equivalent to**: Solidity's `block.gaslimit`
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn check_gas_limit(&self) -> bool {
+        let limit = self.vm().block_gas_limit();
+        limit > 30_000_000
+    }
+}
+```
+
+## Chain Context
+
+Methods for accessing chain-specific information.
+
+### `chain_id()`
+
+Gets the unique chain identifier of the Arbitrum chain.
+
+```rust
+pub fn chain_id(&self) -> u64
+```
+
+**Equivalent to**: Solidity's `block.chainid`
+
+**Example:**
+
+```rust
+#[public]
+impl MultiChain {
+    pub fn verify_chain(&self, expected_chain: u64) -> bool {
+        self.vm().chain_id() == expected_chain
+    }
+}
+```
+
+**Common Arbitrum Chain IDs:**
+
+- Arbitrum One: 42161
+- Arbitrum Nova: 42170
+- Arbitrum Sepolia (testnet): 421614
+
+## Account Information
+
+Methods for querying account details.
+
+### `contract_address()`
+
+Gets the address of the current program.
+
+```rust
+pub fn contract_address(&self) -> Address
+```
+
+**Equivalent to**: Solidity's `address(this)`
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn this_address(&self) -> Address {
+        self.vm().contract_address()
+    }
+
+    pub fn this_balance(&self) -> U256 {
+        let addr = self.vm().contract_address();
+        self.vm().balance(addr)
+    }
+}
+```
+
+### `balance(address)`
+
+Gets the ETH balance in wei of the account at the given address.
+
+```rust
+pub fn balance(&self, account: Address) -> U256
+```
+
+**Equivalent to**: Solidity's `address.balance`
+
+**Example:**
+
+```rust
+#[public]
+impl BalanceChecker {
+    pub fn get_balance(&self, account: Address) -> U256 {
+        self.vm().balance(account)
+    }
+
+    pub fn has_sufficient_balance(&self, account: Address, required: U256) -> bool {
+        self.vm().balance(account) >= required
+    }
+}
+```
+
+### `code(address)`
+
+Gets the code from the account at the given address.
+
+```rust
+pub fn code(&self, account: Address) -> Vec<u8>
+```
+
+**Equivalent to**: Solidity's `address.code` (similar to `EXTCODECOPY` opcode)
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn is_contract(&self, account: Address) -> bool {
+        self.vm().code(account).len() > 0
+    }
+}
+```
+
+### `code_size(address)`
+
+Gets the size of the code in bytes at the given address.
+
+```rust
+pub fn code_size(&self, account: Address) -> usize
+```
+
+**Equivalent to**: Solidity's `EXTCODESIZE` opcode
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn get_code_size(&self, account: Address) -> usize {
+        self.vm().code_size(account)
+    }
+}
+```
+
+### `code_hash(address)`
+
+Gets the code hash of the account at the given address.
+
+```rust
+pub fn code_hash(&self, account: Address) -> B256
+```
+
+**Equivalent to**: Solidity's `EXTCODEHASH` opcode
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn verify_code(&self, account: Address, expected_hash: B256) -> bool {
+        self.vm().code_hash(account) == expected_hash
+    }
+}
+```
+
+**Note:** The code hash of an account without code will be the empty hash: `keccak("") = c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470`.
+
+## Gas and Metering
+
+Methods for accessing gas and ink metering information.
+
+### `evm_gas_left()`
+
+Gets the amount of gas left after paying for the cost of this hostio.
+
+```rust
+pub fn evm_gas_left(&self) -> u64
+```
+
+**Equivalent to**: Solidity's `gasleft()`
+
+**Example:**
+
+```rust
+use stylus_sdk::call::Call;
+
+#[public]
+impl Contract {
+    pub fn complex_operation(&mut self, target: ITarget) {
+        let gas_before = self.vm().evm_gas_left();
+
+        // Use half the remaining gas for external call
+        let config = Call::new_mutating(self)
+            .gas(gas_before / 2);
+
+        target.do_work(self.vm(), config);
+    }
+}
+```
+
+### `evm_ink_left()`
+
+Gets the amount of ink remaining after paying for the cost of this hostio.
+
+```rust
+pub fn evm_ink_left(&self) -> u64
+```
+
+**Description:** Returns remaining computation units in "ink". See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for more information on Stylus's compute pricing.
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn check_ink(&self) -> u64 {
+        self.vm().evm_ink_left()
+    }
+}
+```
+
+### `ink_to_gas(ink)`
+
+Computes the units of gas per a specified amount of ink.
+
+```rust
+pub fn ink_to_gas(&self, ink: u64) -> u64
+```
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn convert_ink_to_gas(&self, ink: u64) -> u64 {
+        self.vm().ink_to_gas(ink)
+    }
+}
+```
+
+### `gas_to_ink(gas)`
+
+Computes the units of ink per a specified amount of gas.
+
+```rust
+pub fn gas_to_ink(&self, gas: u64) -> u64
+```
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn convert_gas_to_ink(&self, gas: u64) -> u64 {
+        self.vm().gas_to_ink(gas)
+    }
+}
+```
+
+## Cryptographic Functions
+
+The SDK provides cryptographic utilities through the `crypto` module and VM methods.
+
+### `keccak()`
+
+Efficiently computes the keccak256 hash of the given preimage.
+
+```rust
+use stylus_sdk::crypto;
+
+pub fn keccak<T: AsRef<[u8]>>(bytes: T) -> B256
+```
+
+**Equivalent to**: Solidity's `keccak256()`
+
+**Example:**
+
+```rust
+use stylus_sdk::crypto;
+use alloy_primitives::{Address, FixedBytes, U256};
+
+#[public]
+impl Contract {
+    pub fn hash_data(&self, data: Vec<u8>) -> FixedBytes<32> {
+        crypto::keccak(data)
+    }
+
+    pub fn verify_hash(&self, data: Vec<u8>, expected: FixedBytes<32>) -> bool {
+        crypto::keccak(data) == expected
+    }
+
+    // Hash multiple values together
+    pub fn hash_packed(&self, addr: Address, amount: U256) -> FixedBytes<32> {
+        let packed = [
+            addr.as_ref(),
+            &amount.to_be_bytes_vec(),
+        ].concat();
+        crypto::keccak(packed)
+    }
+}
+```
+
+### `native_keccak256()`
+
+VM method for computing keccak256 hash (alternative to `crypto::keccak`).
+
+```rust
+pub fn native_keccak256(&self, input: &[u8]) -> B256
+```
+
+**Example:**
+
+```rust
+#[public]
+impl Contract {
+    pub fn hash_via_vm(&self, data: Vec<u8>) -> B256 {
+        self.vm().native_keccak256(&data)
+    }
+}
+```
+
+**Note:** `crypto::keccak()` is the recommended approach as it's more ergonomic.
+
+## Event Logging
+
+Methods for emitting events to the blockchain.
+
+### `log(event)`
+
+Emits a typed Solidity event.
+
+```rust
+pub fn log<T: SolEvent>(&self, event: T)
+```
+
+**Example:**
+
+```rust
+use alloy_sol_types::sol;
+
+sol! {
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
+
+#[public]
+impl Token {
+    pub fn transfer(&mut self, to: Address, value: U256) -> bool {
+        let from = self.vm().msg_sender();
+
+        // Transfer logic...
+        self._transfer(from, to, value);
+
+        // Emit event
+        self.vm().log(Transfer { from, to, value });
+
+        true
+    }
+}
+```
+
+### `raw_log(topics, data)`
+
+Emits a raw log with custom topics and data.
+
+```rust
+pub fn raw_log(&self, topics: &[B256], data: &[u8]) -> Result<(), &'static str>
+```
+
+**Example:**
+
+```rust
+use alloy_primitives::{B256, FixedBytes};
+
+#[public]
+impl Contract {
+    pub fn emit_custom_log(&self) {
+        let topic = B256::from([1u8; 32]);
+        let topics = &[topic];
+        let data = b"custom data";
+
+        self.vm().raw_log(topics, data).unwrap();
+    }
+}
+```
+
+**Note:** Maximum of 4 topics allowed. The first topic is typically the event signature hash.
+
+## Storage Operations
+
+Methods for interacting with contract storage.
+
+### `storage_load_bytes32(key)`
+
+Reads a 32-byte value from permanent storage.
+
+```rust
+pub fn storage_load_bytes32(&self, key: U256) -> B256
+```
+
+**Equivalent to**: Solidity's `SLOAD` opcode
+
+**Note:** Storage is cached for efficiency. Use the SDK's storage types instead of direct storage access.
+
+### `flush_cache(clear)`
+
+Persists dirty values in the storage cache to the EVM state trie.
+
+```rust
+pub fn flush_cache(&self, clear: bool)
+```
+
+**Parameters:**
+
+- `clear`: If `true`, drops the cache entirely after flushing
+
+**Note:** Typically handled automatically by the SDK. Manual cache flushing is rarely needed.
+
+## Memory Management
+
+### `pay_for_memory_grow(pages)`
+
+Pays for memory growth in WASM pages.
+
+```rust
+pub fn pay_for_memory_grow(&self, pages: u16)
+```
+
+**Note:** The `#[entrypoint]` macro handles this automatically. Manual calls are not recommended and will unproductively consume gas.
+
+## Complete Example
+
+Here's a comprehensive example using various global variables and functions:
+
+```rust
+#![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
+extern crate alloc;
+
+use alloy_primitives::{Address, U256, FixedBytes};
+use alloy_sol_types::sol;
+use stylus_sdk::{crypto, prelude::*};
+
+sol! {
+    event Action(
+        address indexed caller,
+        uint256 value,
+        uint256 timestamp,
+        bytes32 data_hash
+    );
+}
+
+sol_storage! {
+    #[entrypoint]
+    pub struct ContextExample {
+        mapping(address => uint256) balances;
+        uint256 total_deposits;
+        uint256 creation_block;
+        address owner;
+    }
+}
+
+#[public]
+impl ContextExample {
+    #[constructor]
+    pub fn constructor(&mut self) {
+        // Use tx_origin for factory deployments
+        self.owner.set(self.vm().tx_origin());
+        self.creation_block.set(U256::from(self.vm().block_number()));
+    }
+
+    #[payable]
+    pub fn deposit(&mut self, data: Vec<u8>) {
+        // Message context
+        let caller = self.vm().msg_sender();
+        let amount = self.vm().msg_value();
+
+        // Block context
+        let timestamp = self.vm().block_timestamp();
+        let block_num = self.vm().block_number();
+
+        // Require minimum value
+        if amount < U256::from(1000) {
+            panic!("Insufficient deposit");
+        }
+
+        // Update balances
+        let balance = self.balances.get(caller);
+        self.balances.setter(caller).set(balance + amount);
+        self.total_deposits.set(self.total_deposits.get() + amount);
+
+        // Hash the data
+        let data_hash = crypto::keccak(&data);
+
+        // Emit event
+        self.vm().log(Action {
+            caller,
+            value: amount,
+            timestamp: U256::from(timestamp),
+            data_hash,
+        });
+    }
+
+    pub fn get_contract_info(&self) -> (Address, U256, u64, u64) {
+        (
+            self.vm().contract_address(),      // Contract's address
+            self.vm().balance(self.vm().contract_address()), // Contract's balance
+            self.vm().chain_id(),              // Chain ID
+            self.vm().block_number(),          // Current block
+        )
+    }
+
+    pub fn verify_signature(&self, message: Vec<u8>, expected_hash: FixedBytes<32>) -> bool {
+        let hash = crypto::keccak(message);
+        hash == expected_hash
+    }
+
+    pub fn is_owner(&self, account: Address) -> bool {
+        account == self.owner.get()
+    }
+
+    pub fn time_since_creation(&self) -> u64 {
+        let current_block = self.vm().block_number();
+        let creation_block: u64 = self.creation_block.get().try_into().unwrap_or(0);
+        current_block.saturating_sub(creation_block)
+    }
+}
+```
+
+## Summary of available methods
+
+The following tables provide a quick reference for all VM methods and utility functions available in Stylus contracts.
+
+### Message context
+
+| Method            | Parameters | Return type | Description                           | Solidity equivalent |
+| ----------------- | ---------- | ----------- | ------------------------------------- | ------------------- |
+| `msg_sender()`    | None       | `Address`   | Caller's address                      | `msg.sender`        |
+| `msg_value()`     | None       | `U256`      | ETH sent with call (in wei)           | `msg.value`         |
+| `msg_reentrant()` | None       | `bool`      | Whether the current call is reentrant | N/A                 |
+
+### Transaction context
+
+| Method           | Parameters | Return type | Description                       | Solidity equivalent |
+| ---------------- | ---------- | ----------- | --------------------------------- | ------------------- |
+| `tx_origin()`    | None       | `Address`   | Original transaction sender (EOA) | `tx.origin`         |
+| `tx_gas_price()` | None       | `U256`      | Gas price in wei per gas          | `tx.gasprice`       |
+| `tx_ink_price()` | None       | `u32`       | Ink price in EVM gas basis points | N/A                 |
+
+### Block context
+
+| Method              | Parameters | Return type | Description                 | Solidity equivalent |
+| ------------------- | ---------- | ----------- | --------------------------- | ------------------- |
+| `block_number()`    | None       | `u64`       | Current block number        | `block.number`      |
+| `block_timestamp()` | None       | `u64`       | Block timestamp (Unix time) | `block.timestamp`   |
+| `block_basefee()`   | None       | `U256`      | Base fee of current block   | `block.basefee`     |
+| `block_coinbase()`  | None       | `Address`   | Batch poster address        | `block.coinbase`    |
+| `block_gas_limit()` | None       | `u64`       | Gas limit of current block  | `block.gaslimit`    |
+
+### Chain context
+
+| Method       | Parameters | Return type | Description             | Solidity equivalent |
+| ------------ | ---------- | ----------- | ----------------------- | ------------------- |
+| `chain_id()` | None       | `u64`       | Unique chain identifier | `block.chainid`     |
+
+### Account information
+
+| Method               | Parameters         | Return type | Description                    | Solidity equivalent |
+| -------------------- | ------------------ | ----------- | ------------------------------ | ------------------- |
+| `contract_address()` | None               | `Address`   | This contract's address        | `address(this)`     |
+| `balance()`          | `account: Address` | `U256`      | ETH balance in wei             | `address.balance`   |
+| `code()`             | `account: Address` | `Vec<u8>`   | Account bytecode               | `address.code`      |
+| `code_size()`        | `account: Address` | `usize`     | Size of account code in bytes  | `EXTCODESIZE`       |
+| `code_hash()`        | `account: Address` | `B256`      | Keccak256 hash of account code | `EXTCODEHASH`       |
+
+### Gas and metering
+
+| Method           | Parameters | Return type | Description                   | Solidity equivalent |
+| ---------------- | ---------- | ----------- | ----------------------------- | ------------------- |
+| `evm_gas_left()` | None       | `u64`       | Remaining gas after this call | `gasleft()`         |
+| `evm_ink_left()` | None       | `u64`       | Remaining ink after this call | N/A                 |
+| `ink_to_gas()`   | `ink: u64` | `u64`       | Convert ink units to gas      | N/A                 |
+| `gas_to_ink()`   | `gas: u64` | `u64`       | Convert gas units to ink      | N/A                 |
+
+### Cryptographic functions
+
+| Method               | Parameters                | Return type | Description                   | Solidity equivalent |
+| -------------------- | ------------------------- | ----------- | ----------------------------- | ------------------- |
+| `crypto::keccak()`   | `bytes: impl AsRef<[u8]>` | `B256`      | Compute keccak256 hash        | `keccak256()`       |
+| `native_keccak256()` | `input: &[u8]`            | `B256`      | Compute keccak256 hash via VM | `keccak256()`       |
+
+### Event logging
+
+| Method      | Parameters                       | Return type                | Description                       | Solidity equivalent   |
+| ----------- | -------------------------------- | -------------------------- | --------------------------------- | --------------------- |
+| `log()`     | `event: T` where `T: SolEvent`   | None                       | Emit a typed Solidity event       | `emit Event()`        |
+| `raw_log()` | `topics: &[B256]`, `data: &[u8]` | `Result<(), &'static str>` | Emit a raw log with custom topics | `log0`-`log4` opcodes |
+
+## See Also
+
+- [Contracts](./contracts.mdx) - Contract structure and methods
+- [Primitives](./data-types/primitives.mdx) - Basic data types
+- [Storage Types](./data-types/storage.mdx) - Persistent storage

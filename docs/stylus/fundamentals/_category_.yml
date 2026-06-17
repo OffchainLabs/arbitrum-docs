@@ -1,0 +1,6 @@
+label: 'Fundamentals'
+position: 2
+collapsed: false
+link:
+  type: generated-index
+  description: Essential Stylus SDK concepts, prerequisites, and core development skills.

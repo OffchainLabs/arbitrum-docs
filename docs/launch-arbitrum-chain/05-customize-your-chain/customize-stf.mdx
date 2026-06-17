@@ -40,10 +40,10 @@ Here's some examples of modifications that don't affect the STF:
 Some potential modifications are incompatible with Arbitrum Nitro and would not result in a functioning blockchain. Here are some requirements for the Arbitrum Nitro State Transition Function:
 
 - The STF must be deterministic. For instance, if you gave an address a random balance using the Go randomness library,
-  - Every node would disagree on the correct amount of balance and the blockchain would not function correctly. However, it is acceptable to take a non-deterministic path to a deterministic output. For instance, if you randomly shuffled a list of addresses, and then gave them each one `ETH`, that would be fine, because no matter how the list of addresses is shuffled the result is the same and all addresses are given one `ETH`.
+  - Every node would disagree on the correct amount of balance and the blockchain would not function correctly. However, it is acceptable to take a non-deterministic path to a deterministic output. For instance, if you randomly shuffled a list of addresses, and then gave them each one **ETH**, that would be fine, because no matter how the list of addresses is shuffled the result is the same and all addresses are given one **ETH**.
 - The STF must not reach a new result for old blocks. For instance, if you have been running an Arbitrum Nitro chain for a while, and then you decide to modify the STF to not charge for gas, a new node that syncs the blockchain will reach a different result for historical blocks. It's also important to synchronize between nodes when an upgrade takes effect. A common mechanism for doing this is having an upgrade take effect at a certain timestamp, by which all nodes must be upgraded.
 - The STF must be "pure" and not use external resources. For instance, it must not use the filesystem, make external network calls, or launch processes. That's because the fraud proving system does not (and for the most part, cannot) support these resources. For instance, it's impossible to fraud prove what the result of an external network call is, because the fraud prover smart contracts on L1 are unable to do networking.
-- The STF must not carry state between blocks outside of the "global state". In practice this means persistent state must be stored within block headers or the Ethereum state trie. For instance, ArbOS stores all retryables in contract storage under a special ArbOS address.
+- The STF must not carry state between blocks outside of the "global state". In practice this means persistent state must be stored within block headers or the Ethereum state trie. For instance, [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) stores all retryables in contract storage under a special ArbOS address.
 - The STF must not modify Ethereum state outside of a transaction. This is important to ensure that replaying old blocks reaches the same result, both for tracing and for validation. The ArbOS internal transaction is useful to modify state at the start of blocks.
 - The STF must reach a result in under a second. This is a rough rule, but for nodes to keep in sync it's highly recommended to keep blocks quick.
   - It's also important for the fraud proofs that execution reliably finishes in a relatively short amount of time.
@@ -60,7 +60,7 @@ To modify the State Transition Function, you'll need to build a modified Arbitru
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.9.4@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.9.9@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -72,7 +72,7 @@ Next, make your changes to the State Transition Function. For example, you could
 After this step, you should visit [Customize ArbOS version](./customize-arbos.mdx) to see if your changes need to upgrade the ArbOS version. If so, please continue
 follow that document to add an ArbOS upgrade logic to your code.
 
-### Step 3. Run the node without fraud proofs
+### Step 3. Run the node
 
 To build the Arbitrum Nitro node image, you'll first need to install Docker.
 You can confirm if it's already setup by running `docker version` in a terminal.
@@ -81,23 +81,13 @@ install Docker from your distribution's package manager and start the Docker ser
 
 Once you have Docker installed, you can simply run `docker build . --tag custom-nitro-node` in the `nitro` folder to build your custom node.
 
-Once you've built your new Nitro node image, you have to modify the configuration file of your node to add a new parameter, `--node.staker.dangerous.without-block-validator`, which disables fraud proof verification.
+<VanillaAdmonition type="note">
 
-To do that, open your `nodeConfig.json` file (stored by default in the `config` folder) and add the new parameter inside the `staker` element:
+A chain running a customized State Transition Function will produce blocks that don't match the verified Nitro WASM module root on the parent chain. Coordinate with Offchain Labs before operating a customized STF against a production chain, as the validator configuration required is not covered in this guide.
 
-```json
-...
-"staker": {
-  ...
-  "dangerous": {
-    "without-block-validator": true
-  }
-  ...
-},
-...
-```
+</VanillaAdmonition>
 
-With that, you have now two ways of running your node.
+You have two ways of running your node.
 
 #### 1. Using the docker-compose file
 
@@ -121,11 +111,11 @@ This method will only run the customized Nitro node (i.e., it will not run Block
 docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node --conf.file /home/user/.arbitrum/nodeConfig.json
 ```
 
-:::info
+<VanillaAdmonition type="info">
 
 The instructions provided in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx) **will not** work with your Arbitrum chain node. See [Optional parameters (Arbitrum chain)](/run-arbitrum-node/02-run-full-node.mdx#optional-parameters) for Arbitrum chain-specific CLI flags.
 
-:::
+</VanillaAdmonition>
 
 Once your node is running, you can try out your modifications to the State Transition Function and confirm they work as expected.
 
@@ -139,7 +129,7 @@ It has three forms:
 - The `machine.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant WAVM.
   - It's used by Arbitrator when actually entering a challenge and performing the fraud proofs,
     and has identical behavior to `replay.wasm`.
-- The WASM module root (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.wavm.br`.
+- The <a data-quicklook-from="wasm-module-root">WASM module root</a> (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.wavm.br`.
   - The replay binary is much too large to post onchain, so this hash is set in the L1 Rollup contract to determine the correct replay binary during fraud proofs.
 
 To run a validator node with fraud proofs enabled, the validator node's Docker image will need to contain all three of these versions of the replay binary.
@@ -163,11 +153,9 @@ Once you have the WASM module root, you can put it onchain by calling `setWasmMo
 The `upgradeExecutor` contract address and Rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the Rollup contract.
 
-Once you have set the new WASM module root onchain, you can re-enable fraud proofs and run your node.
+Once you have set the new WASM module root onchain, the validator will recognize blocks produced by your customized STF. You can now run your node with fraud proof verification enabled.
 
-To re-enable fraud proofs, open your `nodeConfig.json` file again, and remove the `"dangerous"` section (containing the `without-block-validator` property) that you previously added.
-
-After that, you'll have, again, two ways of running your node.
+You have two ways of running your node.
 
 #### 1. Using the docker-compose file
 
@@ -196,7 +184,7 @@ docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:84
 The primary issue with simply using a nitro-node-dev build is that, whenever the code changes at all, the replay binary will also change.
 
 If the node is missing the replay binary corresponding to the onchain WASM module root, it will be unable to act as a validator.
-Therefore, when releasing new node Docker images it's important to include the currently on-chain WASM module root.
+Therefore, when releasing new node Docker images it's important to include the currently onchain WASM module root.
 
 To do that, you'll need to first extract the replay binary from the `nitro-node-dev` Docker image built earlier:
 

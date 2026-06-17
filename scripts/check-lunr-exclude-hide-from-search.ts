@@ -1,7 +1,7 @@
 import * as matter from 'gray-matter';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import glob from 'glob';
+import { glob } from 'glob';
 import { execSync } from 'child_process';
 
 // Path to the docs root and docusaurus config
@@ -10,12 +10,8 @@ const CONFIG_PATH = path.resolve(__dirname, '../docusaurus.config.js');
 const REPO_ROOT = path.resolve(__dirname, '../../'); // For consistent repo root access
 
 // Helper to get all markdown files
-function getAllMarkdownFiles(): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    glob(`${DOCS_ROOT}/**/*.{md,mdx}`, { nodir: true }, (err, files) =>
-      err ? reject(err) : resolve(files),
-    );
-  });
+async function getAllMarkdownFiles(): Promise<string[]> {
+  return glob(`${DOCS_ROOT}/**/*.{md,mdx}`, { nodir: true });
 }
 
 // Helper to check git status of a file
