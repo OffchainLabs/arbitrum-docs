@@ -1,22 +1,24 @@
 ---
-title: 'Compliance Filtering'
-description: ''
+title: 'Compliance filtering'
+sidebar_label: 'Compliance filtering'
+description: 'How chain owners configure protocol-level transaction filtering to restrict sanctioned addresses on their Arbitrum chain.'
+user_story: 'As a chain owner, I want to configure compliance rules so that transactions involving restricted addresses are filtered before execution.'
 content_type: how-to
 author: gmehta2
 sme: gmehta2
 target_audience: 'Developers who want to configure compliance rules on their chain'
 ---
 
-New, optional components can be added to the Sequencer and State Transition Function (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
-The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the Delayed Inbox on the parent chain.
+New, optional components can be added to the <a data-quicklook-from='sequencer'>Sequencer</a> and <a data-quicklook-from='state-transition-function'>State Transition Function</a> (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
+The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the <a data-quicklook-from='delayed-inbox'>Delayed Inbox</a> on the parent chain.
 
 ## Rationale
 
-The Arbitrum platform must evolve to meet the needs of a new wave of teams looking to come onchain - specifically teams who have an obligation to comply with regulatory frameworks and rules in their respective jurisdictions.
+The Arbitrum platform must evolve to meet the needs of a new wave of teams looking to come onchain—specifically teams who have an obligation to comply with regulatory frameworks and rules in their respective jurisdictions.
 This feature represents the first of many to ensure that the Arbitrum platform can serve the needs of enterprises and institutions looking to tap into internet-scale, blockchain technology to increase margins, reduce risk, and improve transparency across their businesses.
 
 While this feature is not intended or proposed to be used by Arbitrum One, its inclusion in ArbOS 60 Elara is intended to simplify the codebase and canonicalize this feature in the node software.
-This feature is instead intended to be used by Arbitrum chains who have compliance and regulatory obligations to restrict on-chain activity from sanctioned entities or actors.
+This feature is instead intended to be used by Arbitrum chains who have compliance and regulatory obligations to restrict onchain activity from sanctioned entities or actors.
 
 ## How it works
 
@@ -34,26 +36,26 @@ When evaluating a transaction, the compliance engine hashes all relevant address
 
 ### Sequencer-level filtering
 
-The Compliance Rules Engine runs inside the sequencer and simulates each transaction before it is sequenced. If a transaction violates any compliance rule, it is rejected at the sequencer level and never included in a block.
+The Compliance Rules Engine runs inside the Sequencer and simulates each transaction before it is sequenced. If a transaction violates any compliance rule, it is rejected at the Sequencer level and never included in a block.
 This is the primary enforcement layer and handles the vast majority of cases.
 
 ### Compliance rules
 
 Specific rules can be defined by the chain owner for any address found on the restricted list.
 These rules apply to direct transfers as well as delegated approval mechanisms. A few examples:
-- Block any transaction originating from or to a restricted address
-- Block execution of ERC20 / ERC721 / ERC1155 transfers from or to a restricted address
-- Block execution of the following opcodes targeting a restricted address: `CALL`, `CREATE`, `CREATE2`, `SELFDESTRUCT`
 
+- Block any transaction originating from or to a restricted address
+- Block execution of ERC-20, ERC-721, and ERC-1155 transfers from or to a restricted address
+- Block execution of the following opcodes targeting a restricted address: `CALL`, `CREATE`, `CREATE2`, `SELFDESTRUCT`
 
 ### Delayed Inbox filtering (STF level)
 
-Transactions submitted via the Delayed Inbox cannot be filtered at the sequencer layer alone, since they are eligible for force inclusion after a timeout window.
+Transactions submitted via the Delayed Inbox cannot be filtered at the Sequencer layer alone, since they are eligible for force inclusion after a timeout window.
 To handle this, Compliance Filtering introduces two additional components:
 
 #### Transaction Guardian Precompile
 
-A new precompile allows authorized entities (e.g., the sequencer) to register the hash of a restricted transaction on-chain before it is force-included. When the STF processes a transaction from the delayed inbox, it checks whether that transaction's hash has been registered in the guardian.
+A new precompile allows authorized entities (e.g., the Sequencer) to register the hash of a restricted transaction onchain before it is force-included. When the STF processes a transaction from the delayed inbox, it checks whether that transaction's hash has been registered in the guardian.
 If so, the transaction is forcibly failed on inclusion, consuming any gas attached to prevent spam.
 
 #### Delayed Inbox Sentinel
@@ -62,7 +64,7 @@ The sentinel is responsible for monitoring the delayed inbox for restricted tran
 
 1. Submits the transaction's hash to the Transaction Guardian Precompile
 2. Ensures this occurs before the force inclusion window closes
-3. Allows the sequencer to then process the transaction, which will fail at the STF level as expected
+3. Allows the Sequencer to then process the transaction, which will fail at the STF level as expected
 
 This ensures that even transactions submitted through the parent chain → child chain messaging path are subject to compliance enforcement.
 
@@ -75,13 +77,13 @@ ERC-20, ERC-721, and ERC-1155 transfers where the `to` field of the Transfer eve
 Important constraints:
 
 - If a "burn" transaction includes any other compliance violation, the entire transaction will fail.
-- A restricted address cannot initiate a burn themselves — their `tx.origin` is blocked at the sequencer level regardless.
+- A restricted address cannot initiate a burn themselves — their `tx.origin` is blocked at the Sequencer level regardless.
 
 This design allows third-party liquidators and protocol contracts (e.g., Paxos, Aave) to burn non-compliant balances while preventing the restricted address from taking any action on the chain.
 
 ### Synchronization pipeline
 
-The restricted address list is distributed to sequencer and <a data-quicklook-from='prechecker-node'>prechecker nodes</a> via a cloud-based pipeline:
+The restricted address list is distributed to Sequencer and <a data-quicklook-from='prechecker-node'>prechecker nodes</a> via a cloud-based pipeline:
 
 - The compliance provider periodically publishes a new hash list to a designated S3 bucket.
 - An SNS notification triggers ingestion into the chain operator's own S3 bucket.
@@ -102,7 +104,7 @@ Compliance Filtering is disabled by default. Chain owners must explicitly config
 
 ## Security considerations
 
-- **Force inclusion protection:** Without STF-level enforcement via the Transaction Guardian, a restricted user could bypass sequencer filtering by waiting for the force inclusion window. The sentinel + precompile combination closes this gap.
+- **Force inclusion protection:** Without STF-level enforcement via the Transaction Guardian, a restricted user could bypass Sequencer filtering by waiting for the force inclusion window. The sentinel + precompile combination closes this gap.
 - **Parent chain bridge deposits:** If a restricted address deposits ETH via `depositEth()` on the parent chain, the ETH enters the bridge contract on the parent chain before any filtering occurs on the child chain. If the corresponding credit is dropped on the child chain, the ETH may become locked in the bridge with no corresponding child chain asset. Chain owners should account for this in their compliance design and user communication strategy.
 - **Address privacy:** Restricted addresses are never stored in plaintext. Salted hashing ensures that the list cannot be trivially reversed to enumerate sanctioned addresses.
 
@@ -156,27 +158,21 @@ An example JSON file to provide to `--execution.transaction-filtering.event-filt
 
 ```json
 {
-   "rules":[
-      {
-         "event":"Transfer(address,address,uint256)",
-         "selector":"0xddf252ad",
-         "topicAddresses":[
-            1,
-            2
-         ],
-         "bypass":{
-            "topicIndex":2,
-            "equals":"0x0000000000000000000000000000000000000000"
-         }
-      },
-      {
-         "event":"Approval(address,address,uint256)",
-         "selector":"0x8c5be1e5",
-         "topicAddresses":[
-            1,
-            2
-         ]
+  "rules": [
+    {
+      "event": "Transfer(address,address,uint256)",
+      "selector": "0xddf252ad",
+      "topicAddresses": [1, 2],
+      "bypass": {
+        "topicIndex": 2,
+        "equals": "0x0000000000000000000000000000000000000000"
       }
-   ]
+    },
+    {
+      "event": "Approval(address,address,uint256)",
+      "selector": "0x8c5be1e5",
+      "topicAddresses": [1, 2]
+    }
+  ]
 }
 ```
