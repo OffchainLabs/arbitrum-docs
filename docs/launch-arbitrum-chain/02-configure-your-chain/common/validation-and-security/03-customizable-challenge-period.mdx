@@ -6,9 +6,9 @@ sme: 'mahsamoosavi'
 content_type: how-to
 ---
 
-The challenge period defines the time frame during which state updates (assertions) submitted to the parent chain remain open for scrutiny and potential challenges before they are finalized. This mechanism ensures that participants in the system have the opportunity to verify the validity of state updates and raise challenges if necessary.
+The challenge period defines the time frame during which state updates ([assertions](/how-arbitrum-works/deep-dives/assertions.mdx)) submitted to the <a data-quicklook-from="parent-chain">parent chain</a> remain open for scrutiny and potential <a data-quicklook-from="challenge">challenges</a> before they are finalized. This mechanism ensures that participants in the system have the opportunity to verify the validity of state updates and raise challenges if necessary.
 
-The length of the challenge period is measured based on the parent chain's notion of time, typically reflected in `block.number`. For L3s settling to Arbitrum chains, this period is determined by L1 block progression rather than Arbitrum's (L2) blocks.
+The length of the <a data-quicklook-from="challenge-period">Challenge Period</a> is measured based on the parent chain's notion of time, typically reflected in `block.number`. For L3s settling to <a data-quicklook-from="arbitrum-chain">Arbitrum chains</a>, this period is determined by <a data-quicklook-from="l1">L1</a> block progression rather than Arbitrum's (<a data-quicklook-from="l2">L2</a>) blocks.
 
 In addition to the main challenge period, **an extra challenge period** provides a buffer to resolve any pending challenges after the main period ends. Together, these parameters help balance security and confirm the chain's state.
 
@@ -16,7 +16,7 @@ In addition to the main challenge period, **an extra challenge period** provides
 
 :::info How time is measured in challenges
 
-Chains settling to Ethereum or Arbitrum chains use `block.number` for all block calculations, which corespond to the chain's view of Ethereum's block number. For example, an L3 Arbitrum chain settling to Arbitrum One, will calculate block progression based on Ethereum's (L1) block number.
+Chains settling to Ethereum or Arbitrum chains use `block.number` for all block calculations, which corespond to the chain's view of Ethereum's block number. For example, an L3 Arbitrum chain settling to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, will calculate block progression based on Ethereum's (L1) block number.
 
 :::
 
@@ -24,7 +24,7 @@ By default, the challenge period lasts approximately one week, which equates to 
 
 On the other hand, the extra challenge period adds a buffer of 40 minutes by default, 200 L1 blocks for chains settling to Ethereum or an Arbitrum chain. This time ensures that any last-minute challenges or ongoing dispute resolution processes can be completed before the Rollup finalizes its state.
 
-These default values are selected to carefully balance security and performance for most Rollup use cases. However, developers and Arbitrum chain owners may wish to customize these parameters to suit their specific requirements.
+These default values are selected to carefully balance security and performance for most Rollup use cases. However, developers and Arbitrum <a data-quicklook-from="chain-owner">chain owners</a> may wish to customize these parameters to suit their specific requirements.
 
 ## Customizing the challenge period
 
@@ -35,13 +35,13 @@ The main challenge period configuration uses the `confirmPeriodBlocks` parameter
 1. **During deployment**: Developers can specify the desired value in the `confirmPeriodBlocks` field of the `RollupCreator` configuration when deploying the Rollup.
 2. **Post-deployment**: The chain owner can update this value dynamically by calling the `Rollup.setConfirmPeriodBlocks(newValue)` function.
 
-For example, setting `confirmPeriodBlocks` to 30,000 blocks reduces the challenge period to approximately 4.5 days. This configuration might be suitable for applications prioritizing faster state confirmation, while increasing the value would extend the challenge period, improving security.
+For example, setting `confirmPeriodBlocks` to 30,000 blocks reduces the challenge period to approximately 4.5 days. This configuration might be suitable for applications prioritizing faster state <a data-quicklook-from="confirmation">confirmation</a>, while increasing the value would extend the challenge period, improving security.
 
 ### Extra challenge period blocks
 
 The extra challenge period is governable using the `extraChallengeTimeBlocks` parameter, which defines the additional buffer duration after the main challenge period. This period ensures that pending challenges are processed before the Rollup state gets finalized.
 
-By default, the extra challenge period is set to **200 blocks**, providing a short but sufficient buffer for most networks. However, developers can increase this value for applications requiring additional dispute resolution time or operate in environments with higher latency between the parent and child chain.
+By default, the extra challenge period is set to **200 blocks**, providing a short but sufficient buffer for most networks. However, developers can increase this value for applications requiring additional dispute resolution time or operate in environments with higher latency between the parent and <a data-quicklook-from="child-chain">child chain</a>.
 
 Like the main challenge period, this parameter is customizable in two ways:
 

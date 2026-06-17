@@ -3,63 +3,27 @@
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
+const { themes: prismThemes } = require('prism-react-renderer');
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
+import { redirects } from './redirects.config.js';
 
-// Inkeep analytics event handler - forwards events to PostHog
-const handleInkeepEvent = (event) => {
-  // Only run on client side where PostHog is available
-  if (typeof window === 'undefined' || !window.posthog) {
-    return;
-  }
-
-  const { eventName, properties } = event;
-
-  // Events we want to track in PostHog
-  const trackedEvents = [
-    // Chat events
-    'assistant_message_received',
-    'user_message_submitted',
-    'assistant_positive_feedback_submitted',
-    'assistant_negative_feedback_submitted',
-    'assistant_source_item_clicked',
-    'chat_share_button_clicked',
-    // Search events
-    'search_query_submitted',
-    'search_result_clicked',
-    'search_query_response_received',
-  ];
-
-  if (trackedEvents.includes(eventName)) {
-    // Extract relevant properties to avoid sending excessive data
-    const eventProperties = {
-      component_type: properties?.componentType,
-      widget_version: properties?.widgetLibraryVersion,
-    };
-
-    // Add event-specific properties
-    if (eventName.includes('search')) {
-      eventProperties.search_query = properties?.searchQuery;
-      if (properties?.totalResults !== undefined) {
-        eventProperties.total_results = properties.totalResults;
-      }
-      if (properties?.title) {
-        eventProperties.result_title = properties.title;
-      }
-    }
-
-    if (eventName.includes('feedback')) {
-      eventProperties.feedback_reasons = properties?.reasons;
-    }
-
-    if (eventName === 'assistant_source_item_clicked') {
-      eventProperties.source_link = properties?.link;
-    }
-
-    window.posthog.capture(`inkeep_${eventName}`, eventProperties);
-  }
-};
+// Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
+// Shared between the sitemap and llms.txt so both indexes stay in sync.
+const nonCanonicalRoutePatterns = [
+  '/sdk/assetBridger/**',
+  '/sdk/dataEntities/**',
+  '/sdk/inbox/**',
+  '/sdk/message/**',
+  '/sdk/utils/**',
+  '/hosted-pdfs/**',
+  // Partials are imported into other pages, not standalone content.
+  // Docusaurus generates routes for them anyway.
+  '**/_*', // Docusaurus partial convention
+  '**/partials/**', // non-underscored partials in this repo's partials/ dirs
+  '/category/**', // auto-generated category index pages
+];
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -68,12 +32,14 @@ const config = {
   url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
   onBrokenAnchors: 'warn', // Allow build to succeed despite false positive anchor warnings from TypeDoc
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
     preprocessor: markdownPreprocessor,
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
     parseFrontMatter: async (params) => {
       // Use the default parser
       const result = await params.defaultParseFrontMatter(params);
@@ -138,10 +104,20 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
+        sitemap: {
+          ignorePatterns: nonCanonicalRoutePatterns,
+        },
       }),
     ],
   ],
   plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Source of truth: redirects.config.ts (also mirrored to vercel.json via `yarn sync-redirects`).
+        redirects,
+      },
+    ],
     [
       '@inkeep/cxkit-docusaurus',
       {
@@ -179,30 +155,27 @@ const config = {
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
     [
-      'docusaurus-plugin-llms',
+      '@signalwire/docusaurus-plugin-llms-txt',
       {
-        generateLLMsTxt: true,
-        generateLLMsFullTxt: true,
-        docsDir: 'docs',
-        excludeImports: true,
-        removeDuplicateHeadings: true,
-        title: 'Arbitrum Documentation',
-        description:
+        siteTitle: 'Arbitrum Documentation',
+        siteDescription:
           'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
-        ignoreFiles: [
-          'sdk/assetBridger/**',
-          'sdk/dataEntities/**',
-          'sdk/inbox/**',
-          'sdk/message/**',
-          'sdk/utils/**',
-          'sdk/index.md',
-          'hosted-pdfs/**',
-        ],
-        pathTransformation: {
-          ignorePaths: ['docs'],
+        content: {
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: true,
+          includeDocs: true,
+          includeBlog: false,
+          includePages: false,
+          excludeRoutes: nonCanonicalRoutePatterns,
+          beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
+          beforeDefaultRemarkPlugins: [
+            require('./src/plugins/remark-llms-cleanup'),
+            require('./src/plugins/remark-llms-page-header'),
+          ],
         },
       },
     ],
+    'docusaurus-plugin-copy-page-button',
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -381,8 +354,8 @@ const config = {
       },
       prism: {
         additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
-        theme: require('prism-react-renderer/themes/github'),
-        darkTheme: require('prism-react-renderer/themes/palenight'),
+        theme: prismThemes.github,
+        darkTheme: prismThemes.palenight,
       },
       liveCodeBlock: {
         /**

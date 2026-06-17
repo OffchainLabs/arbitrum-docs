@@ -10,8 +10,6 @@ content_type: concept
 displayed_sidebar: buildAppsSidebar
 ---
 
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
-
 :::info block number vs `block.number`
 
 Throughout this and other pages, we note that the block number of a chain does not match the value obtained from `block.number`. When using `block.number` in a smart contract, the value obtained will be the block of the first non-Arbitrum ancestor chain. That is:
@@ -57,7 +55,7 @@ The "first non-Arbitrum ancestor chain" is:
 block.number // => returns the approximate block number of the first non-Arbitrum ancestor chain
 ```
 
-As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!)
+As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!) For how this affects specific Solidity operations like `block.number` and `block.timestamp`, see [Solidity support](/build-decentralized-apps/arbitrum-vs-ethereum/04-solidity-support.mdx).
 
 :::info EIP-2935 difference
 

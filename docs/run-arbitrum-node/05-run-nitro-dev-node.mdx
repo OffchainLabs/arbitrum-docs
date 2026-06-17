@@ -14,7 +14,7 @@ This page provides step-by-step instructions for setting up and running a local 
 
 While some teams use `nitro-testnode` for testing cross-layer messaging, which involves launching both Geth as parent chain and Nitro as child chain, this setup can be more complex and time-consuming. If your primary goal is to test contracts on a local node without needing cross-layer interactions, Nitro's `--dev` mode offers a lightweight and efficient alternative.
 
-However, if you need more advanced functionality—such as cross-layer messaging, working with both the parent and child chains, or testing interactions between different layers—`nitro-testnode` is the preferred option. The testnode setup allows you to simulate a full parent-child chain environment, which is critical for those scenarios. See here for instructions.
+However, if you need more advanced functionality—such as cross-layer messaging, working with both the parent and child chains, or testing interactions between different layers—`nitro-testnode` is the preferred option. The testnode setup allows you to simulate a full parent-child chain environment, which is critical for those scenarios. See [How to run a local full chain simulation](/run-arbitrum-node/03-run-local-full-chain-simulation.mdx) for instructions.
 
 Note that Nitro `--dev` mode is ideal for Stylus contract testing, as it is much lighter and faster to set up than the full nitro-testnode environment.
 
@@ -51,7 +51,7 @@ The script will:
 
 ## Development account (used by default)
 
-In `--dev` mode, the script uses a pre-funded development account by default. This account is pre-funded with `ETH` in all networks and is used to deploy contracts, interact with the chain, and assume chain ownership.
+In `--dev` mode, the script uses a pre-funded development account by default. This account is pre-funded with **ETH** in all networks and is used to deploy contracts, interact with the chain, and assume chain ownership.
 
 - Address: `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E`
 - Private key: `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659`

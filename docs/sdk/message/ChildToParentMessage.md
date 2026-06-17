@@ -469,9 +469,7 @@ Any classic and nitro events that match the provided filters.
 ### ChildToParentMessageReaderOrWriter
 
 ```ts
-type ChildToParentMessageReaderOrWriter<T> = T extends Provider
-  ? ChildToParentMessageReader
-  : ChildToParentMessageWriter;
+type ChildToParentMessageReaderOrWriter<T> = T extends Provider ? ChildToParentMessageReader : ChildToParentMessageWriter;
 ```
 
 Defined in: message/ChildToParentMessage.ts:54

@@ -93,45 +93,45 @@ Nitro transforms environment variable names into config keys using these rules (
 
 The following table shows how environment variable names map to CLI flags:
 
-| Environment variable                             | Equivalent CLI flag                         |
-| ------------------------------------------------ | ------------------------------------------- |
-| `NITRO_PARENT__CHAIN_CONNECTION_URL=http://...`  | `--parent-chain.connection.url=http://...`  |
-| `NITRO_HTTP_PORT=8547`                           | `--http.port=8547`                          |
-| `NITRO_NODE_FEED_INPUT_URL=wss://feed.example`   | `--node.feed.input.url=wss://feed.example`  |
-| `NITRO_NODE_BATCH__POSTER_ENABLE=true`           | `--node.batch-poster.enable=true`           |
-| `NITRO_LOG__LEVEL=DEBUG`                         | `--log-level=DEBUG`                         |
-| `NITRO_EXECUTION_FORWARDING__TARGET=https://...` | `--execution.forwarding-target=https://...` |
-| `NITRO_PERSISTENT_CHAIN=/data`                   | `--persistent.chain=/data`                  |
+| Environment variable                              | Equivalent CLI flag                      |
+| ------------------------------------------------- | ---------------------------------------- |
+| `NITRO_PARENT__CHAIN_CONNECTION_URL=http://...`   | `--parent-chain.connection.url=http://...` |
+| `NITRO_HTTP_PORT=8547`                            | `--http.port=8547`                       |
+| `NITRO_NODE_FEED_INPUT_URL=wss://feed.example`    | `--node.feed.input.url=wss://feed.example` |
+| `NITRO_NODE_BATCH__POSTER_ENABLE=true`            | `--node.batch-poster.enable=true`        |
+| `NITRO_LOG__LEVEL=DEBUG`                          | `--log-level=DEBUG`                      |
+| `NITRO_EXECUTION_FORWARDING__TARGET=https://...`  | `--execution.forwarding-target=https://...` |
+| `NITRO_PERSISTENT_CHAIN=/data`                    | `--persistent.chain=/data`               |
 
 ### Comma-separated list values
 
 Certain config keys accept lists. When you set these through environment variables, Nitro automatically splits the value on commas. The full list of comma-split fields:
 
-| Config key                                                          | Description                   |
-| ------------------------------------------------------------------- | ----------------------------- |
-| `auth.api`                                                          | Auth RPC API namespaces       |
-| `auth.origins`                                                      | Auth allowed origins          |
-| `chain.info-files`                                                  | Chain info file paths         |
-| `conf.file`                                                         | Config file paths             |
-| `execution.secondary-forwarding-target`                             | Secondary forwarding targets  |
-| `execution.sequencer.sender-whitelist`                              | Allowed sender addresses      |
-| `graphql.corsdomain`                                                | GraphQL CORS domains          |
-| `graphql.vhosts`                                                    | GraphQL virtual hosts         |
-| `http.api`                                                          | HTTP RPC API namespaces       |
-| `http.corsdomain`                                                   | HTTP CORS domains             |
-| `http.vhosts`                                                       | HTTP virtual hosts            |
-| `node.data-availability.rest-aggregator.urls`                       | DA REST aggregator URLs       |
-| `node.feed.input.secondary-url`                                     | Secondary feed URLs           |
-| `node.feed.input.url`                                               | Feed input URLs               |
-| `node.feed.input.verify.allowed-addresses`                          | Feed signature addresses      |
-| `node.seq-coordinator.signer.ecdsa.allowed-addresses`               | Sequencer coordinator signers |
-| `p2p.bootnodes`                                                     | P2P bootstrap nodes           |
-| `p2p.bootnodes-v5`                                                  | P2P v5 bootstrap nodes        |
-| `validation.api-auth`                                               | Validation API auth           |
-| `validation.arbitrator.redis-validation-server-config.module-roots` | Arbitrator WASM module roots  |
-| `validation.wasm.allowed-wasm-module-roots`                         | Allowed WASM module roots     |
-| `ws.api`                                                            | WebSocket API namespaces      |
-| `ws.origins`                                                        | WebSocket allowed origins     |
+| Config key                                                              | Description                      |
+| ----------------------------------------------------------------------- | -------------------------------- |
+| `auth.api`                                                              | Auth RPC API namespaces          |
+| `auth.origins`                                                          | Auth allowed origins             |
+| `chain.info-files`                                                      | Chain info file paths            |
+| `conf.file`                                                             | Config file paths                |
+| `execution.secondary-forwarding-target`                                 | Secondary forwarding targets     |
+| `execution.sequencer.sender-whitelist`                                  | Allowed sender addresses         |
+| `graphql.corsdomain`                                                    | GraphQL CORS domains             |
+| `graphql.vhosts`                                                        | GraphQL virtual hosts            |
+| `http.api`                                                              | HTTP RPC API namespaces          |
+| `http.corsdomain`                                                       | HTTP CORS domains                |
+| `http.vhosts`                                                           | HTTP virtual hosts               |
+| `node.data-availability.rest-aggregator.urls`                           | DA REST aggregator URLs          |
+| `node.feed.input.secondary-url`                                         | Secondary feed URLs              |
+| `node.feed.input.url`                                                   | Feed input URLs                  |
+| `node.feed.input.verify.allowed-addresses`                              | Feed signature addresses         |
+| `node.seq-coordinator.signer.ecdsa.allowed-addresses`                   | Sequencer coordinator signers    |
+| `p2p.bootnodes`                                                         | P2P bootstrap nodes              |
+| `p2p.bootnodes-v5`                                                      | P2P v5 bootstrap nodes           |
+| `validation.api-auth`                                                   | Validation API auth              |
+| `validation.arbitrator.redis-validation-server-config.module-roots`     | Arbitrator WASM module roots     |
+| `validation.wasm.allowed-wasm-module-roots`                             | Allowed WASM module roots        |
+| `ws.api`                                                                | WebSocket API namespaces         |
+| `ws.origins`                                                            | WebSocket allowed origins        |
 
 For example, to enable multiple HTTP API namespaces:
 
@@ -174,14 +174,14 @@ docker run --rm offchainlabs/nitro-node:v3.5.3-3b3e2fa \
 
 For security, `--conf.dump` replaces the following fields with empty strings in the output:
 
-| Scrubbed field                                      |
-| --------------------------------------------------- |
-| `node.batch-poster.parent-chain-wallet.password`    |
+| Scrubbed field                                    |
+| ------------------------------------------------- |
+| `node.batch-poster.parent-chain-wallet.password`  |
 | `node.batch-poster.parent-chain-wallet.private-key` |
-| `node.staker.parent-chain-wallet.password`          |
-| `node.staker.parent-chain-wallet.private-key`       |
-| `chain.dev-wallet.password`                         |
-| `chain.dev-wallet.private-key`                      |
+| `node.staker.parent-chain-wallet.password`        |
+| `node.staker.parent-chain-wallet.private-key`     |
+| `chain.dev-wallet.password`                       |
+| `chain.dev-wallet.private-key`                    |
 
 If you need to verify that secrets are being picked up correctly, check that the node starts successfully rather than relying on `--conf.dump` output.
 
@@ -197,18 +197,18 @@ The default value is `0`, which disables periodic reloading. When enabled, Nitro
 
 Fields that support hot reload are marked with the `reload:"hot"` tag in the Go source code. The following top-level configuration groups support hot reload:
 
-| Config group               | Description                      |
-| -------------------------- | -------------------------------- |
-| `conf`                     | Configuration system settings    |
-| `node`                     | Consensus node settings          |
-| `execution`                | Execution layer settings         |
-| `validation`               | Validator settings               |
-| `parent-chain`             | Parent chain connection settings |
-| `log-level`                | Log verbosity level              |
-| `log-type`                 | Log output format                |
-| `file-logging`             | File logging settings            |
-| `ensure-rollup-deployment` | Rollup deployment check          |
-| `version-alerter`          | Version alerter settings         |
+| Config group     | Description                       |
+| ---------------- | --------------------------------- |
+| `conf`           | Configuration system settings     |
+| `node`           | Consensus node settings           |
+| `execution`      | Execution layer settings          |
+| `validation`     | Validator settings                |
+| `parent-chain`   | Parent chain connection settings  |
+| `log-level`      | Log verbosity level               |
+| `log-type`       | Log output format                 |
+| `file-logging`   | File logging settings             |
+| `ensure-rollup-deployment` | Rollup deployment check  |
+| `version-alerter` | Version alerter settings         |
 
 If a reload changes a field that does not support hot reload, Nitro rejects the entire reload and logs an error. Fields like `chain`, `persistent`, `http`, `ws`, and `init` require a node restart to take effect.
 
@@ -218,13 +218,13 @@ Nitro can fetch a base configuration file from Amazon S3 at startup. This is use
 
 Configure S3 loading with the following flags:
 
-| Flag                   | Description                              |
-| ---------------------- | ---------------------------------------- |
-| `--conf.s3.access-key` | AWS access key ID                        |
-| `--conf.s3.secret-key` | AWS secret access key                    |
-| `--conf.s3.region`     | S3 bucket region                         |
-| `--conf.s3.bucket`     | S3 bucket name                           |
-| `--conf.s3.object-key` | Object key (file path within the bucket) |
+| Flag                    | Description             |
+| ----------------------- | ----------------------- |
+| `--conf.s3.access-key`  | AWS access key ID       |
+| `--conf.s3.secret-key`  | AWS secret access key   |
+| `--conf.s3.region`      | S3 bucket region        |
+| `--conf.s3.bucket`      | S3 bucket name          |
+| `--conf.s3.object-key`  | Object key (file path within the bucket) |
 
 The S3 config file must be in JSON format. It is loaded early in the precedence chain, so local config files, CLI flags, and environment variables all override S3 values:
 
