@@ -7,11 +7,12 @@
 #                 sandbox repo's default branch (run once, from an arbitrum-docs
 #                 checkout) and generate a sandbox-tailored workflow.
 #   (default)   : open the gate test matrix as internal-branch PRs against the
-#                 sandbox (run after the SME team + SME_GATE_TOKEN secret exist).
+#                 sandbox (run after the SME team + SME_GATE_APP_* secrets exist).
 #
 # Prereqs for enforcement testing (admin — see .github/SME_REVIEW_GATE.md):
-#   an `stylus-sme` team with WRITE access on the sandbox + the SME_GATE_TOKEN
-#   secret (members:read). The matrix uses `stylus-sme` / docs/stylus/**.
+#   an `stylus-sme` team with WRITE access on the sandbox + the SME_GATE_APP_ID /
+#   SME_GATE_APP_PRIVATE_KEY secrets (a GitHub App with members:read + checks:write).
+#   The matrix uses `stylus-sme` / docs/stylus/**.
 #
 # Usage:
 #   scripts/sme-gate-sandbox.sh --repo <owner/name> --bootstrap [--dry-run]
@@ -122,7 +123,7 @@ jobs:
       - name: Resolve PR number
         id: resolve
         env:
-          GH_TOKEN: ${{ secrets.SME_GATE_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INPUT_PR: ${{ inputs.pr }}
           EVENT_PR: ${{ github.event.pull_request.number }}
         run: |
@@ -137,9 +138,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
+      # The gate token must read org team membership AND post a check run. Only a
+      # GitHub App can hold both (checks:write + members:read) — PATs cannot create
+      # check runs — so mint a short-lived installation token here.
+      - name: Mint SME gate token (GitHub App)
+        uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ secrets.SME_GATE_APP_ID }}
+          private-key: ${{ secrets.SME_GATE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
       - name: Run SME review gate
         env:
-          GH_TOKEN: ${{ secrets.SME_GATE_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ steps.resolve.outputs.pr }}
         run: npx -y tsx scripts/sme-review-gate.ts
 YAML
@@ -230,7 +241,7 @@ bootstrap() {
   git commit -q -m "Bootstrap SME review gate (sandbox)"
   git push -q origin "$DEFAULT_BRANCH"
   echo "Installed gate files into ${REPO}@${DEFAULT_BRANCH}."
-  echo "Next: create an ${SME_TEAM} team with write access + the SME_GATE_TOKEN secret, then:"
+  echo "Next: create an ${SME_TEAM} team with write access + the SME_GATE_APP_ID/SME_GATE_APP_PRIVATE_KEY secrets, then:"
   echo "  scripts/sme-gate-sandbox.sh --repo ${REPO}"
 }
 

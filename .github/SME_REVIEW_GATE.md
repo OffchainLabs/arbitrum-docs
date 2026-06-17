@@ -26,11 +26,11 @@ If a PR touches no SME content, the check passes on its own and editorial approv
 
 ## Status check conclusions
 
-| Conclusion | Meaning |
-| --- | --- |
-| `neutral` | Report-only mode (`reportOnly: true`). Never blocks. |
-| `success` | No SME content, or every required SME team approved. |
-| `failure` | A required SME team has not approved yet. |
+| Conclusion        | Meaning                                                                                                                                                                       |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `neutral`         | Report-only mode (`reportOnly: true`). Never blocks.                                                                                                                          |
+| `success`         | No SME content, or every required SME team approved.                                                                                                                          |
+| `failure`         | A required SME team has not approved yet.                                                                                                                                     |
 | `action_required` | Misconfiguration: malformed `sme:*` markers, an unknown team slug, or team membership could not be read (missing team / token). Fix setup — not a normal "awaiting approval". |
 
 ## Transient markers (post-merge cleanup)
@@ -61,6 +61,7 @@ PRs before it gates merges. While in this state you will see SME teams reported 
 
 1. **Create the per-domain SME teams** in the `OffchainLabs` org and give each **write**
    access to `arbitrum-docs` (write access is required for their approvals to count):
+
    - `protocol-sme` — owns `docs/how-arbitrum-works/**`
    - `stylus-sme` — owns `docs/stylus/**`, `docs/stylus-by-example/**`
    - `chain-sme` — owns `docs/launch-arbitrum-chain/**`
@@ -68,10 +69,16 @@ PRs before it gates merges. While in this state you will see SME teams reported 
    (These match `.github/sme-config.json` and `.github/CODEOWNERS`. Add/rename teams by
    editing those two files in a PR.)
 
-2. **Provision a membership-read token.** The default `GITHUB_TOKEN` cannot read org team
-   membership, so the gate reports teams as `unverifiable` without one. Create a GitHub
-   App installation token or a fine-grained PAT with **`members: read`** on the org, and
-   add it as the repo secret **`SME_GATE_TOKEN`**. The workflow prefers it automatically.
+2. **Provision a GitHub App token.** The gate token must do two things at once: read org
+   team membership AND post the `sme-review-gate` check run. Only a **GitHub App** can hold
+   both — `members: read` (org) and `checks: write` (repo). No PAT (classic or fine-grained)
+   can create check runs, so a PAT is not an option here. Create a GitHub App with repo
+   permissions **Checks: read/write**, **Contents: read**, **Pull requests: read** and org
+   permission **Members: read**, install it on the repo, and store its App ID and private
+   key as the repo secrets **`SME_GATE_APP_ID`** and **`SME_GATE_APP_PRIVATE_KEY`**. The
+   workflow mints a short-lived installation token from them via
+   `actions/create-github-app-token`; if the secrets are absent it skips that step and
+   degrades to `GITHUB_TOKEN` (teams report `unverifiable` rather than failing).
 
 3. **Confirm in report-only.** Open/refresh a PR touching a pilot section and check the
    `sme-review-gate` run: required teams should now show `approved`/`awaiting` instead of
@@ -111,7 +118,7 @@ never checks out or runs the PR's code. Do not add a step that builds or execute
 
 ## Smoke-testing in a sandbox
 
-To exercise the *blocking* behavior without risking real PRs, use a throwaway private repo.
+To exercise the _blocking_ behavior without risking real PRs, use a throwaway private repo.
 
 **One-time setup (admin):**
 
@@ -120,8 +127,9 @@ To exercise the *blocking* behavior without risking real PRs, use a throwaway pr
    `scripts/sme-review-gate.ts`, `.github/sme-config.json`, `.github/CODEOWNERS`
    (plus a minimal `package.json` with `tsx`, or reuse this repo's). Keep `sme-config.json`
    identical so `stylus-sme` maps to `docs/stylus/**`.
-3. Create an `stylus-sme` team with **write** access and set the `SME_GATE_TOKEN` secret
-   (`members:read`).
+3. Create an `stylus-sme` team with **write** access, and set the `SME_GATE_APP_ID` +
+   `SME_GATE_APP_PRIVATE_KEY` secrets (a GitHub App with `members: read` + `checks: write`;
+   see step 2 of "Enabling enforcement" for the full permission list).
 
 **Run the matrix:**
 

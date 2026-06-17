@@ -8,7 +8,7 @@ run-name: SME review gate (report-only)
 #
 # SECURITY — why `pull_request_target`:
 # External contributors open PRs from forks. A plain `pull_request` run on a fork
-# gets a read-only token, no secrets (no SME_GATE_TOKEN), and no checks:write — so
+# gets a read-only token, no secrets (no App token), and no checks:write — so
 # the gate could neither read team membership nor post its check. `pull_request_target`
 # runs in the BASE repo context (full token + secrets) for fork PRs too. It is safe
 # here ONLY because this job checks out the trusted base ref (never the PR head) and
@@ -41,11 +41,14 @@ jobs:
   evaluate:
     name: 'evaluate'
     runs-on: ubuntu-latest
+    # `secrets` cannot be used in a step-level `if`; surface presence as an env flag.
+    env:
+      HAS_SME_APP: ${{ secrets.SME_GATE_APP_ID != '' }}
     steps:
       - name: Resolve PR number
         id: resolve
         env:
-          GH_TOKEN: ${{ secrets.SME_GATE_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INPUT_PR: ${{ inputs.pr }}
           EVENT_PR: ${{ github.event.pull_request.number }}
         run: |
@@ -70,12 +73,22 @@ jobs:
         with:
           install-command: yarn install --frozen-lockfile
 
+      # The gate token must read org team membership AND post the check run. Only a
+      # GitHub App can hold both `members: read` (org) and `checks: write` — no PAT,
+      # classic or fine-grained, can create check runs. Mint a short-lived installation
+      # token when the App secrets exist; if they don't, this step is skipped and the
+      # run degrades to GITHUB_TOKEN (report-only neutral check, teams "unverifiable").
+      - name: Mint SME gate token (GitHub App)
+        id: app-token
+        if: ${{ env.HAS_SME_APP == 'true' }}
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.SME_GATE_APP_ID }}
+          private-key: ${{ secrets.SME_GATE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Run SME review gate (report-only)
         env:
-          # Default GITHUB_TOKEN cannot read org team membership. When eng/infra
-          # provisions a GitHub App / fine-grained token with `members:read`, expose
-          # it as SME_GATE_TOKEN and it is preferred automatically; until then the
-          # gate degrades to "unverifiable" rather than failing.
-          GH_TOKEN: ${{ secrets.SME_GATE_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ steps.resolve.outputs.pr }}
         run: yarn tsx scripts/sme-review-gate.ts
