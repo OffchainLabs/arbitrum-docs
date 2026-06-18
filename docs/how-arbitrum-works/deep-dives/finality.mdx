@@ -36,7 +36,7 @@ Soft finality refers to the preliminary confirmation of transactions based on th
 
 ## Hard finality
 
-Hard finality occurs when batched transactions get posted to the parent chain. Key characteristics include:
+Hard finality occurs when batched transactions are posted to the parent chain. Key characteristics include:
 
 - **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
 - **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
@@ -45,7 +45,7 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 #### Advantages of hard finality
 
 - **Maximum security**: Protected by the robustness of the parent chain’s consensus mechanism.
-- **Trust minimization**: This does not require trust in the Sequencer; the underlying blockchain provides security.
+- **Trust minimization**: Does not require trust in the Sequencer; the underlying blockchain provides security.
 - **Suitable for high-value transactions**: Ideal for scenarios where security and immutability are paramount.
 
 #### Limitations of hard finality
@@ -55,13 +55,13 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 
 ## How it works
 
-### Part 1: Soft finality—the sequencer feed in detail
+### Part 1: Soft finality—the Sequencer feed in detail
 
 #### 1. How a transaction becomes a feed message
 
 1. You send a transaction. It doesn't go straight to the feed; it lands in a queue inside the Sequencer.
-2. The Sequencer's main loop pulls your transaciton off the queue.
-3. It hands the transaciton to the execution engine, which runs it and builds a new L2 block.
+2. The Sequencer's main loop pulls your transaction off the queue.
+3. It hands the transaction to the execution engine, which runs it and builds a new L2 block.
 4. The finished block (now a "message") is saved to the Sequencer's own database.
 5. Only after it's saved does the Sequencer broadcast it to everyone listening on the feed (nodes).
 6. The moment that broadcast hits the wire, you have "soft finality."
@@ -85,7 +85,7 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 
 #### 1d. What the feed cannot guarantee yet
 
-1. So far your transaction only lives in the Sequencer's memory and in listerners' caches—nothing is on Ethereum yet.
+1. So far your transaction only lives in the Sequencer's memory and in listeners' caches—nothing is on Ethereum yet.
 2. If the Sequencer vanished right now, the ordering could still be lost or shuffled, because nothing durable recorded it.
 3. The Sequencer could also just ignore your transaction and never sequence it at all.
 4. To guard against being ignored, you can instead push your transaction through Ethereum's "delayed inbox," which forces eventual inclusion.
@@ -95,7 +95,7 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 
 #### 2a. The `BatchPoster` lifecycle
 
-1. A timer fires, and the `BatchPoster` wwakes up to consider posting a new batch.
+1. A timer fires, and the `BatchPoster` wakes up to consider posting a new batch.
 2. It asks L1 "What have I already posted?" so it doesn't repeat itself, and double-checks that its local record agrees.
 3. It picks the cheapest way to put the data on Ethereum (plain calldata vs. blobs) based on current L1 prices.
 4. It bundles many L2 messages together and compresses them (with Brotli) to save space and costs.
@@ -136,11 +136,11 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 
 1. L1 inclusion proved the **data** exists, but not that the resulting L2 **state** is correct—that's a separate guarantee.
 2. Validators ("bonders") are the ones who vouch for the state correctness on L1.
-3. A wrapper checks the onchain rollupo contract at runtime and picks the dispute protocol the chain is using (the interactive legacy, or BoLD).
+3. A wrapper checks the onchain Rollup contract at runtime and picks the dispute protocol the chain is using (the interactive legacy, or BoLD).
 4. Both protocols expose the same two signals—"latest bonded" and "latest confirmed"—so the rest of the node doesn't care which one is running.
 
 #### 4b. The poll loop (legacy)
-
+1. On a repeating timer, the legacy bonder checks the Rollup contract.
 1. One a repeating timer, the legacy bonder checks the rollup contract.
 2. First it asks "what's the latest assertion **my** wallet has bonded on?" and tells the bonded-notifiers that message count.
 3. Then it asks the same contract with the empty (zero) address, which means "what has the **whole chain** confirmed as final?"
