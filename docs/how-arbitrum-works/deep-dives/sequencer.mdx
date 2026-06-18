@@ -26,7 +26,7 @@ The Sequencer feed serves several vital functions within the Arbitrum ecosystem:
 When a user submits a transaction via JSON-RPC, it is sent to the `Sequencer.PublishTransaction`, which begins the following process:
 
 1. **Forwarding check**: If the node is not the active sequencer, the transaction is forwarded to the active one. Only the elected sequencer produces blocks.
-2. **Surplus check**: If `ExpectedSurplusHardThreshold` is set, the L1 pricing surplus must exceed the theshold; otherwise, the transaction is rejected (anti-DoS tied to L1 fee economics).
+2. **Surplus check**: If `ExpectedSurplusHardThreshold` is set, the L1 pricing surplus must exceed the threshold; otherwise, the transaction is rejected (anti-DoS tied to L1 fee economics).
 3. **Sender allowlist**: If configured, only allowlisted addresses may submit (not active on Arbitrum One, Nova, Sepolia).
 4. **Type filtering**: Arbitrum internal transaction types and EIP-4844 blob transactions are rejected.
 5. **Timeboost delay**: If Timeboost is active and the current round has an express lane controller, **non-express-lane transactions are delayed** by `ExpressLaneAdvantage` (default: 200ms) before being queued. Express Lane transactions skip this delay.
@@ -42,7 +42,9 @@ The sequencer runs a tight loop (governed by `MaxBlockSpeed`, default 250ms mini
 - `txRetryQueue` transactions retried after nonce/gas issues
 - `txQueue` regular incoming transactions
 
-After the first transaction, it continues draining for upto `ReadFromTxQueueTimeout` (default 10ms) to batch multiple transactions into a single block. 2. **Pre-checks per queued item**:
+After the first transaction, it continues draining for up to `ReadFromTxQueueTimeout` (default 10ms) to batch multiple transactions into a single block.
+
+2. **Pre-checks per queued item**:
 
 - Context expiration
 - `MaxTxDataSize` (default 95KB)
@@ -72,7 +74,7 @@ This is where transactions become a block:
 2. Calls `arbos.ProduceBlockAdvanced`, which:
 
 - Iterates through transactions via `hooks.NextTxToSequence`.
-- Applies `preTxFilter` (nonce cache check, conditional options check, address filtering)
+- Applies `preTxFilter` (nonce cache check, conditional options check, address filtering).
 - **Executes each transaction** against ArbOS state.
 - Applies `postTxFilter` (revert gas rejection, nonce cache update, nonce failure revival).
 - Enforces per-block data size limits.
@@ -93,7 +95,7 @@ This is where transactions become a block:
 
 The `BatchPoster` runs independently, reading messages from the `TransactionStreamer` in sequence and posting them to L1. The mechanisms that run during this process are:
 
-- **Compression**: messages are Brotli-compressed with adaptive compression levels based on backlog size.
+- **Compression**: Messages are Brotli-compressed with adaptive compression levels based on backlog size.
 - **Posting methods**: Calldata (`addSequencerL2BatchFromOrigin`) or EIP-4844 blobs (`addSequencerL2BatchFromBlobs`).
 - **DA providers**: Supports AnyTrust committees and blob storage as alternatives to direct L1 posting.
 - **L1 bounds tracking**: Ensures batches have valid L1 timestamps.
@@ -101,7 +103,7 @@ The `BatchPoster` runs independently, reading messages from the `TransactionStre
 
 :::note
 
-This is a high-level summary of how the BatchPoster operates within the overall Sequencing mechanism. To learn more about the BatchPoster refer to the Batch poster deep dive.
+This is a high-level summary of how the BatchPoster operates within the overall Sequencing mechanism. To learn more about the BatchPoster, refer to the [Batch poster deep dive](/how-arbitrum-works/deep-dives/batchposter.mdx).
 
 :::
 
@@ -112,7 +114,7 @@ The `SeqCoordinator` implements Redis-based leader election:
 - A `CHOSENSEQ_KEY` in Redis indicates which sequencer URL holds the lock.
 - The active sequencer acquires a **time-limited lockout** (default 1 minute) and must periodically refresh it.
 - Each sequencer that wants to become active sets a `WantsLockout` key; the highest-priority one is selected.
-- The active sequencer **writes signed messages to Redis** (HMAC-signed). Standby nodes poll Redis and adds messages to their local `TransactionStreamer`.
+- The active sequencer **writes signed messages to Redis** (HMAC-signed). Standby nodes poll Redis and add messages to their local `TransactionStreamer`.
 - **Activation**: Clears the forwarder, unpauses the sequencer, and syncs the Timeboost state from Redis.
 - **Deactivation**: Sets up forwarding to the new active sequencer, pauses local block production.
 - **Cleanup**: The active sequencer periodically deletes finalized messages from Redis.
@@ -129,7 +131,7 @@ The feed distributes sequenced messages to all non-sequencer nodes in real-time:
 
 :::note
 
-It's worth noting that batches posted to the parent chain are the second method of the Broadcast feed system. To learn more refer to the Batch poster deep dive.
+Batches posted to the parent chain are the second method of the Broadcast feed system. To learn more, refer to the Batch poster deep dive.
 
 :::
 
@@ -137,20 +139,20 @@ It's worth noting that batches posted to the parent chain are the second method 
 
 Handles messages originating on L1 (deposits, retryable tickets):
 
-- Monitors the `DelayedBridged` for finalized delayed messages.
+- Monitors the `DelayedBridge` for finalized delayed messages.
 - Sequences them into the L2 chain via `ExecutionEngine.SequenceDelayedMessage`.
-- Supports **address filtering**—if a delayed messages touches a filtered address, the sequencer halts until the transaction hash is added to an onchain filter.
+- Supports **address filtering**—if a delayed message touches a filtered address, the sequencer halts until the transaction hash is added to an onchain filter.
 - Only runs on the active sequencer node.
 
 #### 9. Timeboost/Express lane
 
-Timeboost is a transaction priority auction mechanism. A deep dive can be found on the Timeboost page, but a short summary of how it works:
+Timeboost is a transaction priority auction mechanism. A deep dive can be found on the Timeboost page, but here is a short summary of how it works:
 
 - Time is divided into fixed-duration **rounds** (minimum 10 seconds).
 - Before each round, an **auction** determines the **express lane controller**—the address whose transactions get priority.
 - The express lane controller's transactions **skip the 200ms delay** that normal transactions experience when the express lane is active.
 
-##### Flow for Express lane transactions
+##### Flow for Express Lane transactions
 
 1. Controller submits via `Sequencer.PublishExpressLaneTransaction`.
 2. `ExpressLaneService.ValidateExpressLaneTx` checks sender == controller, correct round, valid chain ID.
@@ -158,10 +160,10 @@ Timeboost is a transaction priority auction mechanism. A deep dive can be found 
 4. Messages drain in sequence order → `PublishTimeboostedTransaction` → enters `txQueue` with no delay.
 5. The `isTimeboosted` flag is preserved through block production into `blockMetadata`.
 
-##### Flow for normal transactions when the Express lane is active
+##### Flow for normal transactions when the Express Lane is active
 
 1. Transaction arrives at `PublishTransaction`.
-2. Since `CurrentRoundHasController` returns true, `time.Sleep(ExpressLaneAdvantage)` delay by 200ms.
+2. Since `CurrentRoundHasController` returns true, `time.Sleep(ExpressLaneAdvantage)` delays by 200ms.
 3. Only after the delay does the transaction enter the queue.
 
 ##### Auction system
@@ -174,9 +176,9 @@ Timeboost is a transaction priority auction mechanism. A deep dive can be found 
 
 “Soft finality” refers to the preliminary confirmation of transactions based on the Sequencer’s real-time feed. Key aspects include:
 
-- **Dependence on Sequencer integrity**: The feed’s accuracy and reliability depend on the Sequencer operating honestly and without significant downtime. > The confirmations are provisional and rely on the Sequencer’s integrity and availability.
-- **Immediate user feedback**: Users can act on transaction confirmations swiftly, improving the user experience. > Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer. > Enables applications to offer rapid responses and real-time interactions, enhancing user experience.
-- **Eventual consistency with the parent chain**: While the real-time feed provides quick updates, ultimate security, and finality are established once transactions are posted to and finalized on the parent chain. Refer to the Finality section for an in-depth discussion.
+- **Dependence on Sequencer integrity**: The feed's accuracy and reliability depend on the Sequencer operating honestly and without significant downtime.
+- **Immediate user feedback**: Users can act on transaction confirmations swiftly, improving the user experience.
+- **Eventual consistency with the parent chain**: While the real-time feed provides quick updates, ultimate security and finality are established once transactions are posted to and finalized on the parent chain.
 
 ### Trust considerations
 
