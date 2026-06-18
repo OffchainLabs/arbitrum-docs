@@ -8,9 +8,19 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-This page is the implementation entry point for teams building payments on Arbitrum. During evaluation you chose a deployment path, a settlement currency, and a set of provider categories. This page restates the three deployment paths in the same order you saw them, then routes each one into the technical documentation you need to implement it. It assumes the decision is already made — this is orientation, not a decision aid.
+This page is the implementation entry point for teams building payments on Arbitrum. Payments settle as stablecoin transfers on Arbitrum One: fund in fiat or stablecoins, define your payout logic, execute transfers, and reconcile against an onchain audit trail. Arbitrum One supports USD-denominated stablecoins (USDC, USDT, PYUSD) and non-USD options with onchain volume (EURe, MXNB, MYRC), with sub-cent transaction costs and 24/7 settlement, which reduces the need to pre-fund nostro accounts across weekends and holidays.
 
-The three deployment paths, in order:
+## Overview
+
+We will dive into the deployment paths, which route into the technical documentation needed to implement the solution, and list the stablecoins, service providers, and a pilot checklist commonly used in production payment stacks. It assumes the deployment decision is already made—this is an orientation, not a decision aid.
+
+<VanillaAdmonition type="info" title="Start on Arbitrum One">
+  For most payment pilots, start on Arbitrum One before launching a [dedicated Arbitrum chain](#launch-a-dedicated-arbitrum-chain). You get access to existing stablecoin liquidity with less infrastructure overhead.
+</VanillaAdmonition>
+
+## Choose your deployment path
+
+Three paths cover most payment builds:
 
 1. **Settle on Arbitrum One** — send stablecoin transfers with no custom contracts.
 2. **Build a payments application on Arbitrum One** — enforce payout logic onchain.
@@ -18,43 +28,189 @@ The three deployment paths, in order:
 
 Each path routes into existing documentation. Where a path needs material that does not yet exist, that is marked explicitly below.
 
-## Settle on Arbitrum One
+## Settle on Arbitrum One (recommended for pilots)
 
-For teams sending stablecoin transfers with no custom contracts. This path is mostly a matter of pointing existing tools at the right network.
+Use Arbitrum One as your settlement rail. Your product submits stablecoin transfers (e.g., USDC) over standard RPC. No custom smart contracts are required on day one. This path is mostly a matter of pointing existing tools at the right network.
 
-- **Network setup** (chain IDs, RPC endpoints, faucets) → [Chain info](/for-devs/dev-tools-and-resources/chain-info) and [Chains and testnets](/arbitrum-essentials/public-chains)
-- **First stablecoin transfer** → [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide)
-- **USDC on Arbitrum One** (native vs. bridged) → [USDC on Arbitrum One](/arbitrum-bridge/usdc-arbitrum-one)
-- **Wallet experience** → [ZeroDev](/for-devs/third-party-docs/ZeroDev/zero-dev)
+#### Choose this when
 
-If you want to confirm the full flow end to end before integrating, follow the [testnet settlement walkthrough](/solutions/payments/prove-your-first-settlement), which strings the steps above into a single payment-shaped recipe.
+- You want a fast path to production
+- Compliance screening lives offchain with vendors such as Chainalysis—see [Compliance and analytics](#compliance-and-analytics) in the payments ecosystem below
+- You need access to existing stablecoin liquidity and off-ramps
+
+<VanillaAdmonition type="tip" title="Wallet UX for pilots — ZeroDev">
+  If payers or payees hold funds onchain, [ZeroDev](https://docs.zerodev.app/) smart accounts (built by Offchain) provide passkey or social login, sponsored gas (or gas paid in your settlement ERC-20), and batched transfers on Arbitrum One without building wallet infrastructure from scratch. It works with whichever stablecoin you settle in, not USDC alone. See [ZeroDev on Arbitrum](/for-devs/third-party-docs/ZeroDev/zero-dev).
+</VanillaAdmonition>
+
+#### Core documentation
+
+- [USDC on Arbitrum One](/arbitrum-bridge/usdc-arbitrum-one): native USDC vs. bridged USDC (USDC.e)
+- [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide.mdx): validate your first programmatic transfer on Arbitrum Sepolia, then mainnet
+- [ZeroDev on Arbitrum](/for-devs/third-party-docs/ZeroDev/zero-dev.mdx): embedded smart accounts and gasless UserOps
+- [Chain info](/for-devs/dev-tools-and-resources/chain-info.mdx) and [Chains and testnets](/arbitrum-essentials/public-chains.mdx): chain IDs and network parameters
+- [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx)
+- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees) and [How to estimate gas](/arbitrum-essentials/how-to-estimate-gas.mdx)
+
+If you want to confirm the full flow end to end before integrating, follow the [testnet settlement walkthrough](/solutions/payments/prove-your-first-settlement.mdx), which strings the steps above into a single payment-shaped recipe.
 
 ## Build a payments application on Arbitrum One
 
-For teams enforcing payout logic onchain. This path routes into the application-layer documentation.
+Deploy Solidity smart contracts for treasury logic, routing, FX policy, or payout automation directly on Arbitrum One. Combine onchain execution with offchain compliance and fiat rails. If you later need chain-level control (custom gas, compliance engine, private execution), you can [launch a dedicated Arbitrum chain](#launch-a-dedicated-arbitrum-chain) and deploy the same style of contracts there.
 
-- **Contract deployment basics** → [Solidity quickstart](/build-decentralized-apps/quickstart-solidity-remix)
-- **FX rates and external data** → [Oracles overview](/arbitrum-essentials/oracles/overview-oracles)
-- **Cross-chain coordination** → [Cross-chain messaging](/arbitrum-essentials/bridging/cross-chain-messaging)
+#### Choose this when
 
-<VanillaAdmonition type="info">A reviewed batch-payout and treasury reference contract is in progress and not yet available. Until it ships, build payout logic on the application-layer references above. This page will link the reference contract here once it is published and audited.</VanillaAdmonition>
+- Payout rules, limits, or multi-party approvals must be enforced onchain
+- You want composability with DeFi liquidity and existing Arbitrum integrations
+- You are building a proprietary orchestration layer (e.g., [Rise](https://blog.arbitrum.io/rise-global-payments/) programmable payroll)
+
+#### Core documentation
+
+- [Solidity quickstart](/build-decentralized-apps/01-quickstart-solidity-remix.mdx): deploy your first contract
+- [ZeroDev on Arbitrum](/for-devs/third-party-docs/ZeroDev/zero-dev.mdx) and [ZeroDev documentation](https://docs.zerodev.app/): smart accounts for payers and payees (gasless flows, session keys, batching)
+- [Cross-chain messaging](/arbitrum-essentials/bridging/cross-chain-messaging.mdx): coordinate logic across chains
+- [Oracles overview](/arbitrum-essentials/oracles/overview-oracles.mdx): FX rates and external data
+- [Circle Paymaster quickstart](/for-devs/third-party-docs/Circle/usdc-paymaster-quickstart.mdx): let users pay gas in USDC
+- [LayerZero on Arbitrum](/for-devs/third-party-docs/LayerZero/layerzero.mdx): omnichain messaging and tokens
+- [Allium on Arbitrum](https://docs.allium.so/historical-data/supported-blockchains/evm/arbitrum) _(external)_: query transfers and balances for reconciliation
+- [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk) _(external)_: bridging and messaging utilities
+
+#### Private payments
+
+Confidential amounts and counterparties can be implemented at the smart contract layer on Arbitrum One or at chain level on a dedicated Arbitrum chain. On Arbitrum One, see [Fhenix CoFHE](https://cofhe-docs.fhenix.zone/) (encrypted contract logic on Arbitrum Sepolia today) and [Railgun](https://railgun.org/) (private transfers). Chain-level private execution is on the [dedicated chain](#launch-a-dedicated-arbitrum-chain) roadmap. For architecture scoping, [contact Offchain Enterprise Services](https://www.offchain.io/contact).
+
+<VanillaAdmonition type="caution" title="Sample payment contracts">
+  Arbitrum docs do not yet include reference contracts for treasury, batch payout, or remittance flows. A reviewed batch-payout and treasury reference contract is in progress. Until it ships, use the [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide.mdx) to validate settlement and build payout logic on the application-layer references above, or [contact Offchain Enterprise Services](https://www.offchain.io/contact) to design contract architecture. This page will link the reference contract here once it is published and audited.
+</VanillaAdmonition>
 
 ## Launch a dedicated Arbitrum chain
 
-For teams that need chain-level control. This path has the deepest existing coverage; route directly into it.
+Deploy your own Arbitrum chain when you need control over network economics, fee denomination, permissions, and data visibility. This path fits teams scaling proprietary payment infrastructure. You can deploy your own payment smart contracts on the chain (the same programmability as a payments application on Arbitrum One) while adding chain-level controls that Arbitrum One alone cannot offer.
 
-- **Overview** → [A gentle introduction to Arbitrum chains](/launch-arbitrum-chain/overview/introduction)
-- **Deploy** → [Chain SDK overview](/launch-arbitrum-chain/quickstart/sdk-introduction)
-- **Custom gas token** (stablecoin-denominated fees) → [Custom gas token (Rollup)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup) and [Custom gas token (AnyTrust)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust)
-- **Bridged USDC** → [Adopt the bridged USDC standard](/launch-arbitrum-chain/integrations/bridged-usdc)
-- **Access control** → [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access)
+Many pilots settle in existing stablecoins. Teams can also issue a custom settlement token—for tokenized deposits, bank-branded assets, or a custom gas token on your chain. See [Issuing your own stablecoin](#issuing-your-own-stablecoin) or [contact Offchain Enterprise Services](https://www.offchain.io/contact) for issuance design.
 
-Chain-level compliance tooling and private chain configurations are not yet available. This page does not document them until they ship.
+#### Choose this when
 
-## Shared reference
+- You require stablecoin-denominated network fees (e.g., USDC, USDT as gas)
+- You need protocol-level compliance controls or restricted participation beyond application-layer screening on Arbitrum One
+- Proprietary routing, FX, or counterparty data must not appear on a public ledger
 
-Relevant to all three paths:
+Ethereum L1 anchors security and finality; your chain settles stablecoins and payment contracts; offchain service providers handle fiat. A dedicated chain adds chain-level control—it does not replace [third-party service providers](#references-and-sources).
 
-- **Transaction lifecycle and finality** → [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle)
-- **Gas and fees** → [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees)
-- **Reconciliation and data tooling** → indexing and data providers such as [The Graph](/for-devs/third-party-docs/TheGraph) and [Covalent](/for-devs/third-party-docs/Covalent)
+#### Core documentation
+
+- [A gentle introduction to Arbitrum chains](/launch-arbitrum-chain/overview/introduction.mdx)
+- [Chain SDK overview](/launch-arbitrum-chain/quickstart/sdk-introduction.mdx): deploy a production chain
+- [Custom gas token (Rollup)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx) and [Custom gas token (AnyTrust)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust.mdx): stablecoin-denominated fees
+- [Native mint/burn gas token](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx)
+- [Adopt the bridged USDC standard](/launch-arbitrum-chain/integrations/bridged-usdc.mdx)
+- [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access.mdx)
+- [Third-party infrastructure providers](/launch-arbitrum-chain/integrations/infrastructure-providers.mdx)
+
+<VanillaAdmonition type="warning" title="Some features unavailable">
+  Chain-level compliance tooling and private chain configurations are not yet available. This page does not document them.
+</VanillaAdmonition>
+
+## Choose stablecoins by corridor
+
+Map settlement assets to destination market, liquidity, and issuer requirements. Verify token addresses on [Arbiscan](https://arbiscan.io/) before production.
+
+### USD-denominated (Arbitrum One)
+
+| Stablecoin                | Issuer                       | Description                                                                                            | Documentation                                                                                                                                |
+| ------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Native USDC**           | Circle                       | Default for most dollar pilots; native issuance on Arbitrum One with CEX support and direct redemption | [USDC on Arbitrum One](/arbitrum-bridge/usdc-arbitrum-one) · [USDC quick start](/for-devs/third-party-docs/Circle/usdc-quickstart-guide.mdx) |
+| **Bridged USDC (USDC.e)** | Circle (via Arbitrum bridge) | Legacy bridged USDC from Ethereum; prefer native USDC for new production flows                         | [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx)                                                                            |
+| **USDT**                  | Tether                       | Widely used in LATAM, Africa, and parts of APAC                                                        | [Tether documentation](https://tether.to/en/developers) _(external)_                                                                         |
+| **PYUSD**                 | Paxos                        | PayPal USD on Arbitrum One; suited to PayPal ecosystem payouts                                         | [Paxos blockchains](https://docs.paxos.com/guides/developer/blockchains) _(external)_                                                        |
+| **USDL**                  | Paxos International          | Yield-bearing USD stablecoin on Arbitrum One for treasury yield use cases                              | [USDL on Arbitrum](https://www.paxos.com/newsroom/yield-bearing-stablecoin-lift-dollar-usdl-launches-on-arbitrum) _(external)_               |
+
+More USD-denominated tokens are listed on the [Arbitrum Portal](https://portal.arbitrum.io/).
+
+### Non-USD-denominated (Arbitrum One)
+
+Non-USD stablecoins with meaningful volume on Arbitrum today for corridor-specific pilots. Verify contract addresses on [Arbiscan](https://arbiscan.io/) before production.
+
+| Stablecoin | Issuer   | Description                                                                                          | Documentation                                    |
+| ---------- | -------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| **EURe**   | Monerium | Euro e-money token, 1:1 with EUR; available on Arbitrum for SEPA-corridor and euro-native settlement | [EURe](https://monerium.com/eure/) _(external)_  |
+| **MXNB**   | Juno     | Mexican peso stablecoin, 1:1 with MXN; fiat-backed for LATAM corridor access on Arbitrum             | [MXNB](https://mxnb.mx/en-US) _(external)_       |
+| **MYRC**   | BLOX     | Malaysian ringgit stablecoin, 1:1 with MYR; issued on Arbitrum for APAC fiat and crypto rails        | [BLOX / MYRC](https://www.blox.my/) _(external)_ |
+
+More non-USD-denominated tokens are listed on the [Arbitrum Portal](https://portal.arbitrum.io/).
+
+### Issuing your own stablecoin
+
+Deploy a custom ERC-20 on Arbitrum One with the [Create a token quickstart](/build-decentralized-apps/quickstart-create-a-token.mdx). For bank-branded or corridor-specific settlement assets, work with issuance providers in the [payments ecosystem](#references-and-sources) below (for example, Circle [bridged USDC](/launch-arbitrum-chain/integrations/bridged-usdc.mdx) on dedicated chains, or fiat-backed issuers such as Monerium, Paxos, and BLOX). [Contact Offchain Enterprise Services](https://www.offchain.io/contact) for issuance architecture.
+
+## References and sources
+
+The following service providers are commonly used in production payment stacks on Arbitrum. Links point to Arbitrum docs where available; external links go to provider documentation. Listing a provider does not imply an official commercial partnership with Offchain.
+
+### Fiat on- and off-ramps
+
+| Provider    | Description                  | Documentation                                                   |
+| ----------- | ---------------------------- | --------------------------------------------------------------- |
+| Yellow Card | Africa-focused fiat ↔ crypto | [Yellow Card](https://yellowcard.io/) _(external)_              |
+| MoonPay     | Global fiat on-ramp          | [MoonPay documentation](https://dev.moonpay.com/) _(external)_  |
+| Banxa       | Fiat gateway                 | [Banxa documentation](https://docs.banxa.com/) _(external)_     |
+| Transak     | Fiat on- and off-ramp API    | [Transak documentation](https://docs.transak.com/) _(external)_ |
+
+### Custody
+
+| Provider               | Description                                                | Documentation                                                                 |
+| ---------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Fireblocks             | Wallet and treasury infrastructure for institutional teams | [Fireblocks documentation](https://developers.fireblocks.com/) _(external)_   |
+| BitGo                  | Qualified custody and wallet API                           | [BitGo documentation](https://developers.bitgo.com/) _(external)_             |
+| Coinbase Institutional | Custody and trading (Coinbase product)                     | [Coinbase Institutional](https://www.coinbase.com/institutional) _(external)_ |
+
+### Compliance and analytics
+
+| Provider    | Description                        | Documentation                                            |
+| ----------- | ---------------------------------- | -------------------------------------------------------- |
+| TRM Labs    | Blockchain intelligence and AML    | [TRM Labs](https://www.trmlabs.com/) _(external)_        |
+| Chainalysis | Compliance and investigation tools | [Chainalysis](https://www.chainalysis.com/) _(external)_ |
+| Elliptic    | Crypto compliance and screening    | [Elliptic](https://www.elliptic.co/) _(external)_        |
+
+### Oracles and market data
+
+| Provider     | Description                     | Documentation                                                      |
+| ------------ | ------------------------------- | ------------------------------------------------------------------ |
+| Chainlink    | Price feeds and automation      | [Chainlink on Arbitrum](/for-devs/oracles/chainlink/chainlink.mdx) |
+| Pyth Network | Real-time financial market data | [Pyth documentation](https://docs.pyth.network/) _(external)_      |
+
+### Wallets and smart accounts (recommended)
+
+| Provider    | Description                                                                                                               | Documentation                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **ZeroDev** | Offchain smart account stack: gasless or ERC-20 gas, passkey/social login, batching, session keys for payouts on Arbitrum | [ZeroDev on Arbitrum](/for-devs/third-party-docs/ZeroDev/zero-dev.mdx) · [ZeroDev docs](https://docs.zerodev.app/) |
+
+### Payment orchestration
+
+| Provider        | Description                                | Documentation                                                               |
+| --------------- | ------------------------------------------ | --------------------------------------------------------------------------- |
+| Stripe (Bridge) | Fiat and stablecoin payment infrastructure | [Bridge documentation](https://apidocs.bridge.xyz/) _(external)_            |
+| LayerZero       | Omnichain messaging and tokens             | [LayerZero on Arbitrum](/for-devs/third-party-docs/LayerZero/layerzero.mdx) |
+
+### Data and reconciliation
+
+| Provider  | Description                                                                     | Documentation                                                                                                |
+| --------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Allium    | Arbitrum transfers, balances, and SQL/API analytics for treasury reconciliation | [Allium on Arbitrum](https://docs.allium.so/historical-data/supported-blockchains/evm/arbitrum) _(external)_ |
+| The Graph | Indexing and querying onchain payment data                                      | [The Graph](/for-devs/third-party-docs/TheGraph/thegraph.mdx)                                                |
+| Covalent  | Unified API for historical balances and transfers                               | [Covalent](/for-devs/third-party-docs/Covalent/covalent.mdx)                                                 |
+
+Explore more projects on the [Arbitrum Portal](https://portal.arbitrum.io/).
+
+## Recommended pilot checklist
+
+A minimal path from zero to a verified settlement on Arbitrum One. Skip steps that do not apply to your [deployment path](#choose-your-deployment-path).
+
+1. **Pick a deployment path.** Most pilots start by settling on Arbitrum One without custom contracts. Add onchain treasury contracts if you need them; launch a dedicated chain only if you need chain-level control.
+2. **Pick a stablecoin for your corridor.** Dollar pilots: [native USDC on Arbitrum One](/arbitrum-bridge/usdc-arbitrum-one). See [Choose stablecoins by corridor](#choose-stablecoins-by-corridor) for USDT, PYUSD, or non-USD-denominated options (EURe, MXNB, MYRC).
+3. **Prove settlement on testnet.** Configure RPC via [Chain info](/for-devs/dev-tools-and-resources/chain-info.mdx) (chain ID `421614`), fund Sepolia ETH and USDC ([Circle faucet](https://faucet.circle.com/)), and complete a transfer with the [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide.mdx). Confirm on [Arbitrum Sepolia Arbiscan](https://sepolia.arbiscan.io/). For a guided version, follow the [testnet settlement walkthrough](/solutions/payments/prove-your-first-settlement.mdx).
+4. **Add ZeroDev if end users touch funds onchain.** Integrate [ZeroDev on Arbitrum](/for-devs/third-party-docs/ZeroDev/zero-dev.mdx) for passkey login and gasless payouts. Skip this step if only your treasury wallet sends transfers.
+5. **Wire production service providers before mainnet volume.** Choose on-ramps, custody, and compliance screening from the [payments ecosystem](#references-and-sources). Track payouts with [Allium on Arbitrum](https://docs.allium.so/historical-data/supported-blockchains/evm/arbitrum) when you need reconciliation at scale.
+
+## Get help
+
+- Work with the [Offchain Enterprise Services team](https://www.offchain.io/contact) for solution design, pilot scoping, and payment infrastructure support.
