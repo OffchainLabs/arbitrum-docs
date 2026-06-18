@@ -149,7 +149,7 @@ impl Factory {
 }
 ```
 
-**Important:** Returns the original EOA (Externally Owned Account) that initiated the transaction, even through multiple contract calls.
+**Important:** Returns the original EOA (Externally Owned Account) that initiated the transaction, even through multiple contract calls. When deploying via a factory pattern, `msg_sender()` returns the factory address — use `tx_origin()` to get the actual deployer. See [Using `msg_sender()` instead of `tx_origin()`](../how-tos/using-constructors#using-msg_sender-instead-of-tx_origin) for details.
 
 ### `tx_gas_price()`
 

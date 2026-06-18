@@ -3,7 +3,7 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-05-22
+last_reviewed: 2026-06-08
 ---
 
 ### Activation {#activation}
@@ -70,11 +70,11 @@ An Arbitrum chain is any chain that is built using the Arbitrum stack. Anyone ca
 
 ### Arbitrum DAO {#arbitrum-dao}
 
-The onchain governance body that owns and operates [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). Holders of the ARB token vote on protocol upgrades, treasury actions, and [Arbitrum Expansion Program](/intro/glossary#arbitrum-expansion-program) revenue distributions.
+The onchain governance body that owns and operates [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). Holders of the **ARB** token vote on protocol upgrades, treasury actions, and [Arbitrum Expansion Program](/intro/glossary#arbitrum-expansion-program) revenue distributions.
 
 ### Arbitrum Expansion Program (AEP) {#arbitrum-expansion-program}
 
-The licensing framework under which third parties can deploy new [Arbitrum chains](/intro/glossary#arbitrum-chain) outside [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). In exchange for permissionless deployment, the chain remits 10% of net revenue — 8% to the [Arbitrum DAO](/intro/glossary#arbitrum-dao) and 2% to ecosystem programs.
+The licensing framework under which third parties can deploy new [Arbitrum chains](/intro/glossary#arbitrum-chain) outside [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova). In exchange for permissionless deployment, the chain remits 10% of net revenue—8% to the [Arbitrum DAO](/intro/glossary#arbitrum-dao) and 2% to ecosystem programs.
 
 ### Arbitrum Full Node {#arbitrum-full-node}
 
@@ -205,7 +205,7 @@ Any child chain token contract registered to the [Arbitrum Token Bridge](/intro/
 
 ### Custom gas token {#custom-gas-token}
 
-A non-ETH ERC-20 token chosen at [Arbitrum chain](/intro/glossary#arbitrum-chain) deployment time to be used for paying transaction fees on that chain. Deposits work by escrowing the ERC-20 in the chain's bridge on the [parent chain](/intro/glossary#parent-chain) and crediting the equivalent amount as the native asset on the child chain, where it replaces ETH everywhere ETH would otherwise be charged for gas.
+A non-**ETH** **ERC-20** token chosen at [Arbitrum chain](/intro/glossary#arbitrum-chain) deployment time to be used for paying transaction fees on that chain. Deposits work by escrowing the **ERC-20** in the chain's bridge on the [parent chain](/intro/glossary#parent-chain) and crediting the equivalent amount as the native asset on the child chain, where it replaces **ETH** everywhere **ETH** would otherwise be charged for gas.
 
 ### Custom gateway {#custom-gateway}
 
@@ -317,11 +317,11 @@ The state a transaction reaches once its [batch](/intro/glossary#batch) has been
 
 ### History commitment {#history-commitment}
 
-A Merkle-tree root committing to a sequence of execution states — either block hashes or instruction-level state hashes, depending on the level of the dispute. Each [BoLD](/intro/glossary#bold) [edge](/intro/glossary#edge) carries a start and end history commitment to represent a claim over a range of chain history.
+A Merkle-tree root committing to a sequence of execution states—either block hashes or instruction-level state hashes, depending on the level of the dispute. Each [BoLD](/intro/glossary#bold) [edge](/intro/glossary#edge) carries a start and end history commitment to represent a claim over a range of chain history.
 
 ### Host I/O {#host-io}
 
-The set of low-level imports that a [Stylus](/intro/glossary#stylus) [WASM](/intro/glossary#wasm) program uses to access chain state and runtime services — the equivalent of EVM opcodes for Solidity contracts. Host I/O calls cover storage access, account info, environment data, math primitives, and re-entrancy controls. Each call has a fixed [ink](/intro/glossary#ink) cost.
+The set of low-level imports that a [Stylus](/intro/glossary#stylus) [WASM](/intro/glossary#wasm) program uses to access chain state and runtime services—the equivalent of EVM opcodes for Solidity contracts. Host I/O calls cover storage access, account info, environment data, math primitives, and re-entrancy controls. Each call has a fixed [ink](/intro/glossary#ink) cost.
 
 ### Ink {#ink}
 
@@ -329,7 +329,7 @@ The equivalent of gas in the [Stylus](/intro/glossary#stylus) vm. Ink is introdu
 
 ### Keyset {#keyset}
 
-The onchain configuration object that defines a [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac) — the [BLS public keys](/intro/glossary#bls-signature) of every committee member and the signature threshold required to produce a valid [Data Availability Certificate](/intro/glossary#data-availability-certificate). A new keyset is published whenever committee membership or the threshold changes.
+The onchain configuration object that defines a [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac)—the [BLS public keys](/intro/glossary#bls-signature) of every committee member and the signature threshold required to produce a valid [Data Availability Certificate](/intro/glossary#data-availability-certificate). A new keyset is published whenever committee membership or the threshold changes.
 
 ### L1 {#L1}
 
@@ -367,7 +367,7 @@ An Arbitrum chain whose core contract reside on an Arbitrum [Layer 2 (L2)](/intr
 
 ### Layer Leap {#layer-leap}
 
-A protocol that allows users to bridge ETH and ERC-20 tokens from Ethereum directly to an [Arbitrum chain](/intro/glossary#arbitrum-chain) in a single transaction, without first depositing onto an intermediate [parent chain](/intro/glossary#parent-chain).
+A protocol that allows users to bridge **ETH** and **ERC-20** tokens from Ethereum directly to an [Arbitrum chain](/intro/glossary#arbitrum-chain) in a single transaction, without first depositing onto an intermediate [parent chain](/intro/glossary#parent-chain).
 
 ### MultiVM {#multivm}
 
@@ -379,7 +379,7 @@ An **ERC-20** token used as the native currency for gas fees on an [Arbitrum cha
 
 ### Native mint/burn gas token {#native-mint-burn-gas-token}
 
-A [custom gas token](/intro/glossary#custom-gas-token) variant whose supply on the [Arbitrum chain](/intro/glossary#arbitrum-chain) is controlled by mint and burn calls to the `ArbNativeTokenManager` precompile (address `0x73`) rather than by bridging from the parent chain. Only accounts in the chain's `nativeTokenOwners` set — managed through the `ArbOwner` precompile — may mint or burn. Suited to closed-economy chains that need full control over gas-token issuance.
+A [custom gas token](/intro/glossary#custom-gas-token) variant whose supply on the [Arbitrum chain](/intro/glossary#arbitrum-chain) is controlled by mint and burn calls to the `ArbNativeTokenManager` precompile (address `0x73`) rather than by bridging from the parent chain. Only accounts in the chain's `nativeTokenOwners` set—managed through the `ArbOwner` precompile—may mint or burn. Suited to closed-economy chains that need full control over gas-token issuance.
 
 ### Offchain Labs {#offchain-labs}
 
@@ -463,6 +463,10 @@ Two implementations share the `IRollupEventInbox` interface and `AbsRollupEventI
 
 In some support contexts the contract is informally referred to as "rollupEventBox"; the canonical name in the codebase is `RollupEventInbox`.
 
+### Rollup Improvement Proposal {#rollup-improvement-proposal}
+
+A Rollup Improvement Proposal (RIP) is a process for proposing, discussing, and recording changes or additions to Ethereum’s rollup ecosystem.
+
 ### Sequencer {#sequencer}
 
 An entity (currently a single-party on Arbitrum One) given rights to order transactions in the [Sequencer Inbox](/intro/glossary#sequencer-inbox) over a fixed window of time, who can thus give clients sub-blocktime [Soft Confirmations](/intro/glossary#soft-confirmation). (Not to be confused with a [Validator](/intro/glossary#validator)).
@@ -539,7 +543,7 @@ Synonymous with [Parent chain](/intro/glossary#parent-chain).
 
 ### Upgrade Executor {#upgrade-executor}
 
-The single privileged contract — deployed once per [Arbitrum chain](/intro/glossary#arbitrum-chain) by the rollup creator — that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain's rollup contracts and its `ProxyAdmin`, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the [chain owner](/intro/glossary#chain-owner).
+The single privileged contract—deployed once per [Arbitrum chain](/intro/glossary#arbitrum-chain) by the rollup creator—that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain's rollup contracts and its `ProxyAdmin`, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the [chain owner](/intro/glossary#chain-owner).
 
 ### Validator {#validator}
 
@@ -574,7 +578,7 @@ A [Validator](/intro/glossary#validator) that never bonds / never takes on chain
 
 ### WAVM {#wavm}
 
-Arbitrum's variant of [WASM](/intro/glossary#wasm), used inside the [State Transition Function](/intro/glossary#state-transition-function) for [fraud-proof](/intro/glossary#fraud-proof) execution. WAVM constrains standard WASM so that execution is deterministic and provable onchain — non-deterministic instructions are removed and floating-point operations are replaced with software implementations. The specific WAVM prover image in use is identified by the [WASM module root](/intro/glossary#wasm-module-root).
+Arbitrum's variant of [WASM](/intro/glossary#wasm), used inside the [State Transition Function](/intro/glossary#state-transition-function) for [fraud-proof](/intro/glossary#fraud-proof) execution. WAVM constrains standard WASM so that execution is deterministic and provable onchain—non-deterministic instructions are removed and floating-point operations are replaced with software implementations. The specific WAVM prover image in use is identified by the [WASM module root](/intro/glossary#wasm-module-root).
 
 ### WETH Gateway {#weth-gateway}
 
