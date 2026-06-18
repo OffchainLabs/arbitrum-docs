@@ -13,12 +13,12 @@ Understanding batch posting is essential for grasping how Arbitrum achieves scal
 
 <ImageZoom src="/img/haw-batching.svg" alt="Batching" className="img-600px" />
 
-#### Batch formation criteria:
+#### Batch formation criteria
 
 - **Size thresholds**: Batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transactions, improving cost efficiency.
 - **Time constraints**: The Sequencer also monitors the elapsed time since the last batch update to prevent undue delays. Upon reaching the maximum time threshold, the Sequencer will create a batch with the transactions collected so far, even if the batch doesn’t meet the size threshold.
 
-#### Batch creation process:
+#### Batch creation process
 
 - **Aggregation**: Once the batch-formation criteria (size or time threshold) are satisfied, the Sequencer aggregates buffered transactions into a single batch.
 - **Metadata inclusion**: The batch includes all necessary metadata for all transactions.
@@ -61,7 +61,7 @@ The batching mechanism allows the Sequencer to efficiently manage transactions b
 3. Work out the fee bids (max fee, tip, and blob fee if applicable) for current conditions.
 4. Build the right transaction shape—a normal fee transaction, or a blob-carrying transaction.
 5. For blob transactions, do the extra cryptographic work (KZG commitments and proofs) that Ethereum requires.
-6. Sign it weith the poster's key.
+6. Sign it with the poster's key.
 7. Record it in the queue (so it can be tracked and replaced) and broadcast it to L1.
 
 #### Fee cap formula
@@ -74,7 +74,7 @@ The batching mechanism allows the Sequencer to efficiently manage transactions b
 #### Replace-by-fee (RBF)
 
 1. After sending, the poster keeps watching transactions that haven't been confirmed.
-2. When a transaction waiting past its scheduled replacement time, it resends the **same** transaction with a higher fee (replace-by-fee).
+2. When a transaction has been waiting past its scheduled replacement time, it resends the **same** transaction with a higher fee (replace-by-fee).
 3. Ethereum requires a minimum bump to accept a replacement: at least +10% for normal transactions, +100% (double) for blob transactions.
 4. The schedule starts aggressive (5m, 10m, ...) then stretches out, so it bumps quickly at first and then backs off.
 5. This keeps a batch moving toward inclusion without overpaying the instant it's sent.
@@ -119,7 +119,7 @@ The batching mechanism allows the Sequencer to efficiently manage transactions b
 
 1. The actual blobs ride in a "sidecar" attached to the transaction, not in the main calldata.
 2. Alongside the blobs go their commitments and proofs, so validators can check them.
-3. The transaction body itself only carries lightweight `BlobHashes` (verisoned hashes) that point at the blobs.
+3. The transaction body itself only carries lightweight `BlobHashes` (versioned hashes) that point at the blobs.
 4. This split is why blobs are cheap: the heavy data is gossiped separately and isn't stored by L1 execution forever.
 
 #### EIP-7623 auto-detection
@@ -173,7 +173,7 @@ The batching mechanism allows the Sequencer to efficiently manage transactions b
 
 #### Estimation
 
-1. "Backlog" answers: roughly how mnay batches' worth of messages are waiting but not yet posted?
+1. "Backlog" answers: roughly how many batches' worth of messages are waiting but not yet posted?
 2. It takes the count of unposted messages and divides by the typical messages-per-batch.
 3. That typical figure is a rolling average over the last 20 batches, so it adapts smoothly instead of jumping.
 4. If the poster only paused because it bumped into L1 time bounds (not real congestion), it reports zero backlog so it doesn't needlessly degrade compression or overbid.
@@ -182,7 +182,7 @@ The batching mechanism allows the Sequencer to efficiently manage transactions b
 
 1. The same backlog figure feeds three different behaviors.
 2. It lowers compression quality so batches go out faster when work piles up.
-3. It raises the fee bid (squared) so batches comopete harder for L1 inclusion.
+3. It raises the fee bid (squared) so batches compete harder for L1 inclusion.
 4. It drives operator alerts—a warning past 10 batches behind, an error past 30—so humans notice a poster falling behind.
 
 ### L1 bounds, delay proofs, and the `SequencerInbox`
@@ -205,7 +205,7 @@ The batching mechanism allows the Sequencer to efficiently manage transactions b
 
 #### Delay buffer
 
-1. The delay buffer is an onchain mechanism that rewards the power for including delayed (L1-submitted) message promptly.
+1. The delay buffer is an onchain mechanism that rewards the poster for including delayed (L1-submitted) messages promptly.
 2. The poster tracks the buffer's state (how full, how synced) so it knows whether it still needs updating.
 3. If a delayed message has been waiting and is approaching its threshold, the poster force-posts a batch so it doesn't miss the window.
 4. This guarantees censorship-resistant L1 messages actually get pulled into a batch in time.
@@ -232,7 +232,7 @@ Each batch is serialized with a 40-byte header (5 x uint64).
 
 #### Reading flow
 
-`LookupBatchsInRange` filters `SequencerBatchDelivered` events from the SequencerInbox contract, parses them into `SequencerInboxBatch` structs with time bounds, accumulator hashes, and data location.
+`LookupBatchesInRange` filters `SequencerBatchDelivered` events from the SequencerInbox contract, parses them into `SequencerInboxBatch` structs with time bounds, accumulator hashes, and data location.
 
 1. To learn what batches exist, the reader scans L1 for `SequencerBatchDelivered` events in a block range.
 2. Each event becomes a structured record: its time bounds, its accumulator hashes, and where to find its data.
@@ -254,7 +254,7 @@ The `AccessList` function pre-computes storage slots to reduce gas costs.
 The `Start()` loop uses `EphemeralErrorHandler` instances to suppress transient errors.
 
 1. Many errors are transient (a race, a temporary L1 hiccup), so the poster doesn't shout about them right away—it stays quiet for a minute or so.
-2. A known set of "expected" errors gets a longer grace period (debug, then warn, then error) before it botehrs an operator.
+2. A known set of "expected" errors gets a longer grace period (debug, then warn, then error) before it bothers an operator.
 3. Whenever anything goes wrong, the half-built batch is discarded and rebuilt next time—partial state is never reused.
 4. The return value sets the rhythm: error → wait 10s, nothing to do → wait 10s, success → immediately go post the next batch.
 
