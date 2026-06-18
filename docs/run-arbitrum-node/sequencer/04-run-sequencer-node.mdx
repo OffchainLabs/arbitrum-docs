@@ -8,12 +8,14 @@ content_type: how-to
 
 :::caution
 
-The following instructions are meant for Arbitrum chains only. This article only applies to test environments. If you need support spinning up a production Arbitrum chain, we recommend contacting a [provider](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.mdx#rollup-as-a-service-raas-providers).
+The following instructions are meant for Arbitrum chains only. This article only applies to test environments. If you need support spinning up a production Arbitrum chain, we recommend contacting a [provider](/launch-arbitrum-chain/integrations/infrastructure-providers.mdx#rollup-as-a-service-raas-providers).
 
-We also provide a [guide for running a high-availability sequencer node for an Arbitrum chain](/launch-arbitrum-chain/07-arbitrum-node-runners/05-high-availability-sequencer-docs.mdx).
+We also provide a [guide for running a high-availability sequencer node for an Arbitrum chain](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx).
 :::
 
 This how-to provides step-by-step instructions for running a sequencer node on your local machine.
+
+For background on how sequencers fit into Arbitrum's data flow (batch posting, the sequencer feed, and how full nodes consume sequencer output), see [Data availability](/run-arbitrum-node/data-availability.mdx).
 
 ## Minimum hardware configuration
 
@@ -92,7 +94,7 @@ Disable your sequencer's forwarding transactions, as the node will queue the tra
 
 #### 5. Enable feed-out queued transactions
 
-Enable your node to feed out transactions so full node can receive queued transactions:
+Enable your node to feed out transactions so full node can receive queued transactions. For the wire format consumers will see on this port, see [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
 
 ```shell
 --node.feed.output.enable=true
@@ -104,7 +106,7 @@ Enable your node to feed out transactions so full node can receive queued transa
 
 :::note
 
-This step is only required in Anytrust mode.
+This step is only required in Anytrust mode. For an explanation of AnyTrust mode and the role of the Data Availability Committee (DAC), see [AnyTrust Mode](/run-arbitrum-node/data-availability.mdx#anytrust-mode).
 
 :::
 
