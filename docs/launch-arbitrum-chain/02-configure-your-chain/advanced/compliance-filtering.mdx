@@ -1,0 +1,178 @@
+---
+title: 'Compliance filtering'
+sidebar_label: 'Compliance filtering'
+description: 'How chain owners configure protocol-level transaction filtering to restrict sanctioned addresses on their Arbitrum chain.'
+user_story: 'As a chain owner, I want to configure compliance rules so that transactions involving restricted addresses are filtered before execution.'
+content_type: how-to
+author: gmehta2
+sme: gmehta2
+target_audience: 'Developers who want to configure compliance rules on their chain'
+---
+
+New, optional components can be added to the <a data-quicklook-from='sequencer'>Sequencer</a> and <a data-quicklook-from='state-transition-function'>State Transition Function</a> (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
+The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the <a data-quicklook-from='delayed-inbox'>Delayed Inbox</a> on the parent chain.
+
+## Rationale
+
+The Arbitrum platform must evolve to meet the needs of a new wave of teams looking to come onchain—specifically teams who have an obligation to comply with regulatory frameworks and rules in their respective jurisdictions.
+This feature represents the first of many to ensure that the Arbitrum platform can serve the needs of enterprises and institutions looking to tap into internet-scale, blockchain technology to increase margins, reduce risk, and improve transparency across their businesses.
+
+While this feature is not intended or proposed to be used by Arbitrum One, its inclusion in ArbOS 60 Elara is intended to simplify the codebase and canonicalize this feature in the node software.
+This feature is instead intended to be used by Arbitrum chains who have compliance and regulatory obligations to restrict onchain activity from sanctioned entities or actors.
+
+## How it works
+
+Compliance Filtering operates across two layers: the Sequencer and the State Transition Function (STF). Together, these layers ensure that restricted activity is blocked regardless of how a transaction enters the system.
+
+### Restricted address list
+
+The chain owner configures an external compliance provider (e.g., TRM Labs, Chainalysis) to define which addresses are restricted. This produces a restricted address list, which is:
+
+1. Stored in-memory on any node performing compliance screening
+2. Encoded as salted hashes in the form `sha256(salt || address)` to protect address privacy
+3. Refreshed periodically via a synchronization pipeline
+
+When evaluating a transaction, the compliance engine hashes all relevant addresses and checks them against this list.
+
+### Sequencer-level filtering
+
+The Compliance Rules Engine runs inside the Sequencer and simulates each transaction before it is sequenced. If a transaction violates any compliance rule, it is rejected at the Sequencer level and never included in a block.
+This is the primary enforcement layer and handles the vast majority of cases.
+
+### Compliance rules
+
+Specific rules can be defined by the chain owner for any address found on the restricted list.
+These rules apply to direct transfers as well as delegated approval mechanisms. A few examples:
+
+- Block any transaction originating from or to a restricted address
+- Block execution of ERC-20, ERC-721, and ERC-1155 transfers from or to a restricted address
+- Block execution of the following opcodes targeting a restricted address: `CALL`, `CREATE`, `CREATE2`, `SELFDESTRUCT`
+
+### Delayed Inbox filtering (STF level)
+
+Transactions submitted via the Delayed Inbox cannot be filtered at the Sequencer layer alone, since they are eligible for force inclusion after a timeout window.
+To handle this, Compliance Filtering introduces two additional components:
+
+#### Transaction Guardian Precompile
+
+A new precompile allows authorized entities (e.g., the Sequencer) to register the hash of a restricted transaction onchain before it is force-included. When the STF processes a transaction from the delayed inbox, it checks whether that transaction's hash has been registered in the guardian.
+If so, the transaction is forcibly failed on inclusion, consuming any gas attached to prevent spam.
+
+#### Delayed Inbox Sentinel
+
+The sentinel is responsible for monitoring the delayed inbox for restricted transactions. When a restricted transaction is detected, the sentinel:
+
+1. Submits the transaction's hash to the Transaction Guardian Precompile
+2. Ensures this occurs before the force inclusion window closes
+3. Allows the Sequencer to then process the transaction, which will fail at the STF level as expected
+
+This ensures that even transactions submitted through the parent chain → child chain messaging path are subject to compliance enforcement.
+
+### Exception rules (burn allowance)
+
+Certain DeFi protocols (e.g., lending protocols like Aave, Morpho) require the ability to liquidate or burn token balances associated with restricted accounts in order to maintain solvency and prevent exploits.
+To support this, a narrow exception is available:
+ERC-20, ERC-721, and ERC-1155 transfers where the `to` field of the Transfer event is the zero address (`0x0`) (a burn operation) are permitted even if the `from` address is restricted.
+
+Important constraints:
+
+- If a "burn" transaction includes any other compliance violation, the entire transaction will fail.
+- A restricted address cannot initiate a burn themselves — their `tx.origin` is blocked at the Sequencer level regardless.
+
+This design allows third-party liquidators and protocol contracts (e.g., Paxos, Aave) to burn non-compliant balances while preventing the restricted address from taking any action on the chain.
+
+### Synchronization pipeline
+
+The restricted address list is distributed to Sequencer and <a data-quicklook-from='prechecker-node'>prechecker nodes</a> via a cloud-based pipeline:
+
+- The compliance provider periodically publishes a new hash list to a designated S3 bucket.
+- An SNS notification triggers ingestion into the chain operator's own S3 bucket.
+- Nodes subscribe to updates and load the new list into memory, fully replacing the prior list once the new one is validated and complete.
+
+Nodes are expected to always have a valid list in memory. On startup or restart, a node will fetch the most recent list before beginning to sequence or precheck transactions.
+
+## Deployment considerations
+
+| Component                       | Availability   | Notes                                           |
+| ------------------------------- | -------------- | ----------------------------------------------- |
+| Sequencer-level filtering       | ArbOS 60 Elara | Opcode and event filtering                      |
+| Transaction Guardian Precompile | ArbOS 60 Elara | Required for Delayed Inbox enforcement          |
+| Delayed Inbox Sentinel (STF)    | ArbOS 60 Elara | Requires audit; must be activated at deployment |
+| Burn exception rules            | ArbOS 60 Elara | Covers Aave, Paxos, and similar protocols       |
+
+Compliance Filtering is disabled by default. Chain owners must explicitly configure and enable each component. Activation after chain deployment may require an ArbOS upgrade.
+
+## Security considerations
+
+- **Force inclusion protection:** Without STF-level enforcement via the Transaction Guardian, a restricted user could bypass Sequencer filtering by waiting for the force inclusion window. The sentinel + precompile combination closes this gap.
+- **Parent chain bridge deposits:** If a restricted address deposits ETH via `depositEth()` on the parent chain, the ETH enters the bridge contract on the parent chain before any filtering occurs on the child chain. If the corresponding credit is dropped on the child chain, the ETH may become locked in the bridge with no corresponding child chain asset. Chain owners should account for this in their compliance design and user communication strategy.
+- **Address privacy:** Restricted addresses are never stored in plaintext. Salted hashing ensures that the list cannot be trivially reversed to enumerate sanctioned addresses.
+
+## Configuration
+
+To set up transaction filters, Arbitrum Nitro nodes provide a few configuration options for both address level filtering and event filtering. Event filters are optional, but address filters must both be enabled and configured properly before transactions will be properly filtered.
+
+### Address filter
+
+To define the addresses that are to be restricted from executing or receiving onchain transactions, an S3-compatible file store must be used. When address filtering is enabled, Arbitrum Nitro will poll and read the latest file from the S3 bucket. The addresses are defined as hashes where `hashed_address = SHA256(salt16Byte || address20Byte)`.
+
+- `--execution.transaction-filtering.address-filter.enable`: true/false value that enables address filtering
+- `--execution.transaction-filtering.address-filter.poll-interval`: how often to resync from S3 (e.g. `60m`)
+- `--execution.transaction-filtering.address-filter.s3.bucket`: S3 bucket holding the hashed list
+- `--execution.transaction-filtering.address-filter.s3.object-key`: S3 object key for the hash list
+- `--execution.transaction-filtering.address-filter.s3.region`: AWS region where S3 bucket is hosted (e.g. `us-east-1`)
+- `--execution.address-filter.s3.access-key`: AWS access key
+- `--execution.address-filter.s3.secret-key`: AWS secret key
+- `--execution.address-filter.s3.endpoint`: S3-compatible endpoint where file is hosted (if not using AWS S3)
+
+The hash list of restricted addresses should be provided as a JSON file with the following format:
+
+```json
+{
+  salt: string, # UUID
+  hashes: [string], # list of 32-byte hashes as hex encoded strings
+  issued_at: string, # timestamp
+  hashing_scheme: string # sha256-stringinput or sha256-rawbytesinput.
+}
+```
+
+Note: `sha256-stringinput` assumes that the string-based representation of the UUID salt is concatenated with the string-based version of the hex-encoded address (e.g. `sha256("d35e8ac5-9775-44af-878e-bad86409e80c" || "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")`). Raw bytes uses the raw 16 bytes of the UUID and raw 20 bytes of the address concatenated as input to the sha256 function to produce the 32-byte hash.
+
+### Event filters
+
+Event filters allow for chain owners to filter out transactions based on an arbitrary list of emitted events. For example, a chain owner might want to block all ERC20 transfers involving a restricted address. A chain owner can setup their nodes to listen for `Transfer(address,address,uint256)` events and block any transactions that target a restricted address in either the `from` or `to` field. To setup event filters, two CLI flags are provided:
+
+- `--execution.transaction-filtering.event-filter.rules`: optional inline list of event rules (passed as a JSON string)
+- `--execution.transaction-filtering.event-filter.path`: optional path to a JSON file containing event filter rules. If both `path` and `rules` are provided, the file rules are loaded first and then inline rules are appended after them. Generally, path-based JSON rules should be preferred.
+
+Each entry in the rules is an `EventRule` with the following shape:
+
+- `event`: human-readable event signature (e.g. `Transfer(address,address,uint256)`
+- `selector`: hex string of the first 4 bytes of `keccak256(event)`; the canonical signature of the event type
+- `topicAddresses`: list of 1-indexed topic positions (1-3) whose values should be treated as addresses for filtering
+- `bypass`: defines an optional exception condition that allows the transaction to execute if a specific value is true (example would be transfers to `0x0` burn address). It is a nested object with:
+  - `topicIndex`: 1-indexed topic position (1-3)
+  - `equals`: conditional value for the exception at the topic position defined
+
+An example JSON file to provide to `--execution.transaction-filtering.event-filter.path`:
+
+```json
+{
+  "rules": [
+    {
+      "event": "Transfer(address,address,uint256)",
+      "selector": "0xddf252ad",
+      "topicAddresses": [1, 2],
+      "bypass": {
+        "topicIndex": 2,
+        "equals": "0x0000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "event": "Approval(address,address,uint256)",
+      "selector": "0x8c5be1e5",
+      "topicAddresses": [1, 2]
+    }
+  ]
+}
+```
