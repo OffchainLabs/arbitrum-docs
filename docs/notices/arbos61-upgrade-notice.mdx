@@ -1,0 +1,40 @@
+---
+title: 'Upgrade notice for ArbOS 61'
+description: Upgrade notices for ArbOS 61 activation on Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia
+user_story: As an Arbitrum node operator, I want to keep my nodes in sync with Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia after the ArbOS 61 activation.
+content_type: notice
+---
+
+ArbOS 61 will be activated on the Arbitrum Sepolia, Arbitrum One, and Arbitrum Nova chains.
+
+## Actions required for node operators
+
+### Sepolia network
+
+On Monday, June 29, 2026 at 15:00 UTC, ArbOS 61 is scheduled to activate on the Arbitrum Sepolia chain.
+
+Arbitrum Sepolia node operators must upgrade to Nitro v3.11 ahead of this activation to continue syncing the chain.
+
+- **Docker image:** [offchainlabs/nitro-node:v3.10.0-b1cf6db](https://hub.docker.com/layers/offchainlabs/nitro-node/v3.11.0-a618155/images/sha256-a34457bb9461acf12ea01cbf23a9850e15b20a44b499c64cf441051230231fe1)
+- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.11.0
+
+## Important dates
+
+The following dates are relevant for Arbitrum chain operators.
+
+| Date                               | Network upgrade                      | Affected audience                       |
+| ---------------------------------- | ------------------------------------ | --------------------------------------- |
+| Monday, June 29, 2026 at 15:00 UTC | Arbitrum Sepolia upgrade to ArbOS 61 | Node operators running Arbitrum Sepolia |
+
+## Context
+
+ArbOS 61 builds upon [ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-releases/arbos51.mdx), it introduces a set of protocol upgrades to Arbitrum One and Nova, including support for Dynamic Pricing (multidimensional gas pricing), increased Stylus contract size limits, and new mechanisms for managing minimum base fees.
+
+<VanillaAdmonition>
+  While Dynamic Pricing is included in this release, it will remain disabled at the time of
+  activation. This is because ongoing analyses - led by Offchain Labs in collaboration with Entropy
+  Advisors- have not yet finalized the appropriate gas target parameters required for safe and
+  effective enablement.
+</VanillaAdmonition>
+
+The ArbOS 61 governance temperature check has already passed successfully. Upstream governance for ArbOS 61 follows the standard process, including Snapshot temperature checks and an on-chain vote prior to activation on Arbitrum One and Nova.
