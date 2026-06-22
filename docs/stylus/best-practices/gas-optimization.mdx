@@ -65,7 +65,7 @@ pub fn calculate_good(&self, iterations: u32) -> U256 {
 // ❌ Bad: Multiple separate writes
 pub fn update_user_bad(&mut self, addr: Address, amount: U256, active: bool) {
     self.balances.setter(addr).set(amount);
-    self.last_update.setter(addr).set(block::timestamp());
+    self.last_update.setter(addr).set(U256::from(self.vm().block_timestamp()));
     self.is_active.setter(addr).set(active);
 }
 
@@ -85,7 +85,7 @@ sol_storage! {
 pub fn update_user_good(&mut self, addr: Address, amount: U256, active: bool) {
     let mut user = self.users.setter(addr);
     user.balance.set(amount);
-    user.last_update.set(block::timestamp());
+    user.last_update.set(U256::from(self.vm().block_timestamp()));
     user.is_active.set(active);
     // Single storage slot update instead of three
 }
@@ -305,22 +305,27 @@ pub fn get_price_good(&self, token: Address) -> Result<PriceData, Vec<u8>> {
 impl MyContract {
     // Internal helper (no ABI encoding overhead)
     fn internal_validate(&self, addr: Address, amount: U256) -> Result<(), Vec<u8>> {
-        ensure!(!addr.is_zero(), "Invalid address");
-        ensure!(amount > U256::ZERO, "Invalid amount");
+        if addr.is_zero() {
+            return Err(b"Invalid address".to_vec());
+        }
+        if amount == U256::ZERO {
+            return Err(b"Invalid amount".to_vec());
+        }
         Ok(())
     }
+}
 
+#[public]
+impl MyContract {
     // Public functions use internal helper
-    #[external]
     pub fn deposit(&mut self, amount: U256) -> Result<(), Vec<u8>> {
-        self.internal_validate(msg::sender(), amount)?;
+        self.internal_validate(self.vm().msg_sender(), amount)?;
         // Deposit logic...
         Ok(())
     }
 
-    #[external]
     pub fn withdraw(&mut self, amount: U256) -> Result<(), Vec<u8>> {
-        self.internal_validate(msg::sender(), amount)?;
+        self.internal_validate(self.vm().msg_sender(), amount)?;
         // Withdraw logic...
         Ok(())
     }
@@ -372,8 +377,8 @@ pub fn batch_transfer(
     // Process transfers...
 
     // Single event instead of N events
-    evm::log(BatchTransfer {
-        from: msg::sender(),
+    self.vm().log(BatchTransfer {
+        from: self.vm().msg_sender(),
         to: recipients,
         amounts,
     });
