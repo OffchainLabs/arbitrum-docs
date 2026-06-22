@@ -86,7 +86,7 @@ Hard finality occurs when batched transactions are posted to the parent chain. K
 #### 1d. What the feed cannot guarantee yet
 
 1. So far your transaction only lives in the Sequencer's memory and in listeners' caches—nothing is on Ethereum yet.
-2. If the Sequencer vanished right now, the ordering could still be lost or shuffled, because nothing durable recorded it.
+2. If the Sequencer vanished right now, the ordering could still be lost or shuffled, because no durable record of it exists.
 3. The Sequencer could also just ignore your transaction and never sequence it at all.
 4. To guard against being ignored, you can instead push your transaction through Ethereum's "delayed inbox," which forces eventual inclusion.
 5. These gaps (durability + censorship) are exactly what posting a batch to L1 in Part 2 fixes.
@@ -130,13 +130,13 @@ Hard finality occurs when batched transactions are posted to the parent chain. K
 4. It sends a special "Confirm" message over the feed carrying that confirmed sequence number.
 5. Feed-only clients see this and learn: these messages are now backed by Ethereum, not just the Sequencer's signature.
 
-### Part 4: Hard finality, Stage B—Rollup assertion confirmation
+### Part 4: Hard finality: Stage B—Rollup assertion confirmation
 
 #### 4a. Two protocols coexist in this repo
 
 1. L1 inclusion proved the **data** exists, but not that the resulting L2 **state** is correct—that's a separate guarantee.
 2. Validators ("bonders") are the ones who vouch for the state correctness on L1.
-3. A wrapper checks the onchain Rollup contract at runtime and picks the dispute protocol the chain is using (the interactive legacy, or BoLD).
+3. A wrapper checks the onchain Rollup contract at runtime and picks the dispute protocol the chain is using (the interactive legacy protocol, or BoLD).
 4. Both protocols expose the same two signals—"latest bonded" and "latest confirmed"—so the rest of the node doesn't care which one is running.
 
 #### 4b. The poll loop (legacy)
