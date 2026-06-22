@@ -8,7 +8,13 @@ content_type: quickstart
 
 This quickstart is for users who want to deposit **ETH** or any **ERC-20** tokens from a <a data-quicklook-from="parent-chain">parent chain</a> to a <a data-quicklook-from="child-chain">child chain</a> or vice versa, using [Arbitrum’s bridge](https://bridge.arbitrum.io/). For example, from Ethereum to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, or from Arbitrum One to a Layer 3 Arbitrum chain.
 
-We will walk you through the entire process step by step, providing as much detail as possible. If you feel stuck at any step, don’t hesitate to contact us through our [Discord](https://discord.gg/arbitrum), and we will be happy to help you complete the process.
+We will walk you through the entire process step by step, providing as much detail as possible. If you feel stuck at any step, see [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx), or contact us through our [Discord](https://discord.gg/arbitrum), and we will be happy to help you complete the process.
+
+:::info Bridging **USDC**?
+
+Arbitrum One supports two distinct forms of **USDC** (native and bridged). Before you deposit, see [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx) so you receive the form you intend.
+
+:::
 
 The only prerequisite for this quickstart is to have a Web3 <a data-quicklook-from="wallet">wallet</a> installed, such as MetaMask or OKX Wallet. If you don’t have one installed, visit the [Arbitrum portal](https://portal.arbitrum.io/?categories=wallet) for a list of available wallets to download.
 
@@ -32,13 +38,9 @@ You'll also need to add the desired chain's RPC endpoint to your wallet. Here, w
 2. Click the network selector drop-down in the top-right corner.
 3. Click the **Add a custom network** and then provide the information corresponding to the chain you want to send your assets to (see below).
 
-<ImageZoom
-  src="/img/bridge-quickstart-metamask-set-network.gif"
-  alt="Add the desired destination network to your MetaMask"
-  className="img-600px"
-/>
+<ImageZoom src="/img/bridge-quickstart-metamask-set-network.gif" alt="Add the desired destination network to your MetaMask" className="img-600px" />
 
-Below are the the most common Arbitrum chains. For a more exhaustive list, please visit our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) page.
+Below are the most common Arbitrum chains. For a more exhaustive list, please visit our [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx) page.
 
 | Parameter          | Arbitrum One                 | <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> | Arbitrum Sepolia (testnet)             |
 | ------------------ | ---------------------------- | -------------------------------------------------------- | -------------------------------------- |
@@ -64,31 +66,15 @@ Also note, that when choosing the **source** or **destination** network, a pop u
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-2.png"
-  alt="Add the desired network to your Web3 wallet"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-2.png" alt="Add the desired network to your Web3 wallet" className="img-600px" />
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-3.png"
-  alt="Add the desired network to your Web3 wallet"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-3.png" alt="Add the desired network to your Web3 wallet" className="img-600px" />
 
 4. Select the token you want to bridge in the token drop-down menu.
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-4.png"
-  alt="Select the token to bridge"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-4.png" alt="Select the token to bridge" className="img-600px" />
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-5.png"
-  alt="Select the token to bridge"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-5.png" alt="Select the token to bridge" className="img-600px" />
 
 5. Enter the amount of **ETH** or **ERC-20** tokens you want to bridge over in the **From** box.
 6. Press **Move** funds.
@@ -100,11 +86,7 @@ Please ensure you have sufficient **ETH** in your wallet to cover the transation
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-6.png"
-  alt="Enter the amount of tokens to bridge"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-6.png" alt="Enter the amount of tokens to bridge" className="img-600px" />
 
 After you submit the <a data-quicklook-from="transaction">transaction</a> through your Web3 wallet, you can expect your funds to arrive on the destination chain within roughly 15-30 minutes (depending on chain congestion).
 
@@ -114,7 +96,7 @@ Also, ensure your wallet is set to the destination network so you can see when y
 
 :::info Seven day withdrawal period for Arbitrum One and Nova networks
 
-Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least seven days to receive them on the Ethereum mainnet. For more details, see [Arbitrum Bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-a-withdrawal-from-arbitrum-chains-one-and-nova).
+Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least seven days to receive them on the Ethereum mainnet. For more details, see [Arbitrum Bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-a-withdrawal-from-arbitrum-chains-one-and-nova). For the protocol-level reason behind the dispute window, see [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) and the FAQ entry on [why one week was chosen](/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window).
 
 :::
 
@@ -126,11 +108,7 @@ Testnets like Arbitrum Sepolia only appear if you have an established connection
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-7.png"
-  alt="Select the token to withdraw"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-7.png" alt="Select the token to withdraw" className="img-600px" />
 
 1. Select the token you want to bridge in the token drop-down menu.
 2. Enter the amount of **ETH** or **ERC-20** tokens you want to bridge in the **From** box.
@@ -143,24 +121,23 @@ Please ensure you have sufficient **ETH** in your wallet to cover the transactio
 
 :::
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-8.png"
-  alt="Enter the amount of token to withdraw"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-8.png" alt="Enter the amount of token to withdraw" className="img-600px" />
 
 A countdown will appear stating that you'll receive your funds in 7-8 days.
 
 You can check the status of your withdrawal by clicking on your profile in the top-right corner and opening the **Transactions** tab, where you can claim it when it's ready.
 
-<ImageZoom
-  src="/img/arb-bridge-getting-started-users-9.png"
-  alt="See the transaction history"
-  className="img-600px"
-/>
+<ImageZoom src="/img/arb-bridge-getting-started-users-9.png" alt="See the transaction history" className="img-600px" />
 
 Once the countdown is complete, press the **Claim** button to receive your funds.
 
-## What's next?
+## See also
+
+- [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx)
+- [Arbitrum bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx)
+- [Arbitrum embedded bridge widget](/arbitrum-bridge/04-embedded-bridge-widget.mdx)
+- [Bridge transaction traceability](/arbitrum-bridge/05-bridge-transaction-traceability.mdx)
+- [How token bridging works (deep dive)](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- [Bridge tokens programmatically](/arbitrum-essentials/bridging/overview.mdx)
 
 The team working on Arbitrum is always interested and looking forward to engaging with its users. Why not follow us on [X (Twitter)](https://x.com/arbitrum) or join our community on [Discord](https://discord.gg/arbitrum)?

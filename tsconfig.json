@@ -2,6 +2,8 @@
   // This file is not used in compilation. It is here just for a nice editor experience.
   "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
+    // Silence TS5101 for the deprecated `baseUrl` (still used by the @/ and @site/ path aliases below).
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "moduleResolution": "bundler",
     "allowJs": false,
@@ -17,5 +19,13 @@
       "@site/*": ["./*"]
     }
   },
-  "exclude": ["submodules", "stylus-by-example", "node_modules", "build", ".docusaurus", "*.js"]
+  "exclude": [
+    "submodules",
+    "stylus-by-example",
+    "node_modules",
+    "build",
+    ".docusaurus",
+    "*.js",
+    "middleware.ts"
+  ]
 }
