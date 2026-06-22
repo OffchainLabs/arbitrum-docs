@@ -404,5 +404,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/chain-config/core/stf',
     to: '/launch-arbitrum-chain/protocol-hacks/stf',
   },
+  {
+    from: '/how-arbitrum-works/deep-dives/stf-gentle-intro',
+    to: '/how-arbitrum-works/deep-dives/stf',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

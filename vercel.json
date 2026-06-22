@@ -506,6 +506,11 @@
       "destination": "/launch-arbitrum-chain/protocol-hacks/stf",
       "permanent": false
     },
+    {
+      "source": "/how-arbitrum-works/deep-dives/stf-gentle-intro",
+      "destination": "/how-arbitrum-works/deep-dives/stf",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

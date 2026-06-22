@@ -29,7 +29,7 @@ Transactions first enter the Inbox, serving as the primary gateway into the ecos
 
 The deterministic model ensures that identical inputs will always produce the same outputs, among honest nodes, forming the bedrock of Arbitrum’s security. It supports efficient fraud proofs and dispute resolution, enabling verification of execution correctness without re-running entire transactions, thereby minimizing computational overhead.
 
-For foundational concepts about the STF, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
+For foundational concepts about the STF, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/stf.mdx).
 
 ## Step 1: Submitting a transaction
 
@@ -63,7 +63,7 @@ For a deeper look at how the Sequencer orders, batches, and posts transactions, 
 
 With ordering and batching complete, execution shifts to the State Transition Function (STF), the core of Arbitrum's processing engine.
 
-For foundational concepts about how the STF works, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
+For foundational concepts about how the STF works, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/stf.mdx).
 
 Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-layer architecture. At the base, the <a data-quicklook-from="geth">Geth</a> core handles EVM execution, aligning behaviors with Ethereum and drawing on its extensively tested code for security.
 
@@ -174,7 +174,7 @@ In this overview, you've learned about the complete transaction journey through 
 - [Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx): Detailed transaction lifecycle from submission to finality
 - [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx): How the Sequencer orders, batches, and posts transactions
 - [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx): Gas pricing, fee calculations, and adaptive pricing algorithm
-- [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx): Foundational concepts of the STF
+- [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/stf.mdx): Foundational concepts of the STF
 - [Geth](/how-arbitrum-works/reference/geth.mdx): Geth core and EVM compatibility
 - [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx): Arbitrum Operating System features and capabilities
 - [State Transition Function inputs](/how-arbitrum-works/reference/stf-inputs.mdx): Message types and STF processing mechanics
