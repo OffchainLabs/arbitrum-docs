@@ -7,12 +7,10 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
-
 You can submit transactions to <a data-quicklook-from="arbitrum">Arbitrum</a> through two main pathways:
 
-1. **Through the <a data-quicklook-from="sequencer">Sequencer</a>**: The standard method for most transactions.
-2. **Bypassing the Sequencer**: Using the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the parent chain.
+1. **Through the [<a data-quicklook-from="sequencer">Sequencer</a>](/how-arbitrum-works/deep-dives/sequencer.mdx)**: The standard method for most transactions.
+2. **Bypassing the Sequencer**: Using the [<a data-quicklook-from="delayed-inbox">Delayed Inbox</a>](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#transacting-via-the-delayed-inbox) contract on the parent chain.
 
 This guide explains both methods, when to use each, and how they flow through Arbitrum’s transaction lifecycle.
 
@@ -35,11 +33,7 @@ You can also submit transactions directly to the Delayed Inbox contract on the p
 
 The following diagram shows the different ways you can submit transactions to Arbitrum:
 
-<ImageZoom
-  src="/img/haw-transaction-lifecycle.svg"
-  alt="Transaction lifecycle diagram showing various pathways for submitting transactions"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-transaction-lifecycle.png" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
 
 ## Submitting transactions to the Sequencer
 
@@ -68,7 +62,7 @@ You can find a list of supported third-party providers [here](https://docs.arbit
 
 ### Arbitrum nodes
 
-Running your own Arbitrum node provides maximum control and privacy. Your transactions connect to the Sequencer through the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a>. Consider this option if you need:
+Running your own Arbitrum node provides maximum control and privacy. Your transactions connect to the Sequencer through the [<a data-quicklook-from="sequencer-feed">Sequencer Feed</a>](/how-arbitrum-works/deep-dives/sequencer.mdx#sequencing-and-broadcasting). Consider this option if you need:
 
 - Complete control over transaction handling
 - Maximum privacy
@@ -87,15 +81,11 @@ Use this method when you need the lowest possible latency for time-sensitive tra
 
 The following diagram shows the four methods for submitting transactions to the Sequencer:
 
-<ImageZoom
-  src="/img/haw-submit-tx-to-sequencer.svg"
-  alt="Submit transaction to the Sequencer"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-submit-tx-to-sequencer.svg" alt="Submit transaction to the Sequencer" className="img-600px" />
 
 ## Bypassing the Sequencer
 
-You can submit transactions directly to the Delayed Inbox contract on the parent chain without using the Sequencer. This method provides:
+You can submit transactions directly to the [Delayed Inbox](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#transacting-via-the-delayed-inbox) contract on the parent chain without using the Sequencer. This method provides:
 
 - **Censorship resistance**: Transaction inclusion even if the Sequencer refuses to process it
 - **Availability guarantee**: Transactions work even when the Sequencer is offline
@@ -106,22 +96,18 @@ There are two paths your transaction can take through the Delayed Inbox.
 When you submit a transaction to the Delayed Inbox, two things can happen:
 
 1. **Automatic processing**: The Sequencer picks up your transaction and includes it in the normal transaction flow
-2. **Force inclusion**: If 24 hours pass without processing, you can call the `forceInclude` function on the `SequencerInbox` contract to guarantee inclusion
+2. **Force inclusion**: If 24 hours pass without processing, you can call the `forceInclude` function on the `SequencerInbox` contract to guarantee inclusion. The [Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout) feature can shorten this window when the Sequencer is offline or censoring.
 
 This two-path system ensures your transaction will always be processed, even if the Sequencer is unresponsive or censoring transactions.
 
-<ImageZoom
-  src="/img/haw-bypassing-the-sequencer.svg"
-  alt="Bypassing the Sequencer"
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-bypassing-the-sequencer.svg" alt="Bypassing the Sequencer" className="img-600px" />
 
 ### Using the Delayed Inbox
 
 To submit a transaction through the Delayed Inbox:
 
 1. **Construct your transaction** and serialize it
-2. **Call [`sendL2Message`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/AbsInbox.sol#L150)** with your serialized transaction data
+2. **Call [`sendL2Message`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/AbsInbox.sol#L150)** with your serialized transaction data. For the difference between signed and unsigned message variants, see [Signed messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#signed-messages) and [Unsigned messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#unsigned-messages).
 3. **Wait for processing** or force inclusion after 24 hours
 
 ### Force inclusion after delays

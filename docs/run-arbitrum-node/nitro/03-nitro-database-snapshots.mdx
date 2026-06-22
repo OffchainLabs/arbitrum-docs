@@ -10,6 +10,8 @@ sidebar_position: 11
 
 Nitro stores the chain state and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a database snapshot is advisable instead. Moreover, for the Arbitrum One chain, you must start from a snapshot because Nitro cannot process transactions from the Classic Arbitrum node.
 
+For an overview of snapshots in the context of initial node setup, see the [Database snapshots section of Prepare to run a node](/run-arbitrum-node/start-here.mdx#database-snapshots).
+
 ## Supply the snapshot URL to Nitro
 
 There are multiple ways to supply Nitro with the database snapshot. The most straightforward way is to provide the configuration, so Nitro downloads the snapshot by itself. It is also possible to download the database manually and supply it to Nitro.
@@ -17,6 +19,10 @@ There are multiple ways to supply Nitro with the database snapshot. The most str
 ## Downloading the latest snapshot
 
 Nitro has a CLI configuration for downloading the latest snapshot from a remote server. Set the flag `--init.latest` to either `archive`, `pruned`, or `genesis`, and Nitro will download the preferred snapshot. You may also change the `--init.latest-base` flag to set the base URL when searching for the latest snapshot.
+
+:::info
+PathDB snapshot auto-download with `--init.latest` is not yet supported.
+:::
 
 ### How it works
 
@@ -39,6 +45,12 @@ Nitro also supports importing files from the local file system. In this case, yo
 ---
 
 ## Downloading the snapshot manually
+
+:::tip For most users, automatic download is recommended
+
+Use `--init.latest pruned` (or `archive`) to enable Nitro's automatic handling of multi-part downloads, checksum verification, and extraction. In contrast, manual downloading is preferable only when you need to host a single snapshot locally for multiple nodes, offering direct control but requiring additional effort.
+
+:::
 
 It is possible to download the snapshot manually and supply the archive instead of having Nitro download it.
 

@@ -1,28 +1,5 @@
 // @ts-check
 
-// Use the generated SDK sidebar for API reference
-const sdkApiSidebar = require('./sdk-sidebar.js');
-// Use the generated stylus-by-example sidebars
-const stylusByExampleBasicExamples = require('./docs/stylus-by-example/basic_examples/sidebar.js');
-const stylusByExampleApplications = require('./docs/stylus-by-example/applications/sidebar.js');
-
-// Create a custom SDK sidebar that combines manual intro pages with generated API docs
-const sdkSidebar = {
-  sdkSidebar: [
-    {
-      type: 'doc',
-      id: 'sdk/index',
-      label: 'Introduction',
-    },
-    {
-      type: 'doc',
-      id: 'sdk/migrate',
-      label: 'Migrate from v3 to v4',
-    },
-    ...sdkApiSidebar.sdkSidebar,
-  ],
-};
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   // Get started sidebar - shared entry point
@@ -56,8 +33,13 @@ const sidebars = {
     },
     {
       type: 'link',
+      label: 'Arbitrum essentials',
+      href: '/arbitrum-essentials',
+    },
+    {
+      type: 'link',
       label: 'Run an Arbitrum chain',
-      href: '/launch-arbitrum-chain/a-gentle-introduction',
+      href: '/launch-arbitrum-chain/overview/introduction',
     },
     {
       type: 'link',
@@ -113,10 +95,6 @@ const sidebars = {
           type: 'category',
           label: 'Oracles',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'for-devs/oracles/oracles-content-map',
-          },
           items: [
             {
               type: 'doc',
@@ -178,564 +156,382 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/a-gentle-introduction',
-          label: 'A gentle introduction',
+          id: 'launch-arbitrum-chain/overview/introduction',
+          label: 'Overview',
         },
         {
           type: 'doc',
-          id: 'launch-arbitrum-chain/aep-license',
-          label: 'Arbitrum chain licensing',
+          id: 'launch-arbitrum-chain/overview/license',
+          label: 'Licensing',
+        },
+        {
+          type: 'doc',
+          id: 'launch-arbitrum-chain/overview/faq',
+          label: 'FAQ',
         },
         {
           type: 'category',
-          label: 'Features',
+          label: 'Quickstart',
           collapsed: true,
           items: [
             {
-              type: 'category',
-              label: 'Common',
-              collapsed: true,
-              items: [
-                {
-                  type: 'category',
-                  label: 'Data availability',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-rollup',
-                      label: `Rollup`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-anytrust',
-                      label: `AnyTrust`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/data-availability/choose-alt-da',
-                      label: `Alt-DA`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Gas and fees',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token',
-                      label: `Custom gas token`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-fee-rebates',
-                      label: `Fee distribution`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-native-eth',
-                      label: `Native ETH`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn',
-                      label: `Choose a native mint/burn gas token`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Validation and security',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/validation-and-security/choose-bold',
-                      label: `BoLD`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/validation-and-security/choose-challenge-period',
-                      label: `Custom challenge period`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/validation-and-security/choose-permissioned-validators',
-                      label: `Permissioned validators`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'MEV',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/mev/choose-timeboost',
-                      label: `Timeboost`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'UX',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/ux/choose-fast-withdrawals',
-                      label: `Fast withdrawals`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'AEP fees',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/features/common/configure-aep/configure-aep-fees',
-                      label: `AEP fees`,
-                    },
-                  ],
-                },
-              ],
+              type: 'doc',
+              id: 'launch-arbitrum-chain/quickstart/l3-rollup-from-scratch',
+              label: `L3 rollup from scratch`,
             },
             {
-              type: 'category',
-              label: 'Advanced',
-              collapsed: true,
-              items: [
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-arbos-version',
-                  label: `ArbOS version`,
-                },
-                {
-                  type: 'doc',
-                  label: 'Precompiles',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-chain-precompiles',
-                },
-                {
-                  type: 'doc',
-                  label: 'Chain behavior',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-custom-behavior',
-                },
-                {
-                  type: 'doc',
-                  label: 'Delayed inbox finality',
-                  id: 'launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality',
-                },
-                {
-                  type: 'doc',
-                  label: 'Sequencer timing adjustments',
-                  id: 'launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments',
-                },
-              ],
+              type: 'doc',
+              id: 'launch-arbitrum-chain/quickstart/l3-rollup-testnet',
+              label: 'L3 rollup infrastructure',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/quickstart/sdk-introduction',
+              label: 'Chain SDK overview',
             },
           ],
         },
         {
           type: 'category',
-          label: 'Configure your chain',
+          label: 'Chain configuration',
           collapsed: true,
           items: [
             {
               type: 'category',
-              label: 'Common',
+              label: 'Batch poster',
               collapsed: true,
               items: [
                 {
-                  type: 'category',
-                  label: 'AEP fees',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction',
-                      label: `AEP fee router introduction`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router',
-                      label: `Set up AEP fee router`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees',
-                      label: `Calculate AEP fees`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees',
-                      label: `Reporting on fees`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Data availability',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability',
-                      label: `Config data availability`,
-                    },
-                    {
-                      type: 'category',
-                      label: 'Data availability committee',
-                      collapsed: true,
-                      items: [
-                        {
-                          type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/get-started',
-                          label: `Get started`,
-                        },
-                        {
-                          type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
-                          label: `Deploy DAS`,
-                        },
-                        {
-                          type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das',
-                          label: `Deploy mirror DAS`,
-                        },
-                        {
-                          type: 'doc',
-                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
-                          label: `Configure DAC`,
-                        },
-                      ],
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Fees',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/fees/fee-management',
-                      label: `Fee management`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Gas',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust',
-                      label: `AnyTrust custom gas token`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup',
-                      label: `Rollup custom gas token`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
-                      label: 'Native mint/burn gas token',
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
-                      label: `Gas optimization tools`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
-                      label: 'Dynamic Pricing for Arbitrum Chains',
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'MEV',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains',
-                      label: `Timeboost`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'UX',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals',
-                      label: `Fast withdrawals`,
-                    },
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Validation and security',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/customizable-challenge-period',
-                      label: `Customize challenge period`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/stake-and-validator-configurations',
-                      label: `Stake & validator configuration`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control',
-                      label: `Batch poster & assertion control`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade',
-                      label: `Upgrade ArbOS`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs',
-                      label: `Enable post-4844 blobs`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
-                      label: `Batch poster fee tuning`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
-                      label: `Customize chain finality`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
-                      label: `Adopt BoLD`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit',
-                      label: `Smart contract size limit`,
-                    },
-                  ],
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster',
+                  label: `Batch poster`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters',
-                  label: `Additional configuration parameters`,
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/fee-tuning',
+                  label: `Batch poster fee tuning`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
+                  label: `Enable EIP-4844 blobs`,
                 },
               ],
             },
             {
               type: 'category',
-              label: 'Advanced',
+              label: 'Costs',
               collapsed: true,
               items: [
                 {
                   type: 'doc',
-                  label: 'Use Layer Leap',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/layer-leap',
+                  id: 'launch-arbitrum-chain/chain-config/costs/aep-overview',
+                  label: `AEP overview`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
-                  label: `DA API integration guide`,
+                  id: 'launch-arbitrum-chain/chain-config/costs/aep-router-contracts',
+                  label: `AEP router contracts`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
+                  id: 'launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
+                  label: `AEP fee calculation`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
+                  label: `AEP reporting`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
+                  label: `Native mint and burn`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
+                  label: `Custom gas token (AnyTrust)`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
+                  label: `Custom gas token (Rollup)`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
+                  label: `Dynamic pricing`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/fee-management',
+                  label: `Fee management`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
+                  label: `Gas optimization`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/gas-target',
+                  label: 'Gas target',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Data availability',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/config-data-availability',
+                  label: `Data availability options`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
+                  label: `DAC overview`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults',
+                  label: `DAC defaults`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/configure-dac',
+                  label: `DAC how-to`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/dac-das-operations',
+                  label: `DAC/DAS operations`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference',
+                  label: `DAS RPC method reference`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-das',
+                  label: `Deploy DAS`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
+                  label: `Deploy mirror DAS`,
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Execution',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit',
+                  label: `Smart contract size`,
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Sequencing',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/chain-finality',
+                  label: `Chain finality`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
-              ],
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Deploy an Arbitrum chain',
-          collapsed: true,
-          items: [
-            {
-              type: 'category',
-              label: 'Deploy a production chain',
-              collapsed: true,
-              items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
-                  label: `Overview`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
-                  label: `Deploy an Arbitrum chain`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config',
-                  label: `Generate the node config file`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
-                  label: `Deploy a token bridge`,
-                },
-              ],
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
-              label: 'Canonical factory contracts',
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
-              label: 'Run an L3 rollup from scratch',
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
-              label: 'Run L3 rollup infrastructure (product-level testnet)',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Maintain your chain',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control',
-              label: 'Ownership structure and access control',
-            },
-            {
-              type: 'category',
-              label: 'ArbOS',
-              collapsed: true,
-              items: [
-                {
-                  type: 'html',
-                  value:
-                    '<a class="menu__link menu__list-item" href="/run-arbitrum-node/arbos-releases/overview">ArbOS software releases <span class="other-section-icon">↓</span></a>',
-                  // q: why use an anchor html tag here?
-                  // a: see note at end of file
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade',
-                  label: `Upgrade ArbOS`,
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/timeboost',
+                  label: `Timeboost`,
                 },
               ],
             },
             {
               type: 'category',
-              label: 'Guidance',
+              label: 'Validation',
               collapsed: true,
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-growth',
-                  label: `Manage gas state growth`,
+                  id: 'launch-arbitrum-chain/chain-config/validation/assertion-control',
+                  label: `Assertion control`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
-                  label: `Manage gas target`,
+                  id: 'launch-arbitrum-chain/chain-config/validation/bold',
+                  label: `BoLD`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
-                  label: `Post-launch deployments`,
+                  id: 'launch-arbitrum-chain/chain-config/validation/bond-and-validator',
+                  label: `Bond and validator`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
-                  label: `Node key rotation guide`,
+                  id: 'launch-arbitrum-chain/chain-config/validation/challenge-period',
+                  label: `Challenge period`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting',
-                  label: `Batch poster troubleshooting`,
+                  id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
+                  label: `Fast withdrawals`,
                 },
               ],
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations',
-              label: 'Monitoring tools and considerations',
+              id: 'launch-arbitrum-chain/chain-config/additional-configuration-parameters',
+              label: `Additional configuration parameters`,
             },
           ],
         },
         {
           type: 'category',
-          label: 'Customize your chain',
+          label: 'Deployment',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/customize-your-chain/customize-precompile',
-              label: `Customize your chain's precompiles`,
+              id: 'launch-arbitrum-chain/deploy/canonical-factory-contracts',
+              label: `Canonical factory contracts`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/customize-your-chain/customize-stf',
-              label: `Customize your chain's behavior`,
+              id: 'launch-arbitrum-chain/deploy/configure-node',
+              label: `Node configuration`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/customize-your-chain/customize-arbos',
-              label: `Customize ArbOS version`,
+              id: 'launch-arbitrum-chain/deploy/deploy-chain',
+              label: `Deploy`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/token-bridge',
+              label: `Token bridge`,
             },
           ],
         },
         {
           type: 'category',
-          label: 'Migrate your chain',
+          label: 'Integrations',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/migrate-from-another-stack',
-              label: 'Migrate from another stack',
+              id: 'launch-arbitrum-chain/integrations/bridge-ui',
+              label: 'Bridge UI',
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/migrate-between-raases',
-              label: 'Migrate between RaaSes',
+              id: 'launch-arbitrum-chain/integrations/bridged-usdc',
+              label: 'Bridged USDC',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
+              label: 'Infrastructure providers',
             },
           ],
         },
         {
           type: 'category',
-          label: 'Third-party integrations and features',
+          label: 'Migrate',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard',
-              label: `Implement Circle bridged USDC`,
+              id: 'launch-arbitrum-chain/migrate/between-raases',
+              label: `Between RaaSes`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/third-party-integrations/third-party-providers',
-              label: 'Third-party infrastructure providers',
+              id: 'launch-arbitrum-chain/migrate/from-another-stack',
+              label: `From another stack`,
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Operate',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/arbos-upgrade',
+              label: 'ArbOS upgrade',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/batch-poster-troubleshooting',
+              label: 'Batch poster troubleshooting',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/key-rotation',
+              label: 'Key rotation',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/monitoring',
+              label: 'Monitoring',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/ownership-and-access',
+              label: 'Ownership and access',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/post-launch-deployments',
+              label: 'Post-launch deployments',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/state-growth',
+              label: 'State growth',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Protocol hacks',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/arbos',
+              label: `ArbOS`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/da-api-guide',
+              label: 'DA API guide',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/precompiles',
+              label: `Precompiles`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/protocol-hacks/stf',
+              label: `State Transition Function`,
             },
           ],
         },
@@ -767,35 +563,20 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node',
-              label: 'Run split validator node',
+              id: 'launch-arbitrum-chain/run-a-node/batch-poster',
+              label: 'Batch poster',
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
-              label: 'Run a high availability sequencer',
+              id: 'launch-arbitrum-chain/run-a-node/split-validator-node',
+              label: 'Split validator node',
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
-              label: 'Run a batch poster',
+              id: 'launch-arbitrum-chain/run-a-node/high-availability-sequencer',
+              label: 'High availability sequencer',
             },
           ],
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
-          label: `Add your chain to the bridge`,
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
-          label: 'Public preview',
-        },
-        {
-          type: 'doc',
-          id: 'launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain',
-          label: 'FAQ',
         },
       ],
     },
@@ -832,6 +613,16 @@ const sidebars = {
           type: 'doc',
           id: 'run-arbitrum-node/overview',
           label: 'Overview',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro-support-policy',
+          label: 'Nitro support policy',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/start-here',
+          label: 'Start here',
         },
         {
           type: 'doc',
@@ -931,10 +722,6 @@ const sidebars = {
           type: 'category',
           label: 'Sequencer',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'node-running/sequencer-content-map',
-          },
           items: [
             {
               type: 'doc',
@@ -975,8 +762,18 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/nitro-memory-management',
-          label: 'Nitro memory management',
+          id: 'run-arbitrum-node/nitro/configuration-system',
+          label: 'Configuration system',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/da-tools-reference',
+          label: 'DA tools reference',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/cli-flags-reference',
+          label: 'CLI flags reference',
         },
         {
           type: 'doc',
@@ -1101,18 +898,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Child to parent chain messaging',
+              label: 'Child to Parent chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l2-to-l1-messaging',
-            },
-            {
-              type: 'doc',
-              label: 'Sequencer',
-              id: 'how-arbitrum-works/deep-dives/sequencer',
-            },
-            {
-              type: 'doc',
-              label: 'STF',
-              id: 'how-arbitrum-works/deep-dives/stf-gentle-intro',
             },
             {
               type: 'doc',
@@ -1126,8 +913,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Token bridging',
-              id: 'how-arbitrum-works/deep-dives/token-bridging',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
             },
           ],
         },
@@ -1137,18 +924,13 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
+              label: 'Sequencer',
+              id: 'how-arbitrum-works/deep-dives/sequencer',
             },
             {
               type: 'doc',
               label: 'Geth',
               id: 'how-arbitrum-works/reference/geth',
-            },
-            {
-              type: 'doc',
-              label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/reference/parent-chain-pricing',
             },
           ],
         },
@@ -1159,12 +941,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
-              label: 'A gentle introduction',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
-              label: 'How bisection works',
+              label: 'BoLD overview',
             },
             {
               type: 'link',
@@ -1210,7 +987,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
-              label: 'Public preview',
+              label: 'How Timeboost works',
             },
             {
               type: 'doc',
@@ -1277,23 +1054,183 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'build-decentralized-apps/quickstart-create-a-token',
+          label: 'Create a token',
+        },
+        {
+          type: 'ref',
+          label: 'Solidity support',
+          id: 'arbitrum-essentials/arbitrum-vs-ethereum/solidity-support',
+        },
+        {
+          type: 'doc',
+          label: 'Troubleshooting',
+          id: 'for-devs/troubleshooting-building',
+        },
+        {
+          type: 'category',
+          label: 'Arbitrum essentials',
+          collapsed: true,
+          items: [
+            {
+              type: 'ref',
+              label: 'Bridging',
+              id: 'arbitrum-essentials/bridging/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Oracles',
+              id: 'arbitrum-essentials/oracles/overview-oracles',
+            },
+            {
+              type: 'ref',
+              label: 'Precompiles',
+              id: 'arbitrum-essentials/precompiles/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Estimate gas',
+              id: 'arbitrum-essentials/how-to-estimate-gas',
+            },
+            {
+              type: 'link',
+              label: 'See all Arbitrum essentials →',
+              href: '/arbitrum-essentials',
+            },
+          ],
+        },
+        {
+          type: 'link',
+          label: 'Arbitrum SDK',
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
+        },
+        {
+          type: 'link',
+          label: 'Example code repository',
+          href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
+        },
+      ],
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+
+  // Language-neutral platform content, shared by both the Solidity and Stylus build tracks
+  arbitrumEssentialsSidebar: [
+    {
+      type: 'category',
+      label: 'Arbitrum essentials',
+      collapsed: false,
+      link: {
+        type: 'generated-index',
+        title: 'Arbitrum essentials',
+        description:
+          'Core, language-agnostic guidance for building on Arbitrum — bridging, oracles, precompiles, the NodeInterface, RPC and provider references, networks, gas, and how Arbitrum differs from Ethereum. Applies whether you write contracts in Solidity or Stylus.',
+        slug: '/arbitrum-essentials',
+      },
+      items: [
+        {
+          type: 'doc',
           label: 'Estimate gas',
-          id: 'build-decentralized-apps/how-to-estimate-gas',
+          id: 'arbitrum-essentials/how-to-estimate-gas',
         },
         {
           type: 'doc',
           label: 'Chains and testnets',
-          id: 'build-decentralized-apps/public-chains',
+          id: 'arbitrum-essentials/public-chains',
         },
         {
-          type: 'doc',
-          label: 'Cross-chain messaging',
-          id: 'build-decentralized-apps/cross-chain-messaging',
-        },
-        {
-          type: 'doc',
-          id: 'build-decentralized-apps/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
+          type: 'category',
+          label: 'Bridging',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'arbitrum-essentials/bridging/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Cross-chain messaging',
+              id: 'arbitrum-essentials/bridging/cross-chain-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'L1-to-L3 teleportation',
+              id: 'arbitrum-essentials/bridging/l1-l3-teleportation',
+            },
+            {
+              type: 'doc',
+              label: 'Custom gas token chains',
+              id: 'arbitrum-essentials/bridging/custom-gas-token-chains',
+            },
+            {
+              type: 'category',
+              label: 'Deposit (parent → child)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'arbitrum-essentials/bridging/deposit/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'arbitrum-essentials/bridging/deposit/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Withdraw (child → parent)',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'ETH and messages',
+                  id: 'arbitrum-essentials/bridging/withdraw/eth-and-messages',
+                },
+                {
+                  type: 'doc',
+                  label: 'Tokens',
+                  id: 'arbitrum-essentials/bridging/withdraw/tokens',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Configure token gateway',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Standard gateway',
+                  id: 'arbitrum-essentials/bridging/configure-token-gateway/standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Generic-custom gateway',
+                  id: 'arbitrum-essentials/bridging/configure-token-gateway/generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Custom gateway',
+                  id: 'arbitrum-essentials/bridging/configure-token-gateway/custom',
+                },
+              ],
+            },
+          ],
         },
         {
           type: 'category',
@@ -1302,29 +1239,34 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Comparison overview',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview',
             },
             {
               type: 'doc',
               label: 'Block gas limit, numbers and time',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
               type: 'doc',
               label: 'RPC methods',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods',
             },
             {
               type: 'doc',
               label: 'Solidity support',
-              id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/solidity-support',
+            },
+            {
+              type: 'doc',
+              label: 'Nonce management',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/nonce-management',
             },
           ],
         },
         {
           type: 'doc',
           label: 'Oracles',
-          id: 'build-decentralized-apps/oracles/overview-oracles',
+          id: 'arbitrum-essentials/oracles/overview-oracles',
         },
         {
           type: 'category',
@@ -1334,12 +1276,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'build-decentralized-apps/precompiles/overview',
+              id: 'arbitrum-essentials/precompiles/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'build-decentralized-apps/precompiles/reference',
+              id: 'arbitrum-essentials/precompiles/reference',
             },
           ],
         },
@@ -1351,66 +1293,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'build-decentralized-apps/nodeinterface/overview',
+              id: 'arbitrum-essentials/nodeinterface/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'build-decentralized-apps/nodeinterface/reference',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Token bridging',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Get started',
-              id: 'build-decentralized-apps/token-bridging/get-started',
-            },
-            {
-              type: 'doc',
-              label: 'Deposit tokens',
-              id: 'build-decentralized-apps/token-bridging/deposit-tokens',
-            },
-            {
-              type: 'doc',
-              label: 'Withdraw tokens',
-              id: 'build-decentralized-apps/token-bridging/withdraw-tokens',
-            },
-            {
-              type: 'doc',
-              label: 'Bridge to child chain',
-              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
-            },
-            {
-              type: 'doc',
-              label: 'Bridge to parent chain',
-              id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
-            },
-            ,
-            {
-              type: 'category',
-              label: 'Configure token bridging',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Set up custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway',
-                },
-                {
-                  type: 'doc',
-                  label: 'Set up generic custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway',
-                },
-                {
-                  type: 'doc',
-                  label: 'Set up standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
-                },
-              ],
+              id: 'arbitrum-essentials/nodeinterface/reference',
             },
           ],
         },
@@ -1420,68 +1308,78 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/node-providers',
-              label: 'RPC endpoints and providers',
-            },
-            {
-              type: 'doc',
-              label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/contract-addresses',
-            },
-            {
-              type: 'doc',
               label: 'Chain parameters',
-              id: 'build-decentralized-apps/reference/chain-params',
+              id: 'arbitrum-essentials/reference/chain-params',
             },
             {
               type: 'doc',
-              label: 'Development frameworks',
-              id: 'build-decentralized-apps/reference/development-frameworks',
-            },
-            {
-              type: 'doc',
-              label: 'Web3 libraries and tools',
-              id: 'build-decentralized-apps/reference/web3-libraries-tools',
-            },
-            {
-              type: 'doc',
-              label: 'Monitoring tools and block explorers',
-              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
+              label: 'Contract addresses',
+              id: 'arbitrum-essentials/reference/contract-addresses',
             },
             {
               type: 'doc',
               label: 'Debugging tools',
-              id: 'build-decentralized-apps/reference/debugging-tools',
+              id: 'arbitrum-essentials/reference/debugging-tools',
             },
-
             {
               type: 'doc',
-              id: 'build-decentralized-apps/reference/mainnet-risks',
+              label: 'Development frameworks',
+              id: 'arbitrum-essentials/reference/development-frameworks',
+            },
+            {
+              type: 'doc',
+              id: 'arbitrum-essentials/reference/mainnet-risks',
               label: 'Mainnet risks',
             },
+            {
+              type: 'doc',
+              label: 'Monitoring tools and block explorers',
+              id: 'arbitrum-essentials/reference/monitoring-tools-block-explorers',
+            },
+            {
+              type: 'doc',
+              id: 'arbitrum-essentials/reference/node-providers',
+              label: 'RPC endpoints and providers',
+            },
+            {
+              type: 'doc',
+              label: 'Web3 libraries and tools',
+              id: 'arbitrum-essentials/reference/web3-libraries-tools',
+            },
           ],
-        },
-        {
-          type: 'doc',
-          label: 'Troubleshooting',
-          id: 'for-devs/troubleshooting-building',
-        },
-        {
-          type: 'category',
-          label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
-        },
-        {
-          type: 'link',
-          label: 'Tutorials',
-          href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
       ],
     },
     {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/intro/glossary">Glossary<span class="other-section-icon">↑</span></a>',
+    },
+    {
+      type: 'html',
+      value:
+        '<a class="menu__link menu__list-item" href="/for-devs/contribute">Contribute<span class="other-section-icon">↑</span></a>',
+    },
+  ],
+
+  // Stylus-focused sidebar (only shows Stylus content)
+  buildStylusSidebar: [
+    {
       type: 'category',
       label: 'Build apps with Stylus',
-      collapsed: true,
+      collapsed: false,
+      link: {
+        type: 'generated-index',
+        title: 'Build apps with Stylus',
+        description:
+          "Learn how to build decentralized applications using Stylus, Arbitrum's next-generation smart contract platform supporting Rust, C, and C++.",
+        slug: '/stylus',
+      },
       items: [
         {
           type: 'doc',
@@ -1495,8 +1393,243 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Rust SDK',
+          label: 'Fundamentals',
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/fundamentals/choose-your-path',
+              label: 'Choose your path',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/fundamentals/prerequisites',
+              label: 'Prerequisites',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/fundamentals/project-structure',
+              label: 'Project structure',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/fundamentals/contracts',
+              label: 'Contract structure',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/fundamentals/global-variables-and-functions',
+              label: 'Global variables and functions',
+            },
+            {
+              type: 'category',
+              label: 'Data types',
+              items: [
+                {
+                  type: 'doc',
+                  id: 'stylus/fundamentals/data-types/primitives',
+                  label: 'Primitives',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/fundamentals/data-types/compound-types',
+                  label: 'Compound types',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/fundamentals/data-types/storage',
+                  label: 'Storage',
+                },
+                {
+                  type: 'doc',
+                  id: 'stylus/fundamentals/data-types/conversions-between-types',
+                  label: 'Conversions between types',
+                },
+              ],
+            },
+            {
+              type: 'doc',
+              id: 'stylus/fundamentals/testing-contracts',
+              label: 'Testing contracts',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Guides',
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/using-constructors',
+              label: 'Using constructors',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/trait-based-composition',
+              label: 'Composition, trait-based routing',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/importing-interfaces',
+              label: 'Importing interfaces',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/exporting-abi',
+              label: 'Exporting ABI',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimizing binaries',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/caching-contracts',
+              label: 'Caching contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
+              label: 'Verify contracts with Arbiscan',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
+              label: 'Deploy non-Rust contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/adding-support-for-new-languages',
+              label: 'Add language support',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'CLI tools',
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/cli-tools/overview',
+              label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/cli-tools/check-and-deploy',
+              label: 'Check and deploy',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/cli-tools/verify-contracts',
+              label: 'Verify contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/cli-tools/debugging-tx',
+              label: 'Debugging transactions',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/cli-tools/commands-reference',
+              label: 'Commands reference',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Best Practices',
           collapsed: true,
+          link: {
+            type: 'generated-index',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/best-practices/security',
+              label: 'Security',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/best-practices/gas-optimization',
+              label: 'Gas optimization',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Troubleshooting',
+          collapsed: true,
+          link: {
+            type: 'generated-index',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/troubleshooting/common-issues',
+              label: 'Common issues',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Concepts',
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/concepts/webassembly',
+              label: 'WebAssembly',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/activation',
+              label: 'Activation',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/gas-metering',
+              label: 'Gas metering',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/vm-differences',
+              label: 'VM differences',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/public-preview-expectations',
+              label: 'Public preview expectations',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Advanced',
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/advanced/rust-to-solidity-differences',
+              label: 'Rust to Solidity',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/advanced/minimal-entrypoint-contracts',
+              label: 'Minimal entrypoint contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/advanced/hostio-exports',
+              label: 'Hostio exports',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/advanced/recommended-libraries',
+              label: 'Recommended libraries',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
           items: [
             {
               type: 'doc',
@@ -1505,96 +1638,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/reference/project-structure',
-              label: 'Structure of a Contract',
-            },
-            ...stylusByExampleBasicExamples,
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/using-inheritance',
-              label: 'Composition and trait-based routing model',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/rust-sdk-guide',
-              label: 'Advanced features',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/recommended-libraries',
-              label: 'Recommended Rust Crates',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Rust CLI',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/using-cli',
-              label: 'Overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/debugging-tx',
-              label: 'Debug transactions',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/testing-contracts',
-              label: 'Testing contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts',
-              label: 'Verify contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/caching-contracts',
-              label: 'Cache contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts-arbiscan',
-              label: 'Verify on Arbiscan',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/optimizing-binaries',
-              label: 'Optimize WASM binaries',
-            },
-          ],
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
-        },
-        {
-          type: 'category',
-          label: 'Examples',
-          collapsed: true,
-          items: [
-            ...stylusByExampleApplications,
-            {
-              type: 'link',
-              label: 'Awesome Stylus',
-              href: 'https://github.com/OffchainLabs/awesome-stylus',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Reference',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
               id: 'stylus/reference/opcode-hostio-pricing',
-              label: 'Gas & Ink Pricing',
+              label: 'Opcode and hostio pricing',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/stylus-toml-reference',
+              label: 'Configuration reference',
             },
             {
               type: 'link',
@@ -1604,7 +1654,7 @@ const sidebars = {
             {
               type: 'link',
               label: 'Cargo Stylus CLI GitHub',
-              href: 'https://github.com/OffchainLabs/cargo-stylus',
+              href: 'https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus',
             },
             {
               type: 'link',
@@ -1614,24 +1664,46 @@ const sidebars = {
             {
               type: 'link',
               label: 'Source Code Repository',
-              href: 'https://github.com/OffchainLabs/stylus',
+              href: 'https://github.com/OffchainLabs/stylus-sdk-rs',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Arbitrum essentials',
+          collapsed: true,
+          items: [
+            {
+              type: 'ref',
+              label: 'Bridging',
+              id: 'arbitrum-essentials/bridging/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Oracles',
+              id: 'arbitrum-essentials/oracles/overview-oracles',
+            },
+            {
+              type: 'ref',
+              label: 'Precompiles',
+              id: 'arbitrum-essentials/precompiles/overview',
+            },
+            {
+              type: 'ref',
+              label: 'Estimate gas',
+              id: 'arbitrum-essentials/how-to-estimate-gas',
+            },
+            {
+              type: 'link',
+              label: 'See all Arbitrum essentials →',
+              href: '/arbitrum-essentials',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'stylus/concepts/gas-metering',
-          label: 'Gas metering',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-          label: 'Using other languages',
-        },
-        {
-          type: 'doc',
           id: 'stylus/troubleshooting-building-stylus',
-          label: 'Troubleshooting',
+          label: 'FAQ',
         },
       ],
     },
@@ -1654,6 +1726,11 @@ const sidebars = {
 
   // Notices sidebar
   noticeSidebar: [
+    {
+      type: 'doc',
+      id: 'notices/arbos60-upgrade-notice',
+      label: 'Upgrade notice for ArbOS 60',
+    },
     {
       type: 'doc',
       id: 'notices/arbos51-upgrade-notice',

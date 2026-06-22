@@ -1,0 +1,4694 @@
+[
+  {
+    "flag": "auth.addr",
+    "type": "string",
+    "default": "127.0.0.1",
+    "description": "AUTH-RPC server listening interface"
+  },
+  {
+    "flag": "auth.api",
+    "type": "strings",
+    "default": "[validation]",
+    "description": "APIs offered over the AUTH-RPC interface"
+  },
+  {
+    "flag": "auth.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "Path to file holding JWT secret (32B hex)"
+  },
+  {
+    "flag": "auth.origins",
+    "type": "strings",
+    "default": "[localhost]",
+    "description": "Origins from which to accept AUTH requests"
+  },
+  {
+    "flag": "auth.port",
+    "type": "int",
+    "default": "8549",
+    "description": "AUTH-RPC server listening port"
+  },
+  {
+    "flag": "blocks-reexecutor.blocks",
+    "type": "string",
+    "default": "[[0,0]]",
+    "description": "json encoded list of block ranges in the form of start and end block numbers in a list of size 2"
+  },
+  {
+    "flag": "blocks-reexecutor.commit-state-to-disk",
+    "type": "bool",
+    "default": "",
+    "description": "if set, blocks-reexecutor not only re-executes blocks but it also commits their state to triedb"
+  },
+  {
+    "flag": "blocks-reexecutor.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enables re-execution of a range of blocks against historic state"
+  },
+  {
+    "flag": "blocks-reexecutor.min-blocks-per-thread",
+    "type": "uint",
+    "default": "",
+    "description": "minimum number of blocks to execute per thread. When mode is random this acts as the size of random block range sample"
+  },
+  {
+    "flag": "blocks-reexecutor.mode",
+    "type": "string",
+    "default": "random",
+    "description": "mode to run the blocks-reexecutor on. Valid modes full and random. full - execute all the blocks in the given range. random - execute a random sample range of blocks with in a given range"
+  },
+  {
+    "flag": "blocks-reexecutor.room",
+    "type": "int",
+    "default": "2",
+    "description": "number of threads to parallelize blocks re-execution"
+  },
+  {
+    "flag": "blocks-reexecutor.trie-clean-limit",
+    "type": "int",
+    "default": "",
+    "description": "memory allowance (MB) to use for caching trie nodes in memory"
+  },
+  {
+    "flag": "blocks-reexecutor.validate-multigas",
+    "type": "bool",
+    "default": "",
+    "description": "if set, validate the sum of multi-gas dimensions match the single-gas"
+  },
+  {
+    "flag": "chain.dev-wallet.account",
+    "type": "string",
+    "default": "is first account in keystore",
+    "description": "account to use"
+  },
+  {
+    "flag": "chain.dev-wallet.only-create-key",
+    "type": "bool",
+    "default": "",
+    "description": "if true, creates new key then exits"
+  },
+  {
+    "flag": "chain.dev-wallet.password",
+    "type": "string",
+    "default": "PASSWORD_NOT_SET",
+    "description": "wallet passphrase"
+  },
+  {
+    "flag": "chain.dev-wallet.pathname",
+    "type": "string",
+    "default": "",
+    "description": "pathname for wallet"
+  },
+  {
+    "flag": "chain.dev-wallet.private-key",
+    "type": "string",
+    "default": "",
+    "description": "private key for wallet"
+  },
+  {
+    "flag": "chain.id",
+    "type": "uint",
+    "default": "",
+    "description": "L2 chain ID (determines Arbitrum network)"
+  },
+  {
+    "flag": "chain.info-files",
+    "type": "strings",
+    "default": "",
+    "description": "L2 chain info json files"
+  },
+  {
+    "flag": "chain.info-json",
+    "type": "string",
+    "default": "",
+    "description": "L2 chain info in json string format"
+  },
+  {
+    "flag": "chain.name",
+    "type": "string",
+    "default": "",
+    "description": "L2 chain name (determines Arbitrum network)"
+  },
+  {
+    "flag": "conf.dump",
+    "type": "bool",
+    "default": "",
+    "description": "print out currently active configuration file"
+  },
+  {
+    "flag": "conf.env-prefix",
+    "type": "string",
+    "default": "",
+    "description": "environment variables with given prefix will be loaded as configuration values"
+  },
+  {
+    "flag": "conf.file",
+    "type": "strings",
+    "default": "",
+    "description": "name of configuration file"
+  },
+  {
+    "flag": "conf.reload-interval",
+    "type": "duration",
+    "default": "",
+    "description": "how often to reload configuration (0=disable periodic reloading)"
+  },
+  {
+    "flag": "conf.s3.access-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 access key for fetching the node configuration file from S3"
+  },
+  {
+    "flag": "conf.s3.bucket",
+    "type": "string",
+    "default": "",
+    "description": "S3 bucket containing the node configuration file"
+  },
+  {
+    "flag": "conf.s3.object-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 object key of the node configuration file (JSON format)"
+  },
+  {
+    "flag": "conf.s3.region",
+    "type": "string",
+    "default": "",
+    "description": "S3 region of the bucket containing the node configuration file"
+  },
+  {
+    "flag": "conf.s3.secret-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 secret key for fetching the node configuration file from S3 (triggers S3 config loading)"
+  },
+  {
+    "flag": "conf.string",
+    "type": "string",
+    "default": "",
+    "description": "configuration as JSON string"
+  },
+  {
+    "flag": "ensure-rollup-deployment",
+    "type": "bool",
+    "default": "true",
+    "description": "before starting the node, wait until the transaction that deployed rollup is finalized"
+  },
+  {
+    "flag": "execution.block-metadata-api-blocks-limit",
+    "type": "uint",
+    "default": "100",
+    "description": "maximum number of blocks allowed to be queried for blockMetadata per arb_getRawBlockMetadata query. Enabled by default, set 0 to disable the limit"
+  },
+  {
+    "flag": "execution.block-metadata-api-cache-size",
+    "type": "uint",
+    "default": "104857600",
+    "description": "size (in bytes) of lru cache storing the blockMetadata to service arb_getRawBlockMetadata"
+  },
+  {
+    "flag": "execution.caching.archive",
+    "type": "bool",
+    "default": "",
+    "description": "retain past block state"
+  },
+  {
+    "flag": "execution.caching.block-age",
+    "type": "duration",
+    "default": "30m0s",
+    "description": "minimum age of recent blocks to keep in memory"
+  },
+  {
+    "flag": "execution.caching.block-count",
+    "type": "uint",
+    "default": "128",
+    "description": "minimum number of recent blocks to keep in memory"
+  },
+  {
+    "flag": "execution.caching.database-cache",
+    "type": "int",
+    "default": "2048",
+    "description": "amount of memory in megabytes to cache database contents with"
+  },
+  {
+    "flag": "execution.caching.disable-stylus-cache-metrics-collection",
+    "type": "bool",
+    "default": "",
+    "description": "disable metrics collection for the stylus cache"
+  },
+  {
+    "flag": "execution.caching.enable-preimages",
+    "type": "bool",
+    "default": "",
+    "description": "enable recording of preimages"
+  },
+  {
+    "flag": "execution.caching.head-rewind-blocks-limit",
+    "type": "uint",
+    "default": "2419200",
+    "description": "maximum number of blocks rolled back to recover chain head (0 = use geth default limit)"
+  },
+  {
+    "flag": "execution.caching.max-amount-of-gas-to-skip-state-saving",
+    "type": "uint",
+    "default": "",
+    "description": "maximum amount of gas in blocks to skip saving state to Persistent storage (archive node only) -- warning: this option seems to cause issues"
+  },
+  {
+    "flag": "execution.caching.max-number-of-blocks-to-skip-state-saving",
+    "type": "uint32",
+    "default": "",
+    "description": "maximum number of blocks to skip state saving to persistent storage (archive node only) -- warning: this option seems to cause issues"
+  },
+  {
+    "flag": "execution.caching.pathdb-max-diff-layers",
+    "type": "int",
+    "default": "128",
+    "description": "maximum number of diff layers to keep in pathdb (path state-scheme only)"
+  },
+  {
+    "flag": "execution.caching.snapshot-cache",
+    "type": "int",
+    "default": "400",
+    "description": "amount of memory in megabytes to cache state snapshots with"
+  },
+  {
+    "flag": "execution.caching.snapshot-restore-gas-limit",
+    "type": "uint",
+    "default": "300000000000",
+    "description": "maximum gas rolled back to recover snapshot"
+  },
+  {
+    "flag": "execution.caching.state-history",
+    "type": "uint",
+    "default": "18446744073709551615",
+    "description": "number of recent blocks to retain state history for (path state-scheme only)"
+  },
+  {
+    "flag": "execution.caching.state-scheme",
+    "type": "string",
+    "default": "hash",
+    "description": "scheme to use for state trie storage (hash, path)"
+  },
+  {
+    "flag": "execution.caching.state-size-tracking",
+    "type": "bool",
+    "default": "",
+    "description": "enable tracking of state size over time"
+  },
+  {
+    "flag": "execution.caching.stylus-lru-cache-capacity",
+    "type": "uint32",
+    "default": "256",
+    "description": "capacity, in megabytes, of the LRU cache that keeps initialized stylus programs"
+  },
+  {
+    "flag": "execution.caching.trie-cap-batch-size",
+    "type": "uint32",
+    "default": "",
+    "description": "batch size in bytes used in the TrieDB Cap operation (0 = use geth default)"
+  },
+  {
+    "flag": "execution.caching.trie-cap-limit",
+    "type": "uint32",
+    "default": "100",
+    "description": "amount of memory in megabytes to be used in the TrieDB Cap operation during maintenance"
+  },
+  {
+    "flag": "execution.caching.trie-clean-cache",
+    "type": "int",
+    "default": "600",
+    "description": "amount of memory in megabytes to cache unchanged state trie nodes with"
+  },
+  {
+    "flag": "execution.caching.trie-commit-batch-size",
+    "type": "uint32",
+    "default": "",
+    "description": "batch size in bytes used in the TrieDB Commit operation (0 = use geth default)"
+  },
+  {
+    "flag": "execution.caching.trie-dirty-cache",
+    "type": "int",
+    "default": "1024",
+    "description": "amount of memory in megabytes to cache state diffs against disk with (larger cache lowers database growth)"
+  },
+  {
+    "flag": "execution.caching.trie-time-limit",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "maximum block processing time before trie is written to hard-disk"
+  },
+  {
+    "flag": "execution.caching.trie-time-limit-before-flush-maintenance",
+    "type": "duration",
+    "default": "",
+    "description": "Execution will suggest that maintenance is run if the block processing time required to reach trie-time-limit is smaller or equal than trie-time-limit-before-flush-maintenance"
+  },
+  {
+    "flag": "execution.caching.trie-time-limit-random-offset",
+    "type": "duration",
+    "default": "",
+    "description": "if greater then 0, the block processing time period of each trie write to hard-disk is shortened by a random value from range [0, trie-time-limit-random-offset)"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "execution.consensus-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "execution.disable-arbowner-ethcall",
+    "type": "bool",
+    "default": "",
+    "description": "disable ArbOwner precompile calls outside on-chain execution (ethcall, gas estimation)"
+  },
+  {
+    "flag": "execution.enable-prefetch-block",
+    "type": "bool",
+    "default": "true",
+    "description": "enable prefetching of blocks"
+  },
+  {
+    "flag": "execution.expose-multi-gas",
+    "type": "bool",
+    "default": "",
+    "description": "experimental: expose multi-dimensional gas in transaction receipts"
+  },
+  {
+    "flag": "execution.forwarder.connection-timeout",
+    "type": "duration",
+    "default": "30s",
+    "description": "total time to wait before cancelling connection"
+  },
+  {
+    "flag": "execution.forwarder.idle-connection-timeout",
+    "type": "duration",
+    "default": "15s",
+    "description": "time until idle connections are closed"
+  },
+  {
+    "flag": "execution.forwarder.max-idle-connections",
+    "type": "int",
+    "default": "1",
+    "description": "maximum number of idle connections to keep open"
+  },
+  {
+    "flag": "execution.forwarder.redis-url",
+    "type": "string",
+    "default": "",
+    "description": "the Redis URL to recommend target via"
+  },
+  {
+    "flag": "execution.forwarder.retry-interval",
+    "type": "duration",
+    "default": "100ms",
+    "description": "minimal time between update retries"
+  },
+  {
+    "flag": "execution.forwarder.update-interval",
+    "type": "duration",
+    "default": "1s",
+    "description": "forwarding target update interval"
+  },
+  {
+    "flag": "execution.forwarding-target",
+    "type": "string",
+    "default": "",
+    "description": "transaction forwarding target URL, or \"null\" to disable forwarding (iff not sequencer)"
+  },
+  {
+    "flag": "execution.legacy-zero-base-fee-until",
+    "type": "uint",
+    "default": "",
+    "description": "orbit-chain compat: re-enables the pre-v3.7 behavior of treating ArbOS<=40 blocks with zero base fee as non-arbitrum, for blocks with unix timestamp strictly less than this value (0 disables; set to a timestamp past the last zero-basefee block on the chain)"
+  },
+  {
+    "flag": "execution.parent-chain-reader.dangerous.wait-for-tx-approval-safe-poll",
+    "type": "duration",
+    "default": "",
+    "description": "Dangerous! only meant to be used by system tests"
+  },
+  {
+    "flag": "execution.parent-chain-reader.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "enable reader connection"
+  },
+  {
+    "flag": "execution.parent-chain-reader.old-header-timeout",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "warns if the latest l1 block is at least this old"
+  },
+  {
+    "flag": "execution.parent-chain-reader.poll-interval",
+    "type": "duration",
+    "default": "15s",
+    "description": "interval when polling endpoint"
+  },
+  {
+    "flag": "execution.parent-chain-reader.poll-only",
+    "type": "bool",
+    "default": "",
+    "description": "do not attempt to subscribe to header events"
+  },
+  {
+    "flag": "execution.parent-chain-reader.poll-timeout",
+    "type": "duration",
+    "default": "5s",
+    "description": "timeout when polling endpoint"
+  },
+  {
+    "flag": "execution.parent-chain-reader.subscribe-err-interval",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "interval for subscribe error"
+  },
+  {
+    "flag": "execution.parent-chain-reader.tx-timeout",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "timeout when waiting for a transaction"
+  },
+  {
+    "flag": "execution.parent-chain-reader.use-finality-data",
+    "type": "bool",
+    "default": "true",
+    "description": "use l1 data about finalized/safe blocks"
+  },
+  {
+    "flag": "execution.recording-database.max-prepared",
+    "type": "int",
+    "default": "1000",
+    "description": "max references to store in the recording database"
+  },
+  {
+    "flag": "execution.recording-database.trie-clean-cache",
+    "type": "int",
+    "default": "16",
+    "description": "like trie-clean-cache for the separate, recording database (used for validation)"
+  },
+  {
+    "flag": "execution.recording-database.trie-dirty-cache",
+    "type": "int",
+    "default": "1024",
+    "description": "like trie-dirty-cache for the separate, recording database (used for validation)"
+  },
+  {
+    "flag": "execution.rpc-server.authenticated",
+    "type": "bool",
+    "default": "true",
+    "description": "rpc is authenticated"
+  },
+  {
+    "flag": "execution.rpc-server.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable execution node to serve over rpc"
+  },
+  {
+    "flag": "execution.rpc-server.public",
+    "type": "bool",
+    "default": "",
+    "description": "rpc is public"
+  },
+  {
+    "flag": "execution.rpc.allow-method",
+    "type": "strings",
+    "default": "",
+    "description": "list of whitelisted rpc methods"
+  },
+  {
+    "flag": "execution.rpc.arbdebug.block-range-bound",
+    "type": "uint",
+    "default": "256",
+    "description": "bounds the number of blocks arbdebug calls may return"
+  },
+  {
+    "flag": "execution.rpc.arbdebug.timeout-queue-bound",
+    "type": "uint",
+    "default": "512",
+    "description": "bounds the length of timeout queues arbdebug calls may return"
+  },
+  {
+    "flag": "execution.rpc.block-redirects-list",
+    "type": "string",
+    "default": "default",
+    "description": "array of node configs to redirect block requests given as a json string. time duration should be supplied in number indicating nanoseconds"
+  },
+  {
+    "flag": "execution.rpc.classic-redirect",
+    "type": "string",
+    "default": "",
+    "description": "url to redirect classic requests, use \"error:[CODE:]MESSAGE\" to return specified error instead of redirecting"
+  },
+  {
+    "flag": "execution.rpc.classic-redirect-timeout",
+    "type": "duration",
+    "default": "",
+    "description": "timeout for forwarded classic requests, where 0 = no timeout"
+  },
+  {
+    "flag": "execution.rpc.evm-timeout",
+    "type": "duration",
+    "default": "5s",
+    "description": "timeout used for eth_call (0=infinite)"
+  },
+  {
+    "flag": "execution.rpc.feehistory-max-block-count",
+    "type": "uint",
+    "default": "1024",
+    "description": "max number of blocks a fee history request may cover"
+  },
+  {
+    "flag": "execution.rpc.filter-log-cache-size",
+    "type": "int",
+    "default": "32",
+    "description": "log filter system maximum number of cached blocks"
+  },
+  {
+    "flag": "execution.rpc.filter-timeout",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "log filter system maximum time filters stay active"
+  },
+  {
+    "flag": "execution.rpc.gas-cap",
+    "type": "uint",
+    "default": "50000000",
+    "description": "cap on computation gas that can be used in eth_call/estimateGas (0=infinite)"
+  },
+  {
+    "flag": "execution.rpc.log-export-checkpoints",
+    "type": "string",
+    "default": "",
+    "description": "export log index checkpoints to file"
+  },
+  {
+    "flag": "execution.rpc.log-history",
+    "type": "uint",
+    "default": "9400000",
+    "description": "maximum number of blocks from head where a log search index is maintained"
+  },
+  {
+    "flag": "execution.rpc.log-no-history",
+    "type": "bool",
+    "default": "",
+    "description": "no log search index is maintained"
+  },
+  {
+    "flag": "execution.rpc.max-recreate-state-depth",
+    "type": "int",
+    "default": "-2",
+    "description": "maximum depth for recreating state, measured in l2 gas (0=don't recreate state, -1=infinite, -2=use default value for archive or non-archive node (whichever is configured))"
+  },
+  {
+    "flag": "execution.rpc.tx-allow-unprotected",
+    "type": "bool",
+    "default": "true",
+    "description": "allow transactions that aren't EIP-155 replay protected to be submitted over the RPC"
+  },
+  {
+    "flag": "execution.rpc.tx-fee-cap",
+    "type": "float",
+    "default": "1",
+    "description": "cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap)"
+  },
+  {
+    "flag": "execution.rpc.tx-sync-default-timeout",
+    "type": "duration",
+    "default": "20s",
+    "description": "default timeout for eth_sendRawTransactionSync"
+  },
+  {
+    "flag": "execution.rpc.tx-sync-max-timeout",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "maximum allowed timeout for eth_sendRawTransactionSync "
+  },
+  {
+    "flag": "execution.secondary-forwarding-target",
+    "type": "strings",
+    "default": "",
+    "description": "secondary transaction forwarding target URL"
+  },
+  {
+    "flag": "execution.sequencer.dangerous.disable-blob-base-fee-check",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! disables nitro checks on sequencer for blob base fee"
+  },
+  {
+    "flag": "execution.sequencer.dangerous.disable-seq-inbox-max-data-size-check",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! disables nitro checks on sequencer MaxTxDataSize against the sequencer inbox MaxDataSize"
+  },
+  {
+    "flag": "execution.sequencer.enable",
+    "type": "bool",
+    "default": "",
+    "description": "act and post to l1 as sequencer"
+  },
+  {
+    "flag": "execution.sequencer.enable-profiling",
+    "type": "bool",
+    "default": "",
+    "description": "enable CPU profiling and tracing"
+  },
+  {
+    "flag": "execution.sequencer.expected-surplus-gas-price-mode",
+    "type": "string",
+    "default": "BlobPrice",
+    "description": "gas price setting to be used in calculating estimated surplus. Allowed values- CalldataPrice, BlobPrice and CalldataPrice7523"
+  },
+  {
+    "flag": "execution.sequencer.expected-surplus-hard-threshold",
+    "type": "string",
+    "default": "default",
+    "description": "if expected surplus is lower than this value, new incoming transactions will be denied"
+  },
+  {
+    "flag": "execution.sequencer.expected-surplus-soft-threshold",
+    "type": "string",
+    "default": "default",
+    "description": "if expected surplus is lower than this value, warnings are posted"
+  },
+  {
+    "flag": "execution.sequencer.forwarder.connection-timeout",
+    "type": "duration",
+    "default": "30s",
+    "description": "total time to wait before cancelling connection"
+  },
+  {
+    "flag": "execution.sequencer.forwarder.idle-connection-timeout",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "time until idle connections are closed"
+  },
+  {
+    "flag": "execution.sequencer.forwarder.max-idle-connections",
+    "type": "int",
+    "default": "100",
+    "description": "maximum number of idle connections to keep open"
+  },
+  {
+    "flag": "execution.sequencer.forwarder.redis-url",
+    "type": "string",
+    "default": "",
+    "description": "the Redis URL to recommend target via"
+  },
+  {
+    "flag": "execution.sequencer.forwarder.retry-interval",
+    "type": "duration",
+    "default": "100ms",
+    "description": "minimal time between update retries"
+  },
+  {
+    "flag": "execution.sequencer.forwarder.update-interval",
+    "type": "duration",
+    "default": "1s",
+    "description": "forwarding target update interval"
+  },
+  {
+    "flag": "execution.sequencer.max-acceptable-timestamp-delta",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "maximum acceptable time difference between the local time and the latest L1 block's timestamp"
+  },
+  {
+    "flag": "execution.sequencer.max-block-speed",
+    "type": "duration",
+    "default": "250ms",
+    "description": "minimum delay between blocks (sets a maximum speed of block production)"
+  },
+  {
+    "flag": "execution.sequencer.max-revert-gas-reject",
+    "type": "uint",
+    "default": "",
+    "description": "maximum gas executed in a revert for the sequencer to reject the transaction instead of posting it (anti-DOS)"
+  },
+  {
+    "flag": "execution.sequencer.max-tx-data-size",
+    "type": "int",
+    "default": "95000",
+    "description": "maximum transaction size the sequencer will accept"
+  },
+  {
+    "flag": "execution.sequencer.nonce-cache-size",
+    "type": "int",
+    "default": "1024",
+    "description": "size of the tx sender nonce cache"
+  },
+  {
+    "flag": "execution.sequencer.nonce-failure-cache-expiry",
+    "type": "duration",
+    "default": "1s",
+    "description": "maximum amount of time to wait for a predecessor before rejecting a tx with nonce too high"
+  },
+  {
+    "flag": "execution.sequencer.nonce-failure-cache-size",
+    "type": "int",
+    "default": "1024",
+    "description": "number of transactions with too high of a nonce to keep in memory while waiting for their predecessor"
+  },
+  {
+    "flag": "execution.sequencer.queue-size",
+    "type": "int",
+    "default": "1024",
+    "description": "size of the pending tx queue"
+  },
+  {
+    "flag": "execution.sequencer.queue-timeout",
+    "type": "duration",
+    "default": "12s",
+    "description": "maximum amount of time transaction can wait in queue"
+  },
+  {
+    "flag": "execution.sequencer.read-from-tx-queue-timeout",
+    "type": "duration",
+    "default": "10ms",
+    "description": "timeout for reading new messages"
+  },
+  {
+    "flag": "execution.sequencer.sender-whitelist",
+    "type": "strings",
+    "default": "",
+    "description": "comma separated whitelist of authorized senders (if empty, everyone is allowed)"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.auction-contract-address",
+    "type": "string",
+    "default": "",
+    "description": "Address of the proxy pointing to the ExpressLaneAuction contract"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.auctioneer-address",
+    "type": "string",
+    "default": "",
+    "description": "Address of the Timeboost Autonomous Auctioneer"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.early-submission-grace",
+    "type": "duration",
+    "default": "2s",
+    "description": "period of time before the next round where submissions for the next round will be queued"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable timeboost based on express lane auctions"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.express-lane-advantage",
+    "type": "duration",
+    "default": "200ms",
+    "description": "specify the express lane advantage"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.max-future-sequence-distance",
+    "type": "uint",
+    "default": "1000",
+    "description": "maximum allowed difference (in terms of sequence numbers) between a future express lane tx and the current sequence count of a round"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.queue-timeout-in-blocks",
+    "type": "uint",
+    "default": "5",
+    "description": "maximum amount of time (measured in blocks) that Express Lane transactions can wait in the sequencer's queue"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.redis-update-events-channel-size",
+    "type": "uint",
+    "default": "500",
+    "description": "size of update events' buffered channels in timeboost redis coordinator"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.redis-url",
+    "type": "string",
+    "default": "unset",
+    "description": "the Redis URL for ExpressLaneService to coordinate via"
+  },
+  {
+    "flag": "execution.sequencer.timeboost.sequencer-http-endpoint",
+    "type": "string",
+    "default": "http://localhost:8547",
+    "description": "this sequencer's http endpoint"
+  },
+  {
+    "flag": "execution.stylus-target.allow-fallback",
+    "type": "bool",
+    "default": "true",
+    "description": "if true, fall back to an alternative compiler when compilation of a Stylus program fails"
+  },
+  {
+    "flag": "execution.stylus-target.amd64",
+    "type": "string",
+    "default": "x86_64-linux-unknown+sse4.2+lzcnt+bmi",
+    "description": "stylus programs compilation target for amd64 linux"
+  },
+  {
+    "flag": "execution.stylus-target.arm64",
+    "type": "string",
+    "default": "arm64-linux-unknown+neon",
+    "description": "stylus programs compilation target for arm64 linux"
+  },
+  {
+    "flag": "execution.stylus-target.extra-archs",
+    "type": "strings",
+    "default": "[wavm]",
+    "description": "Comma separated list of extra architectures to cross-compile stylus program to and cache in wasm store (additionally to local target). Currently must include at least wavm. (supported targets: wavm, arm64, amd64, host)"
+  },
+  {
+    "flag": "execution.stylus-target.host",
+    "type": "string",
+    "default": "",
+    "description": "stylus programs compilation target for system other than 64-bit ARM or 64-bit x86"
+  },
+  {
+    "flag": "execution.stylus-target.max-stylus-call-depth",
+    "type": "uint16",
+    "default": "",
+    "description": "max number of Stylus frames simultaneously on the call stack (counts only Stylus frames; EVM frames between two Stylus frames do not decrement it); exceeding the limit rejects non-on-chain calls; 0 disables the limit"
+  },
+  {
+    "flag": "execution.stylus-target.max-stylus-open-pages",
+    "type": "uint16",
+    "default": "128",
+    "description": "max open WASM pages per tx; exceeding the limit rejects non-on-chain calls and filters sequencer-committed txs (delayed inbox is exempt); 0 disables the limit"
+  },
+  {
+    "flag": "execution.stylus-target.native-stack-size",
+    "type": "uint",
+    "default": "",
+    "description": "initial native stack size in bytes for Wasmer coroutines used by Stylus execution (0 = default 1MB)"
+  },
+  {
+    "flag": "execution.sync-monitor.finalized-block-wait-for-block-validator",
+    "type": "bool",
+    "default": "",
+    "description": "wait for block validator to complete before returning finalized block number"
+  },
+  {
+    "flag": "execution.sync-monitor.msg-lag",
+    "type": "duration",
+    "default": "1s",
+    "description": "allowed message lag while still considered in sync"
+  },
+  {
+    "flag": "execution.sync-monitor.safe-block-wait-for-block-validator",
+    "type": "bool",
+    "default": "",
+    "description": "wait for block validator to complete before returning safe block number"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.address-checker-queue-size",
+    "type": "int",
+    "default": "8192",
+    "description": "work queue size for address checker"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.address-checker-worker-count",
+    "type": "int",
+    "default": "4",
+    "description": "number of workers for address checker"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.cache-size",
+    "type": "int",
+    "default": "10000",
+    "description": "LRU cache size for address lookup results"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable restricted address synchronization service"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.poll-interval",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "interval between polling S3 for hash list updates"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.access-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 access key"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.bucket",
+    "type": "string",
+    "default": "",
+    "description": "S3 bucket name"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.chunk-size-mb",
+    "type": "int",
+    "default": "32",
+    "description": "S3 multipart download part size in MB"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.concurrency",
+    "type": "int",
+    "default": "10",
+    "description": "S3 multipart download concurrency"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.endpoint",
+    "type": "string",
+    "default": "",
+    "description": "custom S3 endpoint URL (for MinIO, localstack, or other S3-compatible services)"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.max-retries",
+    "type": "int",
+    "default": "3",
+    "description": "maximum retries for S3 part body download"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.object-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 object key (path) to the file"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.region",
+    "type": "string",
+    "default": "",
+    "description": "S3 region"
+  },
+  {
+    "flag": "execution.transaction-filtering.address-filter.s3.secret-key",
+    "type": "string",
+    "default": "",
+    "description": "S3 secret key"
+  },
+  {
+    "flag": "execution.transaction-filtering.disable-delayed-sequencing-filter",
+    "type": "bool",
+    "default": "",
+    "description": "disable delayed sequencing filter"
+  },
+  {
+    "flag": "execution.transaction-filtering.enable-ethcall-filter",
+    "type": "bool",
+    "default": "",
+    "description": "enable address filtering for eth_estimateGas and eth_call"
+  },
+  {
+    "flag": "execution.transaction-filtering.event-filter.path",
+    "type": "string",
+    "default": "",
+    "description": "path to JSON file containing event filter rules"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "execution.transaction-filtering.filtering-report-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "execution.transaction-filtering.transaction-filterer-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "execution.tx-indexer.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "enables transaction indexer"
+  },
+  {
+    "flag": "execution.tx-indexer.min-batch-delay",
+    "type": "duration",
+    "default": "1s",
+    "description": "minimum delay between transaction indexing/unindexing batches; the bigger the delay, the more blocks can be included in each batch"
+  },
+  {
+    "flag": "execution.tx-indexer.threads",
+    "type": "int",
+    "default": "2",
+    "description": "number of threads used to RLP decode blocks during indexing/unindexing of historical transactions"
+  },
+  {
+    "flag": "execution.tx-indexer.tx-lookup-limit",
+    "type": "uint",
+    "default": "126230400",
+    "description": "retain the ability to lookup transactions by hash for the past N blocks (0 = all blocks)"
+  },
+  {
+    "flag": "execution.tx-pre-checker.required-state-age",
+    "type": "int",
+    "default": "2",
+    "description": "how long ago should the storage conditions from eth_SendRawTransactionConditional be true, 0 = don't check old state"
+  },
+  {
+    "flag": "execution.tx-pre-checker.required-state-max-blocks",
+    "type": "uint",
+    "default": "4",
+    "description": "maximum number of blocks to look back while looking for the <required-state-age> seconds old state, 0 = don't limit the search"
+  },
+  {
+    "flag": "execution.tx-pre-checker.strictness",
+    "type": "uint",
+    "default": "20",
+    "description": "how strict to be when checking txs before forwarding them. 0 = accept anything, 10 = should never reject anything that'd succeed, 20 = likely won't reject anything that'd succeed, 30 = full validation which may reject txs that would succeed"
+  },
+  {
+    "flag": "execution.vmtrace.json-config",
+    "type": "string",
+    "default": "{}",
+    "description": "(experimental) Tracer configuration in JSON format"
+  },
+  {
+    "flag": "execution.vmtrace.tracer-name",
+    "type": "string",
+    "default": "",
+    "description": "(experimental) Name of tracer which should record internal VM operations (costly)"
+  },
+  {
+    "flag": "file-logging.buf-size",
+    "type": "int",
+    "default": "512",
+    "description": "size of intermediate log records buffer"
+  },
+  {
+    "flag": "file-logging.compress",
+    "type": "bool",
+    "default": "true",
+    "description": "enable compression of old log files"
+  },
+  {
+    "flag": "file-logging.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "enable logging to file"
+  },
+  {
+    "flag": "file-logging.file",
+    "type": "string",
+    "default": "nitro.log",
+    "description": "path to log file"
+  },
+  {
+    "flag": "file-logging.local-time",
+    "type": "bool",
+    "default": "",
+    "description": "if true: local time will be used in old log filename timestamps"
+  },
+  {
+    "flag": "file-logging.max-age",
+    "type": "int",
+    "default": "",
+    "description": "maximum number of days to retain old log files based on the timestamp encoded in their filename (0 = no limit)"
+  },
+  {
+    "flag": "file-logging.max-backups",
+    "type": "int",
+    "default": "20",
+    "description": "maximum number of old log files to retain (0 = no limit)"
+  },
+  {
+    "flag": "file-logging.max-size",
+    "type": "int",
+    "default": "5",
+    "description": "log file size in Mb that will trigger log file rotation (0 = trigger disabled)"
+  },
+  {
+    "flag": "graphql.corsdomain",
+    "type": "strings",
+    "default": "",
+    "description": "Comma separated list of domains from which to accept cross origin requests (browser enforced)"
+  },
+  {
+    "flag": "graphql.enable",
+    "type": "bool",
+    "default": "",
+    "description": "Enable graphql endpoint on the rpc endpoint"
+  },
+  {
+    "flag": "graphql.vhosts",
+    "type": "strings",
+    "default": "[localhost]",
+    "description": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard"
+  },
+  {
+    "flag": "http.addr",
+    "type": "string",
+    "default": "",
+    "description": "HTTP-RPC server listening interface"
+  },
+  {
+    "flag": "http.api",
+    "type": "strings",
+    "default": "[net,web3,eth,arb]",
+    "description": "APIs offered over the HTTP-RPC interface"
+  },
+  {
+    "flag": "http.corsdomain",
+    "type": "strings",
+    "default": "",
+    "description": "Comma separated list of domains from which to accept cross origin requests (browser enforced)"
+  },
+  {
+    "flag": "http.port",
+    "type": "int",
+    "default": "8547",
+    "description": "HTTP-RPC server listening port"
+  },
+  {
+    "flag": "http.rpcprefix",
+    "type": "string",
+    "default": "",
+    "description": "HTTP path path prefix on which JSON-RPC is served. Use '/' to serve on all paths"
+  },
+  {
+    "flag": "http.server-timeouts.idle-timeout",
+    "type": "duration",
+    "default": "2m0s",
+    "description": "the maximum amount of time to wait for the next request when keep-alives are enabled (http.Server.IdleTimeout)"
+  },
+  {
+    "flag": "http.server-timeouts.read-header-timeout",
+    "type": "duration",
+    "default": "30s",
+    "description": "the amount of time allowed to read the request headers (http.Server.ReadHeaderTimeout)"
+  },
+  {
+    "flag": "http.server-timeouts.read-timeout",
+    "type": "duration",
+    "default": "30s",
+    "description": "the maximum duration for reading the entire request (http.Server.ReadTimeout)"
+  },
+  {
+    "flag": "http.server-timeouts.write-timeout",
+    "type": "duration",
+    "default": "30s",
+    "description": "the maximum duration before timing out writes of the response (http.Server.WriteTimeout)"
+  },
+  {
+    "flag": "http.vhosts",
+    "type": "strings",
+    "default": "[localhost]",
+    "description": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard"
+  },
+  {
+    "flag": "init.accounts-per-sync",
+    "type": "uint",
+    "default": "100000",
+    "description": "during init - sync database every X accounts. Lower value for low-memory systems. 0 disables."
+  },
+  {
+    "flag": "init.dev-init",
+    "type": "bool",
+    "default": "",
+    "description": "init with dev data (1 account with balance) instead of file import"
+  },
+  {
+    "flag": "init.dev-init-address",
+    "type": "string",
+    "default": "",
+    "description": "Address of dev-account. Leave empty to use the dev-wallet."
+  },
+  {
+    "flag": "init.dev-init-blocknum",
+    "type": "uint",
+    "default": "",
+    "description": "Number of preinit blocks. Must exist in ancient database."
+  },
+  {
+    "flag": "init.dev-max-code-size",
+    "type": "uint",
+    "default": "",
+    "description": "Max code size for dev accounts"
+  },
+  {
+    "flag": "init.download-path",
+    "type": "string",
+    "default": "",
+    "description": "path to save temp downloaded file"
+  },
+  {
+    "flag": "init.download-poll",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "how long to wait between polling attempts"
+  },
+  {
+    "flag": "init.empty",
+    "type": "bool",
+    "default": "",
+    "description": "init with empty state"
+  },
+  {
+    "flag": "init.force",
+    "type": "bool",
+    "default": "",
+    "description": "if true: in case database exists init code will be reexecuted and genesis block compared to database"
+  },
+  {
+    "flag": "init.genesis-json-file",
+    "type": "string",
+    "default": "",
+    "description": "path for genesis json file"
+  },
+  {
+    "flag": "init.genesis-json-file-directory",
+    "type": "string",
+    "default": "",
+    "description": "directory path for genesis json files - will search for a file named by the chain ID"
+  },
+  {
+    "flag": "init.import-file",
+    "type": "string",
+    "default": "",
+    "description": "path for json data to import"
+  },
+  {
+    "flag": "init.import-wasm",
+    "type": "bool",
+    "default": "",
+    "description": "if set, import the wasm directory when downloading a database (contains executable code - only use with highly trusted source)"
+  },
+  {
+    "flag": "init.latest",
+    "type": "string",
+    "default": "",
+    "description": "if set, searches for the latest snapshot of the given kind (accepted values: \"archive\" | \"pruned\" | \"genesis\")"
+  },
+  {
+    "flag": "init.latest-base",
+    "type": "string",
+    "default": "https://snapshot.arbitrum.foundation/",
+    "description": "base url used when searching for the latest"
+  },
+  {
+    "flag": "init.prune",
+    "type": "string",
+    "default": "",
+    "description": "pruning for a given use: \"full\" for full nodes serving RPC requests, or \"validator\" for validators"
+  },
+  {
+    "flag": "init.prune-bloom-size",
+    "type": "uint",
+    "default": "2048",
+    "description": "the amount of memory in megabytes to use for the pruning bloom filter (higher values prune better)"
+  },
+  {
+    "flag": "init.prune-parallel-storage-traversal",
+    "type": "bool",
+    "default": "",
+    "description": "if true: use parallel pruning per account"
+  },
+  {
+    "flag": "init.prune-threads",
+    "type": "int",
+    "default": "2",
+    "description": "the number of threads to use when pruning"
+  },
+  {
+    "flag": "init.prune-trie-clean-cache",
+    "type": "int",
+    "default": "600",
+    "description": "amount of memory in megabytes to cache unchanged state trie nodes with when traversing state database during pruning"
+  },
+  {
+    "flag": "init.rebuild-local-wasm",
+    "type": "string",
+    "default": "auto",
+    "description": "rebuild local wasm database on boot if needed (otherwise-will be done lazily). Three modes are supported  \"auto\"- (enabled by default) if any previous rebuilding attempt was successful then rebuilding is disabled else continues to rebuild, \"force\"- force rebuilding which would commence rebuilding despite the status of previous attempts, \"false\"- do not rebuild on startup"
+  },
+  {
+    "flag": "init.recreate-missing-state-from",
+    "type": "uint",
+    "default": "",
+    "description": "block number to start recreating missing states from (0 = disabled)"
+  },
+  {
+    "flag": "init.reorg-to-batch",
+    "type": "int",
+    "default": "-1",
+    "description": "rolls back the blockchain to a specified batch number"
+  },
+  {
+    "flag": "init.reorg-to-block-batch",
+    "type": "int",
+    "default": "-1",
+    "description": "rolls back the blockchain to the first batch at or before a given block number"
+  },
+  {
+    "flag": "init.reorg-to-message-batch",
+    "type": "int",
+    "default": "-1",
+    "description": "rolls back the blockchain to the first batch at or before a given message index"
+  },
+  {
+    "flag": "init.then-quit",
+    "type": "bool",
+    "default": "",
+    "description": "quit after init is done"
+  },
+  {
+    "flag": "init.url",
+    "type": "string",
+    "default": "",
+    "description": "url to download initialization data - will poll if download fails"
+  },
+  {
+    "flag": "init.validate-checksum",
+    "type": "bool",
+    "default": "true",
+    "description": "if true: validate the checksum after downloading the snapshot"
+  },
+  {
+    "flag": "init.validate-genesis-assertion",
+    "type": "bool",
+    "default": "true",
+    "description": "tests genesis assertion posted on parent chain against the genesis block created on init"
+  },
+  {
+    "flag": "ipc.path",
+    "type": "string",
+    "default": "",
+    "description": "Requested location to place the IPC endpoint. An empty path disables IPC."
+  },
+  {
+    "flag": "log-level",
+    "type": "string",
+    "default": "INFO",
+    "description": "log level, valid values are CRIT, ERROR, WARN, INFO, DEBUG, TRACE"
+  },
+  {
+    "flag": "log-type",
+    "type": "string",
+    "default": "plaintext",
+    "description": "log type (plaintext or json)"
+  },
+  {
+    "flag": "metrics",
+    "type": "bool",
+    "default": "",
+    "description": "enable metrics"
+  },
+  {
+    "flag": "metrics-server.addr",
+    "type": "string",
+    "default": "127.0.0.1",
+    "description": "metrics server address"
+  },
+  {
+    "flag": "metrics-server.port",
+    "type": "int",
+    "default": "6070",
+    "description": "metrics server port"
+  },
+  {
+    "flag": "metrics-server.update-interval",
+    "type": "duration",
+    "default": "3s",
+    "description": "metrics server update interval"
+  },
+  {
+    "flag": "node.batch-poster.anytrust-retention-period",
+    "type": "duration",
+    "default": "360h0m0s",
+    "description": "In AnyTrust mode, the period which AnyTrust nodes are requested to retain the stored batches."
+  },
+  {
+    "flag": "node.batch-poster.check-batch-correctness",
+    "type": "bool",
+    "default": "true",
+    "description": "setting this to true will run the batch against an inbox multiplexer and verifies that it produces the correct set of messages"
+  },
+  {
+    "flag": "node.batch-poster.compression-level",
+    "type": "int",
+    "default": "",
+    "description": "DEPRECATED: use compression-levels instead. batch compression level"
+  },
+  {
+    "flag": "node.batch-poster.compression-levels",
+    "type": "CompressionLevelStepList",
+    "default": "null",
+    "description": "JSON array of compression level steps. Format: [{\"backlog\":<int>,\"level\":<int>,\"recompression-level\":<int>},...]. First entry must have backlog:0. Both Level and recomp-level must be 0-11, weakly descending. Example: [{\"backlog\":0,\"level\":11,\"recompression-level\":11},{\"backlog\":21,\"level\":6,\"recompression-level\":11}]"
+  },
+  {
+    "flag": "node.batch-poster.dangerous.allow-posting-first-batch-when-sequencer-message-count-mismatch",
+    "type": "bool",
+    "default": "",
+    "description": "allow posting the first batch even if sequence number doesn't match chain (useful after force-inclusion)"
+  },
+  {
+    "flag": "node.batch-poster.dangerous.fixed-gas-limit",
+    "type": "uint",
+    "default": "",
+    "description": "use this gas limit for batch posting instead of estimating it"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.allocate-mempool-balance",
+    "type": "bool",
+    "default": "true",
+    "description": "if true, don't put transactions in the mempool that spend a total greater than the batch poster's balance"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.blob-tx-replacement-times",
+    "type": "durationSlice",
+    "default": "[5m0s,10m0s,30m0s,1h0m0s,4h0m0s,8h0m0s,16h0m0s,22h0m0s]",
+    "description": "comma-separated list of durations since first posting a blob transaction to attempt a replace-by-fee"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.dangerous.clear-dbstorage",
+    "type": "bool",
+    "default": "",
+    "description": "clear database storage"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.disable-new-tx",
+    "type": "bool",
+    "default": "",
+    "description": "disable posting new transactions, data poster will still keep confirming existing batches"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.elapsed-time-base",
+    "type": "duration",
+    "default": "10m0s",
+    "description": "unit to measure the time elapsed since creation of transaction used for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.elapsed-time-importance",
+    "type": "float",
+    "default": "10",
+    "description": "weight given to the units of time elapsed used for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.external-signer.address",
+    "type": "string",
+    "default": "",
+    "description": "external signer address"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.external-signer.client-cert",
+    "type": "string",
+    "default": "",
+    "description": "rpc client cert"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.external-signer.client-private-key",
+    "type": "string",
+    "default": "",
+    "description": "rpc client private key"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.external-signer.insecure-skip-verify",
+    "type": "bool",
+    "default": "",
+    "description": "skip TLS certificate verification"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.external-signer.method",
+    "type": "string",
+    "default": "eth_signTransaction",
+    "description": "external signer method"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.external-signer.root-ca",
+    "type": "string",
+    "default": "",
+    "description": "external signer root CA"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.external-signer.url",
+    "type": "string",
+    "default": "",
+    "description": "external signer url"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.legacy-storage-encoding",
+    "type": "bool",
+    "default": "",
+    "description": "encodes items in a legacy way (as it was before dropping generics)"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.max-blob-tx-tip-cap-gwei",
+    "type": "float",
+    "default": "1",
+    "description": "the maximum tip cap to post EIP-4844 blob carrying transactions at"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.max-fee-bid-multiple-bips",
+    "type": "uint",
+    "default": "100000",
+    "description": "the maximum multiple of the current price to bid for a transaction's fees (may be exceeded due to min rbf increase, 0 = unlimited)"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.max-fee-cap-formula",
+    "type": "string",
+    "default": "",
+    "description": "mathematical formula to calculate maximum fee cap gwei the result of which would be float64. This expression is expected to be evaluated please refer https://github.com/Knetic/govaluate/blob/master/MANUAL.md to find all available mathematical operators. Currently available variables to construct the formula are BacklogOfBatches, UrgencyGWei, ElapsedTime, ElapsedTimeBase, ElapsedTimeImportance, and TargetPriceGWei (default \"((BacklogOfBatches * UrgencyGWei) ** 2) + ((ElapsedTime/ElapsedTimeBase) ** 2) * ElapsedTimeImportance + TargetPriceGWei\")"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.max-mempool-transactions",
+    "type": "uint",
+    "default": "18",
+    "description": "the maximum number of transactions to have queued in the mempool at once (0 = unlimited)"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.max-mempool-weight",
+    "type": "uint",
+    "default": "18",
+    "description": "the maximum number of weight (weight = min(1, tx.blobs)) to have queued in the mempool at once (0 = unlimited)"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.max-queued-transactions",
+    "type": "int",
+    "default": "",
+    "description": "the maximum number of unconfirmed transactions to track at once (0 = unlimited)"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.max-tip-cap-gwei",
+    "type": "float",
+    "default": "1.2",
+    "description": "the maximum tip cap to post transactions at"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.min-blob-tx-tip-cap-gwei",
+    "type": "float",
+    "default": "1",
+    "description": "the minimum tip cap to post EIP-4844 blob carrying transactions at"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.min-tip-cap-gwei",
+    "type": "float",
+    "default": "0.05",
+    "description": "the minimum tip cap to post transactions at"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.nonce-rbf-soft-confs",
+    "type": "uint",
+    "default": "1",
+    "description": "the maximum probable reorg depth, used to determine when a transaction will no longer likely need replaced-by-fee"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.redis-signer.dangerous.disable-signature-verification",
+    "type": "bool",
+    "default": "",
+    "description": "disable message signature verification"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.redis-signer.fallback-verification-key",
+    "type": "string",
+    "default": "",
+    "description": "a fallback key used for message verification"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.redis-signer.signing-key",
+    "type": "string",
+    "default": "",
+    "description": "a 32-byte (64-character) hex string used to sign messages, or a path to a file containing it"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.replacement-times",
+    "type": "durationSlice",
+    "default": "[5m0s,10m0s,20m0s,30m0s,1h0m0s,2h0m0s,4h0m0s,6h0m0s,8h0m0s,12h0m0s,16h0m0s,18h0m0s,20h0m0s,22h0m0s]",
+    "description": "comma-separated list of durations since first posting to attempt a replace-by-fee"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.target-price-gwei",
+    "type": "float",
+    "default": "60",
+    "description": "the target price to use for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.urgency-gwei",
+    "type": "float",
+    "default": "2",
+    "description": "the urgency to use for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.use-db-storage",
+    "type": "bool",
+    "default": "true",
+    "description": "uses database storage when enabled"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.use-noop-storage",
+    "type": "bool",
+    "default": "",
+    "description": "uses noop storage, it doesn't store anything"
+  },
+  {
+    "flag": "node.batch-poster.data-poster.wait-for-l1-finality",
+    "type": "bool",
+    "default": "true",
+    "description": "only treat a transaction as confirmed after L1 finality has been achieved (recommended)"
+  },
+  {
+    "flag": "node.batch-poster.delay-buffer-always-updatable",
+    "type": "bool",
+    "default": "true",
+    "description": "always treat delay buffer as updatable"
+  },
+  {
+    "flag": "node.batch-poster.delay-buffer-threshold-margin",
+    "type": "uint",
+    "default": "25",
+    "description": "the number of blocks to post the batch before reaching the delay buffer threshold"
+  },
+  {
+    "flag": "node.batch-poster.disable-dap-fallback-store-data-on-chain",
+    "type": "bool",
+    "default": "",
+    "description": "If unable to batch to DA provider, disable fallback storing data on chain"
+  },
+  {
+    "flag": "node.batch-poster.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable posting batches to l1"
+  },
+  {
+    "flag": "node.batch-poster.error-delay",
+    "type": "duration",
+    "default": "10s",
+    "description": "how long to delay after error posting batch"
+  },
+  {
+    "flag": "node.batch-poster.ethda-fallback-batch-count",
+    "type": "int",
+    "default": "10",
+    "description": "number of batches to post to EthDA before retrying AltDA after a fallback"
+  },
+  {
+    "flag": "node.batch-poster.extra-batch-gas",
+    "type": "uint",
+    "default": "50000",
+    "description": "use this much more gas than estimation says is necessary to post batches"
+  },
+  {
+    "flag": "node.batch-poster.gas-estimate-base-fee-multiple-bips",
+    "type": "uint",
+    "default": "15000",
+    "description": "for gas estimation, use this multiple of the basefee (measured in basis points) as the max fee per gas"
+  },
+  {
+    "flag": "node.batch-poster.gas-refunder-address",
+    "type": "string",
+    "default": "",
+    "description": "The gas refunder contract address (optional)"
+  },
+  {
+    "flag": "node.batch-poster.ignore-blob-price",
+    "type": "bool",
+    "default": "",
+    "description": "if the parent chain supports 4844 blobs and ignore-blob-price is true, post 4844 blobs even if it's not price efficient"
+  },
+  {
+    "flag": "node.batch-poster.l1-block-bound",
+    "type": "string",
+    "default": "",
+    "description": "only post messages to batches when they're within the max future block/timestamp as of this L1 block tag (\"safe\", \"finalized\", \"latest\", or \"ignore\" to ignore this check)"
+  },
+  {
+    "flag": "node.batch-poster.l1-block-bound-bypass",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "post batches even if not within the layer 1 future bounds if we're within this margin of the max delay"
+  },
+  {
+    "flag": "node.batch-poster.max-4844-batch-size",
+    "type": "int",
+    "default": "",
+    "description": "maximum estimated compressed 4844 blob enabled batch size"
+  },
+  {
+    "flag": "node.batch-poster.max-calldata-batch-size",
+    "type": "int",
+    "default": "100000",
+    "description": "maximum estimated compressed calldata batch size"
+  },
+  {
+    "flag": "node.batch-poster.max-delay",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "maximum batch posting delay"
+  },
+  {
+    "flag": "node.batch-poster.max-empty-batch-delay",
+    "type": "duration",
+    "default": "72h0m0s",
+    "description": "maximum empty batch posting delay, batch poster will only be able to post an empty batch if this time period building a batch has passed; if 0, disable automatic empty batch posting"
+  },
+  {
+    "flag": "node.batch-poster.max-size",
+    "type": "int",
+    "default": "",
+    "description": "DEPRECATED: use node.batch-poster.max-calldata-batch-size instead"
+  },
+  {
+    "flag": "node.batch-poster.parent-chain-eip7623",
+    "type": "string",
+    "default": "auto",
+    "description": "if parent chain uses EIP7623 (\"yes\", \"no\", \"auto\")"
+  },
+  {
+    "flag": "node.batch-poster.parent-chain-wallet.account",
+    "type": "string",
+    "default": "is first account in keystore",
+    "description": "account to use"
+  },
+  {
+    "flag": "node.batch-poster.parent-chain-wallet.only-create-key",
+    "type": "bool",
+    "default": "",
+    "description": "if true, creates new key then exits"
+  },
+  {
+    "flag": "node.batch-poster.parent-chain-wallet.password",
+    "type": "string",
+    "default": "PASSWORD_NOT_SET",
+    "description": "wallet passphrase"
+  },
+  {
+    "flag": "node.batch-poster.parent-chain-wallet.pathname",
+    "type": "string",
+    "default": "batch-poster-wallet",
+    "description": "pathname for wallet"
+  },
+  {
+    "flag": "node.batch-poster.parent-chain-wallet.private-key",
+    "type": "string",
+    "default": "",
+    "description": "private key for wallet"
+  },
+  {
+    "flag": "node.batch-poster.poll-interval",
+    "type": "duration",
+    "default": "10s",
+    "description": "how long to wait after no batches are ready to be posted before checking again"
+  },
+  {
+    "flag": "node.batch-poster.post-4844-blobs",
+    "type": "bool",
+    "default": "",
+    "description": "if the parent chain supports 4844 blobs and they're well priced, post EIP-4844 blobs"
+  },
+  {
+    "flag": "node.batch-poster.redis-lock.background-lock",
+    "type": "bool",
+    "default": "",
+    "description": "should node always try grabbing lock in background"
+  },
+  {
+    "flag": "node.batch-poster.redis-lock.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "if false, always treat this as locked and don't write the lock to redis"
+  },
+  {
+    "flag": "node.batch-poster.redis-lock.key",
+    "type": "string",
+    "default": "",
+    "description": "key for lock"
+  },
+  {
+    "flag": "node.batch-poster.redis-lock.lockout-duration",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "how long lock is held"
+  },
+  {
+    "flag": "node.batch-poster.redis-lock.my-id",
+    "type": "string",
+    "default": "",
+    "description": "this node's id prefix when acquiring the lock (optional)"
+  },
+  {
+    "flag": "node.batch-poster.redis-lock.refresh-duration",
+    "type": "duration",
+    "default": "10s",
+    "description": "how long between consecutive calls to redis"
+  },
+  {
+    "flag": "node.batch-poster.redis-url",
+    "type": "string",
+    "default": "",
+    "description": "if non-empty, the Redis URL to store queued transactions in"
+  },
+  {
+    "flag": "node.batch-poster.reorg-resistance-margin",
+    "type": "duration",
+    "default": "10m0s",
+    "description": "do not post batch if its within this duration from layer 1 minimum bounds. Requires l1-block-bound option not be set to \"ignore\""
+  },
+  {
+    "flag": "node.batch-poster.use-access-lists",
+    "type": "bool",
+    "default": "true",
+    "description": "post batches with access lists to reduce gas usage (disabled for L3s)"
+  },
+  {
+    "flag": "node.batch-poster.wait-for-max-delay",
+    "type": "bool",
+    "default": "",
+    "description": "wait for the max batch delay, even if the batch is full"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.api-blocks-limit",
+    "type": "uint",
+    "default": "100",
+    "description": "maximum number of blocks per arb_getRawBlockMetadata query"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable syncing blockMetadata using a bulk blockMetadata api"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.max-sync-interval",
+    "type": "duration",
+    "default": "32m0s",
+    "description": "maximum time between blockMetadata requests"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.timeout",
+    "type": "duration",
+    "default": "10s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.url",
+    "type": "string",
+    "default": "self-auth",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.source.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "node.block-metadata-fetcher.sync-interval",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "minimum time between blockMetadata requests"
+  },
+  {
+    "flag": "node.block-validator.batch-cache-limit",
+    "type": "uint32",
+    "default": "20",
+    "description": "limit number of old batches to keep in block-validator"
+  },
+  {
+    "flag": "node.block-validator.block-inputs-file-path",
+    "type": "string",
+    "default": "./target/validation_inputs",
+    "description": "directory to write block validation inputs files"
+  },
+  {
+    "flag": "node.block-validator.current-module-root",
+    "type": "string",
+    "default": "current",
+    "description": "current wasm module root ('current' read from chain, 'latest' from machines/latest dir, or provide hash)"
+  },
+  {
+    "flag": "node.block-validator.dangerous.reset-block-validation",
+    "type": "bool",
+    "default": "",
+    "description": "resets block-by-block validation, starting again at genesis"
+  },
+  {
+    "flag": "node.block-validator.dangerous.revalidation.end-block",
+    "type": "uint",
+    "default": "",
+    "description": "end revalidation at this block"
+  },
+  {
+    "flag": "node.block-validator.dangerous.revalidation.quit-after-revalidation",
+    "type": "bool",
+    "default": "",
+    "description": "exit node after revalidation is done"
+  },
+  {
+    "flag": "node.block-validator.dangerous.revalidation.start-block",
+    "type": "uint",
+    "default": "",
+    "description": "start revalidation from this block"
+  },
+  {
+    "flag": "node.block-validator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable block-by-block validation"
+  },
+  {
+    "flag": "node.block-validator.failure-is-fatal",
+    "type": "bool",
+    "default": "true",
+    "description": "failing a validation is treated as a fatal error"
+  },
+  {
+    "flag": "node.block-validator.forward-blocks",
+    "type": "uint",
+    "default": "128",
+    "description": "prepare entries for up to that many blocks ahead of validation (stores batch-copy per block)"
+  },
+  {
+    "flag": "node.block-validator.memory-free-limit",
+    "type": "string",
+    "default": "default",
+    "description": "minimum free-memory limit after reaching which the blockvalidator pauses validation. Enabled by default as 1GB, to disable provide empty string"
+  },
+  {
+    "flag": "node.block-validator.pending-upgrade-module-root",
+    "type": "string",
+    "default": "latest",
+    "description": "pending upgrade wasm module root to additionally validate (hash, 'latest' or empty)"
+  },
+  {
+    "flag": "node.block-validator.prerecorded-blocks",
+    "type": "uint",
+    "default": "4",
+    "description": "record that many blocks ahead of validation (larger footprint)"
+  },
+  {
+    "flag": "node.block-validator.recording-iter-limit",
+    "type": "uint",
+    "default": "20",
+    "description": "limit on block recordings sent per iteration"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.create-streams",
+    "type": "bool",
+    "default": "true",
+    "description": "create redis streams if it does not exist"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.name",
+    "type": "string",
+    "default": "redis validation client",
+    "description": "validation client name"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.producer-config.check-result-interval",
+    "type": "duration",
+    "default": "5s",
+    "description": "interval in which producer checks pending messages whether consumer processing them is inactive"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.producer-config.request-timeout",
+    "type": "duration",
+    "default": "3h0m0s",
+    "description": "timeout after which the message in redis stream is considered as errored, this prevents workers from working on wrong requests indefinitely"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.redis-url",
+    "type": "string",
+    "default": "",
+    "description": "redis url"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.room",
+    "type": "int32",
+    "default": "2",
+    "description": "validation client room"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.stream-prefix",
+    "type": "string",
+    "default": "",
+    "description": "prefix for stream name"
+  },
+  {
+    "flag": "node.block-validator.redis-validation-client-config.stylus-archs",
+    "type": "strings",
+    "default": "[wavm]",
+    "description": "archs required for stylus workers"
+  },
+  {
+    "flag": "node.block-validator.validation-poll",
+    "type": "duration",
+    "default": "1s",
+    "description": "poll time to check validations"
+  },
+  {
+    "flag": "node.block-validator.validation-sent-limit",
+    "type": "uint",
+    "default": "1024",
+    "description": "limit on block validations to keep in validation sent state"
+  },
+  {
+    "flag": "node.block-validator.validation-server-configs-list",
+    "type": "string",
+    "default": "default",
+    "description": "array of execution rpc configs given as a json string. time duration should be supplied in number indicating nanoseconds"
+  },
+  {
+    "flag": "node.block-validator.validation-server.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.block-validator.validation-server.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.block-validator.validation-server.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.block-validator.validation-server.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.block-validator.validation-server.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.block-validator.validation-server.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.block-validator.validation-server.timeout",
+    "type": "duration",
+    "default": "10s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.block-validator.validation-server.url",
+    "type": "string",
+    "default": "self-auth",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.block-validator.validation-server.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "node.block-validator.validation-spawning-allowed-attempts",
+    "type": "uint",
+    "default": "1",
+    "description": "number of attempts allowed when trying to spawn a validation before erroring out"
+  },
+  {
+    "flag": "node.block-validator.validation-spawning-allowed-timeouts",
+    "type": "uint",
+    "default": "3",
+    "description": "number of timeout errors allowed per validation attempt before treating it as a fatal error (separate from allowed-attempts)"
+  },
+  {
+    "flag": "node.bold.api",
+    "type": "bool",
+    "default": "",
+    "description": "enable api"
+  },
+  {
+    "flag": "node.bold.api-db-path",
+    "type": "string",
+    "default": "bold-api-db",
+    "description": "bold api db path"
+  },
+  {
+    "flag": "node.bold.api-host",
+    "type": "string",
+    "default": "127.0.0.1",
+    "description": "bold api host"
+  },
+  {
+    "flag": "node.bold.api-port",
+    "type": "uint16",
+    "default": "9393",
+    "description": "bold api port"
+  },
+  {
+    "flag": "node.bold.assertion-confirming-interval",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "confirm assertion interval"
+  },
+  {
+    "flag": "node.bold.assertion-posting-interval",
+    "type": "duration",
+    "default": "15m0s",
+    "description": "assertion posting interval"
+  },
+  {
+    "flag": "node.bold.assertion-scanning-interval",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "scan assertion interval"
+  },
+  {
+    "flag": "node.bold.auto-deposit",
+    "type": "bool",
+    "default": "true",
+    "description": "auto-deposit stake token whenever making a move in BoLD that does not have enough stake token balance"
+  },
+  {
+    "flag": "node.bold.auto-increase-allowance",
+    "type": "bool",
+    "default": "true",
+    "description": "auto-increase spending allowance of the stake token by the rollup and challenge manager contracts"
+  },
+  {
+    "flag": "node.bold.check-staker-switch-interval",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "how often to check if staker can switch to bold"
+  },
+  {
+    "flag": "node.bold.dangerous.assume-valid",
+    "type": "uint",
+    "default": "",
+    "description": "assume this message index is valid (if blockhash matches)"
+  },
+  {
+    "flag": "node.bold.dangerous.assume-valid-blockhash",
+    "type": "string",
+    "default": "",
+    "description": "blockhash of the assumed-valid message"
+  },
+  {
+    "flag": "node.bold.delegated-staking.custom-withdrawal-address",
+    "type": "string",
+    "default": "",
+    "description": "enable a custom withdrawal address for staking on the rollup contract, useful for delegated stakers"
+  },
+  {
+    "flag": "node.bold.delegated-staking.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable delegated staking by having the validator call newStake on startup"
+  },
+  {
+    "flag": "node.bold.enable-fast-confirmation",
+    "type": "bool",
+    "default": "",
+    "description": "enable fast confirmation"
+  },
+  {
+    "flag": "node.bold.max-get-log-blocks",
+    "type": "int",
+    "default": "5000",
+    "description": "maximum size for chunk of blocks when using get logs rpc"
+  },
+  {
+    "flag": "node.bold.minimum-gap-to-parent-assertion",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "minimum duration to wait since the parent assertion was created to post a new assertion"
+  },
+  {
+    "flag": "node.bold.parent-chain-block-time",
+    "type": "duration",
+    "default": "12s",
+    "description": "the average block time of the parent chain where assertions are posted"
+  },
+  {
+    "flag": "node.bold.rpc-block-number",
+    "type": "string",
+    "default": "finalized",
+    "description": "define the block number to use for reading data onchain, either latest, safe, or finalized"
+  },
+  {
+    "flag": "node.bold.start-validation-from-staked",
+    "type": "bool",
+    "default": "true",
+    "description": "assume staked nodes are valid"
+  },
+  {
+    "flag": "node.bold.state-provider-config.check-batch-finality",
+    "type": "bool",
+    "default": "true",
+    "description": "check batch finality"
+  },
+  {
+    "flag": "node.bold.state-provider-config.machine-leaves-cache-path",
+    "type": "string",
+    "default": "machine-hashes-cache",
+    "description": "path to machine cache"
+  },
+  {
+    "flag": "node.bold.state-provider-config.validator-name",
+    "type": "string",
+    "default": "default-validator",
+    "description": "name identifier for cosmetic purposes"
+  },
+  {
+    "flag": "node.bold.track-challenge-parent-assertion-hashes",
+    "type": "strings",
+    "default": "",
+    "description": "only track challenges/edges with these parent assertion hashes"
+  },
+  {
+    "flag": "node.consensus-execution-syncer.sync-interval",
+    "type": "duration",
+    "default": "300ms",
+    "description": "Interval in which finality and sync data is pushed from consensus to execution"
+  },
+  {
+    "flag": "node.da.anytrust.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable Anytrust Data Availability mode"
+  },
+  {
+    "flag": "node.da.anytrust.max-batch-size",
+    "type": "int",
+    "default": "1000000",
+    "description": "maximum batch size for AnyTrust DA (compressed)"
+  },
+  {
+    "flag": "node.da.anytrust.panic-on-error",
+    "type": "bool",
+    "default": "",
+    "description": "whether the Data Availability Service should fail immediately on errors (not recommended)"
+  },
+  {
+    "flag": "node.da.anytrust.request-timeout",
+    "type": "duration",
+    "default": "5s",
+    "description": "Data Availability Service timeout duration for Store requests"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.connection-wait",
+    "type": "duration",
+    "default": "1s",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable retrieval of sequencer batch data from a list of remote REST endpoints; if other AnyTrust storage types are enabled, this mode is used as a fallback"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.max-per-endpoint-stats",
+    "type": "int",
+    "default": "20",
+    "description": "number of stats entries (latency and success rate) to keep for each REST endpoint; controls whether strategy is faster or slower to respond to changing conditions"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.online-url-list",
+    "type": "string",
+    "default": "",
+    "description": "a URL to a list of URLs of REST AnyTrust endpoints that is checked at startup; additive with the url option"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.online-url-list-fetch-interval",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "time interval to periodically fetch url list from online-url-list"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.simple-explore-exploit-strategy.exploit-iterations",
+    "type": "uint32",
+    "default": "1000",
+    "description": "number of consecutive GetByHash calls to the aggregator where each call will cause it to select from REST endpoints in order of best latency and success rate, before switching to explore mode"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.simple-explore-exploit-strategy.explore-iterations",
+    "type": "uint32",
+    "default": "20",
+    "description": "number of consecutive GetByHash calls to the aggregator where each call will cause it to randomly select from REST endpoints until one returns successfully, before switching to exploit mode"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.strategy",
+    "type": "string",
+    "default": "simple-explore-exploit",
+    "description": "strategy to use to determine order and parallelism of calling REST endpoint URLs; valid options are 'simple-explore-exploit'"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.strategy-update-interval",
+    "type": "duration",
+    "default": "10s",
+    "description": "how frequently to update the strategy with endpoint latency and error rate data"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.delay-on-error",
+    "type": "duration",
+    "default": "1s",
+    "description": "time to wait if encountered an error before retrying"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.eager",
+    "type": "bool",
+    "default": "",
+    "description": "eagerly sync batch data to this AnyTrust server's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.eager-lower-bound-block",
+    "type": "uint",
+    "default": "",
+    "description": "when eagerly syncing, start indexing forward from this L1 block. Only used if there is no sync state"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.ignore-write-errors",
+    "type": "bool",
+    "default": "true",
+    "description": "log only on failures to write when syncing; otherwise treat it as an error"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.parent-chain-blocks-per-read",
+    "type": "uint",
+    "default": "100",
+    "description": "when eagerly syncing, max l1 blocks to read per poll"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.retention-period",
+    "type": "duration",
+    "default": "360h0m0s",
+    "description": "period to request storage to retain synced data"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.state-dir",
+    "type": "string",
+    "default": "",
+    "description": "directory to store the sync state in, ie the block number currently synced up to, so that we don't sync from scratch each time"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.sync-to-storage.sync-expired-data",
+    "type": "bool",
+    "default": "true",
+    "description": "sync even data that is expired; needed for mirror configuration"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.urls",
+    "type": "strings",
+    "default": "",
+    "description": "list of URLs including 'http://' or 'https://' prefixes and port numbers to REST AnyTrust endpoints; additive with the online-url-list option"
+  },
+  {
+    "flag": "node.da.anytrust.rest-aggregator.wait-before-try-next",
+    "type": "duration",
+    "default": "2s",
+    "description": "time to wait until trying the next set of REST endpoints while waiting for a response; the next set of REST endpoints is determined by the strategy selected"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.assumed-honest",
+    "type": "int",
+    "default": "",
+    "description": "Number of assumed honest backends (H). If there are N backends, K=N+1-H valid responses are required to consider an Store request to be successful."
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.backends",
+    "type": "backendConfigList",
+    "default": "null",
+    "description": "JSON RPC backend configuration. This can be specified on the command line as a JSON array, eg: [{\"url\": \"...\", \"pubkey\": \"...\"},...], or as a JSON array in the config file."
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable storage of sequencer batch data from a list of RPC endpoints; this should only be used by the batch poster and not in combination with other AnyTrust storage types"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.max-store-chunk-body-size",
+    "type": "int",
+    "default": "5242880",
+    "description": "maximum HTTP body size for chunked store requests"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.finalize-stream",
+    "type": "string",
+    "default": "das_commitChunkedStore",
+    "description": "name of the RPC method to finalize a chunked data stream"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.start-stream",
+    "type": "string",
+    "default": "das_startChunkedStore",
+    "description": "name of the RPC method to start a chunked data stream"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.stream-chunk",
+    "type": "string",
+    "default": "das_sendChunk",
+    "description": "name of the RPC method to send a chunk of data"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.enable-chunked-store",
+    "type": "bool",
+    "default": "true",
+    "description": "enable data to be sent to AnyTrust in chunks instead of all at once"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.timeout",
+    "type": "duration",
+    "default": "10s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.url",
+    "type": "string",
+    "default": "self-auth",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.da.anytrust.rpc-aggregator.rpc-client.rpc.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "node.da.external-provider.data-stream.max-store-chunk-body-size",
+    "type": "int",
+    "default": "5242880",
+    "description": "maximum HTTP body size for chunked store requests"
+  },
+  {
+    "flag": "node.da.external-provider.data-stream.rpc-methods.finalize-stream",
+    "type": "string",
+    "default": "daprovider_commitChunkedStore",
+    "description": "name of the RPC method to finalize a chunked data stream"
+  },
+  {
+    "flag": "node.da.external-provider.data-stream.rpc-methods.start-stream",
+    "type": "string",
+    "default": "daprovider_startChunkedStore",
+    "description": "name of the RPC method to start a chunked data stream"
+  },
+  {
+    "flag": "node.da.external-provider.data-stream.rpc-methods.stream-chunk",
+    "type": "string",
+    "default": "daprovider_sendChunk",
+    "description": "name of the RPC method to send a chunk of data"
+  },
+  {
+    "flag": "node.da.external-provider.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable daprovider client"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.da.external-provider.rpc.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "node.da.external-provider.store-rpc-method",
+    "type": "string",
+    "default": "daprovider_store",
+    "description": "name of the store rpc method on the daprovider server (used when data streaming is disabled)"
+  },
+  {
+    "flag": "node.da.external-provider.use-data-streaming",
+    "type": "bool",
+    "default": "",
+    "description": "use data streaming protocol for storing large payloads"
+  },
+  {
+    "flag": "node.da.external-provider.with-writer",
+    "type": "bool",
+    "default": "",
+    "description": "implies if the daprovider rpc server supports writer interface"
+  },
+  {
+    "flag": "node.dangerous.disable-blob-reader",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! disables the EIP-4844 blob reader, which is necessary to read batches"
+  },
+  {
+    "flag": "node.dangerous.no-l1-listener",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! disables listening to L1. To be used in test nodes only"
+  },
+  {
+    "flag": "node.dangerous.no-sequencer-coordinator",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! allows sequencing without sequencer-coordinator"
+  },
+  {
+    "flag": "node.data-availability.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable Anytrust Data Availability mode"
+  },
+  {
+    "flag": "node.data-availability.max-batch-size",
+    "type": "int",
+    "default": "1000000",
+    "description": "maximum batch size for AnyTrust DA (compressed)"
+  },
+  {
+    "flag": "node.data-availability.panic-on-error",
+    "type": "bool",
+    "default": "",
+    "description": "whether the Data Availability Service should fail immediately on errors (not recommended)"
+  },
+  {
+    "flag": "node.data-availability.request-timeout",
+    "type": "duration",
+    "default": "5s",
+    "description": "Data Availability Service timeout duration for Store requests"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.connection-wait",
+    "type": "duration",
+    "default": "1s",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable retrieval of sequencer batch data from a list of remote REST endpoints; if other AnyTrust storage types are enabled, this mode is used as a fallback"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.max-per-endpoint-stats",
+    "type": "int",
+    "default": "20",
+    "description": "number of stats entries (latency and success rate) to keep for each REST endpoint; controls whether strategy is faster or slower to respond to changing conditions"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.online-url-list",
+    "type": "string",
+    "default": "",
+    "description": "a URL to a list of URLs of REST AnyTrust endpoints that is checked at startup; additive with the url option"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.online-url-list-fetch-interval",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "time interval to periodically fetch url list from online-url-list"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.simple-explore-exploit-strategy.exploit-iterations",
+    "type": "uint32",
+    "default": "1000",
+    "description": "number of consecutive GetByHash calls to the aggregator where each call will cause it to select from REST endpoints in order of best latency and success rate, before switching to explore mode"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.simple-explore-exploit-strategy.explore-iterations",
+    "type": "uint32",
+    "default": "20",
+    "description": "number of consecutive GetByHash calls to the aggregator where each call will cause it to randomly select from REST endpoints until one returns successfully, before switching to exploit mode"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.strategy",
+    "type": "string",
+    "default": "simple-explore-exploit",
+    "description": "strategy to use to determine order and parallelism of calling REST endpoint URLs; valid options are 'simple-explore-exploit'"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.strategy-update-interval",
+    "type": "duration",
+    "default": "10s",
+    "description": "how frequently to update the strategy with endpoint latency and error rate data"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.delay-on-error",
+    "type": "duration",
+    "default": "1s",
+    "description": "time to wait if encountered an error before retrying"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.eager",
+    "type": "bool",
+    "default": "",
+    "description": "eagerly sync batch data to this AnyTrust server's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block",
+    "type": "uint",
+    "default": "",
+    "description": "when eagerly syncing, start indexing forward from this L1 block. Only used if there is no sync state"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.ignore-write-errors",
+    "type": "bool",
+    "default": "true",
+    "description": "log only on failures to write when syncing; otherwise treat it as an error"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.parent-chain-blocks-per-read",
+    "type": "uint",
+    "default": "100",
+    "description": "when eagerly syncing, max l1 blocks to read per poll"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.retention-period",
+    "type": "duration",
+    "default": "360h0m0s",
+    "description": "period to request storage to retain synced data"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.state-dir",
+    "type": "string",
+    "default": "",
+    "description": "directory to store the sync state in, ie the block number currently synced up to, so that we don't sync from scratch each time"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.sync-to-storage.sync-expired-data",
+    "type": "bool",
+    "default": "true",
+    "description": "sync even data that is expired; needed for mirror configuration"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.urls",
+    "type": "strings",
+    "default": "",
+    "description": "list of URLs including 'http://' or 'https://' prefixes and port numbers to REST AnyTrust endpoints; additive with the online-url-list option"
+  },
+  {
+    "flag": "node.data-availability.rest-aggregator.wait-before-try-next",
+    "type": "duration",
+    "default": "2s",
+    "description": "time to wait until trying the next set of REST endpoints while waiting for a response; the next set of REST endpoints is determined by the strategy selected"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.assumed-honest",
+    "type": "int",
+    "default": "",
+    "description": "Number of assumed honest backends (H). If there are N backends, K=N+1-H valid responses are required to consider an Store request to be successful."
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.backends",
+    "type": "backendConfigList",
+    "default": "null",
+    "description": "JSON RPC backend configuration. This can be specified on the command line as a JSON array, eg: [{\"url\": \"...\", \"pubkey\": \"...\"},...], or as a JSON array in the config file."
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable storage of sequencer batch data from a list of RPC endpoints; this should only be used by the batch poster and not in combination with other AnyTrust storage types"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.max-store-chunk-body-size",
+    "type": "int",
+    "default": "5242880",
+    "description": "maximum HTTP body size for chunked store requests"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.rpc-methods.finalize-stream",
+    "type": "string",
+    "default": "das_commitChunkedStore",
+    "description": "name of the RPC method to finalize a chunked data stream"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.rpc-methods.start-stream",
+    "type": "string",
+    "default": "das_startChunkedStore",
+    "description": "name of the RPC method to start a chunked data stream"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.data-stream.rpc-methods.stream-chunk",
+    "type": "string",
+    "default": "das_sendChunk",
+    "description": "name of the RPC method to send a chunk of data"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.enable-chunked-store",
+    "type": "bool",
+    "default": "true",
+    "description": "enable data to be sent to AnyTrust in chunks instead of all at once"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.timeout",
+    "type": "duration",
+    "default": "10s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.url",
+    "type": "string",
+    "default": "self-auth",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.data-availability.rpc-aggregator.rpc-client.rpc.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "node.delayed-sequencer.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable delayed sequencer"
+  },
+  {
+    "flag": "node.delayed-sequencer.filtered-tx-full-retry-interval",
+    "type": "duration",
+    "default": "30s",
+    "description": "how often to do a full re-execution when halted on a filtered delayed message"
+  },
+  {
+    "flag": "node.delayed-sequencer.finalize-distance",
+    "type": "int",
+    "default": "20",
+    "description": "how many blocks in the past L1 block is considered final (ignored when using Merge finality)"
+  },
+  {
+    "flag": "node.delayed-sequencer.require-full-finality",
+    "type": "bool",
+    "default": "",
+    "description": "whether to wait for full finality before sequencing delayed messages"
+  },
+  {
+    "flag": "node.delayed-sequencer.rescan-interval",
+    "type": "duration",
+    "default": "1s",
+    "description": "frequency to rescan for new delayed messages (the parent chain reader's poll-interval config is more important than this)"
+  },
+  {
+    "flag": "node.delayed-sequencer.use-merge-finality",
+    "type": "bool",
+    "default": "true",
+    "description": "whether to use The Merge's notion of finality before sequencing delayed messages"
+  },
+  {
+    "flag": "node.execution-rpc-client.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "node.execution-rpc-client.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "node.execution-rpc-client.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "node.execution-rpc-client.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "node.execution-rpc-client.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "node.execution-rpc-client.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "node.execution-rpc-client.timeout",
+    "type": "duration",
+    "default": "",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "node.execution-rpc-client.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "node.execution-rpc-client.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "node.feed.input.enable-compression",
+    "type": "bool",
+    "default": "true",
+    "description": "enable per message deflate compression support"
+  },
+  {
+    "flag": "node.feed.input.reconnect-initial-backoff",
+    "type": "duration",
+    "default": "1s",
+    "description": "initial duration to wait before reconnect"
+  },
+  {
+    "flag": "node.feed.input.reconnect-maximum-backoff",
+    "type": "duration",
+    "default": "1m4s",
+    "description": "maximum duration to wait before reconnect"
+  },
+  {
+    "flag": "node.feed.input.require-chain-id",
+    "type": "bool",
+    "default": "",
+    "description": "require chain id to be present on connect"
+  },
+  {
+    "flag": "node.feed.input.require-feed-version",
+    "type": "bool",
+    "default": "",
+    "description": "require feed version to be present on connect"
+  },
+  {
+    "flag": "node.feed.input.secondary-url",
+    "type": "strings",
+    "default": "",
+    "description": "list of secondary URLs of sequencer feed source. Would be started in the order they appear in the list when primary feeds fails"
+  },
+  {
+    "flag": "node.feed.input.timeout",
+    "type": "duration",
+    "default": "20s",
+    "description": "duration to wait before timing out connection to sequencer feed"
+  },
+  {
+    "flag": "node.feed.input.url",
+    "type": "strings",
+    "default": "",
+    "description": "list of primary URLs of sequencer feed source"
+  },
+  {
+    "flag": "node.feed.input.verify.accept-sequencer",
+    "type": "bool",
+    "default": "true",
+    "description": "accept verified message from sequencer"
+  },
+  {
+    "flag": "node.feed.input.verify.allowed-addresses",
+    "type": "strings",
+    "default": "",
+    "description": "a list of allowed addresses"
+  },
+  {
+    "flag": "node.feed.input.verify.dangerous.accept-missing",
+    "type": "bool",
+    "default": "true",
+    "description": "accept empty as valid signature"
+  },
+  {
+    "flag": "node.feed.output.addr",
+    "type": "string",
+    "default": "",
+    "description": "address to bind the relay feed output to"
+  },
+  {
+    "flag": "node.feed.output.backlog.enable-backlog-deep-copy",
+    "type": "bool",
+    "default": "",
+    "description": "enable deep copying of L2 messages for memory profiling (debug only)"
+  },
+  {
+    "flag": "node.feed.output.backlog.segment-limit",
+    "type": "int",
+    "default": "240",
+    "description": "the maximum number of messages each segment within the backlog can contain"
+  },
+  {
+    "flag": "node.feed.output.client-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay the first messages sent to each client by this amount"
+  },
+  {
+    "flag": "node.feed.output.client-timeout",
+    "type": "duration",
+    "default": "15s",
+    "description": "duration to wait before timing out connections to client"
+  },
+  {
+    "flag": "node.feed.output.connection-limits.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable broadcaster per-client connection limiting"
+  },
+  {
+    "flag": "node.feed.output.connection-limits.per-ip-limit",
+    "type": "int",
+    "default": "5",
+    "description": "limit clients, as identified by IPv4/v6 address, to this many connections to this relay"
+  },
+  {
+    "flag": "node.feed.output.connection-limits.per-ipv6-cidr-48-limit",
+    "type": "int",
+    "default": "20",
+    "description": "limit ipv6 clients, as identified by IPv6 address masked with /48, to this many connections to this relay"
+  },
+  {
+    "flag": "node.feed.output.connection-limits.per-ipv6-cidr-64-limit",
+    "type": "int",
+    "default": "10",
+    "description": "limit ipv6 clients, as identified by IPv6 address masked with /64, to this many connections to this relay"
+  },
+  {
+    "flag": "node.feed.output.connection-limits.reconnect-cooldown-period",
+    "type": "duration",
+    "default": "",
+    "description": "time to wait after a relay client disconnects before the disconnect is registered with respect to the limit for this client"
+  },
+  {
+    "flag": "node.feed.output.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable broadcaster"
+  },
+  {
+    "flag": "node.feed.output.enable-compression",
+    "type": "bool",
+    "default": "",
+    "description": "enable per message deflate compression support"
+  },
+  {
+    "flag": "node.feed.output.handshake-timeout",
+    "type": "duration",
+    "default": "1s",
+    "description": "duration to wait before timing out HTTP to WS upgrade"
+  },
+  {
+    "flag": "node.feed.output.limit-catchup",
+    "type": "bool",
+    "default": "",
+    "description": "only supply catchup buffer if requested sequence number is reasonable"
+  },
+  {
+    "flag": "node.feed.output.log-connect",
+    "type": "bool",
+    "default": "",
+    "description": "log every client connect"
+  },
+  {
+    "flag": "node.feed.output.log-disconnect",
+    "type": "bool",
+    "default": "",
+    "description": "log every client disconnect"
+  },
+  {
+    "flag": "node.feed.output.max-catchup",
+    "type": "int",
+    "default": "-1",
+    "description": "the maximum size of the catchup buffer (-1 means unlimited)"
+  },
+  {
+    "flag": "node.feed.output.max-send-queue",
+    "type": "int",
+    "default": "4096",
+    "description": "maximum number of messages allowed to accumulate before client is disconnected"
+  },
+  {
+    "flag": "node.feed.output.ping",
+    "type": "duration",
+    "default": "5s",
+    "description": "duration for ping interval"
+  },
+  {
+    "flag": "node.feed.output.port",
+    "type": "string",
+    "default": "9642",
+    "description": "port to bind the relay feed output to"
+  },
+  {
+    "flag": "node.feed.output.queue",
+    "type": "int",
+    "default": "100",
+    "description": "queue size for HTTP to WS upgrade"
+  },
+  {
+    "flag": "node.feed.output.read-timeout",
+    "type": "duration",
+    "default": "1s",
+    "description": "duration to wait before timing out reading data (i.e. pings) from clients"
+  },
+  {
+    "flag": "node.feed.output.require-compression",
+    "type": "bool",
+    "default": "",
+    "description": "require clients to use compression"
+  },
+  {
+    "flag": "node.feed.output.require-version",
+    "type": "bool",
+    "default": "",
+    "description": "don't connect if client version not present"
+  },
+  {
+    "flag": "node.feed.output.signed",
+    "type": "bool",
+    "default": "",
+    "description": "sign broadcast messages with the batch poster wallet"
+  },
+  {
+    "flag": "node.feed.output.workers",
+    "type": "int",
+    "default": "100",
+    "description": "number of threads to reserve for HTTP to WS upgrade"
+  },
+  {
+    "flag": "node.feed.output.write-timeout",
+    "type": "duration",
+    "default": "2s",
+    "description": "duration to wait before timing out writing data to clients"
+  },
+  {
+    "flag": "node.inbox-reader.check-delay",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "the maximum time to wait between inbox checks (if not enough new blocks are found)"
+  },
+  {
+    "flag": "node.inbox-reader.default-blocks-to-read",
+    "type": "uint",
+    "default": "100",
+    "description": "the default number of blocks to read at once (will vary based on traffic by default)"
+  },
+  {
+    "flag": "node.inbox-reader.delay-blocks",
+    "type": "uint",
+    "default": "",
+    "description": "number of latest blocks to ignore to reduce reorgs"
+  },
+  {
+    "flag": "node.inbox-reader.max-blocks-to-read",
+    "type": "uint",
+    "default": "2000",
+    "description": "if adjust-blocks-to-read is enabled, the maximum number of blocks to read at once"
+  },
+  {
+    "flag": "node.inbox-reader.min-blocks-to-read",
+    "type": "uint",
+    "default": "1",
+    "description": "the minimum number of blocks to read at once (when caught up lowers load on L1)"
+  },
+  {
+    "flag": "node.inbox-reader.read-mode",
+    "type": "string",
+    "default": "latest",
+    "description": "mode to only read latest or safe or finalized L1 blocks. Enabling safe or finalized disables feed input and output. Defaults to latest. Takes string input, valid strings- latest, safe, finalized"
+  },
+  {
+    "flag": "node.inbox-reader.target-messages-read",
+    "type": "uint",
+    "default": "500",
+    "description": "if adjust-blocks-to-read is enabled, the target number of messages to read at once"
+  },
+  {
+    "flag": "node.maintenance.check-interval",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "how often to check if maintenance should be run"
+  },
+  {
+    "flag": "node.maintenance.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable maintenance runner"
+  },
+  {
+    "flag": "node.maintenance.lock.background-lock",
+    "type": "bool",
+    "default": "",
+    "description": "should node always try grabbing lock in background"
+  },
+  {
+    "flag": "node.maintenance.lock.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "if false, always treat this as locked and don't write the lock to redis"
+  },
+  {
+    "flag": "node.maintenance.lock.key",
+    "type": "string",
+    "default": "",
+    "description": "key for lock"
+  },
+  {
+    "flag": "node.maintenance.lock.lockout-duration",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "how long lock is held"
+  },
+  {
+    "flag": "node.maintenance.lock.my-id",
+    "type": "string",
+    "default": "",
+    "description": "this node's id prefix when acquiring the lock (optional)"
+  },
+  {
+    "flag": "node.maintenance.lock.refresh-duration",
+    "type": "duration",
+    "default": "10s",
+    "description": "how long between consecutive calls to redis"
+  },
+  {
+    "flag": "node.message-extraction.blocks-to-prefetch",
+    "type": "uint",
+    "default": "499",
+    "description": "the number of blocks to prefetch relevant logs from. Recommend using max allowed range for eth_getLogs rpc query"
+  },
+  {
+    "flag": "node.message-extraction.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable message extraction service"
+  },
+  {
+    "flag": "node.message-extraction.log-extraction-status-frequency-blocks",
+    "type": "uint",
+    "default": "100",
+    "description": "frequency of logging message extraction status in terms of number of blocks processed"
+  },
+  {
+    "flag": "node.message-extraction.read-mode",
+    "type": "string",
+    "default": "latest",
+    "description": "mode to only read latest or safe or finalized L1 blocks. Enabling safe or finalized disables feed input and output. Defaults to latest. Takes string input, valid strings- latest, safe, finalized"
+  },
+  {
+    "flag": "node.message-extraction.retry-interval",
+    "type": "duration",
+    "default": "500ms",
+    "description": "wait time before retring upon a failure"
+  },
+  {
+    "flag": "node.message-extraction.stall-tolerance",
+    "type": "uint",
+    "default": "10",
+    "description": "max times the MEL fsm is allowed to be stuck without logging error"
+  },
+  {
+    "flag": "node.message-pruner.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "enable message pruning"
+  },
+  {
+    "flag": "node.message-pruner.min-batches-left",
+    "type": "uint",
+    "default": "1000",
+    "description": "min number of batches not pruned"
+  },
+  {
+    "flag": "node.message-pruner.prune-interval",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "interval for running message pruner"
+  },
+  {
+    "flag": "node.parent-chain-reader.dangerous.wait-for-tx-approval-safe-poll",
+    "type": "duration",
+    "default": "",
+    "description": "Dangerous! only meant to be used by system tests"
+  },
+  {
+    "flag": "node.parent-chain-reader.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "enable reader connection"
+  },
+  {
+    "flag": "node.parent-chain-reader.old-header-timeout",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "warns if the latest l1 block is at least this old"
+  },
+  {
+    "flag": "node.parent-chain-reader.poll-interval",
+    "type": "duration",
+    "default": "15s",
+    "description": "interval when polling endpoint"
+  },
+  {
+    "flag": "node.parent-chain-reader.poll-only",
+    "type": "bool",
+    "default": "",
+    "description": "do not attempt to subscribe to header events"
+  },
+  {
+    "flag": "node.parent-chain-reader.poll-timeout",
+    "type": "duration",
+    "default": "5s",
+    "description": "timeout when polling endpoint"
+  },
+  {
+    "flag": "node.parent-chain-reader.subscribe-err-interval",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "interval for subscribe error"
+  },
+  {
+    "flag": "node.parent-chain-reader.tx-timeout",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "timeout when waiting for a transaction"
+  },
+  {
+    "flag": "node.parent-chain-reader.use-finality-data",
+    "type": "bool",
+    "default": "true",
+    "description": "use l1 data about finalized/safe blocks"
+  },
+  {
+    "flag": "node.resource-mgmt.mem-free-limit",
+    "type": "string",
+    "default": "",
+    "description": "Decline RPC calls if free memory excluding the page cache is below this amount"
+  },
+  {
+    "flag": "node.rpc-server.authenticated",
+    "type": "bool",
+    "default": "true",
+    "description": "rpc is authenticated"
+  },
+  {
+    "flag": "node.rpc-server.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable consensus node to serve over rpc"
+  },
+  {
+    "flag": "node.rpc-server.public",
+    "type": "bool",
+    "default": "",
+    "description": "rpc is public"
+  },
+  {
+    "flag": "node.seq-coordinator.block-metadata-duration",
+    "type": "duration",
+    "default": "240h0m0s",
+    "description": "expiration duration for block metadata keys in Redis"
+  },
+  {
+    "flag": "node.seq-coordinator.chosen-healthcheck-addr",
+    "type": "string",
+    "default": "",
+    "description": "if non-empty, launch an HTTP service binding to this address that returns status code 200 when chosen and 503 otherwise"
+  },
+  {
+    "flag": "node.seq-coordinator.delete-finalized-msgs",
+    "type": "bool",
+    "default": "true",
+    "description": "enable deleting of finalized messages from redis"
+  },
+  {
+    "flag": "node.seq-coordinator.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable sequence coordinator"
+  },
+  {
+    "flag": "node.seq-coordinator.handoff-timeout",
+    "type": "duration",
+    "default": "30s",
+    "description": "the maximum amount of time to spend waiting for another sequencer to accept the lockout when handing it off on shutdown or db compaction"
+  },
+  {
+    "flag": "node.seq-coordinator.lockout-duration",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "duration to hold the sequencer lockout after acquiring it"
+  },
+  {
+    "flag": "node.seq-coordinator.lockout-spare",
+    "type": "duration",
+    "default": "30s",
+    "description": "time to subtract from lockout duration to ensure timely renewal"
+  },
+  {
+    "flag": "node.seq-coordinator.msg-per-poll",
+    "type": "uint",
+    "default": "2000",
+    "description": "will only be marked as wanting the lockout if not too far behind"
+  },
+  {
+    "flag": "node.seq-coordinator.my-url",
+    "type": "string",
+    "default": "<?INVALID-URL?>",
+    "description": "url for this sequencer if it is the chosen"
+  },
+  {
+    "flag": "node.seq-coordinator.new-redis-url",
+    "type": "string",
+    "default": "",
+    "description": "switch to the new Redis URL to coordinate via"
+  },
+  {
+    "flag": "node.seq-coordinator.redis-quorum-size",
+    "type": "uint",
+    "default": "1",
+    "description": "the quorum size needed to qualify a redis GET as valid"
+  },
+  {
+    "flag": "node.seq-coordinator.redis-url",
+    "type": "string",
+    "default": "",
+    "description": "the Redis URL to coordinate via"
+  },
+  {
+    "flag": "node.seq-coordinator.release-retries",
+    "type": "int",
+    "default": "4",
+    "description": "the number of times to retry releasing the wants lockout and chosen one status on shutdown"
+  },
+  {
+    "flag": "node.seq-coordinator.retry-interval",
+    "type": "duration",
+    "default": "50ms",
+    "description": "interval to wait before retrying after an error"
+  },
+  {
+    "flag": "node.seq-coordinator.safe-shutdown-delay",
+    "type": "duration",
+    "default": "5s",
+    "description": "if non-zero will add delay after transferring control"
+  },
+  {
+    "flag": "node.seq-coordinator.seq-num-duration",
+    "type": "duration",
+    "default": "240h0m0s",
+    "description": "expiration duration for message count keys in Redis"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.ecdsa.accept-sequencer",
+    "type": "bool",
+    "default": "true",
+    "description": "accept verified message from sequencer"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.ecdsa.allowed-addresses",
+    "type": "strings",
+    "default": "",
+    "description": "a list of allowed addresses"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.ecdsa.dangerous.accept-missing",
+    "type": "bool",
+    "default": "true",
+    "description": "accept empty as valid signature"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.symmetric-fallback",
+    "type": "bool",
+    "default": "",
+    "description": "if to fall back to symmetric hmac"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.symmetric-sign",
+    "type": "bool",
+    "default": "",
+    "description": "if to sign with symmetric hmac"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.symmetric.dangerous.disable-signature-verification",
+    "type": "bool",
+    "default": "",
+    "description": "disable message signature verification"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.symmetric.fallback-verification-key",
+    "type": "string",
+    "default": "",
+    "description": "a fallback key used for message verification"
+  },
+  {
+    "flag": "node.seq-coordinator.signer.symmetric.signing-key",
+    "type": "string",
+    "default": "",
+    "description": "a 32-byte (64-character) hex string used to sign messages, or a path to a file containing it"
+  },
+  {
+    "flag": "node.seq-coordinator.update-interval",
+    "type": "duration",
+    "default": "250ms",
+    "description": "interval between sequencer coordinator update attempts"
+  },
+  {
+    "flag": "node.sequencer",
+    "type": "bool",
+    "default": "",
+    "description": "enable sequencer"
+  },
+  {
+    "flag": "node.staker.confirmation-blocks",
+    "type": "int",
+    "default": "12",
+    "description": "confirmation blocks"
+  },
+  {
+    "flag": "node.staker.contract-wallet-address",
+    "type": "string",
+    "default": "",
+    "description": "validator smart contract wallet public address"
+  },
+  {
+    "flag": "node.staker.dangerous.ignore-rollup-wasm-module-root",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! make assertions even when the wasm module root is wrong"
+  },
+  {
+    "flag": "node.staker.dangerous.without-block-validator",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! allows running an L1 validator without a block validator"
+  },
+  {
+    "flag": "node.staker.data-poster.allocate-mempool-balance",
+    "type": "bool",
+    "default": "true",
+    "description": "if true, don't put transactions in the mempool that spend a total greater than the batch poster's balance"
+  },
+  {
+    "flag": "node.staker.data-poster.dangerous.clear-dbstorage",
+    "type": "bool",
+    "default": "",
+    "description": "clear database storage"
+  },
+  {
+    "flag": "node.staker.data-poster.disable-new-tx",
+    "type": "bool",
+    "default": "",
+    "description": "disable posting new transactions, data poster will still keep confirming existing batches"
+  },
+  {
+    "flag": "node.staker.data-poster.elapsed-time-base",
+    "type": "duration",
+    "default": "10m0s",
+    "description": "unit to measure the time elapsed since creation of transaction used for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.staker.data-poster.elapsed-time-importance",
+    "type": "float",
+    "default": "10",
+    "description": "weight given to the units of time elapsed used for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.staker.data-poster.external-signer.address",
+    "type": "string",
+    "default": "",
+    "description": "external signer address"
+  },
+  {
+    "flag": "node.staker.data-poster.external-signer.client-cert",
+    "type": "string",
+    "default": "",
+    "description": "rpc client cert"
+  },
+  {
+    "flag": "node.staker.data-poster.external-signer.client-private-key",
+    "type": "string",
+    "default": "",
+    "description": "rpc client private key"
+  },
+  {
+    "flag": "node.staker.data-poster.external-signer.insecure-skip-verify",
+    "type": "bool",
+    "default": "",
+    "description": "skip TLS certificate verification"
+  },
+  {
+    "flag": "node.staker.data-poster.external-signer.method",
+    "type": "string",
+    "default": "eth_signTransaction",
+    "description": "external signer method"
+  },
+  {
+    "flag": "node.staker.data-poster.external-signer.root-ca",
+    "type": "string",
+    "default": "",
+    "description": "external signer root CA"
+  },
+  {
+    "flag": "node.staker.data-poster.external-signer.url",
+    "type": "string",
+    "default": "",
+    "description": "external signer url"
+  },
+  {
+    "flag": "node.staker.data-poster.legacy-storage-encoding",
+    "type": "bool",
+    "default": "",
+    "description": "encodes items in a legacy way (as it was before dropping generics)"
+  },
+  {
+    "flag": "node.staker.data-poster.max-fee-bid-multiple-bips",
+    "type": "uint",
+    "default": "100000",
+    "description": "the maximum multiple of the current price to bid for a transaction's fees (may be exceeded due to min rbf increase, 0 = unlimited)"
+  },
+  {
+    "flag": "node.staker.data-poster.max-fee-cap-formula",
+    "type": "string",
+    "default": "",
+    "description": "mathematical formula to calculate maximum fee cap gwei the result of which would be float64. This expression is expected to be evaluated please refer https://github.com/Knetic/govaluate/blob/master/MANUAL.md to find all available mathematical operators. Currently available variables to construct the formula are BacklogOfBatches, UrgencyGWei, ElapsedTime, ElapsedTimeBase, ElapsedTimeImportance, and TargetPriceGWei (default \"((BacklogOfBatches * UrgencyGWei) ** 2) + ((ElapsedTime/ElapsedTimeBase) ** 2) * ElapsedTimeImportance + TargetPriceGWei\")"
+  },
+  {
+    "flag": "node.staker.data-poster.max-mempool-transactions",
+    "type": "uint",
+    "default": "1",
+    "description": "the maximum number of transactions to have queued in the mempool at once (0 = unlimited)"
+  },
+  {
+    "flag": "node.staker.data-poster.max-mempool-weight",
+    "type": "uint",
+    "default": "1",
+    "description": "the maximum number of weight (weight = min(1, tx.blobs)) to have queued in the mempool at once (0 = unlimited)"
+  },
+  {
+    "flag": "node.staker.data-poster.max-queued-transactions",
+    "type": "int",
+    "default": "",
+    "description": "the maximum number of unconfirmed transactions to track at once (0 = unlimited)"
+  },
+  {
+    "flag": "node.staker.data-poster.max-tip-cap-gwei",
+    "type": "float",
+    "default": "1.2",
+    "description": "the maximum tip cap to post transactions at"
+  },
+  {
+    "flag": "node.staker.data-poster.min-tip-cap-gwei",
+    "type": "float",
+    "default": "0.05",
+    "description": "the minimum tip cap to post transactions at"
+  },
+  {
+    "flag": "node.staker.data-poster.nonce-rbf-soft-confs",
+    "type": "uint",
+    "default": "1",
+    "description": "the maximum probable reorg depth, used to determine when a transaction will no longer likely need replaced-by-fee"
+  },
+  {
+    "flag": "node.staker.data-poster.redis-signer.dangerous.disable-signature-verification",
+    "type": "bool",
+    "default": "",
+    "description": "disable message signature verification"
+  },
+  {
+    "flag": "node.staker.data-poster.redis-signer.fallback-verification-key",
+    "type": "string",
+    "default": "",
+    "description": "a fallback key used for message verification"
+  },
+  {
+    "flag": "node.staker.data-poster.redis-signer.signing-key",
+    "type": "string",
+    "default": "",
+    "description": "a 32-byte (64-character) hex string used to sign messages, or a path to a file containing it"
+  },
+  {
+    "flag": "node.staker.data-poster.replacement-times",
+    "type": "durationSlice",
+    "default": "[5m0s,10m0s,20m0s,30m0s,1h0m0s,2h0m0s,4h0m0s,6h0m0s,8h0m0s,12h0m0s,16h0m0s,18h0m0s,20h0m0s,22h0m0s]",
+    "description": "comma-separated list of durations since first posting to attempt a replace-by-fee"
+  },
+  {
+    "flag": "node.staker.data-poster.target-price-gwei",
+    "type": "float",
+    "default": "60",
+    "description": "the target price to use for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.staker.data-poster.urgency-gwei",
+    "type": "float",
+    "default": "2",
+    "description": "the urgency to use for maximum fee cap calculation"
+  },
+  {
+    "flag": "node.staker.data-poster.use-db-storage",
+    "type": "bool",
+    "default": "true",
+    "description": "uses database storage when enabled"
+  },
+  {
+    "flag": "node.staker.data-poster.use-noop-storage",
+    "type": "bool",
+    "default": "",
+    "description": "uses noop storage, it doesn't store anything"
+  },
+  {
+    "flag": "node.staker.data-poster.wait-for-l1-finality",
+    "type": "bool",
+    "default": "true",
+    "description": "only treat a transaction as confirmed after L1 finality has been achieved (recommended)"
+  },
+  {
+    "flag": "node.staker.disable-challenge",
+    "type": "bool",
+    "default": "",
+    "description": "disable validator challenge"
+  },
+  {
+    "flag": "node.staker.enable",
+    "type": "bool",
+    "default": "true",
+    "description": "enable validator"
+  },
+  {
+    "flag": "node.staker.enable-fast-confirmation",
+    "type": "bool",
+    "default": "",
+    "description": "enable fast confirmation"
+  },
+  {
+    "flag": "node.staker.extra-gas",
+    "type": "uint",
+    "default": "50000",
+    "description": "use this much more gas than estimation says is necessary to post transactions"
+  },
+  {
+    "flag": "node.staker.gas-refunder-address",
+    "type": "string",
+    "default": "",
+    "description": "The gas refunder contract address (optional)"
+  },
+  {
+    "flag": "node.staker.log-query-batch-size",
+    "type": "uint",
+    "default": "",
+    "description": "range ro query from eth_getLogs"
+  },
+  {
+    "flag": "node.staker.make-assertion-interval",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "if configured with the makeNodes strategy, how often to create new assertions (bypassed in case of a dispute)"
+  },
+  {
+    "flag": "node.staker.only-create-wallet-contract",
+    "type": "bool",
+    "default": "",
+    "description": "only create smart wallet contract and exit"
+  },
+  {
+    "flag": "node.staker.parent-chain-wallet.account",
+    "type": "string",
+    "default": "is first account in keystore",
+    "description": "account to use"
+  },
+  {
+    "flag": "node.staker.parent-chain-wallet.only-create-key",
+    "type": "bool",
+    "default": "",
+    "description": "if true, creates new key then exits"
+  },
+  {
+    "flag": "node.staker.parent-chain-wallet.password",
+    "type": "string",
+    "default": "PASSWORD_NOT_SET",
+    "description": "wallet passphrase"
+  },
+  {
+    "flag": "node.staker.parent-chain-wallet.pathname",
+    "type": "string",
+    "default": "validator-wallet",
+    "description": "pathname for wallet"
+  },
+  {
+    "flag": "node.staker.parent-chain-wallet.private-key",
+    "type": "string",
+    "default": "",
+    "description": "private key for wallet"
+  },
+  {
+    "flag": "node.staker.posting-strategy.high-gas-delay-blocks",
+    "type": "int",
+    "default": "",
+    "description": "high gas delay blocks"
+  },
+  {
+    "flag": "node.staker.posting-strategy.high-gas-threshold",
+    "type": "float",
+    "default": "",
+    "description": "high gas threshold"
+  },
+  {
+    "flag": "node.staker.redis-url",
+    "type": "string",
+    "default": "",
+    "description": "redis url for L1 validator"
+  },
+  {
+    "flag": "node.staker.staker-interval",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "how often the L1 validator should check the status of the L1 rollup and maybe take action with its stake"
+  },
+  {
+    "flag": "node.staker.start-validation-from-staked",
+    "type": "bool",
+    "default": "true",
+    "description": "assume staked nodes are valid"
+  },
+  {
+    "flag": "node.staker.strategy",
+    "type": "string",
+    "default": "Watchtower",
+    "description": "L1 validator strategy, either watchtower, defensive, stakeLatest, or makeNodes"
+  },
+  {
+    "flag": "node.staker.use-smart-contract-wallet",
+    "type": "bool",
+    "default": "",
+    "description": "use a smart contract wallet instead of an EOA address"
+  },
+  {
+    "flag": "node.sync-monitor.msg-lag",
+    "type": "duration",
+    "default": "1s",
+    "description": "allowed msg lag while still considered in sync"
+  },
+  {
+    "flag": "node.transaction-streamer.execute-message-loop-delay",
+    "type": "duration",
+    "default": "100ms",
+    "description": "delay when polling calls to execute messages"
+  },
+  {
+    "flag": "node.transaction-streamer.max-broadcaster-queue-size",
+    "type": "int",
+    "default": "50000",
+    "description": "maximum cache of pending broadcaster messages"
+  },
+  {
+    "flag": "node.transaction-streamer.max-reorg-resequence-depth",
+    "type": "int",
+    "default": "1024",
+    "description": "maximum number of messages to attempt to resequence on reorg (0 = never resequence, -1 = always resequence)"
+  },
+  {
+    "flag": "node.transaction-streamer.shutdown-on-blockhash-mismatch",
+    "type": "bool",
+    "default": "",
+    "description": "if set the node gracefully shuts down upon detecting mismatch in feed and locally computed blockhash. This is turned off by default"
+  },
+  {
+    "flag": "node.transaction-streamer.sync-till-block",
+    "type": "uint",
+    "default": "",
+    "description": "node will not sync past this block"
+  },
+  {
+    "flag": "node.transaction-streamer.track-block-metadata-from",
+    "type": "uint",
+    "default": "",
+    "description": "block number to start saving blockmetadata, 0 to disable"
+  },
+  {
+    "flag": "node.version-alerter-server.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable arb_getMinRequiredNitroVersion endpoint that returns minimum required version of the nitro node software"
+  },
+  {
+    "flag": "node.version-alerter-server.min-required-nitro-by-date",
+    "type": "string",
+    "default": "",
+    "description": "minimum required version of the nitro node software by date. Second string in the result of querying arb_getMinRequiredNitroVersion endpoint"
+  },
+  {
+    "flag": "node.version-alerter-server.min-required-nitro-by-version",
+    "type": "string",
+    "default": "",
+    "description": "minimum required version of the nitro node software. First string in the result of querying arb_getMinRequiredNitroVersion endpoint"
+  },
+  {
+    "flag": "node.version-alerter-server.upgrade-deadline",
+    "type": "string",
+    "default": "",
+    "description": "deadline to upgrade the nitro node software. Third string in the result of querying arb_getMinRequiredNitroVersion endpoint"
+  },
+  {
+    "flag": "parent-chain.blob-client.authorization",
+    "type": "string",
+    "default": "",
+    "description": "Value to send with the HTTP Authorization: header for Beacon REST requests, must include both scheme and scheme parameters"
+  },
+  {
+    "flag": "parent-chain.blob-client.beacon-url",
+    "type": "string",
+    "default": "",
+    "description": "Beacon Chain RPC URL to use for fetching blobs (normally on port 3500)"
+  },
+  {
+    "flag": "parent-chain.blob-client.blob-directory",
+    "type": "string",
+    "default": "",
+    "description": "Full path of the directory to save fetched blobs"
+  },
+  {
+    "flag": "parent-chain.blob-client.dangerous.skip-blob-proof-verification",
+    "type": "bool",
+    "default": "",
+    "description": "DANGEROUS! Skips verification of KZG proofs for blobs fetched from the beacon node."
+  },
+  {
+    "flag": "parent-chain.blob-client.secondary-beacon-url",
+    "type": "string",
+    "default": "",
+    "description": "Backup beacon Chain RPC URL to use for fetching blobs (normally on port 3500) when unable to fetch from primary"
+  },
+  {
+    "flag": "parent-chain.connection.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "parent-chain.connection.connection-wait",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "parent-chain.connection.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "parent-chain.connection.retries",
+    "type": "uint",
+    "default": "2",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "parent-chain.connection.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "parent-chain.connection.retry-errors",
+    "type": "string",
+    "default": "",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "parent-chain.connection.timeout",
+    "type": "duration",
+    "default": "1m0s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "parent-chain.connection.url",
+    "type": "string",
+    "default": "",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "parent-chain.connection.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "parent-chain.id",
+    "type": "uint",
+    "default": "",
+    "description": "if set other than 0, will be used to validate database and L1 connection"
+  },
+  {
+    "flag": "persistent.ancient",
+    "type": "string",
+    "default": "",
+    "description": "directory of ancient where the chain freezer can be opened"
+  },
+  {
+    "flag": "persistent.chain",
+    "type": "string",
+    "default": "",
+    "description": "directory to store chain state"
+  },
+  {
+    "flag": "persistent.db-engine",
+    "type": "string",
+    "default": "",
+    "description": "backing database implementation to use. If set to empty string the database type will be autodetected and if no pre-existing database is found it will default to creating new pebble database ('leveldb', 'pebble' or '' = auto-detect)"
+  },
+  {
+    "flag": "persistent.global-config",
+    "type": "string",
+    "default": ".arbitrum",
+    "description": "directory to store global config"
+  },
+  {
+    "flag": "persistent.handles",
+    "type": "int",
+    "default": "512",
+    "description": "number of file descriptor handles to use for the database"
+  },
+  {
+    "flag": "persistent.log-dir",
+    "type": "string",
+    "default": "",
+    "description": "directory to store log file"
+  },
+  {
+    "flag": "persistent.pebble.experimental.block-size",
+    "type": "int",
+    "default": "4096",
+    "description": "target uncompressed size in bytes of each table block"
+  },
+  {
+    "flag": "persistent.pebble.experimental.bytes-per-sync",
+    "type": "int",
+    "default": "524288",
+    "description": "number of bytes to write to a SSTable before calling Sync on it in the background"
+  },
+  {
+    "flag": "persistent.pebble.experimental.compaction-debt-concurrency",
+    "type": "uint",
+    "default": "1073741824",
+    "description": "controls the threshold of compaction debt at which additional compaction concurrency slots are added. For every multiple of this value in compaction debt bytes, an additional concurrent compaction is added. This works \"on top\" of l0-compaction-concurrency, so the higher of the count of compaction concurrency slots as determined by the two options is chosen."
+  },
+  {
+    "flag": "persistent.pebble.experimental.disable-automatic-compactions",
+    "type": "bool",
+    "default": "",
+    "description": "disables automatic compactions"
+  },
+  {
+    "flag": "persistent.pebble.experimental.force-writer-parallelism",
+    "type": "bool",
+    "default": "",
+    "description": "force parallelism in the sstable Writer for the metamorphic tests. Even with the MaxWriterConcurrency option set, pebble only enables parallelism in the sstable Writer if there is enough CPU available, and this option bypasses that."
+  },
+  {
+    "flag": "persistent.pebble.experimental.index-block-size",
+    "type": "int",
+    "default": "4096",
+    "description": "target uncompressed size in bytes of each index block. When the index block size is larger than this target, two-level indexes are automatically enabled. Setting this option to a large value (such as 2147483647) disables the automatic creation of two-level indexes."
+  },
+  {
+    "flag": "persistent.pebble.experimental.l-base-max-bytes",
+    "type": "int",
+    "default": "67108864",
+    "description": "The maximum number of bytes for LBase. The base level is the level which L0 is compacted into. The base level is determined dynamically based on the existing data in the LSM. The maximum number of bytes for other levels is computed dynamically based on the base level's maximum size. When the maximum number of bytes for a level is exceeded, compaction is requested."
+  },
+  {
+    "flag": "persistent.pebble.experimental.l0-compaction-concurrency",
+    "type": "int",
+    "default": "10",
+    "description": "threshold of L0 read-amplification at which compaction concurrency is enabled (if compaction-debt-concurrency was not already exceeded). Every multiple of this value enables another concurrent compaction up to max-concurrent-compactions."
+  },
+  {
+    "flag": "persistent.pebble.experimental.l0-compaction-file-threshold",
+    "type": "int",
+    "default": "500",
+    "description": "count of L0 files necessary to trigger an L0 compaction"
+  },
+  {
+    "flag": "persistent.pebble.experimental.l0-compaction-threshold",
+    "type": "int",
+    "default": "2",
+    "description": "amount of L0 read-amplification necessary to trigger an L0 compaction"
+  },
+  {
+    "flag": "persistent.pebble.experimental.l0-stop-writes-threshold",
+    "type": "int",
+    "default": "12",
+    "description": "hard limit on L0 read-amplification, computed as the number of L0 sublevels. Writes are stopped when this threshold is reached"
+  },
+  {
+    "flag": "persistent.pebble.experimental.max-writer-concurrency",
+    "type": "int",
+    "default": "",
+    "description": "maximum number of compression workers the compression queue is allowed to use. If max-writer-concurrency > 0, then the Writer will use parallelism, to compress and write blocks to disk. Otherwise, the writer will compress and write blocks to disk synchronously."
+  },
+  {
+    "flag": "persistent.pebble.experimental.mem-table-stop-writes-threshold",
+    "type": "int",
+    "default": "4",
+    "description": "hard limit on the number of queued of MemTables"
+  },
+  {
+    "flag": "persistent.pebble.experimental.read-compaction-rate",
+    "type": "AllowedSeeks",
+    "default": "16000",
+    "description": "controls the frequency of read triggered compactions by adjusting AllowedSeeks in manifest.FileMetadata: AllowedSeeks = FileSize / ReadCompactionRate"
+  },
+  {
+    "flag": "persistent.pebble.experimental.read-sampling-multiplier",
+    "type": "int",
+    "default": "-1",
+    "description": "a multiplier for the readSamplingPeriod in iterator.maybeSampleRead() to control the frequency of read sampling to trigger a read triggered compaction. A value of -1 prevents sampling and disables read triggered compactions. Geth default is -1. The pebble default is 1 << 4. which gets multiplied with a constant of 1 << 16 to yield 1 << 20 (1MB)."
+  },
+  {
+    "flag": "persistent.pebble.experimental.target-byte-deletion-rate",
+    "type": "int",
+    "default": "",
+    "description": "rate (in bytes per second) at which sstable file deletions are limited to (under normal circumstances)."
+  },
+  {
+    "flag": "persistent.pebble.experimental.target-file-size",
+    "type": "int",
+    "default": "2097152",
+    "description": "target file size for the level 0"
+  },
+  {
+    "flag": "persistent.pebble.experimental.target-file-size-equal-levels",
+    "type": "bool",
+    "default": "",
+    "description": "if true same target-file-size will be uses for all levels, otherwise target size for layer n = 2 * target size for layer n - 1"
+  },
+  {
+    "flag": "persistent.pebble.experimental.wal-bytes-per-sync",
+    "type": "int",
+    "default": "512000",
+    "description": "number of bytes to write to a write-ahead log (WAL) before calling Sync on it in the background"
+  },
+  {
+    "flag": "persistent.pebble.experimental.wal-dir",
+    "type": "string",
+    "default": "",
+    "description": "absolute path of directory to store write-ahead logs (WALs) in. If empty, WALs will be stored in the same directory as sstables"
+  },
+  {
+    "flag": "persistent.pebble.experimental.wal-min-sync-interval",
+    "type": "int",
+    "default": "",
+    "description": "minimum duration in microseconds between syncs of the WAL. If WAL syncs are requested faster than this interval, they will be artificially delayed."
+  },
+  {
+    "flag": "persistent.pebble.max-concurrent-compactions",
+    "type": "int",
+    "default": "2",
+    "description": "maximum number of concurrent compactions"
+  },
+  {
+    "flag": "persistent.pebble.sync-mode",
+    "type": "bool",
+    "default": "",
+    "description": "if true sync mode is used (data needs to be written to WAL before the write is marked as completed)"
+  },
+  {
+    "flag": "pprof",
+    "type": "bool",
+    "default": "",
+    "description": "enable pprof"
+  },
+  {
+    "flag": "pprof-cfg.addr",
+    "type": "string",
+    "default": "127.0.0.1",
+    "description": "pprof server address"
+  },
+  {
+    "flag": "pprof-cfg.port",
+    "type": "int",
+    "default": "6071",
+    "description": "pprof server port"
+  },
+  {
+    "flag": "rpc.batch-request-limit",
+    "type": "int",
+    "default": "1000",
+    "description": "the maximum number of requests in a batch (0 means no limit)"
+  },
+  {
+    "flag": "rpc.max-batch-response-size",
+    "type": "int",
+    "default": "10000000",
+    "description": "the maximum response size for a JSON-RPC request measured in bytes (0 means no limit)"
+  },
+  {
+    "flag": "validation.api-auth",
+    "type": "bool",
+    "default": "true",
+    "description": "validate is an authenticated API"
+  },
+  {
+    "flag": "validation.api-public",
+    "type": "bool",
+    "default": "",
+    "description": "validate is a public API"
+  },
+  {
+    "flag": "validation.arbitrator.execution-run-timeout",
+    "type": "duration",
+    "default": "15m0s",
+    "description": "timeout before discarding execution run"
+  },
+  {
+    "flag": "validation.arbitrator.execution.cached-challenge-machines",
+    "type": "uint",
+    "default": "4",
+    "description": "how many machines to store in cache while working on a challenge (should be even)"
+  },
+  {
+    "flag": "validation.arbitrator.execution.initial-steps",
+    "type": "uint",
+    "default": "100000",
+    "description": "initial steps between machines"
+  },
+  {
+    "flag": "validation.arbitrator.output-path",
+    "type": "string",
+    "default": "./target/output",
+    "description": "path to write machines to"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.buffer-reads",
+    "type": "bool",
+    "default": "true",
+    "description": "buffer reads (read next while working)"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.idletime-to-autoclaim",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "After a message spends this amount of time in PEL (Pending Entries List i.e claimed by another consumer but not Acknowledged) it will be allowed to be autoclaimed by other consumers. This option should be set to the same value for all consumers and producers."
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.max-retry-count",
+    "type": "int",
+    "default": "-1",
+    "description": "number of message retries after which this consumer will set an error response and Acknowledge the message (-1 = no limit)"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.response-entry-timeout",
+    "type": "duration",
+    "default": "1h0m0s",
+    "description": "timeout for response entry"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.consumer-config.retry",
+    "type": "bool",
+    "default": "true",
+    "description": "enables autoclaim for this consumer, if set to false this consumer will not check messages from PEL (Pending Entries List)"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.module-roots",
+    "type": "strings",
+    "default": "",
+    "description": "Supported module root hashes"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.redis-url",
+    "type": "string",
+    "default": "",
+    "description": "url of redis server"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.stream-prefix",
+    "type": "string",
+    "default": "",
+    "description": "prefix for stream name"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.stream-timeout",
+    "type": "duration",
+    "default": "10m0s",
+    "description": "Timeout on polling for existence of redis streams"
+  },
+  {
+    "flag": "validation.arbitrator.redis-validation-server-config.workers",
+    "type": "int",
+    "default": "",
+    "description": "number of validation threads (0 to use number of CPUs)"
+  },
+  {
+    "flag": "validation.arbitrator.workers",
+    "type": "int",
+    "default": "",
+    "description": "number of concurrent validation threads"
+  },
+  {
+    "flag": "validation.jit.cranelift",
+    "type": "bool",
+    "default": "true",
+    "description": "use Cranelift instead of LLVM when validating blocks using the jit-accelerated block validator"
+  },
+  {
+    "flag": "validation.jit.jit-path",
+    "type": "string",
+    "default": "",
+    "description": "path to jit executable, if empty, attempts to find jit executable relative to nitro binary or in PATH"
+  },
+  {
+    "flag": "validation.jit.max-execution-time",
+    "type": "duration",
+    "default": "10m0s",
+    "description": "if execution time used by a jit wasm exceeds this limit, a rpc error is returned"
+  },
+  {
+    "flag": "validation.jit.wasm-memory-usage-limit",
+    "type": "int",
+    "default": "4294967296",
+    "description": "if memory used by a jit wasm exceeds this limit, a warning is logged"
+  },
+  {
+    "flag": "validation.jit.workers",
+    "type": "int",
+    "default": "",
+    "description": "number of concurrent validation threads"
+  },
+  {
+    "flag": "validation.use-jit",
+    "type": "bool",
+    "default": "true",
+    "description": "use jit for validation"
+  },
+  {
+    "flag": "validation.wasm.allowed-wasm-module-roots",
+    "type": "strings",
+    "default": "",
+    "description": "list of WASM module roots or machine base paths to match against on-chain WasmModuleRoot"
+  },
+  {
+    "flag": "validation.wasm.enable-wasmroots-check",
+    "type": "bool",
+    "default": "true",
+    "description": "enable check for compatibility of on-chain WASM module root with node"
+  },
+  {
+    "flag": "validation.wasm.root-path",
+    "type": "string",
+    "default": "",
+    "description": "path to machine folders, each containing wasm files (machine.v2.wavm.br, replay.wasm)"
+  },
+  {
+    "flag": "version-alerter.connection.arg-log-limit",
+    "type": "uint",
+    "default": "2048",
+    "description": "limit size of arguments in log entries"
+  },
+  {
+    "flag": "version-alerter.connection.connection-wait",
+    "type": "duration",
+    "default": "",
+    "description": "how long to wait for initial connection"
+  },
+  {
+    "flag": "version-alerter.connection.jwtsecret",
+    "type": "string",
+    "default": "",
+    "description": "path to file with jwtsecret for validation - ignored if url is self or self-auth"
+  },
+  {
+    "flag": "version-alerter.connection.retries",
+    "type": "uint",
+    "default": "3",
+    "description": "number of retries in case of failure(0 mean one attempt)"
+  },
+  {
+    "flag": "version-alerter.connection.retry-delay",
+    "type": "duration",
+    "default": "",
+    "description": "delay between retries"
+  },
+  {
+    "flag": "version-alerter.connection.retry-errors",
+    "type": "string",
+    "default": "websocket: close.*|dial tcp .*|.*i/o timeout|.*connection reset by peer|.*connection refused",
+    "description": "Errors matching this regular expression are automatically retried"
+  },
+  {
+    "flag": "version-alerter.connection.timeout",
+    "type": "duration",
+    "default": "10s",
+    "description": "per-response timeout (0-disabled)"
+  },
+  {
+    "flag": "version-alerter.connection.url",
+    "type": "string",
+    "default": "self-auth",
+    "description": "url of server, use self for loopback websocket, self-auth for loopback with authentication"
+  },
+  {
+    "flag": "version-alerter.connection.websocket-message-size-limit",
+    "type": "int",
+    "default": "268435456",
+    "description": "websocket message size limit used by the RPC client. 0 means no limit"
+  },
+  {
+    "flag": "version-alerter.enable",
+    "type": "bool",
+    "default": "",
+    "description": "enable querying arb_getMinRequiredNitroVersion endpoint in regular intervals and firing alerts if the node software is below the required version"
+  },
+  {
+    "flag": "version-alerter.ping-interval",
+    "type": "duration",
+    "default": "5m0s",
+    "description": "how often the nitro version alerter should ping arb_getMinRequiredNitroVersion for data"
+  },
+  {
+    "flag": "version-alerter.upgrade-grace-period",
+    "type": "duration",
+    "default": "",
+    "description": "represents grace period up until the upgrade deadline received from arb_getMinRequiredNitroVersion, determines escalation of messages regarding node software upgrade"
+  },
+  {
+    "flag": "ws.addr",
+    "type": "string",
+    "default": "",
+    "description": "WS-RPC server listening interface"
+  },
+  {
+    "flag": "ws.api",
+    "type": "strings",
+    "default": "[net,web3,eth,arb]",
+    "description": "APIs offered over the WS-RPC interface"
+  },
+  {
+    "flag": "ws.expose-all",
+    "type": "bool",
+    "default": "",
+    "description": "expose private api via websocket"
+  },
+  {
+    "flag": "ws.origins",
+    "type": "strings",
+    "default": "",
+    "description": "Origins from which to accept websockets requests"
+  },
+  {
+    "flag": "ws.port",
+    "type": "int",
+    "default": "8548",
+    "description": "WS-RPC server listening port"
+  },
+  {
+    "flag": "ws.rpcprefix",
+    "type": "string",
+    "default": "",
+    "description": "WS path path prefix on which JSON-RPC is served. Use '/' to serve on all paths"
+  }
+]

@@ -131,8 +131,8 @@ main() {
   # time_command yarn check-redirects || exit_with_error "Redirect validation failed. Fix redirect issues before committing."
   # log_success "Redirect validation passed"
 
-  # 2. Submodule updates (only if submodules are staged or .gitmodules changed)
-  if echo "$staged_files" | grep -E "(\.gitmodules|submodules/)" >/dev/null 2>&1; then
+  # 2. Submodule updates (only if .gitmodules changed)
+  if echo "$staged_files" | grep -q "\.gitmodules"; then
     log_step "Updating git submodules..."
     time_command git submodule update --init --recursive || exit_with_error "Git submodule update failed. Check submodule configuration."
     log_success "Git submodules updated"
