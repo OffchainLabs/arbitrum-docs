@@ -140,12 +140,13 @@ Hard finality occurs when batched transactions are posted to the parent chain. K
 4. Both protocols expose the same two signals—"latest bonded" and "latest confirmed"—so the rest of the node doesn't care which one is running.
 
 #### 4b. The poll loop (legacy)
+
 1. On a repeating timer, the legacy bonder checks the Rollup contract.
 1. One a repeating timer, the legacy bonder checks the rollup contract.
-2. First it asks "what's the latest assertion **my** wallet has bonded on?" and tells the bonded-notifiers that message count.
-3. Then it asks the same contract with the empty (zero) address, which means "what has the **whole chain** confirmed as final?"
-4. It tells the confirmed-notifiers that count.
-5. It waits for the configured interval and repeats.
+1. First it asks "what's the latest assertion **my** wallet has bonded on?" and tells the bonded-notifiers that message count.
+1. Then it asks the same contract with the empty (zero) address, which means "what has the **whole chain** confirmed as final?"
+1. It tells the confirmed-notifiers that count.
+1. It waits for the configured interval and repeats.
 
 #### 4c. The poll loop (BoLD)
 
