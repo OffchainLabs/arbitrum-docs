@@ -1,10 +1,10 @@
 ---
-title: 'A gentle introduction'
-description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
+title: 'State Transition Function'
+description: "Learn the fundamentals of Nitro's State Transition Function."
 author: petevielhaber
 sme: Mehdi
-user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
-content_type: gentle-introduction
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's State Transition Function.
+content_type: concept
 ---
 
 The State Transition Function is the deterministic core of Arbitrum Nitro. Given the current chain state and an incoming message, it produces a new state and a new L2 block. Every Nitro node—sequencer, validator, or full node—runs the exact same STF, and the same inputs will always produce the same outputs. This determinism is what makes fraud proofs possible.
@@ -12,7 +12,7 @@ The State Transition Function is the deterministic core of Arbitrum Nitro. Given
 ## High-level architecture
 
 1. The work is done by four "teams/layers" stacked on top of each other, like an assembly line.
-2. The top team (`TransactionStreamer`) is the mailroom: it collects incoming instructions and hands them down oen at a time, in order.
+2. The top team (`TransactionStreamer`) is the mailroom: it collects incoming instructions and hands them down one at a time, in order.
 3. The next team (`ExecutionEngine`) is the floor manager: it sets up the workspace and says "Okay, build the next block now."
 4. The third team (`BlockProcessor`) is the builder: it actually assembles the new block, instruction by instruction.
 5. The last team (`TxProcessor`) is the specialist, a craftsman, who handles each individual instruction's math—fees, deposits, refunds.
@@ -44,7 +44,7 @@ This is the mailroom of the chain. Its job is to gather every incoming instructi
 
 This is the "do the next thing" button, pressed over and over (loop).
 
-1. It checks two bookmarks the consensus head message index (latest message stored), and the execution head message index (latest message already executed into a block).
+1. It checks two bookmarks: the consensus head message index (latest message stored), and the execution head message index (latest message already executed into a block).
 2. If building is behind, it grabs the next instruction in line.
 3. It peeks at the one after that too, just to warm the cache so the next round is faster.
 4. It hands the instruction to the builder, saves the result (msgIdx) and broadcasts to the other nodes.
@@ -61,7 +61,7 @@ This is how a follower node turns one instruction into one new block.
 1. First it locks the door so no one else builds at the same time.
 2. It double-checks the instruction is exactly the next one expected—not a skip, not a repeat.
 3. It optionally starts building the following block in the background, as a head start (cache warming).
-4. It builds the block, saves it to the block, and caches the latest pricing info.
+4. It builds the block, saves it to the chain, and caches the latest pricing info.
 
 #### 2b. `createBlockFromNextMessage`
 
@@ -86,9 +86,9 @@ Once a block is completed, two "fingerprints" are pulled from it.
 1. One is the block's overall hash (its unique ID). The other is the `SendRoot`—a summary of all messages heading back from L2 to the main Ethereum chain.
 2. These two numbers are exactly what validators use to vouch for the chain and what fraud proofs check against. They're the receipt that proves the block was written correctly.
 
-### 3. The Deterministic core: `ProduceBlockAdvanced`
+### 3. The deterministic core: `ProduceBlockAdvanced`
 
-This is the master craftsman (builder). It is what actually writes the new block. It's deliberately boring and predictable: given the same state and inputs, it will always output the same results. No randomness. This strictness is what lets this exact process to be repeatable by anyone (including inside of a fraud-proof) to confirm the block.
+This is the master craftsman (builder). It is what actually writes the new block. It's deliberately boring and predictable: given the same state and inputs, it will always output the same results. No randomness. This strictness is what lets this exact process be repeatable by anyone (including inside of a fraud-proof) to confirm the block.
 
 This is what will get compiled to WASM for fraud-proof verification.
 
@@ -106,7 +106,7 @@ This is what will get compiled to WASM for fraud-proof verification.
 Now the craftsman works through the instructions one by one, in a strict order.
 
 1. The housekeeping task goes first. Then any "leftover" jobs from earlier instructions. Then the next user instruction.
-2. For each instruction, it runs safety checks, figures out the fees, takes a "snapshot" it can undo to, runs the instruction , and then settles up the costs.
+2. For each instruction, it runs safety checks, figures out the fees, takes a "snapshot" it can undo to, runs the instruction, and then settles up the costs.
 3. If an instruction fails, it rewinds to the snapshot as if it never happened.
 4. Some instructions create follow-up jobs (e.g., retrying a queued action); those get added to the line and handled in turn.
 5. It keeps going until there are no more instructions and no more follow-ups, then closes the block.
@@ -119,14 +119,14 @@ Now the craftsman works through the instructions one by one, in a strict order.
 4. **extraPreTxFilter**: Additional protocol-level validity checks.
 5. **Compute data gas**: calculates the L1 poster cost of this transaction's calldata in L2 gas units.
 6. **Compute gas split**: If the computational gas is less than the transaction gas, pad it to the transaction gas minimum.
-7. **Block gas limit check** (pre-ArbOS 50): Reject if computation gas is greater than the block gas remaining and user transactions have already processed.
+7. **Block gas limit check** (pre-ArbOS 50): Reject if computation gas is greater than the block gas remaining and user transactions have already been processed.
 
 ##### EVM execution
 
 1. **Snapshot state**: A snapshot of the StateDB for rollback if a failure occurs.
 2. **Set transaction context**: From the StateDB, transaction hash and receipt index.
 3. **Create EVM**: Initialize a new EVM with block context, StateDB, chain config, and VM config.
-4. **Apply transaction**: This enter's Geth's standard transaction processing pipeline but with ArbOS hooks injected at key points:
+4. **Apply transaction**: This enters Geth's standard transaction processing pipeline but with ArbOS hooks injected at key points:
 
 - Result filter callback: runs after execution:
   - Calls `PostTxFilter`, which sequencing hooks can reject after execution.
@@ -135,7 +135,7 @@ Now the craftsman works through the instructions one by one, in a strict order.
 ##### Error handling
 
 - **Filtered redeem rollback**: If a redeem (not a user transaction) fails with `ErrArbTxFilter` and there's an active group checkpoint, the entire group (redeems and user transactions) is rolled back to the pre-group state. This prevents filtered addresses from being touched even indirectly via retryable auto-redeems.
-- **discardable user transactions**: If the sequencer hooks report `CanDiscardTx()`, the transaction is silently dropped. Otherwise, a minimum `TxGas` is deducted from `blockGasLeft`.
+- **Discardable user transactions**: If the sequencer hooks report `CanDiscardTx()`, the transaction is silently dropped. Otherwise, a minimum `TxGas` is deducted from `blockGasLeft`.
 
 ##### Post-execution bookkeeping
 
@@ -144,7 +144,7 @@ Now the craftsman works through the instructions one by one, in a strict order.
 3. **Balance delta tracking**:
 
 - Deposits add **ETH** to the system
-- Retryable submission add `DepositValue` to the system
+- Retryable submissions add `DepositValue` to the system
 - L2→L1 withdrawals remove **ETH** from the system
 
 4. **Block gas deduction**: Only computes gas, not data gas.
@@ -155,17 +155,17 @@ Now the craftsman works through the instructions one by one, in a strict order.
 
 1. Once every instruction is handled, the craftsman seals the block.
 2. It runs final safety checks (e.g., filtering).
-3. It records how many "delayed" messages were used, computes the page's summaries, and stamps everything into the header.
-4. As a last sanity check, it confirms the balance: the funds that should have entered or left exactly matches what actually did. It funds appeared from nowhere, it refuses the page entirely.
+3. It records how many "delayed" messages were used, computes the block's summaries, and stamps everything into the header.
+4. As a last sanity check, it confirms the balance: the funds that should have entered or left exactly match what actually did. If funds appeared from nowhere, it refuses the block entirely.
 
 ### 4. Per-transaction hooks `TxProcessor`
 
-This is the actual engine that runs an instruction is borrowed from Ethereum (EVM). But Arbitrum needs to adds its own touches without rewriting that engine. This allows ArbOS to influence execution without forking Geth's core logic.
+The actual engine that runs an instruction is borrowed from Ethereum (EVM). But Arbitrum needs to add its own touches without rewriting that engine. This allows ArbOS to influence execution without forking Geth's core logic.
 
 It plugs in at three points:
 
 - just before an instruction runs
-- during the fee calculation'
+- during the fee calculation
 - and after it finishes
 
 These plug-in points handle Arbitrum-only things:
@@ -190,7 +190,7 @@ This runs before an instruction is processed and catches the special Arbitrum-on
 3. Return `endTxNow = true`—no EVM execution needed.
 4. If the deposit is in the onchain filter, redirect funds to the filtered funds recipient.
 
-#### `ArbitrumInternalTx` (system transaction)
+##### `ArbitrumInternalTx` (system transaction)
 
 1. Call `ApplyInternalTxUpdate()`
 2. Return `endTxNow = true`
@@ -205,7 +205,7 @@ This runs before an instruction is processed and catches the special Arbitrum-on
 6. Transfer the retryable's call value into an **escrow address** derived from the ticket ID.
 7. Create the retryable ticket in ArbOS state with a timeout (currently ~7 days).
 8. Emit the `TicketCreated` event.
-9. If the sender has enough balance and gas, schedule an **auto-redeem** by emitting `RedeemSchedueled`.
+9. If the sender has enough balance and gas, schedule an **auto-redeem** by emitting `RedeemScheduled`.
 10. If filtered, skip auto-redeem scheduling and redirect beneficiary.
 11. Return `endTxNow = true`.
 
@@ -214,11 +214,11 @@ This runs before an instruction is processed and catches the special Arbitrum-on
 1. Open the retryable from state (skip if already deleted/expired).
 2. Transfer call value from escrow to the redeemer.
 3. Mint prepaid gas to the redeemer.
-4. Return `endTxNow = false. Proceed with normal EVM execution of the retryable's calldata.
+4. Return `endTxNow = false`. Proceed with normal EVM execution of the retryable's calldata.
 
 #### 4b. `GasChargingHook`
 
-On Arbitrum, your single gas fee actually covers tweo different costs, execution (L2) and data posting cost to L1 (Ethereum).
+On Arbitrum, your single gas fee actually covers two different costs: execution (L2) and data posting cost to L1 (Ethereum).
 
 1. This step figures out that cost. It estimates how much space your instruction will take once compressed into a batch, and prices that.
 2. It converts that data cost into equivalent L2 gas units, then sets that amount aside from your gas budget.
@@ -231,12 +231,12 @@ The instruction execution is finished—now settle the bill.
 1. It separates what you owe for computing from what you owe for data posting.
 2. The computing fee goes to the network's fee accounts; the data fee goes into a pool that later reimburses whoever posted your data to L1.
 3. Anything you overpaid is refunded.
-4. For retryable tickets: if the retry succeeded, the ticket is torn up and its reserved fee refunded; if it failed, the money gaoes back into holding and the ticket stays alive for another try later.
+4. For retryable tickets: if the retry succeeded, the ticket is torn up and its reserved fee refunded; if it failed, the money goes back into holding and the ticket stays alive for another try later.
 5. It also records how busy this block was, which feeds the system that adjusts future fees up or down.
 
 #### 4d. `ScheduledTxes`
 
-Some instructions, while running, ask for a follow-up action to happen (e.g., auto-retry this queued ticket)
+Some instructions, while running, ask for a follow-up action to happen (e.g., auto-retry this queued ticket).
 
 1. After the instruction finishes, this step reads those requests and turns each into a real follow-up job.
 2. Those jobs get added to the line so the main builder loop (`BlockProcessing`) handles them right after—keeping everything in a single orderly sequence.
@@ -257,10 +257,10 @@ This is the opening chore of every single block.
 
 #### 5b. `BatchPostingReport` handler
 
-Whenever someone bundles up L2 data and posts it to L1 (Etheruem), that incurs a fee. This chore handles the receipt for that.
+Whenever someone bundles up L2 data and posts it to L1 (Ethereum), that incurs a fee. This chore handles the receipt for that.
 
 1. It reads who posted it and how much it cost.
-2. It credits that poster so they get paid back, and nudges the data-fee price so that what users pay roughly matches wehat posting actually costs over time.
+2. It credits that poster so they get paid back, and nudges the data-fee price so that what users pay roughly matches what posting actually costs over time.
 
 #### 5c. `BatchPostingReportV2` handler
 
@@ -273,7 +273,7 @@ This is a newer, more precise version of the receipt handler above.
 
 This is the final call after all transactions are processed to compute the state commitment.
 
-1. It builds the summary of all processed messages (for later to proving).
+1. It builds the summary of all processed messages (for later proving).
 2. It notes the current software version and a few other bookkeeping facts, and writes them into the block header.
 3. It computes the single fingerprint that represents the entire state of the chain after this block.
 4. That fingerprint plus the block's ID are the official record of what happened that the validators rely on.
@@ -300,7 +300,7 @@ Assertions & Fraud proofs
 
 ## Stylus-specific STF modifications
 
-[<a data-quicklook-from="stylus">Stylus</a>](/stylus/gentle-introduction.mdx) expands Arbitrum’s execution model beyond the Ethereum Virtual Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)—based execution, allowing high-performance contracts in Rust, C, and C++ to run alongside traditional EVM contracts (Solidity). This integration of Stylus introduces several modifications to the STF, including:
+[<a data-quicklook-from="stylus">Stylus</a>](/stylus/gentle-introduction.mdx) expands Arbitrum’s execution model beyond the Ethereum Virtual Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)-based execution, allowing high-performance contracts in Rust, C, and C++ to run alongside traditional EVM contracts (Solidity). This integration of Stylus introduces several modifications to the STF, including:
 
 #### Transaction processing
 
