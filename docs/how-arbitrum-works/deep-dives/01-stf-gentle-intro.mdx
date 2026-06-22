@@ -21,6 +21,15 @@ It's worth noting that each team only talks to the one directly above and below 
 
 ## How it works
 
+### TL;DR
+
+1. **Determinism**: The same inputs always give the same output, so anyone can re-check the work.
+2. **One gas price**: You pay a single fee; the system quietly splits it between computing costs and data-posting costs.
+3. **Balanced books**: Funds can't appear from thin air; every block proves the totals add up.
+4. **No censorship**: Even instructions the sequencer ignores will eventually be forced through and processed the same way.
+5. **Provable honesty**: If anyone cheats, the exact instruction can be re-run to catch them, and withdrawals can be proven.
+6. **Safe upgrades**: Software version changes happen cleanly at a single, predictable moment in a block.
+
 ### 1. Message ingestion
 
 This is the mailroom of the chain. Its job is to gather every incoming instruction and put it in a strict, numbered line.
@@ -81,7 +90,7 @@ Once a block is completed, two "fingerprints" are pulled from it.
 
 This is the master craftsman (builder). It is what actually writes the new block. It's deliberately boring and predictable: given the same state and inputs, it will always output the same results. No randomness. This strictness is what lets this exact process to be repeatable by anyone (including inside of a fraud-proof) to confirm the block.
 
-> This is what will get compiled to WASM for fraud proof verification.
+This is what will get compiled to WASM for fraud-proof verification.
 
 #### 3a. `Initialization`
 
@@ -102,49 +111,45 @@ Now the craftsman works through the instructions one by one, in a strict order.
 4. Some instructions create follow-up jobs (e.g., retrying a queued action); those get added to the line and handled in turn.
 5. It keeps going until there are no more instructions and no more follow-ups, then closes the block.
 
-<!-- needs editing
 ##### Pre-execution checks
 
-1. **Block gas check** — if `blockGasLeft < TxGas` and this is a user tx, reject with `ErrGasLimitReached`
-2. **Recover sender** — `types.Sender(signer, tx)` derives the sender address
-3. **PreTxFilter** — sequencing hooks can reject before execution (e.g., conditional tx checks, nonce validation)
-4. **extraPreTxFilter** — additional protocol-level validity checks
-5. **Compute data gas** — calculates the L1 poster cost of this tx's calldata in L2 gas units:
-   - `posterCost` = `L1PricingState.GetPosterInfo(tx, poster, brotliLevel)` — estimates compressed calldata cost
-   - `dataGas` = `posterCost / baseFee` — converts wei to L2 gas units
-6. **Compute gas split** — `computeGas = tx.Gas() - dataGas`
-   - If `computeGas < TxGas`, pad it up to `TxGas` minimum
-7. **Block gas limit check** (pre-ArbOS 50): reject if `computeGas > blockGasLeft` and user txs have already been processed
+1. **Block gas check**: If the total gas left for the block is less than the transaction gas—and this is a user transaction, reject the transaction.
+2. **Recover sender**: Derives the sender address.
+3. **PreTxFilter**: Sequencing hooks can reject before execution (e.g., conditional transaction checks, nonce validation).
+4. **extraPreTxFilter**: Additional protocol-level validity checks.
+5. **Compute data gas**: calculates the L1 poster cost of this transaction's calldata in L2 gas units.
+6. **Compute gas split**: If the computational gas is less than the transaction gas, pad it to the transaction gas minimum.
+7. **Block gas limit check** (pre-ArbOS 50): Reject if computation gas is greater than the block gas remaining and user transactions have already processed.
 
 ##### EVM execution
 
-1. **Snapshot state** — `statedb.Snapshot()` for rollback on failure
-2. **Set tx context** — `statedb.SetTxContext(tx.Hash(), receiptIndex)`
-3. **Create EVM** — `vm.NewEVM(blockContext, statedb, chainConfig, vmConfig)`
-4. **Apply transaction** — `core.ApplyTransactionWithResultFilter()`:
-   - This enters geth's standard transaction processing pipeline
-   - But with ArbOS hooks injected at key points (see Step 4 below)
-   - The **result filter callback** runs after execution:
-     - Calls `PostTxFilter` — sequencing hooks can reject after execution
-     - If the user tx scheduled redeems and group rollback is supported, saves a **group checkpoint** for potential cascading rollback
+1. **Snapshot state**: A snapshot of the StateDB for rollback if a failure occurs.
+2. **Set transaction context**: From the StateDB, transaction hash and receipt index.
+3. **Create EVM**: Initialize a new EVM with block context, StateDB, chain config, and VM config.
+4. **Apply transaction**: This enter's Geth's standard transaction processing pipeline but with ArbOS hooks injected at key points:
+
+- Result filter callback: runs after execution:
+  - Calls `PostTxFilter`, which sequencing hooks can reject after execution.
+  - If the user transaction scheduled redeems and group rollback is supported, saves a **group checkpoint** for potential cascading rollback.
 
 ##### Error handling
 
-- **Filtered redeem rollback** — if a redeem (not a user tx) fails with `ErrArbTxFilter` and there's an active group checkpoint, the entire group (user tx + all its redeems) is rolled back to the pre-group state. This prevents filtered addresses from being touched even indirectly via retryable auto-redeems.
-- **Discardable user txs** — if the sequencer hooks report `CanDiscardTx()`, the tx is silently dropped. Otherwise, a minimum `TxGas` is deducted from `blockGasLeft`.
+- **Filtered redeem rollback**: If a redeem (not a user transaction) fails with `ErrArbTxFilter` and there's an active group checkpoint, the entire group (redeems and user transactions) is rolled back to the pre-group state. This prevents filtered addresses from being touched even indirectly via retryable auto-redeems.
+- **discardable user transactions**: If the sequencer hooks report `CanDiscardTx()`, the transaction is silently dropped. Otherwise, a minimum `TxGas` is deducted from `blockGasLeft`.
 
 ##### Post-execution bookkeeping
 
-1. **ArbOS version refresh** — after the internal StartBlock tx, re-open ArbOS state in case an upgrade occurred
-2. **Gas accounting** — compute `txGasUsed`, subtract gas reserved for scheduled redeems (so the sequencer isn't double-charged for redeem gas that will be charged separately)
+1. **ArbOS version refresh**: After the internal `StartBlock` transaction, re-open ArbOS state in case an upgrade occurred.
+2. **Gas accounting**: Compute `txGasUsed`, subtract gas reserved for scheduled redeems (so the sequencer isn't double-charged for redeem gas that is charged separately).
 3. **Balance delta tracking**:
-   - Deposits (`ArbitrumDepositTx`) **add** ETH to the system
-   - Retryable submissions (`ArbitrumSubmitRetryableTx`) **add** `DepositValue` to the system
-   - L2→L1 withdrawals (detected via `L2ToL1Tx` log events) **remove** ETH from the system
-4. **Block gas deduction** — `blockGasLeft -= computeUsed` (only compute gas, not data gas)
-5. **Append scheduled redeems** — `redeems = append(redeems, result.ScheduledTxes...)`
-6. **Record success/failure** — notify sequencing hooks of tx outcome
--->
+
+- Deposits add **ETH** to the system
+- Retryable submission add `DepositValue` to the system
+- L2→L1 withdrawals remove **ETH** from the system
+
+4. **Block gas deduction**: Only computes gas, not data gas.
+5. **Append scheduled redeems**.
+6. **Record success/failure**: Notify sequencing hooks of transaction outcome.
 
 #### 3c. Block finalization
 
@@ -155,9 +160,7 @@ Now the craftsman works through the instructions one by one, in a strict order.
 
 ### 4. Per-transaction hooks `TxProcessor`
 
-This is the actual engine that runs an instruction is borrowed from Ethereum (EVM). But Arbitrum needs to adds its own toucehs without rewriting that engine.
-
-> This allows ArbOS to influence execution without forking Geth's core logic.
+This is the actual engine that runs an instruction is borrowed from Ethereum (EVM). But Arbitrum needs to adds its own touches without rewriting that engine. This allows ArbOS to influence execution without forking Geth's core logic.
 
 It plugs in at three points:
 
@@ -173,31 +176,145 @@ These plug-in points handle Arbitrum-only things:
 
 #### 4a. `StartTxHook`
 
-<!-- OLD MATERIAL -->
+This runs before an instruction is processed and catches the special Arbitrum-only instruction types.
 
-The <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) determines how <a data-quicklook-from="blockchain">blockchain</a> systems change state during transaction processing. The STF takes the current blockchain state (account balances, <a data-quicklook-from="smart-contract">smart contract</a> data, and ledger information) and an input (a <a data-quicklook-from="transaction">transaction</a> or a block) to compute the new state deterministically. This deterministic property ensures all network nodes reach the same result, maintaining consensus.
+1. A deposit: it simply manages the funds transfer to the recipient—no further processing is needed.
+2. System housekeeping instruction: it does its internal update and stops.
+3. Retryable creation: sets aside funds in a holding account, creates the ticket with an expiry date, and may schedule an automatic first attempt.
+4. Retryable ticket: it releases the held funds and then lets the normal engine run the actual instruction.
 
-With <a data-quicklook-from="arbitrum">Arbitrum</a>, the STF plays an even more pivotal role. Arbitrum executes transactions offchain in batches, periodically submitting summaries to the <a data-quicklook-from="parent-chain">parent chain</a>. This approach leverages offchain computation to achieve higher throughput and lower gas costs while maintaining Ethereum’s security.
+##### `ArbitrumDepositTx` (L1→L2 ETH deposit)
 
-To safeguard against incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism called fraud proofs. If a dispute arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of offchain computations and ensure that errors or fraudulent behavior are detected and corrected. For how disputes are resolved in practice, see [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx) and the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx).
+1. Mint the deposit value to the sender.
+2. Transfer from the sender to recipient.
+3. Return `endTxNow = true`—no EVM execution needed.
+4. If the deposit is in the onchain filter, redirect funds to the filtered funds recipient.
 
-The [<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx) stack's STF mirrors Ethereum's STF with key modifications for <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> requirements. The function processes ordered transactions and outputs the updated state from the transaction <a data-quicklook-from="batch">batch</a>.
+#### `ArbitrumInternalTx` (system transaction)
+
+1. Call `ApplyInternalTxUpdate()`
+2. Return `endTxNow = true`
+
+##### `ArbitrumSubmitRetryableTx` (retryable ticket creation)
+
+1. Mint the full deposit value to the sender.
+2. Validate the sender can afford the max submission fee.
+3. Calculate the actual submission fee.
+4. Collect the submission fee to the network fee account.
+5. Refund excess submission fee to the network fee account.
+6. Transfer the retryable's call value into an **escrow address** derived from the ticket ID.
+7. Create the retryable ticket in ArbOS state with a timeout (currently ~7 days).
+8. Emit the `TicketCreated` event.
+9. If the sender has enough balance and gas, schedule an **auto-redeem** by emitting `RedeemSchedueled`.
+10. If filtered, skip auto-redeem scheduling and redirect beneficiary.
+11. Return `endTxNow = true`.
+
+##### `ArbitrumRetryTx` (retryable redemption)
+
+1. Open the retryable from state (skip if already deleted/expired).
+2. Transfer call value from escrow to the redeemer.
+3. Mint prepaid gas to the redeemer.
+4. Return `endTxNow = false. Proceed with normal EVM execution of the retryable's calldata.
+
+#### 4b. `GasChargingHook`
+
+On Arbitrum, your single gas fee actually covers tweo different costs, execution (L2) and data posting cost to L1 (Ethereum).
+
+1. This step figures out that cost. It estimates how much space your instruction will take once compressed into a batch, and prices that.
+2. It converts that data cost into equivalent L2 gas units, then sets that amount aside from your gas budget.
+3. If you didn't fund enough gas to cover it, the instruction is rejected. It also caps how much pure computing any single instruction can use.
+
+#### 4c. `EndTxHook`
+
+The instruction execution is finished—now settle the bill.
+
+1. It separates what you owe for computing from what you owe for data posting.
+2. The computing fee goes to the network's fee accounts; the data fee goes into a pool that later reimburses whoever posted your data to L1.
+3. Anything you overpaid is refunded.
+4. For retryable tickets: if the retry succeeded, the ticket is torn up and its reserved fee refunded; if it failed, the money gaoes back into holding and the ticket stays alive for another try later.
+5. It also records how busy this block was, which feeds the system that adjusts future fees up or down.
+
+#### 4d. `ScheduledTxes`
+
+Some instructions, while running, ask for a follow-up action to happen (e.g., auto-retry this queued ticket)
+
+1. After the instruction finishes, this step reads those requests and turns each into a real follow-up job.
+2. Those jobs get added to the line so the main builder loop (`BlockProcessing`) handles them right after—keeping everything in a single orderly sequence.
+
+### 5. Internal transaction processing
+
+These are the chain's chores—nothing a user asked for, but maintenance the system does for itself. The main one runs at the very start of every block (housekeeping). Others react to events like "a batch was posted to L1." These chores keep time, pricing, and cleanup in good order behind the scenes.
+
+#### 5a. `StartBlock` handler
+
+This is the opening chore of every single block.
+
+1. It records the previous block's "fingerprint" (so programs can look up recent block history).
+2. It updates its picture of where the Ethereum chain is right now.
+3. It throws out up to two expired retryable tickets and returns their held funds to the rightful owner.
+4. It nudges the L2 fee up or down based on how busy the chain has been.
+5. It checks whether a scheduled software upgrade should be applied, and applies it if so.
+
+#### 5b. `BatchPostingReport` handler
+
+Whenever someone bundles up L2 data and posts it to L1 (Etheruem), that incurs a fee. This chore handles the receipt for that.
+
+1. It reads who posted it and how much it cost.
+2. It credits that poster so they get paid back, and nudges the data-fee price so that what users pay roughly matches wehat posting actually costs over time.
+
+#### 5c. `BatchPostingReportV2` handler
+
+This is a newer, more precise version of the receipt handler above.
+
+1. Instead of trusting one lump-sum cost number, it measures the data more carefully (total size and how many meaningful bytes it had).
+2. It also accounts for the newer blob style of data storage on Ethereum, then reimburses the poster the same way.
+
+### 6. Block finalization—`FinalizeBlock`
+
+This is the final call after all transactions are processed to compute the state commitment.
+
+1. It builds the summary of all processed messages (for later to proving).
+2. It notes the current software version and a few other bookkeeping facts, and writes them into the block header.
+3. It computes the single fingerprint that represents the entire state of the chain after this block.
+4. That fingerprint plus the block's ID are the official record of what happened that the validators rely on.
+
+### 7. The consensus engine
+
+The `Engine` struct implements Geth's `consensus.Engine` interface, adapting Arbitrum's authority-based model to Geth's pluggable consensus.
+
+:::note Ethereum: The Merge
+
+The method names (`Seal`, `CalcDifficulty`, "difficulty") come from Geth's generic `consensus.Engine` interface, which predates Ethereum's move to proof-of-stake. They are interface requirements that every Geth consensus engine—including the modern PoS `beacon` engine—must implement. Their presence here reflects neither proof-of-work nor proof-of-stake: Arbitrum is an L2 rollup whose ordering comes from L1 + the sequencer and whose validity comes from fraud proofs. It inherits its settlement security from Ethereum L1, which is itself proof-of-stake.
+
+:::
+
+1. Standard Ethereum software expects a "consensus engine" that decides things like mining difficulty and when a block is sealed.
+2. Arbitrum doesn't mine—it has a trusted sequencer—so this is a thin adapter that satisfies that expectation while skipping the mining work.
+3. It plugs Arbitrum's finalize-the-block logic into the right slot, returns blocks instantly with no proof-of-work puzzle, and keeps difficulty fixed at a constant.
+
+<!--
+
+Assertions & Fraud proofs
+
+-->
+
+## Stylus-specific STF modifications
 
 [<a data-quicklook-from="stylus">Stylus</a>](/stylus/gentle-introduction.mdx) expands Arbitrum’s execution model beyond the Ethereum Virtual Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)—based execution, allowing high-performance contracts in Rust, C, and C++ to run alongside traditional EVM contracts (Solidity). This integration of Stylus introduces several modifications to the STF, including:
 
-## Stylus-specific transaction processing
+#### Transaction processing
 
 A modified version of <a data-quicklook-from="geth">Geth</a> that recognizes and processes Stylus transactions, ensuring proper inclusion in state transitions.
 
-## Execution in a WASM runtime
+#### Execution in a WASM runtime
 
 Stylus transactions execute in [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx)'s WASM runtime instead of the EVM, enabling faster execution and more efficient computation.
 
-## Stylus gas accounting and pricing
+#### Stylus gas accounting and pricing
 
 Unlike standard EVM transactions, Stylus transactions introduce new gas pricing models that account for factors such as opcode pricing, host I/O operations, and <a data-quicklook-from="ink">Ink</a> usage costs.
 
-## Interoperability with the EVM
+#### Interoperability with the EVM
 
 Stylus contracts can interact with Solidity contracts, enabling hybrid applications that leverage EVM and WASM execution environments.
 
