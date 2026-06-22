@@ -883,6 +883,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'State Transition Function',
+              id: 'how-arbitrum-works/deep-dives/stf',
+            },
+            {
+              type: 'doc',
               label: 'Assertions',
               id: 'how-arbitrum-works/deep-dives/assertions',
             },
