@@ -29,18 +29,18 @@ When a user submits a transaction via JSON-RPC, it is sent to the `Sequencer.Pub
 2. **Surplus check**: If `ExpectedSurplusHardThreshold` is set, the L1 pricing surplus must exceed the threshold; otherwise, the transaction is rejected (anti-DoS tied to L1 fee economics).
 3. **Sender allowlist**: If configured, only allowlisted addresses may submit (not active on Arbitrum One, Nova, Sepolia).
 4. **Type filtering**: Arbitrum internal transaction types and EIP-4844 blob transactions are rejected.
-5. **Timeboost delay**: If Timeboost is active and the current round has an express lane controller, **non-express-lane transactions are delayed** by `ExpressLaneAdvantage` (default: 200ms) before being queued. Express Lane transactions skip this delay.
+5. **Timeboost delay**: If Timeboost is active and the current round has an Express Lane controller, **transactions outside the Express Lane are delayed** by `ExpressLaneAdvantage` (default: 200ms) before being queued. Express Lane transactions skip this delay.
 6. **Queue insertion**: The transaction is wrapped in a `txQueueItem` (containing the transaction, result channel, context, Timeboost metadata) and pushed into the `txQueue` channel (bound by `QueueSize`, default 1024).
 
 #### 2. Block creation loop
 
-The sequencer runs a tight loop (governed by `MaxBlockSpeed`, default 250ms minimal interval) that repeatedly calls `createBlock`:
+The Sequencer runs a tight loop (governed by `MaxBlockSpeed`, default 250ms minimal interval) that repeatedly calls `createBlock`:
 
 1. **Drain three queues in priority order**:
 
-- `timeboostAuctionResolutionTxQueue` highest priority (auction resolution transactions)
-- `txRetryQueue` transactions retried after nonce/gas issues
-- `txQueue` regular incoming transactions
+- `timeboostAuctionResolutionTxQueue` — highest priority (auction resolution transactions)
+- `txRetryQueue` — transactions retried after nonce/gas issues
+- `txQueue` — regular incoming transactions
 
 After the first transaction, it continues draining for up to `ReadFromTxQueueTimeout` (default 10ms) to batch multiple transactions into a single block.
 
@@ -79,10 +79,10 @@ This is where transactions become a block:
 - Applies `postTxFilter` (revert gas rejection, nonce cache update, nonce failure revival).
 - Enforces per-block data size limits.
 
-3.  Constructs an `L1IncomingMessage` from successfully sequenced transactions.
-4.  Generates `blockMetadata`—a bitmask recording which transactions were timeboosted.
-5.  Calls `TransactionStreamer.WriteMessageFromSequencer` to persist.
-6.  Appends the block to the local blockchain.
+3. Constructs an `L1IncomingMessage` from successfully sequenced transactions.
+4. Generates `blockMetadata`—a bitmask recording which transactions were timeboosted.
+5. Calls `TransactionStreamer.WriteMessageFromSequencer` to persist.
+6. Appends the block to the local blockchain.
 
 #### 4. Persistence & broadcast
 
@@ -107,7 +107,7 @@ This is a high-level summary of how the BatchPoster operates within the overall 
 
 :::
 
-#### 6. Sequencer Coordinator (high-availability)
+#### 6. Sequencer Coordinator (high availability)
 
 The `SeqCoordinator` implements Redis-based leader election:
 
@@ -131,7 +131,7 @@ The feed distributes sequenced messages to all non-sequencer nodes in real-time:
 
 :::note
 
-Batches posted to the parent chain are the second method of the Broadcast feed system. To learn more, refer to the Batch poster deep dive.
+Batches posted to the parent chain are the second method of the Broadcast feed system. To learn more, refer to the [Batch poster deep dive](/how-arbitrum-works/deep-dives/batchposter.mdx).
 
 :::
 
@@ -144,19 +144,19 @@ Handles messages originating on L1 (deposits, retryable tickets):
 - Supports **address filtering**—if a delayed message touches a filtered address, the sequencer halts until the transaction hash is added to an onchain filter.
 - Only runs on the active sequencer node.
 
-#### 9. Timeboost/Express lane
+#### 9. Timeboost/Express Lane
 
-Timeboost is a transaction priority auction mechanism. A deep dive can be found on the Timeboost page, but here is a short summary of how it works:
+Timeboost is a transaction priority auction mechanism. A deep dive can be found on the [Timeboost page](/how-arbitrum-works/timeboost/gentle-introduction.mdx), but here is a short summary of how it works:
 
 - Time is divided into fixed-duration **rounds** (minimum 10 seconds).
-- Before each round, an **auction** determines the **express lane controller**—the address whose transactions get priority.
-- The express lane controller's transactions **skip the 200ms delay** that normal transactions experience when the express lane is active.
+- Before each round, an **auction** determines the **Express Lane controller**—the address whose transactions get priority.
+- The Express Lane controller's transactions **skip the 200ms delay** that normal transactions experience when the Express Lane is active.
 
 ##### Flow for Express Lane transactions
 
 1. Controller submits via `Sequencer.PublishExpressLaneTransaction`.
-2. `ExpressLaneService.ValidateExpressLaneTx` checks sender == controller, correct round, valid chain ID.
-3. `ExpressLaneService.SequenceExpressLaneSubmission` inserts into a per-round **ordering queue** (express lane submissions have sequence numbers and are delivered in order).
+2. `ExpressLaneService.ValidateExpressLaneTx` checks that the sender is the current controller, the round is correct, and the chain ID is valid.
+3. `ExpressLaneService.SequenceExpressLaneSubmission` inserts into a per-round **ordering queue** (Express Lane submissions have sequence numbers and are delivered in order).
 4. Messages drain in sequence order → `PublishTimeboostedTransaction` → enters `txQueue` with no delay.
 5. The `isTimeboosted` flag is preserved through block production into `blockMetadata`.
 
