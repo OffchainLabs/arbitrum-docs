@@ -141,6 +141,15 @@ function isDangerous(flag: CliFlag): boolean {
   return /(^|\.)dangerous(\.|$)/.test(flag.flag);
 }
 
+/**
+ * A flag is "experimental" when its path contains an `experimental` segment
+ * (e.g. `persistent.pebble.experimental.wal-dir`). Matches the flag name only,
+ * so flags that merely mention "experimental" in their description are kept.
+ */
+function isExperimental(flag: CliFlag): boolean {
+  return /(^|\.)experimental(\.|$)/.test(flag.flag);
+}
+
 function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
   const groups = new Map<string, CliFlag[]>();
 
@@ -251,7 +260,7 @@ nitro --conf.file=/path/to/config.json
 function main(): void {
   const { check, output } = parseArgs();
 
-  const flags = loadFlags().filter((flag) => !isDangerous(flag));
+  const flags = loadFlags().filter((flag) => !isDangerous(flag) && !isExperimental(flag));
   const groups = groupByNamespace(flags);
   const mdx = generateMdx(groups);
 
