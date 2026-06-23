@@ -10,21 +10,15 @@
   <tbody>
     <tr>
       <td>
-        <code>addChainOwner()</code>
+        <code>addChainOwner(address newOwner)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L19"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L19" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L40"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L65" target="_blank">
           Implementation
         </a>
       </td>
@@ -32,21 +26,15 @@
     </tr>
     <tr>
       <td>
-        <code>removeChainOwner()</code>
+        <code>removeChainOwner(address ownerToRemove)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L24"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L24" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L45"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L76" target="_blank">
           Implementation
         </a>
       </td>
@@ -54,21 +42,15 @@
     </tr>
     <tr>
       <td>
-        <code>isChainOwner()</code>
+        <code>isChainOwner(address addr)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L29"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L29" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L54"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L91" target="_blank">
           Implementation
         </a>
       </td>
@@ -79,18 +61,12 @@
         <code>getAllChainOwners()</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L34"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L34" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L59"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L96" target="_blank">
           Implementation
         </a>
       </td>
@@ -98,47 +74,31 @@
     </tr>
     <tr>
       <td>
-        <code>setNativeTokenManagementFrom()</code>
+        <code>setNativeTokenManagementFrom(uint64 timestamp)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L38"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L38" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L67"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L132" target="_blank">
           Implementation
         </a>
       </td>
-      <td>
-        SetNativeTokenManagementFrom sets a time in epoch seconds when the native token management
-        becomes enabled. Setting it to 0 disables the feature. If the feature is disabled, then the
-        time must be at least 7 days in the future.
-      </td>
+      <td>SetNativeTokenManagementFrom sets native token management enabled-from time.</td>
     </tr>
     <tr>
       <td>
-        <code>addNativeTokenOwner()</code>
+        <code>addNativeTokenOwner(address newOwner)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L44"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L44" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L94"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L142" target="_blank">
           Implementation
         </a>
       </td>
@@ -146,21 +106,15 @@
     </tr>
     <tr>
       <td>
-        <code>removeNativeTokenOwner()</code>
+        <code>removeNativeTokenOwner(address ownerToRemove)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L50"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L50" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L106"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L160" target="_blank">
           Implementation
         </a>
       </td>
@@ -168,21 +122,15 @@
     </tr>
     <tr>
       <td>
-        <code>isNativeTokenOwner()</code>
+        <code>isNativeTokenOwner(address addr)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L56"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L56" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L115"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L175" target="_blank">
           Implementation
         </a>
       </td>
@@ -193,18 +141,12 @@
         <code>getAllNativeTokenOwners()</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L62"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L62" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L120"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L180" target="_blank">
           Implementation
         </a>
       </td>
@@ -212,45 +154,31 @@
     </tr>
     <tr>
       <td>
-        <code>setL1BaseFeeEstimateInertia()</code>
+        <code>setL1BaseFeeEstimateInertia(uint64 inertia)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L65"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L65" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L125"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L242" target="_blank">
           Implementation
         </a>
       </td>
-      <td>
-        SetL1BaseFeeEstimateInertia sets how slowly ArbOS updates its estimate of the L1 basefee
-      </td>
+      <td>SetL1BaseFeeEstimateInertia sets how slowly ArbOS updates its estimate of the L1 basefee</td>
     </tr>
     <tr>
       <td>
-        <code>setL2BaseFee()</code>
+        <code>setL2BaseFee(uint256 priceInWei)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L70"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L70" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L130"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L247" target="_blank">
           Implementation
         </a>
       </td>
@@ -258,21 +186,15 @@
     </tr>
     <tr>
       <td>
-        <code>setMinimumL2BaseFee()</code>
+        <code>setMinimumL2BaseFee(uint256 priceInWei)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L75"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L75" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L135"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L252" target="_blank">
           Implementation
         </a>
       </td>
@@ -280,21 +202,15 @@
     </tr>
     <tr>
       <td>
-        <code>setSpeedLimit()</code>
+        <code>setSpeedLimit(uint64 limit)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L82"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L82" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L143"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L260" target="_blank">
           Implementation
         </a>
       </td>
@@ -302,21 +218,15 @@
     </tr>
     <tr>
       <td>
-        <code>setMaxTxGasLimit()</code>
+        <code>setMaxTxGasLimit(uint64 limit)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L87"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L87" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L151"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L268" target="_blank">
           Implementation
         </a>
       </td>
@@ -324,21 +234,15 @@
     </tr>
     <tr>
       <td>
-        <code>setMaxBlockGasLimit()</code>
+        <code>setMaxBlockGasLimit(uint64 limit)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L93"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L93" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L159"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L276" target="_blank">
           Implementation
         </a>
       </td>
@@ -346,21 +250,15 @@
     </tr>
     <tr>
       <td>
-        <code>setL2GasPricingInertia()</code>
+        <code>setL2GasPricingInertia(uint64 sec)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L100"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L100" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L164"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L281" target="_blank">
           Implementation
         </a>
       </td>
@@ -368,21 +266,15 @@
     </tr>
     <tr>
       <td>
-        <code>setL2GasBacklogTolerance()</code>
+        <code>setL2GasBacklogTolerance(uint64 sec)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L107"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L107" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L172"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L289" target="_blank">
           Implementation
         </a>
       </td>
@@ -393,18 +285,12 @@
         <code>getNetworkFeeAccount()</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L112"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L112" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L177"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L294" target="_blank">
           Implementation
         </a>
       </td>
@@ -415,18 +301,12 @@
         <code>getInfraFeeAccount()</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L116"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L116" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L182"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L299" target="_blank">
           Implementation
         </a>
       </td>
@@ -434,21 +314,15 @@
     </tr>
     <tr>
       <td>
-        <code>setNetworkFeeAccount()</code>
+        <code>setNetworkFeeAccount(address newNetworkFeeAccount)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L119"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L119" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L187"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L304" target="_blank">
           Implementation
         </a>
       </td>
@@ -456,43 +330,31 @@
     </tr>
     <tr>
       <td>
-        <code>setInfraFeeAccount()</code>
+        <code>setInfraFeeAccount(address newInfraFeeAccount)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L125"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L125" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L192"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L309" target="_blank">
           Implementation
         </a>
       </td>
-      <td>SetInfraFeeAccount sets the infra fee collector to the new network fee account</td>
+      <td>SetInfraFeeAccount sets the infrastructure fee collector address</td>
     </tr>
     <tr>
       <td>
         <code>scheduleArbOSUpgrade(uint64 newVersion, uint64 timestamp)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L130"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L130" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L197"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L314" target="_blank">
           Implementation
         </a>
       </td>
@@ -500,21 +362,15 @@
     </tr>
     <tr>
       <td>
-        <code>setL1PricingEquilibrationUnits()</code>
+        <code>setL1PricingEquilibrationUnits(uint256 equilibrationUnits)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L133"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L133" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L202"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L319" target="_blank">
           Implementation
         </a>
       </td>
@@ -522,21 +378,15 @@
     </tr>
     <tr>
       <td>
-        <code>setL1PricingInertia()</code>
+        <code>setL1PricingInertia(uint64 inertia)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L138"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L138" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L207"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L324" target="_blank">
           Implementation
         </a>
       </td>
@@ -544,21 +394,15 @@
     </tr>
     <tr>
       <td>
-        <code>setL1PricingRewardRecipient()</code>
+        <code>setL1PricingRewardRecipient(address recipient)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L143"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L143" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L212"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L329" target="_blank">
           Implementation
         </a>
       </td>
@@ -566,21 +410,15 @@
     </tr>
     <tr>
       <td>
-        <code>setL1PricingRewardRate()</code>
+        <code>setL1PricingRewardRate(uint64 weiPerUnit)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L148"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L148" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L217"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L334" target="_blank">
           Implementation
         </a>
       </td>
@@ -588,21 +426,15 @@
     </tr>
     <tr>
       <td>
-        <code>setL1PricePerUnit()</code>
+        <code>setL1PricePerUnit(uint256 pricePerUnit)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L153"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L153" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L222"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L339" target="_blank">
           Implementation
         </a>
       </td>
@@ -610,21 +442,15 @@
     </tr>
     <tr>
       <td>
-        <code>setParentGasFloorPerToken()</code>
+        <code>setParentGasFloorPerToken(uint64 floorPerToken)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L159"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L159" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L227"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L344" target="_blank">
           Implementation
         </a>
       </td>
@@ -632,21 +458,15 @@
     </tr>
     <tr>
       <td>
-        <code>setPerBatchGasCharge()</code>
+        <code>setPerBatchGasCharge(int64 cost)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L164"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L164" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L232"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L349" target="_blank">
           Implementation
         </a>
       </td>
@@ -654,21 +474,15 @@
     </tr>
     <tr>
       <td>
-        <code>setBrotliCompressionLevel()</code>
+        <code>setBrotliCompressionLevel(uint64 level)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L170"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L170" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L243"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L360" target="_blank">
           Implementation
         </a>
       </td>
@@ -676,21 +490,15 @@
     </tr>
     <tr>
       <td>
-        <code>setAmortizedCostCapBips()</code>
+        <code>setAmortizedCostCapBips(uint64 cap)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L175"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L175" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L237"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L354" target="_blank">
           Implementation
         </a>
       </td>
@@ -698,21 +506,15 @@
     </tr>
     <tr>
       <td>
-        <code>releaseL1PricerSurplusFunds()</code>
+        <code>releaseL1PricerSurplusFunds(uint256 maxWeiToRelease)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L181"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L181" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L248"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L365" target="_blank">
           Implementation
         </a>
       </td>
@@ -720,21 +522,15 @@
     </tr>
     <tr>
       <td>
-        <code>setInkPrice()</code>
+        <code>setInkPrice(uint32 price)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L188"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L188" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L269"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L386" target="_blank">
           Implementation
         </a>
       </td>
@@ -742,21 +538,15 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmMaxStackDepth()</code>
+        <code>setWasmMaxStackDepth(uint32 depth)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L194"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L194" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L283"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L400" target="_blank">
           Implementation
         </a>
       </td>
@@ -764,43 +554,31 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmFreePages()</code>
+        <code>setWasmFreePages(uint16 pages)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L200"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L200" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L293"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L410" target="_blank">
           Implementation
         </a>
       </td>
-      <td>Gets the number of free wasm pages a tx gets</td>
+      <td>Sets the number of free wasm pages a tx receives</td>
     </tr>
     <tr>
       <td>
-        <code>setWasmPageGas()</code>
+        <code>setWasmPageGas(uint16 gas)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L206"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L206" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L303"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L420" target="_blank">
           Implementation
         </a>
       </td>
@@ -808,21 +586,15 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmPageLimit()</code>
+        <code>setWasmPageLimit(uint16 limit)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L212"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L212" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L313"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L430" target="_blank">
           Implementation
         </a>
       </td>
@@ -830,45 +602,31 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmMaxSize()</code>
+        <code>setWasmMaxSize(uint32 size)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L218"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L218" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L375"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L492" target="_blank">
           Implementation
         </a>
       </td>
-      <td>
-        SetMaxWasmSize sets the maximum size the wasm code can be in bytes after decompression.
-      </td>
+      <td>SetMaxWasmSize sets the maximum size the wasm code can be in bytes after decompression.</td>
     </tr>
     <tr>
       <td>
         <code>setWasmMinInitGas(uint8 gas, uint16 cached)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L226"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L226" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L323"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L440" target="_blank">
           Implementation
         </a>
       </td>
@@ -876,21 +634,15 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmInitCostScalar()</code>
+        <code>setWasmInitCostScalar(uint64 percent)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L231"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L231" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L334"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L451" target="_blank">
           Implementation
         </a>
       </td>
@@ -898,21 +650,15 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmExpiryDays()</code>
+        <code>setWasmExpiryDays(uint16 _days)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L237"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L237" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L344"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L461" target="_blank">
           Implementation
         </a>
       </td>
@@ -920,21 +666,15 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmKeepaliveDays()</code>
+        <code>setWasmKeepaliveDays(uint16 _days)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L243"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L243" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L354"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L471" target="_blank">
           Implementation
         </a>
       </td>
@@ -942,21 +682,15 @@
     </tr>
     <tr>
       <td>
-        <code>setWasmBlockCacheSize()</code>
+        <code>setWasmBlockCacheSize(uint16 count)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L249"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L249" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L364"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L481" target="_blank">
           Implementation
         </a>
       </td>
@@ -964,21 +698,15 @@
     </tr>
     <tr>
       <td>
-        <code>addWasmCacheManager()</code>
+        <code>addWasmCacheManager(address manager)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L255"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L255" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L385"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L502" target="_blank">
           Implementation
         </a>
       </td>
@@ -986,21 +714,15 @@
     </tr>
     <tr>
       <td>
-        <code>removeWasmCacheManager()</code>
+        <code>removeWasmCacheManager(address manager)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L261"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L261" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L390"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L507" target="_blank">
           Implementation
         </a>
       </td>
@@ -1008,21 +730,15 @@
     </tr>
     <tr>
       <td>
-        <code>setChainConfig()</code>
+        <code>setChainConfig(string calldata chainConfig)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L267"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L267" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L403"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L520" target="_blank">
           Implementation
         </a>
       </td>
@@ -1030,99 +746,67 @@
     </tr>
     <tr>
       <td>
-        <code>setCalldataPriceIncrease()</code>
+        <code>setCalldataPriceIncrease(bool enable)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L273"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L273" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L453"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L570" target="_blank">
           Implementation
         </a>
       </td>
-      <td>
-        SetCalldataPriceIncrease sets the increased calldata price feature on or off (EIP-7623)
-      </td>
+      <td>SetCalldataPriceIncrease sets the increased calldata price feature on or off (EIP-7623)</td>
     </tr>
     <tr>
       <td>
-        <code>setGasBacklog()</code>
+        <code>setGasBacklog(uint64 backlog)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L280"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L280" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L458"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L575" target="_blank">
           Implementation
         </a>
       </td>
-      <td>
-        SetGasBacklog sets the L2 gas backlog directly (used by single-constraint pricing model
-        only)
-      </td>
+      <td>SetGasBacklog sets the L2 gas backlog directly (used by single-constraint pricing model only)</td>
     </tr>
     <tr>
       <td>
-        <code>setGasPricingConstraints()</code>
+        <code>setGasPricingConstraints(uint64[3][] calldata constraints)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L301"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L301" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L463"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L580" target="_blank">
           Implementation
         </a>
       </td>
-      <td>
-        SetGasPricingConstraints sets the gas pricing constraints used by the multi-constraint
-        pricing model
-      </td>
+      <td>SetGasPricingConstraints sets the gas pricing constraints used by the multi-constraint pricing model</td>
     </tr>
     <tr>
       <td>
-        <code>setWasmActivationGas()</code>
+        <code>setWasmActivationGas(uint64 gas)</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L308"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L308" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L496"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L682" target="_blank">
           Implementation
         </a>
       </td>
-      <td>value exceeding the block gas limit to block all activations entirely.</td>
+      <td>Sets the constant gas charge applied before each stylus contract activation. Defaults to zero. Can be raised to deter DOS via activations, or set to a value exceeding the block gas limit to block all activations entirely.</td>
     </tr>
   </tbody>
 </table>
@@ -1142,22 +826,16 @@
         <code>OwnerActs</code>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L313"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbOwner.sol#L313" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L27"
-          target="_blank"
-        >
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbOwner.go#L30" target="_blank">
           Implementation
         </a>
       </td>
-      <td>/ Emitted when a successful call is made to this precompile</td>
+      <td>Emitted when a successful call is made to this precompile</td>
     </tr>
   </tbody>
 </table>

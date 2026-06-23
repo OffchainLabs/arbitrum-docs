@@ -16,7 +16,7 @@ function isAddress(value: string): boolean {
 export const AddressAliasHelper = () => {
   const [l1Address, setL1Address] = useState('');
   const [l2Address, setL2Address] = useState('');
-  const [error, setError] = useState();
+  const [error, setError] = useState<string | undefined>(undefined);
   useEffect(() => {
     if (!l1Address) {
       return setError(undefined);
@@ -28,8 +28,8 @@ export const AddressAliasHelper = () => {
       setL2Address(applyAlias(l1Address));
       setError(undefined);
     } catch (err) {
-      setL2Address(undefined);
-      setError(err.message);
+      setL2Address('');
+      setError(err instanceof Error ? err.message : String(err));
     }
   }, [l1Address]);
   return (
