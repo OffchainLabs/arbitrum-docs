@@ -311,7 +311,7 @@ Use default cache sizes. Calculate `GOMEMLIMIT` from the non-Go budget:
 # GOMEMLIMIT = 32,768 - 4,756 - 500 safety ≈ 27,512 MB ≈ 27 GB
 
 MALLOC_ARENA_MAX=2 \
-GOMEMLIMIT=27512MiB
+GOMEMLIMIT=27512MiB \
 
 nitro \
   --metrics \
