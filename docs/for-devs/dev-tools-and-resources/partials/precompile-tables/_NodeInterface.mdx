@@ -13,12 +13,12 @@
         <code>estimateRetryableTicket(address sender, uint256 deposit, address to, uint256 l2CallValue, address excessFeeRefundAddress, address callValueRefundAddress, bytes calldata data)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L26" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L26" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L182" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L128" target="_blank">
           Implementation
         </a>
       </td>
@@ -26,15 +26,15 @@
     </tr>
     <tr>
       <td>
-        <code>constructOutboxProof()</code>
+        <code>constructOutboxProof(uint64 size, uint64 leaf)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L45" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L45" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L229" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L175" target="_blank">
           Implementation
         </a>
       </td>
@@ -42,15 +42,15 @@
     </tr>
     <tr>
       <td>
-        <code>findBatchContainingBlock()</code>
+        <code>findBatchContainingBlock(uint64 blockNum)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L57" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L57" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L94" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L84" target="_blank">
           Implementation
         </a>
       </td>
@@ -58,15 +58,15 @@
     </tr>
     <tr>
       <td>
-        <code>getL1Confirmations()</code>
+        <code>getL1Confirmations(bytes32 blockHash)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L70" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L70" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L109" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L102" target="_blank">
           Implementation
         </a>
       </td>
@@ -77,12 +77,12 @@
         <code>gasEstimateComponents(address to, bool contractCreation, bytes calldata data)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L85" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L85" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L560" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L506" target="_blank">
           Implementation
         </a>
       </td>
@@ -93,12 +93,12 @@
         <code>gasEstimateL1Component(address to, bool contractCreation, bytes calldata data)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L113" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L113" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L518" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L464" target="_blank">
           Implementation
         </a>
       </td>
@@ -106,15 +106,15 @@
     </tr>
     <tr>
       <td>
-        <code>legacyLookupMessageBatchProof()</code>
+        <code>legacyLookupMessageBatchProof(uint256 batchNum, uint64 index)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L136" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L136" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L617" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L563" target="_blank">
           Implementation
         </a>
       </td>
@@ -125,12 +125,12 @@
         <code>nitroGenesisBlock()</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L157" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L157" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L56" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L59" target="_blank">
           Implementation
         </a>
       </td>
@@ -138,15 +138,15 @@
     </tr>
     <tr>
       <td>
-        <code>blockL1Num()</code>
+        <code>blockL1Num(uint64 l2BlockNum)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L161" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L161" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L662" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L608" target="_blank">
           Implementation
         </a>
       </td>
@@ -154,15 +154,15 @@
     </tr>
     <tr>
       <td>
-        <code>l2BlockRangeForL1()</code>
+        <code>l2BlockRangeForL1(uint64 blockNum)</code>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd/src/node-interface/NodeInterface.sol#L172" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/node-interface/NodeInterface.sol#L172" target="_blank">
           Interface
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/execution/nodeInterface/NodeInterface.go#L690" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/execution/nodeinterface/node_interface.go#L636" target="_blank">
           Implementation
         </a>
       </td>
