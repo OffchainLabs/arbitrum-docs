@@ -150,6 +150,14 @@ function isExperimental(flag: CliFlag): boolean {
   return /experimental/i.test(flag.flag) || /experimental/i.test(flag.description);
 }
 
+/**
+ * A flag belongs to the blocks-reexecutor tooling when its path is in the
+ * `blocks-reexecutor` namespace (e.g. `blocks-reexecutor.enable`).
+ */
+function isBlocksReexecutor(flag: CliFlag): boolean {
+  return /(^|\.)blocks-reexecutor(\.|$)/.test(flag.flag);
+}
+
 function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
   const groups = new Map<string, CliFlag[]>();
 
@@ -260,7 +268,9 @@ nitro --conf.file=/path/to/config.json
 function main(): void {
   const { check, output } = parseArgs();
 
-  const flags = loadFlags().filter((flag) => !isDangerous(flag) && !isExperimental(flag));
+  const flags = loadFlags().filter(
+    (flag) => !isDangerous(flag) && !isExperimental(flag) && !isBlocksReexecutor(flag),
+  );
   const groups = groupByNamespace(flags);
   const mdx = generateMdx(groups);
 
