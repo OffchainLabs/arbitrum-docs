@@ -143,11 +143,11 @@ function isDangerous(flag: CliFlag): boolean {
 
 /**
  * A flag is "experimental" when its path contains an `experimental` segment
- * (e.g. `persistent.pebble.experimental.wal-dir`). Matches the flag name only,
- * so flags that merely mention "experimental" in their description are kept.
+ * (e.g. `persistent.pebble.experimental.wal-dir`) or its description marks it
+ * as experimental (e.g. `execution.vmtrace.tracer-name`).
  */
 function isExperimental(flag: CliFlag): boolean {
-  return /(^|\.)experimental(\.|$)/.test(flag.flag);
+  return /experimental/i.test(flag.flag) || /experimental/i.test(flag.description);
 }
 
 function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
