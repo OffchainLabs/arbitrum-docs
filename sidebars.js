@@ -1718,6 +1718,11 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
+      id: 'notices/arbos61-upgrade-notice',
+      label: 'Upgrade notice for ArbOS 61',
+    },
+    {
+      type: 'doc',
       id: 'notices/arbos60-upgrade-notice',
       label: 'Upgrade notice for ArbOS 60',
     },
