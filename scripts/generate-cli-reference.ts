@@ -131,6 +131,16 @@ function loadFlags(): CliFlag[] {
   return JSON.parse(raw) as CliFlag[];
 }
 
+/**
+ * A flag is "dangerous" when its path contains a `dangerous` namespace segment
+ * (e.g. `node.batch-poster.dangerous.fixed-gas-limit`). This is Nitro's
+ * structural marking and is a superset of the flags whose descriptions begin
+ * with "DANGEROUS!".
+ */
+function isDangerous(flag: CliFlag): boolean {
+  return /(^|\.)dangerous(\.|$)/.test(flag.flag);
+}
+
 function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
   const groups = new Map<string, CliFlag[]>();
 
@@ -241,7 +251,7 @@ nitro --conf.file=/path/to/config.json
 function main(): void {
   const { check, output } = parseArgs();
 
-  const flags = loadFlags();
+  const flags = loadFlags().filter((flag) => !isDangerous(flag));
   const groups = groupByNamespace(flags);
   const mdx = generateMdx(groups);
 
