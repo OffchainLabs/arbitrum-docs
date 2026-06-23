@@ -107,6 +107,7 @@ With the block hash, fetch the corresponding block from the child chain provider
 
 Then re-derive the block hash by RLP-encoding and hashing the header fields:
 
+```text
 blockarray = [
   l2blockRaw.parentHash,
   l2blockRaw.sha3Uncles,
