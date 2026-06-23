@@ -66,7 +66,7 @@ When Nitro makes CGO calls (for Pebble, Stylus, etc.), the resulting C-side allo
 
 To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which are independent memory pools, each with its own lock. When a thread allocates memory, it picks an arena, reducing contention compared to a single global lock. By default, glibc creates up to `8 x CPU_count` arenas, each reserving a 64 MB region. The worst-case overhead for arenas is:
 
-```
+```shell
 Arena overhead = 8 x CPU_count x 64 MB
 ```
 
@@ -112,7 +112,7 @@ For `GOMEMLIMIT` to work correctly in a containerized environment, you must rese
 
 Sum all memory that lives outside the Go heap:
 
-```
+```shell
 Non-Go Memory =
     database-cache            # Pebble block cache (CGO)
   + (database-cache / 2)      # Pebble memtables, max (CGO)
@@ -127,7 +127,7 @@ With `MALLOC_ARENA_MAX=2`, arena overhead is ~128 MB. Without it, arena overhead
 
 ### Formula
 
-```
+```shell
 GOMEMLIMIT = Container_Memory_Limit - Non_Go_Memory - Safety_Margin
 ```
 
@@ -148,7 +148,7 @@ You should use a safety margin of 300-500 MB to account for allocator overhead, 
 
 \*Thread stack usage depends on the number of active threads, which varies by workload.
 
-```
+```shell
 GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 ```
 
@@ -168,7 +168,7 @@ Validators perform CPU-intensive WASM execution to verify blocks. Their memory a
 
 Validators use a lower `GOMEMLIMIT` multiplier of `0.75` (compared to `0.9` for the main node) because WASM execution creates more transient Go heap allocations that need GC headroom. For a 16 GB validator container:
 
-```
+```shell
 GOMEMLIMIT ≈ 16,384 MB × 0.75 = ~12,288 MB ≈ 12 GB
 ```
 
@@ -217,11 +217,11 @@ nitro --metrics \
 
 Once metrics are enabled, Nitro exposes a Prometheus-compatible endpoint at:
 
-```
+```shell
 http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus
 ```
 
-The same server also exposes pprof profiling endpoints at `/debug/pprof/` for CPU and memory profiling.
+`pprof` runs as a separate server at `/debug/pprof/` for CPU and memory profiling, enabled with --pprof and configured via --pprof-cfg.addr / --pprof-cfg.port (default 127.0.0.1:6071). It is not served on the metrics port.
 
 ### Key metrics to monitor
 
