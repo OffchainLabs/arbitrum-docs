@@ -21,7 +21,7 @@ Nitro is published as several Docker image targets, each building on the previou
 
 | Image target           | Repository tag                        | Entrypoint                                                                                                                     | Description                                                                                                                                                                                 |
 | ---------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `nitro-node-slim`      | `offchainlabs/nitro-node:slim-*`      | `/usr/local/bin/nitro`                                                                                                         | Minimal node image with `nitro`, `relay`, `nitro-val`, `seq-coordinator-manager`, `prover`, and `dbconv`. No legacy WASM module roots for validation.                                       |
+| `nitro-node-slim`      | `offchainlabs/nitro-node:*-slim`      | `/usr/local/bin/nitro`                                                                                                         | Minimal node image with `nitro`, `relay`, `nitro-val`, `seq-coordinator-manager`, `prover`, and `dbconv`. No legacy WASM module roots for validation.                                       |
 | `nitro-node`           | `offchainlabs/nitro-node:*`           | `/usr/local/bin/nitro --validation.wasm.allowed-wasm-module-roots /home/user/nitro-legacy/machines,/home/user/target/machines` | Full node image with DA tools, Timeboost binaries, and both legacy and current WASM module roots for validation.                                                                            |
 | `nitro-node-validator` | `offchainlabs/nitro-node:validator-*` | `/usr/local/bin/split-val-entry.sh`                                                                                            | Runs dual validation servers (current and legacy `nitro-val` instances) behind the main `nitro` process. Used for block validation across WASM module root upgrades.                        |
 | `nitro-node-dev`       | `offchainlabs/nitro-node:dev-*`       | `/usr/local/bin/split-val-entry.sh`                                                                                            | Extends `nitro-node-validator` with `deploy`, `seq-coordinator-invalidate`, `mockexternalsigner`, and the latest locally-built WASM module root. Intended for development and testing only. |
@@ -99,7 +99,7 @@ docker run offchainlabs/nitro-node:validator-latest \
 
 | Binary                       | Description                                                                                                                                       |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `seq-coordinator-manager`    | Interactive terminal interface (TUI) for managing sequencer coordination via Redis. Displays and controls active sequencer selection. |
+| `seq-coordinator-manager`    | Interactive terminal interface (TUI) for managing sequencer coordination via Redis. Displays and controls active sequencer selection.             |
 | `seq-coordinator-invalidate` | Invalidates a sequencer coordination message in Redis. Usage: `seq-coordinator-invalidate [redis url] [signing key] [msg index]`. Dev image only. |
 
 ### Utilities
@@ -108,7 +108,7 @@ docker run offchainlabs/nitro-node:validator-latest \
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `dbconv`               | Converts node databases between storage backends (for example, LevelDB to Pebble).                                        |
 | `genesis-generator`    | Generates genesis state and initialization data for new Arbitrum chains.                                                  |
-| `l2pricing-simulator`  | Simulates Nitro's child chain pricing algorithm for testing gas pricing parameters. |
+| `l2pricing-simulator`  | Simulates Nitro's child chain pricing algorithm for testing gas pricing parameters.                                       |
 | `transaction-filterer` | Filters transactions based on configurable rules before they reach the sequencer. Exposes a `/liveness` health endpoint.  |
 | `mockexternalsigner`   | Mock external transaction signer for testing. Accepts a private key and exposes an RPC signing interface. Dev image only. |
 
@@ -116,26 +116,26 @@ docker run offchainlabs/nitro-node:validator-latest \
 
 Not all binaries are present in every image. The following table shows which image targets include each binary:
 
-| Binary                        | `nitro-node-slim` | `nitro-node` | `nitro-node-validator` | `nitro-node-dev` |
-| ----------------------------- | :---------------: | :----------: | :--------------------: | :--------------: |
-| `nitro`                       |        Yes        |     Yes      |          Yes           |       Yes        |
-| `relay`                       |        Yes        |     Yes      |          Yes           |       Yes        |
-| `nitro-val`                   |        Yes        |     Yes      |          Yes           |       Yes        |
-| `prover`                      |        Yes        |     Yes      |          Yes           |       Yes        |
-| `dbconv`                      |        Yes        |     Yes      |          Yes           |       Yes        |
-| `seq-coordinator-manager`     |        Yes        |     Yes      |          Yes           |       Yes        |
-| `jit`                         |        No         |     Yes      |          Yes           |       Yes        |
-| `anytrustserver` / `daserver` |        No         |     Yes      |          Yes           |       Yes        |
-| `anytrusttool` / `datool`     |        No         |     Yes      |          Yes           |       Yes        |
-| `daprovider`                  |        No         |     Yes      |          Yes           |       Yes        |
-| `autonomous-auctioneer`       |        No         |     Yes      |          Yes           |       Yes        |
-| `bidder-client`               |        No         |     Yes      |          Yes           |       Yes        |
-| `el-proxy`                    |        No         |     Yes      |          Yes           |       Yes        |
-| `genesis-generator`           |        No         |     Yes      |          Yes           |       Yes        |
-| `transaction-filterer`        |        No         |     Yes      |          Yes           |       Yes        |
-| `deploy`                      |        No         |      No      |           No           |       Yes        |
-| `seq-coordinator-invalidate`  |        No         |      No      |           No           |       Yes        |
-| `mockexternalsigner`          |        No         |      No      |           No           |       Yes        |
+| Binary                        | `nitro-node:*-slim` | `nitro-node` | `nitro-node-validator` | `nitro-node-dev` |
+| ----------------------------- | :-----------------: | :----------: | :--------------------: | :--------------: |
+| `nitro`                       |         Yes         |     Yes      |          Yes           |       Yes        |
+| `relay`                       |         Yes         |     Yes      |          Yes           |       Yes        |
+| `nitro-val`                   |         Yes         |     Yes      |          Yes           |       Yes        |
+| `prover`                      |         Yes         |     Yes      |          Yes           |       Yes        |
+| `dbconv`                      |         Yes         |     Yes      |          Yes           |       Yes        |
+| `seq-coordinator-manager`     |         Yes         |     Yes      |          Yes           |       Yes        |
+| `jit`                         |         No          |     Yes      |          Yes           |       Yes        |
+| `anytrustserver` / `daserver` |         No          |     Yes      |          Yes           |       Yes        |
+| `anytrusttool` / `datool`     |         No          |     Yes      |          Yes           |       Yes        |
+| `daprovider`                  |         No          |     Yes      |          Yes           |       Yes        |
+| `autonomous-auctioneer`       |         No          |     Yes      |          Yes           |       Yes        |
+| `bidder-client`               |         No          |     Yes      |          Yes           |       Yes        |
+| `el-proxy`                    |         No          |     Yes      |          Yes           |       Yes        |
+| `genesis-generator`           |         No          |     Yes      |          Yes           |       Yes        |
+| `transaction-filterer`        |         No          |     Yes      |          Yes           |       Yes        |
+| `deploy`                      |         No          |      No      |           No           |       Yes        |
+| `seq-coordinator-invalidate`  |         No          |      No      |           No           |       Yes        |
+| `mockexternalsigner`          |         No          |      No      |           No           |       Yes        |
 
 ## Overriding entrypoints
 
