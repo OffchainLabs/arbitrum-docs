@@ -86,7 +86,7 @@ pip3 install colorama
 For this guide, we demonstrate debugging using the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) smart contract. The `increment()` method in `src/lib.rs` looks like this:
 
 ```rust
-#[external]
+#[public]
 impl Counter {
     // ...
     /// Increments number and updates its value in storage.

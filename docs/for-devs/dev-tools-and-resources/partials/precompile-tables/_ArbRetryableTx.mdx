@@ -10,7 +10,7 @@
   <tbody>
     <tr>
       <td>
-        <code>redeem()</code>
+        <code>redeem(bytes32 ticketId)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbRetryableTx.sol#L18" target="_blank">
@@ -18,7 +18,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L49" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L50" target="_blank">
           Implementation
         </a>
       </td>
@@ -34,7 +34,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L139" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L162" target="_blank">
           Implementation
         </a>
       </td>
@@ -42,7 +42,7 @@
     </tr>
     <tr>
       <td>
-        <code>getTimeout()</code>
+        <code>getTimeout(bytes32 ticketId)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbRetryableTx.sol#L33" target="_blank">
@@ -50,7 +50,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L144" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L167" target="_blank">
           Implementation
         </a>
       </td>
@@ -58,7 +58,7 @@
     </tr>
     <tr>
       <td>
-        <code>keepalive()</code>
+        <code>keepalive(bytes32 ticketId)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbRetryableTx.sol#L45" target="_blank">
@@ -66,7 +66,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L161" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L184" target="_blank">
           Implementation
         </a>
       </td>
@@ -74,7 +74,7 @@
     </tr>
     <tr>
       <td>
-        <code>getBeneficiary()</code>
+        <code>getBeneficiary(bytes32 ticketId)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbRetryableTx.sol#L55" target="_blank">
@@ -82,7 +82,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L189" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L212" target="_blank">
           Implementation
         </a>
       </td>
@@ -90,7 +90,7 @@
     </tr>
     <tr>
       <td>
-        <code>cancel()</code>
+        <code>cancel(bytes32 ticketId)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbRetryableTx.sol#L64" target="_blank">
@@ -98,7 +98,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L202" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L225" target="_blank">
           Implementation
         </a>
       </td>
@@ -114,7 +114,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L233" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L256" target="_blank">
           Implementation
         </a>
       </td>
@@ -122,7 +122,7 @@
     </tr>
     <tr>
       <td>
-        <code>submitRetryable()</code>
+        <code>submitRetryable(bytes32 requestId, uint256 l1BaseFee, uint256 deposit, uint256 callvalue, uint256 gasFeeCap, uint64 gasLimit, uint256 maxSubmissionFee, address feeRefundAddress, address beneficiary, address retryTo, bytes calldata retryData)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbRetryableTx.sol#L79" target="_blank">
@@ -130,7 +130,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L241" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L264" target="_blank">
           Implementation
         </a>
       </td>
@@ -159,7 +159,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L22" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L23" target="_blank">
           Implementation
         </a>
       </td>
@@ -175,7 +175,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L184" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L207" target="_blank">
           Implementation
         </a>
       </td>
@@ -191,7 +191,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L121" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L125" target="_blank">
           Implementation
         </a>
       </td>
@@ -207,7 +207,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L227" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L250" target="_blank">
           Implementation
         </a>
       </td>
@@ -223,7 +223,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbRetryableTx.go#L32" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbRetryableTx.go#L33" target="_blank">
           Implementation
         </a>
       </td>

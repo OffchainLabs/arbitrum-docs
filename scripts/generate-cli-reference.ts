@@ -131,6 +131,33 @@ function loadFlags(): CliFlag[] {
   return JSON.parse(raw) as CliFlag[];
 }
 
+/**
+ * A flag is "dangerous" when its path contains a `dangerous` namespace segment
+ * (e.g. `node.batch-poster.dangerous.fixed-gas-limit`). This is Nitro's
+ * structural marking and is a superset of the flags whose descriptions begin
+ * with "DANGEROUS!".
+ */
+function isDangerous(flag: CliFlag): boolean {
+  return /(^|\.)dangerous(\.|$)/.test(flag.flag);
+}
+
+/**
+ * A flag is "experimental" when its path contains an `experimental` segment
+ * (e.g. `persistent.pebble.experimental.wal-dir`) or its description marks it
+ * as experimental (e.g. `execution.vmtrace.tracer-name`).
+ */
+function isExperimental(flag: CliFlag): boolean {
+  return /experimental/i.test(flag.flag) || /experimental/i.test(flag.description);
+}
+
+/**
+ * A flag belongs to the blocks-reexecutor tooling when its path is in the
+ * `blocks-reexecutor` namespace (e.g. `blocks-reexecutor.enable`).
+ */
+function isBlocksReexecutor(flag: CliFlag): boolean {
+  return /(^|\.)blocks-reexecutor(\.|$)/.test(flag.flag);
+}
+
 function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
   const groups = new Map<string, CliFlag[]>();
 
@@ -241,7 +268,9 @@ nitro --conf.file=/path/to/config.json
 function main(): void {
   const { check, output } = parseArgs();
 
-  const flags = loadFlags();
+  const flags = loadFlags().filter(
+    (flag) => !isDangerous(flag) && !isExperimental(flag) && !isBlocksReexecutor(flag),
+  );
   const groups = groupByNamespace(flags);
   const mdx = generateMdx(groups);
 
