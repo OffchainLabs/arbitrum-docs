@@ -131,31 +131,37 @@ function loadFlags(): CliFlag[] {
   return JSON.parse(raw) as CliFlag[];
 }
 
-/**
- * A flag is "dangerous" when its path contains a `dangerous` namespace segment
- * (e.g. `node.batch-poster.dangerous.fixed-gas-limit`). This is Nitro's
- * structural marking and is a superset of the flags whose descriptions begin
- * with "DANGEROUS!".
- */
-function isDangerous(flag: CliFlag): boolean {
-  return /(^|\.)dangerous(\.|$)/.test(flag.flag);
+interface ExclusionRule {
+  reason: string;
+  matches: (flag: CliFlag) => boolean;
 }
 
 /**
- * A flag is "experimental" when its path contains an `experimental` segment
- * (e.g. `persistent.pebble.experimental.wal-dir`) or its description marks it
- * as experimental (e.g. `execution.vmtrace.tracer-name`).
+ * Flags omitted from the generated reference. Each rule documents why its
+ * matched flags are excluded. Add an entry here to exclude more flags.
  */
-function isExperimental(flag: CliFlag): boolean {
-  return /experimental/i.test(flag.flag) || /experimental/i.test(flag.description);
-}
+const EXCLUSIONS: ExclusionRule[] = [
+  {
+    reason:
+      'dangerous: flags under a `dangerous` namespace segment (superset of "DANGEROUS!" descriptions)',
+    matches: (flag) => /(^|\.)dangerous(\.|$)/.test(flag.flag),
+  },
+  {
+    reason: 'experimental: marked experimental by flag name or description',
+    matches: (flag) => /experimental/i.test(flag.flag) || /experimental/i.test(flag.description),
+  },
+  {
+    reason: 'blocks-reexecutor: block re-execution tooling namespace',
+    matches: (flag) => /(^|\.)blocks-reexecutor(\.|$)/.test(flag.flag),
+  },
+  {
+    reason: 'conf.reload-interval: periodic config reload knob',
+    matches: (flag) => flag.flag === 'conf.reload-interval',
+  },
+];
 
-/**
- * A flag belongs to the blocks-reexecutor tooling when its path is in the
- * `blocks-reexecutor` namespace (e.g. `blocks-reexecutor.enable`).
- */
-function isBlocksReexecutor(flag: CliFlag): boolean {
-  return /(^|\.)blocks-reexecutor(\.|$)/.test(flag.flag);
+function isExcluded(flag: CliFlag): boolean {
+  return EXCLUSIONS.some((rule) => rule.matches(flag));
 }
 
 function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
@@ -268,9 +274,7 @@ nitro --conf.file=/path/to/config.json
 function main(): void {
   const { check, output } = parseArgs();
 
-  const flags = loadFlags().filter(
-    (flag) => !isDangerous(flag) && !isExperimental(flag) && !isBlocksReexecutor(flag),
-  );
+  const flags = loadFlags().filter((flag) => !isExcluded(flag));
   const groups = groupByNamespace(flags);
   const mdx = generateMdx(groups);
 
