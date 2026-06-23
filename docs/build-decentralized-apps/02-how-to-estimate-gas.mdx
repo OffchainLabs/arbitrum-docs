@@ -75,13 +75,13 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 You can use the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) to retrieve the fee components:
 
 - **P** (L2 Gas Price): Price per gas unit. Starts at a gas floor price and increases with demand.
-  - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.
+  - Call `NodeInterface.gasEstimateComponents()` and get the third element, `baseFee`.
 - **L2G** (Gas used on L2): Gas consumed by child chain computation, excluding parent chain posting costs.
-  - Call `NodeInterface.GasEstimateComponents()` with the transaction data and subtract the second element (`gasEstimateForL1`) from the first (`gasEstimate`).
+  - Call `NodeInterface.gasEstimateComponents()` with the transaction data and subtract the second element (`gasEstimateForL1`) from the first (`gasEstimate`).
 - **L1P** (L1 estimated price per byte of data): Estimated cost of posting 1 byte of data on the parent chain.
-  - Call `NodeInterface.GasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
+  - Call `NodeInterface.gasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
 - **L1S** (Size of data to be posted on L1, in bytes): Depends on the transaction data. Arbitrum adds a fixed amount (~140 bytes) for the static part of the transaction.
-  - Call `NodeInterface.GasEstimateComponents()`, take the second element `gasEstimateForL1` (this is `B` in the formula), multiply by `P` and divide by `L1P`.
+  - Call `NodeInterface.gasEstimateComponents()`, take the second element `gasEstimateForL1` (this is `B` in the formula), multiply by `P` and divide by `L1P`.
   - For Arbitrum Nova (AnyTrust), the data size is a fixed value since only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx#data-availability-certificates-dacert).
 
 :::note
