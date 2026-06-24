@@ -65,7 +65,7 @@ interface IMyContract {
 
     function setValue(uint256 new_value) external;
 
-    error Unauthorized(address caller);
+    error Unauthorized(address);
 }
 ```
 
@@ -91,38 +91,15 @@ Generate JSON format ABI (requires `solc` installed):
 cargo stylus export-abi --json > abi.json
 ```
 
-Output:
+The JSON output is produced by `solc`, so it includes `solc`'s header lines before the ABI array:
 
-```json
-[
-  {
-    "type": "function",
-    "name": "getValue",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "setValue",
-    "inputs": [
-      {
-        "name": "new_value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  }
-]
 ```
+======= <stdin>:IMyContract =======
+Contract JSON ABI
+[{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"Unauthorized","type":"error"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"new_value","type":"uint256"}],"name":"setValue","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+```
+
+Strip the two header lines before feeding the array to front-end tooling.
 
 ## Writing ABI-compatible contracts
 
@@ -281,14 +258,14 @@ impl Token {
 }
 ```
 
-Generated interface includes errors:
+Generated interface includes errors. Note that the exported Solidity drops the error parameter names, keeping only their types:
 
 ```solidity
 interface IToken {
     function transfer(address to, uint256 amount) external;
 
-    error InsufficientBalance(address account, uint256 requested, uint256 available);
-    error Unauthorized(address caller);
+    error InsufficientBalance(address, uint256, uint256);
+    error Unauthorized(address);
     error InvalidAmount();
 }
 ```
@@ -444,10 +421,10 @@ impl MyContract {
 }
 ```
 
-Export constructor signature:
+Export constructor signature with the top-level `constructor` command (the constructor is not part of `export-abi` output):
 
 ```shell
-cargo stylus export-abi constructor
+cargo stylus constructor
 ```
 
 Output:
@@ -477,29 +454,6 @@ constructor(address owner) payable
 ```
 
 ## Export configuration
-
-### Custom license
-
-Specify a custom SPDX license identifier:
-
-```shell
-cargo stylus export-abi --license=GPL-3.0
-```
-
-Output includes:
-
-```solidity
-// SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.23;
-```
-
-### Custom pragma
-
-Specify a custom Solidity version pragma:
-
-```shell
-cargo stylus export-abi --pragma="pragma solidity ^0.8.20;"
-```
 
 ### Rust features
 
@@ -795,7 +749,7 @@ cp abi.json ../frontend/src/abis/
 When adding or modifying constructors, regenerate and commit:
 
 ```shell
-cargo stylus export-abi constructor > CONSTRUCTOR.txt
+cargo stylus constructor > CONSTRUCTOR.txt
 git add CONSTRUCTOR.txt
 git commit -m "Update constructor signature"
 ```
@@ -958,11 +912,16 @@ impl AbiType for MyType {
 
 Export ABIs for all contracts in a workspace:
 
+The `--contract` value is a cargo package name. Repeat the flag to select several contracts; with no `--contract`, the workspace's default contracts are exported.
+
 ```shell
-# Export specific contract
+# Export specific contract by package name
 cargo stylus export-abi --contract=my-token
 
-# Export all contracts
+# Select several contracts in one invocation
+cargo stylus export-abi --contract=token --contract=staking
+
+# Export each to its own file
 for contract in token staking governance; do
     cargo stylus export-abi --contract=$contract > interfaces/I${contract^}.sol
 done
