@@ -34,8 +34,8 @@ pub struct HelloWorld;
 
 #[public]
 impl HelloWorld {
-    fn user_main(_input: Vec<u8>) -> ArbResult {
-        Ok(Vec::new())
+    pub fn greet(&self) -> String {
+        "Hello, Stylus!".to_string()
     }
 }
 ```
@@ -44,8 +44,8 @@ This contract:
 
 - Uses `#[storage]` to define the contract struct (empty in this case)
 - Uses `#[entrypoint]` to mark it as the contract's entry point
-- Uses `#[public]` to expose the `user_main` function
-- Returns `ArbResult`, which is `Result<Vec<u8>, Vec<u8>>`
+- Uses `#[public]` to expose the `greet` method
+- Exposes a single read-only method callable from Solidity or other contracts
 
 ## Storage definition
 
@@ -101,7 +101,7 @@ The `#[entrypoint]` macro marks a struct as the contract's main entry point. It 
 
 - Routing incoming calls to public methods
 - Managing contract storage
-- Handling reentrancy protection (unless the `reentrant` feature is enabled)
+- Flushing the storage cache automatically on cross-contract calls, which protects against reentrancy by default; follow the checks-effects-interactions pattern for additional safety
 
 **Key requirements:**
 
@@ -187,7 +187,8 @@ impl MyContract {
         let sender = self.vm().msg_sender();
         let balance = self.balances.get(sender);
         self.balances.setter(sender).set(balance - amount);
-        self.balances.setter(to).set(self.balances.get(to) + amount);
+        let to_balance = self.balances.get(to);
+        self.balances.setter(to).set(to_balance + amount);
     }
 
     // Pure: no state access at all
@@ -219,7 +220,7 @@ sol_storage! {
 impl Token {
     #[constructor]
     pub fn constructor(&mut self, initial_supply: U256) {
-        let deployer = self.vm().msg_sender();
+        let deployer = self.vm().tx_origin();
         self.owner.set(deployer);
         self.total_supply.set(initial_supply);
     }
@@ -242,7 +243,7 @@ impl Token {
     pub fn constructor(&mut self, initial_supply: U256) {
         // Contract can receive ETH during deployment
         let received = self.vm().msg_value();
-        self.owner.set(self.vm().msg_sender());
+        self.owner.set(self.vm().tx_origin());
         self.total_supply.set(initial_supply);
     }
 }
@@ -562,7 +563,8 @@ impl Token {
             return false;
         }
         self.balances.setter(from).set(from_balance - value);
-        self.balances.setter(to).set(self.balances.get(to) + value);
+        let to_balance = self.balances.get(to);
+        self.balances.setter(to).set(to_balance + value);
 
         // Emit event
         self.vm().log(Transfer { from, to, value });
@@ -625,7 +627,7 @@ sol_interface! {
 #### View calls (read-only)
 
 ```rust
-use stylus_sdk::call::Call;
+use stylus_sdk::prelude::*; // brings `Call` into scope
 
 #[public]
 impl MyContract {
@@ -687,6 +689,7 @@ For maximum flexibility, use raw calls:
 
 ```rust
 use stylus_sdk::call::{call, static_call, RawCall};
+use stylus_sdk::prelude::*; // brings `Call` into scope
 
 #[public]
 impl MyContract {
@@ -695,12 +698,12 @@ impl MyContract {
         let config = Call::new_mutating(self)
             .gas(self.vm().evm_gas_left());
 
-        call(self.vm(), config, target, &calldata)
+        Ok(call(self.vm(), config, target, &calldata)?)
     }
 
     // Static call (read-only)
     pub fn execute_static_call(&self, target: Address, calldata: Vec<u8>) -> Result<Vec<u8>, Vec<u8>> {
-        static_call(self.vm(), Call::new(), target, &calldata)
+        Ok(static_call(self.vm(), Call::new(), target, &calldata)?)
     }
 
     // Unsafe raw call with advanced options
@@ -767,7 +770,8 @@ impl Token {
         }
 
         self.balances.setter(from).set(balance - amount);
-        self.balances.setter(to).set(self.balances.get(to) + amount);
+        let to_balance = self.balances.get(to);
+        self.balances.setter(to).set(to_balance + amount);
 
         Ok(true)
     }
@@ -829,7 +833,7 @@ impl SimpleToken {
     // Constructor
     #[constructor]
     pub fn constructor(&mut self, initial_supply: U256) {
-        let deployer = self.vm().msg_sender();
+        let deployer = self.vm().tx_origin();
         self.owner.set(deployer);
         self.balances.setter(deployer).set(initial_supply);
         self.total_supply.set(initial_supply);
@@ -906,7 +910,8 @@ impl SimpleToken {
             return Err(TokenError::Unauthorized(Unauthorized {}));
         }
 
-        self.balances.setter(to).set(self.balances.get(to) + value);
+        let to_balance = self.balances.get(to);
+        self.balances.setter(to).set(to_balance + value);
         self.total_supply.set(self.total_supply.get() + value);
 
         self.vm().log(Transfer {
@@ -930,7 +935,8 @@ impl SimpleToken {
         }
 
         self.balances.setter(from).set(from_balance - value);
-        self.balances.setter(to).set(self.balances.get(to) + value);
+        let to_balance = self.balances.get(to);
+        self.balances.setter(to).set(to_balance + value);
 
         self.vm().log(Transfer { from, to, value });
         Ok(())
@@ -1074,7 +1080,7 @@ pub fn withdraw(&mut self, amount: U256) -> Result<(), VaultError> {
     self.balances.setter(caller).set(balance - amount);
 
     // Interactions (external calls last)
-    // self.transfer_eth(caller, amount)?;
+    // transfer_eth(self.vm(), caller, amount)?;
 
     Ok(())
 }
@@ -1115,7 +1121,8 @@ This pattern is essential for building upgradeable contracts, proxy patterns, an
 The `delegate_call` function is a low-level operation similar to `call` and `static_call`. It is considered unsafe because it relies on an external contract to ensure safety.
 
 ```rust
-pub unsafe fn delegate_call(
+pub unsafe fn delegate_call<H: Host + ?Sized>(
+    host: &H,
     context: impl MutatingCallContext,
     to: Address,
     data: &[u8],
@@ -1126,6 +1133,7 @@ pub unsafe fn delegate_call(
 
 ```rust
 use stylus_sdk::call::delegate_call;
+use stylus_sdk::prelude::*; // brings `Call` into scope
 
 pub fn low_level_delegate_call(
     &mut self,
@@ -1133,7 +1141,8 @@ pub fn low_level_delegate_call(
     target: Address,
 ) -> Result<Vec<u8>, DelegateCallErrors> {
     unsafe {
-        let result = delegate_call(self, target, &calldata)
+        let config = Call::new_mutating(self);
+        let result = delegate_call(self.vm(), config, target, &calldata)
             .map_err(|_| DelegateCallErrors::DelegateCallFailed(DelegateCallFailed {}))?;
         Ok(result)
     }
@@ -1152,10 +1161,12 @@ pub fn raw_delegate_call(
     calldata: Vec<u8>,
     target: Address,
 ) -> Result<Vec<u8>, Vec<u8>> {
-    let data = RawCall::new_delegate()   // Configure a delegate call
-        .gas(2100)                       // Supply 2100 gas
-        .limit_return_data(0, 32)        // Only read the first 32 bytes back
-        .call(target, &calldata)?;
+    let data = unsafe {
+        RawCall::new_delegate(self.vm()) // Configure a delegate call
+            .gas(2100)                   // Supply 2100 gas
+            .limit_return_data(0, 32)    // Only read the first 32 bytes back
+            .call(target, &calldata)?
+    };
 
     Ok(data)
 }
@@ -1163,9 +1174,11 @@ pub fn raw_delegate_call(
 
 ### Safety considerations
 
-:::caution
+<VanillaAdmonition type="warning">
+
 Delegate calls are inherently unsafe and should be used with caution.
-:::
+
+</VanillaAdmonition>
 
 - **Trust requirement**: The calling contract must trust the external contract to uphold safety requirements
 - **Storage modification**: The external contract can arbitrarily change the calling contract's storage
@@ -1207,7 +1220,8 @@ impl DelegateExample {
         target: Address,
     ) -> Result<Vec<u8>, DelegateCallErrors> {
         unsafe {
-            let result = delegate_call(self, target, &calldata)
+            let config = Call::new_mutating(self);
+            let result = delegate_call(self.vm(), config, target, &calldata)
                 .map_err(|_| DelegateCallErrors::DelegateCallFailed(DelegateCallFailed {}))?;
 
             Ok(result)
@@ -1220,10 +1234,12 @@ impl DelegateExample {
         calldata: Vec<u8>,
         target: Address,
     ) -> Result<Vec<u8>, Vec<u8>> {
-        let data = RawCall::new_delegate()
-            .gas(2100)
-            .limit_return_data(0, 32)
-            .call(target, &calldata)?;
+        let data = unsafe {
+            RawCall::new_delegate(self.vm())
+                .gas(2100)
+                .limit_return_data(0, 32)
+                .call(target, &calldata)?
+        };
 
         Ok(data)
     }
@@ -1247,7 +1263,7 @@ Stylus provides multiple ways to send ether from a contract. Unlike Solidity's `
 The simplest way to send ether:
 
 ```rust
-use stylus_sdk::call::transfer_eth;
+use stylus_sdk::call::transfer::transfer_eth;
 
 #[public]
 impl SendEther {
@@ -1264,13 +1280,16 @@ impl SendEther {
 For more control over the transfer:
 
 ```rust
-use stylus_sdk::call::{call, Call};
+use stylus_sdk::call::call;
+use stylus_sdk::prelude::*; // brings `Call` into scope
 
 #[public]
 impl SendEther {
     #[payable]
     pub fn send_via_call(&mut self, to: Address) -> Result<(), Vec<u8>> {
-        call(Call::new_in(self).value(self.vm().msg_value()), to, &[])?;
+        let value = self.vm().msg_value();
+        let context = Call::new_payable(self, value);
+        call(self.vm(), context, to, &[])?;
         Ok(())
     }
 }
@@ -1281,7 +1300,8 @@ These two approaches are equivalent under the hood:
 ```rust
 // These are equivalent:
 transfer_eth(self.vm(), recipient, value)?;
-call(Call::new_in(self).value(value), recipient, &[])?;
+let context = Call::new_payable(self, value);
+call(self.vm(), context, recipient, &[])?;
 ```
 
 ### Sending with a gas limit
@@ -1291,11 +1311,9 @@ To cap the gas forwarded to the recipient (similar to Solidity's `transfer`):
 ```rust
 #[payable]
 pub fn send_via_call_gas_limit(&mut self, to: Address, gas_amount: u64) -> Result<(), Vec<u8>> {
-    call(
-        Call::new_in(self).value(self.vm().msg_value()).gas(gas_amount),
-        to,
-        &[],
-    )?;
+    let value = self.vm().msg_value();
+    let context = Call::new_payable(self, value).gas(gas_amount);
+    call(self.vm(), context, to, &[])?;
     Ok(())
 }
 ```
@@ -1313,7 +1331,9 @@ pub fn send_via_call_with_calldata(
     to: Address,
     data: Bytes,
 ) -> Result<(), Vec<u8>> {
-    call(Call::new_in(self).value(self.vm().msg_value()), to, data.as_slice())?;
+    let value = self.vm().msg_value();
+    let context = Call::new_payable(self, value);
+    call(self.vm(), context, to, &data)?;
     Ok(())
 }
 ```
@@ -1334,8 +1354,9 @@ impl SendEther {
     #[payable]
     pub fn send_to_contract(&mut self, to: Address) -> Result<(), Vec<u8>> {
         let target = ITarget::new(to);
-        let config = Call::new_in(self).value(self.vm().msg_value());
-        target.receive_ether(config)?;
+        let value = self.vm().msg_value();
+        let context = Call::new_payable(self, value);
+        target.receive_ether(self.vm(), context)?;
         Ok(())
     }
 }
@@ -1357,7 +1378,7 @@ extern crate alloc;
 use alloy_primitives::Address;
 use stylus_sdk::{
     abi::Bytes,
-    call::{call, transfer_eth, Call},
+    call::{call, transfer::transfer_eth},
     prelude::*,
 };
 
@@ -1375,26 +1396,27 @@ pub struct SendEther;
 impl SendEther {
     // Simple transfer
     #[payable]
-    pub fn send_via_transfer(&self, to: Address) -> Result<(), Vec<u8>> {
-        transfer_eth(self.vm(), to, self.vm().msg_value())?;
+    pub fn send_via_transfer(&mut self, to: Address) -> Result<(), Vec<u8>> {
+        let value = self.vm().msg_value();
+        transfer_eth(self.vm(), to, value)?;
         Ok(())
     }
 
     // Low-level call
     #[payable]
     pub fn send_via_call(&mut self, to: Address) -> Result<(), Vec<u8>> {
-        call(Call::new_in(self).value(self.vm().msg_value()), to, &[])?;
+        let value = self.vm().msg_value();
+        let context = Call::new_payable(self, value);
+        call(self.vm(), context, to, &[])?;
         Ok(())
     }
 
     // With gas limit
     #[payable]
     pub fn send_via_call_gas_limit(&mut self, to: Address, gas_amount: u64) -> Result<(), Vec<u8>> {
-        call(
-            Call::new_in(self).value(self.vm().msg_value()).gas(gas_amount),
-            to,
-            &[],
-        )?;
+        let value = self.vm().msg_value();
+        let context = Call::new_payable(self, value).gas(gas_amount);
+        call(self.vm(), context, to, &[])?;
         Ok(())
     }
 
@@ -1405,7 +1427,9 @@ impl SendEther {
         to: Address,
         data: Bytes,
     ) -> Result<(), Vec<u8>> {
-        call(Call::new_in(self).value(self.vm().msg_value()), to, data.as_slice())?;
+        let value = self.vm().msg_value();
+        let context = Call::new_payable(self, value);
+        call(self.vm(), context, to, &data)?;
         Ok(())
     }
 
@@ -1413,8 +1437,9 @@ impl SendEther {
     #[payable]
     pub fn send_to_contract(&mut self, to: Address) -> Result<(), Vec<u8>> {
         let target = ITarget::new(to);
-        let config = Call::new_in(self).value(self.vm().msg_value());
-        target.receive_ether(config)?;
+        let value = self.vm().msg_value();
+        let context = Call::new_payable(self, value);
+        target.receive_ether(self.vm(), context)?;
         Ok(())
     }
 }
@@ -1424,14 +1449,16 @@ impl SendEther {
 
 The factory pattern allows a contract to deploy other contracts programmatically. This is useful for creating contract instances on demand, such as deploying new token contracts or creating user-specific vaults.
 
-:::note
+<VanillaAdmonition type="note">
+
 Advanced deployment patterns documentation is in development. This section will cover:
 
 - Deploying contracts from within a contract
 - Passing constructor arguments
 - Deterministic deployment with CREATE2
 - Handling deployment failures
-  :::
+
+</VanillaAdmonition>
 
 **Constructor considerations for factory-deployed contracts:**
 
