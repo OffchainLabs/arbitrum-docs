@@ -12,11 +12,11 @@ import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-
 
 This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../quickstart.mdx).
 
-:::info
+<VanillaAdmonition type="info">
 
 Many of the affordances use macros. Though this section details what each does, it may be helpful to use [`cargo expand`](https://crates.io/crates/cargo-expand) to see what they expand into if you’re doing advanced work in Rust.
 
-:::
+</VanillaAdmonition>
 
 ## Storage
 
@@ -71,7 +71,7 @@ sol_storage! {
     pub struct Contract {
         address owner;                      // becomes a StorageAddress
         bool active;                        // becomes a StorageBool
-        SubStruct sub_struct,
+        SubStruct sub_struct;
     }
 
     pub struct SubStruct {
@@ -82,19 +82,21 @@ sol_storage! {
 }
 ```
 
-The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait. Many contracts, like [our example **ERC-20**](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs), do exactly this.
+The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait. Many contracts, like [our example **ERC-20**](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/examples/erc20/src/lib.rs), do exactly this.
 
 Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
-:::warning Storage layout in contracts using inheritance
+<VanillaAdmonition type="warning" title="Storage layout in contracts using inheritance">
 
 One exception to this storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in solidity, but not inherited structs. We plan to revisit this behavior in an upcoming release.
 
-:::
+</VanillaAdmonition>
 
-:::tip
+<VanillaAdmonition type="tip">
+
 Existing Solidity smart contracts can upgrade to Rust if they use proxy patterns.
-:::
+
+</VanillaAdmonition>
 
 Consequently, the order of fields will affect the JSON ABIs produced that explorers and tooling might use. Most developers won’t need to worry about this though and can freely order their types when working on a Rust contract from scratch.
 
@@ -111,7 +113,7 @@ impl Contract {
 
     /// Updates the owner in storage
     pub fn set_owner(&mut self, new_owner: Address) {
-        if msg::sender() == self.owner.get() { // we'll discuss msg::sender later
+        if self.vm().msg_sender() == self.owner.get() {
             self.owner.set(new_owner);
         }
     }
@@ -130,11 +132,11 @@ impl Contract {
 
 In Solidity, one has to be very careful about storage access patterns. Getting or setting the same value twice doubles costs, leading developers to avoid storage access at all costs. By contrast, the Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`](https://www.evm.codes/#54) or [`SSTORE`](https://www.evm.codes/#55) operations.
 
-:::tip
+<VanillaAdmonition type="tip">
 
 Stylus uses storage caching, so multiple accesses of the same variable is virtually free.
 
-:::
+</VanillaAdmonition>
 
 However it must be said that storage is ultimately more expensive than memory. So if a value doesn’t need to be stored in state, you probably shouldn’t do it.
 
@@ -234,7 +236,7 @@ sol_storage! {
 }
 ```
 
-The above allows consumers of Erc20 to choose immutable constants via specialization. See our [**WETH** sample contract](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs) for a full example of this feature.
+The above allows consumers of Erc20 to choose immutable constants via specialization. See our [**ERC-20** sample contract](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/examples/erc20/src/lib.rs) for a full example of this feature.
 
 ## Functions
 
@@ -242,7 +244,7 @@ This section provides extra information about how the Stylus Rust SDK handles fu
 
 ### Pure, View, and Write functions
 
-For non-payable methods the [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) macro can figure state mutability out for you based on the types of the arguments. Functions with `&self` will be considered `view`, those with `&mut self` will be considered `write`, and those with neither will be considered `pure`. Please note that `pure` and `view` functions may change the state of other contracts by calling into them, or even this one if the `reentrant` feature is enabled.
+For non-payable methods the [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) macro can figure state mutability out for you based on the types of the arguments. Functions with `&self` will be considered `view`, those with `&mut self` will be considered `write`, and those with neither will be considered `pure`. Please note that `pure` and `view` functions may change the state of other contracts by calling into them.
 
 ### [`#[entrypoint]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html)
 
@@ -266,15 +268,15 @@ The above will make the public methods of `Contract` the first to consider durin
 
 ### Reentrancy
 
-If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus contracts revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
+If a contract calls another that then calls the first, it is said to be reentrant. Stylus contracts are reentrancy-safe by default: the high-level call functions ([`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html), [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html), and [`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html)) automatically flush or clear the storage cache before invoking another contract, so cached values can't go stale across reentry. This happens through the type system and requires no configuration.
 
-```rust
-stylus-sdk = { version = "0.6.0", features = ["reentrant"] }
-```
+<VanillaAdmonition type="warning">
 
-This is dangerous, and should be done only after careful review––ideally by third-party auditors. Numerous exploits and hacks have in Web3 are attributable to developers misusing or not fully understanding reentrant patterns.
+The `reentrant` Cargo feature flag and the `deny_reentrant` entrypoint guard are deprecated as of SDK 0.10.5 and should not be used. Reentrancy safety now comes from automatic storage-cache flushing, which makes the guard redundant.
 
-If enabled, the Stylus SDK will flush the storage cache in between reentrant calls, persisting values to state that might be used by inner calls. Note that preventing storage invalidation is only part of the battle in the fight against exploits. You can tell if a call is reentrant via `msg::reentrant`, and condition your business logic accordingly.
+</VanillaAdmonition>
+
+Automatic cache flushing protects your storage, but it is only part of defending against exploits. Continue to follow the checks-effects-interactions pattern—update your own state before calling untrusted contracts—and review reentrant code carefully, ideally with third-party auditors. You can detect whether the current call is reentrant via `self.vm().msg_reentrant()` and condition your business logic accordingly.
 
 ### [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html)
 
@@ -307,11 +309,11 @@ Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint
 
 Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the **ERC-20**, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
-::::warning
+<VanillaAdmonition type="warning">
 
 Stylus does not currently contain explicit `override` or `virtual` keywords for explicitly marking override functions. It is important, therefore, to carefully ensure that contracts are only overriding the functions.
 
-::::
+</VanillaAdmonition>
 
 Inheritance can also be chained. `#[inherit(Erc20, Erc721)]` will inherit both `Erc20` and `Erc721`, checking for methods in that order. `Erc20` and `Erc721` may also inherit other types themselves. Method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
 
@@ -367,11 +369,11 @@ Both methods can be annotated with `#[payable]` to accept **ETH** along with the
 
 Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus#exporting-solidity-abis).
 
-:::tip
+<VanillaAdmonition type="tip">
 
 You can call contracts in any programming language with the Stylus SDK.
 
-:::
+</VanillaAdmonition>
 
 ### [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html)
 
@@ -392,11 +394,11 @@ sol_interface! {
 
 The above will define `IService` and `ITree` for calling the methods of the two contracts.
 
-::::info
+<VanillaAdmonition type="info">
 
 Currently only functions are supported, and any other items in the interface will cause an error.
 
-::::
+</VanillaAdmonition>
 
 For example, `IService` will have a `make_payment` method that accepts an [`Address`](https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html) and returns a [`B256`](https://docs.rs/alloy-primitives/latest/alloy_primitives/aliases/type.B256.html).
 
@@ -413,20 +415,20 @@ Observe the casing change. [`sol_interface!`](https://docs.rs/stylus-sdk/latest/
 [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) lets you configure a call via optional configuration methods. This is similar to how one would configure opening a [`File`](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples) in Rust.
 
 ```rust
-pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
-    let config = Call::new_in()
-        .gas(evm::gas_left() / 2)       // limit to half the gas left
-        .value(msg::value());           // set the callvalue
+#[payable]
+pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Vec<u8>> {
+    let config = Call::new_payable(self, self.vm().msg_value()) // set the callvalue
+        .gas(self.vm().evm_gas_left() / 2);                     // limit to half the gas left
 
-    account.make_payment(config, user)
+    Ok(account.make_payment(self.vm(), config, user)?)
 }
 ```
 
-By default [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) supplies all gas remaining and zero value, which often means [`Call::new_in()`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_in) may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
+Use [`Call::new_mutating(self)`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_mutating) for a non-payable call and [`Call::new_payable(self, value)`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_payable) when forwarding value. By default [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) supplies all gas remaining and zero value, which often means [`Call::new()`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new) may be passed to the method directly.
 
 ### Reentrant calls
 
-Contracts that opt into reentrancy via the `reentrant` feature flag require extra care. When the `storage-cache` feature is enabled, cross-contract calls must [`flush`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.flush) or [`clear`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.clear) the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html) to safeguard state. This happens automatically via the type system.
+Cross-contract calls flush or clear the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html) to safeguard state across reentry. This happens automatically via the type system, so you don't need to manage the cache yourself.
 
 ```rust
 sol_interface! {
@@ -441,58 +443,60 @@ sol_interface! {
 #[public]
 impl Contract {
     pub fn call_pure(&self, methods: IMethods) -> Result<(), Vec<u8>> {
-        Ok(methods.pure_foo(self)?)    // `pure` methods might lie about not being `view`
+        Ok(methods.pure_foo(self.vm(), Call::new())?)   // `pure` methods might lie about not being `view`
     }
 
     pub fn call_view(&self, methods: IMethods) -> Result<(), Vec<u8>> {
-        Ok(methods.view_foo(self)?)
+        Ok(methods.view_foo(self.vm(), Call::new())?)
     }
 
     pub fn call_write(&mut self, methods: IMethods) -> Result<(), Vec<u8>> {
-        methods.view_foo(self)?;       // allows `pure` and `view` methods too
-        Ok(methods.write_foo(self)?)
+        methods.view_foo(self.vm(), Call::new())?;      // allows `pure` and `view` methods too
+        let config = Call::new_mutating(self);
+        Ok(methods.write_foo(self.vm(), config)?)
     }
 
     #[payable]
     pub fn call_payable(&mut self, methods: IMethods) -> Result<(), Vec<u8>> {
-        methods.write_foo(Call::new_in(self))?;   // these are the same
-        Ok(methods.payable_foo(self)?)            // ------------------
+        let config = Call::new_mutating(self);
+        methods.write_foo(self.vm(), config)?;
+        let config = Call::new_payable(self, U256::ZERO);
+        Ok(methods.payable_foo(self.vm(), config)?)
     }
 }
 ```
 
-In the above, we’re able to pass `&self` and `&mut self` because `Contract` implements [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html), which means that a reference to it entails access to the entirety of the contract’s state. This is the reason it is sound to make a call, since it ensures all cached values are invalidated and/or persisted to state at the right time.
+In the above, we’re able to pass `self.vm()` and `&mut self` because `Contract` implements [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html), which means that a reference to it entails access to the entirety of the contract’s state. This is the reason it is sound to make a call, since it ensures all cached values are invalidated and/or persisted to state at the right time. Note that the call context is built as a separate `let` binding before the call so the immutable borrow from `self.vm()` and the mutable borrow from `Call::new_mutating(self)` don't overlap.
 
-When writing Stylus libraries, a type might not be [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html) and therefore `&self` or `&mut self` won’t work. Building a [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) from a generic parameter via [`new_in`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_in) is the usual solution.
+When writing Stylus libraries, a type might not be [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html) and therefore `&self` or `&mut self` won’t work directly. Building a [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) from a generic parameter is the usual solution.
 
 ```rust
-pub fn do_call(
-    storage: &mut impl TopLevelStorage,  // can be generic, but often just &mut self
-    account: IService,                   // serializes as an Address
+pub fn do_call<T: TopLevelStorage + core::borrow::BorrowMut<Contract>>(
+    storage: &mut T,    // can be generic, but often just &mut self
+    account: IService,  // serializes as an Address
     user: Address,
-) -> Result<String, Error> {
+) -> Result<String, Vec<u8>> {
+    let vm = storage.borrow().vm();
+    let value = vm.msg_value();             // set the callvalue
+    let gas = vm.evm_gas_left() / 2;        // limit to half the gas left
+    let config = Call::new_payable(storage, value).gas(gas); // exclusive access to all contract storage
 
-    let config = Call::new_in(storage)   // take exclusive access to all contract storage
-        .gas(evm::gas_left() / 2)        // limit to half the gas left
-        .value(msg::value());            // set the callvalue
-
-    account.make_payment(config, user)   // note the snake case
+    Ok(account.make_payment(storage.borrow().vm(), config, user)?) // note the snake case
 }
 ```
 
-In the context of a [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`](https://docs.alchemy.com/docs/solidity-payable-functions). This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
-
-Also, that code that previously compiled with reentrancy disabled may require modification in order to type-check. This is done to ensure storage changes are persisted and that the storage cache is properly managed before calls.
+In the context of a [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`](https://docs.alchemy.com/docs/solidity-payable-functions).
 
 ### [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html), [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html), and [`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html)
 
 Though [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html) and [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) form the most common idiom to invoke other contracts, their underlying [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) and [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html) are exposed for direct access.
 
 ```rust
-let return_data = call(Call::new_in(self), contract, call_data)?;
+let config = Call::new_mutating(self);
+let return_data = call(self.vm(), config, contract, &call_data)?;
 ```
 
-In each case the calldata is supplied as a [`Vec<u8>`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html). The return result is either the raw return data on success, or a call [`Error`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/enum.Error.html) on failure.
+The host (`self.vm()`) is the first argument, followed by the call context, the target address, and the calldata. In each case the calldata is supplied as a [`Vec<u8>`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html). The return result is either the raw return data on success, or a call [`Error`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/enum.Error.html) on failure.
 
 [`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html) is also available, though it's `unsafe` and doesn't have a richly-typed equivalent. This is because a delegate call must trust the other contract to uphold safety requirements. Though this function clears any cached values, the other contract may arbitrarily change storage, spend ether, and do other things one should never blindly allow other contracts to do.
 
@@ -500,14 +504,18 @@ In each case the calldata is supplied as a [`Vec<u8>`](https://doc.rust-lang.org
 
 This method provides a convenient shorthand for transferring ether.
 
-:::note
+<VanillaAdmonition type="note">
+
 This method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) function may be used instead.
-:::
+
+</VanillaAdmonition>
 
 ```rust
-transfer_eth(recipient, value)?;                 // these two are equivalent
+// these two are equivalent
+transfer_eth(self.vm(), recipient, value)?;
 
-call(Call::new_in().value(value), recipient, &[])?; // these two are equivalent
+let config = Call::new_payable(self, value);
+call(self.vm(), config, recipient, &[])?;
 ```
 
 ### [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html) and `unsafe` calls
@@ -515,23 +523,31 @@ call(Call::new_in().value(value), recipient, &[])?; // these two are equivalent
 Occasionally, an untyped call to another contract is necessary. [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html) lets you configure an `unsafe` call by calling optional configuration methods. This is similar to how one would configure opening a [`File`](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples) in Rust.
 
 ```rust
-let data = RawCall::new_delegate()   // configure a delegate call
-    .gas(2100)                       // supply 2100 gas
-    .limit_return_data(0, 32)        // only read the first 32 bytes back
-    .flush_storage_cache()           // flush the storage cache before the call
-    .call(contract, calldata)?;      // do the call
+let data = unsafe {
+    RawCall::new_delegate(self.vm())     // configure a delegate call
+        .gas(2100)                       // supply 2100 gas
+        .limit_return_data(0, 32)        // only read the first 32 bytes back
+        .flush_storage_cache()           // flush the storage cache before the call
+        .call(contract, &calldata)?      // do the call
+};
 ```
 
-:::note
-The [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call) method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache) and [`clear_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache) for more information.
-:::
+Pass the host (`self.vm()`) to the constructor: use [`RawCall::new(self.vm())`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.new) for a regular call or [`RawCall::new_delegate(self.vm())`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.new_delegate) for a delegate call.
+
+<VanillaAdmonition type="note">
+
+The [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call) method is always `unsafe`. Unlike the high-level [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) functions, `RawCall` does not flush the storage cache for you, so use [`flush_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache) and [`clear_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache) when reentry could observe stale state.
+
+</VanillaAdmonition>
 
 ## [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html) and `unsafe` deployments
 
 Right now the only way to deploy a contract from inside Rust is to use [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html), similar to [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html). As with [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html), this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html).
 
-:::note
+<VanillaAdmonition type="note">
+
 That the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
-:::
+
+</VanillaAdmonition>
 
 When configured with a `salt`, [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html) will use [`CREATE2`](https://www.evm.codes/#f5) instead of the default [`CREATE`](https://www.evm.codes/#f0), facilitating address determinism.
