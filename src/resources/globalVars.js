@@ -21,7 +21,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.9.9-6b0af88',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.11.0-a618155',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -38,11 +38,11 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.9.9',
+  nitroVersionTag: 'v3.11.0',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: 'bdb8f8c68b2229fe9309fe9c03b37017abd1a2cd',
+  nitroContractsCommit: '4341b132cfbdcc980ead03765ca5224ff6cb5d97',
   nitroContractsPathToPrecompilesInterface: 'src/node-interface',
 
   // Precompile interfaces repository
@@ -50,7 +50,7 @@ const globalVars = {
   nitroPrecompilesCommit: '9056310e554d04829bc590d4ba7e17d40d0a9635',
   nitroPrecompilesPathToInterfaces: '',
 
-  goEthereumCommit: 'fd780d6d2b0b23adb6808c0734802d40042fe0d3',
+  goEthereumCommit: '0f618f330b8d78457524839997f0041d86f3cd1a',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',

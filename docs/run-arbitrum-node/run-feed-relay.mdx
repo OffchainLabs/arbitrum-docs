@@ -13,6 +13,8 @@ Feed endpoints will soon require compression with a custom dictionary, so if con
 
 :::
 
+For context on where the feed relay fits into Arbitrum's overall data flow, see [Data availability](/run-arbitrum-node/data-availability.mdx#how-full-nodes-sync-the-data-from-the-sequencer-feed). For the wire format the feed delivers, see [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
+
 :::info Websocket connection stability
 
 Websocket connections to feed endpoints may occasionally be reset by infrastructure providers. The feed client in the relay automatically restarts immediately on disconnect. For most users, a delay of several blocks is not noticeable.
@@ -37,11 +39,11 @@ The feed relay is in the same Docker image as the Nitro node.
 
 - Here is an example of how to run the feed relay for Arbitrum One:
   ```shell
-  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1-feed.arbitrum.io/feed --chain.id=42161
+  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@ --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1-feed.arbitrum.io/feed --chain.id=42161
   ```
 - Here is an example of how to run nitro-node for Arbitrum One with a custom relay:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.9-6b0af88@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.feed.input.url=ws://local-relay-address:9642
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.feed.input.url=ws://local-relay-address:9642
   ```
 
 Note that Arbitrum Classic does not communicate with Nitro sequencer, so classic relay is no longer used.

@@ -1,0 +1,219 @@
+---
+title: 'Cross-chain messaging'
+sidebar_label: 'Cross-chain messaging'
+description: 'Learn how to send cross-chain messages between Ethereum and Arbitrum using retryable tickets, the ArbSys precompile, and the Outbox contract. Includes a complete Greeter tutorial demonstrating both parent-to-child and child-to-parent messaging.'
+user_story: 'As a developer, I want to understand cross-chain messaging between Ethereum and Arbitrum so I can build applications that communicate across chains.'
+content_type: how-to
+author: anegg0
+sme: greatsoshiant
+displayed_sidebar: arbitrumEssentialsSidebar
+---
+
+import ArbitrumSdkInfo from '@site/docs/partials/_arbitrum-sdk-partial.mdx';
+
+The <a data-quicklook-from="arbitrum">Arbitrum</a> protocol and related tooling make it easy for developers to build cross-chain applications; i.e., applications that involve sending messages from Ethereum to an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, and/or from an Arbitrum chain to Ethereum.
+
+<ArbitrumSdkInfo />
+
+## Ethereum-to-Arbitrum messaging
+
+Creating an arbitrary parent-to-child chain contract call occurs via the Inbox's `createRetryableTicket` method. Upon publishing the <a data-quicklook-from="parent-chain">parent chain</a> <a data-quicklook-from="transaction">transaction</a>, the <a data-quicklook-from="child-chain">child chain</a> side will typically be included within minutes. Commonly, the child chain execution will automatically succeed, but if it reverts, it can be re-executed via a call to the `redeem` method of the [`ArbRetryableTx`](/arbitrum-essentials/precompiles/reference.mdx#arbretryabletx) <a data-quicklook-from="precompile">precompile</a>.
+
+- **How-to guide**: [How to bridge from the parent chain to the child chain](/arbitrum-essentials/bridging/deposit/eth-and-messages.mdx)
+- **Protocol details**: [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
+
+## Arbitrum-to-Ethereum messaging
+
+Similarly, child chain contracts can send arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/arbitrum-essentials/precompiles/reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Upon <a data-quicklook-from="confirmation">confirmation</a> (about one week later), you can execute them by retrieving the relevant data via a call to the `NodeInterface` contract's `constructOutboxProof` method, and then calling the `Outbox`'s `executeTransaction` method.
+
+- **How-to guide**: [How to bridge to parent chain from child chain](/arbitrum-essentials/bridging/withdraw/eth-and-messages.mdx)
+- **Protocol details**: [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
+
+## Tutorial: cross-chain Greeter
+
+This walkthrough demonstrates both messaging directions with a simple Greeter contract that can update its greeting from the other chain.
+
+### The contracts
+
+**Base Greeter** — a simple contract deployed on both chains:
+
+```solidity
+// SPDX-License-Identifier: Apache-2.0
+pragma solidity >=0.6.11;
+
+contract Greeter {
+    string public greeting;
+
+    function greet() public view returns (string memory) {
+        return greeting;
+    }
+
+    function setGreeting(string memory _greeting) public virtual {
+        greeting = _greeting;
+    }
+}
+```
+
+**Parent chain Greeter** — extends the base with a method that sends a greeting to the child chain via a retryable ticket:
+
+```solidity
+// SPDX-License-Identifier: Apache-2.0
+pragma solidity >=0.6.11;
+
+import "./Greeter.sol";
+import "@arbitrum/nitro-contracts/src/bridge/IInbox.sol";
+import "@arbitrum/nitro-contracts/src/bridge/IERC20Inbox.sol";
+
+contract GreeterParent is Greeter {
+    address public childTarget;
+    IInbox public inbox;
+    event RetryableTicketCreated(uint256 indexed ticketId);
+
+    constructor(string memory _greeting, address _childTarget, address _inbox) {
+        greeting = _greeting;
+        childTarget = _childTarget;
+        inbox = IInbox(_inbox);
+    }
+
+    function setGreetingInChild(
+        string memory _greeting,
+        uint256 maxSubmissionCost,
+        uint256 maxGas,
+        uint256 gasPriceBid
+    ) public payable returns (uint256) {
+        bytes memory data = abi.encodeWithSelector(Greeter.setGreeting.selector, _greeting);
+        uint256 ticketID = inbox.createRetryableTicket{value: msg.value}(
+            childTarget,
+            0,
+            maxSubmissionCost,
+            msg.sender,
+            msg.sender,
+            maxGas,
+            gasPriceBid,
+            data
+        );
+        emit RetryableTicketCreated(ticketID);
+        return ticketID;
+    }
+}
+```
+
+**Child chain Greeter** — extends the base with a method that sends a greeting back to the parent chain via `ArbSys`:
+
+```solidity
+// SPDX-License-Identifier: Apache-2.0
+pragma solidity >=0.6.11;
+
+import "./Greeter.sol";
+import "@arbitrum/nitro-contracts/src/precompiles/ArbSys.sol";
+import "@arbitrum/nitro-contracts/src/libraries/AddressAliasHelper.sol";
+
+contract GreeterChild is Greeter {
+    address public parentTarget;
+    event ChildToParentTxCreated(uint256 indexed withdrawalId);
+
+    constructor(string memory _greeting, address _parentTarget) {
+        greeting = _greeting;
+        parentTarget = _parentTarget;
+    }
+
+    function setGreetingInParent(string memory _greeting) public returns (uint256) {
+        bytes memory data = abi.encodeWithSelector(Greeter.setGreeting.selector, _greeting);
+        uint256 withdrawalId = ArbSys(address(100)).sendTxToL1(parentTarget, data);
+        emit ChildToParentTxCreated(withdrawalId);
+        return withdrawalId;
+    }
+
+    /// Only accept messages from the parent chain Greeter (via address aliasing)
+    function setGreeting(string memory _greeting) public override {
+        require(
+            msg.sender == AddressAliasHelper.applyL1ToL2Alias(parentTarget),
+            "Only callable by parent chain Greeter (aliased)"
+        );
+        Greeter.setGreeting(_greeting);
+    }
+}
+```
+
+### Sending a message from parent to child chain
+
+The script below deploys both contracts and sends a greeting from the parent chain to the child chain using `ParentToChildMessageGasEstimator` to compute retryable ticket parameters:
+
+```javascript
+import { providers, Wallet } from 'ethers';
+import {
+  ParentToChildMessageGasEstimator,
+  ParentToChildMessageStatus,
+  ParentTransactionReceipt,
+} from '@arbitrum/sdk';
+import { getBaseFee } from '@arbitrum/sdk/dist/lib/utils/lib';
+
+// Set up wallets
+const parentWallet = new Wallet(
+  process.env.PRIVATE_KEY,
+  new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC),
+);
+const childProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+
+// After deploying GreeterParent and GreeterChild (via Hardhat or your preferred tool):
+const greeterParent = /* deployed GreeterParent contract instance */;
+const greeterChild = /* deployed GreeterChild contract instance */;
+
+// Encode the greeting message
+const newGreeting = 'Greeting from the parent chain';
+const greetingData = greeterChild.interface.encodeFunctionData('setGreeting', [newGreeting]);
+
+// Estimate gas parameters for the retryable ticket
+const gasEstimator = new ParentToChildMessageGasEstimator(childProvider);
+const baseFee = await getBaseFee(parentWallet.provider);
+
+const gasParams = await gasEstimator.estimateAll(
+  {
+    from: greeterParent.address,
+    to: greeterChild.address,
+    l2CallValue: 0,
+    excessFeeRefundAddress: parentWallet.address,
+    callValueRefundAddress: parentWallet.address,
+    data: greetingData,
+  },
+  baseFee,
+  parentWallet.provider,
+);
+
+// Send the greeting via retryable ticket
+const tx = await greeterParent.setGreetingInChild(
+  newGreeting,
+  gasParams.maxSubmissionCost,
+  gasParams.gasLimit,
+  gasParams.maxFeePerGas,
+  { value: gasParams.deposit },
+);
+
+const receipt = await tx.wait();
+console.log(`Parent chain tx: ${receipt.transactionHash}`);
+
+// Wait for the child chain to execute the retryable
+const parentToChildReceipt = new ParentTransactionReceipt(receipt);
+const childTxReceipt = await parentToChildReceipt.waitForChildTransactionReceipt(childProvider);
+
+if (childTxReceipt.status === ParentToChildMessageStatus.REDEEMED) {
+  const updatedGreeting = await greeterChild.greet();
+  console.log(`Child chain greeting updated to: ${updatedGreeting}`);
+}
+```
+
+### Key concepts
+
+**Address aliasing**: When a parent chain contract sends a message to the child chain, the `msg.sender` on the child chain is not the original contract address. Instead, it is _aliased_ by adding `0x1111000000000000000000000000000000001111` to the address. The `AddressAliasHelper` library handles this — see the `setGreeting` override in `GreeterChild` above.
+
+**Gas estimation**: The `ParentToChildMessageGasEstimator` calculates three values: `maxSubmissionCost` (data posting cost), `gasLimit` (child chain execution gas), and `maxFeePerGas` (child chain gas price). Together they determine the `value` (`ETH`) you must attach to the parent chain transaction.
+
+**Retryable tickets**: If the child chain execution runs out of gas, the ticket enters a "retry" state. It can be redeemed by anyone within its lifetime (default: 7 days) by calling `ArbRetryableTx.redeem()`. See the [redeem-pending-retryable tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/redeem-pending-retryable) for a worked example.
+
+## Resources
+
+- [Greeter tutorial source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter)
+- [Outbox execution source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute)
+- [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
+- [Retryable ticket lifecycle](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
+- [Child to parent messaging protocol](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
