@@ -206,7 +206,7 @@ pub fn constructor(
     self.balances.setter(deployer).set(initial_supply);
 
     // Emit initialization event
-    log(self.vm(), TokenCreated {
+    self.vm().log(TokenCreated {
         creator: deployer,
         name: name.clone(),
         symbol: symbol.clone(),
@@ -222,12 +222,30 @@ pub fn constructor(
 Stylus uses trait-based composition instead of traditional inheritance. When implementing constructors with traits, each component typically has its own initialization logic:
 
 ```rust
-// Define traits for different functionality
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+use stylus_sdk::storage::{StorageAddress, StorageMap, StorageString, StorageU256};
+
+sol! {
+    #[derive(Debug)]
+    error InvalidSupply();
+}
+
+#[derive(SolidityError, Debug)]
+pub enum TokenError {
+    InvalidSupply(InvalidSupply),
+}
+
+// Define traits for different functionality. Traits exposed through
+// #[implements(...)] must themselves be annotated with #[public].
+#[public]
 trait IErc20 {
     fn balance_of(&self, account: Address) -> U256;
     fn transfer(&mut self, to: Address, value: U256) -> bool;
 }
 
+#[public]
 trait IOwnable {
     fn owner(&self) -> Address;
     fn transfer_ownership(&mut self, new_owner: Address) -> bool;
@@ -284,13 +302,48 @@ impl MyToken {
 
     fn initialize_erc20(&mut self, initial_supply: U256) -> Result<(), TokenError> {
         if initial_supply == U256::ZERO {
-            return Err(TokenError::InvalidSupply);
+            return Err(TokenError::InvalidSupply(InvalidSupply {}));
         }
 
         let deployer = self.vm().tx_origin();
         self.erc20.total_supply.set(initial_supply);
         self.erc20.balances.setter(deployer).set(initial_supply);
         Ok(())
+    }
+}
+
+// Each trait listed in #[implements(...)] must have a matching implementation.
+#[public]
+impl IErc20 for MyToken {
+    fn balance_of(&self, account: Address) -> U256 {
+        self.erc20.balances.get(account)
+    }
+
+    fn transfer(&mut self, to: Address, value: U256) -> bool {
+        let from = self.vm().msg_sender();
+        let from_balance = self.erc20.balances.get(from);
+        if from_balance < value {
+            return false;
+        }
+        self.erc20.balances.setter(from).set(from_balance - value);
+        let to_balance = self.erc20.balances.get(to);
+        self.erc20.balances.setter(to).set(to_balance + value);
+        true
+    }
+}
+
+#[public]
+impl IOwnable for MyToken {
+    fn owner(&self) -> Address {
+        self.ownable.owner.get()
+    }
+
+    fn transfer_ownership(&mut self, new_owner: Address) -> bool {
+        if self.vm().msg_sender() != self.ownable.owner.get() {
+            return false;
+        }
+        self.ownable.owner.set(new_owner);
+        true
     }
 }
 ```
@@ -363,12 +416,14 @@ mod tests {
 
 Deploy your contract with constructor arguments using `cargo stylus deploy`:
 
-```bash
-# Deploy with constructor parameters
+```shell
+# Deploy with constructor parameters.
+# The constructor is annotated #[payable], so use --constructor-value to send ETH to it.
 cargo stylus deploy \
   --private-key-path ~/.arbitrum/key \
   --endpoint https://sepolia-rollup.arbitrum.io/rpc \
-  --constructor-args "MyToken" "MTK" 1000000
+  --constructor-args "MyToken" "MTK" 1000000 \
+  --constructor-value 0
 ```
 
 ### Constructor argument encoding
@@ -382,7 +437,7 @@ For complex types:
 - **Addresses**: Provide as hex strings with 0x prefix
 - **Arrays**: Use JSON array syntax
 
-```bash
+```shell
 # Example with multiple argument types
 cargo stylus deploy \
   --constructor-args "TokenName" "TKN" 1000000 "0x742d35Cc6635C0532925a3b8D95B5C1b0ea3C28F"
@@ -463,7 +518,7 @@ pub fn constructor(&mut self, params: ConstructorParams) -> Result<(), Error> {
     self.balances.setter(deployer).set(params.initial_supply);
 
     // 6. Emit events last
-    log(self.vm(), ContractInitialized { /* ... */ });
+    self.vm().log(ContractInitialized { /* ... */ });
 
     Ok(())
 }
