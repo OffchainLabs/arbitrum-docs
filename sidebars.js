@@ -1048,6 +1048,11 @@ const sidebars = {
           label: 'Create a token',
         },
         {
+          type: 'doc',
+          id: 'build-decentralized-apps/machine-payments-protocol',
+          label: 'Machine Payments Protocol (MPP)',
+        },
+        {
           type: 'ref',
           label: 'Solidity support',
           id: 'arbitrum-essentials/arbitrum-vs-ethereum/solidity-support',
