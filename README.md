@@ -218,3 +218,28 @@ Notes:
 ### Formatting
 
 1. Run `yarn format` from the root directory.
+
+### Flagging content for SME review
+
+> **Status:** report-only — the `sme-review-gate` check posts an advisory result and does not block merges yet. Enforcement (per-domain SME teams + a branch ruleset) is configured by repo admins; see [.github/SME_REVIEW_GATE.md](.github/SME_REVIEW_GATE.md).
+
+Highly technical docs need a subject-matter expert (SME) approval in addition to editorial review. As a PR creator you can mark exactly which parts of your change need SME eyes, so SMEs review just that subset instead of the whole PR.
+
+Tag a technical region with invisible MDX markers (they render to nothing):
+
+```mdx
+{/* sme:start team=protocol-sme reason="dispute-window timing" */}
+
+The challenge period is exactly 6.4 days because…
+
+{/* sme:end */}
+```
+
+Available teams: `protocol-sme` (how Arbitrum works), `stylus-sme` (Stylus), and `chain-sme` (launch an Arbitrum chain).
+
+You don't always need a marker:
+
+- Editing anything under a technical section (`docs/how-arbitrum-works/`, `docs/stylus/`, `docs/launch-arbitrum-chain/`) automatically requires that section's SME team.
+- A purely editorial PR needs no action — the gate stays green and editorial (Technical Writing) approval is enough.
+
+The `sme-review-gate` check on your PR reports which SME team(s) are required and whether they've approved. See [CONTRIBUTE.md](CONTRIBUTE.md) ("Flagging content for SME review") for the full convention.

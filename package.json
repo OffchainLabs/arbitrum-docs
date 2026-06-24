@@ -26,6 +26,7 @@
     "typecheck": "tsc",
     "test:llms-tracking": "tsx --test lib/llms-tracking.test.ts",
     "test:codemod": "tsx --test scripts/lib/__tests__/*.test.ts",
+    "test:sme": "tsx --test scripts/strip-sme-markers.test.ts",
     "check-releases": "ts-node scripts/check-releases.ts",
     "check-markdown": "tsx scripts/check-markdown.ts",
     "notion:update": "tsx scripts/notion-update.ts",
