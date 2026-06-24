@@ -9,7 +9,11 @@ sme: greatsoshiant
 displayed_sidebar: arbitrumEssentialsSidebar
 ---
 
+import ArbitrumSdkInfo from '@site/docs/partials/_arbitrum-sdk-partial.mdx';
+
 The <a data-quicklook-from="arbitrum">Arbitrum</a> protocol and related tooling make it easy for developers to build cross-chain applications; i.e., applications that involve sending messages from Ethereum to an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, and/or from an Arbitrum chain to Ethereum.
+
+<ArbitrumSdkInfo />
 
 ## Ethereum-to-Arbitrum messaging
 
@@ -210,6 +214,6 @@ if (childTxReceipt.status === ParentToChildMessageStatus.REDEEMED) {
 
 - [Greeter tutorial source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter)
 - [Outbox execution source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute)
-- [Arbitrum SDK documentation](/sdk)
+- [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 - [Retryable ticket lifecycle](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)
 - [Child to parent messaging protocol](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)

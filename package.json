@@ -31,8 +31,8 @@
     "notion:update": "tsx scripts/notion-update.ts",
     "notion:export-csv": "tsx scripts/notion-export-qa-csv.ts",
     "notion:verify-quicklooks": "tsx scripts/notion-verify-quicklooks.ts",
-    "lint:markdown": "markdownlint \"docs/**/*.{md,mdx}\" --ignore \"docs/sdk/**\"",
-    "lint:markdown:fix": "markdownlint \"docs/**/*.{md,mdx}\" --fix --ignore \"docs/sdk/**\"",
+    "lint:markdown": "markdownlint \"docs/**/*.{md,mdx}\"",
+    "lint:markdown:fix": "markdownlint \"docs/**/*.{md,mdx}\" --fix",
     "generate-doc-manifest": "tsx scripts/generate-doc-manifest.ts",
     "audit-docs": "tsx scripts/generate-doc-manifest.ts && tsx scripts/audit-docs.ts",
     "audit-docs:report-only": "tsx scripts/audit-docs.ts",
@@ -45,7 +45,6 @@
     "sync-redirects": "tsx scripts/sync-vercel-redirects.ts"
   },
   "dependencies": {
-    "@arbitrum/sdk": "^4.0.5",
     "@docusaurus/core": "^3.10.1",
     "@docusaurus/plugin-client-redirects": "^3.10.1",
     "@docusaurus/preset-classic": "^3.10.1",
