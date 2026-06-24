@@ -68,7 +68,7 @@ extern crate alloc;
 /// Import items from the SDK. The prelude contains common traits and macros.
 use stylus_sdk::alloy_primitives::{Address, U256};
 use stylus_sdk::console;
-use stylus_sdk::prelude::\*;
+use stylus_sdk::prelude::*;
 use alloy_sol_types::sol;
 
 // Define the event using the sol! macro
@@ -111,7 +111,7 @@ let five_seconds_from_last_distribution = last_distribution + U256::from(5);
             time_accessor.set(U256::from(new_distribution_time));
 
             // Emit the CupcakeDistributed event
-            log(self.vm(), CupcakeDistributed {
+            self.vm().log(CupcakeDistributed {
                 recipient: user_address,
                 timestamp: U256::from(new_distribution_time),
                 new_balance: balance,
@@ -335,7 +335,8 @@ fn test_advanced_testvm_configuration() {
 
     // Mock the external call so it returns our expected response
     // This allows testing contract interactions without deploying external contracts
-    vm.mock_call(external_contract, call_data, Ok(expected_response));
+    // mock_call takes 4 args: (to, data, value, Ok(return)|Err(revert))
+    vm.mock_call(external_contract, call_data, U256::ZERO, Ok(expected_response));
 ```
 
 #### 7: Time-Dependent Behavior Testing
@@ -434,31 +435,28 @@ Here is a `cargo.toml` file to add the required dependencies:
 
 <CustomDetails summary="cargo.toml">
 
-```rust
+```toml
 [package]
 name = "stylus-cupcake-example"
 version = "0.1.7"
-edition = "2021"
+edition = "2024"
 license = "MIT OR Apache-2.0"
 keywords = ["arbitrum", "ethereum", "stylus", "alloy"]
-[dependencies]
-alloy-primitives = "=0.8.20"
-alloy-sol-types = "=0.8.20"
-mini-alloc = "0.8.4"
-stylus-sdk = "0.8.4"
-hex = "0.4.3"
-dotenv = "0.15.0"
 
+[dependencies]
+alloy-primitives = "1.5.7"
+alloy-sol-types = "1.5.7"
+stylus-sdk = "0.10.7"
+
+# Enable the in-memory TestVM only for tests, so it never ships in your contract.
 [dev-dependencies]
-tokio = { version = "1.12.0", features = ["full"] }
-ethers = "2.0"
-eyre = "0.6.8"
-stylus-sdk = { version = "0.8.4", features = ["stylus-test"] }
-alloy-primitives = { version = "=0.8.20", features = ["sha3-keccak"] }
+stylus-sdk = { version = "0.10.7", features = ["stylus-test"] }
 
 [features]
+default = ["mini-alloc"]
 export-abi = ["stylus-sdk/export-abi"]
 debug = ["stylus-sdk/debug"]
+mini-alloc = ["stylus-sdk/mini-alloc"]
 
 [[bin]]
 name = "stylus-cupcake-example"
@@ -484,13 +482,11 @@ You can find the example above in the [stylus-quickstart-vending-machine git rep
 
 ## Running Tests
 
-To run your tests, you can use the standard Rust test command:
+Unit tests run with the standard Rust test command:
 
 ```shell
 cargo test
 ```
-
-Or with the `cargo-stylus` CLI tool:
 
 To run a specific test:
 
