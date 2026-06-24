@@ -5,20 +5,20 @@ content_type: reference
 sidebar_label: chainConfig reference
 ---
 
-The full `chainConfig` contains the standard Ethereum genesis/fork fields, but the Chain SDK's `prepareChainConfig()` only exposes a small subset for customization—everything else is filled from hardcoded `defaults` and should not be changed.
+The full `chainConfig` contains the standard Ethereum genesis/fork fields, but the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk)'s [`prepareChainConfig()`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/prepareChainConfig.ts) only exposes a small subset for customization—everything else is filled from hardcoded `defaults` and should not be changed.
 
 When you call `prepareChainConfig`, you pass a `chainId` and an object where `InitialChainOwner` is required and the fields below are optional overrides.
 
 ## Customizable fields (via `prepareChainConfig`)
 
-| Field                       | Type             | Description                                                                              |
-| --------------------------- | ---------------- | ---------------------------------------------------------------------------------------- |
-| `chainId`                   | `number`         | **Required**. The unique chain ID for your chain.                                        |
-| `InitialChainOwner`         | - (**Required**) | Address that owns the chain and holds upgrade/admin privileges.                          |
-| `InitialArbOSVersion`       | `51`             | The ArbOS version the chain launches with.                                               |
-| `DataAvailabilityCommittee` | `false`          | `false` = Rollup (L1 data posting); `true` = AnyTrust (DAC)                              |
-| `MaxCodeSize`               | `24576`          | Max deployed contract bytecode size in bytes (default matches Ethereum's EIP-170 limit). |
-| `MaxInitCodeSize`           | `49152`          | Max init/constructor code size in bytes (default matches EIP-3860).                      |
+| Field                       | Type             | Description                                                                                                                              |
+| --------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `chainId`                   | `number`         | **Required**. The unique chain ID for your chain.                                                                                        |
+| `InitialChainOwner`         | - (**Required**) | Address that owns the chain and holds upgrade/admin privileges.                                                                          |
+| `InitialArbOSVersion`       | `51`             | The ArbOS version the chain launches with.                                                                                               |
+| `DataAvailabilityCommittee` | `false`          | `false` = Rollup (L1 data posting); `true` = AnyTrust ([DAC](/launch-arbitrum-chain/chain-config/data-availability/dac-get-started.mdx)) |
+| `MaxCodeSize`               | `24576`          | Max deployed contract bytecode size in bytes (default matches Ethereum's EIP-170 limit).                                                 |
+| `MaxInitCodeSize`           | `49152`          | Max init/constructor code size in bytes (default matches EIP-3860).                                                                      |
 
 ## Intentionally not customizable
 
