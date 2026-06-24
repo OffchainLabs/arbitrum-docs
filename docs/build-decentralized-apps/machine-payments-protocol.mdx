@@ -123,9 +123,9 @@ const mppx = Mppx.create({
 // mppx intercepts the 402, signs the challenge, retries automatically:
 const response = await mppx.fetch('http://localhost:3000/authorization');
 const data = await response.json();
-
+console.log(`Response: ${data}`) // Payment response ('authorization worked!')
 const receipt = response.headers.get('payment-receipt'); // base64-encoded mppx Receipt
-console.log(Buffer.from(receipt!, 'base64').toString('binary'));
+console.log(Buffer.from(receipt!, 'base64').toString('binary')); // Transaction information including hash
 ```
 
 ## Run the bundled example locally
