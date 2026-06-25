@@ -1,6 +1,6 @@
 ---
 title: 'Machine Payments Protocol (MPP)'
-description: This quickstart walks you through the process of how to implement the Machine Payments Protocol (MPP) on Arbitrum.
+description: This quickstart shows you how to implement the Machine Payments Protocol (MPP) on Arbitrum.
 author: pete-vielhaber
 sme: EmreDincoglu
 user_story: As a developer, I want to understand how to implement the Machine Payments Protocol (MPP) on Arbitrum.
@@ -10,10 +10,10 @@ displayed_sidebar: buildAppsSidebar
 
 This quickstart will guide you through implementing an Arbitrum-specific payment method plugin for the `mppx` library, which implements the Machine Payments Protocol (MPP). MPP defines a generic **challenge → credential → settlement** flow for payments between two parties:
 
-- **Server**: the merchant/payee (the one wants to get paid)
+- **Server**: the merchant/payee (the one that wants to get paid)
 - **Client**: the payer (a user or AI agent)
 
-`mppx` itself is payment-method-agnostic. This plugin provides the methods for settling payments on Arbitrum One or Arbitrum Sepolia using **ERC-20** stablecoins (currently **USDC**) using [EIP-3009](https://eips.ethereum.org/EIPS/eip-3009) `authorization` and almost any **ERC-20** via `permit2`.
+`mppx` itself is payment-method-agnostic. This plugin provides methods for settling payments on Arbitrum One or Arbitrum Sepolia with **ERC-20** stablecoins (currently **USDC**) through [EIP-3009](https://eips.ethereum.org/EIPS/eip-3009) `authorization`, and with almost any **ERC-20** via `permit2`.
 
 ## Core concepts
 
@@ -30,11 +30,11 @@ It supports two settlement mechanisms:
 | Type          | Onchain mechanism                                   | Supports splits?                                | Need prior approval?                                |
 | ------------- | --------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------- |
 | authorization | EIP-3009 transferWithAuthorization (native to USDC) | ❌                                              | ❌                                                  |
-| permit2       | Uniswamp's Permit2 permitWitnessTransferFrom        | ✅ (pay multiple recipients in one transaction) | ✅ payer must pre-approve Permit2 on the token once |
+| permit2       | Uniswap's Permit2 permitWitnessTransferFrom         | ✅ (pay multiple recipients in one transaction) | ✅ payer must pre-approve Permit2 on the token once |
 
 :::warning Other options
 
-`transaction` and `hash` credential types are stubbed but intentionally not implemented—these have weaker challenge-binding and invite fraud potential.
+`transaction` and `hash` credential types are stubbed but intentionally not implemented—these have weaker challenge-binding and carry fraud risk.
 
 :::
 
@@ -56,7 +56,7 @@ It supports two settlement mechanisms:
   The sum of the amounts in the split must be strictly lower than the total amount for the transaction. So if the total transaction is 10,000 and splits have two recipients that will receive 2,000 and 3,000—the main recipient will receive 5,000.
 </VanillaAdmonition>
 
-- **authorization**: derives nonce = `keccak256(challenge.id`, `challenge.realm`) for challenge-binding (anti-replay), looks up the token’s EIP-712 domain from the local erc3009Tokens registry (not an onchain query), and signs the `TransferWithAuthorization` struct.
+- **authorization**: derives nonce = `keccak256(challenge.id, challenge.realm)` for challenge-binding (anti-replay), looks up the token's EIP-712 domain from the local erc3009Tokens registry (not an onchain query), and signs the `TransferWithAuthorization` struct.
 
 4. Returns `Credential.serialize(...)`. No transaction is broadcast.
 
@@ -110,7 +110,7 @@ app.listen(3000);
 ```
 
 - **Set credentialTypes**: ['permit2'] instead to use Permit2, and add a splits: [...] array to pay multiple recipients in one transaction.
-- ⚠️ Amount is in raw token units, not human-readable—human-readable decimals aren’t supported yet.
+- ⚠️ Amount uses raw token units — human-readable decimal conversion isn't supported yet.
 
 ## How to implement it - client (payer) side
 
@@ -149,7 +149,7 @@ npm run server   # tsx test/server  → listens on :3000
 npm run client   # tsx test/client  → hits /authorization, signs, settles
 ```
 
-#### Funding requirements
+### Funding requirements
 
 - Server needs **ETH** on the chain (it pays gas to submit the settlement transaction).
 - Client needs **USDC** on the same chain (the funds being pulled).
@@ -158,9 +158,9 @@ npm run client   # tsx test/client  → hits /authorization, signs, settles
 ### Current limitations
 
 - Only **USDC** on Arbitrum One/Sepolia is registered. Adding a token = adding its address + EIP-712 name/version/chainId there.
-- amount is raw units only—no human-readable decimal conversion yet.
+- `amount` is raw units only—no human-readable decimal conversion yet.
 - For authorization, the `validBefore` expiry is trusted from the server’s challenge; a far-future expiry theoretically widens the window in which an unsubmitted authorization could be settled late. (**Note**: the EIP-3009 nonce is challenge-bound—keccak256(id, realm) — and single-use onchain, so a literal replay of an already-settled authorization is blocked once the nonce is consumed.)
-- transaction and hash credential types are intentionally unimplemented (weak challenge-binding).
+- `transaction` and `hash` credential types are intentionally unimplemented (weak challenge-binding).
 - Status is v0.1.0 — early/experimental.
 
 ### Reference links
