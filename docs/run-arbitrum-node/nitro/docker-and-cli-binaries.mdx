@@ -52,7 +52,7 @@ If you override the entrypoint (for example, `--entrypoint relay`), the default 
 The `nitro-node-validator` image uses `split-val-entry.sh` as its entrypoint. This script:
 
 1. Generates a shared JWT secret for authentication between the node and its validation servers.
-2. Launches two `nitro-val` instances on loopback addresses:
+2. Launches a `nitro-val` instance on loopback addresses:
    - Port `52000` — current validator using `/home/user/target/machines`.
    - Port `52001` — legacy validator using `/home/user/nitro-legacy/machines`.
 3. Waits for both validation servers to become available.
