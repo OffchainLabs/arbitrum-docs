@@ -29,6 +29,11 @@ const sidebars = {
           id: 'stylus/quickstart',
           label: 'Build apps with Stylus',
         },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/machine-payments-protocol',
+          label: 'Machine Payments Protocol (MPP)',
+        },
       ],
     },
     {
@@ -1046,11 +1051,6 @@ const sidebars = {
           type: 'doc',
           id: 'build-decentralized-apps/quickstart-create-a-token',
           label: 'Create a token',
-        },
-        {
-          type: 'doc',
-          id: 'build-decentralized-apps/machine-payments-protocol',
-          label: 'Machine Payments Protocol (MPP)',
         },
         {
           type: 'ref',
