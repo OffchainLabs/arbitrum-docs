@@ -44,6 +44,8 @@ To make your contract callable, it must undergo an activation process. During ac
 
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
+Contract size: As of ArbOS60, Stylus contracts are not bound by the 24 KB EVM contract code limit. As of ArbOS 60, the maximum size of a Stylus contract is 96 KB — four times the limit for Solidity contracts on the EVM. This is enabled by a fragment-based deployment model, see more (here)[/stylus/using-cli.md].
+
 :::note
 Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
 :::

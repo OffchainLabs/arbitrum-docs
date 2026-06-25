@@ -33,6 +33,8 @@ During activation, we compute the contract's initialization costs for both non-c
 
 To see how much gas contract initialization would cost, you need to call `programInitGas(address)` from the [ArbWasm precompile](https://github.com/OffchainLabs/nitro/blob/d906798140e562500beb9005d2503b0272852298/precompiles/ArbWasm.go). This function returns both the initialization cost when the contract is cached and when it is not.
 
+Fragmented contracts for those over 24kb. Stylus contracts deployed across multiple fragments (see contract size)[/stylus/using-cli.md] incur an additional activation cost roughly equivalent to one `EXTCODEREAD` per fragment, since ArbOS must read each fragment from state before concatenation and decompression. Caching the collection contract still benefits subsequent calls, as the cache stores the fully reconstructed and instrumented native code — not the underlying fragments.
+
 ### How to use the CacheManager API
 
 This section provides a practical guide for interacting with the `CacheManager` contract API, either directly or through the `cargo stylus` command-line tool.

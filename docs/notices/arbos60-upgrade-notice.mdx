@@ -5,4 +5,29 @@ user_story: As an Arbitrum node operator, I want to keep my nodes in sync with A
 content_type: notice
 ---
 
-This is a stub article for the Arbos60 upgrade notice
+# Breaking changes for Stylus
+ArbOS 60 simplifies the Stylus execution model. Most changes are additive (notably the [96 KB contract size limit](../stylus-gentle-introduction.md#contract-size), but one is a breaking change for a narrow set of contracts.
+
+## Removal of WASM multi-value support
+
+ArbOS 60 removes support for the [WebAssembly multi-value extension](https://github.com/WebAssembly/multi-value) from the Stylus runtime. Multi-value lets a single WebAssembly instruction or function return more than one value on the stack — for example, returning a pair without packing it into linear memory.
+
+### Who is affected
+
+A Stylus contract is affected only if its compiled WASM uses the multi-value feature. In practice, this is uncommon for Rust Stylus SDK users, because the standard Rust toolchain targeting `wasm32-unknown-unknown` does not emit multi-value by default. You are most likely affected if:
+- You compiled with non-default LLVM flags that enable multi-value, or
+- You used a non-Rust toolchain (e.g., AssemblyScript or hand-written `wat`) that emits multi-value, or
+- A dependency in your build pipeline opted in to multi-value.
+
+### What happens to affected contracts
+
+After ArbOS 60 activates, contracts using multi-value:
+
+- **Cannot be activated.** A fresh `cargo stylus deploy` of a multi-value WASM will fail at the activation step.
+- **Cannot be re-activated.** Contracts that were already deployed and activated before ArbOS 60 must be reactivated periodically (every 365 days, or after a Stylus upgrade). After ArbOS 60, re-activation will fail for multi-value contracts, making them uncallable until they are redeployed without multi-value.
+
+### What to do
+
+Recompile your contract without the multi-value feature and redeploy. For Rust users on the standard toolchain, this typically means doing nothing differently — the default build target does not emit multi-value. If `cargo stylus check` succeeds against an ArbOS-60 endpoint, your contract is safe.
+
+To verify, run `cargo stylus check` against an ArbOS-60-enabled chain (Arbitrum Sepolia after the upgrade activates there, or your local devnode). If `check` passes, deployment and activation will succeed.
