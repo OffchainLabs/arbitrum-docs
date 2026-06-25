@@ -319,6 +319,10 @@
     "title": "Portal",
     "text": "<p>A web application maintained by <a href=\"/intro/glossary#offchain-labs\">Offchain Labs</a> showcasing the Arbitrum ecosystem; visit it <a href=\"https://portal.arbitrum.io/\">here</a>.</p>\n"
   },
+  "prechecker-node": {
+    "title": "Prechecker Node",
+    "text": "<p>An <a href=\"/intro/glossary#arbitrum-full-node\">Arbitrum full node</a> configured to pre-validate transactions before forwarding <code>eth_sendRawTransaction</code> to the <a href=\"/intro/glossary#sequencer\">Sequencer</a>, insulating it from transactions that would fail.</p>\n<p>At a configurable strictness level, a prechecker verifies the transaction type, signature, intrinsic gas (including L1 calldata gas), fee cap, nonce, sender balance, and any <code>eth_sendRawTransactionConditional</code> storage conditions. When <a href=\"/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering\">compliance filtering</a> is enabled, it also rejects transactions that touch restricted addresses.</p>\n"
+  },
   "precompile": {
     "title": "Precompile",
     "text": "<p>A precompile is a predefined smart contract with a special address that provides specific functionality executed natively by the Arbitrum client, rather than at the EVM bytecode level. Precompiles are used to introduce functions that would be computationally expensive if run in EVM bytecode, or to facilitate interactions between the parent and child chains. Arbitrum supports all Ethereum precompiles and also provides additional precompiles specific to Arbitrum chains, which can be called from smart contracts like regular Solidity functions<a href=\"https://docs.arbitrum.io/build-decentralized-apps/precompiles/overview\">(1)</a>.</p>\n"

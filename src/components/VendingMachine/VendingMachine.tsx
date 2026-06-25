@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import VendingMachineContract from './VendingMachine.sol/VendingMachine.json';
 
 function truncateAddress(text: string) {
@@ -92,7 +92,7 @@ export const VendingMachine = (props: { id: string; type: string }) => {
       console.log(`getting cupcake balance for ${identity} on ${vendingMachineContractAddress}`);
       const contract = await this.initContract(vendingMachineContractAddress);
       const cupcakeBalance = await contract.getCupcakeBalanceFor(identity);
-      return BigNumber.from(cupcakeBalance).toNumber();
+      return Number(cupcakeBalance);
     }
 
     async requestAccount() {
@@ -116,8 +116,8 @@ export const VendingMachine = (props: { id: string; type: string }) => {
       if (this.ethereumAvailable()) {
         // "hey metamask, let's prepare to sign transactions with the account the user has selected"
         await this.requestAccount();
-        const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = metamaskProvider.getSigner();
+        const metamaskProvider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await metamaskProvider.getSigner();
         return signer;
       }
     }
