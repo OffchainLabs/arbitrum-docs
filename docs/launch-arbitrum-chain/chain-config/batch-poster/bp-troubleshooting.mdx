@@ -1,0 +1,42 @@
+---
+title: 'Troubleshooting: Batch poster'
+sidebar_label: 'Troubleshooting'
+description: 'Learn common troubleshooting issues for the batch poster.'
+author: pete-vielhaber
+sme: Jason-W123
+user_story:
+content_type: reference
+---
+
+This troubleshooting reference covers most common errors and warnings—this is not a complete reference of all potential errors/warnings.
+
+## Reverts and halting
+
+#### `Large gap between last seen and current block number, skipping check for reverts`
+
+- [WARN]—`pollForReverts` fell > 100 blocks behind the chain, so it skipped scanning the intervening blocks for reverted poster transactions and fast-forwarded.
+- [CAUSE]—Node lag, a long pause, or a header-subscription stall.
+- [MEANING]—Reverts in that skipped window won't be detected.
+- [ACTION]—Usually transient; if frequent, investigate node sync/L1 RPC health.
+
+#### `Transaction from batch poster reverted`
+
+- [WARN→ERROR]—A batch posting transaction got a failed receipt on L1.
+- [ERROR (not warn)]—When using persistent storage, because it sets `batchReverted` and **halts** all further posting.
+- [CAUSE]—Contract rejected the batch (e.g., message-count mismatch, bad sequence number, gas/blob issue).
+- [ACTION]—Investigate `txErr`; restart clears the halt flag; a count mismatch after force-inclusion may need `allow-posting-first-batch-when-sequencer-message-count-mismatch`.
+
+#### `Error checking batch reverts`
+
+- [DEBUG/WARN]—Revert cehck failed.
+- [DEBUG]—If the error contains "not found" (a benign parent-node inconsistency where one node served a header, another lacks), else WARN.
+- [ACTION]—Ignore the DEBUG case; investigate persistent WARNs.
+
+## Mempool/queue/balance
+
+#### `ErrExceedsMaxMempoolSize`→ “error posting batch”
+
+- [DEBUG→WARN→ERROR over 5 min]—The next batch's nonce would exceed `unconfirmed nonce + max-mempool-transactions`, so it's held back.
+- [CAUSE]—L1 is confirming the poster's transactions slowly, and the in-flight window (default: 18) is filled.
+- [MEANING]—Normal back-pressure short-term; sustained means posts are stuck.
+- [ACTION]—If persistent, check L1 confirmation/fees, consider raising `max-mempool-transactions`.
