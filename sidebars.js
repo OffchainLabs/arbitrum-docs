@@ -216,6 +216,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
                   label: `Enable EIP-4844 blobs`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/batch-poster/bp-troubleshooting',
+                  label: `Troubleshooting`,
+                },
               ],
             },
             {
