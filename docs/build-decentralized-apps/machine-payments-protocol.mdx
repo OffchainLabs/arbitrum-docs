@@ -50,8 +50,13 @@ It supports two settlement mechanisms:
 2. Checks the payer’s token balance onchain (`balanceOf`).
 3. Branches on `credentialTypes`:
 
-- permit2 (or undefined): builds permitted/`transferDetails` arrays (handling splits, with the primary recipient pushed to the front), derives the nonce from a challenge hash, and signs the Permit2 witness typed-data.
-- authorization: derives nonce = `keccak256(challenge.id`, `challenge.realm`) for challenge-binding (anti-replay), looks up the token’s EIP-712 domain from the local erc3009Tokens registry (src/default.ts — not an on-chain query), and signs the `TransferWithAuthorization` struct.
+- **permit2** (or undefined): builds permitted/`transferDetails` arrays (handling splits, with the primary recipient pushed to the front), derives the nonce from a challenge hash, and signs the Permit2 witness typed-data.
+
+<VanillaAdmonition type="info" title="permit2 splits">
+  The sum of the amounts in the split must be strictly lower than the total amount for the transaction. So if the total transaction is 10,000 and splits have two recipients that will receive 2,000 and 3,000—the main recipient will receive 5,000.
+</VanillaAdmonition>
+
+- **authorization**: derives nonce = `keccak256(challenge.id`, `challenge.realm`) for challenge-binding (anti-replay), looks up the token’s EIP-712 domain from the local erc3009Tokens registry (not an onchain query), and signs the `TransferWithAuthorization` struct.
 
 4. Returns `Credential.serialize(...)`. No transaction is broadcast.
 
@@ -62,7 +67,7 @@ It supports two settlement mechanisms:
 1. Simulates the transaction with `eth_call` (so a bad credential doesn’t waste gas).
 2. Submits `transferWithAuthorization` (authorization) or `permitWitnessTransferFrom` (permit2) from the merchant’s account.
 3. `waitForTransactionReceipt`, then verifies the emitted Transfer logs match the expected recipients/amounts.
-4. Returns an mppx Receipt: `method: "arbitrum", status: "success", timestamp, reference: txHash`.
+4. Returns an `mppx` Receipt: `method: "arbitrum", status: "success", timestamp, reference: txHash`.
 
 ## How to implement it — server (merchant) side
 
@@ -123,7 +128,7 @@ const mppx = Mppx.create({
 // mppx intercepts the 402, signs the challenge, retries automatically:
 const response = await mppx.fetch('http://localhost:3000/authorization');
 const data = await response.json();
-console.log(`Response: ${data}`) // Payment response ('authorization worked!')
+console.log(`Response: ${data}`); // Payment response ('authorization worked!')
 const receipt = response.headers.get('payment-receipt'); // base64-encoded mppx Receipt
 console.log(Buffer.from(receipt!, 'base64').toString('binary')); // Transaction information including hash
 ```
@@ -149,17 +154,6 @@ npm run client   # tsx test/client  → hits /authorization, signs, settles
 - Server needs **ETH** on the chain (it pays gas to submit the settlement transaction).
 - Client needs **USDC** on the same chain (the funds being pulled).
 - For Permit2, the client must first approve the Permit2 contract (`0x000000000022D473030F116dDEE9F6B43aC78BA3`) as a spender on the **USDC** token—Permit2 can’t move tokens it hasn’t been allowed to.
-
-## Other useful commands
-
-```shell
-npm test          # vitest run (includes anvil-fork e2e tests under test/e2e)
-npm run build     # rm -rf dist && tsc → dist/  (clean publishable build)
-npm run lint      # eslint --fix
-npm run format    # prettier --write
-```
-
-E2E tests fork a live network via @viem/anvil (set FORK_URL in .env) so they exercise the real USDC and Permit2 contracts without spending real funds.
 
 ### Current limitations
 
