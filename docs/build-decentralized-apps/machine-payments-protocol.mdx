@@ -13,7 +13,7 @@ This quickstart will guide you through implementing an Arbitrum-specific payment
 - **Server**: the merchant/payee (the one wants to get paid)
 - **Client**: the payer (a user or AI agent)
 
-`mppx` itself is payment-method-agnostic. This plugin provides the methods for settling payments on Arbitrum One or Arbitrum Sepolia using **ERC-20** stablecoins (currently **USDC**).
+`mppx` itself is payment-method-agnostic. This plugin provides the methods for settling payments on Arbitrum One or Arbitrum Sepolia using **ERC-20** stablecoins (currently **USDC**) using [EIP-3009](https://eips.ethereum.org/EIPS/eip-3009) `authorization` and almost any **ERC-20** via `permit2`.
 
 ## Core concepts
 
