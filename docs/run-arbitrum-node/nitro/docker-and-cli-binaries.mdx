@@ -23,8 +23,8 @@ Nitro is published as several Docker image targets, each building on the previou
 | ---------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `nitro-node-slim`      | `offchainlabs/nitro-node:*-slim`      | `/usr/local/bin/nitro`                                                                                                         | Minimal node image with `nitro`, `relay`, `nitro-val`, `seq-coordinator-manager`, `prover`, and `dbconv`. No legacy WASM module roots for validation.                                       |
 | `nitro-node`           | `offchainlabs/nitro-node:*`           | `/usr/local/bin/nitro --validation.wasm.allowed-wasm-module-roots /home/user/nitro-legacy/machines,/home/user/target/machines` | Full node image with DA tools, Timeboost binaries, and both legacy and current WASM module roots for validation.                                                                            |
-| `nitro-node-validator` | `offchainlabs/nitro-node:validator-*` | `/usr/local/bin/split-val-entry.sh`                                                                                            | Runs a validation server behind the main `nitro` process. Used for block validation across WASM module root upgrades.                        |
-| `nitro-node-dev`       | `offchainlabs/nitro-node:dev-*`       | `/usr/local/bin/split-val-entry.sh`                                                                                            | Extends `nitro-node-validator` with `deploy`, `seq-coordinator-invalidate`, `mockexternalsigner`, and the latest locally-built WASM module root. Intended for development and testing only. |
+| `nitro-node-validator` | `offchainlabs/nitro-node:*-validator` | `/usr/local/bin/split-val-entry.sh`                                                                                            | Runs a single split validation server (`nitro-val`) alongside the main `nitro` process via `split-val-entry.sh`.                                                                            |
+| `nitro-node-dev`       | `offchainlabs/nitro-node:*-dev`       | `/usr/local/bin/split-val-entry.sh`                                                                                            | Extends `nitro-node-validator` with `deploy`, `seq-coordinator-invalidate`, `mockexternalsigner`, and the latest locally-built WASM module root. Intended for development and testing only. |
 
 All images run as a non-root `user` account by default. The working directory is `/home/user/`.
 
@@ -54,15 +54,14 @@ The `nitro-node-validator` image uses `split-val-entry.sh` as its entrypoint. Th
 1. Generates a shared JWT secret for authentication between the node and its validation servers.
 2. Launches a `nitro-val` instance on loopback addresses:
    - Port `52000` — current validator using `/home/user/target/machines`.
-3. Waits for both validation servers to become available.
-4. Launches the main `nitro` process with `--node.block-validator.validation-server-configs-list` pointing to both validators.
+3. Waits for the validation server to become available.
+4. Launches the main `nitro` process with `--node.block-validator.validation-server-configs-list` pointing to that validator.
 
-You can pass validator-specific flags using the `--val-options`, `--val-options-legacy`, and `--val-options-latest` prefixes, separated by `--`:
+You can pass validator-specific flags using the `--val-options` and `--val-options-latest` prefixes, separated by `--`. The legacy validator was removed upstream, so passing `--val-options-legacy` now causes the container to exit immediately.
 
 ```shell
-docker run offchainlabs/nitro-node:validator-latest \
+docker run @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@-validator \
   --val-options-latest --validation.api-auth=false -- \
-  --val-options-legacy --validation.api-auth=false -- \
   --node.block-validator.enable
 ```
 
@@ -77,14 +76,15 @@ docker run offchainlabs/nitro-node:validator-latest \
 | `relay`     | Sequencer feed relay. Receives the transaction feed from a sequencer and redistributes it to downstream nodes.    |
 | `deploy`    | Deploys Arbitrum Rollup contracts to the parent chain. Used when launching new Arbitrum chains. Dev image only.   |
 | `prover`    | WASM prover binary for generating and verifying fraud proofs.                                                     |
+| `jit`       | Just-in-time (JIT) WASM execution machine. Faster alternative to the interpreted prover, used during validation.  |
 
 ### Data availability
 
-| Binary           | Description                                                                                                                                                    |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anytrustserver` | AnyTrust Data Availability Committee (DAC) server. Stores and serves batch data for AnyTrust chains. `daserver` is a symlink to this binary (deprecated name). |
-| `anytrusttool`   | CLI tool for AnyTrust key generation, keyset management, and certificate inspection. `datool` is a symlink to this binary (deprecated name).                   |
-| `daprovider`     | Unified data availability provider. Serves data from multiple backends (AnyTrust, blobs, or other DA layers).                                                  |
+| Binary           | Description                                                                                                                                                                                                                                               |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anytrustserver` | AnyTrust Data Availability Committee (DAC) server. Stores and serves batch data for AnyTrust chains. Formerly named `daserver`; renamed in [nitro#4142](https://github.com/OffchainLabs/nitro/pull/4142). The old name is no longer present in the image. |
+| `anytrusttool`   | CLI tool for AnyTrust key generation, keyset management, and certificate inspection. Formerly named `datool`; renamed in [nitro#4142](https://github.com/OffchainLabs/nitro/pull/4142). The old name is no longer present in the image.                   |
+| `daprovider`     | Unified data availability provider. Serves data from multiple backends (AnyTrust, blobs, or other DA layers).                                                                                                                                             |
 
 ### Timeboost
 
@@ -107,34 +107,33 @@ docker run offchainlabs/nitro-node:validator-latest \
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `dbconv`               | Converts node databases between storage backends (for example, LevelDB to Pebble).                                        |
 | `genesis-generator`    | Generates genesis state and initialization data for new Arbitrum chains.                                                  |
-| `l2pricing-simulator`  | Simulates Nitro's child chain pricing algorithm for testing gas pricing parameters.                                       |
 | `transaction-filterer` | Filters transactions based on configurable rules before they reach the sequencer. Exposes a `/liveness` health endpoint.  |
 | `mockexternalsigner`   | Mock external transaction signer for testing. Accepts a private key and exposes an RPC signing interface. Dev image only. |
 
 ### Image availability
 
-Not all binaries are present in every image. The following table shows which image targets include each binary:
+Not all binaries are present in every image. The following table shows which image targets include each binary. The images also bundle some additional internal utility binaries not listed in this reference (for example, `blobtool`, `filtering-report`, and `validator` in `nitro-node`, and `stylus-raw-deploycode` in `nitro-node-dev`).
 
-| Binary                        | `nitro-node:*-slim` | `nitro-node` | `nitro-node-validator` | `nitro-node-dev` |
-| ----------------------------- | :-----------------: | :----------: | :--------------------: | :--------------: |
-| `nitro`                       |         Yes         |     Yes      |          Yes           |       Yes        |
-| `relay`                       |         Yes         |     Yes      |          Yes           |       Yes        |
-| `nitro-val`                   |         Yes         |     Yes      |          Yes           |       Yes        |
-| `prover`                      |         Yes         |     Yes      |          Yes           |       Yes        |
-| `dbconv`                      |         Yes         |     Yes      |          Yes           |       Yes        |
-| `seq-coordinator-manager`     |         Yes         |     Yes      |          Yes           |       Yes        |
-| `jit`                         |         No          |     Yes      |          Yes           |       Yes        |
-| `anytrustserver` / `daserver` |         No          |     Yes      |          Yes           |       Yes        |
-| `anytrusttool` / `datool`     |         No          |     Yes      |          Yes           |       Yes        |
-| `daprovider`                  |         No          |     Yes      |          Yes           |       Yes        |
-| `autonomous-auctioneer`       |         No          |     Yes      |          Yes           |       Yes        |
-| `bidder-client`               |         No          |     Yes      |          Yes           |       Yes        |
-| `el-proxy`                    |         No          |     Yes      |          Yes           |       Yes        |
-| `genesis-generator`           |         No          |     Yes      |          Yes           |       Yes        |
-| `transaction-filterer`        |         No          |     Yes      |          Yes           |       Yes        |
-| `deploy`                      |         No          |      No      |           No           |       Yes        |
-| `seq-coordinator-invalidate`  |         No          |      No      |           No           |       Yes        |
-| `mockexternalsigner`          |         No          |      No      |           No           |       Yes        |
+| Binary                       | `nitro-node:*-slim` | `nitro-node` | `nitro-node-validator` | `nitro-node-dev` |
+| ---------------------------- | :-----------------: | :----------: | :--------------------: | :--------------: |
+| `nitro`                      |         Yes         |     Yes      |          Yes           |       Yes        |
+| `relay`                      |         Yes         |     Yes      |          Yes           |       Yes        |
+| `nitro-val`                  |         Yes         |     Yes      |          Yes           |       Yes        |
+| `prover`                     |         Yes         |     Yes      |          Yes           |       Yes        |
+| `dbconv`                     |         Yes         |     Yes      |          Yes           |       Yes        |
+| `seq-coordinator-manager`    |         Yes         |     Yes      |          Yes           |       Yes        |
+| `jit`                        |         No          |     Yes      |          Yes           |       Yes        |
+| `anytrustserver`             |         No          |     Yes      |          Yes           |       Yes        |
+| `anytrusttool`               |         No          |     Yes      |          Yes           |       Yes        |
+| `daprovider`                 |         No          |     Yes      |          Yes           |       Yes        |
+| `autonomous-auctioneer`      |         No          |     Yes      |          Yes           |       Yes        |
+| `bidder-client`              |         No          |     Yes      |          Yes           |       Yes        |
+| `el-proxy`                   |         No          |     Yes      |          Yes           |       Yes        |
+| `genesis-generator`          |         No          |     Yes      |          Yes           |       Yes        |
+| `transaction-filterer`       |         No          |     Yes      |          Yes           |       Yes        |
+| `deploy`                     |         No          |      No      |           No           |       Yes        |
+| `seq-coordinator-invalidate` |         No          |      No      |           No           |       Yes        |
+| `mockexternalsigner`         |         No          |      No      |           No           |       Yes        |
 
 ## Overriding entrypoints
 
@@ -145,7 +144,7 @@ Use `--entrypoint` to run a different binary from the same Docker image. The exa
 ```shell
 docker run --rm \
   --entrypoint relay \
-  offchainlabs/nitro-node:latest \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@ \
   --node.feed.input.url wss://arb1.arbitrum.io/feed \
   --chain.id 42161
 ```
@@ -155,7 +154,7 @@ docker run --rm \
 ```shell
 docker run --rm \
   --entrypoint nitro-val \
-  offchainlabs/nitro-node:latest \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@ \
   --help
 ```
 
@@ -163,20 +162,18 @@ docker run --rm \
 
 ```shell
 docker run --rm \
-  --entrypoint datool \
-  offchainlabs/nitro-node:latest \
+  --entrypoint anytrusttool \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@ \
   dumpkeyset --url https://your-dac-url
 ```
-
-`datool` is a symlink to `anytrusttool`. Both names work.
 
 ### DA key generation
 
 ```shell
 docker run --rm \
   -v /path/to/keys:/data/keys \
-  --entrypoint datool \
-  offchainlabs/nitro-node:latest \
+  --entrypoint anytrusttool \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@ \
   keygen --dir /data/keys
 ```
 
@@ -191,7 +188,7 @@ version: '3.8'
 
 services:
   nitro:
-    image: offchainlabs/nitro-node:latest
+    image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.0-a618155@@
     restart: unless-stopped
     ports:
       # HTTP JSON-RPC endpoint
@@ -201,21 +198,20 @@ services:
     volumes:
       # Persistent data directory for the node database
       - nitro-data:/home/user/.arbitrum
-    environment:
-      # No environment variables are strictly required —
-      # all configuration is passed as command-line flags below.
-      # You can optionally set NITRO_LOG_TYPE=json for structured logging.
-      NITRO_LOG_TYPE: 'json'
     command:
+      # Structured JSON logging. Nitro reads this from the --log-type flag,
+      # not an environment variable (NITRO_LOG_TYPE has no effect).
+      - --log-type=json
       # Parent chain connection (Ethereum mainnet RPC)
       - --parent-chain.connection.url=https://your-parent-chain-rpc-url
       # Beacon chain endpoint for EIP-4844 blob retrieval
       - --parent-chain.blob-client.beacon-url=https://your-beacon-chain-url
       # Chain ID for Arbitrum One
       - --chain.id=42161
-      # Initialize from the latest snapshot to avoid syncing from genesis.
-      # Set "--init.latest" for the most recent snapshot, or a specific URL to "--init.url".
-      - --init.url=https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar
+      # Initialize from the latest pruned snapshot to avoid syncing from genesis.
+      # --init.latest accepts: archive | pruned | genesis. A full node uses the pruned snapshot.
+      # To pin a specific snapshot instead, use --init.url=<URL>.
+      - --init.latest=pruned
       # Enable HTTP RPC on all interfaces so the port mapping works
       - --http.addr=0.0.0.0
       - --http.port=8547
@@ -247,13 +243,13 @@ docker compose logs -f nitro
 
 ## Ports and endpoints
 
-| Port | Protocol  | Service        | Notes                                                                                            |
-| ---- | --------- | -------------- | ------------------------------------------------------------------------------------------------ |
-| 8547 | HTTP      | JSON-RPC       | Main RPC endpoint for `eth_`, `net_`, `web3_`, and `arb_` namespaces.                            |
-| 8548 | WebSocket | JSON-RPC       | WebSocket RPC endpoint. Supports subscriptions (`eth_subscribe`).                                |
-| 8549 | HTTP      | AUTH RPC       | Authenticated RPC used by the split validator entrypoint for node-to-validator communication.    |
-| 9642 | WebSocket | Sequencer feed | Outbound transaction feed. Downstream nodes and relays connect here to receive new transactions. |
-| 6070 | HTTP      | Metrics server | Prometheus metrics endpoint at `/debug/metrics/prometheus`.                                      |
+| Port | Protocol  | Service        | Notes                                                                                                                                                                                           |
+| ---- | --------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 8547 | HTTP      | JSON-RPC       | Main RPC endpoint for `eth_`, `net_`, `web3_`, and `arb_` namespaces.                                                                                                                           |
+| 8548 | WebSocket | JSON-RPC       | WebSocket RPC endpoint. Supports subscriptions (`eth_subscribe`).                                                                                                                               |
+| 8549 | HTTP      | Auth RPC       | Default JWT-authenticated RPC (the `--auth.*` engine API), bound to loopback (`127.0.0.1`) by default. The split validator reaches its `nitro-val` over `ws://127.0.0.10:52000`, not this port. |
+| 9642 | WebSocket | Sequencer feed | Outbound transaction feed. Downstream nodes and relays connect here to receive new transactions.                                                                                                |
+| 6070 | HTTP      | Metrics server | Prometheus metrics endpoint at `/debug/metrics/prometheus`.                                                                                                                                     |
 
 ### Health check endpoints
 
