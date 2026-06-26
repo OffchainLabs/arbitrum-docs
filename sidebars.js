@@ -762,8 +762,18 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/nitro-memory-management',
-          label: 'Nitro memory management',
+          id: 'run-arbitrum-node/nitro/configuration-system',
+          label: 'Configuration system',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/da-tools-reference',
+          label: 'DA tools reference',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/cli-flags-reference',
+          label: 'CLI flags reference',
         },
         {
           type: 'doc',
