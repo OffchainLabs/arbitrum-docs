@@ -214,7 +214,7 @@ services:
       # Chain ID for Arbitrum One
       - --chain.id=42161
       # Initialize from the latest snapshot to avoid syncing from genesis.
-      # Set to "latest" for the most recent snapshot, or a specific URL.
+      # Set "--init.latest" for the most recent snapshot, or a specific URL to "--init.url".
       - --init.url=https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar
       # Enable HTTP RPC on all interfaces so the port mapping works
       - --http.addr=0.0.0.0
