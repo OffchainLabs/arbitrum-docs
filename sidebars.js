@@ -447,6 +447,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
               label: 'Infrastructure providers',
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/bp-kms-signing-services',
+              label: 'KMS signing services',
+            },
           ],
         },
         {

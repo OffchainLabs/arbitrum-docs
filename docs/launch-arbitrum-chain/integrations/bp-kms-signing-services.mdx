@@ -40,7 +40,7 @@ The config struct is `ExternalSignerCfg`:
 | `ClientPrivateKey`   | `client-private-key`   | (Optional) client key for mTLS (required if `client-cert` set).                              |
 | `InsecureSkipVerify` | `insecure-skip-verify` | Skip server TLS verification (not recommended).                                              |
 
-This config is nested under both the batch poster and the staker. So tghe full CLI flag paths are:
+This config is nested under both the batch poster and the staker. So the full CLI flag paths are:
 
 **Batch poster:**
 
@@ -56,6 +56,27 @@ This config is nested under both the batch poster and the staker. So tghe full C
 
 **Staker** uses the same fields under `--node.staker.data-poster.external-signer.*`
 
-When `external-signer.url` is empty, the batch poster requires a local key. The check in `cmd/nitro/nitro.go` confirms this — and note that **AnyTrust mode still needs a local key** (external signing isn't supported alongside AnyTrust there).
+When `external-signer.url` is empty, the batch poster requires a local key. The check in `cmd/nitro/nitro.go` confirms this—and note that **AnyTrust mode still needs a local key** (external signing isn't supported alongside AnyTrust there).
 
 ## What the signer service must implement
+
+Your signer (whether KMS-backed or otherwise) must expose an HTTPS RPC server with a method matching `Method`, that:
+
+- Accepts an Ethereum transaction object (`apitypes.SendTxArgs`—the standard `eth_signTransaction` shape, including blob fields for EIP-4844),
+- Returns the RLP-encoded **signed** transaction as a hex string,
+- Signs with the key for the address you configured as `address`.
+
+If you use mTLS, the server must require and verify the client cert that matches `client-cert`/`client-private-key`.
+
+## Reference implementations
+
+Nitro ships two working examples you can model a KMS service on:
+
+- **`cmd/mockexternalsigner/mockexternalsigner.go`**—a standalone signer binary. It
+  builds an `rpc.Server`, registers a signing method, serves over HTTPS with
+  `tls.RequireAndVerifyClientCert`, and prints the exact flags to pass to Nitro. Swap the
+  local-key `txOpts.Signer` for a KMS-backed signer and you have a KMS integration.
+- **`arbnode/dataposter/externalsignertest/externalsignertest.go`**—the test harness,
+  showing the server side (`SignerAPI`, method registration, cert setup with
+  `RequireAndVerifyClientCert`). The RPC method (`externalsignertest.go:185`) takes
+  `*apitypes.SendTxArgs` and returns the RLP-encoded signed tx as `hexutil.Bytes`.
