@@ -216,11 +216,6 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
                   label: `Enable EIP-4844 blobs`,
                 },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/batch-poster/bp-troubleshooting',
-                  label: `Troubleshooting`,
-                },
               ],
             },
             {
@@ -480,6 +475,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/arbos-upgrade',
               label: 'ArbOS upgrade',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/bp-recovery',
+              label: `Batch poster recovery`,
             },
             {
               type: 'doc',
