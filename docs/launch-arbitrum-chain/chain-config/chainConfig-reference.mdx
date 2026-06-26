@@ -5,7 +5,7 @@ content_type: reference
 sidebar_label: chainConfig reference
 ---
 
-The full `chainConfig` contains the standard Ethereum genesis/fork fields, but the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk)'s [`prepareChainConfig()`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/prepareChainConfig.ts) only exposes a small subset for customization—everything else is filled from hardcoded `defaults` and should not be changed.
+The full `chainConfig` contains the standard Ethereum genesis/fork fields, but the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk)'s [`prepareChainConfig()`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/prepareChainConfig.ts) only exposes a small subset for customization. Everything else is filled from hardcoded `defaults` and should not be changed.
 
 When you call `prepareChainConfig`, you pass a `chainId` (top-level) and an `arbitrum` object where `InitialChainOwner` is required and the fields below are optional overrides.
 
@@ -42,15 +42,15 @@ const chainConfig = prepareChainConfig({
 
 `prepareChainConfig` deliberately excludes Arbitrum-specific fields so they keep their defaults:
 
-| Field                   | Type.   | Description                  |
+| Field                   | Type    | Description                  |
 | ----------------------- | ------- | ---------------------------- |
 | `EnableArbOS`           | `true`  | Must stay enabled.           |
 | `GenesisBlockNum`       | `0`     | Genesis block number.        |
-| `AllowDebugPrecompiles` | `false` | Debug precompiles, kept off. |
+| `AllowDebugPrecompiles` | `false` | Debug precompiles; must stay disabled. |
 
 ## Standard fields
 
-:::warning For informational purposes ONLY
+:::warning For informational purposes only
 
 The following fields are populated automatically from the SDK's hardcoded `defaults`. They are standard Ethereum genesis/fork-activation parameters and are **not** exposed for customization by `prepareChainConfig`.
 
