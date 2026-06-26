@@ -375,3 +375,10 @@ For complete implementation details, see:
 - `[/stylus-sdk/src/abi/ints.rs](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/stylus-sdk/src/abi/ints.rs)`: Integer type conversions
 - `[/stylus-sdk/src/abi/impls.rs](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/stylus-sdk/src/abi/impls.rs)`: Implementations for standard types
 - `[/stylus-sdk/src/storage/traits.rs](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/stylus-sdk/src/abi/traits.rs)`: Storage type conversion traits
+
+### External references
+
+Stylus uses the [Alloy](https://github.com/alloy-rs) library for EVM primitives, so primitive conversion rules follow Alloy's conventions:
+
+- [`alloy-primitives` docs.rs](https://docs.rs/alloy-primitives/latest/alloy_primitives/) — full API reference for `U256`, `Address`, `FixedBytes`, and related types.
+- [`alloy-rs/examples` — `big-numbers/conversion.rs`](https://github.com/alloy-rs/examples/blob/main/examples/big-numbers/examples/conversion.rs) — worked examples converting between `U256` and Rust native integer types.

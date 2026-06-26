@@ -278,7 +278,7 @@ impl Counter {
 
 ### Interoperability
 
-Both environments support seamless interoperability:
+Both environments support interoperability:
 
 ```rust
 // Stylus calling Solidity
@@ -544,7 +544,7 @@ Many projects can benefit from both:
 // Compute-heavy logic in Stylus
 #[public]
 impl ComputeEngine {
-    pub fn complex_calculation(&self, data: Vec<u256>) -> Vec<U256> {
+    pub fn complex_calculation(&self, data: Vec<U256>) -> Vec<U256> {
         // Efficient loops and data processing
         data.iter()
             .map(|x| expensive_computation(*x))

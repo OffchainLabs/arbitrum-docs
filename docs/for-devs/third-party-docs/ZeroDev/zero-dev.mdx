@@ -15,7 +15,7 @@ With ZeroDev, you can:
 
 - Eliminate gas fees for your users by sponsoring their transactions.
 - Use plugins for advanced features like Passkey support, fine-grained permissions, and Session Keys.
-- Improve user experience with seamless onboarding using Social Login (email, social media, passkey).
+- Improve user experience with onboarding using Social Login (email, social media, passkey).
 - Support `EIP-7702` for enhanced smart account functionality, allowing EOAs to gain smart account features while keeping their existing address.
 
 ## Objectives
@@ -68,11 +68,7 @@ npm install @zerodev/sdk @zerodev/ecdsa-validator viem
 2. Set up clients and the Kernel smart account
 
 ```typescript
-import {
-  createKernelAccount,
-  createKernelAccountClient,
-  createZeroDevPaymasterClient,
-} from '@zerodev/sdk';
+import { createKernelAccount, createKernelAccountClient, createZeroDevPaymasterClient } from '@zerodev/sdk';
 import { getEntryPoint, KERNEL_V3_3 } from '@zerodev/sdk/constants';
 import { signerToEcdsaValidator } from '@zerodev/ecdsa-validator';
 import { http, createPublicClient, parseAbi } from 'viem';

@@ -11,6 +11,12 @@ sidebar_position: 1
 
 Writing secure smart contracts is critical - vulnerabilities can lead to loss of funds and user trust. This guide covers essential security patterns for Stylus development.
 
+<VanillaAdmonition type="info" title="Compile-time determinism">
+
+Compiling Rust to WebAssembly is not guaranteed to be deterministic on its own — non-determinism comes from OS-level features (system clock, file system, networking). The Stylus VM does not expose these features at runtime, so they cannot affect contract execution. To keep **builds** reproducible, avoid build scripts and dependencies that read from the system clock or query the network at compile time, and pin your toolchain via `rust-toolchain.toml`.
+
+</VanillaAdmonition>
+
 ## Core security principles
 
 ### 1. Input validation
