@@ -5623,7 +5623,7 @@
     "@types/node" "*"
     form-data "^4.0.0"
 
-"@types/node@*", "@types/node@^25.9.3":
+"@types/node@*":
   version "25.9.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-25.9.3.tgz#11dfe7a33e68fa5c560f0aa76cc5595621ef26b9"
   integrity sha512-603BddQMv3pUcr4U2dhujk83N2tTDVr/34wII2B6bJy6g+8WD6yUb11jszNs0gdi4PesVWl7ABt8nYMVpnLUcg==
@@ -5648,6 +5648,13 @@
   integrity sha512-+bP9tunb6pQbV5cV4z9EwCD/811rXGwXXI/cNK+8MIcm7Ufe9GWGoz91ERuC4MAn5Yp/SEWNYulaQdRHFG67iw==
   dependencies:
     undici-types "~5.26.4"
+
+"@types/node@^22.20.0":
+  version "22.20.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.20.0.tgz#431f5007396bc1a1a47b9c7df60f3e5e0b5b7304"
+  integrity sha512-QWlFW2wf3nTjC13/DqRnBpR4ZO36VJH/JVBkA/vcnmbTBNQIlnObqyqZE1tUR7+Ni23Lda8R1BxMfbXRpCUx5g==
+  dependencies:
+    undici-types "~6.21.0"
 
 "@types/prismjs@^1.0.0", "@types/prismjs@^1.26.0", "@types/prismjs@^1.26.6":
   version "1.26.6"
@@ -13981,6 +13988,11 @@ undici-types@~6.19.2:
   version "6.19.8"
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
   integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
+
+undici-types@~6.21.0:
+  version "6.21.0"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.21.0.tgz#691d00af3909be93a7faa13be61b3a5b50ef12cb"
+  integrity sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==
 
 undici@^6.23.0:
   version "6.27.0"
