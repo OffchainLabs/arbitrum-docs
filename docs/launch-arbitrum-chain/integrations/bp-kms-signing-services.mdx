@@ -12,7 +12,7 @@ Nitro's batch poster (and staker) sign their L1 transaction through the **DataPo
 
 :::info
 
-There is **no native AWS KMS integration** in the Nitro codebase. KMS support is achieved by running a _separate signer service_ that talks to KMS and exposes an Ethereum-style `eth_signTransaction` RPC endpoint. Nitro connects to that endpoint. In other words: "KMS support" = external signer pointed at a KMS-backend signing service.
+There is **no native AWS KMS integration** in the Nitro codebase. KMS support is achieved by running a _separate signer service_ that talks to KMS and exposes an Ethereum-style `eth_signTransaction` RPC endpoint. Nitro connects to that endpoint. In other words: "KMS support" = external signer pointed at a KMS-backed signing service.
 
 :::
 
@@ -22,7 +22,7 @@ There is **no native AWS KMS integration** in the Nitro codebase. KMS support is
 2. **Sign**—`externalSigner()` returns a signer callback that:
 
 - Converts the transaction to `apitypes.SendTxArgs` via `TxToSignTxArgs`
-  - Noter it fully supports EIP-4844 blob transactions (blobs, commitments, proofs), which the batch poster needs.
+  - Note that it fully supports EIP-4844 blob transactions (blobs, commitments, proofs), which the batch poster needs.
 - Calls the configured RPC method: `client.CallContext(ctx, &data, opts.Method, args)`, expecting an RLP-encoded signed transaction back.
 - **Verifies** the returned transaction: the hash must match the request and the recovered sender must equal the configured `Address`. This means TLS is _not_ relied on for authentication—the signature itself is checked at the application layer.
 
