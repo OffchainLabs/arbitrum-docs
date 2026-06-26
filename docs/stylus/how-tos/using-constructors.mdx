@@ -28,7 +28,7 @@ Before implementing constructors, ensure you have:
 
 <CustomDetails summary="Rust toolchain">
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.91 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </CustomDetails>
 
@@ -40,11 +40,11 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.88 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.91 as well as adding the WASM build target:
 
 ```shell
-rustup default 1.88
-rustup target add wasm32-unknown-unknown --toolchain 1.88
+rustup default 1.91
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
@@ -62,10 +62,7 @@ Instructions on how to set up a local Arbitrum test node can be found [in the Ni
 Stylus constructors provide an atomic way to deploy, activate, and initialize a contract in a single transaction. If your contract lacks a constructor, it may allow access to the contract's storage before the initialization logic runs, leading to unexpected behavior.
 
 <VanillaAdmonition type="info" title="Constructors and composition">
-  Stylus uses trait-based composition instead of traditional inheritance. When building contracts
-  that compose multiple traits, constructors help initialize all components properly. See the
-  [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for
-  examples.
+  Stylus uses [trait-based composition](./trait-based-composition) instead of traditional inheritance. When building contracts that compose multiple traits, constructors help initialize all components properly. See the [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for examples.
 </VanillaAdmonition>
 
 ### Constructor rules and guarantees
@@ -82,9 +79,7 @@ Stylus constructors follow these important rules:
 | **Constructor runs exactly once**           | The SDK uses a sentinel system to prevent re-execution                                  |
 
 <VanillaAdmonition type="info" title="Factory pattern in deployment">
-  Stylus uses a factory pattern for deployment, which means `msg_sender()` in a constructor returns
-  the factory contract address, not the deployer. Always use `tx_origin()` to get the actual
-  deployer address.
+  Stylus uses a factory pattern for deployment, which means `msg_sender()` in a constructor returns the factory contract address, not the deployer. Always use `tx_origin()` to get the actual deployer address.
 </VanillaAdmonition>
 
 ## Basic constructor implementation
@@ -301,8 +296,7 @@ impl MyToken {
 ```
 
 <VanillaAdmonition type="info" title="Trait-based composition in Stylus">
-  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is
-  initialized explicitly in the constructor.
+  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is initialized explicitly in the constructor.
 </VanillaAdmonition>
 
 ## Testing constructors

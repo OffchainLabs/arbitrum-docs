@@ -1,7 +1,6 @@
 ---
 title: 'Arbitrum nodes: an overview'
-description: Learn more about what type of ARb node one needs to run.
-author-objective: Build a quickstart that helps readers understand why they might want to run a specific type of an Arbitrum node.
+description: Learn more about what types of Arbitrum nodes are available to run.
 reader-audience: Moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
 reader-task: Learn about the different types of Arbitrum nodes and understand the benefits and trade-offs of each type.
 content_type: concept
@@ -11,7 +10,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <VanillaAdmonition type="note">
 
-There is no protocol-level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain but don’t want to set up a node locally, see our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) to get RPC access to fully managed nodes hosted by a third-party provider.
+There is no protocol-level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain but don’t want to set up a node locally, see our [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx) to get RPC access to fully managed nodes hosted by a third-party provider.
 
 </VanillaAdmonition>
 
@@ -30,7 +29,7 @@ We strongly advise against exposing API endpoints publicly. Users considering su
 
 To be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
 
-- You can use [ third party node providers ](/build-decentralized-apps/reference/01-node-providers.mdx) to get RPC access to fully-managed nodes
+- You can use [ third party node providers ](/arbitrum-essentials/reference/node-providers.mdx) to get RPC access to fully-managed nodes
 - You can run your own Arbitrum node, especially if you want always to know the state of the Arbitrum chain
 
 The rest of this series focuses on the second approach: running your own Arbitrum node.
@@ -68,3 +67,7 @@ If you are running a single node, there is no requirement to set up a feed relay
 Soon, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This local feed relay will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
 
 For detailed instructions, read [how to run an Arbitrum feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+
+## Support policy
+
+To view the short and long term support policy, visit the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx) page.

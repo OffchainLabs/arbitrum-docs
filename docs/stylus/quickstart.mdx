@@ -1,7 +1,7 @@
 ---
 id: quickstart
 title: 'Quickstart: write a smart contract in Rust using Stylus'
-description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
+description: 'Leads a developer step by step writing and deploying a smart contract in Rust using Stylus'
 user_story: 'As a developer, I want to quickly build and deploy my first Stylus contract'
 content_type: quickstart
 author: chrisco512, anegg0
@@ -29,7 +29,7 @@ cover the following steps:
 <details>
 <summary>Rust toolchain</summary>
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.91 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </details>
 
@@ -81,7 +81,7 @@ cd nitro-devnode
 
 ## Creating a Stylus project with cargo stylus
 
-[cargo stylus](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) is a CLI toolkit built to facilitate the development of Stylus contracts.
+[cargo stylus](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) is a CLI toolkit built to facilitate the development of Stylus contracts. For a full list of commands and options, see the [`cargo stylus` commands reference](./cli-tools/commands-reference).
 
 It is available as a plugin to the standard cargo tool used for developing Rust programs.
 
@@ -179,7 +179,7 @@ Location:
     prover/src/binary.rs:493:9, data: None
 ```
 
-The contract can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/cargo-stylus/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
+The contract can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/cargo-stylus/VALID_WASM.md) can help you understand what makes a WASM contract valid or not. For other deployment and activation errors (e.g., `program activation failed`), see [common issues](./troubleshooting/common-issues).
 
 If your contract succeeds, you'll see something like this:
 
@@ -375,7 +375,7 @@ To enable testing, you'll need to add the following to your `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-stylus-sdk = { version = "0.8.4", features = ["stylus-test"] }
+stylus-sdk = { version = "0.10.7", features = ["stylus-test"] }
 ```
 
 ### Running your tests
