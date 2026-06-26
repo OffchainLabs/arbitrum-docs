@@ -8,7 +8,7 @@ user_story:
 content_type: reference
 ---
 
-This section covers how the batch poster recovers state after a crash, restart, or bad start—including DB restore from a batch-poster checkpoint, storage backends, revert/half recovery, Redis failover, nonce sync, and reorg handling.
+This section covers how the batch poster recovers state after a crash, restart, or bad start—including DB restore from a batch-poster checkpoint, storage backends, revert and halt recovery, Redis failover, nonce sync, and reorg handling.
 
 ## The batch poster is mostly stateless—its checkpoint lives on L1
 
@@ -67,7 +67,7 @@ func (s *Storage) PruneAll(ctx context.Context) error {
 }
 ```
 
-`Prune` iterates and batch-deletes all keys below the bound and rewrites the count. After clearing, the empty-queue path above rebuilds nonce/position from L1. **Use once, then unset**—it discards in-flight transaction tracking, so clearing while transactions are genuinely pending risks nonce conflicts/double-posting. It's a no-op unless `use-db-storage` is the active backend.
+`Prune` iterates and batch-deletes all keys below the bound and rewrites the count. After clearing, the empty-queue path above rebuilds nonce and position from L1. **Use once, then unset**—it discards in-flight transaction tracking, so clearing while transactions are genuinely pending risks nonce conflicts or double-posting. It's a no-op unless `use-db-storage` is the active backend.
 
 ## Recovery mechanism 2: revert → halt, and force-inclusion recovery
 
@@ -95,10 +95,10 @@ batch after startup** (`!b.postedFirstBatch`) — once posted, the mismatch reso
 Multiple posters coordinate via `redislock`, default `Enable: true`, `LockoutDuration: 1m`, `RefreshDuration: 10s`:
 
 1. Primary holds the lock: the loop checks `CouldAcquireLock` and logs `"Not posting batches right now because another batch poster has the lock or this node is behind"` on backups.
-2. If the primary crashes, the lock **expires after `LockoutDureation`**; a backup with `background-lock` acquires it.
+2. If the primary crashes, the lock **expires after `LockoutDuration`**; a backup with `background-lock` acquires it.
 3. The backup recovers shared state from **Redis queue storage**, which is **HMAC-signed** so a tampered queue is rejected. Nonce continuity comes from `updateNonce` against L1.
 
-So failover state-sharing rides on persistent, signed Redis storage plus L1-derived nonce/position.
+So failover state-sharing rides on persistent, signed Redis storage plus L1-derived nonce and position.
 
 ## Recovery mechanism 4: nonce/sync on restart
 
@@ -116,11 +116,11 @@ The data-poster DB is a table within the consensus DB: `rawdb.NewTable(consensus
 
 ## Operator recovery cheat-sheet
 
-- _Corrupt/stuck queue_ → restart with `data-poster.dangerous.clear-dbstorage` (once), then
+- _Corrupt or stuck queue_ → restart with `data-poster.dangerous.clear-dbstorage` (once), then
   remove it.
-- _Batch reverted / poster halted_ → investigate the revert, then restart to clear
+- _Batch reverted or poster halted_ → investigate the revert, then restart to clear
   `batchReverted`.
-- _Message-count mismatch after force-inclusion / long downtime_ → restart with
+- _Message-count mismatch after force-inclusion or long downtime_ → restart with
   `dangerous.allow-posting-first-batch-when-sequencer-message-count-mismatch` (first batch
   only).
 - _Primary died, HA configured_ → automatic failover after `lockout-duration`; backup
