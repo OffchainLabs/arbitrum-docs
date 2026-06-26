@@ -1,6 +1,6 @@
 ---
 title: 'Batch poster recovery'
-sidebar_label: 'Recovery'
+sidebar_label: 'Batch poster recovery'
 description: 'Learn how the batch poster recovers and mechanisms for recovery.'
 author: pete-vielhaber
 sme: Jason-W123
@@ -13,6 +13,12 @@ This section covers how the batch poster recovers state after a crash, restart, 
 ## The batch poster is mostly stateless—its checkpoint lives on L1
 
 The batch poster does **not** primarily checkpoint its position in its own database. On every posting attempt it reconstructs where to resume from authoritative sources: the **SequencerInbox contract on L1** plus the local **inbox tracker DB**. Its own data-poster DB holds only the **in-flight transaction queue** (transactions sent but not yet confirmed), for replace-by-fee (RBF). This is why recovery is robust: lose the data-poster DB and the poster still knows exactly where to resume.
+
+## Recovery state machine flow
+
+<ImageZoom src="/img/bp-recovery.png" className="img-600px" alt="Recovery state machine flow">
+  Recovery state machine flow
+</ImageZoom>
 
 ### The position "checkpoint"
 
@@ -121,9 +127,3 @@ The data-poster DB is a table within the consensus DB: `rawdb.NewTable(consensus
   resumes from signed Redis state + L1 nonce.
 - _Lost data-poster DB entirely_ → no manual action needed; position rebuilds from L1 +
   inbox tracker, queue starts empty.
-
-## Recovery state machine flow
-
-<ImageZoom src="/img/bp-recovery.png" className="img-600px" alt="Recovery state machine flow">
-  Recovery state machine flow
-</ImageZoom>
