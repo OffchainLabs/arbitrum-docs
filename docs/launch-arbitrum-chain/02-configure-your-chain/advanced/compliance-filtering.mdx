@@ -17,7 +17,7 @@ The chain owner may configure an external compliance service (e.g., TRM or Chain
 The Arbitrum platform must evolve to meet the needs of a new wave of teams looking to come onchain—specifically teams who have an obligation to comply with regulatory frameworks and rules in their respective jurisdictions.
 This feature represents the first of many to ensure that the Arbitrum platform can serve the needs of enterprises and institutions looking to tap into internet-scale, blockchain technology to increase margins, reduce risk, and improve transparency across their businesses.
 
-While this feature is not intended or proposed to be used by Arbitrum One, its inclusion in ArbOS 60 Elara is intended to simplify the codebase and canonicalize this feature in the node software.
+While this feature is not intended or proposed to be used by Arbitrum One, its inclusion in ArbOS 61 Elara is intended to simplify the codebase and canonicalize this feature in the node software.
 This feature is instead intended to be used by Arbitrum chains who have compliance and regulatory obligations to restrict onchain activity from sanctioned entities or actors.
 
 ## How it works
@@ -95,10 +95,10 @@ Nodes are expected to always have a valid list in memory. On startup or restart,
 
 | Component                       | Availability   | Notes                                           |
 | ------------------------------- | -------------- | ----------------------------------------------- |
-| Sequencer-level filtering       | ArbOS 60 Elara | Opcode and event filtering                      |
-| Transaction Guardian Precompile | ArbOS 60 Elara | Required for Delayed Inbox enforcement          |
-| Delayed Inbox Sentinel (STF)    | ArbOS 60 Elara | Requires audit; must be activated at deployment |
-| Burn exception rules            | ArbOS 60 Elara | Covers Aave, Paxos, and similar protocols       |
+| Sequencer-level filtering       | ArbOS 61 Elara | Opcode and event filtering                      |
+| Transaction Guardian Precompile | ArbOS 61 Elara | Required for Delayed Inbox enforcement          |
+| Delayed Inbox Sentinel (STF)    | ArbOS 61 Elara | Requires audit; must be activated at deployment |
+| Burn exception rules            | ArbOS 61 Elara | Covers Aave, Paxos, and similar protocols       |
 
 Compliance Filtering is disabled by default. Chain owners must explicitly configure and enable each component. Activation after chain deployment may require an ArbOS upgrade.
 
