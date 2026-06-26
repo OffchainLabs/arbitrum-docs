@@ -179,14 +179,14 @@ For **ERC-20** token withdrawals, see the dedicated [Withdraw tokens guide](/arb
 The Arbitrum SDK simplifies child-to-parent messaging:
 
 ```javascript
-import { L2ToL1MessageStatus, L2TransactionReceipt } from '@arbitrum/sdk';
+import { ChildToParentMessageStatus, ChildTransactionReceipt } from '@arbitrum/sdk';
 
 // Get the L2 transaction receipt
 const l2Receipt = await childChainProvider.getTransactionReceipt(l2TxHash);
-const l2TxReceipt = new L2TransactionReceipt(l2Receipt);
+const childTxReceipt = new ChildTransactionReceipt(l2Receipt);
 
-// Get L2ToL1 messages from the transaction
-const messages = await l2TxReceipt.getL2ToL1Messages(parentChainSigner);
+// Get child-to-parent messages from the transaction
+const messages = await childTxReceipt.getChildToParentMessages(parentChainSigner);
 
 // Wait for the message to be executable
 const message = messages[0];
@@ -196,6 +196,34 @@ await message.waitUntilReadyToExecute(childChainProvider);
 const executeResult = await message.execute(childChainProvider);
 await executeResult.wait();
 ```
+
+### Withdraw ETH using the Arbitrum SDK
+
+The SDK also provides an `EthBridger` class that simplifies `ETH` withdrawals:
+
+```ts
+import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
+import { ethers } from 'ethers';
+
+const childNetwork = await getArbitrumNetwork(childProvider);
+const ethBridger = new EthBridger(childNetwork);
+
+// Initiate withdrawal from child chain
+const withdrawTx = await ethBridger.withdraw({
+  amount: ethers.utils.parseEther('0.1'),
+  childSigner,
+  from: walletAddress,
+  destinationAddress: walletAddress,
+});
+const withdrawReceipt = await withdrawTx.wait();
+
+// Get child-to-parent events for later outbox execution
+const withdrawEvents = withdrawReceipt.getChildToParentEvents();
+```
+
+After the 6.4-day challenge period, use the outbox execution flow described above (or the SDK's `ChildToParentMessage.execute`) to claim your `ETH` on the parent chain.
+
+For a complete example, see the [eth-withdraw tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw).
 
 ## Message lifecycle
 
@@ -211,4 +239,4 @@ Child-to-parent messages go through these stages:
 
 - For protocol-level details, see [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
 - For token bridging concepts, see [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx)
-- For the Arbitrum SDK documentation, see [SDK reference](/sdk)
+- For the Arbitrum SDK documentation, see [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
