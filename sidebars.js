@@ -398,6 +398,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/chain-config/additional-configuration-parameters',
               label: `Additional configuration parameters`,
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/chain-config/chainConfig-reference',
+              label: `chainConfig reference`,
+            },
           ],
         },
         {
