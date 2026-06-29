@@ -40,17 +40,17 @@ The [Stylus SDK for Rust](/stylus/reference/rust-sdk-guide) provides the develop
 
 Once you've written your contract, compile it to WASM using the Stylus CLI (or another compiler, like Clang for C/C++). Then you post the compiled WASM onchain.
 
-To make your contract callable, it must undergo an activation process. During activation, the WASM compiles down to a node's native machine code (e.g., ARM or x86). This step also includes safety checks, such as gas metering, depth-checking, and memory charging, to ensure your program runs safely and can be fraud-proven.
+To make your contract callable, it must undergo an [activation process](/stylus/concepts/activation). During activation, the WASM compiles down to a node's native machine code (e.g., ARM or x86). This step also includes safety checks, such as [gas metering](/stylus/concepts/gas-metering), depth-checking, and memory charging, to ensure your program runs safely and can be fraud-proven.
 
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
 :::note
-Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/build-decentralized-apps/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
+Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/arbitrum-essentials/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
 :::
 
 ### Execution
 
-When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a WebAssembly runtime. Because Wasmer compiles to native machine code, it executes faster than Geth's EVM bytecode interpreter. This performance difference reduces gas costs for compute-intensive operations.
+When your Stylus program runs, it executes in a fork of [Wasmer](https://wasmer.io/), a [WebAssembly runtime](/stylus/concepts/webassembly). Because Wasmer compiles to native machine code, it executes faster than Geth's EVM bytecode interpreter. This performance difference reduces gas costs for compute-intensive operations.
 
 EVM contracts continue to work exactly as before. When a contract is called, the system checks whether it's an EVM contract or a WASM program and routes it to the appropriate runtime. Solidity and WASM contracts can call each other, so the language a contract was written in doesn't affect interoperability.
 

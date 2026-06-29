@@ -2,14 +2,14 @@
 title: 'Economics of Disputes in Arbitrum BoLD'
 sidebar_label: 'Economics of Disputes'
 description: 'An in-depth explanation on BoLD economic mechanisms.'
-user_story: 'As a user or researcher of the Arbitrum product suite, I want to understand BoLD economics mechanisms.'
+user_story: 'As a user or researcher of the Arbitrum platform, I want to understand BoLD economics mechanisms.'
 content_type: concept
 author: leeederek
-target_audience: 'Developers, users and researchers interested in the Arbitrum product suite.'
+target_audience: 'Developers, users and researchers interested in the Arbitrum platform.'
 sme: leeederek
 ---
 
-The following document explains the economics and denial-of-service protection mechanisms built into <a data-quicklook-from="arbitrum">Arbitrum</a> <a data-quicklook-from="bold">BoLD</a>. It covers trade-offs Arbitrum has to make to enable permissionless validation, explaining the key problems in an accessible way.
+The following document explains the economics and denial-of-service protection mechanisms built into <a data-quicklook-from="arbitrum">Arbitrum</a> <a data-quicklook-from="bold">BoLD</a>. It covers trade-offs Arbitrum has to make to enable permissionless validation, explaining the key problems in an accessible way. For a higher-level introduction to BoLD, see the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx).
 
 ## Background
 
@@ -27,7 +27,7 @@ For Arbitrum One specifically, approximately every hour, entities known as valid
 
 ### Withdrawing assets back to Ethereum from Arbitrum
 
-Users of Arbitrum One who have bridged assets from Ethereum can initiate the withdrawal process at any time. However, for this withdrawal to fully execute, its corresponding claim must match a confirmed assertion on Ethereum. For instance, if Alice starts a withdrawal transaction on Arbitrum One, it gets posted in a batch on Ethereum. Then, a validator will post an assertion about that batch on Ethereum an hour later. The assertion has a seven-day window in which anyone can dispute it. After that window passes, the protocol confirms the assertion, and Alice will receive her withdrawn assets on Ethereum, which she is free to use as she pleases.
+Users of Arbitrum One who have bridged assets from Ethereum can initiate the [withdrawal process](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx#asset-withdrawals) at any time. However, for this withdrawal to fully execute, its corresponding claim must match a confirmed assertion on Ethereum. For instance, if Alice starts a withdrawal transaction on Arbitrum One, it gets posted in a batch on Ethereum. Then, a validator will post an assertion about that batch on Ethereum an hour later. The assertion has a seven-day window in which anyone can dispute it. After that window passes, the protocol confirms the assertion, and Alice will receive her withdrawn assets on Ethereum, which she is free to use as she pleases.
 
 "Settling states" and having a seven-day dispute window are crucial to ensuring safe withdrawal of assets. Allowing anyone to dispute invalid claims and win keeps withdrawals protected by strong security guarantees without needing to trust a group of validators. This "permissionless validation" distinguishes optimistic rollups from sidechains.
 
@@ -49,7 +49,7 @@ Delaying withdrawals incurs opportunity costs and negatively impacts the user ex
 
 #### Requiring a bond to validate
 
-By default, all Arbitrum nodes act as validators, monitoring the chain to verify assertions posted to the parent chain and flagging any invalid assertions. On Arbitrum One, running a validator, known as a “watchtower” node, is permissionless and incurs no additional cost beyond the infrastructure required for the node.
+By default, all Arbitrum nodes act as validators, monitoring the chain to verify assertions posted to the parent chain and flagging any invalid assertions. On Arbitrum One, running a validator, known as a [“watchtower” node](/run-arbitrum-node/more-types/02-run-validator-node.mdx#validation-strategies), is permissionless and incurs no additional cost beyond the infrastructure required for the node.
 
 Another type of validator, called a "proposer," performs additional tasks in addition to their regular duties as a validator. Proposers compute Arbitrum states and propose assertions to the parent chain. To prevent abuse and delays in withdrawals, proposers must make a security deposit or "bond" to gain the privilege of proposing assertions. This bond can be withdrawn once their latest assertion is confirmed, ending their responsibilities as a proposer.
 
@@ -71,13 +71,13 @@ While both of these bonds can be any **ERC-20** token and configured to any size
 
 - Assertion bonds: 3600 **ETH** is required from validators to bond their funds to an assertion in the eventual hopes of having that assertion be confirmed by the Rollup protocol. This requirement is a one-time bond to start posting assertions. The bond is available for withdrawal once a validator’s assertion is confirmed and can also accumulate through a trustless bonding pool.
 
-- Challenge-bonds, per level: 555 **WETH** at the "big-step" level; 79 **WETH** at the "small-step" level—required from validators to open challenges against an assertion observed on the parent chain (Ethereum, in the case of Arbitrum One), for each level. Note that “level” corresponds to the level of granularity over which the interactive bisection game gets played, starting at the block level, moving on to a range of <a data-quicklook-from="wasm">WASM</a> execution steps, and then finally to the level of a single execution step. For more details on the concept of "levels" in BoLD challenges, see [Challenge resolution](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx#challenge-resolution) section in the Technical deep dive.
+- Challenge-bonds, per level: 555 **WETH** at the "big-step" level; 79 **WETH** at the "small-step" level—required from validators to open challenges against an assertion observed on the parent chain (Ethereum, in the case of Arbitrum One), for each level. Note that “level” corresponds to the level of granularity over which the [interactive bisection game](/how-arbitrum-works/bold/how-bold-bisection-works.mdx) gets played, starting at the block level, moving on to a range of <a data-quicklook-from="wasm">WASM</a> execution steps, and then finally to the level of a single execution step. For more details on the concept of "levels" in BoLD challenges, see [Challenge resolution](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx#challenge-resolution) section in the Technical deep dive.
 
 We calculated these values carefully to optimize for the resource ratio (explained later) and gas costs in the event of an attack, as described in [BoLD whitepaper](https://arxiv.org/abs/2404.10491). This effectively means that an entity that has already posted a bond to propose an assertion does not need to post a separate assertion bond to challenge an invalid state assertion that they observe. To be clear, the validator would still require 555 **ETH** and 79 **ETH** for ongoing challenges. These additional challenge bond amounts are required to participate in the interactive dispute game (back and forth) and narrow down the disagreement to a single step of execution that can be proven on Ethereum. The 555 **ETH** and 79 **ETH** challenge bonds can accumulate via a trustless bonding pool, and do not all have to be provided by the validator that initiated the challenge. These bonds are refundable at the end of a challenge and can also be assembled by the community using a trustless bonding pool.
 
 #### Centralization concerns
 
-Requiring a high bond to post assertions about Arbitrum seems centralizing, as we are replacing an allowlist of validators with a system that requires substantial funds to participate. However, **BoLD ships with a trustless bonding pool** for assertion posting. That is, any group of honest parties can pool funds into a simple contract that will post an assertion to Ethereum without needing to trust each other. Making it easy to pool funds to become a validator without needing trust to dispute invalid claims does not affect the safety or decentralization of BoLD.
+Requiring a high bond to post assertions about Arbitrum seems centralizing, as we are replacing an allowlist of validators with a system that requires substantial funds to participate. However, **BoLD ships with a [trustless bonding pool](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx#trustless-bonding-pools)** for assertion posting. That is, any group of honest parties can pool funds into a simple contract that will post an assertion to Ethereum without needing to trust each other. Making it easy to pool funds to become a validator without needing trust to dispute invalid claims does not affect the safety or decentralization of BoLD.
 
 Optimizing for the unhappy case is more important than optimizing for the happy case. As there only needs to be one honest assertion poster, it falls into the security budget of the chain to set a high bond fee in order to become a proposer. It should be expensive to delay Arbitrum One withdrawals, and it should also have a high barrier to entry for performing this key responsibility. As long as disputes are trustless, and trustless pools are available in production, we claim the security properties of assertion posting hold equally.
 
@@ -89,7 +89,7 @@ One of the core properties BoLD achieves is providing a fixed upper bound for di
 
 Every game between adversarial parties needs a referee: a neutral party that can enforce the rules to declare a fair winner. Arbitrum BoLD relies on Ethereum as its referee because of its properties as the most decentralized, censorship-resistant <a data-quicklook-from="smart-contract">smart contract</a> chain in the world.
 
-When a dispute occurs about Arbitrum One assertions on Ethereum, there is a protocol for resolving them. At its core, a dispute regards the blockhash of an Arbitrum One block at a specific height. Ethereum does not know which claim is correct and instead relies on a dispute resolution mechanism to be played. The game involves different parties asserting claims with supporting evidence to eventually narrow down their disagreement to a single step of execution within the execution of a block, known as a one-step proof (OSP). Ethereum can then verify this OSP by itself and, as the neutral referee, declare a winner.
+When a dispute occurs about Arbitrum One assertions on Ethereum, there is a protocol for resolving them. At its core, a dispute regards the blockhash of an Arbitrum One block at a specific height. Ethereum does not know which claim is correct and instead relies on a dispute resolution mechanism to be played. The game involves different parties asserting claims with supporting evidence to eventually [narrow down their disagreement to a single step of execution](/how-arbitrum-works/bold/how-bold-bisection-works.mdx) within the execution of a block, known as a one-step proof (OSP). Ethereum can then verify this OSP by itself and, as the neutral referee, declare a winner.
 
 The "rules" of the dispute involve parties making claims with proof to reach a single point of disagreement. Parties "narrow down" their claims via moves called bisections. After a party has made a bisection, there is nothing else left to do until another party comes in and counters it. The core of the system is that an honest party winning a one-step proof leaves the malicious party with no other moves to make. Once the honest party has accumulated enough time without being countered, it is declared the winner.
 

@@ -9,6 +9,5 @@ function buildMarkerValue(kind, payload) {
   return `${PREFIX}${kind}:${encodeURIComponent(payload)}`;
 }
 
-exports.PREFIX = PREFIX;
 exports.MARKER_RE = new RegExp(`^${PREFIX}(${KINDS.join('|')}):([^]*)$`);
 exports.buildMarkerValue = buildMarkerValue;
