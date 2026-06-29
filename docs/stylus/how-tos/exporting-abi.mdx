@@ -255,6 +255,33 @@ impl Token {
         // Transfer logic
         Ok(())
     }
+sol! {
+error InsufficientBalance(address account, uint256 requested, uint256 available);
+error Unauthorized(address caller);
+error InvalidAmount();
+}
+#[derive(SolidityError)]
+pub enum TokenError {
+    InsufficientBalance(InsufficientBalance),
+    Unauthorized(Unauthorized),
+    InvalidAmount(InvalidAmount)
+}
+
+#[public]
+impl Token {
+pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), TokenError> {
+let sender = self.vm().msg_sender();
+let balance = self.balances.get(sender);
+if balance < amount {
+return Err(TokenError::InsufficientBalance(InsufficientBalance {
+account: sender,
+requested: amount,
+available: balance,
+}));
+}
+// Transfer logic
+Ok(())
+}
 }
 ```
 
