@@ -6242,9 +6242,9 @@ algoliasearch@^5.37.0:
     "@algolia/requester-node-http" "5.50.2"
 
 altcha-lib@^1.2.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/altcha-lib/-/altcha-lib-1.3.0.tgz#0db5d92710c5b38ec1d0ebec7ebe24642e18d29e"
-  integrity sha512-PpFg/JPuR+Jiud7Vs54XSDqDxvylcp+0oDa/i1ARxBA/iKDqLeNlO8PorQbfuDTMVLYRypAa/2VDK3nbBTAu5A==
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/altcha-lib/-/altcha-lib-1.4.1.tgz#1398f9f46d9e6941d1ddb1739f129f73cc708ce7"
+  integrity sha512-MAXP9tkQOA2SE9Gwoe3LAcZbcDpp3XzYc5GDVej/y3eMNaFG/eVnRY1/7SGFW0RPsViEjPf+hi5eANjuZrH1xA==
 
 ansi-align@^3.0.1:
   version "3.0.1"
@@ -10324,9 +10324,9 @@ mdast-util-phrasing@^4.0.0:
     unist-util-is "^6.0.0"
 
 mdast-util-to-hast@^13.0.0:
-  version "13.1.0"
-  resolved "https://registry.npmjs.org/mdast-util-to-hast/-/mdast-util-to-hast-13.1.0.tgz"
-  integrity sha512-/e2l/6+OdGp/FB+ctrJ9Avz71AN/GRH3oi/3KAx/kMnoUsD6q0woXlDT8lLEeViVKE7oZxE7RXzvO3T8kF2/sA==
+  version "13.2.1"
+  resolved "https://registry.yarnpkg.com/mdast-util-to-hast/-/mdast-util-to-hast-13.2.1.tgz#d7ff84ca499a57e2c060ae67548ad950e689a053"
+  integrity sha512-cctsq2wp5vTsLIcaymblUriiTcZd0CwWtCbLvrOzYCDZoWyMNV8sZ7krj09FSnsiJi3WVsHLM4k6Dq/yaPyCXA==
   dependencies:
     "@types/hast" "^3.0.0"
     "@types/mdast" "^4.0.0"

@@ -403,6 +403,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/chain-config/additional-configuration-parameters',
               label: `Additional configuration parameters`,
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/chain-config/chainConfig-reference',
+              label: `chainConfig reference`,
+            },
           ],
         },
         {
@@ -1502,11 +1507,6 @@ const sidebars = {
               id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
               label: 'Deploy non-Rust contracts',
             },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
-              label: 'Add language support',
-            },
           ],
         },
         {
@@ -1598,11 +1598,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/concepts/vm-differences',
               label: 'VM differences',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/public-preview-expectations',
-              label: 'Public preview expectations',
             },
           ],
         },
