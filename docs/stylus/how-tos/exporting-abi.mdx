@@ -671,16 +671,21 @@ This is the main function:
 The `#[public]` macro generates ABI code:
 
 ```rust
-// From stylus-proc/src/macros/public/export_abi.rs
+// The macro generates an implementation roughly like this:
 impl GenerateAbi for MyContract {
     const NAME: &'static str = "MyContract";
 
     fn fmt_abi(f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "interface I{} {{", Self::NAME)?;
-        // Generate function signatures
+        // Generated function signatures
         write!(f, "\n    function getValue() external view returns (uint256);")?;
-        writeln!(f, "}}")?;
+        writeln!(f, "\n}}")?;
         Ok(())
+    }
+
+    fn fmt_constructor_signature(f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        // Emits the `constructor(...)` line printed by `cargo stylus constructor`
+        write!(f, "constructor()")
     }
 }
 ```
