@@ -97,7 +97,7 @@ function sendL2MessageFromOrigin(
 ) external returns (uint256)
 ```
 
-**Example use case**: [Withdraw Ether tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)
+**Example use case**: [Withdraw Ether tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/blob/master/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)
 
 ### Sending unsigned messages
 
@@ -206,11 +206,11 @@ function createRetryableTicket(
 ### Example using the Arbitrum SDK
 
 ```javascript
-import { L1ToL2MessageGasEstimator } from '@arbitrum/sdk';
+import { ParentToChildMessageGasEstimator } from '@arbitrum/sdk';
 
 // Estimate gas for the retryable ticket
-const l1ToL2MessageGasEstimator = new L1ToL2MessageGasEstimator(l2Provider);
-const retryableGasParams = await l1ToL2MessageGasEstimator.estimateAll(
+const parentToChildMessageGasEstimator = new ParentToChildMessageGasEstimator(childProvider);
+const retryableGasParams = await parentToChildMessageGasEstimator.estimateAll(
   {
     from: senderAddress,
     to: destinationAddress,
@@ -248,6 +248,48 @@ Retryable tickets can auto-redeem if sufficient gas is provided. If the initial 
 ```solidity
 ArbRetryableTx(address(110)).redeem(ticketId);
 ```
+
+## Deposit ETH using the Arbitrum SDK
+
+The [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk) provides an `EthBridger` class that simplifies depositing `ETH` from the parent chain to the child chain:
+
+```ts
+import { ethers } from 'ethers';
+import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
+
+// Get the Arbitrum network and create an EthBridger
+const childNetwork = await getArbitrumNetwork(childProvider);
+const ethBridger = new EthBridger(childNetwork);
+
+// Deposit ETH from parent chain to child chain
+const depositTx = await ethBridger.deposit({
+  amount: ethers.utils.parseEther('0.1'),
+  parentSigner,
+});
+const depositReceipt = await depositTx.wait();
+
+// Wait for the deposit to be processed on the child chain
+const childResult = await depositReceipt.waitForChildTransactionReceipt(childProvider);
+console.log('Deposit complete:', childResult.complete);
+```
+
+### Deposit to a different address
+
+To deposit `ETH` to a recipient address that differs from the sender, use `depositTo`:
+
+```ts
+const depositTx = await ethBridger.depositTo({
+  amount: ethers.utils.parseEther('0.1'),
+  parentSigner,
+  childProvider,
+  destinationAddress: '0x...recipient',
+});
+```
+
+### Tutorials
+
+- [eth-deposit tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit) — full walkthrough of depositing `ETH` using the SDK
+- [eth-deposit-to-different-address tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit-to-different-address) — depositing `ETH` to a different recipient
 
 ## Next steps
 

@@ -54,7 +54,7 @@ const interfaceBaseUrl = `https://github.com/OffchainLabs/${
 const implementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/${globalVars.nitroPathToPrecompiles}/`;
 // NodeInterface is in the nitro-contracts repository
 const nodeInterfaceInterfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/${globalVars.nitroContractsPathToPrecompilesInterface}/`;
-const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/execution/nodeInterface/`;
+const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/execution/nodeinterface/`;
 const defaultDeprecationNotice = `<p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>`;
 
 const renderMethodsInTable = (
@@ -358,7 +358,7 @@ const generateNodeInterfaceReferenceTables = async (
   const implementationCodeRawResponse = await fetch(
     `${nodeInterfaceImplementationBaseUrl
       .replace('github.com', 'raw.githubusercontent.com')
-      .replace('blob/', '')}NodeInterface.go`,
+      .replace('blob/', '')}node_interface.go`,
   );
   const implementationCode = await implementationCodeRawResponse.text();
 
@@ -366,7 +366,7 @@ const generateNodeInterfaceReferenceTables = async (
     interfaceCode,
     implementationCode,
     nodeInterfaceInterfaceBaseUrl + 'NodeInterface.sol',
-    nodeInterfaceImplementationBaseUrl + 'NodeInterface.go',
+    nodeInterfaceImplementationBaseUrl + 'node_interface.go',
     methodOverrides,
   );
 
