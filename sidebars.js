@@ -1497,11 +1497,6 @@ const sidebars = {
               id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
               label: 'Deploy non-Rust contracts',
             },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
-              label: 'Add language support',
-            },
           ],
         },
         {
@@ -1593,11 +1588,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/concepts/vm-differences',
               label: 'VM differences',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/public-preview-expectations',
-              label: 'Public preview expectations',
             },
           ],
         },
