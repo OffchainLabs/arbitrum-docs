@@ -439,7 +439,7 @@ sol_storage! {
 #[public]
 impl MyContract {
     #[constructor]
-    pub fn new(owner: Address, initial_value: U256) {
+    pub fn new(&mut self, owner: Address, initial_value: U256) {
         self.owner.set(owner);
         self.initial_value.set(initial_value);
     }
