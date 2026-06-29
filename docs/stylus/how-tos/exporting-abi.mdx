@@ -232,6 +232,7 @@ interface IMyContract {
 Define custom errors with parameters:
 
 ```rust
+use stylus_sdk::alloy_sol_types::sol;
 use stylus_sdk::prelude::*;
 
 sol! {
@@ -240,48 +241,28 @@ sol! {
     error InvalidAmount();
 }
 
-#[public]
-impl Token {
-    pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), InsufficientBalance> {
-        let sender = self.vm().msg_sender();
-        let balance = self.balances.get(sender);
-        if balance < amount {
-            return Err(InsufficientBalance {
-                account: sender,
-                requested: amount,
-                available: balance,
-            });
-        }
-        // Transfer logic
-        Ok(())
-    }
-sol! {
-error InsufficientBalance(address account, uint256 requested, uint256 available);
-error Unauthorized(address caller);
-error InvalidAmount();
-}
 #[derive(SolidityError)]
 pub enum TokenError {
     InsufficientBalance(InsufficientBalance),
     Unauthorized(Unauthorized),
-    InvalidAmount(InvalidAmount)
+    InvalidAmount(InvalidAmount),
 }
 
 #[public]
 impl Token {
-pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), TokenError> {
-let sender = self.vm().msg_sender();
-let balance = self.balances.get(sender);
-if balance < amount {
-return Err(TokenError::InsufficientBalance(InsufficientBalance {
-account: sender,
-requested: amount,
-available: balance,
-}));
-}
-// Transfer logic
-Ok(())
-}
+    pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), TokenError> {
+        let sender = self.vm().msg_sender();
+        let balance = self.balances.get(sender);
+        if balance < amount {
+            return Err(TokenError::InsufficientBalance(InsufficientBalance {
+                account: sender,
+                requested: amount,
+                available: balance,
+            }));
+        }
+        // Transfer logic
+        Ok(())
+    }
 }
 ```
 
@@ -302,6 +283,7 @@ interface IToken {
 Events are automatically included in the ABI:
 
 ```rust
+use stylus_sdk::alloy_sol_types::sol;
 use stylus_sdk::prelude::*;
 
 sol! {
@@ -876,33 +858,34 @@ fn main() {
 
 **Error**: `the trait AbiType is not implemented for MyType`
 
-**Solution**: Use supported types or implement `AbiType`:
+**Solution**: Use supported types, or derive `AbiType` for a custom struct:
 
 ```rust
 // ✅ Use supported types
 pub fn process(&self, amount: U256) -> U256 { }
 
-// ❌ Custom types need AbiType implementation
+// ❌ Arbitrary Rust types have no ABI representation
 pub fn process(&self, amount: MyCustomType) -> MyCustomType { }
 ```
 
-For custom types, implement `AbiType`:
+For custom struct types, derive `AbiType` inside a `sol!` block. The struct can then be used in public method parameters and return values:
 
 ```rust
-use stylus_sdk::abi::AbiType;
+use stylus_sdk::alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
 
-#[derive(Clone)]
-struct MyType(U256);
-
-impl AbiType for MyType {
-    type SolType = alloy_sol_types::sol_data::Uint<256>;
-
-    fn encode(&self) -> Vec<u8> {
-        self.0.encode()
+sol! {
+    #[derive(AbiType)]
+    struct Point {
+        uint256 x;
+        uint256 y;
     }
+}
 
-    fn decode(data: &[u8]) -> Result<Self, alloy_sol_types::Error> {
-        U256::decode(data).map(MyType)
+#[public]
+impl MyContract {
+    pub fn echo_point(&self, p: Point) -> Point {
+        p
     }
 }
 ```
