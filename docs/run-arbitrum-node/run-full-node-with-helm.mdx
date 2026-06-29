@@ -1,0 +1,280 @@
+---
+title: 'How to run a full node with Helm on Kubernetes'
+sidebar_label: 'Run a full node (Helm)'
+description: 'Deploy and operate an Arbitrum chain full node on Kubernetes with the community Helm chart, including health and log monitoring, network egress, and day-2 operations.'
+user_story: 'As a node operator, I want to deploy and reliably operate an Arbitrum chain full node on Kubernetes using the community Helm chart.'
+content_type: how-to
+author: 'Jason-W123'
+sme: 'Jason-W123'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+This guide shows how to deploy and operate a full node for an Arbitrum chain on Kubernetes using the [community Helm chart](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/nitro). It applies to any Arbitrum chain — [Arbitrum One](https://arbitrum.io), Nova, Sepolia, and your own Arbitrum chain — and covers installation, memory configuration, first sync from a snapshot, monitoring, the log signals that distinguish a healthy node from a broken one, the outbound endpoints to allow through a firewall, and day-2 operations.
+
+The chart's defaults target Arbitrum One, so Arbitrum One is used as the worked example throughout. Each step notes what changes for other chains.
+
+<VanillaAdmonition type="info">
+
+If you want to run a node with Docker instead of Kubernetes, see [How to run a full node for an Arbitrum chain](/run-arbitrum-node/run-full-node.mdx). This page assumes you've reviewed the [Start here](/run-arbitrum-node/start-here.mdx) page, which explains the RPC endpoints, Nitro version, and database snapshots required to run a node.
+
+</VanillaAdmonition>
+
+## Prerequisites
+
+- **Parent chain access:** an execution RPC endpoint for the chain's parent. For Arbitrum One, Nova, and Sepolia the parent is Ethereum, so you also need an **L1 beacon/blob** endpoint (see [L1 Ethereum RPC providers](/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers.mdx)). For an Arbitrum chain whose parent is another Arbitrum chain, supply that parent chain's RPC; a beacon endpoint is only required when the parent posts blobs to Ethereum. Keep the parent-chain client current — incompatible versions can crash or stall the node.
+- **Cluster:** Kubernetes with Helm installed.
+- **Disk:** raise the chart's default `persistence.size` (`500Gi`) as needed for your chain's database, and allow roughly 2× the snapshot size of temporary disk for extraction on the first run.
+
+## Step 1: Deploy with Helm
+
+First add the chart repo:
+
+```shell
+helm repo add offchainlabs https://charts.arbitrum.io
+helm repo update
+```
+
+Then install, selecting the configuration for your chain:
+
+<Tabs className="tabgroup" defaultValue="dao-governed">
+  <TabItem value="dao-governed" label="Arbitrum One, Nova, Sepolia">
+
+The chart defaults to Arbitrum One (`chain.id` `42161`, `parent-chain.id` `1`), so an Arbitrum One node needs only three values:
+
+```shell
+# Arbitrum One
+helm install arb1-fullnode offchainlabs/nitro \
+  --set configmap.data.parent-chain.connection.url=<ETH_L1_RPC_URL> \
+  --set configmap.data.parent-chain.blob-client.beacon-url=<L1_BEACON_URL> \
+  --set configmap.data.init.latest=pruned   # pruned snapshot, recommended for Arbitrum One
+```
+
+For Nova or Sepolia, override the chain and parent-chain IDs. For example, Arbitrum Sepolia:
+
+```shell
+# Arbitrum Sepolia (parent chain is Ethereum Sepolia, 11155111)
+helm install arbsepolia-fullnode offchainlabs/nitro \
+  --set configmap.data.parent-chain.id=11155111 \
+  --set configmap.data.parent-chain.connection.url=<SEPOLIA_RPC_URL> \
+  --set configmap.data.parent-chain.blob-client.beacon-url=<CONSENSUS_API_URL> \
+  --set configmap.data.chain.id=421614
+```
+
+  </TabItem>
+  <TabItem value="your-arbitrum-chain" label="Your Arbitrum chain">
+
+A node for your own Arbitrum chain needs its chain info, sequencer endpoint, and feed URL. Because `chain.info-json` is a large JSON string, supply these through a values file rather than `--set`:
+
+```yaml
+# values-mychain.yaml
+configmap:
+  data:
+    parent-chain:
+      id: <PARENT_CHAIN_ID>
+      connection:
+        url: <PARENT_CHAIN_RPC_URL>
+    chain:
+      id: <YOUR_CHAIN_ID>
+      name: <YOUR_CHAIN_NAME>
+      info-json: '<your chain info JSON>'
+    execution:
+      forwarding-target: <SEQUENCER_ENDPOINT_URL>
+    node:
+      feed:
+        input:
+          url: <SEQUENCER_FEED_URL>
+```
+
+```shell
+helm install mychain-fullnode offchainlabs/nitro -f values-mychain.yaml
+```
+
+If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-client.beacon-url`. AnyTrust chains additionally need a Data Availability configuration (`node.data-availability.*` and a `rest-aggregator`); see [Data Availability](/run-arbitrum-node/data-availability.mdx).
+
+  </TabItem>
+</Tabs>
+
+### Why only three flags for Arbitrum One?
+
+The rest of the node configuration is baked into the chart's defaults, which target Arbitrum One. Only three values must be supplied for Arbitrum One; other chains additionally override `chain.id` / `parent-chain.id` (DAO-governed networks) or supply `chain.info-json` (your Arbitrum chain), as shown above.
+
+| Flag                                  | Chart default                        | Status                              |
+| ------------------------------------- | ------------------------------------ | ----------------------------------- |
+| `parent-chain.connection.url`         | empty                                | **Must set** (1 of 3)               |
+| `parent-chain.blob-client.beacon-url` | empty                                | **Must set** (1 of 3)               |
+| `init.latest=pruned` / `init.url`     | empty                                | **First sync** (1 of 3)             |
+| `chain.id`                            | `42161` (Arbitrum One)               | Pre-set — override for other chains |
+| `parent-chain.id`                     | `1` (Ethereum)                       | Pre-set — override for other chains |
+| `http.api`                            | `[arb,eth,net,web3,txpool,arbdebug]` | Pre-set                             |
+| `http.corsdomain`                     | `"*"`                                | Pre-set                             |
+| `http.addr`                           | `0.0.0.0`                            | Pre-set                             |
+| `http.vhosts`                         | `"*"`                                | Pre-set                             |
+
+The chart also pre-sets flags the Docker example doesn't even show: the WebSocket settings (`ws.*` on port `8548`), `http.port=8547`, `log-type=json`, the allowed WASM module roots, `persistent.chain`, and the config env prefix.
+
+<VanillaAdmonition type="caution" title="Three gotchas">
+
+Otherwise "three flags" is misleading:
+
+- **Don't copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — huge and slow on a chain with a long history such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned` (default base `https://snapshot.arbitrum.foundation/`).
+- **The chart changes the RPC path prefix.** Defaults are `http.rpcprefix=/rpc` and `ws.rpcprefix=/ws`, so RPC is served at `http://host:8547/rpc`, not vanilla Nitro's `/`. Clients that omit `/rpc` get a 404.
+- **Metrics are off by default.** Enable `configmap.data.metrics=true` and `serviceMonitor.enabled=true` to scrape them (see [Step 5](#step-5-enable-monitoring)).
+
+</VanillaAdmonition>
+
+## Step 2: Configure memory management
+
+For a containerized node, set a memory limit and tune the allocator. This applies to every chain:
+
+- **`resources.limits.memory`** — when set, the chart automatically derives `GOMEMLIMIT` (default 90% of the limit). The auto-`GOMEMLIMIT` behavior is on by default but only takes effect once a memory limit is present.
+- **`MALLOC_ARENA_MAX=2`** — not set by the chart. Add it through `extraEnv`, which is a **list** spliced directly into the pod's `env`:
+
+  ```yaml
+  extraEnv:
+    - name: MALLOC_ARENA_MAX
+      value: '2'
+  ```
+
+- **`node.resource-mgmt.mem-free-limit`** (optional) — an RPC memory throttle that's disabled by default. Recommended if you expose this node as a public RPC.
+
+For the allocator details, the `GOMEMLIMIT` formula, and `MALLOC_ARENA_MAX`, see the [memory management deep-dive](/run-arbitrum-node/nitro/nitro-memory-management.mdx) and the [memory management section](/run-arbitrum-node/run-full-node#memory-management) of the Docker full-node guide.
+
+## Step 3: First sync from a snapshot
+
+Whether a snapshot is required depends on the chain:
+
+- **Arbitrum One** requires a snapshot on the first run because of its Classic-era history. Use `configmap.data.init.latest=pruned`.
+- **Nova and Sepolia** have published snapshots that speed up the initial sync but aren't strictly required.
+- **Your Arbitrum chain** typically syncs from genesis with no snapshot, unless you provide one via `init.url`.
+
+When using a snapshot, the default base is `https://snapshot.arbitrum.foundation/`. Initial sync takes a while. The init flag is ignored once a database already exists, so it's safe to leave it in place across restarts. Confirm the current snapshot type and download details in the [Nitro database snapshots](/run-arbitrum-node/nitro/nitro-database-snapshots.mdx) guide.
+
+## Step 4: Verify the node is live
+
+Once the snapshot is extracted and the node starts following the chain:
+
+- The RPC endpoint answers at `http://<pod>:8547/rpc` (remember the `/rpc` prefix from Step 1).
+- `eth_syncing` trends toward `false`. When `false`, the node considers itself synced; when behind, it returns an object describing how far behind it is.
+- The logs show `created block` advancing (see [Log signals](#log-signals-to-watch)).
+
+<VanillaAdmonition type="note">
+
+`eth_syncing=false` only means the node _thinks_ it's synced. For a more robust health check that also compares the local head against a trusted reference RPC and detects a stalled head, use the sync-check tooling in the [community-helm-charts repository](https://github.com/OffchainLabs/community-helm-charts).
+
+</VanillaAdmonition>
+
+## Step 5: Enable monitoring
+
+Turn on metrics and a `ServiceMonitor` so Prometheus can scrape the node:
+
+```shell
+helm upgrade <my-release> offchainlabs/nitro \
+  --reuse-values \
+  --set configmap.data.metrics=true \
+  --set serviceMonitor.enabled=true
+```
+
+### Grafana dashboard
+
+The chart README points to the repository's [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases) for the Grafana dashboard. If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
+
+```shell
+git clone https://github.com/OffchainLabs/community-helm-charts
+git -C community-helm-charts show 430a2cc~1:operations/grafana/dashboards/overview.json > overview.json
+```
+
+Then in Grafana, go to **Dashboards → Import** and paste `overview.json`.
+
+<VanillaAdmonition type="caution">
+
+This exported dashboard has no `__inputs` datasource prompt, and its `Source` variable is hard-pinned to an internal Mimir UID. After importing, you **must** repoint the `Source` variable to your own Prometheus, or every panel reads "No data." Then set `nitronodejob` to this node's scrape job, and leave `sequencerjob`, `validatorjob`, and `relayjob` empty so only the full-node rows render.
+
+</VanillaAdmonition>
+
+### Probes
+
+The chart wires a built-in **startup probe** by default, but **liveness and readiness probes are off** unless you set `livenessProbe` and `readinessProbe`. The startup probe's long failure window protects the initial sync (so a slow sync won't trigger a restart), but it doesn't catch a hang after the node is up. **Configure a liveness probe yourself** for ongoing hang detection.
+
+## Log signals to watch
+
+The chart sets `log-type=json`. The following INFO/WARN/ERROR strings distinguish a healthy node from a broken one on any Arbitrum chain (the sequencer hostnames in the examples below are Arbitrum One's; your chain's will differ):
+
+| Event                              | Healthy signal                                                                              | Broken / warning signal                                                                                                                             |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **New block created**              | `INFO created block` with `l2Block` / `l2BlockHash`, advancing continuously while producing | No advancing `created block` line → block production stalled                                                                                        |
+| **User tx forwarded to sequencer** | Success is not logged                                                                       | `WARN error forwarding transaction trying different target`; `ERROR Failed to publish transaction to any of the forwarding targets`                 |
+| **Sequencer feed message**         | `INFO Feed connected`; `DEBUG received batch item`                                          | `WARN failed connect to sequencer broadcast, waiting and retrying`; `ERROR Server connection timed out without receiving data`                      |
+| **Inbox messages (parent chain)**  | `INFO InboxTracker` with `sequencerBatchCount` / `messageCount` / `l1Block` advancing       | `WARN error reading inbox`. Note: `backwards reorg of delayed messages` is logged at INFO level — it's normal on parent-chain reorgs, not an alert. |
+
+### Why a full node can't forward transactions to the sequencer
+
+A full node forwards user transactions to the sequencer. When forwarding fails, the cause falls into one of three buckets. Forwarding failures are **log-based, not metric-based** — the forwarder emits no metrics — so alert by grepping the log strings below.
+
+| Cause                                                                                      | Signal                                                                                                                                         |
+| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **All forwarding targets unreachable** (egress blocked, or sequencer + all fallbacks down) | `ERROR Failed to publish transaction to any of the forwarding targets`, preceded by per-target `WARN` lines                                    |
+| **Sequencer returns a business error** (non-connection, e.g. `nonce too low`)              | `WARN error forwarding transaction trying different target` with the sequencer's `err` — not escalated; the error is returned to the caller    |
+| **Memory 429 throttling** (rejected before forwarding)                                     | The client receives `HTTP 429 Too many requests` and the metric `arb/rpc/limitcheck/failure` increments. There is **no per-request log line**. |
+
+Representative log lines (hostnames shown are Arbitrum One's):
+
+```text
+# (a) ALL TARGETS UNREACHABLE — egress blocked, or sequencer + all fallbacks down
+WARN  error forwarding transaction trying different target  current target=https://arb1-sequencer.arbitrum.io/rpc  err="dial tcp: lookup ...: no such host"
+WARN  error forwarding transaction to a backup target        target=https://arb1-sequencer-fallback-1.arbitrum.io/rpc  pos=1 total targets=6  err="timeout exceeded"
+ERROR Failed to publish transaction to any of the forwarding targets   numTargets=6
+
+# (b) SEQUENCER RETURNS A BUSINESS ERROR (non-connection) — logged once, NOT escalated, returned to caller
+WARN  error forwarding transaction trying different target  current target=https://arb1-sequencer.arbitrum.io/rpc  err="nonce too low: address 0x..., tx: 5 state: 7"
+#   (no "Failed to publish..." line follows — the error is handed straight back to the RPC client)
+
+# (c) MEMORY 429 THROTTLING — rejected BEFORE it reaches the forwarder; no per-request log line.
+#     The signals are an HTTP 429 to the client and an increment of arb/rpc/limitcheck/failure.
+INFO  Cgroups v2 detected, enabling memory limit RPC throttling     # startup, confirms throttling is active
+ERROR Error checking memory limit  err=...  checker=CgroupsMemoryLimitChecker   # only if the cgroup read fails
+```
+
+## Network egress allowlist
+
+A full node reaches out to a fixed set of endpoints. The specific hostnames depend on the chain: for DAO-governed networks they come from the chain's built-in chain info, and for your own Arbitrum chain they come from the `chain.info-json`, `execution.forwarding-target`, and feed URLs you configure. The categories are the same across chains:
+
+| Purpose                       | Where the endpoint comes from                                       | When                                        |
+| ----------------------------- | ------------------------------------------------------------------- | ------------------------------------------- |
+| **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always — the node forwards user txs here    |
+| Sequencer fallbacks           | chain info `secondary-forwarding-target`                            | Failover                                    |
+| **Sequencer feed**            | chain info `feed-url` / `node.feed.input.url`                       | Always                                      |
+| Feed fallbacks / delayed      | chain info `secondary-feed-url` / `node.feed.input.secondary-url`   | Failover                                    |
+| Block metadata                | chain info `block-metadata-url`                                     | Only if tracking block metadata / Timeboost |
+| DB snapshot                   | the `init` source host                                              | Initial sync only                           |
+| **Parent chain**              | your parent-chain RPC + beacon (beacon only for an Ethereum parent) | Always                                      |
+| DA / REST endpoints           | `rest-aggregator` URL list                                          | AnyTrust chains only (e.g. Nova)            |
+
+For **Arbitrum One**, those resolve to:
+
+| Purpose                   | Endpoint(s)                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------------- |
+| Sequencer (tx forwarding) | `https://arb1-sequencer.arbitrum.io/rpc`                                                       |
+| Sequencer fallbacks       | `https://arb1-sequencer-fallback-{1..5}.arbitrum.io/rpc`                                       |
+| Sequencer feed (primary)  | `wss://arb1-feed.arbitrum.io/feed`                                                             |
+| Feed fallbacks / delayed  | `wss://arb1-delayed-feed.arbitrum.io/feed`, `wss://arb1-feed-fallback-{1..5}.arbitrum.io/feed` |
+| Block metadata            | `https://arb1.arbitrum.io/rpc`                                                                 |
+| DB snapshot               | `https://snapshot.arbitrum.foundation/`                                                        |
+| Parent chain              | Your Ethereum L1 execution RPC + L1 beacon/blob endpoint                                       |
+
+<VanillaAdmonition type="caution" title="Firewall egress">
+
+For a default Arbitrum One full node, allow `*.arbitrum.io` (443 HTTPS + WSS), `snapshot.arbitrum.foundation` (443, init only), and your own L1 RPC + beacon hosts. For other chains, allow that chain's sequencer, feed, and snapshot hosts plus your parent-chain endpoints. **Additional outbound paths exist only if you enable them:** the version alerter (off by default, queries an operator-set endpoint), the classic redirect, or DA/REST endpoints (AnyTrust chains such as Nova).
+
+</VanillaAdmonition>
+
+## Stay current with releases
+
+Track new node versions on the [Nitro releases page](https://github.com/OffchainLabs/nitro/releases). Upgrade with tagged **release** versions only — beta and RC builds risk database corruption (see [Day-2 operations](#day-2-operations)). Read each release's notes for required ArbOS bumps or config changes before upgrading a mainnet full node, and review the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx).
+
+## Day-2 operations
+
+- **Upgrades:** run `helm upgrade` using **release versions only** (no beta/RC — risk of database corruption).
+- **Graceful shutdown:** the chart sets `terminationGracePeriodSeconds=600` so state flushes cleanly on shutdown. Raise it for a large database.
+- **Disk growth:** prune HashDB nodes with `--init.prune full` if disk usage grows.
