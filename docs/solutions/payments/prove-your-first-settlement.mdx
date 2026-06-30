@@ -1,0 +1,61 @@
+---
+title: 'Prove your first settlement on testnet'
+sidebar_label: 'Testnet settlement walkthrough'
+description: 'A payment-shaped walkthrough that strings network setup, testnet funding, a USDC transfer, and settlement confirmation into one followable recipe on Arbitrum Sepolia.'
+user_story: 'As a developer settling stablecoin payments on Arbitrum One, I want to prove the full transfer-and-settle flow on testnet before integrating it into my application.'
+content_type: tutorial
+author: gblanchemain
+sme: gblanchemain
+---
+
+<VanillaAdmonition type="caution">This walkthrough is pending subject-matter-expert review. The steps stitch together existing, individually maintained guides; the end-to-end sequence has not yet been verified by an engineering SME. Treat contract addresses and faucet sources as authoritative only at their linked sources.</VanillaAdmonition>
+
+This walkthrough is for the [Settle on Arbitrum One](/solutions/payments) path. It does not introduce new tooling. It connects the network setup, funding, transfer, and confirmation steps you already have into one payment-shaped flow, so you can prove a stablecoin settles end to end on testnet before you integrate it.
+
+You run the whole flow on **Arbitrum Sepolia**, the public testnet, so no real funds are involved.
+
+## What you will prove
+
+By the end you will have sent a **USDC** transfer on Arbitrum Sepolia and confirmed that it settled. That is the smallest complete unit of a payment: value moved from one address to another and verified as final.
+
+## Prerequisites
+
+- A wallet (such as MetaMask) you can point at a custom network.
+- Node.js and npm, if you follow the application-based transfer in step 3.
+
+## Step 1 — Point your wallet at Arbitrum Sepolia
+
+Add the Arbitrum Sepolia network to your wallet using the chain ID and RPC endpoint from the network reference. Do not copy these values from elsewhere — use the maintained reference:
+
+- [Chain info](/for-devs/dev-tools-and-resources/chain-info) — chain IDs, RPC endpoints, and block explorers
+- [Chains and testnets](/arbitrum-essentials/public-chains) — the full list of public Arbitrum networks
+
+## Step 2 — Fund the account
+
+You need two things in the sending account:
+
+1. **Testnet ETH** to pay gas. Use a faucet for Arbitrum Sepolia listed in [Chain info](/for-devs/dev-tools-and-resources/chain-info).
+2. **Testnet USDC** to transfer. Get it from [Circle's faucet](https://faucet.circle.com/).
+
+Confirm both balances appear in your wallet on Arbitrum Sepolia before continuing.
+
+## Step 3 — Send a USDC transfer
+
+Send the transfer one of two ways:
+
+- **From a wallet:** send a small **USDC** amount to a second address you control. This is enough to prove settlement.
+- **From an application:** follow the [USDC quick start guide](/for-devs/third-party-docs/Circle/usdc-quickstart-guide), which builds a small app that connects a wallet and sends a **USDC** transaction. Point it at Arbitrum Sepolia rather than mainnet.
+
+Use the **USDC** contract address for Arbitrum Sepolia from Circle's official documentation. Do not hardcode an address taken from this page.
+
+## Step 4 — Confirm settlement
+
+Look up the transaction hash in the Arbitrum Sepolia block explorer (linked from [Chain info](/for-devs/dev-tools-and-resources/chain-info)) and confirm the recipient balance changed.
+
+To understand when a transaction is final — and what finality means relative to the parent chain — read [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle). This is the difference between "the transfer was accepted" and "the transfer has settled," which matters once you reconcile payments in production.
+
+## Next steps
+
+- Move from testnet to mainnet with [USDC on Arbitrum One](/arbitrum-bridge/usdc-arbitrum-one), which covers native versus bridged **USDC**.
+- Review [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees) so your cost model reflects mainnet conditions.
+- Return to the [Payments](/solutions/payments) page for the application and dedicated-chain paths.
