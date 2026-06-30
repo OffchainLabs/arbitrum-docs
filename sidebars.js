@@ -488,6 +488,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/bp-recovery',
+              label: `Batch poster recovery`,
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/batch-poster-troubleshooting',
               label: 'Batch poster troubleshooting',
             },

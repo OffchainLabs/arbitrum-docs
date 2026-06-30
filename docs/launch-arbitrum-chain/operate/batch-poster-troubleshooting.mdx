@@ -63,6 +63,32 @@ The exact mempool weight limits depend on the parent chain node’s configuratio
 
 </VanillaAdmonition>
 
+#### `ErrExceedsMaxMempoolSize`→ “error posting batch”
+
+- [DEBUG→WARN→ERROR over 5 min]—The next batch's nonce would exceed `unconfirmed nonce + max-mempool-transactions`, so it's held back.
+- [CAUSE]—L1 is confirming the poster's transactions slowly, and the in-flight window (default: 18) is filled.
+- [MEANING]—Normal back-pressure short-term; sustained means posts are stuck.
+- [ACTION]—If persistent, check L1 confirmation/fees, consider raising `max-mempool-transactions`.
+
+#### `lack of L1 balance prevents posting transaction with desired fee cap`
+
+- [WARN]—The poster's wallet can't cover the target max cost, so the bid is capped at the available balance.
+- [CAUSE]—Low parent-chain balance and/or high L1 fees.
+- [ACTION]—Fund the L1 wallet (`send-l1`); watch `arb/batchposter/wallet/eth`.
+
+#### `a large batch posting backlog exists`
+
+- [INFO/WARN/ERROR]—Unposted messages are piling up; `INFO`: is recently hit L1 bounds, `WARN` at backlog > 10, `ERROR` at > 30.
+- [CAUSE]—Posts not keeping up (fees, mempool cap, L1 congestion, or the poster is behind).
+- [ACTION]—Investigate why posting is throttled; `ERROR` is an alerting threshold.
+
+#### `error fetching batch poster wallet balance` / `...gas refunder balance`
+
+- [WARN]—Balance gauge update failed.
+- [CAUSE]—L1 RPC hiccup.
+- [MEANING]—Monitoring gap only, not a posting failure.
+- [ACTION]—Ignore if transient.
+
 ## Batch posting backlog diagnosis
 
 A batch posting backlog occurs when the sequencer continues ordering transactions, but the batch poster can’t submit them to the parent chain at the same rate. This results in an accumulation of unposted messages.
@@ -121,6 +147,179 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 2. **Review the queued transaction storage**: If using DB or Redis, the stored transaction state may be stale. A node restart typically resolves transient storage inconsistencies.
 3. **Check parent chain connectivity**: Ensure the batch poster can reliably reach the parent chain RPC. Intermittent connectivity causes retry failures.
 4. **Inspect RBF fee escalation**: If the error mentions “replacement transaction underpriced”, the fee increase between attempts may be insufficient. The parent chain typically requires at least a 10% fee increase for RBF. Review the `blob-tx-replacement-times` schedule—shorter intervals may not allow enough price movement between attempts.
+
+## Reverts and halting
+
+#### `Large gap between last seen and current block number, skipping check for reverts`
+
+- [WARN]—`pollForReverts` fell > 100 blocks behind the chain, so it skipped scanning the intervening blocks for reverted poster transactions and fast-forwarded.
+- [CAUSE]—Node lag, a long pause, or a header-subscription stall.
+- [MEANING]—Reverts in that skipped window won't be detected.
+- [ACTION]—Usually transient; if frequent, investigate node sync/L1 RPC health.
+
+#### `Transaction from batch poster reverted`
+
+- [WARN→ERROR]—A batch posting transaction got a failed receipt on L1.
+- [ERROR (not warn)]—When using persistent storage, it sets `batchReverted` and **halts** all further posting.
+- [CAUSE]—Contract rejected the batch (e.g., message-count mismatch, bad sequence number, gas/blob issue).
+- [ACTION]—Investigate `txErr`; restart clears the halt flag; a count mismatch after force-inclusion may need `allow-posting-first-batch-when-sequencer-message-count-mismatch`.
+
+#### `Error checking batch reverts`
+
+- [DEBUG/WARN]—Revert check failed.
+- [DEBUG]—If the error contains "not found" (a benign parent-node inconsistency where one node served a header, another lacks), else WARN.
+- [ACTION]—Ignore the DEBUG case; investigate persistent WARNs.
+
+## Nonce/sync
+
+#### `failed to update nonce with queue empty; falling back to using a recent block`
+
+- [WARN]—Couldn't get the finalized nonce, so it used a recent block instead. Safe because the queue is empty.
+- [CAUSE]—Finality data unavailable/RPC issue.
+- [ACTION]—Benign one-off; investigate if constant.
+
+#### `Failed to get current nonce`
+
+- [WARN]—Nonce refresh failed, but a previous nonce exists, so it's non-fatal.
+- [CAUSE]—L1 RPC.
+- [ACTION]—Ignore if transient.
+
+#### `Failed to get latest nonce`
+
+- [WARN]—Couldn't fetch the unconfirmed nonce this loop; The iteration backs off 10s (`minWait`).
+- [ACTION]—Transient RPC.
+
+#### `failed to update tx poster balance` / `failed to update tx poster nonce`
+
+- [WARN]—Periodic state refresh in the data-poster loop failed; on balance failure, the loop backs off 10s.
+- [ACTION]—Transient RPC.
+
+#### `DataPoster failed to send transaction`
+
+- [WARN]—The RPC `SendTransaction` call errored.
+- [CAUSE]—Mempool rejection, underpriced, RPC issue.
+- [MEANING]—The transaction stays queued and is retried.
+- [ACTION]—Watch for repetition.
+
+#### `maybeLogError` family—`failed to replace-by-fee transaction` / `failed to re-send transaction`
+
+- [DEBUG/INFO → WARN/ERROR after 20 consecutive]—Per-nonce send/RBF errors that escalate if they persist. `storage.ErrStorageRace` starts `DEBUG`; `ErrFutureReplacePending`/`ErrNonceTooHigh` start `INFO`; anything else is immediate `ERROR`.
+- [ACTION]—The escalated `WARN/ERROR` is the real signal—investigate then.
+
+## Fee/pricing
+
+#### `can't meet data poster fee cap obligations with current target max cost` / `can't meet current parent chain fees with current target max cost`
+
+- [INFO]—The computed fee cap can't cover the current L1 base fee/required cost.
+- [CAUSE]—L1 fees spiked above the poster's escalation target, or balanced-capped.
+- [ACTION]—If posts stall, tune the fee formula (`target-price-gwei`, `urgency-gwei`, `max-fee-bid-multiple-bips`) or fund the wallet.
+
+#### `submitting transaction with GasFeeCap less than latest basefee` / `...BlobGasFeeCap less than latest blobfee`
+
+- [INFO]—Posting anyway with a cap below the current fee, expecting it to confirm as fees drop.
+- [ACTION]—Normal during fee volatility; concerning only if posts never confirm.
+
+#### `unable to fetch suggestedTipCap from l1 client to update arb/batchposter/suggestedtipcap metric`
+
+- [WARN]—Couldn't get a tip suggestion for the metric.
+- [MEANING]—Metric gap only.
+- [ACTION]—Ignore if transient.
+
+## L1 bounds/reorg
+
+#### `Disabling batch posting due to batch being within reorg resistance margin from layer 1 minimum block or timestamp bounds`
+
+- [ERROR]—The batch's first message is within `reorg-resistance-margin` of the L1 minimum bound, so posting is refused this round.
+- [CAUSE]—The margin guard (default 10m) protects against reorgs near the lower bound.
+- [ACTION]—Expected safety behavior; set margin to `0` only if you accept the reorg risk.
+
+#### `disabling L1 bound as batch posting message is close to the maximum delay`
+
+- [ERROR]—Overriding the L1 block bound because messages are near `max-delay`; the `l1-block-bound-bypass` margin kicked in to avoid stalling.
+- [ACTION]—Informational; means it chose to post over respecting the bounds.
+
+#### `not posting more messages because block number or timestamp exceed L1 bounds`
+
+- [INFO]—Stopped adding messages that fall outside the current L1 bound window.
+- [ACTION]—Normal bounding behavior.
+
+#### `error getting max time variation on L1 bound block; falling back on latest block`
+
+- [WARN]—`unknown L2 block bound config value; falling back on using finalized`
+- [ERROR]—Bound resolution issues; the latter means a bad `l1-block-bound` config value.
+- [ACTION]—Fix the config value for the `ERROR`.
+
+#### `DataPoster is avoiding creating a mempool nonce gap`
+
+- [INFO]—Held a transaction back rather than create a nonce gap that a reorg could expose (predecessor not yet reorg-resistant).
+- [ACTION]—Normal reorg-safety; the transaction is retried.
+
+## DA/fallback (AnyTrust/AltDA)
+
+#### `DA writer failed, operator action required`
+
+- [ERROR]—A non-fallback DA writer error; posting stops.
+- [ACTION]—**Investigate immediately**—this is an explicit operator-action alert.
+
+#### `DA writer explicitly requested fallback`
+
+- [WARN]—A DA backend requested a fallback; the poster moves to the next writer/EthDA.
+- [ACTION]—Check DA provider health; sustained fallback means degraded DA.
+
+<VanillaAdmonition type="info" title="Related info">
+	- `DA writer reports message too large, will rebuild batch`
+	- `DA writers exhausted, will rebuild for EthDA`
+	- `EthDA fallback period complete, will retry AltDA`
+
+    These pair with the `da_success`/`da_failure`/`da_last_success` metrics.
+
+</VanillaAdmonition>
+
+## Lock/coordination and gas estimation
+
+#### `Error checking if we could acquire redis lock`
+
+- [WARN]—Redis lock check failed; it optimistically tries anyway.
+- [CAUSE]—Redis connectivity.
+- [ACTION]—Check Redis if high availability matters.
+
+#### `Not posting batches right now because another batch poster has the lock or this node is behind`
+
+- [DEBUG]—Normal on backup posters/when behind.
+- [ACTION]—Expected; not an error.
+
+#### `Failed to estimate gas for EIP-7623 check 1/2`
+
+- [WARN]—An EIP-7623 calldata-cost estimation probe failed.
+- [ACTION]—Usually transient; relevant only on EIP-7623 parent chains.
+
+#### `error estimating gas for batch`
+
+- [escalates via ephemeral handler]—Gas estimation failed (`ErrNormalGasEstimationFailed`); DEBUG→WARN→ERROR over 5 min.
+- [CAUSE]—L1 state lag, reverting estimation, inbox not caught up.
+- [ACTION]—Investigate if it reaches `ERROR`.
+
+## Config/startup
+
+#### `max-size is deprecated; use max-calldata-batch-size...`
+
+- [ERROR]—Deprecated flag in use.
+- [ACTION]—Migrate to `max-calldata-batch-size`.
+
+#### `Disabling data poster storage, as parent chain appears to be an Arbitrum chain without a mempool`
+
+- [INFO]—Auto-switched to no-op storage on an Arbitrum parent.
+- [ACTION]—Expected for L3s.
+
+#### `messagesPerbatch is somehow zero`
+
+- [WARN]—Defensive guard against a should-be-impossible state; defaults to `1`.
+- [ACTION]—Benign unless recurring.
+
+## The escalation rule to remember
+
+Many of these (mempool size, storage race, gas estimation, nonce-too-high,
+accumulator-not-found) are logged quietly at first and only escalate to `WARN/ERROR` if they persist past ~1–5 minutes, and `batchPosterFailureCounter` increments **only** at `ERROR` level. So a single `WARN` is usually noise; a _sustained_ one that reaches `ERROR` is the real signal. Pair these with the metrics: `estimated_batch_backlog`, `wallet/eth`, the `dataposter/nonce/*` gap, and `da_failure`.
 
 ## Quick reference
 
