@@ -13,9 +13,11 @@ displayed_sidebar: buildStylusSidebar
 
 You can verify a Stylus contract in two ways: locally with `cargo stylus` or on [Arbiscan](https://arbiscan.io/), Arbitrum’s block explorer. This guide covers both methods.
 
-:::info
+<VanillaAdmonition type="info">
+
 Stylus contract verification on Arbiscan is only supported for contracts deployed using `cargo-stylus` 0.5.0 or higher.
-:::
+
+</VanillaAdmonition>
 
 ## Overview: Why verify contracts?
 
@@ -166,15 +168,14 @@ If your contract is a single `.rs` file:
 For multi-file projects:
 
 1. Click **"Standard JSON Input"**
-2. Generate the JSON using:
+2. Prepare a Standard JSON Input file containing all of your contract's source files and metadata, following the fields requested by the Arbiscan form.
+3. Upload the Standard JSON Input file
 
-```shell
-cargo stylus verify --json
-```
+<VanillaAdmonition type="info">
 
-This generates a `project.json` file containing all sources and metadata.
+The `cargo stylus` CLI does not currently emit this Standard JSON Input bundle. For CLI-based reproducible verification, use the local `cargo stylus verify` flow shown above; the Arbiscan Standard JSON Input is prepared through the explorer's verification form.
 
-3. Upload the `project.json` file
+</VanillaAdmonition>
 
 <ImageZoom src="/img/stylus/standard-json-input.webp" alt="Standard JSON input option" />
 
