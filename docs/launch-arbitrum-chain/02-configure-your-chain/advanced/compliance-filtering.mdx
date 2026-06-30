@@ -9,6 +9,8 @@ sme: gmehta2
 target_audience: 'Developers who want to configure compliance rules on their chain'
 ---
 
+<VanillaAdmonition type="note">This feature is available through the ArbOS 61 upgrade, however off by default. We recommend adopting this feature at least 30 days after the release of ArbOS 61 on Arbitrum One.</VanillaAdmonition>
+
 New, optional components can be added to the <a data-quicklook-from='sequencer'>Sequencer</a> and <a data-quicklook-from='state-transition-function'>State Transition Function</a> (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
 The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the <a data-quicklook-from='delayed-inbox'>Delayed Inbox</a> on the parent chain.
 
