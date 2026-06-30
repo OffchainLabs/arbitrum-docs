@@ -398,6 +398,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/chain-config/additional-configuration-parameters',
               label: `Additional configuration parameters`,
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/chain-config/chainConfig-reference',
+              label: `chainConfig reference`,
+            },
           ],
         },
         {
@@ -767,8 +772,18 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/nitro-memory-management',
-          label: 'Nitro memory management',
+          id: 'run-arbitrum-node/nitro/configuration-system',
+          label: 'Configuration system',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/da-tools-reference',
+          label: 'DA tools reference',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/cli-flags-reference',
+          label: 'CLI flags reference',
         },
         {
           type: 'doc',
@@ -1492,11 +1507,6 @@ const sidebars = {
               id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
               label: 'Deploy non-Rust contracts',
             },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
-              label: 'Add language support',
-            },
           ],
         },
         {
@@ -1588,11 +1598,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/concepts/vm-differences',
               label: 'VM differences',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/public-preview-expectations',
-              label: 'Public preview expectations',
             },
           ],
         },
