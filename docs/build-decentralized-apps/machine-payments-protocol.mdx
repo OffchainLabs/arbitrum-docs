@@ -23,7 +23,7 @@ The client (payer) never broadcasts a transaction and never pays gas.
 2. The payer signs an EIP-712 typed-data authorization offchain—no gas, no prior onchain approval is needed.
 3. The merchant's server submits the signature onchain, completing the fund transfer. The merchant pays for the gas.
 
-This is exactly the "402 Payment Required"—style flow you'd want for machine/agent commerce: an HTTP request hits a paywalled endpoint, the agent signs a payment authorization, and the server settles it atomically before serving the response.
+This is exactly the "402 Payment Required" flow you'd want for machine/agent commerce: an HTTP request hits a paywalled endpoint, the agent signs a payment authorization, and the server settles it atomically before serving the response.
 
 It supports two settlement mechanisms:
 
@@ -109,8 +109,8 @@ app.get(
 app.listen(3000);
 ```
 
-- **Set credentialTypes**: ['permit2'] instead to use Permit2, and add a splits: [...] array to pay multiple recipients in one transaction.
-- ⚠️ Amount uses raw token units — human-readable decimal conversion isn't supported yet.
+- Set `credentialTypes` to `['permit2']` to use Permit2 instead, and add a `splits: [...]` array to pay multiple recipients in one transaction.
+- ⚠️ `amount` uses raw token units — human-readable decimal conversion isn't supported yet.
 
 ## How to implement it - client (payer) side
 
@@ -143,10 +143,10 @@ CLIENT_PRIVATE_KEY=0x...   # this wallet needs USDC on Arbitrum Sepolia
 SERVER_PRIVATE_KEY=0x...   # this wallet needs ETH (gas) on Arbitrum Sepolia
 
 # Terminal 1
-npm run server   # tsx test/server  → listens on :3000
+pnpm run server   # tsx test/server  → listens on :3000
 
 # Terminal 2
-npm run client   # tsx test/client  → hits /authorization, signs, settles
+pnpm run client   # tsx test/client  → hits /authorization, signs, settles
 ```
 
 ### Funding requirements
@@ -157,9 +157,9 @@ npm run client   # tsx test/client  → hits /authorization, signs, settles
 
 ### Current limitations
 
-- Only **USDC** on Arbitrum One/Sepolia is registered. Adding a token = adding its address + EIP-712 name/version/chainId there.
+- Only **USDC** on Arbitrum One/Sepolia is registered. To add a token, register its address and EIP-712 name/version/chainId.
 - `amount` is raw units only—no human-readable decimal conversion yet.
-- For authorization, the `validBefore` expiry is trusted from the server’s challenge; a far-future expiry theoretically widens the window in which an unsubmitted authorization could be settled late. (**Note**: the EIP-3009 nonce is challenge-bound—keccak256(id, realm) — and single-use onchain, so a literal replay of an already-settled authorization is blocked once the nonce is consumed.)
+- For authorization, the `validBefore` expiry is trusted from the server's challenge; a far-future expiry theoretically widens the window in which an unsubmitted authorization could be settled late. (**Note**: the EIP-3009 nonce is challenge-bound—`keccak256(id, realm)`—and single-use onchain, so a literal replay of an already-settled authorization is blocked once the nonce is consumed.)
 - `transaction` and `hash` credential types are intentionally unimplemented (weak challenge-binding).
 - Status is v0.1.0 — early/experimental.
 
