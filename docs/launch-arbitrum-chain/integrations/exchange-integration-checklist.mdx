@@ -55,6 +55,12 @@ eth_blockNumber                       → latest sequenced height
 
 Three properties make this correct. You examine every transaction in every block, plus internal calls through traces, so no value-bearing path is skipped. You credit only transactions whose receipt `status` is `0x1` and whose movement is confirmed by an event log or a trace, not by calldata alone. And you credit only after a block is finalized on the parent chain, so a parent-chain reorganization cannot reverse a credited deposit.
 
+<VanillaAdmonition type="note" title="Calldata here means transaction input, not batch data availability">
+
+Throughout this guide, "calldata" means a transaction's `input` field — the per-transaction data you read over RPC and deliberately validate against receipts and traces. It is unrelated to how your chain posts batches to its parent chain, whether as EIP-4844 blobs or parent-chain calldata. That data-availability choice does not affect deposit detection: you always index transactions through the RPC methods below.
+
+</VanillaAdmonition>
+
 ## Step 1: Stay in sync with the chain head
 
 1. Call `eth_blockNumber` to get the latest sequenced height.
