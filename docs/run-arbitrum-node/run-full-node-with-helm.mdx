@@ -91,7 +91,7 @@ configmap:
 helm install mychain-fullnode offchainlabs/nitro -f values-mychain.yaml
 ```
 
-If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-client.beacon-url`. AnyTrust chains additionally need a Data Availability configuration (`node.data-availability.*` and a `rest-aggregator`); see [Data Availability](/run-arbitrum-node/data-availability.mdx).
+If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-client.beacon-url`. AnyTrust chains additionally need a Data Availability configuration (`node.da.anytrust.*`, including a `rest-aggregator`); see [Data Availability](/run-arbitrum-node/data-availability.mdx). The older `node.data-availability.*` flags still work but are deprecated in Nitro and will be removed in a future release.
 
   </TabItem>
 </Tabs>
