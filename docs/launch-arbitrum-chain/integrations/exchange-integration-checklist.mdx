@@ -164,7 +164,7 @@ Maintain at least one fixture per detection path so you can assert that your ind
 
 | #    | Scenario                                                                 | Expected result                              |
 | ---- | ------------------------------------------------------------------------ | -------------------------------------------- |
-| TV-1 | Native **ETH** transfer to a platform deposit address, `status` `0x1`    | Credit **ETH** equal to `value / 1e18`       |
+| TV-1 | Native **ETH** transfer to a platform deposit address, `status` `0x1`    | Credit **ETH** equal to `value / 10^18`      |
 | TV-2 | **ERC-20** `transfer()` to a supported token with a valid `Transfer` log | Credit token equal to `amount / 10^decimals` |
 | TV-3 | **ERC-20** `transfer()` that reverts (`status` `0x0`)                    | No credit                                    |
 | TV-4 | Token moved through an internal call (no top-level `transfer()`)         | Credit through the log scan in C             |
