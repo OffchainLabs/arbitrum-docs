@@ -7,6 +7,8 @@
     "generate-precompiles-ref-tables": "tsx scripts/precompile-reference-generator.ts",
     "generate-contract-addresses": "tsx scripts/generate-contract-addresses.ts",
     "update-variable-refs": "tsx scripts/update-variable-references.ts",
+    "generate": "yarn generate-precompiles-ref-tables && yarn generate-contract-addresses && yarn build-glossary && yarn update-variable-refs",
+    "generate:check": "yarn generate-precompiles-ref-tables --check && yarn generate-contract-addresses --check && yarn build-glossary --check && yarn update-variable-refs --check",
     "prepare": "husky || true",
     "start": "yarn && yarn clear && docusaurus start",
     "build-glossary": "tsx scripts/build-glossary.ts",

@@ -18,10 +18,8 @@
  *   yarn generate-contract-addresses --check  # fail if the partial is stale (CI)
  */
 
-import fs from 'fs';
 import path from 'path';
 import { getAddress } from '@ethersproject/address';
-import prettier from 'prettier';
 import { getArbitrumNetwork, type ArbitrumNetwork } from '@arbitrum/sdk';
 import {
   coreProxyAdmin,
@@ -31,6 +29,7 @@ import {
   precompiles,
   type ChainKey,
 } from './contract-addresses.data';
+import { writeOrCheck, isCheckMode, runScript } from './lib/generated-partial';
 
 const OUTPUT_PATH = path.resolve(
   __dirname,
@@ -58,7 +57,9 @@ function cell(address: string | undefined, chainId: number): string {
 /** Renders a markdown table. `rows` is [rowLabel, ...cellsPerChain]. */
 function table(cornerLabel: string, rows: string[][]): string {
   const header = `| ${cornerLabel} | ${CHAINS.map((c) => c.label).join(' | ')} |`;
-  const divider = `| ${Array(CHAINS.length + 1).fill('---').join(' | ')} |`;
+  const divider = `| ${Array(CHAINS.length + 1)
+    .fill('---')
+    .join(' | ')} |`;
   const body = rows.map((r) => `| ${r.join(' | ')} |`).join('\n');
   return [header, divider, body].join('\n');
 }
@@ -73,7 +74,11 @@ function sdkRow(
 }
 
 /** A row whose per-chain address is read from the manual data file. */
-function dataRow(label: string, values: Partial<Record<ChainKey, string>>, chainId: (c: Chain) => number): string[] {
+function dataRow(
+  label: string,
+  values: Partial<Record<ChainKey, string>>,
+  chainId: (c: Chain) => number,
+): string[] {
   return [label, ...CHAINS.map((c) => cell(values[c.key], chainId(c)))];
 }
 
@@ -132,10 +137,7 @@ function buildContent(): string {
 
   const precompilesTable = table(
     '',
-    precompiles.map(([name, address]) => [
-      name,
-      ...CHAINS.map((c) => cell(address, c.childId)),
-    ]),
+    precompiles.map(([name, address]) => [name, ...CHAINS.map((c) => cell(address, c.childId))]),
   );
 
   const miscTable = table('Function', [
@@ -215,32 +217,4 @@ ${factoriesTable}
 `;
 }
 
-async function format(content: string): Promise<string> {
-  const options = await prettier.resolveConfig(OUTPUT_PATH);
-  return prettier.format(content, { ...options, filepath: OUTPUT_PATH });
-}
-
-async function main() {
-  const check = process.argv.includes('--check');
-  const formatted = await format(buildContent());
-
-  if (check) {
-    const current = fs.existsSync(OUTPUT_PATH) ? fs.readFileSync(OUTPUT_PATH, 'utf-8') : '';
-    if (current !== formatted) {
-      console.error(
-        'Contract-address partial is out of date. Run `yarn generate-contract-addresses` and commit the result.',
-      );
-      process.exit(1);
-    }
-    console.log('Contract-address partial is up to date.');
-    return;
-  }
-
-  fs.writeFileSync(OUTPUT_PATH, formatted);
-  console.log(`Wrote ${path.relative(process.cwd(), OUTPUT_PATH)}`);
-}
-
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+runScript(() => writeOrCheck(OUTPUT_PATH, buildContent(), { check: isCheckMode() }));
