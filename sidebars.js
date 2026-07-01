@@ -1184,6 +1184,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Verify child chain state',
+              id: 'build-decentralized-apps/how-to-get-l2block-on-l1',
+            },
+            {
+              type: 'doc',
               label: 'L1-to-L3 teleportation',
               id: 'arbitrum-essentials/bridging/l1-l3-teleportation',
             },
