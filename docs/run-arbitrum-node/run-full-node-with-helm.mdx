@@ -17,13 +17,13 @@ The chart's defaults target Arbitrum One, so Arbitrum One is used as the worked 
 
 <VanillaAdmonition type="info">
 
-If you want to run a node with Docker instead of Kubernetes, see [How to run a full node for an Arbitrum chain](/run-arbitrum-node/run-full-node.mdx). This page assumes you've reviewed the [Start here](/run-arbitrum-node/start-here.mdx) page, which explains the RPC endpoints, Nitro version, and database snapshots required to run a node.
+If you want to run a node with Docker instead of Kubernetes, see [How to run a full node for an Arbitrum chain](/run-arbitrum-node/02-run-full-node.mdx). This page assumes you've reviewed the [Start here](/run-arbitrum-node/start-here.mdx) page, which explains the RPC endpoints, Nitro version, and database snapshots required to run a node.
 
 </VanillaAdmonition>
 
 ## Prerequisites
 
-- **Parent chain access:** an execution RPC endpoint for the chain's parent. For Arbitrum One, Nova, and Sepolia the parent is Ethereum, so you also need an **L1 beacon/blob** endpoint (see [L1 Ethereum RPC providers](/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers.mdx)). For an Arbitrum chain whose parent is another chain, supply that parent chain's RPC; a beacon endpoint is only required when the chain posts blobs to its parent chain.
+- **Parent chain access:** an execution RPC endpoint for the chain's parent. For Arbitrum One, Nova, and Sepolia the parent is Ethereum, so you also need an **L1 beacon/blob** endpoint (see [L1 Ethereum RPC providers](/run-arbitrum-node/04-l1-ethereum-beacon-chain-rpc-providers.mdx)). For an Arbitrum chain whose parent is another chain, supply that parent chain's RPC; a beacon endpoint is only required when the chain posts blobs to its parent chain.
 - **Cluster:** Kubernetes with Helm installed.
 - **Disk:** size storage for the chain you're running. A node's database size varies widely from chain to chain and grows over time, so check the expected size with your chain operator before provisioning (for Arbitrum One it runs to multiple TB). Raise the chart's default `persistence.size` (`500Gi`) accordingly, and allow roughly 2× the snapshot size of additional temporary disk for extraction on the first run.
 
@@ -106,20 +106,21 @@ If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-clie
 
 ## Step 2: Configure memory management (optional)
 
-For a containerized node, you can set a memory limit and tune the allocator. This is optional but recommended, and applies to every chain:
+For a containerized node, set a memory limit so the chart can size the Go runtime. This is optional but recommended, and applies to every chain:
 
-- **`resources.limits.memory`** — when set, the chart automatically derives `GOMEMLIMIT` (default 90% of the limit). The auto-`GOMEMLIMIT` behavior is on by default but only takes effect once a memory limit is present.
-- **`MALLOC_ARENA_MAX=2`** — not set by the chart. Add it through `extraEnv`, which is a **list** spliced directly into the pod's `env`:
-
-  ```yaml
-  extraEnv:
-    - name: MALLOC_ARENA_MAX
-      value: '2'
-  ```
-
+- **`resources.limits.memory`** — set this to activate the chart's automatic `GOMEMLIMIT`. When a memory limit is present, the chart derives `GOMEMLIMIT` from it (`env.nitro.goMemLimit`, on by default — it subtracts an estimate of non-Go memory and applies a `0.9` multiplier).
+- **`MALLOC_ARENA_MAX=2`** — already set by the chart by default (`env.nitro.mallocArenaMax`, `enabled: true`, `value: 2`), so you don't normally need to configure it. Adjust or disable it under `env.nitro.mallocArenaMax` if needed.
 - **`node.resource-mgmt.mem-free-limit`** (optional) — an RPC memory throttle that's disabled by default. Recommended if you expose this node as a public RPC.
 
-For the allocator details, the `GOMEMLIMIT` formula, and `MALLOC_ARENA_MAX`, see the [memory management deep-dive](/run-arbitrum-node/nitro/nitro-memory-management.mdx) and the [memory management section](/run-arbitrum-node/run-full-node#memory-management) of the Docker full-node guide.
+To set any other environment variable, use `extraEnv`, whose entries are spliced directly into the pod's `env`:
+
+```yaml
+extraEnv:
+  - name: SOME_VAR
+    value: 'value'
+```
+
+For the allocator details, the `GOMEMLIMIT` formula, and `MALLOC_ARENA_MAX`, see the [memory management deep-dive](/run-arbitrum-node/nitro/05-nitro-memory-management.mdx) and the [memory management section](/run-arbitrum-node/02-run-full-node.mdx#memory-management) of the Docker full-node guide.
 
 ## Step 3: First sync from a snapshot
 
@@ -129,7 +130,7 @@ Whether a snapshot is required depends on the chain:
 - **Nova and Sepolia** have published snapshots that speed up the initial sync but aren't strictly required.
 - **Your Arbitrum chain** typically syncs from genesis with no snapshot, unless you provide one via `init.url`.
 
-When using a snapshot, the default base is `https://snapshot.arbitrum.foundation/`. Initial sync takes a while. The init flag is ignored once a database already exists, so it's safe to leave it in place across restarts. Confirm the current snapshot type and download details in the [Nitro database snapshots](/run-arbitrum-node/nitro/nitro-database-snapshots.mdx) guide.
+When using a snapshot, the default base is `https://snapshot.arbitrum.foundation/`. Initial sync takes a while. The init flag is ignored once a database already exists, so it's safe to leave it in place across restarts. Confirm the current snapshot type and download details in the [Nitro database snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx) guide.
 
 ## Step 4: Enable monitoring
 
@@ -146,7 +147,7 @@ Once enabled, the node exposes Prometheus metrics at `http://<pod>:6070/debug/me
 
 ### Grafana dashboard
 
-The chart README points to the repository's [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases) for the Grafana dashboard. If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
+The repository's README points to the [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases) for the Grafana dashboard. If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
 
 ```shell
 git clone https://github.com/OffchainLabs/community-helm-charts
