@@ -396,6 +396,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
               ],
             },
             {
