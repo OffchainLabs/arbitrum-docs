@@ -67,6 +67,7 @@ Throughout this guide, "calldata" means a transaction's `input` field, the per-t
 1. Call `eth_blockNumber` to get the latest sequenced height.
 2. Compare it against your last scanned height.
 3. For each missing height, call `eth_getBlockByNumber(height, true)` to retrieve full transaction objects. The returned `transactions` array is ordered; use that ordering as the index for the trace output in the next step.
+4. **Handle reorganizations by rewinding, not patching.** Store each scanned block's hash, keyed by height. On each poll, confirm that every new block's `parentHash` matches the hash you stored for the height below it. A mismatch means the chain reorganized — and because a reorg can both remove a deposit and introduce a new one, re-checking only the records already in `READY` is not enough. Walk back to the most recent height whose stored hash still matches the canonical chain (the common ancestor), discard every `READY` entry and stored hash above it, move your scan cursor back to that height, and re-scan forward from there. You never need to rewind below the finalized height, because finalized blocks cannot reorganize.
 
 <VanillaAdmonition type="note" title="Arbitrum block timing">
 
@@ -132,7 +133,7 @@ Besides ordinary externally owned account transactions, value can arrive through
 
 ## Step 4: Confirm finality before crediting
 
-Run an asynchronous loop that calls `eth_getBlockByNumber("finalized", false)` and reads `result.number` as the finalized height. For each `READY` entry whose block height is at or below the finalized height, do not credit on height alone: a matching height does not prove the block you originally scanned is still canonical. Deposits are captured while scanning `latest`, which is not yet final, so that block can be reorganized out before it finalizes. Re-fetch the canonical block at the recorded height (or re-fetch the transaction receipt) and confirm that the recorded `blockHash` and `txHash` still match. If they match, credit the mapped user the recorded amount and coin; if they do not, the record came from an orphaned block, so discard it without crediting.
+Run an asynchronous loop that calls `eth_getBlockByNumber("finalized", false)` and reads `result.number` as the finalized height. For each `READY` entry whose block height is at or below the finalized height, credit the mapped user the recorded amount and coin. Because Step 1 rewinds and re-scans whenever a block's hash stops matching the canonical chain, every `READY` entry at or below the finalized height already reflects the canonical chain, and finalized blocks can no longer reorganize — so a match on height is sufficient to credit.
 
 The block tags carry different finality guarantees:
 
