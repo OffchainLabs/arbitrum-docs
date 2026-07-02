@@ -8,7 +8,7 @@ user_story: As an Arbitrum chain operator, I want to integrate KMS and signing s
 content_type: how-to
 ---
 
-Nitro's batch poster (and staker) sign their L1 transactions through the **DataPoster** component. By default it signs locally with a private key, but it also supports **generic RPC-based external signing**: instead of holding the key, Nitro sends an unsigned transaction to a remote signer over (m)TLS, gets back a signed transaction, and independently verifies it.
+Nitro's batch poster (and staker) sign their parent chain transactions through the **DataPoster** component. By default it signs locally with a private key, but it also supports **generic RPC-based external signing**: instead of holding the key, Nitro sends an unsigned transaction to a remote signer over (m)TLS, gets back a signed transaction, and independently verifies it.
 
 :::info
 
@@ -56,7 +56,7 @@ This config is nested under both the batch poster and the staker, so the full CL
 
 **Staker** uses the same fields under `--node.staker.data-poster.external-signer.*`.
 
-When `external-signer.url` is empty, the batch poster requires a local key. The check in `cmd/nitro/nitro.go` confirms this—and **AnyTrust mode still needs a local key** (external signing isn't supported alongside AnyTrust).
+When `external-signer.url` is empty, the batch poster requires a local key. **AnyTrust chains need a local key even when external signing is enabled**: the external signer covers the batch transactions posted to the parent chain, but the requests sent to the DA Committee are still signed with a local key. See [External signer support](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#external-signer-support) for how to configure the separate key.
 
 ## What the signer service must implement
 
@@ -74,7 +74,7 @@ Nitro ships two working examples you can model a KMS service on:
 
 - **`cmd/mockexternalsigner/mockexternalsigner.go`**—a standalone signer binary. It
   builds an `rpc.Server`, registers a signing method, serves over HTTPS with
-  `tls.RequireAndVerifyClientCert`, and prints the exact flags to pass to Nitro. Swap the
+  `tls.RequireAndVerifyClientCert`. Swap the
   local-key `txOpts.Signer` for a KMS-backed signer and you have a KMS integration.
 - **`arbnode/dataposter/externalsignertest/externalsignertest.go`**—the test harness,
   showing the server side (`SignerAPI`, method registration, cert setup with
