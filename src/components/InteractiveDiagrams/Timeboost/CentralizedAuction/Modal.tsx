@@ -26,12 +26,14 @@ SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
 const components = {
-  h1: ({ children }) => <h1 className="modal__title">{children}</h1>,
-  p: ({ children }) => <p>{children}</p>,
-  ol: ({ children }) => <ul>{children}</ul>,
-  li: ({ children }) => <li>{children}</li>,
-  pre: ({ children }) => children,
-  code: ({ children, className }) => {
+  h1: ({ children }: { children?: React.ReactNode }) => (
+    <h1 className="modal__title">{children}</h1>
+  ),
+  p: ({ children }: { children?: React.ReactNode }) => <p>{children}</p>,
+  ol: ({ children }: { children?: React.ReactNode }) => <ul>{children}</ul>,
+  li: ({ children }: { children?: React.ReactNode }) => <li>{children}</li>,
+  pre: ({ children }: { children?: React.ReactNode }) => children,
+  code: ({ children, className }: { children?: React.ReactNode; className?: string }) => {
     const language = className?.replace('language-', '') || 'text';
 
     // Safe check for SSG - default to false when context is not available
@@ -61,7 +63,7 @@ const components = {
   },
 };
 
-export function Modal({ number }: { number: number }) {
+export function Modal({ number }: { number: 1 | 2 | 3 | 4 | 5 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Safe check for SSG - default to false when context is not available
