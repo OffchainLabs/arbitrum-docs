@@ -97,7 +97,7 @@ Then apply the checks below in order, A through C.
 
 This applies when `to` is one of your platform deposit addresses.
 
-Read `value`, convert it from hexadecimal to decimal, and divide by `10^18`. Record `{from, to, amount, coin: "ETH"}` in the `READY` list.
+Read `value`, convert it from hexadecimal to decimal, and divide by `10^18`. Record `{from, to, amount, coin: "ETH", blockNumber, blockHash, txHash}` in the `READY` list.
 
 ### B. Standard ERC-20 token deposit
 
@@ -114,7 +114,7 @@ Do not trust calldata alone. Confirm the transfer against the receipt:
    - `0x` followed by `topics[2][26:66]` (the recipient) equals `0x` followed by `input[34:74]`, and is a platform user's address.
    - `data[2:66]` (the transferred amount) equals `input[74:138]`.
 
-Credit `data[2:66]` as decimal, divided by `10^decimals` for that token. Record `{from, toAddress, amount, coin}`.
+Credit `data[2:66]` as decimal, divided by `10^decimals` for that token. Record `{from, toAddress, amount, coin, blockNumber, blockHash, txHash}`.
 
 ### C. Internal token or ETH deposit
 
@@ -132,7 +132,7 @@ Besides ordinary externally owned account transactions, value can arrive through
 
 ## Step 4: Confirm finality before crediting
 
-Run an asynchronous loop that calls `eth_getBlockByNumber("finalized", false)` and reads `result.number` as the finalized height. For each entry in the `READY` list whose block height is at or below the finalized height, credit the mapped user the recorded amount and coin.
+Run an asynchronous loop that calls `eth_getBlockByNumber("finalized", false)` and reads `result.number` as the finalized height. For each `READY` entry whose block height is at or below the finalized height, do not credit on height alone: a matching height does not prove the block you originally scanned is still canonical. Deposits are captured while scanning `latest`, which is not yet final, so that block can be reorganized out before it finalizes. Re-fetch the canonical block at the recorded height (or re-fetch the transaction receipt) and confirm that the recorded `blockHash` and `txHash` still match. If they match, credit the mapped user the recorded amount and coin; if they do not, the record came from an orphaned block, so discard it without crediting.
 
 The block tags carry different finality guarantees:
 
