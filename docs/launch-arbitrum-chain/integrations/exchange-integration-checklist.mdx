@@ -180,7 +180,7 @@ Each fixture should record the block hash, the transaction hash, the raw `eth_ge
 ArbOS upgrades can change the details this logic depends on, so confirm versions against the [ArbOS releases overview](/run-arbitrum-node/arbos-releases/01-overview.mdx) and the [Nitro releases page](https://github.com/OffchainLabs/nitro/releases) before each integration cycle. Three things can change across an upgrade and affect your indexer:
 
 - **Tracer output** — the structure or completeness of `debug_traceBlockByHash` call frames.
-- **Gas accounting** — how `gasUsed` is computed and how the parent-chain data fee is represented (for example, the dynamic pricing introduced around ArbOS 60).
+- **Gas accounting** — how `gasUsed` is computed and how the parent-chain data fee is represented.
 - **Transaction-type handling** — the addition of, or changes to, Arbitrum-native transaction types.
 
 None of the historical upgrades that prompted partner questions changed the core detection contract (poll, fetch the block, trace, validate logs and traces, then gate on finality). Each one still has to be re-verified, because an upgrade could change the byte-level details above.
