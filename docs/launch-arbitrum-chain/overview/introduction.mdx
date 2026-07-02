@@ -125,6 +125,41 @@ Stylus is inherited by every Arbitrum chain. It allows developing smart contract
 - [Stylus gentle intro](/stylus/gentle-introduction.mdx)
 - [Deploy non-Rust WASM contracts](/stylus/how-tos/deploying-non-rust-wasm-contracts.mdx)
 
+## Compliance
+
+### Sanctioned-address screening at the protocol level
+
+Protocol-level transaction filtering added to the Sequencer and STF, at the chain owner’s discretion.
+
+| Owner benefit                                                                                                                                                                        | User benefit                                                                                                        | Guide                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Enables filtering as a first-class protocol capability to opt into, rather than building and maintaining bespoke tooling, while retaining full discretion over whether to enable it. | Transactions are screened by the network itself, so protection doesn’t depend on any single app behaving correctly. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Choose your screening provider (TRM Labs / Chainalysis)
+
+| Owner benefit                                                                                          | User benefit                                                                  | Guide                                                                                                    |
+| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Can reuse an existing provider relationship and risk methodology rather than build screening in-house. | Screening reflects industry-standard sanctions data rather than ad hoc lists. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Define restriction lists (address-level and event-level rules)
+
+| Owner benefit                                                            | User benefit                                                                             | Guide                                                                                                    |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Can tailor enforcement granularity to policy—addresses, events, or both. | Only the activity that the policy actually targets is blocked, reducing false positives. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Restriction rules
+
+| Owner benefit                                                                     | User benefit                                                   | Guide                                                                                                    |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| A ready-made menu of enforcement actions covering transfers, tokens, and opcodes. | Clearly scoped restrictions keep permitted activity available. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Continuous monitoring (synchronization pipeline)
+
+| Feature              | Owner benefit                                                      | User benefit                                                             | Guide                                                                                                    |
+| -------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| Compliance filtering | The restricted set remains up to date without manual redeployment. | Newly sanctioned addresses are enforced promptly, improving protection.  | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+| CLI flags            | Can tune update frequency and storage to their operational needs.  | Timely list updates mean less exposure to recently restricted addresses. | [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx)                                  |
+
 ## What problem do Arbitrum chains solve?
 
 Arbitrum chains are dedicated chains built with Arbitrum technology. Teams can configure execution, fee models, governance, data availability, validation, and other chain parameters for their application or business requirements.
