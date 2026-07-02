@@ -8,9 +8,13 @@ target_audience: technical decision-makers, people familiar with web3 who will d
 sidebar_position: 1
 ---
 
-An Arbitrum chain gives you the flexibility and control enterprises actually want—without the burden of running your own Layer 1. Instead of bootstrapping and subsidizing a validator set (a fixed cost that runs into the billions annually across major L1s), your chain anchors its security and finality to Ethereum's nearly 1 million validators and $78B in staked ETH, turning security into a variable, usage-based expense. That economic model is the core reason to choose Arbitrum: your business captures the fee revenue and priority-access value that L1s hand off to validators, achieving 90–98% operating margins because costs scale with usage rather than perpetual subsidies. You also control the economics directly—custom gas tokens, fee policy, and revenue capture — while getting institution-grade settlement: sub-second soft finality for a responsive user experience, configurable hard finality on Ethereum in minutes, and native withdrawals in as little as 15 minutes, backed by a clean, externally legible counterparty-risk story for your risk, audit, and compliance stakeholders.
+An Arbitrum chain gives you the flexibility and control enterprises actually want—without the burden of running your own Layer 1. Instead of bootstrapping and subsidizing a validator set (a fixed cost that runs into the billions annually across major L1s), your chain anchors its security and finality to Ethereum's nearly 1 million validators and $78B in staked ETH, turning security into a variable, usage-based expense.
 
-Beyond economics, an Arbitrum chain lets you launch fast and customize deeply while offloading the operational complexity of running blockchain infrastructure. You get day-one configuration over high, fully tunable throughput and block times (as low as 100ms), data availability (Rollup, AnyTrust, or external DA), sequencing and MEV rules, KYC/AML and permissioning, privacy, precompiles, governance, and multi-prover settlement—and you automatically inherit every future Ethereum and Arbitrum upgrade, including Stylus, without custom engineering. Critically, your chain isn't siloed: it plugs directly into Ethereum's deep liquidity and the Arbitrum ecosystem (Arbitrum One alone secures over $16B with 1,000+ apps and millions of users). And you can de-risk your go-to-market with a phased "launch-and-migrate" path—prove your product on the shared, liquid Arbitrum One, then graduate to your own dedicated Arbitrum chain as a seamless continuation on the same stack, not a costly replatforming.
+That economic model is the core reason to choose Arbitrum: your business captures the fee revenue and priority-access value that L1s hand off to validators, achieving 90–98% operating margins because costs scale with usage rather than perpetual subsidies. You also control the economics directly—custom gas tokens, fee policy, and revenue capture—while getting institution-grade settlement: sub-second soft finality for a responsive user experience, configurable hard finality on Ethereum in minutes, and native withdrawals in as little as 15 minutes, backed by a clean, externally legible counterparty-risk story for your risk, audit, and compliance stakeholders.
+
+Beyond economics, an Arbitrum chain lets you launch fast and customize deeply while offloading the operational complexity of running blockchain infrastructure. You get day-one configuration over high, fully tunable throughput and block times (as low as 100ms), data availability (Rollup, AnyTrust, or external DA), sequencing and MEV rules, KYC/AML and permissioning, privacy, precompiles, governance, and multi-prover settlement—and you automatically inherit every future Ethereum and Arbitrum upgrade, including Stylus, without custom engineering.
+
+Critically, your chain isn't siloed: it plugs directly into Ethereum's deep liquidity and the Arbitrum ecosystem (Arbitrum One alone secures over $16B with 1,000+ apps and millions of users). And you can de-risk your go-to-market with a phased "launch-and-migrate" path—prove your product on the shared, liquid Arbitrum One, then graduate to your own dedicated Arbitrum chain as a seamless continuation on the same stack, not a costly replatforming.
 
 <ImageZoom src="/img/orbit-settlement-layers.svg" alt="Arbitrum  chain settlement layers" className="img-800px" />
 
@@ -28,7 +32,7 @@ Set confirmation speed and settlement behavior for products where timing and cer
 
 <VanillaAdmonition type="note">The 100ms figure is an optional lower bound on block time, not the default. Most chains run at the 250ms default; 100ms is available when you opt into it.</VanillaAdmonition>
 
-## Transaction pricing model
+### Transaction pricing model
 
 Align costs with your business model, including the option to use a custom gas token that fits customer experience, treasury strategy, or internal accounting needs.
 
@@ -38,7 +42,7 @@ Align costs with your business model, including the option to use a custom gas t
 | Manage the fee parameters that govern what uses pay and fee distribution        | Direct control over cost recovery and revenue, so you can tune the chain's economics to be self-sustaining or subsidized as your business model requires.                   | Transparent, deliberately set fees rather than opaque or volatile costs, which builds trust in the pricing.                | [Fee management](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/costs/fee-management)                                                                                                                                                           |
 | Configure native mint/burn behavior for the gas token, and tune dynamic pricing | Automating supply and fee handling protects your margins during demand swings and reduces manual treasury operations.                                                       | More stable, predictable costs even when the network is busy, so users aren't surprised by fee spikes.                     | - [Native mint and burn](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn) <br /> - [Dynamic pricing](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/costs/dynamic-pricing)                         |
 
-## Throughput and latency
+### Throughput and latency
 
 Handle higher volumes and faster response times for products that cannot degrade during periods of peak demand.
 
@@ -48,7 +52,7 @@ Handle higher volumes and faster response times for products that cannot degrade
 | Set the gas target and block gas limit to match your expected load                                | You right-size capacity to your cost budget and build in headroom for growth, avoiding both overspend and under-provisioning.                                   | Fewer failed or delayed transactions at peak, because the chain has enough room to absorb bursts.                                      | [Gas target guidance](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/costs/gas-target)            |
 | Tune the block time and gas trade-offs for your performance profile                               | You optimize the cost-versus-speed balance for your specific workload rather than accepting a one-size-fits-all default.                                        | A responsive app that stays fast without passing along unnecessary fee increases.                                                      | [Dynamic pricing](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/costs/dynamic-pricing)           |
 
-## Compliance and privacy
+### Compliance and privacy
 
 Create participation rules and data access controls that align with regulated workflows and protect sensitive information.
 
@@ -60,7 +64,7 @@ Create participation rules and data access controls that align with regulated wo
 
 <VanillaAdmonition type="note">These controls apply at the validator and data-availability layers—who validates the chain and who can read its data. They are not a per-user transaction allowlist; screening which end users may submit transactions is an application-layer concern, not a chain-config setting.</VanillaAdmonition>
 
-## Transaction sequencing
+### Transaction sequencing
 
 Customize transaction ordering to match your product, whether the priority is wider access, lower MEV exposure, or tighter handling of transaction flow.
 
@@ -69,7 +73,7 @@ Customize transaction ordering to match your product, whether the priority is wi
 | Keep the default First-Come, First-Serve (FCFS) ordering, which protects users from front-running and sandwich MEV                | Fair, simple ordering keeps fast block times and avoids the reputational cost of a chain seen as hostile to ordinary users. | Built-in protection from front-running and sandwich attacks, so users aren't quietly taxed by MEV extractors on every trade.                 | [How the Sequencer works](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/sequencer)                |
 | Enable Timeboost to auction an express lane, letting the chain owner capture MEV while preserving fair ordering for everyone else | You capture MEV as a revenue stream for the chain rather than leaking it to external searchers.                             | Non-express transactions keep their fair-ordering protections, while users who genuinely need priority have a transparent way to pay for it. | [Timeboost configuration](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/sequencer/timeboost) |
 
-## Governance and data availability
+### Governance and data availability
 
 Choose how the chain is upgraded, administered, and backed by data availability based on the balance of cost, transparency, and resilience you need.
 
@@ -77,27 +81,6 @@ Choose how the chain is upgraded, administered, and backed by data availability 
 | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | Define the chain-owner role and access controls that govern upgrades and administration, and plan a path toward progressive decentralization | You retain the control needed for upgrades and incident response early on, then deliberately decentralize as the chain matures—balancing agility with credibility. | Clear accountability for who can change the chain, plus a visible path toward stronger, more decentralized guarantees.                                       | [Ownership and access control](https://docs.arbitrum.io/launch-arbitrum-chain/operate/ownership-and-access)                           |
 | Choose your data availability model—Rollup, AnyTrust, Alt-DA—to trade off cost against transparency and resilience                           | You dial the cost-versus-security balance directly; AnyTrust can cut data costs substantially, while Rollup maximizes security and transparency.                   | Lower fees when you choose AnyTrust, or maximum security and Ethereum-grade transparency when you choose Rollup—matched to what your product actually needs. | [Configure data availability](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/data-availability/config-data-availability) |
-
-<!-- Need to delete this AND all of the subsequent partials + FloatingHoverModal.js 
-
-## What key features should I consider?
-
-| Feature               | Description                                                                                                                                                                                                                                                                                                                                                                                      |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Dedicated throughput  | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx">More info</FloatingHoverModal>                                                                                                                                                                                                                                                                        |
-| EVM+ compatibility    | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-evm-compatibility.mdx">EVM compatibility</FloatingHoverModal> + <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-other-language-support.mdx">more languages like Rust programs supported</FloatingHoverModal>                                                                                                   |
-| Account abstraction   | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-account-abstraction.mdx">Account abstraction</FloatingHoverModal>                                                                                                                                                                                                                                                               |
-| Gas & Tokens          | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-custom-gas-token.mdx">Custom gas token</FloatingHoverModal> or <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-native-eth.mdx">Native ETH</FloatingHoverModal>                                                                                                                                                 |
-| Data availability     | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-rollup.mdx">Rollup (Ethereum DA)</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-anytrust.mdx">AnyTrust</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-alt-da.mdx">Alt-DA</FloatingHoverModal>                                                   |
-| Fast confirmations    | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-fast-withdrawals.mdx">Fast withdrawals</FloatingHoverModal>                                                                                                                                                                                                                                                                     |
-| Security & validation | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-bold.mdx">BoLD</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-permissioned-validators.mdx">Permissioned validators</FloatingHoverModal>, <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx">Challenge period enforced on L1</FloatingHoverModal> |
-| Safety Features       | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-force-inclusion.mdx">Force-inclusion</FloatingHoverModal> & <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-customizable-governance.mdx">customizable governance</FloatingHoverModal>                                                                                                                          |
-| MEV                   | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-timeboost.mdx">Timeboost</FloatingHoverModal>                                                                                                                                                                                                                                                                                   |
-| Cost                  | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-data-posting-costs.mdx">Data posting costs</FloatingHoverModal>                                                                                                                                                                                                                                                                 |
-| Infrastructure        | <FloatingHoverModal href="/launch-arbitrum-chain/partials/config-hardware.mdx">Hardware requirements</FloatingHoverModal>                                                                                                                                                                                                                                                                        |
-| Interop               | TBD                                                                                                                                                                                                                                                                                                                                                                                              |
-
--->
 
 ## What problem do Arbitrum chains solve?
 
