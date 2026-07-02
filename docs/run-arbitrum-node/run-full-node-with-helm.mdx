@@ -23,13 +23,13 @@ If you want to run a node with Docker instead of Kubernetes, see [How to run a f
 
 ## Prerequisites
 
-- **Parent chain access:** an execution RPC endpoint for the chain's parent. For Arbitrum One, Nova, and Sepolia the parent is Ethereum, so you also need an **L1 beacon/blob** endpoint (see [L1 Ethereum RPC providers](/run-arbitrum-node/04-l1-ethereum-beacon-chain-rpc-providers.mdx)). For an Arbitrum chain whose parent is another chain, supply that parent chain's RPC; a beacon endpoint is only required when the chain posts blobs to its parent chain.
+- **Parent chain access:** an execution RPC endpoint for the chain's parent. For Arbitrum One, Nova, and Sepolia, the parent is Ethereum, so you also need an **L1 beacon/blob** endpoint (see [L1 Ethereum RPC providers](/run-arbitrum-node/04-l1-ethereum-beacon-chain-rpc-providers.mdx)). For an Arbitrum chain whose parent is another chain, use the RPC of that parent chain; a beacon endpoint is required only when the chain posts blobs to its parent chain.
 - **Cluster:** Kubernetes with Helm installed.
-- **Disk:** size storage for the chain you're running. A node's database size varies widely from chain to chain and grows over time, so check the expected size with your chain operator before provisioning (for Arbitrum One it runs to multiple TB). Raise the chart's default `persistence.size` (`500Gi`) accordingly, and allow roughly 2× the snapshot size of additional temporary disk for extraction on the first run.
+- **Disk:** size storage for the chain you're running. A node's database size varies widely from chain to chain and grows over time, so check the expected size with your chain operator before provisioning (for Arbitrum One, it runs to multiple TB). Raise the chart's default `persistence.size` (`500Gi`) accordingly, and allow roughly 2× the snapshot size for an additional temporary disk for extraction on the first run.
 
 ## Step 1: Deploy with Helm
 
-First add the chart repo:
+First, add the chart repo:
 
 ```shell
 helm repo add offchainlabs https://charts.arbitrum.io
@@ -98,7 +98,7 @@ If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-clie
 
 <VanillaAdmonition type="caution" title="Defaults that commonly trip up operators">
 
-- **Don't copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — huge and slow on a chain with a long history such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned` (default base `https://snapshot.arbitrum.foundation/`).
+- **Don't copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — a huge, slow process on a chain with a long history, such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned` (default base `https://snapshot.arbitrum.foundation/`).
 - **The chart changes the RPC path prefix.** Defaults are `http.rpcprefix=/rpc` and `ws.rpcprefix=/ws`, so RPC is served at `http://host:8547/rpc`, not vanilla Nitro's `/`. Clients that omit `/rpc` get a 404.
 - **Metrics are off by default.** Enable `configmap.data.metrics=true` and `serviceMonitor.enabled=true` to scrape them (see [Step 4](#step-4-enable-monitoring)).
 
@@ -108,7 +108,7 @@ If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-clie
 
 For a containerized node, set a memory limit so the chart can size the Go runtime. This is optional but recommended, and applies to every chain:
 
-- **`resources.limits.memory`** — set this to activate the chart's automatic `GOMEMLIMIT`. When a memory limit is present, the chart derives `GOMEMLIMIT` from it (`env.nitro.goMemLimit`, on by default — it subtracts an estimate of non-Go memory and applies a `0.9` multiplier).
+- **`resources.limits.memory`** — set this to activate the chart's automatic `GOMEMLIMIT`. When a memory limit is present, the chart derives `GOMEMLIMIT` from it (`env.nitro.goMemLimit`, on by default—it subtracts an estimate of non-Go memory and applies a `0.9` multiplier).
 - **`MALLOC_ARENA_MAX=2`** — already set by the chart by default (`env.nitro.mallocArenaMax`, `enabled: true`, `value: 2`), so you don't normally need to configure it. Adjust or disable it under `env.nitro.mallocArenaMax` if needed.
 - **`node.resource-mgmt.mem-free-limit`** (optional) — an RPC memory throttle that's disabled by default. Recommended if you expose this node as a public RPC.
 
@@ -126,7 +126,7 @@ For the allocator details, the `GOMEMLIMIT` formula, and `MALLOC_ARENA_MAX`, see
 
 Whether a snapshot is required depends on the chain:
 
-- **Arbitrum One** requires a snapshot on the first run because of its Classic-era history. Use `configmap.data.init.latest=pruned`.
+- **Arbitrum One** requires a snapshot during the first run due to its Classic-era history. Use `configmap.data.init.latest=pruned`.
 - **Nova and Sepolia** have published snapshots that speed up the initial sync but aren't strictly required.
 - **Your Arbitrum chain** typically syncs from genesis with no snapshot, unless you provide one via `init.url`.
 
@@ -147,7 +147,7 @@ Once enabled, the node exposes Prometheus metrics at `http://<pod>:6070/debug/me
 
 ### Grafana dashboard
 
-The repository's README points to the [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases) for the Grafana dashboard. If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
+The repository’s README points to the Grafana dashboard's [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases). If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
 
 ```shell
 git clone https://github.com/OffchainLabs/community-helm-charts
@@ -158,7 +158,7 @@ Then in Grafana, go to **Dashboards → Import** and paste `overview.json`.
 
 <VanillaAdmonition type="caution">
 
-This exported dashboard has no `__inputs` datasource prompt, and its `Source` variable is hard-pinned to an internal Mimir UID. After importing, you **must** repoint the `Source` variable to your own Prometheus, or every panel reads "No data." Then set `nitronodejob` to this node's scrape job, and leave `sequencerjob`, `validatorjob`, and `relayjob` empty so only the full-node rows render.
+This exported dashboard has no `__inputs` datasource prompt, and its `Source` variable is hard-pinned to an internal Mimir UID. After importing, you **must** repoint the `Source` variable to your own Prometheus instance, or every panel will read "No data." Then set `nitronodejob` to this node's scrape job, and leave `sequencerjob`, `validatorjob`, and `relayjob` empty so only the full-node rows render.
 
 </VanillaAdmonition>
 
@@ -207,7 +207,7 @@ ERROR Error checking memory limit  err=...  checker=CgroupsMemoryLimitChecker   
 
 ## Network egress allowlist
 
-A full node reaches out to a fixed set of endpoints. If you run on a cloud provider, outbound traffic is often restricted by default, so you'll likely need to allow these destinations explicitly in your cloud security group or firewall rules (for example, AWS security groups, GCP firewall rules, or an egress `NetworkPolicy`). The specific hostnames depend on the chain: for DAO-governed networks they come from the chain's built-in chain info, and for your own Arbitrum chain they come from the `chain.info-json`, `execution.forwarding-target`, and feed URLs you configure. The categories are the same across chains:
+A full node reaches out to a fixed set of endpoints. If you run on a cloud provider, outbound traffic is often restricted by default, so you'll likely need to allow these destinations explicitly in your cloud security group or firewall rules (for example, AWS security groups, GCP firewall rules, or an egress `NetworkPolicy`). The specific hostnames depend on the chain: for DAO-governed networks, they come from the chain's built-in chain info, and for your own Arbitrum chain, they come from the `chain.info-json`, `execution.forwarding-target`, and feed URLs you configure. The categories are the same across chains:
 
 | Purpose                       | Where the endpoint comes from                                       | When                                        |
 | ----------------------------- | ------------------------------------------------------------------- | ------------------------------------------- |
@@ -234,6 +234,6 @@ For **Arbitrum One**, those resolve to:
 
 <VanillaAdmonition type="caution" title="Firewall egress">
 
-For a default Arbitrum One full node, allow `*.arbitrum.io` (443 HTTPS + WSS), `snapshot.arbitrum.foundation` (443, init only), and your own L1 RPC + beacon hosts. For other chains, allow that chain's sequencer, feed, and snapshot hosts plus your parent-chain endpoints. **Additional outbound paths exist only if you enable them:** the version alerter (off by default, queries an operator-set endpoint), the classic redirect, or DA/REST endpoints (AnyTrust chains such as Nova).
+For a default Arbitrum One full node, allow `*.arbitrum.io` (443 HTTPS + WSS), `snapshot.arbitrum.foundation` (443, init only), and your own L1 RPC + beacon hosts. For other chains, allow that chain's sequencer, feed, and snapshot hosts, plus your parent-chain endpoints. **Additional outbound paths exist only if you enable them:** the version alerter (off by default, queries an operator-set endpoint), the classic redirect, or DA/REST endpoints (AnyTrust chains such as Nova).
 
 </VanillaAdmonition>
