@@ -1,4 +1,5 @@
 const globalVars = require('../src/resources/globalVars.js');
+const { createVariableRefPattern } = require('./lib/variable-refs');
 
 /**
  * This preprocessor uses globalVars as the source of truth to work around Vercel's caching behavior.
@@ -17,7 +18,7 @@ function preprocessContent({ filePath, fileContent }) {
   if (!filePath.endsWith('.mdx') && !filePath.endsWith('.md')) return fileContent;
 
   return fileContent.replace(
-    /@@\s*([a-zA-Z0-9_-]+)=[^@]+@@/g,
+    createVariableRefPattern(),
     (match, varName) => globalVars[varName] || match,
   );
 }

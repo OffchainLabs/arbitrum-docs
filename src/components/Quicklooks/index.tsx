@@ -25,10 +25,11 @@ export const Quicklooks = () => {
       content: (reference) => {
         reference.setAttribute('data-quicklook-enabled', 'true');
         let contentSourceKey = reference.getAttribute('data-quicklook-from');
-        let termItem = glossary[contentSourceKey];
+        if (!contentSourceKey) return '';
+        let termItem = glossary[contentSourceKey as keyof typeof glossary];
         if (!termItem) {
           console.warn(`WARNING: No quicklook entry found for ${contentSourceKey}`);
-          return undefined;
+          return '';
         }
         return termItem.text;
       },

@@ -29,6 +29,11 @@ const sidebars = {
           id: 'stylus/quickstart',
           label: 'Build apps with Stylus',
         },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/machine-payments-protocol',
+          label: 'Machine Payments Protocol (MPP)',
+        },
       ],
     },
     {
