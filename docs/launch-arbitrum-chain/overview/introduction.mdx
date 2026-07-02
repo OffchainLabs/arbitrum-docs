@@ -8,30 +8,11 @@ target_audience: technical decision-makers, people familiar with web3 who will d
 sidebar_position: 1
 ---
 
-This document is for developers and decision-makers who want to learn more about **Arbitrum chains**, a product offering that lets you create your own Arbitrum chains.
+An Arbitrum chain gives you the flexibility and control enterprises actually want—without the burden of running your own Layer 1. Instead of bootstrapping and subsidizing a validator set (a fixed cost that runs into the billions annually across major L1s), your chain anchors its security and finality to Ethereum's nearly 1 million validators and $78B in staked ETH, turning security into a variable, usage-based expense. That economic model is the core reason to choose Arbitrum: your business captures the fee revenue and priority-access value that L1s hand off to validators, achieving 90–98% operating margins because costs scale with usage rather than perpetual subsidies. You also control the economics directly—custom gas tokens, fee policy, and revenue capture — while getting institution-grade settlement: sub-second soft finality for a responsive user experience, configurable hard finality on Ethereum in minutes, and native withdrawals in as little as 15 minutes, backed by a clean, externally legible counterparty-risk story for your risk, audit, and compliance stakeholders.
 
-In the programmable economy, markets, transactions, and business processes run in software. Arbitrum provides the infrastructure for those systems to execute with configurable rules and Ethereum settlement.
-
-If you'd prefer to learn by doing, see the [Chain SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/create-rollup-eth) for step-by-step instructions that walk you through how to use `chain-sdk` to configure and launch your own Arbitrum chain.
-
-## In a nutshell
-
-Arbitrum chains are dedicated chains built with Arbitrum technology. Teams can configure execution, fee models, governance, data availability, validation, and other chain parameters for their application or business requirements.
+Beyond economics, an Arbitrum chain lets you launch fast and customize deeply while offloading the operational complexity of running blockchain infrastructure. You get day-one configuration over high, fully tunable throughput and block times (as low as 100ms), data availability (Rollup, AnyTrust, or external DA), sequencing and MEV rules, KYC/AML and permissioning, privacy, precompiles, governance, and multi-prover settlement—and you automatically inherit every future Ethereum and Arbitrum upgrade, including Stylus, without custom engineering. Critically, your chain isn't siloed: it plugs directly into Ethereum's deep liquidity and the Arbitrum ecosystem (Arbitrum One alone secures over $16B with 1,000+ apps and millions of users). And you can de-risk your go-to-market with a phased "launch-and-migrate" path—prove your product on the shared, liquid Arbitrum One, then graduate to your own dedicated Arbitrum chain as a seamless continuation on the same stack, not a costly replatforming.
 
 <ImageZoom src="/img/orbit-settlement-layers.svg" alt="Arbitrum  chain settlement layers" className="img-800px" />
-
-## What's an Arbitrum chain?
-
-- You can think of Arbitrum chains as **deployable, configurable instances of the Arbitrum Nitro tech stack**.
-- You can also think of them as **tailored chains**: chains tailored precisely to **your exact use-case and business needs**.
-- This gives you another way to **progressively decentralize** your applications and **incrementally adopt** the properties and security assumptions of Ethereum's base layer.
-- Arbitrum One and Arbitrum Nova are owned and governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao). With Arbitrum chains, _you_ determine the way that your chain is governed.
-
-## What problem do Arbitrum chains solve?
-
-The Ethereum ecosystem is supported by a **decentralized network of nodes** that each run Ethereum's Layer 1 (L1) client software. Ethereum's block space is in high demand, so users are often stuck waiting for the network to become less congested (and thus, less expensive).
-
-Arbitrum's protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the Arbitrum stack (Arbitrum chains).
 
 ## Customization
 
@@ -117,6 +98,14 @@ Choose how the chain is upgraded, administered, and backed by data availability 
 | Interop               | TBD                                                                                                                                                                                                                                                                                                                                                                                              |
 
 -->
+
+## What problem do Arbitrum chains solve?
+
+Arbitrum chains are dedicated chains built with Arbitrum technology. Teams can configure execution, fee models, governance, data availability, validation, and other chain parameters for their application or business requirements.
+
+The Ethereum ecosystem is supported by a **decentralized network of nodes** that each run Ethereum's Layer 1 (L1) client software. Ethereum's block space is in high demand, so users are often stuck waiting for the network to become less congested (and thus, less expensive).
+
+Arbitrum's protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the Arbitrum stack (Arbitrum chains).
 
 ## How do Arbitrum chains help the Ethereum ecosystem?
 
