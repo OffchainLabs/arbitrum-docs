@@ -10,7 +10,7 @@
   <tbody>
     <tr>
       <td>
-        ⚠️<code>getPreferredAggregator()</code>
+        ⚠️<code>getPreferredAggregator(address addr)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbAggregator.sol#L14" target="_blank">
@@ -18,11 +18,11 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L25" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L25" target="_blank">
           Implementation
         </a>
       </td>
-      <td>Deprecated: Do not use this method.</td>
+      <td>GetPreferredAggregator returns the preferred aggregator address. Deprecated: Do not use this method.</td>
     </tr>
     <tr>
       <td>
@@ -34,11 +34,11 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L32" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L32" target="_blank">
           Implementation
         </a>
       </td>
-      <td>Deprecated: Do not use this method.</td>
+      <td>GetDefaultAggregator returns the default aggregator address. Deprecated: Do not use this method.</td>
     </tr>
     <tr>
       <td>
@@ -50,7 +50,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L37" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L37" target="_blank">
           Implementation
         </a>
       </td>
@@ -58,7 +58,7 @@
     </tr>
     <tr>
       <td>
-        <code>addBatchPoster()</code>
+        <code>addBatchPoster(address newBatchPoster)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbAggregator.sol#L29" target="_blank">
@@ -66,7 +66,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L42" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L42" target="_blank">
           Implementation
         </a>
       </td>
@@ -74,7 +74,7 @@
     </tr>
     <tr>
       <td>
-        <code>getFeeCollector()</code>
+        <code>getFeeCollector(address batchPoster)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbAggregator.sol#L36" target="_blank">
@@ -82,7 +82,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L65" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L65" target="_blank">
           Implementation
         </a>
       </td>
@@ -98,7 +98,7 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L74" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L74" target="_blank">
           Implementation
         </a>
       </td>
@@ -106,7 +106,7 @@
     </tr>
     <tr>
       <td>
-        ⚠️<code>getTxBaseFee()</code>
+        ⚠️<code>getTxBaseFee(address aggregator)</code>
       </td>
       <td>
         <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/9056310e554d04829bc590d4ba7e17d40d0a9635/ArbAggregator.sol#L49" target="_blank">
@@ -114,11 +114,11 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L98" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L98" target="_blank">
           Implementation
         </a>
       </td>
-      <td>Deprecated: always returns zero</td>
+      <td>GetTxBaseFee gets an aggregator's current fixed fee to submit a tx Deprecated: always returns zero</td>
     </tr>
     <tr>
       <td>
@@ -130,11 +130,11 @@
         </a>
       </td>
       <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbAggregator.go#L106" target="_blank">
+        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.0/precompiles/ArbAggregator.go#L106" target="_blank">
           Implementation
         </a>
       </td>
-      <td>Deprecated: no-op</td>
+      <td>SetTxBaseFee sets an aggregator's fixed fee (caller must be the aggregator, its fee collector, or an owner) Deprecated: no-op</td>
     </tr>
   </tbody>
 </table>

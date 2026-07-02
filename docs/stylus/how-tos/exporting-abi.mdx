@@ -128,7 +128,7 @@ Output:
 
 ### Basic contract structure
 
-Contracts must use the `#[public]` macro to generate ABIs:
+Contracts must use the [`#[public]` macro](../fundamentals/contracts#public-methods-with-public) to generate ABIs:
 
 ```rust
 use stylus_sdk::{alloy_primitives::U256, prelude::*};
@@ -266,10 +266,11 @@ sol! {
 #[public]
 impl Token {
     pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), InsufficientBalance> {
-        let balance = self.balances.get(msg::sender());
+        let sender = self.vm().msg_sender();
+        let balance = self.balances.get(sender);
         if balance < amount {
             return Err(InsufficientBalance {
-                account: msg::sender(),
+                account: sender,
                 requested: amount,
                 available: balance,
             });
@@ -308,8 +309,8 @@ sol! {
 impl Token {
     pub fn transfer(&mut self, to: Address, value: U256) -> bool {
         // Transfer logic
-        evm::log(Transfer {
-            from: msg::sender(),
+        self.vm().log(Transfer {
+            from: self.vm().msg_sender(),
             to,
             value,
         });
@@ -464,7 +465,7 @@ impl MyContract {
     #[payable]
     pub fn new(owner: Address) {
         self.owner.set(owner);
-        // msg::value() is available
+        // self.vm().msg_value() is available
     }
 }
 ```

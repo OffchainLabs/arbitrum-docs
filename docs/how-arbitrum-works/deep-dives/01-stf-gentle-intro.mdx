@@ -11,11 +11,11 @@ The <a data-quicklook-from="state-transition-function">State Transition Function
 
 With <a data-quicklook-from="arbitrum">Arbitrum</a>, the STF plays an even more pivotal role. Arbitrum executes transactions offchain in batches, periodically submitting summaries to the <a data-quicklook-from="parent-chain">parent chain</a>. This approach leverages offchain computation to achieve higher throughput and lower gas costs while maintaining Ethereum’s security.
 
-To safeguard against incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism called fraud proofs. If a dispute arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of offchain computations and ensure that errors or fraudulent behavior are detected and corrected.
+To safeguard against incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism called fraud proofs. If a dispute arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of offchain computations and ensure that errors or fraudulent behavior are detected and corrected. For how disputes are resolved in practice, see [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx) and the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx).
 
-The <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack's STF mirrors Ethereum's STF with key modifications for <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> requirements. The function processes ordered transactions and outputs the updated state from the transaction <a data-quicklook-from="batch">batch</a>.
+The [<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx) stack's STF mirrors Ethereum's STF with key modifications for <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> requirements. The function processes ordered transactions and outputs the updated state from the transaction <a data-quicklook-from="batch">batch</a>.
 
-<a data-quicklook-from="stylus">Stylus</a> expands Arbitrum’s execution model beyond the Ethereum Virtual Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)—based execution, allowing high-performance contracts in Rust, C, and C++ to run alongside traditional EVM contracts (Solidity). This integration of Stylus introduces several modifications to the STF, including:
+[<a data-quicklook-from="stylus">Stylus</a>](/stylus/gentle-introduction.mdx) expands Arbitrum’s execution model beyond the Ethereum Virtual Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)—based execution, allowing high-performance contracts in Rust, C, and C++ to run alongside traditional EVM contracts (Solidity). This integration of Stylus introduces several modifications to the STF, including:
 
 ## Stylus-specific transaction processing
 
@@ -23,7 +23,7 @@ A modified version of <a data-quicklook-from="geth">Geth</a> that recognizes and
 
 ## Execution in a WASM runtime
 
-Stylus transactions execute in <a data-quicklook-from="arbos">ArbOS</a>'s WASM runtime instead of the EVM, enabling faster execution and more efficient computation.
+Stylus transactions execute in [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx)'s WASM runtime instead of the EVM, enabling faster execution and more efficient computation.
 
 ## Stylus gas accounting and pricing
 
@@ -35,4 +35,4 @@ Stylus contracts can interact with Solidity contracts, enabling hybrid applicati
 
 These Stylus-related changes aim to maintain compatibility with Ethereum’s execution model while introducing a more efficient, flexible, and scalable alternative for smart contract development.
 
-The following sections cover [STF inputs](/how-arbitrum-works/reference/stf-inputs.mdx), node processing, and implementation rules, highlighting [differences between Ethereum and Arbitrum](/build-decentralized-apps/arbitrum-vs-ethereum/01-comparison-overview.mdx), and Stylus execution environments. [Stylus-specific execution tasks handled within ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) will be covered separately, focusing on host I/O operations, caching, and WASM memory management.
+The following sections cover [STF inputs](/how-arbitrum-works/reference/stf-inputs.mdx), node processing, and implementation rules, highlighting [differences between Ethereum and Arbitrum](/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview.mdx), and Stylus execution environments. [Stylus-specific execution tasks handled within ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) will be covered separately, focusing on host I/O operations, caching, and WASM memory management.

@@ -41,6 +41,8 @@ Here's how Arbitrum data flow works:
 
 In essence, Arbitrum nodes prioritize data retrieval from the parent chain and rely on the sequencer for real-time updates, deviating from the traditional P2P synchronization approach used by Ethereum nodes.
 
+For operational guides that build on these concepts, see [How to run a sequencer node](/run-arbitrum-node/sequencer/04-run-sequencer-node.mdx) and [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
+
 ## How full nodes decode the data from the parent chain
 
 Arbitrum full nodes decode data received from the parent chain (and, in the case of AnyTrust chains, the DAC) to update their local state. This process involves monitoring events, parsing data, and processing messages.

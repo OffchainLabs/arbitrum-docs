@@ -1,0 +1,20 @@
+---
+title: 'Sample'
+description: 'Has < and { characters that would break strict MDX parsing'
+---
+
+import Partial from '@site/docs/partials/_foo.mdx';
+import Other from '../partials/_bar.mdx';
+
+A [markdown link](/how-arbitrum-works/foo) and a [titled one](/get-started/quickstart 'Tooltip').
+
+An [anchor link](/sdk/intro#section) plus an [external](https://example.com).
+
+<Link to="/build-decentralized-apps/intro">build</Link>
+
+<a href="/run-arbitrum-node/overview">node</a>
+
+A computed <Link to={'/computed'}>link</Link> we cannot rewrite.
+
+<Partial />
+<Other />

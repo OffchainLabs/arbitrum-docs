@@ -5,7 +5,7 @@ author: jose-franco
 content_type: how-to
 ---
 
-Timeboost is a new transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the **Sequencer** for faster transaction inclusion.
+Timeboost is a new transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the [**Sequencer**](/how-arbitrum-works/deep-dives/sequencer.mdx) for faster transaction inclusion.
 
 In this how-to, you'll learn how to bid for the right to use the express lane and submit transactions through the express lane. To learn more about Timeboost and the key terms used on this page, refer to the [gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
@@ -278,7 +278,7 @@ If you won the auction, congratulations! You are the express lane controller for
 
 ## How to submit transactions to the express lane
 
-The sequencer immediately sequences transactions sent to the express lane, while regular transactions are delayed 200ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction as the express lane controller for a given round.
+The sequencer immediately sequences transactions sent to the express lane, while regular transactions are delayed 200ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction as the express lane controller for a given round. For background on default sequencer ordering and the feed, see [Sequencing and broadcasting](/how-arbitrum-works/deep-dives/sequencer.mdx#sequencing-and-broadcasting).
 
 The sequencer handles the express lane. When sending transactions to the Sequencer endpoint, we need to send a `timeboost_sendExpressLaneTransaction` request with the following information:
 
@@ -479,7 +479,7 @@ console.log(`Finalize withdrawal transaction sent: ${finalizeWithdrawalTransacti
 
 ## How to identify timeboosted transactions
 
-Transactions sent to the express lane by the express lane controller and that have been executed (regardless of whether they were successful or reverted) can be identified by examining their receipts or the message broadcast by the Sequencer feed.
+Transactions sent to the express lane by the express lane controller and that have been executed (regardless of whether they were successful or reverted) can be identified by examining their receipts or the message broadcast by the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx#real-time-sequencer-feed).
 
 Transaction receipts now include a new field, `timeboosted`, which will be `true` for timeboosted transactions and `false` for regular non-timeboosted transactions. For example:
 
