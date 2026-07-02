@@ -26,7 +26,7 @@ Using a custom genesis allows you to initialize a new blockchain with a customiz
 
 <VanillaAdmonition type="danger" title="Preallocated balances are not backed by the parent chain">
 
-Preallocating account balances in the genesis state credits ETH (or your custom gas token) on your Arbitrum chain **without** depositing anything into the parent-chain bridge. The protocol does **not** enforce that the bridge holds ETH equal to the balances you preallocate, and there is no deploy-time check.
+Preallocating account balances in the genesis state credits **ETH** (or your custom gas token) on your Arbitrum chain **without** depositing anything into the parent-chain bridge. The protocol does **not** require the bridge to hold ETH equal to the balances you preallocate, and there is no deploy-time check.
 
 If your chain will accept user deposits, a chain whose total preallocated balances exceed the bridge's backing is **insolvent from genesis**: withdrawals can fail once the bridge is drained. Only preallocate non-zero balances if you accept responsibility for backing them—for example, a private or test chain, or one where you deposit the equivalent amount into the bridge before opening it to users.
 
