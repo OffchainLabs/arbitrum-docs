@@ -1,6 +1,6 @@
 ---
 title: 'How to run a full node with Helm on Kubernetes'
-sidebar_label: 'Run a full node (Helm)'
+sidebar_label: 'Run a full node (Helm/Kubernetes)'
 description: 'Deploy an Arbitrum chain full node on Kubernetes with the community Helm chart, including memory configuration, monitoring, log signals, and network egress.'
 user_story: 'As a node operator, I want to deploy and reliably operate an full node for an Arbitrum chain on Kubernetes using the community Helm chart.'
 content_type: how-to
@@ -108,9 +108,9 @@ If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-clie
 
 For a containerized node, set a memory limit so the chart can size the Go runtime. This is optional but recommended, and applies to every chain:
 
-- **`resources.limits.memory`** — set this to activate the chart's automatic `GOMEMLIMIT`. When a memory limit is present, the chart derives `GOMEMLIMIT` from it (`env.nitro.goMemLimit`, on by default—it subtracts an estimate of non-Go memory and applies a `0.9` multiplier).
-- **`MALLOC_ARENA_MAX=2`** — already set by the chart by default (`env.nitro.mallocArenaMax`, `enabled: true`, `value: 2`), so you don't normally need to configure it. Adjust or disable it under `env.nitro.mallocArenaMax` if needed.
-- **`node.resource-mgmt.mem-free-limit`** (optional) — an RPC memory throttle that's disabled by default. Recommended if you expose this node as a public RPC.
+- **`resources.limits.memory`** set this to activate the chart's automatic `GOMEMLIMIT`. When a memory limit is present, the chart derives `GOMEMLIMIT` from it (`env.nitro.goMemLimit`, on by default—it subtracts an estimate of non-Go memory and applies a `0.9` multiplier).
+- **`MALLOC_ARENA_MAX=2`** already set by the chart by default (`env.nitro.mallocArenaMax`, `enabled: true`, `value: 2`), so you don't normally need to configure it. Adjust or disable it under `env.nitro.mallocArenaMax` if needed.
+- **`node.resource-mgmt.mem-free-limit`** (optional) an RPC memory throttle that's disabled by default. Recommended if you expose this node as a public RPC.
 
 To set any other environment variable, use `extraEnv`, whose entries are spliced directly into the pod's `env`:
 
@@ -143,7 +143,7 @@ helm upgrade <my-release> offchainlabs/nitro \
   --set serviceMonitor.enabled=true
 ```
 
-Once enabled, the node exposes Prometheus metrics at `http://<pod>:6070/debug/metrics/prometheus` — the metrics server binds to `0.0.0.0:6070` by default (`configmap.data.metrics-server.port`), and the `ServiceMonitor` scrapes that port and path (`serviceMonitor.path` defaults to `/debug/metrics/prometheus`).
+Once enabled, the node exposes Prometheus metrics at `http://<pod>:6070/debug/metrics/prometheus`—the metrics server binds to `0.0.0.0:6070` by default (`configmap.data.metrics-server.port`), and the `ServiceMonitor` scrapes that port and path (`serviceMonitor.path` defaults to `/debug/metrics/prometheus`).
 
 ### Grafana dashboard
 
@@ -170,21 +170,21 @@ The chart wires a built-in **startup probe** by default, but **liveness and read
 
 The chart sets `log-type=json`. The following INFO/WARN/ERROR strings distinguish a healthy node from a broken one on any Arbitrum chain (the sequencer hostnames in the examples below are Arbitrum One's; your chain's will differ):
 
-| Event                              | Healthy signal                                                                              | Broken / warning signal                                                                                                                             |
-| ---------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **New block created**              | `INFO created block` with `l2Block` / `l2BlockHash`, advancing continuously while producing | No advancing `created block` line → block production stalled                                                                                        |
-| **User tx forwarded to sequencer** | Success is not logged                                                                       | `WARN error forwarding transaction trying different target`; `ERROR Failed to publish transaction to any of the forwarding targets`                 |
-| **Sequencer feed message**         | `INFO Feed connected`; `DEBUG received batch item`                                          | `WARN failed connect to sequencer broadcast, waiting and retrying`; `ERROR Server connection timed out without receiving data`                      |
-| **Inbox messages (parent chain)**  | `INFO InboxTracker` with `sequencerBatchCount` / `messageCount` / `l1Block` advancing       | `WARN error reading inbox`. Note: `backwards reorg of delayed messages` is logged at INFO level — it's normal on parent-chain reorgs, not an alert. |
+| Event                              | Healthy signal                                                                              | Broken / warning signal                                                                                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **New block created**              | `INFO created block` with `l2Block` / `l2BlockHash`, advancing continuously while producing | No advancing `created block` line → block production stalled                                                                                          |
+| **User tx forwarded to sequencer** | Success is not logged                                                                       | `WARN error forwarding transaction trying different target`; `ERROR Failed to publish transaction to any of the forwarding targets`                   |
+| **Sequencer feed message**         | `INFO Feed connected`; `DEBUG received batch item`                                          | `WARN failed connect to sequencer broadcast, waiting and retrying`; `ERROR Server connection timed out without receiving data`                        |
+| **Inbox messages (parent chain)**  | `INFO InboxTracker` with `sequencerBatchCount` / `messageCount` / `l1Block` advancing       | `WARN error reading inbox`. **Note**: `backwards reorg of delayed messages` is logged at INFO level—it's normal on parent-chain reorgs, not an alert. |
 
 ### Why a full node can't forward transactions to the sequencer
 
-A full node forwards user transactions to the sequencer. When forwarding fails, the cause falls into one of three buckets. Forwarding failures are **log-based, not metric-based** — the forwarder emits no metrics — so alert by grepping the log strings below.
+A full node forwards user transactions to the sequencer. When forwarding fails, the cause falls into one of three buckets. Forwarding failures are **log-based, not metric-based**—the forwarder emits no metrics—so alert by grepping the log strings below.
 
 | Cause                                                                                      | Signal                                                                                                                                         |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | **All forwarding targets unreachable** (egress blocked, or sequencer + all fallbacks down) | `ERROR Failed to publish transaction to any of the forwarding targets`, preceded by per-target `WARN` lines                                    |
-| **Sequencer returns a business error** (non-connection, e.g. `nonce too low`)              | `WARN error forwarding transaction trying different target` with the sequencer's `err` — not escalated; the error is returned to the caller    |
+| **Sequencer returns a business error** (non-connection, e.g. `nonce too low`)              | `WARN error forwarding transaction trying different target` with the sequencer's `err`—not escalated; the error is returned to the caller      |
 | **Memory 429 throttling** (rejected before forwarding)                                     | The client receives `HTTP 429 Too many requests` and the metric `arb/rpc/limitcheck/failure` increments. There is **no per-request log line**. |
 
 Representative log lines (hostnames shown are Arbitrum One's):
@@ -211,7 +211,7 @@ A full node reaches out to a fixed set of endpoints. If you run on a cloud provi
 
 | Purpose                       | Where the endpoint comes from                                       | When                                        |
 | ----------------------------- | ------------------------------------------------------------------- | ------------------------------------------- |
-| **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always — the node forwards user txs here    |
+| **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always—the node forwards user txs here      |
 | Sequencer fallbacks           | chain info `secondary-forwarding-target`                            | Failover                                    |
 | **Sequencer feed**            | chain info `feed-url` / `node.feed.input.url`                       | Always                                      |
 | Feed fallbacks / delayed      | chain info `secondary-feed-url` / `node.feed.input.secondary-url`   | Failover                                    |
