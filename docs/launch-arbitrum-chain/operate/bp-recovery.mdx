@@ -46,12 +46,12 @@ In short: _queue intact → resume in-flight; queue gone → rebuild cleanly fro
 
 ## Storage backends and what survives a restart
 
-| Backend          | File                               | Persists?                                     | Recovery behavior                                                                  |
-| ---------------- | ---------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------- |
-| **dbstorage**    | `dataposter/dbstorage/storage.go`  | Yes (consensus DB, `BatchPosterPrefix` table) | Queue rehydrated from keyed entries; `FetchContents`/`FetchLast` reload on startup |
-| **redisstorage** | `dataposter/redis/redisstorage.go` | Yes (shared)                                  | Sorted-set keyed by nonce; **HMAC-signed** entries; enables failover               |
-| **slice**        | `dataposter/slice/slicestorage.go` | No (in-memory)                                | Lost on restart; used when parent chain is Arbitrum (no mempool)                   |
-| **noop**         | `dataposter/noop/storage.go`       | No                                            | Stores nothing; post-and-forget                                                    |
+| Backend          | Persists?                                     | Recovery behavior                                                                  |
+| ---------------- | --------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **dbstorage**    | Yes (consensus DB, `BatchPosterPrefix` table) | Queue rehydrated from keyed entries; `FetchContents`/`FetchLast` reload on startup |
+| **redisstorage** | Yes (shared)                                  | Sorted-set keyed by nonce; **HMAC-signed** entries; enables failover               |
+| **slice**        | No (in-memory)                                | Lost on restart; used when parent chain is Arbitrum (no mempool)                   |
+| **noop**         | No                                            | Stores nothing; post-and-forget                                                    |
 
 Notably, when the parent chain itself is an Arbitrum chain, the data poster **forces no-op storage**—there's no L1 mempool to RBF into, so there's nothing to persist or recover.
 
@@ -108,7 +108,7 @@ So failover state-sharing rides on persistent, signed Redis storage plus L1-deri
 
 - **Parent-chain reorg, revert polling**: if the chain went backward (`nextRevertCheckBlock > blockNum`) it resets to re-check; the >100-block gap warning fast-forwards and skips.
 - **Mempool nonce-gap avoidance**: before sending a transaction of a different type than its predecessor (or whose predecessor isn't yet reorg-resistant), it checks `NonceRbfSoftConfs` deep and, if the nonce exceeds the reorg-resistant count, leaves the transaction queued—`"DataPoster is avoiding creating a mempool nonce gap"`—rather than risk a gap a reorg would expose.
-- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see `posting-cadence-and-lifecycle.md` and `config-flags.md`).
+- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx).
 
 ## Where state physically lives
 
