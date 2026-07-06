@@ -29,6 +29,11 @@ const sidebars = {
           id: 'stylus/quickstart',
           label: 'Build apps with Stylus',
         },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/machine-payments-protocol',
+          label: 'Machine Payments Protocol (MPP)',
+        },
       ],
     },
     {
@@ -456,6 +461,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
               label: 'Infrastructure providers',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/exchange-integration-checklist',
+              label: 'Exchange integration checklist',
             },
           ],
         },

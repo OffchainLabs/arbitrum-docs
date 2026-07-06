@@ -145,6 +145,23 @@ yarn generate-cli-reference --check
 ```
 
 The script also accepts `--output <path>` to write to a different location and `--nitro-path <path>` (or the `NITRO_REPO_PATH` env var) to point at a local Nitro checkout — useful when refreshing the JSON data against a specific Nitro version.
+
+### Reference generators
+
+Several docs pages are generated from source data. Edit the source, not the generated `.mdx` — hand edits are overwritten on the next run.
+
+| Command                                | Generates                                                           | Source                                                  |
+| -------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------- |
+| `yarn generate-contract-addresses`     | `docs/partials/_reference-arbitrum-contract-addresses-partial.mdx`  | `@arbitrum/sdk` + `scripts/contract-addresses.data.ts`  |
+| `yarn generate-precompiles-ref-tables` | `docs/for-devs/dev-tools-and-resources/partials/precompile-tables/` | Nitro source (pinned via `src/resources/globalVars.js`) |
+| `yarn build-glossary`                  | `docs/partials/_glossary-partial.mdx` + `static/glossary.json`      | `docs/partials/glossary/*.mdx`                          |
+| `yarn generate-cli-reference`          | `docs/run-arbitrum-node/nitro/cli-flags-reference.mdx`              | `scripts/data/nitro-cli-flags.json`                     |
+| `yarn update-variable-refs`            | `@@var@@` values across docs                                        | `src/resources/globalVars.js`                           |
+
+Run them all with `yarn generate`, then commit the regenerated files.
+
+Add `--check` to any command (e.g. `yarn build-glossary --check`) to verify instead of write: it regenerates in memory, compares against the committed file, changes nothing, and exits with an error if they differ. `yarn generate:check` runs this verify mode across all of them (used in CI to catch stale output).
+
 ### Restructuring docs (moving or renaming pages)
 
 The tooling handles internal links, the moved file's own relative links, sidebar entries,
