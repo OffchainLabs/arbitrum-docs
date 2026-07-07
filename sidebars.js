@@ -462,6 +462,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
               label: 'Infrastructure providers',
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/exchange-integration-checklist',
+              label: 'Exchange integration checklist',
+            },
           ],
         },
         {
@@ -972,6 +977,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/bold/bold-technical-deep-dive',
               label: 'Technical deep dive',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
+              label: 'How BoLD bisection works',
             },
             {
               type: 'doc',
