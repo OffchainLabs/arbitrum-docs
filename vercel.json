@@ -521,6 +521,11 @@
       "destination": "/launch-arbitrum-chain/protocol-hacks/stf",
       "permanent": false
     },
+    {
+      "source": "/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering",
+      "destination": "/launch-arbitrum-chain/chain-config/validation/compliance-filtering",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

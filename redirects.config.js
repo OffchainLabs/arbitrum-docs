@@ -411,5 +411,9 @@ export const redirects = [
     from: '/launch-arbitrum-chain/chain-config/core/stf',
     to: '/launch-arbitrum-chain/protocol-hacks/stf',
   },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
+    to: '/launch-arbitrum-chain/chain-config/validation/compliance-filtering',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
