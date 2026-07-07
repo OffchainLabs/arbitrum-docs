@@ -46,9 +46,9 @@ function stripHtml(html: string): string {
     .replace(/<\/div>/gi, '\n')
     .replace(/<div[^>]*>/gi, '\n')
     .replace(/<[^>]*>/g, '')
-    .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
     .replace(/\n{2,}/g, '\n')
     .trim();
 }
