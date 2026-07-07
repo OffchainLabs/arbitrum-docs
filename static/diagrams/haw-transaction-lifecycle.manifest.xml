@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagramStory
+  id="haw-transaction-lifecycle"
+  title="How Arbitrum Works — Transaction Lifecycle"
+  entryDiagram="transaction-lifecycle"
+>
+  <diagram
+    id="transaction-lifecycle"
+    file="/diagrams/haw-transaction-lifecycle.excalidraw"
+  />
+</diagramStory>

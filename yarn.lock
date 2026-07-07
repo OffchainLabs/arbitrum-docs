@@ -5177,6 +5177,72 @@
     "@react-spring/types" "~10.1.2"
     csstype "^3.2.3"
 
+"@reactflow/background@11.3.14":
+  version "11.3.14"
+  resolved "https://registry.yarnpkg.com/@reactflow/background/-/background-11.3.14.tgz#778ca30174f3de77fc321459ab3789e66e71a699"
+  integrity sha512-Gewd7blEVT5Lh6jqrvOgd4G6Qk17eGKQfsDXgyRSqM+CTwDqRldG2LsWN4sNeno6sbqVIC2fZ+rAUBFA9ZEUDA==
+  dependencies:
+    "@reactflow/core" "11.11.4"
+    classcat "^5.0.3"
+    zustand "^4.4.1"
+
+"@reactflow/controls@11.2.14":
+  version "11.2.14"
+  resolved "https://registry.yarnpkg.com/@reactflow/controls/-/controls-11.2.14.tgz#508ed2c40d23341b3b0919dd11e76fd49cf850c7"
+  integrity sha512-MiJp5VldFD7FrqaBNIrQ85dxChrG6ivuZ+dcFhPQUwOK3HfYgX2RHdBua+gx+40p5Vw5It3dVNp/my4Z3jF0dw==
+  dependencies:
+    "@reactflow/core" "11.11.4"
+    classcat "^5.0.3"
+    zustand "^4.4.1"
+
+"@reactflow/core@11.11.4":
+  version "11.11.4"
+  resolved "https://registry.yarnpkg.com/@reactflow/core/-/core-11.11.4.tgz#89bd86d1862aa1416f3f49926cede7e8c2aab6a7"
+  integrity sha512-H4vODklsjAq3AMq6Np4LE12i1I4Ta9PrDHuBR9GmL8uzTt2l2jh4CiQbEMpvMDcp7xi4be0hgXj+Ysodde/i7Q==
+  dependencies:
+    "@types/d3" "^7.4.0"
+    "@types/d3-drag" "^3.0.1"
+    "@types/d3-selection" "^3.0.3"
+    "@types/d3-zoom" "^3.0.1"
+    classcat "^5.0.3"
+    d3-drag "^3.0.0"
+    d3-selection "^3.0.0"
+    d3-zoom "^3.0.0"
+    zustand "^4.4.1"
+
+"@reactflow/minimap@11.7.14":
+  version "11.7.14"
+  resolved "https://registry.yarnpkg.com/@reactflow/minimap/-/minimap-11.7.14.tgz#298d7a63cb1da06b2518c99744f716560c88ca73"
+  integrity sha512-mpwLKKrEAofgFJdkhwR5UQ1JYWlcAAL/ZU/bctBkuNTT1yqV+y0buoNVImsRehVYhJwffSWeSHaBR5/GJjlCSQ==
+  dependencies:
+    "@reactflow/core" "11.11.4"
+    "@types/d3-selection" "^3.0.3"
+    "@types/d3-zoom" "^3.0.1"
+    classcat "^5.0.3"
+    d3-selection "^3.0.0"
+    d3-zoom "^3.0.0"
+    zustand "^4.4.1"
+
+"@reactflow/node-resizer@2.2.14":
+  version "2.2.14"
+  resolved "https://registry.yarnpkg.com/@reactflow/node-resizer/-/node-resizer-2.2.14.tgz#1810c0ce51aeb936f179466a6660d1e02c7a77a8"
+  integrity sha512-fwqnks83jUlYr6OHcdFEedumWKChTHRGw/kbCxj0oqBd+ekfs+SIp4ddyNU0pdx96JIm5iNFS0oNrmEiJbbSaA==
+  dependencies:
+    "@reactflow/core" "11.11.4"
+    classcat "^5.0.4"
+    d3-drag "^3.0.0"
+    d3-selection "^3.0.0"
+    zustand "^4.4.1"
+
+"@reactflow/node-toolbar@1.3.14":
+  version "1.3.14"
+  resolved "https://registry.yarnpkg.com/@reactflow/node-toolbar/-/node-toolbar-1.3.14.tgz#c6ffc76f82acacdce654f2160dc9852162d6e7c9"
+  integrity sha512-rbynXQnH/xFNu4P9H+hVqlEUafDCkEoCy0Dg9mG22Sg+rY/0ck6KkrAQrYrTgXusd+cEJOMK0uOOFCK2/5rSGQ==
+  dependencies:
+    "@reactflow/core" "11.11.4"
+    classcat "^5.0.3"
+    zustand "^4.4.1"
+
 "@sec-ant/readable-stream@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@sec-ant/readable-stream/-/readable-stream-0.4.1.tgz#60de891bb126abfdc5410fdc6166aca065f10a0c"
@@ -5457,7 +5523,7 @@
   resolved "https://registry.npmjs.org/@types/d3-dispatch/-/d3-dispatch-3.0.6.tgz"
   integrity sha512-4fvZhzMeeuBJYZXRXrRIQnvUYfyXwYmLsdiN7XXmVNQKKw1cM8a5WdID0g1hVFZDqT9ZqZEY5pD44p24VS7iZQ==
 
-"@types/d3-drag@*":
+"@types/d3-drag@*", "@types/d3-drag@^3.0.1":
   version "3.0.7"
   resolved "https://registry.npmjs.org/@types/d3-drag/-/d3-drag-3.0.7.tgz"
   integrity sha512-HE3jVKlzU9AaMazNufooRJ5ZpWmLIoc90A37WU2JMmeq28w1FQqCZswHZ3xR+SuxYftzHq6WU6KJHvqxKzTxxQ==
@@ -5542,7 +5608,7 @@
   dependencies:
     "@types/d3-time" "*"
 
-"@types/d3-selection@*":
+"@types/d3-selection@*", "@types/d3-selection@^3.0.3":
   version "3.0.11"
   resolved "https://registry.npmjs.org/@types/d3-selection/-/d3-selection-3.0.11.tgz"
   integrity sha512-bhAXu23DJWsrI45xafYpkQ4NtcKMwWnAC/vKrd2l+nxMFuvOT3XMYTIj2opv8vq8AO5Yh7Qac/nSeP/3zjTK0w==
@@ -5576,7 +5642,7 @@
   dependencies:
     "@types/d3-selection" "*"
 
-"@types/d3-zoom@*":
+"@types/d3-zoom@*", "@types/d3-zoom@^3.0.1":
   version "3.0.8"
   resolved "https://registry.npmjs.org/@types/d3-zoom/-/d3-zoom-3.0.8.tgz"
   integrity sha512-iqMC4/YlFCSlO8+2Ii1GGGliCAY4XdeG748w5vQUbevlbDu0zSjH/+jojorQVBK/se0j6DUFNPBGSqD3YWYnDw==
@@ -5584,7 +5650,7 @@
     "@types/d3-interpolate" "*"
     "@types/d3-selection" "*"
 
-"@types/d3@^7.4.3":
+"@types/d3@^7.4.0", "@types/d3@^7.4.3":
   version "7.4.3"
   resolved "https://registry.yarnpkg.com/@types/d3/-/d3-7.4.3.tgz#d4550a85d08f4978faf0a4c36b848c61eaac07e2"
   integrity sha512-lZXZ9ckh5R8uiFVt8ogUNf+pIrK4EsWrx2Np75WvF/eTpJ0FMHNhjXk8CKEx/+gpHbNQyJWehbFaTvqmHWB3ww==
@@ -7057,6 +7123,11 @@ class-variance-authority@0.7.1:
   dependencies:
     clsx "^2.1.1"
 
+classcat@^5.0.3, classcat@^5.0.4:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/classcat/-/classcat-5.0.5.tgz#8c209f359a93ac302404a10161b501eba9c09c77"
+  integrity sha512-JhZUT7JFcQy/EzW605k/ktHtncoo9vnyW/2GspNYwFlN1C/WmjuV/xtS04e9SOkL2sTdw0VAZ2UGCcQ9lR6p6w==
+
 clean-css@^5.2.2, clean-css@^5.3.3, clean-css@~5.3.2:
   version "5.3.3"
   resolved "https://registry.npmjs.org/clean-css/-/clean-css-5.3.3.tgz"
@@ -7634,7 +7705,7 @@ d3-delaunay@6:
   resolved "https://registry.npmjs.org/d3-dispatch/-/d3-dispatch-3.0.1.tgz"
   integrity sha512-rzUyPU/S7rwUflMyLc1ETDeBj0NRuHKKAcvukozwhshr6g6c5d8zh4c2gQjY2bZ0dXeGLWc1PF174P2tVvKhfg==
 
-"d3-drag@2 - 3", d3-drag@3:
+"d3-drag@2 - 3", d3-drag@3, d3-drag@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/d3-drag/-/d3-drag-3.0.0.tgz"
   integrity sha512-pWbUJLdETVA8lQNJecMxoXfH6x+mO2UQo8rSmZ+QqxcbyA3hfeprFgIT//HW2nlHChWeIIMwS2Fq+gEARkhTkg==
@@ -7797,7 +7868,7 @@ d3-shape@^1.2.0:
     d3-interpolate "1 - 3"
     d3-timer "1 - 3"
 
-d3-zoom@3:
+d3-zoom@3, d3-zoom@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/d3-zoom/-/d3-zoom-3.0.0.tgz"
   integrity sha512-b8AmV3kfQaqWAuacbPuNbL6vahnOJflOhexLzMMNLga62+/nh0JzvJ0aO/5a5MVgUFGS7Hu1P9P03o3fJkDCyw==
@@ -8767,6 +8838,15 @@ fraction.js@^5.3.4:
   version "5.3.4"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-5.3.4.tgz#8c0fcc6a9908262df4ed197427bdeef563e0699a"
   integrity sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==
+
+framer-motion@^12.42.2:
+  version "12.42.2"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-12.42.2.tgz#8628ad31a9b5c1ea6f908ea1764784e33870b711"
+  integrity sha512-5XY9luDiu0oHfHBjpDthFMh0ES+122w6p/papSJBweMkO8Sn+PW2QaEgRblQBpWFnuvZS5qvarpt/hO2pjGmnw==
+  dependencies:
+    motion-dom "^12.42.2"
+    motion-utils "^12.39.0"
+    tslib "^2.4.0"
 
 fresh@~0.5.2:
   version "0.5.2"
@@ -11341,6 +11421,26 @@ mlly@^1.7.4, mlly@^1.8.0:
     pkg-types "^1.3.1"
     ufo "^1.6.3"
 
+motion-dom@^12.42.2:
+  version "12.42.2"
+  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-12.42.2.tgz#b4661b9b3394ae7e990d76dc954bc1e321c59305"
+  integrity sha512-5gIMWLp/PycBtJRJWRgjxke5n8dlvkSn2DrYW+tr3XcqAZY1xZh6BJyooJXCM8wdfM7wfMjkBJNLge1CKPUIRA==
+  dependencies:
+    motion-utils "^12.39.0"
+
+motion-utils@^12.39.0:
+  version "12.39.0"
+  resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-12.39.0.tgz#e1c66f0e912999804bc5e69b4630c3bc794ef29f"
+  integrity sha512-8nadJAJjTtqRkmRF36FoJTrywK9nnFmnPwnSMyxaOCU7GDjN9RTMJIxx9De8ErM+vpPhMccr/6fo5WciyQLnMQ==
+
+motion@^12.23.24:
+  version "12.42.2"
+  resolved "https://registry.yarnpkg.com/motion/-/motion-12.42.2.tgz#7a0954acb1975e1899ad65639a46fc12a3d24999"
+  integrity sha512-Atvv11yUKIid41cVrRBDVX5m8tF8kNpExRSlbpt6APClhDjtwQssgFHhQzejxw7/7YYbjHSPKBVbHo05BuJT5Q==
+  dependencies:
+    framer-motion "^12.42.2"
+    tslib "^2.4.0"
+
 mrmime@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/mrmime/-/mrmime-2.0.0.tgz"
@@ -12828,6 +12928,18 @@ react@^19.2.7:
   version "19.2.7"
   resolved "https://registry.yarnpkg.com/react/-/react-19.2.7.tgz#1f47a1bfc06f8ec885752c6f4af14369a9f8260b"
   integrity sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==
+
+reactflow@^11.11.4:
+  version "11.11.4"
+  resolved "https://registry.yarnpkg.com/reactflow/-/reactflow-11.11.4.tgz#e3593e313420542caed81aecbd73fb9bc6576653"
+  integrity sha512-70FOtJkUWH3BAOsN+LU9lCrKoKbtOPnz2uq0CV2PLdNSwxTXOhCbsZr50GmZ+Rtw3jx8Uv7/vBFtCGixLfd4Og==
+  dependencies:
+    "@reactflow/background" "11.3.14"
+    "@reactflow/controls" "11.2.14"
+    "@reactflow/core" "11.11.4"
+    "@reactflow/minimap" "11.7.14"
+    "@reactflow/node-resizer" "2.2.14"
+    "@reactflow/node-toolbar" "1.3.14"
 
 readable-stream@^2.0.1:
   version "2.3.8"
@@ -14440,6 +14552,11 @@ use-sidecar@^1.1.3:
     detect-node-es "^1.1.0"
     tslib "^2.0.0"
 
+use-sync-external-store@^1.2.2:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz#b174bfa65cb2b526732d9f2ac0a408027876f32d"
+  integrity sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==
+
 use-sync-external-store@^1.4.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz#55122e2a3edd2a6c106174c27485e0fd59bcfca0"
@@ -14788,6 +14905,13 @@ yocto-queue@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-1.0.0.tgz"
   integrity sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==
+
+zustand@^4.4.1:
+  version "4.5.7"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.5.7.tgz#7d6bb2026a142415dd8be8891d7870e6dbe65f55"
+  integrity sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==
+  dependencies:
+    use-sync-external-store "^1.2.2"
 
 zwitch@^2.0.0, zwitch@^2.0.4:
   version "2.0.4"
