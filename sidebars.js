@@ -240,11 +240,6 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
-                  label: `AEP fee calculation`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
                   label: `AEP reporting`,
                 },

@@ -261,7 +261,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees',
-    to: '/launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
+    to: 'https://docs.arbitrum.foundation/calculate-aep-fees',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees',
