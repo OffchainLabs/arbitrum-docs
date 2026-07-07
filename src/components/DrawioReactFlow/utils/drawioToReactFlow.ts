@@ -41,16 +41,16 @@ function parseStyleString(style: string): Record<string, string> {
 
 function stripHtml(html: string): string {
   if (!html) return '';
-  return html
+  const withBreaks = html
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/div>/gi, '\n')
-    .replace(/<div[^>]*>/gi, '\n')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, '&')
-    .replace(/\n{2,}/g, '\n')
-    .trim();
+    .replace(/<div[^>]*>/gi, '\n');
+  // Parse as inert HTML and read textContent: strips every tag (however nested or
+  // malformed) and decodes all entities, with no regex sanitization to get wrong.
+  // DOMParser does not execute scripts, and this module only runs client-side
+  // (the component is wrapped in BrowserOnly).
+  const text = new DOMParser().parseFromString(withBreaks, 'text/html').body.textContent ?? '';
+  return text.replace(/\n{2,}/g, '\n').trim();
 }
 
 function hasTopAlignedLabel(html: string): boolean {
