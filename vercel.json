@@ -333,7 +333,7 @@
     },
     {
       "source": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
-      "destination": "/launch-arbitrum-chain/chain-config/costs/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1384,7 +1384,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees/",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1414,7 +1414,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1604,7 +1604,7 @@
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1644,7 +1644,7 @@
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1779,7 +1779,7 @@
     },
     {
       "source": "/(launch-orbit-chain/how-tos/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
