@@ -169,7 +169,7 @@ For the strategy comparison table, wallet setup, and BoLD details, see [How to r
 
 ### Split validation
 
-Block validation — re-executing blocks against the chain's WASM machines — is the CPU-heavy part of validating. By default this work stays inside the node: with block validation on, the default `--node.block-validator.validation-server.url` value of `self-auth` starts an internal validation server reached over the node's own authenticated websocket loopback. Split validation moves that work to a separate machine running the `nitro-val` binary, while the wallet, the bond, and the record of validation progress all stay on the main node.
+Block validation — re-executing blocks against the chain's <a data-quicklook-from="wasm">WASM</a> machines — is the CPU-heavy part of validating. By default this work stays inside the node: with block validation on, the default `--node.block-validator.validation-server.url` value of `self-auth` starts an internal validation server reached over the node's own authenticated websocket loopback. Split validation moves that work to a separate machine running the `nitro-val` binary, while the wallet, the bond, and the record of validation progress all stay on the main node.
 
 On the validation server (`nitro-val` binary):
 
