@@ -1,10 +1,10 @@
 ---
 title: 'Batch poster recovery'
 sidebar_label: 'Batch poster recovery'
-description: 'Learn how the batch poster recovers and mechanisms for recovery.'
+description: 'Learn how the batch poster recovers state and the mechanisms that make recovery possible.'
 author: pete-vielhaber
 sme: Jason-W123
-user_story:
+user_story: As an Arbitrum chain operator, I want to understand how the batch poster recovers after a crash, restart, or bad state so I can restore reliable batch posting.
 content_type: reference
 ---
 
@@ -86,7 +86,7 @@ if b.config().Dangerous.AllowPostingFirstBatchWhenSequencerMessageCountMismatch 
 ```
 
 Setting `prevMessageCount = 0` tells the SequencerInbox to skip the equality check, so the
-first post goes through and re-aligns the on-chain count. It applies **only to the first
+first post goes through and re-aligns the onchain count. It applies **only to the first
 batch after startup** (`!b.postedFirstBatch`) — once posted, the mismatch resolves itself.
 
 ## Recovery mechanism 3: Redis failover (high availability)
@@ -107,7 +107,7 @@ So failover state-sharing rides on persistent, signed Redis storage plus L1-deri
 
 - **Parent-chain reorg, revert polling**: if the chain went backward (`nextRevertCheckBlock > blockNum`) it resets to re-check; the >100-block gap warning fast-forwards and skips.
 - **Mempool nonce-gap avoidance**: before sending a transaction of a different type than its predecessor (or whose predecessor isn't yet reorg-resistant), it checks the sender nonce one block back (latest − 1) and, if the nonce exceeds the reorg-resistant count, leaves the transaction queued—`"DataPoster is avoiding creating a mempool nonce gap"`—rather than risk a gap a reorg would expose.
-- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx).
+- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx)).
 
 ## Where state physically lives
 

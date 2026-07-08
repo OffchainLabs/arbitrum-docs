@@ -48,7 +48,7 @@ This error indicates that the parent chain node's mempool has rejected a transac
 ### What causes this error
 
 - **Too many pending transactions**: The batch poster has submitted multiple transactions that haven't yet been included in a block, and the parent chain node's mempool has reached its limit for pending transactions from a single account or overall.
-- **Gas price too low for inclusion**: If gas prices have risen since the transactions were submitted, older transactions may remain in the mempool and not be included. New submissions then push against the mempool’s size limits.
+- **Gas price too low for inclusion**: If gas prices have risen since the transactions were submitted, older transactions may remain in the mempool and not be included. New submissions then push against the mempool's size limits.
 - **RBF not escalating fast enough**: When using DB or Redis storage (which support RBF), the replacement fee schedule may not be aggressive enough to get transactions included during congestion, causing the mempool to fill with stale transactions.
 
 ### Resolution
@@ -59,11 +59,11 @@ This error indicates that the parent chain node's mempool has rejected a transac
 
 <VanillaAdmonition type="info" title="Mempool size limits">
 
-The exact mempool weight limits depend on the parent chain node’s configuration, not the batch poster itself. The batch poster does not control the parent chain node’s mempool size. If you are running your own parent chain node, consult its documentation for mempool configuration. If using a third-party RPC provider, the mempool limits are determined by the provider’s infrastructure.
+The exact mempool weight limits depend on the parent chain node's configuration, not the batch poster itself. The batch poster does not control the parent chain node's mempool size. If you are running your own parent chain node, consult its documentation for mempool configuration. If using a third-party RPC provider, the mempool limits are determined by the provider's infrastructure.
 
 </VanillaAdmonition>
 
-#### `ErrExceedsMaxMempoolSize`→ “error posting batch”
+#### `ErrExceedsMaxMempoolSize` → "error posting batch"
 
 - [DEBUG→WARN→ERROR over 5 min]—The next batch's nonce would exceed `unconfirmed nonce + max-mempool-transactions`, so it's held back.
 - [CAUSE]—L1 is confirming the poster's transactions slowly, and the in-flight window (default: 18) is filled.
@@ -91,7 +91,7 @@ The exact mempool weight limits depend on the parent chain node’s configuratio
 
 ## Batch posting backlog diagnosis
 
-A batch posting backlog occurs when the sequencer continues ordering transactions, but the batch poster can’t submit them to the parent chain at the same rate. This results in an accumulation of unposted messages.
+A batch posting backlog occurs when the sequencer continues ordering transactions, but the batch poster can't submit them to the parent chain at the same rate. This results in an accumulation of unposted messages.
 
 ### Common causes
 
@@ -111,7 +111,7 @@ A batch posting backlog occurs when the sequencer continues ordering transaction
 
 <VanillaAdmonition type="info" title="Backlog metrics">
 
-The specific log messages and metrics that indicate a backlog depend on the Nitro node version and configuration. Operators should familiarize themselves with their node’s log output during normal operation so that deviations are easier to spot. Key log prefixes to watch for include `BatchPoster:` and `DataPoster:` entries.
+The specific log messages and metrics that indicate a backlog depend on the Nitro node version and configuration. Operators should familiarize themselves with their node's log output during normal operation so that deviations are easier to spot. Key log prefixes to watch for include `BatchPoster:` and `DataPoster:` entries.
 
 </VanillaAdmonition>
 
@@ -143,10 +143,10 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 ### Resolution
 
-1. **Check if the original transaction was included**: Query the parent chain for the batch poster’s latest nonce and compare it to what the data poster expects. If the original transaction was already included, the retry error is benign—the data poster should recover automatically on the next cycle.
+1. **Check if the original transaction was included**: Query the parent chain for the batch poster's latest nonce and compare it to what the data poster expects. If the original transaction was already included, the retry error is benign—the data poster should recover automatically on the next cycle.
 2. **Review the queued transaction storage**: If using DB or Redis, the stored transaction state may be stale. A node restart typically resolves transient storage inconsistencies.
 3. **Check parent chain connectivity**: Ensure the batch poster can reliably reach the parent chain RPC. Intermittent connectivity causes retry failures.
-4. **Inspect RBF fee escalation**: If the error mentions “replacement transaction underpriced”, the fee increase between attempts may be insufficient. The parent chain typically requires at least a 10% fee increase for RBF. Review the `blob-tx-replacement-times` schedule—shorter intervals may not allow enough price movement between attempts.
+4. **Inspect RBF fee escalation**: If the error mentions "replacement transaction underpriced", the fee increase between attempts may be insufficient. The parent chain typically requires at least a 10% fee increase for RBF. Review the `blob-tx-replacement-times` schedule—shorter intervals may not allow enough price movement between attempts.
 
 ## Reverts and halting
 
@@ -245,9 +245,9 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 #### `error getting max time variation on L1 bound block; falling back on latest block`
 
-- [WARN]-The L1 node couldn't give state at the finalized bound block, so it falls back to the latest block — usually transient.
+- [WARN]—The L1 node couldn't give state at the finalized bound block, so it falls back to the latest block — usually transient.
 
-#### `unknown L1 block bound config value; falling back on using finalized`. The L1 node couldn't give state at the finalized bound block, so it falls back to the latest block — usually transient.
+#### `unknown L1 block bound config value; falling back on using finalized`
 
 - [ERROR]—Bound resolution issues; the latter means a bad `l1-block-bound` config value.
 - [ACTION]—Fix the config value for the `ERROR`.
