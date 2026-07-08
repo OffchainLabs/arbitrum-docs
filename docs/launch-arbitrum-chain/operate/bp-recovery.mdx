@@ -40,7 +40,7 @@ func (b *BatchPoster) getBatchPosterPosition(ctx context.Context, blockNum *big.
 ### How resume actually works on restart
 
 1. `FetchLast()` the data-poster queue. **If non-empty** (transactions survived restart), resume from `lastQueueItem.Nonce()+1` with its stored metadata—continues exactly where it left off, RBF-ing pending transactions.
-2. **If empty**, call `updateNonce` to sync nonce from L1, then fetch position metadata via `getBatchPosterPosition`. If `updateNonce` fails and the queue isn't persistent (or can't wait for finality), it **falls back to a recent block** (the `"failed to update nonce with queue empty; falling back to using a recent block"` warning)—safe precisely because nothing is queued.
+2. **If empty**, call `updateNonce` to sync the nonce from L1, then fetch position metadata via `getBatchPosterPosition`. If `updateNonce` fails, a non-persistent queue that's still waiting for L1 finality returns an error and retries next round; otherwise the poster reads the nonce from a recent block (the "failed to update nonce with queue empty; falling back to using a recent block" warning).
 
 In short: _queue intact → resume in-flight; queue gone → rebuild cleanly from L1_.
 
@@ -50,8 +50,7 @@ In short: _queue intact → resume in-flight; queue gone → rebuild cleanly fro
 | ---------------- | --------------------------------------------- | ---------------------------------------------------------------------------------- |
 | **dbstorage**    | Yes (consensus DB, `BatchPosterPrefix` table) | Queue rehydrated from keyed entries; `FetchContents`/`FetchLast` reload on startup |
 | **redisstorage** | Yes (shared)                                  | Sorted-set keyed by nonce; **HMAC-signed** entries; enables failover               |
-| **slice**        | No (in-memory)                                | Lost on restart; used when parent chain is Arbitrum (no mempool)                   |
-| **noop**         | No                                            | Stores nothing; post-and-forget                                                    |
+| **noop**         | No                                            | Stores nothing; post-and-forget; used when parent chain is Arbitrum (no mempool)|
 
 Notably, when the parent chain itself is an Arbitrum chain, the data poster **forces no-op storage**—there's no L1 mempool to RBF into, so there's nothing to persist or recover.
 
@@ -107,7 +106,7 @@ So failover state-sharing rides on persistent, signed Redis storage plus L1-deri
 ## Reorg handling
 
 - **Parent-chain reorg, revert polling**: if the chain went backward (`nextRevertCheckBlock > blockNum`) it resets to re-check; the >100-block gap warning fast-forwards and skips.
-- **Mempool nonce-gap avoidance**: before sending a transaction of a different type than its predecessor (or whose predecessor isn't yet reorg-resistant), it checks `NonceRbfSoftConfs` deep and, if the nonce exceeds the reorg-resistant count, leaves the transaction queued—`"DataPoster is avoiding creating a mempool nonce gap"`—rather than risk a gap a reorg would expose.
+- **Mempool nonce-gap avoidance**: before sending a transaction of a different type than its predecessor (or whose predecessor isn't yet reorg-resistant), it checks the sender nonce one block back (latest − 1) and, if the nonce exceeds the reorg-resistant count, leaves the transaction queued—`"DataPoster is avoiding creating a mempool nonce gap"`—rather than risk a gap a reorg would expose.
 - **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx).
 
 ## Where state physically lives
