@@ -124,5 +124,5 @@ The data-poster DB is a table within the consensus DB: `rawdb.NewTable(consensus
   only).
 - _Primary died, HA configured_ → automatic failover after `lockout-duration`; backup
   resumes from signed Redis state + L1 nonce.
-- _Lost data-poster DB entirely_ → no manual action needed; position rebuilds from L1 +
+- _Lost data-poster DB entirely_ → no manual action needed (just make sure there is no pending parent chain batch posting transaction); position rebuilds from L1 +
   inbox tracker, queue starts empty.
