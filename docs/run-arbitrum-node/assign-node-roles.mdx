@@ -57,7 +57,7 @@ Operationally, a full node needs a parent-chain connection but no funded wallet 
 
 <VanillaAdmonition type="info">
 
-`--node.staker.enable` defaults to `true`, so a default full node is technically a watchtower validator: it watches onchain assertions and logs when one disagrees with its locally computed state. With the default watchtower strategy it loads no wallet and posts no bond, so it takes no onchain action. This is why "converting to a validator" is mostly a matter of changing the strategy and providing a wallet and bond, rather than enabling a module. To silence the watchtower entirely, set `--node.staker.enable=false`.
+`--node.staker.enable` defaults to `true`, so a default full node is technically a <a data-quicklook-from="watchtower-validator">watchtower validator</a>: it watches onchain assertions and logs when one disagrees with its locally computed state. With the default watchtower strategy it loads no wallet and posts no bond, so it takes no onchain action. This is why "converting to a validator" is mostly a matter of changing the strategy and providing a wallet and bond, rather than enabling a module. To silence the watchtower entirely, set `--node.staker.enable=false`.
 
 </VanillaAdmonition>
 
