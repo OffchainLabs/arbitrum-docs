@@ -217,7 +217,7 @@ Converting a node from one role to another means changing its flags and restarti
 
 Some roles must not be duplicated for the same chain:
 
-- **Never run two sequencers for the same chain** unless they are in one coordinator (SQM) set. Two uncoordinated sequencers fork the feed and double-order transactions; only the ordering that reaches the parent-chain inbox survives, and nodes that followed the other ordering must reorg or halt.
+- **Never run two sequencers for the same chain** unless they are in one coordinator (SQM) set. Two uncoordinated sequencers fork the feed and double-order transactions; only the ordering that reaches the parent-chain inbox survives, and nodes that followed the other ordering must <a data-quicklook-from="reorg">reorg</a> or halt.
 - **Never run two batch posters for the same chain outside the Redis lock.** They race on nonces and batch positions, and the loser's parent-chain transaction reverts, burning gas. The node-side protections are the Redis lock and revert polling.
 - **Never run two active stakers with the same wallet.** There is no built-in staker leader election, so they conflict on nonces and stall each other.
 - **Safe to run many:** RPC nodes, archive nodes, feed relays, and validation servers. They share no protocol state and need no coordination.
