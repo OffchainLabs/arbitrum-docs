@@ -244,9 +244,9 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 - [ACTION]—Normal bounding behavior.
 
 #### `error getting max time variation on L1 bound block; falling back on latest block`
+The L1 node couldn't give state at the finalized bound block, so it falls back to the latest block — usually transient.
 
-
-#### `unknown L1 block bound config value; falling back on using finalized`. The L1 node couldn't give state at the finalized bound block, so it falls back to the latest block — usually transient.
+#### `unknown L1 block bound config value; falling back on using finalized`. 
 
 - [ERROR]—Bound resolution issues; the latter means a bad `l1-block-bound` config value.
 - [ACTION]—Fix the config value for the `ERROR`.
