@@ -2,10 +2,18 @@ import * as fs from 'fs/promises';
 import * as fsSync from 'fs';
 import * as path from 'path';
 import semver from 'semver';
-import * as github from '@actions/github';
-import * as core from '@actions/core';
 
 const DEPENDENCIES_FILE = 'dependencies.json';
+
+// Mirrors @actions/core's setOutput by appending to the GITHUB_OUTPUT file
+// (the current GitHub Actions mechanism). No-op outside Actions — e.g. local
+// runs, where GITHUB_OUTPUT is unset. Avoids depending on the ESM-only
+// @actions/core, which fails to load under tsx's CommonJS resolution.
+function setOutput(name: string, value: string): void {
+  const outputFile = process.env.GITHUB_OUTPUT;
+  if (!outputFile) return;
+  fsSync.appendFileSync(outputFile, `${name}=${value}\n`);
+}
 
 interface Project {
   id: string;
@@ -126,97 +134,22 @@ async function resolveTagCommitSha(
   }
 }
 
-function updateGlobalVarsDockerImage(dockerImage: string): void {
+// Syncs both Nitro values in globalVars.js from a release: the git tag
+// (nitroVersionTag, which drives the @@ doc references and the precompile source
+// links) and the node Docker image (latestNitroNodeImage, tag + short commit).
+function updateGlobalVarsNitro(version: string, shortSha: string): void {
   const filePath = path.join(process.cwd(), 'src/resources/globalVars.js');
-  const content = fsSync.readFileSync(filePath, 'utf-8');
-  const updated = content.replace(
-    /latestNitroNodeImage:\s*'[^']*'/,
-    `latestNitroNodeImage: '${dockerImage}'`,
-  );
-  if (updated !== content) {
-    fsSync.writeFileSync(filePath, updated, 'utf-8');
+  const before = fsSync.readFileSync(filePath, 'utf-8');
+  const dockerImage = `offchainlabs/nitro-node:${version}-${shortSha}`;
+
+  const after = before
+    .replace(/nitroVersionTag:\s*'[^']*'/, `nitroVersionTag: '${version}'`)
+    .replace(/latestNitroNodeImage:\s*'[^']*'/, `latestNitroNodeImage: '${dockerImage}'`);
+
+  if (after !== before) {
+    fsSync.writeFileSync(filePath, after, 'utf-8');
+    console.log(`✅ Updated nitroVersionTag to: ${version}`);
     console.log(`✅ Updated latestNitroNodeImage to: ${dockerImage}`);
-  }
-}
-
-async function createPullRequest(updatedProjects: Project[]) {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) {
-    throw new Error('GITHUB_TOKEN not found in environment');
-  }
-
-  const octokit = github.getOctokit(token);
-  const context = github.context;
-
-  // Create a new branch
-  const branchName = `docs/update-dependencies-${new Date().toISOString().split('T')[0]}`;
-
-  try {
-    // Get the current commit SHA
-    const { data: ref } = await octokit.rest.git.getRef({
-      ...context.repo,
-      ref: 'heads/master',
-    });
-
-    // Create a new branch
-    await octokit.rest.git.createRef({
-      ...context.repo,
-      ref: `refs/heads/${branchName}`,
-      sha: ref.object.sha,
-    });
-
-    // Update dependencies.json in the new branch
-    const { data: content } = await octokit.rest.repos.getContent({
-      ...context.repo,
-      path: DEPENDENCIES_FILE,
-    });
-
-    if (!('content' in content)) {
-      throw new Error('Could not get content of dependencies.json');
-    }
-
-    const currentContent = Buffer.from(content.content, 'base64').toString();
-    const currentConfig: DependenciesConfig = JSON.parse(currentContent);
-
-    // Update only the projects that have changed
-    updatedProjects.forEach((updatedProject) => {
-      const index = currentConfig.projects.findIndex((p) => p.id === updatedProject.id);
-      if (index !== -1) {
-        currentConfig.projects[index] = updatedProject;
-      }
-    });
-
-    // Create commit with updated dependencies.json
-    await octokit.rest.repos.createOrUpdateFileContents({
-      ...context.repo,
-      path: DEPENDENCIES_FILE,
-      message: 'chore: update dependencies.json with latest versions',
-      content: Buffer.from(JSON.stringify(currentConfig, null, 2)).toString('base64'),
-      branch: branchName,
-      sha: content.sha,
-    });
-
-    // Create pull request
-    const prBody = `This PR updates the following dependencies to their latest versions:\n\n${updatedProjects
-      .map((p) => `- ${p.name}: ${p.latestRelease} (released on ${p.latestReleaseDate})`)
-      .join('\n')}\n\nPlease review the changes and update the documentation accordingly.`;
-
-    const { data: pr } = await octokit.rest.pulls.create({
-      ...context.repo,
-      title: 'chore: update dependencies to latest versions',
-      head: branchName,
-      base: 'master',
-      body: prBody,
-    });
-
-    console.log(`Created PR #${pr.number}: ${pr.html_url}`);
-
-    // Set output for GitHub Actions
-    core.setOutput('pr_number', pr.number);
-    core.setOutput('pr_url', pr.html_url);
-  } catch (error) {
-    console.error('Error creating pull request:', error);
-    throw error;
   }
 }
 
@@ -293,8 +226,7 @@ async function main() {
             nitroUpdate.latestRelease,
           );
           if (shortSha) {
-            const dockerImage = `offchainlabs/nitro-node:${nitroUpdate.latestRelease}-${shortSha}`;
-            updateGlobalVarsDockerImage(dockerImage);
+            updateGlobalVarsNitro(nitroUpdate.latestRelease, shortSha);
           } else {
             console.warn('  ⚠️  Could not resolve tag SHA — globalVars.js not updated');
           }
@@ -302,11 +234,11 @@ async function main() {
       }
 
       // Set output to indicate updates were made
-      core.setOutput('updates_made', 'true');
-      core.setOutput('updated_projects', updatedProjects.map((p) => p.name).join(', '));
+      setOutput('updates_made', 'true');
+      setOutput('updated_projects', updatedProjects.map((p) => p.name).join(', '));
     } else {
       console.log('All dependencies are up to date.');
-      core.setOutput('updates_made', 'false');
+      setOutput('updates_made', 'false');
     }
   } catch (error) {
     console.error('Error:', error);

@@ -8,12 +8,12 @@ content_type: how-to
 
 The <a data-quicklook-from="smart-contract">smart contract</a> size limit must be set during the initial configuration and deployment of a custom chain (Layer 2 or Layer 3 Rollup). It is not possible to modify it post-deployment due to the lack of a versioning mechanism for such parameters.
 
-The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). Both are configurable up to 96KB (98,304 bytes), which is higher than the default 24KB (24,576 bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
+The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). `MaxCodeSize` is configurable up to 96KB (98,304 bytes) and `MaxInitCodeSize` is configurable up to 192KB (196,608 bytes), which is higher than the default 24.5KB (24,576 bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
 
 ## Key specifics
 
 - **Default values**: 24KB (24,576 bytes) for `MaxCodeSize` and `MaxInitCodeSize` is `2 * DefaultMaxCodeSize`.
-- **Maximum values**: 96KB (98,304 bytes) for each. Setting higher is not supported and may cause deployment failures or compatibility issues.
+- **Maximum values**: 96KB (98,304 bytes) for `MaxCodeSize`. 192KB (196,608 bytes) for `MaxInitCodeSize`. Setting higher is not supported and may cause deployment failures or compatibility issues.
 - **Where applicable**: Only in custom <a data-quicklook-from="arbitrum-chain">Arbitrum chains</a>. Public chains like <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or Nova remain fixed at 24KB without a network-wide upgrade.
 - **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded <a data-quicklook-from="wallet">wallet</a> on the <a data-quicklook-from="parent-chain">parent chain</a> (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
 
@@ -58,7 +58,7 @@ const orbitChainParams = {
   arbitrum: {
     // Arbitrum-specific extensions
     MaxCodeSize: 98304, // Set to 96KB (98,304 bytes) for deployed contract code size limit
-    MaxInitCodeSize: 98304, // Set to 96KB for init code size during contract deployment
+    MaxInitCodeSize: 196608, // Set to 192KB (196,608 bytes) for init code size during contract deployment
     // Note: Init code can often be set higher (e.g., 2x MaxCodeSize) if needed for complex constructors,
     // but stick to <= 96KB to avoid issues. Default is 24576 bytes (24KB) if omitted.
     // Warning: Higher values may increase state size and node resource demands.
@@ -95,7 +95,7 @@ const orbitChainParams = {
   chainId: 123456,
   arbitrum: {
     MaxCodeSize: 98304, // Increase to max 96KB for larger contracts
-    MaxInitCodeSize: 98304, // Matching increase for init code
+    MaxInitCodeSize: 196608, // Matching increase for init code
     // Additional params: e.g., InitialChainOwner: '0xYourAddress' for governance
   },
 };

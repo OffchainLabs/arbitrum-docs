@@ -29,6 +29,11 @@ const sidebars = {
           id: 'stylus/quickstart',
           label: 'Build apps with Stylus',
         },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/machine-payments-protocol',
+          label: 'Machine Payments Protocol (MPP)',
+        },
       ],
     },
     {
@@ -235,11 +240,6 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
-                  label: `AEP fee calculation`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
                   label: `AEP reporting`,
                 },
@@ -393,7 +393,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
+                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
                   label: 'Compliance filtering',
                 },
               ],
@@ -456,6 +456,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
               label: 'Infrastructure providers',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/exchange-integration-checklist',
+              label: 'Exchange integration checklist',
             },
           ],
         },
@@ -967,6 +972,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/bold/bold-technical-deep-dive',
               label: 'Technical deep dive',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
+              label: 'How BoLD bisection works',
             },
             {
               type: 'doc',
