@@ -191,7 +191,7 @@ export default function D3EdgeTree({
             .append('tspan')
             .attr('x', 0)
             .attr('dy', idx === 0 ? 0 : textLineHeight)
-            .attr('class', idx === 0 ? undefined : 'ecf-node-label')
+            .attr('class', idx === 0 ? null : 'ecf-node-label')
             .text(line);
         });
       });
