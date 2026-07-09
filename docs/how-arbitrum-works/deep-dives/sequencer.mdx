@@ -1,5 +1,5 @@
 ---
-title: The Sequencer and Censorship Resistance
+title: The Sequencer and censorship resistance
 description: 'Learn the fundamentals of the Arbitrum Sequencer.'
 author: pete-vielhaber
 sme: Mehdi
@@ -21,13 +21,13 @@ A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a b
 
 The Sequencer runs a tight loop that drains its queues and groups transactions into a block. It services three queues in priority order: auction-resolution transactions first, then a retry queue, then the regular queue—and, after the first transaction, keeps draining for a brief period (10ms by default) so multiple transactions land in a single block. Lightweight pre-checks happen here: per-transaction data-size limits, a base-fee check, and a nonce cache that parks too-high nonces and revives them once their predecessor succeeds. The loop also confirms that the parent-chain block number and timestamp are within an acceptable range before producing a block.
 
-#### 3. Handoff to ArbOS/STF.
+#### 3. Handoff to ArbOS and the STF.
 
 Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which in turn invokes ArbOS to produce the block.
 
 :::note Handoff: execution belongs to ArbOS and the STF
 
-Everything from this point of execution-iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the State Transition Function and ArbOS. The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
+Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the State Transition Function and ArbOS. The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
 
 :::
 
@@ -37,7 +37,7 @@ The produced block comes back to the Sequencer as a sequenced message. The Trans
 
 #### 5. Posting to the parent chain.
 
-Independent of the loop above, the BatchPoster reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive compression levels, and posts them to the SequencerInbox using either calldata or EIP-4844 blobs, as described in Submitting to the Sequencer Inbox contract. Once those batches are finalized on the parent chain, the transactions reach hard finality.
+Independent of the loop above, the BatchPoster reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive compression levels, and posts them to the SequencerInbox using either calldata or EIP-4844 blobs, as described in the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) documentation. Once those batches are finalized on the parent chain, the transactions reach hard finality.
 
 ## High availability: the Sequencer coordinator
 
@@ -49,32 +49,32 @@ Not every transaction originates with a direct RPC submission. Deposits and retr
 
 ## Timeboost express lane
 
-Timeboost layers a priority auction on top of the default first-come-first-served ordering. Time is divided into fixed rounds (at least 10 seconds), and an offchain auction assigns each round and express-lane controller. That controller’s transactions take a dedicated path: they are validated (correct sender, round , and chain ID), placed into a per-round ordering queue, and delivered in sequence with no advantage delay, while ordinary transactions wait out the 200ms delay before queuing. The fact that a transaction was timeboosted is preserved as block metadata, so it remains observable downstream.
+Timeboost layers a priority auction on top of the default first-come-first-served ordering. Time is divided into fixed rounds (at least 10 seconds), and an offchain auction assigns each round and express-lane controller. That controller’s transactions take a dedicated path: they are validated (correct sender, round, and chain ID), placed into a per-round ordering queue, and delivered in sequence with no advantage delay, while ordinary transactions wait out the 200ms delay before queuing. The fact that a transaction was timeboosted is preserved as block metadata, so it remains observable downstream.
 
-## Censorship timeout
+## Censorship Timeout
 
 As mentioned in the original Arbitrum BoLD forum post, the initial release of Arbitrum BoLD includes a feature called Censorship Timeout (formerly known as Delay Buffer).
 
-Censorship timeout aims to limit the negative effects of:
+Censorship Timeout aims to limit the negative effects of:
 
-- Prolonged sequencer censorship, and/or
-- Unexpected sequencer outages
+- Prolonged Sequencer censorship, or
+- Unexpected Sequencer outages
 
-## How the Censorship timeout works
+## How the Censorship Timeout works
 
-To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an L3’s parent chain sequencer (the L2 sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge would need to wait 24 hours before bypassing the L2 sequencer (using the SequencerInbox’s forceInclusion method). In this scenario, a challenge resolution would be delayed by a time t where t = (24 hours) \* number of moves for a challenge.
+To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an L3’s parent chain Sequencer (the L2 Sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge would need to wait 24 hours before bypassing the L2 Sequencer (using the SequencerInbox’s forceInclusion method). In this scenario, a challenge resolution would be delayed by a time t where t = (24 hours) \* number of moves for a challenge.
 
 The Censorship timeout feature mitigates this by lowering the force inclusion threshold when unexpected delays in message inclusion occur due to one (or all) of the above-mentioned cases of censorship or a sequencer outage, enabling entities to make moves without the 24-hour delay-per-move.
 
 The force inclusion window is the lesser of delayBuffer and delayBlocks, where delayBlocks is a constant currently set to 24 hours, and delayBuffer ranges from 30 minutes to 48 hours.
 
-The delayBuffer value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the delayBuffer is decremented by the difference between a delayed message’s delay beyond the threshold and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold` , the difference between the messages’ delay and the threshold is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+The delayBuffer value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the delayBuffer is decremented by the difference between a delayed message’s delay beyond the threshold and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the threshold is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
 
-The `delayBuffer` replenishes at a linear rate when the sequencer is operating correctly at a nominal rate of one minute for every 20 minutes in which no messages are delayed beyond the `threshold`.
+The `delayBuffer` replenishes at a linear rate when the Sequencer is operating correctly at a nominal rate of one minute for every 20 minutes in which no messages are delayed beyond the `threshold`.
 
 Below are the initial, proposed parameter values for the Censorship Timeout feature for Arbitrum One and Nova:
 
-- `delay buffer` = 14400 parent chain (Ethereum) blocks (2 days)
+- `delayBuffer` = 14400 parent chain (Ethereum) blocks (2 days)
 - `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 parent chain (Ethereum) blocks (one hour) for Arbitrum Nova
 - `replenish rate` = 5% (meaning one day is replenished every 20 days or roughly a 95% uptime)
 

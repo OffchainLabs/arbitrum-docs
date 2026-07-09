@@ -12,7 +12,7 @@ ArbOS is the child-EVM virtual machine monitor (VMM) for Arbitrum Nitro: a trust
 ## Core responsibilities
 
 1. **Network resource management**: Allocating and tracking the required resources to execute child-chain transactions and pricing them.
-2. **Block production**: Turning sequencer-delivered messages into child-chain blocks with correct state updates.
+2. **Block production**: Turning Sequencer-delivered messages into child-chain blocks with correct state updates.
 3. **Cross-chain messaging**: Enables cross-chain communication between parent and child chains for deposits, withdrawals, and retryable tickets.
 4. **Enhanced EVM execution**: Running instrumented Geth to execute smart contracts with child-chain specific logic.
 5. **Stylus support**: Managing host I/O, memory, and execution context for WASM-based contracts.
@@ -29,9 +29,9 @@ Rather than implementing the EVM, Arbitrum embeds it. The core of execution is _
 
 Sequencer inputs arrive as `L1IncomingMessage` objects. ArbOS turns each message into exactly one child-chain block—a bijective relationship:
 
-For every `L1IncomingMessage`, here is a child-chain block with a unique block hash, and for every child-chain block after chain initialization, there was an `L1IncomingMessage` that produced it.
+For every `L1IncomingMessage`, there is a child-chain block with a unique block hash, and for every child-chain block after chain initialization, there is an `L1IncomingMessage` that produced it.
 
-ProduceBlock consumes one message and emits one block. Each block always begins with an injected `ArbitrumInternalTx` “start block” transaction that stamps in the parent-chain block number, timestamp, and L1 base fee. Because every value the EVM can observe as “now” is frozen into that opening system transaction, two nodes replaying the same message cannot disagree about the result—determinism is structural, not bolted on. Additional system transactions (e.g., batch-posting reports) may also be included during processing.
+`ProduceBlock` consumes one message and emits one block. Each block always begins with an injected `ArbitrumInternalTx` “start block” transaction that stamps in the parent-chain block number, timestamp, and L1 base fee. Because every value the EVM can observe as “now” is frozen into that opening system transaction, two nodes replaying the same message cannot disagree about the result—determinism is structural, not bolted on. Additional system transactions (e.g., batch-posting reports) may also be included during processing.
 
 ## ArbOS state
 
@@ -39,12 +39,12 @@ ArbOS keeps its books in the same Geth state trie that holds account balances, u
 
 Most of this state is reachable from contracts through precompiles. Two components deserve special mention because they back headline features:
 
-- sendMerkle is the accumulator that records every L2 → L1 message; its root is what the parent-chain Outbox verifies against when a withdrawal is finalized.
-- programs hold Stylus activation state, which is why WASM contracts can be priced and executed deterministically.
+- `sendMerkle` is the accumulator that records every L2 → L1 message; its root is what the parent-chain Outbox verifies against when a withdrawal is finalized.
+- `programs` hold Stylus activation state, which is why WASM contracts can be priced and executed deterministically.
 
 ## Gas and fees
 
-An Arbitrum transaction has a cost structure on L1: the chain must be Ethereum to store its data and spend compute to execute it. ArbOS meters both, so every transaction quietly pays two parties:
+An Arbitrum transaction has a cost structure on L1: the chain must pay Ethereum to store its data and spend compute to execute it. ArbOS meters both, so every transaction pays two parties:
 
 - Child-chain execution is priced by `l2PricingState`, which runs a dynamic base-fee mechanism. A gas pool tracks demand across a time window, pushing that base fee up under load and down when idle, smoothing spikes while preserving capacity.
 - Parent-chain data is tracked by `l1PricingState`, which records what the batch poster spent posting compressed data to Ethereum and reimburses it from user fees.
@@ -63,7 +63,7 @@ This lets an EVM CALL reach native operating-system code without breaking the EV
 
 ## Retryables
 
-Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the retryables subspace. See the [parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) documentation for the full lifecycle.
+Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the `retryables` subspace. See the [parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) documentation for the full lifecycle.
 
 ## ArbOS versions and upgrades
 
