@@ -7,71 +7,75 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-ArbOS is the child-EVM virtual machine monitor (VMM—aka hypervisor) for the Arbitrum chain, providing the execution environment for the chain. It acts as a trusted “system glue” component within the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
+ArbOS is the child-EVM virtual machine monitor (VMM) for Arbitrum Nitro: a trusted system component that lives inside the State Transition Function (STF) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and fraud prover) can replay it deterministically.
 
-ArbOS is responsible for:
+## Core responsibilities
 
-## 1. Managing network resources
+1. **Network resource management**: Allocating and tracking the required resources to execute child-chain transactions and pricing them.
+2. **Block production**: Turning sequencer-delivered messages into child-chain blocks with correct state updates.
+3. **Cross-chain messaging**: Enables cross-chain communication between parent and child chains for deposits, withdrawals, and retryable tickets.
+4. **Enhanced EVM execution**: Running instrumented Geth to execute smart contracts with child-chain specific logic.
+5. **Stylus support**: Managing host I/O, memory, and execution context for WASM-based contracts.
 
-ArbOS allocates and tracks the resources needed to execute transactions on the child chain.
+## Architecture: the Geth "sandwich"
 
-## 2. Block production
+Rather than implementing the EVM, Arbitrum embeds it. The core of execution is _unmodified-in-spirit_, and still Geth—the same engine that defines the Ethereum standard. ArbOS wraps Geth on both sides, an arrangement we call the sandwich.
 
-ArbOS processes incoming [sequencer data batches](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting) to produce child chain blocks, ensuring the state is updated correctly.
+- **Top slice** (pre-processing): Before the EVM runs, ArbOS injects a system "start block" transaction, fixes the parent-chain context (block number, timestamp, basefee), prices incoming data, and applies any transaction filtering.
+- **Filling** (Geth core): Geth executes EVM transactions.
+- **Bottom slice** (post-processing): After the EVM runs, ArbOS settles fees, records cross-chain messages, and finalizes the block.
 
-## 3. Cross-chain messaging
+## Messages and blocks
 
-It facilitates communication between the parent and child chains, supporting features such as **ETH** and token [deposits](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) and [withdrawals](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx).
+Sequencer inputs arrive as `L1IncomingMessage` objects. ArbOS turns each message into exactly one child-chain block—a bijective relationship:
 
-## 4. Enhanced EVM execution
+For every `L1IncomingMessage`, here is a child-chain block with a unique block hash, and for every child-chain block after chain initialization, there was an `L1IncomingMessage` that produced it.
 
-ArbOS runs its instrumented Geth instance to execute smart contracts, incorporating additional logic specific to the child chain environment.
-
-## 5. Stylus-specific tasks in ArbOS
-
-ArbOS manages host I/O calls, memory operations, and execution context for Stylus transactions, ensuring efficient and deterministic processing with the WASM runtime.
-
-By offloading high-cost tasks from the parent chain, ArbOS enables them to be executed quickly and cost-effectively on the child chain. This design reduces computational and storage costs while offering significant flexibility, allowing child chain code to evolve or be customized more easily than in a parent-chain-enforced architecture.
-
-While Ethereum’s STF provides a secure, deterministic basis for state updates, Arbitrum’s Nitro stack builds on this foundation with key modifications—ranging from a dual-gas-account model to cross-chain messaging—optimizing performance and flexibility. These innovations are realized through minimal, yet strategic modifications to Geth that integrate with ArbOS, forming the “Geth sandwich.”
-
-With the introduction of Stylus, Arbitrum extends its execution model beyond the EVM, enabling high-performance WASM-based smart contracts. This integration introduces additional modifications to Geth, ensuring compatibility with Stylus transactions while preserving Ethereum-like execution guarantees. These changes include handling Stylus-specific transaction types and ensuring smooth interaction between the EVM and WASM environments.
-
-In the following section, we’ll dive deep into these modifications, exploring how Arbitrum Nitro leverages “Geth at the core” and ArbOS's custom enhancements to deliver an advanced, high-performance STF. Stylus-specific tasks within ArbOS are covered separately to highlight its role in managing execution, host I/O, and memory operations.
-
-## How precompiles work
-
-ArbOS implements precompiles using a Solidity interface paired with a Golang backend, connected through runtime reflection for type safety and ABI conformance. For full technical details of the precompile architecture, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#how-precompiles-work). For a complete list of precompiles, refer to the [precompile references](/build-decentralized-apps/precompiles/02-reference.mdx).
-
-## Messages
-
-An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) message. A message includes one or more user transactions, depending on load, and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, the relationship is still bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that made it. A sequencer batch may contain more than one `L1IncomingMessage`.
-
-## Retryables
-
-A retryable is a special message type for creating an atomic parent-to-child chain; for details, see [parent-to-child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+ProduceBlock consumes one message and emits one block. Each block always begins with an injected ArbitrumInternalTx “start block” transaction that stamps in the parent-chain block number, timestamp, and L1 base fee. Because every value the EVM can observe as “now” is frozen into that opening system transaction, two nodes replaying the same message cannot disagree about the result—determinism is structural, not bolted on. Additional system transactions (for example, batch-posting reports) may also be included during processing.
 
 ## ArbOS state
 
-ArbOS's state is managed through `ArbosState` objects that abstract over the underlying key-value storage. Most of this state supports [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). Key components include `blockhashes` (recent parent chain block hashes), `l1PricingState` (parent chain fee tracking and batch poster reimbursement), and `l2PricingState` (child chain gas pricing via dual gas pools).
+ArbOS keeps its books in the same Geth state trie that holds account balances, under a reserved system address. The ArbosState object is a typed overlay on that raw key-value store. It is partitioned into subspaces, each identified by a one-byte prefix, and a set of fixed-scalar slots (“offsets”) at the root.
 
-For the full technical details of ArbOS state, pricing internals, and the per-block gas limit mechanism, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#arbos-state). For parent chain pricing specifics, see [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
+Most of this state is reachable from contracts through precompiles. Two components deserve special mention because they back headline features:
+
+- sendMerkle is the accumulator that records every L2 → L1 message; its root is what the parent-chain Outbox verifies against when a withdrawal is finalized.
+- programs hold Stylus activation state, which is why WASM contracts can be priced and executed deterministically.
 
 ## Gas and fees
 
-ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple gas targets over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the batch poster (for parent chain data costs) and the network (for child chain execution).
+An Arbitrum transaction has a cost structure on L1: the chain must be Ethereum to store its data and spend compute to execute it. ArbOS meters both, so every transaction quietly pays two parties:
 
-#### Comprehensive explanation of gas pricing
+- Child-chain execution is priced by `l2PricingState`, which runs a dynamic base-fee mechanism. A gas pool tracks demand across a time window, pushing that base fee up under load and down when idle, smoothing spikes while preserving capacity.
+- Parent-chain data is tracked by `l1PricingState`, which records what the batch poster spent posting compressed data to Ethereum and reimburses it from user fees.
 
-- Child chain basefee calculation and gas targets
-- Parent chain calldata pricing and batch poster reimbursement
-- Fee estimation and collection mechanisms
-- The gas target's role in validator security
+Fees are routed to the configured network and infrastructure fee accounts.
 
-See [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx) for the complete breakdown, including detailed mathematical formulas and parent chain pricing internals.
+## Precompiles
+
+ArbOS exposes system functionality to contracts through precompiles—addresses that look like ordinary contracts to Solidity but are implemented in Go. The binding works through runtime reflection:
+
+- A Solidity interface defines the ABI.
+- A Go backend implements the methods.
+- At startup, ArbOS uses reflection to verify that the Go implementation matches the generated ABI exactly and to route incoming calls to the right method.
+
+This lets an EVM CALL reach native operating-system code without breaking the EVM’s type and ABI guarantees. Some precompiles (or specific methods) are gated to a minimum ArbOS version.
+
+## Retryables
+
+Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the retryables subspace. See the [parent-to-child messaging](/how-arbitrum-works/l1-to-l2-messaging) documentation for the full lifecycle.
+
+## ArbOS versions and upgrades
+
+Because the STF must stay deterministic across every node and across every historical replay, ArbOS cannot change behavior simply by shipping a new binary—old blocks must still reproduce exactly. Upgrades are therefore scheduled onchain events.
+
+- ArbOS stores its current version, the upgradeVersion it plans to move to, and the upgradeTimestamp at which to switch (offsets 0-2 of state).
+- At the appointed time, the storage format and execution semantics roll forward identically across all nodes.
+
+This is how the chain has evolved over time—for example, Stylus activated at ArbOS version 30—without ever replacing the operating system out from under its own history. Each version bump is gated behind a named constant in the chain parameters, so behavioral changes are tied to a specific, agreed-upon version rather than wall-clock client releases.
 
 ## Stylus-specific differences
 
-[<a data-quicklook-from="stylus">Stylus</a>](/stylus/gentle-introduction.mdx) extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on Ink units, with LRU caching to minimize execution overhead.
+Stylus extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on Ink units, with LRU caching to minimize execution overhead.
 
 For the full technical details of Stylus execution flow, caching, gas pricing, and Go-WASI integration, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#stylus-specific-differences).
