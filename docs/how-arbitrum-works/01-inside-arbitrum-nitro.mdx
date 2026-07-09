@@ -72,7 +72,7 @@ Let's [follow a user's transaction](/how-arbitrum-works/deep-dives/transaction-l
 
 First, the user creates a transaction, signs it with their <a data-quicklook-from="wallet">wallet</a>, and sends it to the Nitro chain's [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx). The Sequencer's job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
 
-Once the transactions are sequenced, they are run through the [_state transition function_](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx), one by one. The state transition function (STF) takes as input the current state of the chain (account balances, contract code, and so on) along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
+Once the transactions are sequenced, they are run through the [_state transition function_](/how-arbitrum-works/deep-dives/stf.mdx), one by one. The state transition function (STF) takes as input the current state of the chain (account balances, contract code, and so on) along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
 
 Because the protocol doesn't trust the <a data-quicklook-from="sequencer">Sequencer</a> not to put garbage into its sequence, the STF will detect and discard invalid (e.g., improperly formed) transactions from the sequence. A well-behaved Sequencer will filter out invalid transactions so the STF never sees them—and this reduces cost and therefore keeps transaction fees low—but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the feed are signed by their senders, so the Sequencer can't create forged transactions.)
 
@@ -556,7 +556,7 @@ In this overview, you've learned about the complete transaction journey through 
 - [Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx): Detailed transaction lifecycle from submission to finality
 - [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx): How the Sequencer orders, batches, and posts transactions
 - [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx): Gas pricing, fee calculations, and adaptive pricing algorithm
-- [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx): Foundational concepts of the STF
+- [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/stf.mdx): Foundational concepts of the STF
 - [Geth](/how-arbitrum-works/reference/geth.mdx): Geth core and EVM compatibility
 - [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx): Arbitrum Operating System features and capabilities
 - [State Transition Function inputs](/how-arbitrum-works/reference/stf-inputs.mdx): Message types and STF processing mechanics

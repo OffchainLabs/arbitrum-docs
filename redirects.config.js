@@ -10,5 +10,9 @@
  */
 export const redirects = [
   // AUTO-GENERATED REDIRECTS START
+  {
+    from: '/how-arbitrum-works/deep-dives/stf-gentle-intro',
+    to: '/how-arbitrum-works/deep-dives/stf',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
