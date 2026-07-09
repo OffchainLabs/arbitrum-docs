@@ -2978,6 +2978,21 @@
       "permanent": false
     },
     {
+      "source": "/(launch-arbitrum-chain/features/common/configure-aep/configure-aep/fees/?)",
+      "destination": "/https://docs.arbitrum.foundation/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/configure-aep/configure-aep/fees/?)",
+      "destination": "/https://docs.arbitrum.foundation/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/chain-config/costs/calculate-aep-fees/?)",
+      "destination": "/https://docs.arbitrum.foundation/calculate-aep-fees",
+      "permanent": false
+    },
+    {
       "source": "/(build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway/?)",
       "destination": "/build-decentralized-apps/bridging/configure-token-gateway/custom",
       "permanent": false
