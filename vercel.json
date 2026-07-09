@@ -1424,7 +1424,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/set-up-aep-fee-router/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/aep-router-contracts",
       "permanent": false
     },
     {
