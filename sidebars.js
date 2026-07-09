@@ -1038,6 +1038,16 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              label: 'Sequencer',
+              id: 'how-arbitrum-works/deep-dives/sequencer',
+            },
+            {
+              type: 'doc',
+              label: 'Batch poster',
+              id: 'how-arbitrum-works/deep-dives/batchposter',
+            },
+            {
+              type: 'doc',
               label: 'AnyTrust',
               id: 'how-arbitrum-works/deep-dives/anytrust-protocol',
             },
@@ -1082,11 +1092,6 @@ const sidebars = {
           type: 'category',
           label: 'Reference',
           items: [
-            {
-              type: 'doc',
-              label: 'Sequencer',
-              id: 'how-arbitrum-works/deep-dives/sequencer',
-            },
             {
               type: 'doc',
               label: 'Geth',

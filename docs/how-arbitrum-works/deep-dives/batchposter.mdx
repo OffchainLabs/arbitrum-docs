@@ -11,6 +11,8 @@ Batch posting is a fundamental process for the Sequencer's operation in Arbitrum
 
 ## How it works
 
+<ImageZoom src="/img/batchposter-path.png" alt="Batch poster path" className="img-600px" />
+
 #### 1. Messages arrive (upstream handoff)
 
 A transaction’s journey into the batch poster begins after it’s already been sequenced. The poster pulls ordered L2 messages from the TransactionStreamer—that’s a handoff into the batch poster; sequencing, execution, and soft-finality all happened before this point and live outside of the batch poster.
