@@ -1,21 +1,39 @@
 ---
-title: 'A gentle introduction'
-description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
+title: 'State Transition Function'
+description: 'Learn the fundamentals of the State Transition Function within Arbitrum Nitro.'
 author: petevielhaber
 sme: Mehdi
-user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's design.
 content_type: gentle-introduction
 ---
 
-The <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) determines how <a data-quicklook-from="blockchain">blockchain</a> systems change state during transaction processing. The STF takes the current blockchain state (account balances, <a data-quicklook-from="smart-contract">smart contract</a> data, and ledger information) and an input (a <a data-quicklook-from="transaction">transaction</a> or a block) to compute the new state deterministically. This deterministic property ensures all network nodes reach the same result, maintaining consensus.
+An Arbitrum node is a deterministic machine: feed it the same ordered inputs, and it will always produce the same outputs. The job of everything before the STF is to agree on exactly which inputs those are and in what order they should be.
 
-With <a data-quicklook-from="arbitrum">Arbitrum</a>, the STF plays an even more pivotal role. Arbitrum executes transactions offchain in batches, periodically submitting summaries to the <a data-quicklook-from="parent-chain">parent chain</a>. This approach leverages offchain computation to achieve higher throughput and lower gas costs while maintaining Ethereum’s security.
+## How it works
 
-To safeguard against incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism called fraud proofs. If a dispute arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of offchain computations and ensure that errors or fraudulent behavior are detected and corrected. For how disputes are resolved in practice, see [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx) and the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx).
+#### 1. Two doors, one source of truth
 
-The [<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx) stack's STF mirrors Ethereum's STF with key modifications for <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> requirements. The function processes ordered transactions and outputs the updated state from the transaction <a data-quicklook-from="batch">batch</a>.
+Inputs reach a node through two doors. The fast door is the Sequencer feed—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the Sequencer periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the parent chain is the canonical record (Ethereum for Arbitrum), and a node will reorg its optimistic feed-derived state to match what was actually settled on Ethereum.
 
-[<a data-quicklook-from="stylus">Stylus</a>](/stylus/gentle-introduction.mdx) expands Arbitrum’s execution model beyond the Ethereum Virtual Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)—based execution, allowing high-performance contracts in Rust, C, and C++ to run alongside traditional EVM contracts (Solidity). This integration of Stylus introduces several modifications to the STF, including:
+#### 2. The envelope (`L1IncomingMessage`)
+
+Whatever the door, every input lands as one `L1IncomingMessage`: a header plus an opaque L2msg payload. The header is the input surface the STF reads—what kind of message, who put it there, `BlockNumber` and `Timestamp`, the ordering/identity handle, and `L1BaseFee` (parent-chain gas price used). Determinism comes from this: the STF never asks the outside world for the time or the gas price—it only reads what is in the header.
+
+#### 3. One byte decides the path
+
+The header’s `Kind` routes the message. A handful of kinds are system messages minted by the protocol: `Initialize` (the genesis message that sets the chain ID and base fee), `EthDeposit` (native-token bridging), `SubmitRetryable` (the retryable-ticket mechanism behind robust L1→L2 messaging), and `BatchPostingReport` (which lets the STF charge the batch poster for the L1 data it consumes). The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity.
+
+#### 4. The envelope inside the envelope
+
+Open an `L2Message`, and you’ll find a second type byte—the `L2MessageKind`. A single signed transaction (`SignedTx`), an unsigned EOA or contract call (`UnsignedUserTx`, `ContractTx`), or—most importantly—a Batch, which is simply a list of more L2 messages. This nesting is why the type space looks deceptively flat in summaries but is really two layers: an outer parent-chain framing and an inner transaction framing.
+
+#### 5. From batch to messages
+
+A batch posted to L1 isn’t a list of transactions; it’s a Brotli-compressed blob, or calldata. The inbox multiplexer inspects the leading header byte, decompresses, and pops out individual `L1IncomingMessage`s one at a time—the same shape the feed delivers. By the time anything reaches the STF, both doors have converged on the identical stream of envelopes.
+
+#### 6. The unwrap
+
+Finally, `ParseL2Transactions` turns each envelope into the EVM transactions Geth will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions—and that ordered list, derived deterministically from headers no node can fabricate, is the true input to Arbitrum’s State Transition Function.
 
 ## Stylus-specific transaction processing
 
