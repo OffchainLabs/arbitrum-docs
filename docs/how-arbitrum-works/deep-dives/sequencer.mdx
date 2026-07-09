@@ -13,15 +13,15 @@ The Sequencer’s job is to receive, admit, and order transactions and then publ
 
 <ImageZoom src="/img/sequencer-path.png" alt="Sequencer path" className="img-600px" />
 
-#### 1. Receipt and admission.
+#### 1. Receipt and admission
 
 A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a block, it passes a series of admission checks: if this node is not the active Sequencer, the transaction is forwarded to the active one; optional sender allowlists and parent-chain fee-surplus thresholds can reject it; and internal Arbitrum transaction types and blob transactions are filtered out. When Timeboost is active, and the current round has an express-lane controller, ordinary transactions are held back by a small advantage delay (200ms by default) so that express-lane transactions can go first. Admitted transactions are placed into a bounded queue.
 
-#### 2. Block creation loop.
+#### 2. Block creation loop
 
 The Sequencer runs a tight loop that drains its queues and groups transactions into a block. It services three queues in priority order: auction-resolution transactions first, then a retry queue, then the regular queue—and, after the first transaction, keeps draining for a brief period (10ms by default) so multiple transactions land in a single block. Lightweight pre-checks happen here: per-transaction data-size limits, a base-fee check, and a nonce cache that parks too-high nonces and revives them once their predecessor succeeds. The loop also confirms that the parent-chain block number and timestamp are within an acceptable range before producing a block.
 
-#### 3. Handoff to ArbOS and the STF.
+#### 3. Handoff to ArbOS and the STF
 
 Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which in turn invokes ArbOS to produce the block.
 
@@ -31,11 +31,11 @@ Everything from this point of execution—iterating the ordered transactions, ap
 
 :::
 
-#### 4. Persistence and broadcast.
+#### 4. Persistence and broadcast
 
 The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the real-time feed. This is the moment users get soft finality: a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
 
-#### 5. Posting to the parent chain.
+#### 5. Posting to the parent chain
 
 Independent of the loop above, the BatchPoster reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive compression levels, and posts them to the SequencerInbox using either calldata or EIP-4844 blobs, as described in the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) documentation. Once those batches are finalized on the parent chain, the transactions reach hard finality.
 
