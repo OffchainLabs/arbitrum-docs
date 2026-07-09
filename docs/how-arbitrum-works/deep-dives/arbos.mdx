@@ -31,11 +31,11 @@ Sequencer inputs arrive as `L1IncomingMessage` objects. ArbOS turns each message
 
 For every `L1IncomingMessage`, here is a child-chain block with a unique block hash, and for every child-chain block after chain initialization, there was an `L1IncomingMessage` that produced it.
 
-ProduceBlock consumes one message and emits one block. Each block always begins with an injected ArbitrumInternalTx “start block” transaction that stamps in the parent-chain block number, timestamp, and L1 base fee. Because every value the EVM can observe as “now” is frozen into that opening system transaction, two nodes replaying the same message cannot disagree about the result—determinism is structural, not bolted on. Additional system transactions (for example, batch-posting reports) may also be included during processing.
+ProduceBlock consumes one message and emits one block. Each block always begins with an injected `ArbitrumInternalTx` “start block” transaction that stamps in the parent-chain block number, timestamp, and L1 base fee. Because every value the EVM can observe as “now” is frozen into that opening system transaction, two nodes replaying the same message cannot disagree about the result—determinism is structural, not bolted on. Additional system transactions (e.g., batch-posting reports) may also be included during processing.
 
 ## ArbOS state
 
-ArbOS keeps its books in the same Geth state trie that holds account balances, under a reserved system address. The ArbosState object is a typed overlay on that raw key-value store. It is partitioned into subspaces, each identified by a one-byte prefix, and a set of fixed-scalar slots (“offsets”) at the root.
+ArbOS keeps its books in the same Geth state trie that holds account balances, under a reserved system address. The `ArbosState` object is a typed overlay on that raw key-value store. It is partitioned into subspaces, each identified by a one-byte prefix, and a set of fixed-scalar slots (“offsets”) at the root.
 
 Most of this state is reachable from contracts through precompiles. Two components deserve special mention because they back headline features:
 
@@ -63,7 +63,7 @@ This lets an EVM CALL reach native operating-system code without breaking the EV
 
 ## Retryables
 
-Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the retryables subspace. See the [parent-to-child messaging](/how-arbitrum-works/l1-to-l2-messaging) documentation for the full lifecycle.
+Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the retryables subspace. See the [parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) documentation for the full lifecycle.
 
 ## ArbOS versions and upgrades
 
