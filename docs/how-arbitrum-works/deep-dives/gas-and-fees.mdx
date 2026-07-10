@@ -30,7 +30,7 @@ There are two main challenges in accurately pricing parent chain resources:
 
 #### 1. Apportioning batch costs among transactions
 
-- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm ([Brotli](/how-arbitrum-works/deep-dives/sequencer.mdx#compression)). The effectiveness of compression depends on shared patterns among transactions in a batch.
+- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm ([Brotli](/how-arbitrum-works/deep-dives/batchposter.mdx#3-messages-become-a-compressed-batch)). The effectiveness of compression depends on shared patterns among transactions in a batch.
 - **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the batch's overall compressibility.
 - **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
 
@@ -149,7 +149,7 @@ When the Sequencer posts a batch to the parent chain inbox:
 
 #### Compression levels
 
-For an operational overview of how the Sequencer applies these levels, see [Compression](/how-arbitrum-works/deep-dives/sequencer.mdx#compression). Dynamic adjustments of compression levels are based on backlog size ($B$):
+For an operational overview of how the Sequencer applies these levels, see [Compression](/how-arbitrum-works/deep-dives/batchposter.mdx#3-messages-become-a-compressed-batch). Dynamic adjustments of compression levels are based on backlog size ($B$):
 
 - **Compression level ($CL$)** (where $UC$ is the user-configured compression level):
 
