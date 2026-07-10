@@ -7,7 +7,7 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-The Sequencer’s job is to receive, admit, and order transactions and then publish and post the resulting blocks. The moment ordered transactions are handed to the execution engine, responsibility shifts to the State Transition Function (STF) and ArbOS, where transactions are executed against the chain state, gas is metered, and the new state root is computed. Throughout this section, we flag those handoff points and point to the relevant pages rather than duplicating them.
+The Sequencer’s job is to receive, admit, and order transactions and then publish and post the resulting blocks. The moment ordered transactions are handed to the execution engine, responsibility shifts to the <a data-quicklook-from="state-transition-function">State Transition Function (STF)</a> and <a data-quicklook-from="arbos">ArbOS</a>, where transactions are executed against the chain state, gas is metered, and the new state root is computed. Throughout this section, we flag those handoff points and point to the relevant pages rather than duplicating them.
 
 ## A transaction’s path through the Sequencer
 
@@ -15,7 +15,7 @@ The Sequencer’s job is to receive, admit, and order transactions and then publ
 
 #### 1. Receipt and admission
 
-A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a block, it passes a series of admission checks: if this node is not the active Sequencer, the transaction is forwarded to the active one; optional sender allowlists and parent-chain fee-surplus thresholds can reject it; and internal Arbitrum transaction types and blob transactions are filtered out. When Timeboost is active, and the current round has an express-lane controller, ordinary transactions are held back by a small advantage delay (200ms by default) so that express-lane transactions can go first. Admitted transactions are placed into a bounded queue.
+A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a block, it passes a series of admission checks: if this node is not the active Sequencer, the transaction is forwarded to the active one; optional sender allowlists and parent-chain fee-surplus thresholds can reject it; and internal Arbitrum transaction types and blob transactions are filtered out. When <a data-quicklook-from="timeboost">Timeboost</a> is active, and the current round has an <a data-quicklook-from="express-lane-controller">express-lane controller</a>, ordinary transactions are held back by a small advantage delay (200ms by default) so that express-lane transactions can go first. Admitted transactions are placed into a bounded queue.
 
 #### 2. Block creation loop
 
@@ -27,17 +27,17 @@ Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which
 
 :::note Handoff: execution belongs to ArbOS and the STF
 
-Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the State Transition Function and ArbOS. The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
+Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/how-arbitrum-works/deep-dives/stf.mdx) and [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
 
 :::
 
 #### 4. Persistence and broadcast
 
-The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the real-time feed. This is the moment users get soft finality: a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
+The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the real-time feed. This is the moment users get [soft finality](/how-arbitrum-works/deep-dives/finality.mdx): a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
 
 #### 5. Posting to the parent chain
 
-Independent of the loop above, the BatchPoster reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive compression levels, and posts them to the SequencerInbox using either calldata or EIP-4844 blobs, as described in the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) documentation. Once those batches are finalized on the parent chain, the transactions reach hard finality.
+Independent of the loop above, the BatchPoster reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive compression levels, and posts them to the SequencerInbox using either calldata or EIP-4844 blobs, as described in the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) documentation. Once those batches are finalized on the parent chain, the transactions reach [hard finality](/how-arbitrum-works/deep-dives/finality.mdx).
 
 ## High availability: the Sequencer coordinator
 
@@ -45,7 +45,7 @@ In production, several Sequencer nodes run under a single logical Sequencer, wit
 
 ## Delayed messages from the parent chain
 
-Not every transaction originates with a direct RPC submission. Deposits and retryable tickets enter through the parent chain’s delayed inbox. The DelayedSequencer watches for these messages to finalize on the parent chain, then sequences them into the child chain so they appear in the ordering and on the feed alongside ordinary transactions. As with execution generally, the act of applying a delayed message is ArbOS/STF territory; the DelayedSequencer’s role is to decide when it enters the order.
+Not every transaction originates with a direct RPC submission. Deposits and <a data-quicklook-from="retryable-ticket">retryable tickets</a> enter through the parent chain’s <a data-quicklook-from="delayed-inbox">delayed inbox</a>. The DelayedSequencer watches for these messages to finalize on the parent chain, then sequences them into the child chain so they appear in the ordering and on the feed alongside ordinary transactions. As with execution generally, the act of applying a delayed message is ArbOS/STF territory; the DelayedSequencer’s role is to decide when it enters the order.
 
 ## Timeboost express lane
 
@@ -53,7 +53,7 @@ Timeboost layers a priority auction on top of the default first-come-first-serve
 
 ## Censorship Timeout
 
-As mentioned in the original Arbitrum BoLD forum post, the initial release of Arbitrum BoLD includes a feature called Censorship Timeout (formerly known as Delay Buffer).
+As mentioned in the original Arbitrum <a data-quicklook-from="bold">BoLD</a> forum post, the initial release of Arbitrum BoLD includes a feature called Censorship Timeout (formerly known as Delay Buffer).
 
 Censorship Timeout aims to limit the negative effects of:
 

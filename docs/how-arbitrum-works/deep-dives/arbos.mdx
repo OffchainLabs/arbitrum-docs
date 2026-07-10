@@ -7,19 +7,19 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-ArbOS is the child-EVM virtual machine monitor (VMM) for Arbitrum Nitro: a trusted system component that lives inside the State Transition Function (STF) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and fraud prover) can replay it deterministically.
+ArbOS is the child-EVM virtual machine monitor (VMM) for Arbitrum Nitro: a trusted system component that lives inside the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/stf.mdx) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and fraud prover) can replay it deterministically.
 
 ## Core responsibilities
 
 1. **Network resource management**: Allocating and tracking the required resources to execute child-chain transactions and pricing them.
-2. **Block production**: Turning Sequencer-delivered messages into child-chain blocks with correct state updates.
-3. **Cross-chain messaging**: Enables cross-chain communication between parent and child chains for deposits, withdrawals, and retryable tickets.
+2. **Block production**: Turning [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx)-delivered messages into child-chain blocks with correct state updates.
+3. **Cross-chain messaging**: Enables cross-chain communication between parent and child chains for deposits, withdrawals, and <a data-quicklook-from="retryable-ticket">retryable tickets</a>.
 4. **Enhanced EVM execution**: Running instrumented Geth to execute smart contracts with child-chain specific logic.
-5. **Stylus support**: Managing host I/O, memory, and execution context for WASM-based contracts.
+5. **<a data-quicklook-from="stylus">Stylus</a> support**: Managing host I/O, memory, and execution context for <a data-quicklook-from="wasm">WASM</a>-based contracts.
 
 ## Architecture: the Geth "sandwich"
 
-Rather than implementing the EVM, Arbitrum embeds it. The core of execution is _unmodified-in-spirit_, and still Geth—the same engine that defines the Ethereum standard. ArbOS wraps Geth on both sides, an arrangement we call the sandwich.
+Rather than implementing the EVM, Arbitrum embeds it. The core of execution is _unmodified-in-spirit_, and still <a data-quicklook-from="geth">Geth</a>—the same engine that defines the Ethereum standard. ArbOS wraps Geth on both sides, an arrangement we call the sandwich.
 
 - **Top slice** (pre-processing): Before the EVM runs, ArbOS injects a system "start block" transaction, fixes the parent-chain context (block number, timestamp, basefee), prices incoming data, and applies any transaction filtering.
 - **Filling** (Geth core): Geth executes EVM transactions.
@@ -37,7 +37,7 @@ For every `L1IncomingMessage`, there is a child-chain block with a unique block 
 
 ArbOS keeps its books in the same Geth state trie that holds account balances, under a reserved system address. The `ArbosState` object is a typed overlay on that raw key-value store. It is partitioned into subspaces, each identified by a one-byte prefix, and a set of fixed-scalar slots (“offsets”) at the root.
 
-Most of this state is reachable from contracts through precompiles. Two components deserve special mention because they back headline features:
+Most of this state is reachable from contracts through <a data-quicklook-from="precompile">precompiles</a>. Two components deserve special mention because they back headline features:
 
 - `sendMerkle` is the accumulator that records every L2 → L1 message; its root is what the parent-chain Outbox verifies against when a withdrawal is finalized.
 - `programs` hold Stylus activation state, which is why WASM contracts can be priced and executed deterministically.
@@ -47,7 +47,7 @@ Most of this state is reachable from contracts through precompiles. Two componen
 An Arbitrum transaction has a cost structure on L1: the chain must pay Ethereum to store its data and spend compute to execute it. ArbOS meters both, so every transaction pays two parties:
 
 - Child-chain execution is priced by `l2PricingState`, which runs a dynamic base-fee mechanism. A gas pool tracks demand across a time window, pushing that base fee up under load and down when idle, smoothing spikes while preserving capacity.
-- Parent-chain data is tracked by `l1PricingState`, which records what the batch poster spent posting compressed data to Ethereum and reimburses it from user fees.
+- Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) spent posting compressed data to Ethereum and reimburses it from user fees.
 
 Fees are routed to the configured network and infrastructure fee accounts.
 
@@ -76,6 +76,6 @@ This is how the chain has evolved over time—for example, Stylus activated at A
 
 ## Stylus-specific differences
 
-Stylus extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on Ink units, with LRU caching to minimize execution overhead.
+Stylus extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on <a data-quicklook-from="ink">Ink</a> units, with LRU caching to minimize execution overhead.
 
 For the full technical details of Stylus execution flow, caching, gas pricing, and Go-WASI integration, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#stylus-specific-differences).

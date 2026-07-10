@@ -7,18 +7,18 @@ user_story: As a current or prospective Arbitrum user, I want to learn more abou
 content_type: concept
 ---
 
-Finality in blockchain systems refers to the point at which a transaction becomes irreversible and is permanently included in the blockchain’s ledger. In the context of Arbitrum’s Nitro architecture, understanding finality is crucial for developers and users to make informed decisions about transaction confirmations, security guarantees, and application design.
+Finality in <a data-quicklook-from="blockchain">blockchain</a> systems refers to the point at which a transaction becomes irreversible and is permanently included in the blockchain’s ledger. In the context of Arbitrum’s <a data-quicklook-from="arbitrum-nitro">Nitro</a> architecture, understanding finality is crucial for developers and users to make informed decisions about transaction confirmations, security guarantees, and application design.
 
 ## Levels of finality
 
-1. **Soft finality**: Provided by the Sequencer’s real-time feed, offering immediate but provisional transaction confirmations.
-2. **Hard finality**: Occurs when transactions are included in batches posted to and finalized on the parent chain, providing strong security assurances. Final settlement on the parent chain happens via assertions confirmed by the Rollup protocol.
+1. **<a data-quicklook-from="soft-confirmation">Soft finality</a>**: Provided by the <a data-quicklook-from="sequencer">Sequencer’s</a> real-time feed, offering immediate but provisional transaction confirmations.
+2. **<a data-quicklook-from="hard-finality">Hard finality</a>**: Occurs when transactions are included in batches posted to and finalized on the <a data-quicklook-from="parent-chain">parent chain</a>, providing strong security assurances. Final settlement on the parent chain happens via assertions confirmed by the <a data-quicklook-from="arbitrum-rollup-protocol">Rollup protocol</a>.
 
 This section explores the concepts of soft and hard finality, their implications, trust considerations, and guidance for using them effectively within the Arbitrum network.
 
 ## Authority and finality
 
-- **Exclusive access**: Only authorized batch posters can call these batch-submission methods on the Sequencer Inbox contract (access is gated by the contract's `isBatchPoster` mapping, a role distinct from the sequencer, though the two are typically operated by the same party). This exclusivity ensures that no other party can include messages directly.
+- **Exclusive access**: Only authorized [batch posters](/how-arbitrum-works/deep-dives/batchposter.mdx) can call these batch-submission methods on the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract (access is gated by the contract's `isBatchPoster` mapping, a role distinct from the sequencer, though the two are typically operated by the same party). This exclusivity ensures that no other party can include messages directly.
 - **Soft-confirmation receipts**: The Sequencer’s unique ability to immediately process and include transactions allows it to provide users with instant, “soft-confirmation” receipts.
 - **Parent chain finality**: Once batches post, the transactions achieve parent-chain-level finality, secured by the parent chain’s consensus mechanism.
 
@@ -28,15 +28,15 @@ By efficiently sending compressed transaction batches to the Sequencer Inbox con
 
 The following table summarizes the approximate latency and guarantee at each stage. Figures are indicative for an Ethereum parent chain and depend on configuration and network conditions.
 
-| Stage                                                         | Guarantee                                                                               | Approximate latency                                                                             |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Soft finality (Sequencer feed)                                | Provisional ordering by the Sequencer                                                   | Sub-second                                                                                      |
-| Parent-chain data finality (batch posted and finalized on L1) | Transaction data is durably recorded and inherits the parent chain's consensus security | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block) |
-| Full settlement (assertion confirmed)                         | L2 state is finalized and L2→L1 withdrawals can be executed                             | A bounded challenge period under BoLD, on the order of days on mainnet                          |
+| Stage                                                         | Guarantee                                                                               | Approximate latency                                                                                      |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Soft finality (Sequencer feed)                                | Provisional ordering by the Sequencer                                                   | Sub-second                                                                                               |
+| Parent-chain data finality (batch posted and finalized on L1) | Transaction data is durably recorded and inherits the parent chain's consensus security | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block)          |
+| Full settlement (assertion confirmed)                         | L2 state is finalized and L2→L1 withdrawals can be executed                             | A bounded challenge period under <a data-quicklook-from="bold">BoLD</a>, on the order of days on mainnet |
 
 ## Soft finality
 
-Soft finality refers to the preliminary confirmation of transactions based on the Sequencer’s real-time feed. Key characteristics include:
+Soft finality refers to the preliminary confirmation of transactions based on the [Sequencer’s](/how-arbitrum-works/deep-dives/sequencer.mdx) real-time feed. Key characteristics include:
 
 - **Immediate confirmation**: Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer.
 - **Provisional assurance**: The confirmations are provisional and rely on the Sequencer’s integrity and availability.
@@ -56,7 +56,7 @@ Soft finality refers to the preliminary confirmation of transactions based on th
 
 ## Censorship resistance and force inclusion
 
-The soft-finality trust dependency on the Sequencer is bounded rather than open-ended. A user can submit a transaction directly to the parent chain through the delayed inbox. If the Sequencer refuses to include it, the user can call `forceInclusion` on the Sequencer Inbox contract once the Sequencer's exclusive window has elapsed, pushing the message into the chain without the Sequencer's cooperation. By default this window is roughly 24 hours (configured as `delayBlocks`/`delaySeconds`, defaulting to about 5,760 blocks or 86,400 seconds).
+The soft-finality trust dependency on the Sequencer is bounded rather than open-ended. A user can submit a transaction directly to the parent chain through the <a data-quicklook-from="delayed-inbox">delayed inbox</a>. If the Sequencer refuses to include it, the user can call <a data-quicklook-from="forceinclusion">`forceInclusion`</a> on the Sequencer Inbox contract once the Sequencer's exclusive window has elapsed, pushing the message into the chain without the Sequencer's cooperation (see [censorship resistance and the Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer.mdx)). By default this window is roughly 24 hours (configured as `delayBlocks`/`delaySeconds`, defaulting to about 5,760 blocks or 86,400 seconds).
 
 The practical consequence is that the Sequencer can _delay_ a transaction but cannot _permanently_ censor it. Delayed-inbox messages are only sequenced after they reach parent-chain finality — the delayed sequencer waits for the parent chain's `safe` (or, if configured, `finalized`) head before including them — so force-included transactions inherit parent-chain finality guarantees.
 
@@ -66,7 +66,7 @@ Hard finality occurs when batched transactions are posted to the parent chain an
 
 - **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
 - **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
-- **Data availability**: In the default Rollup mode, all transaction data is recorded onchain (via calldata or blobs), ensuring transparency and verifiability. On AnyTrust chains, batch data is instead kept offchain by a Data Availability Committee (DAC), and only a data availability certificate is posted onchain — trading full onchain data availability for lower cost.
+- **Data availability**: In the default Rollup mode, all transaction data is recorded onchain (via calldata or blobs), ensuring transparency and verifiability. On AnyTrust chains, batch data is instead kept offchain by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a>, and only a <a data-quicklook-from="data-availability-certificate">data availability certificate</a> is posted onchain — trading full onchain data availability for lower cost.
 
 ### Advantages of hard finality
 

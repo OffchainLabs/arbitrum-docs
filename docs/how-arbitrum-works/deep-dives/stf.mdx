@@ -13,7 +13,7 @@ An Arbitrum node is a deterministic machine: feed it the same ordered inputs, an
 
 #### 1. Two doors, one source of truth
 
-Inputs reach a node through two doors. The fast door is the Sequencer feed—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the Sequencer periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the parent chain is the canonical record (Ethereum for Arbitrum), and a node will reorg its optimistic feed-derived state to match what was actually settled on Ethereum.
+Inputs reach a node through two doors. The fast door is the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx)—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the Sequencer periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the parent chain is the canonical record (Ethereum for Arbitrum), and a node will <a data-quicklook-from="reorg">reorg</a> its optimistic feed-derived state to match what was actually settled on Ethereum.
 
 #### 2. The envelope (`L1IncomingMessage`)
 
@@ -21,7 +21,7 @@ Whatever the door, every input lands as one `L1IncomingMessage`: a header plus a
 
 #### 3. One byte decides the path
 
-The header’s `Kind` routes the message. A handful of kinds are system messages minted by the protocol: `Initialize` (the genesis message that sets the chain ID and base fee), `EthDeposit` (native-token bridging), `SubmitRetryable` (the retryable-ticket mechanism behind robust L1→L2 messaging), and `BatchPostingReport` (which lets the STF charge the batch poster for the L1 data it consumes). The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity.
+The header’s `Kind` routes the message. A handful of kinds are system messages minted by the protocol: `Initialize` (the genesis message that sets the chain ID and base fee), `EthDeposit` (native-token bridging), `SubmitRetryable` (the <a data-quicklook-from="retryable-ticket">retryable-ticket</a> mechanism behind robust L1→L2 messaging), and `BatchPostingReport` (which lets the STF charge the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) for the L1 data it consumes). The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity.
 
 #### 4. The envelope inside the envelope
 
@@ -37,11 +37,11 @@ Finally, `ParseL2Transactions` turns each envelope into the EVM transactions Get
 
 ## Stylus-specific transaction processing
 
-A modified version of <a data-quicklook-from="geth">Geth</a> that recognizes and processes Stylus transactions, ensuring proper inclusion in state transitions.
+A modified version of <a data-quicklook-from="geth">Geth</a> that recognizes and processes <a data-quicklook-from="stylus">Stylus</a> transactions, ensuring proper inclusion in state transitions.
 
 ## Execution in a WASM runtime
 
-Stylus transactions execute in [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx)'s WASM runtime instead of the EVM, enabling faster execution and more efficient computation.
+Stylus transactions execute in [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx)'s <a data-quicklook-from="wasm">WASM</a> runtime instead of the EVM, enabling faster execution and more efficient computation.
 
 ## Stylus gas accounting and pricing
 
