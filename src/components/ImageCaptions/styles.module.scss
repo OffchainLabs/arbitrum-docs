@@ -1,0 +1,20 @@
+.figure {
+  display: block;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.4rem;
+}
+
+.caption {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
