@@ -128,6 +128,40 @@ This part will update the glossary.
 
 4. Commit your changes and open a PR.
 
+### Update Nitro CLI flag reference
+
+`docs/run-arbitrum-node/nitro/cli-flags-reference.mdx` is auto-generated from `scripts/data/nitro-cli-flags.json` by `scripts/generate-cli-reference.ts`. Do not edit the `.mdx` file by hand — your changes will be overwritten on the next regeneration.
+
+To regenerate the reference after updating the JSON data file:
+
+```shell
+yarn generate-cli-reference
+```
+
+To verify the committed `.mdx` is in sync with the JSON data (used in CI):
+
+```shell
+yarn generate-cli-reference --check
+```
+
+The script also accepts `--output <path>` to write to a different location and `--nitro-path <path>` (or the `NITRO_REPO_PATH` env var) to point at a local Nitro checkout — useful when refreshing the JSON data against a specific Nitro version.
+
+### Reference generators
+
+Several docs pages are generated from source data. Edit the source, not the generated `.mdx` — hand edits are overwritten on the next run.
+
+| Command                                | Generates                                                           | Source                                                  |
+| -------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------- |
+| `yarn generate-contract-addresses`     | `docs/partials/_reference-arbitrum-contract-addresses-partial.mdx`  | `@arbitrum/sdk` + `scripts/contract-addresses.data.ts`  |
+| `yarn generate-precompiles-ref-tables` | `docs/for-devs/dev-tools-and-resources/partials/precompile-tables/` | Nitro source (pinned via `src/resources/globalVars.js`) |
+| `yarn build-glossary`                  | `docs/partials/_glossary-partial.mdx` + `static/glossary.json`      | `docs/partials/glossary/*.mdx`                          |
+| `yarn generate-cli-reference`          | `docs/run-arbitrum-node/nitro/cli-flags-reference.mdx`              | `scripts/data/nitro-cli-flags.json`                     |
+| `yarn update-variable-refs`            | `@@var@@` values across docs                                        | `src/resources/globalVars.js`                           |
+
+Run them all with `yarn generate`, then commit the regenerated files.
+
+Add `--check` to any command (e.g. `yarn build-glossary --check`) to verify instead of write: it regenerates in memory, compares against the committed file, changes nothing, and exits with an error if they differ. `yarn generate:check` runs this verify mode across all of them (used in CI to catch stale output).
+
 ### Restructuring docs (moving or renaming pages)
 
 The tooling handles internal links, the moved file's own relative links, sidebar entries,

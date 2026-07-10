@@ -415,6 +415,12 @@ Anyone can become a validator by running an Arbitrum node, without permission.
 
 A web application maintained by [Offchain Labs](/intro/glossary#offchain-labs) showcasing the Arbitrum ecosystem; visit it [here](https://portal.arbitrum.io/).
 
+### Prechecker Node {#prechecker-node}
+
+An [Arbitrum full node](/intro/glossary#arbitrum-full-node) configured to pre-validate transactions before forwarding `eth_sendRawTransaction` to the [Sequencer](/intro/glossary#sequencer), insulating it from transactions that would fail.
+
+At a configurable strictness level, a prechecker verifies the transaction type, signature, intrinsic gas (including L1 calldata gas), fee cap, nonce, sender balance, and any `eth_sendRawTransactionConditional` storage conditions. When [compliance filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering) is enabled, it also rejects transactions that touch restricted addresses.
+
 ### Precompile {#precompile}
 
 A precompile is a predefined smart contract with a special address that provides specific functionality executed natively by the Arbitrum client, rather than at the EVM bytecode level. Precompiles are used to introduce functions that would be computationally expensive if run in EVM bytecode, or to facilitate interactions between the parent and child chains. Arbitrum supports all Ethereum precompiles and also provides additional precompiles specific to Arbitrum chains, which can be called from smart contracts like regular Solidity functions[(1)](https://docs.arbitrum.io/build-decentralized-apps/precompiles/overview).

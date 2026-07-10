@@ -9,7 +9,7 @@ displayed_sidebar: buildAppsSidebar
 
 Deploying an **ERC-20** token on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is fully permissionless and uses the same tooling and workflows as Ethereum.
 
-You can deploy directly to Arbitrum One using Foundry, and optionally configure [bridging](/build-decentralized-apps/bridging/overview.mdx), liquidity, and supporting <a data-quicklook-from="smart-contract">smart contract</a> infrastructure as part of your token creation.
+You can deploy directly to Arbitrum One using Foundry, and optionally configure [bridging](/arbitrum-essentials/bridging/overview.mdx), liquidity, and supporting <a data-quicklook-from="smart-contract">smart contract</a> infrastructure as part of your token creation.
 
 This guide walks you through deploying a standard **ERC-20** token on Arbitrum One, from local setup to testnet and mainnet deployment.
 
@@ -302,7 +302,7 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
 ## Important notes
 
 - Always conduct security audits (e.g., via tools like Slither or other professional reviews) before mainnet deployment, as token contracts handle value.
-- Ensure your wallet has enough **ETH** for gas on the target network. Arbitrum fees are low, but mainnet deployments still cost real **ETH**. See [How to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx) to size your deployment funds.
+- Ensure your wallet has enough **ETH** for gas on the target network. Arbitrum fees are low, but mainnet deployments still cost real **ETH**. See [How to estimate gas](/arbitrum-essentials/how-to-estimate-gas.mdx) to size your deployment funds.
 - If you encounter verification issues, double-check your Arbiscan API key and foundry.toml configs. For more advanced deployments, refer to general Foundry deployment docs or Arbitrum developer resources.
 
 ## Bridging considerations
@@ -316,7 +316,7 @@ Two deployment paths are possible:
 
 2. **Deployment on Ethereum and bridging to Arbitrum One**
 
-- Use the [Arbitrum Token Bridge](https://bridge.arbitrum.io) to create an L2 counterpart. For a programmatic setup, see the [token bridging guides](/build-decentralized-apps/bridging/overview.mdx).
+- Use the [Arbitrum Token Bridge](https://bridge.arbitrum.io) to create an L2 counterpart. For a programmatic setup, see the [token bridging guides](/arbitrum-essentials/bridging/overview.mdx).
 
 ## Post-deployment considerations
 
