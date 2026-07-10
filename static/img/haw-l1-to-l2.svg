@@ -14,19 +14,19 @@
 <text x="1325.0" y="210" font-size="23" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="700" text-anchor="middle">3 · Retryable tickets</text>
 <path d="M800 146 L800 162" fill="none" stroke="#ffffff" stroke-width="2"/>
 <path d="M210 162 L1320 162" fill="none" stroke="#ffffff" stroke-width="2"/>
-<path d="M210.0 162 L210.0 172" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M735.0 162 L735.0 172" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M1325.0 162 L1325.0 172" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M210.0 162 L210.0 172" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M735.0 162 L735.0 172" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M1325.0 162 L1325.0 172" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="70" y="236" width="280" height="92" rx="14" fill="#12aaff"/>
 <g fill="#ffffff" transform="translate(96,250)"><path d="M28 4 L46 30 L28 40 L10 30 Z" opacity="0.95"/><path d="M28 44 L46 34 L28 56 L10 34 Z" opacity="0.75"/></g>
 <text x="255" y="292" font-size="26" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle">Ether Deposit</text>
-<path d="M210 328 L210 392" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M210 328 L210 392" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="70" y="396" width="280" height="84" rx="14" fill="#292d3e"/>
 <text x="210" y="446" font-size="24" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600" text-anchor="middle" xml:space="preserve"><tspan fill="#82aaff">depositEth</tspan><tspan fill="#c792ea">()</tspan></text>
 <rect x="560" y="236" width="350" height="92" rx="14" fill="#12aaff"/>
 <g transform="translate(600,250)"><rect x="4" y="12" width="48" height="34" rx="5" fill="#ffffff"/><path d="M8 16 L28 33 L48 16" fill="none" stroke="#12aaff" stroke-width="3.2"/></g>
 <text x="760" y="292" font-size="26" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle">Messages to L2</text>
-<path d="M735 328 L735 384" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M735 328 L735 384" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="455" y="388" width="560" height="224" rx="16" fill="#292d3e"/>
 <text x="735" y="430" font-size="22" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600" text-anchor="middle" xml:space="preserve"><tspan fill="#82aaff">sendL2Message</tspan><tspan fill="#c792ea">()</tspan></text>
 <text x="735" y="460" font-size="22" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600" text-anchor="middle" xml:space="preserve"><tspan fill="#82aaff">sendUnsignedTransaction</tspan><tspan fill="#c792ea">()</tspan></text>
@@ -40,11 +40,11 @@
 <rect x="1300" y="236" width="260" height="76" rx="14" fill="#e6007a"/>
 <text x="1430" y="266" font-size="18" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle">Token Bridge contracts</text>
 <text x="1430" y="290" font-size="18" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle">on Parent Chain</text>
-<path d="M1279 274 L1298 274" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M1430 312 L1430 332 L1320 332 L1320 348" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1279 274 L1298 274" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M1430 312 L1430 322 Q1430 332 1420 332 L1328 332 Q1320 332 1320 340 L1320 348" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1180" y="352" width="280" height="74" rx="14" fill="#12aaff"/>
 <text x="1320" y="396" font-size="24" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle">Retryable Tickets</text>
-<path d="M1320 426 L1320 472" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1320 426 L1320 472" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="1105" y="476" width="430" height="122" rx="16" fill="#292d3e"/>
 <text x="1320" y="522" font-size="22" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600" text-anchor="middle" xml:space="preserve"><tspan fill="#82aaff">createRetryableTicket</tspan><tspan fill="#c792ea">()</tspan></text>
 <text x="1320" y="556" font-size="22" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600" text-anchor="middle" xml:space="preserve"><tspan fill="#82aaff">unsafeCreateRetryableTicket</tspan><tspan fill="#c792ea">()</tspan></text>
@@ -52,9 +52,9 @@
 <text x="800" y="636" font-size="1" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle"></text>
 <rect x="660" y="664" width="280" height="78" rx="14" fill="#e6007a"/>
 <text x="800" y="712" font-size="26" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle">Delayed Inbox</text>
-<path d="M210 480 L210 626 L662 626 L680 664" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M735 612 L735 664" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M1320 598 L1320 626 L920 626 L905 664" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M210 480 L210 614 Q210 626 222 626 L650 626 Q662 626 667.1 636.8 L680 664" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M735 612 L735 664" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M1320 598 L1320 614 Q1320 626 1308 626 L932 626 Q920 626 915.6 637.2 L905 664" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 <rect x="390" y="792" width="270" height="86" rx="14" fill="#12aaff"/>
 <g transform="translate(404,812) scale(0.62)"><ellipse cx="24" cy="40" rx="22" ry="10" fill="#ffffff" transform="rotate(-25 24 40)"/><rect x="26" y="20" width="4" height="22" fill="#ffffff" transform="rotate(-25 28 31)"/><path d="M38 8 a20 20 0 0 1 12 12" fill="none" stroke="#ffffff" stroke-width="3"/><path d="M40 2 a28 28 0 0 1 16 16" fill="none" stroke="#ffffff" stroke-width="3"/></g>
 <text x="452" y="842" font-size="19" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="start">Sequencer Feed</text>
@@ -64,7 +64,7 @@
 <text x="1185" y="806" font-size="20" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="600" text-anchor="middle">Checking for Delayed Messages</text>
 <rect x="1040" y="820" width="290" height="54" rx="10" fill="#292d3e"/>
 <text x="1185" y="855" font-size="19" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600" text-anchor="middle" xml:space="preserve"><tspan fill="#c792ea" font-style="italic">event </tspan><tspan fill="#ffcb6b">MessageDelivered</tspan></text>
-<path d="M660 835 L716 835" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M930 835 L996 835" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M1185 772 L1185 720 L940 706" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M660 835 L716 835" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M930 835 L996 835" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<path d="M1185 772 L1185 732 Q1185 720 1173 719.3 L940 706" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
 </svg>
