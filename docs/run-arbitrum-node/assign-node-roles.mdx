@@ -12,6 +12,8 @@ A Nitro node's _role_ is not a separate piece of software. Every role in this ar
 
 Because roles are just configuration, you assign or change a role by editing flags and restarting. This page explains what each role's defining flags are, what else each role needs to operate (a funded parent-chain wallet, a bond, feed connectivity, a parent-chain connection), and how to convert a node from one role to another safely.
 
+If you already know which role you want, go straight to its guide — each one is linked from the table below. Read this page when you're deciding which role to run, want to see how the roles relate to each other, or need to convert an existing node from one role to another.
+
 Flags can be passed on the command line or collected in a JSON configuration file loaded with `--conf.file`. For how flag names, defaults, and the config file relate to each other, see [Nitro configuration system](/run-arbitrum-node/nitro/configuration-system.mdx). This article covers only the flags that define and support each role; for the complete flag list, see the [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx).
 
 Roles can combine on a single node (a sequencer can also post batches, for example), but this article describes them separately so that each role's requirements are clear.
@@ -42,16 +44,7 @@ An RPC node — often just called a full node — is the default role: it follow
 | `--node.staker.enable`          | true    | Staker module on, but with the default watchtower strategy it only observes (see admonition)   |
 | `--execution.forwarding-target` | `""`    | Where the node forwards `eth_sendRawTransaction`; auto-filled from chain info for known chains |
 
-Supporting flags a full node typically sets:
-
-| Flag                                    | Default | Description                                                                                  |
-| --------------------------------------- | ------- | -------------------------------------------------------------------------------------------- |
-| `--parent-chain.connection.url`         | `""`    | Parent-chain RPC endpoint; required in practice                                              |
-| `--parent-chain.blob-client.beacon-url` | `""`    | Beacon REST endpoint; required when the parent chain is Ethereum L1 (to read blob batches)   |
-| `--chain.id`                            | 0       | Selects a built-in chain config; alternatively use `--chain.name`                            |
-| `--node.feed.input.url`                 | `[]`    | Sequencer feed source(s) for low-latency unconfirmed messages; auto-filled for known chains  |
-| `--http.addr`                           | `""`    | HTTP JSON-RPC interface (the HTTP server stays off until this is set); port defaults to 8547 |
-| `--ws.addr`                             | `""`    | WebSocket JSON-RPC interface (off until set); port defaults to 8548                          |
+Beyond those defaults, a full node needs only the shared basics — `--parent-chain.connection.url` and `--chain.id` (or `--chain.name`) — plus `--http.addr` or `--ws.addr` to expose JSON-RPC; the servers stay off until an address is set.
 
 Operationally, a full node needs a parent-chain connection but no funded wallet and no bond. Feed connectivity is strongly recommended for low latency but is not required: a node with no feed input still syncs by reading batches from the parent chain, just with higher latency. You can run as many RPC nodes as you like; they share no state and need no coordination.
 
@@ -93,19 +86,15 @@ Nitro does not stop you if the two flags disagree — it logs an error and keeps
 
 A sequencer must also declare how it coordinates with other sequencer instances, or it refuses to start. Enable the Redis-backed coordinator, or explicitly opt out with the dangerous single-sequencer flag.
 
-| Flag                                        | Default           | Description                                                                                     |
-| ------------------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| `--node.seq-coordinator.enable`             | false             | Enables the Redis-based coordinator for a redundant sequencer set                               |
-| `--node.seq-coordinator.redis-url`          | `""`              | Redis URL used for the coordinator's lockout protocol; required when the coordinator is enabled |
-| `--node.seq-coordinator.my-url`             | `<?INVALID-URL?>` | This sequencer's reachable RPC endpoint, published to Redis when it is chosen                   |
-| `--node.dangerous.no-sequencer-coordinator` | false             | DANGEROUS: allows sequencing without a coordinator (single-sequencer or development setups)     |
-| `--execution.forwarding-target`             | `""`              | Must stay empty on a sequencer; setting it with the sequencer enabled is a hard error           |
-| `--node.feed.output.enable`                 | false             | Starts the broadcaster that publishes the sequencer feed                                        |
-| `--node.feed.output.addr`                   | `""`              | Address to bind the feed output server to                                                       |
-| `--node.feed.output.port`                   | `9642`            | Port for the feed output server                                                                 |
-| `--node.delayed-sequencer.enable`           | false             | Includes parent-chain (delayed inbox) messages once their block is safe (default) or final      |
-| `--node.feed.output.signed`                 | false             | Signs feed messages; if enabled, loads the batch-poster wallet purely as a signing key          |
-| `--parent-chain.connection.url`             | `""`              | Parent-chain RPC endpoint; the coordinator refuses to start without it                          |
+| Flag                                        | Default | Description                                                                                 |
+| ------------------------------------------- | ------- | ------------------------------------------------------------------------------------------- |
+| `--node.seq-coordinator.enable`             | false   | Enables the Redis-based coordinator for a redundant sequencer set                           |
+| `--node.dangerous.no-sequencer-coordinator` | false   | DANGEROUS: allows sequencing without a coordinator (single-sequencer or development setups) |
+| `--execution.forwarding-target`             | `""`    | Must stay empty on a sequencer; setting it with the sequencer enabled is a hard error       |
+| `--node.feed.output.enable`                 | false   | Starts the broadcaster that publishes the sequencer feed                                    |
+| `--node.delayed-sequencer.enable`           | false   | Includes parent-chain (delayed inbox) messages once their block is safe (default) or final  |
+
+The coordinator's Redis URLs, the feed server's address and port, and feed signing are setup details covered in the sequencer guide.
 
 A sequencer needs a parent-chain connection (`--parent-chain.connection.url`), which the coordinator hard-requires. It needs no funded wallet and no bond; sequencing posts nothing onchain. The only case where a pure sequencer loads a key is `--node.feed.output.signed=true`, and even then the key is used to sign feed messages, not to fund transactions. Batch posting and bonding are separate roles.
 
@@ -121,16 +110,11 @@ The batch poster compresses queued sequencer messages into batches and posts the
 
 The batch poster needs a signer for its parent-chain transactions (a local wallet or an external signer) and, for a redundant set, a Redis lock.
 
-| Flag                                                  | Default             | Description                                                                              |
-| ----------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------- |
-| `--node.batch-poster.parent-chain-wallet.private-key` | `""`                | Hex private key of the funded parent-chain account that signs and pays for batches       |
-| `--node.batch-poster.parent-chain-wallet.pathname`    | batch-poster-wallet | Keystore directory for the batch-poster wallet (opened under the name `l1-batch-poster`) |
-| `--node.batch-poster.parent-chain-wallet.password`    | PASSWORD_NOT_SET    | Passphrase for the keystore wallet                                                       |
-| `--node.batch-poster.data-poster.external-signer.url` | `""`                | External signer RPC; replaces the local wallet for signing batch transactions            |
-| `--node.batch-poster.redis-url`                       | `""`                | Redis URL for the leader lock and the queued-transaction store                           |
-| `--node.batch-poster.redis-lock.enable`               | true                | Redis leader lock that keeps only one poster active in a redundant set                   |
-| `--parent-chain.connection.url`                       | `""`                | Parent-chain RPC endpoint; used to read the Sequencer Inbox and submit batches           |
-| `--node.feed.input.url`                               | `[]`                | Feed source(s) a non-sequencer batch poster reads messages from                          |
+| Flag                                                  | Default | Description                                                                               |
+| ----------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
+| `--node.batch-poster.parent-chain-wallet.*`           | —       | The funded parent-chain account (keystore or private key) that signs and pays for batches |
+| `--node.batch-poster.data-poster.external-signer.url` | `""`    | External signer RPC; replaces the local wallet for signing batch transactions             |
+| `--node.batch-poster.redis-url`                       | `""`    | Redis URL for the leader lock that keeps only one poster active in a redundant set        |
 
 A batch poster requires a **funded parent-chain wallet**: it pays parent-chain gas for every batch it posts. Fund the account with enough native currency of the parent chain, and make sure the poster's address is allowlisted as a batch poster on the chain's Sequencer Inbox contract, or its transactions revert. It posts no bond. On AnyTrust chains, the node still requires the local batch-poster key even when an external signer submits the batch transactions; the key signs the data availability store requests.
 
@@ -150,16 +134,11 @@ A validator watches the chain's onchain assertions and, depending on its strateg
 
 With the default `watchtower` strategy the validator is observe-only: it loads no wallet and posts no bond, and it merely logs if an assertion disagrees with its local state. Any other strategy is _active_ and needs a funded wallet and a bond.
 
-| Flag                                            | Default          | Description                                                                             |
-| ----------------------------------------------- | ---------------- | --------------------------------------------------------------------------------------- |
-| `--node.staker.parent-chain-wallet.private-key` | `""`             | Private key for the validator wallet (opened under the name `l1-validator`)             |
-| `--node.staker.parent-chain-wallet.pathname`    | validator-wallet | Keystore directory for the validator wallet                                             |
-| `--node.staker.parent-chain-wallet.password`    | PASSWORD_NOT_SET | Passphrase for the validator keystore                                                   |
-| `--node.staker.data-poster.external-signer.url` | `""`             | External signer RPC; an alternative to a local key                                      |
-| `--node.staker.redis-url`                       | `""`             | Redis URL backing the staker's transaction queue (queue persistence, not a leader lock) |
-| `--parent-chain.connection.url`                 | `""`             | Parent-chain RPC endpoint; a validator cannot start without the parent-chain reader     |
-| `--node.bold.auto-deposit`                      | true             | Auto-wraps parent-chain currency into the stake token when a BoLD move needs a bond     |
-| `--node.bold.auto-increase-allowance`           | true             | Auto-approves the stake-token allowance for the Rollup and challenge-manager contracts  |
+| Flag                                            | Default | Description                                                                             |
+| ----------------------------------------------- | ------- | --------------------------------------------------------------------------------------- |
+| `--node.staker.parent-chain-wallet.*`           | —       | The funded parent-chain wallet (keystore or private key) an active validator acts from  |
+| `--node.staker.data-poster.external-signer.url` | `""`    | External signer RPC; an alternative to a local key                                      |
+| `--node.staker.redis-url`                       | `""`    | Redis URL backing the staker's transaction queue (queue persistence, not a leader lock) |
 
 An <a data-quicklook-from="active-validator">active validator</a> needs a funded parent-chain wallet for gas and posts a **bond** when it acts. Under BoLD, the node reads the required bond size from the chain's contracts (it is an onchain chain parameter, not a node flag), and with `--node.bold.auto-deposit` and `--node.bold.auto-increase-allowance` enabled by default, it deposits and approves the stake token automatically when entering a bond. Active strategies also require block validation, which the node force-enables. On chains where the validator allowlist is active, the wallet address must also be allowlisted; the allowlist is enforced by the chain's contracts, so transactions from a non-allowlisted validator revert.
 
@@ -179,7 +158,6 @@ On the validation server (`nitro-val` binary):
 | `--auth.port`                 | `8549`      | Port for the validation API                                                                        |
 | `--auth.jwtsecret`            | `""`        | Path to the shared 32-byte hex JWT secret file; auto-generated if unset                            |
 | `--validation.wasm.root-path` | `""`        | Path to the folders holding the validation machines (one per WASM module root)                     |
-| `--validation.use-jit`        | true        | Uses the JIT-accelerated spawner instead of the full Arbitrator interpreter                        |
 
 On the main node (`nitro` binary):
 
