@@ -15,12 +15,12 @@
 
   <!-- L1 flow -->
   <circle cx="405" cy="145" r="17" fill="#ffffff"/><path d="M379 192 a26 27 0 0 1 52 0 Z" fill="#ffffff"/>
-  <rect x="298" y="214" width="214" height="58" rx="16" fill="#f97316" />
-  <text x="405" y="251" font-size="24" fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">depositEth()</text>
+  <rect x="298" y="214" width="214" height="58" rx="16" fill="#292d3e" />
+  <text x="405" y="251" font-size="24" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" xml:space="preserve"><tspan fill="#82aaff">depositEth</tspan><tspan fill="#c792ea">()</tspan></text>
   <rect x="298" y="300" width="214" height="58" rx="16" fill="#12aaff" />
   <text x="405" y="338" font-size="26" fill="#ffffff">Inbox contract</text>
-  <rect x="232" y="386" width="346" height="58" rx="16" fill="#f97316" />
-  <text x="405" y="424" font-size="23" fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">enqueueDelayedMessage()</text>
+  <rect x="232" y="386" width="346" height="58" rx="16" fill="#292d3e" />
+  <text x="405" y="424" font-size="23" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" xml:space="preserve"><tspan fill="#82aaff">enqueueDelayedMessage</tspan><tspan fill="#c792ea">()</tspan></text>
   <rect x="298" y="472" width="214" height="58" rx="16" fill="#12aaff" />
   <text x="405" y="510" font-size="26" fill="#ffffff">Bridge contract</text>
 
@@ -43,8 +43,8 @@
   <path d="M752 430 L874 430" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- L2 flow -->
-  <path d="M985 322 a45 13 0 0 1 90 0 v66 a45 13 0 0 1 -90 0 Z" fill="#f97316"/>
-  <ellipse cx="1030" cy="322" rx="45" ry="13" fill="#f97316" stroke="#ffffff" stroke-width="2"/>
+  <path d="M985 322 a45 13 0 0 1 90 0 v66 a45 13 0 0 1 -90 0 Z" fill="#292d3e"/>
+  <ellipse cx="1030" cy="322" rx="45" ry="13" fill="#292d3e" stroke="#ffffff" stroke-width="2"/>
   <ellipse cx="1030" cy="344" rx="45" ry="13" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.5"/>
   <text x="1030" y="380" font-size="22" fill="#ffffff">Node</text>
 

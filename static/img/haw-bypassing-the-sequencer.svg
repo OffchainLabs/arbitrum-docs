@@ -18,10 +18,10 @@
     <!-- ===== Delayed Inbox Contract ===== -->
     <rect x="520" y="190" width="560" height="200" rx="16" fill="#e6007a"/>
     <text x="800" y="234" fill="#ffffff" font-size="30">Delayed Inbox Contract on Ethereum</text>
-    <rect x="560" y="258" width="480" height="52" rx="12" fill="#f97316"/>
-    <text x="800" y="292" fill="#ffffff" font-size="26" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600">sendL2Message</text>
-    <rect x="560" y="322" width="480" height="52" rx="12" fill="#f97316"/>
-    <text x="800" y="356" fill="#ffffff" font-size="26" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600">sendUnsignedTransaction</text>
+    <rect x="560" y="258" width="480" height="52" rx="12" fill="#292d3e"/>
+    <text x="800" y="292" font-size="26" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600"><tspan fill="#82aaff">sendL2Message</tspan></text>
+    <rect x="560" y="322" width="480" height="52" rx="12" fill="#292d3e"/>
+    <text x="800" y="356" font-size="26" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600"><tspan fill="#82aaff">sendUnsignedTransaction</tspan></text>
 
     <!-- arrow delayed inbox -> diamond -->
     <path d="M800 390 L800 441" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
@@ -52,8 +52,8 @@
 
     <rect x="1175" y="650" width="370" height="125" rx="16" fill="#e6007a"/>
     <text x="1360" y="686" fill="#ffffff" font-size="24">Sequencer Inbox Contract</text>
-    <rect x="1235" y="704" width="250" height="52" rx="12" fill="#f97316"/>
-    <text x="1360" y="738" fill="#ffffff" font-size="26" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600">forceInclude</text>
+    <rect x="1235" y="704" width="250" height="52" rx="12" fill="#292d3e"/>
+    <text x="1360" y="738" font-size="26" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="600"><tspan fill="#82aaff">forceInclude</tspan></text>
 
     <path d="M1360 775 L1360 797" fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
     <rect x="1210" y="800" width="300" height="90" rx="16" fill="#12aaff"/>
