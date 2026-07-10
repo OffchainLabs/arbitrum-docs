@@ -869,7 +869,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees/",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -899,7 +899,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -909,7 +909,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/configure-aep-fee-routing/set-up-aep-fee-router/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/aep-router-contracts",
       "permanent": false
     },
     {
@@ -924,7 +924,7 @@
     },
     {
       "source": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {
@@ -1089,7 +1089,7 @@
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1109,7 +1109,7 @@
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap",
+      "destination": "/launch-arbitrum-chain/overview/introduction",
       "permanent": false
     },
     {
@@ -1129,7 +1129,7 @@
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1264,7 +1264,7 @@
     },
     {
       "source": "/(launch-orbit-chain/how-tos/calculate-aep-fees/?)",
-      "destination": "/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -2462,6 +2462,112 @@
       "destination": "/build-decentralized-apps/bridging/configure-token-gateway/generic-custom",
       "permanent": false
     },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/configure-aep/configure-aep/fees/?)",
+      "destination": "/https://docs.arbitrum.foundation/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/configure-aep/configure-aep/fees/?)",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/chain-config/costs/calculate-aep-fees/?)",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/advanced/choose-arbos-version/?)",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/advanced/precompiles/?)",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/precompiles",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/advanced/choose-custom-behavior/?)",
+      "destination": "/launch-arbitrum-chain/protocol-hacks/stf",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality/?)",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/chain-finality",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments/?)",
+      "destination": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/configure-aep/configure-aep-fees/?)",
+      "destination": "https://docs.arbitrum.foundation/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/data-availability/choose-alt-da/?)",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/config-data-availability",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/data-availability/choose-anytrust/?)",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/config-data-availability",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/data-availability/choose-rollup/?)",
+      "destination": "/launch-arbitrum-chain/chain-config/data-availability/config-data-availability",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token/?)",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/custom-gas-token",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/gas-and-fees/choose-fee-rebates/?)",
+      "destination": "/launch-arbitrum-chain/chain-config/costs/fee-management",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/gas-and-fees/choose-native-eth/?)",
+      "destination": "//launch-arbitrum-chain/chain-config/costs/custom-gas-token",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn/?)",
+      "destination": "//launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/mev/choose-timeboostburn/?)",
+      "destination": "//launch-arbitrum-chain/chain-config/sequencer/timeboost",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/ux/choose-fast-withdrawals/?)",
+      "destination": "//launch-arbitrum-chain/chain-config/validation/fast-withdrawals",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/validation-and-security/choose-bold/?)",
+      "destination": "//launch-arbitrum-chain/chain-config/validation/bold",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/validation-and-security/choose-challenge-period/?)",
+      "destination": "//launch-arbitrum-chain/chain-config/validation/challenge-period",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/features/common/validation-and-security/choose-permissioned-validators/?)",
+      "destination": "//launch-arbitrum-chain/chain-config/validation/bond-and-validator",
+      "permanent": false
+    },
+
     {
       "source": "/(build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway/?)",
       "destination": "/build-decentralized-apps/bridging/configure-token-gateway/custom",

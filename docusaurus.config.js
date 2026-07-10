@@ -217,6 +217,14 @@ const config = {
                 label: 'Build with Stylus',
                 to: '/stylus/quickstart',
               },
+              {
+                label: 'Arbitrum essentials',
+                to: '/arbitrum-essentials',
+              },
+              {
+                label: 'Machine Payments Protocol (MPP)',
+                to: 'build-decentralized-apps/machine-payments-protocol',
+              },
             ],
           },
           {
