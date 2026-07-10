@@ -1,0 +1,110 @@
+---
+title: Finality
+description: 'Learn the fundamentals of the finality on Arbitrum.'
+author: pete-vielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I want to learn more about finality.
+content_type: concept
+---
+
+Finality in blockchain systems refers to the point at which a transaction becomes irreversible and is permanently included in the blockchain’s ledger. In the context of Arbitrum’s Nitro architecture, understanding finality is crucial for developers and users to make informed decisions about transaction confirmations, security guarantees, and application design.
+
+## Levels of finality
+
+1. **Soft finality**: Provided by the Sequencer’s real-time feed, offering immediate but provisional transaction confirmations.
+2. **Hard finality**: Occurs when transactions are included in batches posted to and finalized on the parent chain, providing strong security assurances. Final settlement on the parent chain happens via assertions confirmed by the Rollup protocol.
+
+This section explores the concepts of soft and hard finality, their implications, trust considerations, and guidance for using them effectively within the Arbitrum network.
+
+## Authority and finality
+
+- **Exclusive access**: Only authorized batch posters can call these batch-submission methods on the Sequencer Inbox contract (access is gated by the contract's `isBatchPoster` mapping, a role distinct from the sequencer, though the two are typically operated by the same party). This exclusivity ensures that no other party can include messages directly.
+- **Soft-confirmation receipts**: The Sequencer’s unique ability to immediately process and include transactions allows it to provide users with instant, “soft-confirmation” receipts.
+- **Parent chain finality**: Once batches post, the transactions achieve parent-chain-level finality, secured by the parent chain’s consensus mechanism.
+
+By efficiently sending compressed transaction batches to the Sequencer Inbox contract using the most cost-effective method available, the Sequencer ensures transactions are securely recorded on the parent chain. This process maintains the integrity and reliability of the network, enabling users to perform fast, secure transactions.
+
+## Finality at a glance
+
+The following table summarizes the approximate latency and guarantee at each stage. Figures are indicative for an Ethereum parent chain and depend on configuration and network conditions.
+
+| Stage                                                         | Guarantee                                                                               | Approximate latency                                                                             |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Soft finality (Sequencer feed)                                | Provisional ordering by the Sequencer                                                   | Sub-second                                                                                      |
+| Parent-chain data finality (batch posted and finalized on L1) | Transaction data is durably recorded and inherits the parent chain's consensus security | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block) |
+| Full settlement (assertion confirmed)                         | L2 state is finalized and L2→L1 withdrawals can be executed                             | A bounded challenge period under BoLD, on the order of days on mainnet                          |
+
+## Soft finality
+
+Soft finality refers to the preliminary confirmation of transactions based on the Sequencer’s real-time feed. Key characteristics include:
+
+- **Immediate confirmation**: Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer.
+- **Provisional assurance**: The confirmations are provisional and rely on the Sequencer’s integrity and availability.
+- **High performance**: Enables applications to offer rapid responses and real-time interactions, enhancing user experience.
+
+### Advantages of soft finality
+
+- **Low latency**: Users receive immediate feedback on transaction status.
+- **Optimized for speed**: Ideal for applications where responsiveness is critical.
+- **Improved user experience**: Reduces waiting times and uncertainty.
+
+### Limitations of soft finality
+
+- **Trust dependency**: Relies on the Sequencer’s honesty and ability to maintain uptime.
+- **Potential for reordering**: In rare cases, if the Sequencer acts maliciously or encounters issues, the provisional ordering could change.
+- **Not suitable for high-value transactions**: For transactions requiring strong security guarantees, soft finality may not suffice.
+
+## Censorship resistance and force inclusion
+
+The soft-finality trust dependency on the Sequencer is bounded rather than open-ended. A user can submit a transaction directly to the parent chain through the delayed inbox. If the Sequencer refuses to include it, the user can call `forceInclusion` on the Sequencer Inbox contract once the Sequencer's exclusive window has elapsed, pushing the message into the chain without the Sequencer's cooperation. By default this window is roughly 24 hours (configured as `delayBlocks`/`delaySeconds`, defaulting to about 5,760 blocks or 86,400 seconds).
+
+The practical consequence is that the Sequencer can _delay_ a transaction but cannot _permanently_ censor it. Delayed-inbox messages are only sequenced after they reach parent-chain finality — the delayed sequencer waits for the parent chain's `safe` (or, if configured, `finalized`) head before including them — so force-included transactions inherit parent-chain finality guarantees.
+
+## Hard finality
+
+Hard finality occurs when batched transactions are posted to the parent chain and the corresponding assertions are confirmed by the Rollup protocol. Note that posting a batch to the parent chain is not itself final settlement: the transaction data becomes available and inherits the parent chain's data-layer security, but final settlement of the resulting L2 state occurs once assertions are confirmed (see "Final settlement" above). Key characteristics include:
+
+- **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
+- **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
+- **Data availability**: In the default Rollup mode, all transaction data is recorded onchain (via calldata or blobs), ensuring transparency and verifiability. On AnyTrust chains, batch data is instead kept offchain by a Data Availability Committee (DAC), and only a data availability certificate is posted onchain — trading full onchain data availability for lower cost.
+
+### Advantages of hard finality
+
+- **Maximum security**: Protected by the robustness of the parent chain’s consensus mechanism.
+- **Trust minimization**: This does not require trust in the Sequencer; the underlying blockchain provides security.
+- **Suitable for high-value transactions**: Ideal for scenarios where security and immutability are paramount.
+
+### Limitations of hard finality
+
+- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The challenge protocol that backs this guarantee is described in BoLD.
+- **Cost considerations**: Posting batches to the parent chain incurs fees, potentially increasing transaction costs.
+
+## Trust considerations
+
+Understanding the trust assumptions associated with each level of finality is essential:
+
+### Soft finality trust model
+
+- **Reliance on the Sequencer**: Users must trust that the Sequencer operates honestly, sequences transactions correctly, and remains available.
+- **Risk of misbehavior**: If the Sequencer acts maliciously, it could reorder or censor certain transactions before they achieve hard finality.
+
+### Hard finality trust model
+
+- **Reliance on the parent chain**: Security is based on the consensus and integrity of the parent chain.
+- **Reduced trust in the Sequencer**: Even if the Sequencer misbehaves, transactions included in posted batches are secured once finalized on the parent chain.
+
+## Application implications
+
+Developers and users should consider the appropriate level of finality based on their specific use cases:
+
+### When to rely on soft finality
+
+- **Low-risk transactions**: For transactions where the potential impact of reordering or delays is minimal.
+- **User experience priority**: Applications where responsiveness and immediacy enhance user engagement, such as gaming or social platforms.
+- **Frequent transactions**: Scenarios involving a high volume of small transactions where waiting for hard finality is impractical.
+
+### When to require hard finality
+
+- **High-value transactions**: Financial transfers, large trades, or any transaction where security is critical.
+- **Regulatory compliance**: Situations requiring strict adherence to security standards and auditable records.
+- **Centralized exchanges** (CEXs): For deposit and withdrawal operations where certainty of transaction finality is mandatory. Note that these two operations rely on different guarantees. Crediting a deposit can rely on parent-chain data finality (batches posted and finalized on L1, on the order of minutes). Releasing an L2→L1 withdrawal, however, requires the corresponding assertion to be confirmed by the Rollup protocol, which only completes after the BoLD challenge period (on the order of days). Batch posting alone does not make funds withdrawable to the parent chain.
