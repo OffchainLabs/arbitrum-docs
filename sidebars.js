@@ -1038,6 +1038,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              label: 'Transaction lifecycle',
+              id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
+            },
+            {
+              type: 'doc',
               label: 'Sequencer',
               id: 'how-arbitrum-works/deep-dives/sequencer',
             },
@@ -1048,8 +1053,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'AnyTrust',
-              id: 'how-arbitrum-works/deep-dives/anytrust-protocol',
+              label: 'State Transition Function',
+              id: 'how-arbitrum-works/deep-dives/stf',
             },
             {
               type: 'doc',
@@ -1058,8 +1063,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Assertions',
-              id: 'how-arbitrum-works/deep-dives/assertions',
+              label: 'Finality',
+              id: 'how-arbitrum-works/deep-dives/finality',
+            },
+            {
+              type: 'doc',
+              label: 'Gas and fees',
+              id: 'how-arbitrum-works/deep-dives/gas-and-fees',
             },
             {
               type: 'doc',
@@ -1073,18 +1083,13 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Transaction lifecycle',
-              id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
+              label: 'AnyTrust',
+              id: 'how-arbitrum-works/deep-dives/anytrust-protocol',
             },
             {
               type: 'doc',
-              label: 'Gas and fees',
-              id: 'how-arbitrum-works/deep-dives/gas-and-fees',
-            },
-            {
-              type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
+              label: 'Assertions',
+              id: 'how-arbitrum-works/deep-dives/assertions',
             },
           ],
         },
@@ -1096,6 +1101,11 @@ const sidebars = {
               type: 'doc',
               label: 'Geth',
               id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
             },
           ],
         },
