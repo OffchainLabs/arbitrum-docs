@@ -307,7 +307,7 @@
     "title": "Keyset",
     "text": "<p>The onchain configuration object that defines a <a href=\"/intro/glossary#data-availability-committee-dac\">Data Availability Committee (DAC)</a>—the <a href=\"/intro/glossary#bls-signature\">BLS public keys</a> of every committee member and the signature threshold required to produce a valid <a href=\"/intro/glossary#data-availability-certificate\">Data Availability Certificate</a>. A new keyset is published whenever committee membership or the threshold changes.</p>\n"
   },
-  "l1": {
+  "L1": {
     "title": "L1",
     "text": "<p>L1, or Layer 1, refers to the underlying blockchain responsible for maintaining the integrity of the distributed ledger and executing smart contracts. It contains both Ethereum&#39;s execution layer and consensus layer.</p>\n<p>In the context of Arbitrum One and Nova, L1 is the main Ethereum blockchain (Mainnet), and Arbitrum is a Layer 2 platform built on top of this base (Ethereum) layer.</p>\n<p>However, any EVM-compatible blockchain can be an L1 to an Arbitrum chain.</p>\n"
   },
