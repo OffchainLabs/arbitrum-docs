@@ -25,7 +25,7 @@
 <text x="120" y="441.2" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Delayed Inbox</text>
 <rect x="285" y="64" width="150" height="64" rx="10" fill="#213147"/>
 <text x="360" y="92.4" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">Sequencer feed</text>
-<text x="360" y="109.4" text-anchor="middle" fill="#9dcced" font-size="11">(soft guarantee)</text>
+<text x="360" y="109.4" text-anchor="middle" fill="#9dcced" font-size="11">(soft confirmation)</text>
 <rect x="300" y="234" width="120" height="64" rx="10" fill="#12aaff"/>
 <text x="360" y="271.2" text-anchor="middle" fill="#0b1b2e" font-size="15" font-weight="700">Sequencer</text>
 <rect x="470" y="150" width="150" height="232" rx="10" fill="#213147"/>
