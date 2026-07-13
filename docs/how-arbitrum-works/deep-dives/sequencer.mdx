@@ -49,7 +49,7 @@ Not every transaction originates with a direct RPC submission. Deposits and <a d
 
 ## Timeboost express lane
 
-Timeboost layers a priority auction on top of the default first-come-first-served ordering. Time is divided into fixed rounds (at least 10 seconds), and an offchain auction assigns each round and express-lane controller. That controller’s transactions take a dedicated path: they are validated (correct sender, round, and chain ID), placed into a per-round ordering queue, and delivered in sequence with no advantage delay, while ordinary transactions wait out the 200ms delay before queuing. The fact that a transaction was timeboosted is preserved as block metadata, so it remains observable downstream.
+Timeboost layers a priority auction on top of the default first-come-first-served ordering. Time is divided into fixed rounds (at least 10 seconds), and an offchain auction assigns each round an express-lane controller. That controller’s transactions take a dedicated path: they are validated (correct sender, round, and chain ID), placed into a per-round ordering queue, and delivered in sequence with no advantage delay, while ordinary transactions wait out the 200ms delay before queuing.
 
 ## Censorship Timeout
 
@@ -62,13 +62,13 @@ Censorship Timeout aims to limit the negative effects of:
 
 ## How the Censorship Timeout works
 
-To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an L3’s parent chain Sequencer (the L2 Sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge would need to wait 24 hours before bypassing the L2 Sequencer (using the SequencerInbox’s forceInclusion method). In this scenario, a challenge resolution would be delayed by a time t where t = (24 hours) \* number of moves for a challenge.
+To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an L3’s parent chain Sequencer (the L2 Sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge move would need to wait 24 hours before bypassing the L2 Sequencer (using the SequencerInbox’s forceInclusion method). In this scenario, a challenge resolution would be delayed by a time t where t = (24 hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
 
-The Censorship timeout feature mitigates this by lowering the force inclusion threshold when unexpected delays in message inclusion occur due to one (or all) of the above-mentioned cases of censorship or a sequencer outage, enabling entities to make moves without the 24-hour delay-per-move.
+The Censorship Timeout feature mitigates this by lowering the force inclusion threshold when unexpected delays in message inclusion occur due to one (or all) of the above-mentioned cases of censorship or a sequencer outage, enabling entities to make moves without the 24-hour delay-per-move.
 
-The force inclusion window is the lesser of delayBuffer and delayBlocks, where delayBlocks is a constant currently set to 24 hours, and delayBuffer ranges from 30 minutes to 48 hours.
+The force inclusion window is the lesser of `delayBuffer` and `delayBlocks`, where `delayBlocks` is a constant currently set to 24 hours, and `delayBuffer` ranges from 30 minutes to 48 hours.
 
-The delayBuffer value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the delayBuffer is decremented by the difference between a delayed message’s delay beyond the threshold and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the threshold is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+The `delayBuffer` value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message’s delay beyond the `threshold` and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the `threshold` is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
 
 The `delayBuffer` replenishes at a linear rate when the Sequencer is operating correctly at a nominal rate of one minute for every 20 minutes in which no messages are delayed beyond the `threshold`.
 
