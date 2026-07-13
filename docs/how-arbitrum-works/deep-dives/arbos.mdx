@@ -7,21 +7,21 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-ArbOS is the child-EVM virtual machine monitor (VMM) for Arbitrum Nitro: a trusted system component that lives inside the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/stf.mdx) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and fraud prover) can replay it deterministically.
+ArbOS is the child-EVM virtual machine monitor (VMM) for <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>: a trusted system component that lives inside the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/stf.mdx) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and fraud prover) can replay it deterministically.
 
 ## Core responsibilities
 
 1. **Network resource management**: Allocating and tracking the required resources to execute child-chain transactions and pricing them.
 2. **Block production**: Turning [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx)-delivered messages into child-chain blocks with correct state updates.
-3. **Cross-chain messaging**: Enables cross-chain communication between parent and child chains for deposits, withdrawals, and <a data-quicklook-from="retryable-ticket">retryable tickets</a>.
-4. **Enhanced EVM execution**: Running instrumented Geth to execute smart contracts with child-chain specific logic.
-5. **<a data-quicklook-from="stylus">Stylus</a> support**: Managing host I/O, memory, and execution context for <a data-quicklook-from="wasm">WASM</a>-based contracts.
+3. **Cross-chain messaging**: Enabling cross-chain communication between parent and child chains for deposits, withdrawals, and <a data-quicklook-from="retryable-ticket">retryable tickets</a>.
+4. **Enhanced EVM execution**: Running instrumented <a data-quicklook-from="geth">Geth</a> to execute <a data-quicklook-from="smart-contract">smart contracts</a> with child-chain specific logic.
+5. **<a data-quicklook-from="stylus">Stylus</a> support**: Managing <a data-quicklook-from="host-io">host I/O</a>, memory, and execution context for <a data-quicklook-from="wasm">WASM</a>-based contracts.
 
 ## Architecture: the Geth "sandwich"
 
-Rather than implementing the EVM, Arbitrum embeds it. The core of execution is _unmodified-in-spirit_, and still <a data-quicklook-from="geth">Geth</a>—the same engine that defines the Ethereum standard. ArbOS wraps Geth on both sides, an arrangement we call the sandwich.
+Rather than implementing the EVM, Arbitrum embeds it. The core of execution is _unmodified-in-spirit_, and still Geth—the same engine that defines the Ethereum standard. ArbOS wraps Geth on both sides, an arrangement we call the sandwich.
 
-- **Top slice** (pre-processing): Before the EVM runs, ArbOS injects a system "start block" transaction, fixes the parent-chain context (block number, timestamp, basefee), prices incoming data, and applies any transaction filtering.
+- **Top slice** (pre-processing): Before the EVM runs, ArbOS injects a system "start block" transaction, fixes the parent-chain context (block number, timestamp, base fee), prices incoming data, and applies any transaction filtering.
 - **Filling** (Geth core): Geth executes EVM transactions.
 - **Bottom slice** (post-processing): After the EVM runs, ArbOS settles fees, records cross-chain messages, and finalizes the block.
 
@@ -31,23 +31,23 @@ Sequencer inputs arrive as `L1IncomingMessage` objects. ArbOS turns each message
 
 For every `L1IncomingMessage`, there is a child-chain block with a unique block hash, and for every child-chain block after chain initialization, there is an `L1IncomingMessage` that produced it.
 
-`ProduceBlock` consumes one message and emits one block. Each block always begins with an injected `ArbitrumInternalTx` “start block” transaction that stamps in the parent-chain block number, timestamp, and L1 base fee. Because every value the EVM can observe as “now” is frozen into that opening system transaction, two nodes replaying the same message cannot disagree about the result—determinism is structural, not bolted on. Additional system transactions (e.g., batch-posting reports) may also be included during processing.
+`ProduceBlock` consumes one message and emits one block. Each block always begins with an injected `ArbitrumInternalTx` "start block" transaction that stamps in the parent-chain block number, timestamp, and L1 base fee. Because every value the EVM can observe as "now" is frozen into that opening system transaction, two nodes replaying the same message cannot disagree about the result—determinism is structural, not bolted on. Additional system transactions (e.g., batch-posting reports) may also be included during processing.
 
 ## ArbOS state
 
-ArbOS keeps its books in the same Geth state trie that holds account balances, under a reserved system address. The `ArbosState` object is a typed overlay on that raw key-value store. It is partitioned into subspaces, each identified by a one-byte prefix, and a set of fixed-scalar slots (“offsets”) at the root.
+ArbOS keeps its books in the same Geth state trie that holds account balances, under a reserved system address. The `ArbosState` object is a typed overlay on that raw key-value store. It is partitioned into subspaces, each identified by a one-byte prefix, and a set of fixed-scalar slots ("offsets") at the root.
 
 Most of this state is reachable from contracts through <a data-quicklook-from="precompile">precompiles</a>. Two components deserve special mention because they back headline features:
 
-- `sendMerkle` is the accumulator that records every L2 → L1 message; its root is what the parent-chain Outbox verifies against when a withdrawal is finalized.
-- `programs` hold Stylus activation state, which is why WASM contracts can be priced and executed deterministically.
+- `sendMerkle` is the accumulator that records every L2 → L1 message; its root is what the parent-chain <a data-quicklook-from="outbox">Outbox</a> verifies against when a withdrawal is finalized.
+- `programs` hold Stylus <a data-quicklook-from="activation">activation</a> state, which is why WASM contracts can be priced and executed deterministically.
 
 ## Gas and fees
 
 An Arbitrum transaction has a cost structure on L1: the chain must pay Ethereum to store its data and spend compute to execute it. ArbOS meters both, so every transaction pays two parties:
 
 - Child-chain execution is priced by `l2PricingState`, which runs a dynamic base-fee mechanism. A gas pool tracks demand across a time window, pushing that base fee up under load and down when idle, smoothing spikes while preserving capacity.
-- Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) spent posting compressed data to Ethereum and reimburses it from user fees.
+- Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) spent posting compressed data to Ethereum and reimburses the batch poster from user fees.
 
 Fees are routed to the configured network and infrastructure fee accounts.
 
@@ -67,9 +67,9 @@ Retryable tickets are a special message type that enables atomic parent-to-child
 
 ## ArbOS versions and upgrades
 
-Because the STF must stay deterministic across every node and across every historical replay, ArbOS cannot change behavior simply by shipping a new binary—old blocks must still reproduce exactly. Upgrades are therefore scheduled onchain events.
+Because the STF must stay deterministic across every node and across every historical replay, ArbOS cannot change behavior simply by shipping a new binary—old blocks must still reproduce exactly. Upgrades are therefore scheduled as onchain events.
 
-- ArbOS stores its current version, the upgradeVersion it plans to move to, and the upgradeTimestamp at which to switch (offsets 0-2 of state).
+- ArbOS stores its current version, the `upgradeVersion` it plans to move to, and the `upgradeTimestamp` at which to switch (offsets 0-2 of state).
 - At the appointed time, the storage format and execution semantics roll forward identically across all nodes.
 
 This is how the chain has evolved over time—for example, Stylus activated at ArbOS version 30—without ever replacing the operating system out from under its own history. Each version bump is gated behind a named constant in the chain parameters, so behavioral changes are tied to a specific, agreed-upon version rather than wall-clock client releases.
