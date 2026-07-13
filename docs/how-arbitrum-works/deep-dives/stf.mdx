@@ -13,7 +13,7 @@ An Arbitrum node is a deterministic machine: feed it the same ordered inputs, an
 
 #### 1. Two doors, one source of truth
 
-Inputs reach a node through two doors. The fast door is the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx)—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the Sequencer periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the parent chain is the canonical record (Ethereum for Arbitrum), and a node will <a data-quicklook-from="reorg">reorg</a> its optimistic feed-derived state to match what was actually settled on Ethereum.
+Inputs reach a node through two doors. The fast door is the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx)—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the <a data-quicklook-from="sequencer">Sequencer</a> periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the <a data-quicklook-from="parent-chain">parent chain</a> is the canonical record (Ethereum for Arbitrum), and a node will <a data-quicklook-from="reorg">reorg</a> its optimistic feed-derived state to match what was actually settled on Ethereum.
 
 #### 2. The envelope (`L1IncomingMessage`)
 
@@ -25,7 +25,7 @@ The header’s `Kind` routes the message. A handful of kinds are system messages
 
 #### 4. The envelope inside the envelope
 
-Open an `L2Message`, and you’ll find a second type byte—the `L2MessageKind`. A single signed transaction (`SignedTx`), an unsigned EOA or contract call (`UnsignedUserTx`, `ContractTx`), or—most importantly—a Batch, which is simply a list of more L2 messages. This nesting is why the type space looks deceptively flat in summaries but is really two layers: an outer parent-chain framing and an inner transaction framing.
+Open an `L2Message`, and you’ll find a second type byte—the `L2MessageKind`. The type byte can be a single signed transaction (`SignedTx`), an unsigned EOA or contract call (`UnsignedUserTx`, `ContractTx`), or—most importantly—a <a data-quicklook-from="batch">Batch</a>, which is simply a list of more L2 messages. This nesting is why the type space looks deceptively flat in summaries but is really two layers: an outer parent-chain framing and an inner transaction framing.
 
 #### 5. From batch to messages
 
@@ -33,11 +33,11 @@ A batch posted to L1 isn’t a list of transactions; it’s a Brotli-compressed 
 
 #### 6. The unwrap
 
-Finally, `ParseL2Transactions` turns each envelope into the EVM transactions Geth will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions—and that ordered list, derived deterministically from headers no node can fabricate, is the true input to Arbitrum’s State Transition Function.
+Finally, `ParseL2Transactions` turns each envelope into the EVM transactions <a data-quicklook-from="geth">Geth</a> will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions—and that ordered list, derived deterministically from headers no node can fabricate, is the true input to Arbitrum’s <a data-quicklook-from="state-transition-function">State Transition Function</a>.
 
 ## Stylus-specific transaction processing
 
-A modified version of <a data-quicklook-from="geth">Geth</a> that recognizes and processes <a data-quicklook-from="stylus">Stylus</a> transactions, ensuring proper inclusion in state transitions.
+A modified version of Geth that recognizes and processes <a data-quicklook-from="stylus">Stylus</a> transactions, ensuring proper inclusion in state transitions.
 
 ## Execution in a WASM runtime
 

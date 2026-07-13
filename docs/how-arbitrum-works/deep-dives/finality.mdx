@@ -1,6 +1,6 @@
 ---
 title: Finality
-description: 'Learn the fundamentals of the finality on Arbitrum.'
+description: 'Learn the fundamentals of finality on Arbitrum.'
 author: pete-vielhaber
 sme: Mehdi
 user_story: As a current or prospective Arbitrum user, I want to learn more about finality.
@@ -12,7 +12,7 @@ Finality in <a data-quicklook-from="blockchain">blockchain</a> systems refers to
 ## Levels of finality
 
 1. **<a data-quicklook-from="soft-confirmation">Soft finality</a>**: Provided by the <a data-quicklook-from="sequencer">Sequencer’s</a> real-time feed, offering immediate but provisional transaction confirmations.
-2. **<a data-quicklook-from="hard-finality">Hard finality</a>**: Occurs when transactions are included in batches posted to and finalized on the <a data-quicklook-from="parent-chain">parent chain</a>, providing strong security assurances. Final settlement on the parent chain happens via assertions confirmed by the <a data-quicklook-from="arbitrum-rollup-protocol">Rollup protocol</a>.
+2. **<a data-quicklook-from="hard-finality">Hard finality</a>**: Occurs when transactions are included in <a data-quicklook-from="batch">batches</a> posted to and finalized on the <a data-quicklook-from="parent-chain">parent chain</a>, providing strong security assurances. Final settlement on the parent chain happens via <a data-quicklook-from="assertion">assertions</a> confirmed by the <a data-quicklook-from="arbitrum-rollup-protocol">Rollup protocol</a>.
 
 This section explores the concepts of soft and hard finality, their implications, trust considerations, and guidance for using them effectively within the Arbitrum network.
 
@@ -31,8 +31,8 @@ The following table summarizes the approximate latency and guarantee at each sta
 | Stage                                                         | Guarantee                                                                               | Approximate latency                                                                                      |
 | ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | Soft finality (Sequencer feed)                                | Provisional ordering by the Sequencer                                                   | Sub-second                                                                                               |
-| Parent-chain data finality (batch posted and finalized on L1) | Transaction data is durably recorded and inherits the parent chain's consensus security | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block)          |
-| Full settlement (assertion confirmed)                         | L2 state is finalized and L2→L1 withdrawals can be executed                             | A bounded challenge period under <a data-quicklook-from="bold">BoLD</a>, on the order of days on mainnet |
+| Parent-chain data finality (batch posted and finalized on <a data-quicklook-from="L1">L1</a>) | Transaction data is durably recorded and inherits the parent chain's consensus security | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block)          |
+| Full settlement (assertion confirmed)                         | <a data-quicklook-from="L2">L2</a> state is finalized and L2→L1 withdrawals can be executed                             | A bounded <a data-quicklook-from="challenge-period">challenge period</a> under <a data-quicklook-from="bold">BoLD</a>, on the order of days on mainnet |
 
 ## Soft finality
 
@@ -76,7 +76,7 @@ Hard finality occurs when batched transactions are posted to the parent chain an
 
 ### Limitations of hard finality
 
-- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The challenge protocol that backs this guarantee is described in BoLD.
+- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The <a data-quicklook-from="challenge-protocol">challenge protocol</a> that backs this guarantee is described in BoLD.
 - **Cost considerations**: Posting batches to the parent chain incurs fees, potentially increasing transaction costs.
 
 ## Trust considerations

@@ -15,11 +15,11 @@ Batch posting is a fundamental process for the <a data-quicklook-from="sequencer
 
 #### 1. Messages arrive (upstream handoff)
 
-A transaction’s journey into the batch poster begins after it’s already been [sequenced](/how-arbitrum-works/deep-dives/sequencer.mdx). The poster pulls ordered L2 messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/stf.mdx), and [soft-finality](/how-arbitrum-works/deep-dives/finality.mdx) all happened before this point and live outside of the batch poster.
+A transaction’s journey into the batch poster begins after it’s already been [sequenced](/how-arbitrum-works/deep-dives/sequencer.mdx). The poster pulls ordered <a data-quicklook-from="L2">L2</a> messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/stf.mdx), and [soft-finality](/how-arbitrum-works/deep-dives/finality.mdx) all happened before this point and live outside of the batch poster.
 
 #### 2. The poster decides where it stands
 
-The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and L1 nonce am I on?” and establishes the L1 time/block window the batch will use. That window comes from reading the L1 SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to L1.
+The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and <a data-quicklook-from="L1">L1</a> nonce am I on?” and establishes the L1 time/block window the batch will use. That window comes from reading the L1 SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to L1.
 
 #### 3. Messages become a compressed batch
 
