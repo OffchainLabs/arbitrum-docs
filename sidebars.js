@@ -655,6 +655,13 @@ const sidebars = {
           label: 'Run a local full chain simulation',
         },
         {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/run-a-node/run-full-node-with-helm">Run a full node with helm<span class="other-section-icon">↓</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
+        },
+        {
           type: 'doc',
           id: 'run-arbitrum-node/run-nitro-dev-node',
           label: 'Run a local dev node',
