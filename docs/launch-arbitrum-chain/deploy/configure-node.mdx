@@ -59,23 +59,26 @@ The following table briefly describes the type of parameters that can be configu
 
 ### Additional configuration for Arbitrum AnyTrust chains:
 
-For [Arbitrum AnyTrust chains](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx), the Nitro node configuration object has an additional segment under the `node` field to configure the AnyTrust specific properties:
+For [Arbitrum AnyTrust chains](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx), the Nitro node configuration object has an additional `da.anytrust` segment under the `node` field to configure the AnyTrust specific properties (prior to Nitro v3.10.0, this segment was named `data-availability` and also held the `sequencer-inbox-address` and `parent-chain-node-url` keys, which current versions no longer accept):
 
 ```typescript
 {
   ...
   "node": {
     ...
-    "sequencer-inbox-address": "0xSequencerInbox",
-    "parent-chain-node-url": "http://parentChainRpcUrl",
-    "rest-aggregator": {
-      "enable": true,
-      "urls": "http://localhost:9876",
-    },
-    "rpc-aggregator": {
-      "enable": true,
-      "assumed-honest": 3,
-      "backends": "[...]",
+    "da": {
+      "anytrust": {
+        "enable": true,
+        "rest-aggregator": {
+          "enable": true,
+          "urls": "http://localhost:9877",
+        },
+        "rpc-aggregator": {
+          "enable": true,
+          "assumed-honest": 3,
+          "backends": "[...]",
+        },
+      },
     },
   }
   ...

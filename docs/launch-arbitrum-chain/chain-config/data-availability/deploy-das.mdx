@@ -79,7 +79,7 @@ DA servers also have an optional REST aggregator which, when a data batch is not
 
 <VanillaAdmonition type="warning" title="Binary and flag names changed in Nitro v3.10.0">
 
-As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the parent chain flags moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. The Docker image keeps a deprecated `datool` symlink for backward compatibility, but no longer includes `daserver`. This guide uses the new names throughout.
+As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the parent chain flags moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. Current Docker images (v3.11.2 and later) only ship the new binaries, so scripts using the old names fail. This guide uses the new names throughout.
 
 </VanillaAdmonition>
 

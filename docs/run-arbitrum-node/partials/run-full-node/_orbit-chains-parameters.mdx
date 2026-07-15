@@ -68,11 +68,11 @@ Use the parameter `--execution.forwarding-target` to point at the sequencer node
 
 If you're running a node for an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, you need to specify information about the Data Availability Committee (DAC) in the configuration of your node.
 
-First, enable `data-availability` using the following parameters:
+First, enable AnyTrust data availability using the following parameters (prior to Nitro v3.10.0, these lived under the now-deprecated `--node.data-availability.*` namespace):
 
 ```shell
---node.data-availability.enable
---node.data-availability.rest-aggregator.enable
+--node.da.anytrust.enable
+--node.da.anytrust.rest-aggregator.enable
 ```
 
 Then, choose one of these methods to specify the DAS REST endpoints that your node will read the information from. These endpoints should also be provided by the chain owner.
@@ -80,13 +80,13 @@ Then, choose one of these methods to specify the DAS REST endpoints that your no
     1. Set the DAS REST endpoints directly:
 
     ```shell
-    --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, separated by commas>
+    --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, separated by commas>
     ```
 
     2. Set a URL that returns a list of the DAS REST endpoints:
 
     ```shell
-    --node.data-availability.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
+    --node.da.anytrust.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
     ```
 
 ::::tip Setting a DAS (for chain owners)
