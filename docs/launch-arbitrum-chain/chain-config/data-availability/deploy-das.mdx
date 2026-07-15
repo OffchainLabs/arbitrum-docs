@@ -43,12 +43,11 @@ DA servers listen on two primary interfaces:
 
 ### Storage options
 
-A DAS can be configured to use one or more of four storage backends:
+A DAS can be configured to use one or more of three storage backends:
 
 - [AWS S3](https://aws.amazon.com/s3/) bucket
 - Files on local disk
 - (**EXPERIMENTAL**) [Google Cloud Storage](https://cloud.google.com/storage) bucket
-- (**DEPRECATED**) [Badger](https://dgraph.io/docs/badger/) database on local disk
 
 ::::warning Google Cloud Storage is experimental
 
@@ -56,11 +55,9 @@ The Google Cloud Storage option (set with `google-cloud-storage`) is experimenta
 
 ::::
 
-::::warning Local Badger database deprecated
+::::warning Local Badger database removed
 
-The local Badger DB storage option (set with `local-db-storage`) has been deprecated and should be replaced with the local files storage option (set with `local-file-storage`).
-
-A migration tool has been included in Nitro to migrate all data from the local badger db to local files. You can activate it by using the parameter `--data-availability.migrate-local-db-to-file-storage`.
+The local Badger DB storage option (previously set with `local-db-storage`) was deprecated and removed in Nitro v3.8.0, together with its `--data-availability.migrate-local-db-to-file-storage` migration parameter. If your DAS still stores data in a local Badger database, run a Nitro version prior to v3.8.0 with that parameter to migrate the data to the local files storage option (`local-file-storage`) before upgrading.
 
 ::::
 
@@ -79,6 +76,12 @@ Requests sent to the REST interface (to retrieve data from the DAS) always retur
 DA servers also have an optional REST aggregator which, when a data batch is not found in cache or storage, requests that batch to other REST servers defined in a list and stores that batch upon receiving it. This is how a DAS that misses storing a batch (the AnyTrust protocol doesn't require all of them to report success in order to post the batch's certificate to the parent chain) can automatically repair gaps in the data it stores, and also how a [mirror DAS](#running-a-mirror-das) can sync its data. A public list of REST endpoints is published online, which the DAS can be configured to download and use, and additional endpoints can be specified in the configuration.
 
 ## How to deploy the DAS
+
+<VanillaAdmonition type="warning" title="Binary and flag names changed in Nitro v3.10.0">
+
+As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the parent chain flags moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. The Docker image keeps a deprecated `datool` symlink for backward compatibility, but no longer includes `daserver`. This guide uses the new names throughout.
+
+</VanillaAdmonition>
 
 ### Step 0: Prerequisites
 
@@ -116,33 +119,33 @@ Depending on the storage backend you use for your DAS, you'll need to configure 
 
 Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
-The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
+The BLS keypair must be generated using the `anytrusttool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
 When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in.
 
-Here's an example of how to use the `datool keygen` utility inside Docker and store the key that will be used by the DAS in the next step.
+Here's an example of how to use the `anytrusttool keygen` utility inside Docker and store the key that will be used by the DAS in the next step.
 
 ```shell
-docker run -v $(pwd)/bls_keys:/data/keys --entrypoint datool \
+docker run -v $(pwd)/bls_keys:/data/keys --entrypoint anytrusttool \
 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ keygen --dir /data/keys
 ```
 
 ### Step 2: Deploy the DAS
 
-To run the DAS, we'll use the `daserver` tool and we'll configure the following parameters:
+To run the DAS, we'll use the `anytrustserver` tool and we'll configure the following parameters:
 
-| Parameter                                   | Description                                                                                                     |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| --data-availability.parent-chain-node-url   | RPC endpoint of a parent chain node                                                                             |
-| --data-availability.sequencer-inbox-address | Address of the `SequencerInbox` in the parent chain                                                             |
-| --data-availability.key.key-dir             | The absolute path to the directory inside the volume to read the BLS keypair ('das_bls.pub' and 'das_bls') from |
-| --enable-rpc                                | Enables the HTTP-RPC server listening on --rpc-addr and --rpc-port                                              |
-| --rpc-addr                                  | HTTP-RPC server listening interface (default "localhost")                                                       |
-| --rpc-port                                  | (Optional) HTTP-RPC server listening port (default 9876)                                                        |
-| --enable-rest                               | Enables the REST server listening on --rest-addr and --rest-port                                                |
-| --rest-addr                                 | REST server listening interface (default "localhost")                                                           |
-| --rest-port                                 | (Optional) REST server listening port (default 9877)                                                            |
-| --log-level                                 | Log level: 1 - ERROR, 2 - WARN, 3 - INFO, 4 - DEBUG, 5 - TRACE (default 3)                                      |
+| Parameter                              | Description                                                                                                     |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| --parent-chain.node-url                | RPC endpoint of a parent chain node                                                                             |
+| --parent-chain.sequencer-inbox-address | Address of the `SequencerInbox` in the parent chain                                                             |
+| --data-availability.key.key-dir        | The absolute path to the directory inside the volume to read the BLS keypair ('das_bls.pub' and 'das_bls') from |
+| --enable-rpc                           | Enables the HTTP-RPC server listening on --rpc-addr and --rpc-port                                              |
+| --rpc-addr                             | HTTP-RPC server listening interface (default "localhost")                                                       |
+| --rpc-port                             | (Optional) HTTP-RPC server listening port (default 9876)                                                        |
+| --enable-rest                          | Enables the REST server listening on --rest-addr and --rest-port                                                |
+| --rest-addr                            | REST server listening interface (default "localhost")                                                           |
+| --rest-port                            | (Optional) REST server listening port (default 9877)                                                            |
+| --log-level                            | Log level: CRIT, ERROR, WARN, INFO, DEBUG, or TRACE (default INFO)                                              |
 
 To enable caching, you can use the following parameters:
 
@@ -171,8 +174,6 @@ import TabItem from '@theme/TabItem';
 import S3Parameters from '../../partials/config-snippets/_s3-parameters.mdx';
 import LocalFilesParameters from '../../partials/config-snippets/_local-files-parameters.mdx';
 import GoogleCloudStorageParameters from '../../partials/config-snippets/_gcs-parameters.mdx';
-import LocalBadgerDBParameters from '../../partials/code-snippets/_local-badger-db-parameters.mdx';
-
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
     <TabItem value="s3-bucket" label="AWS S3 bucket">
@@ -184,13 +185,10 @@ import LocalBadgerDBParameters from '../../partials/code-snippets/_local-badger-
     <TabItem value="gcs-bucket" label="(Experimental) Google Cloud Storage">
       <GoogleCloudStorageParameters />
     </TabItem>
-    <TabItem value="badger-db" label="(Deprecated) Local Badger database">
-      <LocalBadgerDBParameters />
-    </TabItem>
   </Tabs>
-</div>
+</div>;
 
-Here's an example `daserver` command for a DAS that:
+Here's an example `anytrustserver` command for a DAS that:
 
 - Enables both interfaces: RPC and REST
 - Enables local cache
@@ -199,13 +197,13 @@ Here's an example `daserver` command for a DAS that:
 - Enables local files storage
 
 ```shell
-daserver
-    --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>"
-    --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>"
+anytrustserver
+    --parent-chain.node-url "<YOUR PARENT CHAIN RPC ENDPOINT>"
+    --parent-chain.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>"
     --data-availability.key.key-dir /home/user/data/keys
     --enable-rpc
     --rpc-addr '0.0.0.0'
-    --log-level 3
+    --log-level INFO
     --enable-rest
     --rest-addr '0.0.0.0'
     --data-availability.local-cache.enable
@@ -248,8 +246,7 @@ template:
         - bash
         - -c
         - |
-        mkdir -p /home/user/data/badgerdb
-        /usr/local/bin/daserver --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --data-availability.key.key-dir /home/user/data/keys --enable-rpc --rpc-addr '0.0.0.0' --log-level 3 --enable-rest --rest-addr '0.0.0.0' --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.s3-storage.discard-after-timeout false --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
+        /usr/local/bin/anytrustserver --parent-chain.node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --parent-chain.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --data-availability.key.key-dir /home/user/data/keys --enable-rpc --rpc-addr '0.0.0.0' --log-level INFO --enable-rest --rest-addr '0.0.0.0' --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
         image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@
         imagePullPolicy: Always
         resources:
@@ -289,10 +286,10 @@ template:
 
 Archive DA servers are servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to ensure all historical data is available.
 
-To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to `false` in your storage method. For example:
+To activate the "archive mode" in your DAS, configure your storage backend to never discard data: `local-file-storage` retains all data by default (as long as `enable-expiry` is not set), and `s3-storage` relies on the bucket's lifecycle configuration, as explained in the notes below. For the experimental `google-cloud-storage` backend, set the parameter `discard-after-timeout` to `false`:
 
 ```shell
---data-availability.local-db-storage.discard-after-timeout=false
+--data-availability.google-cloud-storage.discard-after-timeout=false
 ```
 
 :::note
@@ -338,21 +335,21 @@ Using this facility, a load test could be constructed by writing a script to sto
 
 #### Step 1: Generate an ECDSA keypair
 
-First we'll generate an ECDSA keypair with `datool keygen`. Create a folder inside `/some/local/dir` to store the ECDSA keypair, for example `/some/local/dir/keys`. Then run `datool keygen`:
+First we'll generate an ECDSA keypair with `anytrusttool keygen`. Create a folder inside `/some/local/dir` to store the ECDSA keypair, for example `/some/local/dir/keys`. Then run `anytrusttool keygen`:
 
 ```shell
-datool keygen --dir /some/local/dir/keys --ecdsa
+anytrusttool keygen --dir /some/local/dir/keys --ecdsa
 ```
 
 You can also use the `docker run` command as follows:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ keygen --dir /home/user/data/keys --ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ keygen --dir /home/user/data/keys --ecdsa
 ```
 
 #### Step 2: Change the DAS configuration and restart the server
 
-Add the following configuration parameter to `daserver`:
+Add the following configuration parameter to `anytrustserver`:
 
 ```shell
 --data-availability.extra-signature-checking-public-key /some/local/dir/keys/ecdsa.pub
@@ -368,43 +365,43 @@ And then restart it.
 
 #### Step 3: Store data signed with the ECDSA private key
 
-Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
+Now you can use the `anytrusttool` utility to send store requests signed with the ECDSA private key:
 
 ```shell
-datool client rpc store  --server-url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
+anytrusttool client rpc store --rpc-client.rpc.url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
 ```
 
 OR
 
 ```shell
-datool client rpc store  --server-url http://localhost:9876 --message "Hello world" --signing-key "0x<contents of ecdsa>"
+anytrusttool client rpc store --rpc-client.rpc.url http://localhost:9876 --message "Hello world" --signing-key "0x<contents of ecdsa>"
 ```
 
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ client rpc store --server-url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ client rpc store --rpc-client.rpc.url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
 The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
 
 #### Step 4: Retrieve the stored data
 
-Use again the `datool` to retrieve the stored data. Notice that to perform this step you must have the REST interface enabled in the DAS:
+Use again the `anytrusttool` to retrieve the stored data. Notice that to perform this step you must have the REST interface enabled in the DAS:
 
 ```shell
-datool client rest getbyhash --server-url http://localhost:9877 --data-hash 0xDataHash
+anytrusttool client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ client rest getbyhash --server-url http://localhost:9877 --data-hash 0xDataHash
+docker run --rm -it --network="host" --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 If we set `0xDataHash` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
 
-The retention period defaults to 24 hours, but can be configured when calling `datool client rpc store` with the parameter `--das-retention-period` and the number of milliseconds for the retention period.
+The retention period defaults to 24 hours, but can be configured when calling `anytrusttool client rpc store` with the parameter `--anytrust-retention-period` and a duration for the retention period (e.g., `48h`).
 
 ### Test 3: REST health check
 
