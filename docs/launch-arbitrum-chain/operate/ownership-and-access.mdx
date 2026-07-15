@@ -7,7 +7,7 @@ target_audience: 'RaaSes and developers deploying and maintaining Arbitrum chain
 content_type: how-to
 ---
 
-A **chain owner** of an Arbitrum chain is an entity that can carry out critical upgrades to the chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding & removing other chain owners.
+A **chain owner** of an Arbitrum chain is an entity that can carry out critical upgrades to the chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding and removing other chain owners.
 
 An Arbitrum chain's initial chain owner is set by the chain's creator when the chain is deployed.
 
@@ -23,23 +23,112 @@ Some examples:
 
 - The parent chain's core protocol contracts are upgradeable proxies that are controlled by a proxy admin; the proxy admin is owned by the Upgrade Executor on the parent chain.
 - The core Rollup contract's admin role is given to the Upgrade Executor on the parent chain.
-- The affordance to call setters on the `ArbOwner` procompile—which allows for setting system gas parameters and scheduling ArbOS upgrades (among other things)—is given to the Upgrade Executor on the Arbitrum chain.
+- The affordance to call setters on the `ArbOwner` precompile—which allows for setting system gas parameters and scheduling ArbOS upgrades (among other things)—is given to the Upgrade Executor on the Arbitrum chain.
 
-Calls to an Upgrade Executor can only be made by chain owners; e.g., entities granted the `EXECUTOR_ROLE` affordance on the Upgrade Executor. Upgrade executors also have the `ADMIN_ROLE` affordance granted to themselves, which lets chain owners add or remove chain owners.
+Calls to an Upgrade Executor can only be made by chain owners; e.g., entities granted the `EXECUTOR_ROLE` affordance on the Upgrade Executor. Upgrade Executors also have the `ADMIN_ROLE` affordance granted to themselves, which lets chain owners add or remove chain owners.
 
 With this architecture, the Upgrade Executor represents a single source of truth for affordances over critical upgradability of the chain.
 
-:::info Precompile Reference
+<VanillaAdmonition type="info" title="Precompile reference">
 
 The [`ArbOwner` precompile reference](/arbitrum-essentials/precompiles/reference.mdx#arbowner) can be found on the [Precompiles reference page](/arbitrum-essentials/precompiles/reference.mdx).
 
-:::
+</VanillaAdmonition>
 
 ## Upgrades
 
-Upgrades occur via a chain owner initiating a call to an Upgrade Executor, which in turns calls some chain-owned contract.
+Upgrades occur via a chain owner initiating a call to an Upgrade Executor, which in turn calls some chain-owned contract.
 
 Chain owners can either call [`UpgradeExecutor.executeCall`](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L73), which will in turn call the target contract directly, or [`UpgradeExecutor.execute`](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L57), which will delegate-call to an "action contract" and use its code to call the target contract.
+
+## Per-function permissions
+
+The tables below list the privileged functions on the `SequencerInbox`, `Rollup`/`RollupAdminLogic`, and `Bridge` contracts, who is allowed to call each one, and the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) (formerly the Orbit SDK) helper that performs the call (where one exists). This answers the recurring question of which calls the Rollup owner makes and which must be routed through the Upgrade Executor.
+
+**How to read the _Required caller_ column.** The source of truth is the access-control modifier on each function in the [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) source:
+
+- A function gated to the **Rollup owner or admin** — an `onlyRollupOwner`-style modifier, or any `RollupAdminLogic` admin function — is, in a standard deployment, triggered by the owner **through the Upgrade Executor**, because the Upgrade Executor contract _is_ the owner/admin of these contracts. See [Upgrades](#upgrades) above for the conceptual explanation of that flow.
+- A function callable **directly** by a dedicated role (for example the batch poster manager) does **not** need to go through the Upgrade Executor; that role's address calls it directly.
+
+The Chain SDK's `sequencerInboxPrepareTransactionRequest` and `rollupAdminLogicPrepareTransactionRequest` helpers accept an `upgradeExecutor` argument and wrap the call in `UpgradeExecutor.executeCall` automatically, so the owner path is handled for you.
+
+### SequencerInbox
+
+Access is enforced by the `onlyRollupOwner` and `onlyRollupOwnerOrBatchPosterManager` modifiers.
+
+| Function                                | Required caller                                                            | Chain SDK helper                                                                    |
+| --------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `setValidKeyset(bytes)`                 | Rollup owner — via Upgrade Executor                                        | `setValidKeyset` / `buildSetValidKeyset`                                            |
+| `invalidateKeysetHash(bytes32)`         | Rollup owner — via Upgrade Executor                                        | `buildInvalidateKeysetHash`                                                         |
+| `setIsBatchPoster(address, bool)`       | Rollup owner (via Upgrade Executor) **or** batch poster manager (directly) | `buildSetIsBatchPoster` (also `buildEnableBatchPoster` / `buildDisableBatchPoster`) |
+| `setIsSequencer(address, bool)`         | Rollup owner (via Upgrade Executor) **or** batch poster manager (directly) | `sequencerInboxPrepareTransactionRequest`                                           |
+| `setMaxTimeVariation(MaxTimeVariation)` | Rollup owner — via Upgrade Executor                                        | `buildSetMaxTimeVariation`                                                          |
+| `setBatchPosterManager(address)`        | Rollup owner — via Upgrade Executor                                        | `sequencerInboxPrepareTransactionRequest`                                           |
+| `setFeeTokenPricer(IFeeTokenPricer)`    | Rollup owner — via Upgrade Executor                                        | `sequencerInboxPrepareTransactionRequest`                                           |
+| `setBufferConfig(BufferConfig)`         | Rollup owner — via Upgrade Executor                                        | `sequencerInboxPrepareTransactionRequest`                                           |
+| `updateRollupAddress()`                 | Rollup owner (inline check) — via Upgrade Executor                         | `sequencerInboxPrepareTransactionRequest`                                           |
+
+<VanillaAdmonition type="info">
+
+`setAllowListEnabled` is **not** a `SequencerInbox` function, despite being commonly asked about in that context. It lives on the `Inbox` (the delayed inbox/`AbsInbox`)—see the [Inbox](#inbox-delayed-inbox) row below.
+
+</VanillaAdmonition>
+
+### Rollup / RollupAdminLogic
+
+Every function on `RollupAdminLogic` is reachable only through the Rollup proxy's admin, which in a standard deployment is the Upgrade Executor. There is no per-function modifier—the proxy routes admin calls to this logic contract only when the caller is the admin—so **all of these require the Upgrade Executor** and none have a dedicated Chain SDK helper. They are all issued through the generic `rollupAdminLogicPrepareTransactionRequest({ functionName, args, upgradeExecutor, rollup, account })` dispatcher.
+
+| Function                                           | Required caller                     | Chain SDK helper                            |
+| -------------------------------------------------- | ----------------------------------- | ------------------------------------------- |
+| `setValidator(address[], bool[])`                  | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setOwner(address)`                                | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setConfirmPeriodBlocks(uint64)`                   | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setMinimumAssertionPeriod(uint256)`               | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setValidatorAfkBlocks(uint64)`                    | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setValidatorWhitelistDisabled(bool)`              | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `increaseBaseStake(uint256)`                       | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `decreaseBaseStake(uint256, uint64)`               | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setWasmModuleRoot(bytes32)`                       | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setLoserStakeEscrow(address)`                     | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setInbox(IInboxBase)`                             | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setSequencerInbox(address)`                       | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setDelayedInbox(address, bool)`                   | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setOutbox(IOutbox)`                               | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `removeOldOutbox(address)`                         | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setAnyTrustFastConfirmer(address)`                | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `setChallengeManager(address)`                     | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `pause()`                                          | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `resume()`                                         | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `forceRefundStaker(address[])` (only `whenPaused`) | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `forceCreateAssertion(...)` (only `whenPaused`)    | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+| `forceConfirmAssertion(...)` (only `whenPaused`)   | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
+
+<VanillaAdmonition type="note">
+
+The function set above reflects the BoLD-era `RollupAdminLogic`. On pre-BoLD chains some names differ (for example, `setBaseStake` in place of `increaseBaseStake`/`decreaseBaseStake`, and `forceCreateNode`/`forceConfirmNode` in place of the `*Assertion` variants). Always confirm against the `nitro-contracts` version your chain runs.
+
+</VanillaAdmonition>
+
+### Bridge
+
+Access is enforced by the `onlyRollupOrOwner` modifier—the caller must be the Rollup contract itself or the Rollup owner. The owner path runs through the Upgrade Executor. The Chain SDK has no dedicated Bridge helpers; these are configured during deployment or via the `Rollup` admin forwarders above.
+
+| Function                                       | Required caller                                                    | Chain SDK helper |
+| ---------------------------------------------- | ------------------------------------------------------------------ | ---------------- |
+| `setSequencerInbox(address)`                   | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
+| `setDelayedInbox(address, bool)`               | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
+| `setOutbox(address, bool)`                     | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
+| `setSequencerReportedSubMessageCount(uint256)` | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
+| `updateRollupAddress(IOwnable)`                | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
+
+### Inbox (delayed inbox)
+
+`setAllowListEnabled` and the allowlist setter live on the `Inbox` (`AbsInbox`), not on `SequencerInbox`. Access is enforced by `onlyRollupOrOwner`.
+
+| Function                          | Required caller                                                    | Chain SDK helper           |
+| --------------------------------- | ------------------------------------------------------------------ | -------------------------- |
+| `setAllowListEnabled(bool)`       | Rollup contract, or Rollup owner — owner path via Upgrade Executor | `buildSetAllowListEnabled` |
+| `setAllowList(address[], bool[])` | Rollup contract, or Rollup owner — owner path via Upgrade Executor | `buildSetAllowList`        |
 
 ## Ownership flexibility
 
@@ -47,8 +136,8 @@ A chain owner is simply an address; it is set by the Arbitrum chain's deployer a
 
 The Arbitrum DAO governed chains, while not Arbitrum chains themselves, use a similar architecture and upgrade pattern as Arbitrum chains, with both a governance token and a Multisig (aka, the "Security Council") as chain owners. For more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
 
-:::note
+<VanillaAdmonition type="note">
 
-The DAO Governed chains' Upgrade Executor contracts don't have the `.executeCall` method; only the `.execute` method
+The DAO-governed chains' Upgrade Executor contracts don't have the `.executeCall` method; only the `.execute` method.
 
-:::
+</VanillaAdmonition>
