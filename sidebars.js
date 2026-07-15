@@ -322,6 +322,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment',
+                  label: `Deploy DAS with Docker`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
                   label: `Deploy mirror DAS`,
                 },

@@ -1,0 +1,289 @@
+---
+title: 'How to deploy a Data Availability Server (DAS) with Docker'
+sidebar_label: 'Deploy DAS with Docker'
+description: 'Deploy a Data Availability Server (DAS) for your AnyTrust chain using Docker and Docker Compose, without Kubernetes: generate BLS keys in a container, run the server, and verify it.'
+user_story: 'As a Data Availability Committee member, I want to deploy a DAS with Docker and Docker Compose so that I can run a committee member server without a Kubernetes cluster.'
+content_type: 'how-to'
+author: 'Gowtham118'
+sme: 'Gowtham118'
+---
+
+<p>
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
+</p>
+
+In this how-to, you'll learn how to deploy a DAS using Docker and [Docker Compose](https://docs.docker.com/compose/), without a Kubernetes cluster. Every step runs inside the official Nitro Docker image, including key generation, so you never need to build Nitro from source.
+
+[How to deploy a DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx) covers the same deployment using Kubernetes, and explains in depth how a DAS works and which configuration options are available. This page doesn't repeat that conceptual content; when in doubt about an option, refer to that guide.
+
+**When to choose Docker instead of Kubernetes:**
+
+- You're a committee member running a single DAS on one machine or VM.
+- You're testing a DAC setup locally before moving to production infrastructure.
+- Your team doesn't operate a Kubernetes cluster and doesn't want to adopt one for a single service.
+
+For production setups that need self-healing, rolling updates, or multiple replicas behind a load balancer, prefer the [Kubernetes-based guide](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx) or the [Helm chart](https://artifacthub.io/packages/helm/offchainlabshelm/das).
+
+This how-to assumes that you're familiar with:
+
+- The DAC's role in the AnyTrust protocol. Refer to [Inside AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) for a refresher.
+- [Docker](https://docs.docker.com/) and Docker Compose.
+
+<VanillaAdmonition type="warning" title="Binary names changed in Nitro v3.10.0">
+
+As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the Docker image only ships the new names. The parent chain flags also moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. If you're following older guides or scripts that use the legacy names with a recent image, the commands will fail. This guide uses the new names throughout.
+
+</VanillaAdmonition>
+
+## How to deploy the DAS
+
+### Step 0: Prerequisites
+
+Gather the following information and tooling:
+
+- A recent version of [Docker Engine](https://docs.docker.com/engine/install/) with the Docker Compose plugin (so that `docker compose` works).
+- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@`
+- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/arbitrum-essentials/reference/node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/02-run-full-node.mdx) to prevent being rate limited.
+- The `SequencerInbox` contract address in the parent chain.
+- If you wish to configure a REST aggregator for your DAS, the URL where the list of REST endpoints is kept. Refer to [State synchronization](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#state-synchronization) for more information.
+
+The hardware requirements are the same as for a Kubernetes deployment: a single CPU and 1 GiB of RAM handle normal DAS duties comfortably. See [Hardware requirements](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#hardware-requirements) for details, including guidance for mirrors and CDNs.
+
+All files in this guide live in a single working directory. Create it, along with the two directories that will be mounted into the container:
+
+```shell
+mkdir -p das-server/bls_keys das-server/das-data
+cd das-server
+```
+
+<VanillaAdmonition type="warning" title="Create mounted directories before starting the container">
+
+The DAS container runs as a non-root user with UID and GID `1000` (the first regular user on the image's Debian base). If a bind-mounted directory doesn't exist when the container starts, Docker creates it owned by `root`, and the server will fail with permission errors when writing to it. Always create the directories on the host first. On Linux, if your user's UID isn't `1000`, also make them writable for the container user: `sudo chown -R 1000:1000 bls_keys das-data`. Docker Desktop on macOS and Windows maps file ownership automatically, so this step isn't needed there.
+
+</VanillaAdmonition>
+
+### Step 1: Generate the BLS keypair
+
+We'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
+
+The keypair is generated with the `anytrusttool keygen` utility, which ships in the same Docker image as the DAS, so you can run it with `docker run` and a volume mount to have the keys land on your host:
+
+```shell
+docker run --rm -v $(pwd)/bls_keys:/home/user/bls_keys --entrypoint anytrusttool \
+@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ keygen --dir /home/user/bls_keys
+```
+
+This creates two files in `bls_keys/`, both base64-encoded and readable only by their owner (mode `600`):
+
+- `das_bls`: the private key. Never share it, and back it up securely.
+- `das_bls.pub`: the public key. You'll send this one to the <a data-quicklook-from="chain-owner">chain owner</a> so it can be included in the keyset.
+
+To print the public key:
+
+```shell
+cat bls_keys/das_bls.pub
+```
+
+### Step 2: Create the Docker Compose file
+
+Save the following as `docker-compose.yml` in your working directory, replacing the placeholders with your parent chain RPC endpoint and `SequencerInbox` address. The image tag is pinned to a specific release: don't use `latest`, so that upgrades are always an explicit, reviewable change.
+
+```yaml
+services:
+  das-server:
+    image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@
+    entrypoint: ['/usr/local/bin/anytrustserver']
+    command:
+      - --parent-chain.node-url=<YOUR PARENT CHAIN RPC ENDPOINT>
+      - --parent-chain.sequencer-inbox-address=<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>
+      - --enable-rpc
+      - --rpc-addr=0.0.0.0
+      - --enable-rest
+      - --rest-addr=0.0.0.0
+      - --log-level=INFO
+      - --data-availability.key.key-dir=/home/user/bls_keys
+      - --data-availability.local-file-storage.enable
+      - --data-availability.local-file-storage.data-dir=/home/user/das-data
+      - --data-availability.local-cache.enable
+    ports:
+      - '9876:9876'
+      - '9877:9877'
+    volumes:
+      - ./bls_keys:/home/user/bls_keys:ro
+      - ./das-data:/home/user/das-data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9877/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+```
+
+The configuration is intentionally minimal: it enables the RPC interface (used by the sequencer to store data, port `9876`) and the REST interface (used to retrieve data, port `9877`), reads the BLS keypair from the mounted `bls_keys` directory, and stores batch data as local files in the mounted `das-data` directory. The `healthcheck` uses the `curl` binary included in the image against the REST interface's `/health` endpoint, so `docker ps` reports the service as `healthy` only when the underlying storage is working.
+
+All the configuration options available for a Kubernetes deployment apply here too, as command-line flags in the `command` list: caching, S3 storage, archive mode (`discard-after-timeout`), and the REST aggregator. Refer to [Configuration options](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#configuration-options) for the full tables. For example, to let your DAS repair gaps in its data by syncing from other DA servers, add:
+
+```yaml
+- --data-availability.rest-aggregator.enable
+- --data-availability.rest-aggregator.online-url-list=<URL TO LIST OF REST ENDPOINTS>
+```
+
+<VanillaAdmonition type="note" title="Running a mirror DAS with Docker">
+
+A [mirror DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx) uses the same image and a subset of this configuration: remove `--enable-rpc`, `--rpc-addr`, and the `9876` port mapping (mirrors don't store data for the sequencer, so they need no RPC interface and no BLS key), and enable the REST aggregator with the `--data-availability.rest-aggregator.sync-to-storage.*` options so that it syncs data from your main DAS and other public mirrors.
+
+</VanillaAdmonition>
+
+### Step 3: Start the DAS
+
+```shell
+docker compose up -d
+```
+
+Follow the logs and check that both servers start:
+
+```shell
+docker compose logs -f das-server
+```
+
+You should see the hex-encoded BLS public key logged at startup (in the line `AnyTrust public key used for signing`), followed by lines similar to:
+
+```shell
+INFO [...] Starting HTTP-RPC server    addr=0.0.0.0 port=9876 revision=v3.11.1-8512b8c
+INFO [...] Starting REST server        addr=0.0.0.0 port=9877 revision=v3.11.1-8512b8c
+```
+
+## Volumes and persistence
+
+Only the two mounted directories hold state that must survive the container:
+
+- `bls_keys` **must persist and be backed up**. If the private key is lost, the chain owner has to register a new keyset that replaces your public key, following [committee member management](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx#das-committee-member-management). Keep an offline backup in secure storage. The directory is mounted read-only because the server never needs to write to it.
+- `das-data` **must persist** for at least the data retention period; if you run an [archive DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#archive-da-servers), it must persist indefinitely and its size grows with chain history. Losing it is recoverable — a DAS can re-sync missing batches from other DA servers through the [REST aggregator](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#state-synchronization) — but avoid relying on that in production.
+- If you enable eager syncing (typical for mirrors), also persist the directory you configure in `--data-availability.rest-aggregator.sync-to-storage.state-dir`, so the sync doesn't restart from scratch after a container restart.
+
+The container itself is disposable: recreating it (for example, to upgrade the image tag) loses nothing as long as the mounts stay in place. The in-memory cache is rebuilt on demand.
+
+This guide uses bind mounts rather than named volumes because they make key provisioning (Step 1) and backups straightforward: the files sit in plain directories on the host. Named volumes work too, but you'd need an extra copy step to place the generated keys inside the volume.
+
+## Networking with the batch poster
+
+For your DAS to do its job, two parties need to reach it:
+
+- The <a data-quicklook-from="batch-poster">batch poster</a> sends `das_store` RPC requests to the **RPC interface** (port `9876`). This endpoint should not be publicly discoverable: share its URL only with the chain owner through a private channel, and include a random string in the path (e.g., `das.your-chain.io/rpc/randomstring123`).
+- Your chain's nodes retrieve data from the **REST interface** (port `9877`), which is safe to expose publicly — ideally behind a CDN, or served by a [mirror DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx) instead of your main DAS.
+
+The server itself has no TLS support, so don't expose ports `9876` and `9877` directly to the internet. Run a reverse proxy (e.g., [nginx](https://www.nginx.com/), [Caddy](https://caddyserver.com/), or [Traefik](https://traefik.io/traefik)) on the host — or as another Compose service — to terminate HTTPS and forward to the DAS ports. When using nginx, raise `client_max_body_size` (to at least `50M`, default is `1M`); otherwise, the batch poster receives `413 Request Entity Too Large` errors for larger batches and the DAS can't sign certificates for them.
+
+Your DAS only becomes part of the committee once the chain owner registers a keyset containing your BLS public key and RPC URL in the `SequencerInbox` contract, and configures the batch poster with the same information. That process is covered in [How to configure the DAC in your chain](/launch-arbitrum-chain/chain-config/data-availability/configure-dac.mdx).
+
+## Verify the deployment
+
+The verification methods are the same as in the Kubernetes guide; here they are in their Docker form.
+
+### Test 1: REST health check
+
+The REST interface has a health check on the path `/health`, which returns `200` if the underlying storage is working, otherwise `503`:
+
+```shell
+curl -I http://localhost:9877/health
+```
+
+### Test 2: RPC health check
+
+The RPC interface has a health check for the underlying storage, invoked with the `das_healthCheck` RPC method:
+
+```shell
+curl -X POST \
+     -H 'Content-Type: application/json' \
+     -d '{"jsonrpc":"2.0","id":0,"method":"das_healthCheck","params":[]}' \
+     http://localhost:9876
+```
+
+A healthy DAS answers `{"jsonrpc":"2.0","id":0,"result":null}`.
+
+### Test 3: Store and retrieve data
+
+By default, the DAS only accepts store requests signed by the sequencer's key (identified via the `SequencerInbox` contract). To send a test store request yourself, configure the DAS to also accept requests signed with an ECDSA key of your choosing.
+
+First, generate an ECDSA keypair (again, no local Nitro build needed):
+
+```shell
+mkdir -p ecdsa_keys
+docker run --rm -v $(pwd)/ecdsa_keys:/home/user/ecdsa_keys --entrypoint anytrusttool \
+@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ keygen --dir /home/user/ecdsa_keys --ecdsa
+```
+
+Then add the extra signer to your `docker-compose.yml` — a new flag in `command` and a new entry in `volumes` — and apply the change with `docker compose up -d`:
+
+```yaml
+command:
+  # ...existing flags...
+  - --data-availability.extra-signature-checking-public-key=/home/user/ecdsa_keys/ecdsa.pub
+volumes:
+  # ...existing mounts...
+  - ./ecdsa_keys:/home/user/ecdsa_keys:ro
+```
+
+Now store a message through the RPC interface, running `anytrusttool` inside the container so it can reach the server on `localhost`:
+
+```shell
+docker compose exec das-server anytrusttool client rpc store \
+    --rpc-client.rpc.url http://localhost:9876 \
+    --message "Hello world" \
+    --signing-key /home/user/ecdsa_keys/ecdsa
+```
+
+The command prints the hex-encoded DACert and data hash. Note that the DACert comes back in the response to this single request: certificates are signed synchronously, per store request. Use the data hash to retrieve the message back through the REST interface:
+
+```shell
+docker compose exec das-server anytrusttool client rest getbyhash \
+    --url http://localhost:9877 \
+    --data-hash 0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423
+```
+
+If you stored `"Hello world"`, the data hash matches the one above and the output is `Message: Hello world`.
+
+Remove the extra signer configuration when you're done testing, or keep it (with the private key stored safely) to run periodic canary checks against your production DAS.
+
+## Troubleshooting
+
+- **The container exits immediately or logs `permission denied` on `/home/user/das-data`**: the bind-mounted directory isn't writable by the container user (UID `1000`). This typically happens on Linux when Docker auto-created the directory as `root` or your host user has a different UID. Create the directories before starting the container and run `sudo chown -R 1000:1000 bls_keys das-data`.
+
+- **The batch poster can't gather enough signatures, and batches fall back to the parent chain**: a keyset with `N` members and `assumed-honest` `H` needs `K = N + 1 - H` live, signing committee members for every batch. If any DAS in the keyset is unreachable — for example, a keyset registered with two members while only one server is actually running — the batch poster can't produce a DACert and, by default, silently falls back to posting the full batch data to the parent chain, like a regular Rollup. The chain keeps working, but you lose the cost savings of AnyTrust. Make sure every member listed in the keyset is deployed, reachable at its registered RPC URL, and configured with the matching BLS key, and that `assumed-honest` is consistent between the keyset and the batch poster configuration. Refer to [DAC failure modes and fallback to batch posting](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx#dac-failure-modes-and-fallback-to-batch-posting) for the full failure mode table.
+
+- **Store requests fail after the host sleeps or on a laptop running Docker Desktop**: store requests are time-limited, so a significant clock drift between the batch poster and the DAS can cause them to be rejected. Keep the host clock NTP-synced; on Docker Desktop, the VM clock can drift after the host sleeps, and restarting Docker Desktop resyncs it.
+
+- **`docker compose up` fails with `port is already allocated`**: another process is using `9876` or `9877` on the host. Change the host side of the port mapping (e.g., `'19876:9876'`) and update the URLs you communicate to the chain owner and your reverse proxy accordingly.
+
+- **The DAS logs connection errors to the parent chain RPC**: remember that `localhost` inside the container is the container itself, not the host. If your parent chain node runs on the same host, use `host.docker.internal` (Docker Desktop) or the host's IP address (Linux) in `--parent-chain.node-url`, and check firewalls and DNS from inside the container with `docker compose exec das-server curl -I <YOUR PARENT CHAIN RPC ENDPOINT>`.
+
+## Costs and operational notes
+
+A DAS signs and returns a DACert immediately for each store request it receives from the batch poster; there is no waiting period on the DAS side. How often those certificates (or, in fallback, full batches) are posted to the parent chain is governed by the batch poster's own limits — its maximum batch size and maximum delay parameters (`--node.batch-poster.max-delay`, and `--node.data-availability.max-batch-size` for AnyTrust batches) — so DAS costs are dominated by steady infrastructure, not per-batch fees.
+
+<VanillaAdmonition type="info" title="Approximate costs (as of July 2026)">
+
+Typical operational cost for running an AnyTrust DAS node is roughly \$200/month (a small VM, storage, and egress). For comparison, posting data to Celestia costs roughly \$0.08/MB. These are rough estimates that change over time; validate them against current provider pricing before making decisions.
+
+</VanillaAdmonition>
+
+## What to do next?
+
+Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and configure the sequencer:
+
+- Public key (the contents of `bls_keys/das_bls.pub`)
+- The https URL for the RPC endpoint which includes some random string (e.g., `das.your-chain.io/rpc/randomstring123`), communicated through a secure channel
+- The https URL for the REST endpoint (e.g., `das.your-chain.io/rest`)
+
+The chain owner then follows [How to configure the DAC in your chain](/launch-arbitrum-chain/chain-config/data-availability/configure-dac.mdx) to generate and register the keyset.
+
+import DASOptionalParameters from '../../partials/config-snippets/_das-optional-parameters.mdx';
+import DASMetrics from '../../partials/config-snippets/_das-metrics.mdx';
+
+## Optional parameters
+
+<DASOptionalParameters />
+
+## Metrics
+
+<DASMetrics />
