@@ -60,7 +60,7 @@ The `nitro-node-validator` image uses `split-val-entry.sh` as its entrypoint. Th
 You can pass validator-specific flags using the `--val-options` and `--val-options-latest` prefixes, separated by `--`. The legacy validator was removed upstream, so passing `--val-options-legacy` now causes the container to exit immediately.
 
 ```shell
-docker run @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@-validator \
+docker run @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@-validator \
   --val-options-latest --validation.api-auth=false -- \
   --node.block-validator.enable
 ```
@@ -144,7 +144,7 @@ Use `--entrypoint` to run a different binary from the same Docker image. The exa
 ```shell
 docker run --rm \
   --entrypoint relay \
-  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ \
   --node.feed.input.url wss://arb1.arbitrum.io/feed \
   --chain.id 42161
 ```
@@ -154,7 +154,7 @@ docker run --rm \
 ```shell
 docker run --rm \
   --entrypoint nitro-val \
-  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ \
   --help
 ```
 
@@ -163,7 +163,7 @@ docker run --rm \
 ```shell
 docker run --rm \
   --entrypoint anytrusttool \
-  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ \
   dumpkeyset --url https://your-dac-url
 ```
 
@@ -173,7 +173,7 @@ docker run --rm \
 docker run --rm \
   -v /path/to/keys:/data/keys \
   --entrypoint anytrusttool \
-  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ \
   keygen --dir /data/keys
 ```
 
@@ -188,7 +188,7 @@ version: '3.8'
 
 services:
   nitro:
-    image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@
+    image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@
     restart: unless-stopped
     ports:
       # HTTP JSON-RPC endpoint
