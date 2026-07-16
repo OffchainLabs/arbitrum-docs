@@ -3,7 +3,6 @@ partial_type: glossary
 title: 'Arbitrum Glossary Definitions'
 description: 'Comprehensive glossary of Arbitrum terminology and definitions'
 author: anegg0
-last_reviewed: 2026-06-08
 ---
 
 ### Activation {#activation}
@@ -277,7 +276,7 @@ A means by which a user can bypass an Arbitrum chain's [Challenge Period](/intro
 
 ### Fast withdrawals {#fast-withdrawals}
 
-A protocol-level withdrawal path on an [Arbitrum chain](/intro/glossary#arbitrum-chain) in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full [challenge period](/intro/glossary#challenge-period). Distinct from a [fast-exit liquidity exit](/intro/glossary#fast-exit-liquidity-exit), which is a third-party liquidity provider rather than a protocol primitive.
+A protocol-level withdrawal path on an [Arbitrum chain](/intro/glossary#arbitrum-chain) in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full [challenge period](/intro/glossary#challenge-period). Distinct from a [fast-exit liquidity exit](/intro/glossary#fast-exit--liquidity-exit), which is a third-party liquidity provider rather than a protocol primitive.
 
 ### First Come First Serve (FCFS) {#first-come-first-serve-fcfs}
 
@@ -408,6 +407,12 @@ Anyone can become a validator by running an Arbitrum node, without permission.
 ### Portal {#portal}
 
 A web application maintained by [Offchain Labs](/intro/glossary#offchain-labs) showcasing the Arbitrum ecosystem; visit it [here](https://portal.arbitrum.io/).
+
+### Prechecker Node {#prechecker-node}
+
+An [Arbitrum full node](/intro/glossary#arbitrum-full-node) configured to pre-validate transactions before forwarding `eth_sendRawTransaction` to the [Sequencer](/intro/glossary#sequencer), insulating it from transactions that would fail.
+
+At a configurable strictness level, a prechecker verifies the transaction type, signature, intrinsic gas (including L1 calldata gas), fee cap, nonce, sender balance, and any `eth_sendRawTransactionConditional` storage conditions. When [compliance filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering) is enabled, it also rejects transactions that touch restricted addresses.
 
 ### Precompile {#precompile}
 
