@@ -1,17 +1,17 @@
 ---
 title: 'Priority fees collection'
 sidebar_label: 'Priority fees'
-description: "How to enable priority-fee (tip) collection on an Arbitrum chain in ArbOS 60 'Elara', and the additional requirements for tip-based transaction ordering."
+description: "How to enable priority-fee (tip) collection on an Arbitrum chain in ArbOS61 'Elara', and the additional requirements for tip-based transaction ordering."
 content_type: concept
 author: 'gaelblanchemain'
 sme: 'vbridge-hash'
 ---
 
-ArbOS 60 ("Elara") introduces the **capability** for chain owners to collect priority fees (tips) on their Arbitrum chain. The feature ships disabled, and a chain owner can enable it through a deliberate, two-step action.
+ArbOS61 ("Elara") introduces the **capability** for chain owners to collect priority fees (tips) on their Arbitrum chain. The feature ships disabled, and a chain owner can enable it through a deliberate, two-step action.
 
 <VanillaAdmonition type="caution" title="Activation requires a separate Constitutional vote">
 
-For Arbitrum One and Nova, enabling this feature requires an **additional Constitutional DAO vote** — it isn't activated as part of the ArbOS 60 upgrade itself. The upgrade only makes tip collection *possible* for chains that opt in.
+For Arbitrum One and Nova, enabling this feature requires an **additional Constitutional DAO vote** — it isn't activated as part of the ArbOS61 upgrade itself. The upgrade only makes tip collection *possible* for chains that opt in.
 
 </VanillaAdmonition>
 
@@ -56,6 +56,6 @@ Without step 2, the sequencer continues to use its existing ordering rules (such
 
 ## References
 
-- [Constitutional AIP: ArbOS 60 Elara — Priority fees](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-60-elara/30601)
+- [Constitutional AIP: ArbOS61 Elara — Priority fees](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-60-elara/30601)
 - [`ArbOwner` precompile reference](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner)
 - [`setCollectTips` source](https://github.com/OffchainLabs/nitro/blob/6dce8d13902649a1acdfd3f2504129f1f5612358/precompiles/ArbOwner.go#L666)
