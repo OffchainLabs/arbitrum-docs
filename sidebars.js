@@ -240,11 +240,6 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
-                  label: `AEP fee calculation`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
                   label: `AEP reporting`,
                 },
@@ -398,7 +393,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
+                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
                   label: 'Compliance filtering',
                 },
               ],
@@ -573,6 +568,11 @@ const sidebars = {
               // a: see note at end of file
             },
             {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/run-a-node/run-full-node-with-helm',
+              label: 'Run a full node (Helm/Kubernetes)',
+            },
+            {
               type: 'html',
               value:
                 '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Run a validator <span class="other-section-icon">↓</span></a>',
@@ -656,8 +656,20 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/assign-node-roles',
+          label: 'Assign node roles',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/run-local-full-chain-simulation',
           label: 'Run a local full chain simulation',
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/run-a-node/run-full-node-with-helm">Run a full node with helm<span class="other-section-icon">↓</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
         },
         {
           type: 'doc',
@@ -982,6 +994,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/bold/bold-technical-deep-dive',
               label: 'Technical deep dive',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
+              label: 'How BoLD bisection works',
             },
             {
               type: 'doc',
