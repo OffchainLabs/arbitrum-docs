@@ -115,6 +115,7 @@ import TabItem from '@theme/TabItem';
 import S3Parameters from '../../partials/config-snippets/_s3-parameters.mdx';
 import LocalFilesParameters from '../../partials/config-snippets/_local-files-parameters.mdx';
 import GoogleCloudStorageParameters from '../../partials/config-snippets/_gcs-parameters.mdx';
+
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
     <TabItem value="s3-bucket" label="AWS S3 bucket">
@@ -127,7 +128,7 @@ import GoogleCloudStorageParameters from '../../partials/config-snippets/_gcs-pa
       <GoogleCloudStorageParameters />
     </TabItem>
   </Tabs>
-</div>;
+</div>
 
 Here's an example `anytrustserver` command for a mirror DAS that:
 
