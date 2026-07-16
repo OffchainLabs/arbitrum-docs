@@ -12,11 +12,13 @@ target_audience: 'Developers who want to configure compliance rules on their cha
 <VanillaAdmonition type="note">This feature is available through the ArbOS 61 upgrade, however off by default. We recommend adopting this feature at least 30 days after the release of ArbOS 61 on Arbitrum One.</VanillaAdmonition>
 
 New, optional components can be added to the <a data-quicklook-from='sequencer'>Sequencer</a> and <a data-quicklook-from='state-transition-function'>State Transition Function</a> (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
+
 The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the <a data-quicklook-from='delayed-inbox'>Delayed Inbox</a> on the parent chain.
 
 ## Rationale
 
 The Arbitrum platform must evolve to meet the needs of a new wave of teams looking to come onchain—specifically teams who have an obligation to comply with regulatory frameworks and rules in their respective jurisdictions.
+
 This feature represents the first of many to ensure that the Arbitrum platform can serve the needs of enterprises and institutions looking to tap into internet-scale, blockchain technology to increase margins, reduce risk, and improve transparency across their businesses.
 
 While this feature is not intended or proposed to be used by Arbitrum One, its inclusion in ArbOS 61 Elara is intended to simplify the codebase and canonicalize this feature in the node software.
@@ -39,6 +41,7 @@ When evaluating a transaction, the compliance engine hashes all relevant address
 ### Sequencer-level filtering
 
 The Compliance Rules Engine runs inside the Sequencer and simulates each transaction before it is sequenced. If a transaction violates any compliance rule, it is rejected at the Sequencer level and never included in a block.
+
 This is the primary enforcement layer and handles the vast majority of cases.
 
 ### Compliance rules
@@ -47,12 +50,13 @@ Specific rules can be defined by the chain owner for any address found on the re
 These rules apply to direct transfers as well as delegated approval mechanisms. A few examples:
 
 - Block any transaction originating from or to a restricted address
-- Block execution of ERC-20, ERC-721, and ERC-1155 transfers from or to a restricted address
+- Block execution of **ERC-20**, **ERC-721**, and **ERC-1155** transfers from or to a restricted address
 - Block execution of the following opcodes targeting a restricted address: `CALL`, `CREATE`, `CREATE2`, `SELFDESTRUCT`
 
 ### Delayed Inbox filtering (STF level)
 
 Transactions submitted via the Delayed Inbox cannot be filtered at the Sequencer layer alone, since they are eligible for force inclusion after a timeout window.
+
 To handle this, Compliance Filtering introduces two additional components:
 
 #### Transaction Guardian Precompile
@@ -73,13 +77,14 @@ This ensures that even transactions submitted through the parent chain → child
 ### Exception rules (burn allowance)
 
 Certain DeFi protocols (e.g., lending protocols like Aave, Morpho) require the ability to liquidate or burn token balances associated with restricted accounts in order to maintain solvency and prevent exploits.
+
 To support this, a narrow exception is available:
-ERC-20, ERC-721, and ERC-1155 transfers where the `to` field of the Transfer event is the zero address (`0x0`) (a burn operation) are permitted even if the `from` address is restricted.
+**ERC-20**, **ERC-721**, and **ERC-1155** transfers where the `to` field of the Transfer event is the zero address (`0x0`) (a burn operation) are permitted even if the `from` address is restricted.
 
 Important constraints:
 
 - If a "burn" transaction includes any other compliance violation, the entire transaction will fail.
-- A restricted address cannot initiate a burn themselves — their `tx.origin` is blocked at the Sequencer level regardless.
+- A restricted address cannot initiate a burn themselves—their `tx.origin` is blocked at the Sequencer level regardless.
 
 This design allows third-party liquidators and protocol contracts (e.g., Paxos, Aave) to burn non-compliant balances while preventing the restricted address from taking any action on the chain.
 
@@ -107,7 +112,7 @@ Compliance Filtering is disabled by default. Chain owners must explicitly config
 ## Security considerations
 
 - **Force inclusion protection:** Without STF-level enforcement via the Transaction Guardian, a restricted user could bypass Sequencer filtering by waiting for the force inclusion window. The sentinel + precompile combination closes this gap.
-- **Parent chain bridge deposits:** If a restricted address deposits ETH via `depositEth()` on the parent chain, the ETH enters the bridge contract on the parent chain before any filtering occurs on the child chain. If the corresponding credit is dropped on the child chain, the ETH may become locked in the bridge with no corresponding child chain asset. Chain owners should account for this in their compliance design and user communication strategy.
+- **Parent chain bridge deposits:** If a restricted address deposits **ETH** via `depositEth()` on the parent chain, the **ETH** enters the bridge contract on the parent chain before any filtering occurs on the child chain. If the corresponding credit is dropped on the child chain, the **ETH** may become locked in the bridge with no corresponding child chain asset. Chain owners should account for this in their compliance design and user communication strategy.
 - **Address privacy:** Restricted addresses are never stored in plaintext. Salted hashing ensures that the list cannot be trivially reversed to enumerate sanctioned addresses.
 
 ## Configuration
@@ -119,10 +124,10 @@ To set up transaction filters, Arbitrum Nitro nodes provide a few configuration 
 To define the addresses that are to be restricted from executing or receiving onchain transactions, an S3-compatible file store must be used. When address filtering is enabled, Arbitrum Nitro will poll and read the latest file from the S3 bucket. The addresses are defined as hashes where `hashed_address = SHA256(salt16Byte || address20Byte)`.
 
 - `--execution.transaction-filtering.address-filter.enable`: true/false value that enables address filtering
-- `--execution.transaction-filtering.address-filter.poll-interval`: how often to resync from S3 (e.g. `60m`)
+- `--execution.transaction-filtering.address-filter.poll-interval`: how often to resync from S3 (e.g., `60m`)
 - `--execution.transaction-filtering.address-filter.s3.bucket`: S3 bucket holding the hashed list
 - `--execution.transaction-filtering.address-filter.s3.object-key`: S3 object key for the hash list
-- `--execution.transaction-filtering.address-filter.s3.region`: AWS region where S3 bucket is hosted (e.g. `us-east-1`)
+- `--execution.transaction-filtering.address-filter.s3.region`: AWS region where S3 bucket is hosted (e.g., `us-east-1`)
 - `--execution.address-filter.s3.access-key`: AWS access key
 - `--execution.address-filter.s3.secret-key`: AWS secret key
 - `--execution.address-filter.s3.endpoint`: S3-compatible endpoint where file is hosted (if not using AWS S3)
@@ -142,14 +147,14 @@ Note: `sha256-stringinput` assumes that the string-based representation of the U
 
 ### Event filters
 
-Event filters allow for chain owners to filter out transactions based on an arbitrary list of emitted events. For example, a chain owner might want to block all ERC20 transfers involving a restricted address. A chain owner can setup their nodes to listen for `Transfer(address,address,uint256)` events and block any transactions that target a restricted address in either the `from` or `to` field. To setup event filters, two CLI flags are provided:
+Event filters allow for chain owners to filter out transactions based on an arbitrary list of emitted events. For example, a chain owner might want to block all **ERC-20** transfers involving a restricted address. A chain owner can setup their nodes to listen for `Transfer(address,address,uint256)` events and block any transactions that target a restricted address in either the `from` or `to` field. To setup event filters, two CLI flags are provided:
 
 - `--execution.transaction-filtering.event-filter.rules`: optional inline list of event rules (passed as a JSON string)
 - `--execution.transaction-filtering.event-filter.path`: optional path to a JSON file containing event filter rules. If both `path` and `rules` are provided, the file rules are loaded first and then inline rules are appended after them. Generally, path-based JSON rules should be preferred.
 
 Each entry in the rules is an `EventRule` with the following shape:
 
-- `event`: human-readable event signature (e.g. `Transfer(address,address,uint256)`
+- `event`: human-readable event signature (e.g., `Transfer(address,address,uint256)`
 - `selector`: hex string of the first 4 bytes of `keccak256(event)`; the canonical signature of the event type
 - `topicAddresses`: list of 1-indexed topic positions (1-3) whose values should be treated as addresses for filtering
 - `bypass`: defines an optional exception condition that allows the transaction to execute if a specific value is true (example would be transfers to `0x0` burn address). It is a nested object with:
