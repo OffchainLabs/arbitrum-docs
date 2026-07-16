@@ -34,6 +34,24 @@ debug-assertions = false # prune debug assertions
 incremental = false      # no incremental builds
 ```
 
+### Nightly Rust flags (advanced)
+
+If standard release flags still leave you over budget, nightly Rust offers a flag that strips the panic-formatting infrastructure entirely:
+
+```shell
+cargo +nightly -Z build-std=std,panic_abort -Zbuild-std-features=panic_immediate_abort
+```
+
+Combined with disabling storage caching, this can shave roughly 20% off binary size on small contracts.
+
+<VanillaAdmonition type="warning" title="Use nightly flags at your own risk">
+
+Nightly compiler flags are unstable and may change between toolchain releases. Always re-run `cargo stylus check` after enabling them to confirm the resulting binary is still valid.
+
+</VanillaAdmonition>
+
+If your contract still exceeds the size limit after these optimizations, consider splitting functionality across multiple Stylus contracts and composing them via inter-contract calls.
+
 ## Third-party optimization tooling
 
 Additional WASM-specific tooling exists to shrink binaries. Due to being third party, users should use these at their own risk.
@@ -45,6 +63,16 @@ Additional WASM-specific tooling exists to shrink binaries. Due to being third p
 ### `twiggy`
 
 [twiggy](https://github.com/rustwasm/twiggy) is a code size profiler for WASM, it can help you estimate the impact of each added component on your binaries' size.
+
+### Inspecting WASM opcodes
+
+To examine the WebAssembly instructions in your compiled contract, convert the binary to WebAssembly Text format using the [WABT toolkit](https://github.com/WebAssembly/wabt):
+
+```shell
+wasm2wat contract.wasm -o contract.wat
+```
+
+For one-off inspection without installing tools, use the online [wasm2wat demo](https://webassembly.github.io/wabt/demo/wasm2wat/).
 
 Our team has also curated a [list of recommended libraries](/stylus/advanced/recommended-libraries) that are helpful to Stylus development and optimally sized.
 

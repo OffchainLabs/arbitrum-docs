@@ -1,6 +1,6 @@
 ### How do I move assets between One and Nova?
 
-Both Arbitrum One and Arbitrum Nova run as layers on top of Ethereum. Thus, you can always move assets between the two chains in two steps by going "through" Ethereum. In other words: withdraw your assets from Arbitrum One to Ethereum and then deposit them onto Nova, or conversely, withdraw your assets from Nova to Ethereum and then deposit them to Arbitrum One. You can complete these steps using the [Arbitrum Bridge](https://bridge.arbitrum.io/).
+Both Arbitrum One and Arbitrum Nova run as layers on top of Ethereum. Thus, you can always move assets between the two chains in two steps by going "through" Ethereum. In other words: withdraw your assets from Arbitrum One to Ethereum and then deposit them onto Nova, or conversely, withdraw your assets from Nova to Ethereum and then deposit them to Arbitrum One. You can complete these steps using the [Arbitrum Bridge](https://bridge.arbitrum.io/); see the [bridge quickstart](/arbitrum-bridge/01-quickstart.mdx) for a step-by-step walkthrough.
 
 ### What fees do I have to pay when bridging funds from L1 to L2?
 
@@ -27,15 +27,21 @@ The "padding on both ends" involves three events that have to occur between a cl
 3. Somebody (anybody) confirms the assertion on the parent chain (usually within ~15 minutes).
    Additionally, in the rare and unlikely event of a dispute, this delay period will be extended for the dispute to resolve.
 
+For the protocol-level explanation of these steps, see [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) and [The Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx).
+
 ### Is there a way to cancel a withdrawal from Arbitrum?
 
 Once initiated, it is not possible to cancel a withdrawal. However, you can claim your funds on L1 and deposit them again on L2 once the [withdrawal period](https://docs.arbitrum.io/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window) is past.
 
 ### Can I use a smart contract wallet in the bridge?
 
-Support for Smart Contract Wallets is currently limited to token deposits and withdrawals. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the [bridge](https://bridge.arbitrum.io/) (unless you also control that address on L1). In that case, you can use the [cross-chain dashboard](https://retryable-dashboard.arbitrum.io/tx) to claim your funds on L1.
+Support for Smart Contract Wallets is currently limited to token deposits and withdrawals. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the [bridge](https://bridge.arbitrum.io/) (unless you also control that address on L1). In that case, you can use the [cross-chain dashboard](https://retryable-dashboard.arbitrum.io/tx) to claim your funds on L1. Developers debugging a stuck transaction in this flow may also find [Bridge transaction traceability](/arbitrum-bridge/05-bridge-transaction-traceability.mdx) useful.
 
-`ETH` deposits and withdrawals using a Smart Contract Wallet are currently not supported, but will be available soon.
+**ETH** deposits and withdrawals using a Smart Contract Wallet are currently not supported, but will be available soon.
+
+### What's the difference between USDC and USDC.e on Arbitrum One?
+
+Arbitrum One supports both Circle-native **USDC** and bridged **USDC.e**. They are different tokens at different contract addresses. See [USDC on Arbitrum One](/arbitrum-bridge/02-usdc-arbitrum-one.mdx) for the details and which one you should hold.
 
 ### How can I claim withdrawn funds if I don't control on L1 the address that initiated the transaction on L2?
 

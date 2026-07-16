@@ -1,0 +1,15 @@
+{
+  "serverInfo": {
+    "name": "arbitrum-docs",
+    "title": "Arbitrum Documentation",
+    "version": "1.0.0",
+    "description": "MCP server providing search and Q&A over the Arbitrum documentation at https://docs.arbitrum.io"
+  },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://mcp.inkeep.com/offchainlabs/mcp"
+  },
+  "capabilities": {
+    "tools": {}
+  }
+}

@@ -54,6 +54,24 @@ const precompilesInformation = {
     },
   },
   ArbInfo: {},
+  ArbNativeTokenManager: {
+    methodOverrides: {
+      mintNativeToken: {
+        availableSinceArbOS: 41,
+      },
+      burnNativeToken: {
+        availableSinceArbOS: 41,
+      },
+    },
+    eventOverrides: {
+      nativetokenminted: {
+        description: 'Emitted when native gas token is minted to a NativeTokenOwner',
+      },
+      nativetokenburned: {
+        description: 'Emitted when native gas token is burned from a NativeTokenOwner',
+      },
+    },
+  },
   ArbOwner: {
     methodOverrides: {
       setBrotliCompressionLevel: {
