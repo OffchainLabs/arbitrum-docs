@@ -1733,11 +1733,6 @@ const sidebars = {
     },
     {
       type: 'doc',
-      id: 'notices/arbos60-upgrade-notice',
-      label: 'Upgrade notice for ArbOS 60',
-    },
-    {
-      type: 'doc',
       id: 'notices/arbos51-upgrade-notice',
       label: 'Upgrade notice for ArbOS 51',
     },
