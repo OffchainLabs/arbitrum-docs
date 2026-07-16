@@ -121,6 +121,12 @@ This step is only required if you choose to deploy the rollup to the parent chai
      - `--init.empty=false`: **(Required)** Forces the node to load the provided genesis file instead of initializing a blank state.
 5. Start your chain, with the correct preloaded state.
 
+<VanillaAdmonition type="info" title="Loading your custom genesis at start-up">
+
+Your custom genesis is loaded via the `--init.genesis-json-file` and `--init.empty=false` flags when you start the node—it is **not** read from `node-config.json`. If you generate your node configuration with the Chain SDK's `prepare-node-config`, it won't include these, so make sure to pass them on the command line.
+
+</VanillaAdmonition>
+
 ### Use the `genesis-file-generator` tool
 
 #### Environment variables reference (.env)
@@ -153,7 +159,7 @@ These parameters define the identify of your chain
    docker run --rm \
    --env-file .env \
    -v "$(pwd)/genesis":/app/genesis \
-   offchainlabs/genesis-file-generator:v0.0.2-4c37f62
+   offchainlabs/genesis-file-generator:v0.0.3-rc-deffec7
    ```
 
    - You can also generate your own `genesis.json` file, but carefully read [this notice about the chain configuration property](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
@@ -165,7 +171,7 @@ These parameters define the identify of your chain
    --env-file .env \
    -v "$(pwd)/genesis":/app/genesis \
    -v "$(pwd)/custom-alloc.json":/app/custom-alloc.json:ro \
-   offchainlabs/genesis-file-generator:v0.0.2-4c37f62
+   offchainlabs/genesis-file-generator:v0.0.3-rc-deffec7
    ```
 
    Example `custom-alloc.json` (preallocates 1 ETH—review the solvency warning above before setting non-zero balances):
