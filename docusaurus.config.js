@@ -221,6 +221,10 @@ const config = {
                 label: 'Arbitrum essentials',
                 to: '/arbitrum-essentials',
               },
+              {
+                label: 'Machine Payments Protocol (MPP)',
+                to: 'build-decentralized-apps/machine-payments-protocol',
+              },
             ],
           },
           {

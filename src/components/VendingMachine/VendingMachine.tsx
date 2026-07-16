@@ -16,8 +16,8 @@ export const VendingMachine = (props: { id: string; type: string }) => {
   const [identity, setIdentity] = useState<string>('');
   const [contractAddress, setContractAddress] = useState<string>();
   const [cupcakeBalance, setCupcakeBalance] = useState<number>(0);
-  const cupcakeRef = useRef(null);
-  const errorIndicatorRef = useRef(null);
+  const cupcakeRef = useRef<HTMLSpanElement>(null);
+  const errorIndicatorRef = useRef<HTMLSpanElement>(null);
 
   class Web2VendingMachineClient {
     // UI concerns
@@ -25,8 +25,8 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     identityLabel = 'Name';
 
     // state variables = internal memory of the vending machine
-    cupcakeBalances = {};
-    cupcakeDistributionTimes = {};
+    cupcakeBalances: Record<string, number> = {};
+    cupcakeDistributionTimes: Record<string, number> = {};
 
     // the web3 version of the vending machine implements this using ethereum
     async giveCupcakeTo(identity: string) {
@@ -76,8 +76,9 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     }
 
     // the web2 version of the vending machine implements this without using ethereum
-    async giveCupcakeTo(identity, vendingMachineContractAddress) {
+    async giveCupcakeTo(identity: string, vendingMachineContractAddress: string) {
       const contract = await this.initContract(vendingMachineContractAddress);
+      if (!contract) throw new Error('Ethereum provider unavailable');
       const cupcakeCountBefore = Number(await contract.getCupcakeBalanceFor(identity));
       const transaction = await contract.giveCupcakeTo(identity);
       const receipt = await transaction.wait();
@@ -87,10 +88,11 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     }
 
     // the web2 version of the vending machine implements this without using ethereum
-    async getCupcakeBalanceFor(identity, vendingMachineContractAddress) {
+    async getCupcakeBalanceFor(identity: string, vendingMachineContractAddress: string) {
       // console log everything in one line
       console.log(`getting cupcake balance for ${identity} on ${vendingMachineContractAddress}`);
       const contract = await this.initContract(vendingMachineContractAddress);
+      if (!contract) throw new Error('Ethereum provider unavailable');
       const cupcakeBalance = await contract.getCupcakeBalanceFor(identity);
       return Number(cupcakeBalance);
     }
@@ -98,7 +100,7 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     async requestAccount() {
       if (this.ethereumAvailable()) {
         // "hey metamask, please ask the user to connect their wallet and select an account"
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await window.ethereum?.request({ method: 'eth_requestAccounts' });
       }
     }
 
@@ -106,6 +108,7 @@ export const VendingMachine = (props: { id: string; type: string }) => {
       if (this.ethereumAvailable()) {
         // "hey metamask, please give me the wallet address corresponding to the account the user has selected"
         const signer = await this.initSigner();
+        if (!signer) return;
         const walletAddress = await signer.getAddress();
         console.log(`wallet address: ${walletAddress}`);
         return walletAddress;
@@ -116,13 +119,14 @@ export const VendingMachine = (props: { id: string; type: string }) => {
       if (this.ethereumAvailable()) {
         // "hey metamask, let's prepare to sign transactions with the account the user has selected"
         await this.requestAccount();
+        if (!window.ethereum) return;
         const metamaskProvider = new ethers.BrowserProvider(window.ethereum);
         const signer = await metamaskProvider.getSigner();
         return signer;
       }
     }
 
-    async initContract(vendingMachineContractAddress) {
+    async initContract(vendingMachineContractAddress: string) {
       if (this.ethereumAvailable()) {
         // "hey metamask, let's use the network and account the user has selected to interact with the contract"
         const signer = await this.initSigner();
@@ -144,11 +148,11 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     props.type == 'web2' ? new Web2VendingMachineClient() : new Web3VendingMachineClient();
 
   const updateSuccessIndicator = (success: boolean) => {
-    errorIndicatorRef.current.classList.toggle('visible', !success);
+    errorIndicatorRef.current?.classList.toggle('visible', !success);
   };
 
   const callWeb3VendingMachine = useCallback(
-    async (func) => {
+    async (func: (...args: any[]) => Promise<any>) => {
       return await func(identity, contractAddress);
     },
     [identity, contractAddress],
@@ -167,19 +171,22 @@ export const VendingMachine = (props: { id: string; type: string }) => {
 
       let existingFadeout;
       if (gotCupcake) {
-        cupcakeRef.current.style.opacity = 1;
-        cupcakeRef.current.style.transition = 'unset';
-        clearTimeout(existingFadeout);
+        const cupcake = cupcakeRef.current;
+        if (cupcake) {
+          cupcake.style.opacity = '1';
+          cupcake.style.transition = 'unset';
+          clearTimeout(existingFadeout);
 
-        existingFadeout = setTimeout(() => {
-          cupcakeRef.current.style.transition = 'opacity 5.5s';
-          cupcakeRef.current.style.opacity = 0;
-        }, 0);
+          existingFadeout = setTimeout(() => {
+            cupcake.style.transition = 'opacity 5.5s';
+            cupcake.style.opacity = '0';
+          }, 0);
 
-        setTimeout(() => {
-          cupcakeRef.current.style.transition = 'opacity 0s';
-          cupcakeRef.current.style.opacity = 0;
-        }, 5000);
+          setTimeout(() => {
+            cupcake.style.transition = 'opacity 0s';
+            cupcake.style.opacity = '0';
+          }, 5000);
+        }
 
         await handleRefreshBalance();
       } else if (gotCupcake === false) {

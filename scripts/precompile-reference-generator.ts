@@ -3,7 +3,7 @@ import {
   precompilesInformation,
   nodeInterfaceInformation,
 } from '../src/resources/precompilesInformation.js';
-import fs from 'fs';
+import { writeOrCheck, isCheckMode, runScript } from './lib/generated-partial';
 
 type PrecompileMethodInfo = {
   signature: string;
@@ -110,10 +110,13 @@ const renderMethodsInTable = (
 
   if (methodOverrides) {
     // Making all method names lowercase
-    const lowercasedMethodOverrides = Object.keys(methodOverrides).reduce((acc, key) => {
-      acc[key.toLowerCase()] = methodOverrides[key];
-      return acc;
-    }, {});
+    const lowercasedMethodOverrides = Object.keys(methodOverrides).reduce(
+      (acc: Record<string, any>, key) => {
+        acc[key.toLowerCase()] = methodOverrides[key];
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
 
     // Merge potential overrides
     Object.keys(lowercasedMethodOverrides).map((methodName: string) => {
@@ -239,10 +242,13 @@ const renderEventsInTable = (
 
   if (eventOverrides) {
     // Making all event names lowercase
-    const lowercasedEventOverrides = Object.keys(eventOverrides).reduce((acc, key) => {
-      acc[key.toLowerCase()] = eventOverrides[key];
-      return acc;
-    }, {});
+    const lowercasedEventOverrides = Object.keys(eventOverrides).reduce(
+      (acc: Record<string, any>, key) => {
+        acc[key.toLowerCase()] = eventOverrides[key];
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
 
     // Merge potential overrides
     Object.keys(lowercasedEventOverrides).map((eventName: string) => {
@@ -301,6 +307,7 @@ const renderEventsInTable = (
 
 const generatePrecompileReferenceTables = async (
   precompileName: string,
+  check: boolean,
   methodOverrides?: PrecompileMethodOverrides,
   eventOverrides?: PrecompileEventOverrides,
 ) => {
@@ -343,10 +350,15 @@ const generatePrecompileReferenceTables = async (
     eventOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/_${precompileName}.mdx`, methodsTable + eventsTable);
+  await writeOrCheck(
+    `${partialTablesBasePath}/_${precompileName}.mdx`,
+    methodsTable + eventsTable,
+    { check },
+  );
 };
 
 const generateNodeInterfaceReferenceTables = async (
+  check: boolean,
   methodOverrides?: PrecompileMethodOverrides,
 ) => {
   const interfaceCodeRawResponse = await fetch(
@@ -370,23 +382,27 @@ const generateNodeInterfaceReferenceTables = async (
     methodOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.mdx`, methodsTable);
+  await writeOrCheck(`${partialTablesBasePath}/_NodeInterface.mdx`, methodsTable, { check });
 };
 
-const main = async (precompilesInformation, nodeInterfaceInformation) => {
+const main = async () => {
+  const check = isCheckMode();
   await Promise.all(
     Object.keys(precompilesInformation).map(async (precompileName) => {
       const methodOverrides = precompilesInformation[precompileName].methodOverrides ?? undefined;
       const eventOverrides = precompilesInformation[precompileName].eventOverrides ?? undefined;
-      await generatePrecompileReferenceTables(precompileName, methodOverrides, eventOverrides);
+      await generatePrecompileReferenceTables(
+        precompileName,
+        check,
+        methodOverrides,
+        eventOverrides,
+      );
     }),
   );
-  await generateNodeInterfaceReferenceTables(nodeInterfaceInformation.methodOverrides ?? undefined);
+  await generateNodeInterfaceReferenceTables(
+    check,
+    nodeInterfaceInformation.methodOverrides ?? undefined,
+  );
 };
 
-main(precompilesInformation, nodeInterfaceInformation)
-  .then(() => process.exit(0))
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+runScript(main);
