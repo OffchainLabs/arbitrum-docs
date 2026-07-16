@@ -10,6 +10,11 @@ interface Window {
 }
 
 // Module declarations for packages without proper types
+declare module 'markdown-link-extractor' {
+  const markdownLinkExtractor: (markdown: string) => any;
+  export default markdownLinkExtractor;
+}
+
 declare module '@offchainlabs/notion-docs-generator' {
   export type Question = any;
   export type FAQ = any;

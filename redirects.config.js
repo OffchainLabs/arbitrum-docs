@@ -9,6 +9,13 @@
  * webpack's build-dependency cache; `redirects.config.d.ts` supplies the types for the tooling.
  */
 export const redirects = [
+  // Manual redirects — Stylus docs modernization (retired/merged pages)
+  { from: '/stylus/using-cli', to: '/stylus/cli-tools/overview' },
+  { from: '/stylus/concepts/public-preview-expectations', to: '/stylus/gentle-introduction' },
+  {
+    from: '/stylus/how-tos/adding-support-for-new-languages',
+    to: '/stylus/how-tos/deploying-non-rust-wasm-contracts',
+  },
   // AUTO-GENERATED REDIRECTS START
   {
     from: '/build-decentralized-apps/how-to-estimate-gas',
@@ -254,7 +261,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees',
-    to: '/launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
+    to: 'https://docs.arbitrum.foundation/calculate-aep-fees',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees',
@@ -403,6 +410,10 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/chain-config/core/stf',
     to: '/launch-arbitrum-chain/protocol-hacks/stf',
+  },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
+    to: '/launch-arbitrum-chain/chain-config/validation/compliance-filtering',
   },
   // AUTO-GENERATED REDIRECTS END
 ];

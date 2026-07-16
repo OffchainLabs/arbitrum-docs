@@ -35,7 +35,7 @@ All references to **ETH** on this document refers to test **ETH** on Sepolia.
 
 :::
 
-3. **Set up development environment**: Configure your wallet and tools for Arbitrum testnet deployment. Sign up for an Arbiscan account to get an API key for contract verification.
+3. **Set up development environment**: Configure your wallet and tools for Arbitrum testnet deployment. Sign up for an Etherscan account to get an API key for contract verification.
 
 ## Project setup
 
@@ -285,7 +285,6 @@ A list of chain IDs is available on the [Chain Info page](/for-devs/dev-tools-an
    ```bash
    forge verify-contract <contract_address> <contract_path>:YourToken \
      --verifier etherscan \
-     --verifier-url https://api.arbiscan.io/api \
      --chain-id 42161 \
      --num-of-optimizations 200
    ```
