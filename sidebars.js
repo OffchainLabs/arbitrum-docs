@@ -459,6 +459,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/bp-kms-signing-services',
+              label: 'KMS signing services',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/integrations/exchange-integration-checklist',
               label: 'Exchange integration checklist',
             },
