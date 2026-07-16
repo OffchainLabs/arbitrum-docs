@@ -1,0 +1,78 @@
+---
+title: 'Solidity references'
+description: 'Discover references and resources to learn and progress as a Solidity developer.'
+user_story: 'As a web2 or web3 developer, I want to learn more about Solidity.'
+content_type: reference
+author: pete-vielhaber
+---
+
+Solidity is the dominant high-level, statically typed, object-oriented language for writing <a data-quicklook-from="smart-contract">smart contracts</a> that run on the Ethereum Virtual Machine (EVM) and EVM-compatible chains (including <a data-quicklook-from="layer-2-l2">Layer 2s</a> like <a data-quicklook-from="arbitrum">Arbitrum</a>). It powers the vast majority of DeFi, NFTs, DAOs, and other onchain applications.
+
+## Official documentation
+
+These are the authoritative, always-current references.
+
+- [Solidity documentation](https://docs.soliditylang.org/): The single most important resource. Two sections are must-reads:
+  - Solidity by Example
+  - Security Considerations
+- [Solidity Language Portal](https://www.soliditylang.org/): Overview, translations, links to the compiler/repo.
+- [Ethereum.org developer docs](https://ethereum.org/developers/docs/): Smart contracts, EVM, testing, compiling, security, and the full stack. Excellent companion to the Solidity docs.
+- [Official GitHub repository](https://github.com/ethereum/solidity): Compiler source, issues, releases, and vulnerability reporting.
+
+## Learning paths and courses
+
+The ecosystem moves fast; high-quality, free project-based courses outperform most books (which are slow to market).
+
+- [Cyfrin Updraft (Patrick Collins)](https://updraft.cyfrin.io/): Beginner-to-advanced, heavily project-based, uses Foundry from the start. Includes security/auditing tracks.
+- [RareSkills Ultimate Solidity Course](https://rareskills.io/learn-solidity): In-depth, trusted by security experts and auditors. Strong on real-world patterns and protocol walkthroughs.
+- [CryptoZombies](https://cryptozombies.io/): Classic interactive game-based introduction. A little outdated, but still excellent for absolute beginners to learn syntax and basic patterns quickly.
+- [Alchemy University](https://www.alchemy.com/university/courses/solidity): Online education platform for blockchain and Web3 development courses.
+- [Risein](https://www.risein.com/#open-programs): Online education for blockchain and Web3 development courses.
+- [HackQuest](https://www.hackquest.io/learning-track/Ethereum): Ethereum development.
+  - [Stylus course](https://www.hackquest.io/learning-track/Arbitrum)
+- [LearnWeb3](https://learnweb3.io/degrees/ethereum-developer-degree/): Ethereum-specific developer learning.
+  - [Stylus course](https://learnweb3.io/courses/arbitrum-stylus-course/)
+- [Ethernaut](https://ethernaut.openzeppelin.com/): Interactive smart contract hacking game.
+
+**Paid courses**
+
+- [Metana](https://metana.io/web3-solidity-bootcamp-ethereum-blockchain/)
+
+## Development frameworks and tooling
+
+- [Foundry (Rust-based)](https://getfoundry.sh/): Excellent fuzzing, mainnet forking, and cheat codes. Preferred by security researchers and DeFi protocols.
+- [Hardhat](https://hardhat.org/): JavaScript/TypeScript-first. Hardhat 3 brings a Rust-powered runtime for big performance gains. Outstanding stack traces, `console.log` in Solidity, vast plugin ecosystem (verification, gas reporter, etc.). Great for teams with frontend/web devs.
+- [Remix IDE (browser-based)](https://remix.ethereum.org/): Zero-setup prototyping, debugging, and deployment. Perfect for quickstarts and learning.
+
+**Other tools**: VS Code + Solidity extensions, Slither (static analysis, integrates with Foundry), Etherscan/Blockscout for verification.
+
+## Security best practices and auditing
+
+Security is non-negotiable—most exploits stem from reentrancy, access control, integer issues, oracle problems, or upgrade logic.
+
+### Core resources
+
+- [Solidity Docs](https://docs.soliditylang.org/) → Security Considerations section.
+- [ConsenSys Diligence Smart Contract Best Practices](https://consensysdiligence.github.io/smart-contract-best-practices/)
+- [OWASP Smart Contract Top 10](https://owasp.org/www-project-smart-contract-top-10/)
+- [OpenZeppelin Ethernaut](https://ethernaut.openzeppelin.com/)
+- [Trail of Bits “Building Secure Contracts” GitHub repo](https://github.com/crytic/building-secure-contracts)
+- [Cyfrin Updraft Security & Auditing track](https://updraft.cyfrin.io/courses/security)
+
+### Libraries and standards
+
+- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/5.x/): The gold standard for ERC-20/ERC-721/ERC-1155, access control (Ownable, Roles), upgradeable proxies (UUPS/Transparent), pausability, etc. Always audit your usage and prefer their implementations over custom code. [OpenZeppelin GitHub repo](https://github.com/OpenZeppelin/openzeppelin-contracts).
+
+## Community, forums, ongoing learning
+
+- [Ethereum Stack Exchange](https://ethereum.stackexchange.com/): Best for technical Q&A.
+- [awesome-solidity GitHub repo](https://github.com/bkrem/awesome-solidity): Curated list of repos, tools, and examples.
+
+## GitHub repositories worth studying
+
+- [Official compiler](https://github.com/argotorg/solidity) and [examples](https://github.com/ethereum/solidity-examples)
+- [OpenZeppelin](https://github.com/OpenZeppelin)/[openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) (read every line eventually).
+- [foundry-rs](https://github.com/foundry-rs/foundry)/[forge-std](https://github.com/foundry-rs/forge-std)
+- [NomicFoundation/hardhat](https://github.com/NomicFoundation/hardhat)
+- [ethereum/EIPs](https://github.com/ethereum/EIPs) (track changes affecting the EVM/Solidity).
+- Protocol repos (Uniswap, Aave, etc.) for real-world patterns.

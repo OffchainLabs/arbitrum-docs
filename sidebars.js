@@ -1380,6 +1380,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'arbitrum-essentials/reference/solidity-references',
+              label: 'Solidity references',
+            },
+            {
+              type: 'doc',
               label: 'Web3 libraries and tools',
               id: 'arbitrum-essentials/reference/web3-libraries-tools',
             },
