@@ -826,7 +826,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos60',
+              id: 'run-arbitrum-node/arbos-releases/arbos61',
               label: 'Elara (ArbOS 60)',
             },
             {
