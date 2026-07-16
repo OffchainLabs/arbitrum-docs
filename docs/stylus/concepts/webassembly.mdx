@@ -134,6 +134,12 @@ Custom sections can store:
 - Compiler metadata
 - ABI information
 
+## VM runtime
+
+Stylus executes WebAssembly on a modified version of the [Wasmer](https://github.com/wasmerio/wasmer) runtime. Wasmer is used unmodified at the runtime layer; Stylus extends the environment with **host I/O imports** ([documented in `hostio-exports.mdx`](/stylus/advanced/hostio-exports)) that let WASM programs call into native blockchain functions (storage, calls, logs, cryptography).
+
+For Arbitrum-specific adaptations to Wasmer (gas metering, deterministic fraud-proof support), see Offchain Labs' fork: [github.com/OffchainLabs/wasmer](https://github.com/OffchainLabs/wasmer).
+
 ## Compression and deployment
 
 Before deployment, Stylus contracts undergo compression:
@@ -151,11 +157,11 @@ pub fn brotli_compress(wasm: impl Read, compression_level: u32) -> io::Result<Ve
 }
 ```
 
-Using Brotli compression typically reduces the WASM size by 50-70%.
+Using Brotli compression typically reduces the WASM size by 50-70%. For more on reducing binary size before compression, see [Optimizing binaries](/stylus/how-tos/optimizing-binaries).
 
-### 0xEFF000 prefix
+### 0xEFF00000 prefix
 
-Compressed WASM is prefixed with `0xEFF000` to identify it as a Stylus program:
+Compressed WASM is prefixed with `0xEFF00000` (4 bytes, defined in the SDK as `EOF_NO_DICT`) to identify it as a Stylus program:
 
 ```rust
 pub fn add_prefix(compressed_wasm: impl IntoIterator<Item = u8>, prefix: &str) -> Vec<u8> {
@@ -226,13 +232,13 @@ impl Counter {
 
 ### 2. Compile to WASM
 
-```bash
+```shell
 cargo stylus build
 ```
 
 This runs:
 
-```bash
+```shell
 cargo build \
   --lib \
   --locked \
@@ -243,7 +249,7 @@ cargo build \
 
 ### 3. Optimize (optional)
 
-```bash
+```shell
 wasm-opt target/wasm32-unknown-unknown/release/my_contract.wasm \
   -O3 \
   --strip-debug \
@@ -254,7 +260,7 @@ Optimization can reduce the size by an additional 10-30%.
 
 ### 4. Deploy and activate
 
-```bash
+```shell
 # Deploy compressed WASM
 cargo stylus deploy --private-key=$PRIVATE_KEY
 
@@ -263,17 +269,20 @@ cargo stylus deploy --private-key=$PRIVATE_KEY
 
 ## Size limitations
 
-Nitro imposes limits on WASM contract size:
+Nitro bounds the **decompressed** size of an activated Stylus program through the `MaxWasmSize` ArbOS parameter. This is the WASM size after Brotli decompression, not the compressed on-chain bytecode, and it is not the EVM contract-size limit (the 24 KB EIP-170 ceiling applies to Solidity contracts, not Stylus programs).
 
-| Limit                 | Value                  | Reason                            |
-| --------------------- | ---------------------- | --------------------------------- |
-| **Uncompressed size** | ~3-4 MB                | Memory and processing constraints |
-| **Compressed size**   | 24 KB (initial)        | Ethereum transaction size limit   |
-| **Compressed size**   | 128 KB (with EIP-4844) | Larger blob transactions          |
+`MaxWasmSize` is chain-configurable by the chain owner via `ArbOwner.SetWasmMaxSize`. The values below are the protocol defaults:
 
-To stay within limits:
+| ArbOS version   | Default `MaxWasmSize` (decompressed) |
+| --------------- | ------------------------------------ |
+| Before ArbOS 60 | 128 KB                               |
+| ArbOS 60+       | 256 KB                               |
 
-- Use `#[no_std]` to avoid standard library bloat
+From ArbOS 60 onward, large programs can also be stored as a root plus fragments (default `MaxFragmentCount` of 4): the compressed payload is split across multiple code accounts, reassembled, and decompressed at activation, with the decompressed total still bounded by `MaxWasmSize`.
+
+To stay within these limits:
+
+- Use `#![no_std]` to avoid standard library bloat
 - Strip debug symbols with `--strip-debug`
 - Enable aggressive optimization (`-O3`)
 - Minimize dependencies
@@ -349,7 +358,7 @@ Stylus uses WASM MVP (Minimum Viable Product) instructions plus bulk-memory oper
 ### 1. Minimize binary size
 
 ```rust
-// Use #[no_std] when possible
+// Use #![no_std] when possible
 #![no_std]
 extern crate alloc;
 
@@ -370,7 +379,7 @@ let large_buffer = vec![0u8; 1024];
 
 ### 3. Profile before optimizing
 
-```bash
+```shell
 # Check binary size
 ls -lh target/wasm32-unknown-unknown/release/*.wasm
 
@@ -381,7 +390,7 @@ twiggy top target/wasm32-unknown-unknown/release/my_contract.wasm
 
 ### 4. Test locally
 
-```bash
+```shell
 # Use cargo-stylus for local testing
 cargo stylus check
 cargo stylus export-abi

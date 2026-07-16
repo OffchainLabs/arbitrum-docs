@@ -28,7 +28,7 @@ Before implementing constructors, ensure you have:
 
 <CustomDetails summary="Rust toolchain">
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.91 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </CustomDetails>
 
@@ -40,11 +40,11 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.88 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.91 as well as adding the WASM build target:
 
 ```shell
-rustup default 1.88
-rustup target add wasm32-unknown-unknown --toolchain 1.88
+rustup default 1.91
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
@@ -62,10 +62,7 @@ Instructions on how to set up a local Arbitrum test node can be found [in the Ni
 Stylus constructors provide an atomic way to deploy, activate, and initialize a contract in a single transaction. If your contract lacks a constructor, it may allow access to the contract's storage before the initialization logic runs, leading to unexpected behavior.
 
 <VanillaAdmonition type="info" title="Constructors and composition">
-  Stylus uses trait-based composition instead of traditional inheritance. When building contracts
-  that compose multiple traits, constructors help initialize all components properly. See the
-  [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for
-  examples.
+  Stylus uses [trait-based composition](./trait-based-composition) instead of traditional inheritance. When building contracts that compose multiple traits, constructors help initialize all components properly. See the [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for examples.
 </VanillaAdmonition>
 
 ### Constructor rules and guarantees
@@ -82,9 +79,7 @@ Stylus constructors follow these important rules:
 | **Constructor runs exactly once**           | The SDK uses a sentinel system to prevent re-execution                                  |
 
 <VanillaAdmonition type="info" title="Factory pattern in deployment">
-  Stylus uses a factory pattern for deployment, which means `msg_sender()` in a constructor returns
-  the factory contract address, not the deployer. Always use `tx_origin()` to get the actual
-  deployer address.
+  Stylus uses a factory pattern for deployment, which means `msg_sender()` in a constructor returns the factory contract address, not the deployer. Always use `tx_origin()` to get the actual deployer address.
 </VanillaAdmonition>
 
 ## Basic constructor implementation
@@ -211,7 +206,7 @@ pub fn constructor(
     self.balances.setter(deployer).set(initial_supply);
 
     // Emit initialization event
-    log(self.vm(), TokenCreated {
+    self.vm().log(TokenCreated {
         creator: deployer,
         name: name.clone(),
         symbol: symbol.clone(),
@@ -227,12 +222,30 @@ pub fn constructor(
 Stylus uses trait-based composition instead of traditional inheritance. When implementing constructors with traits, each component typically has its own initialization logic:
 
 ```rust
-// Define traits for different functionality
+use alloy_primitives::{Address, U256};
+use alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
+use stylus_sdk::storage::{StorageAddress, StorageMap, StorageString, StorageU256};
+
+sol! {
+    #[derive(Debug)]
+    error InvalidSupply();
+}
+
+#[derive(SolidityError, Debug)]
+pub enum TokenError {
+    InvalidSupply(InvalidSupply),
+}
+
+// Define traits for different functionality. Traits exposed through
+// #[implements(...)] must themselves be annotated with #[public].
+#[public]
 trait IErc20 {
     fn balance_of(&self, account: Address) -> U256;
     fn transfer(&mut self, to: Address, value: U256) -> bool;
 }
 
+#[public]
 trait IOwnable {
     fn owner(&self) -> Address;
     fn transfer_ownership(&mut self, new_owner: Address) -> bool;
@@ -289,7 +302,7 @@ impl MyToken {
 
     fn initialize_erc20(&mut self, initial_supply: U256) -> Result<(), TokenError> {
         if initial_supply == U256::ZERO {
-            return Err(TokenError::InvalidSupply);
+            return Err(TokenError::InvalidSupply(InvalidSupply {}));
         }
 
         let deployer = self.vm().tx_origin();
@@ -298,11 +311,45 @@ impl MyToken {
         Ok(())
     }
 }
+
+// Each trait listed in #[implements(...)] must have a matching implementation.
+#[public]
+impl IErc20 for MyToken {
+    fn balance_of(&self, account: Address) -> U256 {
+        self.erc20.balances.get(account)
+    }
+
+    fn transfer(&mut self, to: Address, value: U256) -> bool {
+        let from = self.vm().msg_sender();
+        let from_balance = self.erc20.balances.get(from);
+        if from_balance < value {
+            return false;
+        }
+        self.erc20.balances.setter(from).set(from_balance - value);
+        let to_balance = self.erc20.balances.get(to);
+        self.erc20.balances.setter(to).set(to_balance + value);
+        true
+    }
+}
+
+#[public]
+impl IOwnable for MyToken {
+    fn owner(&self) -> Address {
+        self.ownable.owner.get()
+    }
+
+    fn transfer_ownership(&mut self, new_owner: Address) -> bool {
+        if self.vm().msg_sender() != self.ownable.owner.get() {
+            return false;
+        }
+        self.ownable.owner.set(new_owner);
+        true
+    }
+}
 ```
 
 <VanillaAdmonition type="info" title="Trait-based composition in Stylus">
-  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is
-  initialized explicitly in the constructor.
+  Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is initialized explicitly in the constructor.
 </VanillaAdmonition>
 
 ## Testing constructors
@@ -369,12 +416,14 @@ mod tests {
 
 Deploy your contract with constructor arguments using `cargo stylus deploy`:
 
-```bash
-# Deploy with constructor parameters
+```shell
+# Deploy with constructor parameters.
+# The constructor is annotated #[payable], so use --constructor-value to send ETH to it.
 cargo stylus deploy \
   --private-key-path ~/.arbitrum/key \
   --endpoint https://sepolia-rollup.arbitrum.io/rpc \
-  --constructor-args "MyToken" "MTK" 1000000
+  --constructor-args "MyToken" "MTK" 1000000 \
+  --constructor-value 0
 ```
 
 ### Constructor argument encoding
@@ -388,7 +437,7 @@ For complex types:
 - **Addresses**: Provide as hex strings with 0x prefix
 - **Arrays**: Use JSON array syntax
 
-```bash
+```shell
 # Example with multiple argument types
 cargo stylus deploy \
   --constructor-args "TokenName" "TKN" 1000000 "0x742d35Cc6635C0532925a3b8D95B5C1b0ea3C28F"
@@ -469,7 +518,7 @@ pub fn constructor(&mut self, params: ConstructorParams) -> Result<(), Error> {
     self.balances.setter(deployer).set(params.initial_supply);
 
     // 6. Emit events last
-    log(self.vm(), ContractInitialized { /* ... */ });
+    self.vm().log(ContractInitialized { /* ... */ });
 
     Ok(())
 }

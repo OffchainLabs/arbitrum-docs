@@ -14,7 +14,7 @@ const pathNameToPreviewText = (pathName: string) => {
     .join(' ');
 };
 
-export default function Layout(props) {
+export default function Layout(props: Record<string, unknown>) {
   const { pathname } = useLocation();
 
   const previewText = pathNameToPreviewText(pathname);
@@ -28,6 +28,10 @@ export default function Layout(props) {
         <meta name="twitter:description" content="Arbitrum Docs" />
         <meta name="twitter:image" content="https://developer.arbitrum.io/img/devdocs.png" />
       </Head>
+      <div className="sr-only" aria-hidden="true">
+        For AI agents: a documentation index is available at the root level at /llms.txt and
+        /llms-full.txt. Append .md to any URL for the markdown version of that page.
+      </div>
       {/* <PostHogProvider> */}
       <OriginalLayout {...props} />
       {/* </PostHogProvider> */}
