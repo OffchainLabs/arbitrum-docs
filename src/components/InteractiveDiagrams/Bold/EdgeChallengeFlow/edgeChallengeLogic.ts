@@ -23,7 +23,7 @@ export const shortHex = (value: string | null | undefined, lead = 6, tail = 4): 
   return `${hex.slice(0, 2 + lead)}\u2026${hex.slice(-tail)}`;
 };
 
-export const toBigInt = (value: string | number | null | undefined): bigint | null => {
+const toBigInt = (value: string | number | null | undefined): bigint | null => {
   if (value == null || value === '-') return null;
   try {
     return BigInt(value);
@@ -41,7 +41,7 @@ export function formatRangeText(startHeight: string | null, endHeight: string | 
 
 // ── Bisection math ──────────────────────────────────────────────
 
-export function mostSignificantBitBigInt(x: bigint): number | null {
+function mostSignificantBitBigInt(x: bigint): number | null {
   if (x <= 0n) return null;
   let msb = -1;
   let cursor = x;
@@ -52,7 +52,7 @@ export function mostSignificantBitBigInt(x: bigint): number | null {
   return msb;
 }
 
-export function mandatoryBisectionHeight(start: bigint, end: bigint): bigint {
+function mandatoryBisectionHeight(start: bigint, end: bigint): bigint {
   const diff = end - start;
   if (diff < 2n) throw new Error('HeightDiffLtTwo');
   if (diff === 2n) return start + 1n;
@@ -309,7 +309,7 @@ export function buildRangeIndex(
   return { rangeNodes, rootKeys };
 }
 
-export function computeRootKeys(rangeNodes: Map<string, RangeNode>): string[] {
+function computeRootKeys(rangeNodes: Map<string, RangeNode>): string[] {
   const hasParent = new Set<string>();
   rangeNodes.forEach((node) => {
     node.childKeys.forEach((childKey) => {
@@ -390,29 +390,6 @@ export function buildLevelGroups(rangeIndex: RangeIndex, levelMeta: LevelMeta): 
     });
     const rootKeys = computeRootKeys(rangeNodes);
     return { ...group, rangeNodes, rootKeys };
-  });
-}
-
-// ── Auto-collapse ───────────────────────────────────────────────
-
-export function applyAutoCollapse(
-  groups: LevelGroup[],
-  collapsedSet: Set<string>,
-  expandedSet: Set<string>,
-): void {
-  const maxDepth = 100;
-  groups.forEach((group) => {
-    const visit = (rangeKey: string, depth: number) => {
-      if (!rangeKey) return;
-      if (depth > maxDepth && !expandedSet.has(rangeKey)) {
-        collapsedSet.add(rangeKey);
-      }
-      const node = group.rangeNodes.get(rangeKey);
-      if (!node) return;
-      const childKeys = Array.from(node.childKeys).filter((key) => group.rangeNodes.has(key));
-      childKeys.forEach((childKey) => visit(childKey, depth + 1));
-    };
-    group.rootKeys.forEach((rootKey) => visit(rootKey, 0));
   });
 }
 
@@ -630,7 +607,7 @@ export function computeMilestones(
   return [create, bisect1, layerzeroChild, bisect2, osp];
 }
 
-export function stepIndexFor(index: number, milestones: number[]): number {
+function stepIndexFor(index: number, milestones: number[]): number {
   let stepIndex = -1;
   milestones.forEach((milestone, idx) => {
     if (milestone >= 0 && index >= milestone) stepIndex = idx;

@@ -164,7 +164,7 @@ Don't stress too much about checking off all these boxes; we periodically review
 Some important disclaimers:
 
 - **This isn't an exhaustive list**. These are just the minimum guidelines applicable to all new content moving forward.
-- **Many of our docs don't yet follow this guidance**. Our small-but-mighty team is working on it! If you notice an obvious content bug, feel free to submit an [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
+- **Many of our docs don't yet follow this guidance**. Our team is working on it! If you notice an obvious content bug, feel free to submit an [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
 
 ### Banner conventions
 
@@ -222,7 +222,7 @@ Instead of opening a PR for this type of contribution, click the `Request an upd
 
 #### How long does it take to review my third-party content contribution?
 
-Our small-but-mighty team continuously balances competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. We process them in the order received, generally within a week or two.
+Our team continuously balances competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. We process them in the order received, generally within a week or two.
 
 #### Is there any way to expedite third-party content contribution reviews?
 
