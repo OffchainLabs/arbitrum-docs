@@ -9,12 +9,10 @@ content_type: reference
 
 <a data-quicklook-from="arbitrum">Arbitrum</a> nodes receive transaction inputs through two channels:
 
-- Nodes subscribe to the Sequencer feed and receive upcoming ordered <a data-quicklook-from="transaction">transactions</a> published in real time. To learn more, refer to the [real-time sequencer feed documentation](/how-arbitrum-works/deep-dives/sequencer.mdx#real-time-sequencer-feed).
-- Nodes also subscribe to the `SequencerBatchDelivered` event on the <a data-quicklook-from="parent-chain">parent chain</a>. This event occurs whenever a <a data-quicklook-from="batch">batch</a> of transactions gets delivered to the parent chain via the batch poster. Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those from the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx#sequencing-and-broadcasting). If discrepancies arise, nodes reorganize to adopt the transactions confirmed on the parent chain, treating it as the definitive source of truth.
+- Nodes subscribe to the <a data-quicklook-from="sequencer-feed">Sequencer feed</a> and receive upcoming ordered <a data-quicklook-from="transaction">transactions</a> published in real time. To learn more, refer to the [real-time sequencer feed documentation](/how-arbitrum-works/deep-dives/sequencer.mdx#4-persistence-and-broadcast).
+- Nodes also subscribe to the `SequencerBatchDelivered` event on the <a data-quicklook-from="parent-chain">parent chain</a>. This event occurs whenever a <a data-quicklook-from="batch">batch</a> of transactions gets delivered to the parent chain via the <a data-quicklook-from="batch-poster">batch poster</a>. Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those from the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx#4-persistence-and-broadcast). If discrepancies arise, nodes reorganize to adopt the transactions confirmed on the parent chain, treating it as the definitive source of truth.
 
-As discussed in the [considerations and limitations section](/how-arbitrum-works/deep-dives/sequencer.mdx#considerations-and-limitations), these methods suit different applications.
-
-These transactions serve as inputs for the [<a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
+These transactions serve as inputs for the [<a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)](/how-arbitrum-works/deep-dives/stf.mdx).
 
 ## Message types
 

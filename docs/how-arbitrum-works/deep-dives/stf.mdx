@@ -1,0 +1,56 @@
+---
+title: 'State Transition Function'
+description: 'Learn the fundamentals of the State Transition Function within Arbitrum Nitro.'
+author: petevielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's design.
+content_type: gentle-introduction
+---
+
+An Arbitrum node is a deterministic machine: feed it the same ordered inputs, and it will always produce the same outputs. The job of everything before the STF is to agree on exactly which inputs those are and in what order they should be.
+
+## How it works
+
+#### 1. Two doors, one source of truth
+
+Inputs reach a node through two doors. The fast door is the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx)—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the <a data-quicklook-from="sequencer">Sequencer</a> periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the <a data-quicklook-from="parent-chain">parent chain</a> is the canonical record (Ethereum for Arbitrum), and a node will <a data-quicklook-from="reorg">reorg</a> its optimistic feed-derived state to match what was actually settled on Ethereum.
+
+#### 2. The envelope (`L1IncomingMessage`)
+
+Whatever the door, every input lands as one `L1IncomingMessage`: a header plus an opaque L2msg payload. The header is the input surface the STF reads—what kind of message, who put it there, `BlockNumber` and `Timestamp`, the ordering/identity handle, and `L1BaseFee` (parent-chain gas price used). Determinism comes from this: the STF never asks the outside world for the time or the gas price—it only reads what is in the header.
+
+#### 3. One byte decides the path
+
+The header’s `Kind` routes the message. A handful of kinds are system messages minted by the protocol: `Initialize` (the genesis message that sets the chain ID and base fee), `EthDeposit` (native-token bridging), `SubmitRetryable` (the <a data-quicklook-from="retryable-ticket">retryable-ticket</a> mechanism behind robust L1→L2 messaging), and `BatchPostingReport` (which lets the STF charge the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) for the L1 data it consumes). The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity.
+
+#### 4. The envelope inside the envelope
+
+Open an `L2Message`, and you’ll find a second type byte—the `L2MessageKind`. The type byte can be a single signed transaction (`SignedTx`), an unsigned EOA or contract call (`UnsignedUserTx`, `ContractTx`), or—most importantly—a <a data-quicklook-from="batch">Batch</a>, which is simply a list of more L2 messages. This nesting is why the type space looks deceptively flat in summaries but is really two layers: an outer parent-chain framing and an inner transaction framing.
+
+#### 5. From batch to messages
+
+A batch posted to L1 isn’t a list of transactions; it’s a Brotli-compressed blob, or calldata. The inbox multiplexer inspects the leading header byte, decompresses, and pops out individual `L1IncomingMessage`s one at a time—the same shape the feed delivers. By the time anything reaches the STF, both doors have converged on the identical stream of envelopes.
+
+#### 6. The unwrap
+
+Finally, `ParseL2Transactions` turns each envelope into the EVM transactions <a data-quicklook-from="geth">Geth</a> will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions—and that ordered list, derived deterministically from headers no node can fabricate, is the true input to Arbitrum’s <a data-quicklook-from="state-transition-function">State Transition Function</a>.
+
+## Stylus-specific transaction processing
+
+A modified version of Geth that recognizes and processes <a data-quicklook-from="stylus">Stylus</a> transactions, ensuring proper inclusion in state transitions.
+
+## Execution in a WASM runtime
+
+Stylus transactions execute in [<a data-quicklook-from="arbos">ArbOS</a>](/how-arbitrum-works/deep-dives/arbos.mdx)'s <a data-quicklook-from="wasm">WASM</a> runtime instead of the EVM, enabling faster execution and more efficient computation.
+
+## Stylus gas accounting and pricing
+
+Unlike standard EVM transactions, Stylus transactions introduce new gas pricing models that account for factors such as opcode pricing, host I/O operations, and <a data-quicklook-from="ink">Ink</a> usage costs.
+
+## Interoperability with the EVM
+
+Stylus contracts can interact with Solidity contracts, enabling hybrid applications that leverage EVM and WASM execution environments.
+
+These Stylus-related changes aim to maintain compatibility with Ethereum’s execution model while introducing a more efficient, flexible, and scalable alternative for smart contract development.
+
+The following sections cover [STF inputs](/how-arbitrum-works/reference/stf-inputs.mdx), node processing, and implementation rules, highlighting [differences between Ethereum and Arbitrum](/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview.mdx), and Stylus execution environments. [Stylus-specific execution tasks handled within ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) will be covered separately, focusing on host I/O operations, caching, and WASM memory management.

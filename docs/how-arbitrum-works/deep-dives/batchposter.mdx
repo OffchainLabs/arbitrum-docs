@@ -1,0 +1,42 @@
+---
+title: The batch poster
+description: 'Learn the fundamentals of the Arbitrum batch poster.'
+author: pete-vielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need to learn more about the batch poster.
+content_type: concept
+---
+
+Batch posting is a fundamental process for the <a data-quicklook-from="sequencer">Sequencer's</a> operation in Arbitrum. It involves collecting multiple <a data-quicklook-from="child-chain">child chain</a> transactions, organizing them into batches, compressing the data to reduce size, and sending these batches to the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract on the <a data-quicklook-from="parent-chain">parent chain</a>. This mechanism is crucial for ensuring that transactions are securely recorded on the parent chain while optimizing for costs and performance.
+
+## How it works
+
+<ImageZoom src="/img/batchposter-path.png" alt="Batch poster path" className="img-600px" />
+
+#### 1. Messages arrive (upstream handoff)
+
+A transaction’s journey into the batch poster begins after it’s already been [sequenced](/how-arbitrum-works/deep-dives/sequencer.mdx). The poster pulls ordered <a data-quicklook-from="L2">L2</a> messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/stf.mdx), and [soft-finality](/how-arbitrum-works/deep-dives/finality.mdx) all happened before this point and live outside of the batch poster.
+
+#### 2. The poster decides where it stands
+
+The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and <a data-quicklook-from="L1">L1</a> nonce am I on?” and establishes the L1 time/block window the batch will use. That window comes from reading the L1 SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to L1.
+
+#### 3. Messages become a compressed batch
+
+The poster receives messages in order, turning each into typed segments (the transaction itself, plus small bookkeeping notes for delayed-message markers and time/block advances) and streaming them through Brotli. It watches size and segment-count caps, and adapts compression effort to how far behind it is—more compression when calm, less when backlogged. When it decides the batch is ready (full enough, old enough, or a delayed message is about to expire), it seals and recompresses it. This is the core work done inside the batch poster.
+
+#### 4. The data is routed to storage (DA handoff)
+
+The sealed bytes are handed to a data availability (DA) provider—an offchain <a data-quicklook-from="data-availability-committee-dac">AnyTrust/DAS committee</a> or a custom backend—via the small Writer.Store interface, with a fallback to putting data directly on Ethereum (calldata or blobs). What comes back is either a <a data-quicklook-from="data-availability-certificate">certificate</a> (offchain) or the raw data (EthDA). The committee aggregation, BLS signing, and blob KZG cryptography all happen behind that interface—handoffs that the batch poster isn’t involved in.
+
+#### 5. The batch is wrapped for L1 and self-checked
+
+The poster builds calldata for the right `SequencerInbox` method (calldata vs. blobs, with or without a delay proof) and—as a correctness gate—replays the whole batch through the `InboxMultiplexer` (the same read/decode machinery used to consume batches) to confirm it decodes back to the exact original messages before anything is sent.
+
+#### 6. The transaction is shipped to L1 (`DataPoster` handoff)
+
+The batch poster hands the calldata, blobs, and gas estimate to the `DataPoster`—the “shipping department.” From here, nonce selection, fee bidding, signing, queue persistence, and replace-by-fee-if-stuck are the `DataPoster`’s job, deliberately kept separate so the batch poster never has to deal with Ethereum gas mechanics. The `DataPoster` ultimately submits the transaction to the L1 `SequencerInbox` contract.
+
+#### 7. Finality and feedback
+
+Once that L1 transaction confirms, the transactions cross from the Sequencer’s soft finality into [hard finality](/how-arbitrum-works/deep-dives/finality.mdx) anchored on Ethereum (L1). The poster updates its backlog estimate (feeding back into compression effort and fee urgency), and a background revert watcher monitors L1—if a posted batch ever fails onchain, it halts all posting for operator intervention.
