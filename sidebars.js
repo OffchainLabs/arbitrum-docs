@@ -834,6 +834,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/nitro/node-tuning-and-monitoring',
+          label: 'Node tuning and monitoring',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/nitro/configuration-system',
           label: 'Configuration system',
         },
@@ -1243,6 +1248,11 @@ const sidebars = {
               type: 'doc',
               label: 'Cross-chain messaging',
               id: 'arbitrum-essentials/bridging/cross-chain-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'Verify child chain state',
+              id: 'arbitrum-essentials/how-to-get-l2block-on-l1',
             },
             {
               type: 'doc',
