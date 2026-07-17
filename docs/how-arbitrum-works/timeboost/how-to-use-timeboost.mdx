@@ -111,9 +111,9 @@ const depositHash = await walletClient.writeContract({
 console.log(`Deposit transaction sent: ${depositHash}`);
 ```
 
-### Step 2: query the reserve pricer API
+### Step 2: Query the reserve pricer API
 
-Any auction participant submitting a bid must first know the minimum acceptable bid amount for the round being bid on. The Timeboost Reserve Pricer API exposes this data publicly over HTTP, returning the current reserve price and the round it applies to. Query this API before submitting any bid.
+Any auction participant submitting a valid bid must first know the minimum acceptable bid amount for the round being bid on. The Timeboost Reserve Pricer API exposes this data publicly over HTTP, returning the current reserve price and the round it applies to. Query this API before submitting any bid.
 
 The reserve price is updated at the 31st second of every minute.
 
