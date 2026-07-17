@@ -8,7 +8,7 @@ sidebar_label: Recommended libraries
 
 Rust provides a package registry at [crates.io](https://crates.io/), which lets developers conveniently access a plethora of open source libraries to utilize as dependencies in their code. Stylus Rust contracts can take advantage of these crates to simplify their development workflow.
 
-While **crates.io** is a fantastic resource, many of these libraries were not designed with the constraints of a blockchain environment in mind. Some produce large binaries that exceed the decompressed WASM size limit (`MaxWasmSize`) for Stylus programs on Arbitrum — a chain-configurable ArbOS parameter that defaults to 128 KB, raised to 256 KB at ArbOS 60 and later. Many also take advantage of unsupported features such as:
+While **crates.io** is a fantastic resource, many of these libraries were not designed with the constraints of a blockchain environment in mind. Some produce large binaries that exceed the decompressed WASM size limit (`MaxWasmSize`) for Stylus programs on Arbitrum — a chain-configurable ArbOS parameter that defaults to 128 KB, raised to 256 KB at ArbOS61 and later. Many also take advantage of unsupported features such as:
 
 - Random numbers
 - Multi threading

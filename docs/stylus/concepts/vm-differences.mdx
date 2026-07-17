@@ -177,9 +177,9 @@ For verified per-operation figures, see the [performance comparison](/stylus/bes
 
 ### Stylus contracts
 
-- **Size limit**: Bounds the **decompressed** WASM, not the EVM 24 KB bytecode limit. It is a chain-configurable ArbOS parameter (`MaxWasmSize`), defaulting to 128 KB and raised to 256 KB at ArbOS 60 and later
+- **Size limit**: Bounds the **decompressed** WASM, not the EVM 24 KB bytecode limit. It is a chain-configurable ArbOS parameter (`MaxWasmSize`), defaulting to 128 KB and raised to 256 KB at ArbOS61 and later
 - **On-chain storage**: WASM is stored compressed, so the on-chain bytecode is smaller than the decompressed ceiling
-- **Large programs**: At ArbOS 60 and later, programs that exceed a single code account are split into a root plus fragments
+- **Large programs**: At ArbOS61 and later, programs that exceed a single code account are split into a root plus fragments
 - **Configurable**: A chain owner can adjust `MaxWasmSize` via `ArbOwner.setWasmMaxSize`
 
 **Size optimization:**

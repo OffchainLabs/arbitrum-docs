@@ -834,6 +834,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/nitro/node-tuning-and-monitoring',
+          label: 'Node tuning and monitoring',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/nitro/configuration-system',
           label: 'Configuration system',
         },
@@ -1802,11 +1807,6 @@ const sidebars = {
       type: 'doc',
       id: 'notices/arbos61-upgrade-notice',
       label: 'Upgrade notice for ArbOS 61',
-    },
-    {
-      type: 'doc',
-      id: 'notices/arbos60-upgrade-notice',
-      label: 'Upgrade notice for ArbOS 60',
     },
     {
       type: 'doc',
