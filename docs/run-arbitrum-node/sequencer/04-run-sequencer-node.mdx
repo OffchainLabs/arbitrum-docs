@@ -80,9 +80,11 @@ Enable your node to send batches to the parent chain:
 
 ```shell
 --node.batch-poster.enable=true
---node.batch-poster.max-size=90000
+--node.batch-poster.max-calldata-batch-size=90000
 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key>
 ```
+
+`--node.batch-poster.max-calldata-batch-size` replaces the deprecated `--node.batch-poster.max-size`, which previously also capped AnyTrust batches. On AnyTrust chains, set the AnyTrust batch limit separately with `--node.da.anytrust.max-batch-size` (see the next section).
 
 #### 4. Disable transaction forwarding
 
@@ -116,6 +118,7 @@ Enable your node to send batches to DAS and get DACerts from them.
 
 ```shell
 --node.da.anytrust.enable=true
+--node.da.anytrust.max-batch-size=90000
 --node.da.anytrust.rest-aggregator.enable=true
 --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL>
 --node.da.anytrust.rpc-aggregator.enable=true
@@ -130,7 +133,7 @@ Enable your node to send batches to DAS and get DACerts from them.
 - Example:
 
   ```shell wordWrap=true
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-calldata-batch-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.da.anytrust.enable=true --node.da.anytrust.rest-aggregator.enable=true --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.da.anytrust.rpc-aggregator.enable=true --node.da.anytrust.rpc-aggregator.assumed-honest=1 --node.da.anytrust.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-calldata-batch-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.da.anytrust.enable=true --node.da.anytrust.max-batch-size=90000 --node.da.anytrust.rest-aggregator.enable=true --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.da.anytrust.rpc-aggregator.enable=true --node.da.anytrust.rpc-aggregator.assumed-honest=1 --node.da.anytrust.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000
   ```
 
   - Ensure that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
@@ -162,6 +165,7 @@ Enable your node to send batches to DAS and get DACerts from them.
       "da": {
         "anytrust": {
           "enable": true,
+          "max-batch-size": 90000,
           "rest-aggregator": {
             "enable": true,
             "urls": ["http://das-server:9877"]

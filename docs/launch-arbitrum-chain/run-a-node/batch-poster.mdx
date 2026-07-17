@@ -12,19 +12,19 @@ To learn how the <a data-quicklook-from="batch-poster">batch-poster</a> role rel
 
 The [batch poster](/how-arbitrum-works/deep-dives/assertions.mdx) uses the following default configuration flags and values:
 
-| Flag                                                  | Default value | Description                                                                                       |
-| ----------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| `--node.batch-poster.enable`                          | false         | Enables posting batches to L1                                                                     |
-| `--node.batch-poster.max-size`                        | 100000        | Default value is overwritten if it's an L3 (90000, for AnyTrust: 1,000,000)                       |
-| `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                      |
-| `--node.batch-poster.error-delay`                     | 10 seconds    | Delay time after error posting batch                                                              |
-| `--node.batch-poster.compression-level`               | 11            | Batch compression level (Arbitrum uses Brotli compression which has compression levels from 1-11) |
-| `--node.batch-poster.parent-chain-wallet.private-key` | none          | Sets the private key of the parent chains wallet                                                  |
+| Flag                                                  | Default value | Description                                                                                                                                                                                                                |
+| ----------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.enable`                          | false         | Enables posting batches to L1                                                                                                                                                                                              |
+| `--node.batch-poster.max-calldata-batch-size`         | 100000        | Maximum calldata batch size; replaces the deprecated `--node.batch-poster.max-size`. Default value is overwritten if it's an L3 (90000). For AnyTrust batches, use `--node.da.anytrust.max-batch-size` (default 1,000,000) |
+| `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                                                                                                                                               |
+| `--node.batch-poster.error-delay`                     | 10 seconds    | Delay time after error posting batch                                                                                                                                                                                       |
+| `--node.batch-poster.compression-level`               | 11            | Batch compression level (Arbitrum uses Brotli compression which has compression levels from 1-11)                                                                                                                          |
+| `--node.batch-poster.parent-chain-wallet.private-key` | none          | Sets the private key of the parent chains wallet                                                                                                                                                                           |
 
 If you created an L3 Arbitrum chain and generated your node config file for a full node, the only values for the batch poster that will be set are:
 
 - `--node.batch-poster.enable = true`
-- `--node.batch-poster.max-size = 90000`
+- `--node.batch-poster.max-calldata-batch-size = 90000`
 - `--node.batch-poster.parent-chain-wallet.private-key = YOUR_PRIVATE_KEY`
 
 If you're the chain owner, using the Arbitrum Chain SDK to generate your config file is the best option.
@@ -291,6 +291,6 @@ The batch poster has a max delay, primarily set by `--node.batch-poster.max-dela
 - **Prevention of issues**: A shorter max delay reduces the opportunity for transaction reordering in the sequencer by requiring shorter waits. It also limits exposure to chain reorgs, since batches post sooner, which anchors them to the parent chain before potential fluctuations can invalidate sequencing. Extremely low posting times aren't recommended, as spamming the parent chain with batches increases costs without providing any benefit.
 - **Recommended settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, keep the value of one hour.
 
-The batch poster also has `--node.batch-poster.max-size` parameter represented in bytes. It is the maximum size a batch can be. If the total queued transactions compression estimate exceeds the max size, the batch poster will post the max size of transactions to the L1. The default value is 100000 bytes.
+The batch poster also has `--node.batch-poster.max-calldata-batch-size` parameter (which replaces the deprecated `--node.batch-poster.max-size`) represented in bytes. It is the maximum size a calldata batch can be. If the total queued transactions compression estimate exceeds the max size, the batch poster will post the max size of transactions to the L1. The default value is 100000 bytes. On AnyTrust chains, the maximum size of batches sent to the DAC is controlled separately by `--node.da.anytrust.max-batch-size` (default 1,000,000 bytes).
 
 Lower values will result in increased frequency of batch posting during high activity. And because Brotli compression is lossy, smaller batch files almost always result in suboptimal compression compared to larger files. which means the gas price will be higher overall for two smaller batches than for one larger batch, assuming the two smaller batches contain the same transactions as the one larger batch. Calldata and blob posting have an upper limit, so raising this value too high can cause issues, while lowering it can lead to inefficient compression and batch spamming on high-activity chains. The recommended value is 100,000 bytes.

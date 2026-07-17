@@ -140,10 +140,10 @@ The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client`
 
-| Key                    | Default | Description                                       |
-| ---------------------- | ------- | ------------------------------------------------- |
-| `enable-chunked-store` | `true`  | Send data to DAS in chunks instead of all at once |
-| `rpc.url`              | —       | DAS server URL                                    |
+| Key                    | Default     | Description                                                          |
+| ---------------------- | ----------- | -------------------------------------------------------------------- |
+| `enable-chunked-store` | `true`      | Send data to DAS in chunks instead of all at once                    |
+| `rpc.url`              | `self-auth` | DAS server URL; overridden at runtime by each `backends[].url` entry |
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client.data-stream`
 

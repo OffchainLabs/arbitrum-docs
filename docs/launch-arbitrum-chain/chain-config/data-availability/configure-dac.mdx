@@ -141,28 +141,30 @@ The configuration to enable the DAC in the batch poster looks like this:
 {
   ...
 
-  "data-availability": {
-    "enable": true,
-    "rpc-aggregator": {
+  "da": {
+    "anytrust": {
       "enable": true,
-      "assumed-honest": h,
-      "backends": [
-        {
-          "url": "https://rpc-endpoint-of-member-1/",
-          "pubkey":"PUBLIC_KEY_OF_MEMBER_1"
-        },
-        {
-          "url": "https://rpc-endpoint-of-member-2/",
-          "pubkey":"PUBLIC_KEY_OF_MEMBER_2"
-        },
+      "rpc-aggregator": {
+        "enable": true,
+        "assumed-honest": h,
+        "backends": [
+          {
+            "url": "https://rpc-endpoint-of-member-1/",
+            "pubkey":"PUBLIC_KEY_OF_MEMBER_1"
+          },
+          {
+            "url": "https://rpc-endpoint-of-member-2/",
+            "pubkey":"PUBLIC_KEY_OF_MEMBER_2"
+          },
 
-        ...
+          ...
 
-        {
-          "url": "https://rpc-endpoint-of-member-n/",
-          "pubkey":"PUBLIC_KEY_OF_MEMBER_N"
-        }
-      ]
+          {
+            "url": "https://rpc-endpoint-of-member-n/",
+            "pubkey":"PUBLIC_KEY_OF_MEMBER_N"
+          }
+        ]
+      }
     }
   },
 
@@ -170,10 +172,10 @@ The configuration to enable the DAC in the batch poster looks like this:
 }
 ```
 
-The following parameters are used:
+The following parameters are used (prior to Nitro v3.10.0, they lived under the now-deprecated `data-availability` section instead of `da.anytrust`):
 
-- `data-availability.enable`: tells the batch poster to handle information stored in a DAC
-- `data-availability.rpc-aggregator`: includes information of the RPC endpoints of all the DA servers run by DAC members.
+- `da.anytrust.enable`: tells the batch poster to handle information stored in a DAC
+- `da.anytrust.rpc-aggregator`: includes information of the RPC endpoints of all the DA servers run by DAC members.
   - `enable`: tells the batch poster that the RPC aggregator will be used
   - `assumed` and `backends`: include information from the DA servers (following the same format as specified in Step 1)
 
@@ -189,17 +191,19 @@ The configuration to enable the DAC in a full node looks like this:
 {
   ...
 
-  "data-availability": {
-    "enable": true,
-    "rest-aggregator": {
+  "da": {
+    "anytrust": {
       "enable": true,
-      "urls": [
-          "https://rest-endpoint-of-member-1/",
-          "https://rest-endpoint-of-member-2/",
-          ...
-          "https://rest-endpoint-of-member-n/",
-      ],
-      "online-url-list": "https://url-of-list-of-rest-endpoints"
+      "rest-aggregator": {
+        "enable": true,
+        "urls": [
+            "https://rest-endpoint-of-member-1/",
+            "https://rest-endpoint-of-member-2/",
+            ...
+            "https://rest-endpoint-of-member-n/",
+        ],
+        "online-url-list": "https://url-of-list-of-rest-endpoints"
+      }
     }
   },
 
@@ -209,8 +213,8 @@ The configuration to enable the DAC in a full node looks like this:
 
 The following parameters are used:
 
-- `data-availability.enable`: tells the node to query information from the DAC
-- `data-availability.rest-aggregator`: includes information on the REST endpoints of all the DA servers run by DAC members.
+- `da.anytrust.enable`: tells the node to query information from the DAC
+- `da.anytrust.rest-aggregator`: includes information on the REST endpoints of all the DA servers run by DAC members.
   - `enable`: tells the node that the REST aggregator will be used
   - `urls` or `online-url-list`: usually only one of these is used, although both parameters can be used and the information will be aggregated together. `urls` is a list of all REST endpoints of the DA servers, and `online-url-list` is a URL to a list of URLs of the REST endpoints of the DA servers.
 
