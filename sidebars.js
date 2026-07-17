@@ -307,27 +307,27 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust',
+                      id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
                       label: `AnyTrust custom gas token`,
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup',
+                      id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
                       label: `Rollup custom gas token`,
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/configure-native-mint-burn-gas-token',
+                      id: 'launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
                       label: 'Native mint/burn gas token',
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/gas-optimization-tools',
+                      id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                       label: `Gas optimization tools`,
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/dynamic-pricing-for-arbitrum-chains',
+                      id: 'launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
                       label: 'Dynamic Pricing for Arbitrum Chains',
                     },
                     {
