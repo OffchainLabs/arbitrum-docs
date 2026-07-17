@@ -30,7 +30,7 @@ IArbOwner(address(0x70)).setCollectTips(false);
 bool collecting = IArbOwner(address(0x70)).getCollectTips();
 ```
 
-`ArbOwner` is access-controlled — only the chain owner (typically the DAO or a designated operator address) can call these methods. The implementation is in [`precompiles/ArbOwner.go`](https://github.com/OffchainLabs/nitro/blob/6dce8d13902649a1acdfd3f2504129f1f5612358/precompiles/ArbOwner.go#L666).
+`ArbOwner` is access-controlled—only the chain owner (typically a designated operator address or DAO) can call these methods. The implementation is in [`precompiles/ArbOwner.go`](https://github.com/OffchainLabs/nitro/blob/6dce8d13902649a1acdfd3f2504129f1f5612358/precompiles/ArbOwner.go#L666).
 
 ## How tips are collected
 
