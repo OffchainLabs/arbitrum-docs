@@ -184,6 +184,6 @@ The procedure above is cryptographically sound — its trust is anchored in an a
 
 - **You can only prove state at a confirmed block.** The block hash in an assertion's global state is for one specific block (the end of the assertion). To prove state at an arbitrary or more recent block, you must additionally link that block back to a confirmed block through the `parentHash` chain.
 - **Confirmation depends on the parent chain's finality.** `latestConfirmed()` can change if the parent chain reorganizes. For maximum safety, read it at a finalized parent chain block.
-- **"Confirmed" reflects the rollup's trust model.** A confirmed assertion is one that survived its challenge period; its correctness rests on the rollup's fraud-proof / BoLD security assumptions (at least one honest validator).
+- **"Confirmed" reflects the Rollup's trust model.** A confirmed assertion is one that survived its <a data-quicklook-from="challenge-period">challenge period</a>; its correctness rests on the Rollup's fraud-proof / <a data-quicklook-from="bold">BoLD</a> security assumptions (at least one honest validator).
 - **Zero / non-existent values need explicit handling.** The steps above check `acctExists == true` and `storageExists == true`. Proving that a slot's value _is_ zero requires handling the corresponding exclusion proof.
 - **The Merkle Trie verifier must be correct.** The overall guarantee depends on the correctness of the verifier library you use; review and test it before relying on it in production.
