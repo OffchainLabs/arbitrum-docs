@@ -65,7 +65,7 @@ interface IMyContract {
 
     function setValue(uint256 new_value) external;
 
-    error Unauthorized(address caller);
+    error Unauthorized(address);
 }
 ```
 
@@ -91,38 +91,15 @@ Generate JSON format ABI (requires `solc` installed):
 cargo stylus export-abi --json > abi.json
 ```
 
-Output:
+The JSON output is produced by `solc`, so it includes `solc`'s header lines before the ABI array:
 
-```json
-[
-  {
-    "type": "function",
-    "name": "getValue",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "setValue",
-    "inputs": [
-      {
-        "name": "new_value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  }
-]
 ```
+======= <stdin>:IMyContract =======
+Contract JSON ABI
+[{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"Unauthorized","type":"error"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"new_value","type":"uint256"}],"name":"setValue","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+```
+
+Strip the two header lines before feeding the array to front-end tooling.
 
 ## Writing ABI-compatible contracts
 
@@ -255,6 +232,7 @@ interface IMyContract {
 Define custom errors with parameters:
 
 ```rust
+use stylus_sdk::alloy_sol_types::sol;
 use stylus_sdk::prelude::*;
 
 sol! {
@@ -263,17 +241,24 @@ sol! {
     error InvalidAmount();
 }
 
+#[derive(SolidityError)]
+pub enum TokenError {
+    InsufficientBalance(InsufficientBalance),
+    Unauthorized(Unauthorized),
+    InvalidAmount(InvalidAmount),
+}
+
 #[public]
 impl Token {
-    pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), InsufficientBalance> {
+    pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), TokenError> {
         let sender = self.vm().msg_sender();
         let balance = self.balances.get(sender);
         if balance < amount {
-            return Err(InsufficientBalance {
+            return Err(TokenError::InsufficientBalance(InsufficientBalance {
                 account: sender,
                 requested: amount,
                 available: balance,
-            });
+            }));
         }
         // Transfer logic
         Ok(())
@@ -281,14 +266,14 @@ impl Token {
 }
 ```
 
-Generated interface includes errors:
+Generated interface includes errors. Note that the exported Solidity drops the error parameter names, keeping only their types:
 
 ```solidity
 interface IToken {
     function transfer(address to, uint256 amount) external;
 
-    error InsufficientBalance(address account, uint256 requested, uint256 available);
-    error Unauthorized(address caller);
+    error InsufficientBalance(address, uint256, uint256);
+    error Unauthorized(address);
     error InvalidAmount();
 }
 ```
@@ -298,6 +283,7 @@ interface IToken {
 Events are automatically included in the ABI:
 
 ```rust
+use stylus_sdk::alloy_sol_types::sol;
 use stylus_sdk::prelude::*;
 
 sol! {
@@ -435,7 +421,7 @@ sol_storage! {
 #[public]
 impl MyContract {
     #[constructor]
-    pub fn new(owner: Address, initial_value: U256) {
+    pub fn new(&mut self, owner: Address, initial_value: U256) {
         self.owner.set(owner);
         self.initial_value.set(initial_value);
     }
@@ -444,10 +430,10 @@ impl MyContract {
 }
 ```
 
-Export constructor signature:
+Export constructor signature with the top-level `constructor` command (the constructor is not part of `export-abi` output):
 
 ```shell
-cargo stylus export-abi constructor
+cargo stylus constructor
 ```
 
 Output:
@@ -477,29 +463,6 @@ constructor(address owner) payable
 ```
 
 ## Export configuration
-
-### Custom license
-
-Specify a custom SPDX license identifier:
-
-```shell
-cargo stylus export-abi --license=GPL-3.0
-```
-
-Output includes:
-
-```solidity
-// SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.23;
-```
-
-### Custom pragma
-
-Specify a custom Solidity version pragma:
-
-```shell
-cargo stylus export-abi --pragma="pragma solidity ^0.8.20;"
-```
 
 ### Rust features
 
@@ -708,16 +671,21 @@ This is the main function:
 The `#[public]` macro generates ABI code:
 
 ```rust
-// From stylus-proc/src/macros/public/export_abi.rs
+// The macro generates an implementation roughly like this:
 impl GenerateAbi for MyContract {
     const NAME: &'static str = "MyContract";
 
     fn fmt_abi(f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "interface I{} {{", Self::NAME)?;
-        // Generate function signatures
+        // Generated function signatures
         write!(f, "\n    function getValue() external view returns (uint256);")?;
-        writeln!(f, "}}")?;
+        writeln!(f, "\n}}")?;
         Ok(())
+    }
+
+    fn fmt_constructor_signature(f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        // Emits the `constructor(...)` line printed by `cargo stylus constructor`
+        write!(f, "constructor()")
     }
 }
 ```
@@ -795,7 +763,7 @@ cp abi.json ../frontend/src/abis/
 When adding or modifying constructors, regenerate and commit:
 
 ```shell
-cargo stylus export-abi constructor > CONSTRUCTOR.txt
+cargo stylus constructor > CONSTRUCTOR.txt
 git add CONSTRUCTOR.txt
 git commit -m "Update constructor signature"
 ```
@@ -895,33 +863,34 @@ fn main() {
 
 **Error**: `the trait AbiType is not implemented for MyType`
 
-**Solution**: Use supported types or implement `AbiType`:
+**Solution**: Use supported types, or derive `AbiType` for a custom struct:
 
 ```rust
 // ✅ Use supported types
 pub fn process(&self, amount: U256) -> U256 { }
 
-// ❌ Custom types need AbiType implementation
+// ❌ Arbitrary Rust types have no ABI representation
 pub fn process(&self, amount: MyCustomType) -> MyCustomType { }
 ```
 
-For custom types, implement `AbiType`:
+For custom struct types, derive `AbiType` inside a `sol!` block. The struct can then be used in public method parameters and return values:
 
 ```rust
-use stylus_sdk::abi::AbiType;
+use stylus_sdk::alloy_sol_types::sol;
+use stylus_sdk::prelude::*;
 
-#[derive(Clone)]
-struct MyType(U256);
-
-impl AbiType for MyType {
-    type SolType = alloy_sol_types::sol_data::Uint<256>;
-
-    fn encode(&self) -> Vec<u8> {
-        self.0.encode()
+sol! {
+    #[derive(AbiType)]
+    struct Point {
+        uint256 x;
+        uint256 y;
     }
+}
 
-    fn decode(data: &[u8]) -> Result<Self, alloy_sol_types::Error> {
-        U256::decode(data).map(MyType)
+#[public]
+impl MyContract {
+    pub fn echo_point(&self, p: Point) -> Point {
+        p
     }
 }
 ```
@@ -958,11 +927,16 @@ impl AbiType for MyType {
 
 Export ABIs for all contracts in a workspace:
 
+The `--contract` value is a cargo package name. Repeat the flag to select several contracts; with no `--contract`, the workspace's default contracts are exported.
+
 ```shell
-# Export specific contract
+# Export specific contract by package name
 cargo stylus export-abi --contract=my-token
 
-# Export all contracts
+# Select several contracts in one invocation
+cargo stylus export-abi --contract=token --contract=staking
+
+# Export each to its own file
 for contract in token staking governance; do
     cargo stylus export-abi --contract=$contract > interfaces/I${contract^}.sol
 done
