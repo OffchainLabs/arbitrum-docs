@@ -336,6 +336,8 @@ const sidebars = {
                       label: 'Priority fees',
                     },
                   ],
+                },
+                {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/configure-dac',
                   label: `DAC how-to`,
