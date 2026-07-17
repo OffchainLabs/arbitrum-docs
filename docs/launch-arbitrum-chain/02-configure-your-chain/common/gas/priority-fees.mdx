@@ -7,11 +7,11 @@ author: 'gaelblanchemain'
 sme: 'vbridge-hash'
 ---
 
-ArbOS61 ("Elara") introduces the **capability** for chain owners to collect priority fees (tips) on their Arbitrum chain. The feature ships disabled, and a chain owner can enable it through a deliberate, two-step action.
+ArbOS61 ("Elara") introduces the capability for chain owners to collect priority fees (tips) on their Arbitrum chain. The feature ships disabled, and a chain owner can enable it through a deliberate, two-step action.
 
 <VanillaAdmonition type="caution" title="Activation requires a separate Constitutional vote">
 
-For Arbitrum One and Nova, enabling this feature requires an **additional Constitutional DAO vote** — it isn't activated as part of the ArbOS61 upgrade itself. The upgrade only makes tip collection _possible_ for chains that opt in.
+For Arbitrum One and Nova, enabling this feature requires a **Constitutional DAO vote**—it isn't activated as part of the ArbOS61 upgrade itself. The upgrade only makes tip collection _possible_ for chains that opt in.
 
 </VanillaAdmonition>
 
@@ -30,15 +30,15 @@ IArbOwner(address(0x70)).setCollectTips(false);
 bool collecting = IArbOwner(address(0x70)).getCollectTips();
 ```
 
-`ArbOwner` is access-controlled — only the chain owner (typically the DAO or a designated operator address) can call these methods. The implementation is in [`precompiles/ArbOwner.go`](https://github.com/OffchainLabs/nitro/blob/6dce8d13902649a1acdfd3f2504129f1f5612358/precompiles/ArbOwner.go#L666).
+`ArbOwner` is access-controlled—only the chain owner (typically a designated operator address or DAO) can call these methods. The implementation is in [`precompiles/ArbOwner.go`](https://github.com/OffchainLabs/nitro/blob/6dce8d13902649a1acdfd3f2504129f1f5612358/precompiles/ArbOwner.go#L666).
 
 ## How tips are collected
 
-Once enabled, any `priorityFee` (EIP-1559 `maxPriorityFeePerGas`) included in a transaction is collected the same way all other gas fees are, and routed into an onchain account. No separate infrastructure is needed.
+Once enabled, any `priorityFee` (EIP-1559 `maxPriorityFeePerGas`) included in a transaction is collected the same way all other gas fees are, and routed into an onchain account. No separate infrastructure or modifications are needed.
 
 ## Activation and receipt timing
 
-If tip-paying transactions land in the same block but **before** the transaction that enables fee collection, tips aren't collected from those earlier transactions — but their receipts will report tips as if they were. This is a known issue.
+If tip-paying transactions land in the same block but _before_ the transaction that enables fee collection, tips aren't collected from those earlier transactions—but their receipts will report tips as if they were. This is a known issue.
 
 To avoid it, the chain owner can either:
 
@@ -49,10 +49,10 @@ To avoid it, the chain owner can either:
 
 Enabling collection alone does **not** change how transactions are ordered. For priority fees to actually influence sequencing, the chain needs **both**:
 
-1. **`setCollectTips(true)`** — activates fee collection via `ArbOwner`.
-2. **Updated sequencer logic** — the sequencer must be configured to read the `PriorityFee` field when sorting transactions.
+1. **`setCollectTips(true)`**: activates fee collection via `ArbOwner`.
+2. **Updated sequencer logic**: the sequencer must be configured to read the `PriorityFee` field when sorting transactions.
 
-Without step 2, the sequencer continues to use its existing ordering rules (such as [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx)) regardless of the priority fee attached to a transaction.
+Without Step 2, the sequencer continues to use its existing ordering rules (such as [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), if enabled) regardless of the transaction's priority fee.
 
 ## References
 

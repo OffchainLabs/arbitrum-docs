@@ -71,7 +71,7 @@ This performs:
    - Strip unnecessary custom sections
 3. **Brotli compression**: Maximum compression (level 11)
 4. **Add EOF prefix**: `EFF00000` (identifies Stylus programs)
-5. **Size validation**: The _decompressed_ WASM must fit within the chain's `MaxWasmSize` parameter (default 128 KB, raised to 256 KB at ArbOS 60+). This is a chain-configurable ArbOS parameter, not the 24 KB EVM contract-code limit that applies to Solidity. At ArbOS 60+, programs larger than the limit can be split into a root plus fragments.
+5. **Size validation**: The _decompressed_ WASM must fit within the chain's `MaxWasmSize` parameter (default 128 KB, raised to 256 KB at ArbOS61+). This is a chain-configurable ArbOS parameter, not the 24 KB EVM contract-code limit that applies to Solidity. At ArbOS61+, programs larger than the limit can be split into a root plus fragments.
 
 **WASM Processing Pipeline**:
 
