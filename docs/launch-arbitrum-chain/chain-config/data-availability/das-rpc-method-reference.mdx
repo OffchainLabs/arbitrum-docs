@@ -30,9 +30,9 @@ The RPC interface supports two storage modes:
 1. **Single-shot store**: entire payload sent in one call (legacy, used when `enable-chunked-store: false`).
 2. **Chunked (streaming) store**: payload sent in chunks across multiple calls (default, enable by `enable-chunked-store: true`).
 
-## DAS RPC methods (Legacy DAS interface)
+## DAS RPC methods (legacy DAS interface)
 
-These methods are usd by the **RPC aggregator** (`node.da.anytrust.rpc-aggregator.rpc-client`) when communicating with standalone DAS servers.
+These methods are used by the **RPC aggregator** (`node.da.anytrust.rpc-aggregator.rpc-client`) when communicating with standalone DAS servers.
 
 ### `das_startChunkedStore`
 
@@ -98,7 +98,7 @@ Finalizes a chunked store session, signaling that all chunks have been transmitt
 - The DAS server assembles the chunks, stores the complete payload, and returns a signed DACert component (the server's <a data-quicklook-from="bls-signature">BLS Signature</a> over the data hash)
 - On success, the server commits the data to its configured storage backend
 
-## DAProvider RPC Methods (newer interface)
+## DAProvider RPC methods (newer interface)
 
 These methods are used by the DA provider client (`node.da.external-provider`)—the newer generalized data availability interface that can work with DAS or other DA backends.
 
@@ -124,7 +124,7 @@ Sends a chunk of data to the DA provider server.
 | Config path         | `node.da.external-provider.data-stream.rpc-methods.stream-chunk` |
 | Config key          | `stream-chunk`                                                   |
 
-Functionally equivalent to `das_sendChunk`. Max chunk body size is goverend by `node.da.external-provider.data-stream.max-store-chunk-body-size` (default: 5,242,880 bytes / 5 MB).
+Functionally equivalent to `das_sendChunk`. Max chunk body size is governed by `node.da.external-provider.data-stream.max-store-chunk-body-size` (default: 5,242,880 bytes / 5 MB).
 
 ### `daprovider_commitChunkedStore`
 
@@ -275,7 +275,7 @@ Full config path: `node.da.anytrust.rpc-aggregator.backends` (JSON string)
 | Single-shot store    | DAProvider | `daprovider_store`              | Store entire payload at once | `store-rpc-method` |
 | Get by hash          | REST       | N/A (HTTP GET)                  | Retrieve data by hash        | N/A                |
 
-### Related Configuration
+### Related configuration
 
 | Config Key                               | Default                  | Description                                                                                       |
 | ---------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------- |
