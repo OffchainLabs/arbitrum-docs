@@ -29,7 +29,7 @@ function checkStagedMarkdownDeletions() {
     }
   } catch (error) {
     console.error('Failed to execute git command. Ensure this is run in a git repository.');
-    console.error(error.message);
+    console.error(error instanceof Error ? error.message : String(error));
     exit(1);
   }
 }
@@ -74,7 +74,7 @@ function checkStagedMarkdownRenames() {
     }
   } catch (error) {
     console.error('Failed to execute git command. Ensure this is run in a git repository.');
-    console.error(error.message);
+    console.error(error instanceof Error ? error.message : String(error));
     exit(1);
   }
 }

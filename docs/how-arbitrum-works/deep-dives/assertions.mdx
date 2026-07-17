@@ -9,7 +9,7 @@ content_type: concept
 
 ## The Rollup chain assertions vs. child chain blocks
 
-The Rollup chain consists of assertions, which serve as checkpoints summarizing multiple child chain blocks.
+The Rollup chain consists of assertions, which serve as checkpoints summarizing multiple child chain blocks. Assertions are what give Arbitrum its hard finality guarantee — for the broader soft- vs. hard-finality picture, see [Finality](/how-arbitrum-works/deep-dives/sequencer.mdx#finality).
 
 - Child chain blocks contain individual transaction data
 - Assertions provide state summaries recorded on Ethereum
@@ -40,7 +40,7 @@ For more details on how the Rollup chain works under <a data-quicklook-from="bol
 
 :::note Validators and proposers serve different roles
 
-Validators validate transactions by computing the next <a data-quicklook-from="chain-state">chain state</a> using the chain's STF, whereas proposers can also assert and challenge the chain state on the parent chain.
+Validators validate transactions by computing the next <a data-quicklook-from="chain-state">chain state</a> using the chain's [STF](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx), whereas proposers can also assert and challenge the chain state on the parent chain.
 
 :::
 
@@ -50,7 +50,7 @@ An assertion implicitly claims that its predecessor is correct, meaning it also 
 
 An assertion also implicitly claims that its older siblings (other assertions with the same predecessor) are incorrect, if any exist. If two assertions are siblings, and the older sibling is correct, then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 
-The assertion is assigned a deadline, which indicates how much time other validators have to respond to it. For an assertion `R` with no older siblings, the deadline will equal the time when the assertion posts, plus an interval of time known as the <a data-quicklook-from="challenge-period">challenge period</a>; subsequent younger siblings will have the same deadline as their oldest sibling (`R`). You don't need to do anything if you're a validator and agree that an assertion is correct. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the party that proposed the first assertion (or another party acting in support of that assertion). More on challenges below:
+The assertion is assigned a deadline, which indicates how much time other validators have to respond to it. For an assertion `R` with no older siblings, the deadline will equal the time when the assertion posts, plus an interval of time known as the <a data-quicklook-from="challenge-period">challenge period</a>; subsequent younger siblings will have the same deadline as their oldest sibling (`R`). You don't need to do anything if you're a validator and agree that an assertion is correct. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the party that proposed the first assertion (or another party acting in support of that assertion). For the bisection protocol used to resolve such challenges, see [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx).
 
 ## Delays
 
@@ -60,7 +60,7 @@ The only delay users experience during a dispute is in their [child-to-parent ch
 
 ## Staking and validator incentives
 
-Arbitrum requires validators to bond **ETH** as a security deposit to ensure honest participation and prevent malicious behavior. This mechanism enforces economic accountability:
+Arbitrum requires validators to bond **ETH** as a security deposit to ensure honest participation and prevent malicious behavior. This mechanism enforces economic accountability (for a deeper analysis of bond sizing and dispute incentives, see [The economics of disputes in BoLD](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx)):
 
 - **Proposers** (validators submitting assertions) must bond **ETH** to support their claims.
 - **Challenges** against incorrect assertions result in bond forfeiture for dishonest validators.
@@ -97,3 +97,26 @@ Multiple disputes may be active simultaneously if conflicting assertions arise i
 - **Child-to-parent chain withdrawals** may experience delays; typically, withdrawals experience a single challenge period (6.4 days). A key property of BoLD is that, in the common case, withdrawals (messages) will experience only a one-challenge-period delay. In the event of a dispute, withdrawals will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
 
 Despite these delays, Arbitrum guarantees that honest assertions always succeed, maintaining Ethereum-level security.
+
+## Verifying a child chain block in a confirmed assertion
+
+You can programmatically check whether a specific child chain block has been included in a confirmed assertion by querying the Rollup contract on the parent chain. This is useful for applications that need to verify finality beyond soft confirmation.
+
+The Rollup contract lives on the parent chain, but its address is exposed via the child chain's network metadata. The example below uses the child chain to look the address up, then attaches it to the parent provider for reads.
+
+```ts
+import { Contract } from 'ethers';
+import { getArbitrumNetwork } from '@arbitrum/sdk';
+import { BoldRollupUserLogic__factory } from '@arbitrum/sdk/dist/lib/abi-bold/factories/BoldRollupUserLogic__factory';
+
+// Look up the child chain's network metadata to find the Rollup address.
+const childNetwork = await getArbitrumNetwork(childProvider);
+
+// The Rollup contract is deployed on the parent chain, so attach it to parentProvider.
+const rollup = new Contract(childNetwork.ethBridge.rollup, BoldRollupUserLogic__factory.abi, parentProvider);
+
+// Get the latest confirmed assertion hash.
+const assertionHash = await rollup.latestConfirmed();
+```
+
+To resolve `assertionHash` to a specific child chain block, query the Rollup's `AssertionCreated` events for that hash and decode the `afterState` — it contains the last processed `GlobalState` (block number and send count). See the [block-verification tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/block-verification-in-parent-chain-assertion) for a complete working example.
