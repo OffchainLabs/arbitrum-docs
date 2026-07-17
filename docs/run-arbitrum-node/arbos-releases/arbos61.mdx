@@ -57,8 +57,6 @@ ArbOS 61 Elara allows a chain owner to take advantage of this instrumentation an
 
 Multidimensional gas pricing ensures gas prices are more “fair” and representative of the network’s actual capacity and opens the door to resource-specific capacity improvements tailored to the chain's unique use case (e.g., better CPU performance yields more computational capacity without sacrificing or restricting storage operation capacity).
 
-####
-
 ### Stylus smart contract size limit increase to 96 KB (merge-on-activate)
 
 Currently, <a data-quicklook-from="stylus">Stylus</a> contracts are limited by the standard Solidity smart contract size limit of 24KB. ArbOS 61 Elara introduces a fragment-based deployment model in which a developer can deploy up to 4 “fragment” contracts (each with a maximum size of 24 KB), along with a “collection” contract that points to a list of the “fragment” contracts. Interacting with this “collection” contract allows a developer or user to use all 4 fragments together *as if they were a single, 96 KB smart contract.*
@@ -93,17 +91,8 @@ As mentioned, ArbOS 61 Elara includes several bug fixes and improvements to Styl
 
 During testing of ArbOS 60 on Arbitrum Sepolia, two interacting bugs in the gas refund logic were found that caused small, unintended changes to gas refund behavior related to Dynamic Pricing, even when Dynamic Pricing was disabled. The required fixes modify the State Transition Function (STF) and can therefore only be applied via a new ArbOS version; accordingly, the corrected release is versioned as ArbOS 61. ArbOS 61 is otherwise identical in scope to the original ArbOS 60 Elara proposal — no features, parameters, or permissions changed. Arbitrum One and Nova were never affected, as ArbOS 60 was not activated on either chain.
 
-### Optional priority fee collection
 
-*@Vanessa Bridge to update*
-
-ArbOS 61 Elara introduces a way to collect tips as priority fees on the Arbitrum chain. This change is implemented using the `maxPriorityFeePerGas` Field in standard EIP-1559 type 2 transactions. 
-
-Arbitrum One and Nova do not currently support the collection of priority fees, and the origin address of the transaction will be refunded at the end of execution by the sequencer.
-
-[Check out these docs for more details.](https://app.notion.com/p/Priority-fees-collection-ArbOS-61-34b01a3f59f8814ea643e85330c90c56?pvs=21)
-
-## Reference links for ArbOS 61 Elara
+### Reference links for ArbOS 61 Elara
 
 - [Guide for how to upgrade ArbOS on your Arbitrum chain](https://www.notion.so/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade)
 - [README for how to upgrade your rollup contracts to support ArbOS 61 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
