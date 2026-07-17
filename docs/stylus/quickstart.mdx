@@ -154,9 +154,11 @@ At this point, you can move on to the next step of this guide or develop your fi
 
 By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** onchain.
 
-:::warning Important
+<VanillaAdmonition type="warning" title="Important">
+
 Ensure your Docker service runs so this command works correctly.
-:::
+
+</VanillaAdmonition>
 
 ```shell
 cargo stylus check
@@ -285,15 +287,14 @@ Our contract is a counter; in its initial state, it should store a counter value
 You can call your contract so it returns its current counter value by sending it the following command:
 
 ```shell title="Call to the function: number()(uint256)"
-cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 \
+cast call --rpc-url 'http://localhost:8547' \
 [deployed-contract-address] "number()(uint256)"
 ```
 
 Let's break down the command:
 
-- `cast call` command sends a call to your contract
+- `cast call` command sends a read-only call to your contract (no transaction is sent, so no private key is needed)
 - The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
-- The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
 - The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
 - `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
 
@@ -347,26 +348,24 @@ to test the counter contract:
 #[cfg(test)]
 mod test {
     use super::*;
-    use alloy_primitives::address;
     use stylus_sdk::testing::*;
 
     #[test]
     fn test_counter_operations() {
-        // Set up test environment
+        // Set up the test VM and instantiate the contract
         let vm = TestVM::default();
-        // Initialize your contract
         let mut contract = Counter::from(&vm);
 
-        // Test initial state
-        assert_eq!(contract.number().unwrap(), U256::ZERO);
+        // Initial state: the counter starts at zero
+        assert_eq!(contract.number(), U256::ZERO);
 
-        // Test increment
-        contract.increment().unwrap();
-        assert_eq!(contract.number().unwrap(), U256::from(1));
+        // increment() updates storage
+        contract.increment();
+        assert_eq!(contract.number(), U256::from(1));
 
-        // Test set number
-        contract.set_number(U256::from(5)).unwrap();
-        assert_eq!(contract.number().unwrap(), U256::from(5));
+        // set_number() overwrites the stored value
+        contract.set_number(U256::from(5));
+        assert_eq!(contract.number(), U256::from(5));
     }
 }
 ```
