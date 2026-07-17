@@ -459,6 +459,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/bp-kms-signing-services',
+              label: 'KMS signing services',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/integrations/exchange-integration-checklist',
               label: 'Exchange integration checklist',
             },
@@ -1377,6 +1382,11 @@ const sidebars = {
               type: 'doc',
               id: 'arbitrum-essentials/reference/node-providers',
               label: 'RPC endpoints and providers',
+            },
+            {
+              type: 'doc',
+              id: 'arbitrum-essentials/reference/solidity-references',
+              label: 'Solidity references',
             },
             {
               type: 'doc',
