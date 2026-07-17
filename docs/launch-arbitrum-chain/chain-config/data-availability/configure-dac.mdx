@@ -181,7 +181,7 @@ The following parameters are used (prior to Nitro v3.10.0, they lived under the 
 - `node.da.anytrust.enable`: tells the batch poster to handle information stored in a DAC
 - `node.da.anytrust.rpc-aggregator`: includes information on the RPC endpoints of all the DA servers run by DAC members.
   - `enable`: tells the batch poster that the RPC aggregator will be used
-  - `assumed` and `backends`: include information from the DA servers (following the same format as specified in Step 1)
+  - `assumed-honest` and `backends`: include information from the DA servers (following the same format as specified in Step 1)
 
 Once the configuration is in place, you can restart your batch poster so it begins communicating with the DA servers to store transaction data, while storing the DACert in the `SequencerInbox`.
 
@@ -219,7 +219,7 @@ The configuration to enable the DAC in a full node looks like this:
 }
 ```
 
-The following parameters are used:
+The following parameters are used (prior to Nitro v3.10.0, they lived under the now-deprecated `node.data-availability` section instead of `node.da.anytrust`):
 
 - `node.da.anytrust.enable`: tells the node to query information from the DAC
 - `node.da.anytrust.rest-aggregator`: includes information on the REST endpoints of all the DA servers run by DAC members.

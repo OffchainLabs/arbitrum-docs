@@ -1864,7 +1864,7 @@ To enable data streaming on your Nitro node, use the following command-line flag
 
 ### Server-side protocol implementation (integrators)
 
-When configuring the Nitro Node with the streaming flag (`--node.da.external-provider.use-data-streaming`), it utilizes an internal sender implementation that relies on a server-side JSON-RPC API exposed by the DA provider. Integrators must implement the following three endpoints to enable the streaming protocol.
+When configuring the Nitro node with the streaming flag (`--node.da.external-provider.use-data-streaming`), it utilizes an internal sender implementation that relies on a server-side JSON-RPC API exposed by the DA provider. Integrators must implement the following three endpoints to enable the streaming protocol.
 
 | `daprovider_startChunkedStore`  | Initiates the streaming and allocates a batch identifier.   |
 | ------------------------------- | ----------------------------------------------------------- |
@@ -1935,7 +1935,7 @@ The current default <a data-quicklook-from="client">client</a> implementation re
 
 Integrators can limit the maximum allowed size for individual chunk transmissions to manage server load.
 
-- **Limit Control:** Use the following flag on the Nitro Node:
+- **Limit Control:** Use the following flag on the Nitro node:
   `--node.da.external-provider.data-stream.max-store-chunk-body-size`
 - **Action:** The client will ensure that all `StreamChunk` requests, including overhead, do not exceed the size specified by this flag.
 
