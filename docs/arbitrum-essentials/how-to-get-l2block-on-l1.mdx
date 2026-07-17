@@ -67,7 +67,7 @@ assertionHash = keccak256(abi.encodePacked(
 
 The send root mapping is stored in the `Outbox` contract. It maps the Merkle root of each batch of child chain -> parent chain messages (the _send root_) to its corresponding child chain block hash.
 
-When an assertion is confirmed, the rollup contract records the send root to the outbox so that, when a user later triggers a child chain -> parent chain message on the parent chain, the request can be verified.
+When an assertion is confirmed, the Rollup contract records the send root to the <a data-quicklook-from="outbox">outbox</a> so that, when a user later triggers a child chain -> parent chain message on the parent chain, the request can be verified.
 
 ```solidity
 mapping(bytes32 => bytes32) public roots; // maps root hashes => child chain block hash
