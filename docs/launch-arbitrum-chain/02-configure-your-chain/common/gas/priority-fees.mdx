@@ -52,7 +52,7 @@ Enabling collection alone does **not** change how transactions are ordered. For 
 1. **`setCollectTips(true)`** — activates fee collection via `ArbOwner`.
 2. **Updated sequencer logic**: the sequencer must be configured to read the `PriorityFee` field when sorting transactions.
 
-Without step 2, the sequencer continues to use its existing ordering rules (such as [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx)) regardless of the priority fee attached to a transaction.
+Without Step 2, the sequencer continues to use its existing ordering rules (such as [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), if enabled) regardless of the transaction's priority fee.
 
 ## References
 
