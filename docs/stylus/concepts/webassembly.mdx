@@ -275,10 +275,10 @@ Nitro bounds the **decompressed** size of an activated Stylus program through th
 
 | ArbOS version   | Default `MaxWasmSize` (decompressed) |
 | --------------- | ------------------------------------ |
-| Before ArbOS 60 | 128 KB                               |
-| ArbOS 60+       | 256 KB                               |
+| Before ArbOS61 | 128 KB                               |
+| ArbOS61+       | 256 KB                               |
 
-From ArbOS 60 onward, large programs can also be stored as a root plus fragments (default `MaxFragmentCount` of 4): the compressed payload is split across multiple code accounts, reassembled, and decompressed at activation, with the decompressed total still bounded by `MaxWasmSize`.
+From ArbOS61 onward, large programs can also be stored as a root plus fragments (default `MaxFragmentCount` of 4): the compressed payload is split across multiple code accounts, reassembled, and decompressed at activation, with the decompressed total still bounded by `MaxWasmSize`.
 
 To stay within these limits:
 
