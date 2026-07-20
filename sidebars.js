@@ -608,6 +608,11 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'link',
+          label: 'Chain playbook',
+          href: 'https://github.com/OffchainLabs/arbitrum-chain-playbook',
+        },
       ],
     },
 
