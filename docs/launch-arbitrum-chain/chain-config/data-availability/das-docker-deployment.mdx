@@ -119,7 +119,7 @@ services:
       retries: 3
 ```
 
-The configuration is intentionally minimal: it enables the RPC interface (used by the sequencer to store data, port `9876`) and the REST interface (used to retrieve data, port `9877`), reads the BLS keypair from the mounted `bls_keys` directory, and stores batch data as local files in the mounted `das-data` directory. The `healthcheck` uses the `curl` binary included in the image against the REST interface's `/health` endpoint, so `docker ps` reports the service as `healthy` only when the underlying storage is working.
+The configuration is intentionally minimal: it enables the RPC interface (used by the <a data-quicklook-from="sequencer">sequencer</a> to store data, port `9876`) and the REST interface (used to retrieve data, port `9877`), reads the BLS keypair from the mounted `bls_keys` directory, and stores <a data-quicklook-from="batch">batch</a> data as local files in the mounted `das-data` directory. The `healthcheck` uses the `curl` binary included in the image against the REST interface's `/health` endpoint, so `docker ps` reports the service as `healthy` only when the underlying storage is working.
 
 All the configuration options available for a Kubernetes deployment apply here too, as command-line flags in the `command` list: caching, S3 storage, archive mode (`discard-after-timeout`), and the REST aggregator. Refer to [Configuration options](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#configuration-options) for the full tables. For example, to let your DAS repair gaps in its data by syncing from other DA servers, add:
 
