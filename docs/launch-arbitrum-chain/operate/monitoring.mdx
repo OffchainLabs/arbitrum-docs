@@ -1,6 +1,6 @@
 ---
 title: 'Monitoring tools and considerations'
-description: 'List of tools available to monitor an Arbitrum chain, and special considerations to take with regard to monitoring'
+description: 'Tools available to monitor an Arbitrum chain, and a component-by-component reference of the metrics, signals, and thresholds to watch for the sequencer, batch poster, validator, and chain fees.'
 content_type: reference
 author: jose-franco
 sme: jose-franco
@@ -8,7 +8,12 @@ target_audience: 'Developers deploying and maintaining Arbitrum chains.'
 sidebar_position: 0
 ---
 
-When deploying and maintaining an Arbitrum chain, there are several key elements that need to be monitored. This page lists tools that are available for chain maintainers, as well as other considerations to keep in mind when monitoring an Arbitrum chain.
+When deploying and maintaining an Arbitrum chain, there are several key elements that need to be monitored. This page has two parts:
+
+1. **Monitoring tools** — scripts and services available to chain maintainers.
+2. **What to monitor, by component** — a reference of the specific metrics, onchain signals, and thresholds to watch for each part of the stack (sequencer, batch poster, validator, and chain fees), plus deployment and hardware guidance.
+
+The metric names in this page are the internal Nitro metric paths (for example, `arb/sequencer/backlog`). On the Prometheus scrape endpoint, each `/` is replaced with `_` (so `arb/sequencer/backlog` is scraped as `arb_sequencer_backlog`). See [Enabling Nitro metrics](#enabling-nitro-metrics) for how to expose them.
 
 ## Arbitrum chain verification script
 
@@ -28,18 +33,120 @@ The Arbitrum chain Verification Script is currently under active development and
 
 If you've deployed an [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `datool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
 
-## Further monitoring considerations
+## Enabling Nitro metrics
 
-Following is a non-comprehensive list of other elements of the network that should be monitored.
+Most of the signals below are exposed as Prometheus-compatible metrics by the Nitro node. Start the node with the `--metrics` flag to enable the metrics server, then scrape the endpoint at `http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus` (default port `6070`):
 
-- **Sequencer's transaction backlog size**: This can be considered as a sign of the network health. In some edge cases, a large and growing backlog might cause the sequencer to experience issues when posting batches on the parent chain.
+```shell
+nitro --metrics \
+  --metrics-server.addr 0.0.0.0 \
+  --metrics-server.port 6070
+```
 
-- **Batches posted in the `SequencerInbox` contract on the parent chain**: The sequencer regularly posts batches on the parent chain, as long as it receives transactions on the Arbitrum chain. If batches are not being posted in the `SequencerInbox` for any reason, further analysis should be conducted to understand why.
+For metrics-server flags, memory-related metrics, health-check patterns, and Kubernetes `ServiceMonitor` examples, see [Node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
 
-- **RBlocks (nodes) created in the Rollup contract on the parent chain**: RBlocks are created by validators and contain [assertions](/how-arbitrum-works/deep-dives/assertions.mdx) of the current state of the chain (viewed by the validators). If RBlocks are not being created or confirmed on the parent chain, further analysis should be conducted to understand why.
+The signals that are not Nitro metrics — onchain events and account balances on the parent chain — are called out explicitly in each table below.
 
-- **High periods of inactivity**: As an extension of the previous point, if no RBlocks (nodes) are created for a certain period of time (due to having no activity in the chain, or any other reason), the validator allowlist mechanism of the Rollup contract can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). That period of time is determined by `confirmPeriodBlocks` + the constant `45818` since the last RBlock (node) created. In this case, time is measured in L1 blocks (around 7 days + the `confirmPeriodBlocks` period) for Arbitrum chains settling to Ethereum or an Arbitrum chain, or measured in the parent chain's block time when settling to other chains.
+## What to monitor, by component
 
-- **Batch poster balance**: The batch poster account needs to be well funded to be able to post batches. There's no automatic mechanism to keep it funded, so its balance should be monitored and actions should be taken whenever it passes a certain threshold. The recommendation is to keep the account overfunded.
+The sections below group the elements to monitor by the component they belong to. Each table lists the signal, where it comes from, what it means, and a suggested condition to alert on. Suggested alert thresholds are starting points; tune them to your chain's activity and settlement layer.
 
-- **Validators' balance**: Validators are in charge of posting and confirming assertions of the state of the Arbitrum chain on the parent chain. Their balance should be monitored to make sure they are able to perform those actions.
+### Sequencer
+
+The sequencer accepts transactions, orders them, and produces blocks. Two different "backlogs" are often confused: the **sequencer's transaction backlog** (transactions received but not yet sequenced into blocks) and the **batcher backlog** (sequenced messages not yet posted to the parent chain). They are separate metrics and live in separate components — the batcher backlog is covered under [Batch poster](#batch-poster).
+
+| Signal                      | Source                   | What it means                                                                                                                                    | Suggested alert                              |
+| --------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| `arb/sequencer/backlog`     | Nitro metric (sequencer) | The sequencer's transaction backlog: transactions accepted but not yet included in a block. A sign of network health.                            | Sustained growth over several minutes        |
+| `arb/sequencer/active`      | Nitro metric (sequencer) | Whether this node is currently the active sequencer. Useful when running a sequencer coordinator with failover.                                  | Value flaps, or no node reports active       |
+| `arb/feed/backlog/messages` | Nitro metric (any node)  | Messages in the feed backlog. A growing backlog means a node (for example, a follower or the batch poster) is falling behind the sequencer feed. | Sustained growth                             |
+| `eth_syncing` fields        | RPC (any node)           | While a node is syncing, `eth_syncing` returns fields such as `batchSeen`, `batchProcessed`, `msgCount`, and `blockNum`. See caveats below.      | `batchSeen` − `batchProcessed` keeps growing |
+
+<VanillaAdmonition type="caution">
+
+`eth_syncing` returns `false` once a node is fully synced, so it is useful for tracking a node that is catching up, not for steady-state health. Its out-of-sync output is **not a stable API** and can change between Nitro versions, so do not build production alerting on the exact field shape. For a fully synced node, use the metrics above and an RPC liveness check (an `eth_chainId` call returning HTTP 200) instead. See [`eth_syncing`](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods.mdx#eth_syncing) for the full field reference.
+
+</VanillaAdmonition>
+
+### Batch poster
+
+The batch poster (the "batcher") posts sequenced transactions to the `SequencerInbox` contract on the parent chain as batches. It needs a funded account and must keep landing batches, or the chain's data stops being published to the parent chain.
+
+| Signal                                    | Source                          | What it means                                                                                      | Suggested alert                                |
+| ----------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `arb/batchposter/estimated_batch_backlog` | Nitro metric (batch poster)     | The batcher backlog: sequenced batches waiting to be posted to the parent chain.                   | Sustained growth over several minutes          |
+| `arb/batchposter/wallet/eth`              | Nitro metric (batch poster)     | The batch poster account balance, in ether. Monitor fund usage directly from this metric.          | Below your funding threshold                   |
+| `arb/inbox/latest/batch`                  | Nitro metric (any node)         | The latest batch number the node has seen in the `SequencerInbox`. Stalls if batches stop landing. | No increase while the chain has activity       |
+| `SequencerBatchDelivered` event           | Parent chain (`SequencerInbox`) | Emitted each time a batch is delivered onchain. The onchain confirmation that batches are landing. | No event within your expected posting interval |
+
+<VanillaAdmonition type="tip">
+
+Monitor the batch poster account balance directly through `arb/batchposter/wallet/eth` (and the validator balance through `arb/staker/balance`, below) rather than estimating monthly spend from configs and gas multipliers. Direct balance monitoring reflects real usage; config-based estimation drifts from reality as parent-chain fees move. There is no automatic mechanism to refund these accounts, so keep them overfunded and alert well before they run dry.
+
+</VanillaAdmonition>
+
+If batches stop being posted, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) for common causes and tuning flags.
+
+### Validator
+
+Validators post and confirm assertions (historically called "RBlocks" or "nodes") of the chain's state to the Rollup contract on the parent chain. The metrics differ depending on whether your chain runs the legacy staker or the BoLD staker.
+
+<VanillaAdmonition type="note">
+
+If you are relying on `arb/staker/action/last_success` and seeing it go stale for long periods even while assertions are being created, this is expected on two counts. First, that gauge only updates when the staker actually **sends a transaction to the parent chain** — during periods when the staker has no action to take, it stays flat even though the validator is healthy and polling. Second, it is a **legacy-staker** metric; on BoLD chains, assertion activity is tracked by the `arb/validator/poster/*` and `arb/validator/scanner/*` metrics instead. Prefer the assertion-progress and failure signals below over `last_success` as your primary health check, and corroborate with the onchain assertion events.
+
+</VanillaAdmonition>
+
+| Signal                                                          | Source                         | What it means                                                                                                  | Suggested alert                          |
+| --------------------------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `arb/staker/staked_node`                                        | Nitro metric (legacy staker)   | The latest assertion this validator has staked on. Should advance as the chain progresses.                     | No advance while the chain has activity  |
+| `arb/staker/confirmed_node`                                     | Nitro metric (legacy staker)   | The latest confirmed assertion this validator sees.                                                            | Stalls unexpectedly                      |
+| `arb/staker/action/failure`                                     | Nitro metric (legacy staker)   | Counter of failed staker actions. A better failure signal than a stale `last_success` gauge.                   | Any sustained increase                   |
+| `arb/staker/balance`                                            | Nitro metric (staker)          | The validator account balance, in ether. Monitor fund usage directly.                                          | Below your funding threshold             |
+| `arb/validator/poster/assertion_posted`                         | Nitro metric (BoLD staker)     | Counter of assertions posted by this validator. The primary "assertions are being made" signal on BoLD chains. | No increase while the chain has activity |
+| `arb/validator/poster/error_posting_assertion`                  | Nitro metric (BoLD staker)     | Counter of errors while posting assertions.                                                                    | Any sustained increase                   |
+| `arb/validator/scanner/latest_confirmed_assertion_block_number` | Nitro metric (BoLD staker)     | Parent-chain block number of the latest confirmed assertion.                                                   | No advance over an extended period       |
+| `arb/validator/validations/failed`                              | Nitro metric (any validator)   | Counter of failed block validations.                                                                           | Any sustained increase                   |
+| `NodeCreated` / `AssertionCreated` events                       | Parent chain (Rollup contract) | The onchain confirmation that assertions are being created. Watch alongside the metrics above.                 | No event over an extended period         |
+
+<VanillaAdmonition type="caution">
+
+**High periods of inactivity can disable the validator allowlist.** If no assertions are created for long enough — determined by `confirmPeriodBlocks` plus the constant `45818` parent-chain blocks since the last assertion — the Rollup contract's validator allowlist mechanism can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). For chains settling to Ethereum or another Arbitrum chain, that constant is roughly seven days on top of the `confirmPeriodBlocks` period; for chains settling elsewhere, it is measured in the parent chain's block time. Alert on assertion inactivity well before this window elapses.
+
+</VanillaAdmonition>
+
+### Chain fees and load
+
+The chain's base fee is a useful signal of sustained demand. An Arbitrum chain has a `gas target` (also called the speed limit), measured in gas per second, that acts as a threshold for pricing. When cumulative usage exceeds it, a backlog of excess gas accumulates and the `L2 base fee` rises using an approach similar to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md). The default gas target is `7,000,000` gas per second as of ArbOS 6 (it was `1,000,000` in ArbOS 0). A sustained base-fee spike therefore indicates demand is exceeding the speed limit — as a rough guide, 7M gas per second is on the order of ~2,000 simple transfers per second, though the exact transactions-per-second figure depends on the gas cost of the transactions being run.
+
+| Signal                                | Source                  | What it means                                                                                  | Suggested alert                           |
+| ------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `arb/block/basefee`                   | Nitro metric (any node) | The current L2 base fee. Spikes above the minimum indicate the chain is congested.             | Sustained elevation above baseline        |
+| `ArbGasInfo.getGasBacklog()`          | Precompile (RPC)        | The backlogged amount of gas burnt in excess of the speed limit. Drives the base fee up.       | Sustained growth                          |
+| `ArbGasInfo.getGasAccountingParams()` | Precompile (RPC)        | Returns the chain's speed limit, pool size, and block gas limit. Use to confirm configuration. | Values differ from expected configuration |
+
+For guidance on choosing and changing the gas target, see [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx).
+
+## Deployment guidance
+
+**Do not run the sequencer and a validator on the same node.** They have different resource profiles and different failure modes, and co-locating them means a single machine failure takes down both liveness (sequencing) and safety (validation) at once. Running them separately also keeps their funding and monitoring independent:
+
+- The **batch poster** account (`arb/batchposter/wallet/eth`) pays to post batches to the parent chain.
+- Each **validator** account (`arb/staker/balance`) pays to post and confirm assertions.
+
+Fund and alert on each account separately, and keep each overfunded — there is no automatic top-up mechanism for either.
+
+## Appendix: reference hardware specifications
+
+{/* SME-verify: confirm the canonical Arbitrum One node specs and instance types below before publishing. These are not derivable from the Nitro source and should be signed off by the infrastructure team. */}
+
+The following are the canonical hardware specifications used by Offchain Labs for Arbitrum One nodes. Treat them as a reference point for sizing your own chain; requirements scale with your chain's activity and history.
+
+| Role      | vCPU / cores | RAM   | Storage     | Reference instance |
+| --------- | ------------ | ----- | ----------- | ------------------ |
+| Sequencer | 10 cores     | 90 GB | 6.6 TB NVMe | `i7ie.3xlarge`     |
+| Archive   | 2 cores      | 40 GB | 16 TB       | —                  |
+| Validator | 3 cores      | 32 GB | 4 TB        | —                  |
+| RPC       | 4 cores      | 32 GB | —           | —                  |
+
+Fast, locally attached NVMe SSD storage is strongly recommended, especially for the sequencer and archive nodes, because disk latency directly affects performance as read volume grows. See [State growth](/launch-arbitrum-chain/operate/state-growth.mdx) for more on storage sizing over time.
