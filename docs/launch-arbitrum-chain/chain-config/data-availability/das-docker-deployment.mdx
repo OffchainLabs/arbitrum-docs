@@ -259,7 +259,7 @@ Remove the extra signer configuration when you're done testing, or keep it (with
 
 ## Costs and operational notes
 
-A DAS signs and returns a DACert immediately for each store request it receives from the batch poster; there is no waiting period on the DAS side. How often those certificates (or, in fallback, full batches) are posted to the parent chain is governed by the batch poster's own limits — its maximum batch size and maximum delay parameters (`--node.batch-poster.max-delay`, and `--node.data-availability.max-batch-size` for AnyTrust batches) — so DAS costs are dominated by steady infrastructure, not per-batch fees.
+A DAS signs and returns a DACert immediately for each store request it receives from the batch poster; there is no waiting period on the DAS side. How often those certificates (or, in fallback, full batches) are posted to the parent chain is governed by the batch poster's own limits — its maximum batch size and maximum delay parameters (`--node.batch-poster.max-delay`, and `--node.da.anytrust.max-batch-size` for AnyTrust batches) — so DAS costs are dominated by steady infrastructure, not per-batch fees.
 
 <VanillaAdmonition type="info" title="Approximate costs (as of July 2026)">
 
