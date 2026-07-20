@@ -76,7 +76,7 @@ docker run --rm -v $(pwd)/bls_keys:/home/user/bls_keys --entrypoint anytrusttool
 This creates two files in `bls_keys/`, both base64-encoded and readable only by their owner (mode `600`):
 
 - `das_bls`: the private key. Never share it, and back it up securely.
-- `das_bls.pub`: the public key. You'll send this one to the <a data-quicklook-from="chain-owner">chain owner</a> so it can be included in the keyset.
+- `das_bls.pub`: the public key. You'll send this one to the <a data-quicklook-from="chain-owner">chain owner</a> so it can be included in the <a data-quicklook-from="keyset">keyset</a>.
 
 To print the public key:
 
