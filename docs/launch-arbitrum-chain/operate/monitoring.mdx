@@ -19,11 +19,11 @@ The metric names in this page are the internal Nitro metric paths (for example, 
 
 The [Arbitrum chain verification script](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/feat-add-verification-scripts/examples/verify-rollup) retrieves information from an Arbitrum chain and its parent chain to verify that all parameters are configured correctly. After gathering the data, it generates a comprehensive report and issues warnings for any discrepancies detected. This tool is particularly useful after deploying and configuring an Arbitrum chain, to make sure that the onchain information has been correctly set.
 
-:::info
+<VanillaAdmonition type="info">
 
-The Arbitrum chain Verification Script is currently under active development and is considered a work-in-progress (WIP). Consequently, its findings should be approached with caution, as there is a potential for false positives.
+The Arbitrum chain verification script is currently under active development and is considered a work-in-progress (WIP). Consequently, its findings should be approached with caution, as there is a potential for false positives.
 
-:::
+</VanillaAdmonition>
 
 ## Arbitrum chain retryables tracker
 
@@ -138,8 +138,6 @@ Fund and alert on each account separately, and keep each overfunded — there is
 
 ## Appendix: reference hardware specifications
 
-{/* SME-verify: confirm the canonical Arbitrum One node specs and instance types below before publishing. These are not derivable from the Nitro source and should be signed off by the infrastructure team. */}
-
 The following are the canonical hardware specifications used by Offchain Labs for Arbitrum One nodes. Treat them as a reference point for sizing your own chain; requirements scale with your chain's activity and history.
 
 | Role      | vCPU / cores | RAM   | Storage     | Reference instance |
@@ -151,8 +149,8 @@ The following are the canonical hardware specifications used by Offchain Labs fo
 
 Fast, locally attached NVMe SSD storage is strongly recommended, especially for the sequencer and archive nodes, because disk latency directly affects performance as read volume grows. See [State growth](/launch-arbitrum-chain/operate/state-growth.mdx) for more on storage sizing over time.
 
-:::info Additional resources
+<VanillaAdmonition type="info" title="Additional resources">
 
-Another good resource for monitoring your chain is the tooling provided in the GitHub repoistory [`arbitrum-monitoring`](https://github.com/OffchainLabs/arbitrum-monitoring).
+Another good resource for monitoring your chain is the tooling provided in the GitHub repository [`arbitrum-monitoring`](https://github.com/OffchainLabs/arbitrum-monitoring).
 
-:::
+</VanillaAdmonition>
