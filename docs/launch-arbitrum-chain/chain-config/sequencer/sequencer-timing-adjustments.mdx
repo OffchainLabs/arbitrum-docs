@@ -1,30 +1,31 @@
 ---
 title: 'Configure Sequencer timing adjustments'
+sidebar_label: 'Sequencer timing adjustments'
 description: 'Learn how to configure timing adjustments to the Sequencer for your Arbitrum chain'
+user_story: 'As a developer, I want to configure the Sequencer timing on my Arbitrum chain'
 content_type: how-to
 author: pete-vielhaber
 sme: jason-w123
-target_audience: 'Developers who want to configure the Sequencer timing on their Arbitrum chain'
 ---
 
 When launching an Arbitrum chain, the Sequencer plays a central role in ordering transactions and producing blocks. Several timing-related parameters can be adjusted in the node configuration (via the Nitro node's JSON config or command-line flags) to optimize performance, user experience, security, and cost for your specific use case.
 
-To configure [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) timing parameters when launching an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, you'll primarily adjust settings in two places:
+To configure [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) timing parameters when launching an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, you'll primarily adjust settings in two places:
 
-1. **Chain-level parameters**: Set during deployment via the Chain SDK, affect sequencer behavior boundaries.
-2. **Node-level parameters**: Set when running your Nitro sequencer node—these control runtime behavior, such as block production speed and <a data-quicklook-from="batch">batch</a> posting.
+1. **Chain-level parameters**: Set during deployment via the Chain SDK; these affect Sequencer behavior boundaries.
+2. **Node-level parameters**: Set when running your Nitro Sequencer node—these control runtime behavior, such as block production speed and <a data-quicklook-from="batch">batch</a> posting.
 
-Most timing tweaks happen at the node level for the sequencer. Use the official Arbitrum Chain SDK to generate a base node config JSON, then override specific fields, or pass flags directly when running the `nitro-node` Docker image.
+Most timing tweaks happen at the node level for the Sequencer. Use the official Arbitrum Chain SDK to generate a base node config JSON, then override specific fields, or pass flags directly when running the `nitro-node` Docker image.
 
-## Key Sequencer Timing parameters to adjust
+## Key Sequencer timing parameters to adjust
 
-| Parameter                                                                            | Location                                            | Default                                                                                       | How to configure                                                                                                                                                      | Why adjust                                                                                                                                             |
-| ------------------------------------------------------------------------------------ | --------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Delayed sequencer finalize distance                                                  | Node (`node.delayed-sequencer`)                     | Higher (e.g., waits for full <a data-quicklook-from="parent-chain">Parent chain</a> finality) | CLI: `--node.delayed-sequencer.finalize-distance=1` and enable: `--node.delayed-sequencer.enable=true` and disable: `node.delayed-sequencer.use-merge-finality=false` | Lower value for near instance deposits (~seconds instead of minutes). Trade-off: ⚠️ **DANGER** ⚠️ Risk of re-org on parent chain.                      |
-| <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> max time variation      | Chain deployment (`sequencerInboxMaxTimeVariation`) | `delayBlocks`: 5760, `futureBlocks`: 12, `delaySeconds`: 86400, `futureSeconds`:3600          | In Chain SDK config struct or `chainConfig` JSON during deployment.                                                                                                   | Allows sequencer minor timestamp adjustments to avoid re-orgs if batch posting lags. Rarely needs change from defaults.                                |
-| [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) non-express delay | Node (`execution.sequencer.timeboost`)              | 200ms                                                                                         | In node config: `"execution": { "sequencer": { "timeboost": { "non-express-delay-msec": 300 } } }`                                                                    | Larger delay for more advantage/revenue for <a data-quicklook-from="express-lane">Express Lane</a> winner. Increases latency for regular transactions. |
+| Parameter                                                                            | Location                                            | Default                                                                                       | How to configure                                                                                                                                                                                | Why adjust                                                                                                                                                                       |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Delayed sequencer finalize distance                                                  | Node (`node.delayed-sequencer`)                     | Higher (e.g., waits for full <a data-quicklook-from="parent-chain">parent chain</a> finality) | CLI: `--node.delayed-sequencer.finalize-distance=1` and enable: `--node.delayed-sequencer.enable=true` and disable: `node.delayed-sequencer.use-merge-finality=false`                           | Lower value for near instant deposits (~seconds instead of minutes). Trade-off: ⚠️ **DANGER** ⚠️ Risk of reorg on parent chain.                                                  |
+| <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> max time variation      | Chain deployment (`sequencerInboxMaxTimeVariation`) | Parent-chain dependent — see [Default values](#default-values)                                | In Chain SDK config struct or `chainConfig` JSON during deployment, or later via `SequencerInbox.setMaxTimeVariation`. See [Understanding `maxTimeVariation`](#understanding-maxtimevariation). | Bounds how far a message's claimed parent-chain block/time may sit from the block the batch lands in, and sets the force-inclusion wait. See the sections below before changing. |
+| [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) non-express delay | Node (`execution.sequencer.timeboost`)              | 200ms                                                                                         | In node config: `"execution": { "sequencer": { "timeboost": { "non-express-delay-msec": 300 } } }`                                                                                              | Larger delay for more advantage/revenue for <a data-quicklook-from="express-lane">Express Lane</a> winner. Increases latency for regular transactions.                           |
 
-## Step-by-step configuration process:
+## Step-by-step configuration process
 
 1. **Deploy your chain first**: using the Chain SDK, this sets immutable params like `sequencerInboxMaxTimeVariation`.
 2. **Generate base node config**: Use the Chain SDK:
@@ -39,11 +40,11 @@ const nodeConfig = await prepareNodeConfig({
 // Write nodeConfig to file: nodeConfig.json
 ```
 
-2. How to run the sequencer node:
+3. **Run the Sequencer node**:
 
 - Use Docker (recommended):
 
-```typescript
+```shell
 docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
   offchainlabs/nitro-node:<latest Nitro version> \
   --conf.file=/config/nodeConfig.json \
@@ -52,14 +53,121 @@ docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
   # Add other required flags (parent-chain URL, chain info-json, keys, etc.)
 ```
 
-:::info Latest version of Nitro
+<VanillaAdmonition type="info" title="Latest version of Nitro">
 
 You can find the latest recommended version of Nitro on the [Run a Node](/run-arbitrum-node/start-here.mdx#recommended-nitro-version) page.
 
-:::
+</VanillaAdmonition>
 
 - or override via CLI flags for testing
 
-3. **Test changes** on a devnet or testnet first—monitor TPS, state growth, posting costs, and deposit latency.
+4. **Test changes** on a devnet or testnet first—monitor TPS, state growth, posting costs, and deposit latency.
 
 For a full list of flags, run `nitro-node --help`. Refer to Arbitrum Docs sections on [Running a Sequencer Node](/run-arbitrum-node/sequencer/04-run-sequencer-node.mdx) and [How to configure your Arbitrum chain's node using the Chain SDK](/launch-arbitrum-chain/deploy/configure-node.mdx) for your exact version. If using Timeboost or advanced features, additional setup (e.g., <a data-quicklook-from="auction-contract">Auction Contract</a>) is needed.
+
+## Understanding `maxTimeVariation`
+
+`maxTimeVariation` is a four-field setting on the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract on the <a data-quicklook-from="parent-chain">parent chain</a>. It bounds how far a sequenced message's claimed parent-chain block number and timestamp may differ from the parent-chain block in which the <a data-quicklook-from="batch">batch</a> carrying that message is actually posted.
+
+```solidity
+struct MaxTimeVariation {
+    uint256 delayBlocks;   // max parent-chain blocks in the past a message may be received
+    uint256 futureBlocks;  // max parent-chain blocks in the future a message may be received
+    uint256 delaySeconds;  // max parent-chain seconds in the past a message may be received
+    uint256 futureSeconds; // max parent-chain seconds in the future a message may be received
+}
+```
+
+The four fields define a **two-sided window** around the current parent-chain block and time:
+
+- `delayBlocks` and `delaySeconds` bound the **past** edge—how old a message's claimed block or timestamp may be.
+- `futureBlocks` and `futureSeconds` bound the **future** edge—how far ahead a message's claimed block or timestamp may be.
+
+Blocks and seconds are tracked independently: `delayBlocks` and `futureBlocks` are measured in parent-chain block numbers (`block.number`), while `delaySeconds` and `futureSeconds` are measured in parent-chain seconds (`block.timestamp`).
+
+## How the time window is enforced
+
+Understanding what this setting guards requires knowing _where_ it is enforced, which is not where most people expect.
+
+When a batch is posted, the Sequencer Inbox computes the window from the **current** parent-chain block and time at the moment the batch lands:
+
+- Timestamp window: `[block.timestamp - delaySeconds, block.timestamp + futureSeconds]`
+- Block window: `[block.number - delayBlocks, block.number + futureBlocks]`
+
+The contract records these bounds (they are emitted in the `SequencerBatchDelivered` event and folded into the batch's data hash), but it **does not reject** a batch whose messages fall outside them. Enforcement happens later, off the parent chain, when the batch is replayed by the node's state-transition function: each message whose claimed block or timestamp is outside the recorded window is **clamped** to the nearest bound—pulled up to the minimum if it is too far in the past, or pulled down to the maximum if it is too far in the future.
+
+<VanillaAdmonition type="warning" title="Out-of-window messages are clamped, not rejected">
+
+Because out-of-window messages are silently clamped rather than rejected, a message can be assigned a different parent-chain block or timestamp than the Sequencer originally computed locally. When the locally executed chain and the chain derived from onchain data disagree, the result is a child-chain reorg. `maxTimeVariation` therefore does not guard by blocking bad batches; it defines the window inside which the Sequencer and batch poster must keep every message to avoid such reorgs.
+
+</VanillaAdmonition>
+
+## What each field guards, with examples
+
+**Future edge (`futureBlocks` / `futureSeconds`).** These cap how far ahead of the parent chain a message may claim to be.
+
+For example, suppose `futureSeconds` is `3600` (one hour) and the batch lands in a parent-chain block whose timestamp is `T`. Any message in that batch claiming a timestamp later than `T + 3600` is clamped down to `T + 3600`. If `futureBlocks` is small—say `48` on a parent chain with two-second blocks, roughly 96 seconds of headroom—then a batch that is delayed, or that contains messages sequenced slightly ahead of the parent chain, can easily reach the future edge and have its messages clamped down. Raising `futureBlocks` widens this headroom.
+
+**Past edge (`delayBlocks` / `delaySeconds`).** These cap how old a message may be. A message claiming a timestamp earlier than `block.timestamp - delaySeconds` is clamped up to that minimum.
+
+For example, with `delaySeconds` set to `345600` (four days), a message may be up to four days older than the parent-chain block that carries it before it is clamped forward.
+
+**`delayBlocks` also sets the force-inclusion wait.** The same `delayBlocks` value determines how long a message submitted through the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> must wait before it can be <a data-quicklook-from="forceinclusion">force-included</a>, bypassing the Sequencer. `forceInclusion` reverts with `ForceIncludeBlockTooSoon` until `delayBlocks` parent-chain blocks have elapsed since the message was submitted. Raising `delayBlocks` therefore lengthens the Sequencer's exclusive window and delays when users can force their transactions in. The optional delay-buffer feature can shorten this window under sustained delay, but never lengthen it.
+
+For more on force inclusion and the Delayed Inbox, see the [Sequencer deep dive](/how-arbitrum-works/deep-dives/sequencer.mdx).
+
+## Default values
+
+The Arbitrum Chain SDK does not use fixed numbers for these fields. It derives them from the parent chain's block time, holding the _time_ windows constant and converting them to block counts:
+
+- `delaySeconds` is `345600` (four days) and `futureSeconds` is `3600` (one hour), constant for all parent chains.
+- `delayBlocks` is `delaySeconds / parentBlockTime` and `futureBlocks` is `futureSeconds / parentBlockTime`.
+
+`parentBlockTime` is two seconds when the parent chain is Base or Base Sepolia (whose `block.number` advances every two seconds), and 12 seconds for every other parent chain, including Ethereum and Arbitrum. The SDK selects the two-second value only for those two chain IDs, so a different OP-stack parent that the SDK does not recognize falls back to the 12-second default. This yields different block defaults depending on where your chain settles:
+
+| Parent chain        | Parent block time | `delayBlocks` | `futureBlocks` | `delaySeconds`  | `futureSeconds` |
+| ------------------- | ----------------- | ------------- | -------------- | --------------- | --------------- |
+| Base / Base Sepolia | 2s                | 172800        | 1800           | 345600 (4 days) | 3600 (1 hour)   |
+| All other parents   | 12s               | 28800         | 300            | 345600 (4 days) | 3600 (1 hour)   |
+
+<VanillaAdmonition type="note" title="Why the default futureBlocks can be 300 or 1800">
+
+A default `futureBlocks` can appear to be either 300 or 1800: 1800 is the default for a Base or Base Sepolia parent (`3600 / 2`), while 300 is the default for every other parent, including Ethereum and Arbitrum (`3600 / 12`). A much smaller value such as 48 is not a current SDK default—it is a manual override or a value from an older deployment. Restoring `futureBlocks` to the parent-appropriate default widens the future headroom (on a two-second parent, from roughly 96 seconds to one hour), reducing how often messages near the future edge are clamped.
+
+</VanillaAdmonition>
+
+## Relationship with the batch poster: `reorg-resistance-margin`
+
+`maxTimeVariation` defines the window; the batch poster is responsible for keeping every message it posts safely inside it. Two node-level settings do this self-policing, one per edge:
+
+- **Future (max) edge** — the batch poster stops adding messages that would exceed `block.number + futureBlocks` or `block.timestamp + futureSeconds`. Which parent-chain header it measures against is selected by `--node.batch-poster.l1-block-bound`, which must not be set to `ignore` for the past-edge check below to run.
+- **Past (min) edge** — governed by `--node.batch-poster.reorg-resistance-margin`.
+
+`--node.batch-poster.reorg-resistance-margin` (a duration, default `10m0s`) tells the batch poster: do not post a batch if its oldest message is within this margin of the window's past edge (`block.timestamp - delaySeconds` or `block.number - delayBlocks`). If the oldest non-delayed message is closer to the minimum bound than the margin allows, the poster halts rather than posting.
+
+### Why the margin exists
+
+Message timestamps and block numbers are assigned by the Sequencer at sequencing time, but the onchain minimum bounds are computed from the parent-chain block and time at the **later** moment the batch actually lands. Between those two moments the parent chain advances, and it can also reorg. If a batch's oldest message is sitting right at the past edge, either a delayed landing or a parent-chain reorg can move the minimum bound _past_ that message. The state-transition function then clamps the message up to the new minimum, silently changing the child-chain block or timestamp the Sequencer's own node had already produced, which is a child-chain reorg.
+
+The default 10-minute margin keeps messages far enough from the past edge that ordinary parent-chain reorgs cannot push them out of the window.
+
+### The `reorg-resistance-margin=0` bypass and its risk profile
+
+Setting `--node.batch-poster.reorg-resistance-margin=0` disables the past-edge check entirely. The batch poster will then post batches whose oldest messages sit arbitrarily close to the window's past edge.
+
+<VanillaAdmonition type="danger" title="reorg-resistance-margin=0 removes reorg protection">
+
+With `reorg-resistance-margin=0`, a parent-chain reorg — or simply a batch landing later than expected — can move the minimum bound past messages that were near the edge. Those messages are then clamped forward by the state-transition function, diverging the onchain-derived chain from the chain the Sequencer executed locally: a child-chain reorg. Use `0` only in controlled situations, such as draining a backlog where you accept the reorg risk; it is not a safe steady-state setting.
+
+</VanillaAdmonition>
+
+Note the interaction with `maxTimeVariation`: a wider past window (`delayBlocks` and `delaySeconds`) gives the batch poster more room before the margin is threatened, while a narrower window makes the margin bite sooner. See the [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx) for the full batch-poster flag set.
+
+## Changing `maxTimeVariation`
+
+`maxTimeVariation` is set at deployment through the Chain SDK, and can be changed afterward by the chain owner by calling `setMaxTimeVariation` on the Sequencer Inbox contract on the parent chain. Keep two effects in mind when changing it on a live chain:
+
+- Raising `delayBlocks` lengthens the Sequencer's exclusive window and delays force inclusion. Very large values weaken the chain's censorship-resistance guarantee, because users must wait longer to force transactions in.
+- Raising `futureBlocks` and `futureSeconds` widens the future headroom, reducing clamping of messages sequenced ahead of the parent chain; it does not affect force inclusion.
+
+Test any change on a testnet first, and confirm the batch poster's `l1-block-bound` and `reorg-resistance-margin` settings remain consistent with the new window.
