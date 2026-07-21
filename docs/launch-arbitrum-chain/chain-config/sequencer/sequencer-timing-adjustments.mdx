@@ -122,16 +122,16 @@ The Arbitrum Chain SDK does not use fixed numbers for these fields. It derives t
 - `delaySeconds` is `345600` (four days) and `futureSeconds` is `3600` (one hour), constant for all parent chains.
 - `delayBlocks` is `delaySeconds / parentBlockTime` and `futureBlocks` is `futureSeconds / parentBlockTime`.
 
-`parentBlockTime` is 12 seconds for Ethereum and Arbitrum parent chains, and two seconds for OP-stack parent chains (whose `block.number` advances every two seconds). This yields different block defaults depending on where your chain settles:
+`parentBlockTime` is two seconds when the parent chain is Base or Base Sepolia (whose `block.number` advances every two seconds), and 12 seconds for every other parent chain, including Ethereum and Arbitrum. The SDK selects the two-second value only for those two chain IDs, so a different OP-stack parent that the SDK does not recognize falls back to the 12-second default. This yields different block defaults depending on where your chain settles:
 
-| Parent chain type   | Parent block time | `delayBlocks` | `futureBlocks` | `delaySeconds`  | `futureSeconds` |
+| Parent chain        | Parent block time | `delayBlocks` | `futureBlocks` | `delaySeconds`  | `futureSeconds` |
 | ------------------- | ----------------- | ------------- | -------------- | --------------- | --------------- |
-| Ethereum / Arbitrum | 12s               | 28800         | 300            | 345600 (4 days) | 3600 (1 hour)   |
-| OP-stack (2s block) | 2s                | 172800        | 1800           | 345600 (4 days) | 3600 (1 hour)   |
+| Base / Base Sepolia | 2s                | 172800        | 1800           | 345600 (4 days) | 3600 (1 hour)   |
+| All other parents   | 12s               | 28800         | 300            | 345600 (4 days) | 3600 (1 hour)   |
 
 <VanillaAdmonition type="note" title="Why the default futureBlocks can be 300 or 1800">
 
-A default `futureBlocks` can appear to be either 300 or 1800: 1800 is the default for a two-second parent chain (`3600 / 2`), while 300 is the default for a 12-second parent chain (`3600 / 12`). A much smaller value such as 48 is not a current SDK default — it is a manual override or a value from an older deployment. Restoring `futureBlocks` to the parent-appropriate default widens the future headroom (in the two-second example, from roughly 96 seconds to one hour), reducing how often messages near the future edge are clamped.
+A default `futureBlocks` can appear to be either 300 or 1800: 1800 is the default for a Base or Base Sepolia parent (`3600 / 2`), while 300 is the default for every other parent, including Ethereum and Arbitrum (`3600 / 12`). A much smaller value such as 48 is not a current SDK default — it is a manual override or a value from an older deployment. Restoring `futureBlocks` to the parent-appropriate default widens the future headroom (on a two-second parent, from roughly 96 seconds to one hour), reducing how often messages near the future edge are clamped.
 
 </VanillaAdmonition>
 
