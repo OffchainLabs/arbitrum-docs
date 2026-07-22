@@ -10,6 +10,12 @@ content_type: reference
 
 This document covers the JSON-RPC methods exposed by <a data-quicklook-from="arbitrum">Arbitrum</a> Data Availability Servers (DAS) and the newer DAProvider interface, as defined in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/) node configuration types [`NodeConfig.generated.ts`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/types/NodeConfig.generated.ts)
 
+<VanillaAdmonition type="info" title="Config paths renamed in Nitro v3.10.0">
+
+As of Nitro v3.10.0, the node-side AnyTrust configuration moved from `node.data-availability.*` (now deprecated) to `node.da.anytrust.*`, the `das-rpc-client` group was renamed to `rpc-client` (with the server URL now set under its `rpc.url` key), `node.da-provider` moved to `node.da.external-provider`, and `node.batch-poster.das-retention-period` was renamed to `node.batch-poster.anytrust-retention-period`. This page uses the new paths; types generated from older Nitro versions (such as `NodeConfig.generated.ts` in the Arbitrum Chain SDK) may still show the legacy names.
+
+</VanillaAdmonition>
+
 ## Overview
 
 DAS servers exposed two interfaces for data storage and retrieval:
@@ -24,20 +30,20 @@ The RPC interface supports two storage modes:
 1. **Single-shot store**: entire payload sent in one call (legacy, used when `enable-chunked-store: false`).
 2. **Chunked (streaming) store**: payload sent in chunks across multiple calls (default, enable by `enable-chunked-store: true`).
 
-## DAS RPC methods (Legacy DAS interface)
+## DAS RPC methods (legacy DAS interface)
 
-These methods are usd by the **RPC aggregator** (`node.data-availability.rpc-aggregator.das-rpc-client`) when communicating with standalone DAS servers.
+These methods are used by the **RPC aggregator** (`node.da.anytrust.rpc-aggregator.rpc-client`) when communicating with standalone DAS servers.
 
 ### `das_startChunkedStore`
 
 Initiates a chunked data stream for storing a large batch payload on the DAS server.
 
-| Field               | Value                                                                                       |
-| ------------------- | ------------------------------------------------------------------------------------------- |
-| Default method name | `das_startChunkedStore`                                                                     |
-| Config path         | `node.data-availability.rpc-aggregator.das-rpc-client.data-stream.rpc-methods.start-stream` |
-| Config key          | `start-stream`                                                                              |
-| Direction           | Client (batch poster) -> DAS server                                                         |
+| Field               | Value                                                                             |
+| ------------------- | --------------------------------------------------------------------------------- |
+| Default method name | `das_startChunkedStore`                                                           |
+| Config path         | `node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.start-stream` |
+| Config key          | `start-stream`                                                                    |
+| Direction           | Client (batch poster) -> DAS server                                               |
 
 **Behavior:**
 
@@ -54,12 +60,12 @@ Initiates a chunked data stream for storing a large batch payload on the DAS ser
 
 Sends a single chunk of batch data within an active chunked store session.
 
-| Field               | Value                                                                                       |
-| ------------------- | ------------------------------------------------------------------------------------------- |
-| Default method name | `das_sendChunk`                                                                             |
-| Config path         | `node.data-availability.rpc-aggregator.das-rpc-client.data-stream.rpc-methods.stream-chunk` |
-| Config key          | `stream-chunk`                                                                              |
-| Direction           | Client (batch poster) -> DAS server                                                         |
+| Field               | Value                                                                             |
+| ------------------- | --------------------------------------------------------------------------------- |
+| Default method name | `das_sendChunk`                                                                   |
+| Config path         | `node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.stream-chunk` |
+| Config key          | `stream-chunk`                                                                    |
+| Direction           | Client (batch poster) -> DAS server                                               |
 
 **Behavior:**
 
@@ -79,12 +85,12 @@ Sends a single chunk of batch data within an active chunked store session.
 
 Finalizes a chunked store session, signaling that all chunks have been transmitted.
 
-| Field               | Value                                                                                          |
-| ------------------- | ---------------------------------------------------------------------------------------------- |
-| Default method name | `das_commitChunkedStore`                                                                       |
-| Config path         | `node.data-availability.rpc-aggregator.das-rpc-client.data-stream.rpc-methods.finalize-stream` |
-| Config key          | `finalize-stream`                                                                              |
-| Direction           | Client (batch poster) -> DAS server                                                            |
+| Field               | Value                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------ |
+| Default method name | `das_commitChunkedStore`                                                             |
+| Config path         | `node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods.finalize-stream` |
+| Config key          | `finalize-stream`                                                                    |
+| Direction           | Client (batch poster) -> DAS server                                                  |
 
 **Behavior:**
 
@@ -92,19 +98,19 @@ Finalizes a chunked store session, signaling that all chunks have been transmitt
 - The DAS server assembles the chunks, stores the complete payload, and returns a signed DACert component (the server's <a data-quicklook-from="bls-signature">BLS Signature</a> over the data hash)
 - On success, the server commits the data to its configured storage backend
 
-## DAProvider RPC Methods (newer interface)
+## DAProvider RPC methods (newer interface)
 
-These methods are used by the DA provider client (`node.da-provider`)—the newer generalized data availability interface that can work with DAS or other DA backends.
+These methods are used by the DA provider client (`node.da.external-provider`)—the newer generalized data availability interface that can work with DAS or other DA backends.
 
 ### `daprovider_startChunkedStore`
 
 Initiates a chunked data stream on the DA provider server.
 
-| Field               | Value                                                   |
-| ------------------- | ------------------------------------------------------- |
-| Default method name | `daprovider_startChunkedStore`                          |
-| Config path         | `node.da-provider.data-stream.rpc-methods.start-stream` |
-| Config key          | `start-stream`                                          |
+| Field               | Value                                                            |
+| ------------------- | ---------------------------------------------------------------- |
+| Default method name | `daprovider_startChunkedStore`                                   |
+| Config path         | `node.da.external-provider.data-stream.rpc-methods.start-stream` |
+| Config key          | `start-stream`                                                   |
 
 Functionally equivalent to `das_startChunkedStore` but routed through the DAProvider abstraction.
 
@@ -112,23 +118,23 @@ Functionally equivalent to `das_startChunkedStore` but routed through the DAProv
 
 Sends a chunk of data to the DA provider server.
 
-| Field               | Value                                                   |
-| ------------------- | ------------------------------------------------------- |
-| Default method name | `daprovider_sendChunk`                                  |
-| Config path         | `node.da-provider.data-stream.rpc-methods.stream-chunk` |
-| Config key          | `stream-chunk`                                          |
+| Field               | Value                                                            |
+| ------------------- | ---------------------------------------------------------------- |
+| Default method name | `daprovider_sendChunk`                                           |
+| Config path         | `node.da.external-provider.data-stream.rpc-methods.stream-chunk` |
+| Config key          | `stream-chunk`                                                   |
 
-Functionally equivalent to `das_sendChunk`. Max chunk body size is goverend by `node.da-provider.data-stream.max-store-chunk-body-size` (default: 5,242,880 bytes / 5 MB).
+Functionally equivalent to `das_sendChunk`. Max chunk body size is governed by `node.da.external-provider.data-stream.max-store-chunk-body-size` (default: 5,242,880 bytes / 5 MB).
 
 ### `daprovider_commitChunkedStore`
 
 Finalizes a chunked store session on the DA provider server.
 
-| Field               | Value                                                      |
-| ------------------- | ---------------------------------------------------------- |
-| Default method name | `daprovider_commitChunkedStore`                            |
-| Config path         | `node.da-provider.data-stream.rpc-methods.finalize-stream` |
-| Config key          | `finalize-stream`                                          |
+| Field               | Value                                                               |
+| ------------------- | ------------------------------------------------------------------- |
+| Default method name | `daprovider_commitChunkedStore`                                     |
+| Config path         | `node.da.external-provider.data-stream.rpc-methods.finalize-stream` |
+| Config key          | `finalize-stream`                                                   |
 
 Functionally equivalent to `das_commitChunkedStore`.
 
@@ -136,11 +142,11 @@ Functionally equivalent to `das_commitChunkedStore`.
 
 Single-shot store method—sends the entire payload in one RPC call. Used when data streaming is disabled. (`use-data-streaming: false`).
 
-| Field               | Value                               |
-| ------------------- | ----------------------------------- |
-| Default method name | `daprovider_store`                  |
-| Config path         | `node.da-provider.store-rpc-method` |
-| Config key          | `store-rpc-method`                  |
+| Field               | Value                                        |
+| ------------------- | -------------------------------------------- |
+| Default method name | `daprovider_store`                           |
+| Config path         | `node.da.external-provider.store-rpc-method` |
+| Config key          | `store-rpc-method`                           |
 
 **Behavior:**
 
@@ -186,14 +192,16 @@ The `simple-explore-exploit` strategy alternates between:
 
 ## Configuration quick reference
 
-### DAS RPC client (Legacy—`das-rpc-client`)
+### AnyTrust RPC client (`rpc-client`, formerly `das-rpc-client`)
 
-Full config path: `node.data-availability.rpc-aggregator.das-rpc-client`
+Full config path: `node.da.anytrust.rpc-aggregator.rpc-client`
 
-```typscript
-'das-rpc-client': {
+```typescript
+'rpc-client': {
   'enable-chunked-store': true,       // default: true
-  'server-url': 'http://...',         // DAS server URL
+  'rpc': {
+    'url': 'http://...',              // DAS server URL
+  },
   'data-stream': {
     'max-store-chunk-body-size': 5242880,  // 5 MB
     'rpc-methods': {
@@ -205,12 +213,12 @@ Full config path: `node.data-availability.rpc-aggregator.das-rpc-client`
 }
 ```
 
-### DAProvider client (newer—`da-provider`)
+### DAProvider client (newer—`external-provider`)
 
-Full config path: `node.da-provider`
+Full config path: `node.da.external-provider`
 
 ```typescript
-'da-provider': {
+'external-provider': {
   'enable': true,
   'store-rpc-method': 'daprovider_store',   // single-shot store
   'use-data-streaming': true,                // use chunked protocol
@@ -238,7 +246,7 @@ Full config path: `node.da-provider`
 
 ### RPC aggregator backend entry
 
-Full config path: `node.data-availability.rpc-aggregator.backends` (JSON string)
+Full config path: `node.da.anytrust.rpc-aggregator.backends` (JSON string)
 
 ```typescript
 // Type: NodeConfigDataAvailabilityRpcAggregatorBackendsJson
@@ -267,18 +275,18 @@ Full config path: `node.data-availability.rpc-aggregator.backends` (JSON string)
 | Single-shot store    | DAProvider | `daprovider_store`              | Store entire payload at once | `store-rpc-method` |
 | Get by hash          | REST       | N/A (HTTP GET)                  | Retrieve data by hash        | N/A                |
 
-### Related Configuration
+### Related configuration
 
-| Config Key                                  | Default                  | Description                                                    |
-| ------------------------------------------- | ------------------------ | -------------------------------------------------------------- |
-| `data-availability.enable`                  | `false`                  | Enable AnyTrust DA mode                                        |
-| `data-availability.request-timeout`         | `5s`                     | Store request timeout                                          |
-| `data-availability.panic-on-error`          | `false`                  | Crash on DAS errors (not recommended)                          |
-| `data-availability.sequencer-inbox-address` | —                        | SequencerInbox contract address                                |
-| `data-availability.parent-chain-node-url`   | —                        | <a data-quicklook-from="parent-chain">Parent chain</a> RPC URL |
-| `batch-poster.das-retention-period`         | `360h`                   | How long DAS retains stored batches                            |
-| `rpc-aggregator.assumed-honest`             | —                        | H value for quorum (K=N+1-H)                                   |
-| `das-rpc-client.enable-chunked-store`       | `true`                   | Use streaming protocol                                         |
-| `rest-aggregator.strategy`                  | `simple-explore-exploit` | Endpoint selection strategy                                    |
-| `rest-aggregator.wait-before-try-next`      | `2s`                     | Timeout before next endpoint                                   |
-| `sync-to-storage.retention-period`          | `360h`                   | Synced data retention period                                   |
+| Config Key                               | Default                  | Description                                                                                       |
+| ---------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------- |
+| `da.anytrust.enable`                     | `false`                  | Enable AnyTrust DA mode                                                                           |
+| `da.anytrust.request-timeout`            | `5s`                     | Store request timeout                                                                             |
+| `da.anytrust.panic-on-error`             | `false`                  | Crash on DAS errors (not recommended)                                                             |
+| `parent-chain.sequencer-inbox-address`   | —                        | SequencerInbox contract address (standalone `anytrustserver` only)                                |
+| `parent-chain.node-url`                  | —                        | <a data-quicklook-from="parent-chain">Parent chain</a> RPC URL (standalone `anytrustserver` only) |
+| `batch-poster.anytrust-retention-period` | `360h`                   | How long DAS retains stored batches                                                               |
+| `rpc-aggregator.assumed-honest`          | —                        | H value for quorum (K=N+1-H)                                                                      |
+| `rpc-client.enable-chunked-store`        | `true`                   | Use streaming protocol                                                                            |
+| `rest-aggregator.strategy`               | `simple-explore-exploit` | Endpoint selection strategy                                                                       |
+| `rest-aggregator.wait-before-try-next`   | `2s`                     | Timeout before next endpoint                                                                      |
+| `sync-to-storage.retention-period`       | `360h`                   | Synced data retention period                                                                      |

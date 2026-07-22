@@ -14,7 +14,7 @@ const pathNameToPreviewText = (pathName: string) => {
     .join(' ');
 };
 
-export default function Layout(props) {
+export default function Layout(props: Record<string, unknown>) {
   const { pathname } = useLocation();
 
   const previewText = pathNameToPreviewText(pathname);

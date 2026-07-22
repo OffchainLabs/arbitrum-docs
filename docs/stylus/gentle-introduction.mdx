@@ -24,7 +24,7 @@ Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](/run-arbitrum-node/arbos-rel
 
 This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a binary format used in web standards and browsers for efficient computation. Its design is to be portable and human-readable, with sandboxed execution environments for security. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fraud proofs.
 
-With a WASM VM, any programming language compilable to WASM is within Stylus's scope. While many popular programming languages can compile to WASM, some compilers are better suited to smart contract development than others, such as Rust, C, and C++. Other languages like Go, Sway, Move, and Cairo are also supported. Languages that include their own runtimes, like Python and JavaScript, are more complex for Stylus to support, although not impossible. WASM programs tend to be more efficient than EVM bytecode for memory-intensive applications. This efficiency comes from mature compiler toolchains for languages like Rust and C, which have benefited from decades of optimization work. The WASM runtime also executes faster than the EVM interpreter. Third-party contributions in the form of libraries for new and existing languages are welcome.
+With a WASM VM, any programming language compilable to WASM is within Stylus's scope. In practice, some compilers are better suited to smart contract development than others. Rust has the first-class, fully supported SDK, and C and C++ are also supported. Any other language that compiles to WASM is theoretically possible, but support for those is experimental rather than officially maintained. Languages that include their own runtimes, like Python and JavaScript, are more complex for Stylus to support, although not impossible. WASM programs tend to be more efficient than EVM bytecode for memory-intensive applications. This efficiency comes from mature compiler toolchains for languages like Rust and C, which have benefited from decades of optimization work. The WASM runtime also executes faster than the EVM interpreter. Third-party contributions in the form of libraries for new and existing languages are welcome.
 
 ## How Stylus works
 
@@ -44,9 +44,11 @@ To make your contract callable, it must undergo an [activation process](/stylus/
 
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
-:::note
-Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/arbitrum-essentials/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable.
-:::
+<VanillaAdmonition type="note">
+
+Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/arbitrum-essentials/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable. The 365-day expiry and a minimum age of about 31 days before a contract can be kept alive are both configurable chain parameters; these are the current defaults.
+
+</VanillaAdmonition>
 
 ### Execution
 
@@ -66,7 +68,7 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 
 - Onchain verification with zero-knowledge proofs: Reduce gas costs for onchain verification using zero-knowledge proving systems. See [case study](https://blog.arbitrum.io/renegade-stylus-case-study/) for an example implementation.
 - DeFi instruments: Implement custom pricing curves for AMMs, synthetic assets, options, and futures with onchain computation. You can extend existing protocols (such as Uniswap V4 hooks) or build your own.
-- Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
+- Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs — Stylus programs can use up to 8 MB of memory, and costs grow near-linearly with the size of the workload. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
 - Cryptographic applications: Implement applications that require advanced cryptography or other compute-heavy operations that would be cost-prohibitive in Solidity.
 
 ## When Stylus saves gas (and when it doesn't)

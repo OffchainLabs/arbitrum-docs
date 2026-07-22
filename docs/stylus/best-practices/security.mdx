@@ -24,34 +24,52 @@ Compiling Rust to WebAssembly is not guaranteed to be deterministic on its own �
 Always validate external inputs before using them in your contract logic.
 
 ```rust
-use stylus_sdk::{prelude::*, msg};
-use alloy_primitives::{Address, U256};
+use stylus_sdk::{
+    alloy_primitives::{Address, U256},
+    prelude::*,
+    storage::{StorageMap, StorageU256},
+};
 
-#[external]
+#[storage]
+#[entrypoint]
+pub struct MyContract {
+    balances: StorageMap<Address, StorageU256>,
+}
+
+#[public]
 impl MyContract {
     // ❌ Bad: No validation
     pub fn transfer_bad(&mut self, recipient: Address, amount: U256) -> Result<(), Vec<u8>> {
-        let sender = msg::sender();
-        self.balances.setter(sender).sub_assign(amount);
-        self.balances.setter(recipient).add_assign(amount);
+        let sender = self.vm().msg_sender();
+        let sender_balance = self.balances.get(sender);
+        let recipient_balance = self.balances.get(recipient);
+        self.balances.setter(sender).set(sender_balance - amount);
+        self.balances.setter(recipient).set(recipient_balance + amount);
         Ok(())
     }
 
     // ✅ Good: Proper validation
     pub fn transfer_good(&mut self, recipient: Address, amount: U256) -> Result<(), Vec<u8>> {
         // Validate inputs
-        ensure!(!recipient.is_zero(), "Invalid recipient");
-        ensure!(amount > U256::ZERO, "Amount must be positive");
+        if recipient.is_zero() {
+            return Err("Invalid recipient".into());
+        }
+        if amount == U256::ZERO {
+            return Err("Amount must be positive".into());
+        }
 
-        let sender = msg::sender();
+        let sender = self.vm().msg_sender();
         let sender_balance = self.balances.get(sender);
 
         // Check sufficient balance
-        ensure!(sender_balance >= amount, "Insufficient balance");
+        if sender_balance < amount {
+            return Err("Insufficient balance".into());
+        }
 
         // Safe arithmetic
-        self.balances.setter(sender).sub_assign(amount);
-        self.balances.setter(recipient).add_assign(amount);
+        let recipient_balance = self.balances.get(recipient);
+        self.balances.setter(sender).set(sender_balance - amount);
+        self.balances.setter(recipient).set(recipient_balance + amount);
 
         Ok(())
     }
@@ -63,27 +81,35 @@ impl MyContract {
 Implement proper authorization checks for privileged operations.
 
 ```rust
-use stylus_sdk::{prelude::*, msg, storage::StorageAddress};
+use stylus_sdk::{
+    alloy_primitives::{Address, U256},
+    prelude::*,
+};
 
 sol_storage! {
+    #[entrypoint]
     pub struct Ownable {
-        StorageAddress owner;
+        address owner;
     }
 }
 
-#[external]
+#[public]
 impl Ownable {
     // Initialize owner in constructor-like pattern
     pub fn init(&mut self) -> Result<(), Vec<u8>> {
         let owner = self.owner.get();
-        ensure!(owner.is_zero(), "Already initialized");
-        self.owner.set(msg::sender());
+        if !owner.is_zero() {
+            return Err("Already initialized".into());
+        }
+        self.owner.set(self.vm().msg_sender());
         Ok(())
     }
 
     // Modifier pattern for owner-only functions
     fn only_owner(&self) -> Result<(), Vec<u8>> {
-        ensure!(msg::sender() == self.owner.get(), "Not authorized");
+        if self.vm().msg_sender() != self.owner.get() {
+            return Err("Not authorized".into());
+        }
         Ok(())
     }
 
@@ -95,7 +121,9 @@ impl Ownable {
 
     pub fn transfer_ownership(&mut self, new_owner: Address) -> Result<(), Vec<u8>> {
         self.only_owner()?;
-        ensure!(!new_owner.is_zero(), "Invalid new owner");
+        if new_owner.is_zero() {
+            return Err("Invalid new owner".into());
+        }
         self.owner.set(new_owner);
         Ok(())
     }
@@ -106,50 +134,67 @@ impl Ownable {
 
 Protect against reentrancy attacks using the checks-effects-interactions pattern.
 
+<VanillaAdmonition type="info">
+
+Don't rely on the old opt-in reentrancy guard. The `reentrant` feature flag and `deny_reentrant` entrypoint guard were deprecated in SDK 0.10.5: the high-level call functions automatically flush the storage cache before every external call, so any state you write before a call is observed by a reentrant call. That makes the guard redundant. Checks-effects-interactions — updating state before the external call — remains the correct way to write reentrancy-safe contracts.
+
+</VanillaAdmonition>
+
 ```rust
-use stylus_sdk::{prelude::*, call::transfer_eth, msg};
+use stylus_sdk::{
+    alloy_primitives::{Address, U256},
+    call::transfer::transfer_eth,
+    prelude::*,
+};
 
 sol_storage! {
+    #[entrypoint]
     pub struct Vault {
-        StorageMap<Address, U256> balances;
-        StorageBool locked;  // Reentrancy guard
+        mapping(address => uint256) balances;
+        bool locked;  // Optional application-level guard
     }
 }
 
-#[external]
+#[public]
 impl Vault {
     // ❌ Bad: Vulnerable to reentrancy
     pub fn withdraw_bad(&mut self, amount: U256) -> Result<(), Vec<u8>> {
-        let sender = msg::sender();
+        let sender = self.vm().msg_sender();
         let balance = self.balances.get(sender);
 
-        ensure!(balance >= amount, "Insufficient balance");
+        if balance < amount {
+            return Err("Insufficient balance".into());
+        }
 
         // DANGER: External call before state update
-        transfer_eth(sender, amount)?;
+        transfer_eth(self.vm(), sender, amount)?;
 
         // State updated after external call - vulnerable!
-        self.balances.setter(sender).sub_assign(amount);
+        self.balances.setter(sender).set(balance - amount);
         Ok(())
     }
 
     // ✅ Good: Checks-Effects-Interactions pattern
     pub fn withdraw_good(&mut self, amount: U256) -> Result<(), Vec<u8>> {
-        // Check: Reentrancy guard
-        ensure!(!self.locked.get(), "Reentrancy detected");
+        // Optional application-level guard
+        if self.locked.get() {
+            return Err("Reentrancy detected".into());
+        }
         self.locked.set(true);
 
-        let sender = msg::sender();
+        let sender = self.vm().msg_sender();
         let balance = self.balances.get(sender);
 
         // Check: Validate conditions
-        ensure!(balance >= amount, "Insufficient balance");
+        if balance < amount {
+            return Err("Insufficient balance".into());
+        }
 
         // Effect: Update state BEFORE external call
-        self.balances.setter(sender).sub_assign(amount);
+        self.balances.setter(sender).set(balance - amount);
 
         // Interaction: External call last
-        let result = transfer_eth(sender, amount);
+        let result = transfer_eth(self.vm(), sender, amount);
 
         // Release lock
         self.locked.set(false);
@@ -164,9 +209,13 @@ impl Vault {
 While Rust prevents overflows in debug mode, use explicit checks for production.
 
 ```rust
-use alloy_primitives::U256;
+use stylus_sdk::{alloy_primitives::U256, prelude::*};
 
-#[external]
+#[storage]
+#[entrypoint]
+pub struct SafeMath {}
+
+#[public]
 impl SafeMath {
     // ✅ Use checked arithmetic
     pub fn safe_add(&self, a: U256, b: U256) -> Result<U256, Vec<u8>> {
@@ -179,7 +228,9 @@ impl SafeMath {
 
     // ✅ Validate before operations
     pub fn calculate_fee(&self, amount: U256, basis_points: U256) -> Result<U256, Vec<u8>> {
-        ensure!(basis_points <= U256::from(10000), "Invalid fee");
+        if basis_points > U256::from(10000) {
+            return Err("Invalid fee".into());
+        }
 
         amount
             .checked_mul(basis_points)
@@ -227,36 +278,48 @@ external_contract.call(data).map_err(|e| "External call failed")?;
 
 ```rust
 // ✅ Use commit-reveal pattern for sensitive operations
+use stylus_sdk::{
+    alloy_primitives::{FixedBytes, U256},
+    crypto::keccak,
+    prelude::*,
+};
+
 sol_storage! {
+    #[entrypoint]
     pub struct CommitReveal {
-        StorageMap<Address, bytes32> commits;
-        StorageMap<Address, U256> reveal_times;
+        mapping(address => bytes32) commits;
+        mapping(address => uint256) reveal_times;
     }
 }
 
+#[public]
 impl CommitReveal {
-    pub fn commit(&mut self, commitment: [u8; 32]) -> Result<(), Vec<u8>> {
-        let sender = msg::sender();
+    pub fn commit(&mut self, commitment: FixedBytes<32>) -> Result<(), Vec<u8>> {
+        let sender = self.vm().msg_sender();
+        // block_timestamp() returns u64; convert before storing in a U256 map
+        let reveal_at = U256::from(self.vm().block_timestamp()) + U256::from(100);
         self.commits.setter(sender).set(commitment);
-        self.reveal_times.setter(sender).set(block::timestamp() + 100);
+        self.reveal_times.setter(sender).set(reveal_at);
         Ok(())
     }
 
-    pub fn reveal(&mut self, value: U256, salt: [u8; 32]) -> Result<(), Vec<u8>> {
-        let sender = msg::sender();
+    pub fn reveal(&mut self, value: U256, salt: FixedBytes<32>) -> Result<(), Vec<u8>> {
+        let sender = self.vm().msg_sender();
 
         // Verify commit period passed
-        ensure!(
-            block::timestamp() >= self.reveal_times.get(sender),
-            "Too early to reveal"
-        );
+        let now = U256::from(self.vm().block_timestamp());
+        if now < self.reveal_times.get(sender) {
+            return Err("Too early to reveal".into());
+        }
 
         // Verify commitment
-        let expected = keccak256(&[&value.to_be_bytes(), &salt].concat());
-        ensure!(
-            expected == self.commits.get(sender),
-            "Invalid reveal"
-        );
+        let mut preimage = Vec::new();
+        preimage.extend_from_slice(&value.to_be_bytes::<32>());
+        preimage.extend_from_slice(salt.as_slice());
+        let expected = keccak(&preimage);
+        if expected != self.commits.get(sender) {
+            return Err("Invalid reveal".into());
+        }
 
         // Process reveal...
         Ok(())
@@ -286,27 +349,34 @@ pub fn distribute_rewards_good(
     start_index: U256,
     count: U256
 ) -> Result<(), Vec<u8>> {
-    ensure!(count <= U256::from(50), "Batch too large");
+    if count > U256::from(50) {
+        return Err("Batch too large".into());
+    }
 
     let end = start_index + count;
-    for i in start_index..end {
-        let recipient = self.recipients.get(i);
+    let mut i = start_index;
+    while i < end {
+        let idx = usize::try_from(i).map_err(|_| b"index overflow".to_vec())?;
+        let recipient = self.recipients.get(idx).unwrap_or(Address::ZERO);
         if !recipient.is_zero() {
             self.send_reward(recipient)?;
         }
+        i += U256::from(1);
     }
     Ok(())
 }
 
 // ✅ Better: Pull-based (users claim their own rewards)
 pub fn claim_reward(&mut self) -> Result<(), Vec<u8>> {
-    let sender = msg::sender();
+    let sender = self.vm().msg_sender();
     let reward = self.pending_rewards.get(sender);
 
-    ensure!(reward > U256::ZERO, "No rewards");
+    if reward == U256::ZERO {
+        return Err("No rewards".into());
+    }
 
     self.pending_rewards.setter(sender).set(U256::ZERO);
-    transfer_eth(sender, reward)?;
+    transfer_eth(self.vm(), sender, reward)?;
 
     Ok(())
 }
@@ -318,19 +388,20 @@ pub fn claim_reward(&mut self) -> Result<(), Vec<u8>> {
 
 ```rust
 sol_storage! {
+    #[entrypoint]
     pub struct SecureVault {
         // Public read, controlled write
-        StorageU256 public_total;
+        uint256 public_total;
 
         // Private storage - not visible off-chain without knowing slot
-        StorageMap<Address, U256> private_balances;
+        mapping(address => uint256) private_balances;
 
         // Owner-controlled
-        StorageAddress owner;
+        address owner;
     }
 }
 
-#[external]
+#[public]
 impl SecureVault {
     // ✅ Expose only what's necessary
     pub fn get_total(&self) -> U256 {
@@ -339,7 +410,10 @@ impl SecureVault {
 
     // ✅ Don't expose internal mappings directly
     pub fn get_balance(&self, account: Address) -> Result<U256, Vec<u8>> {
-        ensure!(msg::sender() == account || msg::sender() == self.owner.get(), "Unauthorized");
+        let caller = self.vm().msg_sender();
+        if caller != account && caller != self.owner.get() {
+            return Err("Unauthorized".into());
+        }
         Ok(self.private_balances.get(account))
     }
 }
@@ -348,20 +422,26 @@ impl SecureVault {
 ### Prevent storage collisions
 
 ```rust
-// ✅ Use unique storage namespace for upgradeable contracts
-sol_storage! {
-    pub struct MyContract {
-        // Prefix with contract name to avoid collisions
-        #[borrow]
-        MyContractStorage storage;
-    }
+use stylus_sdk::{
+    alloy_primitives::{Address, U256},
+    prelude::*,
+    storage::{StorageMap, StorageU256},
+};
+
+// ✅ Group related state in its own storage struct...
+#[storage]
+pub struct MyContractStorage {
+    value: StorageU256,
+    balances: StorageMap<Address, StorageU256>,
 }
 
-sol_storage! {
-    pub struct MyContractStorage {
-        StorageU256 value;
-        StorageMap<Address, U256> balances;
-    }
+// ...then compose it into the entrypoint as a named field.
+// Each nested storage struct gets its own slot range, which avoids
+// collisions between logically separate pieces of state.
+#[storage]
+#[entrypoint]
+pub struct MyContract {
+    inner: MyContractStorage,
 }
 ```
 
@@ -370,26 +450,42 @@ sol_storage! {
 ### Informative error messages
 
 ```rust
-#[derive(SolidityError)]
-pub enum MyError {
-    InsufficientBalance(U256),
-    Unauthorized(Address),
-    InvalidAmount(U256),
-    TransferFailed(Address, U256),
+use stylus_sdk::{
+    alloy_primitives::{Address, U256},
+    alloy_sol_types::sol,
+    prelude::*,
+};
+
+// Each enum variant wraps a Solidity error type declared in a sol! block.
+sol! {
+    error InsufficientBalance(uint256 available);
+    error Unauthorized(address caller);
+    error InvalidAmount(uint256 amount);
+    error TransferFailed(address to, uint256 amount);
 }
 
-#[external]
+#[derive(SolidityError)]
+pub enum MyError {
+    InsufficientBalance(InsufficientBalance),
+    Unauthorized(Unauthorized),
+    InvalidAmount(InvalidAmount),
+    TransferFailed(TransferFailed),
+}
+
+#[public]
 impl MyContract {
     pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), MyError> {
-        let sender = msg::sender();
+        let sender = self.vm().msg_sender();
         let balance = self.balances.get(sender);
 
         if balance < amount {
-            return Err(MyError::InsufficientBalance(balance));
+            return Err(MyError::InsufficientBalance(InsufficientBalance {
+                available: balance,
+            }));
         }
 
         if to.is_zero() {
-            return Err(MyError::InvalidAmount(amount));
+            return Err(MyError::InvalidAmount(InvalidAmount { amount }));
         }
 
         // Transfer logic...
@@ -404,10 +500,12 @@ impl MyContract {
 // ✅ Fail closed, not open
 pub fn privileged_function(&mut self) -> Result<(), Vec<u8>> {
     // Default to denying access
-    let is_authorized = self.check_authorization(msg::sender());
+    let is_authorized = self.check_authorization(self.vm().msg_sender());
 
     // Explicit check required to proceed
-    ensure!(is_authorized, "Access denied");
+    if !is_authorized {
+        return Err("Access denied".into());
+    }
 
     // Privileged operation
     Ok(())
@@ -418,43 +516,52 @@ pub fn privileged_function(&mut self) -> Result<(), Vec<u8>> {
 
 ### Write comprehensive tests
 
+The `testing` module is gated behind the `stylus-test` feature, so add it as a dev-dependency in `Cargo.toml`:
+
+```toml
+[dev-dependencies]
+stylus-sdk = { version = "0.10.7", features = ["stylus-test"] }
+```
+
 ```rust
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloy_primitives::address;
     use stylus_sdk::testing::*;
 
     #[test]
-    fn test_reentrancy_protection() {
+    fn test_withdraw_balance_checks() {
         let vm = TestVM::default();
         let mut contract = Vault::from(&vm);
 
-        // Setup
-        contract.deposit(U256::from(100)).unwrap();
+        // Deposit funds
+        vm.set_value(U256::from(100));
+        contract.deposit();
 
-        // Attempt reentrancy
-        let result = contract.withdraw(U256::from(50));
-        assert!(result.is_ok());
+        // A withdrawal within balance succeeds
+        assert!(contract.withdraw_good(U256::from(50)).is_ok());
 
-        // Second withdrawal should fail if still locked
-        let result2 = contract.withdraw(U256::from(50));
-        assert!(result2.is_err());
+        // A withdrawal exceeding the remaining balance fails
+        assert!(contract.withdraw_good(U256::from(100)).is_err());
     }
 
     #[test]
     fn test_access_control() {
         let vm = TestVM::default();
+        // Capture the default sender, which becomes the owner on init
+        let owner = vm.msg_sender();
         let mut contract = Ownable::from(&vm);
 
         // Initialize owner
         contract.init().unwrap();
 
         // Non-owner should be rejected
-        vm.set_caller(address!("0x0000000000000000000000000000000000000001"));
+        vm.set_sender(address!("0x0000000000000000000000000000000000000001"));
         assert!(contract.sensitive_operation().is_err());
 
         // Owner should succeed
-        vm.set_caller(/* original owner */);
+        vm.set_sender(owner);
         assert!(contract.sensitive_operation().is_ok());
     }
 

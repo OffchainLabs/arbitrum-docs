@@ -9,7 +9,7 @@ sme: bragaigor
 sidebar_position: 2
 ---
 
-Stylus contracts offer significant gas savings compared to Solidity (10-100x for compute-heavy operations), but following optimization best practices can reduce costs even further.
+Stylus contracts can offer significant gas savings compared to Solidity for compute-heavy operations, and following the optimization best practices below can reduce costs even further. Exact savings depend on the workload, so benchmark your own contract.
 
 ## Why Stylus is cheaper
 
@@ -19,15 +19,17 @@ _Figure: Stylus WASM executes natively, avoiding EVM interpretation overhead._
 
 ### Performance comparison
 
-| Operation              | Solidity (EVM) | Stylus (WASM) | Savings     |
-| ---------------------- | -------------- | ------------- | ----------- |
-| Keccak256 hashing      | ~30 gas/byte   | ~3 gas/byte   | **10x**     |
-| Signature verification | ~3,000 gas     | ~300 gas      | **10x**     |
-| Memory operations      | ~3 gas/word    | ~0.3 gas/word | **10x**     |
-| Compute-heavy loops    | High           | Very low      | **50-100x** |
-| Storage operations     | Same           | Same          | **1x**      |
+| Operation                             | Solidity (EVM)          | Stylus (WASM)          | Relative savings        |
+| ------------------------------------- | ----------------------- | ---------------------- | ----------------------- |
+| Compute-heavy loops                   | High                    | Very low               | ~50–100x                |
+| Signature verification (`ecrecover`)  | ~3,000 gas (precompile) | ~300 gas               | ~10x                    |
+| Memory operations (`MLOAD`/`MSTORE`)  | ~3 gas/word             | ~0.3 gas/word          | ~10x                    |
+| Keccak256 hashing                     | 30 gas + 6 gas/word     | native `keccak` hostio | Varies (small per byte) |
+| Storage operations (`SLOAD`/`SSTORE`) | EVM cost                | Same EVM cost          | None (1x)               |
 
-**Key insight**: [Storage operations](/stylus/advanced/hostio-exports#storage-operations) cost the same in Stylus and Solidity. Optimize by reducing storage access and maximizing compute efficiency.
+The EVM-side costs are fixed protocol prices: `ecrecover` = 3,000 gas, `MLOAD`/`MSTORE` = 3 gas/word, and `KECCAK256` = 30 gas + 6 gas per 32-byte word. The Stylus-side figures and the multipliers are directional — drawn from Offchain Labs' Stylus benchmarks — and vary with workload, input size, and ArbOS version. Benchmark your own contract to get numbers you can rely on. Note that Keccak256 is already cheap per byte on the EVM, so hashing is not a headline saving; Stylus' large wins come from compute-heavy logic, memory, and native cryptography.
+
+**Key insight**: [Storage operations](/stylus/advanced/hostio-exports#storage-operations) map to the same underlying EVM `SLOAD`/`SSTORE` costs in Stylus as in Solidity, so they are not where Stylus saves gas. Optimize by reducing storage access and maximizing compute efficiency.
 
 ## Storage optimization
 
@@ -57,7 +59,7 @@ pub fn calculate_good(&self, iterations: u32) -> U256 {
 }
 ```
 
-**Gas impact**: Each storage read costs ~100 gas. The optimized version can save thousands of gas for large loops.
+**Gas impact**: Storage reads map to EVM `SLOAD` costs, where a cold slot (first access in a transaction, per EIP-2929) is far more expensive than a warm one. The SDK also caches storage, so repeated reads of the same slot within a single call are cheap. Caching the value in a local variable, as shown above, avoids repeated `SLOAD` work and can save significant gas in large loops.
 
 ### 2. Batch storage writes
 
@@ -72,22 +74,26 @@ pub fn update_user_bad(&mut self, addr: Address, amount: U256, active: bool) {
 // ✅ Good: Combine into struct
 sol_storage! {
     pub struct UserData {
-        U256 balance;
-        U256 last_update;
+        uint256 balance;
+        uint256 last_update;
         bool is_active;
     }
 
     pub struct OptimizedContract {
-        StorageMap<Address, UserData> users;
+        mapping(address => UserData) users;
     }
 }
 
 pub fn update_user_good(&mut self, addr: Address, amount: U256, active: bool) {
+    // Read host state before taking the storage setter to avoid borrowing
+    // `self` both mutably (the setter) and immutably (`self.vm()`).
+    let timestamp = U256::from(self.vm().block_timestamp());
+
     let mut user = self.users.setter(addr);
     user.balance.set(amount);
-    user.last_update.set(U256::from(self.vm().block_timestamp()));
+    user.last_update.set(timestamp);
     user.is_active.set(active);
-    // Single storage slot update instead of three
+    // Grouped fields share contiguous slots instead of three unrelated slots
 }
 ```
 
@@ -121,7 +127,9 @@ sol_storage! {
 pub fn cleanup(&mut self, addr: Address) -> Result<(), Vec<u8>> {
     let balance = self.balances.get(addr);
 
-    ensure!(balance == U256::ZERO, "Balance not zero");
+    if balance != U256::ZERO {
+        return Err(b"Balance not zero".to_vec());
+    }
 
     // ✅ Deleting storage refunds gas
     self.balances.delete(addr);
@@ -131,7 +139,7 @@ pub fn cleanup(&mut self, addr: Address) -> Result<(), Vec<u8>> {
 }
 ```
 
-**Gas refund**: Deleting storage refunds up to 15,000 gas per slot cleared.
+**Gas refund**: Clearing a storage slot (setting it back to zero) triggers an `SSTORE` refund. Since EIP-3529 this refund is capped at 4,800 gas per cleared slot, and the total refund for a transaction cannot exceed one fifth (20%) of the gas the transaction used.
 
 ## Memory optimization
 
@@ -212,12 +220,13 @@ pub fn verify_merkle_proof(
 ) -> bool {
     let mut computed_hash = leaf;
 
-    // This loop is 10-50x cheaper in Stylus than Solidity
+    // This loop is typically much cheaper in Stylus than Solidity
     for proof_element in proof {
+        // keccak256 returns a B256; `.0` extracts the [u8; 32] array
         computed_hash = if computed_hash <= proof_element {
-            keccak256(&[computed_hash, proof_element].concat())
+            keccak256([computed_hash, proof_element].concat()).0
         } else {
-            keccak256(&[proof_element, computed_hash].concat())
+            keccak256([proof_element, computed_hash].concat()).0
         };
     }
 
@@ -225,12 +234,13 @@ pub fn verify_merkle_proof(
 }
 ```
 
-**Why it's faster**: Native WASM execution vs. EVM interpretation makes loops dramatically cheaper.
+**Why it's faster**: Native WASM execution avoids EVM interpretation overhead, which makes compute-heavy loops cheaper. Benchmark to quantify the savings for your specific workload.
 
 ### 2. Optimize hot paths
 
 ```rust
-// ✅ Optimize frequently-called functions
+// ✅ Hint the compiler to inline small, frequently-called helpers.
+// `#[inline(always)]` is a hint, not a guarantee; measure before relying on it.
 #[inline(always)]
 pub fn is_valid_amount(&self, amount: U256) -> bool {
     amount > U256::ZERO && amount <= self.max_amount.get()
@@ -238,7 +248,9 @@ pub fn is_valid_amount(&self, amount: U256) -> bool {
 
 // Use in hot path
 pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), Vec<u8>> {
-    ensure!(self.is_valid_amount(amount), "Invalid amount");
+    if !self.is_valid_amount(amount) {
+        return Err(b"Invalid amount".to_vec());
+    }
     // Transfer logic...
     Ok(())
 }
@@ -249,12 +261,17 @@ pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), Vec<u8>> {
 ```rust
 // ❌ Bad: Redundant zero check
 pub fn add_to_balance_bad(&mut self, addr: Address, amount: U256) -> Result<(), Vec<u8>> {
-    ensure!(amount > U256::ZERO, "Amount must be positive");
+    if amount == U256::ZERO {
+        return Err(b"Amount must be positive".to_vec());
+    }
 
     let current = self.balances.get(addr);
-    ensure!(current + amount > current, "Overflow");  // Redundant if amount > 0
+    if current + amount <= current {
+        // Redundant if amount > 0
+        return Err(b"Overflow".to_vec());
+    }
 
-    self.balances.setter(addr).add_assign(amount);
+    self.balances.setter(addr).set(current + amount);
     Ok(())
 }
 
@@ -264,7 +281,7 @@ pub fn add_to_balance_good(&mut self, addr: Address, amount: U256) -> Result<(),
 
     let new_balance = current
         .checked_add(amount)
-        .ok_or("Overflow or invalid amount")?;
+        .ok_or(b"Overflow or invalid amount".to_vec())?;
 
     self.balances.setter(addr).set(new_balance);
     Ok(())
@@ -276,23 +293,34 @@ pub fn add_to_balance_good(&mut self, addr: Address, amount: U256) -> Result<(),
 ### 1. Minimize cross-contract calls
 
 ```rust
+// The interface is declared with sol_interface!:
+// sol_interface! {
+//     interface IOracle {
+//         function getPrice(address token) external view returns (uint256);
+//         function getDecimals(address token) external view returns (uint256);
+//         function getTimestamp(address token) external view returns (uint256);
+//         function getPriceData(address token)
+//             external view returns (uint256, uint256, uint256);
+//     }
+// }
+
 // ❌ Bad: Multiple external calls
 pub fn get_price_bad(&self, token: Address) -> Result<U256, Vec<u8>> {
     let oracle = IOracle::new(self.oracle_address.get());
 
-    let price = oracle.get_price(self, token)?;
-    let decimals = oracle.get_decimals(self, token)?;  // Second call
-    let timestamp = oracle.get_timestamp(self, token)?;  // Third call
+    let price = oracle.get_price(self.vm(), Call::new(), token)?;
+    let _decimals = oracle.get_decimals(self.vm(), Call::new(), token)?; // Second call
+    let _timestamp = oracle.get_timestamp(self.vm(), Call::new(), token)?; // Third call
 
     Ok(price)
 }
 
 // ✅ Good: Batch external calls
-pub fn get_price_good(&self, token: Address) -> Result<PriceData, Vec<u8>> {
+pub fn get_price_good(&self, token: Address) -> Result<(U256, U256, U256), Vec<u8>> {
     let oracle = IOracle::new(self.oracle_address.get());
 
     // Single call returns all data
-    oracle.get_price_data(self, token)
+    Ok(oracle.get_price_data(self.vm(), Call::new(), token)?)
 }
 ```
 
@@ -355,7 +383,7 @@ sol! {
 }
 ```
 
-**Gas impact**: Each indexed parameter costs ~375 additional gas. Only index fields you'll search by.
+**Gas impact**: Each additional log topic (indexed parameter) adds to the cost of emitting the event, so only index fields you will actually filter by. The exact per-topic cost is set by EVM `LOG` opcode pricing; verify against current gas-schedule values if you need a precise figure.
 
 ### 2. Batch events when possible
 
@@ -413,70 +441,61 @@ pub fn calculate(&self, value: U256) -> U256 {
     complex_sqrt(value)  // Using 1% of library
 }
 
-// ✅ Good: Implement simple operations yourself
+// ✅ Good: Implement simple operations yourself (sketch)
 pub fn simple_sqrt(&self, value: U256) -> U256 {
-    // Custom implementation adds minimal binary size
-    // Newton's method or similar
+    // Custom implementation adds minimal binary size.
+    // Provide a real algorithm (Newton's method or similar) here.
+    unimplemented!("integer square root")
 }
 ```
 
-### 3. Use cargo stylus optimization
+### 3. Check binary size and optimize the build
 
 ```shell
-# Check binary size
+# Compile and report the activated contract size
 cargo stylus check
-
-# Optimize with wasm-opt
-cargo stylus deploy --optimize
-
-# Maximum optimization (slower build, smaller binary)
-cargo stylus deploy --optimize-level 3
 ```
+
+`cargo stylus` does not expose `--optimize` flags. Control binary size through your
+Cargo release profile (see "Optimize compilation flags" above) and, if you need
+further shrinking, by running `wasm-opt` from [Binaryen](https://github.com/WebAssembly/binaryen)
+on the compiled `.wasm`. See [optimizing binaries](/stylus/how-tos/optimizing-binaries) for details.
 
 ## Gas measurement
 
-### 1. Profile your contracts
+### 1. Test behavior with the unit-test VM
+
+The `TestVM` from `stylus_sdk::testing` runs your contract logic off-chain so you
+can assert behavior quickly. It does not expose a gas meter (there is no
+`gas_left()` getter on `TestVM`), so use it to verify correctness, not to measure gas.
 
 ```rust
 #[cfg(test)]
 mod gas_tests {
     use super::*;
+    use stylus_sdk::testing::*;
 
     #[test]
-    fn benchmark_transfer() {
+    fn update_user_persists() {
         let vm = TestVM::default();
-        let mut contract = Token::from(&vm);
+        let mut contract = OptimizedContract::from(&vm);
 
-        // Measure gas for operation
-        let gas_before = vm.gas_left();
-        contract.transfer(recipient, amount).unwrap();
-        let gas_used = gas_before - vm.gas_left();
+        let user = Address::from([0x11; 20]);
+        contract.update_user_good(user, U256::from(100), true);
 
-        println!("Transfer gas used: {}", gas_used);
-        assert!(gas_used < 50000, "Transfer too expensive");
+        let stored = contract.users.get(user);
+        assert_eq!(stored.balance.get(), U256::from(100));
+        assert!(stored.is_active.get());
     }
 }
 ```
 
-### 2. Compare implementations
+### 2. Measure gas on a live endpoint
 
-```rust
-#[cfg(test)]
-mod optimization_tests {
-    #[test]
-    fn compare_storage_patterns() {
-        // Test pattern A
-        let gas_a = measure_pattern_a();
-
-        // Test pattern B
-        let gas_b = measure_pattern_b();
-
-        println!("Pattern A: {} gas", gas_a);
-        println!("Pattern B: {} gas", gas_b);
-        println!("Savings: {}%", (gas_a - gas_b) * 100 / gas_a);
-    }
-}
-```
+To compare the gas cost of two implementations, deploy each to a Stylus dev node
+and measure the gas used by real transactions (for example with `cast estimate`
+or by reading the gas used from the transaction receipt). On-chain measurement is
+the reliable way to compare optimization patterns; the unit-test VM cannot report gas.
 
 ## Optimization checklist
 
@@ -496,40 +515,44 @@ Before deploying, verify you've:
 
 ## Common optimizations summary
 
-| Pattern                   | Gas Savings                    | Complexity |
-| ------------------------- | ------------------------------ | ---------- |
-| Cache storage reads       | High (100+ gas per read saved) | Low        |
-| Delete unused storage     | Medium (15,000 gas refund)     | Low        |
-| Batch storage writes      | Medium (varies)                | Medium     |
-| Use iterators vs. collect | Low-Medium                     | Low        |
-| Minimize external calls   | High                           | Medium     |
-| Optimize binary size      | High (deployment only)         | Medium     |
-| Right-size data types     | Low-Medium                     | Low        |
+| Pattern                   | Gas savings                         | Complexity |
+| ------------------------- | ----------------------------------- | ---------- |
+| Cache storage reads       | High (avoids repeated `SLOAD`)      | Low        |
+| Delete unused storage     | Medium (≤4,800 gas refund per slot) | Low        |
+| Batch storage writes      | Medium (varies)                     | Medium     |
+| Use iterators vs. collect | Low-Medium                          | Low        |
+| Minimize external calls   | High                                | Medium     |
+| Optimize binary size      | High (deployment only)              | Medium     |
+| Right-size data types     | Low-Medium                          | Low        |
 
 ## Advanced optimization
 
 ### Custom memory allocators
 
-For advanced users, custom allocators can reduce memory overhead:
+The Stylus SDK ships with `mini-alloc` enabled by default (the `mini-alloc`
+feature in the generated `Cargo.toml`), a small WASM-oriented allocator that is
+already a good fit for most contracts. Reach for a custom `#[global_allocator]`
+only if profiling shows allocation is a bottleneck.
 
-```rust
-#[global_allocator]
-static ALLOCATOR: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-```
-
-**Warning**: Only use if you understand the trade-offs.
+Note that `wee_alloc`, once a common choice for size-constrained WASM, is
+unmaintained (archived upstream) and is not recommended for new contracts. Prefer
+the SDK default unless you have a specific, measured reason to change it.
 
 ### Assembly optimization
 
-For critical paths, you can use WASM intrinsics:
+For critical paths, advanced developers can reach for WASM intrinsics from
+`core::arch::wasm32`. The following is pseudocode showing where such an
+optimization would live; the body is intentionally omitted because a real
+implementation depends on the specific operation you are optimizing:
 
 ```rust
 use core::arch::wasm32::*;
 
-// ✅ Advanced: Use WASM intrinsics for critical operations
+// ✅ Advanced: use WASM intrinsics for critical operations.
+// Pseudocode — fill in a complete, measured implementation before using.
 pub fn optimized_hash(&self, data: &[u8]) -> [u8; 32] {
-    // WASM-optimized hashing
-    // Only use if you're an advanced developer
+    // WASM-optimized hashing goes here.
+    unimplemented!("provide a real implementation")
 }
 ```
 

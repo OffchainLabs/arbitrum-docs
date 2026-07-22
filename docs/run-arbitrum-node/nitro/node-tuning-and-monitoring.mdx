@@ -1,13 +1,16 @@
 ---
-title: 'Nitro memory management'
-description: 'Understand how Arbitrum Nitro uses memory across Go, CGO, and raw mmap allocators, and how to configure caches and GOMEMLIMIT for stable node operation.'
-author: athomas
-sme: athomas
-user_story: As a node operator, I need to understand how Nitro allocates memory so I can size my containers correctly, configure GOMEMLIMIT, and avoid out-of-memory issues.
-content_type: how-to
+title: 'Node tuning and monitoring'
+sidebar_label: 'Node tuning and monitoring'
+description: 'Memory management, cache configuration, validator tuning, metrics endpoints, and monitoring setup for Nitro nodes'
+user_story: 'As a node operator, I want to optimize my node memory, CPU, and storage settings and monitor its health'
+content_type: 'how-to'
+author: 'gzeoneth'
+sme: 'gzeoneth'
 ---
 
-Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. This is because Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills. Nitro also includes built-in [runtime memory protection](#runtime-memory-protection) settings. These can throttle RPC requests or pause block validation when free memory runs low, providing a safety net against OOM kills.
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, how to tune validators, and how to monitor node health is essential for stable operation.
 
 ## Memory allocators in Nitro
 
@@ -58,10 +61,10 @@ Because fastcache uses raw `mmap`, this memory doesn't appear in Go's `memstats`
 
 When Nitro makes CGO calls (for Pebble, Stylus, etc.), the resulting C-side allocations go through the system's default C memory allocator: glibc `malloc`. Unlike Go's garbage-collected heap, `malloc` manages memory by requesting large regions from the OS and subdividing them to satisfy individual allocation requests. Freed memory is returned to the allocator's internal free lists rather than immediately back to the OS, so the process's RSS can remain elevated even after allocations are freed.
 
-To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which are independent memory pools, each with its own lock. When a thread allocates memory, it picks an arena, reducing contention compared to a single global lock. By default, glibc creates up to `8 × CPU_count` arenas, each reserving a 64 MB region. The worst-case overhead for arenas is:
+To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which are independent memory pools, each with its own lock. When a thread allocates memory, it picks an arena, reducing contention compared to a single global lock. By default, glibc creates up to `8 x CPU_count` arenas, each reserving a 64 MB region. The worst-case overhead for arenas is:
 
-```
-Arena overhead = 8 × CPU_count × 64 MB
+```shell
+Arena overhead = 8 x CPU_count x 64 MB
 ```
 
 In containerized environments, glibc detects the underlying host CPU count (not the container's CPU requests), which often results in far more arenas than needed. As the process runs and more threads make CGO calls, glibc creates and retains new arenas, causing RSS to drift upward over days or weeks even though no individual allocation is leaking.
@@ -74,9 +77,7 @@ MALLOC_ARENA_MAX=2
 
 Setting `MALLOC_ARENA_MAX=2` caps glibc to two arenas, reducing worst-case arena overhead from gigabytes to ~128 MB. In testing, this eliminated the slow memory growth with no measurable performance impact on RPC throughput.
 
-:::caution
-Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.
-:::
+<VanillaAdmonition type="caution">Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.</VanillaAdmonition>
 
 ### Thread stacks
 
@@ -108,7 +109,7 @@ For `GOMEMLIMIT` to work correctly in a containerized environment, you must rese
 
 Sum all memory that lives outside the Go heap:
 
-```
+```shell
 Non-Go Memory =
     database-cache            # Pebble block cache (CGO)
   + (database-cache / 2)      # Pebble memtables, max (CGO)
@@ -123,11 +124,11 @@ With `MALLOC_ARENA_MAX=2`, arena overhead is ~128 MB. Without it, arena overhead
 
 ### Formula
 
-```
+```shell
 GOMEMLIMIT = Container_Memory_Limit - Non_Go_Memory - Safety_Margin
 ```
 
-You should use a safety margin of 300–500 MB to account for allocator overhead, transient allocations, and kernel page cache.
+You should use a safety margin of 300-500 MB to account for allocator overhead, transient allocations, and kernel page cache.
 
 ### Example: 16 GB container with defaults
 
@@ -144,7 +145,7 @@ You should use a safety margin of 300–500 MB to account for allocator overhead
 
 \*Thread stack usage depends on the number of active threads, which varies by workload.
 
-```
+```shell
 GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 ```
 
@@ -152,78 +153,202 @@ GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
 :::
 
-## Runtime memory protection
+### Helm chart shortcut
 
-Even with well-sized caches and tuned `GOMEMLIMIT`, nodes can face OOM due to workload spikes or unexpected memory pressure. Nitro provides two memory protection mechanisms. These use Linux cgroups to monitor real-time container memory usage and intervene before the kernel's OOM killer takes action.
+The community Helm chart calculates `GOMEMLIMIT` automatically using a multiplier of `0.9` against the container memory limit. It subtracts non-Go memory defaults (database-cache 2048, trie-clean-cache 600, snapshot-cache 400, stylus-lru-cache 256, malloc arena size 64) before applying the multiplier. If you use the Helm chart with default values, `GOMEMLIMIT` is set for you.
 
-Both mechanisms read the container's cgroup memory files (v1 or v2). They compute memory usage while exlcuding page cache, while the kernel can reclaim. They compare the result against the container's memory limit minus a configurable free-memory threshold:
+## Validator tuning
 
-```
-effective_usage = cgroup_memory_usage - (active_file_cache + inactive_file_cache)
-threshold       = cgroup_memory_limit - configured_free_limit
-exceeded        = effective_usage >= threshold
-```
+Validators perform CPU-intensive WASM execution to verify blocks. Their memory and CPU profiles differ from the main Nitro node.
 
-Subtracting active and inactive file cache from usage avoids false positives. The check excludes memory that the kernel can reclaim, which does not count as actual consumption.
+### GOMEMLIMIT for validators
 
-:::note
-Both features require Linux cgroups (v1 or v2). They only work inside containers or environments with groups limits. On bare-metal hosts without cgroup limits, these features are unavailable.
-:::
-
-### RPC throttling
-
-This setting protects the node by rejecting incoming RPC requests with an HTTP 429 (Too Many Requests) status code when free memory drops below the configured threshold. It acts as a back-pressure mechanism, preventing new RPC work from pushing the node over its memory limit.
-
-| Parameter                           | Default         | Description                                                                                                                     |
-| ----------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `node.resource-mgmt.mem-free-limit` | `""` (disabled) | Minimum free memory required to accept RPC requests. Accepts values with suffixes: `B`, `K`/`KB`, `M`/`MB`, `G`/`GB`, `T`/`TB`. |
-
-When enabled, Nitro wraps the HTTP server with a middleware that checks free memory before every RPC call. If the limit is exceeded, the request is rejected immediately without being processed.
-
-**Example configuration:**
+Validators use a lower `GOMEMLIMIT` multiplier of `0.75` (compared to `0.9` for the main node) because WASM execution creates more transient Go heap allocations that need GC headroom. For a 16 GB validator container:
 
 ```shell
---node.resource-mgmt.mem-free-limit=1GB
+GOMEMLIMIT ≈ 16,384 MB × 0.75 = ~12,288 MB ≈ 12 GB
 ```
 
-Nitro emits metrics under the `arb/rpc/limitcheck/` and `arb/memory/` namespaces. These emtrics track accepted and rejected requests, as well as current memory usage. At startup Nitro logs whether cgroup-based throttling is enabled and logs errors if memory checks fail during runtime.
+### Memory free limits
 
-### Block validator throttling
+Nitro can throttle RPC and pause block validation when system free memory drops below a configurable threshold. This protection is **disabled by default in Nitro** — it only kicks in once you set the corresponding flags. The [community Helm chart](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/nitro) enables these limits with the following multipliers against the container memory limit:
 
-This setting protects the node by pausing block validation when free memory drops below the configured threshold. Block validation is memory-intensive, so pausing it under memory pressure prevents the validation workload from triggering an OOM kill.
+- **`resourceMgmtMemFreeLimit`**: Multiplier `0.05` (5% of container memory). When free memory drops below this threshold, the node throttles incoming RPC requests to prevent OOM conditions.
+- **`blockValidatorMemFreeLimit`**: Multiplier `0.05` (5% of container memory). When free memory drops below this threshold, the validator pauses block validation until memory is reclaimed.
 
-| Parameter                                | Default            | Description                                                                                                                                     |
-| ---------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `node.block-validator.memory-free-limit` | `"default"` (1 GB) | Minimum free memory required to continue block validation. Set to `""` (empty string) to disable. Accepts the same suffixes as the RPC setting. |
+<VanillaAdmonition type="note">
 
-This setting is enabled by default with a 1 GB threshold. When free memory drops below this amount, the block validator pauses recording new blocks and halts sending pending validations. Validation resumes once memory usage goes back below the threshold.
+The `0.05` multipliers above come from the community Helm chart's defaults, not from Nitro itself. If you're not running the Helm chart, set the equivalent Nitro flags explicitly to enable this protection.
 
-**Example configuration:**
+</VanillaAdmonition>
 
-To increase the threshold to 2 GB:
+### GOMAXPROCS
+
+`GOMAXPROCS` controls how many OS threads Go uses for goroutine scheduling. For validators, the Helm chart defaults to a multiplier of `2` against the container CPU limit (for example, 4 CPUs yields `GOMAXPROCS=8`). This higher-than-usual setting helps because validators frequently block on CGO calls during WASM execution, and additional Go threads keep non-CGO goroutines progressing.
+
+For the main Nitro node, the Helm chart does not override `GOMAXPROCS`, letting Go's runtime auto-detect from the container CPU limit.
+
+## Metrics and monitoring
+
+Nitro exposes Prometheus-compatible metrics through a dedicated metrics server.
+
+### Enable the metrics server
+
+Pass the `--metrics` flag when starting the node. Configure the server with these flags:
+
+| Flag                               | Default     | Description                              |
+| ---------------------------------- | ----------- | ---------------------------------------- |
+| `--metrics-server.addr`            | `127.0.0.1` | Listen address for the metrics server    |
+| `--metrics-server.port`            | `6070`      | Listen port for the metrics server       |
+| `--metrics-server.update-interval` | `3s`        | How often internal metrics are refreshed |
+
+Example:
 
 ```shell
---node.block-validator.memory-free-limit=2GB
+nitro --metrics \
+  --metrics-server.addr 0.0.0.0 \
+  --metrics-server.port 6070
 ```
 
-To disable the protection:
+### Prometheus scrape endpoint
+
+Once metrics are enabled, Nitro exposes a Prometheus-compatible endpoint at:
 
 ```shell
---node.block-validator.memory-free-limit=""
+http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus
 ```
 
-Nitro exposes the `arb/validator/memory/limit_exceeded` gauge metric (`1` when paused, `0` otherwise) and logs error-level messages when validation is paused, or memory checks fail. Alert on this metric to detect when validation is paused due to memory pressure—sustained pauses may indicate that the node needs more memory or that cache sizes should be reduced.
+`pprof` runs as a separate server at `/debug/pprof/` for CPU and memory profiling, enabled with --pprof and configured via --pprof-cfg.addr / --pprof-cfg.port (default 127.0.0.1:6071). It is not served on the metrics port.
+
+### Key metrics to monitor
+
+| Metric                      | What it tells you                                                                                                  |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `container_memory_rss`      | Actual RSS of the container. Compare against Go-reported heap to understand non-Go memory usage.                   |
+| `arb_feed_backlog_messages` | Number of messages in the feed backlog. A growing backlog indicates the node is falling behind the sequencer feed. |
+| Batch poster backlog        | For batch poster nodes, tracks how many batches are pending submission to the parent chain.                        |
+
+<VanillaAdmonition type="tip">Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.</VanillaAdmonition>
+
+### Kubernetes ServiceMonitor
+
+If you run Nitro on Kubernetes with the Prometheus Operator, configure a `ServiceMonitor` to scrape the metrics endpoint:
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: nitro
+spec:
+  selector:
+    matchLabels:
+      app: nitro
+  endpoints:
+    - port: metrics
+      path: /debug/metrics/prometheus
+      interval: 5s
+```
+
+## Health check patterns
+
+Nitro components expose health information through different mechanisms depending on the binary.
+
+### Main Nitro node
+
+The main `nitro` binary does not expose a dedicated `/health` endpoint. Node health is inferred from RPC availability: if the HTTP RPC port (default `8547`) responds with HTTP 200 to a valid JSON-RPC request, the node is healthy.
+
+Example liveness check:
+
+```shell
+curl -sf -X POST http://localhost:8547 \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1}'
+```
+
+### Auxiliary components
+
+- **Transaction filterer**: Exposes a `/liveness` endpoint for health checks.
+- **DA server**: Exposes a `/health` endpoint.
+
+### Kubernetes probe strategy
+
+Initial sync can take days or weeks depending on chain history. The community Helm chart uses an aggressive startup probe to allow time for initial sync without marking the pod as failed:
+
+```yaml
+startupProbe:
+  httpGet:
+    path: /
+    port: 8547
+  failureThreshold: 2419200
+  periodSeconds: 1
+```
+
+This configuration allows up to 28 days (2,419,200 seconds) for the node to become responsive. Once the startup probe succeeds, standard liveness and readiness probes take over.
 
 ## Tuning recommendations
 
+### General rules
+
 1. **Set `MALLOC_ARENA_MAX=2`**: This is the single most impactful change for containerized nodes. Without it, glibc can waste gigabytes on arena overhead, causing RSS to drift upward over days. Set this environment variable on every Nitro container.
 
-2. **Start from the formula**: Calculate `GOMEMLIMIT` using the formula above with your actual cache configuration values. Do not set it to the container memory limit.
+2. **Start from the formula**: Calculate `GOMEMLIMIT` using the [formula above](#formula) with your actual cache configuration values. Do not set it to the container memory limit.
 
 3. **Monitor RSS, not just Go heap**: Set container memory alerts based on actual RSS (`container_memory_rss` in Prometheus / cAdvisor), not Go-reported memory.
 
 4. **All caches are bounded**: Unlike memory leaks, all non-Go memory in Nitro is bounded by configuration. With `MALLOC_ARENA_MAX` set, if RSS is stable and predictable, the node is behaving correctly. The memory is simply allocated outside Go's visibility.
 
-5. **Enable RPC throttling on public-facing nodes**: Set `node.resource-mgmt.mem-free-limit` (e.g., `1GB`) on nodes that serve external RPC traffic. This prevents request surges from causing the node to go OOM. Monitor `arb/rpc/limitcheck/failure` to track how often throttling activates.
+### Example configurations
 
-6. **Monitor block validator memory pauses**: The block validator's memory protection is on by default. Alert on `arb/validator/memory/limit_exceeded == 1` to detect when validation is paused due to memory pressure.
+#### Full node with 32 GB RAM
+
+Use default cache sizes. Calculate `GOMEMLIMIT` from the non-Go budget:
+
+```shell
+# Non-Go: 2048 + 1024 + 600 + 400 + 256 + 128 + 300 = 4,756 MB
+# GOMEMLIMIT = 32,768 - 4,756 - 500 safety ≈ 27,512 MB ≈ 27 GB
+
+MALLOC_ARENA_MAX=2 \
+GOMEMLIMIT=27512MiB \
+
+nitro \
+  --metrics \
+  --metrics-server.addr 0.0.0.0
+```
+
+#### Archive node with 128 GB RAM
+
+Archive nodes benefit from larger caches to reduce disk I/O for historical queries:
+
+```shell
+# Non-Go: 4096 + 2048 + 1200 + 800 + 256 + 128 + 300 = 8,828 MB
+# GOMEMLIMIT = 131,072 - 8,828 - 500 safety ≈ 121,744 MB ≈ 119 GB
+
+MALLOC_ARENA_MAX=2
+GOMEMLIMIT=121744MiB
+
+nitro \
+  --execution.caching.database-cache 4096 \
+  --execution.caching.trie-dirty-cache 2048 \
+  --execution.caching.trie-clean-cache 1200 \
+  --execution.caching.snapshot-cache 800 \
+  --metrics \
+  --metrics-server.addr 0.0.0.0
+```
+
+#### Validator with 16 GB RAM
+
+Validators need less cache but more CPU headroom. Use reduced cache sizes and the lower `GOMEMLIMIT` multiplier:
+
+```shell
+# Non-Go: 1024 + 512 + 300 + 200 + 256 + 128 + 300 = 2,720 MB
+# GOMEMLIMIT = 16,384 × 0.75 ≈ 12,288 MB
+# Alternatively: 16,384 - 2,720 - 500 = 13,164 MB (use the lower value)
+
+MALLOC_ARENA_MAX=2
+GOMEMLIMIT=12288MiB
+GOMAXPROCS=4
+
+nitro \
+  --metrics \
+  --metrics-server.addr 0.0.0.0
+```

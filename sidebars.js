@@ -29,6 +29,11 @@ const sidebars = {
           id: 'stylus/quickstart',
           label: 'Build apps with Stylus',
         },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/machine-payments-protocol',
+          label: 'Machine Payments Protocol (MPP)',
+        },
       ],
     },
     {
@@ -235,11 +240,6 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
-                  label: `AEP fee calculation`,
-                },
-                {
-                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
                   label: `AEP reporting`,
                 },
@@ -322,6 +322,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment',
+                  label: `Deploy DAS with Docker`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
                   label: `Deploy mirror DAS`,
                 },
@@ -391,12 +396,22 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
               ],
             },
             {
               type: 'doc',
               id: 'launch-arbitrum-chain/chain-config/additional-configuration-parameters',
               label: `Additional configuration parameters`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/chain-config/chainConfig-reference',
+              label: `chainConfig reference`,
             },
           ],
         },
@@ -446,6 +461,16 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
               label: 'Infrastructure providers',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/bp-kms-signing-services',
+              label: 'KMS signing services',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/exchange-integration-checklist',
+              label: 'Exchange integration checklist',
             },
           ],
         },
@@ -548,6 +573,11 @@ const sidebars = {
               // a: see note at end of file
             },
             {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/run-a-node/run-full-node-with-helm',
+              label: 'Run a full node (Helm/Kubernetes)',
+            },
+            {
               type: 'html',
               value:
                 '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Run a validator <span class="other-section-icon">↓</span></a>',
@@ -577,6 +607,11 @@ const sidebars = {
               label: 'High availability sequencer',
             },
           ],
+        },
+        {
+          type: 'link',
+          label: 'Chain playbook',
+          href: 'https://github.com/OffchainLabs/arbitrum-chain-playbook',
         },
       ],
     },
@@ -631,8 +666,20 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/assign-node-roles',
+          label: 'Assign node roles',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/run-local-full-chain-simulation',
           label: 'Run a local full chain simulation',
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/run-a-node/run-full-node-with-helm">Run a full node with helm<span class="other-section-icon">↓</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
         },
         {
           type: 'doc',
@@ -762,8 +809,23 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/nitro-memory-management',
-          label: 'Nitro memory management',
+          id: 'run-arbitrum-node/nitro/node-tuning-and-monitoring',
+          label: 'Node tuning and monitoring',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/configuration-system',
+          label: 'Configuration system',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/da-tools-reference',
+          label: 'DA tools reference',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/cli-flags-reference',
+          label: 'CLI flags reference',
         },
         {
           type: 'doc',
@@ -947,6 +1009,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/bold/bold-technical-deep-dive',
               label: 'Technical deep dive',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
+              label: 'How BoLD bisection works',
             },
             {
               type: 'doc',
@@ -1159,6 +1226,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Verify child chain state',
+              id: 'arbitrum-essentials/how-to-get-l2block-on-l1',
+            },
+            {
+              type: 'doc',
               label: 'L1-to-L3 teleportation',
               id: 'arbitrum-essentials/bridging/l1-l3-teleportation',
             },
@@ -1333,6 +1405,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'arbitrum-essentials/reference/solidity-references',
+              label: 'Solidity references',
+            },
+            {
+              type: 'doc',
               label: 'Web3 libraries and tools',
               id: 'arbitrum-essentials/reference/web3-libraries-tools',
             },
@@ -1487,11 +1564,6 @@ const sidebars = {
               id: 'stylus/how-tos/deploying-non-rust-wasm-contracts',
               label: 'Deploy non-Rust contracts',
             },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
-              label: 'Add language support',
-            },
           ],
         },
         {
@@ -1583,11 +1655,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/concepts/vm-differences',
               label: 'VM differences',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/public-preview-expectations',
-              label: 'Public preview expectations',
             },
           ],
         },
