@@ -111,7 +111,7 @@ If you are relying on `arb/staker/action/last_success` and seeing it go stale fo
 
 <VanillaAdmonition type="caution">
 
-**High periods of inactivity can disable the validator allowlist.** If no assertions are created for long enough — determined by `confirmPeriodBlocks` plus the constant `45818` parent-chain blocks since the last assertion — the Rollup contract's validator allowlist mechanism can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). For chains settling to Ethereum or another Arbitrum chain, that constant is roughly seven days on top of the `confirmPeriodBlocks` period; for chains settling elsewhere, it is measured in the parent chain's block time. Alert on assertion inactivity well before this window elapses.
+**High periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). validatorAfkBlocks is configured per chain — read it from your Rollup contract; a value of 0 disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One validatorAfkBlocks is set to 201600 (~28 days of parent-chain blocks).
 
 </VanillaAdmonition>
 
