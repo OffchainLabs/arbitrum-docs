@@ -261,7 +261,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/calculate-aep-fees',
-    to: '/launch-arbitrum-chain/chain-config/costs/calculate-aep-fees',
+    to: 'https://docs.arbitrum.foundation/calculate-aep-fees',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees',
@@ -410,6 +410,14 @@ export const redirects = [
   {
     from: '/launch-arbitrum-chain/chain-config/core/stf',
     to: '/launch-arbitrum-chain/protocol-hacks/stf',
+  },
+  {
+    from: '/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
+    to: '/launch-arbitrum-chain/chain-config/validation/compliance-filtering',
+  },
+  {
+    from: '/build-decentralized-apps/how-to-get-l2block-on-l1',
+    to: '/arbitrum-essentials/how-to-get-l2block-on-l1',
   },
   // AUTO-GENERATED REDIRECTS END
 ];
