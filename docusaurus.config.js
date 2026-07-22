@@ -228,6 +228,17 @@ const config = {
             ],
           },
           {
+            type: 'dropdown',
+            label: 'Enterprise solutions',
+            position: 'right',
+            items: [
+              {
+                label: 'Payments',
+                to: '/solutions/payments',
+              },
+            ],
+          },
+          {
             type: 'docSidebar',
             sidebarId: 'runArbitrumChainSidebar',
             position: 'right',
