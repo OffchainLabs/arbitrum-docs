@@ -17,47 +17,10 @@ import { MDXProvider } from '@mdx-js/react';
 // Remove Link import - we'll use a span instead to avoid Docusaurus broken link detection (Docusaurus's build will fail if a <Link> points to a non-existent page)
 import './styles.css';
 
-// Import all config partials statically to avoid CSP issues
-import ConfigCustomGasToken from '@site/docs/launch-arbitrum-chain/partials/_custom-gas-token-pc.mdx';
-import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/_alt-da-pc.mdx';
-import ConfigDedicatedThroughput from '@site/docs/launch-arbitrum-chain/partials/config-dedicated-throughput.mdx';
-import ConfigNativeEth from '@site/docs/launch-arbitrum-chain/partials/_native-eth-pc.mdx';
-import ConfigHardware from '@site/docs/launch-arbitrum-chain/partials/config-hardware.mdx';
-import ConfigRollup from '@site/docs/launch-arbitrum-chain/partials/_rollup-pc.mdx';
-import ConfigAnytrust from '@site/docs/launch-arbitrum-chain/partials/_anytrust-pc.mdx';
-import ConfigFastwithdrawals from '@site/docs/launch-arbitrum-chain/partials/_fast-withdrawals-pc.mdx';
-import ConfigTimeboost from '@site/docs/launch-arbitrum-chain/partials/_timeboost-pc.mdx';
-import ConfigBold from '@site/docs/launch-arbitrum-chain/partials/_bold-pc.mdx';
-import ConfigPermissionedValidators from '@site/docs/launch-arbitrum-chain/partials/_permissioned-validators.mdx';
-import ConfigL1ChallengePeriod from '@site/docs/launch-arbitrum-chain/partials/config-l1-challenge-period.mdx';
-import ConfigForceInclusion from '@site/docs/launch-arbitrum-chain/partials/config-force-inclusion.mdx';
-import ConfigAccountAbstraction from '@site/docs/launch-arbitrum-chain/partials/config-account-abstraction.mdx';
-import ConfigCustomizableGovernance from '@site/docs/launch-arbitrum-chain/partials/config-customizable-governance.mdx';
-import ConfigDataPostingCosts from '@site/docs/launch-arbitrum-chain/partials/config-data-posting-costs.mdx';
-import ConfigEVMCompatibility from '@site/docs/launch-arbitrum-chain/partials/config-evm-compatbility.mdx';
-import ConfigOtherLanguageSupport from '@site/docs/launch-arbitrum-chain/partials/config-other-language-support.mdx';
+// Import all config partials statically to avoid CSP issues format: import ConfigAltDa from '@site/docs/launch-arbitrum-chain/partials/_alt-da-pc.mdx';
 
-// Static content mapping
-const contentMap = {
-  'config-custom-gas-token': ConfigCustomGasToken,
-  'config-alt-da': ConfigAltDa,
-  'config-dedicated-throughput': ConfigDedicatedThroughput,
-  'config-native-eth': ConfigNativeEth,
-  'config-hardware': ConfigHardware,
-  'config-rollup': ConfigRollup,
-  'config-anytrust': ConfigAnytrust,
-  'config-fast-withdrawals': ConfigFastwithdrawals,
-  'config-timeboost': ConfigTimeboost,
-  'config-bold': ConfigBold,
-  'config-permissioned-validators': ConfigPermissionedValidators,
-  'config-l1-challenge-period': ConfigL1ChallengePeriod,
-  'config-force-inclusion': ConfigForceInclusion,
-  'config-account-abstraction': ConfigAccountAbstraction,
-  'config-customizable-governance': ConfigCustomizableGovernance,
-  'config-data-posting-costs': ConfigDataPostingCosts,
-  'config-evm-compatibility': ConfigEVMCompatibility,
-  'config-other-language-support': ConfigOtherLanguageSupport,
-};
+// Static content mapping for modals: 'config-custom-gas-token': ConfigCustomGasToken,
+const contentMap = {};
 
 // MDX components for proper rendering
 const mdxComponents = {

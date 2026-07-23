@@ -322,6 +322,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment',
+                  label: `Deploy DAS with Docker`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
                   label: `Deploy mirror DAS`,
                 },
@@ -456,6 +461,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/integrations/infrastructure-providers',
               label: 'Infrastructure providers',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/bp-kms-signing-services',
+              label: 'KMS signing services',
             },
             {
               type: 'doc',
@@ -602,6 +612,11 @@ const sidebars = {
               label: 'High availability sequencer',
             },
           ],
+        },
+        {
+          type: 'link',
+          label: 'Chain playbook',
+          href: 'https://github.com/OffchainLabs/arbitrum-chain-playbook',
         },
       ],
     },
@@ -796,6 +811,11 @@ const sidebars = {
           type: 'doc',
           id: 'run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
           label: 'Convert databases from LevelDB to Pebble',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/node-tuning-and-monitoring',
+          label: 'Node tuning and monitoring',
         },
         {
           type: 'doc',
@@ -1211,6 +1231,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Verify child chain state',
+              id: 'arbitrum-essentials/how-to-get-l2block-on-l1',
+            },
+            {
+              type: 'doc',
               label: 'L1-to-L3 teleportation',
               id: 'arbitrum-essentials/bridging/l1-l3-teleportation',
             },
@@ -1382,6 +1407,11 @@ const sidebars = {
               type: 'doc',
               id: 'arbitrum-essentials/reference/node-providers',
               label: 'RPC endpoints and providers',
+            },
+            {
+              type: 'doc',
+              id: 'arbitrum-essentials/reference/solidity-references',
+              label: 'Solidity references',
             },
             {
               type: 'doc',
