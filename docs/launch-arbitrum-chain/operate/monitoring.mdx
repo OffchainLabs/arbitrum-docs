@@ -11,7 +11,7 @@ sidebar_position: 0
 When deploying and maintaining an Arbitrum chain, there are several key elements that need to be monitored. This page has two parts:
 
 1. **Monitoring tools** — scripts and services available to chain maintainers.
-2. **What to monitor, by component** — a reference of the specific metrics, onchain signals, and thresholds to watch for each part of the stack (<a data-quicklook-from="sequencer">sequencer</a>, batch poster, validator, and chain fees), plus deployment and hardware guidance.
+2. **What to monitor, by component** — a reference of the specific metrics, onchain signals, and thresholds to watch for each part of the stack (<a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, and chain fees), plus deployment and hardware guidance.
 
 The metric names in this page are the internal Nitro metric paths (for example, `arb/sequencer/backlog`). On the Prometheus scrape endpoint, each `/` is replaced with `_` (so `arb/sequencer/backlog` is scraped as `arb_sequencer_backlog`). See [Enabling Nitro metrics](#enabling-nitro-metrics) for how to expose them.
 
@@ -37,7 +37,7 @@ The [retryable monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree
 
 ### Batch poster monitor
 
-The [batch poster monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/batch-poster-monitor) tracks batch posting activity and data availability. It alerts when no batches have been posted within the chain's expected time bounds while user transactions are pending, when the batch poster account balance falls below an estimate of about three days of posting costs, and when a backlog of unposted blocks accumulates. For [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chains, it also detects when the chain has fallen back to posting full calldata on the parent chain instead of DACerts, which indicates a problem with the Data Availability Committee.
+The [batch poster monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/batch-poster-monitor) tracks batch posting activity and data availability. It alerts when no batches have been posted within the chain's expected time bounds while user transactions are pending, when the batch poster account balance falls below an estimate of about three days of posting costs, and when a backlog of unposted blocks accumulates. For [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chains, it also detects when the chain has fallen back to posting full calldata on the parent chain instead of <a data-quicklook-from="data-availability-certificate">DACerts</a>, which indicates a problem with the <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee</a>.
 
 ### Assertion monitor
 
@@ -84,7 +84,7 @@ The sequencer accepts <a data-quicklook-from="transaction">transactions</a>, ord
 
 ### Batch poster
 
-The batch poster (the "batcher") posts sequenced transactions to the `SequencerInbox` contract on the parent chain as batches. It needs a funded account and must keep landing batches, or the chain's data stops being published to the parent chain.
+The batch poster (the "batcher") posts sequenced transactions to the <a data-quicklook-from="sequencer-inbox">`SequencerInbox`</a> contract on the parent chain as batches. It needs a funded account and must keep landing batches, or the chain's data stops being published to the parent chain.
 
 | Signal                                    | Source                          | What it means                                                                                                                                | Suggested alert                                |
 | ----------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
@@ -107,7 +107,7 @@ Validators post and confirm <a data-quicklook-from="assertion">assertions</a> (h
 
 <VanillaAdmonition type="note">
 
-If you are relying on `arb/staker/action/last_success` and seeing it go stale for long periods even while assertions are being created, this is expected on two counts. First, that gauge updates each time when the staker successfully acting — during periods when the staker has no action to take, it stays flat even though the validator is healthy and polling. Second, it is a **legacy-staker** metric; on BoLD chains, assertion activity is tracked by the `arb/validator/poster/*` and `arb/validator/scanner/*` metrics instead. Prefer the assertion-progress and failure signals below over `last_success` as your primary health check, and corroborate with the onchain assertion events.
+If you are relying on `arb/staker/action/last_success` and seeing it go stale for long periods even while assertions are being created, this is expected on two counts. First, that gauge updates each time the staker successfully acts — during periods when the staker has no action to take, it stays flat even though the validator is healthy and polling. Second, it is a **legacy-staker** metric; on BoLD chains, assertion activity is tracked by the `arb/validator/poster/*` and `arb/validator/scanner/*` metrics instead. Prefer the assertion-progress and failure signals below over `last_success` as your primary health check, and corroborate with the onchain assertion events.
 
 </VanillaAdmonition>
 
@@ -121,17 +121,17 @@ If you are relying on `arb/staker/action/last_success` and seeing it go stale fo
 | `arb/validator/poster/error_posting_assertion`                  | Nitro metric (BoLD staker)     | Counter of errors while posting assertions.                                                                    | Any sustained increase                   |
 | `arb/validator/scanner/latest_confirmed_assertion_block_number` | Nitro metric (BoLD staker)     | Parent-chain block number of the latest confirmed assertion.                                                   | No advance over an extended period       |
 | `arb/validator/validations/failed`                              | Nitro metric (any validator)   | Counter of failed block validations.                                                                           | Any sustained increase                   |
-| `NodeCreated` / `AssertionCreated` events                       | Parent chain (Rollup contract) | The onchain confirmation that assertions are being created. Watch alongside the metrics above.                 | No event over an extended period         |
+| `NodeCreated` or `AssertionCreated` events                      | Parent chain (Rollup contract) | The onchain confirmation that assertions are being created. Watch alongside the metrics above.                 | No event over an extended period         |
 
 <VanillaAdmonition type="caution">
 
-**High periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). validatorAfkBlocks is configured per chain — read it from your Rollup contract; a value of 0 disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One validatorAfkBlocks is set to 201600 (~28 days of parent-chain blocks).
+**Long periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). `validatorAfkBlocks` is configured per chain — read it from your Rollup contract; a value of `0` disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One `validatorAfkBlocks` is set to `201600` (~28 days of parent-chain blocks).
 
 </VanillaAdmonition>
 
 ### Chain fees and load
 
-The chain's base fee is a useful signal of sustained demand. An Arbitrum chain has a `gas target` (also called the speed limit), measured in gas per second, that acts as a threshold for pricing. When cumulative usage exceeds it, a backlog of excess gas accumulates and the `L2 base fee` rises using an approach similar to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md). The default gas target is `7,000,000` gas per second as of ArbOS 6 (it was `1,000,000` in ArbOS 0). A sustained base-fee spike therefore indicates demand is exceeding the speed limit — as a rough guide, 7M gas per second is on the order of ~330 simple transfers per second, though the exact transactions-per-second figure depends on the gas cost of the transactions being run.
+The chain's base fee is a useful signal of sustained demand. An Arbitrum chain has a <a data-quicklook-from="gas-target">`gas target`</a> (also called the speed limit), measured in gas per second, that acts as a threshold for pricing. When cumulative usage exceeds it, a backlog of excess gas accumulates and the `L2 base fee` rises using an approach similar to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md). The default gas target is `7,000,000` gas per second as of ArbOS 6 (it was `1,000,000` in ArbOS 0). A sustained base-fee spike therefore indicates demand is exceeding the speed limit — as a rough guide, 7M gas per second is on the order of 330 simple transfers per second, though the exact transactions-per-second figure depends on the gas cost of the transactions being run.
 
 | Signal                                | Source                                                   | What it means                                                                                                      | Suggested alert                           |
 | ------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
