@@ -286,6 +286,10 @@ A type of [Transaction Ordering Policy](/intro/glossary#transaction-ordering-pol
 
 Censorship resistant path for including a message into an Arbitrum chain via the [Delayed Inbox](/intro/glossary#delayed-inbox) on its [Parent chain](/intro/glossary#parent-chain); bypasses any Sequencer involvement.
 
+### Forwarder {#forwarder}
+
+In Arbitrum, a forwarder is a component that forwards user transactions to the Sequencer. Full nodes use the forwarder to send transactions they receive via RPC to the sequencer for ordering and execution.
+
 ### Fraud proof {#fraud-proof}
 
 The means by which an [Active Validator](/intro/glossary#active-validator) proves to its underlying chain that an invalid state transition has taken place.
@@ -370,7 +374,7 @@ A protocol that allows users to bridge **ETH** and **ERC-20** tokens from Ethere
 
 ### MultiVM {#multivm}
 
-MultiVM refers to Arbitrum's ability to support multiple virtual machines (VMs). Specifically, Arbitrum Stylus introduces a WebAssembly (WASM)-based virtual machine alongside the traditional Ethereum Virtual Machine (EVM). This means developers can write smart contracts in languages like Rust, C, or C++ (compiled to WASM) or continue using Solidity for the EVM, and both types of contracts can interact on the same chain. This approach preserves EVM compatibility while enabling more efficient execution and access to a broader set of programming languages and libraries. Learn more about [Stylus](/stylus/gentle-introduction) and language support.
+MultiVM refers to Arbitrum's ability to support multiple virtual machines (VMs). Specifically, Arbitrum <a data-quicklook-from="stylus">Stylus</a> introduces a WebAssembly (<a data-quicklook-from="wasm">WASM</a>)-based virtual machine alongside the traditional Ethereum Virtual Machine (EVM). This means developers can write <a data-quicklook-from="smart-contract">smart contracts</a> in languages like Rust, C, or C++ (compiled to WASM) or continue using Solidity for the EVM, and both types of contracts can interact on the same chain. This approach preserves EVM compatibility while enabling more efficient execution and access to a broader set of programming languages and libraries. Learn more about [Stylus](/stylus/gentle-introduction) and language support.
 
 ### Native Fee Token {#native-fee-token}
 

@@ -263,6 +263,10 @@
     "title": "Force-Inclusion",
     "text": "<p>Censorship resistant path for including a message into an Arbitrum chain via the <a href=\"/intro/glossary#delayed-inbox\">Delayed Inbox</a> on its <a href=\"/intro/glossary#parent-chain\">Parent chain</a>; bypasses any Sequencer involvement.</p>\n"
   },
+  "forwarder": {
+    "title": "Forwarder",
+    "text": "<p>In Arbitrum, a forwarder is a component that forwards user transactions to the Sequencer. Full nodes use the forwarder to send transactions they receive via RPC to the sequencer for ordering and execution.</p>\n"
+  },
   "fraud-proof": {
     "title": "Fraud proof",
     "text": "<p>The means by which an <a href=\"/intro/glossary#active-validator\">Active Validator</a> proves to its underlying chain that an invalid state transition has taken place.</p>\n"
@@ -341,7 +345,7 @@
   },
   "multivm": {
     "title": "MultiVM",
-    "text": "<p>MultiVM refers to Arbitrum&#39;s ability to support multiple virtual machines (VMs). Specifically, Arbitrum Stylus introduces a WebAssembly (WASM)-based virtual machine alongside the traditional Ethereum Virtual Machine (EVM). This means developers can write smart contracts in languages like Rust, C, or C++ (compiled to WASM) or continue using Solidity for the EVM, and both types of contracts can interact on the same chain. This approach preserves EVM compatibility while enabling more efficient execution and access to a broader set of programming languages and libraries. Learn more about <a href=\"/stylus/gentle-introduction\">Stylus</a> and <a href=\"/launch-arbitrum-chain/partials/config-other-language-support\">language support</a>.</p>\n"
+    "text": "<p>MultiVM refers to Arbitrum&#39;s ability to support multiple virtual machines (VMs). Specifically, Arbitrum <a data-quicklook-from=\"stylus\">Stylus</a> introduces a WebAssembly (<a data-quicklook-from=\"wasm\">WASM</a>)-based virtual machine alongside the traditional Ethereum Virtual Machine (EVM). This means developers can write <a data-quicklook-from=\"smart-contract\">smart contracts</a> in languages like Rust, C, or C++ (compiled to WASM) or continue using Solidity for the EVM, and both types of contracts can interact on the same chain. This approach preserves EVM compatibility while enabling more efficient execution and access to a broader set of programming languages and libraries. Learn more about <a href=\"/stylus/gentle-introduction\">Stylus</a> and language support.</p>\n"
   },
   "native-fee-token": {
     "title": "Native Fee Token",
