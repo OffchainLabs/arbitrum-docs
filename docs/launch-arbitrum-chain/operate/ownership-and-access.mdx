@@ -52,7 +52,7 @@ The tables below list the privileged functions on the `SequencerInbox`, `Rollup`
 
 The Chain SDK's `sequencerInboxPrepareTransactionRequest` and `rollupAdminLogicPrepareTransactionRequest` helpers accept an `upgradeExecutor` argument and wrap the call in `UpgradeExecutor.executeCall` automatically, so the owner path is handled for you.
 
-### SequencerInbox
+### `SequencerInbox`
 
 Access is enforced by the `onlyRollupOwner` and `onlyRollupOwnerOrBatchPosterManager` modifiers.
 
@@ -74,7 +74,7 @@ Access is enforced by the `onlyRollupOwner` and `onlyRollupOwnerOrBatchPosterMan
 
 </VanillaAdmonition>
 
-### Rollup / RollupAdminLogic
+### Rollup/`RollupAdminLogic`
 
 Every function on `RollupAdminLogic` is reachable only through the Rollup proxy's admin, which in a standard deployment is the Upgrade Executor. There is no per-function modifier—the proxy routes admin calls to this logic contract only when the caller is the admin—so **all of these require the Upgrade Executor** and none have a dedicated Chain SDK helper. They are all issued through the generic `rollupAdminLogicPrepareTransactionRequest({ functionName, args, upgradeExecutor, rollup, account })` dispatcher.
 
