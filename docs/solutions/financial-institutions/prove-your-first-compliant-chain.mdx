@@ -1,0 +1,50 @@
+---
+title: 'Prove your first compliant chain'
+sidebar_label: 'Testnet walkthrough'
+description: 'Stand up a compliant AnyTrust testnet chain end to end: deploy, enable compliance filtering, and verify a restricted transaction is blocked.'
+user_story: 'As an engineer evaluating Arbitrum for a regulated product, I want to prove a compliant chain works on testnet before committing to the architecture.'
+content_type: tutorial
+author: anegg0
+sme: gmehta2
+---
+
+{/_
+DRAFT STUB — Tier 3 walkthrough for the Financial-institutions Blueprint.
+Steps are an outline only; fill in and verify each command against the linked docs, then run through
+technical-accuracy-reviewer + SME (gmehta2 / jose-franco) before publish. See
+projects/blueprints/blueprint-financial-institutions-design.md (Tier 3) in the PM workspace.
+_/}
+
+:::caution
+This walkthrough is a draft pending SME review. Commands and versions are not yet verified — do not follow it end to end until this notice is removed.
+:::
+
+## What you will prove
+
+By the end, you will have a testnet AnyTrust chain that blocks a sanctioned address at the protocol level — the core of the [Financial institutions blueprint](/solutions/financial-institutions): a compliant, institution-operated chain you can take to a risk committee.
+
+## Prerequisites
+
+- The [Arbitrum chain quickstart prerequisites](/launch-arbitrum-chain/quickstart/sdk-introduction.mdx)
+- A testnet parent chain and funded deployer account
+- An S3-compatible bucket for the restricted-address list (see [Compliance Filtering configuration](/launch-arbitrum-chain/chain-config/validation/compliance-filtering.mdx))
+
+## Step 1 — Deploy an AnyTrust testnet chain
+
+Follow the [quickstart](/launch-arbitrum-chain/quickstart/l3-rollup-testnet.mdx), selecting the AnyTrust data-availability mode. _(Outline — expand with exact steps.)_
+
+## Step 2 — Configure the Data Availability Committee
+
+Stand up at least three DAC members. _(Outline — link [data availability configuration](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx).)_
+
+## Step 3 — Enable Compliance Filtering
+
+Enable Sequencer- and STF-level filtering and point it at your restricted-address list. _(Outline — from [Compliance Filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering.mdx); note the Delayed Inbox Sentinel must be activated at deployment.)_
+
+## Step 4 — Verify a restricted transaction is blocked
+
+Add a test address to the restricted list and confirm a transaction from it is rejected at the Sequencer, and that a force-included attempt fails at the STF. _(Outline — this is the "proof.")_
+
+## Next steps
+
+Return to the [blueprint](/solutions/financial-institutions#recommended-configuration) to plan key management, fast withdrawals, and the ZeroDev account layer for a production deployment.

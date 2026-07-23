@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 620" width="1120" height="620" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title>Regulated financial institution architecture stack on Arbitrum</title>
+  <desc>Five dependency-ordered layers, bottom to top: 1 chain foundation, 2 key management and signing, 3 compliance and controls, 4 interoperability and liquidity, 5 accounts and wallets, with your product on top. Operations and cost apply across every layer.</desc>
+  <defs>
+    <marker id="up" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1,9 L5,1 L9,9" fill="none" stroke="#12aaff" stroke-width="2"/>
+    </marker>
+  </defs>
+
+  <!-- build-order spine (bottom to top) -->
+  <line x1="40" y1="548" x2="40" y2="44" stroke="#12aaff" stroke-width="2" marker-end="url(#up)"/>
+
+  <!-- Layer 6: Your product (customer-owned, outlined) -->
+  <rect x="60" y="44" width="624" height="74" rx="10" fill="#eaf4ff" stroke="#12aaff" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="124" y="79" fill="#213147" font-size="17" font-weight="600">Your product</text>
+  <text x="124" y="99" fill="#5b7a99" font-size="12.5">Tokenized equities · in-app trading · earn / yield</text>
+
+  <!-- Layer 5 -->
+  <rect x="60" y="130" width="624" height="74" rx="10" fill="#213147" stroke="#12aaff" stroke-width="1.5"/>
+  <circle cx="94" cy="167" r="14" fill="#12aaff"/><text x="94" y="172" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">5</text>
+  <text x="124" y="163" fill="#ffffff" font-size="17" font-weight="600">Accounts &amp; wallets</text>
+  <text x="124" y="183" fill="#9dcced" font-size="12.5">ZeroDev smart accounts · gas sponsorship · session keys</text>
+
+  <!-- Layer 4 -->
+  <rect x="60" y="216" width="624" height="74" rx="10" fill="#213147" stroke="#12aaff" stroke-width="1.5"/>
+  <circle cx="94" cy="253" r="14" fill="#12aaff"/><text x="94" y="258" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">4</text>
+  <text x="124" y="249" fill="#ffffff" font-size="17" font-weight="600">Interoperability &amp; liquidity</text>
+  <text x="124" y="269" fill="#9dcced" font-size="12.5">Bridging · withdrawal finality · stablecoin liquidity</text>
+
+  <!-- Layer 3 -->
+  <rect x="60" y="302" width="624" height="74" rx="10" fill="#213147" stroke="#12aaff" stroke-width="1.5"/>
+  <circle cx="94" cy="339" r="14" fill="#12aaff"/><text x="94" y="344" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">3</text>
+  <text x="124" y="335" fill="#ffffff" font-size="17" font-weight="600">Compliance &amp; controls</text>
+  <text x="124" y="355" fill="#9dcced" font-size="12.5">Sanctions screening · KYC / permissioning · reporting</text>
+
+  <!-- Layer 2 -->
+  <rect x="60" y="388" width="624" height="74" rx="10" fill="#213147" stroke="#12aaff" stroke-width="1.5"/>
+  <circle cx="94" cy="425" r="14" fill="#12aaff"/><text x="94" y="430" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">2</text>
+  <text x="124" y="421" fill="#ffffff" font-size="17" font-weight="600">Key management &amp; signing</text>
+  <text x="124" y="441" fill="#9dcced" font-size="12.5">Security council · validators · DAC · KMS / HSM</text>
+
+  <!-- Layer 1 -->
+  <rect x="60" y="474" width="624" height="74" rx="10" fill="#213147" stroke="#12aaff" stroke-width="1.5"/>
+  <circle cx="94" cy="511" r="14" fill="#12aaff"/><text x="94" y="516" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">1</text>
+  <text x="124" y="507" fill="#ffffff" font-size="17" font-weight="600">Chain foundation</text>
+  <text x="124" y="527" fill="#9dcced" font-size="12.5">Dedicated Arbitrum chain · AnyTrust or Rollup</text>
+
+  <!-- settlement note -->
+  <text x="372" y="572" fill="#213147" font-size="12.5" text-anchor="middle" font-style="italic">Settles to Ethereum</text>
+
+  <!-- Cross-cutting rail -->
+  <rect x="712" y="44" width="348" height="504" rx="10" fill="#f4f9ff" stroke="#12aaff" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="736" y="86" fill="#213147" font-size="16" font-weight="700">Cross-cutting</text>
+  <text x="736" y="107" fill="#5b7a99" font-size="12.5">applies at every layer</text>
+
+  <text x="736" y="200" fill="#213147" font-size="15" font-weight="600">Operations &amp; ownership</text>
+  <text x="736" y="221" fill="#5b7a99" font-size="12.5">24/7 SLA · monitoring · upgrades</text>
+
+  <text x="736" y="300" fill="#213147" font-size="15" font-weight="600">Cost &amp; economics</text>
+  <text x="736" y="321" fill="#5b7a99" font-size="12.5">gas token · fee capture</text>
+</svg>

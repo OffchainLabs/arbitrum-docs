@@ -233,8 +233,8 @@ const config = {
             position: 'right',
             items: [
               {
-                label: 'Payments',
-                to: '/solutions/payments',
+                label: 'Financial Institutions',
+                to: '/solutions/financial-institutions',
               },
             ],
           },

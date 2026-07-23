@@ -1790,17 +1790,17 @@ const sidebars = {
       items: [
         {
           type: 'category',
-          label: 'Payments',
+          label: 'Financial Institutions',
           collapsed: false,
           link: {
             type: 'doc',
-            id: 'solutions/payments',
+            id: 'solutions/financial-institutions',
           },
           items: [
             {
               type: 'doc',
-              id: 'solutions/payments/prove-your-first-settlement',
-              label: 'Testnet settlement walkthrough',
+              id: 'solutions/financial-institutions/prove-your-first-compliant-chain',
+              label: 'Testnet walkthrough',
             },
           ],
         },
