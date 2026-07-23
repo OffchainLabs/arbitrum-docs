@@ -40,7 +40,7 @@ Once metrics are enabled, Nitro exposes a Prometheus-compatible endpoint at:
 http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus
 ```
 
-`pprof` runs as a separate server at `/debug/pprof/` for CPU and memory profiling, enabled with --pprof and configured via --pprof-cfg.addr / --pprof-cfg.port (default 127.0.0.1:6071). It is not served on the metrics port.
+`pprof` runs as a separate server at `/debug/pprof/` for CPU and memory profiling, enabled with `--pprof` and configured via `--pprof-cfg.addr` / `--pprof-cfg.port` (default 127.0.0.1:6071). It is not served on the metrics port.
 
 ## Key metrics to monitor
 

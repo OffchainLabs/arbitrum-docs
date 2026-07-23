@@ -10,7 +10,7 @@ sme: 'gzeoneth'
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
-Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, how to tune validators, and how to monitor node health is essential for stable operation.
+Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, how to tune <a data-quicklook-from="validator">validators</a>, and how to monitor node health is essential for stable operation.
 
 ## Memory allocators in Nitro
 
@@ -31,7 +31,7 @@ The Go runtime manages its own heap for all pure-Go allocations. Key consumers i
 
 - **Dirty trie cache** (`trie-dirty-cache`): Modified state trie nodes held in memory before being flushed to disk. Defaults to 1024 MB and is one of the largest bounded caches on the Go heap.
 - **Contract code cache**: An LRU cache of contract bytecode, hardcoded at 256 MB. Isn't configurable.
-- **Activated WASM cache**: Compiled Stylus WASM modules cached on the Go heap, hardcoded at 64 MB.
+- **Activated <a data-quicklook-from="wasm">WASM</a> cache**: Compiled Stylus WASM modules cached on the Go heap, hardcoded at 64 MB.
 - **fastcache index maps**: Although fastcache stores its data via `mmap`, each instance maintains a Go-side index (bucket maps of `uint64` to `uint64`). With two large fastcache instances (trie-clean and snapshot), this index metadata can consume hundreds of MB on the Go heap.
 - **Snapshot diff layers**: Up to 128 diff layers can accumulate, each holding Go maps of modified accounts and storage slots.
 - **Goroutine stacks, block/receipt caches, and GC overhead**: Goroutine stacks, recently accessed blocks/receipts, and Go's own GC metadata collectively add further pressure.
