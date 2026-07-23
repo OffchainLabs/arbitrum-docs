@@ -25,9 +25,23 @@ The Arbitrum chain verification script is currently under active development and
 
 </VanillaAdmonition>
 
-## Arbitrum chain retryables tracker
+## The `arbitrum-monitoring` alerting suite
 
-[Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) are messages sent from a parent chain and executed on the Arbitrum chain. Due to their asynchronous nature (they are executed several minutes after being created), if insufficient funds are provided at the time of creation, they might not automatically redeem (execute) upon arrival at the Arbitrum chain. When this occurs, a manual redemption of the ticket is required. The [Arbitrum chain retryables tracker](https://github.com/OffchainLabs/Orbit-retryable-tracker) is designed to assist in identifying and displaying the status of retryable tickets sent from a parent chain to the Arbitrum chain, and it reports any tickets that have not been automatically redeemed.
+The [`arbitrum-monitoring`](https://github.com/OffchainLabs/arbitrum-monitoring) repository provides three ready-to-run monitoring scripts that watch the critical liveness signals of an Arbitrum chain and can send alerts to Slack, with more monitors under active development. All three monitors read your chain's parameters (RPC endpoints and core contract addresses) from a shared `config.json` file, and can be run once (for example, on a schedule) or continuously.
+
+### Retryable monitor
+
+[Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) are messages sent from a parent chain and executed on the Arbitrum chain. Due to their asynchronous nature (they are executed several minutes after being created), if insufficient funds are provided at the time of creation, they might not automatically redeem (execute) upon arrival at the Arbitrum chain. When this occurs, a manual redemption of the ticket is required.
+
+The [retryable monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/retryable-monitor) tracks these tickets from creation through execution: it watches for ticket creation events on the parent chain, then checks each ticket's status on the Arbitrum chain — automatically redeemed, manually redeemed, still pending, or failed. It alerts on tickets that failed to redeem automatically and on tickets approaching their seven-day expiration window, so that no cross-chain message expires unexecuted.
+
+### Batch poster monitor
+
+The [batch poster monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/batch-poster-monitor) tracks batch posting activity and data availability. It alerts when no batches have been posted within the chain's expected time bounds while user transactions are pending, when the batch poster account balance falls below an estimate of about three days of posting costs, and when a backlog of unposted blocks accumulates. For [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chains, it also detects when the chain has fallen back to posting full calldata on the parent chain instead of DACerts, which indicates a problem with the Data Availability Committee.
+
+### Assertion monitor
+
+The [assertion monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/assertion-monitor) tracks the creation and confirmation of <a data-quicklook-from="assertion">assertions</a> on the chain's Rollup contract, supporting both [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) and legacy (pre-BoLD) chains. It alerts when no assertions are being created despite chain activity, when assertions remain unconfirmed after the challenge period has elapsed, and on validator-related risks such as low validator participation, a base stake below the expected threshold on BoLD chains, or a disabled validator allowlist on legacy chains.
 
 ## Data Availability Server (DAS) health checks
 
@@ -148,9 +162,3 @@ The following are the canonical hardware specifications used by Offchain Labs fo
 | RPC       | 4 cores      | 32 GB | —           | —                  |
 
 Fast, locally attached NVMe SSD storage is strongly recommended, especially for the sequencer and archive nodes, because disk latency directly affects performance as read volume grows. See [State growth](/launch-arbitrum-chain/operate/state-growth.mdx) for more on storage sizing over time.
-
-<VanillaAdmonition type="info" title="Additional resources">
-
-Another good resource for monitoring your chain is the tooling provided in the GitHub repository [`arbitrum-monitoring`](https://github.com/OffchainLabs/arbitrum-monitoring).
-
-</VanillaAdmonition>
