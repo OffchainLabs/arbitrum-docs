@@ -10,7 +10,7 @@ sme: 'gzeoneth'
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
-Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, how to tune <a data-quicklook-from="validator">validators</a>, and how to monitor node health is essential for stable operation.
+Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, and how to tune <a data-quicklook-from="validator">validators</a> is essential for stable operation.
 
 ## Memory allocators in Nitro
 
@@ -40,7 +40,7 @@ Go reports its total memory usage via `runtime.MemStats.Sys`, which includes the
 
 ### CGO allocations (Pebble and Stylus)
 
-Nitro's on-disk database, <a data-quicklook-from="pebble">Pebble</a>, allocates its block cache and memtables through CGO `calloc()` calls (see `pebble/internal/manual/manual.go` in the source). These allocations go through the C memory allocator and are out of scope for Go's memory tracking.
+Nitro's on-disk database, Pebble, allocates its block cache and memtables through CGO `calloc()` calls (see `pebble/internal/manual/manual.go` in the source). These allocations go through the C memory allocator and are out of scope for Go's memory tracking.
 
 **Pebble block cache** is the largest CGO consumer. It caches frequently read database blocks in memory to avoid disk I/O. Its size is set directly by the `database-cache` configuration parameter.
 
@@ -194,13 +194,15 @@ For the main Nitro node, the Helm chart does not override `GOMAXPROCS`, letting 
 
 ## Tuning recommendations
 
+To learn how to monitor node health and metrics, see [Node monitoring](/run-arbitrum-node/nitro/node-monitoring.mdx).
+
 ### General rules
 
 1. **Set `MALLOC_ARENA_MAX=2`**: This is the single most impactful change for containerized nodes. Without it, glibc can waste gigabytes on arena overhead, causing RSS to drift upward over days. Set this environment variable on every Nitro container.
 
 2. **Start from the formula**: Calculate `GOMEMLIMIT` using the [formula above](#formula) with your actual cache configuration values. Do not set it to the container memory limit.
 
-3. **Monitor RSS, not just Go heap**: Set container memory alerts based on actual RSS (`container_memory_rss` in Prometheus / cAdvisor), not Go-reported memory.
+3. **Monitor RSS, not just Go heap**: Set container memory alerts based on actual RSS (`container_memory_rss` in Prometheus and cAdvisor), not Go-reported memory.
 
 4. **All caches are bounded**: Unlike memory leaks, all non-Go memory in Nitro is bounded by configuration. With `MALLOC_ARENA_MAX` set, if RSS is stable and predictable, the node is behaving correctly. The memory is simply allocated outside Go's visibility.
 
@@ -213,10 +215,8 @@ Use default cache sizes. Calculate `GOMEMLIMIT` from the non-Go budget:
 ```shell
 # Non-Go: 2048 + 1024 + 600 + 400 + 256 + 128 + 300 = 4,756 MB
 # GOMEMLIMIT = 32,768 - 4,756 - 500 safety ≈ 27,512 MB ≈ 27 GB
-
 MALLOC_ARENA_MAX=2 \
 GOMEMLIMIT=27512MiB \
-
 nitro \
   --metrics \
   --metrics-server.addr 0.0.0.0
@@ -229,10 +229,8 @@ Archive nodes benefit from larger caches to reduce disk I/O for historical queri
 ```shell
 # Non-Go: 4096 + 2048 + 1200 + 800 + 256 + 128 + 300 = 8,828 MB
 # GOMEMLIMIT = 131,072 - 8,828 - 500 safety ≈ 121,744 MB ≈ 119 GB
-
-MALLOC_ARENA_MAX=2
-GOMEMLIMIT=121744MiB
-
+MALLOC_ARENA_MAX=2 \
+GOMEMLIMIT=121744MiB \
 nitro \
   --execution.caching.database-cache 4096 \
   --execution.caching.trie-dirty-cache 2048 \
@@ -250,12 +248,13 @@ Validators need less cache but more CPU headroom. Use reduced cache sizes and th
 # Non-Go: 1024 + 512 + 300 + 200 + 256 + 128 + 300 = 2,720 MB
 # GOMEMLIMIT = 16,384 × 0.75 ≈ 12,288 MB
 # Alternatively: 16,384 - 2,720 - 500 = 13,164 MB (use the lower value)
-
-MALLOC_ARENA_MAX=2
-GOMEMLIMIT=12288MiB
-GOMAXPROCS=4
-
+MALLOC_ARENA_MAX=2 \
+GOMEMLIMIT=12288MiB \
+GOMAXPROCS=4 \
 nitro \
+  --execution.caching.database-cache 1024 \
+  --execution.caching.trie-clean-cache 300 \
+  --execution.caching.snapshot-cache 200 \
   --metrics \
   --metrics-server.addr 0.0.0.0
 ```

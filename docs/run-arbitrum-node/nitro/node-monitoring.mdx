@@ -40,7 +40,7 @@ Once metrics are enabled, Nitro exposes a Prometheus-compatible endpoint at:
 http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus
 ```
 
-`pprof` runs as a separate server at `/debug/pprof/` for CPU and memory profiling, enabled with `--pprof` and configured via `--pprof-cfg.addr` / `--pprof-cfg.port` (default 127.0.0.1:6071). It is not served on the metrics port.
+`pprof` runs as a separate server at `/debug/pprof/` for CPU and memory profiling, enabled with `--pprof` and configured via `--pprof-cfg.addr` and `--pprof-cfg.port` (default 127.0.0.1:6071). It is not served on the metrics port.
 
 ## Key metrics to monitor
 
@@ -51,9 +51,9 @@ Group your alerts by concern. Metric names below are Nitro's Prometheus metric n
 | Memory         | `container_memory_rss`            | Actual container RSS. Alert on this, not Go heap — most Nitro memory is invisible to Go.                                         |
 | Sequencer feed | `arb_feed_backlog_messages`       | Messages in the feed backlog. A growing backlog means the node is falling behind the feed.                                       |
 | Sequencing     | `arb_sequencer_backlog`           | Backlog at the <a data-quicklook-from="sequencer">sequencer</a>. Sustained growth signals the sequencer can't keep up with load. |
-| Batch posting  | `arb/batchposter/wallet/eth`      | <a data-quicklook-from="batch-poster">Batch poster</a> wallet balance. Alert before it runs dry, or batches stop posting.        |
-| Batch posting  | `arb/batchposter/suggestedtipcap` | Suggested tip cap the batch poster is paying — tracks parent-chain fee pressure.                                                 |
-| RPC protection | `arb/rpc/limitcheck/failure`      | Increments when an RPC call is rejected by the memory free-limit throttle (HTTP 429).                                            |
+| Batch posting  | `arb_batchposter_wallet_eth`      | <a data-quicklook-from="batch-poster">Batch poster</a> wallet balance. Alert before it runs dry, or batches stop posting.        |
+| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster is paying — tracks parent-chain fee pressure.                                                 |
+| RPC protection | `arb_rpc_limitcheck_failure`      | Increments when an RPC call is rejected by the memory free-limit throttle (HTTP 429).                                            |
 
 <VanillaAdmonition type="tip">Always alert on `container_memory_rss`, not Go heap metrics. Most of Nitro's memory is invisible to Go's runtime — see [Memory allocators in Nitro](/run-arbitrum-node/nitro/node-tuning.mdx#memory-allocators-in-nitro).</VanillaAdmonition>
 
