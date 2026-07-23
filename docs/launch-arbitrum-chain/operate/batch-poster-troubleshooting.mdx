@@ -66,7 +66,7 @@ The exact mempool weight limits depend on the parent chain node's configuration,
 #### `ErrExceedsMaxMempoolSize` → "error posting batch"
 
 - [DEBUG→WARN→ERROR over 5 min]—The next batch's nonce would exceed `unconfirmed nonce + max-mempool-transactions`, so it's held back.
-- [CAUSE]—L1 is confirming the poster's transactions slowly, and the in-flight window (default: 18) is filled.
+- [CAUSE]—<a data-quicklook-from="L1">L1</a> is confirming the poster's transactions slowly, and the in-flight window (default: 18) is filled.
 - [MEANING]—Normal back-pressure short-term; sustained means posts are stuck.
 - [ACTION]—If persistent, check L1 confirmation/fees, consider raising `max-mempool-transactions`.
 
@@ -78,7 +78,7 @@ The exact mempool weight limits depend on the parent chain node's configuration,
 
 #### `a large batch posting backlog exists`
 
-- [INFO/WARN/ERROR]—Unposted messages are piling up; `INFO`: is recently hit L1 bounds, `WARN` at backlog > 10, `ERROR` at > 30.
+- [INFO/WARN/ERROR]—Unposted messages are piling up; `INFO` if it recently hit L1 bounds, `WARN` at backlog > 10, `ERROR` at > 30.
 - [CAUSE]—Posts not keeping up (fees, mempool cap, L1 congestion, or the poster is behind).
 - [ACTION]—Investigate why posting is throttled; `ERROR` is an alerting threshold.
 
@@ -160,14 +160,14 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 #### `Transaction from batch poster reverted`
 
 - [WARN→ERROR]—A batch posting transaction got a failed receipt on L1.
-- [ERROR (not warn)]—When using persistent storage, it sets `batchReverted` and **halts** all further posting.
+- [ERROR (not WARN)]—When using persistent storage, it sets `batchReverted` and **halts** all further posting.
 - [CAUSE]—Contract rejected the batch (e.g., message-count mismatch, bad sequence number, gas/blob issue).
-- [ACTION]—Investigate `txErr`; restart clears the halt flag; a count mismatch after force-inclusion may need `allow-posting-first-batch-when-sequencer-message-count-mismatch`.
+- [ACTION]—Investigate `txErr`; restart clears the halt flag; a count mismatch after <a data-quicklook-from="forceinclusion">force-inclusion</a> may need `allow-posting-first-batch-when-sequencer-message-count-mismatch`.
 
 #### `Error checking batch reverts`
 
 - [DEBUG/WARN]—Revert check failed.
-- [DEBUG]—If the error contains "not found" (a benign parent-node inconsistency where one node served a header, another lacks), else WARN.
+- [DEBUG]—If the error contains "not found" (a benign parent-node inconsistency where one node served a header, another lacks it), else WARN.
 - [ACTION]—Ignore the DEBUG case; investigate persistent WARNs.
 
 ## Nonce/sync
@@ -186,7 +186,7 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 #### `Failed to get latest nonce`
 
-- [WARN]—Couldn't fetch the unconfirmed nonce this loop; The iteration backs off 10s (`minWait`).
+- [WARN]—Couldn't fetch the unconfirmed nonce this loop; the iteration backs off 10s (`minWait`).
 - [ACTION]—Transient RPC.
 
 #### `failed to update tx poster balance` / `failed to update tx poster nonce`
@@ -230,7 +230,7 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 #### `Disabling batch posting due to batch being within reorg resistance margin from layer 1 minimum block or timestamp bounds`
 
 - [ERROR]—The batch's first message is within `reorg-resistance-margin` of the L1 minimum bound, so posting is refused this round.
-- [CAUSE]—The margin guard (default 10m) protects against reorgs near the lower bound.
+- [CAUSE]—The margin guard (default 10m) protects against <a data-quicklook-from="reorg">reorgs</a> near the lower bound.
 - [ACTION]—Expected safety behavior; set margin to `0` only if you accept the reorg risk.
 
 #### `disabling L1 bound as batch posting message is close to the maximum delay`
@@ -247,7 +247,7 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 The L1 node couldn't give state at the finalized bound block, so it falls back to the latest block—usually transient.
 
-#### `unknown L1 block bound config value; falling back on using finalized`.
+#### `unknown L1 block bound config value; falling back on using finalized`
 
 - [ERROR]—Bound resolution issues; the latter means a bad `l1-block-bound` config value.
 - [ACTION]—Fix the config value for the `ERROR`.

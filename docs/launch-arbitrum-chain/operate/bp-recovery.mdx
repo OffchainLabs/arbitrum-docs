@@ -12,7 +12,7 @@ This section covers how the batch poster recovers state after a crash, restart, 
 
 ## The batch poster is mostly stateless—its checkpoint lives on L1
 
-The batch poster does **not** primarily checkpoint its position in its own database. On every posting attempt it reconstructs where to resume from authoritative sources: the **SequencerInbox contract on L1** plus the local **inbox tracker DB**. Its own data-poster DB holds only the **in-flight transaction queue** (transactions sent but not yet confirmed), for replace-by-fee (RBF). This is why recovery is robust: lose the data-poster DB and the poster still knows exactly where to resume.
+The batch poster does **not** primarily checkpoint its position in its own database. On every posting attempt it reconstructs where to resume from authoritative sources: the **SequencerInbox contract on <a data-quicklook-from="L1">L1</a>** plus the local **inbox tracker DB**. Its own data-poster DB holds only the **in-flight transaction queue** (transactions sent but not yet confirmed), for replace-by-fee (RBF). This is why recovery is robust: lose the data-poster DB and the poster still knows exactly where to resume.
 
 ## Recovery state machine flow
 
@@ -71,9 +71,9 @@ func (s *Storage) PruneAll(ctx context.Context) error {
 ## Recovery mechanism 2: revert → halt, and force-inclusion recovery
 
 **Halt on revert**.
-`pollForReverts` watches L1; `checkReverts` finds a failed receipt from the poster's sender and returns `shouldHalt := ~UsingNoOpStorage()`. On a confirmed revert it sets `b.batchReverted.Store(true)` and `MaybePostSequencerBatch` then refuses to post: `"batch was reverted, not posting any more batches"`. This is deliberate—a revert means something is wrong; the poster stops rather than burn funds. Recovery requires operator investigation and a restart (which clears the in-memory `batchReverted` flag).
+`pollForReverts` watches L1; `checkReverts` finds a failed receipt from the poster's sender and returns `shouldHalt := !UsingNoOpStorage()`. On a confirmed revert it sets `b.batchReverted.Store(true)`; `MaybePostSequencerBatch` then refuses to post: `"batch was reverted, not posting any more batches"`. This is deliberate—a revert means something is wrong; the poster stops rather than burn funds. Recovery requires operator investigation and a restart (which clears the in-memory `batchReverted` flag).
 
-**Force-inclusion mismatch**
+**<a data-quicklook-from="forceinclusion">Force-inclusion</a> mismatch**
 `dangerous.allow-posting-first-batch-when-sequencer-message-count-mismatch` handles the case
 where the poster's DB message count drifts from the chain's `sequencerReportedSubMessageCount`. The scenario: poster down >24h, someone force-includes a delayed message via the parent contract (which doesn't bump `sequencerReportedSubMessageCount`), so on restart the inbox reader's count diverges. The fix:
 
