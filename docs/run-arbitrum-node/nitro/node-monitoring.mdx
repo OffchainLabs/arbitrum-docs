@@ -52,7 +52,7 @@ Group your alerts by concern. Metric names below are Nitro's Prometheus metric n
 | Sequencer feed | `arb_feed_backlog_messages`       | Messages in the feed backlog. A growing backlog means the node is falling behind the feed.                                       |
 | Sequencing     | `arb_sequencer_backlog`           | Backlog at the <a data-quicklook-from="sequencer">sequencer</a>. Sustained growth signals the sequencer can't keep up with load. |
 | Batch posting  | `arb_batchposter_wallet_eth`      | <a data-quicklook-from="batch-poster">Batch poster</a> wallet balance. Alert before it runs dry, or batches stop posting.        |
-| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster is paying — tracks parent-chain fee pressure.                                                 |
+| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster is paying — tracks <a data-quicklook-from="parent-chain">parent-chain</a> fee pressure.       |
 | RPC protection | `arb_rpc_limitcheck_failure`      | Increments when an RPC call is rejected by the memory free-limit throttle (HTTP 429).                                            |
 
 <VanillaAdmonition type="tip">Always alert on `container_memory_rss`, not Go heap metrics. Most of Nitro's memory is invisible to Go's runtime — see [Memory allocators in Nitro](/run-arbitrum-node/nitro/node-tuning.mdx#memory-allocators-in-nitro).</VanillaAdmonition>

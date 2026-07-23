@@ -10,18 +10,24 @@ sme: 'gzeoneth'
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
-Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, and how to tune <a data-quicklook-from="validator">validators</a> is essential for stable operation.
+Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators:
+
+- the Go garbage-collected heap
+- CGO (Go's mechanism for calling C code) allocations via `calloc`
+- and direct `mmap` system calls, each with its own accounting.
+
+Understanding where memory lives, which configuration knobs control it, and how to tune <a data-quicklook-from="validator">validators</a> is essential for stable operation.
 
 ## Memory allocators in Nitro
 
 Nitro's total resident memory (RSS) is the sum of four distinct categories:
 
-| Allocator               | What uses it                                                                           | Visible in Go `memstats`? | Controlled by                                 |
-| ----------------------- | -------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------- |
-| **Go heap**             | State trie (dirty), transaction processing, goroutine stacks, general application data | Yes                       | `GOMEMLIMIT`, `trie-dirty-cache`              |
-| **calloc**              | Pebble block cache, Pebble memtables, Stylus WASM cache                                | No                        | `database-cache`, `stylus-lru-cache-capacity` |
-| **mmap**                | fastcache (trie-clean and snapshot caches)                                             | No                        | `trie-clean-cache`, `snapshot-cache`          |
-| **glibc malloc arenas** | Per-thread arena overhead for CGO allocations                                          | No                        | `MALLOC_ARENA_MAX`                            |
+| Allocator               | What uses it                                                                                | Visible in Go `memstats`? | Controlled by                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------- |
+| **Go heap**             | State trie (dirty), transaction processing, goroutine stacks, general application data      | Yes                       | `GOMEMLIMIT`, `trie-dirty-cache`              |
+| **calloc**              | Pebble block cache, Pebble memtables, <a data-quicklook-from="stylus">Stylus</a> WASM cache | No                        | `database-cache`, `stylus-lru-cache-capacity` |
+| **mmap**                | fastcache (trie-clean and snapshot caches)                                                  | No                        | `trie-clean-cache`, `snapshot-cache`          |
+| **glibc malloc arenas** | Per-thread arena overhead for CGO allocations                                               | No                        | `MALLOC_ARENA_MAX`                            |
 
 Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO and `mmap` allocations are invisible to Go's runtime. They don't appear in `runtime.MemStats` or standard Go memory profiles, but they still consume container memory and count toward your memory limit.
 
@@ -30,7 +36,7 @@ Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO 
 The Go runtime manages its own heap for all pure-Go allocations. Key consumers include:
 
 - **Dirty trie cache** (`trie-dirty-cache`): Modified state trie nodes held in memory before being flushed to disk. Defaults to 1024 MB and is one of the largest bounded caches on the Go heap.
-- **Contract code cache**: An LRU cache of contract bytecode, hardcoded at 256 MB. Isn't configurable.
+- **Contract code cache**: An LRU cache of contract bytecode, hardcoded at 256 MB and isn't configurable.
 - **Activated <a data-quicklook-from="wasm">WASM</a> cache**: Compiled Stylus WASM modules cached on the Go heap, hardcoded at 64 MB.
 - **fastcache index maps**: Although fastcache stores its data via `mmap`, each instance maintains a Go-side index (bucket maps of `uint64` to `uint64`). With two large fastcache instances (trie-clean and snapshot), this index metadata can consume hundreds of MB on the Go heap.
 - **Snapshot diff layers**: Up to 128 diff layers can accumulate, each holding Go maps of modified accounts and storage slots.
@@ -57,14 +63,14 @@ Two caches use [fastcache](https://github.com/VictoriaMetrics/fastcache), a libr
 
 Because fastcache uses raw `mmap`, this memory doesn't appear in Go's `memstats` or standard profiling tools. You can only see it by inspecting `/proc/<pid>/smaps` at the OS level. Each fastcache instance allocates memory in 64 MB chunks, making these regions identifiable when analyzing process memory maps.
 
-### glibc malloc arenas
+### glibc `malloc` arenas
 
 When Nitro makes CGO calls (for Pebble, Stylus, etc.), the resulting C-side allocations go through the system's default C memory allocator: glibc `malloc`. Unlike Go's garbage-collected heap, `malloc` manages memory by requesting large regions from the OS and subdividing them to satisfy individual allocation requests. Freed memory is returned to the allocator's internal free lists rather than immediately back to the OS, so the process's RSS can remain elevated even after allocations are freed.
 
-To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which are independent memory pools, each with its own lock. When a thread allocates memory, it picks an arena, reducing contention compared to a single global lock. By default, glibc creates up to `8 x CPU_count` arenas, each reserving a 64 MB region. The worst-case overhead for arenas is:
+To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which are independent memory pools, each with its own lock. When a thread allocates memory, it picks an arena, reducing contention compared to a single global lock. By default, glibc creates up to `8 × CPU_count` arenas, each reserving a 64 MB region. The worst-case overhead for arenas is:
 
 ```shell
-Arena overhead = 8 x CPU_count x 64 MB
+Arena overhead = 8 × CPU_count × 64 MB
 ```
 
 In containerized environments, glibc detects the underlying host CPU count (not the container's CPU requests), which often results in far more arenas than needed. As the process runs and more threads make CGO calls, glibc creates and retains new arenas, causing RSS to drift upward over days or weeks even though no individual allocation is leaking.
@@ -87,7 +93,7 @@ Nitro spawns native threads for CGO operations (Pebble, compression libraries) a
 
 These are the flags and environment variables that bound Nitro's memory. All cache flags live under `execution.caching`.
 
-| Flag / variable                                 | Default         | Allocator          | What it controls                                                                                                         |
+| Flag or variable                                | Default         | Allocator          | What it controls                                                                                                         |
 | ----------------------------------------------- | --------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | `--execution.caching.database-cache`            | 2048 MB         | CGO (`calloc`)     | Pebble block cache. Also sets memtable sizes (`database-cache / 2`).                                                     |
 | `--execution.caching.trie-dirty-cache`          | 1024 MB         | Go heap            | Modified trie nodes awaiting flush to disk.                                                                              |
