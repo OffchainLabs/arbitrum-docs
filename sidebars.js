@@ -427,6 +427,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/custom-genesis-state',
+              label: `Custom genesis state`,
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/deploy/configure-node',
               label: `Node configuration`,
             },
