@@ -1,0 +1,125 @@
+---
+title: Sequencer architecture and transaction flow
+description: 'A deep dive into how the Sequencer processes transactions end-to-end: the transaction queue, ordering, block creation timing, and the sequencer feed.'
+author: Gowtham118
+sme: Jason Wan
+user_story: As a chain operator or integration partner, I need to understand how the Sequencer processes transactions end-to-end.
+content_type: concept
+---
+
+This deep dive follows a <a data-quicklook-from="transaction">transaction</a> through a single <a data-quicklook-from="sequencer">Sequencer</a> instance: how it arrives, how it waits in the transaction queue, how blocks get created, and how the result reaches the rest of the network. It is aimed at chain operators and integration partners who need to reason about queueing, timeouts, and block timing.
+
+Two companion pages cover the surrounding context, and this page assumes you have read them:
+
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer.mdx) explains the Sequencer's role, the real-time feed, batch posting, and finality.
+- [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx) explains the different ways to submit a transaction, including bypassing the Sequencer entirely.
+
+:::note Scope of this page
+
+This page describes the internals of a single Sequencer instance. For the behavior of <a data-quicklook-from="arbitrum-one">Arbitrum One</a>'s public sequencer endpoint (latency expectations, retries, and fallback patterns), see [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx). For running multiple redundant Sequencers with Redis-based coordination, see [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx) and [How to run a Sequencer Coordinator Manager](/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.mdx).
+
+:::
+
+All code references below point to [Nitro `v3.11.0`](https://github.com/OffchainLabs/nitro/tree/a618155919315241665356fe60f3cd00d66d5e46).
+
+## Transaction flow at a glance
+
+<ImageZoom src="/img/haw-sequencer-transaction-flow.svg" alt="Transaction flow from a user through an RPC node into the Sequencer's bounded transaction queue, FIFO into block creation, then out to the sequencer feed and, via the batch poster, to the sequencer inbox on the parent chain where validators verify it" className="img-800px" />
+
+1. A user submits a signed transaction to any RPC node on the chain.
+2. The RPC node does not execute or pool the transaction; it forwards it to the Sequencer.
+3. The Sequencer places the transaction in a bounded, in-memory queue.
+4. The block creation loop drains the queue in FIFO order and executes transactions one at a time to build a block.
+5. The new block is published on the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a> for real-time consumers, and the <a data-quicklook-from="batch-poster">batch poster</a> later posts the compressed sequence to the <a data-quicklook-from="sequencer-inbox">sequencer inbox</a> on the <a data-quicklook-from="parent-chain">parent chain</a>.
+6. <a data-quicklook-from="validator">Validators</a> re-execute the sequence posted on the parent chain to verify and assert the chain's state.
+
+:::note Validators do not accept user transactions
+
+Validators only read the ordered transactions from the parent chain and re-execute them locally to compute the chain's state. They have no transaction queue and no way to accept, order, or process a user transaction directly. The only ingestion point for user transactions is the Sequencer, and RPC nodes exist to forward transactions to it. (The one exception, submitting through the <a data-quicklook-from="delayed-inbox">delayed inbox</a> on the parent chain, is covered in [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx).)
+
+:::
+
+## How transactions reach the Sequencer
+
+Only one node on the chain actively sequences transactions at any given time (in a high-availability setup, several sequencer-capable nodes may run behind a coordinator, which picks the active one; see the scope note above). Every other node runs a <a data-quicklook-from="forwarder">forwarder</a>: when it receives a transaction over RPC, it immediately relays the raw transaction to the Sequencer's endpoint instead of processing it locally ([`forwarder.go`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/forwarder.go#L126)). The target is configured with `--execution.forwarding-target`; for known chains, Nitro fills it in automatically from the chain's configuration when the node is not a sequencer. A non-sequencer node with no forwarding target (explicitly set to `"null"`) simply drops incoming transactions.
+
+Unlike Ethereum, there is **no traditional mempool**. Transactions are not gossiped between nodes, do not sit in a public pending pool, and are not reordered by gas price. The Sequencer receives transactions directly into an in-memory queue and processes them on a first-come, first-served basis.
+
+First-come, first-served is the default ordering policy, and the FIFO behavior described on this page assumes it. Chains that enable <a data-quicklook-from="timeboost">Timeboost</a> modify the ordering: transactions from the current <a data-quicklook-from="express-lane-controller">express lane controller</a> are sequenced as soon as they arrive, while every other transaction has its arrival timestamp delayed (by default, 200 milliseconds) before taking its place in the queue. To learn how the <a data-quicklook-from="express-lane">express lane</a> and its auction work, see [Timeboost's gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+
+## The transaction queue
+
+The heart of the intake path is a bounded, in-memory queue, sized by `--execution.sequencer.queue-size` (default `1024`) ([`sequencer.go#L461`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L461)). Its behavior has three distinct zones:
+
+- **Inside the queue**: transactions are ordered strictly **FIFO**. Whatever enters the queue first gets sequenced first.
+- **At the queue boundary, when the queue is full**: a transaction has "reached the Sequencer but is not yet queued." The Sequencer holds the submission open and waits for a slot to free up ([`sequencer.go#L731-L735`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L731-L735)). Ordering among these waiting transactions is **not guaranteed**: when a slot frees up, which waiting transaction claims it depends on runtime scheduling, not arrival order.
+- **Rejected**: if a transaction cannot be queued and sequenced before its deadline (see below), it is rejected and never executes.
+
+### Queue timeout and `context deadline exceeded`
+
+Every transaction receives a deadline when it arrives, set by `--execution.sequencer.queue-timeout` (default `12s`) ([`sequencer.go#L557-L560`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L557-L560)). The deadline is enforced at two points:
+
+1. **While waiting to enter a full queue**: if no slot frees up before the deadline, the submission fails immediately.
+2. **Again at dequeue time**: when the block creation loop pops a transaction from the queue, it first checks whether the transaction's deadline already expired while it sat in the queue, and rejects it if so ([`sequencer.go#L1360-L1364`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L1360-L1364)).
+
+In both cases, the caller receives an error containing the string `context deadline exceeded`. This error means exactly one thing: the chain could not sequence the transaction within `queue-timeout`, and the transaction **was not executed**. For a user or integration partner, the correct response is:
+
+- Treat it as backpressure, not as a permanent failure. It is safe to resubmit the same signed transaction (same nonce) with a backoff.
+- Make sure your client-side HTTP timeout is longer than the chain's `queue-timeout`; otherwise your client gives up before the Sequencer reports the outcome.
+- If you see this error persistently rather than in bursts, the chain's intake is saturated: see [Tuning guidance for chain operators](#tuning-guidance-for-chain-operators) below.
+
+## Block creation and timing
+
+The Sequencer produces blocks from a single loop: attempt to create a block; if a block was produced, wait until `max-block-speed` has elapsed since the attempt started before trying again; if not, retry immediately ([`sequencer.go#L1773-L1781`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L1773-L1781)).
+
+`--execution.sequencer.max-block-speed` (default `250ms`) is therefore the **minimum delay between blocks**, which caps block production at four blocks per second by default. It is not a block time:
+
+- **When the queue is empty**, the block creation routine simply blocks waiting for the next transaction to arrive ([`sequencer.go#L1314-L1341`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L1314-L1341)). No transactions means no blocks: the Sequencer does not produce empty blocks, and `createBlock` reports that no block was made unless at least one transaction was successfully sequenced.
+- **When blocks are heavy**, the actual interval stretches beyond `max-block-speed`, because execution itself takes time and the timer only sets a floor.
+
+In short, **there is no fixed block time on the <a data-quicklook-from="child-chain">child chain</a>**. Block timestamps and block numbers advance with demand, which is why time-based logic in contracts should never assume a constant block interval.
+
+Within one block creation pass, the Sequencer pulls the first transaction (waiting for it if necessary), then keeps draining additional queued transactions for a short window (`--execution.sequencer.read-from-tx-queue-timeout`, default `10ms`) before sealing the set into a block. Transactions that don't fit in the block's gas limit are pushed to an internal retry queue and get first priority in the next block.
+
+### Execution is strictly sequential
+
+When building a block, transactions are executed **one at a time** through the <a data-quicklook-from="state-transition-function">state transition function</a> ([`block_processor.go#L372-L407`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbos/block_processor.go#L372-L407)), under a lock that ensures only one block is ever being built at once. There is no parallel execution: total throughput is bounded by single-threaded EVM execution speed and the per-block gas limit, not by how fast transactions can be queued.
+
+## What happens during a surge
+
+Suppose 100,000 transactions arrive at effectively the same moment, with default settings:
+
+1. The first `1024` transactions occupy the queue. The rest wait at the queue boundary, each holding its own 12-second deadline, with no ordering guarantee among them.
+2. Every `250ms` or more, the Sequencer drains a batch of queued transactions into a block, executing them sequentially. Freed slots are claimed by waiting transactions.
+3. Any transaction that cannot make it through the queue and into a block within its 12-second deadline fails with `context deadline exceeded`.
+
+The queue is deliberately a short buffer, not a mempool: with default settings it never holds more than about 12 seconds' worth of work. Everything beyond what the chain can execute in that window is shed back to the submitter, who is expected to retry. This keeps latency bounded and predictable for the transactions that do get in, at the cost of pushing burst-absorption out to the edges (RPC clients, or an operator-run relayer, described below).
+
+## From block to the rest of the network
+
+As soon as a block is created, the transaction streamer hands the new message to the broadcaster, which publishes it over WebSocket on the sequencer feed ([`transaction_streamer.go#L1307`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbnode/transaction_streamer.go#L1307)). Full nodes and [feed relays](/run-arbitrum-node/run-feed-relay.mdx) consume the feed to give sub-second <a data-quicklook-from="soft-confirmation">soft confirmations</a>; see [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
+
+Independently, the batch poster compresses the sequenced transactions and posts them to the sequencer inbox on the parent chain, at which point they inherit the parent chain's finality. Validators then re-execute the posted sequence and assert the resulting state. [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer.mdx#sequencing-and-broadcasting) covers the feed, batch posting, and the finality trade-offs in detail, and [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx) covers validation.
+
+## Tuning guidance for chain operators
+
+For chains with different traffic profiles than Arbitrum One, the queue parameters are the primary tuning surface:
+
+- `--execution.sequencer.queue-size` (default `1024`): raising it lets the Sequencer absorb larger instantaneous bursts without making submitters wait at the queue boundary. The limit to keep in mind: the queue-timeout deadline keeps counting while a transaction sits in the queue, so a queue deeper than what the chain can execute within `queue-timeout` only moves rejections from enqueue time to dequeue time. Size the queue to roughly what your chain can drain in one timeout window.
+- `--execution.sequencer.queue-timeout` (default `12s`): raising it lets transactions ride out longer spikes at the cost of slower failure feedback and longer-held connections; lowering it makes overload fail fast. Whatever you choose, communicate it to integration partners so their client timeouts and retry logic stay consistent with it.
+- `--execution.sequencer.max-block-speed` (default `250ms`): lowering it raises the block production cap and reduces best-case latency; it does not increase execution throughput, which stays bounded by sequential execution and the per-block gas limit.
+
+### Operator-run relayer cache
+
+If your workload has sustained bursts that no reasonable `queue-size`/`queue-timeout` setting absorbs (for example, game events or airdrops that generate far more than one timeout window's worth of transactions at once), the standard pattern is a **relayer cache in front of the Sequencer**: an operator-run service that accepts transactions immediately, holds them durably, and submits them to the Sequencer at the rate the queue drains, retrying on `context deadline exceeded`.
+
+This pattern complements rather than replaces queue tuning: `queue-size` and `queue-timeout` define how much burst the Sequencer itself absorbs, while the relayer holds everything beyond that and controls its own submission order and retry policy. The trade-off is that transactions waiting in the relayer have no onchain ordering guarantee until they actually enter the Sequencer's queue, so the relayer becomes a trusted component of your chain's ingestion path.
+
+## Related resources
+
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer.mdx): feed, batch posting, finality, and the delayed inbox escape hatch
+- [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx): all submission pathways, including bypassing the Sequencer
+- [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx): public endpoint behavior, retries, and fallback patterns
+- [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx): redundant Sequencers with Redis-based coordination
+- [How to run a Sequencer Coordinator Manager](/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.mdx): managing the sequencer priority list
+- [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx) and [How to run a feed relay](/run-arbitrum-node/run-feed-relay.mdx)
