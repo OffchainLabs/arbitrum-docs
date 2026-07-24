@@ -35,7 +35,7 @@ All code references below point to [Nitro `v3.11.0`](https://github.com/Offchain
 
 :::note Validators do not accept user transactions
 
-Validators only read the transaction sequence from the parent chain and verify the resulting state. They have no transaction queue and no way to accept, order, or process a user transaction directly. The only ingestion point for user transactions is the Sequencer, and RPC nodes exist to forward transactions to it. (The one exception, submitting through the <a data-quicklook-from="delayed-inbox">delayed inbox</a> on the parent chain, is covered in [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx).)
+Validators only read the ordered transactions from the parent chain and re-execute them locally to compute the chain's state. They have no transaction queue and no way to accept, order, or process a user transaction directly. The only ingestion point for user transactions is the Sequencer, and RPC nodes exist to forward transactions to it. (The one exception, submitting through the <a data-quicklook-from="delayed-inbox">delayed inbox</a> on the parent chain, is covered in [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx).)
 
 :::
 
