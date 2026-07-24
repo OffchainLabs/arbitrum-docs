@@ -33,16 +33,16 @@ const DATA_FILE = 'scripts/data/nitro-cli-flags.json';
  */
 const NAMESPACE_LINKS: Record<string, { label: string; href: string }> = {
   'execution': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node tuning',
+    href: '/run-arbitrum-node/nitro/node-tuning',
   },
   'node': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node tuning',
+    href: '/run-arbitrum-node/nitro/node-tuning',
   },
   'validation': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node tuning',
+    href: '/run-arbitrum-node/nitro/node-tuning',
   },
   'init': {
     label: 'Docker and CLI binaries',
@@ -77,24 +77,24 @@ const NAMESPACE_LINKS: Record<string, { label: string; href: string }> = {
     href: '/run-arbitrum-node/nitro/configuration-system',
   },
   'metrics': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node monitoring',
+    href: '/run-arbitrum-node/nitro/node-monitoring',
   },
   'metrics-server': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node monitoring',
+    href: '/run-arbitrum-node/nitro/node-monitoring',
   },
   'pprof': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node monitoring',
+    href: '/run-arbitrum-node/nitro/node-monitoring',
   },
   'pprof-cfg': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node monitoring',
+    href: '/run-arbitrum-node/nitro/node-monitoring',
   },
   'file-logging': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    label: 'Node tuning',
+    href: '/run-arbitrum-node/nitro/node-tuning',
   },
 };
 
@@ -223,7 +223,8 @@ This page lists every CLI flag accepted by the Nitro node binary. For explanatio
 
 - [Configuration system](/run-arbitrum-node/nitro/configuration-system)
 - [Docker and CLI binaries](/run-arbitrum-node/nitro/docker-and-cli-binaries)
-- [Node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring)
+- [Node tuning](/run-arbitrum-node/nitro/node-tuning)
+- [Node monitoring](/run-arbitrum-node/nitro/node-monitoring)
 - [DA tools reference](/run-arbitrum-node/nitro/da-tools-reference)
 
 **Total flags:** ${totalFlags} across ${groups.length} namespaces.
