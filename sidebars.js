@@ -994,6 +994,11 @@ const sidebars = {
               label: 'Geth',
               id: 'how-arbitrum-works/reference/geth',
             },
+            {
+              type: 'doc',
+              label: 'Finality and reorgs',
+              id: 'how-arbitrum-works/reference/finality-and-reorgs',
+            },
           ],
         },
         {
