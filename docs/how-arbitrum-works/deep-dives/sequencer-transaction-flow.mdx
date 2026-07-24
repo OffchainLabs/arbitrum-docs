@@ -24,7 +24,7 @@ All code references below point to [Nitro `v3.11.0`](https://github.com/Offchain
 
 ## Transaction flow at a glance
 
-<ImageZoom src="/img/haw-sequencer-transaction-flow.svg" alt="Transaction flow from a user through an RPC node into the Sequencer's bounded transaction queue, FIFO into block creation, then out to the sequencer feed and, via the batch poster, to the sequencer inbox on the parent chain where validators verify it" className="img-600px" />
+<ImageZoom src="/img/haw-sequencer-transaction-flow.svg" alt="Transaction flow from a user through an RPC node into the Sequencer's bounded transaction queue, FIFO into block creation, then out to the sequencer feed and, via the batch poster, to the sequencer inbox on the parent chain where validators verify it" className="img-800px" />
 
 1. A user submits a signed transaction to any RPC node on the chain.
 2. The RPC node does not execute or pool the transaction; it forwards it to the Sequencer.
