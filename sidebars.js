@@ -890,6 +890,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'arbitrum-bridge/withdrawal-monitoring',
+          label: 'Monitoring withdrawals',
+        },
+        {
+          type: 'doc',
           id: 'arbitrum-bridge/troubleshooting',
           label: 'Troubleshooting',
         },
