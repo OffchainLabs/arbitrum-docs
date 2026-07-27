@@ -95,6 +95,7 @@
     "@offchainlabs/notion-docs-generator": "0.1.2",
     "@offchainlabs/prettier-config": "0.3.0",
     "@signalwire/docusaurus-plugin-llms-txt": "^1.2.2",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@tsconfig/docusaurus": "^2.0.9",
     "@types/d3": "^7.4.3",
     "@types/node": "^22.20.1",

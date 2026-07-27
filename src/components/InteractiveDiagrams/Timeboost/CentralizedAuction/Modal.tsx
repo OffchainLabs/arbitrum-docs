@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useTransition, animated } from '@react-spring/web';
+import { useColorMode } from '@docusaurus/theme-common';
+import { MDXProvider } from '@mdx-js/react';
 import * as Dialog from '@radix-ui/react-dialog';
+import { animated, useTransition } from '@react-spring/web';
+import type { MDXComponents } from 'mdx/types';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
+import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+
+import { NumberComponent } from './NumberComponent';
 import step1Content from './modal-centralized-auction-step-1.mdx';
 import step2Content from './modal-centralized-auction-step-2.mdx';
 import step3Content from './modal-centralized-auction-step-3.mdx';
 import step4Content from './modal-centralized-auction-step-4.mdx';
 import step5Content from './modal-centralized-auction-step-5.mdx';
-import { createPortal } from 'react-dom';
-import { NumberComponent } from './NumberComponent';
-import { MDXProvider } from '@mdx-js/react';
-import type { MDXComponents } from 'mdx/types';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
-import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
-import { useColorMode } from '@docusaurus/theme-common';
 
 // Define the CodeBlock interface
 interface CodeBlock {
