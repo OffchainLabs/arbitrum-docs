@@ -1,0 +1,303 @@
+---
+title: 'Arbitrum chain upgrade runbook'
+sidebar_label: 'Upgrade runbook'
+description: 'An end-to-end operational checklist for upgrading an Arbitrum chain, covering pre-upgrade validation, execution order, post-upgrade verification, WASM module root troubleshooting, and rollback options.'
+author: pete-vielhaber
+sme: ''
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
+user_story: As an Arbitrum chain operator, I need an end-to-end checklist for coordinating an upgrade so that I can validate readiness beforehand, execute steps in the correct order, and confirm the chain is healthy afterward.
+content_type: how-to
+---
+
+This runbook is the operational wrapper around an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> upgrade: what to validate before you start, what order to execute in, how to confirm the upgrade succeeded, and what you can undo if it doesn't.
+
+It complements [ArbOS upgrade](/launch-arbitrum-chain/operate/arbos-upgrade.mdx), which remains the canonical reference for how each individual step works. This page does not restate those mechanics — it links to them at each step and focuses on the coordination, verification, and failure-recovery work around them.
+
+An upgrade touches four things that must stay mutually compatible:
+
+1. The Nitro version running on every node and <a data-quicklook-from="validator">validator</a>.
+2. The `nitro-contracts` deployed on the <a data-quicklook-from="parent-chain">parent chain</a>.
+3. The <a data-quicklook-from="wasm-module-root">WASM module root</a> set in the Rollup contract.
+4. The ArbOS version active on the <a data-quicklook-from="child-chain">child chain</a>.
+
+Most failed upgrades are a mismatch between two of these four, and the majority of those are WASM module root mismatches. [Troubleshoot WASM module root failures](#troubleshoot-wasm-module-root-failures) covers those in detail.
+
+<VanillaAdmonition type="caution" title="ArbOS upgrades are one-way">
+
+Once an ArbOS upgrade activates, you cannot downgrade the ArbOS version. Plan on rolling forward, not back. Read [Rollback options](#rollback-options) **before** you schedule an upgrade, so you know which parts of the process are reversible and which aren't.
+
+</VanillaAdmonition>
+
+## Record your target versions
+
+Every version-specific value comes from the reference page for the ArbOS release you're targeting. Record all five before you begin, because later steps consume them as inputs:
+
+| Input                     | Where to get it                                                                                                                                                                                                                  |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Target ArbOS version      | The [list of available ArbOS releases](/run-arbitrum-node/arbos-releases/01-overview.mdx#list-of-available-arbos-releases)                                                                                                       |
+| Minimum Nitro version     | The requirements section of the targeted ArbOS release page                                                                                                                                                                      |
+| `nitro-contracts` version | The targeted ArbOS release page. Not every ArbOS upgrade requires a contracts upgrade                                                                                                                                            |
+| WASM module root          | The targeted ArbOS release page                                                                                                                                                                                                  |
+| Consensus tag             | The consensus version paired with that WASM module root (for example, `consensus-v51`). Cross-check the pairing against the [`Dockerfile`](https://github.com/OffchainLabs/nitro/blob/master/Dockerfile) in the Nitro repository |
+
+<VanillaAdmonition type="info" title="Why the consensus tag matters">
+
+The consensus tag and the WASM module root are two names for the same artifact, and `scripts/download-machine.sh` requires **both** as arguments. Release pages sometimes reference point releases (for example, `consensus-v51.1`) that carry a different module root than the base tag. Record the exact pair you intend to run, and confirm it against the `Dockerfile` in the Nitro repository, which is the source of truth for which tag maps to which root.
+
+</VanillaAdmonition>
+
+## Pre-upgrade validation
+
+Complete every check in this section before scheduling anything onchain.
+
+### Confirm your current ArbOS version
+
+Call `ArbSys.ArbOSVersion()` on your chain. This function returns the ArbOS version **plus 55** — a chain running ArbOS 40 returns `95`. When you later schedule the upgrade, you pass the real version number, not the offset one. See [Obtaining the current ArbOS version](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-3-schedule-the-arbos-version-upgrade) for details.
+
+### Confirm your current contracts version and upgrade path
+
+Determine which `nitro-contracts` version your chain currently runs and whether a direct upgrade path to the target exists. Follow [Check version and upgrade path](https://github.com/OffchainLabs/chain-actions/blob/main/README.md#check-version-and-upgrade-path) in the `chain-actions` repository, substituting your chain's inbox address and network name.
+
+Contract upgrades are not always a single hop. Confirm the full path now rather than discovering a required intermediate version mid-upgrade.
+
+### Confirm chain owner access
+
+Every administrative action in this runbook is executed by the <a data-quicklook-from="upgrade-executor">upgrade executor</a> contract, not directly by your <a data-quicklook-from="chain-owner">chain owner</a> account. Before you begin, verify that:
+
+- You control an account with the executor role on the parent chain upgrade executor.
+- That account is funded on the parent chain.
+- You can also reach the child chain upgrade executor, which owns the `ArbOwner` <a data-quicklook-from="precompile">precompile</a> actions.
+
+See [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access.mdx) to confirm which account holds which role.
+
+### Confirm the target machine is present on every validator
+
+This is the check that most often gets skipped, and it's the one that causes the WASM root failures in the next section. Verify that each validator has the machine for the **target** WASM module root on disk _before_ the upgrade activates, not after.
+
+Machines are discovered by directory layout, so inspect it directly:
+
+```shell
+ls -l /home/user/.arbitrum/machines/
+cat /home/user/.arbitrum/machines/latest/module-root.txt
+```
+
+A correctly populated machines directory looks like this:
+
+```text
+machines/
+├── latest -> 0x8a7513bf...          # symlink to the newest machine directory
+└── 0x8a7513bf.../                   # directory name must equal the module root
+    ├── module-root.txt              # contains 0x8a7513bf...
+    ├── machine.v2.wavm.br
+    └── replay.wasm                  # only present if the release publishes it
+```
+
+<VanillaAdmonition type="tip" title="WASM module roots are backward compatible">
+
+You can set a new WASM module root, and stage the corresponding machines on your validators, before the ArbOS upgrade activates. Doing so does not disrupt the chain, so there's no reason to leave it until the last moment.
+
+</VanillaAdmonition>
+
+## Determine whether you need `download-machine.sh`
+
+`scripts/download-machine.sh` in the Nitro repository fetches a prebuilt WAVM machine for a given consensus tag. Whether you need to run it depends entirely on how you obtain your node binary:
+
+| Your setup                                                                                         | Do you need `download-machine.sh`?                                                                                   |
+| -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Official Docker image, no <a data-quicklook-from="state-transition-function">STF</a> customization | **No.** Machines are already baked into the image                                                                    |
+| Building the Docker image from source                                                              | **Usually yes.** The `Dockerfile` only downloads the machines on its _uncommented_ `RUN ./download-machine.sh` lines |
+| Custom STF build                                                                                   | **Yes**, and you must also rebuild the replay binary so the resulting module root matches what you set onchain       |
+
+<VanillaAdmonition type="caution" title="The Dockerfile only downloads recent machines">
+
+In the Nitro repository's `Dockerfile`, the `RUN ./download-machine.sh` lines for older consensus versions are **commented out** — only the most recent few are active. If your chain's Rollup contract still points at an older module root, a from-source build produces an image with no machine for that root, and your validator fails to start.
+
+This is the single most common cause of the startup failures described below. Check the `Dockerfile` for a line matching your consensus version before assuming the image contains it.
+
+</VanillaAdmonition>
+
+To fetch a machine manually, run the script from your machines directory with both the consensus tag and its module root:
+
+```shell
+cd /home/user/.arbitrum/machines
+./download-machine.sh consensus-v51 0x8a7513bf7bb3e3db04b0d982d0e973bcf57bf8b88aef7c6d03dba3a81a56a499
+```
+
+The script creates a directory named after the module root, writes `module-root.txt` inside it, repoints the `latest` symlink at it, and downloads `machine.v2.wavm.br` (plus `replay.wasm`, if that release published one).
+
+If you maintain a custom STF, downloading a published machine is not sufficient — see [Customize your chain's behavior](/launch-arbitrum-chain/protocol-hacks/stf.mdx) for how to build and register your own.
+
+## Execution order
+
+Order matters. Each step assumes the previous one completed successfully.
+
+| Step | Action                                                                                                                                                                                      | Notes                                                                                                                        |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| 1    | [Update Nitro on nodes and validators](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-1-update-nitro-on-nodes-and-validators)                                                        | Validators first, then remaining nodes. **Must** complete before the ArbOS upgrade deadline                                  |
+| 2    | [Set the new WASM module root](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-2-upgrade-the-wasm-module-root--your-chains-nitro-contracts)                                           | Safe to do early; roots are backward compatible                                                                              |
+| 3    | Upgrade `nitro-contracts`, if the release requires it                                                                                                                                       | Follow [Nitro contracts upgrades](https://github.com/OffchainLabs/chain-actions?tab=readme-ov-file#nitro-contracts-upgrades) |
+| 4    | [Schedule the ArbOS version upgrade](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-3-schedule-the-arbos-version-upgrade)                                                            | Pass the real version number and a UNIX timestamp. A timestamp of `0` upgrades immediately                                   |
+| 5    | [Enable release-specific configuration or feature flags](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) | Not always required; check the release page                                                                                  |
+
+<VanillaAdmonition type="caution" title="Upgrade nodes before the activation timestamp">
+
+A node that is too old to process the newly active ArbOS version stops with a fatal "please upgrade to the latest version of the node software" error. Because the ArbOS upgrade activates in consensus at the scheduled timestamp, every node must already be running a compatible Nitro version when that timestamp passes. Leave yourself margin.
+
+</VanillaAdmonition>
+
+## Post-upgrade verification
+
+Work through all four checks. A chain can look healthy on the surface while its validator is quietly unable to bond.
+
+### Verify the active ArbOS version
+
+Call `ArbSys.ArbOSVersion()` again and confirm it advanced to your target, remembering the +55 offset. If the scheduled timestamp has passed and the version has not changed, the upgrade did not activate — check that you scheduled the correct version and that nodes are actually producing blocks past the timestamp.
+
+### Verify the WASM module root matches everywhere
+
+Compare the root set in the Rollup contract against the root your validator resolved. Read the onchain value from the parent chain:
+
+```shell
+cast call <rollup-address> "wasmModuleRoot()(bytes32)" --rpc-url <parent-chain-rpc>
+```
+
+Then confirm your validator agrees. On startup, the block validator logs both roots it will validate against:
+
+```text
+INFO BlockValidator initialized  current=0x8a7513bf... pending=0x8a7513bf...
+INFO validator chosen           WasmModuleRoot=0x8a7513bf... chosen=jit maxWorkers=8
+```
+
+The `current` value should match the onchain `wasmModuleRoot()`. A `validator chosen` line must appear for every root listed in `BlockValidator initialized`; if one is missing, that machine isn't available and validation for that root cannot run.
+
+### Verify the validator is bonding
+
+Confirm the validator is still advancing <a data-quicklook-from="assertion">assertions</a> and posting bonds after the upgrade. A validator that started cleanly can still be unable to act if the Rollup contract's root doesn't match what the validator actually validated with — that produces the runtime mismatch described in [The validator starts but can't advance its bond](#the-validator-starts-but-cant-advance-its-bond).
+
+If your chain has <a data-quicklook-from="fast-withdrawals">fast withdrawals</a> enabled, re-check it specifically after the upgrade — see [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx).
+
+### Verify the batch poster is still posting
+
+Confirm the <a data-quicklook-from="batch-poster">batch poster</a> is submitting batches to the <a data-quicklook-from="sequencer-inbox">sequencer inbox</a> at its usual cadence, and that no backlog is accumulating. See [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx) for what to watch.
+
+<VanillaAdmonition type="info" title="Batch poster log noise after an upgrade">
+
+New Nitro versions probe for contract features that older `nitro-contracts` deployments don't implement, so a version-skewed window between steps 1 and 3 can produce `eth_call` errors in the batch poster log that are benign. Confirm batches are still landing onchain before treating any of them as an incident. For diagnosing messages that persist after the upgrade completes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) and [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery.mdx).
+
+</VanillaAdmonition>
+
+## Troubleshoot WASM module root failures
+
+These failures share a single root cause — the validator does not have the machine for a module root it's required to handle — but they surface in three different ways, with different severities. Identify which one you have before changing any configuration.
+
+| Error message                                                                       | Node starts? | What it means                                                                                 |
+| ----------------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------- |
+| `latestWasmModuleRoot not set`                                                      | No           | No machine directory was found **at all**                                                     |
+| `cannot validate WasmModuleRoot <root>`                                             | No           | Machines were found, but none provides this specific required root                            |
+| `unable to find validator machine directory for the on-chain WASM module root`      | Yes          | Startup compatibility pre-check failed. Logged at `ERROR`, but **does not stop the node**     |
+| `on-chain WASM module root did not match with any of the allowed WASM module roots` | Yes          | Same pre-check, when `--validation.wasm.allowed-wasm-module-roots` is set and nothing matched |
+| `wasmroot doesn't match rollup : <root>, valid: [<roots>]`                          | Yes          | Runtime mismatch. The validator runs but cannot advance its bond                              |
+
+Operators upgrading Nitro have reported the two fatal cases wrapped in a `failed to create node` startup error; the specific message quoted in that error tells you which one you're looking at.
+
+### The node won't start
+
+For either fatal case, work through these in order:
+
+1. **Check the `Dockerfile` for your consensus version.** If you built the image from source, confirm there's an _uncommented_ `RUN ./download-machine.sh` line for the consensus tag your chain needs. This is the most common cause.
+2. **Run `download-machine.sh` with the correct version.** Fetch the machine for the exact consensus tag and module root pair you recorded earlier.
+3. **Rebuild the replay binary.** Required if you maintain a custom STF, where no published machine will ever match your root.
+
+Then confirm the machines directory is actually discoverable, because two layout rules are enforced silently:
+
+- **A directory is ignored unless its name is either `latest` or exactly its own module root.** The comparison is against the lowercase, `0x`-prefixed form. A directory named with a truncated, uppercase, or otherwise reformatted root is skipped without an error, even though `module-root.txt` inside it is correct.
+- **Discovery stops at the first search path that yields any machine.** One stale directory in an earlier path masks a correct one later in the search order. If `--validation.wasm.root-path` is set, it is the _only_ path searched.
+
+When `--validation.wasm.root-path` is unset, the search order is:
+
+1. `<project>/target/machines` (source builds)
+2. `./machines`, relative to the working directory
+3. `./target/machines`
+4. `machines/` in the grandparent directory of the binary — for example, `/usr/local/machines` for a binary at `/usr/local/bin/nitro`
+
+Setting `--validation.wasm.root-path` explicitly is the reliable fix when discovery picks the wrong directory.
+
+### Understand which roots your validator is required to have
+
+A validator must have machines for **both** roots the block validator resolves, not just the current one:
+
+- `--node.block-validator.current-module-root` (default `current`, read from the chain)
+- `--node.block-validator.pending-upgrade-module-root` (default `latest`)
+
+When these differ, both are required, and a missing machine for **either** produces `cannot validate WasmModuleRoot`. This is why a validator that ran fine yesterday can fail to start today: the chain's root changed, and the pending root now resolves to something the image doesn't contain.
+
+<VanillaAdmonition type="caution" title="Clearing `pending-upgrade-module-root` is not a fix for a rollup mismatch">
+
+Setting `--node.block-validator.pending-upgrade-module-root=` to an empty value only shrinks the set of roots required **at startup**. It has no effect on the runtime `wasmroot doesn't match rollup` error, which compares against the Rollup contract rather than against this flag.
+
+So if your node starts but can't advance its bond, clearing this flag won't help — you need the correct machine on disk. Conversely, if you cleared it to work around a startup failure, you've disabled validation against the pending upgrade root, which means you won't discover a missing machine until the upgrade activates. Restore it once the correct machine is staged.
+
+</VanillaAdmonition>
+
+### The validator starts but can't advance its bond
+
+This error means the node is running, but the root in the Rollup contract isn't among the roots the block validator actually validated with:
+
+```text
+error advancing stake from node 18 (hash 0x4d42...): error generating node action:
+wasmroot doesn't match rollup : 0x260f5fa5..., valid: [0x8b104a2e...]
+```
+
+Read it as: **the Rollup contract expects the first root; your validator only has the second.** Both values are consensus versions you can look up in the Nitro repository's `Dockerfile` — which usually reveals that the expected root corresponds to a consensus version your image never downloaded.
+
+The fix is to stage the machine for the root the Rollup contract expects, then restart the validator. Confirm success by checking that a `validator chosen` line appears for that root.
+
+A related message, `block validation is still pending`, is not a mismatch — it means the block validator hasn't validated anything yet and has no roots to compare. Wait for validation to progress.
+
+<VanillaAdmonition type="caution" title="Don't suppress the mismatch check">
+
+`--staker.dangerous.ignore-rollup-wasm-module-root` downgrades this error to a warning and lets the validator make assertions anyway. Its own help text describes it as dangerous, and for good reason: asserting against a module root the Rollup contract doesn't recognize risks producing assertions that can be challenged. Fix the machine, don't silence the check.
+
+Likewise, `--validation.wasm.enable-wasmroots-check=false` disables only the non-fatal startup pre-check. It hides an early warning without addressing the cause.
+
+</VanillaAdmonition>
+
+## Rollback options
+
+How much you can undo depends entirely on whether the ArbOS upgrade has activated. The ArbOS upgrade applies in consensus once the chain's block timestamp reaches the scheduled timestamp, and the upgrade logic only ever moves the version **upward**.
+
+| What you changed                              | Reversible?                                                                                                                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Scheduled ArbOS upgrade, before the timestamp | **Yes.** Call `scheduleArbOSUpgrade` again to move the timestamp out or to set a version at or below the current one           |
+| WASM module root                              | **Yes.** Call `setWasmModuleRoot` with the previous root. Roots are backward compatible                                        |
+| Nitro node version                            | **Partially.** You can downgrade, but not below a version that supports the chain's _active_ ArbOS version                     |
+| `nitro-contracts`                             | **Difficult.** Technically possible by re-pointing implementations through the upgrade executor, but treat it as a last resort |
+| Activated ArbOS version                       | **No.** There is no downgrade path                                                                                             |
+
+### Before the activation timestamp
+
+A scheduled upgrade is just two stored values — a target version and a timestamp — and the upgrade only fires when the chain's timestamp reaches the target _and_ the target version is higher than the current one. Until then you can freely cancel or reschedule by calling `scheduleArbOSUpgrade` again through the upgrade executor. This is the safe window; if you have any doubt about validator readiness, postpone from here rather than pushing forward.
+
+### After the activation timestamp
+
+The ArbOS version cannot be lowered. Recovery means rolling forward:
+
+1. **Restore node availability first.** If nodes are failing to start, resolve that with the WASM root troubleshooting above. Getting nodes running on the new ArbOS version is almost always faster than any attempt to unwind.
+2. **Don't downgrade Nitro below the active ArbOS version.** A node older than the active ArbOS version stops with a fatal out-of-date error, so downgrading to "get back to a working state" makes the outage worse.
+3. **Escalate rather than improvise.** If the chain is producing blocks but validation is broken, the chain is still live and withdrawals are the pressure point. Contact Offchain Labs support before attempting contract-level changes.
+
+<VanillaAdmonition type="caution" title="Reverting contracts after assertions exist">
+
+Rolling `nitro-contracts` back is only remotely viable if no <a data-quicklook-from="assertion">assertions</a> have been posted that depend on the new contracts' behavior. Once they have, a revert can invalidate chain history or strand in-flight withdrawals. Treat a contracts rollback as an incident requiring support involvement, not a routine operation.
+
+</VanillaAdmonition>
+
+## Related documents
+
+- [ArbOS upgrade](/launch-arbitrum-chain/operate/arbos-upgrade.mdx) — step-by-step mechanics for each upgrade action
+- [ArbOS releases](/run-arbitrum-node/arbos-releases/01-overview.mdx) — per-release requirements, WASM module roots, and Nitro versions
+- [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access.mdx) — which account holds which administrative role
+- [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx) — what to watch during and after an upgrade
+- [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) — diagnosing batch poster errors
+- [Customize your chain's behavior](/launch-arbitrum-chain/protocol-hacks/stf.mdx) — building a custom STF and its replay binary
+- [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx) — full reference for every flag named here
