@@ -34,11 +34,11 @@ An Arbitrum block is only as final as the parent-chain block that carries its ba
 
 On an AnyTrust chain it is common to assume finality is achieved in seconds, as soon as the <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> signs the block's data. That describes **soft confirmation and data availability**, not hard finality:
 
-- The Sequencer executes and broadcasts the block immediately—this is your sub-second soft confirmation.
+- The Sequencer executes and broadcasts the queued transactions immediately—this is your sub-second soft confirmation.
 - The DAC signing a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate (DACert)</a> guarantees the data _is retrievable_, so the batch can be posted compactly. It does not settle the block against the parent chain.
 - Hard finality still requires the batch (or DACert) to be posted to the parent chain's <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> and for that parent-chain block to finalize.
 
-So on your chain, "seconds" is the soft-confirmation latency; the reorg-proof guarantee tracks Base finality, which in turn tracks Ethereum finality.
+So on your chain, "seconds" is the soft-confirmation latency; the reorg-proof guarantee tracks your parent chain's finality, which in turn tracks Ethereum finality.
 
 ## How the node derives `safe` and `finalized`
 
