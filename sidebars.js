@@ -970,6 +970,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Sequencer transaction flow',
+              id: 'how-arbitrum-works/deep-dives/sequencer-transaction-flow',
+            },
+            {
+              type: 'doc',
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
             },
