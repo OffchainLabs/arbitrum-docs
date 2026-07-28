@@ -44,7 +44,7 @@ So on your chain, "seconds" is the soft-confirmation latency; the reorg-proof gu
 
 A Nitro node is split into a consensus side (reads the parent chain) and an execution side (runs the EVM and serves RPC). Finality flows from the parent chain into the <a data-quicklook-from="child-chain">child chain</a>'s `safe`/`finalized` heads:
 
-1. The node reads the parent chain's own `safe` and `finalized` blocks over RPC. It does not compute parent-chain finality itself—it defers to the parent chain's block tags. (Finality data is only used when the parent chain supports it, for example Ethereum proof-of-stake or another Arbitrum chain.)
+1. The node reads the parent chain's own `safe` and `finalized` blocks over RPC. It does not compute parent-chain finality itself—it defers to the parent chain's block tags. (Finality data is only used when the parent chain serves those tags—for example Ethereum proof-of-stake, another Arbitrum chain, or a chain built on another stack that exposes them—and when the node is configured to read them, via `node.parent-chain-reader.use-finality-data`, which defaults to `true`.)
 2. For each parent-chain `safe`/`finalized` block, the node finds the newest sequencer batch that was posted **at or before** that parent-chain block.
 3. The last child-chain block in that batch becomes the child chain's `safe` (or `finalized`) head, which is what the child-chain RPC serves for those tags.
 
@@ -67,6 +67,12 @@ The confirmation _model_ is identical across chains; what differs is which paren
 | Arbitrum chain atop an L2 (L3, e.g. on Base) | The L2 (e.g. Base) | The L2's `finalized`, which itself tracks Ethereum | The L2's finality latency, which is bounded below by Ethereum finality. |
 
 For an L3 on Base, `finalized` on your chain cannot be more final than Base's `finalized`, and Base's `finalized` ultimately tracks Ethereum. The DAC does not shorten this—it only affects how data is made available, not how the parent chain finalizes.
+
+### Parent chains outside the Ethereum and Arbitrum stacks
+
+A few chains settle to a parent chain that is neither Ethereum nor an Arbitrum chain; in practice this means an OP Stack chain such as Base. The confirmation model is unchanged—your node still defers to the parent chain's `safe` and `finalized` tags—but the meaning of those tags is defined by that chain's stack rather than by Ethereum consensus. On an OP Stack parent chain, `safe` means the block has been derived from batch data already posted to Ethereum, and `finalized` means that Ethereum data is itself finalized, so the chain of inheritance still terminates at Ethereum finality.
+
+Before relying on `finalized` when your parent chain runs a different stack, confirm two things: that its RPC actually serves both tags, and what each tag guarantees on that chain. A parent chain that returns its own head for `safe` and `finalized` gives your child chain no guarantee beyond `latest`, in which case you should derive your own finality signal as described in [Recommended confirmation levels for indexers](#recommended-confirmation-levels-for-indexers).
 
 ## AnyTrust and the DAC: what changes and what doesn't
 
