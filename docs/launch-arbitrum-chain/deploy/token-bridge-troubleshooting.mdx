@@ -1,0 +1,272 @@
+---
+title: 'Token bridge troubleshooting'
+sidebar_label: 'Token bridge troubleshooting'
+description: 'Diagnose and resolve common token bridge problems including ENS errors on non-Ethereum parent chains, unverified WETH contracts, bridged USDC routing to the wrong gateway, custom gateway registration failures, and outboundTransfer reverts.'
+author: pete-vielhaber
+sme: jose-franco
+user_story: As an Arbitrum chain operator, I need to diagnose and resolve common token bridge deployment and registration problems so that tokens bridge through the gateways I intended.
+content_type: troubleshooting
+---
+
+This guide covers problems that operators encounter when deploying, verifying, and registering contracts for the canonical <a data-quicklook-from="arb-token-bridge">token bridge</a>. For the deployment procedure itself, see [Deploy a token bridge using the Chain SDK](/launch-arbitrum-chain/deploy/token-bridge.mdx). To learn how the bridge is designed, see [Token bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx).
+
+Most routing problems in this guide trace back to a single behavior: the <a data-quicklook-from="gateway-router">gateway router</a> falls back to a default gateway instead of failing when a token has no registration. Start with the following section, because the symptoms in [Bridged USDC routes to the standard gateway](#bridged-usdc-routes-to-the-standard-gateway) and [Custom gateway registration fails](#custom-gateway-registration-fails) are both consequences of it.
+
+## How the canonical router picks a gateway
+
+Each side of the bridge has a router (`L1GatewayRouter` on the <a data-quicklook-from="parent-chain">parent chain</a>, `L2GatewayRouter` on the <a data-quicklook-from="child-chain">child chain</a>) holding an `l1TokenToGateway` mapping from a parent chain token address to the gateway that handles it. When you bridge a token, the router calls `getGateway`, which resolves in this order:
+
+1. If `l1TokenToGateway` has an entry for the token, use that gateway.
+2. If it has no entry, fall back to `defaultGateway`—the <a data-quicklook-from="standarderc20-gateway">standard **ERC-20** gateway</a>.
+3. If the resolved gateway is explicitly disabled, return the zero address.
+
+<VanillaAdmonition type="warning" title="Unregistered tokens fail silently, not loudly">
+
+Step 2 is the reason misrouting is so hard to spot. A token you believe is registered to a <a data-quicklook-from="custom-gateway">custom gateway</a>—but isn't—still bridges successfully through the standard gateway, minting a _different_ child chain token than the one you deployed. Nothing reverts and no event signals the mistake. If a bridge transfer succeeds but the tokens land at an unexpected address, suspect a missing registration before you suspect a bug.
+
+</VanillaAdmonition>
+
+The router also rewrites the calldata it forwards. It wraps the original sender with `GatewayMessageHandler.encodeFromRouterToGateway(msg.sender, _data)` so the gateway can recover the true sender. Gateways detect this by checking `isRouter(msg.sender)`. That distinction is what makes direct gateway calls behave differently from router calls, as described in [`outboundTransfer` reverts or moves the wrong tokens](#outboundtransfer-reverts-or-moves-the-wrong-tokens).
+
+## Shared WETH and Multicall deployments
+
+`L1AtomicTokenBridgeCreator` stores two parent chain addresses that are set once and then reused by **every** token bridge that creator deploys:
+
+```solidity
+// WETH address on L1
+address public l1Weth;
+
+// Multicall2 address on L1, this should NOT be ArbMulticall2
+address public l1Multicall;
+```
+
+Both are assigned through `setTemplates`, alongside the child chain contract templates. The creator is shared infrastructure for each parent chain, so these values are effectively universal for all chains created from it. Three consequences matter in practice:
+
+- **You inherit the creator's `l1Weth`.** When you deploy through a canonical creator listed in [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx), your <a data-quicklook-from="weth-gateway">WETH gateway</a> is wired to that creator's **WETH** address. You don't choose it at chain creation time. Only a creator you deploy yourself uses an `l1Weth` you supply.
+- **`l1Multicall` is the parent chain `Multicall2`, not `ArbMulticall2`.** The source comment is explicit. `ArbMulticall2` is the child chain variant, which the creator deploys separately from `l2MulticallTemplate` for each chain. Supplying `ArbMulticall2` here stores a child chain address in a field that must hold a parent chain contract.
+- **The child chain `aeWETH` and `ArbMulticall2` are per-chain.** These are deployed for your chain from templates, which is why they're the contracts you need to verify yourself. See [Token bridge contracts show as unverified](#token-bridge-contracts-show-as-unverified).
+
+<VanillaAdmonition type="note" title="Custom gas token chains have no WETH gateway">
+
+In `createTokenBridge`, the entire **WETH** gateway block is conditional on `feeToken == address(0)`. Chains using a <a data-quicklook-from="custom-gas-token">custom gas token</a> skip it, so no **WETH** gateway, no child chain `aeWETH`, and no **WETH** bridging path are created. If you're looking for a missing **WETH** gateway on a custom gas token chain, it was never deployed. This matches step 5 of the deployment guide, which applies only to **ETH**-based chains.
+
+</VanillaAdmonition>
+
+## `network does not support ENS` when deploying the creator
+
+Deploying the token bridge creator against a non-Ethereum parent chain fails with output like this:
+
+```console
+Deploying token bridge creator...
+Duplicate definition of Transfer (Transfer(address,address,uint256,bytes), Transfer(address,address,uint256))
+Error: network does not support ENS (operation="getResolver", network="unknown", code=UNSUPPORTED_OPERATION, version=providers/5.7.2)
+```
+
+### What causes this error
+
+Ethers v5 treats any string that isn't a valid hex address as an ENS name and tries to resolve it. Resolution requires the network to declare an `ensAddress`, and a custom parent chain has none—ethers reports it as `network="unknown"`—so the attempt throws `UNSUPPORTED_OPERATION`. The real fault is an address-shaped configuration value that isn't actually an address.
+
+`deployTokenBridgeCreator.ts` already throws readable errors for _missing_ variables:
+
+```typescript
+if (!envVars.baseChainWeth) {
+  throw new Error('Missing BASECHAIN_WETH in env vars');
+}
+```
+
+Seeing the ENS error instead of one of those means the variable is **set but malformed**. Two values reach ethers as addresses:
+
+- `BASECHAIN_WETH`, passed straight into `deployL1TokenBridgeCreator` and on to `setTemplates`. Common defects include placeholder text, a wrapping pair of quotes, trailing whitespace, a missing `0x` prefix, and a truncated address.
+- `ROLLUP_ADDRESS`, used by `RollupAdminLogic__factory.connect(rollupAddress, l1Provider)`. This is only read when you leave `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` unset, because that's the path that estimates the gas limit instead.
+
+### Resolution
+
+<!-- SME review: step 2 below is inferred from the contract source (setTemplates stores l1Weth, and deployTokenBridgeCreator.ts rejects an empty BASECHAIN_WETH), not from an upstream doc that states the requirement. Please confirm the guidance for a parent chain with no canonical wrapped native token—specifically whether deploying a WETH9-compatible contract is what we want to recommend, and whether an ETH-based chain can instead be deployed with a placeholder WETH address. -->
+
+1. **Verify `BASECHAIN_WETH` is a bare, checksummed hex address.** No quotes, no whitespace, `0x` prefixed, 42 characters.
+2. **If your parent chain has no wrapped native token, deploy one first.** The creator stores a parent chain **WETH** address and the deploy script rejects an empty `BASECHAIN_WETH`, so a chain without a canonical wrapped native contract needs one deployed before the bridge can be created. A `WETH9`-compatible contract is the usual choice.
+3. **Set `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` explicitly.** Approximately `6000000` is a reasonable value. This skips the `ROLLUP_ADDRESS` and `ORBIT_RPC` estimation path, removing a second source of the same error. The script requires either this variable or both `ROLLUP_ADDRESS` and `ORBIT_RPC`.
+4. **Confirm the deployer key and RPC belong to the same chain.** A key funded on a different chain produces confusing downstream failures once the ENS problem is cleared.
+
+<VanillaAdmonition type="tip" title="The Transfer warning is benign">
+
+`Duplicate definition of Transfer` appears immediately above the error, but it isn't the cause. It's an ethers ABI warning emitted because `aeWETH` declares two overloads of `Transfer`. It prints on successful deployments too. Ignore it and focus on the `UNSUPPORTED_OPERATION` line.
+
+</VanillaAdmonition>
+
+## Token bridge contracts show as unverified
+
+After a successful deployment, the token bridge contracts on your chain's explorer show no source code. This affects both proxies and implementations, including `aeWETH`, the custom gateway, the router, and `ProxyAdmin`.
+
+### Resolution
+
+The `token-bridge-contracts` repository ships a verification script for Blockscout:
+
+1. Update the `orbit` network entry in `hardhat.config.ts` with your chain's RPC endpoint and Blockscout endpoints.
+2. Install and build:
+
+   ```shell
+   yarn install && yarn build
+   ```
+
+3. Set `BASECHAIN_RPC`, `L1_TOKEN_BRIDGE_CREATOR`, and `INBOX_ADDRESS` in `.env`.
+4. Set `DEPLOYER_KEY` as well. See the callout below—omit it and two contracts go unverified.
+5. Run the script:
+
+   ```shell
+   yarn run blockscout:verify --network orbit
+   ```
+
+The script verifies `L2AtomicTokenBridgeFactory`, `TransparentUpgradeableProxy`, `L2GatewayRouter`, `L2ERC20Gateway`, `L2CustomGateway`, `L2WethGateway`, `BeaconProxyFactory`, `UpgradeableBeacon`, `StandardArbERC20`, `ArbMulticall2`, and `ProxyAdmin`. Contracts already verified are reported and skipped rather than treated as failures.
+
+<VanillaAdmonition type="caution" title="aeWETH and UpgradeExecutor require DEPLOYER_KEY">
+
+`aeWETH` and <a data-quicklook-from="upgrade-executor">`UpgradeExecutor`</a> are the two contracts most often reported as unverifiable, and the cause is a missing `DEPLOYER_KEY`. The script can't verify them from the existing deployments, so it deploys throwaway instances whose deployed bytecode matches that of the real contracts, then verifies against those. That requires a funded key, so without `DEPLOYER_KEY` the script logs a warning and skips both:
+
+`DEPLOYER_KEY is missing. Deployer key is required if you want to have aeWETH and UpgradeExecutor verified.`
+
+If **WETH** verification is the goal, this is the setting to check first.
+
+</VanillaAdmonition>
+
+## Bridged USDC routes to the standard gateway
+
+You deployed a bridged **USDC** gateway following [the bridged USDC standard](/launch-arbitrum-chain/integrations/bridged-usdc.mdx), but the SDK and bridge UI keep sending **USDC** through the standard **ERC-20** gateway, producing the default bridged token rather than the Circle-standard one.
+
+### What causes this problem
+
+The deployment script's final registration step is conditional. `deployUsdcBridge.ts` performs these operations in order:
+
+1. Load deployer wallets for both chains and register the networks in the SDK.
+2. Deploy new proxy admins on both chains.
+3. Deploy and initialize bridged **USDC** on the child chain using Circle's implementation.
+4. Deploy and initialize the parent and child chain **USDC** gateways.
+5. **Register the gateways with the routers**—only when `ROLLUP_OWNER_KEY` is set.
+6. Configure the child chain gateway as minter with maximum allowance.
+
+Step 5 runs the registration through the `UpgradeExecutor`. Without `ROLLUP_OWNER_KEY`, the script doesn't fail. It writes the registration calldata to `registerUsdcGatewayTx.json` and expects you to execute it separately. If that file is never executed, `l1TokenToGateway` has no entry for **USDC**, and `getGateway` returns `defaultGateway` exactly as described in [How the canonical router picks a gateway](#how-the-canonical-router-picks-a-gateway).
+
+### Resolution
+
+1. **Query the router directly.** Call `getGateway` on `L1GatewayRouter` with your parent chain **USDC** address. If it returns the standard **ERC-20** gateway rather than your **USDC** gateway, registration never landed.
+2. **Execute `registerUsdcGatewayTx.json`.** Submit the stored calldata through your `UpgradeExecutor` using the account holding the executor role.
+3. **Check both sides.** Registration crosses chains via a <a data-quicklook-from="retryable-ticket">retryable ticket</a>, so confirm the child chain router resolves correctly too. See [Registration succeeded on one chain only](#registration-succeeded-on-one-chain-only).
+4. **Confirm gateway ownership.** Both gateways must be owned by the `UpgradeExecutor`, with an account or multisig holding the executor role. See [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access.mdx).
+
+## Custom gateway registration fails
+
+Registering a token or gateway involves four entry points across two contracts, and they split into two authorization models: token-side calls that the token itself must make, and owner-side calls that only the contract owner can make. Choosing the wrong one for your caller is the most common failure.
+
+| Entry point              | Contract          | Guard             | Who can call it                                            |
+| :----------------------- | :---------------- | :---------------- | :--------------------------------------------------------- |
+| `registerTokenToL2`      | `L1CustomGateway` | `NOT_ARB_ENABLED` | The token contract itself, not an externally owned account |
+| `forceRegisterTokenToL2` | `L1CustomGateway` | `ONLY_OWNER`      | The gateway owner, normally the `UpgradeExecutor`          |
+| `setGateway`             | `L1GatewayRouter` | `NOT_ARB_ENABLED` | The token contract itself                                  |
+| `setGateways`            | `L1GatewayRouter` | `ONLY_OWNER`      | The router owner, normally the `UpgradeExecutor`           |
+
+### Wrong caller for the registration path
+
+`registerTokenToL2` and `setGateway` are designed to be called _by the token_. They revert with `NOT_ARB_ENABLED` unless the caller implements the <a data-quicklook-from="custom-arbtoken">custom token</a> interface and returns the expected value from `isArbitrumEnabled()`. Calling either from an externally owned account fails no matter how that account is funded or permissioned.
+
+For a token that can't be modified, use the owner-side path instead. `forceRegisterTokenToL2` takes parallel arrays and bypasses the token-side check:
+
+```solidity
+function forceRegisterTokenToL2(
+    address[] calldata _l1Addresses,
+    address[] calldata _l2Addresses,
+    uint256 _maxGas,
+    uint256 _gasPriceBid,
+    uint256 _maxSubmissionCost
+) external payable virtual onlyOwner returns (uint256)
+```
+
+Because it's `onlyOwner` and the owner is the `UpgradeExecutor` on chains deployed by the creator, the call must be routed through the executor rather than sent from the <a data-quicklook-from="chain-owner">chain owner</a>'s account directly.
+
+### Underfunded retryable tickets
+
+Every registration path sends a retryable ticket to the child chain through `sendTxToL2`, so the call is `payable` and needs enough value to cover it:
+
+```text
+msg.value >= _maxSubmissionCost + (_maxGas * _gasPriceBid)
+```
+
+The reference script `scripts/register_custom_token.ts` uses a `maxGas` of `4000000`, a `gasPriceBid` of twice the current child chain gas price, and a `maxSubmissionCost` of `400000000000`, sending `gasPriceBid * maxGas + maxSubmissionCost` as value. It also verifies the signer owns the router before proceeding, throwing `Not router owner` otherwise.
+
+### Registration succeeded on one chain only
+
+Because registration is asynchronous, the parent chain transaction can succeed while the child chain retryable fails or expires unredeemed. The result is a half-applied registration: one router resolves your custom gateway, and the other falls back to its default. Deposits and withdrawals then disagree about which gateway owns the token.
+
+After any registration, confirm `getGateway` returns the same gateway on both routers. If the child chain side is missing, locate the retryable ticket from the parent chain transaction and redeem it. To learn how redemption works, see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+
+### Array length and remapping errors
+
+- `INVALID_LENGTHS` from `forceRegisterTokenToL2` and `WRONG_LENGTH` from `setGateways` both mean the address arrays you passed have different lengths.
+- `NO_UPDATE_TO_DIFFERENT_ADDR` means the token already maps to a _different_ child chain address. Registration is not a general-purpose update mechanism—re-registering with the same address is accepted, but pointing an already-registered token at a new child chain address is rejected. Confirm the intended mapping before the first registration.
+- `NOT_TO_CONTRACT` means the gateway address you supplied has no code.
+- `TOKEN_NOT_HANDLED_BY_GATEWAY` means the gateway doesn't recognize the token you're pointing it at. This is an ordering problem: register the token with the gateway first, then register the gateway with the router.
+
+## `outboundTransfer` reverts or moves the wrong tokens
+
+Scripts that call `outboundTransfer` directly on a child chain gateway, bypassing the router, commonly fail. `L2ArbitrumGateway.outboundTransfer` branches on whether the caller is the router:
+
+```solidity
+if (isRouter(msg.sender)) {
+    (_from, _extraData) = GatewayMessageHandler.parseFromRouterToGateway(_data);
+} else {
+    _from = msg.sender;
+    _extraData = _data;
+}
+require(_extraData.length == 0, "EXTRA_DATA_DISABLED");
+```
+
+Direct callers take the `else` branch, which produces three distinct problems:
+
+- **`EXTRA_DATA_DISABLED`.** Router calls carry an encoded payload that `parseFromRouterToGateway` unpacks into a sender and empty extra data. A direct call skips that unpacking, so whatever you pass as `_data` becomes `_extraData` verbatim and any non-empty value reverts. Passing an encoded `maxSubmissionCost`, copied from the deposit direction, triggers this. Direct calls must pass empty bytes.
+- **`NO_VALUE`.** The function begins with `require(msg.value == 0, "NO_VALUE")`. Withdrawals from the child chain don't pay for a retryable ticket, so attaching value reverts. This is another artifact of copying the deposit flow, where value is required.
+- **Tokens debited from the wrong address.** With no router, `_from` becomes `msg.sender`. A contract calling the gateway on a user's behalf has its own balance debited, not the user's. There's no parameter to override this—supplying the sender is precisely what the router does.
+
+Two further details are easy to miss:
+
+- `_l1Token` is always the **parent chain** token address, even when calling the child chain gateway. Passing the child chain token address resolves to the wrong token or no token at all.
+- `ONLY_COUNTERPART_GATEWAY` comes from `finalizeInboundTransfer`, which only accepts calls from the aliased counterpart gateway. It's not a function to call yourself.
+
+### Resolution
+
+Call `outboundTransfer` on `L2GatewayRouter` rather than on the gateway. The router resolves the correct gateway, encodes the sender, and passes the empty extra data the gateway requires. Use the four-parameter overload, which forwards to the six-parameter version with zeroed gas parameters.
+
+If you're bypassing the router because it resolves the wrong gateway, the routing table is the actual problem. Fix the registration rather than working around it—see [Custom gateway registration fails](#custom-gateway-registration-fails).
+
+## Quick reference: deployment and verification
+
+| Message                                                                                    | Likely cause                                                                                                             | Resolution                                                                                                        |
+| :----------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| `network does not support ENS`                                                             | An address-shaped variable, usually `BASECHAIN_WETH` or `ROLLUP_ADDRESS`, holds a malformed value on a chain without ENS | [Validate the address and set the gas limit explicitly](#network-does-not-support-ens-when-deploying-the-creator) |
+| `Duplicate definition of Transfer`                                                         | Benign ethers ABI warning from the `aeWETH` overloads                                                                    | Ignore; look at the following error                                                                               |
+| `Missing BASECHAIN_WETH in env vars`                                                       | Variable absent from `.env`                                                                                              | Set a parent chain **WETH** address, deploying one if the chain has none                                          |
+| `Either GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT or (ROLLUP_ADDRESS and ORBIT_RPC) must be set` | Neither the explicit gas limit nor the estimation inputs were provided                                                   | Set `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` to approximately `6000000`                                              |
+| `DEPLOYER_KEY is missing...`                                                               | Verification script can't deploy the reference instances it needs                                                        | [Set `DEPLOYER_KEY` to verify `aeWETH` and `UpgradeExecutor`](#token-bridge-contracts-show-as-unverified)         |
+| `Already Verified`                                                                         | Contract was verified previously                                                                                         | None; the script treats this as success                                                                           |
+
+## Quick reference: registration and routing
+
+| Message or symptom                                           | Likely cause                                                                                      | Resolution                                                                           |
+| :----------------------------------------------------------- | :------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------------------- |
+| Transfer succeeds but tokens arrive at an unexpected address | Token has no `l1TokenToGateway` entry, so the router used `defaultGateway`                        | [Register the token or gateway](#custom-gateway-registration-fails)                  |
+| **USDC** bridges to the standard gateway                     | Registration step skipped because `ROLLUP_OWNER_KEY` was unset                                    | [Execute `registerUsdcGatewayTx.json`](#bridged-usdc-routes-to-the-standard-gateway) |
+| `NOT_ARB_ENABLED`                                            | `registerTokenToL2` or `setGateway` called from an externally owned account rather than the token | Use `forceRegisterTokenToL2` or `setGateways` as the owner                           |
+| `ONLY_OWNER`                                                 | Owner-side registration sent from the chain owner's account                                       | Route the call through the `UpgradeExecutor`                                         |
+| `NO_UPDATE_TO_DIFFERENT_ADDR`                                | Token already maps to a different child chain address                                             | Confirm the intended mapping; existing mappings can't be repointed                   |
+| `INVALID_LENGTHS`, `WRONG_LENGTH`                            | Parallel address arrays have different lengths                                                    | Pass arrays of equal length                                                          |
+| `NOT_TO_CONTRACT`                                            | Supplied gateway address has no code                                                              | Check the gateway address                                                            |
+| `TOKEN_NOT_HANDLED_BY_GATEWAY`                               | Gateway doesn't recognize the token                                                               | Register the token to the gateway before registering it to the router                |
+| Deposits and withdrawals use different gateways              | Child chain retryable never redeemed                                                              | [Redeem the ticket](#registration-succeeded-on-one-chain-only)                       |
+
+## Quick reference: transfers
+
+| Message                                  | Likely cause                                     | Resolution                                                                                 |
+| :--------------------------------------- | :----------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| `EXTRA_DATA_DISABLED`                    | Non-empty `_data` on a direct gateway call       | [Use the router, or pass empty bytes](#outboundtransfer-reverts-or-moves-the-wrong-tokens) |
+| `NO_VALUE`                               | Value attached to a child chain withdrawal       | Send no value; withdrawals don't buy a retryable ticket                                    |
+| `ONLY_COUNTERPART_GATEWAY`               | `finalizeInboundTransfer` called directly        | Don't call it; it's reserved for the aliased counterpart gateway                           |
+| Tokens debited from the calling contract | Direct gateway call sets `_from` to `msg.sender` | Call `outboundTransfer` on the router so it encodes the real sender                        |
+| Wrong or missing token on a direct call  | Child chain token address passed as `_l1Token`   | Always pass the parent chain token address                                                 |
