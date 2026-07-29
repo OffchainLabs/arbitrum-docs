@@ -10,16 +10,16 @@ content_type: how-to
 
 This guide covers the operational sequencing of a <a data-quicklook-from="bold">BoLD</a> upgrade for chains where the `execute` call is performed by a multisig or a security council rather than a single <a data-quicklook-from="chain-owner">chain owner</a> key. It continues from the step-by-step upgrade in [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx) and assumes you have read it. Concepts, the full parameter table, and the base upgrade steps are not repeated here.
 
-If your chain owner is a single key that can send the upgrade <a data-quicklook-from="transaction">transaction</a> immediately, you do not need this guide—follow the base steps instead.
+If your chain owner is a single key that can send the upgrade <a data-quicklook-from="transaction">transaction</a> immediately, you do not need this guide—follow the [base steps](/launch-arbitrum-chain/chain-config/validation/bold.mdx) instead.
 
 ## The problem this guide solves
 
-The base upgrade sequence contains two steps that appear to conflict when a security council is involved:
+The [base upgrade](/launch-arbitrum-chain/chain-config/validation/bold.mdx) sequence contains two steps that appear to conflict when a security council is involved:
 
 - **Step 4** runs `bold-populate-lookup`, which reads the last confirmed <a data-quicklook-from="assertion">assertion</a> so the new Rollup contract can be initialized from it.
 - **Step 5** executes the upgrade, and reverts if a new assertion has been confirmed since Step 4.
 
-The base guide therefore recommends stopping all <a data-quicklook-from="validator">validators</a> at Step 4 to prevent a new <a data-quicklook-from="confirmation">confirmation</a> from blocking Step 5.
+The [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) therefore recommends stopping all <a data-quicklook-from="validator">validators</a> at [Step 4](/launch-arbitrum-chain/chain-config/validation/bold.mdx#step-4-gather-the-information-of-the-current-state-of-the-chain) to prevent a new <a data-quicklook-from="confirmation">confirmation</a> from blocking [Step 5](/launch-arbitrum-chain/chain-config/validation/bold#step-5-run-the-upgrade-script).
 
 For a production chain, Step 5 is not a transaction you can send on demand. Signers must review a simulation before signing, and collecting a security council's signatures can take days. Read literally, the base sequence implies you must keep every validator stopped for that entire period—a multi-day halt to assertion posting and confirmation on a production chain, which is unacceptable and carries its own risks.
 
@@ -62,7 +62,7 @@ Three consequences follow, and together they resolve the conflict:
 2. **Populating the lookup is additive, not destructive.** `set` writes to a new mapping key per state hash. Repeated runs accumulate entries; they do not overwrite or clear earlier ones. A lookup entry for an assertion that has since been superseded is harmless.
 3. **Anyone can populate the lookup at any time.** `set` is `public` and requires no privileged key, so refreshing the lookup is not itself a governance action and needs no signatures.
 
-What `perform` actually requires is narrower than the base guide implies. It is not that no assertion may be confirmed after Step 4. It is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
+What `perform` actually requires is narrower than the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) implies. It is not that no assertion may be confirmed after Step 4. It is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
 
 <VanillaAdmonition type="caution">
 
@@ -117,7 +117,7 @@ The script finds the last confirmed assertion by searching for its `NodeCreated`
 
 ### Step 5: Execute the upgrade
 
-Submit the signed multisig transaction. Then continue with Steps 6 and 7 of the base guide to update node configuration, restart nodes, and monitor the new Rollup contract.
+Submit the signed multisig transaction. Then continue with Steps 6 and 7 of the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) to update node configuration, restart nodes, and monitor the new Rollup contract.
 
 ## Closing the residual race
 
@@ -164,7 +164,7 @@ To weigh permissioned against <a data-quicklook-from="permissionless-validation"
 
 BoLD changes what validators bond with. The new bond token must be in place before the upgrade, not after.
 
-**BoLD requires an ERC-20 bond token.** In the BoLD Rollup contract, bonding runs entirely through ERC-20 transfers:
+**BoLD requires an ERC-20 bond token.** In the BoLD Rollup contract, bonding runs entirely through **ERC-20** transfers:
 
 ```solidity
 function newStake(uint256 tokenAmount, address _withdrawalAddress) external whenNotPaused
@@ -178,22 +178,22 @@ No bonding function in the BoLD `RollupUserLogic` is `payable`, so there is no n
 
 Whether this is a migration for your chain depends on which pre-BoLD variant you are upgrading from. Legacy `nitro-contracts` shipped two Rollup user logic contracts, and your chain uses exactly one of them:
 
-| Pre-BoLD contract      | Bonding                                                                                                                        | Effect of the upgrade                                                                                                 |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `RollupUserLogic`      | Native <a data-quicklook-from="parent-chain">parent chain</a> currency, via `payable` functions calling `_newStake(msg.value)` | The bond asset changes. Validators must acquire and approve an ERC-20 token before they can bond on the new contract. |
-| `ERC20RollupUserLogic` | An ERC-20 token already                                                                                                        | The bond asset does not necessarily change. Confirm whether your configured `stakeToken` is staying the same.         |
+| Pre-BoLD contract      | Bonding                                                                                                                        | Effect of the upgrade                                                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `RollupUserLogic`      | Native <a data-quicklook-from="parent-chain">parent chain</a> currency, via `payable` functions calling `_newStake(msg.value)` | The bond asset changes. Validators must acquire and approve an **ERC-20** token before they can bond on the new contract. |
+| `ERC20RollupUserLogic` | An **ERC-20** token already                                                                                                    | The bond asset does not necessarily change. Confirm whether your configured `stakeToken` is staying the same.             |
 
 Determine which one your chain runs before planning validator preparation. Do not assume the native-currency case, even though it is the more common one.
 
 <VanillaAdmonition type="info" title="Why operators think BoLD chains bond in ETH">
 
-On Arbitrum One and Arbitrum Nova the `stakeToken` is **WETH**, the ERC-20 wrapper around **ETH**. Explorers and dashboards often display this as **ETH**, which makes it look as though BoLD supports native bonding. It does not—the contract holds **WETH**. If you are checking your own chain's configuration, read `stakeToken` from the Rollup contract rather than relying on a display label.
+On Arbitrum One and Arbitrum Nova the `stakeToken` is **WETH**, the **ERC-20** wrapper around **ETH**. Explorers and dashboards often display this as **ETH**, which makes it look as though BoLD supports native bonding. It does not—the contract holds **WETH**. If you are checking your own chain's configuration, read `stakeToken` from the Rollup contract rather than relying on a display label.
 
 </VanillaAdmonition>
 
 Before you execute the upgrade:
 
-- Confirm the `stakeToken` address in your upgrade configuration is a compliant ERC-20 on the parent chain. **WETH** is the recommended choice, and Offchain Labs does not recommend custom tokens as the bond asset.
+- Confirm the `stakeToken` address in your upgrade configuration is a compliant **ERC-20** on the parent chain. **WETH** is the recommended choice, and Offchain Labs does not recommend custom tokens as the bond asset.
 - Ensure each validator wallet holds enough of that token to meet `stakeAmt`, in addition to parent-chain native currency for gas. A validator that holds only native currency cannot bond after the upgrade.
 - Plan for first-time bonding on the new contract. Validators bond only once, but existing bonds do not carry over from the old Rollup contract, so every validator must bond again after the upgrade.
 
