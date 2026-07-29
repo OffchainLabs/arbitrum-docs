@@ -85,6 +85,10 @@ Because poster costs are borne by the parent chain aggregators, not the network,
 
 The `EndTxHook` is called after the `EVM` returns a transaction's result, providing one last opportunity for ArbOS to intervene before state transition finalization. Final gas amounts are known, enabling ArbOS to credit the network and poster share of the user's gas expenditures and adjust the pools. The hook returns from the [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38) for the final time, discarding its state as the system moves on to the next transaction, where its contents will be renewed.
 
+### [`RevertedTxHook`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbos/tx_processor.go#L960)
+
+The `RevertedTxHook` is called during nitro's state transition, it checks to see if the transaction has been previously reverted, or, is part of the transaction filter. If either is true, it will not execute the transaction and use up a pre determined amount of gas. If it was a previously reverted transaction, the nonce of the sender will be increased.
+
 ## Interfaces and components
 
 ### [`APIBackend`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/apibackend.go#L34)
