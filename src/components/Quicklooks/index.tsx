@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import useIsBrowser from '@docusaurus/useIsBrowser';
 import { useLocation } from '@docusaurus/router';
+import useIsBrowser from '@docusaurus/useIsBrowser';
+import React, { useEffect } from 'react';
 import Tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light-border.css';
+
 import glossary from '../../../static/glossary.json';
 
 export const Quicklooks = () => {
