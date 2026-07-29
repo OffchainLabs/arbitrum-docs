@@ -1,6 +1,6 @@
-import React from 'react';
-import Content from '@theme-original/DocItem/Content';
 import { HeaderBadges } from '@site/src/components/HeaderBadges';
+import Content from '@theme-original/DocItem/Content';
+import React from 'react';
 
 export default function ContentWrapper(props) {
   return (
