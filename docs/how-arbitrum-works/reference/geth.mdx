@@ -87,7 +87,7 @@ The `EndTxHook` is called after the `EVM` returns a transaction's result, provid
 
 ### [`RevertedTxHook`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbos/tx_processor.go#L960)
 
-The `RevertedTxHook` is called during nitro's state transition, it checks to see if the transaction has been previously reverted, or, is part of the transaction filter. If either is true, it will not execute the transaction and use up a pre determined amount of gas. If it was a previously reverted transaction, the nonce of the sender will be increased.
+The `RevertedTxHook` is called during Nitro's state transition. It checks whether the transaction has been previously reverted or is part of the transaction filter. If either is true, it will not execute the transaction and will use up a predetermined amount of gas. If it was a previously reverted transaction, the sender's nonce will be increased.
 
 ## Interfaces and components
 
