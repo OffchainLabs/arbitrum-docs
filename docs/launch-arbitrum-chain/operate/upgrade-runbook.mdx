@@ -120,7 +120,7 @@ To fetch a machine manually, run the script from your machines directory with bo
 
 ```shell
 cd /home/user/.arbitrum/machines
-./download-machine.sh consensus-v51 0x8a7513bf7bb3e3db04b0d982d0e973bcf57bf8b88aef7c6d03dba3a81a56a499
+./download-machine.sh consensus-v51.1 0xc2c02df561d4afaf9a1d6785f70098ec3874765c638e3cb6dbe8d3c83333e14c
 ```
 
 The script creates a directory named after the module root, writes `module-root.txt` inside it, repoints the `latest` symlink at it, and downloads `machine.v2.wavm.br` (plus `replay.wasm`, if that release published one).
@@ -168,7 +168,7 @@ INFO BlockValidator initialized  current=0x8a7513bf... pending=0x8a7513bf...
 INFO validator chosen           WasmModuleRoot=0x8a7513bf... chosen=jit maxWorkers=8
 ```
 
-The `current` value should match the onchain `wasmModuleRoot()`. A `validator chosen` line must appear for every root listed in `BlockValidator initialized`; if one is missing, that machine isn't available and validation for that root cannot run.
+The `current` value should match the onchain `wasmModuleRoot()`. A `validator chosen` line appears for every root listed in `BlockValidator initialized`; if a machine for any root is missing, startup fails with `cannot validate WasmModuleRoot`.
 
 ### Verify the validator is bonding
 
@@ -198,7 +198,7 @@ These failures share a single root cause—the validator does not have the machi
 | `on-chain WASM module root did not match with any of the allowed WASM module roots` | Yes          | Same pre-check, when `--validation.wasm.allowed-wasm-module-roots` is set and nothing matched |
 | `wasmroot doesn't match rollup : <root>, valid: [<roots>]`                          | Yes          | Runtime mismatch. The validator runs but cannot advance its bond                              |
 
-Operators upgrading Nitro have reported the two fatal cases wrapped in a `failed to create node` startup error; the specific message quoted in that error tells you which one you're looking at.
+Operators upgrading Nitro have reported the two fatal cases wrapped in a `failed to create node` startup error (`failed to create consensus node` on newer versions); the specific message quoted in that error tells you which one you're looking at.
 
 ### The node won't start
 
@@ -241,7 +241,7 @@ So if your node starts but can't advance its bond, clearing this flag won't help
 
 ### The validator starts but can't advance its bond
 
-This error means the node is running, but the root in the Rollup contract isn't among the roots the block validator actually validated with:
+This error only occurs on chains still running the legacy staker—the BoLD staker doesn't perform this check. It means the node is running, but the root in the Rollup contract isn't among the roots the block validator actually validated with:
 
 ```text
 error advancing stake from node 18 (hash 0x4d42...): error generating node action:
@@ -256,7 +256,7 @@ A related message, `block validation is still pending`, is not a mismatch—it m
 
 <VanillaAdmonition type="caution" title="Don't suppress the mismatch check">
 
-`--staker.dangerous.ignore-rollup-wasm-module-root` downgrades this error to a warning and lets the validator make assertions anyway. Its own help text describes it as dangerous, and for good reason: asserting against a module root the Rollup contract doesn't recognize risks producing assertions that can be challenged. Fix the machine, don't silence the check.
+`--node.staker.dangerous.ignore-rollup-wasm-module-root` downgrades this error to a warning and lets the validator make assertions anyway. Its own help text describes it as dangerous, and for good reason: asserting against a module root the Rollup contract doesn't recognize risks producing assertions that can be challenged. Fix the machine, don't silence the check.
 
 Likewise, `--validation.wasm.enable-wasmroots-check=false` disables only the non-fatal startup pre-check. It hides an early warning without addressing the cause.
 
@@ -300,4 +300,4 @@ Rolling `nitro-contracts` back is only remotely viable if no assertions have bee
 - [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx)—what to watch during and after an upgrade
 - [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx)—diagnosing batch poster errors
 - [Customize your chain's behavior](/launch-arbitrum-chain/protocol-hacks/stf.mdx)—building a custom STF and its replay binary
-- [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx)—full reference for every flag named here
+- [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx)—reference for the Nitro configuration flags named here (`dangerous` flags are not listed)
