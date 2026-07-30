@@ -52,7 +52,7 @@ Handle higher volumes and faster response times for products that cannot degrade
 | Dedicated throughput so your chain does not compete for computation and storage resources | Guaranteed capacity means you can make performance commitments (effectively an SLA) to partners and customers without worrying about noisy-neighbor contention.                                                                                        | Consistent performance during peak events—launches, drops, market volatility—instead of degraded speed exactly when demand is highest.                                                               | [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx)                                                                                                                 |
 | Set the gas target and block gas limit to match your expected load                        | You provision capacity to match your expected transaction volume—scaling up for high-throughput workloads or holding it lean to manage operating costs—so throughput planning becomes a controllable lever rather than a fixed constraint you inherit. | Capacity provisioned to real demand means orders and settlements continue to clear promptly even during peak volume, rather than facing delays or failed transactions when the network is congested. | - [Gas target guidance](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx) <br /> - [Gas optimization](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx#block-gas-limit) |
 
-### Compliance and privacy
+### Privacy and access controls
 
 Create participation rules and data access controls that align with regulated workflows and protect sensitive information.
 
@@ -81,6 +81,68 @@ Choose how the chain is upgraded, administered, and backed by data availability 
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | Define the chain-owner role and access controls that govern upgrades and administration, and plan a path toward progressive decentralization           | You retain the control needed for upgrades and incident response early on, then deliberately decentralize as the chain matures—balancing agility with credibility. | Clear accountability for who can change the chain, plus a visible path toward stronger, more decentralized guarantees. | [Ownership and access control](/launch-arbitrum-chain/operate/ownership-and-access.mdx)                           |
 | Choose your data availability model—Rollup, AnyTrust, <a data-quicklook-from="alt-da">Alt-DA</a>—to trade off cost against transparency and resilience | You dial the cost-versus-security balance directly; AnyTrust can cut data costs substantially, while Rollup maximizes security and transparency.                   | Lower fees when you choose AnyTrust, or maximum security and Ethereum-grade transparency when you choose Rollup        | [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx) |
+
+## Performance
+
+On an Arbitrum chain, performance isn’t a single parameter—it’s the combined result of a few independent levers. Each trades one property against another (speed vs. infrastructure load, throughput vs. node stability, settlement speed vs. security), and you tune them to fit your product’s risk tolerance and demand profile. There are four primary parameters to configure, and language support capability is automatically included (no configuration needed).
+
+### Finality and settlement
+
+How quickly transactions become final and withdrawable. Set the **Delayed Inbox finality**, the **challenge period**, and **fast withdrawals** to balance settlement speed against re-org and security risk.
+
+| Feature                                           | Your benefit                                                                                                                                                                     | User benefit                                                                                                                       | Guides                                                                                                                                                                                                                                                                                |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Delayed inbox, fast withdrawals, challenge period | Delayed Inbox finality, challenge period, and fast withdrawals — to balance settlement speed against re-org and security risk for your risk, audit, and compliance stakeholders. | Faster, more predictable settlement: sub-second soft finality for responsiveness and quicker withdrawals back to the parent chain. | - [Delayed inbox](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx) <br /> - [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx) <br /> - [Challenge period](/launch-arbitrum-chain/chain-config/validation/challenge-period.mdx) |
+
+### Cost and fee stability
+
+How predictable prices stay under load. Use **Dynamic Pricing**, **fee management** (base/surplus minimums), a **gas price floor**, and **batch-poster fee tuning** to smooth spikes and capture revenue.
+
+| Feature                                                                                             | Your benefit                                                                                                                                                                                                                | User benefit                                                                                                                    | Guides                                                                                                                                                                                                                                                                                                                                                                     |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - Dynamic pricing <br /> - Fee management <br /> - Gas price floor <br /> - Batch poster fee tuning | Shape fee economics directly — Dynamic Pricing (multiple gas targets), base/surplus fee minimums, a gas price floor, and batch-poster fee tuning — to smooth price spikes and capture revenue while costs scale with usage. | More stable, predictable transaction costs under load, avoiding sudden fee spikes during large payout runs or volatile periods. | - [Dynamic pricing](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx) <br /> - [Fee management](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx) <br /> - [Gas optimization](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx) <br /> - [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning.mdx) |
+
+### Language support
+
+Stylus is inherited by every Arbitrum chain. It allows developing smart contracts in languages your team may already be familiar with—instead of having to learn Solidity. Out of the box it will allow you to write performant contracts in Rust, C, C++ (and community-tier AssemblyScript) alongside Solidity, reusing mature libraries and keeping full EVM compatibility.
+
+- [Stylus gentle intro](/stylus/gentle-introduction.mdx)
+- [Deploy non-Rust WASM contracts](/stylus/how-tos/deploying-non-rust-wasm-contracts.mdx)
+
+## Compliance
+
+### Sanctioned-address screening at the protocol level
+
+Protocol-level transaction filtering added to the Sequencer and STF, at the chain owner’s discretion.
+
+| Owner benefit                                                                                                                                                                        | User benefit                                                                                                        | Guide                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Enables filtering as a first-class protocol capability to opt into, rather than building and maintaining bespoke tooling, while retaining full discretion over whether to enable it. | Transactions are screened by the network itself, so protection doesn’t depend on any single app behaving correctly. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Choose your screening provider (TRM Labs / Chainalysis)
+
+| Owner benefit                                                                                          | User benefit                                                                  | Guide                                                                                                    |
+| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Can reuse an existing provider relationship and risk methodology rather than build screening in-house. | Screening reflects industry-standard sanctions data rather than ad hoc lists. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Define restriction lists (address-level and event-level rules)
+
+| Owner benefit                                                            | User benefit                                                                             | Guide                                                                                                    |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Can tailor enforcement granularity to policy—addresses, events, or both. | Only the activity that the policy actually targets is blocked, reducing false positives. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Restriction rules
+
+| Owner benefit                                                                     | User benefit                                                   | Guide                                                                                                    |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| A ready-made menu of enforcement actions covering transfers, tokens, and opcodes. | Clearly scoped restrictions keep permitted activity available. | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+
+### Continuous monitoring (synchronization pipeline)
+
+| Feature              | Owner benefit                                                      | User benefit                                                             | Guide                                                                                                    |
+| -------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| Compliance filtering | The restricted set remains up to date without manual redeployment. | Newly sanctioned addresses are enforced promptly, improving protection.  | [Compliance filtering](/launch-arbitrum-chain/02-configure-your-chain/advanced/compliance-filtering.mdx) |
+| CLI flags            | Can tune update frequency and storage to their operational needs.  | Timely list updates mean less exposure to recently restricted addresses. | [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx)                                  |
 
 ## What problem do Arbitrum chains solve?
 
