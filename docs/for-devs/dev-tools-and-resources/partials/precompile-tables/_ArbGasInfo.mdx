@@ -1,476 +1,448 @@
-<table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Solidity interface</th>
-      <th>Go implementation</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <code>getPricesInWeiWithAggregator(address aggregator)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L24" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L28" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetPricesInWeiWithAggregator gets prices in wei when using the provided aggregator</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getPricesInWei()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L38" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L101" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetPricesInWei gets prices in wei when using the caller's preferred aggregator</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getPricesInArbGasWithAggregator(address aggregator)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L45" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L106" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetPricesInArbGasWithAggregator gets prices in ArbGas when using the provided aggregator</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getPricesInArbGas()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L51" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L156" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetPricesInArbGas gets prices in ArbGas when using the caller's preferred aggregator</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getGasAccountingParams()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L57" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L161" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetGasAccountingParams gets the rollup's speed limit, pool size, and block gas limit</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getMaxTxGasLimit()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L61" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L169" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetMaxTxGasLimit gets the max tx gas limit</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getMinimumGasPrice()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L64" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L176" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetMinimumGasPrice gets the minimum gas price needed for a transaction to succeed</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1BaseFeeEstimate()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L67" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L181" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1BaseFeeEstimate gets the current estimate of the L1 basefee</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1BaseFeeEstimateInertia()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L70" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L186" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1BaseFeeEstimateInertia gets how slowly ArbOS updates its estimate of the L1 basefee</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1RewardRate()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L74" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L191" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1RewardRate gets the L1 pricer reward rate</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1RewardRecipient()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L78" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L196" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1RewardRecipient gets the L1 pricer reward recipient</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1GasPriceEstimate()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L81" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L201" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1GasPriceEstimate gets the current estimate of the L1 basefee</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getCurrentTxL1GasFees()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L84" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L206" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetCurrentTxL1GasFees gets the fee in wei paid to the batch poster for posting this tx</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getGasBacklog()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L89" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L211" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetGasBacklog gets the backlogged amount of gas burnt in excess of the speed limit</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getPricingInertia()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L94" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L216" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetPricingInertia gets how slowly ArbOS updates the L2 basefee in response to backlogged gas</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getGasBacklogTolerance()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L99" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L221" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetGasBacklogTolerance gets the forgivable amount of backlogged gas ArbOS will ignore when raising the basefee</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1PricingSurplus()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L102" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L226" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1PricingSurplus gets the surplus of funds for L1 batch posting payments (may be negative)</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getPerBatchGasCharge()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L105" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L250" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetPerBatchGasCharge gets the base charge (in L1 gas) attributed to each data batch in the calldata pricer</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getAmortizedCostCapBips()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L108" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L255" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetAmortizedCostCapBips gets the cost amortization cap in basis points</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1FeesAvailable()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L112" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L260" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1FeesAvailable gets the available funds from L1 fees</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1PricingEquilibrationUnits()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L116" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L265" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1PricingEquilibrationUnits gets the equilibration units parameter for L1 price adjustment algorithm (Available since ArbOS 20)</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getLastL1PricingUpdateTime()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L120" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L270" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetLastL1PricingUpdateTime gets the last time the L1 calldata pricer was updated (Available since ArbOS 20)</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1PricingFundsDueForRewards()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L124" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L275" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1PricingFundsDueForRewards gets the amount of L1 calldata payments due for rewards (per the L1 reward rate) (Available since ArbOS 20)</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getL1PricingUnitsSinceUpdate()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L128" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L280" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetL1PricingUnitsSinceUpdate gets the amount of L1 calldata posted since the last update (Available since ArbOS 20)</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getLastL1PricingSurplus()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L132" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L285" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetLastL1PricingSurplus gets the L1 pricing surplus as of the last update (may be negative) (Available since ArbOS 20)</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getMaxBlockGasLimit()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L136" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L290" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetMaxBlockGasLimit gets the maximum block gas limit</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getGasPricingConstraints()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L145" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L295" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetGasPricingConstraints gets the current gas pricing constraints used by the Multi-Constraint Pricer.</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getMultiGasPricingConstraints()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L159" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L327" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetMultiGasPricingConstraints returns the current configuration of multi-gas pricing constraints</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getMultiGasBaseFee()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L171" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L381" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetMultiGasBaseFee gets the current base fee for each resource type used by the Multi-Constraint Pricer</td>
-    </tr>
-  </tbody>
-</table>
+<div className="table-wrapper">
+  <table className="stacked-table">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Source</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Method">
+          <code>getPricesInWeiWithAggregator(address aggregator)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L24" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L28" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetPricesInWeiWithAggregator gets prices in wei when using the provided aggregator</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getPricesInWei()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L38" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L101" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetPricesInWei gets prices in wei when using the caller's preferred aggregator</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getPricesInArbGasWithAggregator(address aggregator)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L45" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L106" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetPricesInArbGasWithAggregator gets prices in ArbGas when using the provided aggregator</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getPricesInArbGas()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L51" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L156" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetPricesInArbGas gets prices in ArbGas when using the caller's preferred aggregator</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getGasAccountingParams()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L57" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L161" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetGasAccountingParams gets the rollup's speed limit, pool size, and block gas limit</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getMaxTxGasLimit()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L61" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L169" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetMaxTxGasLimit gets the max tx gas limit</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getMinimumGasPrice()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L64" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L176" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetMinimumGasPrice gets the minimum gas price needed for a transaction to succeed</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1BaseFeeEstimate()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L67" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L181" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1BaseFeeEstimate gets the current estimate of the L1 basefee</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1BaseFeeEstimateInertia()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L70" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L186" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1BaseFeeEstimateInertia gets how slowly ArbOS updates its estimate of the L1 basefee</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1RewardRate()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L74" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L191" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1RewardRate gets the L1 pricer reward rate</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1RewardRecipient()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L78" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L196" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1RewardRecipient gets the L1 pricer reward recipient</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1GasPriceEstimate()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L81" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L201" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1GasPriceEstimate gets the current estimate of the L1 basefee</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getCurrentTxL1GasFees()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L84" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L206" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetCurrentTxL1GasFees gets the fee in wei paid to the batch poster for posting this tx</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getGasBacklog()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L89" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L211" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetGasBacklog gets the backlogged amount of gas burnt in excess of the speed limit</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getPricingInertia()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L94" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L216" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetPricingInertia gets how slowly ArbOS updates the L2 basefee in response to backlogged gas</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getGasBacklogTolerance()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L99" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L221" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetGasBacklogTolerance gets the forgivable amount of backlogged gas ArbOS will ignore when raising the basefee</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1PricingSurplus()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L102" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L226" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1PricingSurplus gets the surplus of funds for L1 batch posting payments (may be negative)</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getPerBatchGasCharge()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L105" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L250" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetPerBatchGasCharge gets the base charge (in L1 gas) attributed to each data batch in the calldata pricer</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getAmortizedCostCapBips()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L108" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L255" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetAmortizedCostCapBips gets the cost amortization cap in basis points</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1FeesAvailable()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L112" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L260" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1FeesAvailable gets the available funds from L1 fees</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1PricingEquilibrationUnits()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L116" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L265" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1PricingEquilibrationUnits gets the equilibration units parameter for L1 price adjustment algorithm (Available since ArbOS 20)</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getLastL1PricingUpdateTime()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L120" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L270" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetLastL1PricingUpdateTime gets the last time the L1 calldata pricer was updated (Available since ArbOS 20)</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1PricingFundsDueForRewards()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L124" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L275" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1PricingFundsDueForRewards gets the amount of L1 calldata payments due for rewards (per the L1 reward rate) (Available since ArbOS 20)</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getL1PricingUnitsSinceUpdate()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L128" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L280" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetL1PricingUnitsSinceUpdate gets the amount of L1 calldata posted since the last update (Available since ArbOS 20)</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getLastL1PricingSurplus()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L132" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L285" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetLastL1PricingSurplus gets the L1 pricing surplus as of the last update (may be negative) (Available since ArbOS 20)</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getMaxBlockGasLimit()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L136" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L290" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetMaxBlockGasLimit gets the maximum block gas limit</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getGasPricingConstraints()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L145" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L295" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetGasPricingConstraints gets the current gas pricing constraints used by the Multi-Constraint Pricer.</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getMultiGasPricingConstraints()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L159" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L327" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetMultiGasPricingConstraints returns the current configuration of multi-gas pricing constraints</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getMultiGasBaseFee()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbGasInfo.sol#L171" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbGasInfo.go#L381" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetMultiGasBaseFee gets the current base fee for each resource type used by the Multi-Constraint Pricer</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
