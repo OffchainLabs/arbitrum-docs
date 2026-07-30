@@ -13,18 +13,21 @@ This runbook is the operational wrapper around an <a data-quicklook-from="arbitr
 
 It complements [ArbOS upgrade](/launch-arbitrum-chain/operate/arbos-upgrade.mdx), which remains the canonical reference for how each individual step works. This page does not restate those mechanics—it links to them at each step and focuses on the coordination, verification, and failure-recovery work around them.
 
-An upgrade touches four things that must stay mutually compatible:
+An upgrade touches five things that must stay mutually compatible:
 
 1. The <a data-quicklook-from="arbitrum-nitro">Nitro</a> version running on every node and <a data-quicklook-from="validator">validator</a>.
 2. The `nitro-contracts` deployed on the <a data-quicklook-from="parent-chain">parent chain</a>.
 3. The <a data-quicklook-from="wasm-module-root">WASM module root</a> set in the Rollup contract.
-4. The <a data-quicklook-from="arbos">ArbOS</a> version active on the <a data-quicklook-from="child-chain">child chain</a>.
+4. The <a data-quicklook-from="wavm">WAVM</a> machines on each validator's disk—one per root the validator must validate (current and pending). A new Nitro version alone doesn't guarantee they are present.
+5. The <a data-quicklook-from="arbos">ArbOS</a> version active on the <a data-quicklook-from="child-chain">child chain</a>.
 
-Most failed upgrades are a mismatch between two of these four, and the majority of those are WASM module root mismatches. [Troubleshoot WASM module root failures](#troubleshoot-wasm-module-root-failures) covers those in detail.
+Most failed upgrades are a mismatch between two of these five, and the majority are mismatches between the onchain root (3) and the machines on validators (4). [Troubleshoot WASM module root failures](#troubleshoot-wasm-module-root-failures) covers those in detail.
 
 <VanillaAdmonition type="caution" title="ArbOS upgrades are one-way">
 
 Once an ArbOS upgrade activates, you cannot downgrade the ArbOS version. Plan on rolling forward, not back. Read [Rollback options](#rollback-options) **before** you schedule an upgrade, so you know which parts of the process are reversible and which aren't.
+
+**The Nitro version and the ArbOS version are independent**: Nitro is per-node software you can deploy and roll back; the ArbOS version is chain-wide state, moved only by `scheduleArbOSUpgrade`. Upgrading Nitro does not change the chain's ArbOS version.
 
 </VanillaAdmonition>
 
@@ -72,7 +75,7 @@ See [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access.m
 
 ### Confirm the target machine is present on every validator
 
-This is the check that most often gets skipped, and it's the one that causes the WASM root failures in the next section. Verify that each validator has the machine for the **target** WASM module root on disk _before_ the upgrade activates, not after.
+This is the check that most often gets skipped, and it's the one that causes the failures in [Troubleshoot WASM module root failures](#troubleshoot-wasm-module-root-failures). Verify that each validator has the machine for the **target** WASM module root on disk _before_ you set that root onchain—not after the upgrade activates.
 
 Machines are discovered by directory layout, so inspect the directory directly:
 
@@ -92,15 +95,25 @@ machines/
     └── replay.wasm                  # only present if the release publishes it
 ```
 
+Staging the machine is only half the check. The block validator reads its machine list and resolves its pending root once, at startup, so restart each validator after staging and confirm the startup log before you set the root onchain:
+
+```text
+INFO BlockValidator initialized  current=0x8a7513bf... pending=0xc2c02df5...
+```
+
+`pending` must equal your target root. If it doesn't, the validator will refuse the onchain root change in step 3. Don't defer this to [post-upgrade verification](#verify-the-wasm-module-root-matches-everywhere)—by then the root is already set.
+
 <VanillaAdmonition type="tip" title="WASM module roots are backward compatible">
 
-You can set a new WASM module root and stage the corresponding machines on your validators before the ArbOS upgrade activates. Doing so does not disrupt the chain, so there's no reason to leave it until the last moment.
+You can stage the machines on your validators and set the new WASM module root well before the ArbOS upgrade activates. Doing so does not disrupt the chain, so there's no reason to leave it until the last moment.
+
+Order matters within that window, though: stage the machine on each validator and restart it **first**, then set the root onchain. A running validator only follows an onchain root change if its pending root already resolves to the new root, and it resolves that root at startup.
 
 </VanillaAdmonition>
 
 ## Determine whether you need `download-machine.sh`
 
-`scripts/download-machine.sh` in the Nitro repository fetches a prebuilt <a data-quicklook-from="wavm">WAVM</a> machine for a given consensus tag. Whether you need to run it depends entirely on how you obtain your node binary:
+`scripts/download-machine.sh` in the Nitro repository fetches a prebuilt WAVM machine for a given consensus tag. Whether you need to run it depends entirely on how you obtain your node binary:
 
 | Your setup                                                                                         | Do you need `download-machine.sh`?                                                                                   |
 | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -131,17 +144,24 @@ If you maintain a custom STF, downloading a published machine is not sufficient�
 
 Order matters. Each step assumes the previous one completed successfully.
 
-| Step | Action                                                                                                                                                                                      | Notes                                                                                                                        |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| 1    | [Update Nitro on nodes and validators](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-1-update-nitro-on-nodes-and-validators)                                                        | Validators first, then remaining nodes. **Must** complete before the ArbOS upgrade deadline                                  |
-| 2    | [Set the new WASM module root](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-2-upgrade-the-wasm-module-root--your-chains-nitro-contracts)                                           | Safe to do early; roots are backward compatible                                                                              |
-| 3    | Upgrade `nitro-contracts`, if the release requires it                                                                                                                                       | Follow [Nitro contracts upgrades](https://github.com/OffchainLabs/chain-actions?tab=readme-ov-file#nitro-contracts-upgrades) |
-| 4    | [Schedule the ArbOS version upgrade](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-3-schedule-the-arbos-version-upgrade)                                                            | Pass the real version number and a UNIX timestamp. A timestamp of `0` upgrades immediately                                   |
-| 5    | [Enable release-specific configuration or feature flags](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) | Not always required; check the release page                                                                                  |
+| Step | Action                                                                                                                                                                                      | Notes                                                                                                                                                         |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | [Update Nitro on nodes and validators](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-1-update-nitro-on-nodes-and-validators)                                                        | Validators first, then remaining nodes. **Must** complete before the ArbOS upgrade deadline                                                                   |
+| 2    | Stage the target WAVM machine on every validator, then restart the validator                                                                                                                | **Must** precede step 3. The block validator resolves its pending root at startup, so stage the machine before the step 1 restart and one restart covers both |
+| 3    | [Set the new WASM module root](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-2-upgrade-the-wasm-module-root--your-chains-nitro-contracts)                                           | Safe to do early, as long as every validator has been restarted with the target machine and its startup log shows `pending=<target root>`                     |
+| 4    | Upgrade `nitro-contracts`, if the release requires it                                                                                                                                       | Follow [Nitro contracts upgrades](https://github.com/OffchainLabs/chain-actions?tab=readme-ov-file#nitro-contracts-upgrades)                                  |
+| 5    | [Schedule the ArbOS version upgrade](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-3-schedule-the-arbos-version-upgrade)                                                            | Pass the real version number and a UNIX timestamp. A timestamp of `0` upgrades immediately                                                                    |
+| 6    | [Enable release-specific configuration or feature flags](/launch-arbitrum-chain/operate/arbos-upgrade.mdx#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) | Not always required; check the release page                                                                                                                   |
+
+<VanillaAdmonition type="caution" title="Stage machines and restart before you set the root onchain">
+
+A running validator adopts a new onchain root only if that root equals its **pending** root; anything else is refused with `unexpected wasmModuleRoot! cannot validate!`. The legacy staker then stops acting entirely, while <a data-quicklook-from="bold">BoLD</a> only warns. Both the pending root and the machine list are read **once, at startup**, so staging a machine under a running validator does nothing—the validator must be restarted before step 3. See [Understand which roots your validator is required to have](#understand-which-roots-your-validator-is-required-to-have).
+
+</VanillaAdmonition>
 
 <VanillaAdmonition type="caution" title="Upgrade nodes before the activation timestamp">
 
-A node that is too old to process the newly active ArbOS version stops with a fatal "please upgrade to the latest version of the node software" error. Because the ArbOS upgrade activates in consensus at the scheduled timestamp, every node must already be running a compatible Nitro version when that timestamp passes. Leave yourself margin.
+A node that is too old to process the newly active ArbOS version stops with a fatal `please upgrade to the latest version of the node software` error. Because the ArbOS upgrade activates in consensus at the scheduled timestamp, every node must already be running a compatible Nitro version when that timestamp passes. Leave yourself margin.
 
 </VanillaAdmonition>
 
@@ -182,21 +202,22 @@ Confirm the <a data-quicklook-from="batch-poster">batch poster</a> is submitting
 
 <VanillaAdmonition type="info" title="Batch poster log noise after an upgrade">
 
-New Nitro versions probe for contract features that older `nitro-contracts` deployments don't implement, so a version-skewed window between steps 1 and 3 can produce `eth_call` errors in the batch poster log that are benign. Confirm batches are still landing onchain before treating any of them as an incident. To diagnose messages that persist after the upgrade completes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) and [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery.mdx).
+New Nitro versions probe for contract features that older `nitro-contracts` deployments don't implement, so a version-skewed window between steps 1 and 4 can produce `eth_call` errors in the batch poster log that are benign. Confirm batches are still landing onchain before treating any of them as an incident. To diagnose messages that persist after the upgrade completes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) and [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery.mdx).
 
 </VanillaAdmonition>
 
 ## Troubleshoot WASM module root failures
 
-These failures share a single root cause—the validator does not have the machine for a module root it's required to handle—but they surface in three different ways, with different severities. Identify which one you have before changing any configuration.
+These failures share a single root cause—the validator does not have, or hasn't loaded, the machine for a module root it's required to handle—but they surface at three different severities: fatal at startup, non-fatal at startup, and at runtime. Identify which one you have before changing any configuration.
 
-| Error message                                                                       | Node starts? | What it means                                                                                 |
-| ----------------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------- |
-| `latestWasmModuleRoot not set`                                                      | No           | No machine directory was found **at all**                                                     |
-| `cannot validate WasmModuleRoot <root>`                                             | No           | Machines were found, but none provides this specific required root                            |
-| `unable to find validator machine directory for the on-chain WASM module root`      | Yes          | Startup compatibility pre-check failed. Logged at `ERROR`, but **does not stop the node**     |
-| `on-chain WASM module root did not match with any of the allowed WASM module roots` | Yes          | Same pre-check, when `--validation.wasm.allowed-wasm-module-roots` is set and nothing matched |
-| `wasmroot doesn't match rollup : <root>, valid: [<roots>]`                          | Yes          | Runtime mismatch. The validator runs but cannot advance its bond                              |
+| Error message                                                                           | Node starts? | What it means                                                                                                                                                                                                          |
+| --------------------------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `latestWasmModuleRoot not set`                                                          | No           | No machine directory was found **at all**                                                                                                                                                                              |
+| `cannot validate WasmModuleRoot <root>`                                                 | No           | Machines were found, but none provides this specific required root                                                                                                                                                     |
+| `unable to find validator machine directory for the on-chain WASM module root`          | Yes          | Startup compatibility pre-check failed. Logged at `ERROR`, but **does not stop the node**                                                                                                                              |
+| `on-chain WASM module root did not match with any of the allowed WASM module roots`     | Yes          | Same pre-check, when `--validation.wasm.allowed-wasm-module-roots` is set and nothing matched                                                                                                                          |
+| `wasmroot doesn't match rollup : <root>, valid: [<roots>]`                              | Yes          | Runtime mismatch. The validator runs but cannot advance its bond                                                                                                                                                       |
+| `unexpected wasmModuleRoot! cannot validate! found <onchain>, current <x>, pending <y>` | Yes          | The onchain root changed to a root that is neither the validator's current nor its pending root, so the validator refuses to adopt it. The legacy staker then stops acting entirely; BoLD logs a warning and continues |
 
 Operators upgrading Nitro have reported the two fatal cases wrapped in a `failed to create node` startup error (`failed to create consensus node` on newer versions); the specific message quoted in that error tells you which one you're looking at.
 
@@ -231,11 +252,13 @@ A validator must have machines for **both** roots the block validator resolves, 
 
 When these differ, both are required, and a missing machine for **either** produces `cannot validate WasmModuleRoot`. This is why a validator that ran fine yesterday can fail to start today: the chain's root changed, and the pending root now resolves to something the image doesn't contain.
 
+By default, `pending` resolves through the `machines/latest` symlink, which `download-machine.sh` repoints to whatever it fetched last. If you'd rather not depend on that, pin it: `--node.block-validator.pending-upgrade-module-root=<target root>`. Either way the machine must be on disk, or startup fails with `cannot validate WasmModuleRoot`—pinning changes which root is required, not whether one is.
+
 <VanillaAdmonition type="caution" title="Clearing `pending-upgrade-module-root` is not a fix for a Rollup mismatch">
 
 Setting `--node.block-validator.pending-upgrade-module-root=` to an empty value only shrinks the set of roots required **at startup**. It has no effect on the runtime `wasmroot doesn't match rollup` error, which compares against the Rollup contract rather than against this flag.
 
-So if your node starts but can't advance its bond, clearing this flag won't help—you need the correct machine on disk. Conversely, if you cleared it to work around a startup failure, you've disabled validation against the pending upgrade root, which means you won't discover a missing machine until the upgrade activates. Restore it once the correct machine is staged.
+So if your node starts but can't advance its bond, clearing this flag won't help—you need the correct machine on disk. Conversely, if you cleared it to work around a startup failure, you've disabled validation against the pending upgrade root, which means you won't discover a missing machine until the upgrade activates. Clearing it also means the validator has no pending root to match against, so it can't adopt a new onchain root at runtime either. Restore it once the correct machine is staged.
 
 </VanillaAdmonition>
 
@@ -276,7 +299,7 @@ How much you can undo depends entirely on whether the ArbOS upgrade has activate
 
 ### Before the activation timestamp
 
-A scheduled upgrade is just two stored values—a target version and a timestamp—and the upgrade only fires when the chain's timestamp reaches the target _and_ the target version is higher than the current one. Until then, you can freely cancel or reschedule by calling `scheduleArbOSUpgrade` again through the upgrade executor. This is the safe window; if you have any doubt about validator readiness, postpone from here rather than pushing forward.
+A scheduled upgrade is just two stored values—a target version and a timestamp—and the upgrade only fires when the chain's timestamp reaches the target timestamp _and_ the target version is higher than the current one. Until then, you can freely cancel or reschedule by calling `scheduleArbOSUpgrade` again through the upgrade executor. This is the safe window; if you have any doubt about validator readiness, postpone from here rather than pushing forward.
 
 ### After the activation timestamp
 
