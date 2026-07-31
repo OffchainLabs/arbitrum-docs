@@ -1,0 +1,155 @@
+---
+title: 'Deploy a Yield Bridge for your Arbitrum chain'
+sidebar_label: 'Yield Bridge'
+description: 'Learn how a Yield Bridge earns yield on the capital escrowed in your token bridge by allocating it to an ERC-4626 vault on the parent chain, what you configure, and what risks it introduces.'
+author: 'TODO-github-username'
+sme: 'TODO-github-username'
+target_audience: 'Chain owners evaluating or deploying a Yield Bridge for an Arbitrum chain.'
+user_story: 'As a current or prospective Arbitrum chain owner, I want to understand how a Yield Bridge works, what I control, and what risks it introduces before I commit to deploying one.'
+content_type: 'concept'
+---
+
+import RaaSNotice from '../partials/_raas-providers-notice.mdx';
+
+<RaaSNotice />
+
+Every token bridged into your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> stays escrowed on the <a data-quicklook-from="parent-chain">parent chain</a> for as long as the corresponding <a data-quicklook-from="child-chain">child chain</a> token exists. In the [canonical token bridge](/launch-arbitrum-chain/deploy/token-bridge.mdx), that escrowed capital earns nothing.
+
+A **Yield Bridge** is a variant of the canonical token bridge that puts the escrowed capital to work. Instead of holding the underlying asset directly, the <a data-quicklook-from="token-gateway">token gateway</a> deposits it into a `MasterVault` on the parent chain, which allocates a portion of the balance to an [ERC-4626](https://eips.ethereum.org/EIPS/eip-4626) vault of your choosing and keeps the remainder liquid for withdrawals. The yield accrues to an address you designate, so you can fund gas subsidies, incentive programs, or chain revenue from capital that would otherwise sit still.
+
+<VanillaAdmonition type="info">
+
+### Get hands-on support before you deploy
+
+A Yield Bridge is a new capability with an operational burden that a standard token bridge doesn't carry: you select and monitor a vault, you decide how much capital stays liquid, and you accept the risk that the underlying strategy loses money. We work directly with the first teams to adopt it.
+
+If you're interested in deploying a Yield Bridge for your Arbitrum chain, [reach out to us in the Arbitrum Discord](https://discord.gg/arbitrum) for hands-on support. This page is written to help you evaluate the design and arrive at that conversation prepared. It isn't a self-service deployment guide.
+
+</VanillaAdmonition>
+
+## What a Yield Bridge changes
+
+A Yield Bridge reuses the canonical token bridge wholesale. The <a data-quicklook-from="gateway-router">gateway router</a>, the <a data-quicklook-from="retryable-ticket">retryable ticket</a> mechanism, and the child chain contracts are unchanged. Only the escrow behavior on the parent chain differs.
+
+|                                | Canonical token bridge                 | Yield Bridge                                                                        |
+| ------------------------------ | -------------------------------------- | ----------------------------------------------------------------------------------- |
+| Parent chain escrow            | The gateway holds the underlying asset | The gateway holds `MasterVault` shares; the vault holds the asset                   |
+| Capital productivity           | None                                   | A configurable share of the balance is allocated to an ERC-4626 vault               |
+| Yield destination              | N/A                                    | An address you designate                                                            |
+| Withdrawal to the parent chain | Delivers the underlying asset          | Delivers `MasterVault` shares, which the recipient redeems for the underlying asset |
+| Enabled                        | Default                                | At token bridge deployment only                                                     |
+
+## Architecture
+
+Three parent chain components sit between the gateway and the yield strategy.
+
+<VanillaAdmonition type="note">
+
+The contracts and deployment scripts use the abbreviation `Ybb`, from the feature's earlier name, Yield Bearing Bridge. You'll see it in identifiers such as `L1YbbERC20Gateway`, `L1YbbCustomGateway`, and `setYbbTemplates`. Those names were deliberately left unchanged when the feature was renamed so that the code you read still matches the commits covered by the security review. `Ybb` and Yield Bridge refer to the same thing.
+
+</VanillaAdmonition>
+
+`MasterVaultFactory` deploys and tracks one `MasterVault` per bridged token. The first time a token is bridged, the gateway calls the factory, which deploys the vault for that token and initializes it. No configuration is required to bridge a token, and none of your existing bridging flows change.
+
+`MasterVault` is the escrow contract and an ERC-4626 vault in its own right. It holds an **idle balance** available for immediate withdrawals and allocates the rest to a single **subvault**. It is the only contract that talks to the subvault.
+
+`MasterVaultRoles` is a roles registry shared across every vault the factory deploys. It lets you grant an operational role once rather than per asset.
+
+The **subvault** is any ERC-4626 vault that shares the vault's underlying asset, such as a curated vault on a lending protocol. This is where the yield comes from, and it is the component you choose.
+
+Choosing and monitoring that subvault is an ongoing risk management job, not a one-time configuration step. Strategies drift, liquidity conditions change, and the protocols underneath a vault get upgraded. We strongly recommend partnering with a professional vault manager or risk curator rather than selecting and maintaining a strategy yourself. Curators operate vaults as their primary business, and they bring the underwriting frameworks, position monitoring, and incident response that bridge-scale capital warrants. Several firms offer this service across the major ERC-4626 vault protocols; we don't endorse specific ones, and evaluating candidates against your own risk tolerance is part of the work we'll do with you.
+
+<VanillaAdmonition type="caution">
+
+### A newly deployed Yield Bridge earns nothing
+
+Each `MasterVault` is initialized with a pass-through subvault that holds assets without generating yield, and with its target allocation set to `0`. Until you allowlist a real ERC-4626 vault, select it, and set a non-zero target allocation, a Yield Bridge behaves exactly like a canonical token bridge. This is deliberate: capital is never exposed to a yield strategy you haven't explicitly chosen.
+
+</VanillaAdmonition>
+
+## Deposit and withdrawal flow
+
+**Depositing from the parent chain.** The user calls the gateway router as they would for any bridged token. The gateway pulls the underlying asset from the user, deposits it into that token's `MasterVault`, and holds the shares it receives as escrow. A retryable ticket mints the child chain token to the user. While the vault is solvent, shares are issued one-for-one with the asset, so the child chain balance matches what the user deposited.
+
+The router also exposes a deposit entrypoint that takes a minimum amount to be received on the child chain and reverts if the vault would issue fewer shares than that. Use it when the vault may be carrying a loss.
+
+**Withdrawing to the parent chain.** The child chain gateway burns the token and sends a <a data-quicklook-from="l2-to-l1-message">child-to-parent message</a> exactly as it does for a canonical bridge. When that message executes, the parent chain gateway delivers `MasterVault` shares to the recipient rather than the underlying asset. The recipient then calls `redeem` on the vault to exchange those shares for the asset, optionally specifying a minimum amount to receive. Redemption is permissionless and available at any time: the vault pays from its idle balance and withdraws from the subvault to cover any shortfall.
+
+**Rebalancing.** Deposits and withdrawals don't move capital in or out of the subvault. A keeper calls `rebalance` to bring the idle balance back to its target, which is what deposits into and withdraws from the subvault. Each call passes a minimum exchange rate, which bounds how much the subvault's share price may move against the vault while the transaction is in flight.
+
+**Collecting yield.** The vault treats all appreciation above the one-for-one share peg as profit. A keeper calls `distributePerformanceFee`, which transfers that profit to the beneficiary you set, drawing from the idle balance first and withdrawing the remainder from the subvault. If the subvault can't cover the full amount, the call distributes what it can rather than reverting.
+
+## What you configure
+
+Every parameter below is set after deployment through the roles described in the next section. `MasterVault` has no way to change its underlying asset, its roles registry, or its gateway router after initialization.
+
+| Parameter                | Setter                      | What it controls                                                                                                                                                              |
+| ------------------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Subvault allowlist       | `setSubVaultWhitelist`      | Which ERC-4626 vaults may ever be selected. A vault must be allowlisted before it can be selected.                                                                            |
+| Active subvault          | `setSubVault`               | The single vault that currently receives allocated capital.                                                                                                                   |
+| Target allocation        | `setTargetAllocationWad`    | The share of total assets to hold in the subvault, expressed as a fraction of `1e18`. The remainder is the idle balance available for immediate withdrawals. Defaults to `0`. |
+| Minimum rebalance amount | `setMinimumRebalanceAmount` | The smallest amount a rebalance may move, so keepers don't burn gas on dust.                                                                                                  |
+| Rebalance cooldown       | `setRebalanceCooldown`      | The minimum interval between rebalances, in seconds.                                                                                                                          |
+| Beneficiary              | `setBeneficiary`            | The address that receives yield. Unset by default, and yield can't be distributed until you set it.                                                                           |
+| Pause state              | `pause`, `unpause`          | Halts deposits, redemptions, rebalancing, and yield distribution.                                                                                                             |
+
+Changing the active subvault requires a full unwind: set the target allocation to `0`, have a keeper drain the position, then select the new vault. There is no partial migration between subvaults, so plan a switch as a deliberate operation rather than a routine one.
+
+The gateway separately lets you set a prefix and suffix on the name and symbol of the child chain tokens it creates, so bridged assets on your chain can carry a name that signals they're backed by a Yield Bridge rather than a raw escrow. The change applies only to tokens bridged for the first time after you set it.
+
+## Roles
+
+Roles are hierarchical, so that the authority to change risk parameters is separated from the authority to run the vault day to day. The `ADMIN_ROLE` is held by your chain's <a data-quicklook-from="upgrade-executor">UpgradeExecutor</a>, which means allowlisting a subvault goes through the same governance path as any other privileged chain action.
+
+| Role                   | Can do                                                                                                                               | Granted by             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| `ADMIN_ROLE`           | Allowlist and remove subvaults; grant `ADMIN_ROLE` and `GENERAL_MANAGER_ROLE`                                                        | `ADMIN_ROLE`           |
+| `GENERAL_MANAGER_ROLE` | Select the active subvault; set the target allocation, minimum rebalance amount, and rebalance cooldown; grant the three roles below | `ADMIN_ROLE`           |
+| `FEE_MANAGER_ROLE`     | Set the beneficiary                                                                                                                  | `GENERAL_MANAGER_ROLE` |
+| `PAUSER_ROLE`          | Pause and unpause the vault                                                                                                          | `GENERAL_MANAGER_ROLE` |
+| `KEEPER_ROLE`          | Rebalance and distribute yield                                                                                                       | `GENERAL_MANAGER_ROLE` |
+
+Granting `KEEPER_ROLE` to the zero address makes rebalancing and yield distribution permissionless. Neither action can move funds to an address the other roles haven't already approved, so opening it up removes a liveness dependency on your own infrastructure without widening what a keeper can do.
+
+## Where the yield goes
+
+All yield accrues to the beneficiary address you set. Bridge users redeem their shares one-for-one with the underlying asset while the vault is solvent, so they neither earn the yield directly nor pay a fee for the vault's existence.
+
+That makes the beneficiary the single decision that determines the economics of your Yield Bridge. Common destinations:
+
+- **Chain revenue.** A revenue stream independent of transaction fees and <a data-quicklook-from="timeboost">Timeboost</a> proceeds.
+- **Gas subsidies.** Offset the cost of posting data to the parent chain and lower fees for your users.
+- **Incentive programs.** Fund liquidity rewards or rebates from real yield rather than token emissions.
+- **Shared revenue.** A contract that splits proceeds between your treasury and another party, such as an ecosystem fund.
+
+Nothing stops you from passing yield through to end users, but the bridge doesn't do it for you. Point the beneficiary at a distribution system of your own design—a rewards contract, a rebate program, a staking wrapper on the child chain token—and it becomes another way to spend the yield rather than a separate mode of the bridge. Keeping that logic outside the vault is what allows the vault's share accounting to stay one-for-one, which is what makes the child chain token's backing simple to reason about.
+
+## Constraints
+
+Understand these before you plan a deployment.
+
+- **A Yield Bridge is chosen at token bridge deployment.** An existing token bridge can't be converted, and a Yield Bridge can't be converted back. The escrow behavior and the risk profile of the child chain tokens are properties of the bridge, so changing them under users who bridged into a canonical bridge isn't something we're willing to support.
+- **One vault per asset, with no comingling.** Each bridged token gets its own `MasterVault`, subvault, target allocation, and beneficiary. A loss in one asset's strategy can't affect another.
+- **One active subvault at a time.** You can allowlist many, but capital is only ever allocated to one.
+- **The underlying asset must be a plain ERC-20.** Fee-on-transfer and rebalancing tokens break the vault's accounting and are rejected.
+- **The subvault must be a well-behaved ERC-4626 vault.** It must charge no deposit or withdrawal fees, and its share price must not be manipulable by a third party within a transaction. Vetting this is the substance of choosing a subvault, and it's the part of the process where a vault manager or risk curator earns their keep.
+
+## Risks
+
+Allocating escrowed capital to a yield strategy introduces risks that a canonical token bridge doesn't carry. Each is stated below with the control that limits it, but none of these controls eliminate the underlying risk.
+
+**Smart contract risk.** Allocated capital is exposed to the subvault and to every protocol beneath it. A compromised or buggy subvault can cause a total loss of the allocated balance. The Yield Bridge contracts themselves have been reviewed by Trail of Bits, and you can find that report alongside our other reviews on the [security audit reports](/audit-reports.mdx) page—but that review covers the bridge, not whichever subvault you select. The allowlist is the control on the subvault side: only a vault the `ADMIN_ROLE` has explicitly approved can ever receive funds, and that role sits behind your chain's UpgradeExecutor. Keeping the target allocation below `1e18` caps the exposure, and working with a risk curator is how you get continuous assessment of the strategy rather than a point-in-time one.
+
+**Principal risk.** If the strategy loses money, the vault's assets fall below the shares outstanding and redemptions become pro-rata. Losses are borne by holders of the child chain token, not by you. Naming the child chain token so it's distinguishable from the canonical asset is how you make that risk legible to users rather than a surprise.
+
+**Liquidity risk.** If the subvault can't return capital on demand, redemptions are limited to the idle balance until it can. The target allocation is the primary control: the lower it is, the more capital stands ready for withdrawals, and the less yield you earn. Choosing a subvault whose strategies exit quickly matters as much as the ratio you pick.
+
+**Operational risk.** Rebalancing and yield distribution depend on a keeper running. A vault that isn't rebalanced drifts from its target, which either leaves capital idle or leaves too little liquid. The rebalance cooldown and minimum rebalance amount bound how often and how small those operations can be, and a permissionless keeper removes the dependency on a single operator.
+
+The vault also carries controls that don't map to a single risk: pausing halts all deposits, redemptions, rebalancing, and distribution in an emergency; exchange-rate bounds on rebalancing and redemption protect against a share price that moves against you mid-transaction; and the vault is seeded at initialization to make first-depositor share price manipulation uneconomical.
+
+## Next steps
+
+Read the [canonical token bridge documentation](/launch-arbitrum-chain/deploy/token-bridge.mdx) if you haven't, since a Yield Bridge inherits all of it, and review [ownership and access control](/launch-arbitrum-chain/operate/ownership-and-access.mdx) to understand the governance path that the `ADMIN_ROLE` sits behind.
+
+Then [reach out to us in the Arbitrum Discord](https://discord.gg/arbitrum). We'll work through subvault selection, target allocation, role assignment, and keeper operations with your team directly.
