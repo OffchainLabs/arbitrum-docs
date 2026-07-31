@@ -1,9 +1,9 @@
 ---
 title: 'Deploy a Yield Bridge for your Arbitrum chain'
-sidebar_label: 'Yield Bridge'
+sidebar_label: 'Yield bridge'
 description: 'Learn how a Yield Bridge earns yield on the capital escrowed in your token bridge by allocating it to an ERC-4626 vault on the parent chain, what you configure, and what risks it introduces.'
-author: 'TODO-github-username'
-sme: 'TODO-github-username'
+author: 0xallan
+sme: godzillaba
 target_audience: 'Chain owners evaluating or deploying a Yield Bridge for an Arbitrum chain.'
 user_story: 'As a current or prospective Arbitrum chain owner, I want to understand how a Yield Bridge works, what I control, and what risks it introduces before I commit to deploying one.'
 content_type: 'concept'
@@ -15,37 +15,33 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 Every token bridged into your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> stays escrowed on the <a data-quicklook-from="parent-chain">parent chain</a> for as long as the corresponding <a data-quicklook-from="child-chain">child chain</a> token exists. In the [canonical token bridge](/launch-arbitrum-chain/deploy/token-bridge.mdx), that escrowed capital earns nothing.
 
-A **Yield Bridge** is a variant of the canonical token bridge that puts the escrowed capital to work. Instead of holding the underlying asset directly, the <a data-quicklook-from="token-gateway">token gateway</a> deposits it into a `MasterVault` on the parent chain, which allocates a portion of the balance to an [ERC-4626](https://eips.ethereum.org/EIPS/eip-4626) vault of your choosing and keeps the remainder liquid for withdrawals. The yield accrues to an address you designate, so you can fund gas subsidies, incentive programs, or chain revenue from capital that would otherwise sit still.
+A **Yield Bridge** is a variant of the canonical token bridge that puts the escrowed capital to work. Instead of holding the underlying asset directly, the <a data-quicklook-from="token-gateway">token gateway</a> deposits it into a `MasterVault` on the parent chain, which allocates a portion of the balance to an [ERC-4626](https://eips.ethereum.org/EIPS/eip-4626) sub-vault of your choosing and keeps the remainder liquid for withdrawals. The yield accrues to an address you designate, so you can fund gas subsidies, incentive programs, or chain operations from capital that would otherwise sit still.
 
 <VanillaAdmonition type="info">
 
 ### Get hands-on support before you deploy
 
-A Yield Bridge is a new capability with an operational burden that a standard token bridge doesn't carry: you select and monitor a vault, you decide how much capital stays liquid, and you accept the risk that the underlying strategy loses money. We work directly with the first teams to adopt it.
+A Yield Bridge is a new capability with an operational burden that a traditional token bridge does not have: the chain operator manages and monitors a vault, decides how much capital stays liquid, and accepts the risk that the underlying strategy loses money.
 
-If you're interested in deploying a Yield Bridge for your Arbitrum chain, [reach out to us in the Arbitrum Discord](https://discord.gg/arbitrum) for hands-on support. This page is written to help you evaluate the design and arrive at that conversation prepared. It isn't a self-service deployment guide.
+If you are interested in deploying a Yield Bridge for your Arbitrum chain, [reach out to us in the Arbitrum Discord](https://discord.gg/arbitrum) for hands-on support. This page is written to help you evaluate the design and arrive at that conversation prepared; it is not a self-service deployment guide.
 
 </VanillaAdmonition>
 
 ## What a Yield Bridge changes
 
-A Yield Bridge reuses the canonical token bridge wholesale. The <a data-quicklook-from="gateway-router">gateway router</a>, the <a data-quicklook-from="retryable-ticket">retryable ticket</a> mechanism, and the child chain contracts are unchanged. Only the escrow behavior on the parent chain differs.
+The Yield Bridge reuses the canonical token bridge. The <a data-quicklook-from="gateway-router">gateway router</a>, the <a data-quicklook-from="retryable-ticket">retryable ticket</a> mechanism, and the child chain contracts are unchanged. Only the escrow behavior on the parent chain differs.
 
-|                                | Canonical token bridge                 | Yield Bridge                                                                        |
-| ------------------------------ | -------------------------------------- | ----------------------------------------------------------------------------------- |
-| Parent chain escrow            | The gateway holds the underlying asset | The gateway holds `MasterVault` shares; the vault holds the asset                   |
-| Capital productivity           | None                                   | A configurable share of the balance is allocated to an ERC-4626 vault               |
-| Yield destination              | N/A                                    | An address you designate                                                            |
-| Withdrawal to the parent chain | Delivers the underlying asset          | Delivers `MasterVault` shares, which the recipient redeems for the underlying asset |
-| Enabled                        | Default                                | At token bridge deployment only                                                     |
+|                       | Canonical token bridge          | Yield Bridge                                   |
+| --------------------- | ------------------------------- | ---------------------------------------------- |
+| **Escrowed capital**  | Sits idle in the gateway        | Earns yield in a sub-vault, minus a reserve    |
+| **Yield**             | None                            | Goes to an address you designate               |
+| **Withdrawals**       | Return the asset                | Return vault shares, redeemable for the asset  |
+| **Child chain token** | Backed one-for-one by the asset | Backed by a vault position that can lose value |
+| **Availability**      | Every token bridge              | New token bridges only                         |
 
 ## Architecture
 
 Three parent chain components sit between the gateway and the yield strategy.
-
-<VanillaAdmonition type="note">
-
-The contracts and deployment scripts use the abbreviation `Ybb`, from the feature's earlier name, Yield Bearing Bridge. You'll see it in identifiers such as `L1YbbERC20Gateway`, `L1YbbCustomGateway`, and `setYbbTemplates`. Those names were deliberately left unchanged when the feature was renamed so that the code you read still matches the commits covered by the security review. `Ybb` and Yield Bridge refer to the same thing.
 
 </VanillaAdmonition>
 
