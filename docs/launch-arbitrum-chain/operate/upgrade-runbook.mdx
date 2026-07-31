@@ -250,7 +250,7 @@ A validator must have machines for **both** roots the block validator resolves, 
 - `--node.block-validator.current-module-root` (default `current`, read from the chain)
 - `--node.block-validator.pending-upgrade-module-root` (default `latest`)
 
-When these differ, both are required, and a missing machine for **either** produces `cannot validate WasmModuleRoot`. This is why a validator that ran fine yesterday can fail to start today: the chain's root changed, and the pending root now resolves to something the image doesn't contain.
+When these differ, both are required, and a missing machine for **either** produces `cannot validate WasmModuleRoot`. This is why a validator that ran fine yesterday can fail to start today: the chain's root changed, and the current root—read from the chain—now names a root with no machine in the image. Pending, by contrast, is resolved from what's on disk (via the machines/latest symlink), so it can't point at a machine you don't have; a pinned pending root that's missing fails startup with the same cannot validate WasmModuleRoot error.
 
 By default, `pending` resolves through the `machines/latest` symlink, which `download-machine.sh` repoints to whatever it fetched last. If you'd rather not depend on that, pin it: `--node.block-validator.pending-upgrade-module-root=<target root>`. Either way the machine must be on disk, or startup fails with `cannot validate WasmModuleRoot`—pinning changes which root is required, not whether one is.
 
