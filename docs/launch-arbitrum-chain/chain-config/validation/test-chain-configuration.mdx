@@ -1,0 +1,107 @@
+---
+title: 'Configure a test Arbitrum chain'
+sidebar_label: 'Test chain configuration'
+description: 'Configure a non-production Arbitrum chain so that assertions post and confirm in seconds rather than days, and understand which parameters differ on testnets.'
+user_story: As an Arbitrum chain developer, I want assertions to confirm quickly on my test chain so that integration tests do not wait out a production challenge period.
+content_type: how-to
+author: pete-vielhaber
+sme: TBD
+---
+
+On a production Arbitrum chain, an <a data-quicklook-from="assertion">assertion</a> takes about a week to confirm. That delay is the security model working as intended, but it makes integration testing impractical. This page covers how to shorten it on a chain you do not need to secure, and which parameters differ on a testnet.
+
+<VanillaAdmonition type="caution" title="These values are unsafe for production">
+
+Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so anyone bonding on it can confirm an incorrect assertion. Use these settings only on chains that hold no value.
+
+</VanillaAdmonition>
+
+<VanillaAdmonition type="note" title="This is not the same as fast withdrawals">
+
+Fast withdrawals are a production feature that shortens confirmation on an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain by delegating confirmation to a committee, using the `--node.bold.enable-fast-confirmation` and `--node.staker.enable-fast-confirmation` flags. That is a deliberate trust assumption, configured separately, and it is not what this page describes. To learn how it works, see [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx).
+
+</VanillaAdmonition>
+
+## What actually gates confirmation speed
+
+Two independent layers govern how quickly an assertion confirms, and lowering only one has no effect:
+
+1. **Onchain parameters** set the floor. `confirmPeriodBlocks` determines how long an assertion must exist before the protocol will confirm it, and `minimumAssertionPeriod` determines how frequently assertions may be posted at all. No node setting can go below these.
+2. **Node intervals** determine how promptly your <a data-quicklook-from="validator">validator</a> acts within that floor. These are polling and cadence settings; they cannot shorten an onchain period.
+
+The common mistake is lowering the node intervals alone, then concluding that the configuration did not work. If `confirmPeriodBlocks` still represents a week, confirmation still takes a week.
+
+## Onchain parameters
+
+Set these when you deploy, or update them afterward as <a data-quicklook-from="chain-owner">chain owner</a>. To learn how to change them and what the production values are, see [Challenge period](/launch-arbitrum-chain/chain-config/validation/challenge-period.mdx) and the [BoLD parameter table](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
+
+| Parameter                    | Production reference                       | For a test chain                                                                                                                                                   |
+| ---------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `confirmPeriodBlocks`        | 45,818 parent chain blocks, about one week | Low enough that a test can wait it out. Measured in <a data-quicklook-from="parent-chain">parent chain</a> blocks, so convert using your parent chain's block time |
+| `challengePeriodBlocks`      | Usually equal to `confirmPeriodBlocks`     | Keep equal to `confirmPeriodBlocks`                                                                                                                                |
+| `extraChallengeTimeBlocks`   | 200 blocks, about 40 minutes               | Can be reduced or set to `0`                                                                                                                                       |
+| `minimumAssertionPeriod`     | 75 parent chain blocks, about 15 minutes   | Must be below the posting interval you configure next                                                                                                              |
+| `challengeGracePeriodBlocks` | 48 hours of parent chain blocks            | Can be reduced; it exists to give a security council time to intervene                                                                                             |
+
+The ordering constraint between `minimumAssertionPeriod` and the posting interval is the one that catches people. The posting interval must exceed `minimumAssertionPeriod`, because posting faster than the onchain minimum produces reverted transactions. If you lower the posting interval without lowering `minimumAssertionPeriod` to match, assertions stop posting.
+
+<!--
+SME REVIEW: confirm what a validator does when the posting interval is set
+below the Rollup's minimumAssertionPeriod. Documented above as reverted
+transactions, per assertion-control.mdx and validator-troubleshooting.mdx.
+Worth confirming whether the node pre-checks and skips, or submits and reverts.
+-->
+
+## Node intervals
+
+These are Nitro flags, set per validator. Lower them so your validator acts promptly inside the onchain floor you configured above.
+
+<!--
+SME REVIEW: defaults below read from OffchainLabs/nitro at a618155
+(staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191
+for legacy). Confirm they still match the Nitro release this page targets.
+-->
+
+| Flag                                          | Default  | Applies to    | For a test chain                                        |
+| --------------------------------------------- | -------- | ------------- | ------------------------------------------------------- |
+| `--node.bold.assertion-posting-interval`      | `15m0s`  | BoLD staker   | Lower it, keeping it above `minimumAssertionPeriod`     |
+| `--node.bold.assertion-scanning-interval`     | `1m0s`   | BoLD staker   | Lower it to notice new assertions sooner                |
+| `--node.bold.assertion-confirming-interval`   | `1m0s`   | BoLD staker   | Lower it to poll for confirmability more often          |
+| `--node.bold.minimum-gap-to-parent-assertion` | `1m0s`   | BoLD staker   | Lower it so consecutive assertions are not spaced out   |
+| `--node.staker.make-assertion-interval`       | `1h0m0s` | Legacy staker | Lower it; no effect on BoLD chains                      |
+| `--node.staker.staker-interval`               | `1m0s`   | Legacy staker | Lower it to act on stake sooner                         |
+| `--node.staker.confirmation-blocks`           | `12`     | Legacy staker | Lower it, or `0` on a chain where you accept reorg risk |
+
+Lowering the confirming interval makes the validator _check_ more often. It does not make confirmation permissible sooner — that is governed entirely by `confirmPeriodBlocks`. To learn more about that distinction, see [Assertion timing flags](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#assertion-timing-flags).
+
+## A worked example
+
+Nitro's own test suite configures the legacy staker for maximum speed. These values come from `TestL1ValidatorConfig` in `staker/legacy/staker.go`:
+
+| Setting                   | Test value | Default  |
+| ------------------------- | ---------- | -------- |
+| `staker-interval`         | `10ms`     | `1m0s`   |
+| `make-assertion-interval` | `-1000h`   | `1h0m0s` |
+| `confirmation-blocks`     | `0`        | `12`     |
+
+The negative `make-assertion-interval` is intentional rather than a typo. The staker checks whether more than the configured interval has elapsed since the last assertion; a negative duration makes that check always pass, so the staker posts on every cycle without waiting.
+
+<VanillaAdmonition type="note" title="BoLD has no equivalent preset">
+
+Nitro defines no `TestBoldConfig`. On a <a data-quicklook-from="bold">BoLD</a> chain, set the four `--node.bold.*` intervals individually rather than looking for a single test preset.
+
+</VanillaAdmonition>
+
+## Why a test validator looks stuck when nothing is misconfigured
+
+`--node.bold.rpc-block-number` defaults to `finalized`. On a local devnet or any parent chain where finality lags or never advances, the validator is reading from a block that does not exist yet, so it takes no action at all. The intervals are irrelevant in that state.
+
+This presents as a validator that logs nothing useful and never posts, which reads like an interval problem and is not one. Check this before tuning anything. To learn more, see [Parent chain read consistency](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#parent-chain-read-consistency).
+
+On a test chain, `safe` or `latest` is usually the right value. Both accept <a data-quicklook-from="reorg">reorg</a> exposure that would be unacceptable in production.
+
+## Testnet chains
+
+A chain settling to a public testnet such as Sepolia is not a local test chain. Its parent chain has real block times and real finality, so parent chain block counts convert the same way they do on mainnet, and a production `confirmPeriodBlocks` still means about a week.
+
+If you want faster confirmation on a testnet-settled chain, you must lower the onchain parameters deliberately — settling to a testnet does not shorten them for you. Read the parameters from your Rollup contract rather than assuming they were reduced at deployment.
