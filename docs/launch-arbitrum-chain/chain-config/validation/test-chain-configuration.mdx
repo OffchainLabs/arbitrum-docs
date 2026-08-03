@@ -69,7 +69,7 @@ for legacy). Confirm they still match the Nitro release this page targets.
 | `--node.bold.assertion-confirming-interval`   | `1m0s`   | BoLD staker   | Lower it to poll for confirmability more often          |
 | `--node.bold.minimum-gap-to-parent-assertion` | `1m0s`   | BoLD staker   | Lower it so consecutive assertions are not spaced out   |
 | `--node.staker.make-assertion-interval`       | `1h0m0s` | Legacy staker | Lower it; no effect on BoLD chains                      |
-| `--node.staker.staker-interval`               | `1m0s`   | Legacy staker | Lower it to act on stake sooner                         |
+| `--node.staker.staker-interval`               | `1m0s`   | Legacy staker | Lower it to check the Rollup status and act sooner      |
 | `--node.staker.confirmation-blocks`           | `12`     | Legacy staker | Lower it, or `0` on a chain where you accept reorg risk |
 
 Lowering the confirming interval makes the validator _check_ more often. It does not make confirmation permissible sooner — that is governed entirely by `confirmPeriodBlocks`. To learn more about that distinction, see [Assertion timing flags](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#assertion-timing-flags).
