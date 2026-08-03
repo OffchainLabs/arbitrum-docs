@@ -169,5 +169,29 @@ confirm both new pages are reachable from a sidebar.
 
 The value tables in deliverable 1 are traceable to nitro master and are
 therefore accurate as of `a618155`, but nitro's defaults can change between
-releases. The PR description should flag the value tables for SME confirmation
-and note the commit they were read from.
+releases. They need SME confirmation before merge.
+
+Carry that flag as an HTML comment in the page source, immediately above each
+affected table, so it is visible in the diff and to anyone editing the file but
+never rendered on the site:
+
+```markdown
+<!--
+SME REVIEW: values below read from OffchainLabs/nitro at a618155
+(staker/bold/bold_staker.go:138-158, staker/legacy/staker.go:171-212).
+Confirm they still match the Nitro release this page targets.
+-->
+```
+
+HTML comments are safe here: they are already used at top level in `.mdx` files
+across this repo (for example `docs/notices/fusaka-upgrade-notice.mdx:60` and a
+multi-line block at `docs/run-arbitrum-node/06-troubleshooting.mdx:412`), the
+`markdownPreprocessor` does not touch them, and they do not reach rendered
+output. Do not use `{/* */}` for these — both work in MDX, but the HTML form
+matches the existing convention in this repo, including the `<!-- todo: ... -->`
+reviewer notes already in `06-troubleshooting.mdx`.
+
+Repeat the same comment above the interval table in deliverable 1 and, if any
+nitro-sourced value ends up in deliverable 2, above that too. The PR description
+should still cite the commit, but the inline comment is what survives after
+merge.
