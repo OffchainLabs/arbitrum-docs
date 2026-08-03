@@ -518,6 +518,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/error-index',
+              label: 'Error index',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/key-rotation',
               label: 'Key rotation',
             },
