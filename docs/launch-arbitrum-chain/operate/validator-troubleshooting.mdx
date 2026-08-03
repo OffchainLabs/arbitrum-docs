@@ -64,7 +64,7 @@ For the full flag list, see the [Nitro CLI flags reference](/run-arbitrum-node/n
 | `safe`      | Shorter lag, small <a data-quicklook-from="reorg">reorg</a> exposure.                                                                                         |
 | `latest`    | No lag, full reorg exposure. The validator may act on data that later disappears.                                                                             |
 
-### `error initializing staker: could not create assertion chain: no contract code at given address`
+### `error initializing staker: could not create assertion chain: no contract code at given address` {#no-contract-code}
 
 This is the most common symptom of the default `finalized` setting, and it usually appears immediately after a BoLD upgrade.
 
@@ -76,7 +76,7 @@ Check as well that `rollup.rollup` in `--chain.info-json` points at the new Roll
 
 ## Assertion errors
 
-### `ASSERTION_NOT_EXIST`
+### `ASSERTION_NOT_EXIST` {#assertion-not-exist}
 
 A revert from the Rollup contract. It originates in `requireExists`, which rejects any assertion whose status is `NoAssertion`:
 
@@ -94,7 +94,7 @@ In other words, the validator referenced an assertion hash that the Rollup contr
 
 **Resolution:** confirm the node is fully synced, verify the parent-chain endpoint returns consistent results, and confirm the Rollup address in `--chain.info-json` is correct. Move to `finalized` if you are running `latest`.
 
-### `found incorrect assertion in watchtower mode`
+### `found incorrect assertion in watchtower mode` {#incorrect-assertion-watchtower}
 
 The node's locally computed state disagrees with an assertion posted onchain. On a healthy chain this warrants immediate investigation—it is the signal watchtower mode exists to produce.
 
