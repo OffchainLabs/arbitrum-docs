@@ -8,18 +8,6 @@ author: anegg0
 sme: gmehta2
 ---
 
-{/\*
-DRAFT — first Blueprint, generated from projects/blueprints/blueprint-financial-institutions-design.md.
-Open items before publish:
-
-- Page name / slug provisional ("Financial institutions" / /solutions/financial-institutions).
-- Diagram /img/solutions-financial-institutions-stack.svg to be finalized (hand-authored, haw-transaction-lifecycle style).
-- ZeroDev dedicated-chain support + KYT are real but undocumented → contact CTA, no deep link (log doc gap).
-- No customer named (co-marketing/legal clearance pending).
-- Per-section SMEs: compliance=gmehta2, fast-withdrawals=jose-franco, chain-finality=leartulaj, ZeroDev=ZeroDev team.
-- Run technical-accuracy-reviewer / claims-verifier / OCL-docs-reviewer before merge.
-  \*/}
-
 Bringing a regulated financial product onchain is a committee decision. Before a single contract ships, your product, engineering, security, and compliance leads all have to agree the architecture is sound — and your regulators have to be able to see it too.
 
 This blueprint is for that group. It treats the move onchain as what it actually is: a stack of dependent decisions, not a menu of features. For a regulated institution the binding constraints aren't block times or benchmarks — they're **regulatory defensibility, operational ownership, and whether your own risk committee will sign off**. Get the order of these decisions wrong and you re-architect mid-flight, hand away chain economics you could have captured, or find you can't show a regulator that your controls match how the system actually runs.
@@ -33,7 +21,7 @@ So each decision below is framed around the objection your legal, compliance, an
 Your architecture is five dependent layers. Each builds on the one below it, and two concerns — operations and cost — run through all of them. Read the stack from the bottom up; the sections that follow walk each layer as a decision.
 
 <figure>
-  <img src="/img/solutions-financial-institutions-stack.svg" alt="Layered architecture for a regulated financial institution on Arbitrum: from the bottom, (1) chain foundation, (2) key management and signing, (3) compliance and controls, (4) interoperability and liquidity, (5) accounts and wallets, with your client product on top, and operations and cost spanning every layer." />
+  <img src="/img/solutions-financial-institutions-stack.svg" width="800" alt="Layered architecture for a regulated financial institution on Arbitrum: from the bottom, (1) chain foundation, (2) key management and signing, (3) compliance and controls, (4) interoperability and liquidity, (5) accounts and wallets, with your client product on top, and operations and cost spanning every layer." />
   <figcaption>The regulated-fintech stack. Each layer is a decision; operations and cost apply at every layer.</figcaption>
 </figure>
 
@@ -43,12 +31,12 @@ How to use this page: read the diagram, walk the five decisions in order, answer
 
 **The decision:** where your product runs, and on what trust model. First, a dedicated Arbitrum chain versus [Arbitrum One](/arbitrum-essentials/public-chains). Then, if dedicated, your data-availability model: a **Rollup** (post data to Ethereum) or an **AnyTrust** chain (a Data Availability Committee). This is the foundation everything else stacks on, and it sets your cost, your withdrawal options, and your decentralization posture.
 
-| Your situation                                                                                                                                   | Recommended                    | Alternative     | Why                                                                                                                                                                                                              |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A regulated product that needs chain-level control — embedded compliance, a custom gas token, dedicated throughput, ownership of chain economics | **A dedicated Arbitrum chain** | Arbitrum One    | Only a dedicated chain can run [Compliance Filtering](#decision-3--compliance--controls), set its own gas token, and capture fee economics. Arbitrum One can't.                                                  |
-| A consumer product optimizing for fast, cheap UX at scale                                                                                        | **AnyTrust**                   | Rollup          | Lower cost, and it unlocks [Fast Withdrawals](#decision-4--interoperability--liquidity) with no new trust assumption. You accept a committee for data availability — structured with named, independent members. |
-| Maximal trust-minimization or L2Beat standing is the priority                                                                                    | **Rollup**                     | AnyTrust        | Strongest trust-minimization, at the cost of higher fees and multi-day withdrawals.                                                                                                                              |
-| A time-boxed pilot                                                                                                                               | **Start on Arbitrum One**      | Dedicated chain | Immediate liquidity and lowest overhead; migrate to a dedicated chain when your control needs grow.                                                                                                              |
+| Your situation                                                                                                                                   | Recommended                    | Alternative     | Why                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A regulated product that needs chain-level control — embedded compliance, a custom gas token, dedicated throughput, ownership of chain economics | **A dedicated Arbitrum chain** | Arbitrum One    | Only a dedicated chain can run [Compliance Filtering](#decision-3--compliance-and-controls), set its own gas token, and capture fee economics. Arbitrum One can't.                                                  |
+| A consumer product optimizing for fast, cheap UX at scale                                                                                        | **AnyTrust**                   | Rollup          | Lower cost, and it unlocks [Fast Withdrawals](#decision-4--interoperability-and-liquidity) with no new trust assumption. You accept a committee for data availability — structured with named, independent members. |
+| Maximal trust-minimization or L2Beat standing is the priority                                                                                    | **Rollup**                     | AnyTrust        | Strongest trust-minimization, at the cost of higher fees and multi-day withdrawals.                                                                                                                                 |
+| A time-boxed pilot                                                                                                                               | **Start on Arbitrum One**      | Dedicated chain | Immediate liquidity and lowest overhead; migrate to a dedicated chain when your control needs grow.                                                                                                                 |
 
 **If you get it wrong:** choose a Rollup, then discover your consumer product needs 15-minute withdrawals, and you'll bolt a fast-confirmation committee onto it — quietly dropping the trust-minimization you chose Rollup for. Choose AnyTrust without structuring the committee as named, independent members, and your chain's trust rests on a black box a regulator will open first.
 

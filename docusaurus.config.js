@@ -236,6 +236,10 @@ const config = {
                 label: 'Financial Institutions',
                 to: '/solutions/financial-institutions',
               },
+              {
+                label: 'Consumer Fintech',
+                to: '/solutions/consumer-fintech',
+              },
             ],
           },
           {

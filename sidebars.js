@@ -1804,6 +1804,16 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Consumer Fintech',
+          collapsed: false,
+          link: {
+            type: 'doc',
+            id: 'solutions/consumer-fintech',
+          },
+          items: [],
+        },
       ],
     },
   ],
