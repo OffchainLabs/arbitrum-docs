@@ -1,0 +1,283 @@
+# DrawioReactFlow — Interactive Diagram Navigation
+
+Converts Draw.io (`.drawio`) **and Excalidraw (`.excalidraw`)** diagrams into interactive React Flow visualizations with animated, manifest-driven navigation between diagrams.
+
+## Overview
+
+Contributors author diagrams in either [Excalidraw](https://excalidraw.com) (recommended, cleaner data model) or [Draw.io](https://app.diagrams.net), then render them as interactive, click-navigable diagrams inside Arbitrum Docs. A manifest XML file defines which diagrams exist and how users transition between them (zoom, pause, fade).
+
+Format is chosen by file extension: `.excalidraw` → JSON converter, anything else → Draw.io XML converter. Both formats can coexist inside a single manifest while migrating.
+
+## Features
+
+- **Two authoring formats**: Excalidraw JSON or Draw.io XML — pick whichever feels better to draw in
+- **Manifest-driven navigation**: XML manifest defines diagram stories with animated transitions
+- **Zoom-to-node transitions**: Click a highlighted node to zoom in, pause, then cross-fade to the next diagram
+- **Modal transitions**: Opt a transition into `mode="modal"` to open the target diagram in a centered overlay instead of replacing the main view
+- **Subgroup support** (Draw.io): Groups render as labeled containers with styled borders
+- **Embedded images** (Draw.io): Inline SVG/base64 images render as image nodes
+- **Theme integration**: Adapts to Docusaurus light/dark mode via CSS variables
+- **Keyboard accessible**: Tab to focus nodes, Enter/Space to activate
+- **Responsive**: Works on mobile, tablet, and desktop
+- **SSG compatible**: Uses Docusaurus `BrowserOnly` for static site generation
+
+## Quick start
+
+### 1. Author a diagram
+
+**Option A — Excalidraw (recommended):** open [excalidraw.com](https://excalidraw.com), draw rectangles/ellipses/diamonds, connect them with arrows (the binding handles give exact anchor points), then File → Save to `static/diagrams/<name>.excalidraw`. Text can be a free-floating label OR bound to a shape/arrow (double-click inside the shape to bind it).
+
+**Option B — Draw.io:** create `.drawio` files in `static/diagrams/` using the [draw.io editor](https://app.diagrams.net).
+
+Nodes whose label matches a `<transition trigger="...">` in the manifest are automatically treated as **interactive trigger nodes** — they blink to signal clickability and navigate on click. Author-time fill colors are ignored; all color comes from the component's glassmorphic theme.
+
+#### Custom attributes
+
+| Attribute         | Draw.io                                   | Excalidraw                                                    |
+| ----------------- | ----------------------------------------- | ------------------------------------------------------------- |
+| Hover content key | `hoverContent="_partial-key"` on the cell | `customData: { hoverContent: "_partial-key" }` on the element |
+| Manual blink      | `hoverContent="blinking"`                 | `customData: { blinking: true }`                              |
+| Color token       | `colorToken="yellow"` on the cell         | `customData: { colorToken: "yellow" }`                        |
+
+### 2. Create a manifest
+
+Create a manifest XML file (e.g., `static/diagrams/my-story.manifest.xml`) that defines the diagram story:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<diagramStory
+  id="my-story"
+  title="My Diagram Story"
+  entryDiagram="overview"
+>
+  <diagram id="overview" file="/diagrams/overview.drawio" />
+  <diagram id="detail"   file="/diagrams/detail.drawio" />
+
+  <transition from="overview" to="detail" trigger="Click Me">
+    <zoom level="4" duration="1600" />
+    <pause duration="200" />
+    <fade duration="1500" easing="easeInOut" />
+  </transition>
+
+  <!-- Optional: open target as a modal overlay instead of zooming -->
+  <transition from="overview" to="detail" trigger="Inspect" mode="modal">
+    <zoom level="4" duration="1600" />
+    <pause duration="200" />
+    <fade duration="1500" easing="easeInOut" />
+  </transition>
+</diagramStory>
+```
+
+| Element          | Description                                                                            |
+| ---------------- | -------------------------------------------------------------------------------------- |
+| `<diagramStory>` | Root element. `entryDiagram` points to the first diagram `id`.                         |
+| `<diagram>`      | Maps an `id` to a `.drawio` file path (relative to `static/`).                         |
+| `<transition>`   | Defines a navigation. `trigger` matches the **node label text** in the `from` diagram. |
+| `<zoom>`         | Zoom level and duration (ms) for the zoom-to-node animation.                           |
+| `<pause>`        | Pause duration (ms) between zoom and cross-fade.                                       |
+| `<fade>`         | Cross-fade duration (ms) and easing for the diagram swap.                              |
+
+### Transition attributes
+
+| Attribute | Values            | Default  | Description                                                                                         |
+| --------- | ----------------- | -------- | --------------------------------------------------------------------------------------------------- |
+| `from`    | diagram `id`      | required | Source diagram.                                                                                     |
+| `to`      | diagram `id`      | required | Target diagram.                                                                                     |
+| `trigger` | node label text   | required | Label of the node that fires the transition when clicked.                                           |
+| `mode`    | `zoom` \| `modal` | `zoom`   | `zoom` cross-fades to the target diagram (default). `modal` opens the target in a centered overlay. |
+
+Nested `<zoom>`, `<pause>`, `<fade>` are read only in `zoom` mode, but stay valid XML in `modal` mode — useful if you want to flip a transition back to zoom later without re-editing.
+
+### 3. Use in MDX
+
+```mdx
+---
+title: 'My Architecture'
+---
+
+import DrawioReactFlow from '@site/src/components/DrawioReactFlow';
+
+<DrawioReactFlow manifest="/diagrams/my-story.manifest.xml" />
+```
+
+You can also render a single diagram without a manifest:
+
+```mdx
+<DrawioReactFlow diagramFile="/diagrams/standalone.drawio" height="400px" />
+```
+
+## Component API
+
+### DrawioReactFlow props
+
+| Prop          | Type     | Default                  | Description                                                                        |
+| ------------- | -------- | ------------------------ | ---------------------------------------------------------------------------------- |
+| `manifest`    | `string` | —                        | Path to manifest XML (relative to `static/`). Enables multi-diagram stories.       |
+| `diagramFile` | `string` | —                        | Path to a single `.drawio` or `.excalidraw` file. Used when no manifest is needed. |
+| `height`      | `string` | CSS `aspect-ratio: 16/9` | Container height. Overrides the default aspect ratio.                              |
+| `className`   | `string` | `""`                     | Additional CSS classes on the container.                                           |
+
+Provide either `manifest` or `diagramFile`, not both.
+
+## Navigation behavior
+
+1. **Initial load**: Fetches the manifest, parses it, loads the `entryDiagram`
+2. **Source parsing**: `convertDiagramToReactFlow()` dispatches on the file extension — `.excalidraw` → `convertExcalidrawToReactFlow()` (JSON), anything else → `convertDrawioToReactFlow()` (Draw.io XML). Both produce `{ nodes, edges }` for React Flow.
+3. **Trigger nodes**: Nodes whose label matches any `<transition trigger="...">` in the manifest blink and are clickable. Detection is manifest-driven — draw.io fill colors are ignored. You can also opt a node into blinking without a transition by setting `hoverContent="blinking"` on the cell.
+4. **Zoom transition** (default, `mode="zoom"`): The camera zooms to the node center, pauses, then cross-fades (via Framer Motion `AnimatePresence`) to the target diagram.
+5. **Modal transition** (`mode="modal"`): The target diagram opens in a centered overlay (`DiagramModal`) with a blurred backdrop. The parent diagram stays untouched. Close with `Esc`, backdrop click, or the `×` button. Nested navigation inside the modal is disabled.
+6. **Back button**: Appears after the first zoom navigation. Returns to the previous diagram.
+7. **Viewport history**: Within a single diagram, zoom-clicks are tracked in a viewport stack with their own back navigation.
+
+## File structure
+
+```
+src/components/DrawioReactFlow/
+├── index.tsx              Main export with BrowserOnly SSG wrapper
+├── NavigableDiagram.tsx   Navigation state, transitions, ReactFlow rendering
+├── DiagramModal.tsx       Portal-rendered overlay for mode="modal" transitions
+├── DiagramHoverModal.tsx  Floating-UI tooltip for hover content on nodes/edges
+├── ClickableNode.tsx      Custom node with shape variants and keyboard support
+├── ImageNode.tsx          Renders embedded images from Draw.io cells
+├── SubgraphNode.tsx       Group container with labeled header
+├── HoverEdge.tsx          Edge with optional hover content
+├── types.ts               TypeScript interfaces (ManifestData, TransitionConfig, TransitionMode, NodeData, etc.)
+└── utils/
+    ├── convertDiagram.ts          Extension-based dispatcher (.excalidraw vs .drawio)
+    ├── drawioToReactFlow.ts       Draw.io XML → ReactFlow nodes/edges conversion
+    ├── excalidrawToReactFlow.ts   Excalidraw JSON → ReactFlow nodes/edges conversion
+    └── parseManifest.ts           Manifest XML → ManifestData parser
+
+static/diagrams/               Diagram source files
+├── *.drawio                   Draw.io diagram files
+├── *.manifest.xml             Manifest story definitions
+└── diagram-background.svg     Shared container background
+
+src/css/partials/
+└── _drawio-reactflow.scss     Theme-integrated styling
+```
+
+## How the converter works
+
+`drawioToReactFlow.ts` performs these steps:
+
+1. **Parse XML**: `DOMParser` extracts `<mxCell>` elements from the Draw.io XML
+2. **Classify cells**: Each cell is categorized as vertex (node), edge (connection), group, image, or text-only
+3. **Detect groups**: Explicit (`group=true` style) and implicit (parent cells with child vertices) groups are identified
+4. **Build nodes**: Vertex cells become ReactFlow nodes with absolute positions computed by walking the parent chain. Groups become `SubgraphNode`s. Images become `ImageNode`s. Regular cells become `ClickableNode`s.
+5. **Build edges**: Edge cells become ReactFlow edges with handle positions resolved from Draw.io's `exitX/exitY/entryX/entryY` metadata, falling back to geometric inference
+6. **Filter**: Edges referencing missing nodes are removed
+
+## Node types
+
+| Type      | Component           | When used                                                      |
+| --------- | ------------------- | -------------------------------------------------------------- |
+| `custom`  | `ClickableNode`     | Regular nodes with labels, shapes, and optional click behavior |
+| `group`   | `SubgraphNode`      | Draw.io groups with visible fill/border                        |
+| `image`   | `ImageNode`         | Cells with `shape=image` style (inline SVG/base64)             |
+| `default` | React Flow built-in | Text-only cells (`text=true` style)                            |
+
+## Styling
+
+### Container
+
+The `.drawio-reactflow-container` uses a 16:9 aspect ratio with a custom SVG background (`diagram-background.svg`), rounded corners, and theme-aware borders.
+
+### Node interactions
+
+- **Trigger nodes** (manifest-matched labels): Blink animation (`2s ease-in-out infinite`). Hover pauses the blink and turns the node green.
+- **Clickable nodes**: `cursor: pointer`, `translateY(-2px)` hover lift, focus outline
+- **Static nodes**: `cursor: default`, no hover effects
+
+### Theme support
+
+Light/dark mode is handled via `data-theme` attribute on the container:
+
+- Light mode: standard box shadows, white node text
+- Dark mode: reduced opacity backgrounds, inverted text colors, adjusted edge labels
+
+### Accessibility
+
+- **Keyboard**: Clickable nodes are focusable (`tabIndex={0}`), activated with Enter/Space
+- **High contrast**: Increased border width via `prefers-contrast: high`
+- **Reduced motion**: All transitions disabled via `prefers-reduced-motion: reduce`
+- **ARIA**: Clickable nodes have `role="button"` and descriptive `aria-label`
+
+## Dependencies
+
+- **reactflow** (`^11.11.4`): Interactive node-based UI
+- **dagre** (`^0.8.5`): Graph layout algorithm (available but not used in current Draw.io path — positions come from the XML)
+- **motion/react** (Framer Motion): Cross-fade transitions between diagrams
+- **@docusaurus/theme-common**: Theme integration (`useColorMode`)
+- **@docusaurus/BrowserOnly**: SSG compatibility
+
+## Testing
+
+### Test page
+
+Visit `/docs/test-interactive-diagrams` to see the system in action with the transaction lifecycle diagram story.
+
+### Manual testing checklist
+
+- [ ] Manifest loads and entry diagram renders
+- [ ] Trigger nodes (labels matching a manifest `<transition trigger="...">`) blink
+- [ ] Clicking a zoom-mode trigger node zooms to it, then fades to next diagram
+- [ ] Clicking a `mode="modal"` trigger node opens the target diagram in a centered overlay
+- [ ] Modal closes on `Esc`, backdrop click, and `×` button; parent viewport is unchanged
+- [ ] Page body does not scroll while the modal is open
+- [ ] Back button appears after zoom navigation and returns to previous diagram
+- [ ] Theme switching updates colors (light/dark)
+- [ ] Keyboard Tab focuses clickable nodes, Enter/Space activates
+- [ ] Groups render with labels and styled borders
+- [ ] Embedded images render correctly
+- [ ] No console errors
+- [ ] Mobile responsive
+
+## Troubleshooting
+
+### Diagram not loading
+
+**Error**: "Failed to load diagram: /diagrams/xxx.drawio"
+
+- Ensure the file exists in `static/diagrams/`
+- Path must start with `/diagrams/` (not `static/diagrams/`)
+- File extension must be `.drawio`
+
+### Manifest not loading
+
+**Error**: "Failed to load manifest" or "entryDiagram not found"
+
+- Verify the manifest XML is well-formed
+- Check that `entryDiagram` attribute matches a `<diagram id="...">` element
+- Ensure all `<diagram file="...">` paths point to existing `.drawio` files
+
+### Node not clickable
+
+- Interactive trigger nodes are detected from the manifest — the node's label must exactly match a `<transition trigger="...">` value (fill color is irrelevant)
+- Verify the `<transition>` `from` diagram matches the current diagram
+- For nodes that should blink without a transition (e.g., hover content only), add `hoverContent="blinking"` to the cell in the drawio
+
+### Modal opens, but nested node clicks do nothing
+
+This is intentional — `DiagramModal` passes a no-op navigation handler to the nested diagram to prevent modal-from-modal chains. If you need the nested diagram to be navigable too, use `mode="zoom"` or extend `DiagramModal.tsx` to accept a navigation callback.
+
+### Unknown `mode` attribute values fall back to zoom
+
+The parser only recognizes `mode="modal"`. Any other value (including typos like `"MODAL"`, `"Modal"`, or `"dialog"`) silently falls back to the default `zoom` behavior. Check the attribute spelling if a transition isn't opening the modal.
+
+### Build errors
+
+**Error**: "Cannot find module 'reactflow'" — Run `yarn install`
+
+**Error**: TypeScript errors — Check `types.ts` imports match component usage
+
+## Contributing
+
+When adding new interactive diagrams:
+
+1. Create `.drawio` files in `static/diagrams/` using draw.io
+2. Use any node label that matches a manifest `<transition trigger="...">` — the component auto-applies the trigger blink (author colors in draw.io are ignored)
+3. Create a manifest XML defining the diagram story and transitions
+4. Add an MDX page importing `DrawioReactFlow` with the manifest path
+5. Test the full navigation flow on the dev server
+6. Commit with a descriptive message
