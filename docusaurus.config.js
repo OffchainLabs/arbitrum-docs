@@ -91,7 +91,7 @@ const config = {
         docs: {
           exclude: ['**/api/**', '**/*.pdf'],
           remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatex],
+          rehypePlugins: [rehypeKatex, require('./src/plugins/rehype-table-labels')],
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           breadcrumbs: false,

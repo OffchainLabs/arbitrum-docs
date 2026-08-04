@@ -1,9 +1,9 @@
 import globalVars from '../src/resources/globalVars.js';
 import {
-  precompilesInformation,
   nodeInterfaceInformation,
+  precompilesInformation,
 } from '../src/resources/precompilesInformation.js';
-import { writeOrCheck, isCheckMode, runScript } from './lib/generated-partial';
+import { isCheckMode, runScript, writeOrCheck } from './lib/generated-partial';
 
 type PrecompileMethodInfo = {
   signature: string;
@@ -146,39 +146,41 @@ const renderMethodsInTable = (
   let showDeprecationFlag = false;
 
   // Create HTML
-  const tableHtml = `<table>
-    <thead>
-      <tr>
-        <th>Method</th>
-        <th>Solidity interface</th>
-        <th>Go implementation</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${Object.values(methodsInformation)
-        .map((methodInfo: PrecompileMethodInfo) => {
-          if (methodInfo.deprecated) {
-            showDeprecationFlag = true;
-          }
-          if (methodInfo.availableSinceArbOS) {
-            methodInfo.description += ` (Available since ArbOS ${methodInfo.availableSinceArbOS})`;
-          }
+  const tableHtml = `<div className="table-wrapper">
+    <table className="stacked-table">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Source</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${Object.values(methodsInformation)
+          .map((methodInfo: PrecompileMethodInfo) => {
+            if (methodInfo.deprecated) {
+              showDeprecationFlag = true;
+            }
+            if (methodInfo.availableSinceArbOS) {
+              methodInfo.description += ` (Available since ArbOS ${methodInfo.availableSinceArbOS})`;
+            }
 
-          return `<tr>
-            <td>${methodInfo.deprecated ? `⚠️` : ''}<code>${methodInfo.signature}</code></td>
-            <td><a href="${interfaceUrl}#L${
-            methodInfo.interfaceLine
-          }" target="_blank">Interface</a></td>
-            <td><a href="${implementationUrl}#L${
-            methodInfo.implementationLine
-          }" target="_blank">Implementation</a></td>
-            <td>${methodInfo.description}</td>
-          </tr>`;
-        })
-        .join('')}
-    </tbody>
-  </table>`;
+            return `<tr>
+              <td data-label="Method">${methodInfo.deprecated ? `⚠️` : ''}<code>${
+                methodInfo.signature
+              }</code></td>
+              <td data-label="Source"><a href="${interfaceUrl}#L${
+                methodInfo.interfaceLine
+              }" target="_blank">Interface</a> · <a href="${implementationUrl}#L${
+                methodInfo.implementationLine
+              }" target="_blank">Implementation</a></td>
+              <td data-label="Description">${methodInfo.description}</td>
+            </tr>`;
+          })
+          .join('')}
+      </tbody>
+    </table>
+  </div>`;
 
   const deprecationNotice = showDeprecationFlag ? defaultDeprecationNotice : '';
 
@@ -276,28 +278,28 @@ const renderEventsInTable = (
 
   // Create HTML
   if (Object.keys(eventsInformation).length > 0) {
-    const tableHtml = `<table>
-      <thead>
-        <tr>
-          <th>Event</th>
-          <th>Solidity interface</th>
-          <th>Go implementation</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${Object.values(eventsInformation)
-          .map((eventInfo: PrecompileEventInfo) => {
-            return `<tr>
-              <td><code>${eventInfo.name}</code></td>
-              <td><a href="${interfaceUrl}#L${eventInfo.interfaceLine}" target="_blank">Interface</a></td>
-              <td><a href="${implementationUrl}#L${eventInfo.implementationLine}" target="_blank">Implementation</a></td>
-              <td>${eventInfo.description}</td>
-            </tr>`;
-          })
-          .join('')}
-      </tbody>
-    </table>`;
+    const tableHtml = `<div className="table-wrapper">
+      <table className="stacked-table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Source</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${Object.values(eventsInformation)
+            .map((eventInfo: PrecompileEventInfo) => {
+              return `<tr>
+                <td data-label="Event"><code>${eventInfo.name}</code></td>
+                <td data-label="Source"><a href="${interfaceUrl}#L${eventInfo.interfaceLine}" target="_blank">Interface</a> · <a href="${implementationUrl}#L${eventInfo.implementationLine}" target="_blank">Implementation</a></td>
+                <td data-label="Description">${eventInfo.description}</td>
+              </tr>`;
+            })
+            .join('')}
+        </tbody>
+      </table>
+    </div>`;
 
     return tableHtml;
   } else {

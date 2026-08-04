@@ -1,0 +1,115 @@
+// ========================================
+// Responsive tables (approach A)
+// ========================================
+//
+// Wide reference tables (precompile methods, chain-info address/parameter
+// matrices) never fit a phone and barely fit the desktop content column. Rather
+// than widen the whole page — which trades prose measure and the table of
+// contents for table width on every doc — we make wide tables usable at the
+// natural column width:
+//
+//   - horizontal scroll for anything wider than the content column,
+//   - a sticky first column so the row identifier stays visible while scrolling,
+//   - a card-stack layout on phones, where each row becomes a labelled card.
+//
+// The card-stack needs each <td> to carry a `data-label` naming its column.
+// Markdown tables get this from src/plugins/rehype-table-labels.js; the
+// generated precompile tables emit it directly from
+// scripts/precompile-reference-generator.ts. Both also tag wide tables with the
+// `stacked-table` class, which is what scopes the rules below so ordinary
+// two-column tables are left untouched.
+
+// Scroll container. Markdown tables are wrapped in `.table-wrapper` by
+// src/theme/MDXComponents.js; generated tables emit the wrapper themselves.
+.table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Sticky first column, above the phone breakpoint (below it, wide tables become
+// cards and there is nothing to scroll). The cell background must be opaque so
+// scrolled-under content does not bleed through the pinned column.
+@media (min-width: 737px) {
+  .table-wrapper table.stacked-table {
+    th:first-child,
+    td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: var(--arbitrum-card);
+    }
+
+    thead th:first-child {
+      background: color-mix(in oklab, var(--arbitrum-color-primary) 8%, var(--arbitrum-muted));
+    }
+  }
+}
+
+// Card-stack on phones: each row is a bordered card, each cell a `label: value`
+// row. The header row is kept in the DOM (for assistive tech) but visually
+// hidden, since every cell now carries its own inline label.
+@media (max-width: 736px) {
+  table.stacked-table {
+    display: block;
+    border-collapse: separate;
+
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    tbody,
+    tr,
+    td {
+      display: block;
+      width: 100%;
+    }
+
+    tr {
+      margin: 0 0 1rem;
+      border: 1px solid var(--arbitrum-border);
+      border-radius: var(--arbitrum-border-radius-sm);
+      overflow: hidden;
+      background: var(--arbitrum-card);
+    }
+
+    td {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.5rem 0.875rem;
+      border: none;
+      border-bottom: 1px solid color-mix(in oklab, var(--arbitrum-border) 50%, transparent);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      // The column name, rendered inline as this cell's label.
+      &::before {
+        content: attr(data-label);
+        flex: 0 0 40%;
+        max-width: 40%;
+        font-weight: 600;
+        color: var(--prose-headings);
+        word-break: break-word;
+      }
+
+      // Cells whose column header is empty — e.g. the row-label column of the
+      // contract-address matrix — carry no label and read as the card heading.
+      &[data-label=''] {
+        font-weight: 600;
+        background: color-mix(in oklab, var(--arbitrum-color-primary) 8%, var(--arbitrum-muted));
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+}

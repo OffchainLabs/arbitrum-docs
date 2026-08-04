@@ -1,235 +1,224 @@
-<table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Solidity interface</th>
-      <th>Go implementation</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <code>redeem(bytes32 ticketId)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L18" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L50" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Redeem schedules an attempt to redeem the retryable, donating all of the call's gas to the redeem attempt</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getLifetime()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L26" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L162" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetLifetime gets the default lifetime period a retryable has at creation</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getTimeout(bytes32 ticketId)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L33" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L167" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetTimeout gets the timestamp for when ticket will expire</td>
-    </tr>
-    <tr>
-      <td>
-        <code>keepalive(bytes32 ticketId)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L45" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L184" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Keepalive adds one lifetime period to the ticket's expiry</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getBeneficiary(bytes32 ticketId)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L55" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L212" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>GetBeneficiary gets the beneficiary of the ticket</td>
-    </tr>
-    <tr>
-      <td>
-        <code>cancel(bytes32 ticketId)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L64" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L225" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Cancel the ticket and refund its callvalue to its beneficiary</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getCurrentRedeemer()</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L73" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L256" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Gets the redeemer of the current retryable redeem attempt</td>
-    </tr>
-    <tr>
-      <td>
-        <code>submitRetryable(bytes32 requestId, uint256 l1BaseFee, uint256 deposit, uint256 callvalue, uint256 gasFeeCap, uint64 gasLimit, uint256 maxSubmissionFee, address feeRefundAddress, address beneficiary, address retryTo, bytes calldata retryData)</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L79" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L264" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Do not call. This method represents a retryable submission to aid explorers. Calling it will always revert.</td>
-    </tr>
-  </tbody>
-</table>
+<div className="table-wrapper">
+  <table className="stacked-table">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Source</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Method">
+          <code>redeem(bytes32 ticketId)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L18" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L50" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Redeem schedules an attempt to redeem the retryable, donating all of the call's gas to the redeem attempt</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getLifetime()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L26" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L162" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetLifetime gets the default lifetime period a retryable has at creation</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getTimeout(bytes32 ticketId)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L33" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L167" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetTimeout gets the timestamp for when ticket will expire</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>keepalive(bytes32 ticketId)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L45" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L184" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Keepalive adds one lifetime period to the ticket's expiry</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getBeneficiary(bytes32 ticketId)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L55" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L212" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">GetBeneficiary gets the beneficiary of the ticket</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>cancel(bytes32 ticketId)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L64" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L225" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Cancel the ticket and refund its callvalue to its beneficiary</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>getCurrentRedeemer()</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L73" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L256" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Gets the redeemer of the current retryable redeem attempt</td>
+      </tr>
+      <tr>
+        <td data-label="Method">
+          <code>submitRetryable(bytes32 requestId, uint256 l1BaseFee, uint256 deposit, uint256 callvalue, uint256 gasFeeCap, uint64 gasLimit, uint256 maxSubmissionFee, address feeRefundAddress, address beneficiary, address retryTo, bytes calldata retryData)</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L79" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L264" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Do not call. This method represents a retryable submission to aid explorers. Calling it will always revert.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Event</th>
-      <th>Solidity interface</th>
-      <th>Go implementation</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <code>TicketCreated</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L93" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L23" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Emitted when creating a retryable</td>
-    </tr>
-    <tr>
-      <td>
-        <code>LifetimeExtended</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L94" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L207" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Emitted when extending a retryable's expiry date</td>
-    </tr>
-    <tr>
-      <td>
-        <code>RedeemScheduled</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L95" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L125" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Emitted when scheduling a retryable</td>
-    </tr>
-    <tr>
-      <td>
-        <code>Canceled</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L104" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L250" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>Emitted when cancelling a retryable</td>
-    </tr>
-    <tr>
-      <td>
-        <code>Redeemed</code>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L107" target="_blank">
-          Interface
-        </a>
-      </td>
-      <td>
-        <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L33" target="_blank">
-          Implementation
-        </a>
-      </td>
-      <td>
-        DEPRECATED in favour of new <code>RedeemScheduled</code> event after the nitro upgrade.
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div className="table-wrapper">
+  <table className="stacked-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Source</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Event">
+          <code>TicketCreated</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L93" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L23" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Emitted when creating a retryable</td>
+      </tr>
+      <tr>
+        <td data-label="Event">
+          <code>LifetimeExtended</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L94" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L207" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Emitted when extending a retryable's expiry date</td>
+      </tr>
+      <tr>
+        <td data-label="Event">
+          <code>RedeemScheduled</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L95" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L125" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Emitted when scheduling a retryable</td>
+      </tr>
+      <tr>
+        <td data-label="Event">
+          <code>Canceled</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L104" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L250" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">Emitted when cancelling a retryable</td>
+      </tr>
+      <tr>
+        <td data-label="Event">
+          <code>Redeemed</code>
+        </td>
+        <td data-label="Source">
+          <a href="https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/e7e6566ae5b0efa0ad4d779138f64ead11928c66/ArbRetryableTx.sol#L107" target="_blank">
+            Interface
+          </a>{' '}
+          ·{' '}
+          <a href="https://github.com/OffchainLabs/nitro/blob/v3.11.2/precompiles/ArbRetryableTx.go#L33" target="_blank">
+            Implementation
+          </a>
+        </td>
+        <td data-label="Description">
+          DEPRECATED in favour of new <code>RedeemScheduled</code> event after the nitro upgrade.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
