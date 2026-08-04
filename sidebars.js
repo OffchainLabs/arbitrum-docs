@@ -332,7 +332,7 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/gas/priority-fees',
+                      id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
                       label: 'Priority fees',
                     },
                   ],
