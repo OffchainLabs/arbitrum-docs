@@ -11,7 +11,7 @@ ArbOS61 ("Elara") introduces the capability for chain owners to collect priority
 
 <VanillaAdmonition type="caution" title="Activation requires a separate Constitutional vote">
 
-For Arbitrum One and Nova, enabling this feature requires a **Constitutional DAO vote**—it isn't activated as part of the ArbOS61 upgrade itself. The upgrade only makes tip collection _possible_ for chains that opt in.
+On Arbitrum One, enabling this feature requires a **Constitutional DAO vote**—it isn't activated as part of the ArbOS61 upgrade itself. The upgrade only makes tip collection _possible_ for chains that opt in. Priority fee collection isn't available on Arbitrum Nova.
 
 </VanillaAdmonition>
 
@@ -52,7 +52,7 @@ Enabling collection alone does **not** change how transactions are ordered. For 
 1. **`setCollectTips(true)`**: activates fee collection via `ArbOwner`.
 2. **Updated sequencer logic**: the sequencer must be configured to read the `PriorityFee` field when sorting transactions.
 
-Without Step 2, the sequencer continues to use its existing ordering rules (such as [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), if enabled) regardless of the transaction's priority fee.
+Without Step 2, the sequencer continues to use its existing ordering rules—[Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), if enabled, or otherwise first-come, first-served—regardless of the transaction's priority fee.
 
 ## References
 
