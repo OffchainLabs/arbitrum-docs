@@ -1,13 +1,15 @@
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
+
+import { inkeepBaseSettings, inkeepExampleQuestions, inkeepModalSettings } from './inkeep.js';
+import { redirects } from './redirects.config.js';
+
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
 const { themes: prismThemes } = require('prism-react-renderer');
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
-import { redirects } from './redirects.config.js';
 
 // Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
 // Shared between the sitemap and llms.txt so both indexes stay in sync.
