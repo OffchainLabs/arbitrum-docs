@@ -1,5 +1,6 @@
-import React from 'react';
 import Link from '@docusaurus/Link';
+import React from 'react';
+
 import styles from './Card.module.css';
 
 function Card({ title, description, to, href, target }) {
