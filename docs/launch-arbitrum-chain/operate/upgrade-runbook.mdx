@@ -138,7 +138,7 @@ cd /home/user/.arbitrum/machines
 
 The script creates a directory named after the module root, writes `module-root.txt` inside it, repoints the `latest` symlink at it, and downloads `machine.v2.wavm.br` (plus `replay.wasm`, if that release published one).
 
-If you maintain a custom STF, downloading a published machine is not sufficient—see [Customize your chain's behavior](/launch-arbitrum-chain/protocol-hacks/stf.mdx) to learn how to build and register your own.
+If you maintain a custom STF, downloading a published machine is not sufficient—see [Customize your chain's behavior](/launch-arbitrum-chain/extend-the-protocol/stf.mdx) to learn how to build and register your own.
 
 ## Execution order
 
@@ -322,5 +322,5 @@ Rolling `nitro-contracts` back is only remotely viable if no assertions have bee
 - [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access.mdx)—which account holds which administrative role
 - [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx)—what to watch during and after an upgrade
 - [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx)—diagnosing batch poster errors
-- [Customize your chain's behavior](/launch-arbitrum-chain/protocol-hacks/stf.mdx)—building a custom STF and its replay binary
+- [Customize your chain's behavior](/launch-arbitrum-chain/extend-the-protocol/stf.mdx)—building a custom STF and its replay binary
 - [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx)—reference for the Nitro configuration flags named here (`dangerous` flags are not listed)
