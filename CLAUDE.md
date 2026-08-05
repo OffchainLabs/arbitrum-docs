@@ -143,7 +143,7 @@ sme: '<github-username>'
 
 As the last step before committing any docs content change, re-read the changed prose and fix these recurring review nits (the most common reviewer comments on docs PRs):
 
-- **Glossary quicklooks**: wrap the first mention of each glossary term on a page in `<a data-quicklook-from="<key>">term</a>`. Valid keys are the filenames in `docs/partials/glossary/` (strip the leading `_` and the `.mdx` extension). Frequently missed terms: `parent-chain`, `child-chain`, `sequencer`, `batch-poster`, `validator`, `sequencer-inbox`, `delayed-inbox`, `keyset`, `chain-owner`, `reorg`, `wasm`. The display text can differ from the key (plurals, capitalization).
+- **Glossary quicklooks**: run `yarn generate-quicklooks <file> --write` to wrap the first mention of each glossary term on a page in `<a data-quicklook-from="<key>">term</a>` (preview first with `yarn generate-quicklooks <file>`), then review the diff. The generator reads valid keys from `static/glossary.json` (built from `docs/partials/glossary/`) and skips code blocks, headings, and already-wrapped terms. Frequently missed terms: `parent-chain`, `child-chain`, `sequencer`, `batch-poster`, `validator`, `sequencer-inbox`, `delayed-inbox`, `keyset`, `chain-owner`, `reorg`, `wasm`. The display text can differ from the key (plurals, capitalization).
 - **Awkward sentence openers**: rewrite cross-reference leads like "For how X works, see Y" to "To learn how X works, see Y".
 
 Don't chase these — they're transitive-dep noise from upstream packages:
