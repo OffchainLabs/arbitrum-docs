@@ -14,16 +14,27 @@
     max-width: 100%;
   }
 
-  // Direct tables (no wrapper)
-  > table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  // All tables
+  // All tables (overrides Infima's `table { display: block }` so columns size
+  // as a real table instead of shrink-wrapping)
   table {
     display: table;
+  }
+}
+
+// Unwrapped tables have nothing to scroll inside: markdown tables get a
+// `.table-wrapper` from src/theme/MDXComponents.js, but raw `<table>` markup in
+// MDX (the generated precompile reference tables, for example) does not. Since
+// `article` and `.markdown` both set `overflow-x: hidden`, a table wider than
+// the content column is clipped and its trailing columns are unreachable on
+// narrow screens. `display: block` is what makes `overflow-x` apply to a table,
+// so scope it to widths where the overflow actually happens.
+@media (max-width: 996px) {
+  article .markdown > table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
