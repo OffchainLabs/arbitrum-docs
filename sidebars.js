@@ -322,6 +322,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment',
+                  label: `Deploy DAS with Docker`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
                   label: `Deploy mirror DAS`,
                 },
@@ -503,6 +508,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/bp-recovery',
+              label: `Batch poster recovery`,
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/batch-poster-troubleshooting',
               label: 'Batch poster troubleshooting',
             },
@@ -535,27 +545,27 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Protocol hacks',
+          label: 'Extend the protocol',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/arbos',
+              id: 'launch-arbitrum-chain/extend-the-protocol/arbos',
               label: `ArbOS`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/da-api-guide',
+              id: 'launch-arbitrum-chain/extend-the-protocol/da-api-guide',
               label: 'DA API guide',
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/precompiles',
+              id: 'launch-arbitrum-chain/extend-the-protocol/precompiles',
               label: `Precompiles`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/stf',
+              id: 'launch-arbitrum-chain/extend-the-protocol/stf',
               label: `State Transition Function`,
             },
           ],
@@ -607,6 +617,11 @@ const sidebars = {
               label: 'High availability sequencer',
             },
           ],
+        },
+        {
+          type: 'link',
+          label: 'Chain playbook',
+          href: 'https://github.com/OffchainLabs/arbitrum-chain-playbook',
         },
       ],
     },
@@ -804,6 +819,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/nitro/node-tuning-and-monitoring',
+          label: 'Node tuning and monitoring',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/nitro/configuration-system',
           label: 'Configuration system',
         },
@@ -872,6 +892,11 @@ const sidebars = {
           type: 'doc',
           id: 'arbitrum-bridge/bridge-transaction-traceability',
           label: 'Tracing bridge transactions',
+        },
+        {
+          type: 'doc',
+          id: 'arbitrum-bridge/withdrawal-monitoring',
+          label: 'Monitoring withdrawals',
         },
         {
           type: 'doc',
@@ -947,6 +972,11 @@ const sidebars = {
               type: 'doc',
               label: 'Transaction lifecycle',
               id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
+            },
+            {
+              type: 'doc',
+              label: 'Sequencer transaction flow',
+              id: 'how-arbitrum-works/deep-dives/sequencer-transaction-flow',
             },
             {
               type: 'doc',
@@ -1213,6 +1243,11 @@ const sidebars = {
               type: 'doc',
               label: 'Cross-chain messaging',
               id: 'arbitrum-essentials/bridging/cross-chain-messaging',
+            },
+            {
+              type: 'doc',
+              label: 'Verify child chain state',
+              id: 'arbitrum-essentials/how-to-get-l2block-on-l1',
             },
             {
               type: 'doc',

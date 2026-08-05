@@ -1,5 +1,5 @@
-import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import React from 'react';
 
 export const HeaderBadges = () => {
   return (
