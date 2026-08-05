@@ -189,15 +189,15 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-arbos',
-    to: '/launch-arbitrum-chain/protocol-hacks/arbos',
+    to: '/launch-arbitrum-chain/extend-the-protocol/arbos',
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-precompile',
-    to: '/launch-arbitrum-chain/protocol-hacks/precompiles',
+    to: '/launch-arbitrum-chain/extend-the-protocol/precompiles',
   },
   {
     from: '/launch-arbitrum-chain/customize-your-chain/customize-stf',
-    to: '/launch-arbitrum-chain/protocol-hacks/stf',
+    to: '/launch-arbitrum-chain/extend-the-protocol/stf',
   },
   {
     from: '/launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control',
@@ -249,7 +249,7 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
-    to: '/launch-arbitrum-chain/protocol-hacks/da-api-guide',
+    to: '/launch-arbitrum-chain/extend-the-protocol/da-api-guide',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction',
@@ -397,19 +397,19 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/chain-config/core/arbos',
-    to: '/launch-arbitrum-chain/protocol-hacks/arbos',
+    to: '/launch-arbitrum-chain/extend-the-protocol/arbos',
   },
   {
     from: '/launch-arbitrum-chain/chain-config/core/da-api-guide',
-    to: '/launch-arbitrum-chain/protocol-hacks/da-api-guide',
+    to: '/launch-arbitrum-chain/extend-the-protocol/da-api-guide',
   },
   {
     from: '/launch-arbitrum-chain/chain-config/core/precompiles',
-    to: '/launch-arbitrum-chain/protocol-hacks/precompiles',
+    to: '/launch-arbitrum-chain/extend-the-protocol/precompiles',
   },
   {
     from: '/launch-arbitrum-chain/chain-config/core/stf',
-    to: '/launch-arbitrum-chain/protocol-hacks/stf',
+    to: '/launch-arbitrum-chain/extend-the-protocol/stf',
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',

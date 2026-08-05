@@ -22,4 +22,14 @@ export default {
     }
     return <ImageZoom {...props} />;
   },
+  // Wide tables need a horizontally scrollable parent: `article` and `.markdown`
+  // both set `overflow-x: hidden`, so an unwrapped table wider than the content
+  // column has its trailing columns clipped and unreachable on narrow screens.
+  // The `div:has(> table)` rules in _content-body.scss / _responsive.scss handle
+  // the scrolling once the wrapper is present.
+  table: (props) => (
+    <div className="table-wrapper">
+      <table {...props} />
+    </div>
+  ),
 };
