@@ -398,7 +398,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
                   label: 'Compliance filtering',
                 },
               ],
