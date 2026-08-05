@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 560" width="1120" height="560" role="img" aria-labelledby="t d" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<title id="t">Nitro transaction lifecycle</title>
+<desc id="d">Transactions enter from JSON-RPC, retryable tickets, or the delayed inbox, are ordered by the Sequencer (which also publishes a soft-confirmation feed), then batched and compressed. Batches are posted to the L1 parent chain as blobs or calldata, and the ordered transactions are run through the State Transition Function, which reads and writes chain state and emits an L2 block that is also settled on L1.</desc>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#12aaff"/></marker></defs>
+<line x1="210" y1="96" x2="245" y2="96" stroke="#12aaff" stroke-width="3"/>
+<line x1="210" y1="266" x2="245" y2="266" stroke="#12aaff" stroke-width="3"/>
+<line x1="210" y1="436" x2="245" y2="436" stroke="#12aaff" stroke-width="3"/>
+<line x1="245" y1="96" x2="245" y2="436" stroke="#12aaff" stroke-width="3"/>
+<line x1="245" y1="266" x2="300" y2="266" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="360" y1="234" x2="360" y2="130" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="420" y1="266" x2="470" y2="266" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="620" y1="266" x2="680" y2="266" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="820" y1="266" x2="900" y2="266" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="750" y1="298" x2="750" y2="372" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="970" y1="298" x2="970" y2="372" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="955" y1="234" x2="955" y2="130" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)" stroke-dasharray="6 5"/>
+<line x1="985" y1="130" x2="985" y2="234" stroke="#12aaff" stroke-width="3" marker-end="url(#ah)" stroke-dasharray="6 5"/>
+<path d="M750,436 L750,508 L795,508" fill="none" stroke="#12aaff" stroke-width="3" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M970,436 L970,508 L945,508" fill="none" stroke="#12aaff" stroke-width="3" stroke-linejoin="round" marker-end="url(#ah)"/>
+<rect x="30" y="64" width="180" height="64" rx="10" fill="#213147"/>
+<text x="120" y="101.2" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">JSON-RPC</text>
+<rect x="30" y="234" width="180" height="64" rx="10" fill="#213147"/>
+<text x="120" y="271.2" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Retryable Ticket</text>
+<rect x="30" y="404" width="180" height="64" rx="10" fill="#213147"/>
+<text x="120" y="441.2" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Delayed Inbox</text>
+<rect x="285" y="64" width="150" height="64" rx="10" fill="#213147"/>
+<text x="360" y="92.4" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">Sequencer feed</text>
+<text x="360" y="109.4" text-anchor="middle" fill="#9dcced" font-size="11">(soft confirmation)</text>
+<rect x="300" y="234" width="120" height="64" rx="10" fill="#12aaff"/>
+<text x="360" y="271.2" text-anchor="middle" fill="#0b1b2e" font-size="15" font-weight="700">Sequencer</text>
+<rect x="470" y="150" width="150" height="232" rx="10" fill="#213147"/>
+<g fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"><rect x="523.0" y="184.0" width="44" height="28" rx="2"/><path d="M523.0,185.0 L545,200 L567.0,185.0"/></g>
+<g fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"><rect x="523.0" y="226.0" width="44" height="28" rx="2"/><path d="M523.0,227.0 L545,242 L567.0,227.0"/></g>
+<g fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"><rect x="523.0" y="268.0" width="44" height="28" rx="2"/><path d="M523.0,269.0 L545,284 L567.0,269.0"/></g>
+<text x="545" y="327.6" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">Ordered</text>
+<text x="545" y="344.6" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">(sequenced)</text>
+<text x="545" y="361.6" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">transactions</text>
+<rect x="680" y="234" width="140" height="64" rx="10" fill="#12aaff"/>
+<text x="750" y="262.4" text-anchor="middle" fill="#0b1b2e" font-size="14" font-weight="700">Batch and</text>
+<text x="750" y="279.4" text-anchor="middle" fill="#0b1b2e" font-size="14" font-weight="700">compress</text>
+<rect x="685" y="372" width="130" height="64" rx="10" fill="#213147"/>
+<text x="750" y="400.6" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">Blob or</text>
+<text x="750" y="416.6" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">calldata</text>
+<rect x="900" y="234" width="140" height="64" rx="10" fill="#12aaff"/>
+<text x="970" y="262.2" text-anchor="middle" fill="#0b1b2e" font-size="13.5" font-weight="700">State transition</text>
+<text x="970" y="279.2" text-anchor="middle" fill="#0b1b2e" font-size="13.5" font-weight="700">function</text>
+<rect x="905" y="64" width="130" height="64" rx="10" fill="#213147"/>
+<text x="970" y="101.2" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">State</text>
+<rect x="905" y="372" width="130" height="64" rx="10" fill="#213147"/>
+<text x="970" y="409.2" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">L2 block</text>
+<rect x="795" y="476" width="150" height="64" rx="10" fill="#1b4add"/>
+<text x="870" y="504.4" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">L1 (parent)</text>
+<text x="870" y="521.4" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">chain</text>
+</svg>

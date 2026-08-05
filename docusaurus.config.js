@@ -230,6 +230,21 @@ const config = {
             ],
           },
           {
+            type: 'dropdown',
+            label: 'Enterprise solutions',
+            position: 'right',
+            items: [
+              {
+                label: 'Financial Institutions',
+                to: '/solutions/financial-institutions',
+              },
+              {
+                label: 'Consumer Fintech',
+                to: '/solutions/consumer-fintech',
+              },
+            ],
+          },
+          {
             type: 'docSidebar',
             sidebarId: 'runArbitrumChainSidebar',
             position: 'right',
