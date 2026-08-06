@@ -96,6 +96,10 @@ Never write "simply", "just", "easy", "obvious", or "of course". When the step d
 - Lead each section with the outcome, then the detail.
 - Write headings a reader can scan to find their task.
 
+### Authoring conventions
+
+- Use `<VanillaAdmonition type="…">` instead of Docusaurus `:::info` / `:::note` for callouts in MDX. The component is registered globally via `src/theme/MDXComponents.js`, so no import is needed.
+
 ## Terminology guide
 
 | Term                           | Correct                                                                  | Incorrect                              |
