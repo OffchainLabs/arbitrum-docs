@@ -144,17 +144,23 @@ const config = {
         },
       },
     ],
-    [
-      'posthog-docusaurus',
-      {
-        apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
-        appUrl: 'https://app.posthog.com',
-        enableInDevelopment: false,
-        persistence: 'memory',
-        disable_session_recording: true,
-      },
-    ],
-    require.resolve('docusaurus-plugin-fathom'),
+    // Load PostHog only on the production deployment. Vercel sets VERCEL_ENV to
+    // 'preview' for staging builds and leaves it undefined locally, so neither
+    // emits the snippet. Mirrors the tracking gate in middleware.ts.
+    ...(process.env.VERCEL_ENV === 'production'
+      ? [
+          [
+            'posthog-docusaurus',
+            {
+              apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
+              appUrl: 'https://app.posthog.com',
+              enableInDevelopment: false,
+              persistence: 'memory',
+              disable_session_recording: true,
+            },
+          ],
+        ]
+      : []),
     require.resolve('docusaurus-plugin-sass'),
     [
       '@signalwire/docusaurus-plugin-llms-txt',
@@ -182,9 +188,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      fathomAnalytics: {
-        siteId: 'DOHOZGJO',
-      },
       announcementBar: {
         backgroundColor: '#e3246e',
         textColor: 'white',
