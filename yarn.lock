@@ -4450,25 +4450,25 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/browser-common@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@posthog/browser-common/-/browser-common-0.2.2.tgz#0cfe110a5f9e87845d6f068dd017abbe7d6895be"
-  integrity sha512-4NHumu2lx7pMeucDLfXnDmeP5CV2oVWY8jBpXBwBUjoYwkQxB7Z3A6q9oDydw+/iSAGl6MaPqW9gsnRK8AvqLA==
+"@posthog/browser-common@^0.2.3":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@posthog/browser-common/-/browser-common-0.2.5.tgz#359d302d3d76558f45a143e5552f0c9a7aa0e6db"
+  integrity sha512-g95viLlEqPl92+ar3hEzlQbPqKB0Hp7AoYVaEmvXdjUiYfG3XP+qwzPRFmULNEGLDMSKL7T+MFHvs2/EswcE+g==
   dependencies:
-    "@posthog/core" "^1.45.1"
-    "@posthog/types" "^1.398.0"
+    "@posthog/core" "^1.45.3"
+    "@posthog/types" "^1.399.0"
 
-"@posthog/core@^1.45.1":
-  version "1.45.1"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.45.1.tgz#4704b108bd6f8cdbbf2299cc8b9c2ec2565fe89b"
-  integrity sha512-tLtvzomavb2PPWdGYKsusyIzIeL2Px47v348Smibkay7sMy/83TyPk+Ptsp2NdeOgJsbuwSxWkR2+XA0aSCAaA==
+"@posthog/core@^1.45.1", "@posthog/core@^1.45.3":
+  version "1.46.1"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.46.1.tgz#a8cf3a32806eff1fe0b8606ecc680142ca360d3d"
+  integrity sha512-EoCFduRkvrg9E5ylMi4QnZCjlAdRJCq6tJouWfngBVR79XSI4iPvIWYA+CdzokAjk+TfSVBFVJ++4Im3r+T0Dg==
   dependencies:
-    "@posthog/types" "^1.398.0"
+    "@posthog/types" "^1.399.0"
 
-"@posthog/types@^1.398.0":
-  version "1.398.0"
-  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.398.0.tgz#a2a2bd57700837793d6ca9303025a912ae9c473e"
-  integrity sha512-sJMkl4k+u8yS/0fjHsKqE9xTdsAh30a2WvgChiptellnVoE0e8QJKFgqOMD2sk8FaEArPdeFklAhXvmENAt3Sg==
+"@posthog/types@^1.398.0", "@posthog/types@^1.399.0":
+  version "1.399.0"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.399.0.tgz#96248f0822fa3a1c38b1882d04a77bf5349c08fe"
+  integrity sha512-/WDwBzqIPko8VJ1B+0rlso2XQEz9+2sqtsY9Tqy3p1GhgTqsFakcz/PmMpAnA321LTEZVRcO6x5hAwABV4yrDw==
 
 "@radix-ui/number@1.1.0":
   version "1.1.0"
@@ -10292,13 +10292,13 @@ markdown-it@~14.3.0:
     punycode.js "^2.3.1"
     uc.micro "^2.1.0"
 
-markdown-link-extractor@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/markdown-link-extractor/-/markdown-link-extractor-4.0.3.tgz#4bca0255c583f017b1f0ce857d5a1af56af99ac4"
-  integrity sha512-aEltJiQ4/oC0h6Jbw/uuATGSHZPkcH8DIunNH1A0e+GSFkvZ6BbBkdvBTVfIV8r6HapCU3yTd0eFdi3ZeM1eAQ==
+markdown-link-extractor@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/markdown-link-extractor/-/markdown-link-extractor-4.0.4.tgz#647f0c0e6564061e8f8dc5403870b4530308d7f1"
+  integrity sha512-Dw9saacqF4u1EjUm3O+f0ZTBM/o7l1IrdHS8z1KSFX2coECIcJTZbltICMKx6QwHBKlzMQXgtWYnIHX71WHZMw==
   dependencies:
     html-link-extractor "^1.0.5"
-    marked "^17.0.0"
+    marked "^18.0.7"
 
 markdown-table@^3.0.0:
   version "3.0.3"
@@ -10347,11 +10347,6 @@ marked@^16.3.0:
   version "16.4.2"
   resolved "https://registry.yarnpkg.com/marked/-/marked-16.4.2.tgz#4959a64be6c486f0db7467ead7ce288de54290a3"
   integrity sha512-TI3V8YYWvkVf3KJe1dRkpnjs68JUPyEa5vjKrp1XEEJUAOaQc+Qj+L1qWbPd0SJuAdQkFU0h73sXXqwDYxsiDA==
-
-marked@^17.0.0:
-  version "17.0.6"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-17.0.6.tgz#2a97586a272d3be5880f198e020b74ad27cf86ba"
-  integrity sha512-gB0gkNafnonOw0obSTEGZTT86IuhILt2Wfx0mWH/1Au83kybTayroZ/V6nS25mN7u8ASy+5fMhgB3XPNrOZdmA==
 
 marked@^18.0.7:
   version "18.0.7"
@@ -12479,12 +12474,12 @@ posthog-docusaurus@^2.0.5:
   resolved "https://registry.yarnpkg.com/posthog-docusaurus/-/posthog-docusaurus-2.0.5.tgz#5ce7ea9659a3845cba094712743194eaf84aa527"
   integrity sha512-Ray65LYEJrMMqDtsBUBXunEVP/g4wtATvq/xz9rchUoLy/9mSkkFgUko/8DVtGxgiP3vivpFMgfb9HpCuDrBHg==
 
-posthog-js@^1.407.3:
-  version "1.407.3"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.407.3.tgz#2722b447340b4996d3c1d6f7bbf83c06f53e4849"
-  integrity sha512-b9Kc7HVN6nh+xsh1JrcLYHv9bbYLwYUM9belJtNVUFZSJWWfFcZRJJP6L+KeanAeu2VxSFSpioVA39pjjolv4A==
+posthog-js@^1.407.5:
+  version "1.407.5"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.407.5.tgz#ac3d65fbb7db8f2fa923ffdeb245c26ce7db6d97"
+  integrity sha512-7YV0aSO8D9NPSawrIjgcOl81SKiPg6op8uFFc7e0qtu3ojYGE5+8MKfR3jEM67duvdkRAeWB9ZwBZQsg9pXu1g==
   dependencies:
-    "@posthog/browser-common" "^0.2.2"
+    "@posthog/browser-common" "^0.2.3"
     "@posthog/core" "^1.45.1"
     "@posthog/types" "^1.398.0"
     core-js "^3.49.0"
