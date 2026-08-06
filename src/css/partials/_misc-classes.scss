@@ -219,7 +219,9 @@ pre[class*='language-'] {
   &:hover {
     color: white;
     transform: translateY(-1px);
-    box-shadow: var(--shadow-lg), 0 0 20px hsla(188, 100%, 53%, 0.3);
+    box-shadow:
+      var(--shadow-lg),
+      0 0 20px hsla(188, 100%, 53%, 0.3);
 
     &::before {
       opacity: 1;
