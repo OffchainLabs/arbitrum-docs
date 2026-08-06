@@ -413,11 +413,15 @@ export const redirects = [
   },
   {
     from: '/launch-arbitrum-chain/configure-your-chain/advanced/compliance-filtering',
-    to: '/launch-arbitrum-chain/chain-config/validation/compliance-filtering',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
   },
   {
     from: '/build-decentralized-apps/how-to-get-l2block-on-l1',
     to: '/arbitrum-essentials/how-to-get-l2block-on-l1',
+  },
+  {
+    from: '/launch-arbitrum-chain/chain-config/validation/compliance-filtering',
+    to: '/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
   },
   // AUTO-GENERATED REDIRECTS END
 ];
