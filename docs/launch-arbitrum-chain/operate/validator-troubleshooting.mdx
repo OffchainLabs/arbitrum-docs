@@ -94,7 +94,7 @@ In other words, the validator referenced an assertion hash that the Rollup contr
 
 **Resolution:** confirm the node is fully synced, verify the parent-chain endpoint returns consistent results, and confirm the Rollup address in `--chain.info-json` is correct. Move to `finalized` if you are running `latest`.
 
-### `found incorrect assertion in watchtower mode`
+### `Detected invalid assertion, but not configured to post a rival stake`
 
 The node's locally computed state disagrees with an assertion posted onchain. On a healthy chain this warrants immediate investigation—it is the signal watchtower mode exists to produce.
 
