@@ -194,7 +194,7 @@ On Arbitrum One and Arbitrum Nova the `stakeToken` is **WETH**, the **ERC-20** w
 Before you execute the upgrade:
 
 - Confirm the `stakeToken` address in your upgrade configuration is a compliant **ERC-20** on the parent chain. **WETH** is the recommended choice, and Offchain Labs does not recommend custom tokens as the bond asset.
-- Ensure each validator wallet holds enough of that token to meet `stakeAmt`, in addition to parent-chain native currency for gas. A validator that holds only native currency cannot bond after the upgrade.
+- Ensure each validator wallet holds enough of that token to meet `stakeAmt`, in addition to parent-chain native currency for gas. 
 - Plan for first-time bonding on the new contract. Validators bond only once, but existing bonds do not carry over from the old Rollup contract, so every validator must bond again after the upgrade.
 
 For guidance on choosing `stakeToken` and `stakeAmt` values, see [Bond and validator configurations](/launch-arbitrum-chain/chain-config/validation/bond-and-validator.mdx) and [Economics of disputes](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx).
