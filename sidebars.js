@@ -356,6 +356,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
