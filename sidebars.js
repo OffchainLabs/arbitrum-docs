@@ -356,6 +356,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
@@ -395,11 +400,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
-                  label: 'Compliance filtering',
                 },
               ],
             },
@@ -503,6 +503,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/bp-recovery',
+              label: `Batch poster recovery`,
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/batch-poster-troubleshooting',
               label: 'Batch poster troubleshooting',
             },
@@ -535,27 +540,27 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Protocol hacks',
+          label: 'Extend the protocol',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/arbos',
+              id: 'launch-arbitrum-chain/extend-the-protocol/arbos',
               label: `ArbOS`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/da-api-guide',
+              id: 'launch-arbitrum-chain/extend-the-protocol/da-api-guide',
               label: 'DA API guide',
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/precompiles',
+              id: 'launch-arbitrum-chain/extend-the-protocol/precompiles',
               label: `Precompiles`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/stf',
+              id: 'launch-arbitrum-chain/extend-the-protocol/stf',
               label: `State Transition Function`,
             },
           ],
@@ -885,6 +890,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'arbitrum-bridge/withdrawal-monitoring',
+          label: 'Monitoring withdrawals',
+        },
+        {
+          type: 'doc',
           id: 'arbitrum-bridge/troubleshooting',
           label: 'Troubleshooting',
         },
@@ -957,6 +967,11 @@ const sidebars = {
               type: 'doc',
               label: 'Transaction lifecycle',
               id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
+            },
+            {
+              type: 'doc',
+              label: 'Sequencer transaction flow',
+              id: 'how-arbitrum-works/deep-dives/sequencer-transaction-flow',
             },
             {
               type: 'doc',
