@@ -361,6 +361,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
@@ -405,11 +410,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/validation/test-chain-configuration',
                   label: `Test chain configuration`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
-                  label: 'Compliance filtering',
                 },
               ],
             },
