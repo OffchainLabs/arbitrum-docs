@@ -45,7 +45,7 @@ Three parent chain components sit between the gateway and the yield strategy.
 
 `MasterVaultFactory` deploys and tracks one `MasterVault` per bridged token. The first time a token is bridged, the gateway calls the factory, which deploys the vault for that token and initializes it. No configuration is required to bridge a token, and none of your existing bridging flows change.
 
-`MasterVault` is the escrow contract and an ERC-4626 vault in its own right. It holds an **idle balance** available for immediate withdrawals and allocates the rest to a single **sub-vault**. It is the only contract that talks to the sub-vault.
+`MasterVault` is the escrow contract which holds an **idle balance** available for immediate withdrawals and allocates the rest to a single **sub-vault**. It is the only contract that talks to the sub-vault.
 
 `MasterVaultRoles` is a roles registry shared across every vault the factory deploys. It lets you grant an operational role once rather than per asset.
 
