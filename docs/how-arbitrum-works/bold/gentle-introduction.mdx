@@ -230,7 +230,7 @@ To mitigate the risk of this issue manifesting on Arbitrum chains, Offchain Labs
 
 Under reasonable parameterization, the sequencer could be offline/censoring for 24 hours twice, before the force inclusion window drops from 24 hours to a minimum inclusion time. The force inclusion window gradually (over weeks) replenishes to its original value over time as long as the sequencer is on "good behavior"—regularly sequencing messages without unexpected delays. We believe that the Delay Buffer feature provides stronger guarantees of censorship resistance for Arbitrum chains.
 
-The methodology for calculating the parameters, specifically for L3 Arbitrum chains, will be made available at a later date for teams who wish to use BoLD.
+Recommended parameter defaults for L3 Arbitrum chains that wish to use BoLD are available in the [BoLD configuration parameters table](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
 
 #### Q: What is the user flow for using the assertion bonding pool contract?
 
