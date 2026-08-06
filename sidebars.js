@@ -440,6 +440,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/deploy/token-bridge',
               label: `Token bridge`,
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/token-bridge-troubleshooting',
+              label: `Token bridge troubleshooting`,
+            },
           ],
         },
         {
