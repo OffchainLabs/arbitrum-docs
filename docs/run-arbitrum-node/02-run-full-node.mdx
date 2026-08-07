@@ -129,7 +129,7 @@ Under heavy RPC load or during operations such as large `debug_traceBlockByNumbe
 - `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold (e.g., `--node.resource-mgmt.mem-free-limit=4GiB`). This helps protect the node from OOM under high request load.
 - `GOMEMLIMIT` environment variable: Sets a soft memory limit for the Go runtime garbage collector (e.g., `GOMEMLIMIT=48GiB` for a 64 GB machine), helping reduce memory spikes.
 
-For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
+For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning](/run-arbitrum-node/nitro/node-tuning.mdx).
 
 :::tip
 For Docker deployments, you can set these in your `docker run` command:
