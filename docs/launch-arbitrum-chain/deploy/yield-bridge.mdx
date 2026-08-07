@@ -21,7 +21,7 @@ A **Yield Bridge** is a variant of the canonical <a data-quicklook-from="arb-tok
 
 ### Get hands-on support before you deploy
 
-A Yield Bridge is a new capability with an operational burden that a traditional token bridge does not have: the <a data-quicklook-from="chain-owner">chain operator</a> - or a curator they appoint - manages and monitors a vault, decides how much capital stays liquid, and accepts the risk that the underlying strategy loses money.
+A Yield Bridge is a new capability with an operational burden that a canonical token bridge does not have: the <a data-quicklook-from="chain-owner">chain operator</a> — or a curator they appoint — manages and monitors a vault, decides how much capital stays liquid, and accepts the risk that the underlying strategy loses money.
 
 If you are interested in deploying a Yield Bridge for your Arbitrum chain, [reach out to us in the Arbitrum Discord](https://discord.gg/arbitrum) for hands-on support. This page is written to help you evaluate the design and arrive at that conversation prepared; it is not a self-service deployment guide.
 
@@ -43,9 +43,9 @@ The Yield Bridge reuses the canonical token bridge. The <a data-quicklook-from="
 
 Three parent chain components sit between the gateway and the yield strategy.
 
-`MasterVaultFactory` deploys and tracks one `MasterVault` per bridged token. The first time a token is bridged, the gateway calls the factory, which deploys the vault for that token and initializes it. No configuration is required to bridge a token, and none of your existing bridging flows change.
+`MasterVaultFactory` deploys and tracks one `MasterVault` per bridged token. The first time a token is bridged, the gateway calls the factory, which deploys the vault for that token and initializes it. You do not need to configure anything to bridge a token, and none of your existing bridging flows change.
 
-`MasterVault` is the escrow contract which holds an **idle balance** available for immediate withdrawals and allocates the rest to a single **sub-vault**. It is the only contract that talks to the sub-vault.
+`MasterVault` is the escrow contract that holds an **idle balance** available for immediate withdrawals and allocates the rest to a single **sub-vault**. It is the only contract that talks to the sub-vault.
 
 `MasterVaultRoles` is a roles registry shared across every vault the factory deploys. It lets you grant an operational role once rather than per asset.
 
@@ -63,7 +63,7 @@ Each `MasterVault` is initialized with a pass-through sub-vault that holds asset
 
 ## Deposit and withdrawal flow
 
-**Depositing from the parent chain.** The user calls the gateway router as they would for any bridged token. The gateway pulls the underlying asset from the user, deposits it into that token's `MasterVault`, and holds the shares it receives as escrow. A retryable ticket mints the child chain token to the user. Shares are issued one-for-one with the asset, so the child chain balance matches what the user deposited. The router also exposes a deposit entrypoint that takes a minimum amount to be received on the child chain and reverts if the vault would issue fewer shares than that. This is useful when the vault may be carrying a loss.
+**Depositing from the parent chain.** The user calls the gateway router as they would for any bridged token. The gateway pulls the underlying asset from the user, deposits it into that token's `MasterVault`, and holds the shares it receives as escrow. A retryable ticket mints the child chain token to the user. The vault issues shares one-for-one with the asset, so the child chain balance matches what the user deposited. The router also exposes a deposit entrypoint that takes a minimum amount to be received on the child chain and reverts if the vault would issue fewer shares than that. This is useful when the vault may be carrying a loss.
 
 **Withdrawing to the parent chain.** The child chain gateway burns the token and sends a <a data-quicklook-from="l2-to-l1-message">child-to-parent message</a> exactly as it does for a canonical bridge. When that message executes, the parent chain gateway delivers `MasterVault` shares to the recipient rather than the underlying asset. The recipient then calls `redeem` on the vault to exchange those shares for the asset, optionally specifying a minimum amount to receive. Redemption is permissionless and available at any time: the vault pays from its idle balance and withdraws from the sub-vault to cover any shortfall.
 
@@ -73,7 +73,7 @@ Each `MasterVault` is initialized with a pass-through sub-vault that holds asset
 
 ## What you configure
 
-Every parameter below is set after deployment through the roles described in the next section. `MasterVault` has no way to change its underlying asset, its roles registry, or its gateway router after initialization.
+You set every parameter below after deployment, through the roles described in the next section. `MasterVault` has no way to change its underlying asset, its roles registry, or its gateway router after initialization.
 
 | Parameter                | Setter                      | What it controls                                                                                                                                                                              |
 | ------------------------ | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -91,7 +91,7 @@ The gateway separately lets you set a prefix and suffix on the name and symbol o
 
 ## Roles
 
-Roles are hierarchical, so the authority to change risk parameters is separated from the authority to run the vault day to day. The `ADMIN_ROLE` is held by your chain's <a data-quicklook-from="upgrade-executor">UpgradeExecutor</a>, which means allowlisting a sub-vault goes through the same governance path as any other privileged chain action.
+Roles are hierarchical, which separates the authority to change risk parameters from the authority to run the vault day to day. The `ADMIN_ROLE` is held by your chain's <a data-quicklook-from="upgrade-executor">UpgradeExecutor</a>, which means allowlisting a sub-vault goes through the same governance path as any other privileged chain action.
 
 | Role                   | Can do                                                                                                                                | Granted by             |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
@@ -107,15 +107,15 @@ Granting `KEEPER_ROLE` to the zero address makes rebalancing and yield distribut
 
 All yield accrues to the beneficiary address you set. Bridge users redeem their shares one-for-one with the underlying asset assuming the vault is solvent, so they neither earn the yield directly nor pay a fee for the vault's existence.
 
-That makes the beneficiary the single decision that determines the economics of your Yield Bridge. With the proceeds from the Yield Bridge, a chain owner may choose to:
+That makes the beneficiary the single decision that determines the economics of your Yield Bridge. With the proceeds from the Yield Bridge, you can:
 
-- sponsor or subsidize gas for end users on their chain
+- sponsor or subsidize gas for end users on your chain
 - offset the cost of posting data to the parent chain and lower fees for your users
-- fund incentives for liquidity providers or market makers on their chain
-- reward end users for activies aligned with growth goals
+- fund incentives for liquidity providers or market makers on your chain
+- reward end users for activities aligned with your growth goals
 - book the proceeds as revenue in addition to transaction fees and ordering fees
 
-Nothing stops you from passing yield through to end users, but the bridge does not do it for you. Point the beneficiary at a distribution system of your own design - a rewards contract, a rebate program, a staking wrapper on the child chain token - and it becomes another way to spend the yield rather than a separate mode of the bridge. Keeping that logic outside the vault is what allows the vault's share accounting to stay one-for-one, which is what makes the child chain token's backing simple to reason about.
+Nothing stops you from passing yield through to end users, but the bridge does not do it for you. Point the beneficiary at a distribution system of your own design — a rewards contract, a rebate program, a staking wrapper on the child chain token — and it becomes another way to spend the yield rather than a separate mode of the bridge. Keeping that logic outside the vault is what allows the vault's share accounting to stay one-for-one, which is what makes the child chain token's backing simple to reason about.
 
 ## Constraints
 
@@ -124,7 +124,7 @@ Understand these before you plan a deployment.
 - **A Yield Bridge is chosen at token bridge deployment.** An existing token bridge cannot be converted, and a Yield Bridge cannot be converted back. The escrow behavior and the risk profile of the child chain tokens are properties of the bridge, so changing them under users who bridged into a canonical bridge is not supported.
 - **One vault per asset, with no commingling.** Each bridged token gets its own `MasterVault`, sub-vault, target allocation, and beneficiary. A loss in one asset's strategy cannot affect another.
 - **One active sub-vault at a time.** You can allowlist many, but capital is only ever allocated to one.
-- **The underlying asset must be a plain ERC-20.** Fee-on-transfer and rebasing tokens would break the vault's accounting and are therefore rejected.
+- **The underlying asset must be a plain ERC-20.** Fee-on-transfer and rebasing tokens would break the vault's accounting, so the vault rejects them.
 - **The sub-vault must be a well-behaved ERC-4626 vault.** It must charge no deposit or withdrawal fees, and its share price must not be manipulable by a third party within a transaction. Vetting these properties is essential when choosing a sub-vault, and it is the part of the process where a vault manager or risk curator can provide the most value.
 
 ## Risks
@@ -133,7 +133,7 @@ Allocating escrowed capital to a yield strategy introduces risks that a canonica
 
 **<a data-quicklook-from="smart-contract">Smart contract</a> risk.** Allocated capital is exposed to the sub-vault and to every protocol beneath it. A compromised or buggy sub-vault can cause a total loss of the allocated balance. The Yield Bridge contracts themselves have been reviewed by Trail of Bits, and you can find that report alongside our other reviews on the [security audit reports](/audit-reports.mdx) page. That review covers the bridge, not whichever sub-vault you select. The allowlist is the control on the sub-vault side: only a vault the `ADMIN_ROLE` has explicitly approved can ever receive funds, and that role sits behind your chain's UpgradeExecutor. Keeping the target allocation below `1e18` caps the exposure, and working with a risk curator is how you get continuous assessment of the strategy rather than a point-in-time one.
 
-**Principal risk.** If the strategy loses money, the vault's assets fall below the shares outstanding and redemptions become pro-rata. Losses are borne by holders of the child chain token, not by you. Naming the child chain token so it is distinguishable from the canonical asset is how you make that risk legible to users rather than a surprise.
+**Principal risk.** If the strategy loses money, the vault's assets fall below the shares outstanding and redemptions become pro-rata. Holders of the child chain token bear those losses, not you. Naming the child chain token so it is distinguishable from the canonical asset is how you make that risk legible to users rather than a surprise.
 
 **Liquidity risk.** If the sub-vault cannot return capital on demand, redemptions are limited to the idle balance until it can. The target allocation is the primary control: the lower it is, the more capital stands ready for withdrawals, and the less yield you earn. Choosing a sub-vault whose strategies exit quickly matters as much as the ratio you pick.
 
