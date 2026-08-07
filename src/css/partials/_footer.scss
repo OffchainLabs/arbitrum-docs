@@ -7,7 +7,7 @@ footer.footer {
   font-size: 0.8125rem;
   border-top: 1px solid var(--arbitrum-border);
   color: var(--arbitrum-text);
-  padding: 1rem 0 1.25rem 2rem;
+  padding: 1rem 0 1.25rem 6rem;
 
   .footer__links {
     margin-bottom: 0;
@@ -116,7 +116,7 @@ footer.footer {
 // ========================================
 @media (max-width: 996px) {
   footer.footer {
-    padding: 1.5rem 0 1rem 1.5rem;
+    padding: 1.5rem 0 1rem 2.5rem;
 
     .footer__col {
       margin-bottom: 1rem;
