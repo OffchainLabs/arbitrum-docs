@@ -43,7 +43,7 @@ ArbOS 61 "Elara" builds upon [ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-relea
 
 ArbOS 61 also ships two features that stay disabled on Arbitrum One and Nova, for the convenience of other Arbitrum chains: an Alternative Data Availability (AltDA) Layer API, and optional compliance transaction filtering. A <a data-quicklook-from="chain-owner">chain owner</a> must enable each one explicitly.
 
-To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx). To learn how transaction filtering works, refer to [Compliance filtering](docs/launch-arbitrum-chain/chain-config/validation/compliance-filtering.mdx).
+To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx). To learn how transaction filtering works, refer to [Compliance filtering](docs/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx).
 
 ArbOS 61 corrects two interacting bugs in the gas refund logic that were found while testing ArbOS 60 on Arbitrum Sepolia. The fixes change the State Transition Function (STF), so they required a new ArbOS version. ArbOS 60 never activated on Arbitrum One or Nova, so neither chain was affected.
 
