@@ -35,43 +35,7 @@ The first two components are straightforward: ArbOS credits them to their collec
 
 ## Fee lifecycle
 
-{/* TODO: replace with an SVG diagram asset (static/img/) */}
-
-<div className="ascii-diagram">
-
-```
-      ┌─────────────────────────────────┐
-      │   User pays gas on child chain  │
-      └───┬───────────────────────────┬─┘
-          │ execution fee             │ parent chain fee
-          │ (base and surplus)        │
-          ▼                           ▼
-┌────────────────────┐  ┌───────────────────────────┐
-│ infraFeeAccount /  │  │ L1PricerFundsPoolAddress  │
-│ networkFeeAccount  │  │ (0xA4B0…00f6) system pool │
-└────────────────────┘  └─────────────┬─────────────┘
-                                      │ accumulates
-┌─────────────────────────────────┐   │
-│ Batch poster posts batch to     │   │
-│ parent chain (pays parent chain │   │
-│ gas out of pocket)              │   │
-└────────────────┬────────────────┘   │
-                 │ batch posting      │
-                 │ report, via the    │
-                 │ delayed inbox      │
-                 ▼                    ▼
-          ┌─────────────────────────────────────────────┐
-          │         ArbOS pays out from the pool        │
-          └──────┬───────────────────────────────┬──────┘
-                 │                               │
-                 ▼                               ▼
-  ┌────────────────────────────┐  ┌──────────────────────────────┐
-  │ L1RewardRecipient          │  │ batch poster's fee collector │
-  │ (parent chain surplus fee) │  │ (cost reimbursement)         │
-  └────────────────────────────┘  └──────────────────────────────┘
-```
-
-</div>
+<ImageZoom src="/img/arb-chain-fee-lifecycle.svg" alt="A user pays one gas fee on the child chain. ArbOS splits that fee into two paths. ArbOS credits the execution fee in the same transaction: the Arbitrum chain base fee to infraFeeAccount, and the surplus fee plus priority fees to networkFeeAccount. ArbOS credits the parent chain fee to the L1PricerFundsPoolAddress system pool (0xA4B0…00f6), where it accumulates. Separately, the batch poster posts a batch to SequencerInbox on the parent chain and pays that gas out of pocket. SequencerInbox then sends a batch posting report into the delayed inbox. When ArbOS processes that report, it pays out from the pool: first the parent chain surplus fee to L1RewardRecipient, then the amount due to the batch poster's fee collector." className="img-900px" />
 
 1. **A user pays the transaction fee.** ArbOS estimates the transaction's parent chain footprint by compressing it and multiplying the size by the current price per data unit (its running estimate of parent chain costs). This amount is charged as part of the transaction's gas.
 
