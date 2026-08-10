@@ -46,7 +46,7 @@ The first two components are straightforward: ArbOS credits them to their collec
 4. **The parent chain reports the spending.** In the same transaction that records the batch, the `SequencerInbox` contract sends a _batch posting report_ message into your chain's <a data-quicklook-from="delayed-inbox">delayed inbox</a>, containing who posted the batch and the parent chain base fee at the time.
 
 5. **ArbOS processes the report and pays out.** When the report arrives on the <a data-quicklook-from="child-chain">child chain</a>, ArbOS computes what the batch actually cost (reported basefee × the batch's data gas, plus a fixed per batch overhead) and records it as funds due to that batch poster. It then pays, from the pool's balance:
-   - first, any **parent chain surplus fee** owed to the configured reward recipient (reward rate × data units processed).
+   - First, any **parent chain surplus fee** owed to the configured reward recipient (reward rate × data units processed).
    - Then, the accumulated amount due to the batch poster, sent to that poster's **fee collector** address.
 
    If the pool doesn't hold enough to cover everything owed, the remainder stays on the books as funds due and is paid from future collections.
