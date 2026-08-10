@@ -140,14 +140,11 @@ Pruning removes older, unnecessary state from the local copy of the chain your n
 
 On **HashDB**, the default, pruning is a _manual, opt-in_ operation. It removes all states from blocks older than the latest 128.
 
-On **PathDB**, pruning is automatic and runs online. Nitro retains `--execution.caching.state-history` blocks of state history. When you leave that flag unset, Nitro picks the default at startup:
+On **PathDB**, pruning is automatic and runs online. Nitro retains `--execution.caching.state-history` blocks of state history.
 
-| Node type                                        | Default `state-history`                                     |
-| :----------------------------------------------- | :---------------------------------------------------------- |
-| Full node (no `--execution.caching.archive`)     | 345,600 blocks — 24 hours at the default 250 ms block speed |
-| Archive node (`--execution.caching.archive` set) | `0`, meaning the entire chain                               |
+import StateHistoryDefaults from './partials/run-full-node/_state-history-defaults.mdx';
 
-Nitro chose this default from the archive flag starting in v3.10.0. Before v3.10.0, the default was always 24 hours' worth of blocks, so an archive node needed an explicit `--execution.caching.state-history=0`.
+<StateHistoryDefaults />
 
 :::note
 

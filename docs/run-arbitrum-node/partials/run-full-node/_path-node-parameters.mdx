@@ -1,3 +1,5 @@
+import StateHistoryDefaults from './_state-history-defaults.mdx';
+
 These flags apply only when you set `--execution.caching.state-scheme=path`.
 
 ### `--execution.caching.state-scheme`
@@ -10,14 +12,7 @@ The two schemes are not interchangeable. A node can only start from a snapshot c
 
 Sets how many blocks of state history Nitro retains, counting back from the chain head. `0` means the entire chain.
 
-When you leave this flag unset, Nitro chooses the default at startup:
-
-| Node type                                        | Default                                                     |
-| :----------------------------------------------- | :---------------------------------------------------------- |
-| Full node (no `--execution.caching.archive`)     | 345,600 blocks — 24 hours at the default 250 ms block speed |
-| Archive node (`--execution.caching.archive` set) | `0`, meaning the entire chain                               |
-
-Nitro started deriving this default from the archive flag in v3.10.0. On earlier versions the default was always 24 hours' worth of blocks, so an archive node needs an explicit `--execution.caching.state-history=0`.
+<StateHistoryDefaults />
 
 Nitro stores state history as reverse diffs in the cold database, also called the state freezer or ancients. State history lets the node recover historical state, which should allow a reorg to a historical block. Offchain Labs has not tested that reorg path.
 
