@@ -26,11 +26,42 @@ This page covers running a node with Docker. If you want to deploy on Kubernetes
 
 </VanillaAdmonition>
 
+## Choose a state scheme
+
+Nitro stores its state trie using one of two schemes: **HashDB** (the default) or **PathDB**. Choose before you initialize the database. You cannot switch an existing database — moving between schemes means re-initializing from a snapshot built with the scheme you want.
+
+| Property                    | HashDB (default)                       | PathDB                                  |
+| :-------------------------- | :------------------------------------- | :-------------------------------------- |
+| Flag                        | None; Nitro uses HashDB by default     | `--execution.caching.state-scheme=path` |
+| State trie pruning          | Manual and offline, via `--init.prune` | Automatic and online                    |
+| Block validation            | Supported                              | Not supported                           |
+| Full node (pruned) snapshot | Published                              | None published yet                      |
+| Archive snapshot            | Published                              | Published for Arbitrum One and Sepolia  |
+| Minimum Nitro version       | Any                                    | v3.9.x                                  |
+
+**Run your full node on HashDB.** No published snapshot pairs PathDB with a pruned (full node) database, so a PathDB full node has to sync from genesis. On Arbitrum One, syncing from genesis also requires a [Classic state import](/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic.mdx#step-3-initialize-your-nitro-node-importing-the-exported-data). For most operators, that cost outweighs the disk savings.
+
+PathDB pays off on **archive** nodes, where it cuts disk use substantially and a `path`-scheme snapshot is published. See [How to run an archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx).
+
+<VanillaAdmonition type="caution" title="PathDB and block validation">
+
+PathDB cannot validate blocks. If a node requires the block validator, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
+
+A default full node is unaffected: it runs the watchtower strategy, which does not require the block validator. Nitro rejects `path` when you set `--node.block-validator.enable=true`, choose a staker strategy other than `Watchtower`, or enable fast confirmation.
+
+</VanillaAdmonition>
+
 ## Putting it into practice: run a node
 
 :::warning Caution
 
 If you are running more than one node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+
+:::
+
+:::warning PathDB and `--init.latest`
+
+`--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match. To initialize a PathDB database, pass the `path`-scheme snapshot URL to `--init.url` instead. See [Nitro database snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
 
 :::
 
@@ -105,9 +136,18 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
 
 ### Pruning
 
-By default, all node types will use HashDB, go-ethereum's original state trie storage scheme. This will be the case until a path-based state scheme (e.g., PathDB) is supported across all Arbitrum node types. This means that, by default, pruning will continue to be an _manual opt-in_ operation, should an operator decide to do so. As a refresher, pruning a full node means removing older, unnecessary data from the local copy of the blockchain the node maintains, thereby saving disk space and slightly improving the node's efficiency. Pruning will remove all states from blocks older than the latest 128.
+Pruning removes older, unnecessary state from the local copy of the chain your node maintains. It saves disk space and slightly improves the node's efficiency. How you prune depends on the [state scheme](#choose-a-state-scheme) you chose.
 
-For nodes using PathDB, pruning will be automatic, can be done online, and defaults to retaining only the last 24 hours' worth of state history on disk.
+On **HashDB**, the default, pruning is a _manual, opt-in_ operation. It removes all states from blocks older than the latest 128.
+
+On **PathDB**, pruning is automatic and runs online. Nitro retains `--execution.caching.state-history` blocks of state history. When you leave that flag unset, Nitro picks the default at startup:
+
+| Node type                                        | Default `state-history`                                     |
+| :----------------------------------------------- | :---------------------------------------------------------- |
+| Full node (no `--execution.caching.archive`)     | 345,600 blocks — 24 hours at the default 250 ms block speed |
+| Archive node (`--execution.caching.archive` set) | `0`, meaning the entire chain                               |
+
+Nitro chose this default from the archive flag starting in v3.10.0. Before v3.10.0, the default was always 24 hours' worth of blocks, so an archive node needed an explicit `--execution.caching.state-history=0`.
 
 :::note
 

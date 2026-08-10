@@ -18,10 +18,12 @@ There are multiple ways to supply Nitro with the database snapshot. The most str
 
 ## Downloading the latest snapshot
 
-Nitro has a CLI configuration for downloading the latest snapshot from a remote server. Set the flag `--init.latest` to either `archive`, `pruned`, or `genesis`, and Nitro will download the preferred snapshot. You may also change the `--init.latest-base` flag to set the base URL when searching for the latest snapshot.
+Nitro has a CLI configuration for downloading the latest snapshot from a remote server. Set the flag `--init.latest` to either `archive`, `pruned`, or `genesis`, and Nitro will download the preferred snapshot. Nitro rejects any other value. You may also change the `--init.latest-base` flag to set the base URL when searching for the latest snapshot.
 
 :::info
-PathDB snapshot auto-download with `--init.latest` is not yet supported.
+
+All three kinds that `--init.latest` accepts resolve to HashDB snapshots, so `--init.latest` cannot bootstrap a PathDB node. See [PathDB snapshots](#pathdb-snapshots).
+
 :::
 
 ### How it works
@@ -41,6 +43,31 @@ Finally, Nitro decompresses and extracts the snapshot archive, placing it in the
 Instead of letting Nitro search for the latest snapshot, you can provide a specific URL to download by setting the flag `--init.url` with the snapshot URL. If the URL points to a remote server, it should start with the `https://` protocol definition. Given the URL, Nitro will download the snapshot as described in the "Downloading the Latest Snapshot" section.
 
 Nitro also supports importing files from the local file system. In this case, you should provide the file path to `--init.url` starting with the prefix `file://` followed by the file path. Beware that when running Nitro inside a Docker container, you must mount a volume containing the provided snapshot using the docker flag `-v` (see [Docker documentation](https://docs.docker.com/reference/cli/docker/container/run/#volume)). Otherwise, the Nitro container running inside Docker won’t be able to find the snapshot in your local filesystem.
+
+---
+
+## PathDB snapshots
+
+A snapshot only works with a node whose state scheme matches the snapshot's. A PathDB snapshot won't initialize a HashDB node, and the reverse also fails.
+
+`--init.latest` can't help you here: it accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots. Snapshots built with the `path` scheme are published under a separate `archive-path` kind that `--init.latest` doesn't accept.
+
+To initialize a PathDB node:
+
+1. Find the `archive-path` snapshot for your chain in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/). These exist for Arbitrum One and Arbitrum Sepolia. Arbitrum Nova has no `path` snapshot.
+2. Confirm the scheme. Each snapshot directory publishes a `metadata.json` naming its `state_scheme`, `snapshot_kind`, size, and Nitro version. Check it before downloading terabytes.
+3. Pass the snapshot URL to `--init.url`, or download it manually as described below.
+
+<!-- todo: SME REVIEW — add a concrete copy-pasteable `--init.url` example for an `archive-path` snapshot once the question below is resolved.
+     Deliberately omitted because it may not work on the current release. Nitro v3.11.2's downloadInitInParts
+     (cmd/nitro/init/init.go:238) fetches `<url>.manifest.txt` to enumerate parts, but the published archive-path
+     snapshots ship no .manifest.txt — only metadata.json (verified 404 at every prefix probed, e.g.
+     arb1/2026-08-02-291ce8d7/archive-path.tar.manifest.txt). Those snapshots were built by v3.11.3-rc.*, which is
+     newer than any released tag, so metadata.json support likely exists in unreleased code but could not be verified.
+     ASK: does the current release read metadata.json for multi-part downloads? If yes, add the example and drop this
+     comment plus the one in "Downloading snapshot parts". If no, document manual download as the only supported route. -->
+
+Because only archive-kind `path` snapshots are published, PathDB has no snapshot-based path to a pruned full node today. Sync from genesis, or run HashDB. See [Choose a state scheme](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).
 
 ---
 
@@ -77,6 +104,19 @@ Finally, you can provide a path to the downloaded snapshot archive to Nitro usin
 ### Downloading snapshot parts
 
 If the snapshot is divided into parts, you should first download the manifest file in `<snapshot-url>.manifest.txt`. This manifest contains the names and checksums of each part. For instance, the snippet below shows how the manifest file should look. You may use the commands described previously to download each part of the snapshot and verify their checksums.
+
+<!-- todo: SME REVIEW — confirm whether Nitro itself can still auto-download these snapshots in parts.
+     The surrounding prose describes the .manifest.txt mechanism that Nitro v3.11.2 implements
+     (cmd/nitro/init/init.go:238), but no published snapshot currently serves a .manifest.txt file.
+     If current Nitro reads metadata.json instead, rewrite this whole "Downloading snapshot parts"
+     section around metadata.json rather than leaving the note below as an exception. See the
+     matching comment in the "PathDB snapshots" section above. -->
+
+:::note
+
+Snapshots published in the Arbitrum Foundation bucket list their parts in the `metadata.json` file at the root of the snapshot directory rather than in a `.manifest.txt` file. `metadata.json` gives each part's filename, size, and both SHA-256 and xxHash checksums. Read the part names from there when downloading one of those snapshots manually.
+
+:::
 
 ```shell
 a938e029605b81e03cd4b9a916c52d96d74c985ac264e2f298b90495c619af74  archive.tar.part0
