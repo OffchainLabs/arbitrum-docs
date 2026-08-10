@@ -8,7 +8,7 @@ user_story: As an Arbitrum chain owner or RaaS provider, I need to understand wh
 content_type: concept
 ---
 
-Every <a data-quicklook-from="transaction">transaction</a> on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> pays a single fee, but under the hood that fee is split into components that travel very different paths before reaching their final destination. Some components are credited to a collector address in the same transaction that paid them. While others are routed through a system pool and paid out after batches are posted.
+Every <a data-quicklook-from="transaction">transaction</a> on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> pays a single fee, but under the hood that fee is split into components that travel very different paths before reaching their final destination. Some components are credited to a collector address in the same transaction that paid them, while others are routed through a system pool and paid out after batches are posted.
 
 This page traces the complete life of a transaction fee: which address collects each component, when funds actually move, why block explorers estimate, and how and when to retrieve funds.
 
@@ -22,16 +22,16 @@ Transaction fees on an Arbitrum chain split into four components, each with its 
 | :----------------------------- | :------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- | :------------------------------ |
 | **Arbitrum chain base fee**    | Execution, up to the configured minimum base fee                                                               | `infraFeeAccount`                                                                                                             | Immediately, per transaction    |
 | **Arbitrum chain surplus fee** | Execution paid above the minimum base fee (congestion), plus any priority fees                                 | `networkFeeAccount`                                                                                                           | Immediately, per transaction    |
-| **Parent chain base fee**      | Estimated cost of posting the transaction's data to the <a data-quicklook-from="parent-chain">parent chain</a> | `L1PricerFundsPoolAddress` (system pool), then the <a data-quicklook-from="batch-poster">batch poster</a>'s **fee collector** | After each batch posting report |
+| **<a data-quicklook-from="parent-chain">Parent chain</a> base fee**      | Estimated cost of posting the transaction's data to the <a data-quicklook-from="parent-chain">parent chain</a> | `L1PricerFundsPoolAddress` (system pool), then the <a data-quicklook-from="batch-poster">batch poster</a>'s **fee collector** | After each batch posting report |
 | **Parent chain surplus fee**   | Optional per data unit reward configured by the <a data-quicklook-from="chain-owner">chain owner</a>           | `L1RewardRecipient`                                                                                                           | After each batch posting report |
 
 <VanillaAdmonition type="note" title="Fallback behavior">
 
-If `infraFeeAccount` is not set (the zero address), the entire execution fee (base and surplus) goes to `networkFeeAccount`. At chain deployment, `networkFeeAccount` is initialized to the initial chain owner and `infraFeeAccount` starts unset, so a freshly deployed chain sends all execution fees to the chain owner's address.
+If `infraFeeAccount` is not set (the zero address), the entire execution fee (base and surplus) goes to `networkFeeAccount`. At chain deployment, `networkFeeAccount` is initialized to the initial <a data-quicklook-from="chain-owner">chain owner</a> and `infraFeeAccount` starts unset, so a freshly deployed chain sends all execution fees to the chain owner's address.
 
 </VanillaAdmonition>
 
-The first two components are straightforward: ArbOS credits them to their collector addresses during transaction execution in the same block. The rest of this page focuses on the parent chain base fee and the parent chain surplus fee.
+The first two components are straightforward: <a data-quicklook-from="arbos">ArbOS</a> credits them to their collector addresses during transaction execution in the same block. The rest of this page focuses on the parent chain base fee and the parent chain surplus fee.
 
 ## Fee lifecycle
 
@@ -41,11 +41,11 @@ The first two components are straightforward: ArbOS credits them to their collec
 
 2. **The fee is split at the end of execution.** The execution components go directly to `infraFeeAccount` and `networkFeeAccount`. The parent chain component is credited to `L1PricerFundsPoolAddress` (`0xA4B00000000000000000000000000000000000f6`), a system owned pool with no private key. The pool exists to reimburse whoever ends up paying for batch posting.
 
-3. **The batch poster posts a batch.** The batch poster submits your chain's transaction data to the `SequencerInbox` contract on the parent chain, paying parent chain gas **from its own parent chain balance**. This is the cost the pool will cover later on.
+3. **The <a data-quicklook-from="batch-poster">batch poster</a> posts a batch.** The batch poster submits your chain's transaction data to the `SequencerInbox` contract on the parent chain, paying parent chain gas **from its own parent chain balance**. This is the cost the pool will cover later on.
 
 4. **The parent chain reports the spending.** In the same transaction that records the batch, the `SequencerInbox` contract sends a _batch posting report_ message into your chain's <a data-quicklook-from="delayed-inbox">delayed inbox</a>, containing who posted the batch and the parent chain base fee at the time.
 
-5. **ArbOS processes the report and pays out.** When the report arrives on the <a data-quicklook-from="child-chain">child chain</a>, ArbOS computes what the batch actually cost (reported basefee × the batch's data gas, plus a fixed per batch overhead) and records it as funds due to that batch poster. It then pays, from the pool's balance:
+5. **ArbOS processes the report and pays out.** When the report arrives on the <a data-quicklook-from="child-chain">child chain</a>, ArbOS computes what the batch actually cost (reported base fee × the batch's data gas, plus a fixed per batch overhead) and records it as funds due to that batch poster. It then pays, from the pool's balance:
    - First, any **parent chain surplus fee** owed to the configured reward recipient (reward rate × data units processed).
    - Then, the accumulated amount due to the batch poster, sent to that poster's **fee collector** address.
 
@@ -57,15 +57,15 @@ The first two components are straightforward: ArbOS credits them to their collec
 
 Payouts to the fee collector and reward recipient are triggered **by batch posting reports**. In practice this means:
 
-- Funds move shortly after each batch is posted once the report has transited the delayed inbox and been processed on the child chain.
-- Batch posting frequency depends on your chain's traffic and batch poster configuration (size, frequency), so payout frequency varies with it. Information about the batch poster configurations are described in [Batch Poster](/launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster.mdx).
+- Funds move shortly after each batch is posted once the report has transited the <a data-quicklook-from="delayed-inbox">delayed inbox</a> and been processed on the child chain.
+- Batch posting frequency depends on your chain's traffic and batch poster configuration (size, frequency), so payout frequency varies with it. Information about the batch poster configuration is described in [Batch Poster](/launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster.mdx).
 - Every report will cover as much of the funds as it can,
 
 ## Estimated versus actual fees
 
-Block explorers such as Blockscout display a per transaction "Gas used for L1" value (and a corresponding L1 fee). A common question is whether this is the **actual** cost of posting that transaction to the parent chain. **It is an estimate**, and it is never retroactively corrected. Here is why:
+Block explorers such as Blockscout display a per transaction "Gas used for <a data-quicklook-from="L1">L1</a>" value (and a corresponding L1 fee). A common question is whether this is the **actual** cost of posting that transaction to the parent chain. **It is an estimate**, and it is never retroactively corrected. Here is why:
 
-- When a transaction executes, its batch doesn't exist yet, meaning the transaction has yet to be posted to the parent chain. Therefore ArbOS estimates the parent chain costs by using the price per data from the previous posted batch as an estimate.
+- When a transaction executes, its batch doesn't exist yet, meaning the transaction has yet to be posted to the parent chain. Therefore ArbOS estimates the parent chain costs by using the price per data unit from the previously posted batch as an estimate.
 - The charged amount is recorded in the transaction receipt as `gasUsedForL1`: the parent chain fee re-expressed in child chain gas units at the transaction's gas price. This receipt field is what explorers display.
 - The transaction's _actual_ share of batch posting costs is only knowable later, when the batch containing it is posted and reported. That actual cost is never attributed back to individual transactions. Instead, the difference between what was collected and what batches actually cost accumulates as a surplus or deficit in `L1PricerFundsPoolAddress`, and the adaptive pricing algorithm adjusts future charges to drive that difference toward zero.
 
@@ -75,7 +75,7 @@ Block explorers such as Blockscout display a per transaction "Gas used for L1" v
 
 </VanillaAdmonition>
 
-You can read the parent chain fee charged to the current transaction from within a contract, or inspect a live chain's pricing state, using the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) precompile (`getCurrentTxL1GasFees()`, `getL1BaseFeeEstimate()`).
+You can read the parent chain fee charged to the current transaction from within a contract, or inspect a live chain's pricing state, using the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) <a data-quicklook-from="precompile">precompile</a> (`getCurrentTxL1GasFees()`, `getL1BaseFeeEstimate()`).
 
 ## Funds are stagnant unless moved
 
@@ -88,12 +88,12 @@ The protocol's pricing loop makes the second balance grow in proportion to what 
 
 There are two options to move revenue from the child chain to the parent chain:
 
-1. **Withdraw manually through the bridge.** If a collector is an EOA or multisig you control, initiate a standard child to parent withdrawal and execute it on the parent chain after the challenge period.
+1. **Withdraw manually through the bridge.** If a collector is an EOA or multisig you control, initiate a standard child to parent withdrawal and execute it on the parent chain after the <a data-quicklook-from="challenge">challenge</a> period.
 2. **Use the AEP fee router contracts.** Set your collector addresses to `ChildToParentRouter` contracts, which route received funds to a configurable parent chain address and can be triggered permissionlessly. This is the recommended setup for chains with [Arbitrum Expansion Program](/launch-arbitrum-chain/chain-config/costs/aep-overview.mdx) obligations (see [AEP fee router contracts](/launch-arbitrum-chain/chain-config/costs/aep-router-contracts.mdx)).
 
 <VanillaAdmonition type="warning" title="Custom gas token chains">
 
-On chains with a custom gas token, fee collection is denominated in your gas token while the batch poster spends the parent chain's native token, so the reimbursement stream and the actual cost are in different assets. Such chains typically disable the parent chain base fee (set the price per unit to zero) and handle batch posting costs off-protocol. See [How to use a custom gas token](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx) and the custom gas token scenario in [AEP fee reporting](/launch-arbitrum-chain/chain-config/costs/reporting-on-fees.mdx).
+On chains with a <a data-quicklook-from="custom-gas-token">custom gas token</a>, fee collection is denominated in your gas token while the batch poster spends the parent chain's native token, so the reimbursement stream and the actual cost are in different assets. Such chains typically disable the parent chain base fee (set the price per unit to zero) and handle batch posting costs off-protocol. See [How to use a custom gas token](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx) and the custom gas token scenario in [AEP fee reporting](/launch-arbitrum-chain/chain-config/costs/reporting-on-fees.mdx).
 
 </VanillaAdmonition>
 
@@ -119,7 +119,7 @@ cast call --rpc-url $CHAIN_RPC 0x000000000000000000000000000000000000006D "getBa
 cast call --rpc-url $CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
 ```
 
-A negative surplus is normal after periods of high parent chain gas prices since recent batches costed more than what were collected. Therefore the adaptive pricing algorithm is raising the per unit price to recover. A persistently large positive surplus means users are being overcharged relative to costs; a chain owner can correct the price directly (`ArbOwner.setL1PricePerUnit`) or leave the algorithm to converge.
+A negative surplus is normal after periods of high parent chain gas prices since recent batches cost more than what was collected. Therefore the adaptive pricing algorithm is raising the per unit price to recover. A persistently large positive surplus means users are being overcharged relative to costs; a chain owner can correct the price directly (`ArbOwner.setL1PricePerUnit`) or leave the algorithm to converge.
 
 <VanillaAdmonition type="note" title="Funds sent directly to the pool address">
 
