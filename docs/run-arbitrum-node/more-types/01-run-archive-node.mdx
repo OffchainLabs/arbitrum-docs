@@ -32,11 +32,12 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 
 ## Use PathDB for archive nodes
 
-**We recommend PathDB for archive nodes on Nitro v3.9.x or later.** PathDB is a path-based state scheme, and it is the one case where switching away from the default HashDB clearly pays off: it cuts the archive database roughly in half. While syncing and serving RPC calls, a PathDB archive node performs about the same as, or slightly better than, a HashDB one.
+**We recommend PathDB for archive nodes on Nitro v3.9.x or later.** PathDB is a path-based state scheme. It cuts archive disk use substantially, and while syncing and serving RPC calls a PathDB archive node performs about the same as, or slightly better than, a HashDB one.
 
 Benefits:
 
-- **Lower disk usage.** The Arbitrum One `path` archive snapshot is about 3.7 TB, against roughly double that for HashDB.
+- **Lower disk usage.** The Arbitrum One `archive-path` snapshot is about 3.7 TB. The equivalent HashDB `archive` snapshot is considerably larger — Nova's is about 8 TB, for a chain whose full node database is a quarter the size of Arbitrum One's.
+- **Automatic, online pruning.** PathDB removes old state as the node runs, without your intervention. You never schedule a prune, and the node never goes offline to run one. On HashDB you prune manually, and the node stops serving RPC requests until it finishes — days, on a chain the size of Arbitrum One. This benefit applies to full nodes on PathDB too.
 - **Configurable retention.** You choose how much state history to keep with `--execution.caching.state-history`.
 
 Limitations:
@@ -66,12 +67,23 @@ For cache sizing and memory tuning that applies to archive nodes generally, see 
 
 A snapshot only works with a node whose state scheme matches the snapshot's. `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots, so it cannot bootstrap a PathDB node.
 
-Instead, find the `path`-scheme archive snapshot for your chain in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/) and pass its URL to `--init.url`. These snapshots are published for Arbitrum One and Arbitrum Sepolia only; Arbitrum Nova has no `path` snapshot. Every snapshot directory includes a `metadata.json` that names its `state_scheme`, so you can confirm you have the right one before downloading terabytes.
+Instead, pass the `archive-path` snapshot URL to `--init.url`. These snapshots are published for Arbitrum One and Arbitrum Sepolia only; Arbitrum Nova has no `archive-path` snapshot.
 
-<!-- todo: SME REVIEW — no concrete `--init.url` example here on purpose; it may not work on the current release.
-     The published archive-path snapshots serve no .manifest.txt, which is what Nitro v3.11.2 uses to enumerate
-     multi-part downloads (cmd/nitro/init/init.go:238). Add a worked example once that is resolved.
-     Full context in the "PathDB snapshots" section of /run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx. -->
+Each chain publishes a pointer file naming its current `archive-path` snapshot directory. Read that file to find the URL:
+
+```shell
+curl https://snapshot.arbitrum.foundation/arb1/latest-archive-path.txt
+```
+
+The file contains a directory path, such as `arb1/2026-08-02-291ce8d7/`. Pass the full URL to that directory, including the trailing slash:
+
+```shell
+--init.url https://snapshot.arbitrum.foundation/arb1/2026-08-02-291ce8d7/
+```
+
+Nitro reads the `.manifest.txt` file in that directory to enumerate the snapshot parts, downloads each one, and verifies its checksum. The directory also holds a `metadata.json` naming the snapshot's `state_scheme`, `snapshot_kind`, and total size, so you can confirm you have the right snapshot before downloading terabytes.
+
+For Arbitrum Sepolia, substitute `sepolia-rollup` for `arb1` in both URLs.
 
 ## System requirements
 

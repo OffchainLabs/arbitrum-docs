@@ -30,7 +30,7 @@ Please note that:
 - The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests. For nodes that need to process multiple simultaneous requests, both the RAM size and the number of CPU cores should be increased to accommodate higher levels of traffic.
 - Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor.
 - The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended. Note that snapshot extraction requires approximately 2x the snapshot size in temporary disk space, so plan accordingly during initial setup.
-- Nitro stores its state trie using either HashDB (the default) or PathDB. The choice affects which snapshot you can use, so make it before you initialize the database. PathDB is worth enabling on archive nodes; full nodes should stay on HashDB for now. See [Choose a state scheme](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).
+- Nitro stores its state trie using either HashDB (the default) or PathDB. The choice affects which snapshot you can use, so make it before you initialize the database. Both schemes have published full node snapshots; PathDB prunes automatically but cannot validate blocks. See [Choose a state scheme](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).
 
 ### Parent chain (L1) client
 
@@ -54,13 +54,16 @@ Database snapshots for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are ava
 
 Snapshots are published per state scheme, and a snapshot only works with a node using the same scheme:
 
-| Snapshot kind  | State scheme | Available for               |
-| :------------- | :----------- | :-------------------------- |
-| `pruned`       | HashDB       | Arbitrum One, Nova, Sepolia |
-| `archive`      | HashDB       | Arbitrum One, Nova, Sepolia |
-| `archive-path` | PathDB       | Arbitrum One, Sepolia       |
+| Snapshot kind  | Node type | State scheme | Available for               |
+| :------------- | :-------- | :----------- | :-------------------------- |
+| `pruned`       | Full node | HashDB       | Arbitrum One, Nova, Sepolia |
+| `full-path`    | Full node | PathDB       | Arbitrum One, Nova, Sepolia |
+| `archive`      | Archive   | HashDB       | Arbitrum One, Nova, Sepolia |
+| `archive-path` | Archive   | PathDB       | Arbitrum One, Sepolia       |
 
-No pruned (full node) snapshot uses PathDB, so run your full node on HashDB. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
+Only the HashDB kinds distinguish pruned from unpruned. PathDB prunes as it runs, so every PathDB snapshot is already pruned to its state-history window — there is no separate unpruned variant to publish. The `pruned` kind exists because a HashDB database is pruned manually, and the published HashDB full node snapshots happen to be pruned ones.
+
+`--init.latest` cannot download the PathDB kinds. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
 
 Database snapshots for other Arbitrum chains may be available at the discretion of the chain's team. Get in touch with them if you're interested in using a database snapshot for their chains.
 
@@ -78,13 +81,15 @@ We provide a summary of the available parameters here, but we recommend reading 
 
 :::tip Which initialization mode should I use?
 
-| Scenario                                    | Recommended Parameter                                                                                                                                                                                                          |
-| :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Setting up a new **pruned** (full) node     | `--init.latest pruned`                                                                                                                                                                                                         |
-| Setting up a new **archive** node           | On Arbitrum One and Sepolia, prefer the `archive-path` snapshot with `--init.url` — it is smaller and more current than the HashDB `archive` snapshot, which is outdated on both chains. On Nova, use `--init.latest archive`. |
-| Reducing disk usage on an **existing** node | `--init.prune full` (or `minimal`) — only applicable to HashDB; PathDB handles state trie pruning automatically                                                                                                                |
-| Hosting one snapshot for **multiple nodes** | Download manually, then use `--init.url file:///path/to/archive.tar` on each node                                                                                                                                              |
-| Using a **custom snapshot URL**             | `--init.url https://your-snapshot-url/archive.tar`                                                                                                                                                                             |
+| Scenario                                        | Recommended Parameter                                                                                                                                                               |
+| :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Setting up a new **full node** on **HashDB**    | `--init.latest pruned`                                                                                                                                                              |
+| Setting up a new **full node** on **PathDB**    | The `full-path` snapshot with `--init.url`. `--init.latest` does not accept this kind.                                                                                              |
+| Setting up a new **archive** node on **HashDB** | `--init.latest archive` (note: the publicly hosted `archive` snapshot is outdated on Arbitrum One and Sepolia)                                                                      |
+| Setting up a new **archive** node on **PathDB** | The `archive-path` snapshot with `--init.url`, on Arbitrum One and Sepolia. It is smaller and more current than the HashDB `archive` snapshot. Nova has no `archive-path` snapshot. |
+| Reducing disk usage on an **existing** node     | `--init.prune full` (or `minimal`) — only applicable to HashDB; PathDB handles state trie pruning automatically                                                                     |
+| Hosting one snapshot for **multiple nodes**     | Download manually, then use `--init.url file:///path/to/archive.tar` on each node                                                                                                   |
+| Using a **custom snapshot URL**                 | `--init.url https://your-snapshot-url/archive.tar`                                                                                                                                  |
 
 For more details on snapshot downloading and initialization, see the [complete snapshot guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx).
 

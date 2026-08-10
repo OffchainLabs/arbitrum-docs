@@ -10,7 +10,7 @@ The two schemes are not interchangeable. A node can only start from a snapshot c
 
 ### `--execution.caching.state-history`
 
-Sets how many blocks of state history Nitro retains, counting back from the chain head. `0` means the entire chain.
+Sets how many blocks of state history Nitro retains, counting back from the chain head. `0` means the entire chain, and is therefore required — but not enough on its own — to run an archive node on PathDB. You also need `--execution.caching.archive`, described below.
 
 <StateHistoryDefaults />
 

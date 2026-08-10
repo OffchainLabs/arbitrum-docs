@@ -1,8 +1,8 @@
 When you leave `--execution.caching.state-history` unset, Nitro chooses the default at startup:
 
-| Node type                                        | Default `state-history`                                     |
-| :----------------------------------------------- | :---------------------------------------------------------- |
-| Full node (no `--execution.caching.archive`)     | 345,600 blocks — 24 hours at the default 250 ms block speed |
-| Archive node (`--execution.caching.archive` set) | `0`, meaning the entire chain                               |
+| Node type                                         | Default `state-history`                                     |
+| :------------------------------------------------ | :---------------------------------------------------------- |
+| Full node (`--execution.caching.archive=false`)   | 345,600 blocks — 24 hours at the default 250 ms block speed |
+| Archive node (`--execution.caching.archive=true`) | `0`, meaning the entire chain                               |
 
 From v3.10.0, Nitro derives this default from the archive flag. On earlier versions the default was always 24 hours' worth of blocks, so an archive node needs an explicit `--execution.caching.state-history=0`.

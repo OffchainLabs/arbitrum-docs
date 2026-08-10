@@ -50,24 +50,40 @@ Nitro also supports importing files from the local file system. In this case, yo
 
 A snapshot only works with a node whose state scheme matches the snapshot's. A PathDB snapshot won't initialize a HashDB node, and the reverse also fails.
 
-`--init.latest` can't help you here: it accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots. Snapshots built with the `path` scheme are published under a separate `archive-path` kind that `--init.latest` doesn't accept.
+`--init.latest` can't help you here: it accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots. Snapshots built with the `path` scheme are published under two separate kinds that `--init.latest` doesn't accept:
 
-To initialize a PathDB node:
+| Kind           | Node type | Available for               |
+| :------------- | :-------- | :-------------------------- |
+| `full-path`    | Full node | Arbitrum One, Nova, Sepolia |
+| `archive-path` | Archive   | Arbitrum One, Sepolia       |
 
-1. Find the `archive-path` snapshot for your chain in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/). These exist for Arbitrum One and Arbitrum Sepolia. Arbitrum Nova has no `path` snapshot.
-2. Confirm the scheme. Each snapshot directory publishes a `metadata.json` naming its `state_scheme`, `snapshot_kind`, size, and Nitro version. Check it before downloading terabytes.
-3. Pass the snapshot URL to `--init.url`, or download it manually as described below.
+Every PathDB snapshot is pruned to its state-history window, because PathDB prunes as the node runs. There is no unpruned `path` variant to publish.
 
-<!-- todo: SME REVIEW — add a concrete copy-pasteable `--init.url` example for an `archive-path` snapshot once the question below is resolved.
-     Deliberately omitted because it may not work on the current release. Nitro v3.11.2's downloadInitInParts
-     (cmd/nitro/init/init.go:238) fetches `<url>.manifest.txt` to enumerate parts, but the published archive-path
-     snapshots ship no .manifest.txt — only metadata.json (verified 404 at every prefix probed, e.g.
-     arb1/2026-08-02-291ce8d7/archive-path.tar.manifest.txt). Those snapshots were built by v3.11.3-rc.*, which is
-     newer than any released tag, so metadata.json support likely exists in unreleased code but could not be verified.
-     ASK: does the current release read metadata.json for multi-part downloads? If yes, add the example and drop this
-     comment plus the one in "Downloading snapshot parts". If no, document manual download as the only supported route. -->
+### Initialize a PathDB node
 
-Because only archive-kind `path` snapshots are published, PathDB has no snapshot-based path to a pruned full node today. Sync from genesis, or run HashDB. See [Choose a state scheme](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).
+Each chain publishes a pointer file naming the current snapshot directory for each kind. Read it to find the URL:
+
+```shell
+curl https://snapshot.arbitrum.foundation/arb1/latest-full-path.txt
+```
+
+Use `latest-archive-path.txt` for an archive node. For Arbitrum Sepolia, substitute `sepolia-rollup` for `arb1`.
+
+The file contains a directory path, such as `arb1/2026-08-01-a78755ba/`. Pass the full URL to that directory, including the trailing slash:
+
+```shell
+--init.url https://snapshot.arbitrum.foundation/arb1/2026-08-01-a78755ba/
+```
+
+Nitro reads the `.manifest.txt` file in that directory to enumerate the snapshot parts, downloads each part, and verifies its checksum.
+
+Before downloading terabytes, confirm you have the right snapshot. Each directory publishes a `metadata.json` naming its `state_scheme`, `snapshot_kind`, and total size:
+
+```shell
+curl https://snapshot.arbitrum.foundation/arb1/2026-08-01-a78755ba/metadata.json
+```
+
+Your node's `--execution.caching.state-scheme` must match the snapshot's `state_scheme`. See [Choose a state scheme](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).
 
 ---
 
@@ -105,16 +121,11 @@ Finally, you can provide a path to the downloaded snapshot archive to Nitro usin
 
 If the snapshot is divided into parts, you should first download the manifest file in `<snapshot-url>.manifest.txt`. This manifest contains the names and checksums of each part. For instance, the snippet below shows how the manifest file should look. You may use the commands described previously to download each part of the snapshot and verify their checksums.
 
-<!-- todo: SME REVIEW — confirm whether Nitro itself can still auto-download these snapshots in parts.
-     The surrounding prose describes the .manifest.txt mechanism that Nitro v3.11.2 implements
-     (cmd/nitro/init/init.go:238), but no published snapshot currently serves a .manifest.txt file.
-     If current Nitro reads metadata.json instead, rewrite this whole "Downloading snapshot parts"
-     section around metadata.json rather than leaving the note below as an exception. See the
-     matching comment in the "PathDB snapshots" section above. -->
-
 :::note
 
-Snapshots published in the Arbitrum Foundation bucket list their parts in the `metadata.json` file at the root of the snapshot directory rather than in a `.manifest.txt` file. `metadata.json` gives each part's filename, size, and both SHA-256 and xxHash checksums. Read the part names from there when downloading one of those snapshots manually.
+For directory-style snapshot URLs, the manifest is the `.manifest.txt` file inside the directory. For example, `https://snapshot.arbitrum.foundation/arb1/2026-08-01-a78755ba/.manifest.txt`. Its part names include the directory prefix, so resolve them against the parent of the snapshot URL.
+
+The same directory also holds a `metadata.json` giving each part's filename, size, and both SHA-256 and xxHash checksums. Either file works for a manual download; Nitro itself reads `.manifest.txt`.
 
 :::
 
