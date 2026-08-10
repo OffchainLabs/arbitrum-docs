@@ -93,60 +93,12 @@ Skip with `HUSKY=0 git commit` when needed.
 
 ## Content writing guidelines
 
-The canonical editorial reference is [`docs/Offchain-pattern-guide.md`](docs/Offchain-pattern-guide.md) — it defines content types, writing principles, and the full terminology guide. The rules below are a condensed quick-reference; when they're silent or ambiguous, defer to the pattern guide.
+ALWAYS READ THE [PATTERN GUIDE](docs/Offchain-pattern-guide.md) AND APPLY ITS RULES IN YOUR WRITING
 
-### Terminology
+## PR Authoring conventions
 
-| Use                     | Don't use             |
-| ----------------------- | --------------------- |
-| decentralized app → app | dapp, dApp            |
-| onchain                 | on-chain              |
-| cross-chain             | crosschain            |
-| Rollup (capital R)      | rollup                |
-| AnyTrust                | anytrust              |
-| `ERC-20`, `ERC-721`     | ERC20                 |
-| allowlist/denylist      | whitelist/blacklist   |
-| Your Arbitrum chain     | L3 Orbit chain        |
-| bond                    | stake (for proposing) |
-
-### Document frontmatter
-
-Every doc must include:
-
-```yaml
----
-title: 'Document title (appears as H1)'
-sidebar_label: 'Shortened title for sidebar'
-description: 'SEO-friendly description'
-user_story: 'As a <role>, I want to <goal>'
-content_type: 'how-to | concept | quickstart | tutorial | reference | troubleshooting'
-author: '<github-username>'
-sme: '<github-username>'
----
-```
-
-### Style rules
-
-- Sentence case for headings
-- Tag code blocks with `shell` not `bash`
-- American English spelling
-- Spell out "and"/"or" (not & or /)
-- Separate procedural from conceptual content
-
-### Authoring conventions
-
-- Use `<VanillaAdmonition type="…">` instead of Docusaurus `:::info` / `:::note` for callouts in MDX. The component is registered globally via `src/theme/MDXComponents.js`, so no import is needed.
 - PR descriptions start from `.github/pull_request_template.md` — preserve its top-level headings (`## Description`, `## Document type`, `## Checklist`, `## Additional Notes`) and fill the sections rather than replacing them.
 - See `AGENTS.md` at the repo root for notes on relevant agents/subagents/skills used while working in this repo.
-
-## Known harmless build noise
-
-Don't chase these — they're transitive-dep noise from upstream packages:
-
-- `image at "...svg" can't be read correctly` / `unsupported file type: undefined` — `image-size` v2 dropped SVG support; Docusaurus's mdx-loader still calls it on every image. Affects build output only; rendered SVGs are fine.
-- `Critical dependency: require function is used in a way...` (`vscode-languageserver-types`) — UMD dynamic require from `mermaid` → `chevrotain` → `vscode-languageserver`.
-- `Can't resolve 'bufferutil' / 'utf-8-validate'` (in `ws/lib/...`) — optional native bindings; `ws` falls back to JS without them.
-- `[docusaurus-plugin-llms-txt] WARNING: Excluded N routes by current config` — informational; the plugin reports how many routes matched `nonCanonicalRoutePatterns` in `docusaurus.config.js` (SDK subtrees, hosted PDFs, partials, category pages). Not an error, just a count.
 
 ## Security audit workflow
 

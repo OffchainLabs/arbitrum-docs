@@ -1,24 +1,25 @@
-import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
-import type {
-  DecodedEvent,
-  EdgeAddedMeta,
-  AppliedState,
-  RangeIndex,
-  LevelMeta,
-  LevelGroup,
-} from './types';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { DEFAULT_INTERVAL_MS } from './constants';
 import {
-  buildParentMap,
-  buildChildOrderMap,
-  recomputeDerivedRanges,
-  computeLevelMeta,
-  buildRangeIndex,
-  buildLevelGroups,
   applyEvents,
+  buildChildOrderMap,
+  buildLevelGroups,
+  buildParentMap,
+  buildRangeIndex,
+  computeLevelMeta,
   computeMilestones,
   normalizeHex,
+  recomputeDerivedRanges,
 } from './edgeChallengeLogic';
-import { DEFAULT_INTERVAL_MS } from './constants';
+import type {
+  AppliedState,
+  DecodedEvent,
+  EdgeAddedMeta,
+  LevelGroup,
+  LevelMeta,
+  RangeIndex,
+} from './types';
 
 export interface EdgeChallengeStateResult {
   currentIndex: number;
