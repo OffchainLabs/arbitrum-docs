@@ -68,29 +68,45 @@ An earlier version of this skill said "white text on cyan/magenta boxes" for
 baked-background diagrams. **White on cyan is 2.55:1 and fails WCAG at every
 size.** Use this table instead — every figure below is computed, not estimated:
 
-| Box fill          | Title text         | Sublabel text     | Never use                  |
-| ----------------- | ------------------ | ----------------- | -------------------------- |
-| cyan `#12aaff`    | `#0b1b2e` — 6.8:1  | `#0b2438` — 6.2:1 | white → **2.55:1 FAIL**    |
-| magenta `#e6007a` | `#ffffff` — 4.5:1  | `#ffffff` — 4.5:1 | `#ffe3f1` → **3.8:1 FAIL** |
-| navy `#213147`    | `#ffffff` — 13.2:1 | `#c9dcef` — 9.4:1 | —                          |
-| orange `#f97316`  | `#0b1b2e` — 6.2:1  | —                 | white → **2.80:1 FAIL**    |
+| Box fill                | Title text         | Sublabel text     | Never use                  |
+| ----------------------- | ------------------ | ----------------- | -------------------------- |
+| cyan `#12aaff`          | `#0b1b2e` — 6.8:1  | `#0b2438` — 6.2:1 | white → **2.55:1 FAIL**    |
+| magenta `#e6007a`       | `#ffffff` — 4.5:1  | `#ffffff` — 4.5:1 | `#ffe3f1` → **3.8:1 FAIL** |
+| navy `#213147`          | `#ffffff` — 13.2:1 | `#c9dcef` — 9.4:1 | —                          |
+| Nova orange `#ff7700`   | `#0b1b2e` — 6.5:1  | `#0b2438` — 6.0:1 | white → **2.66:1 FAIL**    |
+| legacy orange `#f97316` | `#0b1b2e` — 6.2:1  | —                 | white → **2.80:1 FAIL**    |
 
-Note the orange row: the legacy "orange box + white label = this is code"
-convention is itself inaccessible, which is a second reason to use the palenight
-code block below.
+Both orange rows fail on white, so the legacy "orange box + white label = this is
+code" convention is itself inaccessible — a second reason to use the palenight
+code block below. `#ff7700` is the real Arbitrum Nova brand orange (it comes out
+of the Nova logomark); reach for it only when the box genuinely _is_ Nova.
+
+Magenta is the one fill with no headroom: white measures **4.52:1** against a
+4.5 floor. It carries a sublabel only at white — never tint it, and never assume
+a smaller sublabel is safe there.
 
 Text sitting directly on the **gradient** has no fixed backdrop, so its contrast
 depends on _where_ on the canvas it sits — the gradient runs dark navy at the top
 to bright cyan at the bottom. Measure it against the render (Verification step 5).
-Rule of thumb:
 
-| Position                        | Safe fill | Notes                             |
-| ------------------------------- | --------- | --------------------------------- |
-| upper half (dark navy → blue)   | `#9dcced` | 5.0–6.9:1 for lane headers        |
-| lower half (blue → bright cyan) | `#eaf5ff` | `#9dcced` falls to **3.9:1** here |
+**The safe fill inverts near the bottom.** Light text works down to roughly
+three-quarters of the canvas, then fails as the gradient reaches full cyan, and
+dark text takes over. Measured on two real diagrams:
+
+| Depth down the canvas  | `#9dcced` | `#eaf5ff` | `#0b1b2e` | Use       |
+| ---------------------- | --------: | --------: | --------: | --------- |
+| upper half             | 5.0–8.2:1 |    8.2:1+ |       low | `#9dcced` |
+| ~75–80%                |   **3.1** |   **4.8** |   **3.3** | `#eaf5ff` |
+| ~90%+ (near-full cyan) |   **1.8** |   **2.7** |   **5.8** | `#0b1b2e` |
+
+So there is no single "lower half" answer: at 79% down, light wins and dark
+fails; at 94% down, light **fails at 2.7:1** and dark wins. A short canvas
+reaches full cyan sooner than a tall one, so depth is a fraction of canvas
+height, not a pixel count.
 
 `#cfe4f5` looks fine in a render but measures 4.3:1 over the lower gradient and
-fails. Don't trust your eyes on gradient text.
+fails. Don't trust your eyes on gradient text — and don't trust this table
+either. It tells you which candidates to try; `check_contrast.py` decides.
 
 Remember WCAG's "large text" exemption (3:1) needs **24px regular or 18.66px
 bold** — an 18px regular sublabel does _not_ qualify, so hold it to 4.5:1.
@@ -155,6 +171,80 @@ overlay; the zoom backdrop no longer matters.
   → dark navy `#152c4e`.
 - Each diagram carries its own ~45 KB copy of the background — still a 99%+ cut
   from the 6 MB raster it replaces.
+
+### Small diagrams: brand gradient, not the baked background
+
+A two- or three-box explainer sitting inline next to a paragraph does not earn
+45 KB of circuit motif, and a 1600×900 canvas holding four boxes looks absurd.
+But it still cannot be transparent — see the stroke trap below. Use the brand
+gradient stops as a plain `linearGradient` over a **full-bleed rect**:
+
+```svg
+<linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#152c4e"/><stop offset="0.55" stop-color="#1b4add"/><stop offset="1" stop-color="#12aaff"/>
+</linearGradient>
+<rect x="0" y="0" width="800" height="300" fill="url(#brandbg)"/>
+```
+
+That lands at **~2 KB**, stays opaque under `<ImageZoom>`, and reads as the same
+family as the 1600×900 diagrams because the stops are identical. Size the canvas
+to the content and pick a `className` near it (`img-600px` for an 800-wide
+canvas keeps type crisp at 0.75× rather than 0.5625×).
+
+**The stroke trap — why transparent still fails.** Gotcha 2 above says "no text
+floating on transparency", but **strokes have the same problem and are easier to
+miss**. A `#9dcced` connector is near-invisible on a white page; a `#213147` one
+disappears on the dark theme. Since the SVG cannot see the page theme, any
+diagram with a connector, bracket, or divider needs its own opaque backdrop.
+Transparent canvas is safe only for a diagram built purely from opaque filled
+shapes that touch each other — `haw-geth-sandwich` qualifies; almost nothing
+with an arrow does.
+
+**Keep the backdrop rect square-cornered.** A rounded full-bleed panel leaves
+four transparent corners and fails the byte-identical opacity test in
+Verification 3b. Let the page CSS round the image instead.
+
+## Brand logos (Arbitrum One, Nova)
+
+When a box names a specific chain, its **logomark** carries identity far better
+than a colour swatch plus a key row — add the logo and you can delete that key
+entry. Use the `_Logomark_` variants (mark only); the horizontal and vertical
+lockups bundle the wordmark and duplicate your text label.
+
+| Logo          | Drive file id                       | viewBox         | Brand fill |
+| ------------- | ----------------------------------- | --------------- | ---------- |
+| Arbitrum One  | `10B54LXfYk7hw5qwsWt3H2EThNrCXJcWk` | 373.9 × 422     | multi      |
+| Arbitrum Nova | `12cg33GwnrLB7JXGw6Y8njTsBGwQiea02` | 372.84 × 420.63 | `#ff7700`  |
+
+Both are genuine vector, ~2 KB each; the pair costs about **+3.3 KB** inlined.
+`_AllWhite_` variants exist if you ever need a knockout.
+
+Three things will bite, all of them silent:
+
+1. **Fills live in a `<style>` block, keyed by class** (`.st0`…`.st3` on the
+   Arbitrum mark, `.cls-1` on Nova). Resolve every class to an explicit `fill=`
+   attribute before inlining. Two logos in one document otherwise collide on
+   those generic names and one repaints the other. Expand shorthand hex while
+   you are there (`#f70` → `#ff7700`).
+2. **Put each mark on a white chip, not straight on the box.** The Arbitrum
+   logomark's own body is navy `#213147` with cyan `#12aaff` strokes and a
+   `#9dcced` ring — drop it on a cyan box and half the mark vanishes. A white
+   rounded rect behind it renders both marks as the brand intends. Size the
+   glyph to roughly 78% of the chip.
+3. **A logo box still obeys the contrast table.** A Nova-orange box takes dark
+   labels; white on it is 2.66:1. Giving a box a brand colour exempts it from
+   nothing.
+
+Scale by height so the two marks match optically, then centre on the width that
+scale produces — they are not the same aspect ratio:
+
+```python
+scale = GLYPH / view_h
+off_x = chip_x + (CHIP - view_w * scale) / 2
+```
+
+Budget the room first: a logo chip above the name needs roughly **+30px of box
+height** over a text-only box.
 
 ## Workflow
 
@@ -230,8 +320,15 @@ _report_ it — don't delete shared CSS unasked.
 ### Diagram labels are prose — the pattern guide applies
 
 `docs/Offchain-pattern-guide.md` governs text inside the diagram, not just the
-page. An editorial hook enforces it on the MDX and will block your write. The
-rules that bite hardest on labels:
+page. An editorial hook enforces it on the MDX and will block your write.
+
+**Read the guide before you draft labels and `alt` text, not after.** The hook
+fires on the **MDX** write, not on the SVG — so you can generate, round, and
+verify a whole diagram, then get blocked on the one-line tag at the end and have
+to rewrite label text you already baked into the file (and into its `<desc>`).
+Reading it up front costs one tool call; discovering it late costs a regenerate.
+
+The rules that bite hardest on labels:
 
 - **Active voice, name the actor.** "ArbOS credits it in the same transaction",
   not "credited immediately". Lane headers are the usual offender.
@@ -348,6 +445,12 @@ that is your only signal the tool matched anything:
 static/img/NAME.svg: rounded 2 elbow arrow(s)
 ```
 
+`rounded 0` is the **correct** result for a diagram whose connectors are all
+straight 2-point drops — a pure layer stack has no turns to round. Compare the
+count to the elbows you authored, not to zero. Still run the tool: it is the
+cheapest check that your arrows match the authoring contract above, and it must
+run after every regenerate, since regenerating overwrites its output.
+
 Because arrow styling has to be inline for this tool, don't try to factor arrows
 into a `<style>` block. Text and panels can use classes; arrows cannot.
 
@@ -440,11 +543,14 @@ skip small chips and legend headings.
 
 Two recurring offenders worth knowing up front:
 
-- `#9dcced` is safe for lane headers over the upper gradient (5.0–6.9:1) but
-  drops to **3.9:1** over the bright lower gradient. Use `#eaf5ff` for anything
-  below roughly mid-canvas.
+- `#9dcced` is safe for lane headers over the upper gradient (5.0–8.2:1), drops
+  to **3.1:1** around 75–80% down, and collapses to **1.8:1** near the bottom.
+  Switch to `#eaf5ff` below mid-canvas, then to dark `#0b1b2e` in the last tenth
+  — the safe fill inverts, so never carry one choice down the whole canvas.
 - White on magenta is **4.52:1** — it passes, but that is the ceiling for that
   fill. There is no headroom, so don't tint magenta sublabels at all.
+- Dark labels on any orange. White is 2.66:1 on Nova `#ff7700` and 2.80:1 on
+  `#f97316`; both fail.
 
 No `yarn build` is needed for either path — the link graph is untouched by an
 image swap. For a **new** diagram, run the MDX compile check from Path B instead;
@@ -483,23 +589,33 @@ Note that `haw-geth-sandwich` is on a _different_ branch —
 `haw-tier1-svg-diagrams` still carries its 1.5 MB raster.
 
 Note the floor: a baked-background diagram lands at **~50 KB regardless of
-complexity**, because ~44 KB of it is the background. Judge your output against
-that number, not against the 2.7 KB of a transparent-canvas diagram.
+complexity**, because ~44 KB of it is the background. Judge a baked-background
+diagram against that number and a gradient-backdrop one against ~2 KB — they are
+different budgets, not a good and a bad result.
 
 Their color choices predate the measured contrast table above — copy their
 **layout and structure**, not their white-on-cyan text.
 
-- **Current-generation example:** `static/img/arb-chain-fee-lifecycle.svg`,
-  used by `docs/launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx`.
-  Replaced a 37-line ASCII diagram. 1600×900, baked background, two labeled
-  lanes, three-role color key, `img-900px`, and the only diagram that passes
-  `check_contrast.py` clean. **Copy this one's color and type choices**, not the
-  older `haw-*` ones.
+### Current-generation exemplars
 
-  It arrives with the revenue-routing branch
-  (`tw-792-document-network-revenue-routing-and-feecollector-flow`), so if you
-  are on `master` and the file is absent, that PR has not merged yet:
-  `git show origin/tw-792-document-network-revenue-routing-and-feecollector-flow:static/img/arb-chain-fee-lifecycle.svg`
+Copy these for colour and type; they all pass `check_contrast.py` clean. The
+three on `update-diagram-arbitrum-intro` sit on one page, so they also show how
+a small and a large diagram stay in the same family:
+
+| Diagram                       |   Size | Canvas   | Backdrop         | Shows                                                       |
+| ----------------------------- | -----: | -------- | ---------------- | ----------------------------------------------------------- |
+| `arb-chain-fee-lifecycle.svg` |  52 KB | 1600×900 | baked background | two labeled lanes, three-role color key                     |
+| `arbitrum-chains-diagram.svg` |  53 KB | 1600×900 | baked background | **inlined brand logomarks**, per-chain colors, tier gutter  |
+| `scalability-trilemma.svg`    | 2.1 KB | 800×480  | brand gradient   | triangle, colour-as-argument, dark text low on the gradient |
+| `arbitrum-chain-naming.svg`   | 1.9 KB | 800×300  | brand gradient   | smallest useful shape: two boxes and a labeled connector    |
+
+`arb-chain-fee-lifecycle.svg` arrives with
+`tw-792-document-network-revenue-routing-and-feecollector-flow`; the other three
+with `update-diagram-arbitrum-intro`. If a file is absent on your branch:
+
+```bash
+git show origin/update-diagram-arbitrum-intro:static/img/arbitrum-chains-diagram.svg | head -c 2000
+```
 
 ## Tooling: FOSS options considered (not yet adopted)
 
