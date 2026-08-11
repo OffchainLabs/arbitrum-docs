@@ -97,7 +97,6 @@ machines/
 
 Staging the machine is only half the check. The block validator reads its machine list and resolves its pending root once, at startup, so restart each validator after staging and confirm the startup log before you set the root onchain:
 
-```text
 INFO BlockValidator initialized  current=0x8a7513bf... pending=0xc2c02df5...
 ```
 
@@ -183,7 +182,6 @@ cast call <rollup-address> "wasmModuleRoot()(bytes32)" --rpc-url <parent-chain-r
 
 Then confirm your validator agrees. On startup, the block validator logs both roots it will validate against:
 
-```text
 INFO BlockValidator initialized  current=0x8a7513bf... pending=0x8a7513bf...
 INFO validator chosen           WasmModuleRoot=0x8a7513bf... chosen=jit maxWorkers=8
 ```
@@ -198,11 +196,11 @@ If your chain has <a data-quicklook-from="fast-withdrawals">fast withdrawals</a>
 
 ### Verify the batch poster is still posting
 
-Confirm the <a data-quicklook-from="batch-poster">batch poster</a> is submitting batches to the <a data-quicklook-from="sequencer-inbox">sequencer inbox</a> at its usual cadence, and that no backlog is accumulating. See [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx) for what to watch.
+Confirm the <a data-quicklook-from="batch-poster">batch poster</a> is submitting <a data-quicklook-from="batch">batches</a> to the <a data-quicklook-from="sequencer-inbox">sequencer inbox</a> at its usual cadence, and that no backlog is accumulating. See [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx) for what to watch.
 
 <VanillaAdmonition type="info" title="Batch poster log noise after an upgrade">
 
-New Nitro versions probe for contract features that older `nitro-contracts` deployments don't implement, so a version-skewed window between steps 1 and 4 can produce `eth_call` errors in the batch poster log that are benign. Confirm batches are still landing onchain before treating any of them as an incident. To diagnose messages that persist after the upgrade completes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) and [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery.mdx).
+New Nitro versions probe for contract features that older `nitro-contracts` deployments don't implement, so a version-skewed window between steps 1 and 4 can produce `eth_call` errors in the <a data-quicklook-from="batch-poster">batch poster</a> log that are benign. Confirm batches are still landing onchain before treating any of them as an incident. To diagnose messages that persist after the upgrade completes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) and [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery.mdx).
 
 </VanillaAdmonition>
 
@@ -217,7 +215,7 @@ These failures share a single root cause—the validator does not have, or hasn'
 | `unable to find validator machine directory for the on-chain WASM module root`          | Yes          | Startup compatibility pre-check failed. Logged at `ERROR`, but **does not stop the node**                                                                                                                              |
 | `on-chain WASM module root did not match with any of the allowed WASM module roots`     | Yes          | Same pre-check, when `--validation.wasm.allowed-wasm-module-roots` is set and nothing matched                                                                                                                          |
 | `wasmroot doesn't match rollup : <root>, valid: [<roots>]`                              | Yes          | Runtime mismatch. The validator runs but cannot advance its bond                                                                                                                                                       |
-| `unexpected wasmModuleRoot! cannot validate! found <onchain>, current <x>, pending <y>` | Yes          | The onchain root changed to a root that is neither the validator's current nor its pending root, so the validator refuses to adopt it. The legacy staker then stops acting entirely; BoLD logs a warning and continues |
+| `unexpected wasmModuleRoot! cannot validate! found <onchain>, current <x>, pending <y>` | Yes          | The onchain root changed to a root that is neither the validator's current nor its pending root, so the validator refuses to adopt it. The legacy staker then stops acting entirely; <a data-quicklook-from="bold">BoLD</a> logs a warning and continues |
 
 Operators upgrading Nitro have reported the two fatal cases wrapped in a `failed to create node` startup error (`failed to create consensus node` on newer versions); the specific message quoted in that error tells you which one you're looking at.
 
@@ -279,7 +277,7 @@ A related message, `block validation is still pending`, is not a mismatch—it m
 
 <VanillaAdmonition type="caution" title="Don't suppress the mismatch check">
 
-`--node.staker.dangerous.ignore-rollup-wasm-module-root` downgrades this error to a warning and lets the validator make assertions anyway. Its own help text describes it as dangerous, and for good reason: asserting against a module root the Rollup contract doesn't recognize risks producing assertions that can be challenged. Fix the machine, don't silence the check.
+`--node.staker.dangerous.ignore-rollup-wasm-module-root` downgrades this error to a warning and lets the validator make <a data-quicklook-from="assertion">assertions</a> anyway. Its own help text describes it as dangerous, and for good reason: asserting against a module root the Rollup contract doesn't recognize risks producing assertions that can be challenged. Fix the machine, don't silence the check.
 
 Likewise, `--validation.wasm.enable-wasmroots-check=false` disables only the non-fatal startup pre-check. It hides an early warning without addressing the cause.
 
