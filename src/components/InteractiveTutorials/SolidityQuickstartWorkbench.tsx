@@ -1,7 +1,7 @@
 import React from 'react';
 import { vendingMachineSoliditySource } from '@site/src/resources/interactiveTutorialSources';
 import { SolidityLab, SolidityLabTask } from './SolidityLab';
-import styles from './styles.module.css';
+import styles from './SolidityLabPanels.module.css';
 
 const quickstartTasks: SolidityLabTask[] = [
   {

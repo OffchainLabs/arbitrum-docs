@@ -10,7 +10,7 @@ type Balances = Map<string, bigint>;
 
 type ContractState = {
   address: string;
-  abi: ethers.utils.Fragment[];
+  abi: ethers.Fragment[];
   balances: Balances;
   cooldownsMs: Map<string, number>;
 };
@@ -21,29 +21,29 @@ let nextNonce = 0;
 const contracts = new Map<string, ContractState>();
 
 function deterministicAddress(seed: string) {
-  const hash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(seed));
-  return ethers.utils.getAddress(`0x${hash.slice(-40)}`);
+  const hash = ethers.keccak256(ethers.toUtf8Bytes(seed));
+  return ethers.getAddress(`0x${hash.slice(-40)}`);
 }
 
-function pickReadFunctionName(fragments: ethers.utils.Fragment[]) {
+function pickReadFunctionName(fragments: ethers.Fragment[]) {
   const fn = fragments.find(
     (f) =>
       f.type === 'function' &&
       'stateMutability' in f &&
-      ((f as ethers.utils.FunctionFragment).stateMutability === 'view' ||
-        (f as ethers.utils.FunctionFragment).stateMutability === 'pure'),
-  ) as ethers.utils.FunctionFragment | undefined;
+      ((f as ethers.FunctionFragment).stateMutability === 'view' ||
+        (f as ethers.FunctionFragment).stateMutability === 'pure'),
+  ) as ethers.FunctionFragment | undefined;
   return fn?.name;
 }
 
-function pickWriteFunctionName(fragments: ethers.utils.Fragment[]) {
+function pickWriteFunctionName(fragments: ethers.Fragment[]) {
   const fn = fragments.find(
     (f) =>
       f.type === 'function' &&
       'stateMutability' in f &&
-      ((f as ethers.utils.FunctionFragment).stateMutability === 'nonpayable' ||
-        (f as ethers.utils.FunctionFragment).stateMutability === 'payable'),
-  ) as ethers.utils.FunctionFragment | undefined;
+      ((f as ethers.FunctionFragment).stateMutability === 'nonpayable' ||
+        (f as ethers.FunctionFragment).stateMutability === 'payable'),
+  ) as ethers.FunctionFragment | undefined;
   return fn?.name;
 }
 
@@ -53,11 +53,11 @@ export type DeployResult = {
 };
 
 export function browserDeploy(
-  abi: ethers.ContractInterface,
+  abi: ethers.InterfaceAbi,
   bytecode: string,
   deployer: string,
 ): DeployResult {
-  const fragments = (Array.isArray(abi) ? abi : []) as ethers.utils.Fragment[];
+  const fragments = (Array.isArray(abi) ? abi : []) as ethers.Fragment[];
   const seed = `${bytecode}-${deployer}-${nextNonce}`;
   const contractAddress = deterministicAddress(seed);
   contracts.set(contractAddress.toLowerCase(), {
@@ -67,7 +67,7 @@ export function browserDeploy(
     cooldownsMs: new Map(),
   });
   nextNonce += 1;
-  const txHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(`deploy-${seed}`));
+  const txHash = ethers.keccak256(ethers.toUtf8Bytes(`deploy-${seed}`));
   return { txHash, contractAddress };
 }
 
@@ -79,18 +79,18 @@ export type SendResult = {
 
 export function browserSend(
   contractAddress: string,
-  abi: ethers.ContractInterface,
+  abi: ethers.InterfaceAbi,
   fnName: string,
   args: unknown[],
   caller: string,
 ): SendResult {
   const state = contracts.get(contractAddress.toLowerCase());
   const txSeed = `${contractAddress}-${fnName}-${caller}-${Date.now()}`;
-  const txHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(txSeed));
+  const txHash = ethers.keccak256(ethers.toUtf8Bytes(txSeed));
   if (!state) {
     return { txHash, status: 0, revertReason: 'Unknown contract' };
   }
-  const fragments = (Array.isArray(abi) ? abi : []) as ethers.utils.Fragment[];
+  const fragments = (Array.isArray(abi) ? abi : []) as ethers.Fragment[];
   state.abi = fragments;
   const writeFnName = pickWriteFunctionName(fragments);
   if (fnName !== writeFnName) {
@@ -124,13 +124,13 @@ export type CallResult = {
 
 export function browserCall(
   contractAddress: string,
-  abi: ethers.ContractInterface,
+  abi: ethers.InterfaceAbi,
   fnName: string,
   args: unknown[],
 ): CallResult {
   const state = contracts.get(contractAddress.toLowerCase());
   if (!state) return { result: [], revertReason: 'Unknown contract' };
-  const fragments = (Array.isArray(abi) ? abi : []) as ethers.utils.Fragment[];
+  const fragments = (Array.isArray(abi) ? abi : []) as ethers.Fragment[];
   const readFnName = pickReadFunctionName(fragments);
   if (fnName !== readFnName) {
     return {

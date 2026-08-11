@@ -14,7 +14,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Deploy Smart Contracts',
-    href: '/build-decentralized-apps/quickstart-solidity-remix',
+    href: '/build-decentralized-apps/quickstart-solidity',
     description:
       'Deploy a cupcake vending machine contract locally, then to Arbitrum Sepolia, then to Arbitrum Mainnet.',
   },

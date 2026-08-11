@@ -1,0 +1,885 @@
+.ideStartTutorialButton {
+  display: inline-flex;
+  min-height: 2.05rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ide-accent);
+  border-radius: 3px;
+  background: var(--ide-accent);
+  padding: 0.35rem 0.65rem;
+  color: var(--ide-active-fg);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.ideStartTutorialButton:hover {
+  background: var(--ide-accent-strong);
+}
+
+.ideActionSection {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.ideActionHeading {
+  color: var(--ide-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ideActionButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  padding: 0.35rem 0.5rem;
+  color: var(--ide-fg);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.ideActionButton:hover:not(:disabled) {
+  border-color: var(--ide-accent);
+  color: var(--ide-accent);
+}
+
+.ideActionButton:disabled {
+  cursor: not-allowed;
+  color: var(--ide-disabled-fg);
+  opacity: 0.72;
+}
+
+.ideActionButtonPrimary {
+  color: var(--ide-fg);
+}
+
+.ideActionButtonSpotlight {
+  border-color: var(--ide-spotlight-border);
+  background: var(--ide-spotlight-bg);
+  box-shadow: inset 3px 0 0 var(--ide-accent),
+    0 0 0 3px color-mix(in srgb, var(--ide-accent) 18%, transparent),
+    0 0 24px color-mix(in srgb, var(--ide-accent) 24%, transparent);
+}
+
+.ideActionButtonPrimary:hover:not(:disabled) {
+  color: var(--ide-accent);
+}
+
+.ideActionIcon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 1rem;
+}
+
+.ideActionButtonSpotlight .ideActionIcon {
+  color: var(--ide-accent);
+}
+
+.ideExplorerPanel {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.ideExplorerNetworkPanel {
+  display: grid;
+  gap: 0.45rem;
+  border-bottom: 1px solid var(--ide-border);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.ideExplorerItemDimmed {
+  opacity: 0.42;
+  filter: saturate(0.55);
+  transition: opacity 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+}
+
+.idePanelSpotlight {
+  border-color: var(--ide-spotlight-border) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ide-accent) 18%, transparent),
+    0 0 24px color-mix(in srgb, var(--ide-accent) 22%, transparent);
+}
+
+.ideExplorerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ideExplorerSection {
+  display: grid;
+  gap: 0.18rem;
+  border: 1px solid var(--ide-border);
+  border-radius: 4px;
+  background: var(--ide-bg);
+  padding: 0.28rem 0.32rem;
+}
+
+.ideExplorerSectionTitle {
+  color: var(--ide-fg);
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.solidityLab .ideExplorerRows {
+  display: grid;
+  gap: 0.08rem;
+  margin: 0.16rem 0 0.08rem;
+}
+
+.solidityLab .ideExplorerRows div {
+  display: grid;
+  grid-template-columns: minmax(3.6rem, 0.55fr) minmax(0, 1fr);
+  gap: 0.28rem;
+  align-items: baseline;
+  margin: 0;
+  min-height: 0.88rem;
+}
+
+.solidityLab .ideExplorerRows dt {
+  margin: 0;
+  color: var(--ide-muted);
+  font-size: 0.54rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.solidityLab .ideExplorerRows dd {
+  overflow: hidden;
+  margin: 0;
+  color: var(--ide-fg);
+  font-family: var(--ide-mono);
+  font-size: 0.58rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.solidityLab .ideExplorerTxList {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0;
+  padding: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.solidityLab .ideExplorerTxList li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ideExplorerTx {
+  display: grid;
+  width: 100%;
+  gap: 0.08rem;
+  border: 1px solid var(--ide-border);
+  border-radius: 3px;
+  background: var(--ide-panel);
+  padding: 0.24rem 0.3rem;
+  color: var(--ide-fg);
+  cursor: pointer;
+  font: inherit;
+  text-decoration: none;
+  text-align: left;
+}
+
+.ideExplorerTx:hover {
+  border-color: var(--ide-accent);
+  color: var(--ide-fg);
+  text-decoration: none;
+}
+
+.ideExplorerTxActive {
+  border-color: var(--ide-accent);
+  box-shadow: inset 3px 0 0 var(--ide-accent);
+}
+
+.ideExplorerTxDetails {
+  display: grid;
+  gap: 0.14rem;
+  border-top: 1px solid var(--ide-border);
+  margin-top: 0.16rem;
+  padding-top: 0.22rem;
+}
+
+.ideExplorerTxDetails > span {
+  display: grid;
+  grid-template-columns: minmax(3.4rem, 0.55fr) minmax(0, 1fr);
+  gap: 0.28rem;
+  align-items: baseline;
+}
+
+.ideExplorerTxDetails strong {
+  color: var(--ide-muted);
+  font-size: 0.52rem;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.ideExplorerTxDetails span {
+  overflow: hidden;
+  color: var(--ide-fg);
+  font-family: var(--ide-mono);
+  font-size: 0.56rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ideExplorerTxTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+
+.ideExplorerMethod {
+  overflow: hidden;
+  color: var(--ide-fg);
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ideExplorerStatus {
+  border-radius: 999px;
+  padding: 0.03rem 0.22rem;
+  font-size: 0.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.ideExplorerStatusSuccess {
+  background: color-mix(in srgb, var(--ide-console-success) 16%, transparent);
+  color: var(--ide-console-success);
+}
+
+.ideExplorerStatusError {
+  background: color-mix(in srgb, var(--ide-console-error) 16%, transparent);
+  color: var(--ide-console-error);
+}
+
+.ideExplorerHash,
+.ideExplorerTxMeta {
+  overflow: hidden;
+  color: var(--ide-chrome-fg);
+  font-family: var(--ide-mono);
+  font-size: 0.54rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ideExplorerEmpty {
+  border: 1px dashed var(--ide-border);
+  border-radius: 3px;
+  padding: 0.5rem;
+  color: var(--ide-muted);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.ideExplorerExternalLink {
+  color: var(--ide-accent);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.ideExplorerExternalLink:hover {
+  text-decoration: underline;
+}
+
+.ideExplorerContractActions {
+  display: grid;
+  gap: 0.2rem;
+  border-top: 1px solid var(--ide-border);
+  padding-top: 0.28rem;
+}
+
+.ideExplorerCallButton {
+  display: inline-flex;
+  min-height: 1.55rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.32rem;
+  border: 1px solid var(--ide-border);
+  border-radius: 3px;
+  background: var(--ide-panel);
+  padding: 0.22rem 0.32rem;
+  color: var(--ide-fg);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-align: left;
+}
+
+.ideExplorerCallButton:hover:not(:disabled) {
+  border-color: var(--ide-accent);
+  color: var(--ide-accent);
+}
+
+.ideExplorerCallButton:disabled {
+  color: var(--ide-disabled-fg);
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.ideTabBar {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 2.1rem;
+  min-height: 2.1rem;
+  border-bottom: 1px solid var(--ide-border);
+  background: var(--ide-tab);
+}
+
+.ideTabActive {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(18rem, calc(100% - 1rem));
+  height: 2.05rem;
+  border-right: 1px solid var(--ide-border);
+  border-top: 1px solid var(--ide-accent);
+  background: var(--ide-bg);
+  padding: 0 0.8rem;
+  color: var(--ide-fg);
+  font-family: var(--ide-mono);
+  font-size: 0.75rem;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ideTaskBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  border-bottom: 1px solid var(--ide-border);
+  padding: 0.55rem 0.75rem;
+  background: var(--ide-bg);
+  list-style: none;
+}
+
+.ideTaskBar li {
+  margin: 0;
+}
+
+.ideTaskChip {
+  display: grid;
+  grid-template-columns: 1.45rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--ide-border);
+  border-radius: 4px;
+  background: var(--ide-bg);
+  min-height: 2rem;
+  padding: 0.25rem 0.65rem 0.25rem 0.25rem;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.74rem;
+  color: var(--ide-fg);
+  cursor: pointer;
+  text-align: left;
+  max-width: 100%;
+}
+
+.ideTaskChip:hover {
+  border-color: var(--ide-accent);
+}
+
+.ideTaskChipActive {
+  border-color: var(--ide-accent);
+  background: var(--ide-task-active-bg);
+  box-shadow: inset 0 -2px 0 var(--ide-accent);
+}
+
+.ideTaskIndex {
+  display: inline-grid;
+  place-items: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  background: var(--ide-tab);
+  color: var(--ide-chrome-fg);
+  font-family: var(--ide-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.ideTaskChipActive .ideTaskIndex {
+  background: var(--ide-accent);
+  color: var(--ide-active-fg);
+}
+
+.ideTaskLabel {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 26rem;
+}
+
+.ideTaskAction {
+  font-family: var(--ide-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ide-chrome-fg);
+}
+
+.ideHint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--ide-border);
+  padding: 0.4rem 0.75rem;
+  background: var(--ide-hint-bg);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.78rem;
+  color: var(--ide-fg);
+}
+
+.ideHintBullet {
+  color: var(--ide-accent);
+  font-weight: 700;
+}
+
+.ideHintLines {
+  margin-left: auto;
+  font-family: var(--ide-mono);
+  font-size: 0.7rem;
+  color: var(--ide-chrome-fg);
+}
+
+.ideEditor {
+  position: relative;
+  overflow: hidden;
+  background: var(--ide-bg);
+  color: var(--ide-fg);
+  font-family: var(--ide-mono);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.ideStepOverlay {
+  position: absolute;
+  z-index: 3;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: grid;
+  gap: 0.35rem;
+  width: min(30rem, calc(100% - 6.25rem));
+  border: 1px solid var(--ide-overlay-border);
+  border-radius: 6px;
+  background: var(--ide-overlay-bg);
+  box-shadow: var(--ide-overlay-shadow);
+  padding: 0.75rem 0.85rem;
+  color: var(--ide-fg);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.ideStepOverlay strong {
+  font-size: 0.92rem;
+}
+
+.ideStepOverlayMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--ide-accent);
+  font-family: var(--ide-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.ideStepNextButton {
+  position: absolute;
+  z-index: 3;
+  right: 1rem;
+  bottom: 1rem;
+  min-width: 8rem;
+  min-height: 2.85rem;
+  border: 1px solid var(--ide-accent);
+  border-radius: 5px;
+  background: var(--ide-accent);
+  color: var(--ide-active-fg);
+  cursor: pointer;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: var(--ide-action-shadow);
+}
+
+.ideStepNextButton:hover:not(:disabled) {
+  background: var(--ide-accent-strong);
+}
+
+.ideStepNextButton:disabled {
+  border-color: var(--ide-disabled-border);
+  background: var(--ide-disabled-bg);
+  color: var(--ide-next-disabled-fg);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.ideCodeLayer,
+.ideTextarea {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0.5rem 0;
+  font: inherit;
+  font-family: var(--ide-mono) !important;
+  line-height: inherit;
+  tab-size: 2;
+  white-space: pre;
+  background: transparent !important;
+}
+
+.ideCodeLayer {
+  pointer-events: none;
+}
+
+.ideTextarea {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding-left: 3.5rem;
+  color: transparent;
+  caret-color: var(--ide-fg);
+  outline: 0;
+  resize: none;
+}
+
+.ideTextarea::selection {
+  background: color-mix(in srgb, var(--ide-accent) 35%, transparent);
+  color: transparent;
+}
+
+.ideCodeLine {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, max-content);
+  min-height: 1.55em;
+  min-width: 100%;
+  width: max-content;
+  padding-right: 1rem;
+}
+
+.ideLineNumber {
+  display: block;
+  padding-right: 0.6rem;
+  color: var(--ifm-color-emphasis-500);
+  text-align: right;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.ideLineContent {
+  display: block;
+  font-family: var(--ide-mono) !important;
+  min-width: max-content;
+  padding-left: 0.4rem;
+}
+
+.ideLineContent * {
+  font-family: var(--ide-mono) !important;
+}
+
+.ideCodeLineActive {
+  background: var(--ide-line-active-bg);
+  box-shadow: inset 2px 0 0 var(--ide-accent);
+}
+
+.ideCodeLineError {
+  background: color-mix(in srgb, var(--ide-error) 16%, transparent);
+  box-shadow: inset 2px 0 0 var(--ide-error);
+}
+
+.ideCodeLineWarning {
+  background: color-mix(in srgb, var(--ide-warning) 16%, transparent);
+  box-shadow: inset 2px 0 0 var(--ide-warning);
+}
+
+.ideProblems {
+  border-top: 1px solid var(--ide-border);
+  background: color-mix(in srgb, var(--ide-chrome) 60%, var(--ide-bg));
+  font-family: var(--ifm-font-family-base);
+}
+
+.ideProblemsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--ide-border);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ide-chrome-fg);
+}
+
+.ideProblemsHeader strong {
+  color: var(--ide-fg);
+  letter-spacing: 0.04em;
+}
+
+.ideProblemsList {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.4rem;
+  list-style: none;
+  max-height: 14rem;
+  overflow: auto;
+}
+
+.ideProblemsList li {
+  margin: 0;
+}
+
+.ideProblemItem button {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 0.6rem;
+  width: 100%;
+  align-items: start;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  padding: 0.3rem 0.5rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ide-fg);
+  font: inherit;
+}
+
+.ideProblemItem button:hover {
+  border-color: var(--ide-border);
+  background: var(--ide-bg);
+}
+
+.ideProblemMeta {
+  font-family: var(--ide-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ide-chrome-fg);
+  white-space: nowrap;
+}
+
+.ideProblemItemError .ideProblemMeta {
+  color: var(--ide-error);
+}
+
+.ideProblemItemWarning .ideProblemMeta {
+  color: var(--ide-warning);
+}
+
+.ideProblemMessage {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ideConsolePanel {
+  display: grid;
+  grid-template-rows: auto minmax(7.5rem, 10rem);
+  min-width: 0;
+  border-top: 1px solid var(--ide-border);
+  background: var(--ide-console-bg);
+  color: var(--ide-console-fg);
+  font-family: var(--ide-mono) !important;
+}
+
+:global([data-theme='dark']) .ideConsolePanel {
+  background: var(--ide-console-bg);
+  color: var(--ide-console-fg);
+}
+
+.ideConsoleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--ide-border);
+  padding: 0.35rem 0.75rem;
+  background: var(--ide-console-header-bg);
+  color: var(--ide-console-muted);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ideConsoleHeader strong {
+  color: var(--ide-console-fg);
+}
+
+.ideConsoleOutput {
+  overflow: auto;
+  padding: 0.55rem 0.75rem 0.75rem;
+}
+
+.ideConsoleLine {
+  display: grid;
+  grid-template-columns: 5.75rem minmax(0, 1fr);
+  gap: 0.65rem;
+  min-height: 1.45rem;
+  color: var(--ide-console-fg);
+  font-family: var(--ide-mono) !important;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ideConsolePrompt {
+  color: var(--ide-console-info);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ideConsoleLineSuccess {
+  color: var(--ide-console-success);
+}
+
+.ideConsoleLineError {
+  color: var(--ide-console-error);
+}
+
+.ideConsoleLineSuccess .ideConsolePrompt {
+  color: var(--ide-console-success);
+}
+
+.ideConsoleLineError .ideConsolePrompt {
+  color: var(--ide-console-error);
+}
+
+.ideStatusBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.85rem;
+  border-top: 1px solid var(--ide-border);
+  padding: 0.3rem 0.75rem;
+  background: var(--ide-status-bg);
+  color: var(--ide-status-fg);
+  font-family: var(--ide-mono);
+  font-size: 0.72rem;
+}
+
+.ideStatusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ide-accent) 12%, transparent);
+  color: var(--ide-fg);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.ideStatusBadgeBusy {
+  background: color-mix(in srgb, var(--ide-warning) 16%, transparent);
+}
+
+.ideStatusBadgeOk {
+  background: color-mix(in srgb, var(--ide-accent) 14%, transparent);
+}
+
+.ideStatusBadgeErr {
+  background: color-mix(in srgb, var(--ide-error) 80%, transparent);
+}
+
+.ideStatusItem {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  white-space: nowrap;
+  opacity: 0.92;
+}
+
+.ideStatusItem strong {
+  font-weight: 700;
+}
+
+.ideStatusSpacer {
+  flex: 1;
+  min-width: 0.25rem;
+}
+
+.ideStatusLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+@media (min-width: 1180px) {
+  .tutorialStepNav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 996px) {
+  .codeWalkthrough {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ideStepOverlay {
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+  }
+
+  .ideTaskLabel {
+    max-width: 14rem;
+  }
+
+  .walkthroughPre {
+    max-height: 28rem;
+  }
+
+  .checklistItems {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

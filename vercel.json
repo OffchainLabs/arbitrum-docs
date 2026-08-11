@@ -162,7 +162,7 @@
     },
     {
       "source": "/(build-decentralized-apps/quickstart-solidity-hardhat/?)",
-      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
@@ -182,7 +182,7 @@
     },
     {
       "source": "/(contract_deployment/?)",
-      "destination": "/for-devs/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
@@ -522,12 +522,12 @@
     },
     {
       "source": "/(for-devs/quickstart-solidity-hardhat/?)",
-      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
       "source": "/(for-devs/quickstart-solidity-remix/?)",
-      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
@@ -572,7 +572,7 @@
     },
     {
       "source": "/(frontend_integration/?)",
-      "destination": "/for-devs/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
@@ -582,7 +582,7 @@
     },
     {
       "source": "/(getting-started-devs/?)",
-      "destination": "/for-devs/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
@@ -1797,7 +1797,7 @@
     },
     {
       "source": "/(quickstart/?)",
-      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
@@ -2337,7 +2337,7 @@
     },
     {
       "source": "/(tutorials/?)",
-      "destination": "/for-devs/quickstart-solidity-remix",
+      "destination": "/build-decentralized-apps/quickstart-solidity",
       "permanent": false
     },
     {
