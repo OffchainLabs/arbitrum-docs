@@ -270,6 +270,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/revenue-routing',
+                  label: `Revenue routing`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                   label: `Gas optimization`,
                 },
