@@ -1,0 +1,308 @@
+.tutorialShell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  margin: 0;
+}
+
+.tutorialRail {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  padding: 1rem;
+}
+
+.tutorialRailHeader {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.progressTrack {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-200);
+}
+
+.progressBar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ifm-color-primary);
+  transition: width 160ms ease;
+}
+
+.tutorialStepNav {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.tutorialStepLink {
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: start;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.tutorialStepLink a {
+  color: var(--ifm-font-color-base);
+}
+
+.tutorialStepLink.done a {
+  color: var(--ifm-color-emphasis-600);
+  text-decoration: line-through;
+}
+
+.stepCheck {
+  display: inline-grid;
+  width: 1.1rem;
+  height: 1.1rem;
+  place-items: center;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ifm-color-primary);
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tutorialContent {
+  min-width: 0;
+}
+
+.codeWalkthrough {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(20rem, 0.8fr);
+  gap: 1rem;
+  align-items: start;
+  margin: 1.5rem 0;
+}
+
+.walkthroughCodePane {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+}
+
+.walkthroughCodeHeader {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.walkthroughPre {
+  max-height: min(72vh, 46rem);
+  margin: 0;
+  overflow: auto;
+  border-radius: 0;
+  padding: 0.75rem 0;
+  font-size: 0.86rem;
+}
+
+.walkthroughLine {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  min-width: max-content;
+  padding-right: 1rem;
+}
+
+.walkthroughLineActive {
+  background: color-mix(in srgb, var(--ifm-color-primary) 16%, transparent);
+}
+
+.walkthroughLineNumber {
+  padding-right: 0.75rem;
+  color: var(--ifm-color-emphasis-500);
+  text-align: right;
+  user-select: none;
+}
+
+.walkthroughLineContent {
+  min-width: 0;
+}
+
+.walkthroughSteps {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.walkthroughStep {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  padding: 0.9rem;
+  color: var(--ifm-font-color-base);
+  text-align: left;
+  cursor: pointer;
+}
+
+.walkthroughStep:hover,
+.activeStep {
+  border-color: var(--ifm-color-primary);
+}
+
+.stepKicker {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.stepTitle {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.stepBody {
+  white-space: pre-line;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.walkthroughControls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.primaryButton,
+.secondaryButton {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  padding: 0.4rem 0.65rem;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.primaryButton {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary);
+  color: var(--ifm-color-primary-contrast-background);
+}
+
+.secondaryButton {
+  background: transparent;
+  color: var(--ifm-font-color-base);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.stepSection {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+.checkpoint {
+  border-left: 3px solid var(--ifm-color-primary);
+  margin: 1rem 0;
+  padding: 0.65rem 0.85rem;
+  background: var(--ifm-color-emphasis-100);
+  font-weight: 600;
+}
+
+.checklist {
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  margin: 1.25rem 0;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+}
+
+.checklistHeader {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.checklistItems {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.checklistItem {
+  display: grid;
+  grid-template-columns: 1.15rem minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: start;
+  min-height: 5.5rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+}
+
+.checklistItem input {
+  margin-top: 0.18rem;
+}
+
+.checklistItem span {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.checklistItem small {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.commandBlock {
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  margin: 1rem 0;
+  background: var(--ifm-background-surface-color);
+}
+
+.commandPre {
+  margin: 0;
+  border-radius: 0;
+}
+
+.expectedOutput {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  padding: 0.75rem;
+}
+
+.expectedOutput pre {
+  margin: 0.4rem 0 0;
+}
+
+.labStepLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.labStepCopy {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 72rem;
+}
+
+.labStepCopy > :last-child {
+  margin-bottom: 0;
+}

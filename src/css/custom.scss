@@ -134,6 +134,43 @@ article .markdown {
   }
 }
 
+html body.interactive-tutorial-page {
+  [class*='docMainContainer'] {
+    padding-left: clamp(1rem, 2.5vw, 3rem);
+    padding-right: clamp(1rem, 2.5vw, 3rem);
+  }
+
+  .col[class*='docItemCol'] {
+    flex: 0 0 100%;
+    max-width: 100% !important;
+  }
+
+  .col:has(.theme-doc-toc-desktop),
+  .theme-doc-toc-desktop {
+    display: none;
+  }
+
+  .col[class*='docItemCol'],
+  .docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module,
+  [class*='docItemContainer'] {
+    max-width: min(100%, 1540px);
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+html body.interactive-tutorial-page .react-joyride__tooltip {
+  border: 1px solid var(--fd-border) !important;
+  border-radius: 6px !important;
+  background: var(--fd-card) !important;
+  box-shadow: var(--ifm-global-shadow-lw) !important;
+  color: var(--fd-foreground) !important;
+}
+
+html body.interactive-tutorial-page .react-joyride__tooltip button {
+  color: var(--fd-foreground) !important;
+}
+
 // Mobile responsive
 @media (max-width: 996px) {
   .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocPage-Layout-Main-styles-module,
