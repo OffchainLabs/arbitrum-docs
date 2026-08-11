@@ -126,8 +126,8 @@ To enable fraud proofs, you'll need to build the "replay binary", which defines 
 It has three forms:
 
 - The `replay.wasm` binary is the Go replay binary compiled to WASM. It's used by the JIT validator to verify blocks against the fraud prover.
-- The `machine.v2.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant WAVM.
-  - It's used by Arbitrator when actually entering a challenge and performing the fraud proofs,
+- The `machine.v2.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant <a data-quicklook-from="wavm">WAVM</a>.
+  - It's used by Arbitrator when actually entering a <a data-quicklook-from="challenge">challenge</a> and performing the fraud proofs,
     and has identical behavior to `replay.wasm`.
 - The <a data-quicklook-from="wasm-module-root">WASM module root</a> (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.v2.wavm.br`.
   - The replay binary is much too large to post onchain, so this hash is set in the L1 Rollup contract to determine the correct replay binary during fraud proofs.
