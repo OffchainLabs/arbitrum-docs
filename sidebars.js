@@ -1340,6 +1340,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Conditional transactions',
+              id: 'arbitrum-essentials/arbitrum-vs-ethereum/send-raw-transaction-conditional',
+            },
+            {
+              type: 'doc',
               label: 'Solidity support',
               id: 'arbitrum-essentials/arbitrum-vs-ethereum/solidity-support',
             },

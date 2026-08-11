@@ -1,0 +1,252 @@
+---
+title: 'eth_sendRawTransactionConditional'
+sidebar_label: 'Conditional transactions'
+sidebar_position: 4
+description: 'Reference for eth_sendRawTransactionConditional on Arbitrum chains: the conditions you attach to a transaction, where Nitro evaluates them, the error codes it returns, and the node flags that control the checks.'
+user_story: 'As a bundler or relay operator, I want to attach preconditions to a transaction so that the sequencer drops it instead of including a transaction that reverts against changed state.'
+target_audience: 'developers who submit transactions programmatically, such as ERC-4337 bundler and relay operators'
+content_type: reference
+author: anegg0
+sme: lumi
+displayed_sidebar: arbitrumEssentialsSidebar
+---
+
+`eth_sendRawTransactionConditional` submits a signed <a data-quicklook-from="transaction">transaction</a> together with a set of preconditions. Nitro nodes evaluate those preconditions before the <a data-quicklook-from="sequencer">sequencer</a> includes the transaction. If any precondition fails, the node rejects the transaction and never includes it, so you pay nothing.
+
+The method extends `eth_sendRawTransaction`. It takes the same signed transaction payload and adds a second parameter that describes the state your transaction depends on.
+
+<VanillaAdmonition type="info">
+
+This method is not part of the standard Ethereum JSON-RPC API. Nitro implements it, and so do several other stacks, but the semantics differ between them. If you port a client from another stack, read [Differences from other implementations](#differences-from-other-implementations) first.
+
+</VanillaAdmonition>
+
+## When to use it
+
+Use `eth_sendRawTransactionConditional` when your transaction makes sense only against a specific view of <a data-quicklook-from="chain-state">chain state</a>, and you would rather send nothing than send a transaction that reverts.
+
+[ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) account abstraction is the original motivation. A bundler packs many user operations into one transaction. Between the moment the bundler simulates the bundle and the moment the sequencer executes it, another transaction can change a nonce or a balance that the bundle depends on. The bundle then reverts, and the bundler pays the gas. When you list the storage slots the bundle depends on, that failure moves from "executed and reverted" to "rejected before execution".
+
+The same pattern helps any submitter that pays gas on behalf of other people:
+
+- Relays that sponsor meta-transactions.
+- Liquidation and arbitrage bots that must not act on a stale price.
+- Batch payout services that read balances before they spend them.
+
+## Endpoint
+
+Send conditional transactions to an endpoint that reaches the sequencer.
+
+| Chain                                                    | Sequencer endpoint                                 |
+| -------------------------------------------------------- | -------------------------------------------------- |
+| <a data-quicklook-from="arbitrum-one">Arbitrum One</a>   | `https://arb1-sequencer.arbitrum.io/rpc`           |
+| <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> | `https://nova-sequencer.arbitrum.io/rpc`           |
+| Arbitrum Sepolia (Testnet)                               | `https://sepolia-rollup-sequencer.arbitrum.io/rpc` |
+
+You can also send the transaction to any Nitro full node that forwards write traffic. The node carries your conditions to the sequencer unchanged. A node that rejects write traffic returns `publishing transactions not supported by this endpoint`.
+
+<VanillaAdmonition type="caution">
+
+The endpoints above are best-effort public endpoints with no service level agreement. If your application depends on availability, use a node provider or run your own node.
+
+</VanillaAdmonition>
+
+## Parameters
+
+| Position | Type     | Description                                                                               |
+| -------- | -------- | ----------------------------------------------------------------------------------------- |
+| 1        | `string` | The signed transaction, RLP-encoded and hex-prefixed. Same as `eth_sendRawTransaction`.   |
+| 2        | `object` | The conditions. Every field is optional, and the node evaluates only the fields you send. |
+
+The method returns the transaction hash, exactly as `eth_sendRawTransaction` does.
+
+Three transaction kinds never reach the condition checks. When you send a blob transaction, an Arbitrum internal transaction type, or a transaction without [EIP-155](https://eips.ethereum.org/EIPS/eip-155) replay protection, Nitro rejects it first.
+
+### Conditions
+
+Nitro reads three different sources when it evaluates your conditions: the <a data-quicklook-from="parent-chain">parent chain</a> block number, the <a data-quicklook-from="child-chain">child chain</a> block timestamp, and child chain contract storage.
+
+| Field                                 | Type     | Your transaction stays valid only while…                  |
+| ------------------------------------- | -------- | --------------------------------------------------------- |
+| `knownAccounts`                       | `object` | Each listed account still holds the storage you describe. |
+| `blockNumberMin` and `blockNumberMax` | quantity | The parent chain block number sits inside the range.      |
+| `timestampMin` and `timestampMax`     | quantity | The child chain block timestamp sits inside the range.    |
+
+<ImageZoom src="/img/arb-conditional-tx-scope.svg" className="img-900px" caption="Each conditional option reads a different source." alt="Three boxes. blockNumberMin and blockNumberMax read the parent chain block number. timestampMin and timestampMax read the child chain block timestamp. knownAccounts reads child chain contract storage." />
+
+Note the asymmetry. The block bounds read the parent chain block number that <a data-quicklook-from="arbos">ArbOS</a> records in the child chain block header, not the child chain block number. The timestamp bounds read the child chain block timestamp. To learn why the two chains report different numbers, see [Block gas limit, numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx).
+
+Express both bounds as quantities. Nitro accepts the hex-prefixed form and the decimal form.
+
+### knownAccounts
+
+`knownAccounts` maps an account address to the storage you expect that account to hold. Each entry takes one of two forms.
+
+**Storage root form.** The value is a single 32-byte hash. The condition holds only while the account's whole storage root matches that hash. This form is strict: a write to any slot of that account fails the condition.
+
+```json
+{
+  "knownAccounts": {
+    "0x9c8fF314C9Bc7F6e59A9d9225Fb22946427eDC03": "0x1d5d9f6a3c8b2e4f7a9d1c3b5e7f9a2c4d6b8e1f3a5c7d9b2e4f6a8c1d3b5e7f"
+  }
+}
+```
+
+**Slot form.** The value maps a storage slot to the value you expect. The condition holds while every listed slot still holds its listed value, and writes to other slots of the same account leave it alone. Prefer this form. It is far less likely to fail for a reason unrelated to your transaction.
+
+```json
+{
+  "knownAccounts": {
+    "0x9c8fF314C9Bc7F6e59A9d9225Fb22946427eDC03": {
+      "0x0000000000000000000000000000000000000000000000000000000000000000": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    }
+  }
+}
+```
+
+An entry that maps an address to an empty object carries no condition, and Nitro evaluates the remaining conditions as usual.
+
+## Where Nitro evaluates your conditions
+
+Nitro evaluates your conditions three times. Knowing where each check happens tells you which failure you are looking at.
+
+<ImageZoom src="/img/arb-conditional-tx-checkpoints.svg" className="img-900px" caption="Nitro evaluates conditional transaction conditions at three points before inclusion." alt="A vertical flow. Your app signs the transaction and attaches the conditions, then sends it to a prechecker node. The prechecker runs check 1 against current state and check 2 against state about two seconds old. The sequencer runs check 3 against the block it is building, then includes the transaction in a child chain block. If any check fails, the node rejects the transaction with JSON-RPC error -32003 and never includes it." />
+
+1. **The <a data-quicklook-from="prechecker-node">prechecker node</a> evaluates current state.** The node you submit to evaluates your conditions against its latest block before it forwards anything.
+
+2. **The prechecker evaluates older state.** The node then walks back to a block that is at least `required-state-age` seconds old, which defaults to 2 seconds, and evaluates the same conditions against that older state. A failure here returns the original message behind the prefix `conditions check failed for old state`.
+
+   This second check stops a caller from exploiting a condition that held for only a moment. It has a side effect worth planning for: Nitro rejects a condition that became true in the last 2 seconds, even though it holds right now. If your conditions track state that changes that recently, expect this rejection and retry.
+
+3. **The sequencer evaluates the block it is building.** At sequencing time the sequencer evaluates your conditions once more against the in-progress block, immediately before it executes your transaction. This check is the one that guarantees your conditions hold at execution.
+
+A node running with `strictness` below `20` skips both prechecker checks. The sequencer check always runs, so the guarantee holds whatever any intermediate node does.
+
+## Errors
+
+When a condition fails, the node returns JSON-RPC error code `-32003` and names the condition in the message.
+
+| Message                                   | Cause                                                          |
+| ----------------------------------------- | -------------------------------------------------------------- |
+| `BlockNumberMin condition not met`        | The parent chain block number sits below `blockNumberMin`.     |
+| `BlockNumberMax condition not met`        | The parent chain block number sits above `blockNumberMax`.     |
+| `TimestampMin condition not met`          | The child chain block timestamp sits below `timestampMin`.     |
+| `TimestampMax condition not met`          | The child chain block timestamp sits above `timestampMax`.     |
+| `Storage root hash condition not met`     | An account's storage root no longer matches the hash you gave. |
+| `Storage slot value condition not met`    | A listed slot no longer holds the value you gave.              |
+| `conditions check failed for old state:…` | Your conditions hold now but did not hold about 2 seconds ago. |
+
+A rejection means the sequencer never included your transaction, so you can safely resubmit it with updated conditions. Errors that are not condition failures, such as `nonce too low` or a fee cap below the base fee, behave as they do for `eth_sendRawTransaction`.
+
+## Example
+
+The request below submits a transaction that stays valid only while slot `0` of one contract still holds `10`, and only until parent chain block `20260011`.
+
+```shell
+curl -X POST https://arb1-sequencer.arbitrum.io/rpc \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "eth_sendRawTransactionConditional",
+    "params": [
+      "0x02f8710a808459682f008459682f0e82520894a0b8...c080a0",
+      {
+        "knownAccounts": {
+          "0x9c8fF314C9Bc7F6e59A9d9225Fb22946427eDC03": {
+            "0x0000000000000000000000000000000000000000000000000000000000000000": "0x000000000000000000000000000000000000000000000000000000000000000a"
+          }
+        },
+        "blockNumberMax": "0x13524ab"
+      }
+    ]
+  }'
+```
+
+A successful call returns the transaction hash:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x8f7d1c0b3a2e5f4c9d6b8a1e3f7c2d5a9b4e6f8c1d3a7b5e9f2c4d6a8b1e3f5c"
+}
+```
+
+A failed condition returns an error instead:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32003,
+    "message": "Storage slot value condition not met"
+  }
+}
+```
+
+Most libraries do not wrap this method, because it is not part of the standard API. Call it through your provider's raw request interface:
+
+```js
+const txHash = await provider.send('eth_sendRawTransactionConditional', [
+  signedTx,
+  {
+    knownAccounts: {
+      [contractAddress]: { [slot]: expectedValue },
+    },
+    blockNumberMax: '0x13524ab',
+  },
+]);
+```
+
+## Node configuration
+
+Node operators control the prechecker behavior with the flags below. The sequencer check takes no configuration.
+
+| Flag                                                 | Default | Effect                                                                                    |
+| ---------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
+| `execution.tx-pre-checker.required-state-age`        | `2`     | How many seconds old the older state must be. `0` turns the second check off.             |
+| `execution.tx-pre-checker.required-state-max-blocks` | `4`     | How many blocks the node walks back to find that older state. `0` removes the limit.      |
+| `execution.tx-pre-checker.strictness`                | `20`    | Below `20`, the node skips the condition checks and forwards your transaction unverified. |
+
+For the full list, see the [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx).
+
+Nodes export one accepted counter and one rejected counter for each of the three checks. Compare them to tell a client that sends stale conditions apart from a node that rejects on old state.
+
+| Check                                 | Metric prefix                                  |
+| ------------------------------------- | ---------------------------------------------- |
+| Prechecker, current state             | `arb/txprechecker/conditionaltx/currentstate/` |
+| Prechecker, state about 2 seconds old | `arb/txprechecker/conditionaltx/oldstate/`     |
+| Sequencer, block being built          | `arb/sequencer/conditionaltx/`                 |
+
+## Limits
+
+Nitro sets no cap on the number of accounts or storage slots you list in `knownAccounts`. Every listed slot costs the node a state read on each of the three checks, so a large `knownAccounts` map stays cheap for you and grows expensive for the node.
+
+<VanillaAdmonition type="warning">
+
+Nitro enforces no built-in cap, so operators who expose this method publicly should apply their own request-size and rate limits at the RPC layer. Treat an unlimited endpoint as a denial-of-service surface.
+
+</VanillaAdmonition>
+
+List only the slots your transaction depends on. For an ERC-4337 bundle, that usually means the nonce and deposit slots of each sender, rather than the storage root of each account.
+
+## Differences from other implementations
+
+Other stacks expose a method with the same name and a different contract. If you port a bundler or relay to an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, check these four points.
+
+| Behavior                              | On Arbitrum chains                                                                                                |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `blockNumberMin` and `blockNumberMax` | Read the parent chain block number. Other stacks read their own chain's block number.                             |
+| Old-state re-check                    | Nitro also evaluates your conditions against state about 2 seconds old. Other stacks evaluate current state only. |
+| `knownAccounts` size cap              | Nitro enforces none. Other stacks cap the number of slots and reject the request with `-32005`.                   |
+| Authentication                        | Nitro requires none. Each operator chooses their own access control.                                              |
+
+Nitro reserves JSON-RPC error code `-32005` for a limit-exceeded condition, but the current implementation never returns it.
+
+## See also
+
+- [RPC methods](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods.mdx) — other differences between Arbitrum and Ethereum JSON-RPC responses.
+- [Block gas limit, numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx) — why the parent chain and the child chain report different block numbers.
+- [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management.mdx) — how Arbitrum orders transactions that come from the same sender.
