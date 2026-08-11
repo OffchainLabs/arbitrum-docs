@@ -7,21 +7,23 @@ footer.footer {
   font-size: 0.8125rem;
   border-top: 1px solid var(--arbitrum-border);
   color: var(--arbitrum-text);
-  padding: 3rem 0 2rem;
+  padding: 1rem 0 1.25rem 6rem;
 
   .footer__links {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
   }
 
+  // Columns sit in a single row on desktop, so no gap is needed below them.
+  // The responsive block restores a gap once they stack.
   .footer__col {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
   }
 
   .footer__title {
     font-weight: 600;
     font-size: 0.875rem;
     color: var(--arbitrum-text);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     letter-spacing: normal;
   }
 
@@ -32,7 +34,11 @@ footer.footer {
   }
 
   .footer__item {
-    margin-bottom: 0.625rem;
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .footer__link-item {
@@ -55,8 +61,8 @@ footer.footer {
   .footer__copyright {
     color: var(--arbitrum-secondary-text);
     font-size: 0.75rem;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
     border-top: 1px solid var(--arbitrum-border);
     text-align: center;
   }
@@ -110,15 +116,34 @@ footer.footer {
 // ========================================
 @media (max-width: 996px) {
   footer.footer {
-    padding: 2rem 0 1.5rem;
+    padding: 1.5rem 0 1rem 2.5rem;
 
     .footer__col {
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
     }
 
     .footer__copyright {
-      margin-top: 1.5rem;
-      padding-top: 1rem;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+    }
+  }
+}
+
+// ========================================
+// Two-column footer (tablet and large phone)
+// ========================================
+// Infima collapses every .col to full width below 996px, which jumps the footer
+// straight from four columns to one. Overriding --ifm-col-width restores an
+// intermediate 2 x 2 stage: the variable feeds both .col's max-width and the
+// flex-basis that Infima's own max-width:996px rule applies.
+@media (min-width: 600px) and (max-width: 996px) {
+  footer.footer .footer__col {
+    --ifm-col-width: 50%;
+    margin-bottom: 1.5rem;
+
+    // The bottom row needs no gap beneath it.
+    &:nth-last-child(-n + 2) {
+      margin-bottom: 0;
     }
   }
 }
