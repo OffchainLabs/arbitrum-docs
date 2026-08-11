@@ -4,7 +4,10 @@
   border-radius: 4px;
   border-left: 6px solid var(--vadm-color);
   background: var(--vadm-bg);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .admonitionHeader {
@@ -52,6 +55,11 @@
 }
 
 .warning {
+  --vadm-color: #f0b400;
+  --vadm-bg: rgba(240, 180, 0, 0.1);
+}
+
+.caution {
   --vadm-color: #f0b400;
   --vadm-bg: rgba(240, 180, 0, 0.1);
 }

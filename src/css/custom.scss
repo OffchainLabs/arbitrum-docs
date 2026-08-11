@@ -77,9 +77,13 @@ html body .container {
 }
 
 // Main content area
+// `min-width: 0` for the same reason as the article column below: without it the
+// flex default of `min-width: auto` lets a long code line widen this container
+// past the viewport and give the whole page a horizontal scrollbar.
 html body [class*='docMainContainer'] {
   padding: 2rem 1.5rem;
   max-width: 100%;
+  min-width: 0;
 }
 
 // Content wrapper centering
@@ -114,8 +118,14 @@ article .markdown {
   // theme-classic caps the article column with `max-width: 75% !important`, so
   // the widths set above never apply. Release the cap and let the flex row hand
   // the article everything the table of contents doesn't take.
+  //
+  // `min-width: 0` overrides the flex default of `min-width: auto`, which sizes
+  // the column to its min-content. A single long code line then pushes the
+  // column past the space left beside the table of contents, and the flex row
+  // wraps the table of contents below the article.
   html body .col[class*='docItemCol'] {
     max-width: none !important;
+    min-width: 0;
   }
 
   // Full-bleed tables: stop capping the article container at a prose width and
