@@ -1,13 +1,14 @@
-import React from 'react';
 import clsx from 'clsx';
-import Highlight, { defaultProps } from 'prism-react-renderer';
+import { Highlight, Prism } from 'prism-react-renderer';
+import React from 'react';
 import { ACTIONS, EVENTS, EventData, Joyride, STATUS } from 'react-joyride';
+
 import layoutStyles from './SolidityLabLayout.module.css';
 import panelStyles from './SolidityLabPanels.module.css';
 import {
   ARBITRUM_SEPOLIA,
-  SOLC_VERSION,
   ActionIcon,
+  SOLC_VERSION,
   SpotlightOnlyTooltip,
   TaskLessonContent,
   handleEditorKey,
@@ -280,12 +281,7 @@ export function SolidityLabView(props: ReturnType<typeof useSolidityLab>) {
                 Next
               </button>
             )}
-            <Highlight
-              Prism={defaultProps.Prism}
-              theme={prismTheme}
-              code={code}
-              language={highlightLanguage}
-            >
+            <Highlight prism={Prism} theme={prismTheme} code={code} language={highlightLanguage}>
               {({ className: highlightClassName, style, tokens, getLineProps, getTokenProps }) => (
                 <pre
                   ref={codeLayerRef}
@@ -298,11 +294,11 @@ export function SolidityLabView(props: ReturnType<typeof useSolidityLab>) {
                       const lineNumber = index + 1;
                       const issue = issues.find((item) => item.line === lineNumber);
                       const lineProps = getLineProps({ line });
-                      const { key: lineKey, ...linePropsWithoutKey } = lineProps;
+                      const { key: _lineKey, ...linePropsWithoutKey } = lineProps;
                       return (
                         <span
                           {...linePropsWithoutKey}
-                          key={lineKey || lineNumber}
+                          key={lineNumber}
                           className={clsx(
                             lineProps.className,
                             styles.ideCodeLine,
@@ -324,9 +320,9 @@ export function SolidityLabView(props: ReturnType<typeof useSolidityLab>) {
                             ) : (
                               line.map((token, key) => {
                                 const tokenProps = getTokenProps({ token });
-                                const { key: tokenKey, ...tokenPropsWithoutKey } = tokenProps;
+                                const { key: _tokenKey, ...tokenPropsWithoutKey } = tokenProps;
 
-                                return <span key={tokenKey || key} {...tokenPropsWithoutKey} />;
+                                return <span key={key} {...tokenPropsWithoutKey} />;
                               })
                             )}
                           </span>

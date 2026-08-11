@@ -31,7 +31,7 @@ Before checking or deploying contracts, ensure you have:
 Deploying a Stylus contract involves two distinct steps:
 
 1. **Deployment**: Upload the compressed WASM bytecode to the chain, assigning it an address
-2. **Activation**: Trigger onchain compilation to native code and cache it for fast execution
+2. **[Activation](/stylus/concepts/activation)**: Trigger onchain compilation to native code and cache it for fast execution
 
 The `cargo stylus check` command validates your contract before deployment, and `cargo stylus deploy` handles both steps automatically.
 
@@ -47,7 +47,7 @@ The `cargo stylus check` command validates that your contract can be deployed an
    - Required exports (`user_entrypoint`)
    - Allowed imports (only `vm_hooks`)
    - Memory constraints
-   - Size limits (24KB compressed)
+   - Size limits (decompressed WASM within `MaxWasmSize`)
 4. **Simulates activation** using `eth_call` to verify onchain compatibility
 5. **Estimates the data fee** required for activation
 
@@ -106,7 +106,7 @@ Common validation errors include:
 
 - **Missing entrypoint**: Contract lacks `#[entrypoint]` attribute
 - **Invalid exports**: Contract exports reserved symbols
-- **Size limit exceeded**: Compressed WASM exceeds 24KB
+- **Size limit exceeded**: Decompressed WASM exceeds `MaxWasmSize` (the chain-configurable limit, 128 KB by default and 256 KB at ArbOS 60+)
 - **Invalid imports**: Contract imports functions outside `vm_hooks`
 - **Memory violations**: Incorrect memory handling or growth
 
@@ -263,7 +263,7 @@ cargo stylus deploy \
 # Specify cargo-stylus version
 cargo stylus deploy \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=0.5.0
+  --cargo-stylus-version=0.10.7
 ```
 
 Skip Docker for local development (non-reproducible):
@@ -401,7 +401,7 @@ cargo stylus deploy \
 cargo stylus deploy \
   --endpoint="https://arb1.arbitrum.io/rpc" \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=0.5.0
+  --cargo-stylus-version=0.10.7
 
 # 4. Verify the deployed contract
 cargo stylus verify \
@@ -522,7 +522,7 @@ cargo stylus deploy \
 cargo stylus deploy \
   --endpoint="https://arb1.arbitrum.io/rpc" \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=0.5.0
+  --cargo-stylus-version=0.10.7
 
 # Then verify on Arbiscan
 cargo stylus verify \
@@ -542,7 +542,7 @@ cargo stylus deploy \
 # Check compressed size
 cargo stylus check
 
-# If size is close to 24KB limit:
+# If the decompressed WASM is close to the MaxWasmSize limit:
 # - Use #[no_std]
 # - Remove unused dependencies
 # - Enable aggressive optimizations
@@ -568,7 +568,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 
 ### Size limit errors
 
-**Error**: Compressed WASM exceeds 24KB
+**Error**: Decompressed WASM exceeds the size limit (`MaxWasmSize`)
 
 **Solutions**:
 
@@ -583,7 +583,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 
    ```toml
    [dependencies]
-   stylus-sdk = "0.5"
+   stylus-sdk = "0.10.7"
    # Remove unnecessary crates
    ```
 
@@ -690,7 +690,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 4. Check SDK version compatibility:
    ```toml
    [dependencies]
-   stylus-sdk = "0.5"  # Use latest stable version
+   stylus-sdk = "0.10.7"  # Use latest stable version
    ```
 
 ## Non-Rust WASM Deployment

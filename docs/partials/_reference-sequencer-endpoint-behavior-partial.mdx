@@ -1,0 +1,31 @@
+---
+partial_type: reference
+title: 'Sequencer Endpoint Behavior Reference'
+description: 'How the Arbitrum sequencer endpoint behaves compared to the public RPC, including timeout behavior and fallback patterns'
+author: Jason-W123
+last_reviewed: 2026-05-21
+---
+
+## Sequencer endpoint behavior
+
+Arbitrum One exposes two public endpoints with different roles, shown below: a general-purpose public RPC URL, and a direct sequencer endpoint that accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`. The table below summarizes how they differ in purpose and operational guarantees.
+
+### The two endpoints at a glance
+
+| Endpoint                                                      | Purpose                                                                                                                                           | Operational guarantees                                                                                                                                     |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `https://arb1.arbitrum.io/rpc` (public RPC URL)               | General-purpose read/write endpoint, useful for development and low-volume reads.                                                                 | **No uptime, latency, or rate-limit guarantees.** Any application that depends on availability should use a third-party node provider or run its own node. |
+| `https://arb1-sequencer.arbitrum.io/rpc` (sequencer endpoint) | Direct submission path to the chain's sequencer for write traffic. Accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`. | Exposes the defined queueing and timeout behavior described below, but it is still a best-effort public endpoint with no formal SLA.                       |
+
+### Latency and timeout behavior
+
+Under nominal load, transactions submitted to the sequencer endpoint are accepted in well under a second. Internally, the sequencer places submissions into a bounded in-memory queue (default capacity 1024). The queue timeout (default 12 seconds) bounds how long a submitted transaction may remain pending in the sequencer's background queue before being picked up or rejected; it does **not** provide a formal end-to-end inclusion latency guarantee. If the transaction is not picked up within that window, `eth_sendRawTransaction` returns `context deadline exceeded`, and the transaction was **not** accepted—it is safe to retry.
+
+### Recommended fallback patterns
+
+- Use a third-party node provider as your primary endpoint, or as a fallback when a direct sequencer submission fails.
+- Retry on transient errors only—`context deadline exceeded` and network/connection errors are safe to retry with backoff. Do not retry terminal errors such as `nonce too low` or contract reverts.
+
+### Monitoring and alerting
+
+A successful `eth_sendRawTransaction` response means the sequencer has already sequenced your transaction into an L2 block—the call blocks until the block is created and returns only then, not merely when the transaction is enqueued. Treat this as the sequencer's soft confirmation that your transaction has been ordered and executed. It does **not** by itself mean the transaction has been posted to the parent chain in a batch or finalized there; if your application needs parent-chain finality guarantees, track that separately. For monitoring, alert on submission calls that return errors or exceed your expected latency ceiling rather than assuming a pending-but-unconfirmed state.

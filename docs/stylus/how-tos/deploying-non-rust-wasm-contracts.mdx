@@ -190,7 +190,7 @@ Output shows validation results:
 ```
 Reading WASM file at counter.wat
 Compressed WASM size: 142 B
-Contract succeeded Stylus onchain activation checks with Stylus version: 1
+Contract succeeded Stylus onchain activation checks with Stylus version: 2
 ```
 
 ## C/C++ development
@@ -238,8 +238,9 @@ my-contract/
 // Storage slot for counter
 static uint8_t counter_slot[32] = {0};
 
-// Main entrypoint
-int main(int argc, char *argv[]) {
+// Stylus calls user_entrypoint, not main. It receives the calldata length
+// and returns the output length.
+int user_entrypoint(int args_len) {
     // Load counter from storage
     uint8_t value[32];
     storage_load_bytes32(counter_slot, value);
@@ -250,7 +251,7 @@ int main(int argc, char *argv[]) {
     // Store back
     storage_store_bytes32(counter_slot, value);
 
-    return 0;
+    return 0;  // No output
 }
 ```
 
@@ -360,7 +361,7 @@ int verify_signature(
     return -1;      // Invalid signature
 }
 
-int main(int argc, char *argv[]) {
+int user_entrypoint(int args_len) {
     uint8_t msg_hash[32];
     uint8_t sig[65];
     uint8_t pubkey[64];
@@ -450,6 +451,274 @@ cargo stylus deploy \
     --wasm-file=contract.wasm \
     --private-key-path=./key.txt
 ```
+
+## Example: writing a contract in Zig
+
+[Zig](https://ziglang.org/) is a systems language often described as a spiritual successor to C: it adds memory-safety guardrails, produces small binaries, and ships with a C compiler so existing C projects can adopt it incrementally. Because Zig compiles to WebAssembly, you can use it to write Stylus contracts that fit comfortably within the 24 KB Brotli-compressed limit and meet Stylus gas-metering requirements. Programs written in Zig have gas costs comparable to C.
+
+<VanillaAdmonition type="info">This walkthrough targets **Zig 0.11.0**. Some APIs used below (for example `std.mem.readIntSliceLittle` and the `std.heap.WasmAllocator` internals) changed or were removed in later Zig releases, so pin to 0.11.0 when following along.</VanillaAdmonition>
+
+### Requirements
+
+- Download and install [Zig 0.11.0](https://ziglang.org/downloads).
+- Install [Rust](https://www.rust-lang.org/tools/install), which the [Stylus CLI tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) needs to deploy your program.
+
+This example also uses Rust to run a script that calls the Zig contract using the [ethers-rs](https://github.com/gakonst/ethers-rs) library.
+
+Once Rust is installed, install the Stylus CLI tool:
+
+```shell
+RUSTFLAGS="-C link-args=-rdynamic" cargo install --force cargo-stylus
+```
+
+### A minimal Zig entrypoint
+
+Clone the example repository:
+
+```shell
+git clone https://github.com/offchainlabs/zig-on-stylus && cd zig-on-stylus
+```
+
+Then delete everything inside `main.zig` — you'll fill it out from scratch.
+
+A Stylus contract needs a special entrypoint function that takes the length of its input arguments (`len`) and returns a status code `i32` of either `0` or `1`. It also needs `memory_grow`, a function injected into every Stylus contract as an external import to allocate memory. These imports are called `vm_hooks` (or host I/Os), and they give the contract access to the host EVM environment. You don't need the Zig standard library yet.
+
+Replace everything in `main.zig` with:
+
+```zig
+pub extern "vm_hooks" fn memory_grow(len: u32) void;
+
+export fn mark_unused() void {
+    memory_grow(0);
+    @panic("");
+}
+
+// The main entrypoint to use for execution of the Stylus WASM program.
+export fn user_entrypoint(len: usize) i32 {
+    _ = len;
+    return 0;
+}
+```
+
+Build the Zig library to a freestanding WASM file for onchain deployment:
+
+```shell
+zig build-lib ./src/main.zig -target wasm32-freestanding -dynamic --export=user_entrypoint -OReleaseSmall --export=mark_unused
+```
+
+Deploy it with the Stylus CLI tool. This example deploys to Arbitrum Sepolia; you can also target a [local Stylus devnode](/run-arbitrum-node/run-local-full-chain-simulation) at `http://localhost:8547`:
+
+```shell
+cargo stylus deploy \
+    --private-key=<YOUR_PRIVATE_KEY> \
+    --wasm-file=main.wasm \
+    --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+The tool sends two transactions: one to deploy the contract code onchain, and one to activate it.
+
+```
+Uncompressed WASM size: 112 B
+Compressed WASM size to be deployed onchain: 103 B
+```
+
+The Zig program is tiny when compiled to WASM. Call the contract with any Ethereum tooling — here, the `cast` CLI from [Foundry](https://github.com/foundry-rs/foundry):
+
+```shell
+export ADDR=<YOUR_DEPLOYED_CONTRACT_ADDRESS>
+cast call --rpc-url 'https://sepolia-rollup.arbitrum.io/rpc' $ADDR '0x'
+```
+
+Calling the contract returns `0`, as programmed:
+
+```
+0x
+```
+
+### Reading input and writing output data
+
+To do anything useful, a contract needs to read input and write output. The Stylus runtime provides two host I/Os for this:
+
+```zig
+pub extern "vm_hooks" fn read_args(dest: *u8) void;
+pub extern "vm_hooks" fn write_result(data: *const u8, len: usize) void;
+```
+
+Add these near the top of `main.zig`.
+
+`read_args` takes a pointer to a byte slice where the input arguments are written. The slice length must equal the length of the program args received in `user_entrypoint`. Write a helper that wraps this host I/O and returns a Zig byte slice:
+
+```zig
+// Allocates a Zig byte slice of length=`len` and reads a Stylus contract's
+// calldata using the read_args hostio function.
+pub fn input(len: usize) ![]u8 {
+    var input = try allocator.alloc(u8, len);
+    read_args(@ptrCast(*u8, input));
+    return input;
+}
+```
+
+Next, a helper that outputs bytes to the caller:
+
+```zig
+// Outputs data as bytes via the write_result hostio to the Stylus contract's caller.
+pub fn output(data: []u8) void {
+    write_result(@ptrCast(*u8, data), data.len);
+}
+```
+
+Put them together to echo the input back to the caller:
+
+```zig
+// The main entrypoint to use for execution of the Stylus WASM program.
+// It echoes the input arguments to the caller.
+export fn user_entrypoint(len: usize) i32 {
+    var in = input(len) catch return 1;
+    output(in);
+    return 0;
+}
+```
+
+Rebuilding now fails because there's no allocator:
+
+```
+src/main.zig:21:20: error: use of undeclared identifier 'allocator'
+    var data = try allocator.alloc(u8, len);
+                   ^~~~~~~~~
+```
+
+Zig requires you to provide an allocator explicitly. The standard library ships one built for WASM programs, where memory grows in 64 KB increments. Add this to the top of `main.zig`:
+
+```zig
+const std = @import("std");
+const allocator = std.heap.WasmAllocator;
+```
+
+The code compiles, but `cargo stylus check --wasm-file=main.wasm` fails:
+
+```
+Caused by:
+    missing import memory_grow
+```
+
+The standard-library `WasmAllocator` needs to call our `memory_grow` host I/O under the hood. Fix this by copying the `WasmAllocator.zig` file from the standard library and changing a single line to use `memory_grow`. You can find this modified file as `WasmAllocator.zig` in the [zig-on-stylus repository](https://github.com/offchainlabs/zig-on-stylus). Use it like so:
+
+```zig
+const std = @import("std");
+const WasmAllocator = @import("WasmAllocator.zig");
+
+// Uses our custom WasmAllocator, a simple modification over the wasm allocator
+// from the Zig standard library as of Zig 0.11.0.
+pub const allocator = std.mem.Allocator{
+    .ptr = undefined,
+    .vtable = &WasmAllocator.vtable,
+};
+```
+
+Rebuild and run `cargo stylus check` again — it now succeeds:
+
+```
+Uncompressed WASM size: 514 B
+Compressed WASM size to be deployed onchain: 341 B
+Connecting to Stylus RPC endpoint: https://sepolia-rollup.arbitrum.io/rpc
+Stylus program with same WASM code is already activated onchain
+```
+
+Deploy it:
+
+```shell
+cargo stylus deploy \
+    --private-key=<YOUR_PRIVATE_KEY> \
+    --wasm-file=main.wasm \
+    --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+```
+
+Now calling the contract echoes back whatever input you send. Send it `0x123456`:
+
+```shell
+export ADDR=<YOUR_DEPLOYED_CONTRACT_ADDRESS>
+cast call --rpc-url 'https://sepolia-rollup.arbitrum.io/rpc' $ADDR '0x123456'
+
+0x123456
+```
+
+### Prime number checker
+
+For something fancier, implement a primality checker using the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes). Given a number, the contract outputs `1` if it's prime or `0` otherwise. This example leverages Zig's [comptime](https://kristoff.it/blog/what-is-zig-comptime/) keyword, which tells the compiler to evaluate code at compile time. Here, it defines a slice of booleans up to a fixed limit at compile time, marking which numbers are prime.
+
+```zig
+fn sieve_of_erathosthenes(comptime limit: usize, nth: u16) bool {
+    var prime = [_]bool{true} ** limit;
+    prime[0] = false;
+    prime[1] = false;
+    var i: usize = 2;
+    while (i * i < limit) : (i += 1) {
+        if (prime[i]) {
+            var j = i * i;
+            while (j < limit) : (j += i)
+                prime[j] = false;
+        }
+    }
+    return prime[nth];
+}
+```
+
+Checking whether a number `N` is prime is just reading index `N` of the `prime` slice. Integrate it into `user_entrypoint`:
+
+```zig
+// The main entrypoint to use for execution of the Stylus WASM program.
+export fn user_entrypoint(len: usize) i32 {
+    // Expects the input is a u16 encoded as little endian bytes.
+    var in = input(len) catch return 1;
+    var check_nth_prime = std.mem.readIntSliceLittle(u16, in);
+    const limit: u16 = 10_000;
+    if (check_nth_prime > limit) {
+        @panic("input is greater than limit of 10,000 primes");
+    }
+    // Checks if the number is prime and returns a boolean using the output function.
+    var is_prime = sieve_of_erathosthenes(limit, check_nth_prime);
+    var out = in[0..1];
+    if (is_prime) {
+        out[0] = 1;
+    } else {
+        out[0] = 0;
+    }
+    output(out);
+    return 0;
+}
+```
+
+Check and deploy:
+
+```
+Uncompressed WASM size: 10.8 KB
+Compressed WASM size to be deployed onchain: 525 B
+```
+
+The uncompressed size is large because of the boolean array, but it compresses well since the values are mostly zeros.
+
+### Calling the Zig contract from Rust
+
+The repository includes a `rust-example` that uses [ethers-rs](https://github.com/gakonst/ethers-rs) to call the prime-sieve contract. Run it with:
+
+```shell
+export STYLUS_PROGRAM_ADDRESS=<YOUR_DEPLOYED_CONTRACT_ADDRESS>
+cargo run
+```
+
+You'll see output like:
+
+```
+Checking if 2 is_prime = true, took: 404.146917ms
+Checking if 3 is_prime = true, took: 154.802083ms
+Checking if 4 is_prime = false, took: 123.239583ms
+Checking if 5 is_prime = true, took: 109.248709ms
+Checking if 6 is_prime = false, took: 113.086625ms
+Checking if 32 is_prime = false, took: 280.19975ms
+Checking if 53 is_prime = true, took: 123.667958ms
+```
+
+The host I/Os shown here aren't the only ones — see [stylus-sdk-c](https://github.com/OffchainLabs/stylus-sdk-c) (`hostio.h`) for the full list, including affordances for the EVM, storage access, and calling other Arbitrum contracts.
 
 ## Deployment workflow
 
@@ -753,7 +1022,7 @@ Official examples for different languages:
 | **WAT**            | ✅ Supported    | Manual                                                         | Minimal contracts, learning |
 | **AssemblyScript** | 🔶 Community    | Custom                                                         | TypeScript developers       |
 | **Go**             | 🔶 Experimental | TinyGo                                                         | Custom applications         |
-| **Zig**            | 🔶 Experimental | Custom                                                         | Systems programming         |
+| **Zig**            | 🔶 Experimental | [zig-on-stylus](https://github.com/offchainlabs/zig-on-stylus) | Systems programming         |
 
 ## Advanced: custom languages
 

@@ -32,7 +32,9 @@ jobs:
 
       - name: Propagate globalVars changes to docs
         if: ${{ steps.check-releases.outputs.updates_made == 'true' }}
-        run: yarn update-variable-refs
+        run: |
+          yarn update-variable-refs
+          yarn generate-precompiles-ref-tables
 
       - name: Configure Git
         if: ${{ steps.check-releases.outputs.updates_made == 'true' }}

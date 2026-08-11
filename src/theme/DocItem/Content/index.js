@@ -1,8 +1,8 @@
-import React from 'react';
-import Content from '@theme-original/DocItem/Content';
 import { useDoc } from '@docusaurus/plugin-content-docs/client';
 import { HeaderBadges } from '@site/src/components/HeaderBadges';
 import { InteractiveTutorialShell } from '@site/src/components/InteractiveTutorials';
+import Content from '@theme-original/DocItem/Content';
+import React from 'react';
 
 export default function ContentWrapper(props) {
   const { frontMatter } = useDoc();

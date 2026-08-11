@@ -15,6 +15,7 @@ import { marked } from 'marked'; // For converting Markdown to HTML
 import { GrayMatterFile } from 'gray-matter'; // TypeScript type for parsed frontmatter files
 import * as fs from 'fs/promises'; // Async filesystem operations
 import * as path from 'path'; // Path manipulation utilities
+import { writeOrCheck, isCheckMode, runScript } from './lib/generated-partial';
 // Local implementation of escapeForJSON utility
 function escapeForJSON(str: string): string {
   return str
@@ -67,26 +68,24 @@ async function renderGlossaryJSON(terms: GrayMatterFile<string>[]): Promise<stri
 async function readFilesInDirectory(directory: string): Promise<GrayMatterFile<string>[]> {
   let definitions: GrayMatterFile<string>[] = [];
 
-  try {
-    // Get all filenames in the specified directory
-    const files = await fs.readdir(directory);
+  // Get all filenames in the specified directory. Errors propagate: a missing or
+  // unreadable glossary directory should fail the build, not silently emit an
+  // empty glossary.
+  const files = await fs.readdir(directory);
 
-    // Process each file
-    for (const file of files) {
-      const filePath = path.join(directory, file);
-      const stats = await fs.stat(filePath);
+  // Process each file
+  for (const file of files) {
+    const filePath = path.join(directory, file);
+    const stats = await fs.stat(filePath);
 
-      // Only process markdown files (not directories or other file types)
-      if (stats.isFile() && (filePath.endsWith('.md') || filePath.endsWith('.mdx'))) {
-        // Read the file content
-        const content = await fs.readFile(filePath, 'utf-8');
+    // Only process markdown files (not directories or other file types)
+    if (stats.isFile() && (filePath.endsWith('.md') || filePath.endsWith('.mdx'))) {
+      // Read the file content
+      const content = await fs.readFile(filePath, 'utf-8');
 
-        // Parse frontmatter and content
-        definitions.push(matter(content));
-      }
+      // Parse frontmatter and content
+      definitions.push(matter(content));
     }
-  } catch (error) {
-    console.error('Error reading directory:', error);
   }
 
   // Sort terms alphabetically based on titleforSort frontmatter property
@@ -94,84 +93,44 @@ async function readFilesInDirectory(directory: string): Promise<GrayMatterFile<s
 }
 
 /**
- * Converts a term key to a valid React component name
- *
- * This function:
- * 1. Capitalizes the first letter (React components must start with uppercase)
- * 2. Removes hyphens to ensure valid JavaScript identifier syntax
- *
- * @param {string} key - The raw term key (usually kebab-case from filenames)
- * @returns {string} A PascalCase string suitable for use as a React component name
- */
-function renderKey(key: string): string {
-  // Capitalize the first letter
-  let capitalized = String(key).charAt(0).toUpperCase() + String(key).slice(1);
-
-  // Remove hyphens to create a valid JavaScript identifier
-  return capitalized.replace(/[\-]/gi, '');
-}
-
-/**
  * Main function that orchestrates the glossary building process
  *
  * This function:
  * 1. Reads all glossary term files from the specified directory
- * 2. Generates import statements and component references (although unused in current implementation)
- * 3. Creates a consolidated Markdown partial file with all terms
- * 4. Generates a JSON file with all terms for client-side usage
+ * 2. Creates a consolidated Markdown partial file with all terms
+ * 3. Generates a JSON file with all terms for client-side usage
  */
 async function main(): Promise<void> {
   // Read and parse all glossary term files
   let terms = await readFilesInDirectory('./docs/partials/glossary/');
 
-  // Generate import statements for each term (unused in current implementation)
-  // This could be used if implementing a React component approach to term rendering
-  let imports = terms
-    .map(
-      (item) => `import ${renderKey(item.data.key)} from './docs/glossary/${item.data.key}.mdx';`,
-    )
-    .join('\n');
+  const check = isCheckMode();
 
-  // Generate component references for each term (unused in current implementation)
-  let items = terms.map((item) => `<${renderKey(item.data.key)} />`).join('\n');
-
-  // Generate and write the consolidated glossary partial MDX file
-  // This creates a single file with all terms formatted as Markdown headings
-  const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  // Generate the consolidated glossary partial MDX file
+  // This creates a single file with all terms formatted as Markdown headings.
+  // Output is kept deterministic (no generation timestamp) so `--check` works.
   const frontmatter = `---
 partial_type: glossary
 title: "Arbitrum Glossary Definitions"
 description: "Comprehensive glossary of Arbitrum terminology and definitions"
 author: anegg0
-last_reviewed: ${currentDate}
 ---
 
 `;
 
-  await fs.writeFile(
-    './docs/partials/_glossary-partial.mdx',
+  const partial =
     frontmatter +
-      terms
-        .map((item) => `### ${item.data.title} {#${item.data.key}}\n\n${item.content.trim()}`)
-        .join('\n\n') +
-      '\n',
-  );
+    terms
+      .map((item) => `### ${item.data.title} {#${item.data.key}}\n\n${item.content.trim()}`)
+      .join('\n\n') +
+    '\n';
+  await writeOrCheck('./docs/partials/_glossary-partial.mdx', partial, { check });
 
-  // Generate and write the JSON glossary file for client-side usage
+  // Generate the JSON glossary file for client-side usage
   // This is used for search, tooltips, or other dynamic functionality
   const glossaryJSON = await renderGlossaryJSON(terms);
-  await fs.writeFile('./static/glossary.json', glossaryJSON);
+  await writeOrCheck('./static/glossary.json', glossaryJSON, { check });
 }
 
-/**
- * Script entry point
- *
- * Run the main function and handle success/failure cases,
- * exiting with appropriate status codes
- */
-main()
-  .then(() => process.exit(0)) // Exit with success code when completed
-  .catch((err) => {
-    console.error(err); // Log any errors
-    process.exit(1); // Exit with failure code on error
-  });
+/** Script entry point with shared success/failure handling. */
+runScript(main);

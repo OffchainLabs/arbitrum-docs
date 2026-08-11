@@ -29,12 +29,14 @@ Stylus introduces new pricing models for WASM programs. Intended for high-comput
 - Storage, for which the Rust SDK promotes better access patterns and type choices. Note that while the underlying <a href="https://www.evm.codes/#54"><code>SLOAD</code></a> and <a href="https://www.evm.codes/#55"><code>SSTORE</code></a> operations cost as they do in the EVM, the Rust SDK implements an optimal caching policy that minimizes their use. Exact savings depends on the program.
 - VM affordances, including common operations like `keccak` and reentrancy detection. No longer is it expensive to make safety the default.
 
+These models also change how costs scale: while the EVM reprices memory quadratically within each call, Stylus charges for memory by the 64 KB WASM page, and a program can use up to 8 MB of memory by default (a `PageLimit` of 128 pages, configurable by the <a data-quicklook-from="chain-owner">chain owner</a>). In practice, the gas cost of a compute- and memory-heavy Stylus call grows near-linearly with the size of its workload. For more benchmarks, see the [Stylus benchmarking projects](https://github.com/OffchainLabs/stylus-nanoGPT/blob/main/benchmark-compare/README.md).
+
 There are, however, minor overheads to using Stylus that may matter to your application:
 
-- The first time a WASM is deployed, it must be _activated_. This is generally a few million gas, though to avoid testnet DoS, we've set it to a fixed 14 million. Note that you do not have to activate future copies of the same program. For example, the same NFT template can be deployed many times without paying this cost more than once. We will soon make the fees paid depend on the program, so that the gas used is based on the complexity of the WASM instead of this very conservative, worst-case estimate.
-- Calling a Stylus contract costs 128-2048 gas. We're working with Wasmer to improve setup costs, but there will likely always be some amount of gas one pays to jump into WASM execution. This means that if a contract does next to nothing, it may be cheaper in Solidity. However if a contract starts doing interesting work, the dynamic fees will quickly make up for this fixed-cost overhead.
+- The first time a WASM is deployed, it must be _activated_. Activation charges a configurable `ActivationGas` amount (`0` by default), plus a fixed computation charge of `1,659,168` gas, plus a dynamic data fee that scales with the size of the compiled program. Note that you do not have to activate future copies of the same program. For example, the same NFT template can be deployed many times without paying the activation cost more than once.
+- Calling a Stylus contract incurs a minimum init cost of `8,832` gas when the program is not cached, or `352` gas when it is cached, plus a dynamic init term proportional to the program's complexity. There will likely always be some amount of gas one pays to jump into WASM execution. This means that if a contract does next to nothing, it may be cheaper in Solidity. However if a contract starts doing interesting work, the dynamic fees will quickly make up for this fixed-cost overhead.
 
-Though conservative bounds have been chosen for testnet, all of this is subject to change as pricing models mature and further optimizations are made. Since gas numbers will vary across updates, it may make more sense to clock the time it takes to perform an operation rather than going solely by the numbers reported in receipts.
+All of these parameters are configurable by the chain owner and subject to change as pricing models mature and further optimizations are made. Since gas numbers will vary across updates, it may make more sense to clock the time it takes to perform an operation rather than going solely by the numbers reported in receipts.
 
 ## Ink and gas
 
@@ -72,7 +74,7 @@ For example, if the Stylus VM becomes 2x faster, instead of cutting the nominal 
 
 It is important to note that users never need to worry about this notion of ink. Receipts will always be measured in gas, with the exchange rate applied automatically under the hood as the VMs pass execution back and forth.
 
-However, developers optimizing contracts may choose to measure performance in ink to pin down the exact cost of executing various routines. The <a href="https://docs.rs/stylus-sdk/0.3.0/stylus_sdk/evm/fn.ink_left.html"><code>ink_left</code></a> function exposes this value, and various methods throughout the Rust SDK optionally accept ink amounts too.
+However, developers optimizing contracts may choose to measure performance in ink to pin down the exact cost of executing various routines. The `evm_ink_left()` host method exposes this value, and various methods throughout the Rust SDK optionally accept ink amounts too.
 
 ### See also
 

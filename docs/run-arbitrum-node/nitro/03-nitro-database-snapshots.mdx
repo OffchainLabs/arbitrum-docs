@@ -10,6 +10,8 @@ sidebar_position: 11
 
 Nitro stores the chain state and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a database snapshot is advisable instead. Moreover, for the Arbitrum One chain, you must start from a snapshot because Nitro cannot process transactions from the Classic Arbitrum node.
 
+For an overview of snapshots in the context of initial node setup, see the [Database snapshots section of Prepare to run a node](/run-arbitrum-node/start-here.mdx#database-snapshots).
+
 ## Supply the snapshot URL to Nitro
 
 There are multiple ways to supply Nitro with the database snapshot. The most straightforward way is to provide the configuration, so Nitro downloads the snapshot by itself. It is also possible to download the database manually and supply it to Nitro.

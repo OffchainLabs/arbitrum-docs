@@ -1,17 +1,17 @@
-export interface EdgeChallengeDataMeta {
+interface EdgeChallengeDataMeta {
   challengeManager: string;
   chain: string;
   fetchedAt: string;
 }
 
-export interface DecodedEventBase {
+interface DecodedEventBase {
   type: string;
   blockNumber: number;
   logIndex: number;
   txHash: string;
 }
 
-export interface EdgeAddedEvent extends DecodedEventBase {
+interface EdgeAddedEvent extends DecodedEventBase {
   type: 'EdgeAdded';
   edgeId: string;
   mutualId: string;
@@ -23,7 +23,7 @@ export interface EdgeAddedEvent extends DecodedEventBase {
   isLayerZero: boolean;
 }
 
-export interface EdgeBisectedEvent extends DecodedEventBase {
+interface EdgeBisectedEvent extends DecodedEventBase {
   type: 'EdgeBisected';
   edgeId: string;
   lowerChildId: string;
@@ -31,7 +31,7 @@ export interface EdgeBisectedEvent extends DecodedEventBase {
   lowerChildAlreadyExists: boolean;
 }
 
-export interface EdgeConfirmedByOneStepProofEvent extends DecodedEventBase {
+interface EdgeConfirmedByOneStepProofEvent extends DecodedEventBase {
   type: 'EdgeConfirmedByOneStepProof';
   edgeId: string;
   mutualId: string;

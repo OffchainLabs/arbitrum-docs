@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useCallback } from 'react';
-import type { LevelGroup, AppliedState, LevelMeta, TreeNode } from './types';
-import { buildTreeData, resolveLevelType, formatRangeText, shortHex } from './edgeChallengeLogic';
+import React, { useCallback, useEffect, useRef } from 'react';
+
+import { buildTreeData, formatRangeText, resolveLevelType, shortHex } from './edgeChallengeLogic';
+import type { AppliedState, LevelGroup, LevelMeta, TreeNode } from './types';
 
 interface D3EdgeTreeProps {
   group: LevelGroup;
@@ -191,7 +192,7 @@ export default function D3EdgeTree({
             .append('tspan')
             .attr('x', 0)
             .attr('dy', idx === 0 ? 0 : textLineHeight)
-            .attr('class', idx === 0 ? undefined : 'ecf-node-label')
+            .attr('class', idx === 0 ? null : 'ecf-node-label')
             .text(line);
         });
       });

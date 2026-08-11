@@ -1,0 +1,213 @@
+---
+title: 'Exchange integration checklist: deposit and withdrawal verification'
+description: 'A version-pinned checklist that helps centralized exchanges reliably detect deposits, process withdrawals, and re-verify their indexing logic across Nitro and ArbOS upgrades on Dedicated Blockchains.'
+author: gchittemsetty
+sme: gchittemsetty
+user_story: As an exchange integrating a Dedicated Blockchain, I want a definitive checklist for detecting deposits and processing withdrawals so that I never credit an invalid transaction and never miss a valid one, even after a node upgrade.
+content_type: how-to
+sidebar_label: Exchange integration checklist
+---
+
+This checklist helps centralized exchanges (and other custodial integrators) detect deposits and process withdrawals reliably on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Dedicated Blockchains. It also provides a repeatable procedure for re-verifying your indexing logic whenever a new Nitro release or an <a data-quicklook-from="arbos">ArbOS</a> upgrade reaches your chain.
+
+The two failure modes every exchange must avoid are the same:
+
+1. **False credits**: crediting a user for a transaction that did not actually transfer value to a platform-controlled address (a reverted transaction, a spoofed event, the wrong token, or an internal call that did not succeed).
+2. **Missed deposits**: failing to credit a real transfer because it arrived through a path your indexer does not scan (**ETH** moved by an internal call, a token moved without a top-level `transfer()`, or value delivered by an Arbitrum-specific transaction type).
+
+The detection flow below is designed to make both failure modes structurally impossible: you examine every transaction in every block, validate each one against its receipt and traces rather than its calldata, and credit only after the block is final on the parent chain.
+
+<VanillaAdmonition type="caution" title="Re-verify on every upgrade">
+
+ArbOS upgrades are Arbitrum's equivalent of a hard fork and can change trace output, gas accounting, and transaction-type handling. Treat the [Re-verification procedure](#re-verification-procedure) as mandatory before each upgrade activates on your chain, not as optional cleanup afterward.
+
+</VanillaAdmonition>
+
+## Before you start
+
+| Requirement                                                                                                                           | Why it matters                                                                                                           |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| A full node with the `debug` API enabled (`--http.api=eth,debug,net,web3`), or an RPC provider that exposes `debug_traceBlockByHash`. | Catching **ETH** delivered through internal calls requires call traces. The `eth` namespace alone is not sufficient.     |
+| A Nitro version greater than or equal to the release that ships the latest ArbOS used by your chain.                                  | Nitro is backward compatible, but trace output and gas accounting are tied to the active ArbOS version.                  |
+| The exact set of platform-controlled deposit addresses, plus supported token contract addresses with their decimals.                  | Every detection rule below keys off these two sets.                                                                      |
+| Confirmation of whether your chain supports the `finalized` and `safe` block tags.                                                    | These tags are available on Arbitrum One. On a Dedicated Blockchain, support depends on your parent-chain configuration. |
+
+<VanillaAdmonition type="warning" title="Run an archive or debug-capable node">
+
+`debug_traceBlockByHash` may not return traces beyond a pruned node's retention window. Index in near real time, or run an archive node when you need to backfill historical blocks.
+
+</VanillaAdmonition>
+
+## How deposit detection works
+
+Poll the chain roughly once per second and process every block exactly once, in order, with no gaps:
+
+```text
+eth_blockNumber                       → latest sequenced height
+  └─ for each unprocessed height:
+       eth_getBlockByNumber           → block, including the ordered "transactions" array
+       debug_traceBlockByHash         → per-transaction call traces (tracer: callTracer)
+         └─ for each transaction:
+              eth_getTransactionByHash      → transaction detail (to, value, input, type)
+              eth_getTransactionReceipt     → status, logs, gasUsed
+              classify → ETH | ERC-20 | internal → add to the READY list
+  └─ eth_getBlockByNumber("finalized")  → credit READY deposits at or under the finalized height
+```
+
+Three properties make this correct. You examine every transaction in every block, plus internal calls through traces, so no value-bearing path is skipped. You credit only transactions whose receipt `status` is `0x1` and whose movement is confirmed by an event log or a trace, not solely by calldata. And you credit only after a block is finalized on the parent chain, so a parent-chain reorganization cannot reverse a credited deposit.
+
+<VanillaAdmonition type="note" title="Calldata here means transaction input, not batch data availability">
+
+Throughout this guide, "calldata" means a transaction's `input` field, the per-transaction data you read over RPC and deliberately validate against receipts and traces. It is unrelated to how your chain posts batches to its parent chain, whether as EIP-4844 blobs or parent-chain calldata. That data-availability choice does not affect deposit detection: you always index transactions through the RPC methods below.
+
+</VanillaAdmonition>
+
+## Step 1: Stay in sync with the chain head
+
+1. Call `eth_blockNumber` to get the latest sequenced height.
+2. Compare it against your last scanned height.
+3. For each missing height, call `eth_getBlockByNumber(height, true)` to retrieve full transaction objects. The returned `transactions` array is ordered; use that ordering as the index for the trace output in the next step.
+4. **Handle reorganizations by rewinding, not patching.** Store each scanned block's hash, keyed by height. On each poll, confirm that every new block's `parentHash` matches the hash you stored for the height below it. A mismatch means the chain reorganized — and because a reorg can both remove a deposit and introduce a new one, re-checking only the records already in `READY` is not enough. Walk back to the most recent height whose stored hash still matches the canonical chain (the common ancestor), discard every `READY` entry and stored hash above it, move your scan cursor back to that height, and re-scan forward from there. You never need to rewind below the finalized height, because finalized blocks cannot reorganize.
+
+<VanillaAdmonition type="note" title="Arbitrum block timing">
+
+Arbitrum produces blocks far more frequently than Ethereum, and the Sequencer assigns their ordering. The `latest` tag is the Sequencer tip and is not yet final. Never credit a deposit based on `latest`. See [Step 4](#step-4-confirm-finality-before-crediting).
+
+</VanillaAdmonition>
+
+## Step 2: Pull call traces for the block
+
+Call `debug_traceBlockByHash(blockHash, {"tracer": "callTracer"})`.
+
+The result is an array whose entries correspond one-to-one, by index, with the block's `transactions` array: `trace[i]` is the trace for `transactions[i]`. Each entry's `result` contains the top-level call plus a nested `calls` array describing internal calls. Only `CALL` frames carry **ETH** value; `STATICCALL` and `DELEGATECALL` frames never do. This is how you detect **ETH** that moved through an internal call rather than a top-level transfer.
+
+Attach each trace to its transaction by index before classifying, then confirm against the transaction hash.
+
+## Step 3: Classify and validate every transaction
+
+For each transaction, first fetch its details and receipt:
+
+- `eth_getTransactionByHash(txHash)` returns `from`, `to`, `value`, `input`, and `type`.
+- `eth_getTransactionReceipt(txHash)` returns `status`, `logs`, and `gas` or `gasUsed`.
+
+**Gate first.** If `status` is not `0x1`, skip the transaction entirely. A reverted transaction never moves value, regardless of what its calldata claims. This single check is your primary defense against false credits.
+
+Then apply the checks below in order, A through C.
+
+### A. Native ETH deposit
+
+This applies when `to` is one of your platform deposit addresses.
+
+Read `value`, convert it from hexadecimal to decimal, and divide by `10^18`. Record `{from, to, amount, coin: "ETH", blockNumber, blockHash, txHash}` in the `READY` list.
+
+### B. Standard ERC-20 token deposit
+
+This applies when `to` is one of your supported token contract addresses, `input` begins with `0xa9059cbb` (the `transfer(address,uint256)` selector), and `input` is 138 hexadecimal characters long (`0x` plus 8 selector characters, 64 address characters, and 64 amount characters).
+
+Do not trust calldata alone. Confirm the transfer against the receipt:
+
+1. `gas` is greater than or equal to `gasUsed`.
+2. `logs` has at least one entry.
+3. A log exists where all of the following hold:
+   - `log.address` equals `receipt.to` (the token contract).
+   - `topics[0]` equals `0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef`, the `Transfer(address,address,uint256)` event signature.
+   - `0x` followed by `topics[1][26:66]` (the sender) equals the transaction `from`.
+   - `0x` followed by `topics[2][26:66]` (the recipient) equals `0x` followed by `input[34:74]`, and is a platform user's address.
+   - `data[2:66]` (the transferred amount) equals `input[74:138]`.
+
+Credit `data[2:66]` as decimal, divided by `10^decimals` for that token. Record `{from, toAddress, amount, coin, blockNumber, blockHash, txHash}`.
+
+### C. Internal token or ETH deposit
+
+This is the catch-all reached when neither A nor B matched. Value can still have reached a platform address through an internal call. Require `gas >= gasUsed`, and, for the token sub-case, require more than one log entry.
+
+For an internal token transfer, scan every entry in the receipt `logs`. Credit the transfer when `log.address` is one of your supported token contracts (this identifies the coin), `topics[0]` is the `Transfer` signature above, and `0x` followed by `topics[2][26:66]` is a platform user's address. Credit `data[2:66]` divided by `10^decimals`.
+
+For an internal **ETH** transfer, recursively scan the `callTracer` frames for the transaction — the top-level call and every entry in its nested `calls` arrays. Credit a frame when `to` is a platform user's address, `value` is not `0x0`, the frame's `type` is `CALL` (only `CALL` frames carry **ETH** value), the frame has no `error`, and the frame's `gasUsed` is less than or equal to its `gas`. Credit `value` divided by `10^18`.
+
+<VanillaAdmonition type="caution" title="Arbitrum-specific deposits to watch">
+
+Besides ordinary externally owned account transactions, value can arrive through Arbitrum-native transaction types. When a user bridges directly to an exchange-controlled address, the credit appears as an `ArbitrumDepositTx` (type `0x64`), where ArbOS adds balance to the destination after the parent-chain bridge locks the same funds. Retryable-ticket execution (`ArbitrumRetryTx`, `0x68`, and `ArbitrumSubmitRetryableTx`, `0x69`) can also deliver value. System transactions of type `ArbitrumInternalTx` (`0x6A`) are ArbOS-generated bookkeeping and must never be credited. Classify by observed value movement, as in A through C, rather than assuming every credit is a standard transfer. See [Geth at the core](/how-arbitrum-works/reference/geth.mdx) for the full list of transaction types.
+
+</VanillaAdmonition>
+
+## Step 4: Confirm finality before crediting
+
+Run an asynchronous loop that calls `eth_getBlockByNumber("finalized", false)` and reads `result.number` as the finalized height. For each `READY` entry whose block height is at or below the finalized height, credit the mapped user the recorded amount and coin. Because Step 1 rewinds and re-scans whenever a block's hash stops matching the canonical chain, every `READY` entry at or below the finalized height already reflects the canonical chain, and finalized blocks can no longer reorganize — so a match on height is sufficient to credit.
+
+The block tags carry different finality guarantees:
+
+- `latest` is the Sequencer tip and is not yet posted to the parent chain. Never credit on `latest`.
+- `safe` means the batch containing this block has been posted and reached finality on the parent chain. It is resistant to reorganizations but can still be reverted by a deep parent-chain reorganization.
+- `finalized` means the batch is finalized on the parent chain, and reversal is highly improbable. Credit occurs here.
+
+<VanillaAdmonition type="warning" title="Finality on Dedicated Blockchains">
+
+The `safe` and `finalized` tags are available on Arbitrum One. On a self-managed Dedicated Blockchain, support for these tags depends on your parent-chain configuration and on how your node tracks parent-chain finality. Confirm the behavior on your chain before relying on `finalized`, and document the expected confirmation latency for your integrators.
+
+</VanillaAdmonition>
+
+## Withdrawal flow
+
+Distinguish two operations that are both casually called "withdrawals."
+
+### Exchange to the user on the same Dedicated Blockchain
+
+This is the common case: an ordinary transaction from your hot wallet to the user's address, either a native **ETH** transfer or a token `transfer()`. Submit the transaction and track it by hash. Mark the withdrawal complete only when `eth_getTransactionReceipt` returns a `status` of `0x1`, and apply the same finality discipline you use for deposits before treating it as irreversible. Use EIP-1559-style fee fields, and account for the parent-chain data-posting fee, which is reflected in the effective gas cost rather than in the gas units.
+
+### Bridging value to the parent chain
+
+If the user withdraws to the parent chain (for example, from Arbitrum One to Ethereum), the funds move through the bridge and outbox and are subject to the dispute window before they can be claimed. Do not treat the parent-chain side as settled until the message is confirmed and executed through the outbox. Direct integrators to the bridge documentation for the current dispute-period mechanics rather than hard-coding a duration.
+
+## Test vectors
+
+Maintain at least one fixture per detection path so you can assert that your indexer credits the right amount and rejects everything else. Capture each fixture from a live node (Arbitrum Sepolia is preferred because it receives ArbOS upgrades first) and pin it to the stated Nitro and ArbOS versions.
+
+| #    | Scenario                                                                 | Expected result                              |
+| ---- | ------------------------------------------------------------------------ | -------------------------------------------- |
+| TV-1 | Native **ETH** transfer to a platform deposit address, `status` `0x1`    | Credit **ETH** equal to `value / 10^18`      |
+| TV-2 | **ERC-20** `transfer()` to a supported token with a valid `Transfer` log | Credit token equal to `amount / 10^decimals` |
+| TV-3 | **ERC-20** `transfer()` that reverts (`status` `0x0`)                    | No credit                                    |
+| TV-4 | Token moved through an internal call (no top-level `transfer()`)         | Credit through the log scan in C             |
+| TV-5 | **ETH** moved to a user through an internal call frame                   | Credit through the trace scan in C           |
+| TV-6 | `ArbitrumDepositTx` (`0x64`) to a platform address                       | Credit **ETH** from the bridge deposit       |
+| TV-7 | `ArbitrumInternalTx` (`0x6A`) system transaction                         | No credit                                    |
+| TV-8 | `Transfer` event emitted by an unsupported or spoofed contract           | No credit (address not in the set)           |
+
+Each fixture should record the block hash, the transaction hash, the raw `eth_getTransactionByHash` and `eth_getTransactionReceipt` responses, the relevant slice of `debug_traceBlockByHash`, and the expected credit or rejection.
+
+## Version compatibility
+
+ArbOS upgrades can change the details this logic depends on, so confirm versions against the [ArbOS releases overview](/run-arbitrum-node/arbos-releases/01-overview.mdx) and the [Nitro releases page](https://github.com/OffchainLabs/nitro/releases) before each integration cycle. Three things can change across an upgrade and affect your indexer:
+
+- **Tracer output** — the structure or completeness of `debug_traceBlockByHash` call frames.
+- **Gas accounting** — how `gasUsed` is computed and how the parent-chain data fee is represented.
+- **Transaction-type handling** — the addition of, or changes to, Arbitrum-native transaction types.
+
+None of the historical upgrades that prompted partner questions changed the core detection contract (poll, fetch the block, trace, validate logs and traces, then gate on finality). Each one still has to be re-verified, because an upgrade could change the byte-level details above.
+
+## Re-verification procedure
+
+Run this whenever a new Nitro release or ArbOS upgrade targets your chain, before activation on your production chain rather than after.
+
+1. **Watch the upgrade channels.** Subscribe to the [Arbitrum Node Upgrade Announcement channel on Telegram](https://t.me/arbitrumnodeupgrade) and read the relevant upgrade notice.
+2. **Test on Sepolia first.** Arbitrum Sepolia receives ArbOS upgrades ahead of Arbitrum One. Point a staging indexer at a Sepolia node running the new Nitro version.
+3. **Replay your test vectors.** Run TV-1 through TV-8 against the upgraded node and assert identical credit and rejection outcomes.
+4. **Diff the raw responses.** Compare `debug_traceBlockByHash`, `eth_getTransactionReceipt`, and `eth_getBlockByNumber` payloads before and after the upgrade for the same fixtures, and investigate any structural change.
+5. **Verify the two invariants explicitly.** Confirm that no invalid or reverted transaction produces a credit, and that no valid deposit on any path is missed.
+6. **Confirm the finality tags.** Check that the `finalized` height advances and that you are not crediting on `latest`.
+7. **Upgrade your own node** to the required Nitro version per the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx), then re-run Steps 3 through 6 on your production chain shortly after activation.
+8. **Record the result** — node version, ArbOS version, date, and pass or fail, so the next upgrade has a baseline to diff against.
+
+<VanillaAdmonition type="note" title="For Dedicated Blockchain owners">
+
+We recommend waiting at least four weeks after an ArbOS release is live on Arbitrum One before upgrading a self-managed chain, so that any stability issues surface first.
+
+</VanillaAdmonition>
+
+## Related resources
+
+- [ArbOS software releases: overview](/run-arbitrum-node/arbos-releases/01-overview.mdx)
+- [Geth at the core](/how-arbitrum-works/reference/geth.mdx)
+- [RPC methods: Arbitrum compared with Ethereum](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods.mdx)
+- [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx)

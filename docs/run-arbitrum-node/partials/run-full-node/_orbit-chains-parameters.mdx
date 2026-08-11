@@ -24,7 +24,7 @@ Additionally, if the chain is a Layer-2 (L2) chain on top of Ethereum and uses b
 
 :::info Public Arbitrum RPC endpoints
 
-[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.mdx#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
+[Public Arbitrum RPC endpoints](/arbitrum-essentials/reference/node-providers.mdx#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
 
 :::
 
@@ -66,13 +66,13 @@ Use the parameter `--execution.forwarding-target` to point at the sequencer node
 
 #### 3. Additional parameters for AnyTrust chains
 
-If you're running a node for an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, you need to specify information about the Data Availability Committee (DAC) in the configuration of your node.
+If you're running a node for an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust chain</a>, you need to specify information about the <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> in the configuration of your node.
 
-First, enable `data-availability` using the following parameters:
+First, enable AnyTrust data availability using the following parameters (prior to Nitro v3.10.0, these lived under the now-deprecated `--node.data-availability.*` namespace):
 
 ```shell
---node.data-availability.enable
---node.data-availability.rest-aggregator.enable
+--node.da.anytrust.enable
+--node.da.anytrust.rest-aggregator.enable
 ```
 
 Then, choose one of these methods to specify the DAS REST endpoints that your node will read the information from. These endpoints should also be provided by the chain owner.
@@ -80,19 +80,19 @@ Then, choose one of these methods to specify the DAS REST endpoints that your no
     1. Set the DAS REST endpoints directly:
 
     ```shell
-    --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, separated by commas>
+    --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, separated by commas>
     ```
 
     2. Set a URL that returns a list of the DAS REST endpoints:
 
     ```shell
-    --node.data-availability.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
+    --node.da.anytrust.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
     ```
 
 ::::tip Setting a DAS (for chain owners)
 
-If you are a chain owner, please refer to the [DAC setup guide](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/01-get-started.mdx#if-you-are-a-chain-owner) to set it up.
+If you are a chain owner, please refer to the [DAC setup guide](/launch-arbitrum-chain/chain-config/data-availability/dac-get-started.mdx#if-you-are-a-chain-owner) to set it up.
 
-Additionally, for your batch poster to post data to the DAS, follow [Step 3 of How to configure a DAC](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/04-configure-dac.mdx#step-3-craft-the-new-configuration-for-the-batch-poster) to configure your batch poster node.
+Additionally, for your batch poster to post data to the DAS, follow [Step 3 of How to configure a DAC](/launch-arbitrum-chain/chain-config/data-availability/configure-dac.mdx#step-3-craft-the-new-configuration-for-the-batch-poster) to configure your batch poster node.
 
 ::::

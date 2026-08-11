@@ -51,7 +51,7 @@ source ~/.bashrc  # or source ~/.zshrc
 rustup target add wasm32-unknown-unknown
 
 # If using specific toolchain
-rustup target add wasm32-unknown-unknown --toolchain 1.81
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 **Verify**:
@@ -102,17 +102,18 @@ strip = true           # Remove debug symbols
 panic = "abort"        # Smaller panic handling
 ```
 
-2. **Use wasm-opt**:
+2. **Run `wasm-opt` on the compiled binary**:
 
 ```shell
-cargo stylus check --wasm-opt
+wasm-opt -Oz target/wasm32-unknown-unknown/release/your_contract.wasm \
+  -o optimized.wasm
 ```
 
 3. **Remove unused dependencies**:
 
 ```toml
 # Remove unnecessary features
-stylus-sdk = { version = "0.8", default-features = false }
+stylus-sdk = { version = "0.10.7", default-features = false }
 ```
 
 4. **Check binary size**:
@@ -259,7 +260,9 @@ pub fn divide(&self, a: U256, b: U256) -> U256 {
 
 // ✅ Good: Returns error
 pub fn divide(&self, a: U256, b: U256) -> Result<U256, Vec<u8>> {
-    ensure!(!b.is_zero(), "Division by zero");
+    if b.is_zero() {
+        return Err(b"Division by zero".to_vec());
+    }
     Ok(a / b)
 }
 ```
@@ -363,7 +366,7 @@ mod tests {
         let mut contract = MyContract::from(&vm);
 
         // Configure test environment
-        vm.set_caller(address!("0x0000000000000000000000000000000000000001"));
+        vm.set_sender(address!("0x0000000000000000000000000000000000000001"));
 
         // Run tests
         assert_eq!(contract.get_value().unwrap(), U256::ZERO);
@@ -381,7 +384,7 @@ mod tests {
 
 ```toml
 [toolchain]
-channel = "1.81"
+channel = "1.91.0"
 components = ["rustfmt", "clippy"]
 targets = ["wasm32-unknown-unknown"]
 ```
@@ -404,17 +407,17 @@ targets = ["wasm32-unknown-unknown"]
 
 **Solution**:
 
-1. **Ensure methods use `#[external]` macro**:
+1. **Ensure methods use `#[public]` macro**:
 
 ```rust
-#[external]
+#[public]
 impl MyContract {
     // ✅ This will be exported
     pub fn public_method(&self) -> U256 {
         U256::from(42)
     }
 
-    // ❌ This won't be exported (no #[external])
+    // ❌ This won't be exported (no #[public])
     fn internal_method(&self) -> U256 {
         U256::from(42)
     }
@@ -580,12 +583,12 @@ Include:
 | ------------------------------------------ | ------------------------- | ------------------------------------------ |
 | "target not found: wasm32-unknown-unknown" | WASM target not installed | `rustup target add wasm32-unknown-unknown` |
 | "Cannot connect to Docker daemon"          | Docker not running        | Start Docker Desktop                       |
-| "Program too large"                        | Binary exceeds size limit | Add optimization flags, use `--wasm-opt`   |
+| "Program too large"                        | Binary exceeds size limit | Add optimization flags, run `wasm-opt`     |
 | "Insufficient funds"                       | Not enough ETH for gas    | Fund account from faucet                   |
 | "Nonce too low"                            | Nonce mismatch            | Let tooling manage nonces                  |
 | "Out of gas"                               | Gas limit exceeded        | Increase gas limit or optimize code        |
 | "Storage not initialized"                  | Missing TestVM setup      | Initialize `TestVM::default()` in tests    |
-| "Division by zero"                         | Unchecked arithmetic      | Use `ensure!()` or `checked_div()`         |
+| "Division by zero"                         | Unchecked arithmetic      | Return an error or use `checked_div()`     |
 
 ## Next steps
 

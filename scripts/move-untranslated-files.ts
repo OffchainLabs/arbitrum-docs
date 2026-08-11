@@ -18,7 +18,7 @@ const moveTranslatedFiles = async () => {
 const getFiles = async (dir: string) => {
   const subdirs = await readdir(dir);
   const files = await Promise.all(
-    subdirs.map(async (subdir) => {
+    subdirs.map(async (subdir: string) => {
       const res = resolve(dir, subdir);
       return (await stat(res)).isDirectory() ? getFiles(res) : res;
     }),

@@ -1,28 +1,28 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ethers } from 'ethers';
 import { usePrismTheme } from '@docusaurus/theme-common';
+import { ethers } from 'ethers';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Step } from 'react-joyride';
-import { browserCall, browserDeploy, browserSend } from './browserChain';
-import { ensureArbitrumSepolia } from './ensureArbitrumSepolia';
+
 import {
   ARBITRUM_SEPOLIA,
   COMPILE_INSTRUCTION_MS,
-  DEPLOY_INSTRUCTION_MS,
-  LOCAL_DEVNET_ACCOUNT_COUNT,
-  SOLC_VERSION,
   CompilationIssue,
   CompilationResult,
   ConsoleKind,
+  DEPLOY_INSTRUCTION_MS,
   ExplorerTransaction,
+  LOCAL_DEVNET_ACCOUNT_COUNT,
   LabAction,
   LabConsoleEntry,
   LabMode,
   LineRange,
   ProcessVisual,
+  SOLC_VERSION,
   SolidityLabProps,
   SolidityLabTask,
   SpotlightTarget,
   StatusKind,
+  TaskLessonContent,
   compileSource,
   deriveLocalDevnetAccounts,
   pickFunctionName,
@@ -30,9 +30,10 @@ import {
   shortAddress,
   spotlightSelector,
   taskSpotlightTarget,
-  TaskLessonContent,
   wait,
 } from './SolidityLabSupport';
+import { browserCall, browserDeploy, browserSend } from './browserChain';
+import { ensureArbitrumSepolia } from './ensureArbitrumSepolia';
 
 export function useSolidityLab({
   title = 'Solidity lab',
@@ -77,7 +78,7 @@ export function useSolidityLab({
   ]);
   const [explorerTransactions, setExplorerTransactions] = useState<ExplorerTransaction[]>([]);
   const [selectedExplorerTxId, setSelectedExplorerTxId] = useState<number | undefined>();
-  const runningActionRef = useRef<LabAction | undefined>();
+  const runningActionRef = useRef<LabAction | undefined>(undefined);
   const codeLayerRef = useRef<HTMLPreElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const prismTheme = usePrismTheme();
@@ -311,8 +312,8 @@ export function useSolidityLab({
   }, [code, source, storageKey, storageLoaded]);
 
   const runCompileRef =
-    useRef<(advanceOnSuccess?: boolean) => Promise<CompilationResult | undefined>>();
-  const deployRef = useRef<() => Promise<void>>();
+    useRef<(advanceOnSuccess?: boolean) => Promise<CompilationResult | undefined>>(undefined);
+  const deployRef = useRef<() => Promise<void>>(undefined);
   const runCompile = async (advanceOnSuccess = true) => {
     if (!beginRunningAction('compile')) return undefined;
     setProcessVisual('compile');

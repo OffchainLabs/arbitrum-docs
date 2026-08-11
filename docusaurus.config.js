@@ -1,65 +1,15 @@
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
+
+import { inkeepBaseSettings, inkeepExampleQuestions, inkeepModalSettings } from './inkeep.js';
+import { redirects } from './redirects.config.js';
+
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
-
-// Inkeep analytics event handler - forwards events to PostHog
-const handleInkeepEvent = (event) => {
-  // Only run on client side where PostHog is available
-  if (typeof window === 'undefined' || !window.posthog) {
-    return;
-  }
-
-  const { eventName, properties } = event;
-
-  // Events we want to track in PostHog
-  const trackedEvents = [
-    // Chat events
-    'assistant_message_received',
-    'user_message_submitted',
-    'assistant_positive_feedback_submitted',
-    'assistant_negative_feedback_submitted',
-    'assistant_source_item_clicked',
-    'chat_share_button_clicked',
-    // Search events
-    'search_query_submitted',
-    'search_result_clicked',
-    'search_query_response_received',
-  ];
-
-  if (trackedEvents.includes(eventName)) {
-    // Extract relevant properties to avoid sending excessive data
-    const eventProperties = {
-      component_type: properties?.componentType,
-      widget_version: properties?.widgetLibraryVersion,
-    };
-
-    // Add event-specific properties
-    if (eventName.includes('search')) {
-      eventProperties.search_query = properties?.searchQuery;
-      if (properties?.totalResults !== undefined) {
-        eventProperties.total_results = properties.totalResults;
-      }
-      if (properties?.title) {
-        eventProperties.result_title = properties.title;
-      }
-    }
-
-    if (eventName.includes('feedback')) {
-      eventProperties.feedback_reasons = properties?.reasons;
-    }
-
-    if (eventName === 'assistant_source_item_clicked') {
-      eventProperties.source_link = properties?.link;
-    }
-
-    window.posthog.capture(`inkeep_${eventName}`, eventProperties);
-  }
-};
+const { themes: prismThemes } = require('prism-react-renderer');
 
 // Routes that exist in the Docusaurus build but aren't standalone, indexable pages.
 // Shared between the sitemap and llms.txt so both indexes stay in sync.
@@ -164,6 +114,13 @@ const config = {
   ],
   plugins: [
     [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Source of truth: redirects.config.ts (also mirrored to vercel.json via `yarn sync-redirects`).
+        redirects,
+      },
+    ],
+    [
       '@inkeep/cxkit-docusaurus',
       {
         SearchBar: {
@@ -187,17 +144,23 @@ const config = {
         },
       },
     ],
-    [
-      'posthog-docusaurus',
-      {
-        apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
-        appUrl: 'https://app.posthog.com',
-        enableInDevelopment: false,
-        persistence: 'memory',
-        disable_session_recording: true,
-      },
-    ],
-    require.resolve('docusaurus-plugin-fathom'),
+    // Load PostHog only on the production deployment. Vercel sets VERCEL_ENV to
+    // 'preview' for staging builds and leaves it undefined locally, so neither
+    // emits the snippet. Mirrors the tracking gate in middleware.ts.
+    ...(process.env.VERCEL_ENV === 'production'
+      ? [
+          [
+            'posthog-docusaurus',
+            {
+              apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
+              appUrl: 'https://app.posthog.com',
+              enableInDevelopment: false,
+              persistence: 'memory',
+              disable_session_recording: true,
+            },
+          ],
+        ]
+      : []),
     require.resolve('docusaurus-plugin-sass'),
     require.resolve('./src/plugins/interactive-tutorials'),
     [
@@ -226,9 +189,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      fathomAnalytics: {
-        siteId: 'DOHOZGJO',
-      },
       announcementBar: {
         backgroundColor: '#e3246e',
         textColor: 'white',
@@ -262,6 +222,14 @@ const config = {
               {
                 label: 'Build with Stylus',
                 to: '/stylus/quickstart',
+              },
+              {
+                label: 'Arbitrum essentials',
+                to: '/arbitrum-essentials',
+              },
+              {
+                label: 'Machine Payments Protocol (MPP)',
+                to: 'build-decentralized-apps/machine-payments-protocol',
               },
             ],
           },
@@ -301,26 +269,15 @@ const config = {
         style: 'dark',
         links: [
           {
+            title: 'Ecosystem',
             items: [
               {
                 label: 'Arbitrum.io',
                 to: 'https://arbitrum.io/',
               },
               {
-                label: 'Arbitrum Rollup',
-                to: 'https://arbitrum.io/rollup',
-              },
-              {
-                label: 'Arbitrum AnyTrust',
-                to: 'https://arbitrum.io/anytrust',
-              },
-              {
                 label: 'Arbitrum chains',
                 to: 'https://arbitrum.io/launch-chain',
-              },
-              {
-                label: 'Arbitrum Stylus',
-                to: 'https://arbitrum.io/stylus',
               },
               {
                 label: 'Arbitrum Foundation',
@@ -332,11 +289,8 @@ const config = {
             ],
           },
           {
+            title: 'Products',
             items: [
-              {
-                label: 'Network status',
-                to: 'https://status.arbitrum.io/',
-              },
               {
                 label: 'Portal',
                 to: 'https://portal.arbitrum.io/',
@@ -346,24 +300,17 @@ const config = {
                 to: 'https://bridge.arbitrum.io/',
               },
               {
+                label: 'Network status',
+                to: 'https://status.arbitrum.io/',
+              },
+              {
                 label: 'Governance docs',
                 to: 'https://docs.arbitrum.foundation/',
-              },
-              {
-                label: 'Careers',
-                to: 'https://offchainlabs.com/careers/',
-              },
-              {
-                label: 'Support',
-                to: 'https://support.arbitrum.io/',
-              },
-              {
-                label: 'Bug Bounties',
-                to: 'https://immunefi.com/bounty/arbitrum/',
               },
             ],
           },
           {
+            title: 'Community',
             items: [
               {
                 label: 'Discord',
@@ -381,27 +328,38 @@ const config = {
                 label: 'Medium Blog',
                 to: 'https://medium.com/offchainlabs',
               },
+            ],
+          },
+          {
+            title: 'Resources',
+            items: [
+              {
+                label: 'Support',
+                to: 'https://support.arbitrum.io/',
+              },
+              {
+                label: 'Bug Bounties',
+                to: 'https://immunefi.com/bounty/arbitrum/',
+              },
               {
                 label: 'Research forum',
                 to: 'https://research.arbitrum.io/',
               },
               {
-                label: 'Privacy Policy',
-                to: 'https://arbitrum.io/privacy',
-              },
-              {
-                label: 'Terms of Service',
-                to: 'https://arbitrum.io/tos',
+                label: 'Careers',
+                to: 'https://offchainlabs.com/careers/',
               },
             ],
           },
         ],
-        copyright: `© ${new Date().getFullYear()} Offchain Labs`,
+        // Legal links live in the copyright row, not a column, so the four
+        // link columns stay even. Rendered as raw HTML by Docusaurus.
+        copyright: `© ${new Date().getFullYear()} Offchain Labs · <a href="https://arbitrum.io/privacy">Privacy Policy</a> · <a href="https://arbitrum.io/tos">Terms of Service</a>`,
       },
       prism: {
         additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
-        theme: require('prism-react-renderer/themes/github'),
-        darkTheme: require('prism-react-renderer/themes/palenight'),
+        theme: prismThemes.github,
+        darkTheme: prismThemes.palenight,
       },
       liveCodeBlock: {
         /**

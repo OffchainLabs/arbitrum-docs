@@ -25,5 +25,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Run doc-restructure codemod tests
+        run: yarn test:codemod
+
       - name: Check for deleted markdown files
         run: yarn tsx scripts/check-markdown.ts --ci

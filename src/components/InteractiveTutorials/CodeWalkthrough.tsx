@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
-import clsx from 'clsx';
 import { usePrismTheme } from '@docusaurus/theme-common';
-import Highlight, { defaultProps, Language } from 'prism-react-renderer';
+import clsx from 'clsx';
+import { Highlight, Language, Prism } from 'prism-react-renderer';
+import React, { useMemo, useState } from 'react';
+
 import { parseCodeTitle, parseCodeWalkthrough } from './codeWalkthroughParser';
 import styles from './styles.module.css';
 
@@ -19,7 +20,7 @@ function normalizeLanguage(language?: string, className?: string): string {
 }
 
 function resolveHighlightLanguage(language: string): string {
-  if (defaultProps.Prism.languages[language]) return language;
+  if (Prism.languages[language]) return language;
   if (language === 'solidity' || language === 'rust') return 'clike';
   if (language === 'shell' || language === 'sh') return 'bash';
   return 'text';
@@ -67,7 +68,7 @@ export function CodeWalkthrough({
           </button>
         </div>
         <Highlight
-          Prism={defaultProps.Prism}
+          prism={Prism}
           theme={prismTheme}
           code={parsed.code}
           language={highlightLanguage as Language}
@@ -82,10 +83,10 @@ export function CodeWalkthrough({
                 {tokens.map((line, index) => {
                   const lineNumber = index + 1;
                   const lineProps = getLineProps({ line });
-                  const { key: lineKey, ...linePropsWithoutKey } = lineProps;
+                  const { key: _lineKey, ...linePropsWithoutKey } = lineProps;
                   return (
                     <span
-                      key={lineKey || index}
+                      key={index}
                       {...linePropsWithoutKey}
                       className={clsx(
                         lineProps.className,
@@ -99,9 +100,9 @@ export function CodeWalkthrough({
                       <span className={styles.walkthroughLineContent}>
                         {line.map((token, key) => {
                           const tokenProps = getTokenProps({ token });
-                          const { key: tokenKey, ...tokenPropsWithoutKey } = tokenProps;
+                          const { key: _tokenKey, ...tokenPropsWithoutKey } = tokenProps;
 
-                          return <span key={tokenKey || key} {...tokenPropsWithoutKey} />;
+                          return <span key={key} {...tokenPropsWithoutKey} />;
                         })}
                       </span>
                     </span>

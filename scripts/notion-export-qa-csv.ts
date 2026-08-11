@@ -66,7 +66,7 @@ const renderCSV = (questions: Question[]): string => {
     } catch (e: unknown) {
       // Get question text directly from plain_text to avoid render errors
       const questionPreview = q.question
-        .map((t) => t.plain_text)
+        .map((t: { plain_text: string }) => t.plain_text)
         .join('')
         .substring(0, 100);
       const reason = e instanceof Error ? e.message : String(e);

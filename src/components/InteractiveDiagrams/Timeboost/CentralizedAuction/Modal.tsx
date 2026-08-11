@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useTransition, animated } from '@react-spring/web';
+import { useColorMode } from '@docusaurus/theme-common';
+import { MDXProvider } from '@mdx-js/react';
 import * as Dialog from '@radix-ui/react-dialog';
+import { animated, useTransition } from '@react-spring/web';
+import type { MDXComponents } from 'mdx/types';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
+import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+
+import { NumberComponent } from './NumberComponent';
 import step1Content from './modal-centralized-auction-step-1.mdx';
 import step2Content from './modal-centralized-auction-step-2.mdx';
 import step3Content from './modal-centralized-auction-step-3.mdx';
 import step4Content from './modal-centralized-auction-step-4.mdx';
 import step5Content from './modal-centralized-auction-step-5.mdx';
-import { createPortal } from 'react-dom';
-import { NumberComponent } from './NumberComponent';
-import { MDXProvider } from '@mdx-js/react';
-import type { MDXComponents } from 'mdx/types';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
-import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
-import { useColorMode } from '@docusaurus/theme-common';
 
 // Define the CodeBlock interface
 interface CodeBlock {
@@ -26,12 +27,14 @@ SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
 const components = {
-  h1: ({ children }) => <h1 className="modal__title">{children}</h1>,
-  p: ({ children }) => <p>{children}</p>,
-  ol: ({ children }) => <ul>{children}</ul>,
-  li: ({ children }) => <li>{children}</li>,
-  pre: ({ children }) => children,
-  code: ({ children, className }) => {
+  h1: ({ children }: { children?: React.ReactNode }) => (
+    <h1 className="modal__title">{children}</h1>
+  ),
+  p: ({ children }: { children?: React.ReactNode }) => <p>{children}</p>,
+  ol: ({ children }: { children?: React.ReactNode }) => <ul>{children}</ul>,
+  li: ({ children }: { children?: React.ReactNode }) => <li>{children}</li>,
+  pre: ({ children }: { children?: React.ReactNode }) => children,
+  code: ({ children, className }: { children?: React.ReactNode; className?: string }) => {
     const language = className?.replace('language-', '') || 'text';
 
     // Safe check for SSG - default to false when context is not available
@@ -61,7 +64,7 @@ const components = {
   },
 };
 
-export function Modal({ number }: { number: number }) {
+export function Modal({ number }: { number: 1 | 2 | 3 | 4 | 5 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Safe check for SSG - default to false when context is not available

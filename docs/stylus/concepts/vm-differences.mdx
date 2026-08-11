@@ -33,12 +33,12 @@ PUSH1 0x03    // Push 3 onto stack
 ADD           // Pop 2 values, push sum (5)
 ```
 
-### WASM: Register-based architecture
+### WASM: Stack-based architecture
 
-The Stylus WASM VM uses a register-based execution model:
+The Stylus WASM VM also uses a stack-based execution model, operating on a structured value stack with typed local variables:
 
-- **Operations**: Work with virtual registers and local variables
-- **Instructions**: Thousands of WASM instructions with fine-grained metering
+- **Operations**: Push and pop typed values on an operand stack, with named local variables
+- **Instructions**: Hundreds of WASM instructions with fine-grained metering
 - **Memory**: Linear memory with explicit grow operations
 - **Storage**: Same 256-bit storage as EVM (shared state)
 - **Call depth**: Same 1024 limit for compatibility
@@ -46,10 +46,10 @@ The Stylus WASM VM uses a register-based execution model:
 **Example WASM execution:**
 
 ```wasm
-(local.get 0)    ;; Read from local variable 0
-(local.get 1)    ;; Read from local variable 1
-(i32.add)        ;; Add and store result
-(local.set 2)    ;; Store in local variable 2
+(local.get 0)    ;; Push local variable 0 onto the stack
+(local.get 1)    ;; Push local variable 1 onto the stack
+(i32.add)        ;; Pop two values, push their sum
+(local.set 2)    ;; Pop the result into local variable 2
 ```
 
 ## Memory model
@@ -59,7 +59,7 @@ The Stylus WASM VM uses a register-based execution model:
 - **Dynamic expansion**: Memory grows in 32-byte chunks
 - **Gas cost**: Quadratic growth (memory expansion gets expensive)
 - **Access pattern**: Byte-level addressing
-- **Limit**: Practical limit around 15 MB due to gas costs
+- **Limit**: Bounded in practice by the quadratic gas cost of expansion
 
 ### WASM memory
 
@@ -71,7 +71,7 @@ The Stylus WASM VM uses a register-based execution model:
 **Memory growth in Stylus:**
 
 ```rust
-// The entrypoint macro automatically handles pay_for_memory_grow
+// The #[entrypoint] attribute automatically handles pay_for_memory_grow
 #[entrypoint]
 pub struct MyContract {
     // Large data structures are more practical in WASM
@@ -83,9 +83,11 @@ pub struct MyContract {
 let large_vector = vec![0u8; 100_000]; // Efficient in WASM
 ```
 
-:::note
-The Stylus SDK's `entrypoint!` macro includes a no-op call to `pay_for_memory_grow` to ensure the function is referenced. Nitro then automatically inserts actual calls when memory allocation occurs.
-:::
+<VanillaAdmonition type="note">
+
+The Stylus SDK's `#[entrypoint]` attribute includes a no-op call to `pay_for_memory_grow` to ensure the function is referenced. Nitro then automatically inserts actual calls when memory allocation occurs.
+
+</VanillaAdmonition>
 
 ## Gas metering: Ink and gas
 
@@ -109,13 +111,13 @@ Stylus introduces "ink" as a fine-grained metering unit:
 
 ```rust
 // Check remaining ink
-let ink_left = evm_ink_left();
+let ink_left = self.vm().evm_ink_left();
 
 // Check remaining gas
-let gas_left = evm_gas_left();
+let gas_left = self.vm().evm_gas_left();
 
 // Get ink price (in gas basis points)
-let ink_price = tx_ink_price();
+let ink_price = self.vm().tx_ink_price();
 
 // Conversion formula:
 // gas = ink * ink_price / 10000
@@ -130,13 +132,9 @@ let ink_price = tx_ink_price();
 
 **Gas cost comparison:**
 
-| Operation           | EVM Gas   | Stylus Gas | Improvement     |
-| ------------------- | --------- | ---------- | --------------- |
-| Basic arithmetic    | 3-5       | ~1-2       | 2-3x cheaper    |
-| Memory operations   | Variable  | Efficient  | 10-100x cheaper |
-| Complex computation | Expensive | Cheap      | 10-100x cheaper |
-| Storage operations  | Same      | Same       | Equal           |
-| External calls      | Same      | Same       | Equal           |
+The two execution models price work differently. The EVM charges a fixed gas cost per opcode, so compute-heavy logic accumulates cost quickly. Stylus meters each WASM instruction in ink and converts ink to gas at execution time, which lets compute-intensive code run for less gas. Operations that touch shared state — `SLOAD`, `SSTORE`, external calls, value transfers, and event emission — cost the same in both environments because they use the same underlying mechanisms.
+
+For verified per-operation figures, see the [performance comparison](/stylus/best-practices/gas-optimization#performance-comparison) in the gas optimization guide.
 
 ## Instruction sets
 
@@ -179,10 +177,10 @@ let ink_price = tx_ink_price();
 
 ### Stylus contracts
 
-- **Initial limit**: 24 KB (same as EVM for compatibility)
-- **Compressed size**: Can be larger before compression
-- **Future**: Limit may be increased as WASM tooling improves
-- **Practical size**: Stylus programs are often smaller due to efficient compilation
+- **Size limit**: Bounds the **decompressed** WASM, not the EVM 24 KB bytecode limit. It is a chain-configurable ArbOS parameter (`MaxWasmSize`), defaulting to 128 KB and raised to 256 KB at ArbOS 60 and later
+- **On-chain storage**: WASM is stored compressed, so the on-chain bytecode is smaller than the decompressed ceiling
+- **Large programs**: At ArbOS 60 and later, programs that exceed a single code account are split into a root plus fragments
+- **Configurable**: A chain owner can adjust `MaxWasmSize` via `ArbOwner.setWasmMaxSize`
 
 **Size optimization:**
 
@@ -244,35 +242,11 @@ impl Counter {
 
 ## Performance characteristics
 
-### Compute operations
+Compute-bound work — integer arithmetic, loops, memory copying, cryptography, and string and byte manipulation — generally runs for less gas on Stylus than on the EVM, because WASM instructions are metered finely in ink and compiled to native code rather than interpreted opcode by opcode.
 
-| Category            | EVM       | Stylus WASM | Winner       |
-| ------------------- | --------- | ----------- | ------------ |
-| Integer arithmetic  | Moderate  | Fast        | WASM (10x+)  |
-| Loops               | Expensive | Cheap       | WASM (100x+) |
-| Memory copying      | Expensive | Cheap       | WASM (10x+)  |
-| Hashing (keccak256) | Native    | Native      | Equal        |
-| Cryptography        | Limited   | Efficient   | WASM         |
-| String operations   | Expensive | Cheap       | WASM (100x+) |
+State-bound work is identical across the two environments. Storage reads and writes (`SLOAD`, `SSTORE`), storage refunds, contract calls, value transfers, and event emission all use the same underlying mechanisms and cost the same gas. Stylus adds storage caching within a call, so repeated reads of the same slot in one execution are cheaper.
 
-### Storage operations
-
-| Operation       | EVM        | Stylus WASM | Winner |
-| --------------- | ---------- | ----------- | ------ |
-| SLOAD           | 2,100 gas  | 2,100 gas   | Equal  |
-| SSTORE (new)    | 20,000 gas | 20,000 gas  | Equal  |
-| SSTORE (update) | 5,000 gas  | 5,000 gas   | Equal  |
-| Storage refunds | Standard   | Standard    | Equal  |
-| Cached reads    | No         | Yes         | WASM   |
-
-### External interactions
-
-| Operation            | EVM           | Stylus WASM   | Winner |
-| -------------------- | ------------- | ------------- | ------ |
-| Contract calls       | ~700 gas base | ~700 gas base | Equal  |
-| Cross-language calls | N/A           | Efficient     | WASM   |
-| Event emission       | Same cost     | Same cost     | Equal  |
-| Value transfers      | Same cost     | Same cost     | Equal  |
+For verified per-operation gas figures, see the [performance comparison](/stylus/best-practices/gas-optimization#performance-comparison) in the gas optimization guide.
 
 ## Call semantics
 
@@ -460,8 +434,10 @@ pub struct Bridge {
 #[public]
 impl Bridge {
     pub fn read_evm_storage(&self, key: U256) -> U256 {
-        // Both VMs use the same storage layout
-        // Can read storage written by EVM contracts
+        // Illustrative: Stylus and the EVM share one storage trie, so a Stylus
+        // contract can read slots written by EVM contracts. Reading an arbitrary
+        // slot uses the low-level `storage_load_bytes32` hostio (unsafe, pointer-
+        // based) or the SDK storage types — not the simplified call shown here.
         storage_load_bytes32(key)
     }
 }
@@ -544,7 +520,7 @@ Many projects can benefit from both:
 // Compute-heavy logic in Stylus
 #[public]
 impl ComputeEngine {
-    pub fn complex_calculation(&self, data: Vec<u256>) -> Vec<U256> {
+    pub fn complex_calculation(&self, data: Vec<U256>) -> Vec<U256> {
         // Efficient loops and data processing
         data.iter()
             .map(|x| expensive_computation(*x))

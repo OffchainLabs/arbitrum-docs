@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import useIsBrowser from '@docusaurus/useIsBrowser';
 import { useLocation } from '@docusaurus/router';
+import useIsBrowser from '@docusaurus/useIsBrowser';
+import React, { useEffect } from 'react';
 import Tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light-border.css';
+
 import glossary from '../../../static/glossary.json';
 
 export const Quicklooks = () => {
@@ -25,10 +26,11 @@ export const Quicklooks = () => {
       content: (reference) => {
         reference.setAttribute('data-quicklook-enabled', 'true');
         let contentSourceKey = reference.getAttribute('data-quicklook-from');
-        let termItem = glossary[contentSourceKey];
+        if (!contentSourceKey) return '';
+        let termItem = glossary[contentSourceKey as keyof typeof glossary];
         if (!termItem) {
           console.warn(`WARNING: No quicklook entry found for ${contentSourceKey}`);
-          return undefined;
+          return '';
         }
         return termItem.text;
       },

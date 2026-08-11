@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
 import { ethers } from 'ethers';
 import { Language } from 'prism-react-renderer';
+import React, { ReactNode } from 'react';
 import { Step, TooltipRenderProps } from 'react-joyride';
+
 import layoutStyles from './SolidityLabLayout.module.css';
 import panelStyles from './SolidityLabPanels.module.css';
 

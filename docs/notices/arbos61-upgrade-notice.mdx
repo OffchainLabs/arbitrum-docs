@@ -1,0 +1,50 @@
+---
+title: 'Upgrade notice for ArbOS 61'
+description: Upgrade notices for ArbOS 61 activation on Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia
+user_story: As an Arbitrum node operator, I want to keep my nodes in sync with Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia after the ArbOS 61 activation.
+content_type: notice
+---
+
+<a data-quicklook-from="arbos">ArbOS</a> 61 "Elara" is active on Arbitrum Sepolia. The ArbitrumDAO approved it for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, where it activates on Thursday, August 20, 2026, at 17:00 UTC.
+
+<VanillaAdmonition type="warning" title="Action required">
+
+Node operators **must upgrade** to Nitro **`v3.11`** or higher to continue syncing these chains.
+
+- **Docker image:** [offchainlabs/nitro-node:v3.11.0-a618155](https://hub.docker.com/layers/offchainlabs/nitro-node/v3.11.0-a618155/images/sha256-a34457bb9461acf12ea01cbf23a9850e15b20a44b499c64cf441051230231fe1)
+- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.11.0
+
+</VanillaAdmonition>
+
+## Actions required for node operators
+
+### Sepolia network
+
+ArbOS 61 activated on the Arbitrum Sepolia chain on Monday, June 29, 2026, at 15:00 UTC.
+
+### Arbitrum One and Arbitrum Nova
+
+The ArbitrumDAO approved ArbOS 61 for Arbitrum One and Arbitrum Nova in a Constitutional onchain vote. After the waiting periods and phases set out in the ArbitrumDAO Constitution, ArbOS 61 activates on both chains on Thursday, August 20, 2026, at 17:00 UTC.
+
+Complete the upgrade before that date. The [Arbitrum DAO network upgrades table](https://docs.arbitrum.foundation/network-upgrades) records the exact activation time after the upgrade executes.
+
+## Important dates
+
+The following dates are relevant for Arbitrum chain operators.
+
+| Date                                   | Network upgrade                       | Affected audience                        |
+| -------------------------------------- | ------------------------------------- | ---------------------------------------- |
+| Monday, June 29, 2026 at 15:00 UTC     | Arbitrum Sepolia upgrade to ArbOS 61  | Node operators running Arbitrum Sepolia  |
+| Thursday, August 20, 2026 at 17:00 UTC | Arbitrum One/Nova upgrade to ArbOS 61 | Node operators running Arbitrum One/Nova |
+
+## Context
+
+ArbOS 61 "Elara" builds upon [ArbOS 51 "Dia"](docs/run-arbitrum-node/arbos-releases/arbos51.mdx). It makes two changes to Arbitrum One and Nova: it raises the <a data-quicklook-from="stylus">Stylus</a> contract code size limit to 96 KB, and it adds a `BaseFeeManager` contract that manages the minimum L2 base fee.
+
+ArbOS 61 also ships two features that stay disabled on Arbitrum One and Nova, for the convenience of other Arbitrum chains: an Alternative Data Availability (AltDA) Layer API, and optional compliance transaction filtering. A <a data-quicklook-from="chain-owner">chain owner</a> must enable each one explicitly.
+
+To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx). To learn how transaction filtering works, refer to [Compliance filtering](docs/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx).
+
+ArbOS 61 corrects two interacting bugs in the gas refund logic that were found while testing ArbOS 60 on Arbitrum Sepolia. The fixes change the State Transition Function (STF), so they required a new ArbOS version. ArbOS 60 never activated on Arbitrum One or Nova, so neither chain was affected.
+
+ArbOS 61 passed a Snapshot temperature check and then a Constitutional onchain vote, which closed on August 1, 2026. To learn more about the proposal, refer to the [ArbOS 61 Elara AIP](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-61-elara/30601).

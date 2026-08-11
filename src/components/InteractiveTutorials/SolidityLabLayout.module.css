@@ -161,7 +161,10 @@
 .idePassiveControl {
   opacity: 0.48;
   filter: saturate(0.72);
-  transition: opacity 140ms ease, filter 140ms ease, box-shadow 140ms ease;
+  transition:
+    opacity 140ms ease,
+    filter 140ms ease,
+    box-shadow 140ms ease;
 }
 
 .idePassiveControl:hover,
@@ -194,7 +197,8 @@
 }
 
 .ideModeButtonSpotlight {
-  box-shadow: inset 0 0 0 2px var(--ide-spotlight-border),
+  box-shadow:
+    inset 0 0 0 2px var(--ide-spotlight-border),
     0 0 0 3px color-mix(in srgb, var(--ide-accent) 22%, transparent);
 }
 
@@ -208,10 +212,15 @@
   font: inherit;
   font-family: var(--ide-mono);
   font-size: 0.74rem;
-  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
     linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position: calc(100% - 0.7rem) center, calc(100% - 0.45rem) center;
-  background-size: 0.25rem 0.25rem, 0.25rem 0.25rem;
+  background-position:
+    calc(100% - 0.7rem) center,
+    calc(100% - 0.45rem) center;
+  background-size:
+    0.25rem 0.25rem,
+    0.25rem 0.25rem;
   background-repeat: no-repeat;
 }
 
@@ -886,7 +895,8 @@
   42%,
   66% {
     border-color: var(--ide-accent);
-    box-shadow: inset 0 -4px 0 var(--ide-accent),
+    box-shadow:
+      inset 0 -4px 0 var(--ide-accent),
       0 0 0 3px color-mix(in srgb, var(--ide-accent) 14%, transparent);
   }
   100% {
@@ -921,7 +931,8 @@
   70%,
   86% {
     border-color: var(--ide-accent);
-    box-shadow: inset 0 -3px 0 var(--ide-accent),
+    box-shadow:
+      inset 0 -3px 0 var(--ide-accent),
       0 0 0 3px color-mix(in srgb, var(--ide-accent) 14%, transparent);
   }
   100% {

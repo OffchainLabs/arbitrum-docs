@@ -33,7 +33,7 @@ Before implementing interfaces, ensure you have:
 
 <CustomDetails summary="Rust toolchain">
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.88 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.91 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </CustomDetails>
 
@@ -45,11 +45,11 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The example below sets your default Rust toolchain to 1.88, as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The example below sets your default Rust toolchain to 1.91, as well as adding the WASM build target:
 
 ```shell
-rustup default 1.88
-rustup target add wasm32-unknown-unknown --toolchain 1.88
+rustup default 1.91
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 You can verify that `cargo stylus` is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.

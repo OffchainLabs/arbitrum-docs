@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+
 import { ARBITRUM_SEPOLIA } from './SolidityLabSupport';
 
 export async function ensureArbitrumSepolia(ethereum: ethers.Eip1193Provider) {

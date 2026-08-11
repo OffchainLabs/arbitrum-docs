@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import Layout from '@theme/Layout';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import {
   CommandBlock,
@@ -9,6 +7,8 @@ import {
   TutorialStep,
 } from '@site/src/components/InteractiveTutorials';
 import { vendingMachineSoliditySource } from '@site/src/resources/interactiveTutorialSources';
+import Layout from '@theme/Layout';
+import React, { useState } from 'react';
 
 const REVIEW_TASKS = [
   {

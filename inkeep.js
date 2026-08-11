@@ -1,12 +1,17 @@
-// Shared Inkeep configuration
+// Shared Inkeep configuration.
+// The Inkeep `onEvent` analytics handler lives in `./inkeep.config.js` (client module).
+// Functions can't be passed through themeConfig — they get stripped during JSON serialization.
+
+const { themes: prismThemes } = require('prism-react-renderer');
+
 const inkeepBaseSettings = {
   apiKey: process.env.INKEEP_API_KEY,
   primaryBrandColor: '#213147',
   organizationDisplayName: 'Arbitrum',
   theme: {
     syntaxHighlighter: {
-      lightTheme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/palenight'),
+      lightTheme: prismThemes.github,
+      darkTheme: prismThemes.palenight,
     },
   },
 };

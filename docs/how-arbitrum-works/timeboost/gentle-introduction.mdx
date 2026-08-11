@@ -24,9 +24,9 @@ However, there are a few downsides to an FCFS ordering policy. Under FCFS, searc
 
 Timeboost retains most FCFS benefits while addressing FCFS limitations.
 
-Timeboost is a _transaction ordering policy_. It's a set of rules that the sequencer of an Arbitrum chain is trusted to follow when ordering transactions submitted by users. In the near future, multiple sequencers will be able to enforce those rules with decentralized Timeboost.
+Timeboost is a _transaction ordering policy_. It's a set of rules that the [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) of an Arbitrum chain is trusted to follow when ordering transactions submitted by users. In the near future, multiple sequencers will be able to enforce those rules with decentralized Timeboost.
 
-For Arbitrum chains, the sequencer’s sole job is to take arriving, valid transactions from users, place them into an order dictated by the transaction ordering policy, and then publish the final sequence to a real-time feed and in compressed batches to the chain’s data availability layer. Before Timeboost, the transaction ordering policy was FCFS, and Timeboost is a modified FCFS ordering policy.
+For Arbitrum chains, the sequencer’s sole job is to take arriving, valid transactions from users, place them into an order dictated by the transaction ordering policy, and then publish the final sequence to a [real-time feed](/how-arbitrum-works/deep-dives/sequencer.mdx#real-time-sequencer-feed) and in compressed batches to the chain’s data availability layer. Before Timeboost, the transaction ordering policy was FCFS, and Timeboost is a modified FCFS ordering policy.
 
 #### Timeboost preserves the great UX that Arbitrum chains are known for
 

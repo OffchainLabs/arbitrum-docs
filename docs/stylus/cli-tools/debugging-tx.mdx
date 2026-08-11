@@ -86,7 +86,7 @@ pip3 install colorama
 For this guide, we demonstrate debugging using the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) smart contract. The `increment()` method in `src/lib.rs` looks like this:
 
 ```rust
-#[external]
+#[public]
 impl Counter {
     // ...
     /// Increments number and updates its value in storage.
@@ -196,9 +196,11 @@ The `replay` command allows you to debug transaction execution interactively:
 cargo stylus replay --tx=$TX_HASH --endpoint=$RPC_URL --use-native-tracer
 ```
 
-:::note
+<VanillaAdmonition type="note">
+
 The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See [RPC endpoint compatibility](#rpc-endpoint-compatibility) for details.
-:::
+
+</VanillaAdmonition>
 
 The debugger loads and sets a breakpoint at the `user_entrypoint` function:
 

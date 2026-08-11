@@ -11,10 +11,12 @@ import path from 'path';
  * - After updating values in globalVars.js
  * - Before committing changes that modify global variables
  *
- * Run with: `yarn update-variable-refs`
+ * Run with: `yarn update-variable-refs` (add `--check` to fail on drift in CI).
  */
 
 import globalVars from '../src/resources/globalVars.js';
+import { createVariableRefPattern } from './lib/variable-refs';
+import { isCheckMode, runScript } from './lib/generated-partial';
 
 // Find all .md and .mdx files recursively
 function findDocFiles(dir: string): string[] {
@@ -29,42 +31,44 @@ function findDocFiles(dir: string): string[] {
 }
 
 // Process a single file and return stats about changes
-function processFile(filePath: string, docsPath: string) {
+function processFile(filePath: string, docsPath: string, check: boolean) {
   const content = fs.readFileSync(filePath, 'utf-8');
   const found = new Set<string>();
   const updated = new Set<string>();
 
   // Update values for existing @@ variables
-  const newContent = content.replace(
-    /@@\s*([a-zA-Z0-9_-]+)=([^@]+)@@/g,
-    (match, varName, currentValue) => {
-      if (varName in globalVars) {
-        found.add(varName);
-        const newValue = String(globalVars[varName]);
-        if (currentValue.trim() !== newValue) {
-          updated.add(varName);
-          return `@@${varName}=${newValue}@@`;
-        }
+  const newContent = content.replace(createVariableRefPattern(), (match, varName, currentValue) => {
+    if (varName in globalVars) {
+      found.add(varName);
+      const newValue = String(globalVars[varName]);
+      if (currentValue.trim() !== newValue) {
+        updated.add(varName);
+        return `@@${varName}=${newValue}@@`;
       }
-      return match;
-    },
-  );
+    }
+    return match;
+  });
 
-  // Only write if we made changes
+  const relativePath = path.relative(docsPath, filePath);
   if (updated.size > 0) {
-    fs.writeFileSync(filePath, newContent);
-    console.log(`Updated ${updated.size} variables in: ${path.relative(docsPath, filePath)}`);
+    if (check) {
+      console.log(`Stale variables in ${relativePath}: ${[...updated].join(', ')}`);
+    } else {
+      fs.writeFileSync(filePath, newContent);
+      console.log(`Updated ${updated.size} variables in: ${relativePath}`);
+    }
   }
 
   return { found: found.size, updated: updated.size };
 }
 
-function main() {
-  console.log('Scanning for variable references...');
+async function main() {
+  const check = isCheckMode();
+  console.log(check ? 'Checking variable references...' : 'Scanning for variable references...');
 
   const docsPath = path.resolve(__dirname, '../docs');
   const stats = findDocFiles(docsPath)
-    .map((file) => processFile(file, docsPath))
+    .map((file) => processFile(file, docsPath, check))
     .reduce(
       (acc, curr) => ({
         filesWithVars: acc.filesWithVars + (curr.found > 0 ? 1 : 0),
@@ -77,6 +81,18 @@ function main() {
 
   console.log('\nSummary:');
   console.log(`Found ${stats.varsFound} variable references in ${stats.filesWithVars} files`);
+
+  if (check) {
+    if (stats.varsUpdated > 0) {
+      throw new Error(
+        `${stats.varsUpdated} variable reference(s) in ${stats.filesUpdated} file(s) are out of date. ` +
+          'Run `yarn update-variable-refs` and commit the result.',
+      );
+    }
+    console.log('All variable references are up to date');
+    return;
+  }
+
   if (stats.varsUpdated > 0) {
     console.log(`Updated ${stats.varsUpdated} variables in ${stats.filesUpdated} files`);
   } else {
@@ -84,4 +100,4 @@ function main() {
   }
 }
 
-main();
+runScript(main);

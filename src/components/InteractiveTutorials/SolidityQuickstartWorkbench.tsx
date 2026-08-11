@@ -1,5 +1,6 @@
-import React from 'react';
 import { vendingMachineSoliditySource } from '@site/src/resources/interactiveTutorialSources';
+import React from 'react';
+
 import { SolidityLab, SolidityLabTask } from './SolidityLab';
 import styles from './SolidityLabPanels.module.css';
 
