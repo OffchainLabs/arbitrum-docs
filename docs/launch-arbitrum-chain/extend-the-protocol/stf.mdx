@@ -126,10 +126,10 @@ To enable fraud proofs, you'll need to build the "replay binary", which defines 
 It has three forms:
 
 - The `replay.wasm` binary is the Go replay binary compiled to WASM. It's used by the JIT validator to verify blocks against the fraud prover.
-- The `machine.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant WAVM.
-  - It's used by Arbitrator when actually entering a challenge and performing the fraud proofs,
+- The `machine.v2.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant <a data-quicklook-from="wavm">WAVM</a>.
+  - It's used by Arbitrator when actually entering a <a data-quicklook-from="challenge">challenge</a> and performing the fraud proofs,
     and has identical behavior to `replay.wasm`.
-- The <a data-quicklook-from="wasm-module-root">WASM module root</a> (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.wavm.br`.
+- The <a data-quicklook-from="wasm-module-root">WASM module root</a> (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.v2.wavm.br`.
   - The replay binary is much too large to post onchain, so this hash is set in the L1 Rollup contract to determine the correct replay binary during fraud proofs.
 
 To run a validator node with fraud proofs enabled, the validator node's Docker image will need to contain all three of these versions of the replay binary.
@@ -198,14 +198,14 @@ mv extracted-replay-binary "target/machines/$(cat extracted-replay-binary/module
 
 These commands will output the new WASM module root, and create the directory `target/machines/<wasm module root>`.
 There you'll find the three versions of the replay binary mentioned earlier:
-`replay.wasm`, `machine.wavm.br`, and `module-root.txt`, along with some other optional files.
+`replay.wasm`, `machine.v2.wavm.br`, and `module-root.txt`, along with some other optional files.
 Now that you've extracted the replay binary, there are two ways to add it to future Docker images,
 including non-dev image builds. You can either keep it locally and copy it in, or host it on the web.
 
 ##### Option 1: Store the extracted replay binary locally
 
 Now that we've extracted the replay binary, we can modify the Docker file to copy it into new Docker builds.
-Edit the `Dockerfile` file in the root of the nitro folder, and after all the `RUN ./download-machines.sh ...` lines, add:
+Edit the `Dockerfile` file in the root of the nitro folder, and after all the `RUN ./download-machine.sh ...` lines, add:
 
 ```dockerfile
 COPY target/machines/<wasm module root> <wasm module root>
@@ -219,25 +219,25 @@ Replace each `<wasm module root>` with the WASM module root you got earlier.
 To support building the Docker image on other computers without this local machine directory,
 you'll need to either commit the machine to git, or preferably, host the replay binary on the web.
 
-To host the replay binary on the web, you'll need to host the `replay.wasm` and `machine.wavm.br` files somewhere.
+To host the replay binary on the web, you'll need to host the `replay.wasm` and `machine.v2.wavm.br` files somewhere.
 One good option is GitHub releases, but any hosting service works.
 
 Once you have those two files hosted, instead of the `COPY` and `RUN` command mentioned in option 1,
 you'll need to add these new lines to the `Dockerfile` file in the root of the nitro folder,
-after all the `RUN ./download-machines.sh ...` lines:
+after all the `RUN ./download-machine.sh ...` lines:
 
 ```dockerfile
 RUN wasm_module_root="<wasm module root>" && \
     mkdir "$wasm_module_root" && \
     wget <url of replay.wasm> -O "$wasm_module_root/replay.wasm" && \
-    wget <url of machine.wavm.br> -O "$wasm_module_root/machine.wavm.br" && \
+    wget <url of machine.v2.wavm.br> -O "$wasm_module_root/machine.v2.wavm.br" && \
     echo "$wasm_module_root" > "$wasm_module_root/module-root.txt" && \
     ln -sfT "$wasm_module_root" latest
 ```
 
 Replace the `<wasm module root>` with the WASM module root you got earlier,
 the `<url of replay.wasm>` with the direct link to the `replay.wasm` file (it must be a direct link to the file and not just a download site),
-and the `<url of machine.wavm.br>` with the direct link to the `machine.wavm.br` file.
+and the `<url of machine.v2.wavm.br>` with the direct link to the `machine.v2.wavm.br` file.
 
 ### Step 5. Verify the fraud proofs
 
