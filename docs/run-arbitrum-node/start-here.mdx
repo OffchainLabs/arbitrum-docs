@@ -77,7 +77,7 @@ We provide a summary of the available parameters here, but we recommend reading 
 - Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
 - Note that these parameters get ignored if a database already exists
 - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
-- Only snapshots formatted with your node's specified state scheme are compatible. In other words, a PathDB snapshot won't work for a node using HashDB, and vice versa. Each snapshot directory publishes a `metadata.json` naming its `state_scheme`; check it before downloading.
+- Only snapshots formatted with your node's specified state scheme are compatible. In other words, a PathDB snapshot won't work for a node using HashDB, and vice versa. Each snapshot directory publishes a `metadata.json` file naming its `state_scheme`; check it before downloading.
 
 :::tip Which initialization mode should I use?
 

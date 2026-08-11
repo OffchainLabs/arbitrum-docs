@@ -14,7 +14,7 @@ Sets how many blocks of state history Nitro retains, counting back from the chai
 
 <StateHistoryDefaults />
 
-Nitro stores state history as reverse diffs in the cold database, also called the state freezer or ancients. State history lets the node recover historical state, which should allow a reorg to a historical block. Offchain Labs has not tested that reorg path.
+Nitro stores state history as reverse diffs in the cold database, also called the state freezer or ancients. State history lets the node recover historical state, which should allow a <a data-quicklook-from="reorg">reorg</a> to a historical block. Offchain Labs has not tested that reorg path.
 
 **State history alone does not let RPC calls read historical state.** For that, see `--execution.caching.archive` below. Here, historical state means state older than `pathdb-max-diff-layers + 1` blocks — 129 by default — from the node's current head.
 
