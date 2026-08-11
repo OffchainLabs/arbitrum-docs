@@ -270,6 +270,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/revenue-routing',
+                  label: `Revenue routing`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                   label: `Gas optimization`,
                 },
@@ -356,6 +361,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
@@ -395,11 +405,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
-                  label: 'Compliance filtering',
                 },
               ],
             },
