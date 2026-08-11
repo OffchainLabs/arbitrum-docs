@@ -24,6 +24,8 @@ Nothing is wrong with Ethereum. Its limits follow from design choices that put d
 
 That tradeoff is the scalability trilemma: a chain cannot maximize decentralization, security, and scalability at the same time. Ethereum optimizes the first two, which caps the third.
 
+<ImageZoom src="/img/scalability-trilemma.svg" alt="A triangle with one property at each corner. Ethereum maximizes decentralization and security, shown in blue. Scalability, shown in dark grey, is capped as a result. Rollups like Arbitrum add scalability without weakening the other two." className="img-600px" />
+
 Rather than weaken security or decentralization, the Ethereum roadmap moves execution offchain to Rollups like Arbitrum. Ethereum then specializes in settlement and data availability.
 
 A Rollup orders many transactions into a <a data-quicklook-from="batch">batch</a>, executes them on its own infrastructure, and posts compressed data and a state commitment back to Ethereum. You inherit Ethereum's security, throughput rises by orders of magnitude, and fees drop.
