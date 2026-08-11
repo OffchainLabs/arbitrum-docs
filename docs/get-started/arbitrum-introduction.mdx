@@ -14,23 +14,6 @@ Developers use Arbitrum to build applications on public chains such as Arbitrum 
 
 Arbitrum is built on Ethereum. Its protocols let applications process transactions with lower fees and higher throughput while preserving a clear relationship to Ethereum settlement and security. This page explains the main parts of the platform: Arbitrum Rollup, AnyTrust, Nitro, Stylus, Arbitrum One, Arbitrum Nova, and Arbitrum chains.
 
-## Wait, what makes a contract smart?
-
-Smart contracts are simply a program that's deployed to a chain that runs exactly as written, automatically, when called (hence the smart part). In short, smart contracts are:
-
-- **Code, not paper.** Bytecode living at an address onchain. Anyone can call it by sending a transaction.
-- **Deterministic.** Every node executes the same code on the same inputs and must agree on the result.
-- **Immutable by default.** Once deployed, the code can't be changed.
-- **Trust-minimized.** You don't need to trust a counterparty to honor the agreement (contract); the contract itself enforces the rules.
-- **Composable.** Contracts can call other contracts, so applications can stack on top of each other.
-
-Arbitrum runs the same EVM as Ethereum, so any smart contract that works on Ethereum works on Arbitrum—just faster and cheaper, because execution happens on Arbitrum and only compressed results get posted to Ethereum.
-
-If you want to build on Arbitrum, check out the smart contract quickstart pages:
-
-- [Solidity](/build-decentralized-apps/01-quickstart-solidity-remix.mdx)
-- [Stylus](/stylus/quickstart.mdx)
-
 ## Why does Ethereum need help scaling? Is there something wrong?
 
 Ethereum is awesome, and there's _nothing_ wrong with it! The constraints are the consequences of intentional design choices that prioritize decentralization and security. The tradeoff is known as the scalability trilemma: it's hard to balance decentralization, security, and scalability simultaneously. Ethereum deliberately optimizes for the first two, which caps the third.
