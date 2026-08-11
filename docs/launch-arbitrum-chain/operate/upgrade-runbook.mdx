@@ -97,6 +97,7 @@ machines/
 
 Staging the machine is only half the check. The block validator reads its machine list and resolves its pending root once, at startup, so restart each validator after staging and confirm the startup log before you set the root onchain:
 
+```text
 INFO BlockValidator initialized  current=0x8a7513bf... pending=0xc2c02df5...
 ```
 
@@ -182,8 +183,9 @@ cast call <rollup-address> "wasmModuleRoot()(bytes32)" --rpc-url <parent-chain-r
 
 Then confirm your validator agrees. On startup, the block validator logs both roots it will validate against:
 
+```text
 INFO BlockValidator initialized  current=0x8a7513bf... pending=0x8a7513bf...
-INFO validator chosen           WasmModuleRoot=0x8a7513bf... chosen=jit maxWorkers=8
+INFO validator chosen            WasmModuleRoot=0x8a7513bf... chosen=jit maxWorkers=8
 ```
 
 The `current` value should match the onchain `wasmModuleRoot()`. A `validator chosen` line appears for every root listed in `BlockValidator initialized`; if a machine for any root is missing, startup fails with `cannot validate WasmModuleRoot`.
@@ -208,13 +210,13 @@ New Nitro versions probe for contract features that older `nitro-contracts` depl
 
 These failures share a single root cause—the validator does not have, or hasn't loaded, the machine for a module root it's required to handle—but they surface at three different severities: fatal at startup, non-fatal at startup, and at runtime. Identify which one you have before changing any configuration.
 
-| Error message                                                                           | Node starts? | What it means                                                                                                                                                                                                          |
-| --------------------------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `latestWasmModuleRoot not set`                                                          | No           | No machine directory was found **at all**                                                                                                                                                                              |
-| `cannot validate WasmModuleRoot <root>`                                                 | No           | Machines were found, but none provides this specific required root                                                                                                                                                     |
-| `unable to find validator machine directory for the on-chain WASM module root`          | Yes          | Startup compatibility pre-check failed. Logged at `ERROR`, but **does not stop the node**                                                                                                                              |
-| `on-chain WASM module root did not match with any of the allowed WASM module roots`     | Yes          | Same pre-check, when `--validation.wasm.allowed-wasm-module-roots` is set and nothing matched                                                                                                                          |
-| `wasmroot doesn't match rollup : <root>, valid: [<roots>]`                              | Yes          | Runtime mismatch. The validator runs but cannot advance its bond                                                                                                                                                       |
+| Error message                                                                           | Node starts? | What it means                                                                                                                                                                                                                                            |
+| --------------------------------------------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `latestWasmModuleRoot not set`                                                          | No           | No machine directory was found **at all**                                                                                                                                                                                                                |
+| `cannot validate WasmModuleRoot <root>`                                                 | No           | Machines were found, but none provides this specific required root                                                                                                                                                                                       |
+| `unable to find validator machine directory for the on-chain WASM module root`          | Yes          | Startup compatibility pre-check failed. Logged at `ERROR`, but **does not stop the node**                                                                                                                                                                |
+| `on-chain WASM module root did not match with any of the allowed WASM module roots`     | Yes          | Same pre-check, when `--validation.wasm.allowed-wasm-module-roots` is set and nothing matched                                                                                                                                                            |
+| `wasmroot doesn't match rollup : <root>, valid: [<roots>]`                              | Yes          | Runtime mismatch. The validator runs but cannot advance its bond                                                                                                                                                                                         |
 | `unexpected wasmModuleRoot! cannot validate! found <onchain>, current <x>, pending <y>` | Yes          | The onchain root changed to a root that is neither the validator's current nor its pending root, so the validator refuses to adopt it. The legacy staker then stops acting entirely; <a data-quicklook-from="bold">BoLD</a> logs a warning and continues |
 
 Operators upgrading Nitro have reported the two fatal cases wrapped in a `failed to create node` startup error (`failed to create consensus node` on newer versions); the specific message quoted in that error tells you which one you're looking at.
