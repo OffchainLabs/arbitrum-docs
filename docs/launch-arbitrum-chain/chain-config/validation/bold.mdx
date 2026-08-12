@@ -82,7 +82,7 @@ Enabling permissionless validation means that any entity can spin up a validator
 
 #### Risk of resource exhaustion attacks
 
-Where malicious entities can acquire and utilize more resources than honest parties can put together during a challenge. Such an attack can take many forms and includes both onchain and offchain computational/infra costs. For example, a well-coordinated attack on an Arbitrum chain could overwhelm honest parties if the malicious actors can spend more gas and computational power and acquire more of the bonding asset than the defenders can. This risk can be mitigated by a combination of high bond sizes, use of a price-independent bonding asset, use of a bonding asset with high liquidity, strong economic guarantees that attackers will lose most of their resources, sufficiently long challenge periods, and robust infrastructure operations and resources that can respond and scale up when necessary. More information on resource exhaustion attacks and how Arbitrum BoLD's design accounts for this risk can be found in [Section 6.1.4 of the BoLD whitepaper](https://arxiv.org/abs/2404.10491). We recommend teams consider a resource exhaustion ratio greater than 5 assuming very high <a data-quicklook-from="L1">L1</a> gas costs (like 100 `gwei`/gas).
+Where malicious entities can acquire and utilize more resources than honest parties can put together during a challenge. Such an attack can take many forms and includes both onchain and offchain computational/infra costs. For example, a well-coordinated attack on an Arbitrum chain could overwhelm honest parties if the malicious actors can spend more gas and computational power and acquire more of the bonding asset than the defenders can. This risk can be mitigated by a combination of high bond sizes, use of a price-independent bonding asset, use of a bonding asset with high liquidity, strong economic guarantees that attackers will lose most of their resources, sufficiently long challenge periods, and robust infrastructure operations and resources that can respond and scale up when necessary. More information on resource exhaustion attacks and how Arbitrum BoLD's design accounts for this risk can be found in [Section 6.1.4 of the BoLD whitepaper](https://arxiv.org/abs/2404.10491). We recommend teams consider a resource exhaustion ratio greater than 5 assuming very high <a data-quicklook-from="l1">L1</a> gas costs (like 100 `gwei`/gas).
 
 #### Increased infrastructure costs and overhead
 
@@ -115,6 +115,8 @@ The recommendation is to keep Arbitrum chains validation permissioned by having 
 Enabling BoLD in your chain involves updating your chain's Nitro contracts and ensuring that your nodes are running the expected minimum (or higher) version.
 
 However, enabling BoLD does not require upgrading your [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx) version.
+
+:::
 
 This how-to provides step-by-step instructions for Arbitrum chain operators who want to enable BoLD on their chain. Familiarity with Nitro, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), and [chain ownership](/launch-arbitrum-chain/operate/ownership-and-access.mdx) is expected.
 
