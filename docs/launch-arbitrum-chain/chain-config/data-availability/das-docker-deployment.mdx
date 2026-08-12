@@ -42,7 +42,7 @@ As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `
 Gather the following information and tooling:
 
 - A recent version of [Docker Engine](https://docs.docker.com/engine/install/) with the Docker Compose plugin (so that `docker compose` works).
-- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@`
+- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/arbitrum-essentials/reference/node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/02-run-full-node.mdx) to prevent being rate limited.
 - The `SequencerInbox` contract address in the parent chain.
 - If you wish to configure a REST aggregator for your DAS, the URL where the list of REST endpoints is kept. Refer to [State synchronization](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#state-synchronization) for more information.
@@ -70,7 +70,7 @@ The keypair is generated with the `anytrusttool keygen` utility, which ships in 
 
 ```shell
 docker run --rm -v $(pwd)/bls_keys:/home/user/bls_keys --entrypoint anytrusttool \
-@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ keygen --dir /home/user/bls_keys
+@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ keygen --dir /home/user/bls_keys
 ```
 
 This creates two files in `bls_keys/`, both base64-encoded and readable only by their owner (mode `600`):
@@ -91,7 +91,7 @@ Save the following as `docker-compose.yml` in your working directory, replacing 
 ```yaml
 services:
   das-server:
-    image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@
+    image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@
     entrypoint: ['/usr/local/bin/anytrustserver']
     command:
       - --parent-chain.node-url=<YOUR PARENT CHAIN RPC ENDPOINT>
@@ -210,7 +210,7 @@ First, generate an ECDSA keypair (again, no local Nitro build needed):
 ```shell
 mkdir -p ecdsa_keys
 docker run --rm -v $(pwd)/ecdsa_keys:/home/user/ecdsa_keys --entrypoint anytrusttool \
-@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.1-8512b8c@@ keygen --dir /home/user/ecdsa_keys --ecdsa
+@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ keygen --dir /home/user/ecdsa_keys --ecdsa
 ```
 
 Then add the extra signer to your `docker-compose.yml` — a new flag in `command` and a new entry in `volumes` — and apply the change with `docker compose up -d`:
