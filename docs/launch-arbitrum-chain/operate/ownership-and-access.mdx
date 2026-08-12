@@ -7,7 +7,7 @@ target_audience: 'RaaSes and developers deploying and maintaining Arbitrum chain
 content_type: how-to
 ---
 
-A **chain owner** of an Arbitrum chain is an entity that can carry out critical upgrades to the chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding and removing other chain owners.
+A **<a data-quicklook-from="chain-owner">chain owner</a>** of an Arbitrum chain is an entity that can carry out critical upgrades to the chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding and removing other chain owners.
 
 An Arbitrum chain's initial chain owner is set by the chain's creator when the chain is deployed.
 
@@ -23,7 +23,7 @@ Some examples:
 
 - The parent chain's core protocol contracts are upgradeable proxies that are controlled by a proxy admin; the proxy admin is owned by the Upgrade Executor on the parent chain.
 - The core Rollup contract's admin role is given to the Upgrade Executor on the parent chain.
-- The affordance to call setters on the `ArbOwner` precompile—which allows for setting system gas parameters and scheduling ArbOS upgrades (among other things)—is given to the Upgrade Executor on the Arbitrum chain.
+- The affordance to call setters on the `ArbOwner` <a data-quicklook-from="precompile">precompile</a>—which allows for setting system gas parameters and scheduling ArbOS upgrades (among other things)—is given to the Upgrade Executor on the Arbitrum chain.
 
 Calls to an Upgrade Executor can only be made by chain owners; e.g., entities granted the `EXECUTOR_ROLE` affordance on the Upgrade Executor. Upgrade Executors also have the `ADMIN_ROLE` affordance granted to themselves, which lets chain owners add or remove chain owners.
 
@@ -48,7 +48,7 @@ The tables below list the privileged functions on the `SequencerInbox`, `Rollup`
 **How to read the _Required caller_ column.** The source of truth is the access-control modifier on each function in the [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) source:
 
 - A function gated to the **Rollup owner or admin** — an `onlyRollupOwner`-style modifier, or any `RollupAdminLogic` admin function — is, in a standard deployment, triggered by the owner **through the Upgrade Executor**, because the Upgrade Executor contract _is_ the owner/admin of these contracts. See [Upgrades](#upgrades) above for the conceptual explanation of that flow.
-- A function callable **directly** by a dedicated role (for example the batch poster manager) does **not** need to go through the Upgrade Executor; that role's address calls it directly.
+- A function callable **directly** by a dedicated role (for example the <a data-quicklook-from="batch">batch</a> poster manager) does **not** need to go through the Upgrade Executor; that role's address calls it directly.
 
 The Chain SDK's `sequencerInboxPrepareTransactionRequest` and `rollupAdminLogicPrepareTransactionRequest` helpers accept an `upgradeExecutor` argument and wrap the call in `UpgradeExecutor.executeCall` automatically, so the owner path is handled for you.
 
@@ -70,7 +70,7 @@ Access is enforced by the `onlyRollupOwner` and `onlyRollupOwnerOrBatchPosterMan
 
 <VanillaAdmonition type="info">
 
-`setAllowListEnabled` is **not** a `SequencerInbox` function, despite being commonly asked about in that context. It lives on the `Inbox` (the delayed inbox/`AbsInbox`)—see the [Inbox](#inbox-delayed-inbox) row below.
+`setAllowListEnabled` is **not** a `SequencerInbox` function, despite being commonly asked about in that context. It lives on the `Inbox` (the <a data-quicklook-from="delayed-inbox">delayed inbox</a>/`AbsInbox`)—see the [Inbox](#inbox-delayed-inbox) row below.
 
 </VanillaAdmonition>
 
@@ -105,13 +105,13 @@ Every function on `RollupAdminLogic` is reachable only through the Rollup proxy'
 
 <VanillaAdmonition type="note">
 
-The function set above reflects the BoLD-era `RollupAdminLogic`. On pre-BoLD chains some names differ (for example, `setBaseStake` in place of `increaseBaseStake`/`decreaseBaseStake`, and `forceCreateNode`/`forceConfirmNode` in place of the `*Assertion` variants). Always confirm against the `nitro-contracts` version your chain runs.
+The function set above reflects the <a data-quicklook-from="bold">BoLD</a>-era `RollupAdminLogic`. On pre-BoLD chains some names differ (for example, `setBaseStake` in place of `increaseBaseStake`/`decreaseBaseStake`, and `forceCreateNode`/`forceConfirmNode` in place of the `*Assertion` variants). Always confirm against the `nitro-contracts` version your chain runs.
 
 </VanillaAdmonition>
 
 ### Bridge
 
-Access is enforced by the `onlyRollupOrOwner` modifier—the caller must be the Rollup contract itself or the Rollup owner. The owner path runs through the Upgrade Executor. The Chain SDK has no dedicated Bridge helpers; these are configured during deployment or via the `Rollup` admin forwarders above.
+Access is enforced by the `onlyRollupOrOwner` modifier. The caller must be the Rollup contract itself or the Rollup owner. The owner path runs through the Upgrade Executor. The Chain SDK has no dedicated Bridge helpers; these are configured during deployment or via the `Rollup` admin forwarders above.
 
 | Function                                       | Required caller                                                    | Chain SDK helper |
 | ---------------------------------------------- | ------------------------------------------------------------------ | ---------------- |
@@ -134,7 +134,7 @@ Access is enforced by the `onlyRollupOrOwner` modifier—the caller must be the 
 
 A chain owner is simply an address; it is set by the Arbitrum chain's deployer and can represent any sort of governance scheme (i.e., it could be an EOA (as is set via the [Chain SDK Rollup creation example](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/create-rollup-eth)), a Multisig, a governance token system, etc.)
 
-The Arbitrum DAO governed chains, while not Arbitrum chains themselves, use a similar architecture and upgrade pattern as Arbitrum chains, with both a governance token and a Multisig (aka, the "Security Council") as chain owners. For more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
+The <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> governed chains, while not Arbitrum chains themselves, use a similar architecture and upgrade pattern as Arbitrum chains, with both a governance token and a Multisig (aka, the "Security Council") as chain owners. For more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
 
 <VanillaAdmonition type="note">
 
