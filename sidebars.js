@@ -547,6 +547,7 @@ const sidebars = {
               label: 'State growth',
             },
             {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/upgrade-runbook',
               label: 'Upgrade runbook',
             },
