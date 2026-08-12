@@ -518,6 +518,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/bold-upgrade-playbook',
+              label: 'BoLD upgrade playbook',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/key-rotation',
               label: 'Key rotation',
             },
@@ -540,6 +545,16 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/state-growth',
               label: 'State growth',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/upgrade-runbook',
+              label: 'Upgrade runbook',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/validator-troubleshooting',
+              label: 'Validator troubleshooting',
             },
           ],
         },
