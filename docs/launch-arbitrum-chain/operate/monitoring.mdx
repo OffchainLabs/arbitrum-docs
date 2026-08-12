@@ -135,7 +135,11 @@ If you are relying on `arb/staker/action/last_success` and seeing it go stale fo
 
 **Long periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). `validatorAfkBlocks` is configured per chain — read it from your Rollup contract; a value of `0` disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One `validatorAfkBlocks` is set to `201600` (~28 days of parent-chain blocks).
 
+Note that this applies regardless of `disableValidatorWhitelist`. Setting `disableValidatorWhitelist` to `false` keeps your chain permissioned in normal operation but does not protect the allowlist from this escape hatch. To learn how the two parameters interact, and why any deliberate validator pause counts toward this window, see [Keeping validation permissioned across the upgrade](/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx#keeping-validation-permissioned-across-the-upgrade).
+
 </VanillaAdmonition>
+
+If assertions stop being posted or confirmed, see [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx) for common causes and tuning flags.
 
 ### Chain fees and load
 
