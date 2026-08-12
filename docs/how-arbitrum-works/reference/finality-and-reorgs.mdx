@@ -26,13 +26,13 @@ An Arbitrum node exposes three levels of confirmation, surfaced as the standard 
 
 <VanillaAdmonition type="tip" title="The load-bearing rule">
 
-An Arbitrum block is only as final as the parent-chain block that carries its batch. Soft confirmation is fast (sub-second) but reversible. <a data-quicklook-from="hard-finality">Hard finality</a>—the `safe` and `finalized` tags—is inherited from the parent chain and is what makes a block reorg-proof.
+An Arbitrum block is only as final as the parent-chain block that carries its batch. <a data-quicklook-from="soft-confirmation">Soft confirmation</a> is fast (sub-second) but reversible. <a data-quicklook-from="hard-finality">Hard finality</a>—the `safe` and `finalized` tags—is inherited from the parent chain and is what makes a block reorg-proof.
 
 </VanillaAdmonition>
 
 ### What "seconds to finality" really means
 
-On an AnyTrust chain it is common to assume finality is achieved in seconds, as soon as the <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> signs the block's data. That describes **soft confirmation and data availability**, not hard finality:
+On an AnyTrust chain it is common to assume finality is achieved in seconds, as soon as the <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> signs the block's data. That describes **soft confirmation and data availability**, not <a data-quicklook-from="hard-finality">hard finality</a>:
 
 - The Sequencer executes and broadcasts the queued transactions immediately—this is your sub-second soft confirmation.
 - The DAC signing a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate (DACert)</a> guarantees the data _is retrievable_, so the batch can be posted compactly. It does not settle the block against the parent chain.
@@ -90,7 +90,7 @@ When a parent-chain reorg does change the Sequencer Inbox or <a data-quicklook-f
 
 1. The node detects that the parent-chain-derived data has changed (the delayed-message accumulator or the sequencer-batch accumulator no longer matches what it stored).
 2. It walks back to the most recent block that still matches the canonical parent-chain-derived history—the common ancestor.
-3. It rolls the chain back to that block. **State reverts to the state root at the common ancestor, and every transaction after that point is discarded.** Block explorers and RPC will no longer return the discarded transactions.
+3. It rolls the chain back to that block. **State reverts to the state root at the common ancestor, and every transaction after that point is discarded.** Block explorers and RPC no longer return the discarded transactions.
 4. It re-derives the chain forward from the parent chain. Messages that were reorged out (within the re-sequencing window) may be re-sequenced, but block hashes, block numbers, and transaction ordering after the common ancestor can all differ from before.
 
 <VanillaAdmonition type="warning" title="Never key an index on block number alone across a reorg">
@@ -101,7 +101,7 @@ After a reorg, the same block _number_ can hold different transactions with a di
 
 ## How deep can a reorg go?
 
-Child-chain reorg depth is bounded by parent-chain reorg depth, not by anything on the child chain and not by how often you post assertions.
+Child-chain reorg depth is bounded by parent-chain reorg depth, not by anything on the child chain and not by how often you post <a data-quicklook-from="assertion">assertions</a>.
 
 A common misconception is to reason from the assertion (state-root) cadence: "we post state roots every hour, which at 250 ms blocks is ~14,400 blocks, so a reorg could be 14,400 blocks deep." That conflates two independent things:
 
@@ -158,7 +158,7 @@ You may encounter the node flag `--node.bold.rpc-block-number`. It is a **valida
 
 <VanillaAdmonition type="warning" title="Not the tag your indexer reads">
 
-`--node.bold.rpc-block-number` controls how the BoLD validator reads the _parent chain_ during dispute-protocol operations. It does **not** configure the `latest`/`safe`/`finalized` tags your indexer requests from the child-chain RPC. Do not set it expecting to change indexer-facing finality; use the block tags on your RPC queries instead.
+`--node.bold.rpc-block-number` controls how the <a data-quicklook-from="bold">BoLD</a> validator reads the _parent chain_ during dispute-protocol operations. It does **not** configure the `latest`/`safe`/`finalized` tags your indexer requests from the child-chain RPC. Do not set it expecting to change indexer-facing finality; use the block tags on your RPC queries instead.
 
 </VanillaAdmonition>
 
@@ -170,7 +170,7 @@ The scenarios below are the ones integrators most often ask about. They follow d
 
 ### A parent-chain reorg moves a block that held one of our state-root attestations
 
-No child-chain reorg results. State-root assertions are settlement checkpoints, not sequenced data; if the parent-chain block carrying an assertion is reorged, the node simply re-submits the assertion. A child-chain reorg happens only if the reorg changes the Sequencer Inbox or delayed-inbox ordering.
+No child-chain reorg results. State-root assertions are settlement checkpoints, not sequenced data; if the parent-chain block carrying an assertion is reorged, the node re-submits the assertion. A child-chain reorg happens only if the reorg changes the Sequencer Inbox or delayed-inbox ordering.
 
 ### A reorg on Base's parent (Ethereum) affects a block holding some of our data
 
@@ -193,6 +193,6 @@ The Sequencer keeps producing soft-confirmed blocks on the feed, and the batch p
 - [Exchange integration checklist](/launch-arbitrum-chain/integrations/exchange-integration-checklist.mdx) — end-to-end deposit/withdrawal detection built on this model.
 - [Geth at the core](/how-arbitrum-works/reference/geth.mdx) — transaction types, `ArbitrumInternalTx`, and `ReorgToOldBlock`.
 - [The Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) — soft vs hard finality and batch posting.
-- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) — keysets, DACerts, and the fallback to Rollup mode.
+- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) — <a data-quicklook-from="keyset">keysets</a>, DACerts, and the fallback to Rollup mode.
 - [DAC and DAS operations](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx) — DAC failure modes and fallback behavior.
 - [Block numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx) — parent-chain block numbers on the child chain.
