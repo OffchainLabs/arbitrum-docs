@@ -30,35 +30,60 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 | Send **pre-Nitro** archive requests                                             | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](/run-arbitrum-node/more-types/03-run-classic-node.mdx) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                        | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                                           |
 
-:::info Archive nodes using PathDB (path-based state scheme)
+## Use PathDB for archive nodes
 
-A Nitro archive node using PathDB is similar to an archive node using HashDB (default), with the exception that a Nitro archive node using PathDB takes significantly less disk space (~4TB for Arbitrum One). During sync and serving RPC calls, an archive node using PathDB should be equivalent to, or slightly better than, one using HashDB.
+**We recommend PathDB for archive nodes on Nitro v3.9.x or later.** PathDB is a path-based state scheme. It cuts archive disk use substantially, and while syncing and serving RPC calls a PathDB archive node performs about the same as, or slightly better than, a HashDB one.
 
-We recommend using PathDB for archive nodes, but only on Nitro versions >= v3.9.x.
+Benefits:
 
-**Benefits of PathDB**:
+- **Lower disk usage.** The Arbitrum One `archive-path` snapshot is about 3.7 TB. The equivalent HashDB `archive` snapshot is considerably larger — Nova's is about 8 TB, for a chain whose full node database is a quarter the size of Arbitrum One's.
+- **Automatic, online pruning.** PathDB removes old state as the node runs, without your intervention. You never schedule a prune, and the node never goes offline to run one. On HashDB you prune manually, and the node stops serving RPC requests until it finishes — days, on a chain the size of Arbitrum One. This benefit applies to full nodes on PathDB too.
+- **Configurable retention.** You choose how much state history to keep with `--execution.caching.state-history`.
 
-- **Lower disk usage**: Under ~4 TB for Arbitrum One
-- **Configurable retention**: users can choose how many historical states to retain (using `--execution.caching.state-history`)
+Limitations:
 
-**Limitations**:
+- **PathDB cannot validate blocks.** If a node requires the block validator, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
+- **Fast, local NVMe SSD storage is required** for reasonable sync speed.
+- **`--init.latest` cannot download a PathDB snapshot.** Use `--init.url`, as described in [Initialize a PathDB archive node](#initialize-a-pathdb-archive-node).
 
-Block validation is not yet supported with the path-based state scheme. In other words, validators cannot use PathDB yet.
-
-- Fast, local NVMe SSD storage is required for reasonable sync speed.
-- PathDB snapshot auto-downloads with `--init.latest` are not yet supported.
-
-For guidance on tuning cache sizes and memory usage on PathDB archive nodes, see [node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
-
-To enable PathDB on your archive node, start your node with the following flags:
+To enable PathDB on your archive node, start it with these flags:
 
 | Flag                                    | Purpose                                                                                              |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `--execution.caching.archive`           | Enables archive mode; under PathDB, builds the state-history index so RPC can serve historical state |
 | `--execution.caching.state-scheme=path` | Selects PathDB instead of the default HashDB                                                         |
-| `--execution.caching.state-history=0`   | Retains the entire chain's state history (unlimited)                                                 |
 
-:::
+<VanillaAdmonition type="caution" title="On Nitro before v3.10.0, also set `--execution.caching.state-history=0`">
+
+`--execution.caching.state-history` controls how many blocks of state history PathDB retains. From v3.10.0 onward, setting `--execution.caching.archive` makes it default to `0`, which keeps the entire chain, so you can leave it unset.
+
+Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. Nitro logs a warning — `Path scheme archive mode enabled, but state-history is not zero` — and then silently retains only recent history, leaving you with an archive node that cannot serve older state. Pass `--execution.caching.state-history=0` explicitly on those versions.
+
+</VanillaAdmonition>
+
+For cache sizing and memory tuning that applies to archive nodes generally, see [node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
+
+### Initialize a PathDB archive node
+
+A snapshot only works with a node whose state scheme matches the snapshot's. `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots, so it cannot bootstrap a PathDB node.
+
+Instead, pass the `archive-path` snapshot URL to `--init.url`. These snapshots are published for Arbitrum One and Arbitrum Sepolia only; Arbitrum Nova has no `archive-path` snapshot.
+
+Each chain publishes a pointer file naming its current `archive-path` snapshot directory. Read that file to find the URL:
+
+```shell
+curl https://snapshot.arbitrum.foundation/arb1/latest-archive-path.txt
+```
+
+The file contains a directory path, such as `arb1/2026-08-02-291ce8d7/`. Pass the full URL to that directory, including the trailing slash:
+
+```shell
+--init.url https://snapshot.arbitrum.foundation/arb1/2026-08-02-291ce8d7/
+```
+
+Nitro reads the `.manifest.txt` file in that directory to enumerate the snapshot parts, downloads each one, and verifies its checksum. The directory also holds a `metadata.json` naming the snapshot's `state_scheme`, `snapshot_kind`, and total size, so you can confirm you have the right snapshot before downloading terabytes.
+
+For Arbitrum Sepolia, substitute `sepolia-rollup` for `arb1` in both URLs.
 
 ## System requirements
 
@@ -94,11 +119,11 @@ import HardwarePartial from '../../partials/_hardware-requirements.mdx';
 
 | Arbitrum Nitro                                             | Arbitrum Classic                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | ---------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` | `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx))                                                                                                                                                                                                                                                                                      |
+| `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` | `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide a standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx))                                                                                                                                                                                                                                                                                       |
 | `--chain.id=<L2 chain ID>`                                 | `--l2.chain-id=<L2 Chain ID>`               | See [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx) for a list of Arbitrum chains and the respective child chain IDs                                                                                                                                                                                                                                                                                                                          |
 | `--execution.caching.archive`                              | `--node.caching.archive`                    | Required for running an **Arbitrum One Nitro** archival node and retains past block state                                                                                                                                                                                                                                                                                                                                                                                      |
-| `--execution.caching.state-scheme`                         | -                                           | Default: `hash`. This flag sets the schema used in Nitro's state trie, inherited from Geth. You can set this to `path` to enable PathDB, but note that PathDB isn't yet supported for validators.                                                                                                                                                                                                                                                                              |
-| `--execution.caching.state-history`                        | -                                           | Default: 345600 blocks, calculated as 24 hours worth of blocks at the default block speed of 250ms. Number of recent blocks of state history to retain on disk. Set to `0` for unlimited (i.e., Archive nodes). Only available for PathDB enabled nodes                                                                                                                                                                                                                        |
+| `--execution.caching.state-scheme`                         | -                                           | Default: `hash`. Sets the scheme Nitro uses to store its state trie, inherited from Geth. Set it to `path` to enable PathDB. PathDB cannot validate blocks.                                                                                                                                                                                                                                                                                                                    |
+| `--execution.caching.state-history`                        | -                                           | PathDB only. Number of recent blocks of state history to retain on disk. On an archive node, leave it unset: from Nitro v3.10.0 onward, `--execution.caching.archive` makes it default to `0`, which retains the entire chain. Before v3.10.0, the default was 345,600 blocks (24 hours), so set `--execution.caching.state-history=0` explicitly.                                                                                                                             |
 | `--execution.caching.pathdb-max-diff-layers`               | -                                           | Default: 128 layers. Maximum number of diff layers kept in the node's memory before flushing to disk. Increasing the number of diff layers may cause the node to fall behind the chain head during busy periods since doing so slows down block processing speed and reduces sync speed. This configuration is primarily used to improve performance of shallow re-orgs (which are a concern on Ethereum but not on Arbitrum chains) and for efficient access to recent state. |
 | -                                                          | `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum One Classic** archival node. When this option is present, it will load old blocks from disk if not in memory cache.                                                                                                                                                                                                                                                                                                                         |
 | -                                                          | `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum One Classic** archival node.                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -144,7 +169,7 @@ Both Nitro and Classic have multiple other parameters that can be used to config
 
 <!-- todo: FAQ -->
 
-## Archive-path node configuration details
+## PathDB configuration reference
 
 import PathNodeConfiguration from '../partials/run-full-node/_path-node-parameters.mdx';
 
