@@ -504,7 +504,7 @@ Give any thick link its own fixed-size marker instead of resizing the geometry:
 `markerUnits="userSpaceOnUse"` pins the head to 16px whatever the stroke does.
 `refX`/`refY` stay in viewBox units either way.
 
-**2. Marker colour inverts down the gradient exactly like text does.** A
+**2. Marker color inverts down the gradient exactly like text does.** A
 `#9dcced` arrowhead is fine in the upper two-thirds and near-invisible on the
 near-full cyan at the bottom. A legend or key row sitting in the last tenth needs
 its own ink-coloured marker (`fill="#0b1b2e"`), so a diagram often carries **two
