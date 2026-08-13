@@ -18,7 +18,7 @@ Each entry links to the guide that explains the message in full. This page delib
 
 </VanillaAdmonition>
 
-Log levels in the linked guides are worth reading closely. Many <a data-quicklook-from="batch-poster">batch poster</a> messages are logged quietly at first and escalate to `WARN` or `ERROR` only if they persist. A single `WARN` is usually noise; a sustained one that reaches `ERROR` is the real signal. To learn how that escalation works, see [The escalation rule to remember](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#the-escalation-rule-to-remember).
+Log levels in the linked guides are worth reading closely. Many <a data-quicklook-from="batch-poster">batch poster</a> messages are logged quietly at first. If they persist, they escalate to `WARN` or `ERROR`. A single `WARN` is usually noise. A sustained one that reaches `ERROR` is the real signal. To learn how that escalation works, see [The escalation rule to remember](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#the-escalation-rule-to-remember).
 
 ## Batch poster
 
@@ -94,7 +94,7 @@ Log levels in the linked guides are worth reading closely. Many <a data-quickloo
 
 | Message                                                                                          | Likely cause                                                                              | Where to look                                                                                                   |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `error initializing staker: could not create assertion chain: no contract code at given address` | Reading at `finalized` before the Rollup deployment finalized, or a stale `rollup.rollup` | [Parent chain read consistency](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#no-contract-code)  |
+| `error initializing staker: could not create assertion chain: no contract code at given address` | Reading at `finalized` before the Rollup deployment is finalized, or a stale `rollup.rollup` | [Parent chain read consistency](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#no-contract-code)  |
 | `ASSERTION_NOT_EXIST`                                                                            | Unsynced node, inconsistent parent chain RPC, or reorg exposure                           | [Assertion errors](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#assertion-not-exist)            |
 | `found incorrect assertion in watchtower mode`                                                   | Local state disagrees with an onchain <a data-quicklook-from="assertion">assertion</a>    | [Assertion errors](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#incorrect-assertion-watchtower) |
 

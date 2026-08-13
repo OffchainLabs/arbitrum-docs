@@ -10,18 +10,18 @@ content_type: how-to
 
 This guide covers the operational sequencing of a <a data-quicklook-from="bold">BoLD</a> upgrade for chains where the `execute` call is performed by a multisig or a security council rather than a single <a data-quicklook-from="chain-owner">chain owner</a> key. It continues from the step-by-step upgrade in [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx) and assumes you have read it. Concepts, the full parameter table, and the base upgrade steps are not repeated here.
 
-If your chain owner is a single key that can send the upgrade <a data-quicklook-from="transaction">transaction</a> immediately, you do not need this guide—follow the [base steps](/launch-arbitrum-chain/chain-config/validation/bold.mdx) instead.
+If your chain owner is a single key that can send the upgrade <a data-quicklook-from="transaction">transaction</a> immediately, you do not need this guide—follow the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) instead.
 
 ## The problem this guide solves
 
-The [base upgrade](/launch-arbitrum-chain/chain-config/validation/bold.mdx) sequence contains two steps that appear to conflict when a security council is involved:
+The [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) sequence contains two steps that appear to conflict when a security council is involved:
 
 - **Step 4** runs `bold-populate-lookup`, which reads the last confirmed <a data-quicklook-from="assertion">assertion</a> so the new Rollup contract can be initialized from it.
-- **Step 5** executes the upgrade, and reverts if a new assertion has been confirmed since Step 4.
+- **Step 5** executes the upgrade, and reverts if a new <a data-quicklook-from="assertion">assertion</a> has been confirmed since Step 4.
 
 The [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) therefore recommends stopping all <a data-quicklook-from="validator">validators</a> at [Step 4](/launch-arbitrum-chain/chain-config/validation/bold.mdx#step-4-gather-the-information-of-the-current-state-of-the-chain) to prevent a new <a data-quicklook-from="confirmation">confirmation</a> from blocking [Step 5](/launch-arbitrum-chain/chain-config/validation/bold#step-5-run-the-upgrade-script).
 
-For a production chain, Step 5 is not a transaction you can send on demand. Signers must review a simulation before signing, and collecting a security council's signatures can take days. Read literally, the base sequence implies you must keep every validator stopped for that entire period—a multi-day halt to assertion posting and confirmation on a production chain, which is unacceptable and carries its own risks.
+For a production chain, Step 5 is not a <a data-quicklook-from="transaction">transaction</a> you can send on demand. Signers must review a simulation before signing, and collecting a security council's signatures can take days. Read literally, the base sequence implies you must keep every validator stopped for that entire period—a multi-day halt to assertion posting and confirmation on a production chain, which is unacceptable and carries its own risks.
 
 _You do not have to do this._ The following sections explain why.
 
@@ -62,7 +62,7 @@ Three consequences follow, and together they resolve the conflict:
 2. **Populating the lookup is additive, not destructive.** `set` writes to a new mapping key per state hash. Repeated runs accumulate entries; they do not overwrite or clear earlier ones. A lookup entry for an assertion that has since been superseded is harmless.
 3. **Anyone can populate the lookup at any time.** `set` is `public` and requires no privileged key, so refreshing the lookup is not itself a governance action and needs no signatures.
 
-What `perform` actually requires is narrower than the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) implies. It is not that no assertion may be confirmed after Step 4. It is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
+What `perform` actually requires is narrower than the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) implies. Confirming another assertion after Step 4 is fine—what matters is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
 
 <VanillaAdmonition type="caution">
 
@@ -87,7 +87,7 @@ $ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|
 $ L1_PRIV_KEY=xxx yarn script:bold-local-execute --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 ```
 
-Use the printed `execute(...)` calldata as the payload for your multisig transaction, and use the populated state to produce the simulation your signers will review.
+Use the printed `execute(...)` calldata as the payload for your multisig transaction. Use the populated state to produce the simulation your signers will review.
 
 ### Step 3: Collect signatures with validators running
 
@@ -130,7 +130,7 @@ Hash not yet set
 This is a benign, recoverable failure. The upgrade did not partially apply—it reverted. Choose whichever mitigation fits your operations, in rough order of preference:
 
 - **Submit both in one bundle or block.** If your tooling can batch, sending `set` and `execute` together removes the gap entirely. This is the cleanest option and requires no validator downtime at all.
-- **Retry.** Because `set` is permissionless and inexpensive, simply re-running Step 4 and resubmitting is often the pragmatic answer, particularly on chains that confirm assertions hours apart.
+- **Retry.** Because `set` is permissionless and inexpensive, re-running Step 4 and resubmitting is often the pragmatic answer, particularly on chains that confirm assertions hours apart.
 - **Freeze validators briefly, at execution time only.** Stop assertion-confirming validators shortly before you submit, rather than for the whole signature window. This is the base guide's recommendation, narrowed from days to minutes. If you choose this, read the following section first, because a freeze has a side effect on the validator allowlist.
 
 ## Keeping validation permissioned across the upgrade
@@ -183,7 +183,7 @@ Whether this is a migration for your chain depends on which pre-BoLD variant you
 | `RollupUserLogic`      | Native <a data-quicklook-from="parent-chain">parent chain</a> currency, via `payable` functions calling `_newStake(msg.value)` | The bond asset changes. Validators must acquire and approve an **ERC-20** token before they can bond on the new contract. |
 | `ERC20RollupUserLogic` | An **ERC-20** token already                                                                                                    | The bond asset does not necessarily change. Confirm whether your configured `stakeToken` is staying the same.             |
 
-Determine which one your chain runs before planning validator preparation. Do not assume the native-currency case, even though it is the more common one.
+Determine which one your chain runs before you prepare validators. Do not assume the native-currency case, even though it is the more common one.
 
 <VanillaAdmonition type="info" title="Why operators think BoLD chains bond in ETH">
 

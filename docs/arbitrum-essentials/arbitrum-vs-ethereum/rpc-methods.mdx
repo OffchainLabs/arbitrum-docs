@@ -224,12 +224,12 @@ To enable them, include `txpool` in the node's `--http.api` list:
 --http.api=net,web3,eth,arb,txpool
 ```
 
-Enabling the namespace does not make the results mean what they mean on Ethereum. On Ethereum, the transaction pool is where transactions wait to be picked up by whichever validator builds the next block. On an Arbitrum chain, the <a data-quicklook-from="sequencer">sequencer</a> orders transactions and the result is a queue held by a single known party, so pool contents reflect that node's view of the sequencer's intake rather than a competitive mempool. Nonce handling differs for the same reason — to learn more, see [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management.mdx).
+Enabling the namespace does not make the results mean what they mean on Ethereum. On Ethereum, the transaction pool holds transactions that are waiting to be picked up by whichever validator builds the next block. On an Arbitrum chain, the <a data-quicklook-from="sequencer">sequencer</a> orders transactions, and a single known party holds the resulting queue. Pool contents reflect that node's view of the sequencer's intake, not a competitive mempool. Nonce handling differs for the same reason — to learn more, see [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management.mdx).
 
 ### `eth_getLogs` block ranges
 
 Nitro imposes no block-range limit on `eth_getLogs`. A range limit you encounter in practice comes from the RPC provider in front of the node, not from Nitro, so the ceiling depends on whose endpoint you are querying. Check your provider's documentation rather than assuming a protocol-level value.
 
-For a sense of what ranges are widely tolerated, Nitro chunks its own parent chain log queries conservatively: message extraction prefetches 499 blocks at a time, and the <a data-quicklook-from="bold">BoLD</a> validator reads in chunks of 5,000 via `--node.bold.max-get-log-blocks`. Those are Nitro acting as a client against someone else's endpoint, not limits it enforces on yours.
+For a sense of what ranges are widely tolerated, Nitro chunks its own parent chain log queries conservatively: message extraction prefetches 499 blocks at a time, and the <a data-quicklook-from="bold">BoLD</a> validator reads in chunks of 5,000 via `--node.bold.max-get-log-blocks`. Those are Nitro acting as a <a data-quicklook-from="client">client</a> against someone else's endpoint, not limits it enforces on yours.
 
 If you are running your own node and querying it directly, large ranges are bounded by memory and response time rather than by a configured cap. Paginate wide historical queries regardless.

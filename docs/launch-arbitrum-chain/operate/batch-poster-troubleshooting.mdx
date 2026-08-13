@@ -231,7 +231,7 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 - [ERROR]—The batch's first message is within `reorg-resistance-margin` of the L1 minimum bound, so posting is refused this round.
 - [CAUSE]—The margin guard (default 10m) protects against <a data-quicklook-from="reorg">reorgs</a> near the lower bound.
-- [ACTION]—Expected safety behavior; set margin to `0` only if you accept the reorg risk.
+- [ACTION]—Expected safety behavior; set margin to `0` only if you accept the <a data-quicklook-from="reorg">reorg</a> risk.
 
 #### `disabling L1 bound as batch posting message is close to the maximum delay` {#l1-bound-disabled-max-delay}
 

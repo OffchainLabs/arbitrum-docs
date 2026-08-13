@@ -8,17 +8,17 @@ author: pete-vielhaber
 sme: TBD
 ---
 
-On a production Arbitrum chain, an <a data-quicklook-from="assertion">assertion</a> takes about a week to confirm (6.4 days). That delay is the security model working as intended, but it makes integration testing impractical. This page covers how to shorten it on a chain you do not need to secure, and which parameters differ on a testnet.
+On a production Arbitrum chain, an <a data-quicklook-from="assertion">assertion</a> takes about a week to confirm (6.4 days). That delay is the security model working as intended, but it makes integration testing impractical. This page covers how to shorten it on a chain you do not need to secure. It also covers which parameters differ on a testnet.
 
 <VanillaAdmonition type="caution" title="These values are unsafe for production">
 
-Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so anyone bonding on it can confirm an incorrect assertion. Use these settings only on chains that hold no value.
+Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so anyone bonding on it can confirm an incorrect <a data-quicklook-from="assertion">assertion</a>. Use these settings only on chains that hold no value.
 
 </VanillaAdmonition>
 
 <VanillaAdmonition type="note" title="This is not the same as fast withdrawals">
 
-Fast withdrawals are a production feature that shortens confirmation on an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain by delegating confirmation to a committee, using the `--node.bold.enable-fast-confirmation` and `--node.staker.enable-fast-confirmation` flags. That is a deliberate trust assumption, configured separately, and it is not what this page describes. To learn how it works, see [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx).
+<a data-quicklook-from="fast-withdrawals">Fast withdrawals</a> are a production feature that shortens confirmation on an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain by delegating confirmation to a committee, using the `--node.bold.enable-fast-confirmation` and `--node.staker.enable-fast-confirmation` flags. That is a deliberate trust assumption, configured separately, and it is not what this page describes. To learn how it works, see [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx).
 
 </VanillaAdmonition>
 
@@ -26,7 +26,7 @@ Fast withdrawals are a production feature that shortens confirmation on an <a da
 
 Two independent layers govern how quickly an assertion confirms, and lowering only one has no effect:
 
-1. **Onchain parameters** set the floor. `confirmPeriodBlocks` determines how long an assertion must exist before the protocol will confirm it, and `minimumAssertionPeriod` determines how frequently assertions may be posted at all. No node setting can go below these.
+1. **Onchain parameters** set the floor. `confirmPeriodBlocks` determines how long an assertion must exist before the protocol confirms it, and `minimumAssertionPeriod` determines how frequently assertions may be posted at all. No node setting can go below these.
 2. **Node intervals** determine how promptly your <a data-quicklook-from="validator">validator</a> acts within that floor. These are polling and cadence settings; they cannot shorten an onchain period.
 
 The common mistake is lowering the node intervals alone, then concluding that the configuration did not work. If `confirmPeriodBlocks` still represents a week, confirmation still takes a week.
@@ -70,7 +70,7 @@ for legacy). Confirm they still match the Nitro release this page targets.
 | `--node.bold.minimum-gap-to-parent-assertion` | `1m0s`   | BoLD staker   | Lower it so consecutive assertions are not spaced out   |
 | `--node.staker.make-assertion-interval`       | `1h0m0s` | Legacy staker | Lower it; no effect on BoLD chains                      |
 | `--node.staker.staker-interval`               | `1m0s`   | Legacy staker | Lower it to check the Rollup status and act sooner      |
-| `--node.staker.confirmation-blocks`           | `12`     | Legacy staker | Lower it, or `0` on a chain where you accept reorg risk |
+| `--node.staker.confirmation-blocks`           | `12`     | Legacy staker | Lower it, or `0` on a chain where you accept <a data-quicklook-from="reorg">reorg</a> risk |
 
 Lowering the confirming interval makes the validator _check_ more often. It does not make confirmation permissible sooner — that is governed entirely by `confirmPeriodBlocks`. To learn more about that distinction, see [Assertion timing flags](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#assertion-timing-flags).
 
@@ -84,7 +84,7 @@ Nitro's own test suite configures the legacy staker for maximum speed. These val
 | `make-assertion-interval` | `-1000h`   | `1h0m0s` |
 | `confirmation-blocks`     | `0`        | `12`     |
 
-The negative `make-assertion-interval` is intentional rather than a typo. The staker checks whether more than the configured interval has elapsed since the last assertion; a negative duration makes that check always pass, so the staker posts on every cycle without waiting.
+The negative `make-assertion-interval` is intentional rather than a typo. The staker checks whether more than the configured interval has elapsed since the last assertion. A negative duration makes that check always pass, so the staker posts on every cycle without waiting.
 
 <VanillaAdmonition type="note" title="BoLD has no equivalent preset">
 

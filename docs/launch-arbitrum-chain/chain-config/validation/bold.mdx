@@ -82,7 +82,7 @@ Enabling permissionless validation means that any entity can spin up a validator
 
 #### Risk of resource exhaustion attacks
 
-Where malicious entities can acquire and utilize more resources than honest parties can put together during a challenge. Such an attack can take many forms and includes both onchain and offchain computational/infra costs. For example, a well-coordinated attack on an Arbitrum chain could overwhelm honest parties if the malicious actors can spend more gas and computational power and acquire more of the bonding asset than the defenders can. This risk can be mitigated by a combination of high bond sizes, use of a price-independent bonding asset, use of a bonding asset with high liquidity, strong economic guarantees that attackers will lose most of their resources, sufficiently long challenge periods, and robust infrastructure operations and resources that can respond and scale up when necessary. More information on resource exhaustion attacks and how Arbitrum BoLD's design accounts for this risk can be found in [Section 6.1.4 of the BoLD whitepaper](https://arxiv.org/abs/2404.10491). We recommend teams consider a resource exhaustion ratio greater than 5 assuming very high <a data-quicklook-from="L1">L1</a> gas costs (like 100 `gwei`/gas).
+Where malicious entities can acquire and use more resources than honest parties can put together during a challenge. Such an attack can take many forms and includes both onchain and offchain computational/infra costs. For example, a well-coordinated attack on an Arbitrum chain could overwhelm honest parties if the malicious actors can spend more gas and computational power and acquire more of the bonding asset than the defenders can. This risk can be mitigated by a combination of high bond sizes, use of a price-independent bonding asset, use of a bonding asset with high liquidity, strong economic guarantees that attackers will lose most of their resources, sufficiently long challenge periods, and robust infrastructure operations and resources that can respond and scale up when necessary. More information on resource exhaustion attacks and how Arbitrum BoLD's design accounts for this risk can be found in [Section 6.1.4 of the BoLD whitepaper](https://arxiv.org/abs/2404.10491). We recommend teams consider a resource exhaustion ratio greater than 5 assuming very high <a data-quicklook-from="l1">L1</a> gas costs (like 100 `gwei`/gas).
 
 #### Increased infrastructure costs and overhead
 
@@ -257,7 +257,7 @@ As mentioned, this script will try to find the last confirmed assertion of your 
 
 :::note Upgrades executed by a multisig or security council
 
-If Step 5 requires signatures that take hours or days to collect, you do not need to keep validators stopped for that entire period. The payload your signers approve does not encode assertion data, so the lookup this script populates can be refreshed at any point before execution without invalidating collected signatures. To learn how to sequence this, see [here](/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx).
+If Step 5 requires signatures that take hours or days to collect, you do not need to keep validators stopped for that entire period. The payload your signers approve does not encode assertion data, so you can refresh the lookup this script populates at any point before execution without invalidating collected signatures. To learn how to sequence this, see the [BoLD upgrade playbook](/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx).
 
 :::
 
