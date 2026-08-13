@@ -508,7 +508,7 @@ Give any thick link its own fixed-size marker instead of resizing the geometry:
 `#9dcced` arrowhead is fine in the upper two-thirds and near-invisible on the
 near-full cyan at the bottom. A legend or key row sitting in the last tenth needs
 its own ink-coloured marker (`fill="#0b1b2e"`), so a diagram often carries **two
-colour variants of the same head**. The contrast checker will not tell you —
+color variants of the same head**. The contrast checker will not tell you —
 it never looks at markers.
 
 **3. Label chips swallow arrowheads.** A chip centred on a horizontal connector
