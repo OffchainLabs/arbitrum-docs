@@ -321,7 +321,9 @@ In this case, wait until those blocks finalize, then start your node again.
 
 #### Step 7: Monitor the validation process
 
-Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is one hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is seven days).
+Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is 15 minutes) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is seven days).
+
+If assertions don't appear, or your validators fail to start or bond on the new Rollup contract, see [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx).
 
 If assertions don't appear, or your validators fail to start or bond on the new Rollup contract, see [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx).
 

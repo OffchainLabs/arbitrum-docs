@@ -270,6 +270,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/revenue-routing',
+                  label: `Revenue routing`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                   label: `Gas optimization`,
                 },
@@ -550,6 +555,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/state-growth',
               label: 'State growth',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/upgrade-runbook',
+              label: 'Upgrade runbook',
             },
             {
               type: 'doc',
@@ -1018,6 +1028,11 @@ const sidebars = {
               type: 'doc',
               label: 'Geth',
               id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Finality and reorgs',
+              id: 'how-arbitrum-works/reference/finality-and-reorgs',
             },
           ],
         },
