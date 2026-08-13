@@ -559,7 +559,7 @@ settle before you place a single box:
 - **Mermaid's per-subgraph `style fill:` has no brand equivalent.** Don't try to
   map five arbitrary subgraph tints onto the palette. Let lanes carry the
   grouping and let fill carry **role** (see the key below); you usually delete a
-  key row's worth of colour in the process.
+  key row's worth of color in the process.
 - **Node text is prose.** Expand `<br/>` into title + sublabels, convert `&` to
   "and", apply sentence case, and run the terminology table over it — `L2` in a
   pasted source becomes **child chain** in the art.
