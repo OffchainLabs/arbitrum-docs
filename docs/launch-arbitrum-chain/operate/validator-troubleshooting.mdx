@@ -16,13 +16,13 @@ Most of this guide applies to both the legacy staker and the <a data-quicklook-f
 
 The [validator setup guide](/run-arbitrum-node/more-types/02-run-validator-node.mdx#validation-strategies) describes what each strategy does. This section covers the operational consequences that are easy to get wrong.
 
-| Strategy       | Operational notes                                                                                                                                                                                                                  |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Watchtower`   | Default. Takes no onchain action and needs no <a data-quicklook-from="wallet">wallet</a> or bond. Logs `found incorrect assertion in watchtower mode` on disagreement.                                                             |
-| `Defensive`    | Bonds and <a data-quicklook-from="challenge">challenges</a> only when it finds a bad <a data-quicklook-from="assertion">assertion</a>. Idle in normal operation, so an absence of onchain activity is not a fault signal.                                                 |
-| `StakeLatest`  | Pre-BoLD chains only. Not available on BoLD chains.                                                                                                                                                                                |
+| Strategy       | Operational notes                                                                                                                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Watchtower`   | Default. Takes no onchain action and needs no <a data-quicklook-from="wallet">wallet</a> or bond. Logs `found incorrect assertion in watchtower mode` on disagreement.                                                          |
+| `Defensive`    | Bonds and <a data-quicklook-from="challenge">challenges</a> only when it finds a bad <a data-quicklook-from="assertion">assertion</a>. Idle in normal operation, so an absence of onchain activity is not a fault signal.       |
+| `StakeLatest`  | Pre-BoLD chains only. Not available on BoLD chains.                                                                                                                                                                             |
 | `ResolveNodes` | Bonds and resolves assertions **that already exist**. It never creates new ones, so a chain whose validators are all `ResolveNodes` will stop advancing. At least one `MakeNodes` validator is required to post new assertions. |
-| `MakeNodes`    | Creates assertions, resolves unconfirmed ones, and challenges bad ones.                                                                                                                                                            |
+| `MakeNodes`    | Creates assertions, resolves unconfirmed ones, and challenges bad ones.                                                                                                                                                         |
 
 <VanillaAdmonition type="note" title="Switching strategy does not re-bond">
 
@@ -62,7 +62,7 @@ For the full flag list, see the [Nitro CLI flags reference](/run-arbitrum-node/n
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `finalized` | Default and safest. The validator only acts on data that cannot be reorganized, at the cost of lagging roughly two epochs behind on an Ethereum parent chain. |
 | `safe`      | Shorter lag, small <a data-quicklook-from="reorg">reorg</a> exposure.                                                                                         |
-| `latest`    | No lag, full <a data-quicklook-from="reorg">reorg</a> exposure. The validator may act on data that later disappears.                                                                             |
+| `latest`    | No lag, full <a data-quicklook-from="reorg">reorg</a> exposure. The validator may act on data that later disappears.                                          |
 
 ### `error initializing staker: could not create assertion chain: no contract code at given address` {#no-contract-code}
 
