@@ -525,7 +525,7 @@ line, so it looks like you drew a connector with no direction.
 
 **Verify markers by eye at the display width.** They are the one part of the
 diagram with no automated gate, so budget a zoom crop (below) for any diagram
-with a bidirectional link, a thick link, or chipped horizontal connectors.
+with a bi-directional link, a thick link, or chipped horizontal connectors.
 
 ### Zoom-crop to inspect detail
 
