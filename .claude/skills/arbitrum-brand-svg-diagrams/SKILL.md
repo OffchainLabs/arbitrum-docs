@@ -720,7 +720,7 @@ better hex — there isn't one. Give the label its own opaque backdrop:
 
 Chip every connector label, not just the failing ones. Mixed treatment reads as
 arbitrary, and a chip is position-independent — you can move a label later
-without re-deriving its colour. It also **masks whatever the label crosses**
+without re-deriving its color. It also **masks whatever the label crosses**
 (lifelines, lane borders, other connectors), which is the same trick Mermaid uses
 with its white label backgrounds.
 
