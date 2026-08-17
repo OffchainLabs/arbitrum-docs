@@ -22,7 +22,7 @@ The <a data-quicklook-from="sequencer-feed">sequencer feed</a> is a WebSocket st
 
 ### What produces the feed
 
-Any Nitro node with feed output enabled runs a broadcast server on port `9642` and serves the `/feed` endpoint. Two roles enable it:
+Any <a data-quicklook-from="arbitrum-nitro">Nitro</a> node with feed output enabled runs a broadcast server on port `9642` and serves the `/feed` endpoint. Two roles enable it:
 
 | Role      | What it does                                                 | Configuration                          |
 | --------- | ------------------------------------------------------------ | -------------------------------------- |
@@ -79,7 +79,7 @@ This is logged at `ERROR`. Despite the wording, it is a broadcaster-side memory 
 
 Because the text is the same in both cases, do not infer a backlog reset from the log line alone. Confirm it with `arb/feed/backlog/messages`, which drops to zero on a real reset.
 
-**A related message on the same path:**
+One related message comes from the same code path.
 
 #### `confirmed sequence number is past the end of stored messages`
 
@@ -98,11 +98,11 @@ Because the text is the same in both cases, do not infer a backlog reset from th
 
 A "stalled feed" describes three different failures. They need different fixes, so identify which one you have before acting.
 
-| What you observe                           | What it means                               | Where to look                 |
-| ------------------------------------------ | ------------------------------------------- | ----------------------------- |
-| No new messages arrive at your node        | Connection is dead or upstream stopped      | Your node and the relay chain |
-| `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | Batch poster                  |
-| Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources         |
+| What you observe                           | What it means                               | Where to look                                          |
+| ------------------------------------------ | ------------------------------------------- | ------------------------------------------------------ |
+| No new messages arrive at your node        | Connection is dead or upstream stopped      | Your node and the relay chain                          |
+| `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | <a data-quicklook-from="batch-poster">Batch poster</a> |
+| Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources                                  |
 
 <VanillaAdmonition type="caution" title="A growing feed backlog is not a lagging follower">
 
@@ -196,7 +196,7 @@ The sequencer keeps running here, but the block it builds is empty because every
 
 For the surplus flags, see [Sequencer configuration reference](/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference.mdx#expected-surplus-flags).
 
-`sequencer temporarily not available` comes from the forwarder, not the sequencer. A node returns it when it is not the chosen sequencer and has no enabled target to forward to. Brief occurrences during a lockout handoff are normal. Sustained occurrences across every node mean no sequencer is chosen—see the [No sequencer is chosen](#1-no-sequencer-is-chosen) page.
+`sequencer temporarily not available` comes from the forwarder, not the sequencer. A node returns it when it is not the chosen sequencer and has no enabled target to forward to. Brief occurrences during a lockout handoff are normal. Sustained occurrences across every node mean no sequencer is chosen—see [No sequencer is chosen](#1-no-sequencer-is-chosen).
 
 ### 4. Execution problems
 
@@ -213,13 +213,13 @@ Ruling these out saves time:
 
 - **A batch posting backlog.** The sequencer keeps producing blocks while unposted batches accumulate. See [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx).
 - **A feed outage.** The feed is an output. Losing it affects subscribers, not block production.
-- **A validator or proposer failure.** Validation runs behind block production and does not gate it.
+- **A <a data-quicklook-from="validator">validator</a> or <a data-quicklook-from="proposer">proposer</a> failure.** Validation runs behind block production and does not gate it.
 - **An unfunded batch poster.** Posting stops; sequencing does not.
 
 ### Diagnostic order
 
 1. Is the chain producing blocks? Compare block height across two samples.
-2. Does a sequencer hold the lockout? Read `coordinator.chosen` in Redis, or use the <a data-quicklook-from="sequencer">Sequencer</a> Coordination Manager (SQM).
+2. Does a sequencer hold the lockout? Read `coordinator.chosen` in Redis, or use the Sequencer Coordination Manager (SQM).
 3. Does the chosen sequencer log `cannot sequence`? Check the parent chain connection and clock.
 4. Are transactions being rejected on arrival? Check surplus thresholds and the sender allowlist.
 5. Is block creation slow rather than stopped? Check `took over 5 seconds to sequence a block` and host resources.
