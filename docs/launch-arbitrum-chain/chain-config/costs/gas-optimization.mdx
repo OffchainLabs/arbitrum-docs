@@ -46,7 +46,7 @@ Refer to the [Chain parameters](/arbitrum-essentials/reference/chain-params.mdx)
 
 ## Block gas limit
 
-- **Description**: This limits the maximum amount consumable by all <a data-quicklook-from="transaction">transactions</a> in a single <a data-quicklook-from="l2">L2</a> block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
+- **Description**: This limits the maximum amount consumable by all <a data-quicklook-from="transaction">transactions</a> in a single <a data-quicklook-from="L2">L2</a> block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
 - **Default**: 32,000,000 gas per block.
 - **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) method on the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 
@@ -80,7 +80,7 @@ Refer to the [Chain parameters](/arbitrum-essentials/reference/chain-params.mdx)
 
 ## Per batch gas cost
 
-- **Description**: This refers to the fixed <a data-quicklook-from="l1">L1</a> base charge applied for the overhead of posting each <a data-quicklook-from="batch">batch</a> to the parent chain. It is used in transaction pricing to amortize the parent chain's fixed costs (like calldata posting) over the batch's transactions. It can be adjusted to reflect actual posting costs or incentivize batching. The surplus (if any) gets rewarded to the <a data-quicklook-from="batch-poster">Batch Poster</a>.
+- **Description**: This refers to the fixed <a data-quicklook-from="L1">L1</a> base charge applied for the overhead of posting each <a data-quicklook-from="batch">batch</a> to the parent chain. It is used in transaction pricing to amortize the parent chain's fixed costs (like calldata posting) over the batch's transactions. It can be adjusted to reflect actual posting costs or incentivize batching. The surplus (if any) gets rewarded to the <a data-quicklook-from="batch-poster">Batch Poster</a>.
 - **Default**: Varies based on parent chain fees, but typically around 210,000 gas (adjustable to match).
 - **Configuration**: Call the `setPerBatchGasCharge(int64 newCharge)` on the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner), where `newCharge` is the fixed gas units per batch. This configuration adjusts the allocation of L2 gas for batch overhead in pricing. Additionally, you can configure related surplus fees (extra reward to batch poster) via `setL1PricingRewardRate(uint64 rate)`. The parent chain base fee estimates influence the actual cost, which is dynamic; therefore, monitor them via `ArbGasInfo`'s `getPricesInWei()` method.
 

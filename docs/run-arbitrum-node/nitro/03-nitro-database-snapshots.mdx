@@ -8,7 +8,7 @@ content_type: how-to
 sidebar_position: 11
 ---
 
-Nitro stores the chain state and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a database snapshot is advisable instead. Moreover, for the Arbitrum One chain, you must start from a snapshot because Nitro cannot process transactions from the Classic Arbitrum node.
+Nitro stores the <a data-quicklook-from="chain-state">chain state</a> and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a <a data-quicklook-from="database-snapshot">database snapshot</a> is advisable instead. Moreover, for the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain, you must start from a snapshot because Nitro cannot process transactions from the <a data-quicklook-from="arbitrum-classic">Classic</a> Arbitrum node.
 
 For an overview of snapshots in the context of initial node setup, see the [Database snapshots section of Prepare to run a node](/run-arbitrum-node/start-here.mdx#database-snapshots).
 
@@ -22,7 +22,7 @@ Nitro has a CLI configuration for downloading the latest snapshot from a remote 
 
 :::info
 
-All three kinds that `--init.latest` accepts resolve to HashDB snapshots, so `--init.latest` cannot bootstrap a PathDB node. See [PathDB snapshots](#pathdb-snapshots).
+All three kinds that `--init.latest` accepts resolve to <a data-quicklook-from="hashdb">HashDB</a> snapshots, so `--init.latest` cannot bootstrap a <a data-quicklook-from="pathdb">PathDB</a> node. See [PathDB snapshots](#pathdb-snapshots).
 
 :::
 
@@ -44,7 +44,7 @@ Nitro also supports importing files from the local file system. In this case, yo
 
 ## PathDB snapshots
 
-A snapshot only works with a node whose state scheme matches the snapshot's. A PathDB snapshot won't initialize a HashDB node, and the reverse also fails.
+A snapshot only works with a node whose <a data-quicklook-from="state-scheme">state scheme</a> matches the snapshot's. A PathDB snapshot won't initialize a HashDB node, and the reverse also fails.
 
 `--init.latest` can't help you here: it accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots. Snapshots built with the `path` scheme are published under two separate kinds that `--init.latest` doesn't accept:
 
@@ -53,7 +53,7 @@ A snapshot only works with a node whose state scheme matches the snapshot's. A P
 | `full-path`    | Full node | Arbitrum One, Nova, Sepolia |
 | `archive-path` | Archive   | Arbitrum One, Sepolia       |
 
-Every PathDB snapshot is pruned to its state-history window, because PathDB prunes as the node runs. There is no unpruned `path` variant to publish.
+Every PathDB snapshot is <a data-quicklook-from="state-pruning">pruned</a> to its state-history window, because PathDB prunes as the node runs. There is no unpruned `path` variant to publish.
 
 ### Initialize a PathDB node
 
@@ -63,7 +63,7 @@ Each chain publishes a pointer file naming the current snapshot directory for ea
 curl https://snapshot.arbitrum.foundation/arb1/latest-full-path.txt
 ```
 
-Use `latest-archive-path.txt` for an archive node. For Arbitrum Sepolia, substitute `sepolia-rollup` for `arb1`.
+Use `latest-archive-path.txt` for an <a data-quicklook-from="archive-node">archive node</a>. For Arbitrum Sepolia, substitute `sepolia-rollup` for `arb1`.
 
 The file contains a directory path, such as `arb1/2026-08-01-a78755ba/`. Pass the full URL to that directory, including the trailing slash:
 

@@ -14,11 +14,11 @@ sme: 'gzeoneth'
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
-Nitro ships three binaries for operating [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) data availability (DA) infrastructure: `anytrusttool` for key management and testing, `anytrustserver` for running a DA committee member, and `daprovider` for running a DA provider server that exposes a unified JSON-RPC interface over different DA backends.
+Nitro ships three binaries for operating [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) data availability (DA) infrastructure: `anytrusttool` for key management and testing, `anytrustserver` for running a <a data-quicklook-from="data-availability-committee-dac">DA committee</a> member, and `daprovider` for running a DA provider server that exposes a unified JSON-RPC interface over different DA backends.
 
 ## anytrusttool
 
-`anytrusttool` is a command-line utility for generating cryptographic keys, computing keyset hashes, and interacting with DA committee members through RPC and REST endpoints. It has four subcommands:
+`anytrusttool` is a command-line utility for generating cryptographic keys, computing <a data-quicklook-from="keyset">keyset</a> hashes, and interacting with DA committee members through RPC and REST endpoints. It has four subcommands:
 
 ```
 anytrusttool [keygen | dumpkeyset | client | generatehash] ...
@@ -90,7 +90,7 @@ docker run --rm \
 
 ### dumpkeyset
 
-Compute the keyset bytes and keyset hash from a DA committee backend configuration. You need the keyset hash when configuring the `SequencerInbox` contract on the parent chain.
+Compute the keyset bytes and keyset hash from a DA committee backend configuration. You need the keyset hash when configuring the <a data-quicklook-from="sequencer-inbox">`SequencerInbox`</a> contract on the <a data-quicklook-from="parent-chain">parent chain</a>.
 
 #### Usage
 
@@ -224,7 +224,7 @@ The argument is a positional parameter (not a flag).
 
 ## anytrustserver
 
-`anytrustserver` runs a DA committee member server that stores and serves batch data. It exposes RPC and REST interfaces for clients to store and retrieve data.
+`anytrustserver` runs a <a data-quicklook-from="data-availability-server-das">DA committee member server</a> that stores and serves <a data-quicklook-from="batch">batch</a> data. It exposes RPC and REST interfaces for clients to store and retrieve data.
 
 <VanillaAdmonition type="caution" title="Deprecation notice">
 

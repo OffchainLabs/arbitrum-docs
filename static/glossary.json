@@ -95,6 +95,10 @@
     "title": "ArbOS",
     "text": "<p>Arbitrum&#39;s &quot;operating system&quot; that trustlessly handles system-level operations; includes the ability to emulate the EVM.</p>\n"
   },
+  "archive-node": {
+    "title": "Archive Node",
+    "text": "<p>An <a href=\"/intro/glossary#arbitrum-full-node\">Arbitrum full node</a> that retains every historical <a href=\"/intro/glossary#chain-state\">chain state</a> instead of discarding old ones, so it can serve <code>eth_call</code>, balance, and trace queries at any past block. An archive node is a storage variant of a full node rather than a separate protocol role: it runs the same <code>nitro</code> binary with <code>--execution.caching.archive</code> enabled. The trade-off is disk — an Arbitrum One archive database is measured in terabytes.</p>\n"
+  },
   "assertion": {
     "title": "Assertion",
     "text": "<p>A bonded claim made by an Arbitrum <a href=\"/intro/glossary#validator\">Validator</a> representing a claim about an Arbitrum chain&#39;s state. An <a href=\"/intro/glossary#assertion\">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href=\"/intro/glossary#challenge\">Challenge</a>.</p>\n<p>Assertions can have different states:</p>\n<ul>\n<li><strong>Proposed</strong>: When a validator submits an assertion</li>\n<li><strong>Challenged</strong>: If another validator disputes the assertion, an interactive fraud-proof initiates.</li>\n<li><strong>Confirmed</strong>: An assertion becomes final if no one challenges it within the dispute window (6.4 days).</li>\n</ul>\n"
@@ -118,6 +122,10 @@
   "bisection": {
     "title": "Bisection",
     "text": "<p>A move in the <a href=\"/intro/glossary#bold\">BoLD</a> <a href=\"/intro/glossary#challenge-protocol\">Challenge Protocol</a> in which an <a href=\"/intro/glossary#edge\">edge</a> is split in half, producing two child edges with shorter histories. Repeated bisection narrows a disagreement down to a single execution step, which can then be resolved with a <a href=\"/intro/glossary#one-step-proof\">One-Step Proof</a>. BoLD&#39;s bisection generalises the older Arbitrum Classic <a href=\"/intro/glossary#dissection\">dissection</a> move.</p>\n"
+  },
+  "blob": {
+    "title": "Blob",
+    "text": "<p>A transaction data format introduced on Ethereum by <a href=\"https://eips.ethereum.org/EIPS/eip-4844\">EIP-4844</a> and enabled for <a href=\"/intro/glossary#arbitrum-chains\">Arbitrum chains</a> in <a href=\"/intro/glossary#arbos\">ArbOS</a> 20 &quot;Atlas&quot;. Blob data lives on the Ethereum beacon chain and is not readable by the EVM, unlike calldata. Posting <a href=\"/intro/glossary#batch\">batches</a> as blobs is cheaper than calldata, but it means a node needs a beacon chain RPC endpoint — with historical blob data — to sync.</p>\n"
   },
   "blockchain": {
     "title": "Blockchain",
@@ -203,6 +211,14 @@
     "title": "Data Availability Committee (DAC)",
     "text": "<p>A permissioned set of parties responsible for enforcing data availability on a chain using the <a href=\"/intro/glossary/#arbitrum-anytrust-protocol\">Arbitrum AnyTrust Protocol</a>.</p>\n<p>See <a href=\"https://medium.com/offchainlabs/introducing-anytrust-chains-cheaper-faster-l2-chains-with-minimal-trust-assumptions-31def59eb8d7\">Introducing AnyTrust Chains: Cheaper, Faster L2 Chains with Minimal Trust Assumptions</a> to learn more.</p>\n"
   },
+  "data-availability-server-das": {
+    "title": "Data Availability Server (DAS)",
+    "text": "<p>The server software each member of a <a href=\"/intro/glossary#data-availability-committee-dac\">Data Availability Committee (DAC)</a> runs to store <a href=\"/intro/glossary#batch\">batch</a> data and serve it on demand. On an <a href=\"/intro/glossary#arbitrum-anytrust-protocol\">AnyTrust</a> chain the <a href=\"/intro/glossary#sequencer\">sequencer</a> sends batch data to the committee&#39;s DAS instances, which sign and return a <a href=\"/intro/glossary#data-availability-certificate\">Data Availability Certificate</a>. Nitro ships <code>anytrustserver</code> for running a DAS.</p>\n"
+  },
+  "database-snapshot": {
+    "title": "Database Snapshot",
+    "text": "<p>An archive of a Nitro database published so a new node can initialize without syncing from genesis. You supply one through <code>--init.url</code>, or let Nitro fetch the latest with <code>--init.latest</code>. A snapshot only works on a node whose <a href=\"/intro/glossary#state-scheme\">state scheme</a> matches the snapshot&#39;s. On Arbitrum One you must start from a snapshot, because Nitro cannot process transactions from <a href=\"/intro/glossary#arbitrum-classic\">Arbitrum Classic</a>.</p>\n"
+  },
   "defensive-validator": {
     "title": "Defensive Validator",
     "text": "<p>A <a href=\"/intro/glossary#validator\">Validator</a> that watches an Arbitrum chain and takes action (i.e., bonds and challenges) only when and if an invalid <a href=\"/intro/glossary#assertion\">Assertion</a> occurs.</p>\n"
@@ -255,6 +271,10 @@
     "title": "Fast withdrawals",
     "text": "<p>A protocol-level withdrawal path on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full <a href=\"/intro/glossary#challenge-period\">challenge period</a>. Distinct from a <a href=\"/intro/glossary#fast-exit--liquidity-exit\">fast-exit liquidity exit</a>, which is a third-party liquidity provider rather than a protocol primitive.</p>\n"
   },
+  "feed-relay": {
+    "title": "Feed Relay",
+    "text": "<p>A standalone <code>relay</code> binary that subscribes to a <a href=\"/intro/glossary#sequencer-feed\">sequencer feed</a> and re-broadcasts it to downstream nodes. The feed relay is stateless fan-out: it needs no <a href=\"/intro/glossary#parent-chain\">parent chain</a> connection, no wallet, no bond, and no database. Running one relay per data center reduces ingress fees and improves stability when you run several nodes. It ships inside the Nitro Docker image.</p>\n"
+  },
   "first-come-first-serve-fcfs": {
     "title": "First Come First Serve (FCFS)",
     "text": "<p>A type of <a href=\"/intro/glossary#transaction-ordering-policy\">Transaction Ordering Policy</a> used by the sequencer in Arbitrum chains whereby incoming transactions are sequenced into a block in the order that the transactions arrived.</p>\n"
@@ -294,6 +314,10 @@
   "hard-finality": {
     "title": "Hard finality",
     "text": "<p>The state a transaction reaches once its <a href=\"/intro/glossary#batch\">batch</a> has been posted to the parent chain by the <a href=\"/intro/glossary#batch-poster\">Batch Poster</a> and that posting is itself final on the parent chain. Hard finality inherits the security of the parent chain and cannot be reverted without a parent-chain reorg. Contrast with <a href=\"/intro/glossary#soft-confirmation\">soft confirmation</a>, which is immediate but trust-based on the honesty of the <a href=\"/intro/glossary#sequencer\">Sequencer</a>.</p>\n"
+  },
+  "hashdb": {
+    "title": "HashDB",
+    "text": "<p>Nitro&#39;s default <a href=\"/intro/glossary#state-scheme\">state scheme</a>, which stores the state trie keyed by node hash. HashDB supports block validation, so a node running the block validator must use it. Unlike <a href=\"/intro/glossary#pathdb\">PathDB</a>, HashDB <a href=\"/intro/glossary#state-pruning\">prunes</a> manually and offline through <code>--init.prune</code>: the node stops serving RPC requests until the prune finishes.</p>\n"
   },
   "history-commitment": {
     "title": "History commitment",
@@ -374,6 +398,14 @@
   "parent-chain": {
     "title": "Parent chain",
     "text": "<p>EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka <a href=\"/intro/glossary#child-chain\">Child chain</a> ). For example, Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with &quot;underlying chain.&quot;</p>\n"
+  },
+  "pathdb": {
+    "title": "PathDB",
+    "text": "<p>A <a href=\"/intro/glossary#state-scheme\">state scheme</a> that stores Nitro&#39;s state trie by path, enabled with <code>--execution.caching.state-scheme=path</code> and available from Nitro v3.9.x. PathDB <a href=\"/intro/glossary#state-pruning\">prunes</a> automatically while the node runs, so disk use stays within the window set by <code>--execution.caching.state-history</code> and the node keeps serving RPC. It cuts <a href=\"/intro/glossary#archive-node\">archive node</a> disk use substantially, but it cannot validate blocks.</p>\n"
+  },
+  "pebble": {
+    "title": "Pebble",
+    "text": "<p>The key-value store Nitro uses for its on-disk database. Pebble allocates its block cache and memtables through CGO calls, so that memory sits outside Go&#39;s memory tracking and outside what <code>GOMEMLIMIT</code> governs. The <code>database-cache</code> parameter sets the block cache size directly and also determines memtable size.</p>\n"
   },
   "permissionless-validation": {
     "title": "Permissionless validation",
@@ -470,6 +502,14 @@
   "standarderc20-gateway": {
     "title": "StandardERC20 gateway",
     "text": "<p><a href=\"/intro/glossary#token-gateway\">Token Gateway</a> via which any underlying chain&#39;s <strong>ERC-20</strong> token can permissionlessly bridge; the <code>StandardERC20</code> gateway contracts deploy a <a href=\"/intro/glossary#standard-arbtoken\">Standard Arb-Token</a> on the <a href=\"/intro/glossary#child-chain\">Child chain</a> for each bridged token.</p>\n"
+  },
+  "state-pruning": {
+    "title": "State Pruning",
+    "text": "<p>Removing historical <a href=\"/intro/glossary#chain-state\">chain state</a> a node no longer needs, to keep its database from growing without bound. On <a href=\"/intro/glossary#hashdb\">HashDB</a> you prune manually with <code>--init.prune</code> and the node is offline while it runs. On <a href=\"/intro/glossary#pathdb\">PathDB</a> Nitro prunes online as the node runs, with no intervention and no downtime. An <a href=\"/intro/glossary#archive-node\">archive node</a> prunes nothing by definition.</p>\n"
+  },
+  "state-scheme": {
+    "title": "State Scheme",
+    "text": "<p>The layout Nitro uses to store its state trie on disk, selected with <code>--execution.caching.state-scheme</code>. Nitro supports two: <a href=\"/intro/glossary#hashdb\">HashDB</a> (the default) and <a href=\"/intro/glossary#pathdb\">PathDB</a>. The two are not interchangeable — a node can only start from a <a href=\"/intro/glossary#database-snapshot\">database snapshot</a> built with the same state scheme, so switching means re-initializing the database.</p>\n"
   },
   "state-transition-function": {
     "title": "State Transition Function",

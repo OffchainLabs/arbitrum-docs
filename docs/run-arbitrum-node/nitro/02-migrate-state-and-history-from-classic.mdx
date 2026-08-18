@@ -8,13 +8,13 @@ content_type: how-to
 sidebar_position: 11
 ---
 
-When running a Nitro node for the first time on a chain that produced [classic blocks](/arbitrum-essentials/public-chains.mdx#classic-deprecated) in the past (like Arbitrum One), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a database snapshot using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/run-arbitrum-node/02-run-full-node.mdx)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
+When running a Nitro node for the first time on a chain that produced [classic blocks](/arbitrum-essentials/public-chains.mdx#classic-deprecated) in the past (like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a <a data-quicklook-from="database-snapshot">database snapshot</a> using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/run-arbitrum-node/02-run-full-node.mdx)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
 
 :::info Is this How-to for you?
 
 As mentioned, the recommended way of initializing a Nitro node is by using a pre-initialized database snapshot with the `--init.url` option. This guide is for those that are interested in re-creating the full state of the chain from the genesis block using their own classic node.
 
-Keep in mind that this process only applies to Arbitrum One. Other Arbitrum chains didn't produce classic blocks in the past, they started as Nitro chains.
+Keep in mind that this process only applies to Arbitrum One. Other <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> didn't produce <a data-quicklook-from="arbitrum-classic">classic</a> blocks in the past, they started as Nitro chains.
 
 :::
 
@@ -62,7 +62,7 @@ The rollup state is exported as a series of JSON files. State read from these JS
 
 This data does not impact consensus and is optional. It allows a Nitro node to provide the information required when executing a withdrawal made on the classic rollup.
 
-- Call the RPC method `arb_exportOutbox` with parameter `"0xffffffffffffffff"` to initiate outbox export. It will return immediately.
+- Call the RPC method `arb_exportOutbox` with parameter `"0xffffffffffffffff"` to initiate <a data-quicklook-from="outbox">outbox</a> export. It will return immediately.
 - Calling `arb_exportOutboxStatus` will return the latest outbox batch exported, or an error if the export failed.
 - Data will be stored in the directory `nitroexport/nitro/classic-msg`.
 
