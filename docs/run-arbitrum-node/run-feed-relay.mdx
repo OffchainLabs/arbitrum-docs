@@ -95,7 +95,7 @@ nitro \
   ...
 ```
 
-Nitro connects to every URL in the primary list at the same time and dedupes by sequence number. A reconnect, restart, or regional problem on one relay is invisible: the other connection never stopped streaming.
+Nitro connects to every URL in the primary list at the same time and removes duplication by sequence number. A reconnect, restart, or regional problem on one relay is invisible: the other connection never stopped streaming.
 
 Two relays in the same region share edge and transit fate: a regional event (a degraded CDN point of presence, a transit problem, a datacenter issue) interrupts both primaries at once. The relay in the other region keeps the node streaming through it. The cross-region hop adds a small amount of latency on that connection; sequence number deduplication means the node always advances at the pace of whichever connection is ahead, so the local relay still sets your steady-state latency.
 
