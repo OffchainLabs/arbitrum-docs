@@ -363,6 +363,17 @@ Write the `alt` text to the same standard; it is page prose.
   `A   ·   B`, add `xml:space="preserve"` to the `<text>`.
 - Use a system font stack (`Inter, ui-sans-serif, system-ui, …`) — webfonts
   won't load inside an `<img>`-embedded SVG.
+- **Quote multi-word font names with SINGLE quotes.** The stack goes into a
+  double-quoted attribute, so `"Segoe UI"` and `"SF Mono"` close it early and the
+  file is no longer well-formed XML. Write `'Segoe UI'`, `'SF Mono'`. This bites
+  on the very first render, before any layout work is visible:
+
+  ```text
+  xml.parsers.expat.ExpatError: not well-formed (invalid token): line 10, column 65
+  ```
+
+  Verification step 1 catches it — which is the reason it runs first.
+
 - Metaphor helps recall: e.g. bun-shaped corners (larger radius on the outer
   edges of top/bottom layers) made the "sandwich" read at a glance.
 
@@ -451,8 +462,138 @@ count to the elbows you authored, not to zero. Still run the tool: it is the
 cheapest check that your arrows match the authoring contract above, and it must
 run after every regenerate, since regenerating overwrites its output.
 
+**`rounded 0` also means "already rounded".** The tool is idempotent: once a
+corner is a `Q` curve the path no longer matches its straight-elbow pattern, so a
+second run on an unchanged file reports 0. Don't read that as a regression —
+count the baked-in corners instead:
+
+```bash
+grep -o ' Q[0-9]' static/img/NAME.svg | wc -l   # quadratic corners present
+```
+
 Because arrow styling has to be inline for this tool, don't try to factor arrows
 into a `<style>` block. Text and panels can use classes; arrows cannot.
+
+## Arrowheads: three failures no tool catches
+
+`check_contrast.py` inspects `<text>` only, and `round_arrows.py` only looks at
+path geometry. **Nothing validates a marker.** All three of these render without
+warning and are only visible in the display-width image.
+
+**1. Markers scale with `stroke-width`.** `markerUnits` defaults to
+`strokeWidth`, so the head's on-canvas size is `markerWidth × stroke-width`. A
+`markerWidth="7"` head is 17.5px on a 2.5px stroke but **31.5px** on a 4.5px one.
+Two of those on a short segment collide and fuse into a solid diamond that reads
+as a blob, not an arrow:
+
+```text
+Mermaid <==> rendered as a 65px double-headed link
+  2 heads x (7 x 4.5) = 63px of arrowhead on a 65px line  ->  diamond blob
+```
+
+Give any thick link its own fixed-size marker instead of resizing the geometry:
+
+```svg
+<marker id="arrowbig" viewBox="0 0 10 10" refX="9" refY="5"
+        markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse"
+        orient="auto-start-reverse">
+  <path d="M0 0 L10 5 L0 10 z" fill="#9dcced"/>
+</marker>
+```
+
+`markerUnits="userSpaceOnUse"` pins the head to 16px whatever the stroke does.
+`refX`/`refY` stay in viewBox units either way.
+
+**2. Marker color inverts down the gradient exactly like text does.** A
+`#9dcced` arrowhead is fine in the upper two-thirds and near-invisible on the
+near-full cyan at the bottom. A legend or key row sitting in the last tenth needs
+its own ink-coloured marker (`fill="#0b1b2e"`), so a diagram often carries **two
+color variants of the same head**. The contrast checker will not tell you —
+it never looks at markers.
+
+**3. Label chips swallow arrowheads.** A chip centred on a horizontal connector
+must clear half the head plus its own half-height. With the standard 7×2.5 head
+(17.5px tall) and a 25px chip, the label baseline needs **≥18px** of clearance
+from the arrow:
+
+```python
+label_baseline = arrow_y - 20     # 2px of margin over the 18px minimum
+```
+
+Too little and the head disappears under the chip — the arrow still reads as a
+line, so it looks like you drew a connector with no direction.
+
+**Verify markers by eye at the display width.** They are the one part of the
+diagram with no automated gate, so budget a zoom crop (below) for any diagram
+with a bi-directional link, a thick link, or chipped horizontal connectors.
+
+### Zoom-crop to inspect detail
+
+`rsvg-convert` cannot crop, and reading the full render downsamples exactly the
+detail you are checking. Rewrite the `viewBox` on a throwaway copy instead:
+
+```bash
+sed 's|viewBox="0 0 1360 1340" width="1360" height="1340"|viewBox="760 600 560 400" width="1120" height="800"|' \
+  static/img/NAME.svg > /tmp/crop.svg
+rsvg-convert -b '#ffffff' /tmp/crop.svg -o /tmp/crop.png
+```
+
+The `width`/`height` set the zoom factor (2× above). This is how you confirm a
+`marker-start` actually rendered, that a rounded elbow curved, and that text sits
+inside its chip.
+
+## Converting a Mermaid source
+
+Mermaid is not an output format here, but it is a common **input** — someone
+pastes a `flowchart`/`sequenceDiagram` and wants it on-brand. Four things to
+settle before you place a single box:
+
+- **Ask which way it should flow when the request is ambiguous.** "Keep the
+  horizontal layout" means one thing for a `flowchart LR` and something else for
+  a `sequenceDiagram`, whose participants are already horizontal while time runs
+  down. Guessing wrong throws away the whole diagram, so it is worth one
+  question with two ASCII mockups rather than a full build.
+- **Drop the invisible edges.** `~~~` is a layout hint that exists only to steer
+  Mermaid's auto-layout. Hand placement makes them meaningless — one source this
+  session had 12 of them against 14 real `-->` edges.
+- **Mermaid's per-subgraph `style fill:` has no brand equivalent.** Don't try to
+  map five arbitrary subgraph tints onto the palette. Let lanes carry the
+  grouping and let fill carry **role** (see the key below); you usually delete a
+  key row's worth of color in the process.
+- **Node text is prose.** Expand `<br/>` into title + sublabels, convert `&` to
+  "and", apply sentence case, and run the terminology table over it — `L2` in a
+  pasted source becomes **child chain** in the art.
+
+A four-role key covers nearly every architecture diagram and keeps a set of
+diagrams consistent with each other:
+
+| Fill      | Role               | Text                  |
+| --------- | ------------------ | --------------------- |
+| `#9dcced` | people (actors)    | `#0b1b2e`             |
+| `#12aaff` | user-facing app    | `#0b1b2e` / `#0b2438` |
+| `#213147` | service or handler | `#ffffff` / `#c9dcef` |
+| `#e6007a` | data store         | `#ffffff` only        |
+
+Reuse it verbatim across related diagrams — a reader who learns the key once
+should not have to relearn it on the next figure.
+
+## Sequence diagrams
+
+Participants as columns, time down. What differs from a flowchart:
+
+- **Lifelines** are dashed verticals (`#9dcced`, ~1.5px, `stroke-dasharray="6 7"`,
+  opacity ~0.5) running from under each participant box to a common floor.
+- **Labels go above the arrow, not centred on it** — a centred chip on a long
+  message hides the arrow it describes. Baseline at `arrow_y - 20`.
+- **Every message is a straight 2-point path**, so `round_arrows.py` reports
+  `rounded 0`. That is the correct result, not a miss.
+- **Two head styles.** Solid request → filled triangle. Dashed response
+  (Mermaid `-->>`) → open V, `fill="none"` + `stroke-linejoin="round"`. The
+  distinction is load-bearing; don't collapse it.
+- **Row pitch ~62px** at 16px labels keeps a chip clear of the arrowhead above.
+- **Uniform column spacing, and let long labels overflow** their span. Sizing
+  columns to the longest label makes the canvas absurd; the chip masks the
+  lifelines it crosses, which is what makes overflow safe.
 
 ## Segment complex diagrams into labeled lanes
 
@@ -539,7 +680,11 @@ any failure, so it can gate a commit.
 Run it, don't reason about it. On its first run against a finished diagram it
 caught **four** failures across two rounds — including two that hand-sampling had
 already missed, because manual checks cover the labels you think to check and
-skip small chips and legend headings.
+skip small chips and legend headings. A later diagram opened at **8 failures of
+14** connector labels, so treat a clean first run as luck, not skill.
+
+It checks `<text>` and nothing else. Arrowheads, strokes and panel borders have
+no automated gate at all — see "Arrowheads: three failures no tool catches".
 
 Two recurring offenders worth knowing up front:
 
@@ -551,6 +696,41 @@ Two recurring offenders worth knowing up front:
   fill. There is no headroom, so don't tint magenta sublabels at all.
 - Dark labels on any orange. White is 2.66:1 on Nova `#ff7700` and 2.80:1 on
   `#f97316`; both fail.
+
+### The gradient has a dead band — put connector labels on chips
+
+The inversion above has a gap in the middle where **no plain text fill passes at
+all.** Around 75–80% down, the gradient sits near `#1778ed`, and every candidate
+measured against it fails:
+
+| Fill              | Ratio on `#1778ed` | 4.5 needed |
+| ----------------- | -----------------: | ---------- |
+| `#eaf5ff`         |           **3.84** | fail       |
+| `#ffffff`         |           **4.25** | fail       |
+| `#0b1b2e`         |           **4.09** | fail       |
+| chip `#152c4e` bg |          **12.65** | pass       |
+
+So "switch to the other fill" has no answer in that band. Don't hunt for a
+better hex — there isn't one. Give the label its own opaque backdrop:
+
+```svg
+<rect x="…" y="…" width="…" height="25" rx="6" fill="#152c4e" opacity="0.92"/>
+<text … font-size="16" fill="#eaf5ff" text-anchor="middle">Proxies</text>
+```
+
+Chip every connector label, not just the failing ones. Mixed treatment reads as
+arbitrary, and a chip is position-independent — you can move a label later
+without re-deriving its color. It also **masks whatever the label crosses**
+(lifelines, lane borders, other connectors), which is the same trick Mermaid uses
+with its white label backgrounds.
+
+Size the chip from the width estimate (0.52 em/char sans, 0.60 mono) plus ~12px
+padding. Slight text overflow past a chip is safe here: the few pixels that land
+on bare gradient are still `#eaf5ff`, which is exactly the fill you would have
+used anyway.
+
+A diagram with **no edge labels needs none of this** — bare connectors on an
+opaque backdrop have no contrast requirement, and the file lands ~35% smaller.
 
 No `yarn build` is needed for either path — the link graph is untouched by an
 image swap. For a **new** diagram, run the MDX compile check from Path B instead;
