@@ -15,7 +15,7 @@ This page describes the recommended architecture for consuming the sequencer fee
 
 1. **Run your own feed relays.** At least two, in different geographic regions, with distinct egress IPs.
 2. **Each relay maintains at least two primary upstream connections** to the upstream feed endpoint.
-3. **Each node connects to at least two of your relays as primary feeds** (a list of primary URLs). Do not use the secondary/fallback mechanism for redundancy.
+3. **Each node connects to at least two of your relays as primary feeds** (a list of primary URLs), and at least one of them must be in a different region than the node. Do not use the secondary/fallback mechanism for redundancy.
 4. **Never point a node fleet directly at the public feed.** The relay layer exists to collapse your fleet's footprint to a handful of well-behaved upstream connections.
 5. **Do not treat individual reconnects as incidents.** Alert on sustained absence of feed data and on sustained head lag, not on `readData returned EOF`.
 
@@ -71,8 +71,9 @@ The corollary: **redundancy must live on the client side, as multiple simultaneo
             +--------------+          +--------------+     distinct egress IPs
                   |    \                  /    |
                   |     \                /     |
-              [ node ]  [ node ]  [ node ]  [ node ]       every node: >= 2 relays
-                                                           as PRIMARY feed inputs
+              [ node ]  [ node ]  [ node ]  [ node ]       every node: >= 2 relays as
+                                                           PRIMARY feed inputs, spanning
+                                                           regions (local + other region)
 ```
 
 ### Layer 1: your relays
@@ -95,15 +96,17 @@ The feed input accepts a comma-separated list of URLs. All of them are connected
 
 ### Layer 2: your nodes
 
-Every node lists **at least two of your relays as primary feeds**:
+Every node lists **at least two of your relays as primary feeds**, and the set must span regions: the relay local to the node plus at least one relay in another region:
 
 ```shell
 nitro \
-  --node.feed.input.url=ws://relay-a.internal:9642,ws://relay-b.internal:9642 \
+  --node.feed.input.url=ws://relay-region1.internal:9642,ws://relay-region2.internal:9642 \
   ...
 ```
 
 Nitro connects to every URL in the primary list at the same time and dedupes by sequence number. A reconnect, restart, or regional problem on one relay is invisible: the other connection never stopped streaming.
+
+The cross-region requirement is the point. Two relays in the same region share edge and transit fate, so a regional event (a degraded CDN point of presence, a transit problem, a datacenter issue) interrupts both primaries at once. The relay in the other region is what keeps the node streaming through it. The cross-region hop adds a small amount of latency on that connection; sequence number deduplication means the node always advances at the pace of whichever connection is ahead, so the local relay still sets your steady-state latency.
 
 ### Why a primary list, not `secondary-url`
 
