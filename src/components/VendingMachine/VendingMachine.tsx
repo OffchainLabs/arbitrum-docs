@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import VendingMachineContract from './VendingMachine.sol/VendingMachine.json';
 
 function truncateAddress(text: string) {

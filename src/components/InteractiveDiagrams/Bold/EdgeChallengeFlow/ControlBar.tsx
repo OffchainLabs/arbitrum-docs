@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { SPEED_OPTIONS } from './constants';
 
 interface ControlBarProps {

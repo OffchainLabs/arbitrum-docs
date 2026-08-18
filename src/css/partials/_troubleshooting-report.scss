@@ -25,8 +25,8 @@
   > textarea {
     @include invisible-horizontal-scroll;
     padding: 15px;
-    font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-      monospace;
+    font-family:
+      SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     background-color: #f6f6f6;
     color: #444 !important;
     text-align: left;
@@ -73,8 +73,8 @@
     min-width: 100%;
     font-size: 12px;
     padding: 20px;
-    font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-      monospace;
+    font-family:
+      SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     background-color: #292929;
     color: white;
     text-align: left;

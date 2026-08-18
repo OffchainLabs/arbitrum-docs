@@ -68,7 +68,7 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 
 - Onchain verification with zero-knowledge proofs: Reduce gas costs for onchain verification using zero-knowledge proving systems. See [case study](https://blog.arbitrum.io/renegade-stylus-case-study/) for an example implementation.
 - DeFi instruments: Implement custom pricing curves for AMMs, synthetic assets, options, and futures with onchain computation. You can extend existing protocols (such as Uniswap V4 hooks) or build your own.
-- Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
+- Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs — Stylus programs can use up to 8 MB of memory, and costs grow near-linearly with the size of the workload. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
 - Cryptographic applications: Implement applications that require advanced cryptography or other compute-heavy operations that would be cost-prohibitive in Solidity.
 
 ## When Stylus saves gas (and when it doesn't)

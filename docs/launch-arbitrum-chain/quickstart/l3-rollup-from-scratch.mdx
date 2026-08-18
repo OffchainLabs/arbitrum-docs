@@ -26,12 +26,12 @@ This how-to is where you should start if you have not deployed a chain on Arbitr
 
 ### Before you start
 
-| Requirement                 | What you need                                                                                                                                  |
-| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Node.js**                 | v23 or later. [Install Node.js](https://nodejs.org/)                                                                                           |
-| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                          |
-| **ETH on Arbitrum Sepolia** | Your deployer wallet needs **ETH** for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
-| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                                   |
+| Requirement                 | What you need                                                                                                                                                |
+| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Node.js**                 | v20 or later. [Install Node.js](https://nodejs.org/)                                                                                                         |
+| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                                        |
+| **ETH on Arbitrum Sepolia** | Your deployer wallet needs at least ~0.1 **ETH** for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
+| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                                                 |
 
 ## Step 1: Set up the project
 
@@ -49,7 +49,9 @@ npm install @arbitrum/chain-sdk viem dotenv
 DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
 ```
 
-- You will need this file in future steps.
+- If you fail to add this key, or do not enter it correctly, it will fail with:
+  `Error: private key must be 32 bytes, hex or bigint, not string`
+- You **will need this file** in future steps.
 
 ### Environment variables reference
 
@@ -60,7 +62,7 @@ DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
 | `BATCH_POSTER_PRIVATE_KEY`          | Optional               | Step 2       | Private key for the batch poster. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                    |
 | `VALIDATOR_PRIVATE_KEY`             | Optional               | Step 2       | Private key for the validator. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                       |
 | `CHAIN_DEPLOYMENT_TRANSACTION_HASH` | **Yes** (after Step 2) | Step 3, 6    | Transaction hash from the deploy script. Copy it from Step 2's output into `.env`.                                                                                                     |
-| `CHAIN_RPC`                         | Optional               | Step 6       | Your chain's RPC URL. Defaults to `http://localhost:8547` when running locally. Override if your node is elsewhere.                                                                    |
+| `CHAIN_RPC`                         | Optional               | Step 6       | Your chain's RPC URL. Defaults to `http://localhost:8449` when running locally. Override if your node is elsewhere.                                                                    |
 
 :::caution Private key format
 
@@ -194,9 +196,13 @@ async function main() {
     parentChainRpcUrl: process.env.PARENT_CHAIN_RPC || parentChain.rpcUrls.default.http[0],
   });
 
+  // This quickstart doesn't require stake; if you leave it as true it will crash the node
+  if (nodeConfig.node?.staker) {
+    nodeConfig.node.staker.enable = false;
+  }
+
   await writeFile('node-config.json', JSON.stringify(nodeConfig, null, 2));
   console.log('Node config written to node-config.json');
-}
 
 main().catch(console.error);
 ```
@@ -228,18 +234,18 @@ In this step you will start your chain. One node runs everything: it sequences b
 
 ```bash
 mkdir -p ./arbitrum-data
+cp node-config.json ./arbitrum-data/node-config.json
 ```
 
 ```bash
 docker run --rm -it \
   -v $(pwd)/arbitrum-data:/home/user/.arbitrum \
-  -v $(pwd)/node-config.json:/home/user/.arbitrum/node-config.json \
   -p 8547:8547 -p 8548:8548 \
   offchainlabs/nitro-node:v3.9.4-7f582c3 \
   --conf.file /home/user/.arbitrum/node-config.json
 ```
 
-The node will start and begin syncing. Wait until you see it producing blocks (logs will show block numbers). Your chain's RPC is then available at `http://localhost:8547`.
+The node will start and begin syncing. Wait until you see it producing blocks (logs will show block numbers). Your chain's RPC is then available at `http://localhost:8449`.
 
 ## Step 6: Deploy the token bridge
 
@@ -257,6 +263,7 @@ import { arbitrumSepolia } from 'viem/chains';
 import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, createTokenBridgePrepareTransactionRequest, createTokenBridgePrepareTransactionReceipt, createTokenBridgePrepareSetWethGatewayTransactionRequest, createTokenBridgePrepareSetWethGatewayTransactionReceipt } from '@arbitrum/chain-sdk';
 import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
 import { config } from 'dotenv';
+
 config();
 
 const parentChain = arbitrumSepolia;
@@ -276,7 +283,7 @@ async function main() {
   const coreContracts = txReceipt.getCoreContracts();
   const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
   const chainId = chainConfig.chainId;
-  const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
+  const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8449';
 
   const chain = defineChain({
     id: chainId,
@@ -286,6 +293,7 @@ async function main() {
     rpcUrls: { default: { http: [chainRpc] } },
     testnet: true,
   });
+
   const chainPublicClient = createPublicClient({ chain, transport: http() });
 
   const txRequest = await createTokenBridgePrepareTransactionRequest({
@@ -294,44 +302,96 @@ async function main() {
       rollupOwner: rollupOwner.address,
     },
     parentChainPublicClient,
+    orbitChainPublicClient: chainPublicClient, // <-- ADD
     account: rollupOwner.address,
   });
 
   console.log('Deploying token bridge...');
+
   const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
     serializedTransaction: await rollupOwner.signTransaction(txRequest),
   });
+
   const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }));
+
   console.log('Token bridge deployed on parent chain');
 
   console.log('Waiting for retryables on your chain...');
+
   const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
     orbitPublicClient: chainPublicClient,
   });
   if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
     throw new Error('Retryables failed');
   }
+
   console.log('Token bridge contracts created on your chain');
 
   const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
     rollup: coreContracts.rollup,
     parentChainPublicClient,
+    orbitChainPublicClient: chainPublicClient, // <-- ADD
     account: rollupOwner.address,
   });
+
   const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
     serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
   });
+
   const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }));
+
   const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
     orbitPublicClient: chainPublicClient,
   });
-  if (wethRetryableReceipts[0].status !== 'success') {
-    throw new Error('WETH gateway retryable failed');
+
+  try {
+    const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
+      orbitPublicClient: chainPublicClient,
+    });
+    if (wethRetryableReceipts[0].status !== 'success') throw new Error('WETH gateway retryable failed');
+    console.log('WETH gateway configured. Token bridge ready.');
+  } catch (e) {
+    console.warn('WETH gateway retryable was not auto-redeemed:', e.message);
+    console.warn('Redeem it manually with redeem-ticket.mjs using the ticket id above (TICKET).');
   }
-  console.log('WETH gateway configured. Token bridge ready.');
 }
 
 main().catch(console.error);
+```
+
+</CustomDetails>
+
+- This is an optional that will redeem a retryable:
+
+<CustomDetails summary="Optional: redeem-ticket.mjs">
+
+```javascript
+import { createPublicClient, createWalletClient, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
+import { config } from 'dotenv';
+config();
+
+// The ticket id printed by deploy-token-bridge.mjs ("Unexpected status for retryable ticket: 0x...")
+const TICKET = process.env.WETH_TICKET_ID;
+const ARB_RETRYABLE_TX = '0x000000000000000000000000000000000000006E';
+const L3_RPC = process.env.CHAIN_RPC || 'http://localhost:8547';
+const L3_CHAIN_ID = Number(process.env.CHAIN_ID); // your chain id, e.g. 36173670529
+
+const abi = [
+  { type: 'function', name: 'getTimeout', stateMutability: 'view', inputs: [{ name: 'ticketId', type: 'bytes32' }], outputs: [{ type: 'uint256' }] },
+  { type: 'function', name: 'redeem', stateMutability: 'nonpayable', inputs: [{ name: 'ticketId', type: 'bytes32' }], outputs: [{ type: 'bytes32' }] },
+];
+
+const acct = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
+const chain = { id: L3_CHAIN_ID, name: 'l3', nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 }, rpcUrls: { default: { http: [L3_RPC] } } };
+const pub = createPublicClient({ chain, transport: http() });
+const wallet = createWalletClient({ account: acct, chain, transport: http() });
+
+const hash = await wallet.writeContract({ address: ARB_RETRYABLE_TX, abi, functionName: 'redeem', args: [TICKET] });
+const rec = await pub.waitForTransactionReceipt({ hash });
+console.log('redeem tx', hash, 'status', rec.status);
+// getTimeout reverts with NoTicketWithID once the ticket is consumed -> success
 ```
 
 </CustomDetails>
@@ -346,7 +406,15 @@ node deploy-token-bridge.mjs
 
 ## A running chain
 
-Congratulations! You now have a fully running L3 chain that settles to Arbitrum Sepolia, with a sequencer, validator, and token bridge. Your chain's RPC is at `http://localhost:8547`.
+Congratulations! You now have a fully running L3 chain that settles to Arbitrum Sepolia, with a sequencer, validator, and token bridge. Your chain's RPC is at `http://localhost:8449`.
+
+#### What "done/success" looks like:
+
+```text
+L3 router.getGateway(parentWETH) == L3 wethGateway   -> WETH gateway registered
+eth_chainId  -> 0x86c1e6881 (your chain id)
+eth_blockNumber advances; RPC reachable at http://localhost:8449
+```
 
 ### If something failed
 
