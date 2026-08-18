@@ -8,11 +8,11 @@ author: 'Gowtham118'
 sme: 'Gowtham118'
 ---
 
-A Nitro node's _role_ is not a separate piece of software. Every role in this article runs the same `nitro` binary; what makes a node a <a data-quicklook-from="sequencer">sequencer</a>, a <a data-quicklook-from="batch-poster">batch poster</a>, a <a data-quicklook-from="validator">validator</a>, or a plain RPC node is the set of configuration flags you pass at startup. The exceptions are the feed relay — a small standalone `relay` binary shipped inside the same Docker image — and the optional split-validation setup, which moves block validation into a separate `nitro-val` binary; both are built from the same repository.
+A Nitro node's _role_ is not a separate piece of software. Every role in this article runs the same `nitro` binary; what makes a node a <a data-quicklook-from="sequencer">sequencer</a>, a <a data-quicklook-from="batch-poster">batch poster</a>, a <a data-quicklook-from="validator">validator</a>, or a plain RPC node is the set of configuration flags you pass at startup. The exceptions are the feed relay — a small standalone `relay` binary shipped inside the same Docker image—and the optional split-validation setup, which moves block validation into a separate `nitro-val` binary; both are built from the same repository.
 
 Because roles are just configuration, you assign or change a role by editing flags and restarting. This page explains what each role's defining flags are, what else each role needs to operate (a funded parent-chain wallet, a bond, feed connectivity, a parent-chain connection), and how to convert a node from one role to another safely.
 
-If you already know which role you want, go straight to its guide — each one is linked from the table below. Read this page when you're deciding which role to run, want to see how the roles relate to each other, or need to convert an existing node from one role to another.
+If you already know which role you want, go straight to its guide—each one is linked from the table below. Read this page when you're deciding which role to run, want to see how the roles relate to each other, or need to convert an existing node from one role to another.
 
 Flags can be passed on the command line or collected in a JSON configuration file loaded with `--conf.file`. For how flag names, defaults, and the config file relate to each other, see [Nitro configuration system](/run-arbitrum-node/nitro/configuration-system.mdx). This article covers only the flags that define and support each role; for the complete flag list, see the [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx).
 
@@ -34,7 +34,7 @@ Every role except the feed relay and the split-validation server needs a parent-
 
 ## RPC node (full node)
 
-An RPC node — often just called a full node — is the default role: it follows the chain and serves JSON-RPC, but it does not sequence, post batches, or actively validate. None of the role-defining flags are enabled by default.
+An RPC node—often just called a full node—is the default role: it follows the chain and serves JSON-RPC, but it does not sequence, post batches, or actively validate. None of the role-defining flags are enabled by default.
 
 | Flag                            | Default | Description                                                                                    |
 | ------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
@@ -67,7 +67,7 @@ An archive node is an RPC node that retains every historical state instead of ga
 | `--execution.rpc.classic-redirect` | `""`    | Arbitrum One only: URL of an Arbitrum Classic node that serves queries for pre-Nitro blocks                                            |
 | `--init.latest`                    | `""`    | Set to `archive` to bootstrap from the latest archive snapshot (`hash` scheme only; see the archive guide for `path`-scheme snapshots) |
 
-An archive node needs no wallet and no bond, and you can run as many as you like. The cost is disk: an Arbitrum One archive database is measured in terabytes (see the archive guide for current figures). Enabling archive also makes the node keep everything else — Nitro automatically disables the consensus message pruner and retains the full transaction-hash lookup index.
+An archive node needs no wallet and no bond, and you can run as many as you like. The cost is disk: an Arbitrum One archive database is measured in terabytes (see the archive guide for current figures). Enabling archive also makes the node keep everything else—Nitro automatically disables the consensus message pruner and retains the full transaction-hash lookup index.
 
 Arbitrum One is the only chain with pre-Nitro (Classic) history, so only Arbitrum One archive nodes need `--execution.rpc.classic-redirect` pointed at an [Arbitrum Classic node](/run-arbitrum-node/more-types/03-run-classic-node.mdx); every other chain launched directly on Nitro.
 
@@ -82,17 +82,17 @@ The sequencer orders incoming transactions, produces blocks, and publishes the <
 | `--execution.sequencer.enable` | false   | Execution-layer sequencer: the node orders queued transactions and builds blocks |
 | `--node.sequencer`             | false   | Consensus-layer counterpart; must agree with `--execution.sequencer.enable`      |
 
-Nitro does not stop you if the two flags disagree — it logs an error and keeps running in a broken half-configuration — so always change them together.
+Nitro does not stop you if the two flags disagree—it logs an error and keeps running in a broken half-configuration—so always change them together.
 
 A sequencer must also declare how it coordinates with other sequencer instances, or it refuses to start. Enable the Redis-backed coordinator, or explicitly opt out with the dangerous single-sequencer flag.
 
-| Flag                                        | Default | Description                                                                                 |
-| ------------------------------------------- | ------- | ------------------------------------------------------------------------------------------- |
-| `--node.seq-coordinator.enable`             | false   | Enables the Redis-based coordinator for a redundant sequencer set                           |
-| `--node.dangerous.no-sequencer-coordinator` | false   | DANGEROUS: allows sequencing without a coordinator (single-sequencer or development setups) |
-| `--execution.forwarding-target`             | `""`    | Must stay empty on a sequencer; setting it with the sequencer enabled is a hard error       |
-| `--node.feed.output.enable`                 | false   | Starts the broadcaster that publishes the sequencer feed                                    |
-| `--node.delayed-sequencer.enable`           | false   | Includes parent-chain (delayed inbox) messages once their block is safe (default) or final  |
+| Flag                                        | Default | Description                                                                                     |
+| ------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `--node.seq-coordinator.enable`             | false   | Enables the Redis-based coordinator for a redundant sequencer set                               |
+| `--node.dangerous.no-sequencer-coordinator` | false   | **Dangerous**: allows sequencing without a coordinator (single-sequencer or development setups) |
+| `--execution.forwarding-target`             | `""`    | Must stay empty on a sequencer; setting it with the sequencer enabled is a hard error           |
+| `--node.feed.output.enable`                 | false   | Starts the broadcaster that publishes the sequencer feed                                        |
+| `--node.delayed-sequencer.enable`           | false   | Includes parent-chain (delayed inbox) messages once their block is safe (default) or final      |
 
 The coordinator's Redis URLs, the feed server's address and port, and feed signing are setup details covered in the sequencer guide.
 

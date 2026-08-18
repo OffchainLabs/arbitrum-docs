@@ -43,7 +43,7 @@ Exporting the state of your own classic node should produce the same state as us
 
 ## Step 2: Export information from your classic node
 
-### Block & transaction history
+### Block and transaction history
 
 These are block headers, transactions and receipts executed in the classic node. Nitro node uses the history to be able to answer simple requests, like `eth_getTransactionReceipt`, from the classic history. The last block in the chain is the only one that affects the genesis block: timestamp is copied from the last block, and `parentHash` is taken from the last block's `blockHash`.
 

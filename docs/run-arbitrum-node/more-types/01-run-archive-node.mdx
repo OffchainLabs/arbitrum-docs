@@ -18,7 +18,7 @@ For how archive mode relates to the other Nitro node roles, see [How to assign r
 
 ## Before we begin
 
-Before the Nitro upgrade, Arbitrum One ran on the Classic stack for about one year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can serve all but six RPC requests for pre-Nitro blocks. Full details are outlined in [Do you need to run a Classic node?](/run-arbitrum-node/more-types/03-run-classic-node.mdx#do-you-need-to-run-a-classic-node).**
+Before the Nitro upgrade, Arbitrum One ran on the Classic stack for a year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can serve all but six RPC requests for pre-Nitro blocks. Full details are outlined in [Do you need to run a Classic node?](/run-arbitrum-node/more-types/03-run-classic-node.mdx#do-you-need-to-run-a-classic-node).**
 
 Running an Arbitrum One **full node** in **archive mode** lets you access both pre-Nitro and post-Nitro blocks, but it requires you to run **both Classic and Nitro nodes** together. You may not need to do this, depending on your use case:
 
@@ -37,7 +37,7 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 Benefits:
 
 - **Lower disk usage.** The Arbitrum One `archive-path` snapshot is about 3.7 TB. The equivalent HashDB `archive` snapshot is considerably larger — Nova's is about 8 TB, for a chain whose full node database is a quarter the size of Arbitrum One's.
-- **Automatic, online pruning.** PathDB removes old state as the node runs, without your intervention. You never schedule a prune, and the node never goes offline to run one. On HashDB you prune manually, and the node stops serving RPC requests until it finishes — days, on a chain the size of Arbitrum One. This benefit applies to full nodes on PathDB too.
+- **Automatic, online pruning.** PathDB removes old state as the node runs, without your intervention. You never schedule a prune, and the node never goes offline to run one. On HashDB you prune manually, and the node stops serving RPC requests until it finishes—days, on a chain the size of Arbitrum One. This benefit applies to full nodes on PathDB too.
 - **Configurable retention.** You choose how much state history to keep with `--execution.caching.state-history`.
 
 Limitations:
@@ -57,7 +57,7 @@ To enable PathDB on your archive node, start it with these flags:
 
 `--execution.caching.state-history` controls how many blocks of state history PathDB retains. From v3.10.0 onward, setting `--execution.caching.archive` makes it default to `0`, which keeps the entire chain, so you can leave it unset.
 
-Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. Nitro logs a warning — `Path scheme archive mode enabled, but state-history is not zero` — and then silently retains only recent history, leaving you with an archive node that cannot serve older state. Pass `--execution.caching.state-history=0` explicitly on those versions.
+Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. Nitro logs a warning — `Path scheme archive mode enabled, but state-history is not zero`—and then silently retains only recent history, leaving you with an archive node that cannot serve older state. Pass `--execution.caching.state-history=0` explicitly on those versions.
 
 </VanillaAdmonition>
 

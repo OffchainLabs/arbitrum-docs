@@ -18,7 +18,11 @@ When querying archive blocks, the following commands can only be handled by Arbi
 - `eth_getTransactionCount`
 - `eth_getStorageAt`
 
-🔉 Note that Arbitrum Nova and Arbitrum Sepolia started as a Nitro chain, so they don't have classic blocks.
+<VanillaAdmonition type="note" title="Arbitrum Nova and Sepolia">
+
+Arbitrum Nova and Arbitrum Sepolia started as Nitro chains, so they don't have classic blocks.
+
+</VanillaAdmonition>
 
 ## Required artifacts
 
@@ -39,8 +43,8 @@ When querying archive blocks, the following commands can only be handled by Arbi
 
 ## Putting it all together
 
-- When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
-- Here is an example of how to run a classic archive node for Arbitrum One (only needed for archive requests on pre-Nitro blocks, so you'll probably want to enable the archive mode in your nitro node as well):
+- When running Docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
+- Here is an example of how to run a classic archive node for Arbitrum One (only needed for archive requests on pre-Nitro blocks, so you'll probably want to enable the archive mode in your Nitro node as well):
 
 ```shell
 docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestClassicNodeImage=offchainlabs/arb-node:v1.4.6-551a39b3@@ --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
@@ -48,7 +52,7 @@ docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/m
 
 ## Note on permissions
 
-- The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders.
+- The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders.
 
 ```shell
 mkdir /some/local/dir/arbitrum-mainnet

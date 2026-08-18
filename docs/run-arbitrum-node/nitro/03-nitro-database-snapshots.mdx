@@ -36,15 +36,11 @@ The snapshot can be a single archive file or a series of parts. Nitro first trie
 
 Finally, Nitro decompresses and extracts the snapshot archive, placing it in the database directory. Nitro will delete the archive after extracting it, so if you need to set up multiple nodes with the same snapshot, consider downloading it manually, as explained below.
 
----
-
 ## Downloading the snapshot from a URL
 
 Instead of letting Nitro search for the latest snapshot, you can provide a specific URL to download by setting the flag `--init.url` with the snapshot URL. If the URL points to a remote server, it should start with the `https://` protocol definition. Given the URL, Nitro will download the snapshot as described in the "Downloading the Latest Snapshot" section.
 
 Nitro also supports importing files from the local file system. In this case, you should provide the file path to `--init.url` starting with the prefix `file://` followed by the file path. Beware that when running Nitro inside a Docker container, you must mount a volume containing the provided snapshot using the docker flag `-v` (see [Docker documentation](https://docs.docker.com/reference/cli/docker/container/run/#volume)). Otherwise, the Nitro container running inside Docker won’t be able to find the snapshot in your local filesystem.
-
----
 
 ## PathDB snapshots
 
@@ -84,8 +80,6 @@ curl https://snapshot.arbitrum.foundation/arb1/2026-08-01-a78755ba/metadata.json
 ```
 
 Your node's `--execution.caching.state-scheme` must match the snapshot's `state_scheme`. See [Choose a state scheme](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).
-
----
 
 ## Downloading the snapshot manually
 
@@ -143,8 +137,6 @@ After downloading all the parts and verifying their checksums, you may use the c
 ```shell
 cat archive.tar.part* > archive.tar
 ```
-
----
 
 ## Extracting the snapshot manually
 
