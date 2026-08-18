@@ -17,7 +17,7 @@ This document is currently in **public preview** and may change significantly as
 
 ## Launch status and key dates
 
-- **Status:** Generally available for L2s and launched on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>. _BoLD for L3s are not yet supported at the time of writing._
+- **Status:** Generally available for all Arbitrum chains, including both L2s and L3s. Already live on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>.
 - **Arbitrum Sepolia** Dec 11, 2024
 - **Arbitrum One** 09:00 ET (GMT-5) on Feb 12, 2025{' '}
 - **Arbitrum Nova** 09:00 ET (GMT-5) on Feb 12, 2025{' '}
@@ -118,17 +118,11 @@ However, enabling BoLD does not require upgrading your [ArbOS](/how-arbitrum-wor
 
 :::
 
-This how-to provides step-by-step instructions for <a data-quicklook-from="l2">L2</a> Arbitrum chain operators who want to enable BoLD on their chain. Familiarity with Nitro, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), and [chain ownership](/launch-arbitrum-chain/operate/ownership-and-access.mdx) is expected.
-
-:::warning No support for L3s
-
-Currently, BoLD is not supported for L3s.
-
-:::
+This how-to provides step-by-step instructions for Arbitrum chain operators who want to enable BoLD on their chain. Familiarity with Nitro, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), and [chain ownership](/launch-arbitrum-chain/operate/ownership-and-access.mdx) is expected.
 
 ### Overview
 
-To enable BoLD in your L2 Arbitrum chain, you'll have to perform these actions:
+To enable BoLD in your Arbitrum chain, you'll have to perform these actions:
 
 1. Make sure your nodes are running at least [Nitro v3.5.4](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.4) and enable the required parameters after the upgrade
 2. Upgrade your Nitro contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
@@ -261,6 +255,12 @@ As mentioned, this script will try to find the last confirmed assertion of your 
 
 :::
 
+:::note Upgrades executed by a multisig or security council
+
+If Step 5 requires signatures that take hours or days to collect, you do not need to keep validators stopped for that entire period. The payload your signers approve does not encode assertion data, so the lookup this script populates can be refreshed at any point before execution without invalidating collected signatures. To learn how to sequence this, see the [BoLD upgrade playbook](/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx).
+
+:::
+
 ```shell
 
 $ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
@@ -321,7 +321,9 @@ In this case, wait until those blocks finalize, then start your node again.
 
 #### Step 7: Monitor the validation process
 
-Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is one hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is seven days).
+Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is 15 minutes) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is seven days).
+
+If assertions don't appear, or your validators fail to start or bond on the new Rollup contract, see [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx).
 
 ### Table of Arbitrum BoLD parameters
 

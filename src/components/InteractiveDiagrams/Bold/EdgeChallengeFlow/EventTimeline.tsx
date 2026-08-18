@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import type { DecodedEvent, LevelMeta, EdgeAddedMeta } from './types';
+
 import { formatEvent } from './edgeChallengeLogic';
+import type { DecodedEvent, EdgeAddedMeta, LevelMeta } from './types';
 
 interface EventTimelineProps {
   appliedEvents: DecodedEvent[];

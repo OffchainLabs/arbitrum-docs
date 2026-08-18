@@ -1,0 +1,82 @@
+---
+title: 'Batch poster: External signing (KMS)'
+sidebar_label: 'KMS and signing services'
+description: "Learn how to integrate external signing—including AWS KMS—for your chain's batch poster."
+author: pete-vielhaber
+sme: jason-w123
+user_story: As an Arbitrum chain operator, I want to integrate KMS and signing services for my batch poster.
+content_type: how-to
+---
+
+Nitro's batch poster (and staker) sign their parent chain transactions through the **DataPoster** component. By default, it signs locally with a private key, but it also supports **generic RPC-based external signing**: instead of holding the key, Nitro sends an unsigned transaction to a remote signer over (m)TLS, gets back a signed transaction, and independently verifies it.
+
+:::info
+
+There is **no native AWS KMS integration** in the Nitro codebase. KMS support is achieved by running a _separate signer service_ that talks to KMS and exposes an Ethereum-style `eth_signTransaction` RPC endpoint. Nitro connects to that endpoint. In other words: "KMS support" = external signer pointed at a KMS-backed signing service.
+
+:::
+
+## How it works internally
+
+1. **Connect**—`rpcClient()` dials the signer URL with a TLS config: optional client cert/key for mTLS (`ClientCert`/`ClientPrivateKey`), optional `RootCA` (lets you use self-signed certs), and `InsecureSkipVerify`.
+2. **Sign**—`externalSigner()` returns a signer callback that:
+
+- Converts the transaction to `apitypes.SendTxArgs` via `TxToSignTxArgs`.
+  - It fully supports EIP-4844 blob transactions (blobs, commitments, proofs), which the batch poster needs.
+- Calls the configured RPC method: `client.CallContext(ctx, &data, opts.Method, args)`, expecting an RLP-encoded signed transaction back.
+- **Verifies** the returned transaction: the hash must match the request and the recovered sender must equal the configured `Address`. This means TLS is _not_ relied on for authentication—the signature itself is checked at the application layer.
+
+## Configuration
+
+The config struct is `ExternalSignerCfg`:
+
+| Field                | koanf key              | Purpose                                                                                      |
+| -------------------- | ---------------------- | -------------------------------------------------------------------------------------------- |
+| `URL`                | `url`                  | RPC endpoint of the signer. **Setting this enables external signing** (overrides local key). |
+| `Address`            | `address`              | Hex Ethereum address the signer controls; used to verify returned signatures.                |
+| `Method`             | `method`               | RPC method name, e.g., `eth_signTransaction`.                                                |
+| `RootCA`             | `root-ca`              | (Optional) CA cert to trust — enables self-signed server certs.                              |
+| `ClientCert`         | `client-cert`          | (Optional) client cert for mTLS.                                                             |
+| `ClientPrivateKey`   | `client-private-key`   | (Optional) client key for mTLS (required if `client-cert` set).                              |
+| `InsecureSkipVerify` | `insecure-skip-verify` | Skip server TLS verification (not recommended).                                              |
+
+This config is nested under both the batch poster and the staker, so the full CLI flag paths are:
+
+**Batch poster:**
+
+```
+--node.batch-poster.data-poster.external-signer.url
+--node.batch-poster.data-poster.external-signer.address
+--node.batch-poster.data-poster.external-signer.method
+--node.batch-poster.data-poster.external-signer.root-ca
+--node.batch-poster.data-poster.external-signer.client-cert
+--node.batch-poster.data-poster.external-signer.client-private-key
+--node.batch-poster.data-poster.external-signer.insecure-skip-verify
+```
+
+**Staker** uses the same fields under `--node.staker.data-poster.external-signer.*`.
+
+When `external-signer.url` is empty, the batch poster requires a local key. **AnyTrust chains need a local key even when external signing is enabled**: the external signer covers the batch transactions posted to the parent chain, but the requests sent to the <a data-quicklook-from="data-availability-committee-dac">DA Committee</a> are still signed with a local key. See [External signer support](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#external-signer-support) for how to configure the separate key.
+
+## What the signer service must implement
+
+Your signer (whether KMS-backed or otherwise) must expose an HTTPS RPC server with a method matching `Method` that:
+
+- Accepts an Ethereum transaction object (`apitypes.SendTxArgs`—the standard `eth_signTransaction` shape, including blob fields for EIP-4844),
+- Returns the RLP-encoded **signed** transaction as a hex string,
+- Signs with the key for the address you configured as `address`.
+
+If you use mTLS, the server must require and verify the client cert that matches `client-cert`/`client-private-key`.
+
+## Reference implementations
+
+Nitro ships two working examples you can model a KMS service on:
+
+- **`cmd/mockexternalsigner/mockexternalsigner.go`**—a standalone signer binary. It
+  builds an `rpc.Server`, registers a signing method, serves over HTTPS with
+  `tls.RequireAndVerifyClientCert`. Swap the
+  local-key `txOpts.Signer` for a KMS-backed signer, and you have a KMS integration.
+- **`arbnode/dataposter/externalsignertest/externalsignertest.go`**—the test harness,
+  showing the server side (`SignerAPI`, method registration, cert setup with
+  `RequireAndVerifyClientCert`). The RPC method (`externalsignertest.go:185`) takes
+  `*apitypes.SendTxArgs` and returns the RLP-encoded signed transaction as `hexutil.Bytes`.

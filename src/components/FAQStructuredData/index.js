@@ -4,9 +4,8 @@
  * @typedef { import('./types').FAQStructuredData } FAQStructuredData - Schema.org structured data format for FAQs
  * @typedef { import('./types').FAQ } FAQ - Individual FAQ item with question, answer and key
  */
-
-import React from 'react';
 import { useLocation } from '@docusaurus/router';
+import React from 'react';
 
 /**
  * A component that generates and renders Schema.org FAQ structured data for SEO
