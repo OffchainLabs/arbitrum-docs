@@ -45,20 +45,25 @@ The corollary: **redundancy must live on the client side, as multiple simultaneo
 ## The reference architecture
 
 ```text
-                     upstream feed endpoint(s)
-                        wss://feed...
-                     /   \                /   \
-                    /     \              /     \
-            +--------------+          +--------------+
-            |   Relay A    |          |   Relay B    |     >= 2 relays,
-            |  (region 1)  |          |  (region 2)  |     >= 2 primary upstream
-            |  2 upstreams |          |  2 upstreams |     connections each,
-            +--------------+          +--------------+     distinct egress IPs
-                  |    \                  /    |
-                  |     \                /     |
-              [ node ]  [ node ]  [ node ]  [ node ]       every node: >= 2 relays as
-                                                           PRIMARY feed inputs, spanning
-                                                           regions (local + other region)
+                 upstream feed endpoint(s)
+                      wss://feed...
+                   /   \          /   \
+           +--------------+    +--------------+
+           |   Relay A    |    |   Relay B    |     >= 2 relays,
+           |  (region 1)  |    |  (region 2)  |     >= 2 primary upstream
+           |  2 upstreams |    |  2 upstreams |     connections each,
+           +--------------+    +--------------+     distinct egress IPs
+                 |      \        /      |
+                 |       \      /       |
+                 |        \    /        |
+                 |         \  /         |
+                 |          \/          |
+                 |          /\          |
+                 |         /  \         |
+        [ nodes in region 1 ]  [ nodes in region 2 ]
+
+        every node: two primary feed inputs =
+        its local relay + the relay in the other region
 ```
 
 ### Layer 1: your relays
