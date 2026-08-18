@@ -120,7 +120,7 @@ A fallback is not a redundancy mechanism between equivalent sources. If two feed
 
 ### Never point the fleet directly at the public feed
 
-Nitro's reconnect loop retries roughly every 15 seconds, per node, indefinitely. A fleet of direct clients aggregates into exactly the kind of per-IP connection pattern that edge protections rate limit, and a rate-limited client can stay banned precisely because it keeps retrying. Two relays collapse an arbitrarily large fleet into a handful of upstream connections. This is the single highest-leverage change a provider can make.
+Nitro's reconnect loop retries roughly every 15 seconds, per node, indefinitely. A fleet of direct clients aggregates into exactly the kind of per-IP connection pattern that edge protections rate limit, and a rate-limited client can stay banned precisely because it keeps retrying. Two relays collapse an arbitrarily large fleet into a handful of upstream connections.
 
 ### Operational guidance for your fleet
 
