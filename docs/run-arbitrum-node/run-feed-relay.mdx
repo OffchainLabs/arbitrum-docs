@@ -29,9 +29,10 @@ For latency-sensitive applications, you can configure a redundant feed connectio
 
 - This doubles the bandwidth usage at the relay
 - Excessive connections to feed endpoints may be rate-limited
-- This redundancy should be implemented at the relay level, not at individual nodes
-- Generally not recommended unless your application specifically requires minimal latency
-- Do not use more than one redundant feed connection
+- Redundant connections to the public feed should be implemented at the relay level, not at individual nodes
+- Do not use more than one redundant feed connection per relay
+
+If you operate a fleet of nodes for customers (RPC provider, explorer, indexer), follow the [feed relay reference architecture for node providers](/run-arbitrum-node/feed-relay-reference-architecture.mdx): multiple geographically distributed relays with distinct egress IPs, two upstream connections per relay, and every node connected to at least two relays as primary feeds.
 
 :::
 
