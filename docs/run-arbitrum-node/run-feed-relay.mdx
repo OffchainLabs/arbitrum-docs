@@ -103,7 +103,7 @@ Two relays in the same region share edge and transit fate: a regional event (a d
 
 Nitro has two distinct mechanisms for listing more than one feed source, and they behave very differently.
 
-**Multiple primaries** (`--node.feed.input.url` with a list): every URL is connected **simultaneously and permanently**. Messages are deduplicated by sequence number, and the node advances at the pace of whichever connection is ahead. Failover is instant and gapless because there is nothing to fail over: the other stream never stopped. The cost is bandwidth, since each connection carries the full feed.
+**Multiple primaries** (`--node.feed.input.url` with a list): every URL is connected **simultaneously and permanently**. Messages have duplicates removed by sequence number, and the node advances at the pace of whichever connection is ahead. Failover is instant and gapless because there is nothing to fail over: the other stream never stopped. The cost is bandwidth, since each connection carries the full feed.
 
 **Fallback** (`--node.feed.input.secondary-url`): a standby list. In steady state, a secondary is **not connected at all**. The client opens a secondary connection only after the primaries have delivered no messages for a short inactivity window (on the order of seconds), brings secondaries up one at a time, and tears them back down once a primary has been delivering continuously again for a sustained period (on the order of minutes). Three consequences follow:
 
