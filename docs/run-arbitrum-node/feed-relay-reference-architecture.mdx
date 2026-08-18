@@ -34,7 +34,7 @@ A healthy client logs a transient connection error at warning level (an EOF, a r
 Two properties of the system bound the impact of any feed interruption:
 
 - **The feed is a latency optimization, not the source of truth.** Every message is also posted to the parent chain in batches. A node that misses feed messages backfills them from the parent chain automatically. Feed loss can add seconds to minutes of head latency; it cannot cause data loss or an incorrect chain.
-- **Messages carry monotonic sequence numbers**, so clients holding multiple simultaneous feed connections deduplicate perfectly.
+- **Messages carry monotonic sequence numbers**, so clients holding multiple simultaneous feed connections deduplicate them by sequence number.
 
 ## What happens on reconnect (and why gaps appear)
 
