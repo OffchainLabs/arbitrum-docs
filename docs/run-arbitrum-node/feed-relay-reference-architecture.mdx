@@ -17,7 +17,7 @@ This page describes the recommended architecture for consuming the sequencer fee
 2. **Each relay maintains at least two primary upstream connections** to the upstream feed endpoint.
 3. **Each node connects to at least two of your relays as primary feeds** (a list of primary URLs), and at least one of them must be in a different region than the node. Do not use the secondary/fallback mechanism for redundancy.
 4. **Never point a node fleet directly at the public feed.** The relay layer exists to collapse your fleet's footprint to a handful of well-behaved upstream connections.
-5. **Do not treat individual reconnects as incidents.** Alert on sustained absence of feed data and on sustained head lag, not on `readData returned EOF`.
+5. **Do not treat individual reconnects as incidents.** Alert on sustained absence of feed data and on sustained head lag, not on individual transient connection errors.
 
 If you follow 1-3, a disconnect on any single connection, relay, or region is invisible to your nodes.
 
@@ -25,19 +25,11 @@ If you follow 1-3, a disconnect on any single connection, relay, or region is in
 
 The sequencer feed is a long-lived WebSocket. Long-lived connections get terminated in normal operation by every layer they cross:
 
-- **Content delivery networks.** Public feed endpoints are fronted by Cloudflare. Cloudflare restarts edge servers whenever it rolls out code to its network, which drops the WebSocket connections those servers carry. This is documented, expected behavior: see the [Cloudflare WebSockets technical note](https://developers.cloudflare.com/network/websockets/#technical-note).
+- **Edge and CDN infrastructure.** Public feed endpoints are typically served through CDN or edge proxy layers. Edge providers routinely restart servers as they roll out code across their networks, which drops the WebSocket connections those servers carry. This is documented, expected behavior across the industry (see, for example, the [Cloudflare WebSockets technical note](https://developers.cloudflare.com/network/websockets/#technical-note)).
 - **Load balancing and capacity changes.** When feed capacity scales up or down (for example, to absorb a traffic burst), connections are redistributed across instances. Every redistribution is a disconnect/reconnect for the affected clients.
 - **Ordinary transit events.** Route changes, edge maintenance, and idle and lifetime limits along the path.
 
-A healthy client sees this as:
-
-```text
-WARN readData returned EOF                        url=wss://... err="unexpected EOF"
-INFO First reconnection attempt, skipping backoff url=wss://...
-INFO Feed connected                               requestedSeqNum=...
-```
-
-with sub-second to few-second reconnection. Occurring a few times per day per connection, this is **normal operation, not degradation**. The architecture below exists so that these events never affect what your nodes see.
+A healthy client logs a transient connection error at warning level (an EOF, a read timeout, a connection reset; the exact message varies by failure mode and client version), reconnects, and reports the feed connected again within seconds. The shape is what matters, not the specific error string: error, reconnect, streaming again. Occurring a few times per day per connection, this is **normal operation, not degradation**. The architecture below exists so that these events never affect what your nodes see.
 
 Two properties of the system bound the impact of any feed interruption:
 
@@ -46,21 +38,14 @@ Two properties of the system bound the impact of any feed interruption:
 
 ## What happens on reconnect (and why gaps appear)
 
-On reconnect, a client asks the server to resume from a requested sequence number. A feed instance can only replay what is in its own catchup buffer. After a capacity change, a reconnecting client may land on a fresh instance that does not hold the earlier history, and gets resumed at that instance's current position instead:
-
-```text
-WARN new message sequence number (34078876) is greater than the expected
-     sequence number (34078551): remove previous segments from backlog
-```
-
-The node fills that gap from the parent chain. This is safe, but it is also exactly the event that multi-primary redundancy makes a non-event: with two or more simultaneous primaries, the other connection has been streaming the whole time and there is no gap to fill.
+On reconnect, a client asks the server to resume from a requested sequence number. A feed instance can only replay what is in its own catchup buffer. After a capacity change, a reconnecting client may land on a fresh instance that does not hold the earlier history, and gets resumed at that instance's current position instead; the client logs a warning that the incoming sequence number is greater than the one it expected. The node fills that gap from the parent chain. This is safe, but it is also exactly the event that multi-primary redundancy makes a non-event: with two or more simultaneous primaries, the other connection has been streaming the whole time and there is no gap to fill.
 
 The corollary: **redundancy must live on the client side, as multiple simultaneous connections.** Server-side resume semantics cannot guarantee gapless delivery across a single connection's lifecycle.
 
 ## The reference architecture
 
 ```text
-                 upstream feed endpoint (CDN-fronted)
+                     upstream feed endpoint(s)
                         wss://feed...
                      /   \                /   \
                     /     \              /     \
@@ -81,7 +66,7 @@ The corollary: **redundancy must live on the client side, as multiple simultaneo
 Run the [feed relay](/run-arbitrum-node/run-feed-relay.mdx) shipped with Nitro.
 
 - **At least two relays, geographically distributed.** Edge and transit problems are usually regional (a single CDN point of presence, one provider's backbone). Two relays entering the network from different regions decorrelate those failures.
-- **Distinct egress IPs, deliberately.** The feed load balancer routes connections to backends by client source IP (session affinity). All connections from one egress IP generally land on the same backend and stay there. Your effective upstream redundancy is therefore bounded by **how many distinct egress IPs you use**, not by how many relay pods or connections you run. Ten relays behind one NAT IP is one unit of redundancy.
+- **Distinct egress IPs, deliberately.** Feed load balancers commonly route connections to backends by client source IP (session affinity), so all connections from one egress IP tend to land on the same backend and stay there. Assume your effective upstream redundancy is bounded by **how many distinct egress IPs you use**, not by how many relay pods or connections you run. Ten relays behind one NAT IP is one unit of redundancy.
 - **At least two primary upstream connections per relay:**
 
 ```shell
@@ -108,15 +93,24 @@ Nitro connects to every URL in the primary list at the same time and dedupes by 
 
 The cross-region requirement is the point. Two relays in the same region share edge and transit fate, so a regional event (a degraded CDN point of presence, a transit problem, a datacenter issue) interrupts both primaries at once. The relay in the other region is what keeps the node streaming through it. The cross-region hop adds a small amount of latency on that connection; sequence number deduplication means the node always advances at the pace of whichever connection is ahead, so the local relay still sets your steady-state latency.
 
-### Why a primary list, not `secondary-url`
+### Multiple primaries vs `secondary-url` fallback
 
-A common misconfiguration is `--node.feed.input.url=<own relay>` plus `--node.feed.input.secondary-url=<public feed>` as a "fallback." This does not do what operators expect:
+Nitro has two distinct mechanisms for listing more than one feed source, and they behave very differently.
 
-- The secondary feed is **inactivity-triggered, not lag-triggered**. It activates only after roughly five seconds with _zero_ messages from the primary, and it deactivates again once the primary has been continuously healthy for a sustained period.
-- It is **additive**: the secondary runs alongside the primary; it does not replace it. A relay that is behind but still streaming **never** triggers it, so it provides no protection against a lagging upstream.
-- In practice, it silently multiplies your public feed footprint. A fleet where every node carries the public feed as secondary produces a large number of direct public feed connections that the operator did not intend to have, all subject to per-IP affinity and edge rate limiting.
+**Multiple primaries** (`--node.feed.input.url` with a list): every URL is connected **simultaneously and permanently**. Messages are deduplicated by sequence number, and the node advances at the pace of whichever connection is ahead. Failover is instant and gapless because there is nothing to fail over: the other stream never stopped. The cost is bandwidth, since each connection carries the full feed.
 
-Multiple primaries give you actual concurrent redundancy with none of these surprises. Reserve `secondary-url` for what it is: a last-resort input for total primary silence, if you use it at all.
+**Fallback** (`--node.feed.input.secondary-url`): a standby list. In steady state, a secondary is **not connected at all**. The client opens a secondary connection only after the primaries have delivered no messages for a short inactivity window (on the order of seconds), brings secondaries up one at a time, and tears them back down once a primary has been delivering continuously again for a sustained period (on the order of minutes). Three consequences follow:
+
+- It is **inactivity-triggered, not lag-triggered**. A primary that is behind but still streaming never trips it, so it provides no protection against a lagging upstream.
+- Activation is **not gapless**: by the time it fires, the node has already been silent for the length of the inactivity window, and normal reconnect and catchup dynamics apply on the new connection.
+- When active, it is **additive**: the secondary runs alongside the primary rather than replacing it.
+
+**When a fallback is appropriate:**
+
+- As a **break-glass input of a different class than your primaries**, on a limited subset of nodes. For example: primaries on your two relays and a secondary pointing at the public feed, so that a total failure of your own relay layer still self-heals. Keep this to a small subset of nodes: applied fleet-wide, it creates a large direct public feed footprint when activated (every node opens its own secondary), subject to per-IP affinity and edge rate limiting.
+- When bandwidth genuinely rules out a second always-on stream for a given node.
+
+A fallback is not a redundancy mechanism between equivalent sources. If two feed sources are both acceptable to consume continuously, list them both as primaries and let sequence number deduplication do the work. Avoid the inverted arrangement (your own relay as the only primary, with the public feed as a fleet-wide secondary): it provides no protection against a lagging relay and produces a fleet-wide public feed footprint whenever it activates.
 
 ### Never point the fleet directly at the public feed
 
@@ -129,36 +123,7 @@ Nitro's reconnect loop retries roughly every 15 seconds, per node, indefinitely.
   - `arb_feed_sources_connected == 0` sustained for more than a minute (the node has no feed input at all)
   - head lag versus a reference RPC sustained beyond your latency SLO
   - relay upstream disconnect rate materially above its own baseline
-- **Log lines:**
 
-| Log line                                                            | Meaning                                                                                        |
-| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `readData returned EOF` followed by `Feed connected` within seconds | Normal reconnect. Not an incident.                                                             |
-| `Compression was not negotiated ... non-critical`                   | Informational. Safe to ignore.                                                                 |
-| `new message sequence number (...) is greater than the expected`    | Resume gap after reconnect; the node backfills from the parent chain. Rare with multi-primary. |
-| `no connected feed` sustained, reconnects failing repeatedly        | Investigate: likely local egress, DNS, or an edge rate limit on your IP.                       |
-| `BlockHash from feed doesn't match locally computed hash`           | Not a transport issue. Check the chain's status page and support channels before acting.       |
+## Status and monitoring
 
-## Feed monitoring operated by Offchain Labs
-
-Offchain Labs maintains continuous, alerting monitoring on the feed path end to end for the chains it operates infrastructure for. **If this reference architecture is followed and you still see sustained degradation, it is highly unlikely you are observing something that is not already known.** This monitoring includes:
-
-- **Multi-region synthetic feed subscribers.** Always-on probe clients in multiple regions hold long-lived connections to the same public endpoints customers use, alerting on connection failures, message inactivity, and sequence number stalls.
-- **Public feed canary nodes.** Full nodes deliberately consuming the public feed from outside Offchain Labs' own network, experiencing exactly what an external subscriber experiences.
-- **Relay fleet metrics.** Every relay exports upstream connection state, connected client counts, and backlog depth, with alerting on upstream loss and backlog growth.
-- **Transport-level monitoring.** Host network metrics (including TCP retransmit ratios) on feed infrastructure, which catch edge and transit degradation before most subscribers notice.
-- **Sequencer-side publication alerting.** A stall in feed publication at the source pages the on-call rotation directly.
-- **Edge analytics.** Per-location CDN error and connection-rate visibility for the public endpoints.
-
-All of this pages a 24/7 on-call rotation, and incidents are published to the relevant chain's status page (for Arbitrum One and Nova: [status.arbitrum.io](https://status.arbitrum.io/)).
-
-## Reporting an issue
-
-Check the chain's status page first. If you still believe you are seeing a feed-side problem, include the following in your report; it turns a multi-day thread into a same-day answer:
-
-1. Time window in **UTC**, as precise as possible.
-2. The exact feed URL(s) affected.
-3. Your topology: how many relays, where, upstream URL(s) per relay, and the exact `--node.feed.input.*` configuration on both relays and nodes.
-4. Your egress IPs for the affected connections.
-5. Sample logs around the event (the reconnect lines above, with timestamps).
-6. Whether it self-recovered, and how long recovery took.
+Offchain Labs maintains continuous monitoring and alerting on the feed path end to end for the chains it operates infrastructure for, backed by a 24/7 on-call rotation. Incidents are published to the relevant chain's status page (for Arbitrum One and Nova: [status.arbitrum.io](https://status.arbitrum.io/)); check it first when investigating sustained degradation.
