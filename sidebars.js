@@ -728,11 +728,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/feed-relay-reference-architecture',
-          label: 'Feed relay reference architecture',
-        },
-        {
-          type: 'doc',
           id: 'run-arbitrum-node/beacon-nodes-historical-blobs',
           label: 'Historical blobs',
         },
