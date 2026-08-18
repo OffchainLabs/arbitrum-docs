@@ -51,7 +51,7 @@ Two properties of the system bound the impact of any feed interruption:
 
 On reconnect, a client asks the server to resume from a requested sequence number. A feed instance can only replay what is in its own catchup buffer. After a capacity change, a reconnecting client may land on a fresh instance that does not hold the earlier history, and gets resumed at that instance's current position instead; the client logs a warning that the incoming sequence number is greater than the one it expected. The node fills that gap from the parent chain. This is safe, and it is the event that multi-primary redundancy eliminates: with two or more simultaneous primaries, the other connection has been streaming the whole time and there is no gap to fill.
 
-The corollary: **redundancy must live on the client side, as multiple simultaneous connections.** Server-side resume semantics cannot guarantee gapless delivery across a single connection's lifecycle.
+In summary: **redundancy must live on the client side, as multiple simultaneous connections.** Server-side resume semantics cannot guarantee gapless delivery across a single connection's lifecycle.
 
 ## Reference architecture for node providers
 
