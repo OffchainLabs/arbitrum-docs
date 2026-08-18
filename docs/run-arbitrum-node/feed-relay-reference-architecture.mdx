@@ -123,7 +123,3 @@ Nitro's reconnect loop retries roughly every 15 seconds, per node, indefinitely.
   - `arb_feed_sources_connected == 0` sustained for more than a minute (the node has no feed input at all)
   - head lag versus a reference RPC sustained beyond your latency SLO
   - relay upstream disconnect rate materially above its own baseline
-
-## Status and monitoring
-
-Offchain Labs maintains continuous monitoring and alerting on the feed path end to end for the chains it operates infrastructure for, backed by a 24/7 on-call rotation. Incidents are published to the relevant chain's status page (for Arbitrum One and Nova: [status.arbitrum.io](https://status.arbitrum.io/)); check it first when investigating sustained degradation.
