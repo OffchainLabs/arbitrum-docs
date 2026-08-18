@@ -61,7 +61,7 @@ Snapshots are published per state scheme, and a snapshot only works with a node 
 | `archive`      | Archive   | HashDB       | Arbitrum One, Nova, Sepolia |
 | `archive-path` | Archive   | PathDB       | Arbitrum One, Sepolia       |
 
-Only the HashDB kinds distinguish pruned from unpruned. PathDB prunes as it runs, so every PathDB snapshot is already pruned to its state-history window — there is no separate unpruned variant to publish. The `pruned` kind exists because a HashDB database is pruned manually, and the published HashDB full node snapshots happen to be pruned ones.
+Only the HashDB kinds distinguish pruned from unpruned. PathDB prunes as it runs, so every PathDB snapshot is already pruned to its state-history window—there is no separate unpruned variant to publish. The `pruned` kind exists because a HashDB database is pruned manually, and the published HashDB full node snapshots happen to be pruned ones.
 
 `--init.latest` cannot download the PathDB kinds. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
 
@@ -71,7 +71,7 @@ Database snapshots for other Arbitrum chains may be available at the discretion 
 
 Supplying a database snapshot when starting your node for the first time is required for Arbitrum One (to provide information from the Classic era) but is optional for other chains. Supplying a database snapshot on the first run will provide the state and data for that chain up to a specific block, allowing the node to sync faster to the head of the chain.
 
-We provide a summary of the available parameters here, but we recommend reading the [complete guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx) if you plan to use snapshots.
+We provide a summary of the available parameters here, but it is recommended to read the [complete guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx) if you plan to use snapshots.
 
 - Use the parameter `--init.latest <snapshot type>` (accepted values: `archive`, `pruned`, `genesis`) to instruct your node to download the corresponding snapshot from the configured URL
 - Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
