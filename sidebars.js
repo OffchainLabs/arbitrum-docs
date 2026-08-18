@@ -724,7 +724,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos61',
-              label: 'Elara (ArbOS 60)',
+              label: 'Elara (ArbOS 61)',
             },
             {
               type: 'doc',
