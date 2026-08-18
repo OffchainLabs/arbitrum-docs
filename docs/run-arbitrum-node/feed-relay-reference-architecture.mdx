@@ -84,6 +84,8 @@ relay \
 
 The feed input accepts a comma-separated list of URLs. All of them are connected simultaneously and deduplicated by sequence number. Where a chain publishes only one public feed hostname, two connections to the same hostname from distinct egress IPs still provide meaningful redundancy (session affinity will generally pin them to different backends). Do not exceed two upstream connections per relay: each one doubles bandwidth, and excessive connections may be rate-limited at the edge.
 
+Some chains publish more than one feed endpoint. Arbitrum One, for example, also publishes a delayed feed that intentionally lags the real-time sequencer feed. Endpoints like these serve different use cases, not redundancy: under sequence number deduplication, an intentionally delayed stream contributes nothing while a real-time connection is healthy. Choose the endpoint class that matches your requirements and apply the redundancy rules on this page to that endpoint.
+
 ### Layer 2: your nodes
 
 Every node lists **at least two of your relays as primary feeds**, and the set must span regions: the relay local to the node plus at least one relay in another region:
