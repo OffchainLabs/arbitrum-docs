@@ -283,6 +283,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-target',
                   label: 'Gas target',
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
+                  label: `Priority fees`,
+                },
               ],
             },
             {
@@ -304,43 +309,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults',
                   label: `DAC defaults`,
-                },
-                {
-                  type: 'category',
-                  label: 'Gas',
-                  collapsed: true,
-                  items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
-                      label: `AnyTrust custom gas token`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
-                      label: `Rollup custom gas token`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
-                      label: 'Native mint/burn gas token',
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
-                      label: `Gas optimization tools`,
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
-                      label: 'Dynamic Pricing for Arbitrum Chains',
-                    },
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
-                      label: 'Priority fees',
-                    },
-                  ],
                 },
                 {
                   type: 'doc',
