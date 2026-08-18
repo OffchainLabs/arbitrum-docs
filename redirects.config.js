@@ -16,15 +16,6 @@ export const redirects = [
     from: '/stylus/how-tos/adding-support-for-new-languages',
     to: '/stylus/how-tos/deploying-non-rust-wasm-contracts',
   },
-  // Manual redirects — retired page "How to verify child chain state on the parent chain"
-  {
-    from: '/arbitrum-essentials/how-to-get-l2block-on-l1',
-    to: '/how-arbitrum-works/deep-dives/assertions',
-  },
-  {
-    from: '/build-decentralized-apps/how-to-get-l2block-on-l1',
-    to: '/how-arbitrum-works/deep-dives/assertions',
-  },
   // AUTO-GENERATED REDIRECTS START
   {
     from: '/build-decentralized-apps/how-to-estimate-gas',
