@@ -69,7 +69,7 @@ If you follow 1-3, a disconnect on any single connection, relay, or region is in
 
 ### Layer 1: your relays
 
-- **At least two relays, geographically distributed.** Edge and transit problems are usually regional (a single CDN point of presence, one provider's backbone). Two relays entering the network from different regions decorrelate those failures.
+- **At least two relays, geographically distributed.** Edge and transit problems are usually regional (a single CDN point of presence, one provider's backbone). Two relays entering the network from different regions reduces those failures.
 - **Distinct egress IPs.** Feed load balancers commonly route connections to backends by client source IP (session affinity), so all connections from one egress IP tend to land on the same backend and stay there. Assume your effective upstream redundancy is bounded by **how many distinct egress IPs you use**, not by how many relay pods or connections you run. Ten relays behind one NAT IP is one unit of redundancy.
 - **At least two primary upstream connections per relay:**
 
