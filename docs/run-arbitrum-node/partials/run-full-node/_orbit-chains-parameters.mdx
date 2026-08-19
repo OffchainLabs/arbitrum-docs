@@ -16,7 +16,7 @@ If you choose to self-host an EVM node, the [Prysm client software](https://www.
 
 :::
 
-Additionally, if the chain is a Layer-2 (L2) chain on top of Ethereum and uses blobs to post calldata, use the parameter `--parent-chain.blob-client.beacon-url` to provide a beacon chain RPC endpoint:
+Additionally, if the chain is a Layer-2 (L2) chain on top of Ethereum and uses <a data-quicklook-from="blob">blobs</a> to post calldata, use the parameter `--parent-chain.blob-client.beacon-url` to provide a beacon chain RPC endpoint:
 
 ```shell
 --parent-chain.blob-client.beacon-url=<Parent chain beacon chain RPC URL>
@@ -75,7 +75,7 @@ First, enable AnyTrust data availability using the following parameters (prior t
 --node.da.anytrust.rest-aggregator.enable
 ```
 
-Then, choose one of these methods to specify the DAS REST endpoints that your node will read the information from. These endpoints should also be provided by the chain owner.
+Then, choose one of these methods to specify the <a data-quicklook-from="data-availability-server-das">DAS</a> REST endpoints that your node will read the information from. These endpoints should also be provided by the chain owner.
 
     1. Set the DAS REST endpoints directly:
 
