@@ -1,0 +1,7 @@
+---
+title: Feed Relay
+key: feed-relay
+titleforSort: Feed Relay
+---
+
+A standalone `relay` binary that subscribes to a [sequencer feed](/intro/glossary#sequencer-feed) and re-broadcasts it to downstream nodes. The feed relay is stateless fan-out: it needs no [parent chain](/intro/glossary#parent-chain) connection, no wallet, no bond, and no database. Running one relay per data center reduces ingress fees and improves stability when you run several nodes. It ships inside the Nitro Docker image.
