@@ -4167,10 +4167,10 @@
     "@types/node-fetch" "^2.5.10"
     node-fetch "^2.6.1"
 
-"@notionhq/client@^5.23.3":
-  version "5.23.3"
-  resolved "https://registry.yarnpkg.com/@notionhq/client/-/client-5.23.3.tgz#876f4209c203c3698790eedde298b433d602a5ba"
-  integrity sha512-Uk0ycO+u6+iueoE/eK9Aa/DGWd2tZ9ymvGF/MXcfxXXL+AS2JYWm1ols19rEk5qOdZ0l2KYc6zThx0iXQ3QhpQ==
+"@notionhq/client@^5.24.0":
+  version "5.24.0"
+  resolved "https://registry.yarnpkg.com/@notionhq/client/-/client-5.24.0.tgz#53bfb0d7f2154b996dcf63c25876b358d6eadbd4"
+  integrity sha512-fd71hjK6QZYggwWdaBeLu4ajBQ4HTK0R6bj7v9GMFhilgsdMRJ5HDHQtKbc8/y6E5XXLYgNpDz78Q+BdXHa1ug==
 
 "@offchainlabs/notion-docs-generator@0.1.2":
   version "0.1.2"
@@ -4450,25 +4450,25 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/browser-common@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@posthog/browser-common/-/browser-common-0.3.1.tgz#5c1aa9ba11878c8a4ca566bc3ac4a261701c9c74"
-  integrity sha512-1nhMVY1wnHADTg8tR9yvm+lPAz5ROxznfQlBtLzB2FFo4lp/LU8lk9KyFPsARDkBxCfYachsJfvRjocL1G/AJQ==
+"@posthog/browser-common@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@posthog/browser-common/-/browser-common-0.5.0.tgz#792d7f9840f808be4581c675ccc47a3761ba0c78"
+  integrity sha512-8DaxVZS1bQPbA514RePurLNbYjei3P4jhnC206DwVv5XThmZM3QdlsXenI2ujE3pLbgQ79hYn9o1Kda8I3WK/Q==
   dependencies:
-    "@posthog/core" "^1.46.0"
-    "@posthog/types" "^1.399.0"
-
-"@posthog/core@^1.46.0", "@posthog/core@^1.46.6":
-  version "1.46.9"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.46.9.tgz#c76ee98638ce263efec83e1dc974552a02b9674e"
-  integrity sha512-EXO6y5ih+jBkTCpUCuYgQmajuDZuvy6vMvflkub6pLQyi0GPlCPWVSvZZkOeQw9e2MxoD5GteeGCt9R8+UJ/yQ==
-  dependencies:
+    "@posthog/core" "^1.47.0"
     "@posthog/types" "^1.402.2"
 
-"@posthog/types@^1.399.0", "@posthog/types@^1.400.2", "@posthog/types@^1.402.2":
-  version "1.402.2"
-  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.402.2.tgz#13a82f000a76b2ca9265d2e880f16cf9376a1b16"
-  integrity sha512-ZZTiS4dLwF4/D0YTzS3gGSLFnhuNOY5yu4d9VGS9trGe5GW6FjIXo20p18K5BPW2RZSYSld8sdnSAY3AUXleUQ==
+"@posthog/core@^1.47.0":
+  version "1.48.1"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.48.1.tgz#842e868b43cee6426ed5acbaf73e18cafe8dd5be"
+  integrity sha512-mxw31XdYgt/SnlwqLPAcltK67q+QmsiYjVLGQ4GbBc8OJ7O4yRFSDwAXt8QsokHokeyEZtTRWM6jDHL7LYMx1A==
+  dependencies:
+    "@posthog/types" "^1.404.1"
+
+"@posthog/types@^1.402.2", "@posthog/types@^1.402.3", "@posthog/types@^1.404.1":
+  version "1.404.1"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.404.1.tgz#66743e03df9dfad215401e7ec8ec090e99382df6"
+  integrity sha512-i2Gei6ARfOSBeTN4s2yUP1p97s2UNI+1NWmtLjhnR/V6t3RFOfI1sBWKcJNWHjtoOCCWoAFU+PNPY6SgT2VtEQ==
 
 "@radix-ui/number@1.1.0":
   version "1.1.0"
@@ -6023,10 +6023,10 @@
     d3-selection "^3.0.0"
     d3-transition "^3.0.1"
 
-"@vercel/edge@1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-1.3.2.tgz#7121398425d069700aa2d3ed5723567e9427fd82"
-  integrity sha512-bpeHqawJ931YujN2OxcOfknQPem0pvTofpLmfGMvlcSW0FMDLEog+NKNIez3YRkr9aVIIKKyMzozmmg3UtWqEA==
+"@vercel/edge@1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-1.3.3.tgz#40c5f05d824b2772e06fcdc1a485b68e43b95c4b"
+  integrity sha512-B4zu4g81nI1JHoOqc2FnXmh1DUpAJlZKPQsZck6iLp23kQ/zZF4ma6+Wejn8p9bKB6WPTbYPqEYrRXx4yl0qaw==
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
@@ -8105,7 +8105,7 @@ domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
-dompurify@^3.3.2, dompurify@^3.3.3:
+dompurify@^3.3.3, dompurify@^3.4.13:
   version "3.4.13"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.13.tgz#fc28949d59f92d62e28a3a764bcbeee35897a1be"
   integrity sha512-2vmYIoqjze2d+kakP8S/nS5shfsl587kzwEjcGlTdiksUVgFHnFCsLYDVj/JNqJVOQZGSYBTmuycv0PodwmnMQ==
@@ -12469,20 +12469,21 @@ posthog-docusaurus@^2.0.5:
   resolved "https://registry.yarnpkg.com/posthog-docusaurus/-/posthog-docusaurus-2.0.5.tgz#5ce7ea9659a3845cba094712743194eaf84aa527"
   integrity sha512-Ray65LYEJrMMqDtsBUBXunEVP/g4wtATvq/xz9rchUoLy/9mSkkFgUko/8DVtGxgiP3vivpFMgfb9HpCuDrBHg==
 
-posthog-js@^1.410.10:
-  version "1.410.10"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.410.10.tgz#4aee0af6eda0920a8f7212b079affa7eeb455846"
-  integrity sha512-4bAvfvlBnhYoaDQBvA8fXXUR6Uu3adKTAZyDnFYDtcobKHQQhccWICViy2QgfrGDRV9clr+Q5MfF9X8kOrKZzg==
+posthog-js@^1.415.4:
+  version "1.415.4"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.415.4.tgz#e338ac9f2f7c9b846e6468b9028243d693e3817a"
+  integrity sha512-8YQmAcBXo5H0nN8oEbfIwJr4GUizjbEH63fAHtRZi+zFZGeB3yN0oKB5sEbRldVwpxkqfuV4a8XY9RmmLzYb1A==
   dependencies:
-    "@posthog/browser-common" "^0.3.1"
-    "@posthog/core" "^1.46.6"
-    "@posthog/types" "^1.400.2"
+    "@posthog/browser-common" "^0.5.0"
+    "@posthog/core" "^1.47.0"
+    "@posthog/types" "^1.402.3"
     core-js "^3.49.0"
-    dompurify "^3.3.2"
+    dompurify "^3.4.13"
     fflate "^0.4.8"
     preact "^10.29.3"
     query-selector-shadow-dom "^1.0.1"
     web-vitals "^5.3.0"
+    web-vitals-soft-navs "npm:web-vitals@6.0.0"
 
 preact@^10.29.3:
   version "10.29.7"
@@ -13945,7 +13946,7 @@ svg-parser@^2.0.4:
   resolved "https://registry.npmjs.org/svg-parser/-/svg-parser-2.0.4.tgz"
   integrity sha512-e4hG1hRwoOdRb37cIMSgzNsxyzKfayW6VOflrwvR+/bzrkyxY/31WkbgnQpgtrNp1SdpJvpUAGTa/ZoiPNDuRQ==
 
-svgo@^3.0.2, svgo@^3.2.0:
+svgo@3.3.4, svgo@^3.0.2, svgo@^3.2.0:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/svgo/-/svgo-3.3.4.tgz#fd2aa10ff585b3bd2b83ce3602f5582bc0718bb5"
   integrity sha512-GsNRis4e8jxn2Y9ENz/8lbJ93CstG8svtMnuRaHbiF2LTJ5tK0/q3t/URPq9Zc7zVWBJnNnJMIp6bevK7bSmNg==
@@ -14145,10 +14146,10 @@ tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0, tslib@^2.6.0, tslib@^2.6
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
-tsx@^4.23.5:
-  version "4.23.5"
-  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.23.5.tgz#fbf78241ff3e616c5dc96e6113200b0e6899e7dc"
-  integrity sha512-rw55FUaqOoI7RvlQwLbhO4nSDApnQ4/CykPuiQ/EPvtrX3WA9Ig55jIt9VvbBJbzJuj12ueRu4PMZ2SxPVbihg==
+tsx@^4.23.12:
+  version "4.23.12"
+  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.23.12.tgz#3a4919591cd9b9e00011b75e596c8ab8db23c09c"
+  integrity sha512-FDf4L4sYzKtzWYhU/Xm0AQFdTjdIxNo9ElTf2mxXM6k8YMHXzYUe4yODVaXP4V9uMFbVg8c0qyBccK2OOxb45Q==
   dependencies:
     esbuild "~0.28.0"
   optionalDependencies:
@@ -14576,6 +14577,11 @@ web-streams-polyfill@4.0.0-beta.3:
   version "4.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-4.0.0-beta.3.tgz#2898486b74f5156095e473efe989dcf185047a38"
   integrity sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug==
+
+"web-vitals-soft-navs@npm:web-vitals@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-6.0.0.tgz#05c7c10e7c4bba4acfe35c59767bd52894e22350"
+  integrity sha512-Guaibvy/+uNtL6Bsu4jmMJGzuSl91oeRH5iO9pPRbYftnFUr3yqT1TUNX/OE4o9HexuEMU3Kb/Wg7iKhlffZUA==
 
 web-vitals@^5.3.0:
   version "5.3.0"

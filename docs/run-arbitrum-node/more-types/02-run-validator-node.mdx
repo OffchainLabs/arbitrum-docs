@@ -76,7 +76,7 @@ On top of the configuration of a regular full node, you'll need to configure the
 | `--node.staker.strategy`                        | `Watchtower`, `Defensive`, `StakeLatest`, `ResolveNodes`, `MakeNodes` | Strategy that your node will use                                                                                                                                      |
 | `--node.staker.parent-chain-wallet.private-key` | 0xPrivateKey                                                          | Private key of the wallet used to perform the operations onchain. Use either `private-key` or `password` (below)                                                      |
 | `--node.staker.parent-chain-wallet.password`    | Password                                                              | Password of a wallet generated with nitro (see instructions [here](#use-nitro-to-create-a-wallet-for-your-validator)). Use either `private-key` (above) or `password` |
-| `--node.bold.enable`                            | true                                                                  | Enables validation with BoLD (not needed if BoLD is not activated, only needed before nitro v3.6.0)                                                                   |
+| `--node.bold.enable`                            | true                                                                  | Enables validation with BoLD (not needed if BoLD is not activated, only needed before Nitro v3.6.0)                                                                   |
 
 Here's an example of how to run a defensive validator for Arbitrum One:
 
@@ -84,7 +84,7 @@ Here's an example of how to run a defensive validator for Arbitrum One:
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.staker.strategy=Defensive
 ```
 
-### Step 2: verify that your node is running as a validator
+### Step 2: Verify that your node is running as a validator
 
 To verify that your node is acting as a validator, you can look for the following log line:
 
