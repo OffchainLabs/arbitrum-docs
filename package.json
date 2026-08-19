@@ -114,6 +114,7 @@
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
     "semver": "^7.8.5",
+    "svgo": "3.3.4",
     "tsx": "^4.23.12",
     "typescript": "^6.0",
     "unified": "^11.0.5",

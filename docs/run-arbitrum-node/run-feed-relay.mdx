@@ -7,7 +7,7 @@ content_type: how-to
 
 :::caution
 
-If running a single node, there is no need to run a feed relay. When running more than one node, it is strongly recommended to run a single feed relay per data center, which will reduce ingress fees and improve stability.
+If running a single node, there is no need to run a <a data-quicklook-from="feed-relay">feed relay</a>. When running more than one node, it is strongly recommended to run a single feed relay per data center, which will reduce ingress fees and improve stability.
 
 Feed endpoints will soon require compression with a custom dictionary, so if connecting to a feed with anything other than a standard node, it is strongly suggested to run a local feed relay, which will provide an uncompressed feed by default.
 
@@ -37,17 +37,19 @@ For latency-sensitive applications, you can configure a redundant feed connectio
 
 The feed relay is in the same Docker image as the Nitro node.
 
-- Here is an example of how to run the feed relay for Arbitrum One:
+- Here is an example of how to run the feed relay for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>:
+
   ```shell
   docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1-feed.arbitrum.io/feed --chain.id=42161
   ```
-- Here is an example of how to run nitro-node for Arbitrum One with a custom relay:
+
+- Here is an example of how to run `nitro-node` for Arbitrum One with a custom relay:
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.feed.input.url=ws://local-relay-address:9642
   ```
 
-Note that Arbitrum Classic does not communicate with Nitro sequencer, so classic relay is no longer used.
+Note that <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> does not communicate with Nitro <a data-quicklook-from="sequencer">sequencer</a>, so classic relay is no longer used.
 
 ## Helm charts (Kubernetes)
 
-If you are using [Kubernetes](https://kubernetes.io/) to run your feed relay, a helm chart is available at [ArtifactHUB](https://artifacthub.io/packages/helm/offchainlabshelm/relay). It supports running a Nitro relay by providing the feed input URL. Find more information in the [OCL community Helm charts repository](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/relay).
+If you are using [Kubernetes](https://kubernetes.io/) to run your feed relay, a Helm chart is available at [ArtifactHUB](https://artifacthub.io/packages/helm/offchainlabshelm/relay). It supports running a Nitro relay by providing the feed input URL. Find more information in the [OCL community Helm charts repository](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/relay).
