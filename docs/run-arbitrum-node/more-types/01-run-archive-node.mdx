@@ -6,7 +6,7 @@ sidebar_position: 3
 content_type: how-to
 ---
 
-An Arbitrum **archive node** is a full node that maintains an archive of historical chain states. This how-to walks you through the process of configuring an archive node on your local machine so that you can query both pre-Nitro and post-Nitro state data.
+An Arbitrum **archive node** is an <a data-quicklook-from="arbitrum-full-node">Arbitrum full node</a> that maintains an archive of historical <a data-quicklook-from="chain-state">chain states</a>. This how-to walks you through the process of configuring an archive node on your local machine so that you can query both pre-Nitro and post-Nitro state data.
 
 For how archive mode relates to the other Nitro node roles, see [How to assign roles to a Nitro node](/run-arbitrum-node/assign-node-roles.mdx).
 
@@ -18,7 +18,7 @@ For how archive mode relates to the other Nitro node roles, see [How to assign r
 
 ## Before we begin
 
-Before the Nitro upgrade, Arbitrum One ran on the Classic stack for about one year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can serve all but six RPC requests for pre-Nitro blocks. Full details are outlined in [Do you need to run a Classic node?](/run-arbitrum-node/more-types/03-run-classic-node.mdx#do-you-need-to-run-a-classic-node).**
+Before the Nitro upgrade, <a data-quicklook-from="arbitrum-one">Arbitrum One</a> ran on the <a data-quicklook-from="arbitrum-classic">Classic</a> stack for a year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can serve all but six RPC requests for pre-Nitro blocks. Full details are outlined in [Do you need to run a Classic node?](/run-arbitrum-node/more-types/03-run-classic-node.mdx#do-you-need-to-run-a-classic-node).**
 
 Running an Arbitrum One **full node** in **archive mode** lets you access both pre-Nitro and post-Nitro blocks, but it requires you to run **both Classic and Nitro nodes** together. You may not need to do this, depending on your use case:
 
@@ -32,17 +32,17 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 
 ## Use PathDB for archive nodes
 
-**We recommend PathDB for archive nodes on Nitro v3.9.x or later.** PathDB is a path-based state scheme. It cuts archive disk use substantially, and while syncing and serving RPC calls a PathDB archive node performs about the same as, or slightly better than, a HashDB one.
+**We recommend <a data-quicklook-from="pathdb">PathDB</a> for archive nodes on Nitro v3.9.x or later.** PathDB is a path-based <a data-quicklook-from="state-scheme">state scheme</a>. It cuts archive disk use substantially, and while syncing and serving RPC calls a PathDB archive node performs about the same as, or slightly better than, a <a data-quicklook-from="hashdb">HashDB</a> one.
 
 Benefits:
 
 - **Lower disk usage.** The Arbitrum One `archive-path` snapshot is about 3.7 TB. The equivalent HashDB `archive` snapshot is considerably larger — Nova's is about 8 TB, for a chain whose full node database is a quarter the size of Arbitrum One's.
-- **Automatic, online pruning.** PathDB removes old state as the node runs, without your intervention. You never schedule a prune, and the node never goes offline to run one. On HashDB you prune manually, and the node stops serving RPC requests until it finishes — days, on a chain the size of Arbitrum One. This benefit applies to full nodes on PathDB too.
+- **Automatic, online <a data-quicklook-from="state-pruning">pruning</a>.** PathDB removes old state as the node runs, without your intervention. You never schedule a prune, and the node never goes offline to run one. On HashDB you prune manually, and the node stops serving RPC requests until it finishes—days, on a chain the size of Arbitrum One. This benefit applies to full nodes on PathDB too.
 - **Configurable retention.** You choose how much state history to keep with `--execution.caching.state-history`.
 
 Limitations:
 
-- **PathDB cannot validate blocks.** If a node requires the block validator, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
+- **PathDB cannot validate blocks.** If a node requires the block <a data-quicklook-from="validator">validator</a>, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
 - **Fast, local NVMe SSD storage is required** for reasonable sync speed.
 - **`--init.latest` cannot download a PathDB snapshot.** Use `--init.url`, as described in [Initialize a PathDB archive node](#initialize-a-pathdb-archive-node).
 
@@ -57,7 +57,7 @@ To enable PathDB on your archive node, start it with these flags:
 
 `--execution.caching.state-history` controls how many blocks of state history PathDB retains. From v3.10.0 onward, setting `--execution.caching.archive` makes it default to `0`, which keeps the entire chain, so you can leave it unset.
 
-Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. Nitro logs a warning — `Path scheme archive mode enabled, but state-history is not zero` — and then silently retains only recent history, leaving you with an archive node that cannot serve older state. Pass `--execution.caching.state-history=0` explicitly on those versions.
+Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. Nitro logs a warning — `Path scheme archive mode enabled, but state-history is not zero`—and then silently retains only recent history, leaving you with an archive node that cannot serve older state. Pass `--execution.caching.state-history=0` explicitly on those versions.
 
 </VanillaAdmonition>
 
@@ -67,7 +67,7 @@ For cache sizing and memory tuning that applies to archive nodes generally, see 
 
 A snapshot only works with a node whose state scheme matches the snapshot's. `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots, so it cannot bootstrap a PathDB node.
 
-Instead, pass the `archive-path` snapshot URL to `--init.url`. These snapshots are published for Arbitrum One and Arbitrum Sepolia only; Arbitrum Nova has no `archive-path` snapshot.
+Instead, pass the `archive-path` snapshot URL to `--init.url`. These snapshots are published for Arbitrum One and Arbitrum Sepolia only; <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> has no `archive-path` snapshot.
 
 Each chain publishes a pointer file naming its current `archive-path` snapshot directory. Read that file to find the URL:
 
@@ -96,7 +96,7 @@ import HardwarePartial from '../../partials/_hardware-requirements.mdx';
 1. **Docker images:** We'll specify these in the below commands; you don't need to download them manually.
    - Latest Docker image for **Arbitrum One Nitro**: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@</code>
    - Latest Docker image for **Arbitrum One Classic**: <code>@@latestClassicNodeImage=offchainlabs/arb-node:v1.4.6-551a39b3@@</code>
-2. **Database snapshots:**
+2. **<a data-quicklook-from="database-snapshot">Database snapshots</a>:**
    - Nitro database snapshot
      - Use the parameter `--init.url=` on the first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot-explorer.arbitrum.io/)). Example: <code>--init.url="@@arbOneNitroArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar@@"</code>
    - Arbitrum One Classic database snapshot
@@ -137,7 +137,7 @@ When running a Docker image, an external volume should be mounted to persist the
 
 <!-- todo: does the user need to do anything to configure the mount point, or is this handled by the below docker commands? -->
 
-To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one or more of the below examples:
+To run both <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> and/or Arbitrum Classic in archive mode, follow one or more of the below examples:
 
 - **Arbitrum One Nitro archive node**:
   ```shell
