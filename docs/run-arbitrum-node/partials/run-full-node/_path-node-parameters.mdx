@@ -4,13 +4,13 @@ These flags apply only when you set `--execution.caching.state-scheme=path`.
 
 ### `--execution.caching.state-scheme`
 
-Selects the TrieDB implementation Nitro uses to store its state trie. Set it to `path` to enable PathDB; the default is `hash`.
+Selects the TrieDB implementation Nitro uses to store its state trie. Set it to `path` to enable <a data-quicklook-from="pathdb">PathDB</a>; the default is `hash`.
 
-The two schemes are not interchangeable. A node can only start from a snapshot created with the same state scheme, so you cannot convert an existing database. To move to PathDB, either start from a `path`-scheme snapshot or sync from genesis. On Arbitrum One, syncing from genesis also requires a [Classic state import](/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic.mdx#step-3-initialize-your-nitro-node-importing-the-exported-data).
+The two schemes are not interchangeable. A node can only start from a snapshot created with the same <a data-quicklook-from="state-scheme">state scheme</a>, so you cannot convert an existing database. To move to PathDB, either start from a `path`-scheme snapshot or sync from genesis. On Arbitrum One, syncing from genesis also requires a [Classic state import](/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic.mdx#step-3-initialize-your-nitro-node-importing-the-exported-data).
 
 ### `--execution.caching.state-history`
 
-Sets how many blocks of state history Nitro retains, counting back from the chain head. `0` means the entire chain, and is therefore required — but not enough on its own — to run an archive node on PathDB. You also need `--execution.caching.archive`, described below.
+Sets how many blocks of state history Nitro retains, counting back from the chain head. `0` means the entire chain, and is therefore required — but not enough on its own — to run an <a data-quicklook-from="archive-node">archive node</a> on PathDB. You also need `--execution.caching.archive`, described below.
 
 <StateHistoryDefaults />
 
@@ -20,7 +20,7 @@ Nitro stores state history as reverse diffs in the cold database, also called th
 
 ### `--execution.caching.archive`
 
-Enables archive mode. Under PathDB, archive mode also builds the state history index, an extra dataset Nitro persists in the hot database (Pebble). That index is what allows RPC calls to read state older than `pathdb-max-diff-layers + 1` blocks from the head.
+Enables archive mode. Under PathDB, archive mode also builds the state history index, an extra dataset Nitro persists in the hot database (<a data-quicklook-from="pebble">Pebble</a>). That index is what allows RPC calls to read state older than `pathdb-max-diff-layers + 1` blocks from the head.
 
 ### `--execution.caching.pathdb-max-diff-layers`
 

@@ -283,6 +283,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-target',
                   label: 'Gas target',
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
+                  label: `Priority fees`,
+                },
               ],
             },
             {
@@ -740,6 +745,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/overview',
               label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos61',
+              label: 'Elara (ArbOS 61)',
             },
             {
               type: 'doc',
@@ -1827,11 +1837,6 @@ const sidebars = {
       type: 'doc',
       id: 'notices/arbos61-upgrade-notice',
       label: 'Upgrade notice for ArbOS 61',
-    },
-    {
-      type: 'doc',
-      id: 'notices/arbos60-upgrade-notice',
-      label: 'Upgrade notice for ArbOS 60',
     },
     {
       type: 'doc',

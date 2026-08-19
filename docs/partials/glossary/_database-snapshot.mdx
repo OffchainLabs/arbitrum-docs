@@ -1,0 +1,7 @@
+---
+title: Database Snapshot
+key: database-snapshot
+titleforSort: Database Snapshot
+---
+
+An archive of a Nitro database published so a new node can initialize without syncing from genesis. You supply one through `--init.url`, or let Nitro fetch the latest with `--init.latest`. A snapshot only works on a node whose [state scheme](/intro/glossary#state-scheme) matches the snapshot's. On Arbitrum One you must start from a snapshot, because Nitro cannot process transactions from [Arbitrum Classic](/intro/glossary#arbitrum-classic).
