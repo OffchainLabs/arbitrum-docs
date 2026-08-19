@@ -47,13 +47,13 @@ A healthy client logs a transient connection error at warning level (an EOF, a r
 Two properties of the system bound the impact of any feed interruption:
 
 - **The feed is a latency optimization, not the source of truth.** Every message is also posted to the parent chain in batches. A node that misses feed messages backfills them from the parent chain automatically. Feed loss can add seconds to minutes of head latency; it cannot cause data loss or an incorrect chain.
-- **Messages carry monotonic sequence numbers**, so clients holding multiple simultaneous feed connections deduplicate them by sequence number.
+- **Messages carry monotonic sequence numbers**, so clients holding multiple simultaneous feed connections remove duplicates by sequence number.
 
 ## What happens on reconnect (and why gaps appear)
 
 On reconnect, a client asks the server to resume from a requested sequence number. A feed instance can only replay what is in its own catchup buffer. After a capacity change, a reconnecting client may land on a fresh instance that does not hold the earlier history, and gets resumed at that instance's current position instead; the client logs a warning that the incoming sequence number is greater than the one it expected. The node fills that gap from the parent chain. This is safe, and it is the event that multi-primary redundancy eliminates: with two or more simultaneous primaries, the other connection has been streaming the whole time and there is no gap to fill.
 
-The corollary: **redundancy must live on the client side, as multiple simultaneous connections.** Server-side resume semantics cannot guarantee gapless delivery across a single connection's lifecycle.
+In summary: **redundancy must live on the client side, as multiple simultaneous connections.** Server-side resume semantics cannot guarantee gapless delivery across a single connection's lifecycle.
 
 ## Reference architecture for node providers
 
@@ -71,7 +71,7 @@ If you follow 1-3, a disconnect on any single connection, relay, or region is in
 
 ### Layer 1: your relays
 
-- **At least two relays, geographically distributed.** Edge and transit problems are usually regional (a single CDN point of presence, one provider's backbone). Two relays entering the network from different regions decorrelate those failures.
+- **At least two relays, geographically distributed.** Edge and transit problems are usually regional (a single CDN point of presence, one provider's backbone). Two relays entering the network from different regions reduces those failures.
 - **Distinct egress IPs.** Feed load balancers commonly route connections to backends by client source IP (session affinity), so all connections from one egress IP tend to land on the same backend and stay there. Assume your effective upstream redundancy is bounded by **how many distinct egress IPs you use**, not by how many relay pods or connections you run. Ten relays behind one NAT IP is one unit of redundancy.
 - **At least two primary upstream connections per relay:**
 
@@ -85,7 +85,7 @@ relay \
 
 The feed input accepts a comma-separated list of URLs. All of them are connected simultaneously and deduplicated by sequence number. Where a chain publishes only one public feed hostname, two connections to the same hostname from distinct egress IPs still provide meaningful redundancy (session affinity will generally pin them to different backends). Do not exceed two upstream connections per endpoint: each one doubles bandwidth, and excessive connections may be rate-limited at the edge.
 
-Some chains publish more than one feed endpoint. Arbitrum One, for example, also publishes a delayed feed that intentionally lags the real-time sequencer feed. Adding an endpoint like this as an extra primary upstream broadens a relay's redundancy: under sequence number deduplication it contributes nothing while a real-time connection is ahead, and it keeps messages flowing, at its own intentional delay, if the real-time connections are interrupted. Check the chain's documentation for the endpoints it publishes.
+Some chains publish more than one feed endpoint. Arbitrum One, for example, also publishes a delayed feed that intentionally lags the real-time sequencer feed. Adding an endpoint like this as an extra primary upstream broadens a relay's redundancy: under sequence number duplication removal it contributes nothing while a real-time connection is ahead, and it keeps messages flowing, at its own intentional delay, if the real-time connections are interrupted. Check the chain's documentation for the endpoints it publishes.
 
 ### Layer 2: your nodes
 
@@ -97,7 +97,7 @@ nitro \
   ...
 ```
 
-Nitro connects to every URL in the primary list at the same time and dedupes by sequence number. A reconnect, restart, or regional problem on one relay is invisible: the other connection never stopped streaming.
+Nitro connects to every URL in the primary list at the same time and removes duplication by sequence number. A reconnect, restart, or regional problem on one relay is invisible: the other connection never stopped streaming.
 
 Two relays in the same region share edge and transit fate: a regional event (a degraded CDN point of presence, a transit problem, a datacenter issue) interrupts both primaries at once. The relay in the other region keeps the node streaming through it. The cross-region hop adds a small amount of latency on that connection; sequence number deduplication means the node always advances at the pace of whichever connection is ahead, so the local relay still sets your steady-state latency.
 
@@ -105,7 +105,7 @@ Two relays in the same region share edge and transit fate: a regional event (a d
 
 Nitro has two distinct mechanisms for listing more than one feed source, and they behave very differently.
 
-**Multiple primaries** (`--node.feed.input.url` with a list): every URL is connected **simultaneously and permanently**. Messages are deduplicated by sequence number, and the node advances at the pace of whichever connection is ahead. Failover is instant and gapless because there is nothing to fail over: the other stream never stopped. The cost is bandwidth, since each connection carries the full feed.
+**Multiple primaries** (`--node.feed.input.url` with a list): every URL is connected **simultaneously and permanently**. Messages have duplicates removed by sequence number, and the node advances at the pace of whichever connection is ahead. Failover is instant and gapless because there is nothing to fail over: the other stream never stopped. The cost is bandwidth, since each connection carries the full feed.
 
 **Fallback** (`--node.feed.input.secondary-url`): a standby list. In steady state, a secondary is **not connected at all**. The client opens a secondary connection only after the primaries have delivered no messages for a short inactivity window (on the order of seconds), brings secondaries up one at a time, and tears them back down once a primary has been delivering continuously again for a sustained period (on the order of minutes). Three consequences follow:
 
