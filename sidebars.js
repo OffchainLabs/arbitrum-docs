@@ -985,6 +985,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Finality',
+              id: 'how-arbitrum-works/deep-dives/finality',
+            },
+            {
+              type: 'doc',
               label: 'Parent to Child chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l1-to-l2-messaging',
             },
