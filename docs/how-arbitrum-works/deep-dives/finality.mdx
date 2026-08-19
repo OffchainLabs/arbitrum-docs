@@ -62,11 +62,11 @@ The practical consequence is that the Sequencer can _delay_ a transaction but ca
 
 ## Hard finality
 
-Hard finality occurs when batched transactions are posted to the parent chain and the corresponding assertions are confirmed by the Rollup protocol. Note that posting a batch to the parent chain is not itself final settlement: the transaction data becomes available and inherits the parent chain's data-layer security, but final settlement of the resulting L2 state occurs once assertions are confirmed (see "Final settlement" above). Key characteristics include:
+Hard finality occurs when batched transactions are posted to the parent chain and the corresponding assertions are <a data-quicklook-from="confirmation">confirmed</a> by the Rollup protocol. Note that posting a batch to the parent chain is not itself final settlement: the transaction data becomes available and inherits the parent chain's data-layer security, but final settlement of the resulting L2 state occurs once assertions are confirmed (see "Final settlement" above). Key characteristics include:
 
 - **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
 - **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
-- **Data availability**: In the default Rollup mode, all transaction data is recorded onchain (via calldata or <a data-quicklook-from="blob">blobs</a>), ensuring transparency and verifiability. On <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust chains</a>, batch data is instead kept offchain by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a>, and only a <a data-quicklook-from="data-availability-certificate">data availability certificate</a> is posted onchain — trading full onchain data availability for lower cost.
+- **Data availability**: In the default [Rollup mode](/run-arbitrum-node/data-availability.mdx#rollup-mode), all transaction data is recorded onchain (via calldata or <a data-quicklook-from="blob">blobs</a>), ensuring transparency and verifiability. On <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust chains</a>, batch data is instead kept offchain by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a>, and only a <a data-quicklook-from="data-availability-certificate">data availability certificate</a> is posted onchain — trading full onchain data availability for lower cost.
 
 ### Advantages of hard finality
 
@@ -107,7 +107,7 @@ Developers and users should consider the appropriate level of finality based on 
 
 - **High-value transactions**: Financial transfers, large trades, or any transaction where security is critical.
 - **Regulatory compliance**: Situations requiring strict adherence to security standards and auditable records.
-- **Centralized exchanges** (CEXs): For deposit and withdrawal operations where certainty of transaction finality is mandatory. Note that these two operations rely on different guarantees. Crediting a deposit can rely on parent-chain data finality (batches posted and finalized on L1, on the order of minutes). Releasing an L2→L1 withdrawal, however, requires the corresponding assertion to be confirmed by the Rollup protocol, which only completes after the BoLD challenge period (on the order of days). Batch posting alone does not make funds withdrawable to the parent chain.
+- **Centralized exchanges** (CEXs): For deposit and withdrawal operations where certainty of transaction finality is mandatory. Note that these two operations rely on different guarantees. Crediting a deposit can rely on parent-chain data finality (batches posted and finalized on L1, on the order of minutes). Releasing an <a data-quicklook-from="l2-to-l1-message">L2→L1 withdrawal</a>, however, requires the corresponding assertion to be confirmed by the Rollup protocol, which only completes after the BoLD challenge period (on the order of days). Batch posting alone does not make funds withdrawable to the parent chain.
 
 ## Related resources
 
