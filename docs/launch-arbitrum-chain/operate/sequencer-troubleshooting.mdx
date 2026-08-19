@@ -160,7 +160,7 @@ With the coordinator enabled, exactly one sequencer holds the lockout in Redis. 
 #### `myurl main sequencer, but no sequencer exists`
 
 - [ERROR]—The node is top of the priority list, but it has no sequencer configured.
-- [CAUSE]—A node registered in `coordinator.priorities` without `node.sequencer.enable=true`. Registering a batch poster causes exactly this.
+- [CAUSE]—A node registered in `coordinator.priorities` without `node.sequencer=true`. Registering a batch poster causes exactly this.
 - [ACTION]—Remove the node from the priority list, or enable sequencing on it.
 
 ### 2. The sequencer refuses to build a block

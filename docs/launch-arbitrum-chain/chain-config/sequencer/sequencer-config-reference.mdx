@@ -68,7 +68,7 @@ Four behaviors matter more than the values you pick:
 
 1. **Soft must be at or above hard.** The sequencer refuses to start with `expected-surplus-soft-threshold cannot be lower than expected-surplus-hard-threshold`. Setting only the hard threshold leaves soft at `default`, which is treated as `0` in the comparison—so any positive hard threshold fails this check. Set both together.
 
-2. **Neither works without a parent chain reader.** Both are skipped when the sequencer has no parent chain reader configured, because the calculation needs parent chain headers.
+2. **Neither works without a parent chain reader.** The calculation needs parent chain headers. Enabling either threshold without a parent chain reader makes the sequencer fail to start with `expected surplus soft/hard thresholds are enabled but l1Reader is nil`.
 
 3. **The hard threshold stops the sequencer from starting if the first reading fails.** When the hard threshold is enabled and the initial surplus fetch fails, startup aborts with `expected-surplus-hard-threshold is enabled but error fetching initial expected surplus value`. With only the soft threshold set, the same failure logs at `ERROR` and the sequencer continues. Enabling the hard threshold makes your sequencer's startup depend on parent chain RPC availability.
 
