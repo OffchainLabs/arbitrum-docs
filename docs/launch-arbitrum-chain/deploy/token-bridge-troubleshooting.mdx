@@ -12,9 +12,11 @@ This guide covers problems that operators encounter when deploying, verifying, a
 
 Most routing problems in this guide trace back to a single behavior: the <a data-quicklook-from="gateway-router">gateway router</a> falls back to a default gateway instead of failing when a token has no registration. Start with the following section, because the symptoms in [Bridged USDC routes to the standard gateway](#bridged-usdc-routes-to-the-standard-gateway) and [Custom gateway registration fails](#custom-gateway-registration-fails) are both consequences of it.
 
-## How the canonical router picks a gateway
+## How the TokenBridge router picks a gateway
 
-Each side of the bridge has a router (`L1GatewayRouter` on the <a data-quicklook-from="parent-chain">parent chain</a>, `L2GatewayRouter` on the <a data-quicklook-from="child-chain">child chain</a>) holding an `l1TokenToGateway` mapping from a parent chain token address to the gateway that handles it. When you bridge a token, the router calls `getGateway`, which resolves in this order:
+Each side of the bridge has a router (`L1GatewayRouter` on the <a data-quicklook-from="parent-chain">parent chain</a>, `L2GatewayRouter` on the <a data-quicklook-from="child-chain">child chain</a>) holding an `l1TokenToGateway` mapping from a parent chain token address to the gateway that handles it.
+
+The mapping isn't a list of every bridgeable token. It holds only the tokens that someone registered to a <a data-quicklook-from="custom-gateway">custom gateway</a>, so an ordinary **ERC-20** token never has an entry. When you bridge a token, the router calls `getGateway`, which resolves in this order:
 
 1. If `l1TokenToGateway` has an entry for the token, use that gateway.
 2. If it has no entry, fall back to `defaultGateway`—the <a data-quicklook-from="standarderc20-gateway">standard **ERC-20** gateway</a>.
@@ -22,110 +24,7 @@ Each side of the bridge has a router (`L1GatewayRouter` on the <a data-quicklook
 
 <VanillaAdmonition type="warning" title="Unregistered tokens fail silently, not loudly">
 
-Step 2 is the reason misrouting is so hard to spot. A token you believe is registered to a <a data-quicklook-from="custom-gateway">custom gateway</a>—but isn't—still bridges successfully through the standard gateway, minting a _different_ child chain token than the one you deployed. Nothing reverts and no event signals the mistake. If a bridge transfer succeeds but the tokens land at an unexpected address, suspect a missing registration before you suspect a bug.
-
-</VanillaAdmonition>
-
-The router also rewrites the calldata it forwards. It wraps the original sender with `GatewayMessageHandler.encodeFromRouterToGateway(msg.sender, _data)` so the gateway can recover the true sender. Gateways detect this by checking `isRouter(msg.sender)`. That distinction is what makes direct gateway calls behave differently from router calls, as described in [`outboundTransfer` reverts or moves the wrong tokens](#outboundtransfer-reverts-or-moves-the-wrong-tokens).
-
-## Shared WETH and Multicall deployments
-
-`L1AtomicTokenBridgeCreator` stores two parent chain addresses that are set once and then reused by **every** token bridge that creator deploys:
-
-```solidity
-// WETH address on L1
-address public l1Weth;
-
-// Multicall2 address on L1, this should NOT be ArbMulticall2
-address public l1Multicall;
-```
-
-Both are assigned through `setTemplates`, alongside the child chain contract templates. The creator is shared infrastructure for each parent chain, so these values are effectively universal for all chains created from it. Three consequences matter in practice:
-
-- **You inherit the creator's `l1Weth`.** When you deploy through a canonical creator listed in [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx), your <a data-quicklook-from="weth-gateway">WETH gateway</a> is wired to that creator's **WETH** address. You don't choose it at chain creation time. Only a creator you deploy yourself uses an `l1Weth` you supply.
-- **`l1Multicall` is the parent chain `Multicall2`, not `ArbMulticall2`.** The source comment is explicit. `ArbMulticall2` is the child chain variant, which the creator deploys separately from `l2MulticallTemplate` for each chain. Supplying `ArbMulticall2` here stores a child chain address in a field that must hold a parent chain contract.
-- **The child chain `aeWETH` and `ArbMulticall2` are per-chain.** These are deployed for your chain from templates, which is why they're the contracts you need to verify yourself. See [Token bridge contracts show as unverified](#token-bridge-contracts-show-as-unverified).
-
-<VanillaAdmonition type="note" title="Custom gas token chains have no WETH gateway">
-
-In `createTokenBridge`, the entire **WETH** gateway block is conditional on `feeToken == address(0)`. Chains using a <a data-quicklook-from="custom-gas-token">custom gas token</a> skip it, so no **WETH** gateway, no child chain `aeWETH`, and no **WETH** bridging path are created. If you're looking for a missing **WETH** gateway on a custom gas token chain, it was never deployed. This matches step 5 of the deployment guide, which applies only to **ETH**-based chains.
-
-</VanillaAdmonition>
-
-## `network does not support ENS` when deploying the creator
-
-Deploying the token bridge creator against a non-Ethereum parent chain fails with output like this:
-
-```console
-Deploying token bridge creator...
-Duplicate definition of Transfer (Transfer(address,address,uint256,bytes), Transfer(address,address,uint256))
-Error: network does not support ENS (operation="getResolver", network="unknown", code=UNSUPPORTED_OPERATION, version=providers/5.7.2)
-```
-
-### What causes this error
-
-Ethers v5 treats any string that isn't a valid hex address as an ENS name and tries to resolve it. Resolution requires the network to declare an `ensAddress`, and a custom parent chain has none—ethers reports it as `network="unknown"`—so the attempt throws `UNSUPPORTED_OPERATION`. The real fault is an address-shaped configuration value that isn't actually an address.
-
-`deployTokenBridgeCreator.ts` already throws readable errors for _missing_ variables:
-
-```typescript
-if (!envVars.baseChainWeth) {
-  throw new Error('Missing BASECHAIN_WETH in env vars');
-}
-```
-
-Seeing the ENS error instead of one of those means the variable is **set but malformed**. Two values reach ethers as addresses:
-
-- `BASECHAIN_WETH`, passed straight into `deployL1TokenBridgeCreator` and on to `setTemplates`. Common defects include placeholder text, a wrapping pair of quotes, trailing whitespace, a missing `0x` prefix, and a truncated address.
-- `ROLLUP_ADDRESS`, used by `RollupAdminLogic__factory.connect(rollupAddress, l1Provider)`. This is only read when you leave `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` unset, because that's the path that estimates the gas limit instead.
-
-### Resolution
-
-<!-- SME review: step 2 below is inferred from the contract source (setTemplates stores l1Weth, and deployTokenBridgeCreator.ts rejects an empty BASECHAIN_WETH), not from an upstream doc that states the requirement. Please confirm the guidance for a parent chain with no canonical wrapped native token—specifically whether deploying a WETH9-compatible contract is what we want to recommend, and whether an ETH-based chain can instead be deployed with a placeholder WETH address. -->
-
-1. **Verify `BASECHAIN_WETH` is a bare, checksummed hex address.** No quotes, no whitespace, `0x` prefixed, 42 characters.
-2. **If your parent chain has no wrapped native token, deploy one first.** The creator stores a parent chain **WETH** address and the deploy script rejects an empty `BASECHAIN_WETH`, so a chain without a canonical wrapped native contract needs one deployed before the bridge can be created. A `WETH9`-compatible contract is the usual choice.
-3. **Set `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` explicitly.** Approximately `6000000` is a reasonable value. This skips the `ROLLUP_ADDRESS` and `ORBIT_RPC` estimation path, removing a second source of the same error. The script requires either this variable or both `ROLLUP_ADDRESS` and `ORBIT_RPC`.
-4. **Confirm the deployer key and RPC belong to the same chain.** A key funded on a different chain produces confusing downstream failures once the ENS problem is cleared.
-
-<VanillaAdmonition type="tip" title="The Transfer warning is benign">
-
-`Duplicate definition of Transfer` appears immediately above the error, but it isn't the cause. It's an ethers ABI warning emitted because `aeWETH` declares two overloads of `Transfer`. It prints on successful deployments too. Ignore it and focus on the `UNSUPPORTED_OPERATION` line.
-
-</VanillaAdmonition>
-
-## Token bridge contracts show as unverified
-
-After a successful deployment, the token bridge contracts on your chain's explorer show no source code. This affects both proxies and implementations, including `aeWETH`, the custom gateway, the router, and `ProxyAdmin`.
-
-### Resolution
-
-The `token-bridge-contracts` repository ships a verification script for Blockscout:
-
-1. Update the `orbit` network entry in `hardhat.config.ts` with your chain's RPC endpoint and Blockscout endpoints.
-2. Install and build:
-
-   ```shell
-   yarn install && yarn build
-   ```
-
-3. Set `BASECHAIN_RPC`, `L1_TOKEN_BRIDGE_CREATOR`, and `INBOX_ADDRESS` in `.env`.
-4. Set `DEPLOYER_KEY` as well. See the callout below—omit it and two contracts go unverified.
-5. Run the script:
-
-   ```shell
-   yarn run blockscout:verify --network orbit
-   ```
-
-The script verifies `L2AtomicTokenBridgeFactory`, `TransparentUpgradeableProxy`, `L2GatewayRouter`, `L2ERC20Gateway`, `L2CustomGateway`, `L2WethGateway`, `BeaconProxyFactory`, `UpgradeableBeacon`, `StandardArbERC20`, `ArbMulticall2`, and `ProxyAdmin`. Contracts already verified are reported and skipped rather than treated as failures.
-
-<VanillaAdmonition type="caution" title="aeWETH and UpgradeExecutor require DEPLOYER_KEY">
-
-`aeWETH` and <a data-quicklook-from="upgrade-executor">`UpgradeExecutor`</a> are the two contracts most often reported as unverifiable, and the cause is a missing `DEPLOYER_KEY`. The script can't verify them from the existing deployments, so it deploys throwaway instances whose deployed bytecode matches that of the real contracts, then verifies against those. That requires a funded key, so without `DEPLOYER_KEY` the script logs a warning and skips both:
-
-`DEPLOYER_KEY is missing. Deployer key is required if you want to have aeWETH and UpgradeExecutor verified.`
-
-If **WETH** verification is the goal, this is the setting to check first.
+Step 2 is the reason misrouting is so hard to spot. A token you believe is registered to a custom gateway—but isn't—still bridges successfully through the standard gateway, minting a _different_ child chain token than the one you deployed. Nothing reverts and no event signals the mistake. If a bridge transfer succeeds but the tokens land at an unexpected address, suspect a missing registration before you suspect a bug.
 
 </VanillaAdmonition>
 
@@ -144,7 +43,7 @@ The deployment script's final registration step is conditional. `deployUsdcBridg
 5. **Register the gateways with the routers**—only when `ROLLUP_OWNER_KEY` is set.
 6. Configure the child chain gateway as minter with maximum allowance.
 
-Step 5 runs the registration through the `UpgradeExecutor`. Without `ROLLUP_OWNER_KEY`, the script doesn't fail. It writes the registration calldata to `registerUsdcGatewayTx.json` and expects you to execute it separately. If that file is never executed, `l1TokenToGateway` has no entry for **USDC**, and `getGateway` returns `defaultGateway` exactly as described in [How the canonical router picks a gateway](#how-the-canonical-router-picks-a-gateway).
+Step 5 runs the registration through the `UpgradeExecutor`. Without `ROLLUP_OWNER_KEY`, the script doesn't fail. It writes the registration calldata to `registerUsdcGatewayTx.json` and expects you to execute it separately. If that file is never executed, `l1TokenToGateway` has no entry for **USDC**, and `getGateway` returns `defaultGateway` exactly as described in [How the router picks a gateway](#how-the-tokenbridge-router-picks-a-gateway).
 
 ### Resolution
 
@@ -205,6 +104,73 @@ After any registration, confirm `getGateway` returns the same gateway on both ro
 - `NOT_TO_CONTRACT` means the gateway address you supplied has no code.
 - `TOKEN_NOT_HANDLED_BY_GATEWAY` means the gateway doesn't recognize the token you're pointing it at. This is an ordering problem: register the token with the gateway first, then register the gateway with the router.
 
+## A WETH gateway is missing
+
+Your chain has no <a data-quicklook-from="weth-gateway">WETH gateway</a>, no child chain `aeWETH`, and no **WETH** bridging path.
+
+If your chain uses a <a data-quicklook-from="custom-gas-token">custom gas token</a>, it was never deployed. In `createTokenBridge`, the entire **WETH** gateway block is conditional on `feeToken == address(0)`, so a custom gas token chain skips it. This matches step 5 of the deployment guide, which applies only to **ETH**-based chains.
+
+On an **ETH**-based chain, the gateway is wired to the **WETH** address stored by the creator you deployed through, not to one you choose at chain creation time. To learn which creator you used, see [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx).
+
+## Token bridge contracts show as unverified
+
+After a successful deployment, the token bridge contracts on your chain's explorer show no source code. This affects both proxies and implementations, including `aeWETH`, the custom gateway, the router, and `ProxyAdmin`.
+
+### Resolution
+
+The `token-bridge-contracts` repository ships a verification script for Blockscout:
+
+1. Update the `orbit` network entry in `hardhat.config.ts` with your chain's RPC endpoint and Blockscout endpoints.
+2. Install and build:
+
+   ```shell
+   yarn install && yarn build
+   ```
+
+3. Set `BASECHAIN_RPC`, `L1_TOKEN_BRIDGE_CREATOR`, and `INBOX_ADDRESS` in `.env`.
+4. Set `DEPLOYER_KEY` as well. See the callout below—omit it and two contracts go unverified.
+5. Run the script:
+
+   ```shell
+   yarn run blockscout:verify --network orbit
+   ```
+
+The script verifies `L2AtomicTokenBridgeFactory`, `TransparentUpgradeableProxy`, `L2GatewayRouter`, `L2ERC20Gateway`, `L2CustomGateway`, `L2WethGateway`, `BeaconProxyFactory`, `UpgradeableBeacon`, `StandardArbERC20`, `ArbMulticall2`, and `ProxyAdmin`. Contracts already verified are reported and skipped rather than treated as failures.
+
+<VanillaAdmonition type="caution" title="aeWETH and UpgradeExecutor require DEPLOYER_KEY">
+
+`aeWETH` and <a data-quicklook-from="upgrade-executor">`UpgradeExecutor`</a> are the two contracts most often reported as unverifiable, and the cause is a missing `DEPLOYER_KEY`. The script can't verify them from the existing deployments, so it deploys throwaway instances whose deployed bytecode matches that of the real contracts, then verifies against those. That requires a funded key, so without `DEPLOYER_KEY` the script logs a warning and skips both:
+
+`DEPLOYER_KEY is missing. Deployer key is required if you want to have aeWETH and UpgradeExecutor verified.`
+
+If **WETH** verification is the goal, this is the setting to check first.
+
+</VanillaAdmonition>
+
+## `network does not support ENS` when deploying the creator
+
+Deploying the token bridge creator against a non-Ethereum parent chain fails with output like this:
+
+```console
+Deploying token bridge creator...
+Error: network does not support ENS (operation="getResolver", network="unknown", code=UNSUPPORTED_OPERATION, version=providers/5.7.2)
+```
+
+### What causes this error
+
+A malformed address. The deploy script hands two configuration values to the provider as addresses, and anything that isn't valid hex gets treated as a name to look up instead. A custom parent chain has no ENS registry, so the lookup fails rather than reporting the bad value.
+
+Check these two variables:
+
+- `BASECHAIN_WETH`, the parent chain **WETH** address the creator stores.
+- `ROLLUP_ADDRESS`, read only when you leave `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` unset.
+
+A _missing_ variable produces a clear error instead, such as `Missing BASECHAIN_WETH in env vars`. Seeing the ENS error means the variable is set but malformed.
+
+### Resolution
+
+Verify that each address is a bare, checksummed hex string: no quotes, no whitespace, `0x` prefixed, 42 characters. Placeholder text, a missing `0x` prefix, and a truncated address are the common defects.
+
 ## `outboundTransfer` reverts or moves the wrong tokens
 
 Scripts that call `outboundTransfer` directly on a child chain gateway, bypassing the router, commonly fail. `L2ArbitrumGateway.outboundTransfer` branches on whether the caller is the router:
@@ -238,14 +204,13 @@ If you're bypassing the router because it resolves the wrong gateway, the routin
 
 ## Quick reference: deployment and verification
 
-| Message                                                                                    | Likely cause                                                                                                             | Resolution                                                                                                        |
-| :----------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
-| `network does not support ENS`                                                             | An address-shaped variable, usually `BASECHAIN_WETH` or `ROLLUP_ADDRESS`, holds a malformed value on a chain without ENS | [Validate the address and set the gas limit explicitly](#network-does-not-support-ens-when-deploying-the-creator) |
-| `Duplicate definition of Transfer`                                                         | Benign ethers ABI warning from the `aeWETH` overloads                                                                    | Ignore; look at the following error                                                                               |
-| `Missing BASECHAIN_WETH in env vars`                                                       | Variable absent from `.env`                                                                                              | Set a parent chain **WETH** address, deploying one if the chain has none                                          |
-| `Either GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT or (ROLLUP_ADDRESS and ORBIT_RPC) must be set` | Neither the explicit gas limit nor the estimation inputs were provided                                                   | Set `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` to approximately `6000000`                                              |
-| `DEPLOYER_KEY is missing...`                                                               | Verification script can't deploy the reference instances it needs                                                        | [Set `DEPLOYER_KEY` to verify `aeWETH` and `UpgradeExecutor`](#token-bridge-contracts-show-as-unverified)         |
-| `Already Verified`                                                                         | Contract was verified previously                                                                                         | None; the script treats this as success                                                                           |
+| Message                                                                                    | Likely cause                                                                                                             | Resolution                                                                                                |
+| :----------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------- |
+| `network does not support ENS`                                                             | An address-shaped variable, usually `BASECHAIN_WETH` or `ROLLUP_ADDRESS`, holds a malformed value on a chain without ENS | [Validate the address](#network-does-not-support-ens-when-deploying-the-creator)                          |
+| `Missing BASECHAIN_WETH in env vars`                                                       | Variable absent from `.env`                                                                                              | Set the parent chain **WETH** address                                                                     |
+| `Either GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT or (ROLLUP_ADDRESS and ORBIT_RPC) must be set` | Neither the explicit gas limit nor the estimation inputs were provided                                                   | Supply either the gas limit or both estimation inputs                                                     |
+| `DEPLOYER_KEY is missing...`                                                               | Verification script can't deploy the reference instances it needs                                                        | [Set `DEPLOYER_KEY` to verify `aeWETH` and `UpgradeExecutor`](#token-bridge-contracts-show-as-unverified) |
+| `Already Verified`                                                                         | Contract was verified previously                                                                                         | None; the script treats this as success                                                                   |
 
 ## Quick reference: registration and routing
 
