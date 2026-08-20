@@ -48,7 +48,7 @@ const nodeConfig = await prepareNodeConfig({
 
 ```shell
 docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
-  offchainlabs/nitro-node:<latest Nitro version> \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ \
   --conf.file=/config/nodeConfig.json \
   --node.sequencer=true \
   --execution.sequencer.enable=true \

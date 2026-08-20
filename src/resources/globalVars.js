@@ -7,6 +7,17 @@
  * due to Vercel's caching behavior.
  */
 
+// Two distinct figures, deliberately kept apart:
+//
+// - L1_SLOT_TIME_SECONDS (12) is Ethereum's nominal slot time. This is the number
+//   docs mean when they say "12 seconds"; use `l1SlotTimeSeconds` in prose.
+// - L1_BLOCK_TIME_SECONDS (12.1) is the observed average, which is slightly higher
+//   than the slot time because slots are occasionally missed. Duration math below
+//   uses it so the derived windows match the published figures.
+//
+// Both round to the same rendered values (6.4 days, 4.0 minutes), so swapping them
+// changes nothing today — but they answer different questions, so don't merge them.
+const L1_SLOT_TIME_SECONDS = 12;
 const L1_BLOCK_TIME_SECONDS = 12.1;
 
 const arbOneDisputeWindowBlocks = 45818;
@@ -20,6 +31,10 @@ const goerliForceIncludePeriodBlocks = 5760;
 const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
+  // block timing
+  l1SlotTimeSeconds: L1_SLOT_TIME_SECONDS,
+  l1AvgBlockTimeSeconds: L1_BLOCK_TIME_SECONDS,
+
   // Node docker images
   latestNitroNodeImage: 'offchainlabs/nitro-node:v3.11.3-beb2108',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
