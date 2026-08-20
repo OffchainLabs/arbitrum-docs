@@ -112,6 +112,39 @@ const globalVars = {
   goerliBlockGasLimit: '20,000,000',
   sepoliaBlockGasLimit: '32,000,000',
 
+  // child chain block time
+  l2BlockTimeMs: 250,
+
+  // execution limits.
+  // Deliberately no `maxCodeSizeKb`: "24KB" names three different constants in
+  // these docs — the EVM MaxCodeSize, EIP-170's Ethereum limit, and Stylus's
+  // compressed WASM limit — so one variable would conflate them.
+  maxCodeSizeBytes: '24,576',
+  gasTargetSpeedLimit: '7,000,000',
+
+  // Inbox message size limit, which differs by parent chain
+  maxDataSizeL2: 117964,
+  maxDataSizeL3: 104857,
+
+  // AnyTrust DA
+  dasMaxStoreChunkBytes: 5242880,
+
+  // Timeboost
+  timeboostRoundSeconds: 60,
+  timeboostAuctionClosingSeconds: 15,
+  timeboostNonExpressDelayMs: 200,
+
+  // Stylus toolchain. cargo-stylus (the CLI) and stylus-sdk (the crate) are
+  // separate products that happen to share a version today — keep them apart so
+  // bumping one does not silently bump the other in every Cargo.toml example.
+  stylusRustToolchain: '1.91',
+  stylusRustToolchainFull: '1.91.0',
+  cargoStylusVersion: '0.10.7',
+  stylusSdkVersion: '0.10.7',
+
+  // Arbitrum Expansion Program revenue share
+  aepRevenueSharePercent: 10,
+
   // portal application form
   portalApplicationForm:
     'https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform',
