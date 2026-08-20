@@ -34,6 +34,66 @@ An increase in the speed target allows users and apps to perform more onchain ac
 
 Refer to the [State Growth](/launch-arbitrum-chain/operate/state-growth.mdx) article for more information.
 
+## How to set the gas target
+
+You set the gas target by calling the <a data-quicklook-from="precompile">precompile</a> `ArbOwner` at address `0x0000000000000000000000000000000000000070`. Only a <a data-quicklook-from="chain-owner">chain owner</a> can call it. Calls from any other account revert.
+
+Before you change anything, find out which pricing model your chain runs. The model decides which method takes effect:
+
+| Pricing model        | Method that sets the target                      | How to read the current value           |
+| -------------------- | ------------------------------------------------ | --------------------------------------- |
+| Single gas target    | `ArbOwner.setSpeedLimit(uint64 limit)`           | `ArbGasInfo.getGasAccountingParams()`   |
+| Multiple gas targets | `ArbOwner.setGasPricingConstraints(uint64[3][])` | `ArbGasInfo.getGasPricingConstraints()` |
+
+Call `ArbGasInfo.getGasPricingConstraints()` first. If it returns an empty array, your chain uses a single gas target and `setSpeedLimit` applies. If it returns one or more constraints, your chain uses multiple gas targets.
+
+<VanillaAdmonition type="warning">
+
+From [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) onward, `setSpeedLimit` writes only the single gas target value. It does not change a multiple gas target configuration. On a chain with constraints configured, the call succeeds and the stored value changes, but gas prices do not respond. To move such a chain back to a single gas target, call `setGasPricingConstraints` with an empty array, then call `setSpeedLimit`.
+
+</VanillaAdmonition>
+
+### Parameters that only the single gas target model uses
+
+`setSpeedLimit` is one of four `ArbOwner` methods that configure the single gas target model. If your chain uses multiple gas targets, all four write a stored value that has no effect on pricing:
+
+| Method                                 | What it sets                                                                        | Default     | How to read the current value         |
+| -------------------------------------- | ----------------------------------------------------------------------------------- | ----------- | ------------------------------------- |
+| `setSpeedLimit(uint64 limit)`          | The gas target, in gas per second                                                   | `7,000,000` | `ArbGasInfo.getGasAccountingParams()` |
+| `setL2GasPricingInertia(uint64 sec)`   | How slowly the base fee responds to backlogged gas. Higher values react more slowly | `102`       | `ArbGasInfo.getPricingInertia()`      |
+| `setL2GasBacklogTolerance(uint64 sec)` | The backlog ArbOS forgives before it raises the base fee, in seconds                | `10`        | `ArbGasInfo.getGasBacklogTolerance()` |
+| `setGasBacklog(uint64 backlog)`        | The accumulated backlog directly, bypassing normal accounting                       | `0`         | `ArbGasInfo.getGasBacklog()`          |
+
+To tune the equivalent behavior on a chain that uses multiple gas targets, set the `adjustmentWindowSeconds` and `startingBacklogValue` fields of each constraint instead. Refer to [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx).
+
+These four parameters control how the chain prices congestion. They do not control what the chain charges for posting data to the parent chain. For that, refer to [tune parent chain data fee pricing](/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing.mdx).
+
+### Set a single gas target
+
+The gas target is measured in gas per second. The default is `7,000,000` gas per second as of ArbOS 6, up from `1,000,000` in ArbOS 0.
+
+To raise the target to 10,000,000 gas per second:
+
+```shell
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setSpeedLimit(uint64)" 10000000
+```
+
+Confirm the new value:
+
+```shell
+cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getGasAccountingParams()"
+```
+
+`getGasAccountingParams()` returns the gas target, the pool size, and the block gas limit. Check that the first value matches what you set.
+
+Raise the target in small steps and watch your nodes between each step. Refer to [monitoring your Arbitrum chain](/launch-arbitrum-chain/operate/monitoring.mdx) for the metrics to watch, and to [configure and optimize gas](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx) for the other gas parameters you can tune.
+
+### Set multiple gas targets
+
+Multiple gas targets smooth price transitions and are the recommended configuration from ArbOS 51 Dia onward. To configure them, refer to [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx).
+
+For the full list of `ArbOwner` methods, refer to the [precompiles reference](/arbitrum-essentials/precompiles/reference.mdx#arbowner).
+
 ## Is Offchain Labs working on software improvements to allow Arbitrum chain owners to _safely_ raise their chain's speed target?
 
 Yes. Offchain Labs is currently working on several key initiatives to improve the core Nitro node software that would result in a safe and formally endorsed increase in the speed targets for Arbitrum chains.

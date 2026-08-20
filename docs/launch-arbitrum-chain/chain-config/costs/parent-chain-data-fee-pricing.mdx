@@ -1,0 +1,98 @@
+---
+title: 'Tune parent chain data fee pricing'
+sidebar_label: 'Parent chain data fee pricing'
+description: 'How to tune the ArbOwner parameters that control what your Arbitrum chain charges users for posting transaction data to the parent chain.'
+author: petevielhaber
+sme: petevielhaber
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
+sidebar_position: 7
+user_story: As an Arbitrum chain owner, I want to tune how my chain prices parent chain data costs so that fee revenue tracks my batch posting costs.
+content_type: how-to
+---
+
+Your Arbitrum chain charges users for the cost of posting their transaction data to the <a data-quicklook-from="parent-chain">parent chain</a>. Four `ArbOwner` methods control how that charge adjusts over time. Tune them when fee revenue drifts away from what your <a data-quicklook-from="batch-poster">batch poster</a> actually spends.
+
+These parameters are separate from congestion pricing. They set what the chain charges for data, not what it charges when demand exceeds the <a data-quicklook-from="gas-target">gas target</a>. To tune congestion pricing, refer to [manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx).
+
+## How the pricing algorithm works
+
+ArbOS tracks a running surplus: the difference between what it has collected from users for data and what it owes the batch poster. At each update it adjusts the price per data unit to drive that surplus toward zero over a chosen time horizon.
+
+Two of the parameters below map directly onto that algorithm:
+
+- **Equilibration units** set the time horizon for eliminating the surplus.
+- **Pricing inertia** smooths the adjustment so the price does not swing sharply between updates.
+
+For the full derivation, refer to [gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+
+## The parameters
+
+Call all four methods on the <a data-quicklook-from="precompile">precompile</a> `ArbOwner` at address `0x0000000000000000000000000000000000000070`. Only a <a data-quicklook-from="chain-owner">chain owner</a> can call them. Calls from any other account revert.
+
+| Method                                          | What it sets                                                       | Default             |
+| ----------------------------------------------- | ------------------------------------------------------------------ | ------------------- |
+| `setL1PricingInertia(uint64 inertia)`           | How much the algorithm smooths each price adjustment               | `10`                |
+| `setL1PricingEquilibrationUnits(uint256 units)` | The time horizon, in data units, for eliminating the surplus       | `160,000,000`       |
+| `setL1BaseFeeEstimateInertia(uint64 inertia)`   | How slowly ArbOS updates its estimate of the parent chain base fee | Set at genesis      |
+| `setAmortizedCostCapBips(uint64 cap)`           | A ceiling on the amortized cost the chain charges, in basis points | `0`, meaning no cap |
+
+The `160,000,000` default for equilibration units applies from ArbOS 6 onward. Chains initialized before ArbOS 6 used `96,000,000`.
+
+<VanillaAdmonition type="warning">
+
+`setL1PricingInertia` has no matching getter. You cannot read the current value back from any precompile, so record the value whenever you change it.
+
+`ArbGasInfo.getPricingInertia()` does not return this value. It returns the congestion pricing inertia set by `setL2GasPricingInertia`, which is a different parameter for a different algorithm. Refer to [manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx#parameters-that-only-the-single-gas-target-model-uses).
+
+</VanillaAdmonition>
+
+## Read the current values
+
+Three of the four parameters have a getter on `ArbGasInfo`, at address `0x000000000000000000000000000000000000006c`:
+
+```shell
+cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getL1PricingEquilibrationUnits()"
+cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getL1BaseFeeEstimateInertia()"
+cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getAmortizedCostCapBips()"
+```
+
+`getL1PricingEquilibrationUnits()` is available from ArbOS 20 onward.
+
+To see whether the algorithm is currently over- or under-collecting, read the surplus:
+
+```shell
+cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getL1PricingSurplus()"
+```
+
+A persistent positive surplus means the chain collects more for data than it owes the batch poster. A persistent negative surplus means it collects too little and the reimbursement fund is draining.
+
+## Change a value
+
+To shorten the equilibration horizon so the algorithm corrects a surplus faster:
+
+```shell
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setL1PricingEquilibrationUnits(uint256)" 80000000
+```
+
+Confirm the change:
+
+```shell
+cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getL1PricingEquilibrationUnits()"
+```
+
+Change one parameter at a time and watch the surplus across several batch posting cycles before you change another. Adjusting two at once makes it hard to attribute the resulting fee behavior.
+
+<VanillaAdmonition type="warning">
+
+Test every change on a devnet or testnet chain first. A short equilibration horizon combined with low inertia makes data fees swing sharply between updates, which harms user experience even when the long-run average is correct.
+
+</VanillaAdmonition>
+
+## Related parameters
+
+Two more `ArbOwner` methods affect what the chain collects for data, covered elsewhere:
+
+- `setL1PricePerUnit(uint256 pricePerUnit)` and `setPerBatchGasCharge(int64 cost)`, in [configure and optimize gas](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx).
+- `setL1PricingRewardRate(uint64 weiPerUnit)` and `setL1PricingRewardRecipient(address recipient)`, which route the batch poster reward. Refer to [revenue routing](/launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx).
+
+For the full list of `ArbOwner` methods, refer to the [precompiles reference](/arbitrum-essentials/precompiles/reference.mdx#arbowner).

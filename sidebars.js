@@ -285,6 +285,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
+                  label: 'Parent chain data fee pricing',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
                   label: `Priority fees`,
                 },
