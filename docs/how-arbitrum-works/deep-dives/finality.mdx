@@ -18,11 +18,11 @@ This section explores the concepts of soft and <a data-quicklook-from="hard-fina
 
 ## Authority and finality
 
-- **Exclusive access**: Only authorized [<a data-quicklook-from="batch-poster">batch posters</a>](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting) can call these batch-submission methods on the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract (access is gated by the contract's `isBatchPoster` mapping, a role distinct from the sequencer, though the two are typically operated by the same party). This exclusivity ensures that no other party can include messages directly.
+- **Exclusive access**: Only authorized [<a data-quicklook-from="batch-poster">batch posters</a>](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting) can call these batch-submission methods on the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract (access is gated by the contract’s `isBatchPoster` mapping, a role distinct from the sequencer, though the two are typically operated by the same party). This exclusivity ensures that no other party can include messages directly.
 - **Soft-confirmation receipts**: The Sequencer’s unique ability to immediately process and include transactions allows it to provide users with instant, “soft-confirmation” receipts.
 - **Parent chain finality**: Once batches post, the transactions achieve parent-chain-level finality, secured by the parent chain’s consensus mechanism.
 
-By efficiently sending compressed transaction batches to the Sequencer Inbox contract using the most cost-effective method available, the Sequencer ensures transactions are securely recorded on the parent chain. This process maintains the integrity and reliability of the network, enabling users to perform fast, secure transactions.
+By efficiently sending compressed transaction batches to the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract using the most cost-effective method available, the Sequencer ensures transactions are securely recorded on the parent chain. This process maintains the integrity and reliability of the network, enabling users to perform fast, secure transactions.
 
 ## Finality at a glance
 
@@ -31,8 +31,8 @@ The following table summarizes the approximate latency and guarantee at each sta
 | Stage                                                                                         | Guarantee                                                                                   | Approximate latency                                                                                                                                    |
 | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Soft finality (<a data-quicklook-from="sequencer-feed">Sequencer feed</a>)                    | Provisional ordering by the Sequencer                                                       | Sub-second                                                                                                                                             |
-| Parent-chain data finality (batch posted and finalized on <a data-quicklook-from="L1">L1</a>) | Transaction data is durably recorded and inherits the parent chain's consensus security     | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block)                                                        |
-| Full settlement (assertion confirmed)                                                         | <a data-quicklook-from="L2">L2</a> state is finalized and L2→L1 withdrawals can be executed | A bounded <a data-quicklook-from="challenge-period">challenge period</a> under <a data-quicklook-from="bold">BoLD</a>, on the order of days on mainnet |
+| Parent-chain data finality (batch posted and finalized on <a data-quicklook-from="L1">L1</a>) | Transaction data is durably recorded and inherits the parent chain's consensus security     | ~2 epochs, roughly 12–15 minutes (the <a data-quicklook-from="batch-poster">batch poster</a> defaults to referencing the L1 `safe` block)                                                        |
+| Full settlement (<a data-quicklook-from="assertion">assertion</a> confirmed)                                                         | <a data-quicklook-from="L2">L2</a> state is finalized and L2→L1 withdrawals can be executed | A bounded <a data-quicklook-from="challenge-period">challenge period</a> under <a data-quicklook-from="bold">BoLD</a>, on the order of days on mainnet |
 
 ## Soft finality
 
@@ -56,13 +56,13 @@ Soft finality refers to the preliminary confirmation of transactions based on th
 
 ## Censorship resistance and force inclusion
 
-The soft-finality trust dependency on the Sequencer is bounded rather than open-ended. A user can submit a transaction directly to the parent chain through the <a data-quicklook-from="delayed-inbox">delayed inbox</a>. If the Sequencer refuses to include it, the user can call <a data-quicklook-from="forceinclusion">`forceInclusion`</a> on the Sequencer Inbox contract once the Sequencer's exclusive window has elapsed, pushing the message into the chain without the Sequencer's cooperation (see [censorship resistance and the Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout)). By default this window is roughly 24 hours (configured as `delayBlocks`/`delaySeconds`, defaulting to about 5,760 blocks or 86,400 seconds).
+The soft-finality trust dependency on the Sequencer is bounded rather than open-ended. A user can submit a transaction directly to the parent chain through the <a data-quicklook-from="delayed-inbox">delayed inbox</a>. If the Sequencer refuses to include it, the user can call <a data-quicklook-from="forceinclusion">`forceInclusion`</a> on the Sequencer Inbox contract once the Sequencer’s exclusive window has elapsed, pushing the message into the chain without the Sequencer’s cooperation (see [censorship resistance and the Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer.mdx#censorship-timeout)). By default this window is roughly 24 hours (configured as `delayBlocks`/`delaySeconds`, defaulting to about 5,760 blocks or 86,400 seconds).
 
-The practical consequence is that the Sequencer can _delay_ a transaction but cannot _permanently_ censor it. Delayed-inbox messages are only sequenced after they reach parent-chain finality — the delayed sequencer waits for the parent chain's `safe` (or, if configured, `finalized`) head before including them — so force-included transactions inherit parent-chain finality guarantees.
+The practical consequence is that the Sequencer can _delay_ a transaction but cannot _permanently_ censor it. Delayed-inbox messages are only sequenced after they reach parent-chain finality — the delayed sequencer waits for the parent chain’s `safe` (or, if configured, `finalized`) head before including them — so force-included transactions inherit parent-chain finality guarantees.
 
 ## Hard finality
 
-Hard finality occurs when batched transactions are posted to the parent chain and the corresponding assertions are <a data-quicklook-from="confirmation">confirmed</a> by the Rollup protocol. Note that posting a batch to the parent chain is not itself final settlement: the transaction data becomes available and inherits the parent chain's data-layer security, but final settlement of the resulting L2 state occurs once assertions are confirmed (see "Final settlement" above). Key characteristics include:
+Hard finality occurs when batched transactions are posted to the parent chain and the corresponding assertions are <a data-quicklook-from="confirmation">confirmed</a> by the Rollup protocol. Posting a batch to the parent chain is not itself final settlement: the transaction data becomes available and inherits the parent chain’s data-layer security, but final settlement of the resulting L2 state occurs once assertions are confirmed (see "Final settlement" above). Key characteristics include:
 
 - **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
 - **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
@@ -76,7 +76,7 @@ Hard finality occurs when batched transactions are posted to the parent chain an
 
 ### Limitations of hard finality
 
-- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The <a data-quicklook-from="challenge-protocol">challenge protocol</a> that backs this guarantee is described in BoLD.
+- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The <a data-quicklook-from="challenge-protocol">challenge protocol</a> that backs this guarantee is described in <a data-quicklook-from="bold">BoLD</a>.
 - **Cost considerations**: Posting batches to the parent chain incurs fees, potentially increasing transaction costs.
 
 ## Trust considerations
@@ -107,13 +107,13 @@ Developers and users should consider the appropriate level of finality based on 
 
 - **High-value transactions**: Financial transfers, large trades, or any transaction where security is critical.
 - **Regulatory compliance**: Situations requiring strict adherence to security standards and auditable records.
-- **Centralized exchanges** (CEXs): For deposit and withdrawal operations where certainty of transaction finality is mandatory. Note that these two operations rely on different guarantees. Crediting a deposit can rely on parent-chain data finality (batches posted and finalized on L1, on the order of minutes). Releasing an <a data-quicklook-from="l2-to-l1-message">L2→L1 withdrawal</a>, however, requires the corresponding assertion to be confirmed by the Rollup protocol, which only completes after the BoLD challenge period (on the order of days). Batch posting alone does not make funds withdrawable to the parent chain.
+- **Centralized exchanges** (CEXs): For deposit and withdrawal operations where certainty of transaction finality is mandatory. These two operations rely on different guarantees. Crediting a deposit can rely on parent-chain data finality (batches posted and finalized on L1, on the order of minutes). Releasing an <a data-quicklook-from="l2-to-l1-message">L2→L1 withdrawal</a>, however, requires the corresponding assertion to be confirmed by the Rollup protocol, which only completes after the BoLD challenge period (on the order of days). Batch posting alone does not make funds withdrawable to the parent chain.
 
 ## Related resources
 
-- [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs.mdx) — the `latest`, `safe`, and `finalized` block tags, reorg depth, and which tag an indexer should wait on.
-- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer.mdx) — the real-time feed, batch posting, and the delayed inbox escape hatch.
-- [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx) — how the Rollup protocol confirms child chain state and completes final settlement.
+- [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs.mdx) — the `latest`, `safe`, and `finalized` block tags, <a data-quicklook-from="reorg">reorg</a> depth, and which tag an indexer should wait on.
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer.mdx) — the real-time feed, batch posting, and the <a data-quicklook-from="delayed-inbox">delayed inbox</a> escape hatch.
+- [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx) — how the Rollup protocol confirms <a data-quicklook-from="child-chain">child chain</a> state and completes final settlement.
 - [BoLD: a gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) — the dispute protocol that bounds the challenge period.
-- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) — how a DAC and data availability certificates change the data availability guarantee.
-- [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) — the outbox and why withdrawals wait for assertion confirmation.
+- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) — how a DAC and <a data-quicklook-from="data-availability-certificate">data availability certificates</a> change the data availability guarantee.
+- [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) — the <a data-quicklook-from="outbox">outbox</a> and why withdrawals wait for assertion confirmation.
