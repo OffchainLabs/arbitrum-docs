@@ -80,7 +80,7 @@ html body .container {
 
 // Main content area
 html body [class*='docMainContainer'] {
-  padding: 2rem 3rem;
+  padding: 2rem 1.5rem;
   max-width: 100%;
 }
 
@@ -88,11 +88,52 @@ html body [class*='docMainContainer'] {
 .col[class*='docItemCol'],
 .docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module,
 [class*='docItemContainer'] {
-  max-width: 900px;
+  max-width: 1120px;
   margin: 0 auto;
   width: 100%;
   padding: 0 1rem;
   box-sizing: border-box;
+}
+
+// Keep running prose at a comfortable measure while tables and code blocks
+// use the full width of the content column
+article .markdown {
+  > p,
+  > ul,
+  > ol,
+  > blockquote,
+  > h1,
+  > h2,
+  > h3,
+  > h4,
+  > h5,
+  > h6 {
+    max-width: 900px;
+  }
+}
+
+@media (min-width: 997px) {
+  // theme-classic caps the article column with `max-width: 75% !important`, so
+  // the widths set above never apply. Release the cap and let the flex row hand
+  // the article everything the table of contents doesn't take.
+  html body .col[class*='docItemCol'] {
+    max-width: none !important;
+  }
+
+  // Full-bleed tables: stop capping the article container at a prose width and
+  // drop its gutters. The prose rules above keep the reading measure, so wide
+  // blocks (tables especially) can use the whole column instead.
+  html body [class*='docItemContainer'] {
+    max-width: none;
+    padding: 0;
+  }
+
+  // Desktop table of contents: fixed width instead of Docusaurus's 25% column,
+  // which returns the difference to the article
+  html body .row > div:has(.theme-doc-toc-desktop) {
+    flex: 0 0 220px;
+    max-width: 220px;
+  }
 }
 
 // Mobile responsive

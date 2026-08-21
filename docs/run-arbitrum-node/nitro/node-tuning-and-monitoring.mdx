@@ -6,9 +6,6 @@ user_story: 'As a node operator, I want to optimize my node memory, CPU, and sto
 content_type: 'how-to'
 author: 'gzeoneth'
 sme: 'gzeoneth'
-# Content gap tracking:
-# - TW-694: Node hardware requirements
-# - TW-692: Node operations runbook (partial — monitoring)
 ---
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
@@ -320,7 +317,7 @@ nitro \
 
 #### Archive node with 128 GB RAM
 
-Archive nodes benefit from larger caches to reduce disk I/O for historical queries:
+<a data-quicklook-from="archive-node">Archive nodes</a> benefit from larger caches to reduce disk I/O for historical queries:
 
 ```shell
 # Non-Go: 4096 + 2048 + 1200 + 800 + 256 + 128 + 300 = 8,828 MB

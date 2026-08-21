@@ -8,11 +8,11 @@ author: 'Gowtham118'
 sme: 'Gowtham118'
 ---
 
-A Nitro node's _role_ is not a separate piece of software. Every role in this article runs the same `nitro` binary; what makes a node a <a data-quicklook-from="sequencer">sequencer</a>, a <a data-quicklook-from="batch-poster">batch poster</a>, a <a data-quicklook-from="validator">validator</a>, or a plain RPC node is the set of configuration flags you pass at startup. The exceptions are the feed relay — a small standalone `relay` binary shipped inside the same Docker image — and the optional split-validation setup, which moves block validation into a separate `nitro-val` binary; both are built from the same repository.
+A Nitro node's _role_ is not a separate piece of software. Every role in this article runs the same `nitro` binary; what makes a node a <a data-quicklook-from="sequencer">sequencer</a>, a <a data-quicklook-from="batch-poster">batch poster</a>, a <a data-quicklook-from="validator">validator</a>, or a plain RPC node is the set of configuration flags you pass at startup. The exceptions are the <a data-quicklook-from="feed-relay">feed relay</a> — a small standalone `relay` binary shipped inside the same Docker image—and the optional split-validation setup, which moves block validation into a separate `nitro-val` binary; both are built from the same repository.
 
 Because roles are just configuration, you assign or change a role by editing flags and restarting. This page explains what each role's defining flags are, what else each role needs to operate (a funded parent-chain wallet, a bond, feed connectivity, a parent-chain connection), and how to convert a node from one role to another safely.
 
-If you already know which role you want, go straight to its guide — each one is linked from the table below. Read this page when you're deciding which role to run, want to see how the roles relate to each other, or need to convert an existing node from one role to another.
+If you already know which role you want, go straight to its guide—each one is linked from the table below. Read this page when you're deciding which role to run, want to see how the roles relate to each other, or need to convert an existing node from one role to another.
 
 Flags can be passed on the command line or collected in a JSON configuration file loaded with `--conf.file`. For how flag names, defaults, and the config file relate to each other, see [Nitro configuration system](/run-arbitrum-node/nitro/configuration-system.mdx). This article covers only the flags that define and support each role; for the complete flag list, see the [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx).
 
@@ -30,11 +30,11 @@ Roles can combine on a single node (a sequencer can also post batches, for examp
 | Validation server (split validation) | `nitro-val` binary + `--node.block-validator.validation-server.url` on the node | No wallet, no bond (all onchain action stays on the node) | Many (one node can use several)           | [Run a split validator node](/launch-arbitrum-chain/run-a-node/split-validator-node.mdx) |
 | Feed relay                           | `relay` binary + `--node.feed.input.url` + `--chain.id`                         | No wallet, no bond, no parent-chain connection            | Many (stateless fan-out)                  | [Run a feed relay](/run-arbitrum-node/run-feed-relay.mdx)                                |
 
-Every role except the feed relay and the split-validation server needs a parent-chain connection through `--parent-chain.connection.url`. Nodes whose parent chain is Ethereum <a data-quicklook-from="L1">L1</a> also need `--parent-chain.blob-client.beacon-url` to read batches posted as EIP-4844 blobs. For well-known chains, setting `--chain.id` or `--chain.name` auto-fills defaults such as `--execution.forwarding-target` and `--node.feed.input.url` from the chain info embedded in the binary (the forwarding target is only auto-filled when the sequencer is disabled).
+Every role except the feed relay and the split-validation server needs a parent-chain connection through `--parent-chain.connection.url`. Nodes whose parent chain is Ethereum <a data-quicklook-from="L1">L1</a> also need `--parent-chain.blob-client.beacon-url` to read batches posted as EIP-4844 <a data-quicklook-from="blob">blobs</a>. For well-known chains, setting `--chain.id` or `--chain.name` auto-fills defaults such as `--execution.forwarding-target` and `--node.feed.input.url` from the chain info embedded in the binary (the forwarding target is only auto-filled when the sequencer is disabled).
 
 ## RPC node (full node)
 
-An RPC node — often just called a full node — is the default role: it follows the chain and serves JSON-RPC, but it does not sequence, post batches, or actively validate. None of the role-defining flags are enabled by default.
+An RPC node—often just called a full node—is the default role: it follows the chain and serves JSON-RPC, but it does not sequence, post batches, or actively validate. None of the role-defining flags are enabled by default.
 
 | Flag                            | Default | Description                                                                                    |
 | ------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
@@ -54,11 +54,11 @@ Operationally, a full node needs a parent-chain connection but no funded wallet 
 
 </VanillaAdmonition>
 
-For the full setup, including snapshots, pruning, and Docker details, see [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx).
+For the full setup, including snapshots, <a data-quicklook-from="state-pruning">pruning</a>, and Docker details, see [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx).
 
 ## Archive node
 
-An archive node is an RPC node that retains every historical state instead of garbage-collecting old ones, so it can serve `eth_call`, balance, and trace queries at arbitrary past blocks. It is a storage variant of the full node, not a different protocol role: same binary, one extra caching flag.
+An <a data-quicklook-from="archive-node">archive node</a> is an RPC node that retains every historical state instead of garbage-collecting old ones, so it can serve `eth_call`, balance, and trace queries at arbitrary past blocks. It is a storage variant of the full node, not a different protocol role: same binary, one extra caching flag.
 
 | Flag                               | Default | Description                                                                                                                            |
 | ---------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -67,7 +67,7 @@ An archive node is an RPC node that retains every historical state instead of ga
 | `--execution.rpc.classic-redirect` | `""`    | Arbitrum One only: URL of an Arbitrum Classic node that serves queries for pre-Nitro blocks                                            |
 | `--init.latest`                    | `""`    | Set to `archive` to bootstrap from the latest archive snapshot (`hash` scheme only; see the archive guide for `path`-scheme snapshots) |
 
-An archive node needs no wallet and no bond, and you can run as many as you like. The cost is disk: an Arbitrum One archive database is measured in terabytes (see the archive guide for current figures). Enabling archive also makes the node keep everything else — Nitro automatically disables the consensus message pruner and retains the full transaction-hash lookup index.
+An archive node needs no wallet and no bond, and you can run as many as you like. The cost is disk: an Arbitrum One archive database is measured in terabytes (see the archive guide for current figures). Enabling archive also makes the node keep everything else—Nitro automatically disables the consensus message pruner and retains the full transaction-hash lookup index.
 
 Arbitrum One is the only chain with pre-Nitro (Classic) history, so only Arbitrum One archive nodes need `--execution.rpc.classic-redirect` pointed at an [Arbitrum Classic node](/run-arbitrum-node/more-types/03-run-classic-node.mdx); every other chain launched directly on Nitro.
 
@@ -82,17 +82,17 @@ The sequencer orders incoming transactions, produces blocks, and publishes the <
 | `--execution.sequencer.enable` | false   | Execution-layer sequencer: the node orders queued transactions and builds blocks |
 | `--node.sequencer`             | false   | Consensus-layer counterpart; must agree with `--execution.sequencer.enable`      |
 
-Nitro does not stop you if the two flags disagree — it logs an error and keeps running in a broken half-configuration — so always change them together.
+Nitro does not stop you if the two flags disagree—it logs an error and keeps running in a broken half-configuration—so always change them together.
 
 A sequencer must also declare how it coordinates with other sequencer instances, or it refuses to start. Enable the Redis-backed coordinator, or explicitly opt out with the dangerous single-sequencer flag.
 
-| Flag                                        | Default | Description                                                                                 |
-| ------------------------------------------- | ------- | ------------------------------------------------------------------------------------------- |
-| `--node.seq-coordinator.enable`             | false   | Enables the Redis-based coordinator for a redundant sequencer set                           |
-| `--node.dangerous.no-sequencer-coordinator` | false   | DANGEROUS: allows sequencing without a coordinator (single-sequencer or development setups) |
-| `--execution.forwarding-target`             | `""`    | Must stay empty on a sequencer; setting it with the sequencer enabled is a hard error       |
-| `--node.feed.output.enable`                 | false   | Starts the broadcaster that publishes the sequencer feed                                    |
-| `--node.delayed-sequencer.enable`           | false   | Includes parent-chain (delayed inbox) messages once their block is safe (default) or final  |
+| Flag                                        | Default | Description                                                                                     |
+| ------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `--node.seq-coordinator.enable`             | false   | Enables the Redis-based coordinator for a redundant sequencer set                               |
+| `--node.dangerous.no-sequencer-coordinator` | false   | **Dangerous**: allows sequencing without a coordinator (single-sequencer or development setups) |
+| `--execution.forwarding-target`             | `""`    | Must stay empty on a sequencer; setting it with the sequencer enabled is a hard error           |
+| `--node.feed.output.enable`                 | false   | Starts the broadcaster that publishes the sequencer feed                                        |
+| `--node.delayed-sequencer.enable`           | false   | Includes parent-chain (delayed inbox) messages once their block is safe (default) or final      |
 
 The coordinator's Redis URLs, the feed server's address and port, and feed signing are setup details covered in the sequencer guide.
 
@@ -208,7 +208,7 @@ Role-specific conversion notes:
 - **Sequencer to RPC node:** set both sequencer flags to false, re-set `--execution.forwarding-target` to the chain's sequencer endpoint (or `null`, or rely on the chain-info default), disable `--node.delayed-sequencer.enable` and `--node.seq-coordinator.enable`, and re-add `--node.feed.input.url`.
 - **Enabling the batch poster:** fund the parent-chain wallet and get its address allowlisted on the Sequencer Inbox before you start posting; provide a signer and, for a redundant set, a shared Redis URL.
 - **Watchtower to active validator:** set `--node.staker.strategy` to an active value, provide and fund a wallet, arrange the bond, and let block validation come on automatically. This adds substantial CPU, memory, and disk needs.
-- **Full node to archive node:** flipping `--execution.caching.archive=true` on an existing database only archives state from that point forward; history the node already pruned is not backfilled. For full history, re-initialize from an archive snapshot (`--init.latest archive`) or — on a `hash`-scheme database that still holds an early state — rebuild missing states by re-execution with `--init.recreate-missing-state-from` (very slow, and not supported with the `path` state scheme). No wallet or funding is involved.
+- **Full node to archive node:** flipping `--execution.caching.archive=true` on an existing database only archives state from that point forward; history the node already pruned is not backfilled. For full history, re-initialize from an archive snapshot (`--init.latest archive`) or — on a `hash`-scheme database that still holds an early state — rebuild missing states by re-execution with `--init.recreate-missing-state-from` (very slow, and not supported with the `path` <a data-quicklook-from="state-scheme">state scheme</a>). No wallet or funding is involved.
 - **Moving validation to a separate machine (split validation):** start `nitro-val` on the new machine with the validation machine folders and a reachable `--auth.addr`, share the JWT secret file between the two processes, and point the node's `--node.block-validator.validation-server.url` and `.jwtsecret` at the server (the full guide uses the equivalent `--node.block-validator.validation-server-configs-list` JSON form, which is also how you configure multiple servers). Validation progress stays in the node's database, so this is a flags-and-restart change in both directions.
 - **Decommissioning an active validator:** do not simply kill the node. On pre-BoLD chains, a staker that keeps running with its wallet and an active strategy (`defensive` keeps the wallet loaded without seeking new bonds) automatically returns its old deposit and withdraws the funds once the assertion it bonded on is confirmed; only then switch to `watchtower` or disable the staker and shut down. Switching to `watchtower` too early doesn't work: it loads no wallet, so nothing can withdraw. On BoLD chains, withdrawing the bond is a manual onchain operation. Either way, stopping the node early leaves the bond locked onchain until you withdraw it.
 
