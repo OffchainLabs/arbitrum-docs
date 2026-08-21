@@ -114,8 +114,11 @@ article .markdown {
   // theme-classic caps the article column with `max-width: 75% !important`, so
   // the widths set above never apply. Release the cap and let the flex row hand
   // the article everything the table of contents doesn't take.
+  // `min-width` defaults to auto (min-content) and outranks `max-width`, so one
+  // long code line widens the column until the row wraps the contents below it.
   html body .col[class*='docItemCol'] {
     max-width: none !important;
+    min-width: 0;
   }
 
   // Full-bleed tables: stop capping the article container at a prose width and
@@ -124,6 +127,12 @@ article .markdown {
   html body [class*='docItemContainer'] {
     max-width: none;
     padding: 0;
+  }
+
+  // Same min-content blowout one level up: without this the table of contents
+  // un-wraps but the page keeps a horizontal scrollbar.
+  html body [class*='docMainContainer'] {
+    min-width: 0;
   }
 
   // Desktop table of contents: fixed width instead of Docusaurus's 25% column,
