@@ -15,17 +15,20 @@ Arbitrum documentation portal ([docs.arbitrum.io](https://docs.arbitrum.io/)), b
 ```shell
 yarn                              # Install dependencies
 yarn start --no-open              # Dev server (always use --no-open)
-yarn build                        # Production build (installs SDK deps, syncs Stylus, builds)
+yarn build                        # Production build (yarn && yarn clear && docusaurus build — always a cold rebuild)
 vercel build                      # Vercel-parity build (use to verify before deploying)
 yarn serve --no-open              # Serve built site locally
 yarn typecheck                    # TypeScript checking (tsc --noEmit)
 yarn format                       # Prettier (docs + app + check)
-yarn lint:markdown                # Markdownlint on docs/**/*.{md,mdx} (excludes docs/sdk/)
+yarn lint:markdown                # Markdownlint on docs/**/*.{md,mdx}
 yarn lint:markdown:fix            # Auto-fix markdown lint issues
 yarn generate-precompiles-ref-tables  # Regenerate precompile reference tables
 yarn update-variable-refs         # Propagate globalVars.js changes into doc files
 yarn build-glossary               # Rebuild glossary from partials/glossary/*.mdx
-node scripts/sync-stylus-content.js   # Refresh checked-in Stylus examples in docs/stylus-by-example/
+yarn generate                     # Run all generators (precompiles, contract addresses, glossary, variable refs)
+yarn generate:check               # Same, --check mode — CI fails if generated files are stale
+yarn test:llms-tracking           # Test middleware tracking logic
+node scripts/sync-stylus-content.js   # Refresh Stylus examples — NOTE: expects submodules/stylus-by-example, which no longer exists
 yarn find-orphan-pages            # Find docs not linked in sidebars
 yarn sync-redirects               # Sync redirects.config.js → vercel.json
 ```
@@ -36,7 +39,7 @@ yarn sync-redirects               # Sync redirects.config.js → vercel.json
 
 `onBrokenLinks: 'throw'` and `onBrokenMarkdownLinks: 'throw'` in `docusaurus.config.js`. Builds fail on any dead link. Always verify links after renaming/moving files.
 
-`onBrokenAnchors` is set to `'warn'` (not `'throw'`) because the generated SDK pages in `docs/sdk/` emit false-positive anchor warnings. These are expected and not actionable.
+`onBrokenAnchors` is set to `'warn'` (not `'throw'`) because TypeDoc-generated pages emit false-positive anchor warnings. These are expected and not actionable.
 
 ### Edge middleware
 
@@ -44,8 +47,8 @@ yarn sync-redirects               # Sync redirects.config.js → vercel.json
 
 ### Stylus and SDK content origins
 
-- `docs/stylus-by-example/` is checked into this repo directly (no submodule, no `.gitmodules`). To refresh from the upstream `stylus-by-example` source, run `node scripts/sync-stylus-content.js`.
-- `docs/sdk/` contains previously generated TypeDoc output. There is no live regeneration script in this repo today — treat the files as checked-in content and edit cautiously if needed.
+- `docs/stylus-by-example/` is checked into this repo directly (no submodule, no `.gitmodules`). Its `DONT-EDIT-THIS-FOLDER` marker points at `submodules/stylus-by-example`, which no longer exists — so edit the files here directly. `node scripts/sync-stylus-content.js` still exists but expects that missing submodule.
+- **The SDK API docs subsystem is dead.** `docs/sdk/` and `scripts/sdkDocsHandler.ts` no longer exist; `sdk-sidebar.js` is orphaned; `docs/api/` is a 3-file stub not referenced by `docusaurus.config.js`. The `sdk-docs` job in `.github/workflows/update-external-content.yml` still targets them and would fail if run. Do not treat any of these as a live pipeline.
 
 ### Global variables and markdown preprocessor
 
@@ -57,12 +60,13 @@ yarn sync-redirects               # Sync redirects.config.js → vercel.json
 
 Files starting with `_` in `docs/partials/` are reusable content fragments. The `parseFrontMatter` hook in `docusaurus.config.js` clears their frontmatter to suppress Docusaurus warnings. Partials are content-rich and imported across many pages — changes propagate widely, so trace imports before editing.
 
+### Generated content — do not hand-edit
+
+`docs/api/`, `docs/stylus-by-example/`, `docs/partials/glossary/` (138 files), `docs/partials/_reference-arbitrum-contract-addresses-partial.mdx`, `docs/run-arbitrum-node/nitro/cli-flags-reference.mdx`, `docs/run-arbitrum-node/assign-node-roles.mdx`, and `vercel.json` (generated from `redirects.config.js`). `docs/superpowers/` holds internal plans/specs, not published docs.
+
 ### Sidebar configuration
 
-`sidebars.js` defines all navigation sidebars. It imports generated sidebars from:
-
-- `sdk-sidebar.js` — auto-generated SDK API sidebar
-- `docs/stylus-by-example/*/sidebar.js` — Stylus examples sidebars
+`sidebars.js` (1855 lines) defines all navigation sidebars and is **self-contained — it imports nothing**. `sdk-sidebar.js` and `docs/stylus-by-example/*/sidebar.js` exist on disk but are not imported by it.
 
 ### Pre-commit hooks (Husky)
 

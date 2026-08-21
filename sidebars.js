@@ -283,6 +283,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-target',
                   label: 'Gas target',
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
+                  label: `Priority fees`,
+                },
               ],
             },
             {
@@ -753,6 +758,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos61',
+              label: 'Elara (ArbOS 61)',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos51',
               label: 'Dia (ArbOS 51)',
             },
@@ -1002,6 +1012,11 @@ const sidebars = {
               type: 'doc',
               label: 'Sequencer transaction flow',
               id: 'how-arbitrum-works/deep-dives/sequencer-transaction-flow',
+            },
+            {
+              type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
             },
             {
               type: 'doc',
@@ -1837,11 +1852,6 @@ const sidebars = {
       type: 'doc',
       id: 'notices/arbos61-upgrade-notice',
       label: 'Upgrade notice for ArbOS 61',
-    },
-    {
-      type: 'doc',
-      id: 'notices/arbos60-upgrade-notice',
-      label: 'Upgrade notice for ArbOS 60',
     },
     {
       type: 'doc',

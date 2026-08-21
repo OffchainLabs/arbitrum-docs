@@ -1,0 +1,152 @@
+---
+title: 'ArbOS 61 Elara'
+sidebar_label: 'ArbOS 61 Elara'
+sidebar_position: 1
+description: 'Learn about the ArbOS 61 Elara release and upgrade requirements for Arbitrum chain owners and node operators.'
+user_story: As an Arbitrum chain owner or node operator, I want to know what ArbOS 61 implements.
+author: 'anegg0'
+sme: 'leeederek'
+content_type: reference
+---
+
+## ArbOS 61 Elara
+
+This page is intended for all Arbitrum node operators and Arbitrum chain owners; it summarizes the changes brought by <a data-quicklook-from="arbos">ArbOS</a> 61 "Elara" and what you should do to ensure a seamless upgrade.
+
+<VanillaAdmonition type="info">
+
+The Nitro version, Docker image tag, nitro-contracts versions, and WASM module root below are final.
+
+</VanillaAdmonition>
+
+The minimum Nitro version that supports ArbOS 61 "Elara" is [**Nitro 3.11.3**](https://github.com/OffchainLabs/nitro/releases/tag/v3.11.3), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.11.3-beb2108`. This release of Nitro is a mandatory upgrade for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> node operators. The ArbitrumDAO approved ArbOS 61 Elara for Arbitrum One and Nova in an onchain vote that ran from July 16 to July 30, 2026 ([proposal](https://alt.gov.arbitrum.foundation/proposal/7191014407719621170610709569285477750369874509305441081488686529382763374426?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9)), so this upgrade is confirmed for both chains. ArbOS 61 activates on Arbitrum One and Nova on **Thursday, August 20, 2026 at 17:00 UTC**.
+
+As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fork. To learn more, refer to the [Arbitrum ArbOS upgrades forum post](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Note that ArbOS 61 Elara is an upgrade that builds upon [ArbOS 51 Dia](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos51).
+
+## Requirements
+
+- Running [**Nitro 3.11.3**](https://github.com/OffchainLabs/nitro/releases/tag/v3.11.3) or higher, which is available on Docker Hub with the image tag **`offchainlabs/nitro-node:v3.11.3-beb2108`**.
+- WASM module root ([consensus-v61](https://github.com/OffchainLabs/nitro/releases/tag/consensus-v61)): `0xc10cd7ec6acaf1c441a3f6bd0900ad20f15855ba775a96f1939118cbc629dc97`
+
+### Additional requirements for chain owners/operators:
+
+- Having read and understood the [**ArbOS Software Releases Overview page**](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/overview).
+- Following the [**Guide for how to upgrade ArbOS on your Arbitrum chain**](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade).
+- ArbOS 61 Elara should technically work with all previous nitro-contract versions, but you may need specific versions if you want to enable optional features for your chain:
+  - To take advantage of the new AltDA API (new chains only) or the new base stake management functions for BoLD, you will need [nitro-contracts v3.2.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.2.0) or higher.
+  - To enable [Native Token Mint/Burn capabilities](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos51#native-token-mint-and-burn) for your chain, you must use [nitro-contracts v3.1.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.1) or higher.
+  - To use BoLD, you'll need [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher.
+
+## High-level description of ArbOS 61 changes
+
+ArbOS 61 Elara introduces several improvements and features that benefit all Arbitrum chains.
+
+### Stylus smart contract size limit increased to 96 KB
+
+**This change is enabled on Arbitrum One and Nova.**
+
+Stylus contracts launched with the same 24 KB code size limit as Solidity contracts, to maximize interoperability between the two and to keep the transition familiar for Solidity developers. As teams pushed further into Rust libraries through the first-party SDK and the wider Rust ecosystem, that limit became substantially more constraining for Stylus programs than it typically is for Solidity contracts, adding friction and complexity for larger applications.
+
+ArbOS 61 raises the Stylus limit to 96 KB — a 300% increase, and 4× the code size limit for Solidity contracts on the EVM.
+
+The increase works by changing how Stylus contracts are deployed and activated:
+
+- When a contract larger than 24 KB is deployed, `cargo stylus deploy` splits it into the smallest number of fragments needed so each fits under the regular 24 KB contract size limit. The default `MaxFragmentCount` is 4.
+- Each fragment is deployed in its own transaction. A root contract is deployed last, holding the ordered list of fragment addresses.
+- On activation through `ArbWasm`, the State Transition Function reads all fragments through the root contract and concatenates their contents _before_ decompression.
+- From that point, the node treats the collection of fragments as a single contract. The root contract address is the one callers use, and it behaves like any other Stylus contract.
+
+This change is limited to Stylus. The 24 KB limit for Solidity contracts is deliberately unchanged: raising it would alter core EVM assumptions and diverge from Ethereum's contract size rules, potentially impacting node performance, developer tooling, and cross-chain compatibility.
+
+### Minimum L2 base fee management
+
+**This applies only to Arbitrum One and Nova. It does not affect any other Arbitrum chain: the BaseFeeManager delegation is scoped to those two chains, and chain owners elsewhere keep full control of their own minimum base fee.**
+
+ArbOS 61 grants Offchain Labs — acting as a service provider to the Arbitrum Foundation, on behalf of and for the benefit of the ArbitrumDAO — the ability to modify the `minimumL2BaseFee` and `L2BaseFee` values on Arbitrum One and Nova to any value between 0.01 gwei and 0.10 gwei, inclusive.
+
+The mechanism is a newly deployed `BaseFeeManager` contract containing an access list. The ArbitrumDAO uses that access list to designate Offchain Labs as the party permitted to make these calls, in the same pattern as the `ResourceConstraintManager` contract deployed alongside ArbOS 51 Dia.
+
+Terms and safeguards:
+
+- The privilege expires two years after mainnet activation on Arbitrum One and Nova.
+- Every change is announced publicly via a forum post, so the ArbitrumDAO has full visibility into modifications.
+- The ArbitrumDAO retains the right to remove the delegation at any time through the standard governance process. These revocation actions are onchain.
+- No time-lock or execution delay is built into the `BaseFeeManager` contract.
+- The contract was audited by an independent third party (Trail of Bits). The final report is published and linked below.
+
+The intent of the delegation is to allow the minimum L2 base fee to be iterated on without a 30+ day Constitutional vote per change, converging over time on a stable final value. For reference, the minimum L2 base fee on Arbitrum One and Nova was set to 0.02 gwei on January 8, 2026, as part of the ArbOS 51 Dia upgrade.
+
+### Priority fee collection
+
+**This ships in ArbOS 61 but is not switched on for Arbitrum One or Nova at activation. It is optional and available to any Arbitrum chain.**
+
+ArbOS 61 introduces a mechanism for an Arbitrum chain to collect tips as priority fees. Users have always been able to specify a priority fee on a transaction, but no Arbitrum chain was configured to accept one, so the value was ignored.
+
+Turning the feature on takes two steps: enabling tip collection itself, and updating the sequencer's sorting logic to take the `PriorityFee` field into account.
+
+The ArbOS 61 AIP grants Offchain Labs the authority to toggle tip collection on Arbitrum One and Nova. That toggle is not flipped at ArbOS 61 activation — enabling it on Arbitrum One is bundled with the separate Priority Gas Auctions (PGA) and Fast Feed vote.
+
+For configuration details, see the [Priority fees](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/costs/priority-fees) section.
+
+### Alternative Data Availability (AltDA) Layer API
+
+**This ships in ArbOS 61 but is left intentionally disabled on Arbitrum One and Nova. It is intended for other Arbitrum chains.**
+
+ArbOS 61 introduces a pluggable interface to the Arbitrum node software, allowing AltDA layers — such as EigenDA or Celestia — to integrate with an Arbitrum chain without forking the node software. Once a chain owner integrates it, the API also reduces the technical overhead of maintaining existing Nitro forks used to run Arbitrum chains on AltDA layers.
+
+The interface is intended for Arbitrum chains that post data to a DA layer other than Ethereum, another Arbitrum L2, or an AnyTrust DAC. It is not intended for use by Arbitrum One or Nova, since both settle to Ethereum; it is included in ArbOS 61 to simplify the codebase and canonicalize the feature in Nitro.
+
+For implementation details, see [How to integrate with the DA API](https://docs.arbitrum.io/launch-arbitrum-chain/extend-the-protocol/da-api-guide), which covers the JSON-RPC server methods a DA provider must expose (reading batch data by certificate, writing batch data, generating fraud-proof validation proofs) and the Solidity validator contract that validates those proofs onchain.
+
+### Compliance transaction filtering
+
+**This ships in ArbOS 61 but is left intentionally disabled on Arbitrum One and Nova. It is optional and available to any Arbitrum chain.**
+
+ArbOS 61 includes new optional components in the sequencer and the State Transition Function that enable protocol-level transaction filtering for regulatory or compliance purposes, at the chain owner's discretion.
+
+- The chain owner may configure an external compliance service, such as TRM or Chainalysis, to define address-level policies.
+- Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including those submitted through the Delayed Inbox.
+- The feature is gated behind an `ArbOwner` call, so only the chain owner can enable it.
+- A 7-day enable delay is built in: if a chain owner enables filtering on a live chain, it takes 7 days for the change to take effect.
+
+The feature is not enabled on Arbitrum One or Nova. It is included in ArbOS 61 to simplify the codebase and canonicalize the feature in the node software, and is intended for Arbitrum chains with compliance and regulatory obligations to restrict onchain activity from sanctioned entities or actors. You can learn more in our [compliance filtering explainer](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/validation/compliance-filtering).
+
+### WASM compatibility changes
+
+**This applies to every chain that upgrades to ArbOS 61.**
+
+ArbOS 61 includes several bug fixes and improvements to Stylus. It also removes support for the WebAssembly multi-value extension, which simplifies the execution model.
+
+Contracts that rely on multi-value WASM can no longer be activated or reactivated. Chain owners and Stylus developers should confirm their contracts do not depend on the extension before upgrading.
+
+### Gas refund logic fix — the reason for the version bump to ArbOS 61
+
+**This applies to every chain that upgrades to ArbOS 61.**
+
+During testing of ArbOS 60 on Arbitrum Sepolia, an ecosystem partner reported, and Offchain Labs subsequently confirmed, that two interacting bugs in the gas refund logic caused small, unintended changes to gas refund behavior.
+
+The required fixes modify the State Transition Function and can only be applied through a new ArbOS version. The corrected release is therefore versioned as ArbOS 61.
+
+ArbOS 61 is otherwise identical in scope to the ArbOS 60 Elara proposal: no features, parameters, or permissions changed. Arbitrum One and Arbitrum Nova were never affected, because ArbOS 60 was not activated on either chain.
+
+### Activation
+
+- **Arbitrum Sepolia** activated ArbOS 61 on Monday, June 29, 2026 at 15:00 UTC.
+- **Arbitrum One and Arbitrum Nova** will activate ArbOS 61 on **Thursday, August 20, 2026 at 17:00 UTC**. Node operators must be running Nitro v3.11.3 ahead of that time to keep syncing the chain. The upgrade was approved by Constitutional AIP: the onchain vote opened on July 16, 2026, closed on July 30, 2026, and passed, followed by the timelock period set out in the ArbitrumDAO Constitution. Executed activation timestamps are recorded in the Arbitrum DAO [network upgrades table](https://docs.arbitrum.foundation/network-upgrades).
+
+### Reference links for this revision
+
+- [\[Constitutional\] AIP: ArbOS 61 Elara](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-61-elara/30601) — canonical AIP thread, including the June 19, 2026 update
+- [Constitutional AIP: ArbOS61 Elara Upgrade — onchain vote](https://alt.gov.arbitrum.foundation/proposal/7191014407719621170610709569285477750369874509305441081488686529382763374426?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9) — the executed onchain proposal; voting ran July 16 to July 30, 2026
+- [Arbitrum ArbOS upgrades](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695) — background on ArbOS upgrades as hard forks
+- [Arbitrum DAO network upgrades](https://docs.arbitrum.foundation/network-upgrades) — canonical table of governance approval status and per-chain activation timestamps
+- [How to integrate with the DA API](https://docs.arbitrum.io/launch-arbitrum-chain/extend-the-protocol/da-api-guide) — integration guide for building a custom DA provider against the new API
+- [Priority fees](https://docs.arbitrum.io/launch-arbitrum-chain/chain-config/costs/priority-fees) — how to configure priority fee collection on an Arbitrum chain
+- [Deploying contracts larger than 24 KB](https://docs.arbitrum.io/stylus/cli-tools/overview#deploying-contracts-larger-than-24-kb) — fragmented deployment flow for Stylus contracts above the 24 KB limit
+- [Trail of Bits ArbOS 60/61 code review, July 10, 2026](https://docs.arbitrum.io/assets/files/2026_07_10_trail_of_bits_arbitrum_arbos_60_61_code_review_final_comprehensive_report-b07649fde7599b13706214e36dd2e0ac.pdf)
+- [Guide for how to upgrade ArbOS on your Arbitrum chain](https://docs.arbitrum.io/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbos-upgrade)
+- [README for how to upgrade your rollup contracts to support ArbOS 61 on your chain](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades)
+- [Nitro releases](https://github.com/OffchainLabs/nitro/releases)
+- [nitro-contracts releases](https://github.com/OffchainLabs/nitro-contracts/releases)
+- [ArbOS 51 Dia release notes](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos51)
+- [Forum post for ArbOS upgrades](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695)
