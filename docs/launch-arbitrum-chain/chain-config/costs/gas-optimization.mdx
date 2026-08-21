@@ -22,7 +22,7 @@ This is the target gas consumption rate per second that the chain can sustainabl
 
 <a data-quicklook-from="arbitrum-chains">Arbitrum Chains</a> support two configuration modes -
 
-- **[RECOMMENDED] Multiple Gas Targets (supported starting [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51))**
+- **[RECOMMENDED] Multiple <a data-quicklook-from="gas-target">Gas Targets</a> (supported starting [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51))**
 
   - **Description**: Provides smoother price transitions. It uses multiple gas targets to reduce the frequency and severity of <a data-quicklook-from="child-chain">child chain</a> gas price spikes.
   - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata constraints)` method on the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner), where `constraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` triples. \
@@ -49,7 +49,7 @@ Refer to the [Chain parameters](/arbitrum-essentials/reference/chain-params.mdx)
 
 - **Description**: This limits the maximum amount consumable by all <a data-quicklook-from="transaction">transactions</a> in a single <a data-quicklook-from="L2">L2</a> block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
 - **Default**: 32,000,000 gas per block.
-- **Configuration**: Call the [`setMaxTxGasLimit(uint64 limit)`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) method on the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner), where `limit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
+- **Configuration**: Call the [`setMaxTxGasLimit(uint64 limit)`](/arbitrum-essentials/precompiles/reference.mdx#arbowner) method on the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner), where `limit` is the desired max gas. The method name suggests it sets the block limit, though it may technically apply to individual transactions; in practice, it caps block usage.
 
 Example using `cast`:
 

@@ -16,7 +16,7 @@ These parameters are separate from congestion pricing. They set what the chain c
 
 ## How the pricing algorithm works
 
-ArbOS tracks a running surplus: the difference between what it has collected from users for data and what it owes the batch poster. At each update it adjusts the price per data unit to drive that surplus toward zero over a chosen time horizon.
+<a data-quicklook-from="arbos">ArbOS</a> tracks a running surplus: the difference between what it has collected from users for data and what it owes the batch poster. At each update it adjusts the price per data unit to drive that surplus toward zero over a chosen time horizon.
 
 Two of the parameters below map directly onto that algorithm:
 
@@ -40,9 +40,9 @@ The `160,000,000` default for equilibration units applies from ArbOS 6 onward. C
 
 <VanillaAdmonition type="warning">
 
-`setL1PricingInertia` has no matching getter. You cannot read the current value back from any precompile, so record the value whenever you change it.
+`setL1PricingInertia` has no matching getter. You cannot read the current value back from any <a data-quicklook-from="precompile">precompile</a>, so record the value whenever you change it.
 
-`ArbGasInfo.getPricingInertia()` does not return this value. It returns the congestion pricing inertia set by `setL2GasPricingInertia`, which is a different parameter for a different algorithm. Refer to [manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx#parameters-that-only-the-single-gas-target-model-uses).
+`ArbGasInfo.getPricingInertia()` does not return this value. It returns the congestion pricing inertia set by `setL2GasPricingInertia`, which is a different parameter for a different algorithm. Refer to [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx#parameters-that-only-the-single-gas-target-model-uses).
 
 </VanillaAdmonition>
 
