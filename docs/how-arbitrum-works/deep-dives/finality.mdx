@@ -7,14 +7,14 @@ user_story: As a current or prospective Arbitrum user, I want to learn more abou
 content_type: concept
 ---
 
-Finality in <a data-quicklook-from="blockchain">blockchain</a> systems refers to the point at which a <a data-quicklook-from="transaction">transaction</a> becomes irreversible and is permanently included in the blockchain’s ledger. In the context of Arbitrum’s <a data-quicklook-from="arbitrum-nitro">Nitro</a> architecture, understanding finality is crucial for developers and users to make informed decisions about transaction confirmations, security guarantees, and application design.
+Finality in <a data-quicklook-from="blockchain">blockchain</a> systems refers to the point at which a <a data-quicklook-from="transaction">transaction</a> becomes irreversible and is permanently included in the blockchain’s ledger. In Arbitrum’s <a data-quicklook-from="arbitrum-nitro">Nitro</a> architecture, understanding finality is crucial for developers and users to make informed decisions about transaction confirmations, security guarantees, and application design.
 
 ## Levels of finality
 
 1. **<a data-quicklook-from="soft-confirmation">Soft finality</a>**: Provided by the <a data-quicklook-from="sequencer">Sequencer’s</a> real-time feed, offering immediate but provisional transaction confirmations.
-2. **<a data-quicklook-from="hard-finality">Hard finality</a>**: Occurs when transactions are included in <a data-quicklook-from="batch">batches</a> posted to and finalized on the <a data-quicklook-from="parent-chain">parent chain</a>, providing strong security assurances. Final settlement on the parent chain happens via <a data-quicklook-from="assertion">assertions</a> confirmed by the <a data-quicklook-from="arbitrum-rollup-protocol">Rollup protocol</a>.
+2. **<a data-quicklook-from="hard-finality">Hard finality</a>**: Occurs when transactions are included in <a data-quicklook-from="batch">batches</a> posted to and finalized on the <a data-quicklook-from="parent-chain">parent chain</a>, providing strong security assurances. Final settlement on the <a data-quicklook-from="parent-chain">parent chain</a> happens via <a data-quicklook-from="assertion">assertions</a> confirmed by the <a data-quicklook-from="arbitrum-rollup-protocol">Rollup protocol</a>.
 
-This section explores the concepts of soft and hard finality, their implications, trust considerations, and guidance for using them effectively within the Arbitrum network.
+This section explores the concepts of soft and <a data-quicklook-from="hard-finality">hard finality</a>, their implications, trust considerations, and guidance for using them effectively within the Arbitrum network.
 
 ## Authority and finality
 
