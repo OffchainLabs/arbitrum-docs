@@ -27,7 +27,7 @@ The Arbitrum chain verification script is currently under active development and
 
 ## The `arbitrum-monitoring` alerting suite
 
-The [`arbitrum-monitoring`](https://github.com/OffchainLabs/arbitrum-monitoring) repository provides three ready-to-run monitoring scripts that watch the critical liveness signals of an Arbitrum chain and can send alerts to Slack, with more monitors under active development. All three monitors read your chain's parameters (RPC endpoints and core contract addresses) from a shared `config.json` file, and can be run once (for example, on a schedule) or continuously.
+The [`arbitrum-monitoring`](https://github.com/OffchainLabs/arbitrum-monitoring) repository provides five ready-to-run monitoring scripts that watch the critical liveness signals of an Arbitrum chain and can send alerts to Slack, with more monitors under active development. All monitors read your chain's parameters (RPC endpoints and core contract addresses) from a shared `config.json` file, and can be run once (for example, on a schedule) or continuously.
 
 ### Retryable monitor
 
@@ -42,6 +42,14 @@ The [batch poster monitor](https://github.com/OffchainLabs/arbitrum-monitoring/t
 ### Assertion monitor
 
 The [assertion monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/assertion-monitor) tracks the creation and confirmation of <a data-quicklook-from="assertion">assertions</a> on the chain's Rollup contract, supporting both [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) and legacy (pre-BoLD) chains. It alerts when no assertions are being created despite chain activity, when assertions remain unconfirmed after the challenge period has elapsed, and on validator-related risks such as low validator participation, a base stake below the expected threshold on BoLD chains, or a disabled validator allowlist on legacy chains.
+
+### ArbOS version monitor
+
+The [ArbOS version monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/arbos-version-monitor) checks that every monitored chain is running at least a minimum <a data-quicklook-from="arbos">ArbOS</a> version, by querying the `ArbSys` <a data-quicklook-from="precompile">precompile</a> on each chain. It alerts when a chain reports a version below the configured minimum, and when the chain's RPC endpoint is unavailable or returns an invalid value, since such a chain cannot be monitored.
+
+### Node sync monitor
+
+The [node sync monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/node-sync-monitor) checks the health of your operator-run nodes by comparing each node against a trusted reference RPC endpoint for the same chain, such as the chain's public gateway. A node is considered healthy when it reports fully synced and its head is within a configurable number of blocks of the reference. Comparing against an independent reference correctly handles chains that produce blocks on demand: a stuck node shows growing lag against the reference, while an idle chain stays equal. Note that the comparison is only as reliable as the reference: if the reference RPC itself fails or falls behind, the monitor's results may be inaccurate, so point it at infrastructure independent of the monitored nodes.
 
 ## Data Availability Server (DAS) health checks
 
@@ -127,7 +135,11 @@ If you are relying on `arb/staker/action/last_success` and seeing it go stale fo
 
 **Long periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). `validatorAfkBlocks` is configured per chain — read it from your Rollup contract; a value of `0` disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One `validatorAfkBlocks` is set to `201600` (~28 days of parent-chain blocks).
 
+Note that this applies regardless of `disableValidatorWhitelist`. Setting `disableValidatorWhitelist` to `false` keeps your chain permissioned in normal operation but does not protect the allowlist from this escape hatch. To learn how the two parameters interact, and why any deliberate validator pause counts toward this window, see [Keeping validation permissioned across the upgrade](/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx#keeping-validation-permissioned-across-the-upgrade).
+
 </VanillaAdmonition>
+
+If assertions stop being posted or confirmed, see [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx) for common causes and tuning flags.
 
 ### Chain fees and load
 

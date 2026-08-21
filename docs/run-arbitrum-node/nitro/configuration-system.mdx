@@ -24,7 +24,9 @@ Nitro loads configuration in the following order. Each source overrides values s
 6. **Environment variables** — variables matching the configured prefix (see [Environment variables](#environment-variables)). These are applied last and override everything else, including CLI flags.
 
 :::tip
+
 Because environment variables have the highest precedence, they are the safest way to inject secrets or per-environment overrides without modifying config files.
+
 :::
 
 ## Config file format
@@ -154,7 +156,7 @@ Mount to `/home/user/` because Nitro runs as a non-root user inside the containe
 
 ## Dumping running config
 
-Use the `--conf.dump` flag to inspect the fully merged configuration. Nitro loads all config sources (defaults, S3, files, config string, CLI flags, environment variables), scrubs sensitive fields, prints the merged result as JSON to stdout, and then exits immediately:
+Use the `--conf.dump` flag to inspect the fully merged configuration. Nitro loads all config sources (defaults, S3, files, config string, CLI flags, environment variables), scrubs sensitive fields, prints the merged result as JSON to `stdout`, and then exits immediately:
 
 ```shell
 docker run --rm offchainlabs/nitro-node:v3.5.3-3b3e2fa \

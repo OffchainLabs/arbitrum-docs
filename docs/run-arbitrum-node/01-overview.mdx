@@ -27,32 +27,28 @@ We strongly advise against exposing API endpoints publicly. Users considering su
 
 :::
 
-To be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
+To be able to _interact with_ or _build applications on_ any Arbitrum chain, you will need to access the corresponding Arbitrum node. Options are:
 
-- You can use [ third party node providers ](/arbitrum-essentials/reference/node-providers.mdx) to get RPC access to fully-managed nodes
-- You can run your own Arbitrum node, especially if you want always to know the state of the Arbitrum chain
+- [Third party node providers](/arbitrum-essentials/reference/node-providers.mdx) to get RPC access to fully-managed nodes
+- Run your own Arbitrum node, especially if you want always to know the state of the Arbitrum chain
 
 The rest of this series focuses on the second approach: running your own Arbitrum node.
 
-:::
+When interacting with the Arbitrum network, users have the option to run either a full node or an <a data-quicklook-from="archive-node">archive node</a>. There are distinct advantages to running an <a data-quicklook-from="arbitrum-full-node">Arbitrum full node</a>. In this quick start, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each node type, users can make an informed decision based on their specific requirements and objectives.
 
-To be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
-
-When interacting with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quick start, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each node type, users can make an informed decision based on their specific requirements and objectives.
-
-Beyond full and archive nodes, a Nitro node can take on other roles — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, or feed relay — purely through configuration. For the flags that define each role and how to convert a node between roles, see [How to assign roles to a Nitro node](/run-arbitrum-node/assign-node-roles.mdx).
+Beyond full and archive nodes, a Nitro node can take on other roles — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—purely through configuration. For the flags that define each role and how to convert a node between roles, see [How to assign roles to a Nitro node](/run-arbitrum-node/assign-node-roles.mdx).
 
 ## Considerations for running an Arbitrum full node
 
-- **Transaction validation and security**: Running a full node allows users to independently validate transactions and verify the state of the Arbitrum blockchain. Users can have complete confidence in the authenticity and integrity of the transactions they interact with.
-- **Reduced trust requirements**: By running a full node, users can interact with the Arbitrum network without relying on third-party services or infrastructure. This independence reduces the need to trust external entities and mitigates the risk of potential centralized failures or vulnerabilities.
-- **Lower resource requirements**: Compared to archive nodes, full nodes generally require fewer resources such as storage and computational power. These requirements make it more accessible to users with limited hardware capabilities or those operating in resource-constrained environments.
+- **Transaction validation and security**: Running a full node allows you to independently validate transactions and verify the state of the Arbitrum blockchain. You can have complete confidence in the authenticity and integrity of the transactions you interact with.
+- **Reduced trust requirements**: By running a full node, you can interact with the Arbitrum network without relying on third-party services or infrastructure. This independence reduces the need to trust external entities and mitigates the risk of potential centralized failures or vulnerabilities.
+- **Lower resource requirements**: Compared to archive nodes, full nodes generally require fewer resources such as storage and computational power. These requirements make it more accessible with limited hardware capabilities or those operating in resource-constrained environments.
 
 For detailed instructions, read [how to run an Arbitrum full node](/run-arbitrum-node/02-run-full-node.mdx).
 
 ## Considerations for running an Arbitrum archive node
 
-While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require access to extensive historical data or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
+While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable to access extensive historical data or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
 
 For detailed instructions, read [how to run an Arbitrum archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx).
 

@@ -103,6 +103,10 @@ A trustless, permissionless Arbitrum protocol that uses its underlying base laye
 
 Arbitrum's "operating system" that trustlessly handles system-level operations; includes the ability to emulate the EVM.
 
+### Archive Node {#archive-node}
+
+An [Arbitrum full node](/intro/glossary#arbitrum-full-node) that retains every historical [chain state](/intro/glossary#chain-state) instead of discarding old ones, so it can serve `eth_call`, balance, and trace queries at any past block. An archive node is a storage variant of a full node rather than a separate protocol role: it runs the same `nitro` binary with `--execution.caching.archive` enabled. The trade-off is disk — an Arbitrum One archive database is measured in terabytes.
+
 ### Assertion {#assertion}
 
 A bonded claim made by an Arbitrum [Validator](/intro/glossary#validator) representing a claim about an Arbitrum chain's state. An [Assertion](/intro/glossary#assertion) may, e.g., propose a new assertion, or may be a step in a [Challenge](/intro/glossary#challenge).
@@ -132,6 +136,10 @@ The batch poster is an Externally Owned Account (EOA) controlled by the Sequence
 ### Bisection {#bisection}
 
 A move in the [BoLD](/intro/glossary#bold) [Challenge Protocol](/intro/glossary#challenge-protocol) in which an [edge](/intro/glossary#edge) is split in half, producing two child edges with shorter histories. Repeated bisection narrows a disagreement down to a single execution step, which can then be resolved with a [One-Step Proof](/intro/glossary#one-step-proof). BoLD's bisection generalises the older Arbitrum Classic [dissection](/intro/glossary#dissection) move.
+
+### Blob {#blob}
+
+A transaction data format introduced on Ethereum by [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) and enabled for [Arbitrum chains](/intro/glossary#arbitrum-chains) in [ArbOS](/intro/glossary#arbos) 20 "Atlas". Blob data lives on the Ethereum beacon chain and is not readable by the EVM, unlike calldata. Posting [batches](/intro/glossary#batch) as blobs is cheaper than calldata, but it means a node needs a beacon chain RPC endpoint — with historical blob data — to sync.
 
 ### Blockchain {#blockchain}
 
@@ -220,6 +228,14 @@ A permissioned set of parties responsible for enforcing data availability on a c
 
 See [Introducing AnyTrust Chains: Cheaper, Faster L2 Chains with Minimal Trust Assumptions](https://medium.com/offchainlabs/introducing-anytrust-chains-cheaper-faster-l2-chains-with-minimal-trust-assumptions-31def59eb8d7) to learn more.
 
+### Data Availability Server (DAS) {#data-availability-server-das}
+
+The server software each member of a [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac) runs to store [batch](/intro/glossary#batch) data and serve it on demand. On an [AnyTrust](/intro/glossary#arbitrum-anytrust-protocol) chain the [sequencer](/intro/glossary#sequencer) sends batch data to the committee's DAS instances, which sign and return a [Data Availability Certificate](/intro/glossary#data-availability-certificate). Nitro ships `anytrustserver` for running a DAS.
+
+### Database Snapshot {#database-snapshot}
+
+An archive of a Nitro database published so a new node can initialize without syncing from genesis. You supply one through `--init.url`, or let Nitro fetch the latest with `--init.latest`. A snapshot only works on a node whose [state scheme](/intro/glossary#state-scheme) matches the snapshot's. On Arbitrum One you must start from a snapshot, because Nitro cannot process transactions from [Arbitrum Classic](/intro/glossary#arbitrum-classic).
+
 ### Defensive Validator {#defensive-validator}
 
 A [Validator](/intro/glossary#validator) that watches an Arbitrum chain and takes action (i.e., bonds and challenges) only when and if an invalid [Assertion](/intro/glossary#assertion) occurs.
@@ -278,6 +294,10 @@ A means by which a user can bypass an Arbitrum chain's [Challenge Period](/intro
 
 A protocol-level withdrawal path on an [Arbitrum chain](/intro/glossary#arbitrum-chain) in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full [challenge period](/intro/glossary#challenge-period). Distinct from a [fast-exit liquidity exit](/intro/glossary#fast-exit--liquidity-exit), which is a third-party liquidity provider rather than a protocol primitive.
 
+### Feed Relay {#feed-relay}
+
+A standalone `relay` binary that subscribes to a [sequencer feed](/intro/glossary#sequencer-feed) and re-broadcasts it to downstream nodes. The feed relay is stateless fan-out: it needs no [parent chain](/intro/glossary#parent-chain) connection, no wallet, no bond, and no database. Running one relay per data center reduces ingress fees and improves stability when you run several nodes. It ships inside the Nitro Docker image.
+
 ### First Come First Serve (FCFS) {#first-come-first-serve-fcfs}
 
 A type of [Transaction Ordering Policy](/intro/glossary#transaction-ordering-policy) used by the sequencer in Arbitrum chains whereby incoming transactions are sequenced into a block in the order that the transactions arrived.
@@ -317,6 +337,10 @@ An execution-layer client that defines the Ethereum state transition function an
 ### Hard finality {#hard-finality}
 
 The state a transaction reaches once its [batch](/intro/glossary#batch) has been posted to the parent chain by the [Batch Poster](/intro/glossary#batch-poster) and that posting is itself final on the parent chain. Hard finality inherits the security of the parent chain and cannot be reverted without a parent-chain reorg. Contrast with [soft confirmation](/intro/glossary#soft-confirmation), which is immediate but trust-based on the honesty of the [Sequencer](/intro/glossary#sequencer).
+
+### HashDB {#hashdb}
+
+Nitro's default [state scheme](/intro/glossary#state-scheme), which stores the state trie keyed by node hash. HashDB supports block validation, so a node running the block validator must use it. Unlike [PathDB](/intro/glossary#pathdb), HashDB [prunes](/intro/glossary#state-pruning) manually and offline through `--init.prune`: the node stops serving RPC requests until the prune finishes.
 
 ### History commitment {#history-commitment}
 
@@ -404,6 +428,14 @@ A parent chain contract responsible for tracking [child-to-parent chain message]
 
 EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka [Child chain](/intro/glossary#child-chain) ). For example, Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with "underlying chain."
 
+### PathDB {#pathdb}
+
+A [state scheme](/intro/glossary#state-scheme) that stores Nitro's state trie by path, enabled with `--execution.caching.state-scheme=path` and available from Nitro v3.9.x. PathDB [prunes](/intro/glossary#state-pruning) automatically while the node runs, so disk use stays within the window set by `--execution.caching.state-history` and the node keeps serving RPC. It cuts [archive node](/intro/glossary#archive-node) disk use substantially, but it cannot validate blocks.
+
+### Pebble {#pebble}
+
+The key-value store Nitro uses for its on-disk database. Pebble allocates its block cache and memtables through CGO calls, so that memory sits outside Go's memory tracking and outside what `GOMEMLIMIT` governs. The `database-cache` parameter sets the block cache size directly and also determines memtable size.
+
 ### Permissionless validation {#permissionless-validation}
 
 Anyone can become a validator by running an Arbitrum node, without permission.
@@ -416,7 +448,7 @@ A web application maintained by [Offchain Labs](/intro/glossary#offchain-labs) s
 
 An [Arbitrum full node](/intro/glossary#arbitrum-full-node) configured to pre-validate transactions before forwarding `eth_sendRawTransaction` to the [Sequencer](/intro/glossary#sequencer), insulating it from transactions that would fail.
 
-At a configurable strictness level, a prechecker verifies the transaction type, signature, intrinsic gas (including L1 calldata gas), fee cap, nonce, sender balance, and any `eth_sendRawTransactionConditional` storage conditions. When [compliance filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering) is enabled, it also rejects transactions that touch restricted addresses.
+At a configurable strictness level, a prechecker verifies the transaction type, signature, intrinsic gas (including L1 calldata gas), fee cap, nonce, sender balance, and any `eth_sendRawTransactionConditional` storage conditions. When [compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering) is enabled, it also rejects transactions that touch restricted addresses.
 
 ### Precompile {#precompile}
 
@@ -507,6 +539,14 @@ An token contract on an Arbitrum chain deployed via the [`StandardERC20` gateway
 ### StandardERC20 gateway {#standarderc20-gateway}
 
 [Token Gateway](/intro/glossary#token-gateway) via which any underlying chain's **ERC-20** token can permissionlessly bridge; the `StandardERC20` gateway contracts deploy a [Standard Arb-Token](/intro/glossary#standard-arbtoken) on the [Child chain](/intro/glossary#child-chain) for each bridged token.
+
+### State Pruning {#state-pruning}
+
+Removing historical [chain state](/intro/glossary#chain-state) a node no longer needs, to keep its database from growing without bound. On [HashDB](/intro/glossary#hashdb) you prune manually with `--init.prune` and the node is offline while it runs. On [PathDB](/intro/glossary#pathdb) Nitro prunes online as the node runs, with no intervention and no downtime. An [archive node](/intro/glossary#archive-node) prunes nothing by definition.
+
+### State Scheme {#state-scheme}
+
+The layout Nitro uses to store its state trie on disk, selected with `--execution.caching.state-scheme`. Nitro supports two: [HashDB](/intro/glossary#hashdb) (the default) and [PathDB](/intro/glossary#pathdb). The two are not interchangeable — a node can only start from a [database snapshot](/intro/glossary#database-snapshot) built with the same state scheme, so switching means re-initializing the database.
 
 ### State Transition Function {#state-transition-function}
 
