@@ -41,7 +41,7 @@ Independent of the loop above, the <a data-quicklook-from="batch-poster">batch p
 
 ## High availability: the Sequencer coordinator
 
-In production, several Sequencer nodes run under a single logical Sequencer, with the SeqCoordinator electing a single active leader via Redis. A chosen-sequencer key records the current leader, which holds a short, time-limited lockout (roughly one minute by default) that it must continually refresh. The active node writes signed messages to Redis; standby nodes follow along so that, if the leader fails or steps down, another can take over with minimal disruption. Activation clears any <a data-quicklook-from="forwarder">forwarders</a> and resumes block production; deactivation sets up forwarding to the new leader and pauses local production.
+In production, several Sequencer nodes run under a single logical Sequencer, with the SeqCoordinator electing a single active leader via Redis. A chosen-sequencer key records the current leader, which holds a short, time-limited lockout (roughly one minute by default) that it must continually refresh. The active node writes signed messages to Redis; standby nodes follow along so that, if the leader fails or steps down, another can take over with minimal disruption. <a data-quicklook-from="activation">Activation</a> clears any <a data-quicklook-from="forwarder">forwarders</a> and resumes block production; deactivation sets up forwarding to the new leader and pauses local production.
 
 ## Delayed messages from the parent chain
 
@@ -62,13 +62,13 @@ Censorship Timeout aims to limit the negative effects of:
 
 ## How the Censorship Timeout works
 
-To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an <a data-quicklook-from="layer-3-l3">L3</a>’s parent chain Sequencer (the <a data-quicklook-from="L2">L2</a> Sequencer) is censoring or offline. In such a case, every <a data-quicklook-from="assertion">assertion</a> and/or sub-<a data-quicklook-from="challenge">challenge</a> move would need to wait 24 hours before bypassing the L2 Sequencer (using the Sequencer Inbox’s <a data-quicklook-from="forceinclusion">`forceInclusion`</a> method). In this scenario, a challenge resolution would be delayed by a time t where t = (24 hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
+To explain how this feature improves the security of chains settling to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, consider a scenario where an <a data-quicklook-from="layer-3-l3">L3</a>’s parent chain Sequencer (the <a data-quicklook-from="L2">L2</a> Sequencer) is censoring or offline. In such a case, every <a data-quicklook-from="assertion">assertion</a> and/or sub-<a data-quicklook-from="challenge">challenge</a> move would need to wait 24 hours before bypassing the L2 Sequencer (using the Sequencer Inbox’s <a data-quicklook-from="forceinclusion">`forceInclusion`</a> method). In this scenario, a challenge resolution would be delayed by a time t where t = (24 hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
 
 The Censorship Timeout feature mitigates this by lowering the force inclusion threshold when unexpected delays in message inclusion occur due to one (or all) of the above-mentioned cases of censorship or a sequencer outage, enabling entities to make moves without the 24-hour delay-per-move.
 
 The force inclusion window is the lesser of `delayBuffer` and `delayBlocks`, where `delayBlocks` is a constant currently set to 24 hours, and `delayBuffer` ranges from 30 minutes to 48 hours.
 
-The `delayBuffer` value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message’s delay beyond the `threshold` and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the `threshold` is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+The `delayBuffer` value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message’s delay beyond the `threshold` and how long it has been delayed (that is, when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the `threshold` is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
 
 The `delayBuffer` replenishes at a linear rate when the Sequencer is operating correctly at a nominal rate of one minute for every 20 minutes in which no messages are delayed beyond the `threshold`.
 
@@ -78,7 +78,7 @@ Below are the initial, proposed parameter values for the Censorship Timeout feat
 - `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 parent chain (Ethereum) blocks (one hour) for Arbitrum Nova
 - `replenish rate` = 5% (meaning one day is replenished every 20 days or roughly a 95% uptime)
 
-We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains—especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to utilize this feature for their chain and can also change the default parameters as they see fit for their use case.
+We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains—especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to use this feature for their chain and can also change the default parameters as they see fit for their use case.
 
 ## Decentralized fair sequencing
 
