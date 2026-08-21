@@ -15,17 +15,20 @@ Arbitrum documentation portal ([docs.arbitrum.io](https://docs.arbitrum.io/)), b
 ```shell
 yarn                              # Install dependencies
 yarn start --no-open              # Dev server (always use --no-open)
-yarn build                        # Production build (installs SDK deps, syncs Stylus, builds)
+yarn build                        # Production build (yarn && yarn clear && docusaurus build — always a cold rebuild)
 vercel build                      # Vercel-parity build (use to verify before deploying)
 yarn serve --no-open              # Serve built site locally
 yarn typecheck                    # TypeScript checking (tsc --noEmit)
 yarn format                       # Prettier (docs + app + check)
-yarn lint:markdown                # Markdownlint on docs/**/*.{md,mdx} (excludes docs/sdk/)
+yarn lint:markdown                # Markdownlint on docs/**/*.{md,mdx}
 yarn lint:markdown:fix            # Auto-fix markdown lint issues
 yarn generate-precompiles-ref-tables  # Regenerate precompile reference tables
 yarn update-variable-refs         # Propagate globalVars.js changes into doc files
 yarn build-glossary               # Rebuild glossary from partials/glossary/*.mdx
-node scripts/sync-stylus-content.js   # Refresh checked-in Stylus examples in docs/stylus-by-example/
+yarn generate                     # Run all generators (precompiles, contract addresses, glossary, variable refs)
+yarn generate:check               # Same, --check mode — CI fails if generated files are stale
+yarn test:llms-tracking           # Test middleware tracking logic
+node scripts/sync-stylus-content.js   # Refresh Stylus examples — NOTE: expects submodules/stylus-by-example, which no longer exists
 yarn find-orphan-pages            # Find docs not linked in sidebars
 yarn sync-redirects               # Sync redirects.config.js → vercel.json
 ```
@@ -36,7 +39,7 @@ yarn sync-redirects               # Sync redirects.config.js → vercel.json
 
 `onBrokenLinks: 'throw'` and `onBrokenMarkdownLinks: 'throw'` in `docusaurus.config.js`. Builds fail on any dead link. Always verify links after renaming/moving files.
 
-`onBrokenAnchors` is set to `'warn'` (not `'throw'`) because the generated SDK pages in `docs/sdk/` emit false-positive anchor warnings. These are expected and not actionable.
+`onBrokenAnchors` is set to `'warn'` (not `'throw'`) because TypeDoc-generated pages emit false-positive anchor warnings. These are expected and not actionable.
 
 ### Edge middleware
 
@@ -44,8 +47,8 @@ yarn sync-redirects               # Sync redirects.config.js → vercel.json
 
 ### Stylus and SDK content origins
 
-- `docs/stylus-by-example/` is checked into this repo directly (no submodule, no `.gitmodules`). To refresh from the upstream `stylus-by-example` source, run `node scripts/sync-stylus-content.js`.
-- `docs/sdk/` contains previously generated TypeDoc output. There is no live regeneration script in this repo today — treat the files as checked-in content and edit cautiously if needed.
+- `docs/stylus-by-example/` is checked into this repo directly (no submodule, no `.gitmodules`). Its `DONT-EDIT-THIS-FOLDER` marker points at `submodules/stylus-by-example`, which no longer exists — so edit the files here directly. `node scripts/sync-stylus-content.js` still exists but expects that missing submodule.
+- **The SDK API docs subsystem is dead.** `docs/sdk/` and `scripts/sdkDocsHandler.ts` no longer exist; `sdk-sidebar.js` is orphaned; `docs/api/` is a 3-file stub not referenced by `docusaurus.config.js`. The `sdk-docs` job in `.github/workflows/update-external-content.yml` still targets them and would fail if run. Do not treat any of these as a live pipeline.
 
 ### Global variables and markdown preprocessor
 
@@ -57,12 +60,13 @@ yarn sync-redirects               # Sync redirects.config.js → vercel.json
 
 Files starting with `_` in `docs/partials/` are reusable content fragments. The `parseFrontMatter` hook in `docusaurus.config.js` clears their frontmatter to suppress Docusaurus warnings. Partials are content-rich and imported across many pages — changes propagate widely, so trace imports before editing.
 
+### Generated content — do not hand-edit
+
+`docs/api/`, `docs/stylus-by-example/`, `docs/partials/glossary/` (138 files), `docs/partials/_reference-arbitrum-contract-addresses-partial.mdx`, `docs/run-arbitrum-node/nitro/cli-flags-reference.mdx`, `docs/run-arbitrum-node/assign-node-roles.mdx`, and `vercel.json` (generated from `redirects.config.js`). `docs/superpowers/` holds internal plans/specs, not published docs.
+
 ### Sidebar configuration
 
-`sidebars.js` defines all navigation sidebars. It imports generated sidebars from:
-
-- `sdk-sidebar.js` — auto-generated SDK API sidebar
-- `docs/stylus-by-example/*/sidebar.js` — Stylus examples sidebars
+`sidebars.js` (1855 lines) defines all navigation sidebars and is **self-contained — it imports nothing**. `sdk-sidebar.js` and `docs/stylus-by-example/*/sidebar.js` exist on disk but are not imported by it.
 
 ### Pre-commit hooks (Husky)
 
@@ -93,65 +97,12 @@ Skip with `HUSKY=0 git commit` when needed.
 
 ## Content writing guidelines
 
-The canonical editorial reference is [`docs/Offchain-pattern-guide.md`](docs/Offchain-pattern-guide.md) — it defines content types, writing principles, and the full terminology guide. The rules below are a condensed quick-reference; when they're silent or ambiguous, defer to the pattern guide.
+ALWAYS READ THE [PATTERN GUIDE](docs/Offchain-pattern-guide.md) AND APPLY ITS RULES IN YOUR WRITING
 
-### Terminology
+## PR Authoring conventions
 
-| Use                     | Don't use             |
-| ----------------------- | --------------------- |
-| decentralized app → app | dapp, dApp            |
-| onchain                 | on-chain              |
-| cross-chain             | crosschain            |
-| Rollup (capital R)      | rollup                |
-| AnyTrust                | anytrust              |
-| `ERC-20`, `ERC-721`     | ERC20                 |
-| allowlist/denylist      | whitelist/blacklist   |
-| Your Arbitrum chain     | L3 Orbit chain        |
-| bond                    | stake (for proposing) |
-
-### Document frontmatter
-
-Every doc must include:
-
-```yaml
----
-title: 'Document title (appears as H1)'
-sidebar_label: 'Shortened title for sidebar'
-description: 'SEO-friendly description'
-user_story: 'As a <role>, I want to <goal>'
-content_type: 'how-to | concept | quickstart | tutorial | reference | troubleshooting'
-author: '<github-username>'
-sme: '<github-username>'
----
-```
-
-### Style rules
-
-- Sentence case for headings
-- Tag code blocks with `shell` not `bash`
-- American English spelling
-- Spell out "and"/"or" (not & or /)
-- Separate procedural from conceptual content
-
-### Authoring conventions
-
-- Use `<VanillaAdmonition type="…">` instead of Docusaurus `:::info` / `:::note` for callouts in MDX. The component is registered globally via `src/theme/MDXComponents.js`, so no import is needed.
 - PR descriptions start from `.github/pull_request_template.md` — preserve its top-level headings (`## Description`, `## Document type`, `## Checklist`, `## Additional Notes`) and fill the sections rather than replacing them.
 - See `AGENTS.md` at the repo root for notes on relevant agents/subagents/skills used while working in this repo.
-
-### Review-nit check before committing
-
-As the last step before committing any docs content change, re-read the changed prose and fix these recurring review nits (the most common reviewer comments on docs PRs):
-
-- **Glossary quicklooks**: wrap the first mention of each glossary term on a page in `<a data-quicklook-from="<key>">term</a>`. Valid keys are the filenames in `docs/partials/glossary/` (strip the leading `_` and the `.mdx` extension). Frequently missed terms: `parent-chain`, `child-chain`, `sequencer`, `batch-poster`, `validator`, `sequencer-inbox`, `delayed-inbox`, `keyset`, `chain-owner`, `reorg`, `wasm`. The display text can differ from the key (plurals, capitalization).
-- **Awkward sentence openers**: rewrite cross-reference leads like "For how X works, see Y" to "To learn how X works, see Y".
-
-Don't chase these — they're transitive-dep noise from upstream packages:
-
-- `image at "...svg" can't be read correctly` / `unsupported file type: undefined` — `image-size` v2 dropped SVG support; Docusaurus's mdx-loader still calls it on every image. Affects build output only; rendered SVGs are fine.
-- `Critical dependency: require function is used in a way...` (`vscode-languageserver-types`) — UMD dynamic require from `mermaid` → `chevrotain` → `vscode-languageserver`.
-- `Can't resolve 'bufferutil' / 'utf-8-validate'` (in `ws/lib/...`) — optional native bindings; `ws` falls back to JS without them.
-- `[docusaurus-plugin-llms-txt] WARNING: Excluded N routes by current config` — informational; the plugin reports how many routes matched `nonCanonicalRoutePatterns` in `docusaurus.config.js` (SDK subtrees, hosted PDFs, partials, category pages). Not an error, just a count.
 
 ## Security audit workflow
 

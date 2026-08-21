@@ -54,7 +54,7 @@ Chain owners and operators should be aware that the fast withdrawals committee m
 
 While a fast withdrawals-enabled chain can be configured to finality in as little as 15 seconds (pre-BoLD only), there are externalities on the parent chain and from cross-chain messaging layers that must be considered.
 
-For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that <a data-quicklook-from="l1">L1</a>.
+For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that <a data-quicklook-from="L1">L1</a>.
 
 For an <a data-quicklook-from="arbitrum-one">Arbitrum One</a>-based Layer-3, there are three tiers of finality to consider:
 
@@ -113,7 +113,7 @@ To configure the script, you need to specify the following environment variables
 | `PARENT_CHAIN_ID`          | ChainId of the parent chain.                                                                                                                                                                                                                                                                                                                                                                 |
 | `ROLLUP_ADDRESS`           | Address of the Rollup contract.                                                                                                                                                                                                                                                                                                                                                              |
 | `FC_VALIDATORS`            | Array of fast-withdrawal validators. They will be added as signers to the multisig Safe wallet and to the Rollup's validator allowlist. It is recommended that these are DAC members of the AnyTrust chain.                                                                                                                                                                                  |
-| `MINIMUM_ASSERTION_PERIOD` | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in block number of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for <a data-quicklook-from="l2">L2</a> chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain)). |
+| `MINIMUM_ASSERTION_PERIOD` | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in block number of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for <a data-quicklook-from="L2">L2</a> chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain)). |
 
 Finally, follow these steps to execute the script (from the `examples/setup-fast-withdrawal` folder):
 
