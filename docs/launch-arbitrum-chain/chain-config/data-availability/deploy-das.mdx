@@ -87,7 +87,7 @@ As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `
 
 Gather the following information:
 
-- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@`
+- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/arbitrum-essentials/reference/node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/02-run-full-node.mdx) to prevent being rate limited.
 - The `SequencerInbox` contract address in the parent chain.
 
@@ -127,7 +127,7 @@ Here's an example of how to use the `anytrusttool keygen` utility inside Docker 
 
 ```shell
 docker run -v $(pwd)/bls_keys:/data/keys --entrypoint anytrusttool \
-@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ keygen --dir /data/keys
+@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ keygen --dir /data/keys
 ```
 
 ### Step 2: Deploy the DAS
@@ -248,7 +248,7 @@ template:
         - -c
         - |
         /usr/local/bin/anytrustserver --parent-chain.node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --parent-chain.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --data-availability.key.key-dir /home/user/data/keys --enable-rpc --rpc-addr '0.0.0.0' --log-level INFO --enable-rest --rest-addr '0.0.0.0' --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
-        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@
+        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@
         imagePullPolicy: Always
         resources:
         limits:
@@ -345,7 +345,7 @@ anytrusttool keygen --dir /some/local/dir/keys --ecdsa
 You can also use the `docker run` command as follows:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ keygen --dir /home/user/data/keys --ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ keygen --dir /home/user/data/keys --ecdsa
 ```
 
 #### Step 2: Change the DAS configuration and restart the server
@@ -381,7 +381,7 @@ anytrusttool client rpc store --rpc-client.rpc.url http://localhost:9876 --messa
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ client rpc store --rpc-client.rpc.url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ client rpc store --rpc-client.rpc.url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
 The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
@@ -397,7 +397,7 @@ anytrusttool client rest getbyhash --url http://localhost:9877 --data-hash 0xDat
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it --network="host" --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.2-3599aca@@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+docker run --rm -it --network="host" --entrypoint anytrusttool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 If we set `0xDataHash` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`

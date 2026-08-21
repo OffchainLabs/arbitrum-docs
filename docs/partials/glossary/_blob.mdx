@@ -1,0 +1,7 @@
+---
+title: Blob
+key: blob
+titleforSort: Blob
+---
+
+A transaction data format introduced on Ethereum by [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) and enabled for [Arbitrum chains](/intro/glossary#arbitrum-chains) in [ArbOS](/intro/glossary#arbos) 20 "Atlas". Blob data lives on the Ethereum beacon chain and is not readable by the EVM, unlike calldata. Posting [batches](/intro/glossary#batch) as blobs is cheaper than calldata, but it means a node needs a beacon chain RPC endpoint — with historical blob data — to sync.

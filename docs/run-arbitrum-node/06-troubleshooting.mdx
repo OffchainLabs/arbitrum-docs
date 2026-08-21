@@ -175,7 +175,7 @@ You can check logs by different log types: info, warn, and error.
         </tr>
         <tr className="scenario">
           <td>
-            Your Arbitrum node can’t connect to your parent chain node on <code>localhost:8545</code>
+            Your Arbitrum node can’t connect to your <a data-quicklook-from="parent-chain">parent chain</a> node on <code>localhost:8545</code>
           </td>
           <td>This is often because of a Docker port configuration issue. See https://stackoverflow.com/questions/43884981/unable-to-connect-localhost-in-docker.</td>
         </tr>
@@ -243,7 +243,9 @@ You can check logs by different log types: info, warn, and error.
           <td>
             You see <code>`Failed to load snapshot` err="head doesn't match snapshot: have a, want b”</code>
           </td>
-          <td>This is usually because an ungraceful shutdown caused a corrupted database; try restarting the node without a prune flag, and after your node goes back to normal, then graceful shut it down and restart to prune it.</td>
+          <td>
+            This is usually because an ungraceful shutdown caused a corrupted database; try restarting the node without a <a data-quicklook-from="state-pruning">prune</a> flag, and after your node goes back to normal, then graceful shut it down and restart to prune it.
+          </td>
         </tr>
         <tr className="scenario">
           <td>
@@ -265,7 +267,7 @@ You can check logs by different log types: info, warn, and error.
             You see <code>Getting file info dir=&lt;path&gt;/machines error="stat &lt;path&gt;/machines: no such file or directory"</code>.
           </td>
           <td>
-            Nitro is checking one of the expected locations for WASM machine artifacts, but that particular <code>machines/</code> directory does not exist. This warning can be harmless if Nitro finds the required machine artifacts in another location. If it is followed by validation or WASM module-root errors, make sure you're running a supported/current Nitro image for your chain, and that the image or mounted <code>machines/</code> directory contains artifacts matching the chain's onchain WASM module root. If you're using an older Docker image, upgrade to a newer Nitro release; if you're building or running from source, mount or download the matching machine artifacts for that Nitro version/module root.
+            Nitro is checking one of the expected locations for WASM machine artifacts, but that particular <code>machines/</code> directory does not exist. This warning can be harmless if Nitro finds the required machine artifacts in another location. If it is followed by validation or WASM module-root errors, make sure you're running a supported/current Nitro image for your chain, and that the image or mounted <code>machines/</code> directory contains artifacts matching the chain's onchain <a data-quicklook-from="wasm-module-root">WASM module root</a>. If you're using an older Docker image, upgrade to a newer Nitro release; if you're building or running from source, mount or download the matching machine artifacts for that Nitro version/module root.
           </td>
         </tr>
         <tr className="scenario">
@@ -292,7 +294,9 @@ You can check logs by different log types: info, warn, and error.
           <td>
             You see <code>`error reading inbox` err="previous delayed accumulator mismatch for message N"</code>.
           </td>
-          <td>The delayed-inbox accumulator your node computed doesn't match the onchain one at message N—typically caused by a parent-chain endpoint serving inconsistent data or by a reorg. Switch to a different parent-chain RPC and restart; if it persists, re-sync from a recent snapshot.</td>
+          <td>
+            The <a data-quicklook-from="delayed-inbox">delayed-inbox</a> accumulator your node computed doesn't match the onchain one at message N—typically caused by a parent-chain endpoint serving inconsistent data or by a <a data-quicklook-from="reorg">reorg</a>. Switch to a different parent-chain RPC and restart; if it persists, re-sync from a recent snapshot.
+          </td>
         </tr>
         <tr className="scenario">
           <td>
@@ -344,7 +348,7 @@ You can check logs by different log types: info, warn, and error.
             or <code>batch is within reorg resistance margin from layer 1 minimum block or timestamp bounds</code>
           </td>
           <td>
-            It indicates that there has been an issue with batch posting on the network. This could occur if your batch poster didn't post a batch for an extended period. Common reasons include the node being shut down inadvertently or the batch poster running out of funds, leading to no new blocks being produced or posted by the batch poster. <br />
+            It indicates that there has been an issue with <a data-quicklook-from="batch">batch</a> posting on the network. This could occur if your <a data-quicklook-from="batch-poster">batch poster</a> didn't post a batch for an extended period. Common reasons include the node being shut down inadvertently or the batch poster running out of funds, leading to no new blocks being produced or posted by the batch poster. <br />
             To resolve this, If re-org doesn’t matter, you can just start the batch poster with `--node.batch-poster.reorg-resistance-margin=0` and `node.batch-poster.l1-block-bound` to ignore, If it does, you'd want to modify the time bounds on the sequencer inbox to allow the sequencer to post a batch containing the transactions with the old timestamp
           </td>
         </tr>
@@ -365,7 +369,7 @@ You can check logs by different log types: info, warn, and error.
             You see <code>wrong msgIdx got X expected Y</code>.
           </td>
           <td>
-            The transaction streamer received a message whose index doesn't match the next expected one—your node's local DB is behind or ahead of the sequencer feed. Restart the node; if the gap persists, re-sync from a snapshot or use <code>--init.reorg-to-message-batch</code> to roll back to a known-good index.
+            The transaction streamer received a message whose index doesn't match the next expected one—your node's local DB is behind or ahead of the <a data-quicklook-from="sequencer-feed">sequencer feed</a>. Restart the node; if the gap persists, re-sync from a snapshot or use <code>--init.reorg-to-message-batch</code> to roll back to a known-good index.
           </td>
         </tr>
         <tr className="scenario">

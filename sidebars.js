@@ -270,6 +270,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/revenue-routing',
+                  label: `Revenue routing`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                   label: `Gas optimization`,
                 },
@@ -277,6 +282,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-target',
                   label: 'Gas target',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
+                  label: `Priority fees`,
                 },
               ],
             },
@@ -356,6 +366,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
@@ -395,11 +410,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
-                  label: 'Compliance filtering',
                 },
               ],
             },
@@ -518,6 +528,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/bold-upgrade-playbook',
+              label: 'BoLD upgrade playbook',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/key-rotation',
               label: 'Key rotation',
             },
@@ -540,6 +555,16 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/state-growth',
               label: 'State growth',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/upgrade-runbook',
+              label: 'Upgrade runbook',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/validator-troubleshooting',
+              label: 'Validator troubleshooting',
             },
           ],
         },
@@ -725,6 +750,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/overview',
               label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos61',
+              label: 'Elara (ArbOS 61)',
             },
             {
               type: 'doc',
@@ -980,6 +1010,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
+            },
+            {
+              type: 'doc',
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
             },
@@ -1003,6 +1038,11 @@ const sidebars = {
               type: 'doc',
               label: 'Geth',
               id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Finality and reorgs',
+              id: 'how-arbitrum-works/reference/finality-and-reorgs',
             },
           ],
         },
@@ -1807,11 +1847,6 @@ const sidebars = {
       type: 'doc',
       id: 'notices/arbos61-upgrade-notice',
       label: 'Upgrade notice for ArbOS 61',
-    },
-    {
-      type: 'doc',
-      id: 'notices/arbos60-upgrade-notice',
-      label: 'Upgrade notice for ArbOS 60',
     },
     {
       type: 'doc',
