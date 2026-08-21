@@ -69,6 +69,6 @@ When the Arbitrum Sequencer produces a data <a data-quicklook-from="batch">batch
 
 Once the Sequencer has collected enough signatures, it can aggregate the signatures and create a valid DACert for the pair (hash, expiration time). The Sequencer then posts that DACert to the parent chain Inbox contract, making it available to the AnyTrust chain software on the child chain.
 
-The [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx#4-the-data-is-routed-to-storage-da-handoff) drives this exchange. It hands the sealed batch to the DAC through a single storage interface, so the same code path serves a DAC, a custom backend, or Ethereum itself.
+The [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx#4-the-data-is-routed-to-storage-da-handoff) is the Sequencer component that drives this exchange. It hands the sealed batch to the DAC through a single storage interface, so the same code path serves a DAC, a custom backend, or Ethereum itself.
 
 If the Sequencer fails to collect enough signatures within a few minutes, it will abandon the attempt to use the DAC and will "[fall back to Rollup mode](/how-arbitrum-works/deep-dives/assertions.mdx)" by posting the full data directly to the parent chain, as it would do in a non-AnyTrust chain. The child chain software can understand both data posting formats (via DACert or full data) and will handle each one correctly.
