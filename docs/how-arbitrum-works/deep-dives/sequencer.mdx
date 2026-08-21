@@ -190,9 +190,9 @@ By efficiently sending compressed transaction batches to the Sequencer Inbox con
 Arbitrum offers two levels of finality:
 
 1. **Soft finality**: The Sequencer’s real-time feed confirms transactions almost instantly, but those confirmations are provisional. They rely on the Sequencer sequencing honestly and staying available.
-2. **Hard finality**: Transactions are included in batches posted to and finalized on the parent chain, inheriting the parent chain’s security. Final settlement happens when the Rollup protocol confirms the containing [assertion](/how-arbitrum-works/deep-dives/assertions.mdx), after the [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) challenge period.
+2. **Hard finality**: The Sequencer's batches are posted to and finalized on the parent chain, and the batch's transactions inherit the parent chain's security. Final settlement happens when the Rollup protocol confirms the containing [assertion](/how-arbitrum-works/deep-dives/assertions.mdx), after the [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) challenge period.
 
-Posting a batch is not itself final settlement. The transaction data becomes available and inherits the parent chain’s data-layer security, but the resulting child chain state settles only once an assertion is confirmed.
+Posting a batch is not itself final settlement. The transaction data becomes available and inherits the parent chain’s data-layer security, but the resulting child <a data-quicklook-from="chain-state">chain state</a> settles only once an assertion is confirmed.
 
 For the full treatment—latency at each stage, the trust model behind each level, force inclusion, AnyTrust data availability, and guidance on which level your application should wait for—see [Finality](/how-arbitrum-works/deep-dives/finality.mdx).
 
