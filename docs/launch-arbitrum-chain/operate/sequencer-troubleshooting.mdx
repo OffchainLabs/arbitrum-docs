@@ -29,14 +29,14 @@ Any <a data-quicklook-from="arbitrum-nitro">Nitro</a> node with feed output enab
 | Sequencer | Broadcasts messages it sequences itself                      | `node.feed.output.enable=true`         |
 | Relay     | Subscribes to an upstream feed and rebroadcasts it unchanged | `node.feed.input.url` plus feed output |
 
-A relay does not sequence, validate, or execute anything. It reads an upstream feed and distributes it to more subscribers. The message content is identical either way, so a client cannot tell from the payload whether it is connected to a sequencer or a relay.
+A relay does not sequence, validate, or execute anything. It reads an upstream feed and distributes it to more subscribers. The message content is identical either way, so a <a data-quicklook-from="client">client</a> cannot tell from the payload whether it is connected to a sequencer or a relay.
 
 ### Sequencer feed compared to relay feed
 
 The difference is operational, not structural:
 
 - **Load isolation.** Every subscriber on a sequencer is a connection the sequencer maintains instead of ordering transactions. Relays absorb that load.
-- **Compression.** Public feed endpoints may serve compressed messages using a custom dictionary. A local relay serves an uncompressed feed by default, which is why you should run one if you consume the feed with anything other than a standard Nitro node.
+- **Compression.** Public feed endpoints may serve compressed messages using a custom dictionary. A local relay serves an uncompressed feed by default, so if you consume the feed with anything other than a standard Nitro node, run one.
 - **Blast radius.** A relay that fails takes its subscribers offline. A sequencer that fails stops the chain.
 
 In a high-availability deployment, feeds flow in one direction through two relay tiers:
@@ -68,7 +68,7 @@ The broadcast server keeps recent messages in a **backlog** so a reconnecting cl
 
 ### `error in backlogSegment type assertion: clearing backlog`
 
-This is logged at `ERROR`. Despite the wording, it is a broadcaster-side memory structure problem, not chain data loss or corruption. Blocks the sequencer already produced are unaffected.
+Nitro logs this at `ERROR`. Despite the wording, it is a broadcaster-side memory structure problem, not chain data loss or corruption. Blocks the sequencer already produced are unaffected.
 
 **What happens.** The backlog empties itself. Connected clients can no longer catch up from memory, so they resync from their configured source. Feed consumers see a gap and reconnect.
 
@@ -84,7 +84,7 @@ One related message comes from the same code path.
 #### `confirmed sequence number is past the end of stored messages`
 
 - [WARN]—The confirmed message number is ahead of everything the backlog holds, so it resets.
-- [CAUSE]—The broadcaster fell far behind, or restarted and is being told about confirmations for messages it never buffered.
+- [CAUSE]—The broadcaster fell far behind, or it restarted and received confirmations for messages it never buffered.
 - [MEANING]—Expected shortly after a restart. A recurring pattern in steady state is not.
 
 ### What to do
@@ -147,13 +147,13 @@ With the coordinator enabled, exactly one sequencer holds the lockout in Redis. 
 
 #### `no sequencer appears to want the lockout on redis`
 
-- [DEBUG→WARN→ERROR]—The priority list exists, but no sequencer on it has set its wants-lockout key. Logged at `DEBUG` at first, `WARN` after 10 seconds, `ERROR` after 20, and throttled to once every 5 seconds.
+- [DEBUG→WARN→ERROR]—The priority list exists, but no sequencer on it has set its wants-lockout key. Nitro logs this at `DEBUG` at first, escalates to `WARN` after 10 seconds and `ERROR` after 20, and throttles it to once every 5 seconds.
 - [CAUSE]—Every listed sequencer is unsynced, down, or unreachable—or the URLs in the list do not match any running sequencer's `my-url`.
 - [ACTION]—Compare the `priorities` value printed in the log against each sequencer's configured `my-url`. They must match exactly.
 
 #### `sequencer is not synced`
 
-- [WARN]—The sequencer will not ask for the lockout because it has not caught up. Sync details are attached to the log entry.
+- [WARN]—The sequencer does not ask for the lockout because it has not caught up. Nitro attaches sync details to the log entry.
 - [CAUSE]—The node is still replaying messages, or it cannot reach the feed or parent chain.
 - [MEANING]—Expected during startup. Sustained means the node cannot catch up.
 
@@ -186,13 +186,13 @@ The timestamp check applies only when the sequencer has a parent chain reader co
 
 ### 3. The sequencer accepts no transactions
 
-The sequencer keeps running here, but the block it builds is empty because everything is rejected before it is queued.
+The sequencer keeps running here, but the block it builds is empty because the sequencer rejects everything before queuing it.
 
 | Rejection message                                                                    | Trigger                                                                       |
 | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
 | `currently not accepting transactions due to expected surplus being below threshold` | Expected surplus fell below `expected-surplus-hard-threshold`                 |
 | `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                            |
-| `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its forwarder is disabled |
+| `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its <a data-quicklook-from="forwarder">forwarder</a> is disabled |
 
 For the surplus flags, see [Sequencer configuration reference](/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference.mdx#expected-surplus-flags).
 
