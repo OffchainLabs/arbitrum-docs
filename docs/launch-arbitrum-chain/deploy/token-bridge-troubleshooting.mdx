@@ -16,7 +16,7 @@ Most routing problems in this guide trace back to a single behavior: the <a data
 
 Each side of the bridge has a router (`L1GatewayRouter` on the <a data-quicklook-from="parent-chain">parent chain</a>, `L2GatewayRouter` on the <a data-quicklook-from="child-chain">child chain</a>) holding an `l1TokenToGateway` mapping from a parent chain token address to the gateway that handles it.
 
-The mapping isn't a list of every bridgeable token. It holds only the tokens that someone registered to a <a data-quicklook-from="custom-gateway">custom gateway</a>, so an ordinary **ERC-20** token never has an entry. When you bridge a token, the router calls `getGateway`, which resolves in this order:
+The mapping isn't a list of every bridgeable token. It holds only the tokens that someone registered to a <a data-quicklook-from="custom-gateway">custom gateway</a>, so a given **ERC-20** token may or may not have an entry. When you bridge a token, the router calls `getGateway`, which resolves in this order:
 
 1. If `l1TokenToGateway` has an entry for the token, use that gateway.
 2. If it has no entry, fall back to `defaultGateway`—the <a data-quicklook-from="standarderc20-gateway">standard **ERC-20** gateway</a>.
@@ -34,7 +34,7 @@ You deployed a bridged **USDC** gateway following [the bridged USDC standard](/l
 
 ### What causes this problem
 
-The deployment script's final registration step is conditional. `deployUsdcBridge.ts` performs these operations in order:
+The deployment script's final registration step is conditional. It performs these operations in order:
 
 1. Load deployer wallets for both chains and register the networks in the SDK.
 2. Deploy new proxy admins on both chains.
@@ -67,7 +67,7 @@ Registering a token or gateway involves four entry points across two contracts, 
 
 `registerTokenToL2` and `setGateway` are designed to be called _by the token_. They revert with `NOT_ARB_ENABLED` unless the caller implements the <a data-quicklook-from="custom-arbtoken">custom token</a> interface and returns the expected value from `isArbitrumEnabled()`. Calling either from an externally owned account fails no matter how that account is funded or permissioned.
 
-For a token that can't be modified, use the owner-side path instead. `forceRegisterTokenToL2` takes parallel arrays and bypasses the token-side check:
+For a token that can't be modified, use the chain-owner-side path instead. `forceRegisterTokenToL2` takes parallel arrays and bypasses the token-side check:
 
 ```solidity
 function forceRegisterTokenToL2(
@@ -108,7 +108,7 @@ After any registration, confirm `getGateway` returns the same gateway on both ro
 
 Your chain has no <a data-quicklook-from="weth-gateway">WETH gateway</a>, no child chain `aeWETH`, and no **WETH** bridging path.
 
-If your chain uses a <a data-quicklook-from="custom-gas-token">custom gas token</a>, it was never deployed. In `createTokenBridge`, the entire **WETH** gateway block is conditional on `feeToken == address(0)`, so a custom gas token chain skips it. This matches step 5 of the deployment guide, which applies only to **ETH**-based chains.
+If your chain uses a <a data-quicklook-from="custom-gas-token">custom gas token</a>, it doesn't need a WETH gateway since ETH is not the native token of the chain and doesn't require specific handling. In a custom gas token chain, WETH can be bridge through the default gateway.
 
 On an **ETH**-based chain, the gateway is wired to the **WETH** address stored by the creator you deployed through, not to one you choose at chain creation time. To learn which creator you used, see [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx).
 
@@ -171,7 +171,7 @@ A _missing_ variable produces a clear error instead, such as `Missing BASECHAIN_
 
 Verify that each address is a bare, checksummed hex string: no quotes, no whitespace, `0x` prefixed, 42 characters. Placeholder text, a missing `0x` prefix, and a truncated address are the common defects.
 
-## `outboundTransfer` reverts or moves the wrong tokens
+## Calling `outboundTransfer` directly on the child chain gateway reverts or moves the wrong tokens
 
 Scripts that call `outboundTransfer` directly on a child chain gateway, bypassing the router, commonly fail. `L2ArbitrumGateway.outboundTransfer` branches on whether the caller is the router:
 
