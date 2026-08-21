@@ -15,17 +15,17 @@ The majority of this document describes Arbitrum Rollup, the primary use case fo
 
 <a data-quicklook-from="arbitrum">Arbitrum</a> is an <a data-quicklook-from="L2">L2</a> scaling solution for Ethereum, offering a unique combination of benefits:
 
-- **Trustless security**: security rooted in Ethereum, with any one party able to ensure correct Layer 2 results.
-- **Compatibility with Ethereum**: able to run unmodified EVM contracts and Ethereum transactions.
+- **<a data-quicklook-from="trustless">Trustless</a> security**: security rooted in Ethereum, with any one party able to ensure correct Layer 2 results.
+- **Compatibility with Ethereum**: able to run unmodified EVM contracts and Ethereum <a data-quicklook-from="transaction">transactions</a>.
 - **Scalability**: moving contracts' computation and storage off of the main Ethereum chain, allowing much higher throughput.
 - **Minimum cost**: designed and engineered to minimize the <a data-quicklook-from="L1">L1</a> gas footprint of the system, minimizing per-transaction cost.
 
 Nitro is a major upgrade to Arbitrum, improving over <a data-quicklook-from="arbitrum-classic">"classic" Arbitrum</a> in several ways:
 
-- **Advanced <a data-quicklook-from="blob">blob</a>/calldata compression** further reduces <a data-quicklook-from="transaction">transaction</a> costs on Arbitrum by reducing the amount of data posted to L1.
+- **Advanced <a data-quicklook-from="blob">blob</a>/calldata compression** further reduces <a data-quicklook-from="transaction">transaction</a> costs on Arbitrum by reducing the amount of data posted to <a data-quicklook-from="L1">L1</a>.
 - **Separate contexts for common execution and fault proving**, increasing the performance of L1 nodes, and thus offering lower fees.
 - **Ethereum L1 gas compatibility**, bringing pricing and accounting for EVM operations perfectly in line with Ethereum.
-- **Additional L1 interoperability**, including tighter synchronization with L1 block numbers, and full support for all Ethereum L1 precompiles.
+- **More L1 interoperability**, including tighter synchronization with L1 block numbers, and full support for all Ethereum L1 precompiles.
 - **Safe retryables** that eliminate the failure mode where a <a data-quicklook-from="retryable-ticket">retryable ticket</a> fails to be created.
 - **<a data-quicklook-from="geth">Geth</a> tracing**, for even broader debugging support.
 - And many, many more changes.
@@ -38,14 +38,14 @@ At the most basic level, an <a data-quicklook-from="arbitrum-chain">Arbitrum cha
 
 People and contracts put messages into the inbox. The chain reads the messages one at a time and processes each one. This updates the chain's state and produces outputs.
 
-If you want an Arbitrum chain to process a transaction for you, you need to put that transaction into the chain's inbox. Then the chain will see your transaction, execute it, and produce outputs: a transaction receipt and any withdrawals your transaction initiated.
+If you want an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> to process a transaction for you, you need to put that transaction into the chain's inbox. Then the chain will see your transaction, execute it, and produce outputs: a transaction receipt and any withdrawals your transaction initiated.
 
 Execution is deterministic—which means that the chain's behavior is uniquely determined by the contents of its inbox. Because of this, the result of your transaction is known as soon as it is put in the inbox. Any Arbitrum node can tell you the result. (And you can run an Arbitrum node yourself if you want.)
 
 All the technical details in this document are related to this diagram. To get from this diagram to a full description of Arbitrum, we'll need to answer questions like these:
 
 - Who keeps track of the inbox, <a data-quicklook-from="chain-state">chain state</a>, and outputs?
-- How does Arbitrum make sure that the chain state and outputs are correct?
+- How does Arbitrum make sure that the <a data-quicklook-from="chain-state">chain state</a> and outputs are correct?
 - How can Ethereum users and contracts interact with Arbitrum?
 - How does Arbitrum support Ethereum-compatible contracts and transactions?
 - How are **ETH** and tokens transferred into and out of Arbitrum chains, and how are they managed while on the chain?
@@ -58,9 +58,9 @@ For foundational concepts about the STF, see the [State Transition Function gent
 The essence of Nitro, and its key innovations, lie in four big ideas. We'll list them here with a quick summary of each, then we'll unpack them in more detail in later sections.
 
 - **Sequencing, followed by deterministic execution**: Nitro processes transactions with a two-phase strategy. First, the transactions are organized into a single ordered sequence, and Nitro commits to that sequence. Then the transactions are processed, in that sequence, by a deterministic <a data-quicklook-from="state-transition-function">State Transition Function</a>.
-- **Geth at the core**: Nitro supports Ethereum's data structures, formats, and virtual machine by compiling them into the core code of the popular go-ethereum ("Geth") Ethereum node software. Using Geth as a library in this way ensures a very high degree of compatibility with Ethereum.
+- **<a data-quicklook-from="geth">Geth</a> at the core**: Nitro supports Ethereum's data structures, formats, and virtual machine by compiling them into the core code of the popular go-ethereum ("Geth") Ethereum node software. Using Geth as a library in this way ensures a very high degree of compatibility with Ethereum.
 - **Separating execution from proving**: Nitro compiles the same source code twice, once to native code for execution on a Nitro node, optimized for speed, and again to <a data-quicklook-from="wasm">WASM</a> for proving, optimized for portability and security.
-- **Optimistic Rollup with interactive fraud proofs**: Nitro settles transactions on the Layer 1 Ethereum chain using an Optimistic Rollup protocol that includes interactive fraud proofs, pioneered by Arbitrum. The current dispute system, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), extends this with an all-vs-all, <a data-quicklook-from="permissionless-validation">permissionless validation</a> protocol that resolves disputes with a bounded delay (See "Resolving disputes using interactive fraud proofs").
+- **Optimistic Rollup with interactive <a data-quicklook-from="fraud-proof">fraud proofs</a>**: Nitro settles transactions on the Layer 1 Ethereum chain using an Optimistic Rollup protocol that includes interactive fraud proofs, pioneered by Arbitrum. The current dispute system, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), extends this with an all-vs-all, <a data-quicklook-from="permissionless-validation">permissionless validation</a> protocol that resolves disputes with a bounded delay (See "Resolving disputes using interactive fraud proofs").
 
 ## Sequencing, followed by deterministic execution
 
@@ -72,11 +72,11 @@ This diagram summarizes how transactions are processed in Nitro.
 
 Let's [follow a user's transaction](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx) through this process.
 
-First, the user creates a transaction, signs it with their <a data-quicklook-from="wallet">wallet</a>, and sends it to the Nitro chain's [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx). The Sequencer's job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
+First, the user creates a transaction, signs it with their <a data-quicklook-from="wallet">wallet</a>, and sends it to the Nitro chain's [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx). The <a data-quicklook-from="sequencer">Sequencer</a>'s job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
 
-Once the transactions are sequenced, they are run through the _state transition function_, one by one. The state transition function (STF) takes as input the current state of the chain (account balances, contract code, and so on) along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
+Once the transactions are sequenced, they are run through the _<a data-quicklook-from="state-transition-function">state transition function</a>_, one by one. The state transition function (STF) takes as input the current state of the chain (account balances, contract code, and so on) along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
 
-Because the protocol doesn't trust the <a data-quicklook-from="sequencer">Sequencer</a> not to put garbage into its sequence, the STF will detect and discard invalid (e.g., improperly formed) transactions from the sequence. A well-behaved Sequencer will filter out invalid transactions so the STF never sees them—and this reduces cost and therefore keeps transaction fees low—but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the feed are signed by their senders, so the Sequencer can't create forged transactions.)
+Because the protocol doesn't trust the <a data-quicklook-from="sequencer">Sequencer</a> not to put garbage into its sequence, the STF will detect and discard invalid (for example, improperly formed) transactions from the sequence. A well-behaved Sequencer will filter out invalid transactions so the STF never sees them—and this reduces cost and therefore keeps transaction fees low—but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the feed are signed by their senders, so the Sequencer can't create forged transactions.)
 
 The State Transition Function is deterministic, which means that its behavior depends only on the current state and the contents of the next transaction—and nothing else. Because of this determinism, the result of a transaction `T` will depend only on the genesis state of the chain, the transactions before `T` in the sequence, and `T` itself.
 
@@ -87,19 +87,19 @@ It follows that anyone who knows the transaction sequence can compute the STF th
 So how do nodes get the sequence? The Sequencer publishes it in two ways:
 
 - a <a data-quicklook-from="sequencer-feed">real-time feed</a>, and
-- batches posted on L1 Ethereum
+- <a data-quicklook-from="batch">batches</a> posted on L1 Ethereum
 
 The real-time feed is published by the Sequencer, so anyone who subscribes receives instant notifications of each transaction as it is sequenced. Nitro nodes can subscribe to the feed directly from the Sequencer or via a <a data-quicklook-from="feed-relay">relay</a> that forwards it. The feed represents the Sequencer's promise to record transactions in a particular order. If the Sequencer is honest and doesn't have a long downtime, this promise will be kept. So anyone who trusts the Sequencer to keep its promises can rely on the feed to get instant information about the transaction sequence—and they can run the sequenced transactions through the State Transition Function to learn the results of each transaction immediately. This is "<a data-quicklook-from="soft-confirmation">soft finality</a>" for transactions; it's "soft" because it depends on the Sequencer keeping its promises.
 
-The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically—perhaps every few minutes in production—the Sequencer concatenates the next group of transactions in the feed, compresses them for efficiency, and posts the results to Ethereum—by default as EIP-4844 blobs when the <a data-quicklook-from="parent-chain">parent chain</a> supports them, and they are priced efficiently—otherwise as calldata. This is the final and official record of the transaction sequence. As soon as this Ethereum transaction reaches finality, the Layer 2 Nitro transactions it records will also have finality. These transactions are final because their positions in the sequence are final, and their outcomes are deterministic and knowable to any party. This is "<a data-quicklook-from="hard-finality">hard finality</a>."
+The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically—perhaps every few minutes in production—the Sequencer concatenates the next group of transactions in the feed, compresses them for efficiency, and posts the results to Ethereum—by default as EIP-4844 <a data-quicklook-from="blob">blobs</a> when the <a data-quicklook-from="parent-chain">parent chain</a> supports them, and they are priced efficiently—otherwise as calldata. This is the final and official record of the transaction sequence. As soon as this Ethereum transaction reaches finality, the Layer 2 Nitro transactions it records will also have finality. These transactions are final because their positions in the sequence are final, and their outcomes are deterministic and knowable to any party. This is "<a data-quicklook-from="hard-finality">hard finality</a>."
 
-The Sequencer's <a data-quicklook-from="batch">batches</a> are compressed using the general-purpose Brotli data compression algorithm. Rather than always using the maximum compression level, the batch poster selects a Brotli level adaptively based on its backlog (the default at low backlog is the maximum level 11, dropping to faster, lower levels as the backlog grows).
+The Sequencer's <a data-quicklook-from="batch">batches</a> are compressed using the general-purpose Brotli data compression algorithm. Rather than always using the maximum compression level, the <a data-quicklook-from="batch-poster">batch poster</a> selects a Brotli level adaptively based on its backlog (the default at low backlog is the maximum level 11, dropping to faster, lower levels as the backlog grows).
 
 ## Geth at the core
 
 The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers to [go-ethereum](/how-arbitrum-works/reference/geth.mdx), the most common node software for Ethereum. As its name would suggest, go-ethereum is written in the Go programming language, as is almost all of Nitro.
 
-<VanillaAdmonition type="info">In Ethereum's post-Merge architecture, Geth is an **execution client**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles in Geth's execution core as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.</VanillaAdmonition>
+<VanillaAdmonition type="info">In Ethereum's post-Merge architecture, Geth is an **execution <a data-quicklook-from="client">client</a>**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles in Geth's execution core as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.</VanillaAdmonition>
 
 <ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
@@ -109,17 +109,17 @@ The software that makes up a Nitro node can be thought of as built in three main
 - The middle layer, which we call [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx), is custom software that provides additional functions associated with Layer 2 functionality, such as decompressing and parsing the Sequencer's data batches, accounting for Layer 1 gas costs and collecting fees to reimburse for them, and supporting cross-chain <a data-quicklook-from="bridge">bridge</a> functionalities such as deposits of Ether (**ETH**) and tokens from L1 and withdrawals of the same back to L1. We'll dig into the details of <a data-quicklook-from="arbos">ArbOS</a> below.
 - The top layer consists of node software, mostly drawn from Geth. This handles connections and incoming RPC requests from clients and provides the other top-level functionality required to operate an Ethereum-compatible <a data-quicklook-from="blockchain">blockchain</a> node.
 
-Because the top and bottom layers rely heavily on code from Geth, this structure has been dubbed a "Geth sandwich." Strictly speaking, Geth plays the role of the bread in the sandwich, and ArbOS is the filling, but this sandwich is named for the bread.
+Because the top and bottom layers rely heavily on code from Geth, this structure has been dubbed a "Geth sandwich." Strictly speaking, Geth plays the role of the bread in the sandwich, and <a data-quicklook-from="arbos">ArbOS</a> is the filling, but this sandwich is named for the bread.
 
 The State Transition Function consists of the bottom Geth layer and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code and implicitly includes all code that it calls. The STF takes as input the [bytes of a transaction received in the inbox](/how-arbitrum-works/reference/stf-inputs.mdx) and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state and, upon completion, emit the header of a new block (in Ethereum's block header format), which will be appended to the Nitro chain.
 
 ## Separating execution from proving
 
-One of the challenges in designing a practical rollup system is the tension between wanting the system to perform well in ordinary execution and reliably verifying its results. Nitro resolves this tension by using the same source code for both execution and proving, but compiling it to different targets for the two cases.
+One of the <a data-quicklook-from="challenge">challenges</a> in designing a practical rollup system is the tension between wanting the system to perform well in ordinary execution and reliably verifying its results. Nitro resolves this tension by using the same source code for both execution and proving, but compiling it to different targets for the two cases.
 
-When compiling the Nitro node software for _execution_, the standard Go compiler produces native code for the target architecture, which, of course, will vary across node deployments. (The node software is distributed in source code form, and as a Docker image containing a compiled library.)
+When compiling the Nitro node software for _execution_, the standard Go compiler produces native code for the target architecture, which will vary across node deployments. (The node software is distributed in source code form, and as a Docker image containing a compiled library.)
 
-Separately, for proof, the State Transition Function portion of the code is compiled to WebAssembly (WASM), a typed, portable machine code format. The WASM code is then transformed into a format we call <a data-quicklook-from="wavm">WAVM</a>, as detailed below. If there is a dispute over the correct result of the STF computation, it is resolved to the WAVM code.
+Separately, for proof, the State Transition Function portion of the code is compiled to WebAssembly (<a data-quicklook-from="wasm">WASM</a>), a typed, portable machine code format. The WASM code is then transformed into a format we call <a data-quicklook-from="wavm">WAVM</a>, as detailed below. If there is a dispute over the correct result of the STF computation, it is resolved to the WAVM code.
 
 ### WAVM
 
@@ -153,11 +153,11 @@ Arbitrum is an Optimistic Rollup. Let's unpack what that means.
 
 Arbitrum is a Rollup, which means that the inputs to the chain—the messages that are put into the inbox—are all recorded on the Ethereum chain as EIP-4844 blobs or as calldata if blobs are unavailable. Because of this, everyone has the information they need to determine the chain's current state—they have the full history of the inbox, and the results are uniquely determined by that history, so they can reconstruct the chain's state based on public information, if needed.
 
-This also allows anyone to participate in the Arbitrum protocol by running an Arbitrum node or serving as a validator. Nothing about the chain's history or state is a secret.
+This also allows anyone to participate in the Arbitrum protocol by running an Arbitrum node or serving as a <a data-quicklook-from="validator">validator</a>. Nothing about the chain's history or state is a secret.
 
 #### Optimistic
 
-Arbitrum is optimistic, meaning that it advances the state of the chain by allowing any party (a "validator") to post an <a data-quicklook-from="assertion">assertion</a> on Layer 1 that the party claims is correct, and then giving everyone else a chance to challenge that claim. If the <a data-quicklook-from="challenge-period">challenge period</a> (6.4 days) passes and no one challenges the claimed assertion, Arbitrum confirms it as correct. If someone challenges the claim during the challenge period, Arbitrum uses an efficient dispute-resolution protocol (detailed below) to determine which party is lying. The liar will forfeit a deposit, and the truth-teller will take part of that deposit as a reward for their efforts (some of the deposit is burned, guaranteeing that the liar is punished even if there's some collusion going on).
+Arbitrum is optimistic, meaning that it advances the state of the chain by allowing any party (a "validator") to post an <a data-quicklook-from="assertion">assertion</a> on Layer 1 that the party claims is correct, and then giving everyone else a chance to challenge that claim. If the <a data-quicklook-from="challenge-period">challenge period</a> (6.4 days) passes and no one challenges the claimed <a data-quicklook-from="assertion">assertion</a>, Arbitrum confirms it as correct. If someone challenges the claim during the challenge period, Arbitrum uses an efficient dispute-resolution protocol (detailed below) to determine which party is lying. The liar will forfeit a deposit, and the truth-teller will take part of that deposit as a reward for their efforts (some of the deposit is burned, guaranteeing that the liar is punished even if there's some collusion going on).
 
 Because a party that tries to cheat will lose a deposit, attempts to cheat should be very rare, and the normal case will be a single party posting a correct assertion, and nobody challenging it.
 
@@ -187,7 +187,7 @@ We strongly believe that interactive proving is the superior approach, for the f
 
 - **More efficient in the optimistic case**: Because interactive proving can resolve disputes that are larger than one transaction, it can allow an assertion to contain only a single claim about the end state of the chain after all of the execution covered by the assertion. By contrast, re-executing requires posting a state claim for each transaction within the assertion. With hundreds or thousands of transactions per assertion, this is a substantial difference in L1 footprint—and L1 footprint is the main component of cost.
 - **More efficient in the pessimistic case**: In the case of a dispute, interactive proving requires the L1 mediator contract only to check that Alice and Bob's actions "have the right shape," for example, that Alice has divided her `N`-step claim into two claims half as large. (The mediator doesn't need to evaluate the correctness of Alice's claim—Bob does that, offchain.) Only one instruction needs to be re-executed. By contrast, re-execution requires the L1 mediator to emulate the execution of an entire transaction.
-- **High per-transaction gas limit**: Interactive proving can escape from Ethereum's tight per-transaction gas limit. The gas limit isn't infinite, for obvious reasons, but it can be larger than on Ethereum. As far as Ethereum is concerned, the only downside of a gas-heavy Arbitrum transaction is that it may require an interactive <a data-quicklook-from="fraud-proof">fraud proof</a> with slightly more steps (and only if indeed it is fraudulent). By contrast, re-execution must impose a _lower_ gas limit than Ethereum, because it must be possible to emulate execution of the transaction (which is more expensive than executing it directly) within a single Ethereum transaction.
+- **High per-transaction gas limit**: Interactive proving can escape from Ethereum's tight per-transaction gas limit. The gas limit isn't infinite, for practical reasons, but it can be larger than on Ethereum. As far as Ethereum is concerned, the only downside of a gas-heavy Arbitrum transaction is that it may require an interactive <a data-quicklook-from="fraud-proof">fraud proof</a> with slightly more steps (and only if indeed it is fraudulent). By contrast, re-execution must impose a _lower_ gas limit than Ethereum, because it must be possible to emulate execution of the transaction (which is more expensive than executing it directly) within a single Ethereum transaction.
 - **More implementation flexibility**: Interactive proving allows more flexibility in implementation. All that is necessary is the ability to verify a <a data-quicklook-from="one-step-proof">one-step proof</a> on Ethereum. By contrast, re-execution approaches are constrained by the EVM's limitations.
 
 ### Interactive proving drives Arbitrum's design
@@ -212,36 +212,36 @@ The parties that participate in the protocol are called _validators_. Some valid
 
 With the deployment of <a data-quicklook-from="bold">BoLD</a>, validation is permissionless: anyone can post an assertion, bond, and defend the chain. (A chain may still keep an optional validator allowlist enabled as a safety measure during early stages; this is a toggle in the rollup contracts, not a requirement of the protocol.) "<a data-quicklook-from="watchtower-validator">Watchtower validators</a>," who monitor the chain but don't take any onchain actions, can be run permissionlessly (see "validators" below).
 
-The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that executing an Arbitrum chain is as trustless as executing an Ethereum chain. You, and you alone (or someone you hire), can ensure your transactions are processed correctly. And this is true no matter how many malicious people are trying to stop you. Under BoLD, this guarantee comes with a [_bounded delay_](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx): a single honest party can force <a data-quicklook-from="confirmation">confirmation</a> of the correct outcome with a known, fixed amount of time, regardless of how many adversaries participate or how much they place as bond.
+The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that executing an Arbitrum chain is as trustless as executing an Ethereum chain. You, and you alone (or someone you hire), can ensure your transactions are processed correctly. And this is true no matter how many malicious people are trying to stop you. Under <a data-quicklook-from="bold">BoLD</a>, this guarantee comes with a [_bounded delay_](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx): a single honest party can force <a data-quicklook-from="confirmation">confirmation</a> of the correct outcome with a known, fixed amount of time, regardless of how many adversaries participate or how much they place as bond.
 
 ### The Rollup chain
 
-The rollup protocol tracks a chain of claims about the L2 state—we'll call these [assertions](/how-arbitrum-works/deep-dives/assertions.mdx). They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 (Nitro) blocks. You can think of these assertions as forming a tree of claims about the chain's history, which the <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> manages and oversees.
+The rollup protocol tracks a chain of claims about the <a data-quicklook-from="L2">L2</a> state—we'll call these [assertions](/how-arbitrum-works/deep-dives/assertions.mdx). They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 (Nitro) blocks. You can think of these assertions as forming a tree of claims about the chain's history, which the <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> manages and oversees.
 
 Validators can propose assertions. A new assertion is initially unresolved. Eventually, every assertion will be _resolved_ by being either _confirmed_ or _rejected_. The confirmed assertions constitute the chain's confirmed history.
 
 Each assertion contains, among other things:
 
 - The <a data-quicklook-from="predecessor-assertion">predecessor assertion</a> it builds on (the last assertion before this one that is claimed to be correct)
-- The number of L2 blocks that have been created in the chain's history
+- The number of <a data-quicklook-from="l2-block">L2 blocks</a> that have been created in the chain's history
 - The number of inbox messages that have been consumed in the chain's history
-- A commitment to the state and outputs produced over the chain's history
+- A <a data-quicklook-from="commitment">commitment</a> to the state and outputs produced over the chain's history
 
 Except for its position in the tree, the contents of an assertion are all just claims by its <a data-quicklook-from="proposer">proposer</a>. Arbitrum doesn't know at first whether they are correct. If they are correct, the protocol should eventually confirm the assertion. If they are incorrect, the protocol should eventually reject them.
 
 An assertion implicitly claims that its predecessor is correct, and therefore, transitively, that a complete history of the chain reaching back to its genesis is correct. It also implicitly claims that any <a data-quicklook-from="rival">rival</a> assertion—a different assertion sharing the same predecessor—is incorrect.
 
-In the normal case, only correct assertions are proposed. If an assertion has no rival and its challenge period elapses, it is confirmed. If two or more rival assertions exist, they are resolved by a <a data-quicklook-from="challenge">challenge</a> (described below), and the assertions descending from the losing side are rejected. The crucial property of BoLD is that this resolution completes with a bounded delay, no matter how many rival assertions a malicious party creates.
+In the normal case, only correct assertions are proposed. If an assertion has no <a data-quicklook-from="rival">rival</a> and its challenge period elapses, it is confirmed. If two or more rival assertions exist, they are resolved by a <a data-quicklook-from="challenge">challenge</a> (described below), and the assertions descending from the losing side are rejected. The crucial property of BoLD is that this resolution completes with a bounded delay, no matter how many rival assertions a malicious party creates.
 
 ### Bonding
 
-At any given time, some validators will be bonders, and some will not. To propose an assertion, a validator must put up a [bond held by the Arbitrum Layer 1 contracts](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx), which will be confiscated if the assertion is proven false. The bond is denominated in an **ERC-20** token configured for the chain—on Arbitrum One, this is **WETH**—so, in practice, stakers post **ETH**-denominated value.
+At any given time, some validators will be <a data-quicklook-from="bonder">bonders</a>, and some will not. To propose an assertion, a validator must put up a [bond held by the Arbitrum Layer 1 contracts](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx), which will be confiscated if the assertion is proven false. The bond is denominated in an **ERC-20** token configured for the chain—on Arbitrum One, this is **WETH**—so, in practice, stakers post **ETH**-denominated value.
 
 A validator who agrees with the current confirmed history and proposes a correct successor assertion stays bonded on it until it is confirmed, at which point the bond can be withdrawn. A validator whose assertion is rejected forfeits its bond.
 
-When a dispute arises, the challenge game itself is played over _edges_ (see "Challenges"), and creating an <a data-quicklook-from="edge">edge</a> requires posting a small additional _mini-bond_ at each level of the dispute. Because only one assertion in a set of rivals can ever be confirmed, the protocol only needs to retain a single mini-bond per level; the redundant bonds posted by rivals can be released to a designated excess-bond receiver.
+When a dispute arises, the challenge game itself is played over _<a data-quicklook-from="edge">edges</a>_ (see "Challenges"), and creating an <a data-quicklook-from="edge">edge</a> requires posting a small additional _mini-bond_ at each level of the dispute. Because only one assertion in a set of rivals can ever be confirmed, the protocol only needs to retain a single mini-bond per level; the redundant bonds posted by rivals can be released to a designated excess-bond receiver.
 
-Under BoLD, the bond required to propose an assertion and the mini-bonds required to participate in a challenge are fixed parameters of the chain (the per-level mini-bond amounts are configured in the challenge manager). There is no exponential escalation tied to confirmation delay, because BoLD's bounded-delay guarantee removes the delay-attack incentive that the escalation was designed to counter: an adversary can't push out confirmation by piling on false stakes, so there is no need to raise the price of doing so over time.
+Under BoLD, the bond required to propose an assertion and the mini-bonds required to participate in a challenge are fixed parameters of the chain (the per-level mini-bond amounts are configured in the challenge manager). There is no exponential escalation tied to <a data-quicklook-from="confirmation">confirmation</a> delay, because BoLD's bounded-delay guarantee removes the delay-attack incentive that the escalation was designed to counter: an adversary can't push out confirmation by piling on false stakes, so there is no need to raise the price of doing so over time.
 
 ### Rules for confirming or rejecting
 
@@ -255,23 +255,23 @@ An assertion can be confirmed if:
 
 An assertion is rejected if its predecessor is rejected, or if a rival assertion wins the challenge between them.
 
-A consequence of these rules is that a lone, unrivaled assertion is simply confirmed once its time elapses—no challenge is ever needed in the common, honest case. When two or more rival assertions exist, the disagreement is settled by a challenge. It's time to look at how those work.
+A consequence of these rules is that a lone, unrivaled assertion is confirmed once its time elapses—no challenge is ever needed in the common, honest case. When two or more rival assertions exist, the disagreement is settled by a challenge. It's time to look at how those work.
 
 ### Challenges
 
 Suppose two (or more) rival assertions have been posted, sharing the same predecessor. They make conflicting claims about the chain's history, so at most one of them can be correct.
 
-Whenever rival assertions exist, anyone—not just the proposers—can open a challenge. The rollup protocol records the challenge and mediates it via the **Edge Challenge Manager**, eventually confirming the correct side and allowing the losing side's bond to be confiscated.
+Whenever rival assertions exist, anyone—not just the <a data-quicklook-from="proposer">proposers</a>—can open a challenge. The rollup protocol records the challenge and mediates it via the **Edge Challenge Manager**, eventually confirming the correct side and allowing the losing side's bond to be confiscated.
 
 A challenge is played over the _edges_. An edge is a claim that the machine can advance from one state to another over some range of steps. Each participant who wants to defend a position creates a _layer-zero edge_ (posting a mini-stake) and then [**bisects**](/how-arbitrum-works/bold/how-bold-bisection-works.mdx) it by posting the claimed midpoint state, splitting the edge into two half-size child edges. Rivals do the same to their own edges. Because the protocol is all-vs-all, many edges can be developed in parallel, and, crucially, the honest participant only needs to keep bisecting towards the truth—it does not need a specific opponent to "take a turn." Each edge accumulates time only while it is _unrivaled_; an edge whose unrivaled timer reaches the challenge period is confirmable. This is how BoLD bounds the total delay: an adversary can create rivals, but doing so does not buy unbounded time.
 
 <a data-quicklook-from="dissection">Dissection</a> proceeds across several levels—first over Layer 2 blocks, then over progressively finer ranges of WAVM instructions (a block level, one or more big-step levels, and a small-step level)—until an edge represents a single step of execution. The final edge is confirmed by a **one-step proof**, checked onchain by the one-step proof entry contract, which determines who was telling the truth about that one instruction.
 
-The two subsections below give the classic two-party intuition for _why_ dissection works. They describe a simplified Alice-vs-Bob game; in BoLD, the same logic applies, generalized so that any number of parties can compete and the honest party always has a winning line of play.
+The two subsections below give the classic two-party intuition for _why_ <a data-quicklook-from="dissection">dissection</a> works. They describe a simplified Alice-vs-Bob game; in BoLD, the same logic applies, generalized so that any number of parties can compete and the honest party always has a winning line of play.
 
 #### Dissection protocol: simplified version
 
-Alice is defending the claim that, starting from the state in the predecessor assertion, the Virtual Machine can advance to the state specified in her assertion. Essentially, she is claiming that the Virtual Machine can execute `N` instructions, and that the execution will consume `M` inbox messages and transform the hash of outputs from `H'` to `H`.
+Alice is defending the claim that, starting from the state in the <a data-quicklook-from="predecessor-assertion">predecessor assertion</a>, the Virtual Machine can advance to the state specified in her assertion. Essentially, she is claiming that the Virtual Machine can execute `N` instructions, and that the execution will consume `M` inbox messages and transform the hash of outputs from `H'` to `H`.
 
 Alice's first move requires her to dissect her claims about intermediate states between the beginning (0 instructions executed) and the end (`N` instructions executed). So we require Alice to divide her claim in half, and post the state at the halfway point, after `N/2` instructions have been executed.
 
@@ -292,12 +292,12 @@ To prove (1), observe that if Alice's initial claim is correct, she can offer a 
 The real dissection protocol is conceptually similar to the simplified one described above, but with several changes that improve efficiency, enable permissionless all-vs-all play, and deal with necessary corner cases. Here is a list of the differences:
 
 - **Dissection over L2 blocks, then over instructions**: An assertion asserts the result of creating some number of Layer 2 Nitro blocks. Dissection first occurs over these Layer 2 blocks to narrow the dispute down to a single Layer 2 Nitro block. At that point, the dispute becomes about a single execution of the State Transition Function—i.e., the execution of a sequence of WAVM instructions—and the recursive dissection sub-protocol runs again over WAVM instructions (across a block level, one or more big-step levels, and a small-step level) to narrow the dispute to a single instruction. The dispute concludes with a one-step proof of a single instruction (or a party failing to act and losing on time).
-- **Binary <a data-quicklook-from="bisection">bisection</a>**: Each edge is split into two half-size child edges by posting a single midpoint claim. (The classic protocol generalizes this to K-way dissection; BoLD uses straightforward binary bisection).
+- **Binary <a data-quicklook-from="bisection">bisection</a>**: Each edge is split into two half-size child edges by posting a single midpoint claim. (The classic protocol generalizes this to K-way dissection; BoLD uses straightforward binary <a data-quicklook-from="bisection">bisection</a>).
 - **All-vs-all, not turn-based**: Rather than two players alternating moves, any number of participants may create and bisect edges. Each edge accrues time only while it is _unrivaled_; as soon as a rival edge appears (one sharing the same start commitment and level—its "mutual ID"), the timer stops. The honest participant defends by continuing to bisect toward the truth; it never has to wait for a specific opponent to move. This is what lets a single honest party guarantee the correct outcome, no matter how many adversaries join, and within a bounded delay.
 - **Deal with the Empty-Inbox case**: The machine can't always execute `N` steps without getting stuck. It might halt, or it might have to wait because its inbox is exhausted, so it can't go on until more messages arrive. The protocol, therefore, allows a challenger to claim that the specified amount of execution is not possible under the current conditions, rather than being forced to assert a concrete end state.
 - **Time limits**: Confirmation is governed by per-edge, unrivaled timers measured against a challenge period (6.4 days), and the protocol limits the total time to confirmation. A participant who stops responding while behind will lose once the relevant time elapses.
 
-It should be clear that these changes don't affect the basic correctness of the challenge protocol. They do, however, improve their efficiency, make validation permissionless, and bound the worst-case delay.
+It should be clear that these changes don't affect the basic correctness of the <a data-quicklook-from="challenge-protocol">challenge protocol</a>. They do, however, improve their efficiency, make validation permissionless, and bound the worst-case delay.
 
 #### Efficiency
 
@@ -315,11 +315,11 @@ Not all nodes will choose to do this. Because the rollup protocol doesn't decide
 
 Every validator can choose its own approach, but we expect validators to follow three common strategies:
 
-- The _active validator_ strategy tries to advance the state of the chain by proposing new assertions. An active validator is always staked, since creating an assertion requires staking. A chain really only needs one honest <a data-quicklook-from="active-validator">active validator</a>; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
+- The _<a data-quicklook-from="active-validator">active validator</a>_ strategy tries to advance the state of the chain by proposing new assertions. An active validator is always staked, since creating an assertion requires staking. A chain really only needs one honest <a data-quicklook-from="active-validator">active validator</a>; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
 - The _<a data-quicklook-from="defensive-validator">defensive validator</a>_ strategy watches the rollup protocol operate. If only correct assertions are proposed, this strategy doesn't stake. But if an incorrect assertion is proposed, this strategy intervenes by posting a correct assertion or staking on a correct assertion posted by another party. This strategy avoids staking when things are going well, but if someone is dishonest, it stakes in order to defend the correct outcome.
-- The _watchtower validator_ strategy never stakes. It simply watches the rollup protocol and, if an incorrect assertion is proposed, raises the alarm (by whatever means it chooses) so others can intervene. This strategy assumes that other parties willing to stake will intervene to take some of the dishonest proposer's stake, and that this can occur within the challenge period. (In practice, this will allow several days for a response.)
+- The _watchtower validator_ strategy never stakes. It watches the rollup protocol and, if an incorrect assertion is proposed, raises the alarm (by whatever means it chooses) so others can intervene. This strategy assumes that other parties willing to stake will intervene to take some of the dishonest proposer's stake, and that this can occur within the challenge period. (In practice, this will allow several days for a response.)
 
-Under normal conditions, validators using the defensive and watchtower strategies won't do anything except observe. A malicious actor considering whether to try cheating won't be able to tell how many defensive and watchtower validators are operating incognito. Perhaps some defensive validators will announce themselves, but others probably won't, so a would-be attacker will always have to worry that defenders are waiting to emerge.
+Under normal conditions, validators using the defensive and watchtower strategies won't do anything except observe. A malicious actor considering whether to try cheating won't be able to tell how many defensive and watchtower validators are operating incognito. Perhaps some <a data-quicklook-from="defensive-validator">defensive validators</a> will announce themselves, but others probably won't, so a would-be attacker will always have to worry that defenders are waiting to emerge.
 
 With BoLD, validation is permissionless—anyone can propose an assertion, stake, and defend the correct chain. A chain may still keep an optional validator allowlist enabled for safety during the early stages, but this is a configurable toggle rather than a protocol property.
 
@@ -343,15 +343,15 @@ Supporting these functions in Layer 2 trusted software, rather than building int
 
 As the name suggests, <a data-quicklook-from="arbitrum-full-node">full nodes</a> in Arbitrum play the same role as full nodes in Ethereum: they know the state of the chain, and provide an API that others can use to interact with.
 
-Arbitrum full nodes normally "live at Layer 2," which means that they don't worry about the rollup protocol but simply treat their Arbitrum chain as a mechanism that feeds inbox messages to the State Transition Function to evolve the Layer 2 chain and produce outputs.
+<a data-quicklook-from="arbitrum-full-node">Arbitrum full nodes</a> normally "live at Layer 2," which means that they don't worry about the rollup protocol but simply treat their Arbitrum chain as a mechanism that feeds inbox messages to the State Transition Function to evolve the Layer 2 chain and produce outputs.
 
 ## The Sequencer
 
 The Sequencer is a specially designated full node granted limited power to control transaction ordering. This allows the Sequencer to guarantee the results of user transactions immediately, without waiting for anything to happen on Ethereum. So no need to wait five minutes or so for blocks—and no need to even wait 15 seconds for Ethereum to make a block.
 
-Clients interact with the Sequencer exactly the same way they would with any full node, for example, by giving their wallet software a network URL that points to the Sequencer.
+Clients interact with the Sequencer exactly the same way they would with any full node, for example, by giving their <a data-quicklook-from="wallet">wallet</a> software a network URL that points to the Sequencer.
 
-Currently, the Sequencer on the Arbitrum One and Arbitrum Nova chains is run by Offchain Labs.
+Currently, the Sequencer on the Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> chains is run by Offchain Labs.
 
 ### Instant confirmation
 
@@ -365,7 +365,7 @@ When we add a Sequencer, the inbox's operation changes.
 
 - Only the Sequencer can put new messages directly into the inbox. The Sequencer tags the messages it is submitting with an Ethereum block number and timestamp. (ArbOS ensures that these are non-decreasing, adjusting them upward if necessary to avoid decreases.)
 - Anyone else can submit a message, but messages submitted by non-Sequencer nodes will be put into the "<a data-quicklook-from="delayed-inbox">Delayed Inbox</a>" queue, which is managed by an L1 Ethereum contract.
-  - Messages in the delayed inbox queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer typically releases delayed messages after about 10 minutes, as explained below.
+  - Messages in the <a data-quicklook-from="delayed-inbox">delayed inbox</a> queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer typically releases delayed messages after about 10 minutes, as explained below.
   - Alternatively, if a message has been in the delayed inbox queue for longer than the maximum delay interval (currently 24 hours on Arbitrum One), anyone can <a data-quicklook-from="forceinclusion">force it to be promoted</a> to the main inbox. (This ensures that the Sequencer can only delay messages but can't censor them.)
 
 ### If the Sequencer is well-behaved...
@@ -390,9 +390,9 @@ Because the Sequencer will be run by a trusted party at first and later decentra
 
 ### Transaction ordering: Timeboost, and the road to decentralized sequencing
 
-The Sequencer still controls transaction ordering, but Arbitrum chains can layer on a <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> called [**Timeboost**](/how-arbitrum-works/timeboost/gentle-introduction.mdx). <a data-quicklook-from="timeboost">Timeboost</a> is an opt-in mechanism in which an _express lane_ for transaction submission is auctioned off, round by round, via an L1 <a data-quicklook-from="auction-contract">auction contract</a> and an <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a>. The winner of a round may submit transactions through the <a data-quicklook-from="express-lane">express lane</a> and receive a small, fixed time advantage (configurable, on the order of a couple of hundred milliseconds) over the ordinary lane during that round. Bids are validated, and the proceeds accrue according to the chain's configuration.
+The Sequencer still controls transaction ordering, but Arbitrum chains can layer on a <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> called [**Timeboost**](/how-arbitrum-works/timeboost/gentle-introduction.mdx). <a data-quicklook-from="timeboost">Timeboost</a> is an opt-in mechanism in which an _<a data-quicklook-from="express-lane">express lane</a>_ for transaction submission is auctioned off, round by round, via an L1 <a data-quicklook-from="auction-contract">auction contract</a> and an <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a>. The winner of a round may submit transactions through the <a data-quicklook-from="express-lane">express lane</a> and receive a small, fixed time advantage (configurable, on the order of a couple of hundred milliseconds) over the ordinary lane during that round. Bids are validated, and the proceeds accrue according to the chain's configuration.
 
-It's worth being precise about what Timeboost is and isn't. It is a way to allocate a latency advantage through an open auction layered on top of the existing Sequencer; it is **not** a decentralized or "fair-ordering" Sequencer, and it does not, by itself, remove trust in the Sequencer operator. The Sequencer on Arbitrum One is still a single node run by Offchain Labs.
+It's worth being precise about what <a data-quicklook-from="timeboost">Timeboost</a> is and isn't. It is a way to allocate a latency advantage through an open auction layered on top of the existing Sequencer; it is **not** a decentralized or "fair-ordering" Sequencer, and it does not, by itself, remove trust in the Sequencer operator. The Sequencer on Arbitrum One is still a single node run by Offchain Labs.
 
 Truly decentralized sequencing—replacing the single Sequencer with a committee that establishes ordering as long as a supermajority is honest—remains an active research and engineering direction rather than a shipped feature. Research by a team at Cornell Tech, including Offchain Labs co-founder Steven Goldfeder, produced an early decentralized fair-ordering algorithm, and ideas in that lineage continue to inform the longer-term design.
 
@@ -428,7 +428,7 @@ This mechanism is a bit more cumbersome than ordinary L1-to-L2 transactions, but
 
 ### L2-to-L1 ticket-based calls
 
-Calls from L2-to-L1 operate similarly, using a ticket-based system. An L2 contract can call a method of the precompiled ArbSys contract to [send a transaction to L1](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a ticket is created in the L1 <a data-quicklook-from="outbox">outbox</a> contract. That ticket can be triggered by anyone who calls a certain L1 outbox method and submits the `ticketID`. The ticket is only marked as redeemed if the L1 transaction does not revert.
+Calls from L2-to-L1 operate similarly, using a ticket-based system. An L2 contract can call a method of the precompiled ArbSys contract to [send a transaction to L1](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a ticket is created in the L1 <a data-quicklook-from="outbox">outbox</a> contract. That ticket can be triggered by anyone who calls a certain L1 <a data-quicklook-from="outbox">outbox</a> method and submits the `ticketID`. The ticket is only marked as redeemed if the L1 transaction does not revert.
 
 These L2-to-L1 tickets have an unlimited lifetime, until they're successfully redeemed. No rent is required, as the tickets (actually a Merkle hash of the tickets) are stored on the Ethereum blockchain, which does not require rent. (The cost of allocating storage for the ticket Merkle roots is covered by L2 transaction fees.)
 
@@ -489,7 +489,7 @@ AnyTrust relies instead on an external <a data-quicklook-from="data-availability
 
 ### Keysets
 
-A <a data-quicklook-from="keyset">Keyset</a> specifies the public keys of Committee members and the number of signatures required for a Data Availability Certificate to be valid. Keysets enable Committee membership changes and allow Committee members to change their keys.
+A <a data-quicklook-from="keyset">Keyset</a> specifies the public keys of Committee members and the number of signatures required for a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> to be valid. Keysets enable Committee membership changes and allow Committee members to change their keys.
 
 A Keyset contains:
 
