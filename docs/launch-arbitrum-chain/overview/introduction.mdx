@@ -24,11 +24,33 @@ Critically, your chain isn't siloed: it plugs directly into Ethereum's deep liqu
 
 Set confirmation speed and settlement behavior for products where timing and certainty matter—payments, trading, treasury, and internal asset movement.
 
-| Feature                                                                                                  | Your benefit                                                                                                                                                                                            | User benefit                                                                                                                                                          | Guide                                                                                                                                                                                                                 |
-| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Tune block time                                                                                          | You own the speed-versus-cost tradeoff. Faster blocks let you position the chain as a premium, low-latency venue (trading, gaming, payments) without waiting on a third party to change infrastructure. | Near-instant confirmations make the app feel like a familiar web experience rather than a slow onchain one, reducing the “did my transaction go through?” hesitation. | - [Configure chain finality](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx) <br /> - [Sequencer timing adjustments](launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments.mdx) |
-| Configure deposit finality (<a data-quicklook-from="delayed-inbox">delayed inbox</a>)                    | You match certainty guarantees to your actual risk profile to avoid paying for stronger finality than your product needs. Adjust the time before the chain processes a deposit.                         | Predictable, well-defined settlement means users know exactly when funds and actions are final—important for anyone moving real value.                                | [Configure chain finality](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx)                                                                                                                          |
-| Enable <a data-quicklook-from="fast-withdrawals">fast withdrawals</a> to reduce withdrawal finality time | Fewer support tickets and complaints about locked-up capital, and a more competitive bridging story when users compare your chain to alternatives.                                                      | Users get their funds in minutes instead of waiting the full challenge window, dramatically lowering the friction of exiting the chain.                               | [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx)                                                                                                                               |
+#### Tune block time
+
+- **Your benefit**
+  - You own the speed-versus-cost tradeoff. Faster blocks let you position the chain as a premium, low-latency venue (trading, gaming, payments) without waiting on a third party to change infrastructure.
+- **User benefit**
+  - Near-instant confirmations make the app feel like a familiar web experience rather than a slow onchain one, reducing the “did my transaction go through?” hesitation.
+- **Guides**
+  - [Configure chain finality](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx)
+  - [Sequencer timing adjustments](launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments.mdx)
+
+#### Configure deposit finality
+
+- **Your benefit**
+  - You match certainty guarantees to your actual risk profile to avoid paying for stronger finality than your product needs. Adjust the time before the chain processes a deposit.
+- **User benefit**
+  - Predictable, well-defined settlement means users know exactly when funds and actions are final—important for anyone moving real value.
+- **Guide**
+  - [Configure chain finality](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx)
+
+#### Enable fast withdrawals to reduce withdrawal finality time
+
+- **Your benefit**
+  - Fewer support tickets and complaints about locked-up capital, and a more competitive bridging story when users compare your chain to alternatives.
+- **User benefit**
+  - Users get their funds in minutes instead of waiting the full challenge window, dramatically lowering the friction of exiting the chain.
+- **Guide**
+  - [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx)
 
 <VanillaAdmonition type="note">The 100ms figure is an optional lower bound on block time, not the default. Most chains run at the @@l2BlockTimeMs=250@@ms default; 100ms is available when you opt into it. By default, fast withdrawals is not enabled—the default withdrawal time is @@arbOneDisputeWindowDays=6.4@@ days.</VanillaAdmonition>
 
@@ -36,31 +58,100 @@ Set confirmation speed and settlement behavior for products where timing and cer
 
 Align costs with your business model, including the option to use a custom gas token that fits customer experience, treasury strategy, or internal accounting needs.
 
-| Feature                                                                   | Your benefit                                                                                                                                                                                                                                                    | User benefit                                                                                                                                       | Guide                                                                                                                                                                                                                |
-| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Use a custom ERC-20 as the native gas token                               | You can drive utility to your own token, align fee revenue with your treasury strategy, and simplify internal accounting by denominating gas in the unit you already track.                                                                                     | Users pay fees in a familiar or branded token rather than acquiring a separate asset, removing a common onboarding hurdle.                         | - [Custom gas token (Rollup)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx) <br /> - [Custom gas token (AnyTrust)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust.mdx) |
-| Manage the fee parameters that govern what users pay and fee distribution | Direct control over cost recovery and revenue, so you can tune the chain's economics to be self-sustaining or subsidized as your business model requires.                                                                                                       | Transparent, deliberately set fees rather than opaque or volatile costs, which builds trust in the pricing.                                        | [Fee management](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx)                                                                                                                                       |
-| Configure native mint/burn behavior for the gas token                     | You can use a cross-chain-native token (such as a stablecoin) as your gas token, so it moves in and out of your chain through canonical interop protocols instead of lock-and-mint wrappers—keeping your treasury and accounting denominated in the real asset. | Users hold and pay fees in the canonical token rather than a wrapped derivative, so their gas balance stays fungible and redeemable across chains. | [Native mint and burn](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx)                                                                                                                     |
-| Dynamic pricing                                                           | You smooth out pricing (gas fee) volatility by setting multiple gas targets that react to short-term spikes and long-term load separately, so brief demand bursts don't turn into severe, sustained gas-price spikes.                                           | More stable, predictable fees during periods of high demand instead of sudden, sharp cost increases exactly when the chain is busiest.             | [Dynamic pricing](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx)                                                                                                                                     |
+#### Use a custom ERC-20 as the native gas token
+
+- **Your benefit**
+  - You can drive utility to your own token, align fee revenue with your treasury strategy, and simplify internal accounting by denominating gas in the unit you already track.
+- **User benefit**
+  - Users pay fees in a familiar or branded token rather than acquiring a separate asset, removing a common onboarding hurdle.
+- **Guides**
+  - [Custom gas token (Rollup)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx)
+  - [Custom gas token (AnyTrust)](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust.mdx)
+
+#### Manage the fee parameters that govern what users pay and fee distribution
+
+- **Your benefit**
+  - Direct control over cost recovery and revenue, so you can tune the chain's economics to be self-sustaining or subsidized as your business model requires.
+- **User benefit**
+  - Transparent, deliberately set fees rather than opaque or volatile costs, which builds trust in the pricing.
+- **Guide**
+  - [Fee management](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx)
+
+#### Configure native mint/burn behavior for the gas token
+
+- **Your benefit**
+  - You can use a cross-chain-native token (such as a stablecoin) as your gas token, so it moves in and out of your chain through canonical interop protocols instead of lock-and-mint wrappers—keeping your treasury and accounting denominated in the real asset.
+- **User benefit**
+  - Users hold and pay fees in the canonical token rather than a wrapped derivative, so their gas balance stays fungible and redeemable across chains.
+- **Guide**
+  - [Native mint and burn](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx)
+
+#### Dynamic pricing
+
+- **Your benefit**
+  - You smooth out pricing (gas fee) volatility by setting multiple gas targets that react to short-term spikes and long-term load separately, so brief demand bursts don't turn into severe, sustained gas-price spikes.
+- **User benefit**
+  - More stable, predictable fees during periods of high demand instead of sudden, sharp cost increases exactly when the chain is busiest.
+- **Guide**
+  - [Dynamic pricing](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx)
 
 ### Throughput and latency
 
 Handle higher volumes and faster response times for products that cannot degrade during periods of peak demand.
 
-| Feature                                                                                   | Your benefit                                                                                                                                                                                                                                           | User benefit                                                                                                                                                                                         | Guide                                                                                                                                                                                         |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Dedicated throughput so your chain does not compete for computation and storage resources | Guaranteed capacity means you can make performance <a data-quicklook-from="commitment">commitments</a> (effectively an SLA) to partners and customers without worrying about noisy-neighbor contention.                                                | Consistent performance during peak events—launches, drops, market volatility—instead of degraded speed exactly when demand is highest.                                                               | [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx)                                                                                                                 |
-| Set the gas target and block gas limit to match your expected load                        | You provision capacity to match your expected transaction volume—scaling up for high-throughput workloads or holding it lean to manage operating costs—so throughput planning becomes a controllable lever rather than a fixed constraint you inherit. | Capacity provisioned to real demand means orders and settlements continue to clear promptly even during peak volume, rather than facing delays or failed transactions when the network is congested. | - [Gas target guidance](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx) <br /> - [Gas optimization](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx#block-gas-limit) |
+#### Dedicated throughput
+
+- **Your benefit**
+  - Guaranteed capacity means you can make performance commitments (effectively an SLA) to partners and customers without worrying about noisy-neighbor contention for computation and storage resources.
+- **User benefit**
+  - Consistent performance during peak events—launches, drops, market volatility—instead of degraded speed exactly when demand is highest.
+- **Guide**
+  - [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx)
+
+#### Set the gas target to match your expected load
+
+- **Your benefit**
+  - You provision capacity to match your expected transaction volume—scaling up for high-throughput workloads or holding it lean to manage operating costs—so throughput planning becomes a controllable lever rather than a fixed constraint you inherit.
+- **User benefit**
+  - Capacity provisioned to real demand means orders and settlements continue to clear promptly even during peak volume, rather than facing delays or failed transactions when the network is congested.
+- **Guides**
+  - [Gas target guidance](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx)
+  - [Gas optimization](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx#block-gas-limit)
 
 ### Privacy and access controls
 
 Create participation rules and data access controls that align with regulated workflows and protect sensitive information.
 
-| Feature                                                                                                                                                                                                      | Your benefit                                                                                                                                                                                  | User benefit                                                                                                                                              | Guide                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Run permissioned validators to vet and restrict who participates in validation—useful for enterprise or regulated environments (for example, KYC for validators)                                             | You can meet regulatory and legal requirements, reduce compliance risk, and make the chain viable for enterprise and institutional partners who can't operate on a fully open infrastructure. | Assurance that the chain operates within a vetted, accountable set of participants — a prerequisite for many regulated financial and enterprise products. | [Validation and BoLD](/launch-arbitrum-chain/chain-config/validation/bold.mdx)                                    |
-| Restrict who can read chain data by keeping data off the public <a data-quicklook-from="L1">L1</a> with an AnyTrust <a data-quicklook-from="data-availability-committee-dac">data availability committee</a> | You keep sensitive business and user data out of a fully public ledger, satisfying privacy obligations and protecting competitive information.                                                | Greater confidentiality around their activity and data than a fully public chain would offer.                                                             | [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx) |
-| Move to permissionless validation later via <a data-quicklook-from="bold">BoLD</a> when you are ready to decentralize                                                                                        | You can launch with tight control and decentralize on your own timeline — no re-platforming required as your product and risk tolerance mature.                                               | A credible path to stronger trustlessness and censorship resistance over time, rather than being locked into a permissioned model forever.                | [Validation and BoLD](/launch-arbitrum-chain/chain-config/validation/bold.mdx)                                    |
+#### Run permissioned validators
+
+Vet and restrict who participates in validation—useful for enterprise or regulated environments (for example, KYC for validators)
+
+- **Your benefit**
+  - You can meet regulatory and legal requirements, reduce compliance risk, and make the chain viable for enterprise and institutional partners who can't operate on a fully open infrastructure.
+- **User benefit**
+  - Assurance that the chain operates within a vetted, accountable set of participants–a prerequisite for many regulated financial and enterprise products.
+- **Guide**
+  - [Validation and BoLD](/launch-arbitrum-chain/chain-config/validation/bold.mdx)
+
+#### Restrict who can read chain data
+
+Keep data off the public L1 with an AnyTrust data availability committee.
+
+- **Your benefit**
+  - You keep sensitive business and user data out of a fully public ledger, satisfying privacy obligations and protecting competitive information.
+- **User benefit**
+  - Greater confidentiality around their activity and data than a fully public chain would offer.
+- **Guide**
+  - [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx)
+
+#### Move to permissionless validation later
+
+- **Your benefit**
+  - You can launch with tight control and decentralize on your own timeline—no re-platforming required as your product and risk tolerance mature.
+- **User benefit**
+  - A credible path to stronger trustlessness and censorship resistance over time, rather than being locked into a permissioned model forever.
+- **Guide**
+  - [Validation and BoLD](/launch-arbitrum-chain/chain-config/validation/bold.mdx)
 
 <VanillaAdmonition type="note">These controls apply at the validator and data-availability layers—who validates the chain and who can read its data. They are not a per-user transaction allowlist; screening which end users may submit transactions is an application-layer concern, not a chain-config setting.</VanillaAdmonition>
 
@@ -68,19 +159,53 @@ Create participation rules and data access controls that align with regulated wo
 
 Customize transaction ordering to match your product, whether the priority is wider access, lower MEV exposure, or tighter handling of transaction flow.
 
-| Feature                                                                                                                           | Your benefit                                                                                                                | User benefit                                                                                                                                 | Guide                                                                                  |
-| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Keep the default FCFS ordering for intuitive, simple ordering that the world's largest exchanges use for trading                  | Fair, simple ordering keeps fast block times and avoids the reputational cost of a chain seen as hostile to ordinary users. | Built-in protection from front-running and sandwich attacks, so users aren't quietly taxed by MEV extractors on every trade.                 | [How the Sequencer works](/how-arbitrum-works/deep-dives/sequencer.mdx)                |
-| Enable Timeboost to auction an express lane, letting the chain owner capture MEV while preserving fair ordering for everyone else | You capture MEV as a revenue stream for the chain rather than leaking it to external searchers.                             | Non-express transactions keep their fair-ordering protections, while users who genuinely need priority have a transparent way to pay for it. | [Timeboost configuration](/launch-arbitrum-chain/chain-config/sequencer/timeboost.mdx) |
+#### Keep the default FCFS ordering
+
+For intuitive, simple ordering that the world's largest exchanges use for trading.
+
+- **Your benefit**
+  - Fair, simple ordering keeps fast block times and avoids the reputational cost of a chain seen as hostile to ordinary users.
+- **User benefit**
+  - Built-in protection from front-running and sandwich attacks, so users aren't quietly taxed by MEV extractors on every trade.
+- **Guide**
+  - [How the Sequencer works](/how-arbitrum-works/deep-dives/sequencer.mdx)
+
+#### Timeboost
+
+Enable Timeboost to auction an express lane, letting the chain owner capture MEV while preserving fair ordering for everyone else.
+
+- **Your benefit**
+  - You capture MEV as a revenue stream for the chain rather than leaking it to external searchers.
+- **User benefit**
+  - Non-express transactions keep their fair-ordering protections, while users who genuinely need priority have a transparent way to pay for it.
+- **Guide**
+  - [Timeboost configuration](/launch-arbitrum-chain/chain-config/sequencer/timeboost.mdx)
 
 ### Governance and data availability
 
 Choose how the chain is upgraded, administered, and backed by data availability based on the balance of cost, transparency, and resilience you need.
 
-| Feature                                                                                                                                                | Your benefit                                                                                                                                                       | User benefit                                                                                                           | Guide                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Define the chain-owner role and access controls that govern upgrades and administration, and plan a path toward progressive decentralization           | You retain the control needed for upgrades and incident response early on, then deliberately decentralize as the chain matures—balancing agility with credibility. | Clear accountability for who can change the chain, plus a visible path toward stronger, more decentralized guarantees. | [Ownership and access control](/launch-arbitrum-chain/operate/ownership-and-access.mdx)                           |
-| Choose your data availability model—Rollup, AnyTrust, <a data-quicklook-from="alt-da">Alt-DA</a>—to trade off cost against transparency and resilience | You dial the cost-versus-security balance directly; AnyTrust can cut data costs substantially, while Rollup maximizes security and transparency.                   | Lower fees when you choose AnyTrust, or maximum security and Ethereum-grade transparency when you choose Rollup        | [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx) |
+#### Chain-owner role and access controls
+
+Govern upgrades and administration, and plan a path toward progressive decentralization.
+
+- **Your benefit**
+  - You retain the control needed for upgrades and incident response early on, then deliberately decentralize as the chain matures—balancing agility with credibility.
+- **User benefit**
+  - Clear accountability for who can change the chain, plus a visible path toward stronger, more decentralized guarantees.
+- **Guide**
+  - [Ownership and access control](/launch-arbitrum-chain/operate/ownership-and-access.mdx)
+
+#### Data availability model
+
+Whether Rollup, AnyTrust, Alt-DA—choose the one that fits your case to trade off cost against transparency and resilience.
+
+- **Your benefit**
+  - You dial the cost-versus-security balance directly; AnyTrust can cut data costs substantially, while Rollup maximizes security and transparency.
+- **User benefit**
+  - Lower fees when you choose AnyTrust, or maximum security and Ethereum-grade transparency when you choose Rollup
+- **Guide**
+  - [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx)
 
 ## Performance
 
@@ -90,17 +215,32 @@ On an Arbitrum chain, performance isn’t a single parameter—it’s the combin
 
 How quickly transactions become final and withdrawable. Set the **delayed inbox finality**, the **challenge period**, and **fast withdrawals** to balance settlement speed against re-org and security risk.
 
-| Feature                                           | Your benefit                                                                                                                                                                     | User benefit                                                                                                                       | Guides                                                                                                                                                                                                                                                                                |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Delayed inbox, fast withdrawals, challenge period | Delayed Inbox finality, challenge period, and fast withdrawals — to balance settlement speed against re-org and security risk for your risk, audit, and compliance stakeholders. | Faster, more predictable settlement: sub-second soft finality for responsiveness and quicker withdrawals back to the parent chain. | - [Delayed inbox](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx) <br /> - [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx) <br /> - [Challenge period](/launch-arbitrum-chain/chain-config/validation/challenge-period.mdx) |
+#### Delayed inbox, fast withdrawals, challenge period
+
+- **Your benefit**
+  - Delayed Inbox finality, challenge period, and fast withdrawals—to balance settlement speed against re-org and security risk for your risk, audit, and compliance stakeholders.
+- **User benefit**
+  - Faster, more predictable settlement: sub-second soft finality for responsiveness and quicker withdrawals back to the parent chain.
+- **Guides**
+  - [Delayed inbox](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx)
+  - [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx)
+  - [Challenge period](/launch-arbitrum-chain/chain-config/validation/challenge-period.mdx)
 
 ### Cost and fee stability
 
 How predictable prices stay under load. Use **Dynamic Pricing**, **fee management** (base/surplus minimums), a **gas price floor**, and **batch-poster fee tuning** to smooth spikes and capture revenue.
 
-| Feature                                                                                             | Your benefit                                                                                                                                                                                                                | User benefit                                                                                                                    | Guides                                                                                                                                                                                                                                                                                                                                                                     |
-| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - Dynamic pricing <br /> - Fee management <br /> - Gas price floor <br /> - Batch poster fee tuning | Shape fee economics directly — Dynamic Pricing (multiple gas targets), base/surplus fee minimums, a gas price floor, and batch-poster fee tuning — to smooth price spikes and capture revenue while costs scale with usage. | More stable, predictable transaction costs under load, avoiding sudden fee spikes during large payout runs or volatile periods. | - [Dynamic pricing](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx) <br /> - [Fee management](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx) <br /> - [Gas optimization](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx) <br /> - [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning.mdx) |
+#### Dynamic pricing, fee management, gas price floor, batch poster fee tuning
+
+- **Your benefit**
+  - Shape fee economics directly — Dynamic Pricing (multiple gas targets), base/surplus fee minimums, a gas price floor, and batch-poster fee tuning — to smooth price spikes and capture revenue while costs scale with usage.
+- **User benefit**
+  - More stable, predictable transaction costs under load, avoiding sudden fee spikes during large payout runs or volatile periods.
+- **Guides**
+  - [Dynamic pricing](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx)
+  - [Fee management](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx)
+  - [Gas optimization](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx)
+  - [Batch poster fee tuning](/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning.mdx)
 
 ### Language support
 
@@ -115,19 +255,36 @@ Stylus is inherited by every Arbitrum chain. It lets you develop smart contracts
 
 Protocol-level transaction filtering added to the Sequencer and State Transition Function (STF), at the chain owner's discretion.
 
-| Owner benefit                                                                                                                                                                        | User benefit                                                                                                        | Guide                                                                                          |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Enables filtering as a first-class protocol capability to opt into, rather than building and maintaining bespoke tooling, while retaining full discretion over whether to enable it. | Transactions are screened by the network itself, so protection doesn’t depend on any single app behaving correctly. | [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx) |
-| Can reuse an existing provider relationship and risk methodology rather than build screening in-house.                                                                               | Screening reflects industry-standard sanctions data rather than ad hoc lists.                                       | [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx) |
-| Can tailor enforcement granularity to policy—addresses, events, or both.                                                                                                             | Only the activity that the policy actually targets is blocked, reducing false positives.                            | [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx) |
-| A ready-made menu of enforcement actions covering transfers, tokens, and opcodes.                                                                                                    | Clearly scoped restrictions keep permitted activity available.                                                      | [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx) |
-| The restricted set remains up to date without manual redeployment.                                                                                                                   | Newly sanctioned addresses are enforced promptly, improving protection.                                             | [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx) |
+#### Your benefit
+
+- Enables filtering as a first-class protocol capability to opt into, rather than building and maintaining bespoke tooling, while retaining full discretion over whether to enable it.
+- Can reuse an existing provider relationship and risk methodology rather than build screening in-house.
+- Can tailor enforcement granularity to policy—addresses, events, or both.
+- A ready-made menu of enforcement actions covering transfers, tokens, and opcodes.
+- The restricted set remains up to date without manual redeployment.
+
+#### User benefit
+
+- Transactions are screened by the network itself, so protection doesn’t depend on any single app behaving correctly.
+- Screening reflects industry-standard sanctions data rather than ad hoc lists.
+- Only the activity that the policy actually targets is blocked, reducing false positives.
+- Clearly scoped restrictions keep permitted activity available.
+- Newly sanctioned addresses are enforced promptly, improving protection.
+
+#### Guide
+
+- [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx)
 
 ### Continuous monitoring (synchronization pipeline)
 
-| Feature   | Owner benefit                                                     | User benefit                                                             | Guide                                                                   |
-| --------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| CLI flags | Can tune update frequency and storage to their operational needs. | Timely list updates mean less exposure to recently restricted addresses. | [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx) |
+#### CLI flags
+
+- **Your benefit**
+  - Can tune update frequency and storage to their operational needs.
+- **User benefit**
+  - Timely list updates mean less exposure to recently restricted addresses.
+- **Guide**
+  - [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx)
 
 ## What problem do Arbitrum chains solve?
 
@@ -141,12 +298,14 @@ Arbitrum's protocols address this challenge by offloading some of the Ethereum n
 
 Arbitrum helps Ethereum move towards a **multi-chain future**. This is valuable for the following reasons:
 
-| Value add                           | Description                                                                                                                                                                                                                                                                                                                |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scalability**                     | Multiple chains help overcome scaling bottlenecks by dividing activity into opt-in environments with separate resource management.                                                                                                                                                                                         |
-| **Flexible security models**        | Different chains can experiment with different security models, allowing for tradeoffs. For example: Arbitrum One and Arbitrum Nova are both L2 chains, with Arbitrum Nova giving developers the ability to optimize for lower fees. With Arbitrum chains, extending the technology and experimenting is easier than ever. |
-| **Flexible execution environments** | Different chains can experiment with more-or-less restrictive execution environments. For example, although Arbitrum chains are fully EVM compatible, Arbitrum chains can restrict smart contract functionality to optimize for your project's needs.                                                                      |
-| **Flexible governance**             | Arbitrum chains let you define your own governance protocols.                                                                                                                                                                                                                                                              |
+- **Value: Scalability**
+  - Multiple chains help overcome scaling bottlenecks by dividing activity into opt-in environments with separate resource management.
+- **Value: Flexible security models**
+  - Different chains can experiment with different security models, allowing for tradeoffs. For example: Arbitrum One and Arbitrum Nova are both L2 chains, with Arbitrum Nova giving developers the ability to optimize for lower fees. With Arbitrum chains, extending the technology and experimenting is easier than ever.
+- **Value: Flexible execution environments**
+  - Different chains can experiment with more-or-less restrictive execution environments. For example, although Arbitrum chains are fully EVM compatible, Arbitrum chains can restrict smart contract functionality to optimize for your project's needs.
+- **Value: Flexible governance**
+  - Arbitrum chains let you define your own governance protocols. |
 
 ## Are Arbitrum chains the same thing as "app chains"?
 
