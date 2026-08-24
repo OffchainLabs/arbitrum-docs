@@ -4167,10 +4167,10 @@
     "@types/node-fetch" "^2.5.10"
     node-fetch "^2.6.1"
 
-"@notionhq/client@^5.24.0":
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/@notionhq/client/-/client-5.24.0.tgz#53bfb0d7f2154b996dcf63c25876b358d6eadbd4"
-  integrity sha512-fd71hjK6QZYggwWdaBeLu4ajBQ4HTK0R6bj7v9GMFhilgsdMRJ5HDHQtKbc8/y6E5XXLYgNpDz78Q+BdXHa1ug==
+"@notionhq/client@^5.25.2":
+  version "5.25.2"
+  resolved "https://registry.yarnpkg.com/@notionhq/client/-/client-5.25.2.tgz#b6c621cdcef97533313b56b9d47b484efc8431e4"
+  integrity sha512-kbaCZxiTxuWS7nTP29s3q9qbfMGd4cyfjMMdpVr7vK7SuB+0C6zBAP1sw8Gx/HKa+giWGnReuFovamN696Qy8w==
 
 "@offchainlabs/notion-docs-generator@0.1.2":
   version "0.1.2"
@@ -4458,17 +4458,17 @@
     "@posthog/core" "^1.47.0"
     "@posthog/types" "^1.402.2"
 
-"@posthog/core@^1.47.0":
-  version "1.48.1"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.48.1.tgz#842e868b43cee6426ed5acbaf73e18cafe8dd5be"
-  integrity sha512-mxw31XdYgt/SnlwqLPAcltK67q+QmsiYjVLGQ4GbBc8OJ7O4yRFSDwAXt8QsokHokeyEZtTRWM6jDHL7LYMx1A==
+"@posthog/core@^1.47.0", "@posthog/core@^1.48.3":
+  version "1.48.8"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.48.8.tgz#4f29f9513a860c5e43094320c27cf54a096a7084"
+  integrity sha512-LAOBOjMQrQmgcbZxnubl74l2GQd5OWqxCJJ8mzcWdZRWbfO6Y/A6E3fqWjDtm68hY4LxC/bbopG60cxZW8cfWw==
   dependencies:
-    "@posthog/types" "^1.404.1"
+    "@posthog/types" "^1.405.1"
 
-"@posthog/types@^1.402.2", "@posthog/types@^1.402.3", "@posthog/types@^1.404.1":
-  version "1.404.1"
-  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.404.1.tgz#66743e03df9dfad215401e7ec8ec090e99382df6"
-  integrity sha512-i2Gei6ARfOSBeTN4s2yUP1p97s2UNI+1NWmtLjhnR/V6t3RFOfI1sBWKcJNWHjtoOCCWoAFU+PNPY6SgT2VtEQ==
+"@posthog/types@^1.402.2", "@posthog/types@^1.405.0", "@posthog/types@^1.405.1":
+  version "1.405.1"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.405.1.tgz#9a37c4c9c5c36aa6bd6116eb56786889e61f4b71"
+  integrity sha512-JvaR4ChUKUk7qSTG58vKN2Br6es9riFF5mvlu7YGcwbB476vfyTO0o/TBh+zE88QhsfxnE5Tr/jKxI+e1v3Q5A==
 
 "@radix-ui/number@1.1.0":
   version "1.1.0"
@@ -10343,10 +10343,10 @@ marked@^16.3.0:
   resolved "https://registry.yarnpkg.com/marked/-/marked-16.4.2.tgz#4959a64be6c486f0db7467ead7ce288de54290a3"
   integrity sha512-TI3V8YYWvkVf3KJe1dRkpnjs68JUPyEa5vjKrp1XEEJUAOaQc+Qj+L1qWbPd0SJuAdQkFU0h73sXXqwDYxsiDA==
 
-marked@^18.0.7, marked@^18.0.9:
-  version "18.0.9"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-18.0.9.tgz#729fb57203a4fd58dd5ddc551917ef40daf5036a"
-  integrity sha512-/Sa4qiiHZxf0/FQdBBowr9q4r10krCwMvpK48FUBdXdUXScDxiQGR9zCPrFgRVR5LU3iySOiIjy09ZQvADir1w==
+marked@^18.0.10, marked@^18.0.7:
+  version "18.0.10"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-18.0.10.tgz#a09ac1f54e378b9efc8b31707adc188fdc047d2e"
+  integrity sha512-FJeH4bRpYoXiggcgriCGItKCSv3xkngJc4QCZ/rkQCogU3VYaLxYJoZl8Nw/b4+x7iij/pd+09mZ6A1dXzpL0A==
 
 math-intrinsics@^1.1.0:
   version "1.1.0"
@@ -12469,14 +12469,14 @@ posthog-docusaurus@^2.0.5:
   resolved "https://registry.yarnpkg.com/posthog-docusaurus/-/posthog-docusaurus-2.0.5.tgz#5ce7ea9659a3845cba094712743194eaf84aa527"
   integrity sha512-Ray65LYEJrMMqDtsBUBXunEVP/g4wtATvq/xz9rchUoLy/9mSkkFgUko/8DVtGxgiP3vivpFMgfb9HpCuDrBHg==
 
-posthog-js@^1.415.4:
-  version "1.415.4"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.415.4.tgz#e338ac9f2f7c9b846e6468b9028243d693e3817a"
-  integrity sha512-8YQmAcBXo5H0nN8oEbfIwJr4GUizjbEH63fAHtRZi+zFZGeB3yN0oKB5sEbRldVwpxkqfuV4a8XY9RmmLzYb1A==
+posthog-js@^1.418.1:
+  version "1.418.1"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.418.1.tgz#5cc950a15242b859cdbf3b52e955a11be63441e6"
+  integrity sha512-gGJSGE1sTRcnK53TvZpoFzVBaFTE37NpgGykeQzb6CACx34piy6SFtp5wudFSo49taqFMZdcNG/TrnfJVx0YQw==
   dependencies:
     "@posthog/browser-common" "^0.5.0"
-    "@posthog/core" "^1.47.0"
-    "@posthog/types" "^1.402.3"
+    "@posthog/core" "^1.48.3"
+    "@posthog/types" "^1.405.0"
     core-js "^3.49.0"
     dompurify "^3.4.13"
     fflate "^0.4.8"
