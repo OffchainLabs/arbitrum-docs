@@ -179,7 +179,7 @@ helm install sequencer offchainlabs/nitro \
   --set configmap.data.parent-chain.id=<parent-chain-id> \
   --set configmap.data.parent-chain.connection.url=<parent-node-url> \
   --set configmap.data.chain.id=<child-chain-id> \
-  --set configmap.data.node.sequencer.enable=true \
+  --set configmap.data.node.sequencer=true \
   --set configmap.data.node.delayed-sequencer.enable=true \
   --set configmap.data.node.seq-coordinator.enable=true \
   --set configmap.data.node.seq-coordinator.redis-url=<redis-url> \
