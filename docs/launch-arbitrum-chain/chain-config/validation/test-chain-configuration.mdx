@@ -12,7 +12,7 @@ On a production Arbitrum chain, an <a data-quicklook-from="assertion">assertion<
 
 <VanillaAdmonition type="caution" title="These values are unsafe for production">
 
-Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so anyone bonding on it can confirm an incorrect <a data-quicklook-from="assertion">assertion</a>. Use these settings only on chains that hold no value.
+Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so an incorrect <a data-quicklook-from="assertion">assertion</a> can be confirmed before anyone has time to dispute it — and if the validator allowlist is disabled, any address can trigger that confirmation. Use these settings only on chains that hold no value.
 
 </VanillaAdmonition>
 
@@ -33,24 +33,31 @@ The common mistake is lowering the node intervals alone, then concluding that th
 
 ## Onchain parameters
 
-Set these when you deploy, or update them afterward as <a data-quicklook-from="chain-owner">chain owner</a>. To learn how to change them and what the production values are, see [Challenge period](/launch-arbitrum-chain/chain-config/validation/challenge-period.mdx) and the [BoLD parameter table](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
+Most of these are set at deployment. As <a data-quicklook-from="chain-owner">chain owner</a> you can update `confirmPeriodBlocks` and `minimumAssertionPeriod` afterward through the Rollup admin interface, and on a legacy chain `extraChallengeTimeBlocks` as well. On a BoLD chain, `challengePeriodBlocks` is fixed when the challenge manager is deployed and `challengeGracePeriodBlocks` when the Rollup is initialized — neither has an owner setter, so plan them before you deploy. To learn what the production values are, see [Challenge period](/launch-arbitrum-chain/chain-config/validation/challenge-period.mdx) and the [BoLD parameter table](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
 
-| Parameter                    | Production reference                       | For a test chain                                                                                                                                                   |
-| ---------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `confirmPeriodBlocks`        | 45,818 parent chain blocks, about one week | Low enough that a test can wait it out. Measured in <a data-quicklook-from="parent-chain">parent chain</a> blocks, so convert using your parent chain's block time |
-| `challengePeriodBlocks`      | Usually equal to `confirmPeriodBlocks`     | Keep equal to `confirmPeriodBlocks`                                                                                                                                |
-| `extraChallengeTimeBlocks`   | 200 blocks, about 40 minutes               | Can be reduced or set to `0`                                                                                                                                       |
-| `minimumAssertionPeriod`     | 75 parent chain blocks, about 15 minutes   | Must be below the posting interval you configure next                                                                                                              |
-| `challengeGracePeriodBlocks` | 48 hours of parent chain blocks            | Can be reduced; it exists to give a security council time to intervene                                                                                             |
+Parameters that exist on both BoLD and legacy chains:
 
-The ordering constraint between `minimumAssertionPeriod` and the posting interval is the one that catches people. The posting interval must exceed `minimumAssertionPeriod`, because posting faster than the onchain minimum produces reverted transactions. If you lower the posting interval without lowering `minimumAssertionPeriod` to match, assertions stop posting.
+| Parameter                | Production reference          | For a test chain                                      |
+| ------------------------ | ----------------------------- | ----------------------------------------------------- |
+| `confirmPeriodBlocks`    | 45,818 blocks, about one week | Low enough that a test can wait it out                |
+| `minimumAssertionPeriod` | 75 blocks, about 15 minutes   | Must be below the posting interval you configure next |
 
-<!--
-SME REVIEW: confirm what a validator does when the posting interval is set
-below the Rollup's minimumAssertionPeriod. Documented above as reverted
-transactions, per assertion-control.mdx and validator-troubleshooting.mdx.
-Worth confirming whether the node pre-checks and skips, or submits and reverts.
--->
+BoLD chains only:
+
+| Parameter                    | Production reference                   | For a test chain                                                                            |
+| ---------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `challengePeriodBlocks`      | Usually equal to `confirmPeriodBlocks` | Keep equal to `confirmPeriodBlocks`; set at challenge manager deployment                    |
+| `challengeGracePeriodBlocks` | 48 hours of Ethereum blocks            | Can be reduced; it exists to give a security council time to intervene. Fixed at deployment |
+
+Legacy (pre-BoLD) chains only:
+
+| Parameter                  | For a test chain             |
+| -------------------------- | ---------------------------- |
+| `extraChallengeTimeBlocks` | Can be reduced or set to `0` |
+
+All block counts above are denominated in the <a data-quicklook-from="parent-chain">parent chain</a>'s `block.number`. On an Arbitrum parent, `block.number` tracks a bounded estimate of the underlying Ethereum L1 block number — not the Arbitrum chain's own block height — so one unit is still roughly 12 seconds for a chain settling to Arbitrum One or Nova. Only when the parent's `block.number` is its native height (Ethereum itself, or a local devnet) does the parent's own block time apply. To learn more, see [Block numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx).
+
+The interaction between `minimumAssertionPeriod` and the posting interval is the one that catches people. The two use different units — the posting interval is a duration, while `minimumAssertionPeriod` counts parent chain `block.number` units (on an Arbitrum parent, that is the underlying L1 block number, roughly 12 seconds per unit — see the note above). The validator enforces the onchain minimum itself: before posting, it checks how many of those block units have elapsed since the parent assertion and waits (logging `Need to wait N blocks before posting next assertion`) instead of submitting a transaction that would revert. If you lower the posting interval without lowering `minimumAssertionPeriod` to match, assertions do not stop or revert — they simply keep posting at the onchain floor's cadence. Lowering both is what makes posting faster.
 
 ## Node intervals
 
@@ -72,7 +79,7 @@ for legacy). Confirm they still match the Nitro release this page targets.
 | `--node.staker.staker-interval`               | `1m0s`   | Legacy staker | Lower it to check the Rollup status and act sooner                                         |
 | `--node.staker.confirmation-blocks`           | `12`     | Legacy staker | Lower it, or `0` on a chain where you accept <a data-quicklook-from="reorg">reorg</a> risk |
 
-Lowering the confirming interval makes the validator _check_ more often. It does not make confirmation permissible sooner — that is governed entirely by `confirmPeriodBlocks`. To learn more about that distinction, see [Assertion timing flags](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#assertion-timing-flags).
+Lowering the confirming interval makes the validator _check_ more often. It does not make confirmation permissible sooner — that is governed by `confirmPeriodBlocks`, plus `challengeGracePeriodBlocks` after a challenge. To learn more about that distinction, see [Assertion timing flags](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#assertion-timing-flags).
 
 ## A worked example
 
@@ -94,11 +101,14 @@ Nitro defines no `TestBoldConfig`. On a <a data-quicklook-from="bold">BoLD</a> c
 
 ## Why a test validator looks stuck when nothing is misconfigured
 
-`--node.bold.rpc-block-number` defaults to `finalized`. On a local devnet or any parent chain where finality lags or never advances, the validator is reading from a block that does not exist yet, so it takes no action at all. The intervals are irrelevant in that state.
+`--node.bold.rpc-block-number` defaults to `finalized`, and the symptom depends on what your parent chain does with finality:
 
-This presents as a validator that logs nothing useful and never posts, which reads like an interval problem and is not one. Check this before tuning anything. To learn more, see [Parent chain read consistency](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#parent-chain-read-consistency).
+- **The parent chain never finalizes** (common on local devnets). Requests for the `finalized` block fail with an RPC error such as `finalized block not found`, so the staker cannot initialize and the node fails startup with `error initializing staker: could not create assertion chain: ...`. The intervals never come into play.
+- **Finality lags the tip.** The validator reads a finalized view that trails recent activity. If the finalized head predates the Rollup contract's deployment, initialization fails with `no contract code at given address`; once the deployment is finalized, the validator acts on a stale view and appears idle until finality catches up.
 
-On a test chain, `safe` or `latest` is usually the right value. Both accept <a data-quicklook-from="reorg">reorg</a> exposure that would be unacceptable in production.
+Both read like an interval problem and are not one. Check this before tuning anything. To learn more, see [Parent chain read consistency](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#parent-chain-read-consistency).
+
+On a test chain, `latest` is usually the right value; `safe` helps only if your parent chain actually advances it. Both accept <a data-quicklook-from="reorg">reorg</a> exposure that would be unacceptable in production.
 
 ## Testnet chains
 

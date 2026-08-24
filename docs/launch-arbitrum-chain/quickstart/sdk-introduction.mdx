@@ -54,7 +54,7 @@ The four steps above run through two separate factory contracts, in order. Knowi
 
 `RollupCreator` runs first. It deploys your chain's core contracts — the Rollup, the <a data-quicklook-from="sequencer-inbox">sequencer inbox</a>, the <a data-quicklook-from="delayed-inbox">delayed inbox</a>, the <a data-quicklook-from="outbox">outbox</a>, and the bridge — and sends the initialization messages that bring the chain to life.
 
-`TokenBridgeCreator` runs afterward. It depends on `RollupCreator` having already run: it takes your chain's `rollup` or `inbox` address as input, deploys the parent chain half of the token bridge, and sends messages to the <a data-quicklook-from="child-chain">child chain</a> to deploy the counterpart contracts there.
+`TokenBridgeCreator` runs afterward. It depends on `RollupCreator` having already run: the factory contract takes your chain's `inbox` address as input (the SDK accepts your `rollup` address and resolves the inbox for you), deploys the parent chain half of the token bridge, and sends messages to the <a data-quicklook-from="child-chain">child chain</a> to deploy the counterpart contracts there.
 
 Two consequences follow from that ordering:
 

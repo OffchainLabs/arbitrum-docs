@@ -218,13 +218,7 @@ The result of this call will be something along the lines of:
 
 Nitro's default HTTP API namespaces are `net`, `web3`, `eth`, and `arb`. The `txpool` namespace is **not** among them, so `txpool_content`, `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` return a method-not-found error on a default node.
 
-To enable them, include `txpool` in the node's `--http.api` list:
-
-```shell
---http.api=net,web3,eth,arb,txpool
-```
-
-Enabling the namespace does not make the results mean what they mean on Ethereum. On Ethereum, the transaction pool holds transactions that are waiting to be picked up by whichever validator builds the next block. On an Arbitrum chain, the <a data-quicklook-from="sequencer">sequencer</a> orders transactions, and a single known party holds the resulting queue. Pool contents reflect that node's view of the sequencer's intake, not a competitive mempool. Nonce handling differs for the same reason — to learn more, see [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management.mdx).
+Enabling the namespace (by adding `txpool` to the node's `--http.api` list) changes less than you might expect, because Arbitrum has no transaction pool at all — the concept does not exist in Nitro's architecture. On Ethereum, the pool holds transactions waiting to be picked up by whichever validator builds the next block. An Arbitrum chain has no equivalent: the <a data-quicklook-from="sequencer">sequencer</a> receives transactions and orders them directly through its internal queue, other nodes simply forward transactions to it, and no node ever holds a pool of pending transactions. Nitro ships only a compatibility stub for tooling that probes this namespace: with it enabled, `txpool_content` responds but always returns empty `pending` and `queued` sets, and `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` remain unavailable. Do not build tooling that expects these methods to show the sequencer's intake. Nonce handling differs for the same reason — to learn more, see [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management.mdx).
 
 ### `eth_getLogs` block ranges
 
