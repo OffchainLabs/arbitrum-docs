@@ -1,0 +1,123 @@
+---
+title: 'Sequencer configuration reference'
+sidebar_label: 'Configuration reference'
+description: 'Operational guidance for sequencer flags, including expected surplus thresholds, block production timing, and sequencer coordinator tuning.'
+author: pete-vielhaber
+sme: jasonw-123
+user_story: As an Arbitrum chain operator, I need to understand what each sequencer flag does and what happens when I change it, so I can tune my sequencer safely.
+content_type: reference
+---
+
+This page explains what the operational <a data-quicklook-from="sequencer">sequencer</a> flags do and what changes when you set them. For the complete list of every Nitro flag, see the [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx). For failure diagnosis, see [Sequencer troubleshooting](/launch-arbitrum-chain/operate/sequencer-troubleshooting.mdx).
+
+All flags take the prefix `--execution.sequencer.` or `--node.seq-coordinator.` as shown.
+
+<VanillaAdmonition type="info" title="Defaults in this guide">
+
+Every default and log string here comes from the [Nitro source](https://github.com/OffchainLabs/nitro). Defaults change between releases. Confirm them against your version with `--help`.
+
+</VanillaAdmonition>
+
+## Expected surplus flags
+
+Expected surplus estimates whether your chain is collecting enough in <a data-quicklook-from="parent-chain">parent chain</a> data fees to cover what it will cost to post the data it already owes. <a data-quicklook-from="arbitrum-nitro">Nitro</a> computes it as:
+
+```text
+expected surplus = current L1 pricing surplus - cost to post the calldata backlog
+```
+
+A negative value means your chain is accumulating data it cannot pay to post. The thresholds let you warn on that condition or refuse new transactions before the deficit grows.
+
+The sequencer recalculates expected surplus every 5 seconds and exports it as `arb/sequencer/expectedsurplus`.
+
+### `expected-surplus-gas-price-mode`
+
+Selects how the sequencer prices the backlog it has not yet posted. Default: `BlobPrice`.
+
+| Value               | How it prices the backlog                                     | When to use it                                                                      |
+| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `BlobPrice`         | Blob fee per byte, from the parent chain header               | Default. Correct when you post blobs to a parent chain that supports them           |
+| `CalldataPrice`     | Parent chain base fee per calldata unit                       | Correct when you post calldata rather than blobs                                    |
+| `CalldataPrice7623` | Base fee scaled by 40/16 to model the EIP-7623 calldata floor | Correct when you post calldata and the parent chain charges the EIP-7623 floor cost |
+
+<VanillaAdmonition type="caution" title="The accepted value is CalldataPrice7623">
+
+Nitro's own `--help` output lists this value as `CalldataPrice7523`. That string is a typo in the help text. The sequencer validates against `CalldataPrice7623`, matching [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623). Passing `CalldataPrice7523` fails at startup with `undefined expected-surplus-gas-price-mode`.
+
+</VanillaAdmonition>
+
+`BlobPrice` falls back to calldata pricing, logging once at `INFO`, when either of these is true:
+
+- The latest parent chain header has no `BlobGasUsed` or `ExcessBlobGas`, meaning the parent chain does not support blobs.
+- You set `--execution.sequencer.dangerous.disable-blob-base-fee-check`.
+
+If you run against a parent chain without blob support, set `CalldataPrice` explicitly rather than relying on the fallback. The fallback keeps the sequencer running, but the mode you configured is not the mode in effect.
+
+### `expected-surplus-soft-threshold` and `expected-surplus-hard-threshold`
+
+Both default to the string `default`, which disables them. Set them to an integer value in wei.
+
+| Flag                              | Effect when expected surplus drops below it                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `expected-surplus-soft-threshold` | Logs `expected surplus is below soft threshold` at `WARN`                                                          |
+| `expected-surplus-hard-threshold` | Rejects new transactions with `currently not accepting transactions due to expected surplus being below threshold` |
+
+Both are hot-reloadable, so you can change them without restarting.
+
+Four behaviors matter more than the values you pick:
+
+1. **Soft must be at or above hard.** The sequencer refuses to start with `expected-surplus-soft-threshold cannot be lower than expected-surplus-hard-threshold`. Setting only the hard threshold leaves soft at `default`, which is treated as `0` in the comparison—so any positive hard threshold fails this check. Set both together.
+
+2. **Neither works without a parent chain reader.** The calculation needs parent chain headers. Enabling either threshold without a parent chain reader makes the sequencer fail to start with `expected surplus soft/hard thresholds are enabled but l1Reader is nil`.
+
+3. **The hard threshold stops the sequencer from starting if the first reading fails.** When the hard threshold is enabled and the initial surplus fetch fails, startup aborts with `expected-surplus-hard-threshold is enabled but error fetching initial expected surplus value`. With only the soft threshold set, the same failure logs at `ERROR` and the sequencer continues. Enabling the hard threshold makes your sequencer's startup depend on parent chain RPC availability.
+
+4. **The hard threshold fails open, not closed.** The rejection applies only while the sequencer holds a reading it believes is current. If a refresh fails, the sequencer marks the value stale and stops rejecting transactions until a refresh succeeds. Repeated refresh failures log `expected surplus soft/hard thresholds are enabled but unable to fetch latest expected surplus, retrying` at `WARN` for the first 20 consecutive failures, then at `ERROR`. Treat that escalation as a signal that your surplus protection is not active.
+
+### Choosing threshold values
+
+There is no default worth copying, because the right value depends on your posting costs and your tolerance for running at a deficit. A workable approach:
+
+1. Run with both thresholds disabled and watch `arb/sequencer/expectedsurplus` across a normal week, including a parent chain gas spike.
+2. Set the soft threshold near the low end of that observed range so you get warned before anything acts.
+3. Leave the hard threshold disabled until the soft threshold has been quiet for a while. It stops your chain from accepting transactions, which is a more disruptive failure than the deficit it prevents for most chains.
+
+## Block production timing
+
+| Flag                             | Default | What it controls                                                                                                                                                                                                               |
+| -------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `max-block-speed`                | `250ms` | Minimum delay between blocks, which sets the maximum block production rate                                                                                                                                                     |
+| `max-acceptable-timestamp-delta` | `1h`    | Largest gap allowed between the local clock and the newest parent chain timestamp                                                                                                                                              |
+| `max-tx-data-size`               | `95000` | Largest transaction the sequencer queues. Set to 95% of the <a data-quicklook-from="batch-poster">batch poster</a> limit, leaving room for headers. Nitro overrides this for <a data-quicklook-from="layer-3-l3">L3</a> chains |
+| `max-revert-gas-reject`          | `0`     | Gas used in a revert below which the sequencer rejects rather than sequences (anti-DoS)                                                                                                                                        |
+| `queue-timeout`                  | `12s`   | How long a transaction waits in the queue before it is dropped                                                                                                                                                                 |
+
+`max-acceptable-timestamp-delta` is the one to understand before changing. When the newest parent chain block's timestamp differs from the sequencer's clock by more than this, the sequencer stops producing blocks and logs `cannot sequence: unknown L1 block or L1 timestamp too far from local clock time`. Raising it does not fix a lagging parent chain connection or a drifted clock—it only delays when you find out. See the [Block production halt conditions](/launch-arbitrum-chain/operate/sequencer-troubleshooting.mdx#block-production-halt-conditions) section of [Sequencer troubleshooting](/launch-arbitrum-chain/operate/sequencer-troubleshooting.mdx).
+
+## Sequencer coordinator flags
+
+These apply when you run more than one sequencer with `--node.seq-coordinator.enable=true`. For the deployment, see the [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx) page.
+
+| Flag                      | Default | What it controls                                                        |
+| ------------------------- | ------- | ----------------------------------------------------------------------- |
+| `redis-url`               | —       | Redis instance used for coordination                                    |
+| `my-url`                  | invalid | This sequencer's own address. Must match its entry in the priority list |
+| `lockout-duration`        | `1m`    | How long a sequencer holds the lockout after acquiring it               |
+| `lockout-spare`           | `30s`   | Time subtracted from the lockout duration to leave room for renewal     |
+| `update-interval`         | `250ms` | Time between coordinator update attempts                                |
+| `retry-interval`          | `50ms`  | Wait before retrying after a Redis error                                |
+| `handoff-timeout`         | `30s`   | Longest wait for another sequencer to accept the lockout during handoff |
+| `safe-shutdown-delay`     | `5s`    | Delay added after transferring control                                  |
+| `release-retries`         | `4`     | Attempts to release the lockout on shutdown                             |
+| `msg-per-poll`            | `2000`  | How far behind a sequencer may be and still ask for the lockout         |
+| `redis-quorum-size`       | `1`     | Reads needed to treat a Redis `GET` as valid                            |
+| `seq-num-duration`        | `10d`   | Expiry for message count keys in Redis                                  |
+| `block-metadata-duration` | `10d`   | Expiry for block metadata keys in Redis                                 |
+| `chosen-healthcheck-addr` | —       | Address serving `200` while chosen and `503` otherwise                  |
+| `delete-finalized-msgs`   | `true`  | Delete finalized messages from Redis                                    |
+
+Three notes on tuning these:
+
+- **`my-url` must match the priority list exactly.** The coordinator compares strings. A trailing slash or a different hostname form means the sequencer never matches and never becomes chosen. See [Redis priority registration](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx#redis-priority-registration).
+- **`lockout-spare` must stay well below `lockout-duration`.** The holder renews after `lockout-duration` minus `lockout-spare`. Narrowing that margin risks the lockout expiring during a slow Redis round trip, which triggers an unnecessary failover.
+- **`chosen-healthcheck-addr` is the cleanest failover signal.** Point your load balancer at it rather than inferring the active sequencer from logs or metrics.
