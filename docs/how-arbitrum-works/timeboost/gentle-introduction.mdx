@@ -16,7 +16,7 @@ Timeboost is the culmination of over a year of [research and development](https:
 
 ## Why do Arbitrum chains need Timeboost?
 
-In the past, Arbitrum chains ordered incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. This ordering policy is simple to understand and implement, enabling fast block times (starting at 250ms and down to 100ms if desired), and protecting users from harmful types of MEV, such as front-running & sandwich attacks.
+In the past, Arbitrum chains ordered incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. This ordering policy is simple to understand and implement, enabling fast block times (starting at @@l2BlockTimeMs=250@@ms and down to 100ms if desired), and protecting users from harmful types of MEV, such as front-running & sandwich attacks.
 
 However, there are a few downsides to an FCFS ordering policy. Under FCFS, searchers have incentives to participate in and attempt to win latency races by investing in offchain hardware. This "race" means that for searchers on Arbitrum chains, generating a profit from arbitrage and liquidation opportunities involves a lot of spam, placing stress on the chain infrastructure and contributing to congestion. Additionally, all captured MEV on an Arbitrum chain under FCFS is allocated to searchers, returning none of the available MEV to the chain owner or the applications on the chain.
 
@@ -30,7 +30,7 @@ For Arbitrum chains, the sequencer’s sole job is to take arriving, valid trans
 
 #### Timeboost preserves the great UX that Arbitrum chains are known for
 
-- The default block time for Arbitrum chains continues to be industry-leading at 250ms, even with Timeboost. With Timeboost, some transactions not in the express lane may experience a delay to the next block.
+- The default block time for Arbitrum chains continues to be industry-leading at @@l2BlockTimeMs=250@@ms, even with Timeboost. With Timeboost, some transactions not in the express lane may experience a delay to the next block.
 
 #### With Timeboost, Arbitrum chains will continue to protect users from harmful types of MEV
 
@@ -52,7 +52,7 @@ Timeboost uses three separate components that work together:
 - **An offchain auction** to determine the controller of the express lane for a given round. This auction gets managed by an <a data-quicklook-from='autonomous-auctioneer'>autonomous auctioneer</a>.
 - **An <a data-quicklook-from='auction-contract'>auction contract</a>** deployed on the target chain to serve as the canonical source of truth for the auction results and handling of auction proceeds.
 
-To start, the default duration of a round is 60 seconds. Transactions not in the express lane will be subject to a default 200-millisecond artificial delay in their arrival timestamp before being sequenced, which means that some non-express lane transactions may be delayed to the next block. It’s important to note that the default Arbitrum block time will remain at 250 milliseconds (which can be adjusted to 100 milliseconds if desired). Let’s dive into how each of these components works.
+To start, the default duration of a round is @@timeboostRoundSeconds=60@@ seconds. Transactions not in the express lane will be subject to a default 200-millisecond artificial delay in their arrival timestamp before being sequenced, which means that some non-express lane transactions may be delayed to the next block. It’s important to note that the default Arbitrum block time will remain at @@l2BlockTimeMs=250@@ milliseconds (which can be adjusted to 100 milliseconds if desired). Let’s dive into how each of these components works.
 
 ### The express lane
 
@@ -60,7 +60,7 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
 
 The express lane implementation uses a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name "express lane." The sequencer will only accept valid transaction payloads to this endpoint if they are signed correctly by the current round’s <a data-quicklook-from='express-lane-controller'>express lane controller</a>.
 
-Transactions submitted to the sequencer normally will be considered non-express lane transactions and will, therefore, have their arrival timestamp delayed by 200 milliseconds. It is important to note that transactions from both the express and non-express lanes will eventually get sequenced into a single, ordered stream of transactions for the sequencer to post to a data availability layer (and for node operations to construct the chain's state then). The express lane controller does _not_:
+Transactions submitted to the sequencer normally will be considered non-express lane transactions and will, therefore, have their arrival timestamp delayed by @@timeboostNonExpressDelayMs=200@@ milliseconds. It is important to note that transactions from both the express and non-express lanes will eventually get sequenced into a single, ordered stream of transactions for the sequencer to post to a data availability layer (and for node operations to construct the chain's state then). The express lane controller does _not_:
 
 - Have the right to reorder transactions.
 - Have a guarantee that their transactions will always be first at the “top-of-the-block.”
@@ -70,11 +70,11 @@ The value of the express lane will be the sum of how much MEV the express lane c
 
 ### The Timeboost auction
 
-Determining control of the express lane in each round (default: 60 seconds) happens by a per-round auction, which is a sealed-bid, second-price auction. This auction occurs to determine the express lane controller for the next round. In other words, determining the express lane controller can happen at any point in time in the previous auction round. Bids for the auction can be made with any **ERC-20** token, in any amount, and can be collected by any address—at the full discretion of the chain owner.
+Determining control of the express lane in each round (default: @@timeboostRoundSeconds=60@@ seconds) happens by a per-round auction, which is a sealed-bid, second-price auction. This auction occurs to determine the express lane controller for the next round. In other words, determining the express lane controller can happen at any point in time in the previous auction round. Bids for the auction can be made with any **ERC-20** token, in any amount, and can be collected by any address—at the full discretion of the chain owner.
 
 <FlowChart />
 
-The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This closing time means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bidding is over and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the onchain auction contract to formally resolve the auction.
+The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This closing time means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the @@timeboostAuctionClosingSeconds=15@@ seconds between when bidding is over and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the onchain auction contract to formally resolve the auction.
 
 :::info Bid behavior
 
