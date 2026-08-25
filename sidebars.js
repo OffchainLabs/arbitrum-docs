@@ -376,6 +376,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference',
+                  label: `Sequencer configuration reference`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
@@ -550,6 +555,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/post-launch-deployments',
               label: 'Post-launch deployments',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/sequencer-troubleshooting',
+              label: 'Sequencer troubleshooting',
             },
             {
               type: 'doc',
