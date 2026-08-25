@@ -27,7 +27,7 @@ Before you begin, make sure you have:
 
 - Basic familiarity with Rust and smart contract development
 - Understanding of unit testing concepts
-- Rust toolchain: follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.91 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+- Rust toolchain: follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v@@stylusRustToolchain=1.91@@ or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 ## The Stylus Testing Framework
 
@@ -446,11 +446,11 @@ keywords = ["arbitrum", "ethereum", "stylus", "alloy"]
 [dependencies]
 alloy-primitives = "1.5.7"
 alloy-sol-types = "1.5.7"
-stylus-sdk = "0.10.7"
+stylus-sdk = "@@stylusSdkVersion=0.10.7@@"
 
 # Enable the in-memory TestVM only for tests, so it never ships in your contract.
 [dev-dependencies]
-stylus-sdk = { version = "0.10.7", features = ["stylus-test"] }
+stylus-sdk = { version = "@@stylusSdkVersion=0.10.7@@", features = ["stylus-test"] }
 
 [features]
 default = ["mini-alloc"]

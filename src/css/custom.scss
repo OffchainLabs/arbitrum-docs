@@ -80,6 +80,12 @@ html body .container {
 html body [class*='docMainContainer'] {
   padding: 2rem 1.5rem;
   max-width: 100%;
+  // `max-width: 100%` above replaces theme-classic's `calc(100% - sidebar)` cap,
+  // so a flex item at the default `min-width: auto` stretches to the min-content
+  // width of its widest child — one long unbreakable line in a code block or
+  // table pushes the column past the viewport and the page scrolls sideways.
+  // Pinning min-width to 0 lets those blocks scroll inside themselves instead.
+  min-width: 0;
 }
 
 // Content wrapper centering
@@ -91,6 +97,9 @@ html body [class*='docMainContainer'] {
   width: 100%;
   padding: 0 1rem;
   box-sizing: border-box;
+  // Same reason as docMainContainer above: without this the article column keeps
+  // the desktop table of contents from getting its 220px and it ends up clipped.
+  min-width: 0;
 }
 
 // Keep running prose at a comfortable measure while tables and code blocks

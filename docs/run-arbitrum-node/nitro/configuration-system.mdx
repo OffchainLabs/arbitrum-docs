@@ -24,7 +24,9 @@ Nitro loads configuration in the following order. Each source overrides values s
 6. **Environment variables** — variables matching the configured prefix (see [Environment variables](#environment-variables)). These are applied last and override everything else, including CLI flags.
 
 :::tip
+
 Because environment variables have the highest precedence, they are the safest way to inject secrets or per-environment overrides without modifying config files.
+
 :::
 
 ## Config file format
@@ -146,7 +148,7 @@ When running Nitro in Docker, mount your config file into the container and refe
 ```shell
 docker run --rm -it -v /path/to/local/node-config.json:/home/user/node-config.json \
   -p 8547:8547 -p 8548:8548 \
-  offchainlabs/nitro-node:v3.5.3-3b3e2fa \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ \
   --conf.file /home/user/node-config.json
 ```
 
@@ -154,10 +156,10 @@ Mount to `/home/user/` because Nitro runs as a non-root user inside the containe
 
 ## Dumping running config
 
-Use the `--conf.dump` flag to inspect the fully merged configuration. Nitro loads all config sources (defaults, S3, files, config string, CLI flags, environment variables), scrubs sensitive fields, prints the merged result as JSON to stdout, and then exits immediately:
+Use the `--conf.dump` flag to inspect the fully merged configuration. Nitro loads all config sources (defaults, S3, files, config string, CLI flags, environment variables), scrubs sensitive fields, prints the merged result as JSON to `stdout`, and then exits immediately:
 
 ```shell
-docker run --rm offchainlabs/nitro-node:v3.5.3-3b3e2fa \
+docker run --rm @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ \
   --conf.dump \
   --conf.file /path/to/node-config.json
 ```
@@ -165,7 +167,7 @@ docker run --rm offchainlabs/nitro-node:v3.5.3-3b3e2fa \
 To save the output to a file:
 
 ```shell
-docker run --rm offchainlabs/nitro-node:v3.5.3-3b3e2fa \
+docker run --rm @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ \
   --conf.dump \
   --conf.file /path/to/node-config.json > merged-config.json
 ```
