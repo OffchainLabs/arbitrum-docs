@@ -27,7 +27,7 @@ Messages from child to parent chains are included in Arbitrum’s Rollup state a
    - To initiate a child-to-parent chain message, a user or contract calls the `sendTxToL1` method on the [`ArbSys`](/arbitrum-essentials/precompiles/reference.mdx#arbsys) precompile.
 2. **Message inclusion in an <a data-quicklook-from="assertion">assertion</a>**:
    - The message is batched with other transactions and included in a [Rollup assertion](/how-arbitrum-works/deep-dives/assertions.mdx).
-   - Assertions are submitted to the Rollup contract on the parent chain and enter the [dispute window](/how-arbitrum-works/deep-dives/assertions.mdx) (6.4 days).
+   - Assertions are submitted to the Rollup contract on the parent chain and enter the [dispute window](/how-arbitrum-works/deep-dives/assertions.mdx) (@@arbOneDisputeWindowDays=6.4@@ days).
 3. **Assertion confirmation**:
    - If the assertion remains unchallenged after the dispute window, the Rollup contract finalizes the assertion.
    - The assertion's Merkle root gets posted to the outbox contract on the parent chain.
@@ -64,7 +64,7 @@ Each message progresses through three primary states:
 | Stage | Description |
 | ------------------------ | ----------- |
 | Posted on child chain | The message is sent via `ArbSys.sendTxToL1`. |
-| Waiting for finalization | The assertion containing the message is in the [<a data-quicklook-from="challenge-period">challenge period</a>](/how-arbitrum-works/deep-dives/assertions.mdx) (~6.4 days) |
+| Waiting for finalization | The assertion containing the message is in the [<a data-quicklook-from="challenge-period">challenge period</a>](/how-arbitrum-works/deep-dives/assertions.mdx) (~@@arbOneDisputeWindowDays=6.4@@ days) |
 | Confirmed and executable on the parent chain | If no [<a data-quicklook-from="fraud-proof">fraud proof</a>](/how-arbitrum-works/bold/gentle-introduction.mdx) is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
 
 ## Asset withdrawals
