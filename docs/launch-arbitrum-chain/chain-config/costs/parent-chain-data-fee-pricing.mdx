@@ -33,7 +33,7 @@ Call all four methods on the <a data-quicklook-from="precompile">precompile</a> 
 | ----------------------------------------------- | ------------------------------------------------------------------ | ------------------- |
 | `setL1PricingInertia(uint64 inertia)`           | How much the algorithm smooths each price adjustment               | `10`                |
 | `setL1PricingEquilibrationUnits(uint256 units)` | The time horizon, in data units, for eliminating the surplus       | `160,000,000`       |
-| `setL1BaseFeeEstimateInertia(uint64 inertia)`   | How slowly ArbOS updates its estimate of the parent chain base fee |        `10`         |
+| `setL1BaseFeeEstimateInertia(uint64 inertia)`   | How slowly ArbOS updates its estimate of the parent chain base fee | `10`                |
 | `setAmortizedCostCapBips(uint64 cap)`           | A ceiling on the amortized cost the chain charges, in basis points | `0`, meaning no cap |
 
 The `160,000,000` default for equilibration units applies from ArbOS 6 onward. Chains initialized before ArbOS 6 used `96,000,000`.
