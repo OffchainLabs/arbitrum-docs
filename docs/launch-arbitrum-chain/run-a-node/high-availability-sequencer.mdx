@@ -207,7 +207,7 @@ Configuring `redis-url` and `my-url` is not enough to make a sequencer eligible.
 
 Nitro treats this key as **read-only**. No sequencer can write itself into it. You populate it with the [Sequencer Coordination Manager (SQM)](/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.mdx), which is the only component that writes the key.
 
-A sequencer that is not in the list starts cleanly, syncs, serves RPC, and broadcasts to the feed—but never becomes the active sequencer. 
+A sequencer that is not in the list starts cleanly, syncs, serves RPC, and broadcasts to the feed—but never becomes the active sequencer.
 
 How the coordinator picks the active sequencer:
 

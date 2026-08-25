@@ -188,10 +188,10 @@ The timestamp check applies only when the sequencer has a parent chain reader co
 
 The sequencer keeps running here, but the block it builds is empty because the sequencer rejects everything before queuing it.
 
-| Rejection message                                                                    | Trigger                                                                       |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
-| `currently not accepting transactions due to expected surplus being below threshold` | Expected surplus fell below `expected-surplus-hard-threshold`                 |
-| `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                            |
+| Rejection message                                                                    | Trigger                                                                                                              |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `currently not accepting transactions due to expected surplus being below threshold` | Expected surplus fell below `expected-surplus-hard-threshold`                                                        |
+| `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                                                                   |
 | `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its <a data-quicklook-from="forwarder">forwarder</a> is disabled |
 
 For the surplus flags, see [Sequencer configuration reference](/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference.mdx#expected-surplus-flags).
