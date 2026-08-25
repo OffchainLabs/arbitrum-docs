@@ -103,19 +103,19 @@ The Arbitrum Nova chain has a 7-party DAC, whose members can be seen in the [Ar
 
 ### Can I withdraw my funds from Arbitrum back to Ethereum without going through the Sequencer? What about funds that are in a contract?
 
-Yes, it is possible to send a message from Ethereum to be executed on Arbitrum permissionlessly, while bypassing the Sequencer. You can achieve this by using the `DelayedInbox` contract and forcing the inclusion of the message after a certain amount of time has passed (currently ~24 hours). For more information about this behavior, refer to [How Arbitrum Works](https://docs.arbitrum.io/sequencer#unhappyuncommon-case-sequencer-isnt-doing-its-job).
+Yes, it is possible to send a message from Ethereum to be executed on Arbitrum permissionlessly, while bypassing the Sequencer. You can achieve this by using the `DelayedInbox` contract and forcing the inclusion of the message after a certain amount of time has passed (currently ~@@arbOneForceIncludePeriodHours=24@@ hours). For more information about this behavior, refer to [How Arbitrum Works](https://docs.arbitrum.io/sequencer#unhappyuncommon-case-sequencer-isnt-doing-its-job).
 
 Keep in mind that you can execute any message in this way, be it a withdrawal of funds back to Ethereum or a call to a contract.
 
 You can also find an example of force-inclusion in [this tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/delayedInbox-l2msg).
 
-### Are there any plans to reduce the time a transaction needs to wait before being able to be force-included from Ethereum into the Arbitrum chain, bypassing the sequencer? (Currently 24 hours)
+### Are there any plans to reduce the time a transaction needs to wait before being able to be force-included from Ethereum into the Arbitrum chain, bypassing the sequencer? (Currently @@arbOneForceIncludePeriodHours=24@@ hours)
 
 The mechanism that allows force-including transactions from Ethereum (bypassing the sequencer) is intended to be used in very rare cases, especially when it is expected that the sequencer will not be operational again, so that users have a way of interacting with Arbitrum in a trustless way.
 
 When using this mechanism, if the sequencer is down for longer than the time window for force-including transactions from Ethereum, the moment it is online again, it can lead to a reorganization of blocks in Arbitrum (it would have received transactions timestamped before the force-included one).
 
-24 hours was chosen because it provides a comfortable period of time for the team running the sequencer infrastructure to fix any bugs that may cause the sequencer to not work. While there aren't any active initiatives to lower that time, the decision ultimately falls in the hands of the Arbitrum DAO, who has discussed the topic in their governance forum ([see here for more information](https://forum.arbitrum.foundation/t/proposal-decrease-censorship-delay-from-24-hours-to-4-hours/13047)).
+@@arbOneForceIncludePeriodHours=24@@ hours was chosen because it provides a comfortable period of time for the team running the sequencer infrastructure to fix any bugs that may cause the sequencer to not work. While there aren't any active initiatives to lower that time, the decision ultimately falls in the hands of the Arbitrum DAO, who has discussed the topic in their governance forum ([see here for more information](https://forum.arbitrum.foundation/t/proposal-decrease-censorship-delay-from-24-hours-to-4-hours/13047)).
 
 In any case, we could also analyze why would someone use this mechanism having an honest and functional sequencer. For instance, if the reason is a distrust of the sequencer, a centralised agent as of now, one potential solution could be to [decentralize the sequencer](https://medium.com/@espressosys/offchain-labs-partnership-improving-transaction-ordering-for-arbitrum-technology-chains-beyond-de2b6018acb2) instead of reducing the force-inclusion delay time.
 

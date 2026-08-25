@@ -263,7 +263,7 @@ cargo stylus deploy \
 # Specify cargo-stylus version
 cargo stylus deploy \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=0.10.7
+  --cargo-stylus-version=@@cargoStylusVersion=0.10.7@@
 ```
 
 Skip Docker for local development (non-reproducible):
@@ -401,7 +401,7 @@ cargo stylus deploy \
 cargo stylus deploy \
   --endpoint="https://arb1.arbitrum.io/rpc" \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=0.10.7
+  --cargo-stylus-version=@@cargoStylusVersion=0.10.7@@
 
 # 4. Verify the deployed contract
 cargo stylus verify \
@@ -522,7 +522,7 @@ cargo stylus deploy \
 cargo stylus deploy \
   --endpoint="https://arb1.arbitrum.io/rpc" \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=0.10.7
+  --cargo-stylus-version=@@cargoStylusVersion=0.10.7@@
 
 # Then verify on Arbiscan
 cargo stylus verify \
@@ -583,7 +583,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 
    ```toml
    [dependencies]
-   stylus-sdk = "0.10.7"
+   stylus-sdk = "@@stylusSdkVersion=0.10.7@@"
    # Remove unnecessary crates
    ```
 
@@ -690,7 +690,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 4. Check SDK version compatibility:
    ```toml
    [dependencies]
-   stylus-sdk = "0.10.7"  # Use latest stable version
+   stylus-sdk = "@@stylusSdkVersion=0.10.7@@"  # Use latest stable version
    ```
 
 ## Non-Rust WASM Deployment
